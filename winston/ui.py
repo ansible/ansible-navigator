@@ -584,7 +584,7 @@ class UserInterface:
         # add a space
         colws = [c + 1 for c in colws]
 
-        available = self._screen_w - line_prefix_w
+        available = self._screen_w - line_prefix_w - 1  # scrollbar width
         adj_colws = distribute(available, colws)
 
         col_starts = [0]
@@ -723,8 +723,8 @@ class UserInterface:
         else:
             color = curses.color_pair(0)
         text = str(coltext)[0 : adj_colws[colno]]
-        if isinstance(coltext, (int, bool, float)):
-            # right jusitfy on header if int, bool, float
+        if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "duration":
+            # right jusitfy on header if int, bool, float or "duration"
             print_at = col_starts[colno] + len(header[colno][1]) - len(text)
         elif re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", str(coltext)):
             # right justify in column if %
