@@ -148,7 +148,7 @@ class WebXtermJs:
     def _set_winsize(self, fhand: int, row: int, col: int, xpix: int = 0, ypix: int = 0) -> None:
         # pylint: disable=too-many-arguments
         """set the size of the pty"""
-        self._logger("setting pty size to width: %s , height: %s", col, row)
+        self._logger.debug("setting pty size to width: %s , height: %s", col, row)
         winsize = struct.pack("HHHH", row, col, xpix, ypix)
         fcntl.ioctl(fhand, termios.TIOCSWINSZ, winsize)
 
@@ -171,7 +171,7 @@ class WebXtermJs:
                 script=DRIVER_SCRIPT.safe_substitute(ip=LISTEN_IP, port=LISTEN_PORT),
                 title="Driving",
             )
-            self._logger("served html to driver")
+            self._logger.debug("served html to driver")
         else:
             page = HTML_PAGE.safe_substitute(
                 add_src=WATCHER_ADD_SRC,
@@ -183,7 +183,7 @@ class WebXtermJs:
                 ),
                 title="Watching",
             )
-            self._logger("served html to watcher")
+            self._logger.debug("served html to watcher")
         return HTTPStatus.OK, response_headers, page.encode()
 
     async def _queue_drainer(self):
