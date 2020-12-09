@@ -1,7 +1,6 @@
 """ some utilities that didn't fit elsewhere
 """
 import ast
-import datetime
 import logging
 import html
 import os
@@ -30,21 +29,21 @@ except ImportError:
     HAS_ANSIBLE = False
 
 
-def human_time(*args: int, **kwargs: int) -> str:
-    """make some time pretty"""
-
-    secs = float(datetime.timedelta(*args, **kwargs).total_seconds())
-    units = [("day", 86400), ("hour", 3600), ("minute", 60), ("second", 1)]
-    parts = []
-    for unit, mul in units:
-        if secs / mul >= 1 or mul == 1:
-            if mul > 1:
-                num = float(int(floor(secs / mul)))
-                secs -= num * mul
-            else:
-                num = secs if secs != int(secs) else int(secs)
-            parts.append("%s %s%s" % (num, unit, "" if num == 1 else "s"))
-    return ", ".join(parts)
+def human_time(seconds: int) -> str:
+    """convert seconds into huma readable
+    00d00h00m00s format"""
+    sign_string = "-" if seconds < 0 else ""
+    seconds = abs(int(seconds))
+    days, seconds = divmod(seconds, 86400)
+    hours, seconds = divmod(seconds, 3600)
+    minutes, seconds = divmod(seconds, 60)
+    if days > 0:
+        return "%s%dd%dh%dm%ds" % (sign_string, days, hours, minutes, seconds)
+    if hours > 0:
+        return "%s%dh%dm%ds" % (sign_string, hours, minutes, seconds)
+    if minutes > 0:
+        return "%s%dm%ds" % (sign_string, minutes, seconds)
+    return "%s%ds" % (sign_string, seconds)
 
 
 def to_list(thing: Union[str, List]) -> List:
