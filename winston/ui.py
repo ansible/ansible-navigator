@@ -63,7 +63,7 @@ COLOR_MAP = {
 }
 
 DEFAULT_COLORS = "terminal_colors.json"
-THEME_DIR = os.path.join(sys.prefix, "share", "ansible_explorer", "theme")
+THEME_DIR = os.path.join(sys.prefix, "share", "winston", "theme")
 
 
 class Action(NamedTuple):
