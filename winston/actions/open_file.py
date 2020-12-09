@@ -1,0 +1,146 @@
+""" :open """
+import curses
+import json
+import logging
+import os
+import tempfile
+
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Match
+from typing import Tuple
+
+from . import _actions as actions
+from ..ui import Union
+from ..utils import templar
+from ..yaml import yaml, Dumper
+
+from ..app import App
+from ..ui import Content
+from ..ui import Interaction
+from ..ui import Menu
+
+
+class SuspendCurses:
+    """Context Manager to temporarily leave curses mode"""
+
+    def __enter__(self):
+        curses.endwin()
+
+    def __exit__(self, exc_type, exc_val, tback):
+        newscr = curses.initscr()
+        newscr.refresh()
+        curses.doupdate()
+
+
+@actions.register
+class Action:
+    """:open"""
+
+    # pylint: disable=too-few-public-methods
+
+    KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
+
+    def __init__(self):
+        self._logger = logging.getLogger()
+
+    def _content(self, content: Content, match: Match) -> Tuple[Union[str, None], str, Any]:
+        filename = None
+        line_number = "0"
+        obj = None
+        self._logger.debug("content is showing")
+        if something := match.groupdict()["something"]:
+            self._logger.debug("asked to open something")
+            if something.startswith("{{"):
+                self._logger.debug("something appears to be a template: %s", something)
+                templated = templar(something, content.showing)
+                if isinstance(templated, str):
+                    parts = templated.rsplit(":", 1)
+                    if os.path.isfile(parts[0]):
+                        filename = parts[0]
+                        line_number = parts[1:][0] if parts[1:] else line_number
+                        self._logger.debug(
+                            "template interaction in valid filename %s:%s", filename, line_number
+                        )
+                    else:
+                        self._logger.debug("template not a valid filename, open showing")
+                        obj = templated
+                else:
+                    self._logger.debug("template not a string, open showing")
+                    obj = templated
+            else:
+                parts = something.rsplit(":", 1)
+                if os.path.isfile(parts[0]):
+                    filename = parts[0]
+                    line_number = parts[1:][0] if parts[1:] else line_number
+                    self._logger(
+                        "something not a template, but is a valid filename %s:%s",
+                        filename,
+                        line_number,
+                    )
+                else:
+                    self._logger("something just a plain string")
+                    obj = something
+        else:
+            self._logger.debug("something not provided")
+            obj = content.showing
+        return filename, line_number, obj
+
+    def _menu(self, menu: Menu, menu_filter: Callable) -> Tuple[None, str, List[Dict[Any, Any]]]:
+        filename = None
+        line_number = "0"
+        self._logger.debug("menu is showing, open that")
+        obj = [{k: v for k, v in c.items() if k in menu.columns} for c in menu.current]
+        if menu_filter():
+            obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
+        return filename, line_number, obj
+
+    def run(self, interaction: Interaction, app: App) -> bool:
+        """Handle :open
+
+        :param interaction: The interaction from the user
+        :type interaction: Interaction
+        :param app: The app instance
+        :type app: App
+        """
+        self._logger.debug("open requested")
+        if interaction.content:
+            filename, line_number, obj = self._content(
+                content=interaction.content, match=interaction.action.match
+            )
+        elif interaction.menu:
+            filename, line_number, obj = self._menu(
+                menu=interaction.menu, menu_filter=interaction.ui.menu_filter
+            )
+        else:
+            return True
+
+        if not filename:
+            if isinstance(obj, str):
+                filename = tempfile.NamedTemporaryFile(suffix=".txt").name
+                with open(filename, "w") as outfile:
+                    outfile.write(obj)
+            elif interaction.ui.xform() == "source.yaml":
+                filename = tempfile.NamedTemporaryFile(suffix=".yaml").name
+                with open(filename, "w") as outfile:
+                    yaml.dump(
+                        obj,
+                        outfile,
+                        default_flow_style=False,
+                        Dumper=Dumper,
+                        explicit_start=True,
+                        sort_keys=True,
+                    )
+            elif interaction.ui.xform() == "source.json":
+                filename = tempfile.NamedTemporaryFile(suffix=".json").name
+                with open(filename, "w") as outfile:
+                    json.dump(obj, outfile, indent=4, sort_keys=True)
+
+        with SuspendCurses():
+            command = app.args.editor.format(filename=filename, line_number=line_number)
+            self._logger.debug("Command: %s", command)
+            if isinstance(command, str):
+                os.system(command)
+        return True
