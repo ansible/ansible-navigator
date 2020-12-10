@@ -118,8 +118,8 @@ class Action:
             return True
 
         if not filename:
-            if isinstance(obj, str):
-                filename = tempfile.NamedTemporaryFile(suffix=".txt").name
+            if interaction.ui.xform() == "text.html.markdown":
+                filename = tempfile.NamedTemporaryFile(suffix=".md").name
                 with open(filename, "w") as outfile:
                     outfile.write(obj)
             elif interaction.ui.xform() == "source.yaml":
@@ -137,6 +137,10 @@ class Action:
                 filename = tempfile.NamedTemporaryFile(suffix=".json").name
                 with open(filename, "w") as outfile:
                     json.dump(obj, outfile, indent=4, sort_keys=True)
+            else:
+                filename = tempfile.NamedTemporaryFile(suffix=".txt").name
+                with open(filename, "w") as outfile:
+                    outfile.write(obj)
 
         with SuspendCurses():
             command = app.args.editor.format(filename=filename, line_number=line_number)

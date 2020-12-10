@@ -65,12 +65,13 @@ class Action:
         templated = templar(string=str(interaction.action.value), template_vars=template_vars)
         if isinstance(templated, str):
             templated = html.unescape(templated)
-            xform = "source.text"
-        else:
-            xform = interaction.ui.xform()
 
         while True:
-            interaction = interaction.ui.show(obj=templated, xform=xform)
+            if isinstance(templated, str):
+                interaction = interaction.ui.show(obj=templated, xform="source.txt")
+            else:
+                interaction = interaction.ui.show(obj=templated)
+
             app.update()
             if interaction.action.name != "refresh":
                 break
