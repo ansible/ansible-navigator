@@ -133,35 +133,31 @@ class UserInterface:
         :param no_osc4: enable/disable osc4 terminal color change support
         :type no_osc4: str (enabled/disabled)
         """
-        self._logger = logging.getLogger()
-        self._pbar_width = pbar_width
-        self._screen_miny = screen_miny
-        self._kegexes = kegexes
-        self._refresh = [refresh]
-
-        self.status = ""
-        self.status_color = None
-
-        curses.curs_set(0)
-
         self._colorizer = Colorize(share_dir=share_dir)
         self._custom_colors_enabled = None
         self._default_colors = None
         self._default_pairs = None
-        self._no_osc4 = no_osc4
-        self._number_colors = None
-        self._prefix_color = 8
-        self._rgb_to_curses_color_idx = {}
-        self._set_colors()
-        self._theme_dir = os.path.join(share_dir, "theme")
-        self._xform = "source.yaml"
-
-        self._scroll = 0
         self._hide_keys = True
+        self._kegexes = kegexes
+        self._logger = logging.getLogger()
         self._menu_filter = None
         self._menu_indicies = None
+        self._no_osc4 = no_osc4
+        self._number_colors = None
         self._one_line_input = OneLineInput()
+        self._pbar_width = pbar_width
+        self._prefix_color = 8
+        self._refresh = [refresh]
+        self._rgb_to_curses_color_idx = {}
+        self._screen_miny = screen_miny
+        self._scroll = 0
+        self._theme_dir = os.path.join(share_dir, "themes")
+        self._xform = "source.yaml"
+        self.status = ""
+        self.status_color = None
 
+        curses.curs_set(0)
+        self._set_colors()
         self._screen = curses.initscr()
         self._screen.timeout(refresh)
 

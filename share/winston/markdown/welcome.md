@@ -8,7 +8,7 @@ Some things you can try from here:
 - `:doc <plugin>`                           Show a plugin doc
 - `:help`                                   Show the main help page
 - `:open`                                   Open current page in the IDE
-- `:quit`                                   Quit after playbook complete
+- `:quit`                                   Quit the application
 - `:redhat`                                 See the latest from Red Hat
 
 If you want to run a playbook, quit and rerun with:

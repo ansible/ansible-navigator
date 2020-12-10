@@ -12,8 +12,8 @@ arrow up, arrow down                    Scroll up/down
 :l, :log                                Review current log file
 :o, :open                               Open current page in the editor
 :o, :open {{ some_key }}                Open file path in a key's value
-:q, :quit                               Quit after playbook complete
-:q!, :quit!, ^c                         Force quit
+:q, :quit                               Quit the application
+:q!, :quit!, ^c                         Force quit while a playbook is running
 :redhat                                 See the latest from Red Hat
 :rr, :rerun                             Rerun the playbook
 :s <file>, :save <file>                 Save current plays as an artifact
