@@ -18,14 +18,14 @@ from .curses_defs import CursesLinePart
 
 CURSES_STYLES = {
     0: None,
-    1: curses.A_BOLD,
-    2: curses.A_DIM,
-    3: curses.A_ITALIC,
-    4: curses.A_UNDERLINE,
-    5: curses.A_BLINK,
-    6: curses.A_BLINK,
-    7: curses.A_REVERSE,
-    8: curses.A_INVIS,
+    1: getattr(curses, "A_BOLD", None),
+    2: getattr(curses, "A_DIM", None),
+    3: getattr(curses, "A_ITALIC", None),
+    4: getattr(curses, "A_UNDERLINE", None),
+    5: getattr(curses, "A_BLINK", None),
+    6: getattr(curses, "A_BLINK", None),
+    7: getattr(curses, "A_REVERSE", None),
+    8: getattr(curses, "A_INVIS", None),
 }
 
 THEME = "dark_vs.json"
