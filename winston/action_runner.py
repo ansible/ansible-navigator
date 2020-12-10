@@ -33,6 +33,7 @@ class ActionRunner(App):
             no_osc4=self.args.no_osc4,
             kegexes=self.actions.kegexes,
             refresh=refresh,
+            share_dir=self.args.share_dir,
         )
 
     def run(self, _screen) -> None:

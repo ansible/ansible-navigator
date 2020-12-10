@@ -158,13 +158,19 @@ def main():
     os.environ.setdefault("ESCDELAY", "25")
     os.system("clear")
 
-    if args.requires_ansible:
+    if not hasattr(args, "requires_ansible") or args.requires_ansible:
         if not args.execution_environment:
             check_for_ansible()
         set_ansible_envar()
 
     if args.web:
         args.no_osc4 = True
+
+    if not args.app:
+        args.app = "welcome"
+        args.value = None
+
+    args.share_dir = os.path.join(sys.prefix, "share", APP_NAME)
 
     try:
         if args.app in ["playbook", "playquietly"]:

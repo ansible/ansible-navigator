@@ -8,7 +8,6 @@ import logging
 
 import os
 import re
-import sys
 
 from functools import lru_cache
 from math import ceil, floor
@@ -62,8 +61,8 @@ COLOR_MAP = {
     "terminal.ansiBrightWhite": 15,
 }
 
+
 DEFAULT_COLORS = "terminal_colors.json"
-THEME_DIR = os.path.join(sys.prefix, "share", "winston", "theme")
 
 
 class Action(NamedTuple):
@@ -122,7 +121,7 @@ class UserInterface:
 
     """The main UI class"""
 
-    def __init__(self, screen_miny, no_osc4, kegexes, refresh, pbar_width=11):
+    def __init__(self, screen_miny, no_osc4, kegexes, refresh, share_dir, pbar_width=11):
         """init
 
         :param screen_miny: The minimum screen height
@@ -145,15 +144,16 @@ class UserInterface:
 
         curses.curs_set(0)
 
-        self._colorizer = Colorize()
-        self._prefix_color = 8
+        self._colorizer = Colorize(share_dir=share_dir)
+        self._custom_colors_enabled = None
         self._default_colors = None
         self._default_pairs = None
         self._no_osc4 = no_osc4
-        self._custom_colors_enabled = None
         self._number_colors = None
+        self._prefix_color = 8
         self._rgb_to_curses_color_idx = {}
         self._set_colors()
+        self._theme_dir = os.path.join(share_dir, "theme")
         self._xform = "source.yaml"
 
         self._scroll = 0
@@ -318,7 +318,7 @@ class UserInterface:
         self._logger.debug("_custom_colors_enabled: %s", self._custom_colors_enabled)
 
         if self._custom_colors_enabled:
-            with open(os.path.join(THEME_DIR, DEFAULT_COLORS)) as data_file:
+            with open(os.path.join(self._theme_dir, DEFAULT_COLORS)) as data_file:
                 colors = json.load(data_file)
 
             for color_name, color_hex in colors.items():
