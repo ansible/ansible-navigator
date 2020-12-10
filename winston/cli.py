@@ -79,22 +79,25 @@ def update_args(
             section = cdict.get("default")
             if section:
                 for key, value in section.items():
-                    if (arg_value := getattr(args, key, None)) and arg_value is not None:
-                        default: Union[None, str] = parser.get_default(key)
-                        if isinstance(arg_value, bool):
-                            bool_key: bool = section.getboolean(key)
-                            if bool_key != arg_value == default:
-                                msg = f"{key} was default, using entry '{key}={bool_key}' as bool"
+                    if hasattr(args, key):
+                        if (arg_value := getattr(args, key)) is not None:
+                            default: Union[None, str] = parser.get_default(key)
+                            if isinstance(arg_value, bool):
+                                bool_key: bool = section.getboolean(key)
+                                if bool_key != arg_value == default:
+                                    msg = (
+                                        f"{key} was default, using entry '{key}={bool_key}' as bool"
+                                    )
+                                    msgs.append(msg)
+                                    setattr(args, key, bool_key)
+                            elif default == arg_value != value:
+                                msg = f"{key} was default, using entry '{key}={value}"
                                 msgs.append(msg)
-                                setattr(args, key, bool_key)
-                        elif default == arg_value != value:
-                            msg = f"{key} was default, using entry '{key}={value}"
+                                setattr(args, key, value)
+                        else:
+                            msg = f"{key} was not provided, using entry '{key}={value}'"
                             msgs.append(msg)
                             setattr(args, key, value)
-                    if hasattr(args, key) and getattr(args, key) is None:
-                        msg = f"{key} was not provided, using entry '{key}={value}'"
-                        msgs.append(msg)
-                        setattr(args, key, value)
     else:
         msgs.append("No config file file found")
     return msgs
@@ -158,13 +161,19 @@ def main():
     os.environ.setdefault("ESCDELAY", "25")
     os.system("clear")
 
-    if args.requires_ansible:
+    if not hasattr(args, "requires_ansible") or args.requires_ansible:
         if not args.execution_environment:
             check_for_ansible()
         set_ansible_envar()
 
     if args.web:
         args.no_osc4 = True
+
+    if not args.app:
+        args.app = "welcome"
+        args.value = None
+
+    args.share_dir = os.path.join(sys.prefix, "share", APP_NAME)
 
     try:
         if args.app in ["playbook", "playquietly"]:

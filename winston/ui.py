@@ -8,7 +8,6 @@ import logging
 
 import os
 import re
-import sys
 
 from functools import lru_cache
 from math import ceil, floor
@@ -62,8 +61,8 @@ COLOR_MAP = {
     "terminal.ansiBrightWhite": 15,
 }
 
+
 DEFAULT_COLORS = "terminal_colors.json"
-THEME_DIR = os.path.join(sys.prefix, "share", "winston", "theme")
 
 
 class Action(NamedTuple):
@@ -122,7 +121,7 @@ class UserInterface:
 
     """The main UI class"""
 
-    def __init__(self, screen_miny, no_osc4, kegexes, refresh, pbar_width=11):
+    def __init__(self, screen_miny, no_osc4, kegexes, refresh, share_dir, pbar_width=11):
         """init
 
         :param screen_miny: The minimum screen height
@@ -134,34 +133,32 @@ class UserInterface:
         :param no_osc4: enable/disable osc4 terminal color change support
         :type no_osc4: str (enabled/disabled)
         """
-        self._logger = logging.getLogger()
-        self._pbar_width = pbar_width
-        self._screen_miny = screen_miny
+        self._colorizer = Colorize(share_dir=share_dir)
+        self._custom_colors_enabled = None
+        self._default_colors = None
+        self._default_pairs = None
+        self._default_obj_serialization = "source.yaml"
+        self._hide_keys = True
         self._kegexes = kegexes
+        self._logger = logging.getLogger()
+        self._menu_filter = None
+        self._menu_indicies = None
+        self._no_osc4 = no_osc4
+        self._number_colors = None
+        self._one_line_input = OneLineInput()
+        self._pbar_width = pbar_width
+        self._prefix_color = 8
         self._refresh = [refresh]
-
+        self._rgb_to_curses_color_idx = {}
+        self._screen_miny = screen_miny
+        self._scroll = 0
+        self._theme_dir = os.path.join(share_dir, "themes")
+        self._xform = self._default_obj_serialization
         self.status = ""
         self.status_color = None
 
         curses.curs_set(0)
-
-        self._colorizer = Colorize()
-        self._prefix_color = 8
-        self._default_colors = None
-        self._default_pairs = None
-        self._no_osc4 = no_osc4
-        self._custom_colors_enabled = None
-        self._number_colors = None
-        self._rgb_to_curses_color_idx = {}
         self._set_colors()
-        self._xform = "source.yaml"
-
-        self._scroll = 0
-        self._hide_keys = True
-        self._menu_filter = None
-        self._menu_indicies = None
-        self._one_line_input = OneLineInput()
-
         self._screen = curses.initscr()
         self._screen.timeout(refresh)
 
@@ -214,7 +211,7 @@ class UserInterface:
             self._scroll = value
         return self._scroll
 
-    def xform(self, value: Union[str, None] = None) -> str:
+    def xform(self, value: Union[str, None] = None, default: bool = False) -> str:
         """Set or return the current xform
 
         :param value: the value to set the xform to
@@ -224,6 +221,8 @@ class UserInterface:
         """
         if value is not None:
             self._xform = value
+            if default:
+                self._default_obj_serialization = value
         return self._xform
 
     @property
@@ -318,7 +317,7 @@ class UserInterface:
         self._logger.debug("_custom_colors_enabled: %s", self._custom_colors_enabled)
 
         if self._custom_colors_enabled:
-            with open(os.path.join(THEME_DIR, DEFAULT_COLORS)) as data_file:
+            with open(os.path.join(self._theme_dir, DEFAULT_COLORS)) as data_file:
                 colors = json.load(data_file)
 
             for color_name, color_hex in colors.items():
@@ -749,27 +748,25 @@ class UserInterface:
                 return Action(match=match, name=kegex.name, value=entry)
         return None
 
-    def _serialize_color(self, obj: Any, xform: str) -> CursesLines:
+    def _serialize_color(self, obj: Any) -> CursesLines:
         """Serialize, if neccesary and color an obj
 
         :param obj: the object to color
         :type obj: Any
-        :param xform: The format to serialize the object
-        :type xfrom: str
         :return: The generated lines
         :rtype: CursesLines
         """
-        if xform == "source.ansi":
-            return self._colorizer.render(obj, xform)
-        if xform == "source.yaml":
+        if self.xform() == "source.ansi":
+            return self._colorizer.render(doc=obj, scope=self.xform())
+        if self.xform() == "source.yaml":
             string = yaml.dump(
                 obj, default_flow_style=False, Dumper=Dumper, explicit_start=True, sort_keys=True
             )
-        elif xform == "source.json":
+        elif self.xform() == "source.json":
             string = json.dumps(obj, indent=4, sort_keys=True)
         else:
             string = obj
-        colorized = self._colorizer.render(string, xform)
+        colorized = self._colorizer.render(doc=string, scope=self.xform())
         lines = self._color_lines_for_term(colorized)
         return lines
 
@@ -857,40 +854,32 @@ class UserInterface:
             decoration=0,
         )
 
-    def _filter_and_serialize(
-        self, obj: Any, xform: str
-    ) -> Tuple[Union[CursesLines, None], CursesLines]:
+    def _filter_and_serialize(self, obj: Any) -> Tuple[Union[CursesLines, None], CursesLines]:
         """filter an obj and serialize
 
         :param obj: the obj to serialize
         :type obj: Any
-        :param xfrom: the xform to use
-        :type xform: str
         :return: the serialize lines ready for display
         :rtype: CursesLines
         """
         obj = self._filter_keys(obj) if self._hide_keys and isinstance(obj, dict) else obj
-        lines = self._serialize_color(obj, xform)
+        lines = self._serialize_color(obj)
         heading = self._custom_heading(obj)
         return heading, lines
 
-    def _show_obj_from_list(
-        self, objs: List[Any], index: int, xform: str, await_input: bool
-    ) -> Interaction:
+    def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
         """Show an object on the display
 
         :param objs: A list of one or more object
         :type objs: A list of Any
-        :param xform: How the obj should be serialized
-        :type xform: str
         :param await_input: Should we wait for user input before returning
         :type await_input: bool
         :return: interaction with the user
         :rtype: Interaction
         """
-        heading, lines = self._filter_and_serialize(objs[index], xform)
+        heading, lines = self._filter_and_serialize(objs[index])
         while True:
 
             if len(objs) > 1:
@@ -915,7 +904,7 @@ class UserInterface:
 
             if entry == "_":
                 self._hide_keys = not self._hide_keys
-                heading, lines = self._filter_and_serialize(objs[index], xform)
+                heading, lines = self._filter_and_serialize(objs[index])
 
             # get the less or more, wrap, incase we jumped out of the menu indices
             elif entry == "-":
@@ -1039,31 +1028,32 @@ class UserInterface:
     def show(
         self,
         obj: Union[List, Dict, str, bool, int, float],
+        xform: str = "",
         index: int = None,
         columns: List = None,
         await_input: bool = True,
-        xform: str = None,
     ) -> Interaction:
         """Show something on the screen
 
         :param obj: The inbound object
         :type obj: anything
+        :param xform: Set the xform
+        :type xform: str
         :param index: When obj is a list, show this entry
         :type index: int
         :param columns: When obj is a list of dicts, use these keys for menu columns
         :type columns: list
         :param wait_input: Should we wait for user input?
         :type wait_input: bool
-        :param xform: Override the current xform
-        :type xform: str
         :return: interaction with the user
         :rtype: Interaction
         """
         columns = columns or []
+        self.xform(xform or self._default_obj_serialization)
         if index is not None and isinstance(obj, list):
-            result = self._show_obj_from_list(obj, index, xform or self._xform, await_input)
+            result = self._show_obj_from_list(obj, index, await_input)
         elif columns and isinstance(obj, list):
             result = self._show_menu(obj, columns, await_input)
         else:
-            result = self._show_obj_from_list([obj], 0, xform or self._xform, await_input)
+            result = self._show_obj_from_list([obj], 0, await_input)
         return result

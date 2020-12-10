@@ -5,7 +5,6 @@ import json
 import logging
 import os
 import re
-import sys
 
 import colorsys
 import curses
@@ -29,9 +28,7 @@ CURSES_STYLES = {
     8: curses.A_INVIS,
 }
 
-GRAMMAR_DIR = os.path.join(sys.prefix, "share", "winston", "grammar")
 THEME = "dark_vs.json"
-THEME_DIR = os.path.join(sys.prefix, "share", "winston", "theme")
 
 
 class ColorSchema:
@@ -72,14 +69,16 @@ class Colorize:
     """Functionality for coloring"""
 
     # pylint: disable=too-few-public-methods
-    def __init__(self):
+    def __init__(self, share_dir):
         self._logger = logging.getLogger(__name__)
         self._schema = None
+        self._theme_dir = os.path.join(share_dir, "themes")
+        self._grammar_dir = os.path.join(share_dir, "grammar")
+        self._grammars = Grammars(self._grammar_dir)
         self._load()
-        self._grammars = Grammars(GRAMMAR_DIR)
 
     def _load(self):
-        with open(os.path.join(THEME_DIR, THEME)) as data_file:
+        with open(os.path.join(self._theme_dir, THEME)) as data_file:
             self._schema = ColorSchema(json.load(data_file))
 
     @functools.lru_cache(maxsize=100)

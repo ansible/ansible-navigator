@@ -54,14 +54,10 @@ class PlaybookRunner:
             "finished_callback": self.runner_finished_callback,
         }
         if self._ee:
+            inventory = ["-i", self._inventory] if self._inventory else []
             add_args = {
                 "cli_execenv_cmd": "playbook",
-                "cmdline": [
-                    self._playbook,
-                    "-i",
-                    self._inventory,
-                ]
-                + self._cmdline,
+                "cmdline": [self._playbook] + inventory + self._cmdline,
                 "container_image": self._eei,
                 "private_data_dir": ".",
                 "process_isolation_executable": self._ce,

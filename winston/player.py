@@ -311,6 +311,7 @@ class Player(App):
             no_osc4=self.args.no_osc4,
             kegexes=self.actions.kegexes,
             refresh=refresh,
+            share_dir=self.args.share_dir,
         )
 
     def explore(self, _screen) -> None:

@@ -3,14 +3,15 @@
 /changelogs/.plugin-cache.yaml
 
 
-# local dev crap
+############# local dev crap
 .dev/
-aap.cfg
+winston.cfg
 ansible.cfg
 # runner artifacts
 artifacts 
-# ansible-explorer artifact
+# app artifact
 playbook.json
+#############
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

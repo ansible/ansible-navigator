@@ -6,7 +6,6 @@ import subprocess
 
 from argparse import Namespace
 from distutils.spawn import find_executable
-from typing import Tuple
 from typing import Union
 from . import _actions as actions
 from ..player import App
@@ -26,6 +25,7 @@ class Action:
         self._app = None
 
     def run(self, interaction: Interaction, app: App) -> Union[Interaction, bool]:
+        # pylint: disable=too-many-branches
         """Handle :doc
 
         :param interaction: The interaction from the user
@@ -51,13 +51,20 @@ class Action:
 
         if app.args.execution_environment:
             self._logger.debug("trying execution environment")
-            plugin_doc, xform = self._try_ee(app.args, interaction.ui.xform(), plugin)
-            if not plugin_doc:
+            plugin_doc = self._try_ee(app.args, interaction, plugin)
+            if isinstance(plugin_doc, str):
+                plugin_doc = {"execution_environment_errors": plugin_doc.splitlines()}
                 self._logger.debug("ee ansible-doc failed, trying local")
-                plugin_doc, xform = self._try_local(interaction, plugin)
+                local_plugin_doc = self._try_local(interaction, plugin)
+                if isinstance(local_plugin_doc, str):
+                    plugin_doc["local_errors"] = local_plugin_doc.splitlines()
+                else:
+                    plugin_doc = local_plugin_doc
         else:
             self._logger.debug("trying local")
-            plugin_doc, xform = self._try_local(interaction, plugin)
+            plugin_doc = self._try_local(interaction, plugin)
+            if isinstance(plugin_doc, str):
+                plugin_doc = {"local_errors": plugin_doc.splitlines()}
 
         if not plugin_doc:
             return False
@@ -65,7 +72,7 @@ class Action:
         previous_scroll = interaction.ui.scroll()
         interaction.ui.scroll(0)
         while True:
-            result = interaction.ui.show(obj=plugin_doc, xform=xform)
+            result = interaction.ui.show(obj=plugin_doc)
             app.update()
             if result.action.name != "refresh":
                 break
@@ -73,8 +80,8 @@ class Action:
         return result
 
     def _try_ee(
-        self, args: Namespace, xform: str, plugin: str
-    ) -> Tuple[Union[str, dict, None], Union[str, None]]:
+        self, args: Namespace, interaction: Interaction, plugin: str
+    ) -> Union[str, dict, None]:
 
         if "playbook" in self._app.args:
             playbook_dir = os.path.dirname(args.playbook)
@@ -97,77 +104,69 @@ class Action:
             )
             parts = proc_out.stdout.split("{", 1)
             stderr = parts[0]
+
             if len(parts) == 2:
                 stdout = "{" + parts[1]
-                plugin_doc = json.loads(stdout)
-                if plugin_doc:
-                    plugin_doc = plugin_doc[list(plugin_doc.keys())[0]]
-                    if stderr:
-                        plugin_doc["WARNINGS"] = stderr.splitlines()
-                    self._logger.debug("ee ansible-doc output %s", proc_out)
-                    return plugin_doc, xform
-                self._logger.debug("ee command failed, json was empty.")
-                return None, None
-            self._logger.debug("ee command failed, no json in response: '%s'", proc_out.stdout)
-            return None, None
+            else:
+                stdout = ""
+
+            plugin_doc = self._extract_plugin_doc(interaction, stdout, stderr)
+            return plugin_doc
 
         except subprocess.CalledProcessError as exc:
             self._logger.debug("ee command execution failed: '%s'", str(exc))
             self._logger.debug("ee command execution failed: '%s'", exc.output)
-            return None, None
-        except json.JSONDecodeError as exc:
-            self._logger.debug("ee command json decode failed: '%s'", str(exc))
-            return None, None
+            return None
 
-    def _try_local(
-        self, interaction: Interaction, plugin: str
-    ) -> Tuple[Union[str, dict, None], Union[str, None]]:
+    def _try_local(self, interaction: Interaction, plugin: str) -> Union[str, dict, None]:
         adoc_path = find_executable("ansible-doc")
         if adoc_path:
             self._logger.debug("local ansible-doc path is: %s", adoc_path)
-            try:
-                cmd = [adoc_path, plugin, "--json"]
-                if "playbook" in self._app.args:
-                    cmd.extend(["--playbook-dir", os.path.dirname(self._app.args.playbook)])
-                else:
-                    cmd.extend(["--playbook-dir", os.getcwd()])
+            cmd = [adoc_path, plugin, "--json"]
+            if "playbook" in self._app.args:
+                cmd.extend(["--playbook-dir", os.path.dirname(self._app.args.playbook)])
+            else:
+                cmd.extend(["--playbook-dir", os.getcwd()])
 
-                if self._app.args.app == "doc" and self._app.args.type:
-                    cmd.extend(["-t", self._app.args.type])
-                    self._app.args.type = None
+            if self._app.args.app == "doc" and self._app.args.type:
+                cmd.extend(["-t", self._app.args.type])
+                self._app.args.type = None
 
-                proc_out = subprocess.run(
-                    " ".join(cmd), capture_output=True, check=True, text=True, shell=True
-                )
-                self._logger.debug("ansible-doc output %s", proc_out)
+            proc_out = subprocess.run(
+                " ".join(cmd), capture_output=True, check=True, text=True, shell=True
+            )
+            self._logger.debug("ansible-doc output %s", proc_out)
 
-                plugin_doc = json.loads(proc_out.stdout)
-                if plugin_doc:
-                    plugin_doc = plugin_doc[list(plugin_doc.keys())[0]]
+            plugin_doc = self._extract_plugin_doc(interaction, proc_out.stdout, proc_out.stderr)
+            return plugin_doc
 
-                if proc_out.stderr:
-                    plugin_doc["WARNINGS"] = proc_out.stderr.splitlines()
+        msg = "no ansible-doc command found in path"
+        self._logger.error(msg)
+        return msg
 
-                xform = interaction.ui.xform()
+    def _extract_plugin_doc(self, interaction: Interaction, stdout: str, stderr: str):
+        try:
+            plugin_doc = json.loads(stdout)
+            if plugin_doc:
+                plugin_doc = plugin_doc[list(plugin_doc.keys())[0]]
+                if stderr:
+                    plugin_doc["WARNINGS"] = stderr.splitlines()
+            else:
+                plugin_doc = stderr
 
-            except subprocess.CalledProcessError as exc:
-                self._logger.info(
-                    "Command failed 'ansible-doc %s --json'", interaction.action.value
-                )
-                self._logger.debug(
-                    "ansible-doc command failure for '%s' %s", interaction.action.value, str(exc)
-                )
-                plugin_doc = exc.output
-                xform = None
+        except subprocess.CalledProcessError as exc:
+            self._logger.info("Command failed 'ansible-doc %s --json'", interaction.action.value)
+            self._logger.debug(
+                "ansible-doc command failure for '%s' %s", interaction.action.value, str(exc)
+            )
+            plugin_doc = exc.output
 
-            except json.JSONDecodeError as exc:
-                self._logger.info(
-                    "Parsing of ansible-doc output failed for '%s'", interaction.action.value
-                )
-                self._logger.debug("json decode error: %s", str(exc))
-                self._logger.debug("tried: %s", plugin_doc.stdout)
-                plugin_doc = plugin_doc.stdout
-                xform = None
-            return plugin_doc, xform
-        self._logger.error("no ansible-doc command found in path")
-        return None, None
+        except json.JSONDecodeError as exc:
+            self._logger.info(
+                "Parsing of ansible-doc output failed for '%s'", interaction.action.value
+            )
+            self._logger.debug("json decode error: %s", str(exc))
+            self._logger.debug("tried: %s", plugin_doc.stdout)
+            plugin_doc = stdout
+
+        return plugin_doc
