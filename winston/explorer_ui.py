@@ -117,7 +117,7 @@ class ExplorerUi(UserInterface):
                 res = obj["result"]
 
             if "res" in obj and "msg" in obj["res"]:
-                msg = obj["res"]["msg"].replace("\n", " ").replace("\r", "")
+                msg = str(obj["res"]["msg"]).replace("\n", " ").replace("\r", "")
             else:
                 msg = ""
 
