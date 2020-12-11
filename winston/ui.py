@@ -121,7 +121,15 @@ class UserInterface:
 
     """The main UI class"""
 
-    def __init__(self, screen_miny, no_osc4, kegexes, refresh, share_dir, pbar_width=11):
+    def __init__(
+        self,
+        screen_miny: int,
+        no_osc4: bool,
+        kegexes: Callable[..., Any],
+        refresh: int,
+        share_dir: str,
+        pbar_width: int = 11,
+    ) -> None:
         """init
 
         :param screen_miny: The minimum screen height
@@ -133,29 +141,32 @@ class UserInterface:
         :param no_osc4: enable/disable osc4 terminal color change support
         :type no_osc4: str (enabled/disabled)
         """
+        self._color_menu_item: Callable[[str, Dict[str, Any]], int]
         self._colorizer = Colorize(share_dir=share_dir)
-        self._custom_colors_enabled = None
+        self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
+        self._custom_colors_enabled = False
         self._default_colors = None
         self._default_pairs = None
         self._default_obj_serialization = "source.yaml"
+        self._filter_content_keys: Callable[[Dict[Any, Any]], Dict[Any, Any]]
         self._hide_keys = True
         self._kegexes = kegexes
         self._logger = logging.getLogger()
-        self._menu_filter = None
-        self._menu_indicies = None
+        self._menu_filter: Union[Pattern, None] = None
+        self._menu_indicies: Tuple[int, ...] = tuple()
         self._no_osc4 = no_osc4
-        self._number_colors = None
+        self._number_colors = 0
         self._one_line_input = OneLineInput()
         self._pbar_width = pbar_width
         self._prefix_color = 8
         self._refresh = [refresh]
-        self._rgb_to_curses_color_idx = {}
+        self._rgb_to_curses_color_idx: Dict[str, int] = {}
         self._screen_miny = screen_miny
         self._scroll = 0
         self._theme_dir = os.path.join(share_dir, "themes")
         self._xform = self._default_obj_serialization
         self.status = ""
-        self.status_color = None
+        self.status_color = 0
 
         curses.curs_set(0)
         self._set_colors()
@@ -175,7 +186,7 @@ class UserInterface:
         self._refresh.pop()
         self._screen.timeout(self._refresh.pop())
 
-    def menu_filter(self, *args: List[Union[str, None]], **kwargs: None) -> Union[Pattern, None]:
+    def menu_filter(self, value: Union[str, None] = "") -> object:
         """Set or return the menu filter
 
         :param args[0]: None or the menu_filter to set
@@ -183,17 +194,15 @@ class UserInterface:
         :return: the current menu filter
         :rtype: None or Pattern
         """
-        if args:
-            if len(args) > 1 or kwargs:
-                raise TypeError
-            if args[0] is None:
+        if value != "":
+            if value is None:
                 self._menu_filter = None
             else:
                 try:
-                    self._menu_filter = re.compile(args[0])
+                    self._menu_filter = re.compile(value)
                 except re.error as exc:
                     self._menu_filter = None
-                    self._logger.error("Regex for menu filter was invalid: %s", args[0])
+                    self._logger.error("Regex for menu filter was invalid: %s", value)
                     self._logger.exception(exc)
         return self._menu_filter
 
@@ -262,43 +271,6 @@ class UserInterface:
             curses.flash()
             curses.beep()
             self._screen.refresh()
-
-    @staticmethod
-    def _custom_color(_colname, _entry) -> int:
-        """Provide a custom color for this column
-        override in child class
-
-        :params _colname: The column name
-        :type _colname: str
-        :param _entry: The full menu line
-        :type _entry: dict
-        :return int:
-        """
-        return 0
-
-    def _custom_heading(self, _obj: Any) -> Union[CursesLines, None]:
-        # pylint: disable=no-self-use
-        """Generate a heading for the object being show
-        override in child class
-
-        :param _obj: The current showing content object
-        :type _obj: Any
-        :return: a header to show
-        :rtype: CursesLines or None
-        """
-        return tuple()
-
-    @staticmethod
-    def _filter_keys(obj: Any):
-        """Hide keys from an obj
-        override in child class
-
-        :param obj: An obj from which keys can be filtered
-        :type obj: Any
-        :return: The same object, modified if need be
-        :rtype: Any
-        """
-        return obj
 
     def _set_colors(self) -> None:
         """Set the colors for curses"""
@@ -693,7 +665,11 @@ class UserInterface:
         )
 
     def _menu_line_part(
-        self, colno: int, coltext: Any, dyct: dict, menu_layout: Tuple[List, ...]
+        self,
+        colno: int,
+        coltext: Any,
+        dyct: dict,
+        menu_layout: Tuple[List, ...],
     ) -> CursesLinePart:
         """Generate one menu line part
 
@@ -717,10 +693,10 @@ class UserInterface:
         :type: CursesLinePart
         """
         col_starts, cols, adj_colws, header = menu_layout
-        if color := self._custom_color(cols[colno], dyct):
-            color = curses.color_pair(color % self._number_colors)
-        else:
-            color = curses.color_pair(0)
+
+        color = self._color_menu_item(cols[colno], dyct)
+        color = curses.color_pair(color % self._number_colors)
+
         text = str(coltext)[0 : adj_colws[colno]]
         if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "duration":
             # right jusitfy on header if int, bool, float or "duration"
@@ -732,7 +708,6 @@ class UserInterface:
             # left justify
             print_at = col_starts[colno]
         return CursesLinePart(column=print_at, string=str(text), color=color, decoration=0)
-        # result.append([print_at, text, color, 0])
 
     def _action_match(self, entry: str) -> Union[Action, None]:
         """attempt to match the user input against the regexes
@@ -862,9 +837,9 @@ class UserInterface:
         :return: the serialize lines ready for display
         :rtype: CursesLines
         """
-        obj = self._filter_keys(obj) if self._hide_keys and isinstance(obj, dict) else obj
+        obj = self._filter_content_keys(obj) if self._hide_keys and isinstance(obj, dict) else obj
         lines = self._serialize_color(obj)
-        heading = self._custom_heading(obj)
+        heading = self._content_heading(obj, self._screen_w)
         return heading, lines
 
     def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:
@@ -900,7 +875,7 @@ class UserInterface:
             )
             if entry == "KEY_RESIZE":
                 # only the heading knows about the screen_w and screen_h
-                heading = self._custom_heading(objs[index])
+                heading = self._content_heading(objs[index], self._screen_w)
 
             if entry == "_":
                 self._hide_keys = not self._hide_keys
@@ -1002,7 +977,7 @@ class UserInterface:
                     if self._obj_match_filter(mi.obj, columns)
                 )
             else:
-                self._menu_indicies = range(len(menu_items))
+                self._menu_indicies = tuple(range(len(menu_items)))
 
             entry = self._display(
                 lines=tuple(menu_items[idx].line for idx in self._menu_indicies),
@@ -1032,6 +1007,9 @@ class UserInterface:
         index: int = None,
         columns: List = None,
         await_input: bool = True,
+        filter_content_keys: Callable = lambda x: x,
+        color_menu_item: Callable = lambda *args, **kwargs: 0,
+        content_heading: Callable = lambda *args, **kwargs: None,
     ) -> Interaction:
         """Show something on the screen
 
@@ -1048,6 +1026,9 @@ class UserInterface:
         :return: interaction with the user
         :rtype: Interaction
         """
+        self._color_menu_item = color_menu_item
+        self._content_heading = content_heading
+        self._filter_content_keys = filter_content_keys
         columns = columns or []
         self.xform(xform or self._default_obj_serialization)
         if index is not None and isinstance(obj, list):

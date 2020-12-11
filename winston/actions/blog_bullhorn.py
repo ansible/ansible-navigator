@@ -1,10 +1,13 @@
 """ :blog """
 import logging
+import re
 import xml.etree.ElementTree as ET
 import urllib.request
 import urllib.error
 import webbrowser
 
+from typing import Any
+from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Union
@@ -29,6 +32,23 @@ URLS = {
     "bullhorn": "https://us19.campaign-archive.com/feed?u=56d874e027110e35dea0e03c1&id=d6635f5420",
     "redhat": "https://www.redhat.com/sysadmin/rss.xml",
 }
+
+RESULT_TO_COLOR = [
+    ("(?i)^title$", 9),
+    ("(?i)^date$", 11),
+    ("(?i)^category$", 14),
+]
+get_color = lambda word: next((x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)), 0)
+
+
+def color_menu_item(colname: str, _entry: Dict[str, Any]) -> int:
+    # pylint: disable=too-many-branches
+    """Find matching color for word
+
+    :param word: A word to match
+    :type word: str(able)
+    """
+    return get_color(colname)
 
 
 @actions.register
@@ -84,7 +104,9 @@ class Action:
             return True
 
         while True:
-            result = interaction.ui.show(obj=f2show, columns=columns)
+            result = interaction.ui.show(
+                obj=f2show, columns=columns, color_menu_item=color_menu_item
+            )
             app.update()
             if result.action.name == "select":
                 webbrowser.open_new_tab(f2show[result.action.value % len(f2show)]["link"])

@@ -5,9 +5,9 @@ from collections import deque
 import winston.actions as actions
 
 from .app import App
-from .explorer_ui import ExplorerUi as Ui
 from .step import Step
 from .ui import Interaction
+from .ui import UserInterface
 
 
 class ActionRunner(App):
@@ -28,7 +28,7 @@ class ActionRunner(App):
         :param refresh: The refresh for the ui
         :type refresh: int
         """
-        self._ui = Ui(
+        self._ui = UserInterface(
             screen_miny=3,
             no_osc4=self.args.no_osc4,
             kegexes=self.actions.kegexes,
