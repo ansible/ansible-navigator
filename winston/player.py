@@ -11,10 +11,13 @@ from typing import Union
 import winston.actions as actions
 
 from .app import App
-from .explorer_ui import ExplorerUi as Ui
 from .playbook_runner import PlaybookRunner
+from .player_ui_callbacks import color_menu_item
+from .player_ui_callbacks import content_heading
+from .player_ui_callbacks import filter_content_keys
 from .step import Step
 from .ui import Interaction
+from .ui import UserInterface
 from .utils import human_time
 
 
@@ -306,7 +309,7 @@ class Player(App):
         :param refresh: The refresh for the ui
         :type refresh: int
         """
-        self._ui = Ui(
+        self._ui = UserInterface(
             screen_miny=3,
             no_osc4=self.args.no_osc4,
             kegexes=self.actions.kegexes,
@@ -346,12 +349,16 @@ class Player(App):
                 )
             elif self.step.type == "menu":
                 self._populate_step()
-                interaction = self._ui.show(obj=self.step.value, columns=self.step.columns)
+                interaction = self._ui.show(
+                    obj=self.step.value, columns=self.step.columns, color_menu_item=color_menu_item
+                )
 
             elif self.step.type == "content":
                 interaction = self._ui.show(
                     obj=self.step.previous.value,
                     index=self.step.previous.index,
+                    content_heading=content_heading,
+                    filter_content_keys=filter_content_keys,
                 )
 
             if isinstance(interaction, Interaction):
