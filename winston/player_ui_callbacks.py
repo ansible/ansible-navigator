@@ -23,7 +23,7 @@ RESULT_TO_COLOR = [
 get_color = lambda word: next((x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)), 0)
 
 
-def color_menu_item(colname: str, entry: Dict[str, Any]) -> int:
+def color_menu_item(_colno: int, colname: str, entry: Dict[str, Any]) -> int:
     # pylint: disable=too-many-branches
     """Find matching color for word
 

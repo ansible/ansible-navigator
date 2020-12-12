@@ -1,5 +1,6 @@
 """ start here
 """
+import itertools
 import logging
 import os
 import sys
@@ -90,10 +91,17 @@ def update_args(
                                     )
                                     msgs.append(msg)
                                     setattr(args, key, bool_key)
-                            elif default == arg_value != value:
-                                msg = f"{key} was default, using entry '{key}={value}"
+                            # argparse report a default of [] as None :(
+                            elif arg_value == [] and default is None and value:
+                                use_value = [value.split(",")]
+                                setattr(args, key, use_value)
+                                msg = f"{key} was default list, "
+                                msg += f"using entry.split(',') '{key}:{use_value}'"
                                 msgs.append(msg)
+                            elif default == arg_value != value:
                                 setattr(args, key, value)
+                                msg = f"{key} was default, using entry '{key}={value}'"
+                                msgs.append(msg)
                         else:
                             msg = f"{key} was not provided, using entry '{key}={value}'"
                             msgs.append(msg)
@@ -155,9 +163,6 @@ def main():
     if args.app == "load" and not os.path.exists(args.artifact):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
-    for key, value in vars(args).items():
-        logger.debug("Running with %s=%s %s", key, value, type(value))
-
     os.environ.setdefault("ESCDELAY", "25")
     os.system("clear")
 
@@ -173,7 +178,13 @@ def main():
         args.app = "welcome"
         args.value = None
 
+    if hasattr(args, "inventory"):
+        args.inventory = list(itertools.chain.from_iterable(args.inventory))
+
     args.share_dir = os.path.join(sys.prefix, "share", APP_NAME)
+
+    for key, value in vars(args).items():
+        logger.debug("Running with %s=%s %s", key, value, type(value))
 
     try:
         if args.app in ["playbook", "playquietly"]:

@@ -2,7 +2,6 @@
 """
 
 from collections import deque
-import winston.actions as actions
 
 from .app import App
 from .step import Step
@@ -18,8 +17,6 @@ class ActionRunner(App):
 
     def __init__(self, args):
         super().__init__(args)
-
-        self.actions = actions
         self._ui = None
 
     def initialize_ui(self, refresh: int) -> None:

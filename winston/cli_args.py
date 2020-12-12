@@ -66,6 +66,7 @@ class CliArgs:
 
     def _base(self) -> None:
         self._ee_params(self._base_parser)
+        self._inventory_columns(self._base_parser)
         self._ide_params(self._base_parser)
         self._log_params(self._base_parser)
         self._no_osc4_params(self._base_parser)
@@ -147,10 +148,21 @@ class CliArgs:
     @staticmethod
     def _ide_params(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "-ide",
+            "--ide",
             help="Specify the current ide",
             choices=["pycharm", "vim", "vscode"],
             default="vim",
+        )
+
+    @staticmethod
+    def _inventory_columns(parser: ArgumentParser) -> None:
+        parser.add_argument(
+            "--inventory_columns",
+            help=(
+                "Additional columns to be shown in the inventory views,"
+                " comma delimited, eg 'xxx,yyy,zzz'"
+            ),
+            default="",
         )
 
     def _load(self) -> None:
@@ -214,7 +226,10 @@ class CliArgs:
             "-i",
             "--inventory",
             help="The inventory to use",
+            action="append",
+            nargs="+",
             type=_abspath,
+            default=[],
         )
         parser.add_argument(
             "-a",

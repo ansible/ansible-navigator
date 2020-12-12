@@ -141,7 +141,7 @@ class UserInterface:
         :param no_osc4: enable/disable osc4 terminal color change support
         :type no_osc4: str (enabled/disabled)
         """
-        self._color_menu_item: Callable[[str, Dict[str, Any]], int]
+        self._color_menu_item: Callable[[int, str, Dict[str, Any]], int]
         self._colorizer = Colorize(share_dir=share_dir)
         self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
         self._custom_colors_enabled = False
@@ -551,7 +551,10 @@ class UserInterface:
         line_prefix_w = len(str(len(dicts))) + len("|")
         dicts = convert_percentages(dicts, cols, self._pbar_width)
         lines = [[str(d.get(c)) for c in cols] for d in dicts]
-        colws = [max([len(str(v)) for v in c]) for c in zip(*lines + [cols])]
+        colws = [
+            max([len(str(v)) for v in c])
+            for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]])
+        ]
         # add a space
         colws = [c + 1 for c in colws]
 
@@ -605,7 +608,8 @@ class UserInterface:
         :type: CursesLinePart
         """
         col_starts, cols, adj_colws = menu_layout
-        coltext = cols[colno]
+        coltext = re.sub("^__", "", cols[colno])
+        coltext = re.sub("_", " ", coltext)
         adj_entry = coltext[0 : adj_colws[colno]].upper()
         # right justifyheader if %
         if coltext.startswith("% "):
@@ -694,7 +698,7 @@ class UserInterface:
         """
         col_starts, cols, adj_colws, header = menu_layout
 
-        color = self._color_menu_item(cols[colno], dyct)
+        color = self._color_menu_item(colno, cols[colno], dyct)
         color = curses.color_pair(color % self._number_colors)
 
         text = str(coltext)[0 : adj_colws[colno]]

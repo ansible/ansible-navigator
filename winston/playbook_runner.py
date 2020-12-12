@@ -1,6 +1,7 @@
 """ ansible_runner w/ queue and
 event handler
 """
+import itertools
 import logging
 import os
 from ansible_runner import Runner  # type: ignore
@@ -54,7 +55,8 @@ class PlaybookRunner:
             "finished_callback": self.runner_finished_callback,
         }
         if self._ee:
-            inventory = ["-i", self._inventory] if self._inventory else []
+            inventory = [["-i", inv] for inv in self._inventory] if self._inventory else []
+            inventory = list(itertools.chain.from_iterable(inventory))
             add_args = {
                 "cli_execenv_cmd": "playbook",
                 "cmdline": [self._playbook] + inventory + self._cmdline,

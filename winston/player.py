@@ -8,7 +8,6 @@ from typing import Deque
 from typing import Tuple
 from typing import Union
 
-import winston.actions as actions
 
 from .app import App
 from .playbook_runner import PlaybookRunner
@@ -40,7 +39,6 @@ class Player(App):
 
         self.stdout = []
 
-        self.actions = actions
         self._ui = None
         self._msg_from_plays = (None, None)
         self._plays = Step("plays", "menu", self._play_stats)
