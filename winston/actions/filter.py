@@ -17,7 +17,7 @@ class Action:
         self._logger = logging.getLogger()
 
     # pylint: disable=unused-argument
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> None:
         """Handle :filter
 
         :param interaction: The interaction from the user
@@ -30,4 +30,8 @@ class Action:
         menu_filter = interaction.action.match.groupdict()["regex"]
         interaction.ui.menu_filter(menu_filter)
         self._logger.debug("requested filter set to %s", menu_filter)
-        return False
+
+        if hasattr(app, "steps"):
+            app.steps.back_one()
+
+        return None

@@ -25,6 +25,7 @@ all:
             eos202:
             eos203:
             eos204:
+            eos101:
 
       vars:
         ansible_network_os: arista.eos.eos

@@ -17,7 +17,7 @@ class Action:
     def __init__(self):
         self._logger = logging.getLogger()
 
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> None:
         """Handle :save
 
         :param interaction: The interaction from the user
@@ -28,4 +28,4 @@ class Action:
         self._logger.debug("save requested")
         filename = interaction.action.match.groupdict()["filename"]
         app.write_artifact(filename)
-        return True
+        return None

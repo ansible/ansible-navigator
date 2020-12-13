@@ -17,7 +17,7 @@ class Action:
         self._logger = logging.getLogger()
 
     # pylint: disable=unused-argument
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> None:
         """Handle :yaml
 
         :param interaction: The interaction from the user, action and value
@@ -28,5 +28,4 @@ class Action:
             interaction.ui.scroll(0)
             xform = interaction.ui.xform("source.yaml", default=True)
             self._logger.debug("Serialization set to %s", xform)
-            return True
-        return False
+        return None

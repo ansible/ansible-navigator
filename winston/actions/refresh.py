@@ -29,7 +29,14 @@ class Action:
         # this is noisy but helpful when needed
         # self._logger.debug("refresh requested")
 
+        # pop ourself off the stack
+        if hasattr(app, "steps"):
+            app.steps.back_one()
+
         # Just in case the user switched tasks with +,- etc
         if interaction.content:
-            app.step.previous.index = interaction.action.value
+            if hasattr(app, "steps"):
+                app.steps.current.index = interaction.action.value
+            else:
+                app.step.previous.index = interaction.action.value
         return True

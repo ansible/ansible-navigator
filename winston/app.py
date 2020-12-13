@@ -9,9 +9,10 @@ class App:
     # pylint: disable=too-few-public-methods
     """simple base class for apps"""
 
-    def __init__(self, args):
+    def __init__(self, args=None):
         self.actions: type.ModuleType = actions
         self.args = args
+        self.stdout = []
         self.step = None
         self._logger = logging.getLogger(__name__)
 

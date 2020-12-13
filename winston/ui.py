@@ -910,7 +910,11 @@ class UserInterface:
             if action := self._action_match(entry):
                 if action.name == "refresh":
                     action = action._replace(value=index)
-                content = Content(showing=objs[index % len(objs)])
+                
+                current = objs[index % len(objs)]
+                filtered = self._filter_content_keys(current) if self._hide_keys and isinstance(current, dict) else current
+
+                content = Content(showing=filtered)
                 return Interaction(action=action, content=content, ui=self._ui)
 
     def _obj_match_filter(self, obj: Dict, columns: List) -> bool:
@@ -1001,7 +1005,9 @@ class UserInterface:
                         action = action._replace(value=index)
                     else:
                         continue
-                menu = Menu(current=current, columns=columns)
+                clean_columns = [re.sub("^__", "", col) for col in columns]
+                clean_current = [{re.sub("^__", "", k):v for k,v in me.items()} for me in current] 
+                menu = Menu(current=clean_current, columns=clean_columns)
                 return Interaction(action=action, menu=menu, ui=self._ui)
 
     def show(

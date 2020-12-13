@@ -37,13 +37,11 @@ class Player(App):
         self.runner = None
         self._runner_finished = None
 
-        self.stdout = []
-
         self._ui = None
         self._msg_from_plays = (None, None)
-        self._plays = Step("plays", "menu", self._play_stats)
-        self._tasks = Step("tasks", "menu", lambda x: x["tasks"])
-        self._task = Step("task", "content", None)
+        self._plays = Step(name="plays", tipe="menu", func=self._play_stats)
+        self._tasks = Step(name="tasks", tipe="menu", func=lambda x: x["tasks"])
+        self._task = Step(name="task", tipe="content")
 
         self._plays.previous = self._plays
         self._plays.next = self._tasks

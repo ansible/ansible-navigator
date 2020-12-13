@@ -62,7 +62,7 @@ class Action:
     def __init__(self):
         self._logger = logging.getLogger()
 
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> Union[Interaction, None]:
         """Handle <esc>
 
         :param interaction: The interaction from the user
@@ -75,7 +75,7 @@ class Action:
         url = URLS.get(str(interaction.action.value), None)
         if not url:
             self._logger.debug("no url for %s", interaction.action.value)
-            return True
+            return None
 
         previous_filter = interaction.ui.menu_filter()
         interaction.ui.menu_filter(None)
@@ -98,10 +98,10 @@ class Action:
                 f2show = [blog._asdict() for blog in feed]
             else:
                 self._logger.info("feed empty")
-                return True
+                return None
         else:
             self._logger.info("blog was empty")
-            return True
+            return None
 
         while True:
             result = interaction.ui.show(

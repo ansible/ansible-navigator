@@ -1,23 +1,27 @@
 """ A step
 """
 
+from collections import deque
+from typing import Union
+
 
 class Step:
 
     # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-arguments
     """One step in the flow of things"""
 
-    def __init__(self, name, tipe, func):
-        self._index = None
+    def __init__(self, columns=None, index=None, name=None, tipe=None, func=None, value=None):
+        self._index = index
         self._index_changed = False
-        self._value = []
+        self._value = value or []
         self._value_changed = False
         self.name = name
         self.type = tipe
         self.func = func
         self.previous = None
         self.next = None
-        self.columns = []
+        self.columns = columns or []
 
     @property
     def changed(self):
@@ -66,10 +70,9 @@ class Step:
         :return: the selected item
         :rtype: obj
         """
-        try:
-            return self._value[self._index % len(self._value)]
-        except AttributeError as _exc:
+        if self.index is None or not self._value:
             return None
+        return self._value[self._index % len(self._value)]
 
     @property
     def value(self):
@@ -96,3 +99,23 @@ class Step:
         """check some expect type against a value"""
         if not isinstance(value, want):
             raise ValueError("wanted {want}, got {value}".format(want=want, value=type(value)))
+
+
+class Steps(deque):
+    """a custom deque"""
+
+    def back_one(self) -> Union[Step, None]:
+        """convenience method"""
+        if self:
+            return self.pop()
+        return None
+
+    @property
+    def current(self):
+        """return the current step"""
+        return self[-1]
+
+    @property
+    def previous(self) -> Step:
+        """return the previous step"""
+        return self[-2]

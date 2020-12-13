@@ -20,7 +20,7 @@ class Action:
         self._logger = logging.getLogger()
 
     # pylint: disable=unused-argument
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> None:
         """Handle :rerun
 
         :param interaction: The interaction from the user
@@ -30,4 +30,3 @@ class Action:
         """
         self._logger.debug("rerun requested")
         app.rerun()
-        return False

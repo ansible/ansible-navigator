@@ -97,7 +97,7 @@ class Action:
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
         return filename, line_number, obj
 
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> None:
         """Handle :open
 
         :param interaction: The interaction from the user
@@ -115,7 +115,7 @@ class Action:
                 menu=interaction.menu, menu_filter=interaction.ui.menu_filter
             )
         else:
-            return True
+            return None
 
         if not filename:
             if interaction.ui.xform() == "text.html.markdown":
@@ -147,4 +147,4 @@ class Action:
             self._logger.debug("Command: %s", command)
             if isinstance(command, str):
                 os.system(command)
-        return True
+        return None

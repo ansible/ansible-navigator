@@ -18,7 +18,7 @@ class Action:
     def __init__(self):
         self._logger = logging.getLogger()
 
-    def run(self, interaction: Interaction, app: App) -> Union[Interaction, bool]:
+    def run(self, interaction: Interaction, app: App) -> Union[Interaction, None]:
         """Handle :stream
 
         :param interaction: The interaction from the user
@@ -51,4 +51,7 @@ class Action:
             interaction.ui.scroll(previous_scroll)
             return interaction
         self._logger.debug("stdout unavailable")
-        return False
+        if hasattr(app, "steps"):
+            self._logger.debug("stepping back in %s", app.name)
+            app.steps.back_one()
+        return None

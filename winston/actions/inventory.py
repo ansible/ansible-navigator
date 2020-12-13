@@ -5,18 +5,18 @@ import json
 import os
 import subprocess
 
-from collections import deque
 from distutils.spawn import find_executable
 from subprocess import CompletedProcess
 from typing import Any
-from typing import Callable
 from typing import Dict
 from typing import List
-from typing import NamedTuple
 from typing import Union
 from . import _actions as actions
+from ..app import App
 from ..curses_defs import CursesLinePart
 from ..curses_defs import CursesLines
+from ..step import Step
+from ..step import Steps
 from ..ui import Interaction
 
 
@@ -33,6 +33,8 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
         if entry["__type"] == "group":
             return 11
         return 12
+    if colname == "__taxonomy":
+        return 11
     if colname == "inventory_hostname":
         return 10
     colors = [14, 13, 6, 5, 4, 3, 2]
@@ -98,47 +100,8 @@ class Menu(list):
     """a menu"""
 
 
-class Step(NamedTuple):
-    """A step in the deque"""
-
-    type: str
-    value: Union[Menu, List[Dict]]
-    idx: Union[int, None] = None
-
-
-class Steps(deque):
-    """a custom deque"""
-
-    @property
-    def adder(self) -> Callable:
-        """return self adder"""
-        return self._adder
-
-    @adder.setter
-    def adder(self, value: Callable) -> None:
-        """set the callable used to generate the next step"""
-        self._adder = value
-
-    def back_one(self) -> Union[Step, None]:
-        """convenience method"""
-        if self:
-            return self.pop()
-        return None
-
-    @property
-    def current(self):
-        """return the current step"""
-        return self[-1]
-
-    def next(self, value: Union[Step, Interaction]) -> None:
-        """add the next step to the que"""
-        if isinstance(value, Interaction):
-            value = self._adder(value)
-        self.append(value)
-
-
 @actions.register
-class Action:
+class Action(App):
     """:inventory"""
 
     # pylint:disable=too-few-public-methods
@@ -147,13 +110,14 @@ class Action:
     KEGEX = r"^i(?:nventory)?(\s(?P<inventories>.*))?$"
 
     def __init__(self):
+        super().__init__()
+        self._calling_app: App
         self._logger = logging.getLogger()
-        self._app: Any
         self.__inventory: Dict[Any, Any]
         self._inventory_error: str = ""
         self._host_vars: Dict[str, Dict[Any, Any]]
-        self._steps: Steps = Steps()
-        self._steps.adder = self._generate_next_step
+        self.name = "inventory"
+        self.steps: Steps = Steps()
         self._interaction: Interaction
 
     @property
@@ -174,9 +138,9 @@ class Action:
 
     @property
     def _show_columns(self):
-        return self._app.args.inventory_columns.split(",")
+        return self.args.inventory_columns.split(",")
 
-    def run(self, interaction: Interaction, app) -> Union[Interaction, bool]:
+    def run(self, interaction: Interaction, app) -> None:
         # pylint: disable=too-many-branches
         """Handle :inventory
 
@@ -186,12 +150,14 @@ class Action:
         :type app: App
         """
         self._logger.debug("inventory requested")
-        self._app = app
+        self._calling_app = app
+        self.args = app.args
+        self.stdout = app.stdout
         self._interaction = interaction
         self._gererate_inventory()
 
         if not self._inventory:
-            return True
+            return None
 
         previous_scroll = interaction.ui.scroll()
         previous_filter = interaction.ui.menu_filter()
@@ -199,8 +165,30 @@ class Action:
         if self._inventory_error:
             self._interaction.ui.show(self._inventory_error, xform="source.ansi")
             interaction.ui.scroll(previous_scroll)
-            return True
+            return None
 
+        self.steps.clear()
+        self.steps.append(self._build_main_menu())
+        self._interaction.ui.scroll(0)
+        while True:
+            self._calling_app.update()
+            self._take_step()
+            if not self.steps:
+                break
+
+        interaction.ui.scroll(previous_scroll)
+        interaction.ui.menu_filter(previous_filter)
+        return None
+
+    def _explore(self, initial_step):
+        self.steps.clear()
+        self.steps.append(initial_step)
+        self._interaction.ui.scroll(0)
+        while True:
+            self._calling_app.update()
+            self._take_step()
+
+    def _build_main_menu(self) -> Step:
         groups = MenuEntry(
             title="Browse groups",
             description="Explore each inventory group and group members members",
@@ -208,144 +196,125 @@ class Action:
         hosts = MenuEntry(
             title="Browse hosts", description="Explore the inventory with a list of all hosts"
         )
-        while True:
-            self._interaction.ui.scroll(0)
-            self._interaction.ui.menu_filter(None)
 
-            app.update()
+        step = Step(
+            columns=["title", "description"],
+            func=self._step_from_main_menu,
+            tipe="menu",
+            value=[groups, hosts],
+        )
+        return step
 
-            menu = Menu([groups, hosts])
-            result = self._interaction.ui.show(
-                obj=menu,
-                columns=["title", "description"],
-                color_menu_item=color_main_menu,
-            )
-            if result is True:
-                continue
-            if result is False or result.action.name == "back":
-                break
-            if result.action.name == "select":
-                if result.action.value == 0:
-                    self._explore(self._build_group_menu("all"))
-                else:
-                    self._explore(self._build_host_menu())
+    def _step_from_main_menu(self) -> Step:
+        if self.steps.current.index == 0:
+            return self._build_group_menu("all")
+        if self.steps.current.index == 1:
+            return self._build_host_menu()
+        raise IndexError("broken modules somewhere?")
 
-        interaction.ui.scroll(previous_scroll)
-        interaction.ui.menu_filter(previous_filter)
-        return result
+    def _build_group_menu(self, key=None) -> Step:
+        if key is None:
+            key = self.steps.current.selected["__name"]
 
-    def _explore(self, initial_step):
-        self._steps.clear()
-        while True:
-            self._app.update()
-            self._interaction.ui.scroll(0)
-
-            if not self._steps:
-                self._steps.next(initial_step)
-
-            result = self._take_step()
-
-            if isinstance(result, bool):
-                self._steps.back_one()
-                if result is False:
-                    self._steps.back_one()
-
-            elif result.action.name == "refresh":
-                if self._steps.current.type == "host_content":
-                    step = self._steps.back_one()
-                    idx = result.action.value % len(step.value)
-                    self._steps.next(step._replace(idx=idx))
-                    continue
-            elif result.action.name == "select":
-                self._steps.next(result)
-            elif result.action.name == "back":
-                self._steps.back_one()
-                if not self._steps:
-                    break
-            else:
-                self._steps.append(result)
-
-    def _build_group_menu(self, key: str) -> Step:
         menu = Menu()
-        for host in self._inventory[key].get("hosts", []):
-            entry = self._host_vars[host]
-            entry["__type"] = "host"
-            entry["__name"] = entry["inventory_hostname"]
-            menu.append(MenuEntry(entry))
-        for child in self._inventory[key].get("children", []):
-            menu_entry = MenuEntry(
-                __name=child, __type="group", **{c: "" for c in self._show_columns}
-            )
-            menu.append(menu_entry)
-        return Step(type="group_menu", value=menu)
+        taxonomy = "\u25B8".join(["all"] + [step.selected["__name"] for step in self.steps if step.name == "group_menu"])
+
+        columns=["__name", "__taxonomy", "__type"]
+
+        if hosts := self._inventory[key].get("hosts", None):
+            columns.extend(self._show_columns)
+            for host in hosts:
+                menu_entry = MenuEntry(**self._host_vars[host])
+                menu_entry["__name"] = menu_entry["inventory_hostname"]
+                menu_entry["__taxonomy"] = taxonomy
+                menu_entry["__type"] = "host"
+                menu.append(menu_entry)
+
+        if children := self._inventory[key].get("children", None):
+            for child in children:
+                menu_entry = MenuEntry()
+                menu_entry["__name"] = child
+                menu_entry["__taxonomy"] = taxonomy
+                menu_entry["__type"] = "group"
+                if hosts:
+                    menu_entry.update({c: "" for c in self._show_columns})
+                menu.append(menu_entry)
+
+        return Step(
+            name="group_menu",
+            tipe="menu",
+            value=menu,
+            columns=columns,
+            func=self._host_or_group_step,
+        )
+
+    def _build_host_content(self) -> Step:
+        host_vars = self._host_vars
+        values = [
+            host_vars[m_entry.get("__name", m_entry.get("inventory_hostname"))]
+            for m_entry in self.steps.current.value
+            if m_entry["__type"] == "host"
+        ]
+        entry = Step(
+            name="host_content",
+            tipe="content",
+            value=values,
+            index=self.steps.current.index,
+            columns=["__name"] + self._show_columns,
+        )
+        return entry
 
     def _build_host_menu(self) -> Step:
         menu = Menu()
         for host in self._host_vars.values():
             host["__type"] = "host"
             menu.append(MenuEntry(host))
-        return Step(type="host_menu", value=menu)
+        columns = ['inventory_hostname'] + self._show_columns
+        return Step(columns=columns, name="host_menu", tipe="menu", value=menu, func=self._build_host_content)
 
-    def _generate_next_step(self, result: Interaction) -> Step:
-        value = self._steps.current.value
-        idx = result.action.value
-        menu_entry = value[idx]
-        if menu_entry["__type"] == "group":
-            return self._build_group_menu(key=menu_entry["__name"])
+    def _host_or_group_step(self) -> Step:
+        if self.steps.current.selected["__type"] == "group":
+            return self._build_group_menu()
+        if self.steps.current.selected["__type"] == "host":
+            return self._build_host_content()
+        raise TypeError("unknown step type")
 
-        host_vars = self._host_vars
-        values = [
-            host_vars[m_entry.get("__name", m_entry.get("inventory_hostname"))]
-            for m_entry in self._steps.current.value
-            if m_entry["__type"] == "host"
-        ]
-        entry = Step(type="host_content", value=values, idx=int(idx))
-        return entry
-
-    def _take_step(self):
-        if isinstance(self._steps.current, Interaction):
-            result = self._app.actions.run(
-                action=self._steps.current.action.name,
-                app=self._app,
-                interaction=self._steps.current,
+    def _take_step(self) -> None:
+        if isinstance(self.steps.current, Interaction):
+            result = self.actions.run(
+                action=self.steps.current.action.name,
+                app=self,
+                interaction=self.steps.current,
             )
-        elif isinstance(self._steps.current, Step):
-            if self._steps.current.type == "group_menu":
-                menu = Menu(self._steps.current.value)
-                columns = ["__name", "__type"]
-                if "host" in set(t["__type"] for t in menu):
-                    columns.extend(self._show_columns)
+        elif isinstance(self.steps.current, Step):
+            if self.steps.current.type == "menu":                
                 result = self._interaction.ui.show(
-                    obj=menu,
-                    columns=columns,
+                    obj=self.steps.current.value,
+                    columns=self.steps.current.columns,
                     color_menu_item=color_menu,
                 )
-            elif self._steps.current.type == "host_menu":
-                menu = Menu(self._steps.current.value)
+            elif self.steps.current.type == "content":
                 result = self._interaction.ui.show(
-                    obj=menu,
-                    columns=["inventory_hostname"] + self._show_columns,
-                    color_menu_item=color_menu,
-                )
-            elif self._steps.current.type == "host_content":
-                result = self._interaction.ui.show(
-                    obj=self._steps.current.value,
-                    index=self._steps.current.idx,
+                    obj=self.steps.current.value,
+                    index=self.steps.current.index,
                     content_heading=content_heading,
                     filter_content_keys=filter_content_keys,
                 )
-        return result
+        if result is None:
+            self.steps.back_one()
+        else:
+            self.steps.append(result)
 
     def _gererate_inventory(self) -> None:
         if inventories := self._interaction.action.match.groupdict()["inventories"]:
             inventories = [os.path.abspath(i) for i in inventories.split(",")]
             self._logger.debug("inventories set by user: %s", inventories)
-        elif hasattr(self._app.args, "inventory") and (inventories := self._app.args.inventory):
+        elif hasattr(self.args, "inventory") and (inventories := self.args.inventory):
             self._logger.info("no inventory provided, using inventory from args")
         else:
             return
 
-        if self._app.args.execution_environment:
+        if self.args.execution_environment:
             self._logger.debug("trying execution environment")
             self._try_ee(inventories)
         else:
@@ -364,12 +333,12 @@ class Action:
 
     def _try_ee(self, inventories: List[str]) -> None:
         inventory_paths = (os.path.dirname(i) for i in inventories)
-        cmd = [self._app.args.container_engine, "run", "-i", "-t"]
+        cmd = [self.args.container_engine, "run", "-i", "-t"]
 
         for inventory_path in inventory_paths:
             cmd.extend(["-v", f"{inventory_path}:{inventory_path}"])
 
-        cmd.extend([self._app.args.ee_image])
+        cmd.extend([self.args.ee_image])
         cmd.extend(self._inventory_cmdline(inventories))
 
         cmdline = " ".join(cmd)

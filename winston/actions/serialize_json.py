@@ -17,7 +17,7 @@ class Action:
         self._logger = logging.getLogger()
 
     # pylint: disable=unused-argument
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> None:
         """Handle :json
 
         :param interaction: The interaction from the user
@@ -30,5 +30,4 @@ class Action:
             interaction.ui.scroll(0)
             xform = interaction.ui.xform("source.json", default=True)
             self._logger.debug("Serialization set to %s", xform)
-            return True
-        return False
+        return None

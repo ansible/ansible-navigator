@@ -22,7 +22,7 @@ class Action:
     def __init__(self):
         self._logger = logging.getLogger()
 
-    def run(self, interaction: Interaction, app: App) -> Union[Interaction, bool]:
+    def run(self, interaction: Interaction, app: App) -> Union[Interaction, None]:
         """Handle :{{ }}
 
         :param interaction: The interaction from the user
@@ -57,7 +57,7 @@ class Action:
             self._logger.info("a menu is a list of dictionaries. use 'this' to access it")
         else:
             self._logger.error("No menu or content found")
-            return True
+            return None
 
         previous_scroll = interaction.ui.scroll()
         interaction.ui.scroll(0)
