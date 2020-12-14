@@ -1,0 +1,40 @@
+Cisco Nexus Operating System (NX-OS) Software
+TAC support: http://www.cisco.com/tac
+Documents: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_serie
+s_home.html
+Copyright (c) 2002-2020, Cisco Systems, Inc. All rights reserved.
+The copyrights to certain works contained herein are owned by
+other third parties and are used and distributed under license.
+Some parts of this software are covered under the GNU Public
+License. A copy of the license is available at
+http://www.gnu.org/licenses/gpl.html.
+
+Software
+  BIOS:      version 2.1.18
+  loader:    version N/A
+  kickstart: version 8.4(2b)
+  system:    version 8.4(2b)
+  BIOS compile time:       04/06/20
+  kickstart image file is: bootflash:///m9100-s5ek9-kickstart-mz.8.4.2b.bin
+  kickstart compile time:  9/30/2020 12:00:00 [10/06/2020 13:37:39]
+  system image file is:    bootflash:///m9100-s5ek9-mz.8.4.2b.bin
+  system compile time:     9/30/2020 12:00:00 [10/06/2020 15:30:06]
+
+
+Hardware
+  cisco MDS 9148S 16G 48 FC (1 Slot) Chassis ("2/4/8/16 Gbps FC/Supervisor")
+  Motorola, e500v2 with 4088624 kB of memory.
+  Processor Board ID JAF1751BGPS
+
+  Device name: sw109-Mini
+  bootflash:    4001760 kB
+
+Kernel uptime is 42 day(s), 23 hour(s), 31 minute(s), 29 second(s)
+
+Last reset at 870592 usecs after Tue Oct 13 17:01:33 2020
+  Reason: Reset Requested by CLI command reload
+  System version: 8.4(2b)
+  Service: 
+
+plugin
+  Core Plugin

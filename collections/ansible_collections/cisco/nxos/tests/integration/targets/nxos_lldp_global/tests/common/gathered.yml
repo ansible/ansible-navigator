@@ -1,0 +1,24 @@
+---
+- debug:
+    msg: START nxos_lldp_global gathered integration tests on connection={{ ansible_connection }}
+
+- include_tasks: _remove_config.yml
+
+- include_tasks: _populate_config.yml
+
+- block:
+
+    - name: Gather lldp_global facts from the device using nxos_lldp_global
+      register: result
+      cisco.nxos.nxos_lldp_global:
+        state: gathered
+
+    - assert:
+        that: "{{ result['gathered'] == gathered }}"
+
+  always:
+
+    - include_tasks: _remove_config.yml
+
+    - debug:
+        msg: END nxos_lldp_global gathered integration tests on connection={{ ansible_connection }}

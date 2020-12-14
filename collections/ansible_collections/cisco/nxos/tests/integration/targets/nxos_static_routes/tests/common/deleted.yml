@@ -1,0 +1,81 @@
+---
+- debug:
+    msg: "Start nxos_static_routes deleted integration tests connection = {{ ansible_connection }}"
+
+- include_tasks: _populate_config.yaml
+
+- block:
+    - name: Gather static_routes facts
+      cisco.nxos.nxos_facts: &facts
+        gather_subset:
+          - "!all"
+          - "!min"
+        gather_network_resources: static_routes
+
+    - name: Delete all routes based on VRF
+      cisco.nxos.nxos_static_routes:
+        config:
+          - vrf: trial_vrf
+        state: deleted
+      register: result
+
+    - assert:
+        that:
+          - "result.changed == true"
+          - "'vrf context trial_vrf' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.22 tag 4' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.23 name merged_route 1' in result.commands"
+          - "result.commands | length == 3"
+
+    - include_tasks: _populate_config.yaml
+
+    - name: Delete routes based on AFI in a VRF
+      cisco.nxos.nxos_static_routes:
+        config:
+          - vrf: trial_vrf
+            address_families:
+              - afi: ipv4
+        state: deleted
+      register: result
+
+    - assert:
+        that:
+          - "result.changed == true"
+          - "'vrf context trial_vrf' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.22 tag 4' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.23 name merged_route 1' in result.commands"
+          - "result.commands | length == 3"
+
+    - include_tasks: _remove_config.yaml
+
+    - include_tasks: _populate_config.yaml
+
+    - name: Deleted (All routes)
+      cisco.nxos.nxos_static_routes: &deleted
+        state: deleted
+      register: result
+
+    - name: Gather static_routes post facts
+      cisco.nxos.nxos_facts: *facts
+
+    - assert:
+        that:
+          - "'vrf context trial_vrf' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.22 tag 4' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.23 name merged_route 1' in result.commands"
+          - "'vrf context default' in result.commands"
+          - "'no ip route 192.0.2.16/28 192.0.2.24 name new_route' in result.commands"
+          - "'no ip route 192.0.2.80/28 192.0.2.26 tag 12' in result.commands"
+          - "result.changed == true"
+          - "result.commands | length == 6"
+
+    - name: Idempotence - deleted
+      cisco.nxos.nxos_static_routes: *deleted
+      register: result
+
+    - assert:
+        that:
+          - "result.changed == false"
+
+  always:
+    - include_tasks: _remove_config.yaml

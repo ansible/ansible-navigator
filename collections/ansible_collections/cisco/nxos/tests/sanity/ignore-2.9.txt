@@ -1,0 +1,27 @@
+plugins/modules/nxos_acl.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_acl.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_acl_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_acl_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_l2_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_l2_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_l3_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_l3_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_linkagg.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_linkagg.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_lldp.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_lldp.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_ospf.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_ospf.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_static_route.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_static_route.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_vlan.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_vlan.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_ospf_vrf.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_ospf_vrf.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/action/nxos.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`
+plugins/modules/nxos_smu.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_smu.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/nxos_interface_ospf.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/nxos_interface_ospf.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict

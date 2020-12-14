@@ -1,12 +1,13 @@
 """ jump to one action
 """
 
-from collections import deque
 
 from .app import App
-from .step import Step
+from .steps import Steps
 from .ui import Interaction
 from .ui import UserInterface
+
+DEFAULT_REFRESH = 100
 
 
 class ActionRunner(App):
@@ -17,7 +18,9 @@ class ActionRunner(App):
 
     def __init__(self, args):
         super().__init__(args)
+        self.name = "action_runner"
         self._ui = None
+        self.steps: Steps = Steps()
 
     def initialize_ui(self, refresh: int) -> None:
         """initialize the user interface
@@ -36,41 +39,30 @@ class ActionRunner(App):
     def run(self, _screen) -> None:
         # pylint: disable=protected-access
         """Run with the interface and runner"""
-        self.initialize_ui(-1)
-        self.step = Step(self.args.app, "content", None)
-        self.step.previous = self.step
-        action = self._ui._action_match(" ".join(filter(None, (self.args.app, self.args.value))))
-        interaction = Interaction(action=action, menu=None, content=None, ui=self._ui._ui)
+        self.initialize_ui(DEFAULT_REFRESH)
+        name, action = self._ui._action_match(
+            " ".join(filter(None, (self.args.app, vars(self.args).get("value", ""))))
+        )
+        interaction = Interaction(
+            name=name, action=action, menu=None, content=None, ui=self._ui._ui
+        )
         self._run_app(interaction)
 
-    def _run_app(self, interaction: Interaction) -> None:
+    def _run_app(self, initial_interaction: Interaction) -> None:
         """enter the endless loop"""
-        # pylint: disable=too-many-branches
-        initial = interaction
-        ique = deque([interaction])
         while True:
+            if not self.steps:
+                self.steps.append(initial_interaction)
 
-            interaction = self.actions.run(
-                action=ique[-1].action.name,
-                app=self,
-                interaction=ique[-1],
-            )
-
-            if isinstance(interaction, Interaction):
-                if interaction.action.name == "quit":
-                    return
-                ique.append(interaction)
-            elif isinstance(interaction, bool):
-                if interaction is True:
-                    ique.pop()
-                elif interaction is False:
-                    if len(ique) == 1:
-                        pass
-                    else:
-                        ique.pop()
-                        ique.pop()
-                        if not ique:
-                            ique.append(initial)
+            if isinstance(self.steps.current, Interaction):
+                interaction = self.actions.run(
+                    action=self.steps.current.name,
+                    app=self,
+                    interaction=self.steps.current,
+                )
+            if interaction is None:
+                self.steps.back_one()
+            elif interaction.name == "quit":
+                break
             else:
-                self._logger.debug("Invalid response from action: %s", interaction)
-                interaction = False
+                self.steps.append(interaction)

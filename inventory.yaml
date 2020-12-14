@@ -1,8 +1,8 @@
 all:
   vars:
-    ansible_user: "{{ lookup('env', 'ansible_user') }}"
-    ansible_password: "{{ lookup('env', 'ansible_password') }}"
-    ansible_become_pass: "{{ lookup('env', 'ansible_become_pass') }}"
+    ansible_user: "{{ lookup('env', 'ANSIBLE_REMOTE_USER') }}"
+    ansible_password: "{{ lookup('env', 'ANSIBLE_PASSWORD') }}"
+    ansible_become_pass: "{{ lookup('env', 'ANSIBLE_BECOME_PASS') }}"
     ansible_become: True
     ansible_become_method: enable
     ansible_connection: ansible.netcommon.network_cli
@@ -10,7 +10,6 @@ all:
     ansible_network_cli_ssh_type: libssh
 
   hosts:
-    foo:
   children:
     eos:
       hosts:
@@ -18,15 +17,6 @@ all:
         eos102:
         eos103:
         eos104:
-      children:
-        eos2:
-          hosts:
-            eos201:
-            eos202:
-            eos203:
-            eos204:
-            eos101:
-
       vars:
         ansible_network_os: arista.eos.eos
     ios:

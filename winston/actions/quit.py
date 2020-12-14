@@ -27,5 +27,5 @@ class Action:
         :type app: App
         """
         # : quit will be handled in the app
-        self._logger("quit was requested as: %s", interaction.action.value)
+        self._logger.debug("quit was requested as: %s", interaction.action.value)
         return interaction

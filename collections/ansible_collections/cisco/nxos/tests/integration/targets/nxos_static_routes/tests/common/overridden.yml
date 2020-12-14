@@ -1,0 +1,60 @@
+---
+- debug:
+    msg: "Start nxos_static_routes overridden tests connection={{ ansible_connection }}"
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+    - name: Gather static_routes facts
+      cisco.nxos.nxos_facts: &facts
+        gather_subset:
+          - "!all"
+          - "!min"
+        gather_network_resources: static_routes
+
+    - name: Overridden
+      cisco.nxos.nxos_static_routes: &overridden
+        config:
+          - vrf: trial_vrf
+            address_families:
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.16/28
+                    next_hops:
+                      - forward_router_address: 192.0.2.23
+                        route_name: overridden_route1
+                        admin_distance: 3
+
+                      - forward_router_address: 192.0.2.45
+                        route_name: overridden_route2
+                        dest_vrf: destinationVRF
+                        interface: "{{ nxos_int2 }}"
+
+        state: overridden
+      register: result
+
+    - assert:
+        that:
+          - "result.changed == true"
+          - "'vrf context trial_vrf' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.22 tag 4' in result.commands"
+          - "'no ip route 192.0.2.64/28 192.0.2.23 name merged_route 1' in result.commands"
+          - "'ip route 192.0.2.16/28 192.0.2.23 name overridden_route1 3' in result.commands"
+          - "'ip route 192.0.2.16/28 {{ nxos_int2 }} 192.0.2.45 vrf destinationVRF name overridden_route2' in result.commands"
+          - "'vrf context default' in result.commands"
+          - "'no ip route 192.0.2.16/28 192.0.2.24 name new_route' in result.commands"
+          - "'no ip route 192.0.2.80/28 192.0.2.26 tag 12' in result.commands"
+          - "result.commands | length == 8"
+
+    - name: Idempotence - overridden
+      cisco.nxos.nxos_static_routes: *overridden
+      register: result
+
+    - assert:
+        that:
+          - "result.changed == false"
+
+  always:
+    - include_tasks: _remove_config.yaml

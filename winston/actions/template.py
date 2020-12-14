@@ -67,14 +67,11 @@ class Action:
             templated = html.unescape(templated)
 
         while True:
-            if isinstance(templated, str):
-                interaction = interaction.ui.show(obj=templated, xform="source.txt")
-            else:
-                interaction = interaction.ui.show(obj=templated)
-
             app.update()
-            if interaction.action.name != "refresh":
+            xform = "source.txt" if isinstance(templated, str) else ""
+            next_interaction: Interaction = interaction.ui.show(obj=templated, xform=xform)
+            if next_interaction.name != "refresh":
                 break
 
         interaction.ui.scroll(previous_scroll)
-        return interaction
+        return next_interaction

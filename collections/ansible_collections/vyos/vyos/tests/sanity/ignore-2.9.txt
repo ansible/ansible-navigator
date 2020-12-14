@@ -1,0 +1,13 @@
+plugins/modules/vyos_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/vyos_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/vyos_l3_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/vyos_l3_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/vyos_linkagg.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/vyos_linkagg.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/vyos_static_route.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/vyos_static_route.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/vyos_lldp.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/vyos_lldp.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/vyos_lldp_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/vyos_lldp_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/action/vyos.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`

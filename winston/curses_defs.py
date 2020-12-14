@@ -1,5 +1,6 @@
-""" curses line defs
+""" commonly used defs
 """
+
 from typing import NamedTuple
 from typing import Tuple
 

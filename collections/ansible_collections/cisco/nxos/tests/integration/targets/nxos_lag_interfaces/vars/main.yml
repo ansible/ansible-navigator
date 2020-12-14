@@ -1,0 +1,33 @@
+gathered:
+  - name: port-channel10
+    members:
+      - member: '{{ nxos_int1 }}'
+        mode: active
+  - name: port-channel11
+    members:
+      - member: '{{ nxos_int2 }}'
+        mode: passive
+
+rendered:
+  - "interface Ethernet1/800"
+  - "channel-group 10 mode active"
+  - "interface Ethernet1/801"
+  - "channel-group 10"
+  - "interface Ethernet1/802"
+  - "channel-group 11 mode passive"
+
+parsed:
+  - members:
+      - member: Ethernet1/800
+      - member: Ethernet1/801
+        mode: active
+    name: port-channel10
+  
+  - members:
+      - member: Ethernet1/802
+        mode: passive
+      - member: Ethernet1/803
+        mode: passive
+    name: port-channel11
+
+  - name: port-channel12

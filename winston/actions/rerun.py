@@ -1,7 +1,7 @@
 """ :rerun """
 import logging
 from . import _actions as actions
-from ..player import Player as App
+from ..app import App
 from ..ui import Interaction
 
 

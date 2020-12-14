@@ -30,16 +30,10 @@ class Action:
         """
         self._logger.debug("selection made")
         interaction.ui.scroll(0)
-        if hasattr(app, "steps"):
-            this_interaction = app.steps.back_one()
-            app.steps.current.index = interaction.action.value
-            app.steps.append(app.steps.current.func())
-            # add interaction on since it will get poped
-            app.steps.append(this_interaction)
-            self._logger.debug(
-                "Requested next step in %s will be %s", app.name, app.steps.previous.name
-            )
-        else:
-            app.step.index = interaction.action.value
-            app.step = app.step.next
-            self._logger.debug("Stepped forward to %s[%s]", app.step.name, interaction.action.value)
+        this = app.steps.back_one()  # remove this
+        app.steps.current.index = interaction.action.value  # update index
+        app.steps.append(app.steps.current.select_func())  # add next
+        app.steps.append(this)  # put this back on stack
+        self._logger.debug(
+            "Requested next step in %s will be %s", app.name, app.steps.previous.name
+        )

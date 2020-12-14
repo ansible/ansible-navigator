@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - To provide support for interface Virtual-Template raised in issue(https://github.com/ansible-collections/cisco.ios/issues/141)

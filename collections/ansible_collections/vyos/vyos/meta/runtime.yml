@@ -1,0 +1,209 @@
+---
+requires_ansible: '>=2.9.10,<2.11'
+plugin_routing:
+  action:
+    vyos_banner:
+      redirect: vyos.vyos.vyos
+    banner:
+      redirect: vyos.vyos.vyos
+    vyos_command:
+      redirect: vyos.vyos.vyos
+    command:
+      redirect: vyos.vyos.vyos
+    vyos_config:
+      redirect: vyos.vyos.vyos
+    config:
+      redirect: vyos.vyos.vyos
+    vyos_facts:
+      redirect: vyos.vyos.vyos
+    facts:
+      redirect: vyos.vyos.vyos
+    vyos_firewall_global:
+      redirect: vyos.vyos.vyos
+    firewall_global:
+      redirect: vyos.vyos.vyos
+    vyos_firewall_interfaces:
+      redirect: vyos.vyos.vyos
+    firewall_interfaces:
+      redirect: vyos.vyos.vyos
+    vyos_firewall_rules:
+      redirect: vyos.vyos.vyos
+    firewall_rules:
+      redirect: vyos.vyos.vyos
+    vyos_interface:
+      redirect: vyos.vyos.vyos
+    interface:
+      redirect: vyos.vyos.vyos
+    vyos_interfaces:
+      redirect: vyos.vyos.vyos
+    interfaces:
+      redirect: vyos.vyos.vyos
+    vyos_l3_interface:
+      redirect: vyos.vyos.vyos
+    l3_interface:
+      redirect: vyos.vyos.vyos
+    vyos_l3_interfaces:
+      redirect: vyos.vyos.vyos
+    l3_interfaces:
+      redirect: vyos.vyos.vyos
+    vyos_lag_interfaces:
+      redirect: vyos.vyos.vyos
+    lag_interfaces:
+      redirect: vyos.vyos.vyos
+    vyos_linkagg:
+      redirect: vyos.vyos.vyos
+    linkagg:
+      redirect: vyos.vyos.vyos
+    vyos_lldp:
+      redirect: vyos.vyos.vyos
+    lldp:
+      redirect: vyos.vyos.vyos
+    vyos_lldp_global:
+      redirect: vyos.vyos.vyos
+    lldp_global:
+      redirect: vyos.vyos.vyos
+    vyos_lldp_interface:
+      redirect: vyos.vyos.vyos
+    lldp_interface:
+      redirect: vyos.vyos.vyos
+    vyos_lldp_interfaces:
+      redirect: vyos.vyos.vyos
+    lldp_interfaces:
+      redirect: vyos.vyos.vyos
+    vyos_logging:
+      redirect: vyos.vyos.vyos
+    logging:
+      redirect: vyos.vyos.vyos
+    vyos_ospfv2:
+      redirect: vyos.vyos.vyos
+    ospfv2:
+      redirect: vyos.vyos.vyos
+    vyos_ospfv3:
+      redirect: vyos.vyos.vyos
+    ospfv3:
+      redirect: vyos.vyos.vyos
+    vyos_ospf_interfaces:
+      redirect: vyos.vyos.vyos
+    ospf_interfaces:
+      redirect: vyos.vyos.vyos
+    vyos_ping:
+      redirect: vyos.vyos.vyos
+    ping:
+      redirect: vyos.vyos.vyos
+    vyos_static_route:
+      redirect: vyos.vyos.vyos
+    static_route:
+      redirect: vyos.vyos.vyos
+    vyos_static_routes:
+      redirect: vyos.vyos.vyos
+    static_routes:
+      redirect: vyos.vyos.vyos
+    vyos_system:
+      redirect: vyos.vyos.vyos
+    system:
+      redirect: vyos.vyos.vyos
+    vyos_user:
+      redirect: vyos.vyos.vyos
+    user:
+      redirect: vyos.vyos.vyos
+    vyos_vlan:
+      redirect: vyos.vyos.vyos
+    vlan:
+      redirect: vyos.vyos.vyos
+  modules:
+    banner:
+      redirect: vyos.vyos.vyos_banner
+    command:
+      redirect: vyos.vyos.vyos_command
+    config:
+      redirect: vyos.vyos.vyos_config
+    facts:
+      redirect: vyos.vyos.vyos_facts
+    firewall_global:
+      redirect: vyos.vyos.vyos_firewall_global
+    firewall_interfaces:
+      redirect: vyos.vyos.vyos_firewall_interfaces
+    firewall_rules:
+      redirect: vyos.vyos.vyos_firewall_rules
+    interface:
+      redirect: vyos.vyos.vyos_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vyos_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    interfaces:
+      redirect: vyos.vyos.vyos_interfaces
+    l3_interface:
+      redirect: vyos.vyos.vyos_l3_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vyos_l3_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    l3_interfaces:
+      redirect: vyos.vyos.vyos_l3_interfaces
+    lag_interfaces:
+      redirect: vyos.vyos.vyos_lag_interfaces
+    linkagg:
+      redirect: vyos.vyos.vyos_linkagg
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vyos_linkagg:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    lldp:
+      redirect: vyos.vyos.vyos_lldp
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vyos_lldp:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    lldp_global:
+      redirect: vyos.vyos.vyos_lldp_global
+    lldp_interface:
+      redirect: vyos.vyos.vyos_lldp_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vyos_lldp_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    lldp_interfaces:
+      redirect: vyos.vyos.vyos_lldp_interfaces
+    logging:
+      redirect: vyos.vyos.vyos_logging
+    ospfv2:
+      redirect: vyos.vyos.vyos_ospfv2
+    ospfv3:
+      redirect: vyos.vyos.vyos_ospfv3
+    ospf_interfaces:
+      redirect: vyos.vyos.vyos_ospf_interfaces
+    ping:
+      redirect: vyos.vyos.vyos_ping
+    static_route:
+      redirect: vyos.vyos.vyos_static_route
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vyos_static_route:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    static_routes:
+      redirect: vyos.vyos.vyos_static_routes
+    system:
+      redirect: vyos.vyos.vyos_system
+    user:
+      redirect: vyos.vyos.vyos_user
+    vlan:
+      redirect: vyos.vyos.vyos_vlan

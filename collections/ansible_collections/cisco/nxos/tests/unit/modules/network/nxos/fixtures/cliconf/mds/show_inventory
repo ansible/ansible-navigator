@@ -1,0 +1,53 @@
+NAME: "Chassis",  DESCR: "MDS 9710 (10 Slot) Chassis"
+PID: DS-C9710            ,  VID: V01 ,  SN: JAF1724ADSD          
+
+NAME: "Slot 1",  DESCR: "4/8/16/32 Gbps Advanced FC Module"
+PID: DS-X9648-1536K9     ,  VID: V01 ,  SN: JAE204207TT          
+
+NAME: "Slot 2",  DESCR: "1/10/40G IPS,2/4/8/10/16G FC Module"
+PID: DS-X9334-K9         ,  VID: V00 ,  SN: JAE200806S9          
+
+NAME: "Slot 3",  DESCR: "2/4/8/10/16 Gbps Advanced FC Module"
+PID: DS-X9448-768K9      ,  VID: V01 ,  SN: JAE180605X5          
+
+NAME: "Slot 4",  DESCR: "2/4/8/10/16 Gbps Advanced FC Module"
+PID: DS-X9448-768K9      ,  VID: V01 ,  SN: JAE180605XZ          
+
+NAME: "Slot 5",  DESCR: "Supervisor Module-3"
+PID: DS-X97-SF1-K9       ,  VID: V01 ,  SN: JAE172007TK          
+
+NAME: "Slot 6",  DESCR: "Supervisor Module-3"
+PID: DS-X97-SF1-K9       ,  VID: V01 ,  SN: JAE17200573          
+
+NAME: "Slot 7",  DESCR: "4/8/16/32 Gbps Advanced FC Module"
+PID: DS-X9648-1536K9     ,  VID: V01 ,  SN: JAE203901ZM          
+
+NAME: "Slot 8",  DESCR: "1/10/40G IPS,2/4/8/10/16G FC Module"
+PID: DS-X9334-K9         ,  VID: V02 ,  SN: JAE240306KZ          
+
+NAME: "Slot 11",  DESCR: "Fabric card module"
+PID: DS-X9710-FAB1       ,  VID: V01 ,  SN: JAE172008WA          
+
+NAME: "Slot 12",  DESCR: "Fabric card module"
+PID: DS-X9710-FAB1       ,  VID: V01 ,  SN: JAE172006B7          
+
+NAME: "Slot 13",  DESCR: "Fabric card module"
+PID: DS-X9710-FAB1       ,  VID: V01 ,  SN: JAE1720069V          
+
+NAME: "Slot 33",  DESCR: "MDS 9710 (10 Slot) Chassis Power Supply"
+PID: DS-CAC97-3KW        ,  VID: V01 ,  SN: DTM172005SG          
+
+NAME: "Slot 34",  DESCR: "MDS 9710 (10 Slot) Chassis Power Supply"
+PID: DS-CAC97-3KW        ,  VID: V01 ,  SN: DTM172005SH          
+
+NAME: "Slot 35",  DESCR: "MDS 9710 (10 Slot) Chassis Power Supply"
+PID: DS-CAC97-3KW        ,  VID: V01 ,  SN: DTM172005JK      
+    
+NAME: "Slot 41",  DESCR: "MDS 9710 (10 Slot) Chassis Fan Module"
+PID: DS-C9710-FAN        ,  VID: V01 ,  SN: JAF1724ALHP          
+
+NAME: "Slot 42",  DESCR: "MDS 9710 (10 Slot) Chassis Fan Module"
+PID: DS-C9710-FAN        ,  VID: V01 ,  SN: JAF1721ALCB          
+
+NAME: "Slot 43",  DESCR: "MDS 9710 (10 Slot) Chassis Fan Module"
+PID: DS-C9710-FAN        ,  VID: V01 ,  SN: JAF1721AKRL

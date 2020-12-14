@@ -1,0 +1,35 @@
+{
+ "collection_info": {
+  "namespace": "cisco",
+  "name": "ios",
+  "version": "1.2.1",
+  "authors": [
+   "Ansible Network Community (ansible-network)"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "cisco",
+   "ios",
+   "iosxe",
+   "networking"
+  ],
+  "description": "Ansible Network Collection for Cisco IOS devices.",
+  "license": [],
+  "license_file": "LICENSE",
+  "dependencies": {
+   "ansible.netcommon": "*"
+  },
+  "repository": "https://github.com/ansible-collections/cisco.ios",
+  "documentation": null,
+  "homepage": null,
+  "issues": null
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "ecfb7958e5622da4909b6a278958e3a46ca3b8abc2d3327dd4cc2539eebe4ab2",
+  "format": 1
+ },
+ "format": 1
+}

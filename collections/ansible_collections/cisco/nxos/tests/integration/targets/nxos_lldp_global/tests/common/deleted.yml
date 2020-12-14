@@ -1,0 +1,84 @@
+---
+- debug:
+    msg: Start nxos_lldp_global deleted integration tests connection = {{ ansible_connection
+      }}
+
+- block:
+
+    - set_fact: cfg_port_id=True
+      when: platform is not search('N[567]K') and imagetag is not search("I[2345]")
+
+    - name: feature off to cleanup lldp
+      cisco.nxos.nxos_feature: &id003
+        feature: lldp
+        state: disabled
+
+    - name: Enable LLDP feature
+      cisco.nxos.nxos_feature:
+        feature: lldp
+        state: enabled
+
+    - name: Setup
+      cisco.nxos.nxos_config:
+        lines:
+          - "lldp holdtime 125"
+          - "lldp timer 32"
+          - "no lldp tlv-select dcbxp"
+          - "lldp tlv-select system-name"
+          - "no lldp tlv-select system-description"
+
+    - name: Setup2
+      when: cfg_port_id is defined
+      cisco.nxos.nxos_config:
+        lines:
+          - "lldp portid-subtype 1"
+          - "no lldp tlv-select power-management"
+
+    - name: Gather lldp_global facts
+      cisco.nxos.nxos_facts: &id001
+        gather_subset:
+          - '!all'
+          - '!min'
+        gather_network_resources: lldp_global
+
+    - name: Deleted
+      register: result
+      cisco.nxos.nxos_lldp_global: &id002
+        state: deleted
+
+    - assert:
+        that:
+          - ansible_facts.network_resources.lldp_global == result.before
+          - "'no lldp holdtime 125' in result.commands"
+          - "'no lldp timer 32' in result.commands"
+          - "'lldp tlv-select dcbxp' in result.commands"
+          - "'lldp tlv-select system-description' in result.commands"
+          - 'result.changed == true '
+          - result.after | length == 0
+
+    - assert:
+        that:
+          - "'no lldp portid-subtype 1' in result.commands"
+          - "'lldp tlv-select power-management' in result.commands"
+      when: cfg_port_id is defined
+
+    - name: Gather lldp_global post facts
+      cisco.nxos.nxos_facts: *id001
+
+    - assert:
+        that:
+          - 'ansible_facts.network_resources == {} '
+
+    - name: Idempotence - deleted
+      register: result
+      cisco.nxos.nxos_lldp_global: *id002
+
+    - assert:
+        that:
+          - result.changed == false
+          - result.commands|length == 0
+  always:
+
+    - name: teardown
+      cisco.nxos.nxos_feature: *id003
+  when: platform is not search('N35')

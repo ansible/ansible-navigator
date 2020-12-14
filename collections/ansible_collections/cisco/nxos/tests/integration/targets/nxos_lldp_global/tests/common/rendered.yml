@@ -1,0 +1,38 @@
+---
+- debug:
+    msg: START nxos_lldp_global rendered integration tests on connection={{ ansible_connection }}
+
+- include_tasks: _remove_config.yml
+
+- block:
+    - name: Use rendered state to convert task input to device specific commands
+      register: result
+      cisco.nxos.nxos_lldp_global:
+        config:
+          holdtime: 130
+          port_id: 1
+          reinit: 5
+          tlv_select:
+            dcbxp: yes
+            power_management: yes
+        state: rendered
+
+    - assert:
+        that: "{{ rendered | symmetric_difference(result['rendered'])\
+          \ |length==0 }}"
+
+    - name: Gather lldp_global facts from the device and assert that its empty
+      register: result
+      cisco.nxos.nxos_lldp_global:
+        state: gathered
+
+    - name: Make sure that rendered task actually did not make any changes to the
+        device
+      assert:
+        that: "{{ result['gathered'] == {} }}"
+  always:
+
+    - include_tasks: _remove_config.yml
+
+- debug:
+    msg: END nxos_lldp_global rendered integration tests on connection={{ ansible_connection }}

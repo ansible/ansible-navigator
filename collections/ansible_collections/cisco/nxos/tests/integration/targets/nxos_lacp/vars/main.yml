@@ -1,0 +1,18 @@
+# The CI NX-OS image doesn't support `lacp system-mac`
+gathered:
+  system:
+    priority: 10
+
+# using mac related configs in parsed and rendered would also 
+# prove that we're not connecting to the appliance as expected
+
+rendered:
+  - "lacp system-priority 10"
+  - "lacp system-mac 00c1.4c00.bd15 role secondary"
+
+parsed:
+  system:
+    priority: 10
+    mac:
+      address: 00c1.4c00.bd15
+      role: secondary

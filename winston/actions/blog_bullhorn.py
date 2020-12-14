@@ -104,19 +104,18 @@ class Action:
             return None
 
         while True:
-            result = interaction.ui.show(
+            next_interaction: Interaction = interaction.ui.show(
                 obj=f2show, columns=columns, color_menu_item=color_menu_item
             )
             app.update()
-            if result.action.name == "select":
-                webbrowser.open_new_tab(f2show[result.action.value % len(f2show)]["link"])
-            elif result.action.name != "refresh":
+            if next_interaction.name == "select" and isinstance(next_interaction.action.value, int):
+                webbrowser.open_new_tab(f2show[next_interaction.action.value]["link"])
+            elif next_interaction.name != "refresh":
                 break
 
         interaction.ui.scroll(previous_scroll)
         interaction.ui.menu_filter(previous_filter)
-
-        return result
+        return next_interaction
 
     @staticmethod
     def _get_text(ement: Element, name: str) -> Union[str, None]:

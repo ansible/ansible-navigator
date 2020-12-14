@@ -1,0 +1,3 @@
+ansible
+ansible-pylibssh
+paramiko

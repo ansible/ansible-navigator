@@ -30,4 +30,3 @@ class Action:
             interaction.ui.scroll(0)
             xform = interaction.ui.xform("source.json", default=True)
             self._logger.debug("Serialization set to %s", xform)
-        return None

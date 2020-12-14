@@ -13,14 +13,13 @@ from typing import Match
 from typing import Tuple
 
 from . import _actions as actions
-from ..ui import Union
-from ..utils import templar
-from ..yaml import yaml, Dumper
-
 from ..app import App
 from ..ui import Content
 from ..ui import Interaction
 from ..ui import Menu
+from ..ui import Union
+from ..utils import templar
+from ..yaml import yaml, Dumper
 
 
 class SuspendCurses:

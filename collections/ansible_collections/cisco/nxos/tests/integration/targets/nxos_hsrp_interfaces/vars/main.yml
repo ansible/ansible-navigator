@@ -1,0 +1,17 @@
+gathered:
+  - name: "{{ nxos_int1 }}"
+    bfd: enable
+  - name: "{{ nxos_int2 }}"
+    bfd: enable
+
+parsed:
+  - name: Ethernet1/800
+    bfd: enable
+  - name: Ethernet1/801
+    bfd: enable
+
+rendered:
+  - "interface Ethernet1/800"
+  - "hsrp bfd"
+  - "interface Ethernet1/801"
+  - "hsrp bfd"

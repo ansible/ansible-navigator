@@ -1,0 +1,56 @@
+---
+- debug:
+    msg: Start nxos_acls deleted integration tests connection={{ansible_connection}}"
+
+- include_tasks: populate_config.yaml
+
+- block:
+    - name: Deleted (All ACLs)
+      cisco.nxos.nxos_acls:
+        config:
+        state: deleted
+
+    - name: Gather acls facts
+      cisco.nxos.nxos_facts: &id001
+        gather_subset:
+          - "!all"
+          - "!min"
+        gather_network_resources: acls
+
+    - assert:
+        that:
+          - ansible_facts.network_resources == {}
+
+    - include_tasks: populate_config.yaml
+
+    - name: Deleted
+      register: result
+      cisco.nxos.nxos_acls: &id002
+        config:
+          - afi: ipv4
+
+          - afi: ipv6
+
+        state: deleted
+
+    - assert:
+        that:
+          - result.changed==True
+          - "'no ip access-list ACL1v4' in result.commands"
+          - "'no ip access-list ACL2v4' in result.commands"
+          - "'no ipv6 access-list ACL1v6' in result.commands"
+          - "'no ipv6 access-list ACL2v6' in result.commands"
+          - result.commands | length == 4
+
+    - name: Gather acls facts
+      cisco.nxos.nxos_facts: *id001
+
+    - name: Idempotence - deleted
+      register: result
+      cisco.nxos.nxos_acls: *id002
+
+    - assert:
+        that:
+          - result.changed == false
+  always:
+    - include_tasks: remove_config.yaml

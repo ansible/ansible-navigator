@@ -1,0 +1,239 @@
+---
+requires_ansible: '>=2.9.10,<2.11'
+plugin_routing:
+  action:
+    eos_acl_interfaces:
+      redirect: arista.eos.eos
+    acl_interfaces:
+      redirect: arista.eos.eos
+    eos_acls:
+      redirect: arista.eos.eos
+    acls:
+      redirect: arista.eos.eos
+    eos_banner:
+      redirect: arista.eos.eos
+    banner:
+      redirect: arista.eos.eos
+    eos_bgp:
+      redirect: arista.eos.eos
+    bgp:
+      redirect: arista.eos.eos
+    eos_command:
+      redirect: arista.eos.eos
+    command:
+      redirect: arista.eos.eos
+    eos_config:
+      redirect: arista.eos.eos
+    config:
+      redirect: arista.eos.eos
+    eos_eapi:
+      redirect: arista.eos.eos
+    eapi:
+      redirect: arista.eos.eos
+    eos_facts:
+      redirect: arista.eos.eos
+    facts:
+      redirect: arista.eos.eos
+    eos_interface:
+      redirect: arista.eos.eos
+    interface:
+      redirect: arista.eos.eos
+    eos_interfaces:
+      redirect: arista.eos.eos
+    interfaces:
+      redirect: arista.eos.eos
+    eos_l2_interface:
+      redirect: arista.eos.eos
+    l2_interface:
+      redirect: arista.eos.eos
+    eos_l2_interfaces:
+      redirect: arista.eos.eos
+    l2_interfaces:
+      redirect: arista.eos.eos
+    eos_l3_interface:
+      redirect: arista.eos.eos
+    l3_interface:
+      redirect: arista.eos.eos
+    eos_l3_interfaces:
+      redirect: arista.eos.eos
+    l3_interfaces:
+      redirect: arista.eos.eos
+    eos_lacp:
+      redirect: arista.eos.eos
+    lacp:
+      redirect: arista.eos.eos
+    eos_lacp_interfaces:
+      redirect: arista.eos.eos
+    lacp_interfaces:
+      redirect: arista.eos.eos
+    eos_lag_interfaces:
+      redirect: arista.eos.eos
+    lag_interfaces:
+      redirect: arista.eos.eos
+    eos_linkagg:
+      redirect: arista.eos.eos
+    linkagg:
+      redirect: arista.eos.eos
+    eos_lldp:
+      redirect: arista.eos.eos
+    lldp:
+      redirect: arista.eos.eos
+    eos_lldp_global:
+      redirect: arista.eos.eos
+    lldp_global:
+      redirect: arista.eos.eos
+    eos_lldp_interfaces:
+      redirect: arista.eos.eos
+    lldp_interfaces:
+      redirect: arista.eos.eos
+    eos_logging:
+      redirect: arista.eos.eos
+    logging:
+      redirect: arista.eos.eos
+    eos_ospfv2:
+      redirect: arista.eos.eos
+    ospfv2:
+      redirect: arista.eos.eos
+    eos_ospfv3:
+      redirect: arista.eos.eos
+    ospfv3:
+      redirect: arista.eos.eos
+    eos_ospf_interfaces:
+      redirect: arista.eos.eos
+    ospf_interfaces:
+      redirect: arista.eos.eos
+    eos_static_route:
+      redirect: arista.eos.eos
+    static_route:
+      redirect: arista.eos.eos
+    eos_static_routes:
+      redirect: arista.eos.eos
+    static_routes:
+      redirect: arista.eos.eos
+    eos_system:
+      redirect: arista.eos.eos
+    system:
+      redirect: arista.eos.eos
+    eos_user:
+      redirect: arista.eos.eos
+    user:
+      redirect: arista.eos.eos
+    eos_vlan:
+      redirect: arista.eos.eos
+    vlan:
+      redirect: arista.eos.eos
+    eos_vlans:
+      redirect: arista.eos.eos
+    vlans:
+      redirect: arista.eos.eos
+    eos_vrf:
+      redirect: arista.eos.eos
+    vrf:
+      redirect: arista.eos.eos
+  modules:
+    acl_interfaces:
+      redirect: arista.eos.eos_acl_interfaces
+    acls:
+      redirect: arista.eos.eos_acls
+    banner:
+      redirect: arista.eos.eos_banner
+    bgp:
+      redirect: arista.eos.eos_bgp
+    command:
+      redirect: arista.eos.eos_command
+    config:
+      redirect: arista.eos.eos_config
+    eapi:
+      redirect: arista.eos.eos_eapi
+    facts:
+      redirect: arista.eos.eos_facts
+    interface:
+      redirect: arista.eos.eos_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    eos_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    interfaces:
+      redirect: arista.eos.eos_interfaces
+    l2_interface:
+      redirect: arista.eos.eos_l2_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    eos_l2_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    l2_interfaces:
+      redirect: arista.eos.eos_l2_interfaces
+    l3_interface:
+      redirect: arista.eos.eos_l3_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    eos_l3_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    l3_interfaces:
+      redirect: arista.eos.eos_l3_interfaces
+    lacp:
+      redirect: arista.eos.eos_lacp
+    lacp_interfaces:
+      redirect: arista.eos.eos_lacp_interfaces
+    lag_interfaces:
+      redirect: arista.eos.eos_lag_interfaces
+    linkagg:
+      redirect: arista.eos.eos_linkagg
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    eos_linkagg:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    lldp:
+      redirect: arista.eos.eos_lldp
+    lldp_global:
+      redirect: arista.eos.eos_lldp_global
+    lldp_interfaces:
+      redirect: arista.eos.eos_lldp_interfaces
+    logging:
+      redirect: arista.eos.eos_logging
+    ospfv2:
+      redirect: arista.eos.eos_ospfv2
+    ospfv3:
+      redirect: arista.eos.eos_ospfv3
+    ospf_interfaces:
+      redirect: arista.eos.eos_ospf_interfaces
+    static_route:
+      redirect: arista.eos.eos_static_route
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    eos_static_route:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    static_routes:
+      redirect: arista.eos.eos_static_routes
+    system:
+      redirect: arista.eos.eos_system
+    user:
+      redirect: arista.eos.eos_user
+    vlan:
+      redirect: arista.eos.eos_vlan
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    eos_vlan:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vlans:
+      redirect: arista.eos.eos_vlans
+    vrf:
+      redirect: arista.eos.eos_vrf

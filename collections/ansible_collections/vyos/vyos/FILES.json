@@ -1,0 +1,5661 @@
+{
+ "files": [
+  {
+   "name": ".",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_config_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "85c811ea39dfa2cc4252b64751f8c2cb2a94f6124caf441004173a21537668d5",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_firewall_rules_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "97ff5777e29b213646a1dc47abad87160f04e21a7d6de1eaff57c444ee925ee7",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_ospfv2_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "da208029f501252c923e890ce74d0c60fea3315197ffd161ee9a1795f03f83a5",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_vlan_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "44f376a2e5dc118dc71f3092c826af3f1bfe6051ee7c57ee9a697dbb53b98c64",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_l3_interface_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f63e1c78a8d6994cbef321a5eb5bab4b9a0f71ec9487e5de90003ea9ae2d5423",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_lldp_interface_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c788653e35a4afeeb5750b058311be1f9905bae957e5ca7b94781c799a73342c",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_static_route_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "097e65c37c62a3a3999e9e12a7f18f4a64a4c3f9b87b0f329d19f49b9acec212",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_ospf_interfaces_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ecac59e68356bff68a7830f671055a84f8a53a974e1293e8bf9aaf41c786027b",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_ospfv3_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ea1446ee8622dca4abe95c17f1c7e8fc398bb1b9ba83356083365d8d0f5fafc1",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_firewall_interfaces_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9ad278ab1ae612b9ddc57d8b422cb4dfd3eb74495f688e6433d1a26ed854e484",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_command_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ef25d7536a8128d80ac28c096df9a61702afb93ae6ecbb0a41d3bf716c2432e3",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_linkagg_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "93c767e9b2b1e81b969b9c05d4fc9ba6a45d980e16721292fba4248e54df2540",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_lldp_interfaces_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0520672e3e47acc25486ce81357ffc5d4f92cd97f78640ea0921033b73dd9b83",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_cliconf.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b5174575305c40c950273180f04fd1e62ff92f5aa794a0200422b444b6a724c3",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_ping_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ed95d30928a2956c6b5bd3b2bb45795aaf9d2f5d9aa629f46c554acb0faf4b92",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_firewall_global_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fa872abdd997c252e23772eef5f3457c2ddc4b330a758216155c77a91f28dde1",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_lldp_global_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "72c9af36692d9ffeade81117cf27cdfb1ad94d41e2fe6737cde358c0c731fb43",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_interfaces_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e6bf1739b0e2ca670fefcd83ea4ba405d61fde8f78d2ff5dafc4598d566132f3",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_static_routes_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e969382e5bbda5fd406b1012e5b2adab488446a0a26eca6b32a1851fa2297d33",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_lldp_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7e983907d70b3beea71baf68de373c6691cb168b4b2091c7ca5b0947cca3cf58",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_user_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e51055f38cde92a2e69238465349f589679d02274368cb7bf969c5c427362198",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_logging_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "15d609187a374a84d9d06a9062e5450c5b959644c3a13ce8b6569472d505298b",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_system_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0159dffc5ee745cdc63d024c4ea34b50df4d22be968ab9932e1f72628a559877",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_l3_interfaces_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7c0ed58d96308e514bc73be173ee87c379f8a7067a04d156e73906e492cd1a59",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_interface_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "306f4afacd857b0a2c9e71cf8700352723553951f1c4602b5385fe3d89d3ca7a",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_facts_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9bfb862f8cdf407f01483912993cd67bfdc76ed4f74f8d3a375ea1ec7e64953f",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_banner_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e8709ba7c331b16856b00f6e196d497b3289d4c81a880927cee62f28688ef6f8",
+   "format": 1
+  },
+  {
+   "name": "docs/vyos.vyos.vyos_lag_interfaces_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8125275600bd55bdf117d951fa7a1bfa0de21b2f7ccdfaa5f69580b4581769f1",
+   "format": 1
+  },
+  {
+   "name": "requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "243d11c04e5420302b643aaa33a479aa4249435e2920292b2f40c0f3bba906fa",
+   "format": 1
+  },
+  {
+   "name": "plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/filter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/filter/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments/vyos.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "485e06c4ee3eafc02550cc6968b23c637ebc76ef960cf41c23e3b65f10cfc4b2",
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/cliconf",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/cliconf/vyos.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8e15182629a209ec40a16c39309f0e19226d37b58139e268c5ac3f0f293f5f88",
+   "format": 1
+  },
+  {
+   "name": "plugins/cliconf/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/inventory",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/inventory/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/terminal",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/terminal/vyos.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "64d4e21aad4712ccf9d7cc60559bb05503ccdfd6340af45d86b784a0c05a2730",
+   "format": 1
+  },
+  {
+   "name": "plugins/terminal/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/vyos.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "61cd638e4b247969e3eda62293cb2c858cccbeda52e09b2ddc52147089a0f7b4",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/interfaces/interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "351b094add731ffc2ef9528956b0e45f1f814342576f45d9e0b04b5298a90ddb",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/l3_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/l3_interfaces/l3_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "72e7a468cfbd64fbf809953969e173e8e0295463b4634b886fb8ae68a4bc8dab",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/l3_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/static_routes",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/static_routes/static_routes.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "32fe20a7d3e4ab4df26bca351df62b0eb69b947b5aa6464b9f45801bf7afb4ff",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/static_routes/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_interfaces/firewall_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b7423b32879a3b432fa8c1b30781426f729ef910c582d1f85b45280dfb45a5ed",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospfv3",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospfv3/ospfv3.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ba75705133bd7ee87c570d9be378274bc6904f40734b4d89b46ff298f32d288d",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospfv3/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospf_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospf_interfaces/ospf_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdf9465a43e877d9ed8903efd9eb742e0ce9424bcf8c8824af26603a91072ccf",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospf_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lldp_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lldp_interfaces/lldp_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1d5131cfe51ad27dec6abfe4d9be53cb08e6d39bab404be8104a7fd05713c548",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lldp_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lag_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lag_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lag_interfaces/lag_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "09a5b28691b0b8c0fcd4dc896168cc9e33ce41788b21dea4786a4e9321e735a0",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_rules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_rules/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_rules/firewall_rules.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fc13fd67286349da1a0873b147aaa15edfa0f7e4b97919e0e23815f27fb202a9",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/facts",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/facts/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/facts/facts.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3c5ffcfc60161de1f5205e4ec3791f57994590f5086ed3ff28ae07e0c28283bc",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospfv2",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospfv2/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/ospfv2/ospfv2.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3193f9e931229ace21951539855f07ad196ef62c6176f1e3f22c1d44a1ea1f4e",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_global/firewall_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "95b6a627275fc759af0f300d1984b12f8d1197cfef993053d3821cf4702a584c",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/firewall_global/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lldp_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lldp_global/lldp_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8648d14d12aa79a556a8053e86b683fff7f25c1daae82518d36799466a944253",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/argspec/lldp_global/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/interfaces/interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "753eb5fcf74c82ab43cbdfa01de6586d326dafcc54712ee38b2a81ebad6b7ca0",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/l3_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/l3_interfaces/l3_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ba9b841360e54a993f1a04d50127c16602c4199c2e1b5ada345cf51f6095b267",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/l3_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/static_routes",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/static_routes/static_routes.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b887be5b5e3efa32fa5a5f046433b8e7a9dd370e8ac6d48205de2b61c7144a21",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/static_routes/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_interfaces/firewall_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7c7c70b9ee2a803b0d74d5e9563541a82b23bf664c474919108b7d89bbbac75a",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospfv3",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospfv3/ospfv3.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d7c58b0b6023be1f8a58eab59ba017f8428e534911a81bb0b70f8072ff98d37f",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospfv3/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospf_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospf_interfaces/ospf_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4ff55a997f18073c46ef02c13ca3bd6dd944975bc213cc20aa33da8ac0f24d47",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospf_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lldp_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lldp_interfaces/lldp_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4ffd23ca60c0445f5bb1657a270a1d8f19ee74faa15c097b211b8793db4a9251",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lldp_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lag_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lag_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lag_interfaces/lag_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "23784a6bfedc389e5bd0cae91d0ddce03068f1de7407f972cd90d18d3d4429b9",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_rules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_rules/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_rules/firewall_rules.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5a4d733ea269c19e33a5e26319177991a626c08020e8387a760f321ece8ad772",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospfv2",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospfv2/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/ospfv2/ospfv2.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fba5918eeed4cbd6e823aeaa9245af72a76dbc0bcb21a90ad5b1afe8ed226a1d",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/facts.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddafff7998cfc208259d51372230a37f05cbe8a64df8cfbcdf1730b646db2237",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/legacy",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/legacy/base.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ff9b627b4e171366b2c0bd3be1a6d6f6da192ac7948cf5d67438e6c317ee3129",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/legacy/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_global/firewall_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4abd9643ac6e76e33621460b96db8c299a1623ce7288394ce9f2273f1bd36273",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/firewall_global/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lldp_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lldp_global/lldp_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "eb269e5d61c429dbfdae7747a5fba2b428a9f70c7b56a5bfbe28cbce4c034c22",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/facts/lldp_global/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/interfaces/interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ad6ccbcd0fa87e7483b1c4a0e9be4cd863f0d29d9e8c30aae7c8ba5a2ecb4e43",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/l3_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/l3_interfaces/l3_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9e8660154f1f48a60231df743ce7692f0d7953dfb62d6f0b5158092e0181d8f8",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/l3_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/static_routes",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/static_routes/static_routes.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9a69318a4836ba9ffc3fe28f9626b00a806242a213598d05185cf0897b106c76",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/static_routes/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_interfaces/firewall_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cee399382c3743d2fd5d5bd8d43e38bfa1ca8ab41c9f6c0fa6e52f711e11683e",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospfv3",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospfv3/ospfv3.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e5f3c72b221f74bcae31743edc93f08dda4a920eeeb0b9f94a1f226f0caa8b52",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospfv3/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospf_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospf_interfaces/ospf_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "75abd44c30765eaeb71811490651676d34f381ad3d963e0d1f8f8eb1bcca4ce7",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospf_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lldp_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lldp_interfaces/lldp_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f15854b32f87874695d42ab8e86a490fd5c9a4030019afdadc1fc50c6831276d",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lldp_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lag_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lag_interfaces/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lag_interfaces/lag_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a21bbdde67eb7266dd73b07ad4c699bded8f652e6d915611f0ecbd470ed6176a",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_rules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_rules/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_rules/firewall_rules.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0e5e10ead77d6bab013e4befce4029d2b355918a192e73dcc923ce098034100d",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospfv2",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospfv2/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/ospfv2/ospfv2.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "884f375307f4284fdcf5e0804d66396f82e63ec106de9f7f9bc7418fcf3f4fe1",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_global/firewall_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3e5bb9f7ab2cd98f521c1ce76dc5d75f847f3537c445ba450d5f1770b49a9058",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/firewall_global/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lldp_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lldp_global/lldp_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "60a67727208e39bd2089170d7ba6558003c38ace708ca8e57ea464d00385e2c5",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/config/lldp_global/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/utils/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/utils/utils.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5bd673d6968c4d8e57b56226acee72606f5670b611cb886d50c35c3dd1fa33ae",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/rm_templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/rm_templates/ospf_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f2ccbb95cef5b85b87fbd601eaf80e42012e9cabe6b562fea3d29894f8a64127",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/vyos/rm_templates/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/network/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/action",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/action/vyos.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "945a8e3ac714137a24febfa76cffd4feb7a2f0617c57ba089e3dabf6b8a7285d",
+   "format": 1
+  },
+  {
+   "name": "plugins/action/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_system.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9d1c919508a337dfd52462d493fd0609a9b58e32b68b9a901a5e43b43ba99c76",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_lldp_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "89715625cd7bb08b708b4fc9c579dec74f6b27e17bb9fb70f82e0049521f2865",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_ping.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1821c68cd0d602c771956fa51b119cd26109855cadb9b9b4d2fb324e98d427fd",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_ospf_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1352e5b1196f0721665881a8763e38a8dc9ebb7ce66151e269edfd5a22e1528a",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_command.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "401e5b51619e1a82a7902e8815e72393f7a31e4de66b775435f2b5e6bff1a70c",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_facts.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "afc31c78a8f70f43c521f181029bd039d5cfbbec1e96d33794d3529635ab881e",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_linkagg.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "99d1ba8046651677e44fbd9f88c11ce2a34d2fd79b7d32cc238cadcba4703a2e",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_static_route.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8e8e0e97e7dc88798fb37c7e63d74d8ca587ddec7d69ec8b45a8a4b58cab32db",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_interface.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e946bee49b922ae95e70d6f36404f196ba6f8b129c09028c606afe0dec6421cc",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_lldp.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e64a85527f2fb6bf33b35043f7b4672faac43d1fdd0b4e643879dcfb12cb38e0",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_lldp_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "128c1d2fa3fdbbced4741d4493f4acf2a5ee1730f5532f8f824bcebe9b66fa24",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_lldp_interface.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "14357dff03a4bbffac0c215bc85686146b2446e404bbf507d0dc3432b4786b37",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_logging.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7bde1a2705986862032a563e889c077a745878f4dcc7c532ddb1f9fcd948b1f8",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_l3_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f5a04d8f6b625167ea631ff5b59261898f95ad5cc166fe05dadc57ea9ab03cc1",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_ospfv2.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b69e0d11e457fa8e2330c58b57878c88928cf4022501bf9d43ce702661a439d3",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_firewall_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c34f1dfdbb50f981cca9655cf5402a9ac7df6fab2df00379809dfdb29ede0d91",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_l3_interface.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e88721384dd4b31d4129c4354cd017529e22c07a928bb2223535179267241d1c",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_banner.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a2e3e15e18f3ab1bf10c2f5cf11348e6a70acb4dfc1c515dee68d4322219ad18",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_firewall_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b6d1a549afebf7c94f9972801d7bd39e9111067b26f75ff5a845bf55640b4fa9",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e5a7e0df4ba49bb12979506b55648cbf9332244a451bdb5b1e568f7bdbc175d7",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_config.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fb29f27191d07c9159fed7a54a1cc780b2abe3e9da7c6f0b0c746274b5f46e54",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_lag_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c7c4b80ca462243bed5ad71f563f813465008b8c2dab75d410f389e64b21739e",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_static_routes.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "56076c78ab61d16ef44a3a33a4fc8bb59454dc0dd6e8758689fa1eedbc4f625b",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_user.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9373bf674766ab6a213efedb918dbf27094720cf82047c75c4659a9cdbbe3b36",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_vlan.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "771f6ca6b29c5e0fd3e30e9381f70fd200601d2e7be2a95985a2e0c63c46327b",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_firewall_rules.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9e5a0dc39a785e7dd296458bb767dd8709c0988bbb60353a992d88ee3f28c929",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/vyos_ospfv3.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "877752b2313648d754b3f93725fe337faf5745afd89b42d7ab7e224ac7246e73",
+   "format": 1
+  },
+  {
+   "name": "tox.ini",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c6e94fc72827b917d55ef15386cbe48fc9eca81755aed8f532d8da97a0be3483",
+   "format": 1
+  },
+  {
+   "name": "bindep.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "80645079eb025b3a905b4775ac545d080a3d7d35d537c31e04f7197c94315ab5",
+   "format": 1
+  },
+  {
+   "name": "tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/sanity",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c8a4ac4bfdef88e75d6e748e35a42fb4915947dfa2b7dd788626fd829600e014",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.9.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0601d1470a13bdc6e93e053fd970b2b6f46db034e411a61feaa86833465161e9",
+   "format": 1
+  },
+  {
+   "name": "tests/sanity/ignore-2.10.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a7532854f0a69cbd1d48ff6f093c835debc6bd15c577dd440f1edcbcfafc803e",
+   "format": 1
+  },
+  {
+   "name": "tests/.gitignore",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b5726d3ec9335a09c124469eca039523847a6b0f08a083efaefd002b83326600",
+   "format": 1
+  },
+  {
+   "name": "tests/unit",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "49ba996dc4735c3463e9af561344346dfae14bcc1a68096ce78364b377f0df1f",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/mock",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/mock/procenv.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "695c4c1184c4d1bf87a836bfd6099cb0a53e6e6fba68c19430df44a77f2aacbe",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/mock/yaml_helper.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "94e2f3c867d2582c9f7a0e99e544718e355025c4a51c9925e70158fa89b3609e",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/mock/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/mock/path.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "396b0a5972d1f016f3d28cc06a093d85aa71da1ae7e3aa13866ec9dd6cc958b9",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/mock/vault_helper.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "feae23166b6eb502f7d9b77c314970516c9a99aaad7de01295b4dfdad53c5c09",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/mock/loader.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0cfbf4c710a5d5725f84d5f34ab76ec1a0e853397cd945c90fd97769f89dddc5",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/compat",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/compat/unittest.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3ed698b1faec43d87a2c1ebcb15a2aae48b09ff355bb9a598e5f5a1c928dbb30",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/compat/builtins.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ba13a350ade8ef804336f888d5883b8e54f8bddfb9d0fadc10277a8ca6540f4e",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/compat/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/compat/mock.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "19729d817c5060fe2714834b549d18ab803e248882a83129849d170a42b0ec9f",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_static_routes.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ca1e7ab17287803aaca0f21f5449b06d7c1b6cbcc02a6595ea18c73800445ea7",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_ping.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "09ab31b60605e7520809a82bed73ad1453a7c20f3f7feba335bbb47b4d0c7a62",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_user.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f9a2fb9aec4c7014197d0dce18eb09767a7018d20c1664fe31d035f3312488eb",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_banner.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9032f312be5574c048b127530a30571573c41002101633673f26e35034314504",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_firewall_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "56a6b243e9285a2e8917689b818af170343cd591369659f1bbfd990fe087c507",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_facts.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "dd3bd53c6e1deed5e71575afa80f1b16b78b60e92d8fd8109c105cd339398dc5",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3fe19ebf37533872f3ff203897231471a58de8da8b61ca92e5c7097bdf4d8d62",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_firewall_global.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "dbfaf9ee1239a1a497e1b46d559209a5f8efd15d283bac988e160a6427a695b2",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_ospfv2.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "be4db45ded682737d38fc9930b69a76062bfb6c11d54ddd010f299cd7afa9855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/vyos_module.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "343dc8a757db195746506b2bc68e3f8026e801f81f06ea98d6fa141c4a395f80",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_command.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "05cf9fef1e96fd5154f035f5fc0d8de5780c1834cc8c4ab829e503d28cc257ec",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_config.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a0509f6f4d166eb60f5221dfaeb1a580b23344cacf7c0ed1492d2d16f5d4c188",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_ospfv3.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f8437ad4520159cc99f189c9efff7872f526772861066eec4283270bdd89e27b",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_system.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "71ba1e9ec8f4ce4b255033186df7cee46adff12f014ddea913a277b520a5f18e",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_ospfv2_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbdf1f1197c560b690b9154a03be06c84064fe8fa954c512e7235c477fa42c10",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_firewall_global_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "546e5cc4390940d0a0ac76c35d145ac647ba2f52df630b6c8f2f194541f8b236",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_ping_ping_10.10.10.20_count_4",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1a8388234a268b6f3e162c6b059f2a65fb00c426dc7e5613421e7846ac55785a",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/show_version",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7596dbf5fcd0e83c165d46e12dba97253425e24b97f3662a9b96ef6eb89a9422",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_ping_ping_10.10.10.10_count_2",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1c9b5b99cd0fb20ca46f006d111afb4a208d1d56271daefb37291d9efc6d74fe",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_lldp_neighbor_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e74e122ef6c9389a68c65c2b1da21505ed098a464982dab62b7934c14c883561",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_firewall_interfaces_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "738423a3ccd98905161a6d15a3f5a44ab4f71a1ba6eaec552555057ccf370c7e",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_user_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ef00b7f9f6c30bdd1a1bd4e28b02a6d98faee62f6fc199d989e7af4d3ea56ae1",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_ospf_interfaces_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7479b26ab0e0238d347a808ca88bf15cbbc58f2d2505fb01624c5627e1f26302",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_firewall_rules_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d1e9fd5c49c7619d783536cfb58307ad520ea675c68d7a5f9c6608a80cdfca23",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_ping_ping_10.10.10.11_count_10_ttl_128_size_512",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "49d6b325868eeb8905618eff9843cb1d5c5127f230af80a5face945fdc3611a9",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_interface_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bee1003d72d534eff81258fc10eac84b6754a82a7f88055d167e9a5686223b5c",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_ospfv3_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7d28369d4b497a36e65524a684415eeee46c0a5ac060dcc6b7be4a682191128e",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_static_routes_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "24e264207e3c76be328a0eef20c984c6937c77c230a6740676e48bcbf204b7a4",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_config_src.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "11edf901dee62b3e1fe4611e9a7d93aa7c7b9f18aa31ba7a64759c405d4ad326",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_config_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "43e42e158d44261c20c343c1b71b0640e819d94c7d132a4ecc3cebd56a20f89d",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/show_host_name",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b5e4b850450b895fc729138183b9e29684063ca09a493b4c60e5810547cd6af3",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_interfaces_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bee1003d72d534eff81258fc10eac84b6754a82a7f88055d167e9a5686223b5c",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/fixtures/vyos_config_src_brackets.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2be9218fda64212a34f21d50e123210ceccddc3d8b28824671a54e7f097ddd24",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_static_route.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c26fe4bf75e7e611d3203c3ac14cf78bbff8dc3f2ed7a9dddfb9df0cd4f4ae64",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_firewall_rules.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "974957ab91ba6eab06bf915d9637e84b1c57d089a18ca7683152640a17183a9b",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_ospf_interfaces.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cb7b677dce533b53bd6ffff272798651cccf719e540e91111ee30959c97ec03d",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/vyos/test_vyos_interface.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8b505ee070f761c33143b6cceace3886bd923fb1e382f9eca9666d5dae01e9c2",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/network/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/conftest.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2af4846e50d461a131ad3edfb609fbb39a9eb1796048c62e4ead8234bcf5c6a1",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/modules/utils.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ac0e108b4d864fb3f335372e92536ed2378c72345e024bfe587c577f9f914f28",
+   "format": 1
+  },
+  {
+   "name": "tests/integration",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "59612db65b1ab7ccf74c9ae6e32b39a692e7f83732d588b1fec6b52c58e55e2e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/tests/cli/net_static_route.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a29684f6009d9ea14e39435c7b39b9c28762580ad1d698169d08cce5da32b1e2",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_route/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fd6181c54f718909ec021ae9b02e0564f6fc0c3121e8826ec0a3bd755e4141e1",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5fd156b278185c274b6b579e938e099f338ed13ad04782c0f17675b11a465451",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/deleted_afi.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "20e6d0db32a4d7aa621a9b22f3c6310765fa8eb4d2c42cadc5588bec0d68a3db",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ecbb6ccb3b1e5ef2e3f7da9c05f6d81ccf284359d3ed5cc6024923d7c775b151",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "486def34fd1521aa45cbf9eb51478b8582e251e11d4d2d795f04ea8c38d6420c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "62a5ec5fc949f34451d72a86ed2bcc325381e666bddbb9d388e3a8ce02e15014",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/deleted_all.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "73bbb2f2ba7fcf49d3b8122479d6ee8b533289c946f4610af570ca896e13b0ed",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4fdeadd0e296502b3990195091abb59bc830b0d0f7a06b756de5eb28352b995f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "253c10e9951cc4cf1f2c8fbf954faa6d5cb04637fbb4fdc0dc3474e87a3dadf8",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9be8fe05117c68e2469329964d07b8cd6054ee1a8898c95b02980e63f22d9b23",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8a0193f8a346eadc1799ca949cc3539743659d4a2ea1bb6d4af01c6f7db25562",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6e04c4ef3996f517c90f79ad7b4c3688dd2c3fb508e2e75f2f782ef6b80c9908",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "da22a3c5e19dea15b219e0ac3f548c3daa03bda65126394bef7160538bd25877",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "229b8976ae4954d01be29e1586365ae2809378accf2334eda42bad0ae69987d3",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "37bb266ed396b0deedfadc54a835f15862266232e9148bbebf537367a72fbba7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "186029afc4df1670db6c7b4a539cfe2f674955614639c06291dd444881fb7022",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_static_routes/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ff8a4ed6bbeadfc6d9e05b89f5b37562a19389628483609d6c0c0099b7e96728",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b8b4071964db02d28353cafba273779cc27ddd4907f6fd073c34a73a8ffd5a1a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9437f66dbd18283bf716ff325f2990fcabf8518aac00266d1cfd622926589a44",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "05649fbcec72bb023295e844a4f4efe214e7cf415058bbc4633678e862d3df65",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7d7585f2c0910617ab40c3920e55d73c8e54f2b8894f43b2ff566939d8dd9b75",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9eed03819bc034f6199f03f41b58f89ce7da91cb80350a041ac77a4374bf98fe",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "30242d60a89851b07a7a02567262cc5915c6ee02b533a9529f2de7ec46c01b8c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "61247bf1b2d932b7a26d94b578243d5a13a0becb01ca224a0a5708ac157b00dd",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f2f35f1858add024d250e435ef9ff779f285354f14fd23d706c6d08cea4ac2ce",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6ae8d1bc5fdaa3ed481dbaf3c68616ef45d1edfeabe89650e44f3a375f71515c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bd7cfadb2806c48bc726c4b8963478b1edd52dba78d3b728b3d0ab83d7a90e67",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "aef6061f0775993d318c064440f87a214e812687255a6fce43e6d8c7668f8b30",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7aeab591c30ecc37f7cd1b9d7151640811daf4cb922d8f190c3c68ef84e5d7d7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_global/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "eeb71127052d4175e52c1e232f885842efa9db6aa492ee290144ef494e2ffb4e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "252988309c7e447e0a77b5ab2a0ab267a3fe824fb85dab60b129726143b2924d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/_parsed.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "412dd2fa8979e049424ca876a01cd81b717872d073af1ff688d0d116775afc50",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8508b306a7eaaaf167f30fd0c93b1ca63b96a3a6f3bebe0dd1d4d01f508b3406",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6a7996f74d231e38c4ff59fbc35d45855dd3e48cf16e6c585b92faff8a633669",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8b8bde54396f615629746ea18304097b84a5a292df3a0a43a9d9310ed05ef4cf",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c32039c7ae7211bae2a299a73d0d04ed18a338dde9d33839d6ed3d22bf289306",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "67378c660ff17115bc81566c00186bdf351dc2930c11f56863ea1a8a1130be3c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e8acfa9923185a068ef01baf2eb44741ad8389eaba27ea4c7bd84cff77f88398",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "05884bde7e8abddc2015ff9165858cf27f0daf323429c0f517fde4a152f23b90",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c4064d2d5a49ce1135eb2384f6500013e99360b3a77e7628c9696e3224b5a26f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4f2d7f68df100ad9a627dde1e7d36aa36b832b8635a54f7ef1bcb90ab5ef2663",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "eee04e25d9a4eef83ceeaefeb26665e96c3a0e7430b478318d3345bcf60f0f6f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f10ad8afa2beb685b3e68d8409f5a0e5c0bd004581c7f5f8592ee5a9e1f20a85",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospf_interfaces/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1a2ed6e2e9ba3726d6661ba7938c2a5bb607cce4e616fc0edb05e1e43d365e5a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/templates/config.j2",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1af3e1f05d0e4cff24108d0b0ff02b3f323d843cd074d578128b2528e1fc445f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli/save.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2a5450d1fd4c02d0487a12fd583711343c78489ff5c2e4203cfb493a70e255aa",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli/check_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f9f26d231409e78accee8377f346b8cada56c967cb346d1170a3be26a2d82507",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli/simple.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2147d964ad9ad848aacbd45eaf2004f710a4f575a08c9e99f7035e919867f015",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli/comment.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b5f936a88a3aedd7e2993ed89ed6a95a2bf74dde1ea5065ca12b59295c2e79d0",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli/backup.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0d59389759725b69fad8d074b46169b6d6ba1dd449d00adf36e5f0ea3a9e71cb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli/config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8e3c10773d2da12e06e21c1d84116620a6723a531f9723b8636f15cf79e525f4",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli_config",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli_config/cli_basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c7ab56eab29c00cbac70193c2d3aa6ffa89ef863bb179383c9f9d80538e97122",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli_config/cli_backup.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8e3dc4e968e2149e65f78bf511fd56927fb8a0deb33233b24f6205f38bd5d3d8",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/cli_config/cli_comment.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4ff0285771a46551ca06270ebabec26c0def234a9ef731f64033a3e7eef75d5c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "34c53a74169c387d5f916913a0c89838197052ea46452bf090fdb45524864e74",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tasks/cli_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "85cf134edf2a993adbf49b5058b0f58ef2469b24252aec88e7769bf50e014357",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "563e54eb47da89dd3372811bb375782b08538bd778cfaed6abe80c0393ab33f2",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_config/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/prepare_vyos_tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/prepare_vyos_tests/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/prepare_vyos_tests/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a4f9a85ad709d3a4b872439adf4aca95a87ae1adfb0c7923b89fce3461b44d5b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "34708b4f383f2f9c2051c2e0743c5941aaf77fdaf527046b3c88577d70e310a9",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1e2d5a2060929bbfb176d5dd3d71132ebf8e994730851d7acf784218efea91ad",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "11257cf00428207d8b309964030959ed92746d0b9fc571d7ee2e7d308fe3c206",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f561ffdb8a927af1fadce120d727add3316f60e65d2fe5429d5c1bb86838fd74",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e5b2f1e922086c1ee292afc009d4b16ae11ddc724daf86b9901f8c63710e42e1",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddad905e6e266d216cc14a6a72c385db6a2ba496f18805c879625902a9078fbc",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a98e867f78f0a9ee7eacd8b463c469ac3c676a18af0dd3509dc52a49c194ad53",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8b5909b8643b5b5ac6bd072c383b4f760b381a0af4477c1afae2d0b19d854cab",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "71c1264780ed68bc3fb03241b473500f4f829f7b2df73a8fa1631e6ec132699b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/_remove_bond.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f3a83be6ef6b00a93a6c4fcb910fd0af8741eea9f7296d3249edcfc668464678",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "686c8cfd6f00fee1383a8dd185cba8bd4f0809cb9926b69cf975e2ba0f28a8b0",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/_add_bond.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "66a59c87d57b71ddf4b74ffc88eb4ee0af16132d9d3e72c16388263d262c9135",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5d6535ce0d97277e8f7c56411aef9b1dd850eb7dd3c823d7d01f2b882a85017b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "109b8111963b6958d08d479736cb3444f0fad2e561bf26e9ff7c752b680c42e7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d5a7be540e04782bcca4808dff3d29752f743ce7e2e5da79d62a695a66bb8270",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "175aea4e5364bd95aac0c41e974aa6af2662d9901525a1beae12fa7adc0f14cb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lag_interfaces/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "36a1aaece12e47beb5a2741deaad6e68c94ebfc7401d37609e0fb071ffa19fc2",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/tests/cli/net_interface.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0c4f5455fec2c4d8451835d05f341e889ac7c16fb98640a198b7c0c4ea5ad4a8",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interface/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c4a2c376b9873e7288af220232d746696c00c0b306a04e35f3e6a564f2f33463",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/tests/cli/auth.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6c6d7267368b97fd3d93042da03dc8c2fbe550981019283c7abc2f392bc4d001",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_user/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "62f5433f8d3768f6e5e47dcec5619ca6845b1f81e7713fd76a38b2a48d60e1f8",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/tests/cli/net_lldp_interface.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "34b333f698292015410bd882a4d51a90cc13a646c700e73eb147d38879c01fc0",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interface/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1c30311e76c51e59a27c298f5a8461c17c51b478e6461ccd592aa19658eed470",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1a9b36b7be26ea88d103609d69c1a051f2d25ea84b1335a931a346d2622392d6",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a8faf5674a91e0bf9727d918bd1fd1a1322f2fe483ed6786ae8faf6e869a8f47",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8a75d64c1253d907944562ed76c0d1e4ca0aa21ecb97de97dc556b8c7b908b18",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "18597981d66eb42ee34916fbd8f05c47b07b824ebca67b8f52b3a1b1f0ea9a7b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ae8f6501636e2b2a1d45615068784da4e319f80a16ee3e79a4a3019111aebb3b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d4cd0c2e9cb86a31d79f26b83555f3c1cbcfdad0431a842bb09e918b2efa93f1",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d50b0b272492592e72a81cd2c832ac474f3b75a10aa9e22f46aaae447a3f805f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c4f79e779b0dc5f86df652d8ed664c2a05934cbfecf2e543a2055b2cbc14ff5f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "59ac0817529e5e28c172399077913c684719aa616d21e6a10e65121d9915052c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6f0df337323b9cc96c002e46563a026559dfcbf9b78b1f7b76428870cd50314f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "403b25c08f94a477ba272cdc365e46c73052ce1e1b41afe97c90beb0d4454e59",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "864608785841033c7ab9d77d18480cfdde1de4707f64a86fbc413f7521da064c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "90528688ff4d0b98df05918adb9b9740dfcc14e9c9a544c2f7507613d21e98a0",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interfaces/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tests/cli/intent.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0ed0bda07bed6c6ef4dacedbbafca27a08f8c159d72791865988e0b106f6791c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2918b60cc15e5e96e5a47d8d62b5f232c9f1e5902cc94b5ff40912f9df134f4f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tests/cli/multiple.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0dbdf5fe860ce05a57488ed6b13376f22d5f42e2b7ce74c1f8984b970f1dcb68",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_vlan/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tests/cli/basic-post-login.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6b1d91a33c59bb91193ac9b2835d4aba0608429b1f8b984750362a0a5dbac679",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tests/cli/basic-no-login.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5ba767d9b814faa9db8451d8719a7f835fe1f0817e4575f8b005c2a6f02a93d6",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tests/cli/basic-pre-login.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2925c3c928ae98807e2b75e73da4a20e9fa1ef7ceab3e2e6f8045c21daa37cb1",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_banner/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4dfe2434c4813417c87b759aaff819e903d3c63b5e46fba41463fa50e495b231",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "213b8cdff1a5eda24b21ffaf4aa71274804cbd202a068568a77eb14c4386696e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/_populate_rule_sets.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e642bafad1788ffa61c8604388a081ef73876d0a5e8509c6b4d5ededbe17cbd7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/deleted_afi.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1702b4ff681d4c6def8b1d92cae49ef9f9e21b532dd37f4d0528365cd46ecae4",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b6d5e2a1bf4ab6643d482445246c483a5a1f233d58a3e519ab3d1e4e5f1c7f54",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "251a5f3ac213ca3d75c420d1e3b830503e508d165299f4b182a248e53e1c0a20",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "42b1ec8189889366c7683f5f53e5bb56773cd327f03a1f83881d8534922a331b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/merged_edit.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1c8dd2914c0b158591608b89de65f9265d934b1b1e33bf57fc04d512539779e7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/deleted_all.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ac9318c93d45957c10152cfc6b6839cd878a4302b64ec826eb179762af3987ac",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e05cfeebef6891e1a65d019af0ebb7ca954028ced9a54ea140eecf5d347ec83b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f0246f4f95d07aabbf6b7d4cb63456c09a9dfb6ceaddf0e05fda7c89cd22ad23",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e8acfa9923185a068ef01baf2eb44741ad8389eaba27ea4c7bd84cff77f88398",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/_remove_firewall_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "93b3da41594bc121ae3c6b87fe1f754c7f5fd26d668e7e3686d1b86940e20709",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "05af6b196f878e90415a5295351ade47b1ef8b2aa76aa0e6c215df87c1086ea3",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/deleted_single.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "31e1e090904f8375e906d65e0b4820fe5eb6701f3ab73acc5a9d0a7d81390ac5",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "635300d142fab4e09d4dde8ea90e315692ec651273954fb52c89cd845a523d43",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6f9ad9c72f39ea8dae16fe03ce61f00eeed5fd66db19a6cfc97cd2e6c82e199a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e01669b9f13511b087b2ad51e50f5ee86938ed61670a5558387eadb0cb4baffd",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8f282bb563863de720f60a5e986b9f1b4e990aedfb791122d95c36907e1305ab",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1a2ed6e2e9ba3726d6661ba7938c2a5bb607cce4e616fc0edb05e1e43d365e5a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_interfaces/1",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "630e92488d76f1bda35b6e9d721ad8ff531579f4d63ec48f8ddf83ad211e3730",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "70d716a4ca93aa89cc7acc63251b25bb5aa28459ae374f549ba617b9fe8642f9",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "06bce329ef76fff5da65e5bc0c72f71714698d9cba3edbfb76c1ec599fa8bef7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/merged_update.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4641a606312b273553e473343ad4e0a346fb73699efecde119b8289ba836ce41",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e5f657c42a38d5169f05450c606393dd1fc783a75d16e8cfebb6c1141648fc89",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0938b70cd293751b54cba1f1019e2e91788da20f705d3fc7f175eb63988618e5",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3ed61ca7a947d04744101771b27ef21b13c6fca9e45ff6ef2af0eef1347bcfb0",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5d724dfcab79dce098f8fc0de2769d86573d9fab285add3601c57f690fd30440",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "de1b2c7626375f902f3b8ed8734a0da6eca639dcbf06f4e92e3fc11b8187d305",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "21b5328e5f160094f9f38dc52c7442e65ad325de7681f45234211c1326f47f80",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6932d677de57140432ce894eb0f585b14189a12147c3d70f86ca14450339629b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e16560f9b431ede3c27fb23f784e82db64dfa5952e77f6b6e0696231244f2ad2",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e0ee1c7a9a42e4c73107a0723381b562a45b1bd260063a7fc5c23fc9f7128ad3",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e2183348f557548902494e62c03c625fb8deba37213d41c4f3f4fb2a489ab77b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7106b82b54fa4b494bff367d6b21dbd79df31ba0c1ef89f6d8ed9bac18dafeaf",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv3/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/cli/contains.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ab62b27c0fc3126c9acc3d4b7b245ebd0f5c584056e7ef0f717fd7f6f1017d90",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/cli/invalid.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d19397938de2fece4d693bf7534d6a0bdd2e3c88c22fecbc165728e68caa08",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/cli/cli_command.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b6e82d0dea2aac35a289975f88bb5bff3bdcea02ed4bb1364d86afdaa5382c84",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/cli/output.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "be7ce5467615bdf4dee0260b4442ed24619d36f22f9bb0035920054d956ccbf2",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/cli/timeout.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c8a934cff26c1d1ec8d30e41660cc6694b63a60ee061a5c649a9f540cbc3247e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/cli/bad_operator.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cc73de3aa5078a86d81e045017eddac900374c8de0a5108d8c3fddda9a9e91d2",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c46f60dd3031700517b85c954db4277a59feaa8d29ef4649197e40bfc6ed8a19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbc6fe6fd7cbe9f01ee34cfb0a08bcbd0a0dc22b7d54d6285ac89f417a31e1ad",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_command/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c6ee716708e59182c8420ea78ab1298551e365ae950dc43464564fbd26a6bcc",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_l3_interface/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0f74e0f84512fdbfd63305609e1d0d3c47ee89eb02bff585427bf9378cf93533",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "da1a829a7daa65cf7e785ed8d07de4fc70509da335c8573288b562f5d00cc34c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/deleted_afi.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5e548c0397aa54b111ed9f4e5a50c3488cda267dd94ad81541a59a52b1954a66",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0783889d0fc52cbac755fb2e7adde7e8813243549b82391e725e550610de1870",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f03ba864eaac5d355f58cc423c6ef1c67ea162bd80d413e5a094adcb5def4f52",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "acb7ca6a73d7e1402e17a58981bd7098505fdded2074756a89096bc26804656b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/deleted_all.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a8ab120e5bd9294e99936490342488632b1609c10f374997a3e8b187f08dc0a6",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "de9e51518d631db285e6c03b6b95ae657e9a9597914835695deb356a629ccd26",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d93454f8ce3ef3397542d87cf5d57bede759ab2834fb343c5ac4de43ec146395",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3a1ddfaa0116c374ab2f902270e6862a1bf565b0282fe4208c5425ccac94b16a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8ce6337664b7baca8e7366f2d3f56c8b9ce2648c8378b9caf407568ad319bd81",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6e9c32b4b823aee215007da91529f8a61fd3786939747d2e26842ce45b12504a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9cf2965c53afa86db7915281a598de7e891de5a68438a3ec3681c3de60931467",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "40c05ab6a006612357b7899089adbb780edca6320ef7e0e869932ef6b3470980",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bc92bf097a7c145ed31cdf00bcfe22842855df0da9820b0283283f949cc27394",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1a2ed6e2e9ba3726d6661ba7938c2a5bb607cce4e616fc0edb05e1e43d365e5a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_firewall_rules/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "774f9a26bc52555b607e81227923b6eee3541f9f5fbf0a4912d9c67dd76d93e5",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d009aa8f722d7708d17f868558c75ff33f68c735d193c8beda1213988af7b61c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/merged_update.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27f80695b4b2c45944d6e63e52b68248fef98c7a529e91f023ab482d0820d4f1",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c04a2ea1273d4425cb27d4e5e04ab82ce60f1ecbb70a62e19bc246fa88d58a7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8dcfb0a5543d81a32d210a83239e97f646ddfab05b51654b0e7244b44bbdef84",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7d0e6b8a457f22fc1324d02d452a934c3d6f528656490600dc649ea3d7e32e0b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b5ede8994550ca83c94be9a58efed9488d07ea035a8e3a90741576a6b428f067",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d763aa81ca680074ecb27b6baca8ac3f1c5921b8bba2f3b86bc2cc697ad40a5b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b7e6ec08fc517764d24a30e68ff33ae6498f076ff31c54fcbab942f6b6d51da7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e7eabfc7ac634a3cf2fdc5d754d23dba7be7844803561d5e0a858a6ad145c2ad",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7b1c098dcc79e52f5cb1b92467f4d0fbf25116132f527a5927397b5907d0d020",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "eda7d7544427821b30bd24bf1775aab0ba3d204756911eeb23d8b263c6a15592",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5a5f4637a62124f8b170b543ffdc2ba3878973e785af3ed6ede394ff5844dd1f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b7f9ef6e404eba9b0b19c078c0dbcf6f5b450b9de07d0fbe92a560fdfd417e90",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_ospfv2/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "720ec3cc69d0f054aaeccc6af91b70f1b0a7f1ed3feeb9919908e016e786f07a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/tests/cli/net_logging.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "91c97575f17a890151d4369d4db8eac238065ac12d599ef653d71cd101f283fa",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_logging/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "47c3d13e48c890c9adaeaa7d12285f474a1ec782b83f80de1b0eb0380d23907a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "30fe26774ed94a3d6957298e2ac9ca557b9dabf9b93da6290f2668a99c55203e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a756bf3f4a14d8497073748c6a0e9ff59cfe68bcea9a1f86090692449a5a86fc",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f3b45eed7cf392affb2981bbc0503a83221e3d70ab123a45b3b04ed42b6cf5d9",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5ea2ae90a2496e16c3bd986c078fad6e5616d5e0bf2b247922401a64dc70b2cc",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "540964c919dbecfeccc02e23035356cf49ee2e1f1b95773b04ddde193810a416",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d7fa686a0cc3b72a4e78b3b1f21fd5d5ab558f8f8bf99a5ebb11772abbf1dd2d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9256c3a880eb0f71684a208f0d369169996303fbbc9cb19f5122fc7da10e8169",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "24bda94462eeef10a1b55ac9accd80d5bde111037204db31e044a03956623e2e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "871797cd77c8dce388ff49623211e81a0f5ab04f5b0de991cc6fd4c025596a57",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "53f58f36a0cc51659c43c847ec699b06f0fdc9e91e9015d5d958b86ad7fc14f2",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6c8f0c2d9a227ecc45ddfe914a8e838fd22d627ec7968b46533f3b51f5b396a7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1a2ed6e2e9ba3726d6661ba7938c2a5bb607cce4e616fc0edb05e1e43d365e5a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_global/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3ce33ce1a527f427b43adcdcd12ae40a770555ed988fff5ce2189d19d37a12a5",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27a7a06d0bcc81b578e9d34bbe11904018859e7605f3db37abd39d07b1c40a52",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/_populate_intf.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ccbd324d31e6a9218f25f74cbe953b00b9aca35ab06dcf4679539599832c77df",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "34650122cf1f1af4b9644f62475214a475026b629ccdadcd558cfa68494bd2f7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e382618b83493fa29dbdae5764dfebad3650020c840677e07a7e3d52a8c349ec",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "002fc15caa87b1c38fb7be1b418929eaec0b78894768f4bc0694dfec5ec31673",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d1aa21a1783c5f2a572b2cd7694e8b5e178358d02ab2b5fe4353e203bcec9cd0",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0092eeb7be043cea4b610a19b624d89112fac90220401f793e2496c7558a702a",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "edce6da6784dcac1ebda51e551bc4d2a3fa3fef06a66f157a46bc7244de34d23",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a256fc9f3edc6c5c3bfdb779cc06173548affee2bce3e6676e6ccbca162a5e70",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "22a09a8f2c8b80c5c6ee64dbc833925ed4a094e46eb3e7ef493bf74372279741",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f76b0b49707f1f0b5d5e911252081d8fab4e9d354f0c815d3d9ae285c0985590",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "99c0b62a623a050298b525bdaca0620b8db3ea3d031a1511251db57a02b6d54d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6435b83e1812dc2fad30e5857584de7788f0e540cb2cf551e6ef5a5aebce7607",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a947fe698399871b45e3d5b8202a2721d4ba6a7dc9ed58ef7681e72aab21a098",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp_interfaces/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9c7a04f67f78ee48d4cd68a3fc7ec07e8736cf82ecdca0f9600eb2fbb621d390",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/_remove_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c3c6809526ddde7c894216f7a79c0c78d659b54abb0d87d74ac5fcafd33b09cc",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/parsed.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bead8b03b8cd8da640df7d1bc47389119cdc775161e08aae5ee10955955213c6",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/replaced.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e803c42458226f83f70043dede2e6c164b3e6a3477214dd58b415fb12e15423c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/gathered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bd6d03811124544a568cba38cff3a765afa39d91a49a24a9cec66c94b69cb169",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/rtt.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "68b164f3112ab0e2c76bf95580e944c076fd57f5d78a5bfcebf7c9f5a1bf277b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/_populate.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bec70f5c7a2a933f69136fdb7aec0864f41bc63669d0a0c2caacfe4c8204e5d8",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/merged.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1bdd5dc5387a76923bb4e03f999c31169a1cd706fbef5628278be0c5d11210d9",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/_parsed_config.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "385875e35231b20014cfd942c5f43e650af017c2e645b5228ca02c42f53cf89e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/deleted.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ec6f205d7cea4c28fe23a3663bdd05f9ff5fac22406a4ba6a255950ad7735c4d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/empty_config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b92b23de0a589524e6fd4352cdfeefaefd78dde748612d8e2a907009b94a6aef",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/rendered.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d6e0f6f93447e330e0ef054e4c265165631cfd6934d441e421d23dd3b579f644",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/cli/overridden.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "34fc054682d6da4102230b30c0b5ad2ca2be81d765647818b9c19765c88ee2fc",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ced7f174d58c382e01fb9029630b69773b19369b1e5aab8a21c466d59c3413a7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "27b07d86cdd3068f41e5435bbd7baf4f664db35af1f26c498c08dce6703b2334",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/vars/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "14e86c56ee310bcf5518b796ae53f3a8044f6f4ab17f2142248a64f708eb07e7",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "13850d7e7fbc194e2031c3c03a2736113fbb9099b6f5c0d26dddf71cce53c62d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_interfaces/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cdaff5f4b4b2ca8ba06898e9bdcc3fdd454f5e29309f6ea9261714ac30a8b528",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b9098b2df992cc04fe3de98d5d4b1c972e8258f11639062dd8ae94954c602a93",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/tests/cli/net_lldp.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f6876cfb6ef092feae9859f52e9c6c92aa642b0b080f531f65db8b696052f609",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_lldp/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cc5c48b5d0ef0cc685394c9ad9ebb78056ef6c95e11cff81a70ee0678c31890c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/tests/cli/net_linkagg.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a045c087931eea0e74153d8773230641d3fe3988685e2a915bfd28396c8bac83",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_linkagg/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/tests/cli/basic.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7188e3020c0f3343a9936308f2be5271e758c5407de7818265c26ce1338d5884",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/tests/cli/net_system.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "88daf0094eb3678edb0b75944efd7e03bbde5230068805818ff659adebada9eb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ddf85efe18296ec17d890e6539366e7ae535082e3ddb5e795f3bbb3de8e9625e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_system/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/defaults/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "126c357f960d8408c7d5e4c3bdc05e2e5e898330e173a4f56f72240f10aae4bb",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tests/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tests/cli/basic_facts.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5cfd90e0dca23370c46fa3dc53616810de2021f882848c3af6e107dab50a5f7b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tests/redirection",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tests/redirection/cli",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tests/redirection/cli/shortname.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1c6ca1721b0ab2aed6b832dbd7f3edec86f4e5fe8e4ccfff831f8638e6e1310c",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tasks/redirection.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7503f7c9f1756901e21cb39314a797b73217348e39e0911b5583f9cadea1ec71",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tasks/cli.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbd846541920f944a49312dde34a352135711c806b04c10fca3e4ecac6470d10",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cbc6fe6fd7cbe9f01ee34cfb0a08bcbd0a0dc22b7d54d6285ac89f417a31e1ad",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/vyos_facts/aliases",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "10065b058aa0b1471103d86b79c083cae0603eb6dda9b38c07af77c6cf22ef19",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/target-prefixes.network",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8f5d6e9c5feefc0545a2c53f7405093b3f87135d2e87858a754532a4a1d4745e",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/network-integration.cfg",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d67b11263a8f50b30bf43c7c2b4bdd8dc4f173f0b5dd22761311360dfbd56a1d",
+   "format": 1
+  },
+  {
+   "name": "meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "meta/runtime.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e336b4907ebd473182176142e30201b55ef2d37527556fc5198b03971ab545bb",
+   "format": 1
+  },
+  {
+   "name": "LICENSE",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+   "format": 1
+  },
+  {
+   "name": "changelogs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "changelogs/changelog.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6e1fcfa139a1a41e02d0c97d0201b9e6636ca948364a78a92d6835d3d22583cb",
+   "format": 1
+  },
+  {
+   "name": "changelogs/config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0de35d0244fd604f9af1e56379c5a9ddc64252d485fba56d5f384ac5a40ddbbe",
+   "format": 1
+  },
+  {
+   "name": "changelogs/CHANGELOG.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2ebf513c17074e22fcbf6acc4962ffbe6785ccbecacf2f39e5bbaf43dea92e95",
+   "format": 1
+  },
+  {
+   "name": ".gitignore",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a2ebfecdb6c1b58267fbe97e6e2ac02c2b963df7673fc1047270f0f0cff16732",
+   "format": 1
+  },
+  {
+   "name": "README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d5a0057923c0d821788153cab3bc5b0c89f80f7d403b659de34125a2585348fd",
+   "format": 1
+  },
+  {
+   "name": ".yamllint",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "827ef9e031ecdcaf137be239d33ef93fcbbc3611cbb6b30b0e507d0e03373d0e",
+   "format": 1
+  },
+  {
+   "name": "test-requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bc2b6f6c80ae681585b1c632137b80ce95c5bbb0a5e15fc49aeaf260cf91245a",
+   "format": 1
+  }
+ ],
+ "format": 1
+}

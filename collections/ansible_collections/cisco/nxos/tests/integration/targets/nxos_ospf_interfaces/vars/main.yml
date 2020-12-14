@@ -1,0 +1,153 @@
+---
+merged:
+  before:
+    - name: "{{ nxos_int1 }}"
+    - name: "{{ nxos_int2 }}"
+    - name: "{{ nxos_int3 }}"
+  commands:
+    - "interface {{ nxos_int1 }}"
+    - "ip router ospf 100 area 1.1.1.1 secondaries none"
+    - "ip router ospf multi-area 11.11.11.11"
+    - "ipv6 router ospfv3 200 area 2.2.2.2"
+    - "ipv6 router ospfv3 200 multi-area 21.0.0.0"
+    - "ipv6 router ospfv3 300 multi-area 50.50.50.50"
+    - "ipv6 router ospfv3 multi-area 16.10.10.10"
+    - "interface {{ nxos_int2 }}"
+    - "ip ospf authentication"
+    - "ip ospf authentication key-chain test-1"
+    - "ip ospf message-digest-key 10 md5 3 abc01d272be25d29"
+    - "ip ospf cost 100"
+    - "ospfv3 network broadcast"
+    - "ospfv3 shutdown"
+    - "interface {{ nxos_int3 }}"
+    - "ip ospf authentication-key 7 12090404011C03162E"
+  after:
+    - name: "{{ nxos_int1 }}"
+      address_family:
+      - afi: ipv4
+        multi_areas:
+        - 11.11.11.11
+        processes:
+        - area:
+            area_id: 1.1.1.1
+            secondaries: false 
+          process_id: "100"
+      - afi: ipv6
+        multi_areas:
+        - 16.10.10.10
+        processes:
+        - area:
+            area_id: 2.2.2.2
+          multi_areas:
+          - 21.0.0.0
+          process_id: "200"
+        - multi_areas:
+          - 50.50.50.50
+          process_id: "300"
+    - name: "{{ nxos_int2 }}"
+      address_family:
+      - afi: ipv4
+        authentication:
+          enable: True
+          key_chain: test-1
+        message_digest_key:
+          key_id: 10
+          encryption: 3
+          key: abc01d272be25d29
+        cost: 100
+      - afi: ipv6
+        network: broadcast
+        shutdown: True
+    - name: "{{ nxos_int3 }}"
+      address_family:
+      - afi: ipv4
+        authentication_key:
+          encryption: 7
+          key: 12090404011C03162E
+    
+replaced:
+  commands:
+    - "interface {{ nxos_int1 }}"
+    - "no ip router ospf multi-area 11.11.11.11"
+    - "ip router ospf multi-area 11.11.11.12"
+    - "no ipv6 router ospfv3 200 area 2.2.2.2"
+    - "no ipv6 router ospfv3 200 multi-area 21.0.0.0"
+    - "no ipv6 router ospfv3 300 multi-area 50.50.50.50"
+    - "no ipv6 router ospfv3 multi-area 16.10.10.10"
+    - "interface {{ nxos_int3 }}"
+    - "no ip ospf authentication-key 7 12090404011C03162E"
+  after:
+    - name: "{{ nxos_int1 }}"
+      address_family:
+      - afi: ipv4
+        processes:
+        - process_id: "100"
+          area:
+            area_id: 1.1.1.1
+            secondaries: False
+        multi_areas:
+        - 11.11.11.12
+    - name: "{{ nxos_int2 }}"
+      address_family:
+      - afi: ipv4
+        authentication:
+          enable: True
+          key_chain: test-1
+        message_digest_key:
+          key_id: 10
+          encryption: 3
+          key: abc01d272be25d29
+        cost: 100
+      - afi: ipv6
+        network: broadcast
+        shutdown: True
+    - name: "{{ nxos_int3 }}"
+overridden:
+  commands:
+    - "interface {{ nxos_int1 }}"
+    - "no ip router ospf multi-area 11.11.11.11"
+    - "ip router ospf multi-area 11.11.11.12"
+    - "no ipv6 router ospfv3 200 area 2.2.2.2"
+    - "no ipv6 router ospfv3 200 multi-area 21.0.0.0"
+    - "no ipv6 router ospfv3 300 multi-area 50.50.50.50"
+    - "no ipv6 router ospfv3 multi-area 16.10.10.10"
+    - "interface {{ nxos_int2 }}"
+    - "no ip ospf authentication"
+    - "no ip ospf authentication key-chain test-1"
+    - "no ip ospf message-digest-key 10 md5 3 abc01d272be25d29"
+    - "no ip ospf cost 100"
+    - "no ospfv3 network broadcast"
+    - "no ospfv3 shutdown"
+    - "interface {{ nxos_int3 }}"
+    - "no ip ospf authentication-key 7 12090404011C03162E"
+  after:
+    - name: "{{ nxos_int1 }}"
+      address_family:
+      - afi: ipv4
+        processes:
+        - process_id: "100"
+          area:
+            area_id: 1.1.1.1
+            secondaries: False
+        multi_areas:
+        - 11.11.11.12
+    - name: "{{ nxos_int2 }}"
+    - name: "{{ nxos_int3 }}"
+deleted:
+  commands:
+  - "interface {{ nxos_int1 }}"
+  - "no ip router ospf 100 area 1.1.1.1 secondaries none"
+  - "no ip router ospf multi-area 11.11.11.11"
+  - "no ipv6 router ospfv3 200 area 2.2.2.2"
+  - "no ipv6 router ospfv3 200 multi-area 21.0.0.0"
+  - "no ipv6 router ospfv3 300 multi-area 50.50.50.50"
+  - "no ipv6 router ospfv3 multi-area 16.10.10.10"
+  - "interface {{ nxos_int2 }}"
+  - "no ip ospf authentication"
+  - "no ip ospf authentication key-chain test-1"
+  - "no ip ospf message-digest-key 10 md5 3 abc01d272be25d29"
+  - "no ip ospf cost 100"
+  - "no ospfv3 network broadcast"
+  - "no ospfv3 shutdown"
+  - "interface {{ nxos_int3 }}"
+  - "no ip ospf authentication-key 7 12090404011C03162E"

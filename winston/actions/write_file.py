@@ -5,9 +5,9 @@ import os
 import re
 
 from . import _actions as actions
-from ..yaml import yaml, Dumper
 from ..app import App
 from ..ui import Interaction
+from ..yaml import yaml, Dumper
 
 
 @actions.register

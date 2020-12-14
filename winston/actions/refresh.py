@@ -18,7 +18,7 @@ class Action:
         self._logger = logging.getLogger()
 
     # pylint: disable=no-self-use
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: App) -> None:
         """Handle :refresh
 
         :param interaction: The interaction from the user
@@ -29,14 +29,7 @@ class Action:
         # this is noisy but helpful when needed
         # self._logger.debug("refresh requested")
 
-        # pop ourself off the stack
-        if hasattr(app, "steps"):
-            app.steps.back_one()
-
         # Just in case the user switched tasks with +,- etc
+        # change previous, since this interaction is on the stack
         if interaction.content:
-            if hasattr(app, "steps"):
-                app.steps.current.index = interaction.action.value
-            else:
-                app.step.previous.index = interaction.action.value
-        return True
+            app.steps.previous.index = interaction.action.value

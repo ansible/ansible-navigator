@@ -1,0 +1,226 @@
+---
+requires_ansible: '>=2.9.10,<2.11'
+plugin_routing:
+  action:
+    ios_acl_interfaces:
+      redirect: cisco.ios.ios
+    acl_interfaces:
+      redirect: cisco.ios.ios
+    ios_acls:
+      redirect: cisco.ios.ios
+    acls:
+      redirect: cisco.ios.ios
+    ios_banner:
+      redirect: cisco.ios.ios
+    banner:
+      redirect: cisco.ios.ios
+    ios_bgp:
+      redirect: cisco.ios.ios
+    bgp:
+      redirect: cisco.ios.ios
+    ios_command:
+      redirect: cisco.ios.ios
+    command:
+      redirect: cisco.ios.ios
+    ios_config:
+      redirect: cisco.ios.ios
+    config:
+      redirect: cisco.ios.ios
+    ios_facts:
+      redirect: cisco.ios.ios
+    facts:
+      redirect: cisco.ios.ios
+    ios_interface:
+      redirect: cisco.ios.ios
+    interface:
+      redirect: cisco.ios.ios
+    ios_interfaces:
+      redirect: cisco.ios.ios
+    interfaces:
+      redirect: cisco.ios.ios
+    ios_l2_interface:
+      redirect: cisco.ios.ios
+    l2_interface:
+      redirect: cisco.ios.ios
+    ios_l2_interfaces:
+      redirect: cisco.ios.ios
+    l2_interfaces:
+      redirect: cisco.ios.ios
+    ios_l3_interface:
+      redirect: cisco.ios.ios
+    l3_interface:
+      redirect: cisco.ios.ios
+    ios_l3_interfaces:
+      redirect: cisco.ios.ios
+    l3_interfaces:
+      redirect: cisco.ios.ios
+    ios_lacp:
+      redirect: cisco.ios.ios
+    lacp:
+      redirect: cisco.ios.ios
+    ios_lacp_interfaces:
+      redirect: cisco.ios.ios
+    lacp_interfaces:
+      redirect: cisco.ios.ios
+    ios_lag_interfaces:
+      redirect: cisco.ios.ios
+    lag_interfaces:
+      redirect: cisco.ios.ios
+    ios_linkagg:
+      redirect: cisco.ios.ios
+    linkagg:
+      redirect: cisco.ios.ios
+    ios_lldp:
+      redirect: cisco.ios.ios
+    lldp:
+      redirect: cisco.ios.ios
+    ios_lldp_global:
+      redirect: cisco.ios.ios
+    lldp_global:
+      redirect: cisco.ios.ios
+    ios_lldp_interfaces:
+      redirect: cisco.ios.ios
+    lldp_interfaces:
+      redirect: cisco.ios.ios
+    ios_logging:
+      redirect: cisco.ios.ios
+    logging:
+      redirect: cisco.ios.ios
+    ios_ntp:
+      redirect: cisco.ios.ios
+    ntp:
+      redirect: cisco.ios.ios
+    ios_ospfv2:
+      redirect: cisco.ios.ios
+    ospfv2:
+      redirect: cisco.ios.ios
+    ios_ping:
+      redirect: cisco.ios.ios
+    ping:
+      redirect: cisco.ios.ios
+    ios_static_route:
+      redirect: cisco.ios.ios
+    static_route:
+      redirect: cisco.ios.ios
+    ios_static_routes:
+      redirect: cisco.ios.ios
+    static_routes:
+      redirect: cisco.ios.ios
+    ios_system:
+      redirect: cisco.ios.ios
+    system:
+      redirect: cisco.ios.ios
+    ios_user:
+      redirect: cisco.ios.ios
+    user:
+      redirect: cisco.ios.ios
+    ios_vlan:
+      redirect: cisco.ios.ios
+    vlan:
+      redirect: cisco.ios.ios
+    ios_vlans:
+      redirect: cisco.ios.ios
+    vlans:
+      redirect: cisco.ios.ios
+    ios_vrf:
+      redirect: cisco.ios.ios
+    vrf:
+      redirect: cisco.ios.ios
+  modules:
+    acl_interfaces:
+      redirect: cisco.ios.ios_acl_interfaces
+    acls:
+      redirect: cisco.ios.ios_acls
+    banner:
+      redirect: cisco.ios.ios_banner
+    bgp:
+      redirect: cisco.ios.ios_bgp
+    command:
+      redirect: cisco.ios.ios_command
+    config:
+      redirect: cisco.ios.ios_config
+    facts:
+      redirect: cisco.ios.ios_facts
+    interface:
+      redirect: cisco.ios.ios_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    ios_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    interfaces:
+      redirect: cisco.ios.ios_interfaces
+    l2_interface:
+      redirect: cisco.ios.ios_l2_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    ios_l2_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    l2_interfaces:
+      redirect: cisco.ios.ios_l2_interfaces
+    l3_interface:
+      redirect: cisco.ios.ios_l3_interface
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    ios_l3_interface:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    l3_interfaces:
+      redirect: cisco.ios.ios_l3_interfaces
+    lacp:
+      redirect: cisco.ios.ios_lacp
+    lacp_interfaces:
+      redirect: cisco.ios.ios_lacp_interfaces
+    lag_interfaces:
+      redirect: cisco.ios.ios_lag_interfaces
+    linkagg:
+      redirect: cisco.ios.ios_linkagg
+    lldp:
+      redirect: cisco.ios.ios_lldp
+    lldp_global:
+      redirect: cisco.ios.ios_lldp_global
+    lldp_interfaces:
+      redirect: cisco.ios.ios_lldp_interfaces
+    logging:
+      redirect: cisco.ios.ios_logging
+    ntp:
+      redirect: cisco.ios.ios_ntp
+    ospfv2:
+      redirect: cisco.ios.ios_ospfv2
+    ping:
+      redirect: cisco.ios.ios_ping
+    static_route:
+      redirect: cisco.ios.ios_static_route
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    ios_static_route:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    static_routes:
+      redirect: cisco.ios.ios_static_routes
+    system:
+      redirect: cisco.ios.ios_system
+    user:
+      redirect: cisco.ios.ios_user
+    vlan:
+      redirect: cisco.ios.ios_vlan
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    ios_vlan:
+      deprecation:
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
+    vlans:
+      redirect: cisco.ios.ios_vlans
+    vrf:
+      redirect: cisco.ios.ios_vrf

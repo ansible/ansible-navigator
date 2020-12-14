@@ -1,0 +1,30 @@
+gathered:
+  - name: "{{ nxos_int1 }}"
+    port_priority: 5
+    rate: fast
+  - name: port-channel10
+    mode: delay
+  - name: port-channel11
+    links:
+      max: 10
+      min: 5
+
+parsed:
+  - name: port-channel10
+    links:
+      max: 15
+      min: 10
+  - name: Ethernet1/800
+    port_priority: 100
+    rate: fast
+
+rendered:
+  - "interface Ethernet1/800"
+  - "lacp rate fast"
+  - "interface Ethernet1/801"
+  - "lacp port-priority 32"
+  - "lacp rate fast"
+  - "interface port-channel10"
+  - "lacp min-links 2"
+  - "lacp max-bundle 15"
+  - "lacp graceful-convergence"

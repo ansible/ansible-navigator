@@ -2,7 +2,7 @@
 import logging
 
 from . import _actions as actions
-from ..player import Player as App
+from ..app import App
 from ..ui import Interaction
 
 
@@ -28,4 +28,3 @@ class Action:
         self._logger.debug("save requested")
         filename = interaction.action.match.groupdict()["filename"]
         app.write_artifact(filename)
-        return None

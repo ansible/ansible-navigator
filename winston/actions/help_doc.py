@@ -33,7 +33,7 @@ class Action:
         while True:
             interaction = interaction.ui.show(obj=help_md, xform="text.html.markdown")
             app.update()
-            if interaction.action.name != "refresh":
+            if interaction.name != "refresh":
                 break
         interaction.ui.scroll(previous_scroll)
         return interaction

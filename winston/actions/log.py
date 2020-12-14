@@ -38,7 +38,7 @@ class Action:
 
             interaction = interaction.ui.show(obj=dalog, xform="text.log")
             app.update()
-            if interaction.action.name != "refresh":
+            if interaction.name != "refresh":
                 break
 
             if interaction.ui.scroll() < new_scroll and auto_scroll:

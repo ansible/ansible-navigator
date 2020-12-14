@@ -1,0 +1,38 @@
+Cisco Nexus Operating System (NX-OS) Software
+TAC support: http://www.cisco.com/tac
+Documents: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html
+Copyright (c) 2002-2019, Cisco Systems, Inc. All rights reserved.
+The copyrights to certain works contained herein are owned by
+other third parties and are used and distributed under license.
+Some parts of this software are covered under the GNU Public
+License. A copy of the license is available at
+http://www.gnu.org/licenses/gpl.html.
+
+Nexus 9000v is a demo version of the Nexus Operating System
+
+Software
+  BIOS: version
+ NXOS: version 9.3(3)
+  BIOS compile time:
+  NXOS image file is: bootflash:///nxos.9.3.3.bin
+  NXOS compile time:  12/22/2019 2:00:00 [12/22/2019 14:00:37]
+
+
+Hardware
+  cisco Nexus9000 C9300v Chassis
+  Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz with 6087432 kB of memory.
+  Processor Board ID 9J9LUC1LLV5
+
+  Device name: nxos-9kv-933
+  bootflash:    4287040 kB
+Kernel uptime is 2 day(s), 5 hour(s), 5 minute(s), 41 second(s)
+
+Last reset
+  Reason: Unknown
+  System version:
+  Service:
+
+plugin
+  Core Plugin, Ethernet Plugin
+
+Active Package(s):

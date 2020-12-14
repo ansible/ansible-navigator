@@ -15,44 +15,28 @@ from . import _actions as actions
 from ..app import App
 from ..curses_defs import CursesLinePart
 from ..curses_defs import CursesLines
-from ..step import Step
-from ..step import Steps
+from ..steps import Step
 from ..ui import Interaction
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
-    # pylint: disable=too-many-branches
     """Find matching color for word
 
     :param word: A word to match
     :type word: str(able)
     """
-    if colname == "__name":
+    if colname in ["__name", "title", "inventory_hostname"]:
         return 10
+    if colname == "__taxonomy":
+        return 11
+    if colname == "description":
+        return 12
     if colname == "__type":
         if entry["__type"] == "group":
             return 11
         return 12
-    if colname == "__taxonomy":
-        return 11
-    if colname == "inventory_hostname":
-        return 10
     colors = [14, 13, 6, 5, 4, 3, 2]
     return colors[colno % len(colors)]
-
-
-def color_main_menu(_colno: int, colname: str, _entry: Dict[str, Any]) -> int:
-    # pylint: disable=too-many-branches
-    """Find matching color for word
-
-    :param word: A word to match
-    :type word: str(able)
-    """
-    if colname == "title":
-        return 10
-    if colname == "description":
-        return 12
-    return 0
 
 
 def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
@@ -113,11 +97,10 @@ class Action(App):
         super().__init__()
         self._calling_app: App
         self._logger = logging.getLogger()
-        self.__inventory: Dict[Any, Any]
+        self.__inventory: Dict[Any, Any] = {}
         self._inventory_error: str = ""
         self._host_vars: Dict[str, Dict[Any, Any]]
         self.name = "inventory"
-        self.steps: Steps = Steps()
         self._interaction: Interaction
 
     @property
@@ -154,7 +137,7 @@ class Action(App):
         self.args = app.args
         self.stdout = app.stdout
         self._interaction = interaction
-        self._gererate_inventory()
+        self._generate_inventory()
 
         if not self._inventory:
             return None
@@ -173,20 +156,45 @@ class Action(App):
         while True:
             self._calling_app.update()
             self._take_step()
+
+            if self.steps.current.name == "quit":
+                return self.steps.current
+
             if not self.steps:
-                break
+                if self.args.app == self.name:
+                    self.steps.append(self._build_main_menu())
+                else:
+                    break
 
         interaction.ui.scroll(previous_scroll)
         interaction.ui.menu_filter(previous_filter)
         return None
 
-    def _explore(self, initial_step):
-        self.steps.clear()
-        self.steps.append(initial_step)
-        self._interaction.ui.scroll(0)
-        while True:
-            self._calling_app.update()
-            self._take_step()
+    def _take_step(self) -> None:
+        if isinstance(self.steps.current, Interaction):
+            result = self.actions.run(
+                action=self.steps.current.name,
+                app=self,
+                interaction=self.steps.current,
+            )
+        elif isinstance(self.steps.current, Step):
+            if self.steps.current.type == "menu":
+                result = self._interaction.ui.show(
+                    obj=self.steps.current.value,
+                    columns=self.steps.current.columns,
+                    color_menu_item=color_menu,
+                )
+            elif self.steps.current.type == "content":
+                result = self._interaction.ui.show(
+                    obj=self.steps.current.value,
+                    index=self.steps.current.index,
+                    content_heading=content_heading,
+                    filter_content_keys=filter_content_keys,
+                )
+        if result is None:
+            self.steps.back_one()
+        else:
+            self.steps.append(result)
 
     def _build_main_menu(self) -> Step:
         groups = MenuEntry(
@@ -199,7 +207,7 @@ class Action(App):
 
         step = Step(
             columns=["title", "description"],
-            func=self._step_from_main_menu,
+            select_func=self._step_from_main_menu,
             tipe="menu",
             value=[groups, hosts],
         )
@@ -217,9 +225,11 @@ class Action(App):
             key = self.steps.current.selected["__name"]
 
         menu = Menu()
-        taxonomy = "\u25B8".join(["all"] + [step.selected["__name"] for step in self.steps if step.name == "group_menu"])
+        taxonomy = "\u25B8".join(
+            ["all"] + [step.selected["__name"] for step in self.steps if step.name == "group_menu"]
+        )
 
-        columns=["__name", "__taxonomy", "__type"]
+        columns = ["__name", "__taxonomy", "__type"]
 
         if hosts := self._inventory[key].get("hosts", None):
             columns.extend(self._show_columns)
@@ -245,7 +255,7 @@ class Action(App):
             tipe="menu",
             value=menu,
             columns=columns,
-            func=self._host_or_group_step,
+            select_func=self._host_or_group_step,
         )
 
     def _build_host_content(self) -> Step:
@@ -269,8 +279,14 @@ class Action(App):
         for host in self._host_vars.values():
             host["__type"] = "host"
             menu.append(MenuEntry(host))
-        columns = ['inventory_hostname'] + self._show_columns
-        return Step(columns=columns, name="host_menu", tipe="menu", value=menu, func=self._build_host_content)
+        columns = ["inventory_hostname"] + self._show_columns
+        return Step(
+            columns=columns,
+            name="host_menu",
+            tipe="menu",
+            value=menu,
+            select_func=self._build_host_content,
+        )
 
     def _host_or_group_step(self) -> Step:
         if self.steps.current.selected["__type"] == "group":
@@ -279,39 +295,14 @@ class Action(App):
             return self._build_host_content()
         raise TypeError("unknown step type")
 
-    def _take_step(self) -> None:
-        if isinstance(self.steps.current, Interaction):
-            result = self.actions.run(
-                action=self.steps.current.action.name,
-                app=self,
-                interaction=self.steps.current,
-            )
-        elif isinstance(self.steps.current, Step):
-            if self.steps.current.type == "menu":                
-                result = self._interaction.ui.show(
-                    obj=self.steps.current.value,
-                    columns=self.steps.current.columns,
-                    color_menu_item=color_menu,
-                )
-            elif self.steps.current.type == "content":
-                result = self._interaction.ui.show(
-                    obj=self.steps.current.value,
-                    index=self.steps.current.index,
-                    content_heading=content_heading,
-                    filter_content_keys=filter_content_keys,
-                )
-        if result is None:
-            self.steps.back_one()
-        else:
-            self.steps.append(result)
-
-    def _gererate_inventory(self) -> None:
+    def _generate_inventory(self) -> None:
         if inventories := self._interaction.action.match.groupdict()["inventories"]:
             inventories = [os.path.abspath(i) for i in inventories.split(",")]
             self._logger.debug("inventories set by user: %s", inventories)
         elif hasattr(self.args, "inventory") and (inventories := self.args.inventory):
             self._logger.info("no inventory provided, using inventory from args")
         else:
+            self._logger.error("no inventory set at command line or requested")
             return
 
         if self.args.execution_environment:

@@ -1,0 +1,52 @@
+---
+- debug:
+    msg: "Start nxos_static_routes replaced integration tests connection = {{ansible_connection}}"
+
+- include_tasks: _populate_config.yaml
+
+- block:
+    - name: Gather static_routes post facts
+      cisco.nxos.nxos_facts:
+        gather_subset:
+          - "!all"
+          - "!min"
+        gather_network_resources: static_routes
+
+    - name: Replaced
+      cisco.nxos.nxos_static_routes: &replaced
+        config:
+          - address_families:
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.16/28
+                    next_hops:
+                      - forward_router_address: 192.0.2.23
+                        route_name: replaced_route1
+                        admin_distance: 3
+
+                      - forward_router_address: 192.0.2.45
+                        route_name: replaced_route2
+                        dest_vrf: destinationVRF
+                        interface: "{{ nxos_int2 }}"
+        state: replaced
+      register: result
+
+    - assert:
+        that:
+          - "result.changed == true"
+          - "'vrf context default' in result.commands"
+          - "'no ip route 192.0.2.16/28 192.0.2.24 name new_route' in result.commands"
+          - "'ip route 192.0.2.16/28 192.0.2.23 name replaced_route1 3' in result.commands"
+          - "'ip route 192.0.2.16/28 {{ nxos_int2 }} 192.0.2.45 vrf destinationVRF name replaced_route2' in result.commands"
+          - "result.commands | length == 4"
+
+    - name: Idempotence - Replaced
+      cisco.nxos.nxos_static_routes: *replaced
+      register: result
+
+    - assert:
+        that:
+          - "result.changed == false"
+
+  always:
+    - include_tasks: _remove_config.yaml

@@ -1,0 +1,65 @@
+gathered:
+  - name: "{{ nxos_int1 }}"
+    ipv4:
+      - address: 192.0.2.100/24
+  - name: "{{ nxos_int2 }}"
+    ipv4:
+      - address: 203.0.113.10/24
+    ipv6:
+      - address: 2001:db8::1/32
+    redirects: False
+    unreachables: True
+
+rendered:
+  - "interface Ethernet1/800"
+  - "ip address 192.168.1.100/24 tag 5"
+  - "ip address 10.1.1.1/24 secondary tag 10"
+  - "interface Ethernet1/800"
+  - "ipv6 address fd5d:12c9:2201:2::1/64 tag 6"
+
+parsed: 
+  - name: Ethernet1/800
+    ipv4:
+      - address: 192.168.1.100/24
+        tag: 5
+      - address: 10.1.1.1/24
+        secondary: True
+        tag: 10
+    redirects: False
+  - name: Ethernet1/801
+    ipv6:
+      - address: fd5d:12c9:2201:2::1/64
+        tag: 6
+    unreachables: True
+  - name: mgmt0
+    ipv4:
+      - address: dhcp
+
+rendered_multi:
+  - "interface Ethernet1/800"
+  - "ip address 192.168.1.100/24 tag 5"
+  - "ip address 10.1.1.1/24 secondary tag 10"
+  - "evpn multisite fabric-tracking"
+  - "interface Ethernet1/800"
+  - "ipv6 address fd5d:12c9:2201:2::1/64 tag 6"
+  - "evpn multisite dci-tracking"
+
+parsed_multi:
+  - name: Ethernet1/800
+    ipv4:
+      - address: 192.168.1.100/24
+        tag: 5
+      - address: 10.1.1.1/24
+        secondary: True
+        tag: 10
+    redirects: False
+    evpn_multisite_tracking: fabric-tracking
+  - name: Ethernet1/801
+    ipv6:
+      - address: fd5d:12c9:2201:2::1/64
+        tag: 6
+    unreachables: True
+    evpn_multisite_tracking: dci-tracking
+  - name: mgmt0
+    ipv4:
+      - address: dhcp

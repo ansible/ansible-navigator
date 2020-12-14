@@ -3,6 +3,7 @@ import logging
 
 from . import _actions as actions
 from ..app import App
+from ..steps import Step
 from ..ui import Interaction
 
 
@@ -27,20 +28,17 @@ class Action:
         """
         self._logger.debug("back requested")
         interaction.ui.scroll(0)
+        this = app.steps.back_one()  # pop this
+        step = app.steps.back_one()  # pop current
 
-        if hasattr(app, "steps"):
-            this_interaction = app.steps.back_one()  # pop ourself
-            step = app.steps.back_one()  # pop current
-            if app.steps:
-                self._logger.debug("Stepping back in %s from %s to %s", app.name, step.name, app.steps.current.name)
-            else:
-                self._logger.debug("Stepping out of %s", app.name)
-            app.steps.append(this_interaction)
+        if app.steps:
+            if isinstance(step, Step) and isinstance(app.steps.current, Step):
+                if step.type == "menu" and app.steps.current.type == "menu":
+                    interaction.ui.menu_filter(None)
+            self._logger.debug(
+                "Stepping back in %s from %s to %s", app.name, step.name, app.steps.current.name
+            )
         else:
-            # if seeing a menu, and going back to a menu, clear the menu filter
-            if app.step.type == "menu" and app.step.previous.type == "menu":
-                interaction.ui.menu_filter(None)
+            self._logger.debug("Stepping out of %s", app.name)
 
-            self._logger.debug("Stepping back from %s to %s", app.step.name, app.step.previous.name)
-            app.step = app.step.previous
-        return None
+        app.steps.append(this)  # put this back on

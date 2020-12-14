@@ -1,0 +1,4 @@
+this is a sample
+mulitline banner
+
+used for testing

@@ -1,0 +1,28 @@
+---
+- name: Enable Ethernet1 interface and disable switchport
+  become: true
+  connection: ansible.netcommon.network_cli
+  arista.eos.eos_config:
+    lines:
+      - no shutdown
+      - no switchport
+    parents: int Ethernet1
+
+- name: Enable Ethernet2 interface and disable switchport
+  become: true
+  connection: ansible.netcommon.network_cli
+  arista.eos.eos_config:
+    lines:
+      - no shutdown
+      - no switchport
+    parents: int Ethernet2
+
+- name: enable eapi
+  become: true
+  connection: ansible.netcommon.network_cli
+  tags: eapi
+  arista.eos.eos_eapi:
+    http: true
+    https: true
+    local_http: false
+    enable_socket: true

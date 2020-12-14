@@ -21,13 +21,11 @@ from typing import Pattern
 from typing import Tuple
 from typing import Union
 
-
-from .colorize import Colorize, rgb_to_ansi, hex_to_rgb_curses
-from .curses_defs import CursesLinePart
 from .curses_defs import CursesLine
+from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
-
-from .one_line_input import OneLineInput
+from .colorize import Colorize, rgb_to_ansi, hex_to_rgb_curses
+from .ui_one_line_input import OneLineInput
 from .utils import convert_percentages, distribute
 from .yaml import yaml, Dumper
 
@@ -68,7 +66,6 @@ DEFAULT_COLORS = "terminal_colors.json"
 class Action(NamedTuple):
     """the user's input"""
 
-    name: str
     value: Union[str, int]
     match: Match
 
@@ -92,12 +89,14 @@ class Ui(NamedTuple):
     menu_filter: Callable
     scroll: Callable
     show: Callable
+    update_status: Callable
     xform: Callable
 
 
 class Interaction(NamedTuple):
     """wrapper for what is sent bak to the calling app"""
 
+    name: str
     action: Action
     ui: Ui
     content: Union[Content, None] = None
@@ -165,8 +164,8 @@ class UserInterface:
         self._scroll = 0
         self._theme_dir = os.path.join(share_dir, "themes")
         self._xform = self._default_obj_serialization
-        self.status = ""
-        self.status_color = 0
+        self._status = ""
+        self._status_color = 0
 
         curses.curs_set(0)
         self._set_colors()
@@ -185,6 +184,11 @@ class UserInterface:
         """
         self._refresh.pop()
         self._screen.timeout(self._refresh.pop())
+
+    def update_status(self, status: str = "", status_color: int = 0) -> None:
+        """update the status"""
+        self._status = status
+        self._status_color = status_color
 
     def menu_filter(self, value: Union[str, None] = "") -> object:
         """Set or return the menu filter
@@ -245,6 +249,7 @@ class UserInterface:
             menu_filter=self.menu_filter,
             scroll=self.scroll,
             show=self.show,
+            update_status=self.update_status,
             xform=self.xform,
         )
         return res
@@ -363,7 +368,7 @@ class UserInterface:
         :rtype: CursesLine
         """
         colws = [len("{k}: {v}".format(k=str(k), v=str(v))) for k, v in key_dict.items()]
-        if self.status:
+        if self._status:
             status_width = self._pbar_width
         else:
             status_width = 0
@@ -393,12 +398,12 @@ class UserInterface:
                     decoration=0,
                 )
             )
-        if self.status:
+        if self._status:
             footer.append(
                 CursesLinePart(
                     column=self._screen_w - self._pbar_width,
-                    string=self.status[0 : self._pbar_width + 1].upper().center(self._pbar_width),
-                    color=curses.color_pair(self.status_color % self._number_colors),
+                    string=self._status[0 : self._pbar_width + 1].upper().center(self._pbar_width),
+                    color=curses.color_pair(self._status_color % self._number_colors),
                     decoration=curses.A_REVERSE,
                 )
             )
@@ -713,19 +718,19 @@ class UserInterface:
             print_at = col_starts[colno]
         return CursesLinePart(column=print_at, string=str(text), color=color, decoration=0)
 
-    def _action_match(self, entry: str) -> Union[Action, None]:
+    def _action_match(self, entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
         """attempt to match the user input against the regexes
         provided by each action
 
         :param entry: the user input
         :type entry: str
-        :return: The matching action or not
-        :rtype: Action or None
+        :return: The name and matching action or not
+        :rtype: str, Action or None, None
         """
         for kegex in self._kegexes():
             if match := kegex.kegex.match(entry):
-                return Action(match=match, name=kegex.name, value=entry)
-        return None
+                return kegex.name, Action(match=match, value=entry)
+        return None, None
 
     def _serialize_color(self, obj: Any) -> CursesLines:
         """Serialize, if neccesary and color an obj
@@ -849,6 +854,7 @@ class UserInterface:
     def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
         """Show an object on the display
 
         :param objs: A list of one or more object
@@ -907,15 +913,20 @@ class UserInterface:
                 self.scroll(0)
                 entry = "KEY_F(5)"
 
-            if action := self._action_match(entry):
-                if action.name == "refresh":
+            name, action = self._action_match(entry)
+            if name and action:
+                if name == "refresh":
                     action = action._replace(value=index)
-                
+
                 current = objs[index % len(objs)]
-                filtered = self._filter_content_keys(current) if self._hide_keys and isinstance(current, dict) else current
+                filtered = (
+                    self._filter_content_keys(current)
+                    if self._hide_keys and isinstance(current, dict)
+                    else current
+                )
 
                 content = Content(showing=filtered)
-                return Interaction(action=action, content=content, ui=self._ui)
+                return Interaction(name=name, action=action, content=content, ui=self._ui)
 
     def _obj_match_filter(self, obj: Dict, columns: List) -> bool:
         """Check a dict's columns against a regex
@@ -997,18 +1008,20 @@ class UserInterface:
 
             if entry == "KEY_RESIZE":
                 menu_heading, menu_items = self._get_heading_menu_items(current, columns)
+                continue
 
-            elif action := self._action_match(entry):
-                if action.name == "select":
+            name, action = self._action_match(entry)
+            if name and action:
+                if name == "select":
                     if menu_items:
                         index = self._menu_indicies[int(entry) % len(self._menu_indicies)]
                         action = action._replace(value=index)
                     else:
                         continue
                 clean_columns = [re.sub("^__", "", col) for col in columns]
-                clean_current = [{re.sub("^__", "", k):v for k,v in me.items()} for me in current] 
+                clean_current = [{re.sub("^__", "", k): v for k, v in me.items()} for me in current]
                 menu = Menu(current=clean_current, columns=clean_columns)
-                return Interaction(action=action, menu=menu, ui=self._ui)
+                return Interaction(name=name, action=action, menu=menu, ui=self._ui)
 
     def show(
         self,

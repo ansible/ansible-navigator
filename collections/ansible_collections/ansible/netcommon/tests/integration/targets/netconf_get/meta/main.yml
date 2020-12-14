@@ -1,0 +1,8 @@
+---
+dependencies:
+  - role: prepare_junos_tests
+    when: ansible_network_os == 'junipernetworks.junos.junos'
+  - role: prepare_iosxr_tests
+    when: ansible_network_os == 'cisco.iosxr.iosxr'
+  - role: prepare_sros_tests
+    when: ansible_network_os == 'sros'
