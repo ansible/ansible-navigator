@@ -1,5 +1,0 @@
-- name: Remove config
-  cisco.nxos.nxos_feature:
-    feature: lldp
-    state: disabled
-  ignore_errors: True

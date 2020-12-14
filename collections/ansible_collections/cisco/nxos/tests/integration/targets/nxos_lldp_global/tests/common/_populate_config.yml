@@ -1,8 +1,0 @@
-- name: Populate config
-  cisco.nxos.nxos_config:
-    lines:
-      - "feature lldp"
-      - "lldp holdtime 129"
-      - "lldp reinit 5" 
-      - "lldp timer 35"
-      - "no lldp tlv-select system-name"

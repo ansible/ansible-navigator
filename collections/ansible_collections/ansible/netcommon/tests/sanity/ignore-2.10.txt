@@ -1,5 +1,0 @@
-plugins/action/net_base.py action-plugin-docs # base class for other net_* action plugins which have a matching module
-plugins/action/netconf.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`
-plugins/action/network.py action-plugin-docs # base class for network action plugins
-plugins/module_utils/compat/ipaddress.py no-assert
-plugins/module_utils/compat/ipaddress.py no-unicode-literals

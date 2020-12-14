@@ -1,8 +1,0 @@
-ansible
-ansible-pylibssh
-jxmlease
-ncclient
-selectors2 ; python_version == '3.5'
-netaddr
-paramiko
-xmltodict

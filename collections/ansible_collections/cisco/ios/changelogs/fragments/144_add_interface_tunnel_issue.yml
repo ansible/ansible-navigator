@@ -1,3 +1,0 @@
----
-bugfixes:
-  - To provide support for interface Tunnel in IOS raised in issue(https://github.com/ansible-collections/cisco.ios/issues/144)

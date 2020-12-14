@@ -1,7 +1,0 @@
-black==19.3b0 ; python_version > '3.5'
-coverage==4.5.4
-flake8
-mock ; python_version < '3.5'
-pexpect
-pytest-xdist
-yamllint
