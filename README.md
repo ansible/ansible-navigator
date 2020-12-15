@@ -17,13 +17,15 @@ winston bullhorn
 winston redhat
 winston doc ansible.netcommon.cli_command
 winston explore site.yaml -i inventory.yaml
+winston inventory -i inventory.yaml
 winston playbook site.yaml -i inventory.yaml
 ```
 
 ## help
 
 ```
-usage: winston [-h] [-ce {podman,docker}] [-ee] [-eei EE_IMAGE] [-ide {pycharm,vim,vscode}] [-lf LOGFILE] [-ll {debug,info,warning,error,critical}] [-no-osc4] [--web]
+(venv) ➜  winston git:(inventory) ✗ winston --help
+usage: winston [-h] [-ce {podman,docker}] [-ee] [-eei EE_IMAGE] [--inventory_columns INVENTORY_COLUMNS] [--ide {pycharm,vim,vscode}] [-lf LOGFILE] [-ll {debug,info,warning,error,critical}] [-no-osc4] [--web]
                {command} --help ...
 
 optional arguments:
@@ -34,7 +36,9 @@ optional arguments:
                         Run the playbook in an Execution Environment (default: False)
   -eei EE_IMAGE, --ee-image EE_IMAGE
                         Specify the name of the container image containing an Execution Environment (default: quay.io/ansible/ansible-runner:devel)
-  -ide {pycharm,vim,vscode}
+  --inventory_columns INVENTORY_COLUMNS
+                        Additional columns to be shown in the inventory views, comma delimited, eg 'xxx,yyy,zzz' (default: )
+  --ide {pycharm,vim,vscode}
                         Specify the current ide (default: vim)
   -lf LOGFILE, --logfile LOGFILE
                         Specify the application log file location (default: ./winston.log)
@@ -51,6 +55,7 @@ subcommands:
     bullhorn            Catch up on the latest bullhorn issues
     doc                 Show a plugin doc
     explore             Run playbook(s) interactive
+    inventory           Explore inventories
     load                Load an artifact
     playbook            Run playbook(s)
     playquietly         Run playbook(s) quietly
@@ -63,13 +68,25 @@ subcommands:
 
 ```
 [default]
-artifact                      = playbook.json
 container_engine              = podman
+ee_image                      = ee_libssh
 execution_environment         = False
-ee_image                      = quay.io/ansible/ansible-runner:devel
 ide                           = vscode
-inventory                     = /home/user/inventory.yaml
+inventory_columns             = ansible_network_os,ansible_network_cli_ssh_type,ansible_connection
 loglevel                      = debug
+no_osc4                       = True
+
+[explore]
+playbook                      = site.yaml
+inventory                     = inventory.yaml
+forks                         = 15
+
+[inventory]
+inventory                     = inventory.yaml
+
+[playbook]
+playbook                      = site.yaml
+inventory                     = inventory.yaml
 
 ```
 
@@ -84,22 +101,24 @@ esc                                     Go back
 arrow up, arrow down                    Scroll up/down
 :blog                                   Check out the recent Ansible blog entries
 :bullhorn                               Catch up on the latest bullhorn issues
-:d <plugin> :doc <plugin>               Show a plugin doc
+:d, :doc <plugin>                       Show a plugin doc
+:e, :explore <playbook> -i <inventory>  Run a playbook using explore
 :f, :filter <re>                        Filter page lines using a regex
 :h, :help                               This page
+:i, :inventory <inventory>              Explore the current or alternate inventory
 :l, :log                                Review current log file
 :o, :open                               Open current page in the editor
 :o, :open {{ some_key }}                Open file path in a key's value
-:q, :quit                               Quit after playbook complete
-:q!, :quit!, ^c                         Force quit
+:q, :quit                               Quit the application
+:q!, :quit!, ^c                         Force quit while a playbook is running
 :redhat                                 See the latest from Red Hat
 :rr, :rerun                             Rerun the playbook
-:s <file>, :save <file>                 Save current plays as an artifact
+:s, :save <file>                        Save current plays as an artifact
 :st, :stream                            Watch playbook results realtime
-:w <file>, :write <file>                Write current page to a new file
-:w! <file>, :write! <file>              Write current page to an existing or new file
-:w>> <file> :write>> <file>             Append current page to an existing file
-:w!>> <file> :write!>> <file>           Append current page to an existing or new file
+:w, :write <file>                       Write current page to a new file
+:w!, :write! <file>                     Write current page to an existing or new file
+:w>>, :write>> <file>                   Append current page to an existing file
+:w!>>, :write!>> <file>                 Append current page to an existing or new file
 
 ## MENUS
 --------------------------------------------------------------------------------------
