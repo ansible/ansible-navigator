@@ -6,11 +6,11 @@ esc                                     Go back
 arrow up, arrow down                    Scroll up/down
 :blog                                   Check out the recent Ansible blog entries
 :bullhorn                               Catch up on the latest bullhorn issues
-:d <plugin> :doc <plugin>               Show a plugin doc
+:d, :doc <plugin>                       Show a plugin doc
 :e, :explore <playbook> -i <inventory>  Run a playbook using explore
 :f, :filter <re>                        Filter page lines using a regex
 :h, :help                               This page
-:i, :inventory                          Explore an inventory
+:i, :inventory <inventory>              Explore the current or alternate inventory
 :l, :log                                Review current log file
 :o, :open                               Open current page in the editor
 :o, :open {{ some_key }}                Open file path in a key's value
@@ -18,12 +18,12 @@ arrow up, arrow down                    Scroll up/down
 :q!, :quit!, ^c                         Force quit while a playbook is running
 :redhat                                 See the latest from Red Hat
 :rr, :rerun                             Rerun the playbook
-:s <file>, :save <file>                 Save current plays as an artifact
+:s, :save <file>                        Save current plays as an artifact
 :st, :stream                            Watch playbook results realtime
-:w <file>, :write <file>                Write current page to a new file
-:w! <file>, :write! <file>              Write current page to an existing or new file
-:w>> <file> :write>> <file>             Append current page to an existing file
-:w!>> <file> :write!>> <file>           Append current page to an existing or new file
+:w, :write <file>                       Write current page to a new file
+:w!, :write! <file>                     Write current page to an existing or new file
+:w>>, :write>> <file>                   Append current page to an existing file
+:w!>>, :write!>> <file>                 Append current page to an existing or new file
 
 ## MENUS
 --------------------------------------------------------------------------------------
