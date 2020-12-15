@@ -2,7 +2,8 @@
 import logging
 
 from . import _actions as actions
-from ..app import App
+from ..app_public import AppPublic
+from ..steps import Step
 from ..ui import Interaction
 
 
@@ -14,10 +15,11 @@ class Action:
 
     KEGEX = r"^\^\[|\x1b$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle <esc>
 
         :param interaction: The interaction from the user
@@ -27,10 +29,17 @@ class Action:
         """
         self._logger.debug("back requested")
         interaction.ui.scroll(0)
-        # if seeing a menu, and going back to a menu, clear the menu filter
-        if app.step.type == "menu" and app.step.previous.type == "menu":
-            interaction.ui.menu_filter(None)
+        this = app.steps.back_one()  # pop this
+        step = app.steps.back_one()  # pop current
 
-        self._logger.debug("Stepping back from %s to %s", app.step.name, app.step.previous.name)
-        app.step = app.step.previous
-        return False
+        if app.steps:
+            if isinstance(step, Step) and isinstance(app.steps.current, Step):
+                if step.type == "menu" and app.steps.current.type == "menu":
+                    interaction.ui.menu_filter(None)
+            self._logger.debug(
+                "Stepping back in %s from %s to %s", app.name, step.name, app.steps.current.name
+            )
+        else:
+            self._logger.debug("Return to %s, at last step", app.name)
+
+        app.steps.append(this)  # put this back on

@@ -2,7 +2,7 @@
 import logging
 import os
 from . import _actions as actions
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -14,10 +14,11 @@ class Action:
 
     KEGEX = r"^h(?:elp)?$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
-    def run(self, interaction: Interaction, app: App) -> Interaction:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle :help
 
         :param interaction: The interaction from the user
@@ -33,7 +34,7 @@ class Action:
         while True:
             interaction = interaction.ui.show(obj=help_md, xform="text.html.markdown")
             app.update()
-            if interaction.action.name != "refresh":
+            if interaction.name != "refresh":
                 break
         interaction.ui.scroll(previous_scroll)
         return interaction

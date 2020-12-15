@@ -1,7 +1,8 @@
 r""" :\d+[0-9] etc """
 import logging
+
 from . import _actions as actions
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -16,10 +17,11 @@ class Action:
 
     KEGEX = r"^\d+$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle :[0-n]
 
         :param interaction: The interaction from the user
@@ -29,7 +31,10 @@ class Action:
         """
         self._logger.debug("selection made")
         interaction.ui.scroll(0)
-        app.step.index = interaction.action.value
-        app.step = app.step.next
-        self._logger.debug("Stepped forward to %s[%s]", app.step.name, interaction.action.value)
-        return False
+        this = app.steps.back_one()  # remove this
+        app.steps.current.index = interaction.action.value  # update index
+        app.steps.append(app.steps.current.select_func())  # add next
+        app.steps.append(this)  # put this back on stack
+        self._logger.debug(
+            "Requested next step in %s will be %s", app.name, app.steps.previous.name
+        )

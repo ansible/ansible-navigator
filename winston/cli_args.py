@@ -50,6 +50,7 @@ class CliArgs:
         )
         self._blogs()
         self._doc()
+        self._inventory()
         self._load()
         self._explore()
         self._playbook()
@@ -66,6 +67,7 @@ class CliArgs:
 
     def _base(self) -> None:
         self._ee_params(self._base_parser)
+        self._inventory_columns(self._base_parser)
         self._ide_params(self._base_parser)
         self._log_params(self._base_parser)
         self._no_osc4_params(self._base_parser)
@@ -143,14 +145,42 @@ class CliArgs:
     def _explore(self) -> None:
         parser = self._add_subparser("explore", "Run playbook(s) interactive")
         self._playbook_params(parser)
+        self._inventory_params(parser)
 
     @staticmethod
     def _ide_params(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "-ide",
+            "--ide",
             help="Specify the current ide",
             choices=["pycharm", "vim", "vscode"],
             default="vim",
+        )
+
+    @staticmethod
+    def _inventory_columns(parser: ArgumentParser) -> None:
+        parser.add_argument(
+            "--inventory_columns",
+            help=(
+                "Additional columns to be shown in the inventory views,"
+                " comma delimited, eg 'xxx,yyy,zzz'"
+            ),
+            default="",
+        )
+
+    def _inventory(self) -> None:
+        parser = self._add_subparser("inventory", "Explore inventories")
+        self._inventory_params(parser)
+
+    @staticmethod
+    def _inventory_params(parser: ArgumentParser) -> None:
+        parser.add_argument(
+            "-i",
+            "--inventory",
+            help="The inventory/inventories to use",
+            action="append",
+            nargs="+",
+            type=_abspath,
+            default=[],
         )
 
     def _load(self) -> None:
@@ -160,9 +190,10 @@ class CliArgs:
     @staticmethod
     def _load_params(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "artifact",
+            "value",
             default=None,
             help="The file name of the artifact",
+            metavar="artifact",
             type=_abspath,
         )
         parser.set_defaults(requires_ansible=False)
@@ -196,31 +227,26 @@ class CliArgs:
     def _playbook(self) -> None:
         parser = self._add_subparser("playbook", "Run playbook(s)")
         self._playbook_params(parser)
+        self._inventory_params(parser)
 
     def _playquietly(self) -> None:
         parser = self._add_subparser("playquietly", "Run playbook(s) quietly")
         self._playbook_params(parser)
+        self._inventory_params(parser)
 
     @staticmethod
     def _playbook_params(parser: ArgumentParser) -> None:
         parser.add_argument(
             "playbook",
-            default=None,
             nargs="?",
             help="The name of the playbook(s) to run",
-            type=_abspath,
-        )
-        parser.add_argument(
-            "-i",
-            "--inventory",
-            help="The inventory to use",
             type=_abspath,
         )
         parser.add_argument(
             "-a",
             "--artifact",
             help="Specify the artifact file name for playbook results",
-            type=_abspath,
+            default="<playbook_dir>/<playbook_name>_artifact.json",
         )
         parser.set_defaults(requires_ansible=True)
 

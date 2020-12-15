@@ -7,7 +7,7 @@ from typing import Union
 
 from . import _actions as actions
 from ..utils import templar
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -19,10 +19,11 @@ class Action:
 
     KEGEX = r"^{{.*}}$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
-    def run(self, interaction: Interaction, app: App) -> Union[Interaction, bool]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Handle :{{ }}
 
         :param interaction: The interaction from the user
@@ -57,7 +58,7 @@ class Action:
             self._logger.info("a menu is a list of dictionaries. use 'this' to access it")
         else:
             self._logger.error("No menu or content found")
-            return True
+            return None
 
         previous_scroll = interaction.ui.scroll()
         interaction.ui.scroll(0)
@@ -67,14 +68,11 @@ class Action:
             templated = html.unescape(templated)
 
         while True:
-            if isinstance(templated, str):
-                interaction = interaction.ui.show(obj=templated, xform="source.txt")
-            else:
-                interaction = interaction.ui.show(obj=templated)
-
             app.update()
-            if interaction.action.name != "refresh":
+            xform = "source.txt" if isinstance(templated, str) else ""
+            next_interaction: Interaction = interaction.ui.show(obj=templated, xform=xform)
+            if next_interaction.name != "refresh":
                 break
 
         interaction.ui.scroll(previous_scroll)
-        return interaction
+        return next_interaction

@@ -1,9 +1,8 @@
 """ :stream """
 import logging
 
-from typing import Union
 from . import _actions as actions
-from ..player import Player as App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -15,10 +14,11 @@ class Action:
 
     KEGEX = r"^st(?:ream)?$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
-    def run(self, interaction: Interaction, app: App) -> Union[Interaction, bool]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle :stream
 
         :param interaction: The interaction from the user
@@ -27,28 +27,27 @@ class Action:
         :type app: App
         """
         self._logger.debug("stream requested")
-        if hasattr(app, "stdout"):
-            previous_scroll = interaction.ui.scroll()
-            interaction.ui.scroll(0)
-            auto_scroll = True
-            while True:
-                new_scroll = len(app.stdout)
-                if auto_scroll:
-                    interaction.ui.scroll(new_scroll)
-                obj = "\n".join(app.stdout)
-                interaction = interaction.ui.show(obj=obj, xform="source.ansi")
-                app.update()
-                if interaction.action.name != "refresh":
-                    break
 
-                if interaction.ui.scroll() < new_scroll and auto_scroll:
-                    self._logger.debug("autoscroll disabled")
-                    auto_scroll = False
-                elif interaction.ui.scroll() >= new_scroll and not auto_scroll:
-                    self._logger.debug("autoscroll enabled")
-                    auto_scroll = True
+        previous_scroll = interaction.ui.scroll()
+        interaction.ui.scroll(0)
+        auto_scroll = True
+        while True:
+            app.update()
 
-            interaction.ui.scroll(previous_scroll)
-            return interaction
-        self._logger.debug("stdout unavailable")
-        return False
+            new_scroll = len(app.stdout)
+            if auto_scroll:
+                interaction.ui.scroll(new_scroll)
+            obj = "\n".join(app.stdout)
+            next_interaction: Interaction = interaction.ui.show(obj=obj, xform="source.ansi")
+            if next_interaction.name != "refresh":
+                break
+
+            if interaction.ui.scroll() < new_scroll and auto_scroll:
+                self._logger.debug("autoscroll disabled")
+                auto_scroll = False
+            elif interaction.ui.scroll() >= new_scroll and not auto_scroll:
+                self._logger.debug("autoscroll enabled")
+                auto_scroll = True
+
+        interaction.ui.scroll(previous_scroll)
+        return next_interaction

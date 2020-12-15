@@ -5,9 +5,9 @@ import os
 import re
 
 from . import _actions as actions
-from ..yaml import yaml, Dumper
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Interaction
+from ..yaml import yaml, Dumper
 
 
 @actions.register
@@ -18,11 +18,12 @@ class Action:
 
     KEGEX = r"^w(?:rite)?(?P<force>!)?\s+(?P<append>>>)?\s*(?P<filename>.+)$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
     # pylint: disable=unused-argument
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle :write
 
         :param interaction: The interaction from the user
@@ -39,14 +40,14 @@ class Action:
                 self._logger.warning(
                     "Append operation failed because %s does not exist, force with !", filename
                 )
-                return True
+                return None
             fmode = "a"
         else:
             if os.path.exists(filename) and not match["force"]:
                 self._logger.warning(
                     "Write operation failed because %s exists, force with !", filename
                 )
-                return True
+                return None
             fmode = "w"
 
         if interaction.content:
@@ -91,4 +92,4 @@ class Action:
                 json.dump(obj, outfile, indent=4, sort_keys=True)
 
         self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, fmode, write_as)
-        return True
+        return None

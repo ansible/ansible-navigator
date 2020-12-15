@@ -1,9 +1,8 @@
 """ refresh"""
 import logging
-
 from . import _actions as actions
-from ..app import App
 from ..ui import Interaction
+from ..app_public import AppPublic
 
 
 @actions.register
@@ -14,11 +13,12 @@ class Action:
 
     KEGEX = r"^KEY_F\(5\)$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
     # pylint: disable=no-self-use
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle :refresh
 
         :param interaction: The interaction from the user
@@ -30,6 +30,6 @@ class Action:
         # self._logger.debug("refresh requested")
 
         # Just in case the user switched tasks with +,- etc
+        # change previous, since this interaction is on the stack
         if interaction.content:
-            app.step.previous.index = interaction.action.value
-        return True
+            app.steps.previous.index = interaction.action.value

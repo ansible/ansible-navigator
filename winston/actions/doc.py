@@ -8,7 +8,7 @@ from argparse import Namespace
 from distutils.spawn import find_executable
 from typing import Union
 from . import _actions as actions
-from ..player import App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -20,11 +20,12 @@ class Action:
 
     KEGEX = r"^d(?:oc)?(\s(?P<plugin>.*))?$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
         self._app = None
 
-    def run(self, interaction: Interaction, app: App) -> Union[Interaction, bool]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
         """Handle :doc
 
@@ -44,10 +45,10 @@ class Action:
                 self._logger.debug("plugin derived from 'task action': %s", plugin)
             except (KeyError, AttributeError):
                 self._logger.info("no plugin provided or found in content")
-                return False
+                return None
         else:
             self._logger.info("no plugin provided, not showing content")
-            return False
+            return None
 
         if app.args.execution_environment:
             self._logger.debug("trying execution environment")
@@ -67,17 +68,17 @@ class Action:
                 plugin_doc = {"local_errors": plugin_doc.splitlines()}
 
         if not plugin_doc:
-            return False
+            return None
 
         previous_scroll = interaction.ui.scroll()
         interaction.ui.scroll(0)
         while True:
-            result = interaction.ui.show(obj=plugin_doc)
             app.update()
-            if result.action.name != "refresh":
+            next_interaction: Interaction = interaction.ui.show(obj=plugin_doc)
+            if next_interaction.name != "refresh":
                 break
         interaction.ui.scroll(previous_scroll)
-        return result
+        return next_interaction
 
     def _try_ee(
         self, args: Namespace, interaction: Interaction, plugin: str

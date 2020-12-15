@@ -5,8 +5,10 @@
 
 ############# local dev crap
 .dev/
-winston.cfg
-ansible.cfg
+*.cfg
+*.yaml
+collections
+*_artifact.json
 # runner artifacts
 artifacts 
 # app artifact

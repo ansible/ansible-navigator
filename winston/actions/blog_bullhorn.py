@@ -14,7 +14,7 @@ from typing import Union
 from xml.etree.ElementTree import Element
 
 from . import _actions as actions
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -41,7 +41,7 @@ RESULT_TO_COLOR = [
 get_color = lambda word: next((x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)), 0)
 
 
-def color_menu_item(colname: str, _entry: Dict[str, Any]) -> int:
+def color_menu_item(_colno: int, colname: str, _entry: Dict[str, Any]) -> int:
     # pylint: disable=too-many-branches
     """Find matching color for word
 
@@ -59,10 +59,11 @@ class Action:
 
     KEGEX = r"^(?P<rss>blog|bullhorn|redhat)$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Handle <esc>
 
         :param interaction: The interaction from the user
@@ -75,7 +76,7 @@ class Action:
         url = URLS.get(str(interaction.action.value), None)
         if not url:
             self._logger.debug("no url for %s", interaction.action.value)
-            return True
+            return None
 
         previous_filter = interaction.ui.menu_filter()
         interaction.ui.menu_filter(None)
@@ -98,25 +99,24 @@ class Action:
                 f2show = [blog._asdict() for blog in feed]
             else:
                 self._logger.info("feed empty")
-                return True
+                return None
         else:
             self._logger.info("blog was empty")
-            return True
+            return None
 
         while True:
-            result = interaction.ui.show(
+            next_interaction: Interaction = interaction.ui.show(
                 obj=f2show, columns=columns, color_menu_item=color_menu_item
             )
             app.update()
-            if result.action.name == "select":
-                webbrowser.open_new_tab(f2show[result.action.value % len(f2show)]["link"])
-            elif result.action.name != "refresh":
+            if next_interaction.name == "select" and isinstance(next_interaction.action.value, int):
+                webbrowser.open_new_tab(f2show[next_interaction.action.value]["link"])
+            elif next_interaction.name != "refresh":
                 break
 
         interaction.ui.scroll(previous_scroll)
         interaction.ui.menu_filter(previous_filter)
-
-        return result
+        return next_interaction
 
     @staticmethod
     def _get_text(ement: Element, name: str) -> Union[str, None]:

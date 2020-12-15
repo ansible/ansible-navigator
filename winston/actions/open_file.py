@@ -13,14 +13,13 @@ from typing import Match
 from typing import Tuple
 
 from . import _actions as actions
-from ..ui import Union
-from ..utils import templar
-from ..yaml import yaml, Dumper
-
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Content
 from ..ui import Interaction
 from ..ui import Menu
+from ..ui import Union
+from ..utils import templar
+from ..yaml import yaml, Dumper
 
 
 class SuspendCurses:
@@ -43,8 +42,9 @@ class Action:
 
     KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
 
-    def __init__(self):
-        self._logger = logging.getLogger()
+    def __init__(self, args):
+        self._args = args
+        self._logger = logging.getLogger(__name__)
 
     def _content(self, content: Content, match: Match) -> Tuple[Union[str, None], str, Any]:
         filename = None
@@ -97,7 +97,7 @@ class Action:
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
         return filename, line_number, obj
 
-    def run(self, interaction: Interaction, app: App) -> bool:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle :open
 
         :param interaction: The interaction from the user
@@ -115,7 +115,7 @@ class Action:
                 menu=interaction.menu, menu_filter=interaction.ui.menu_filter
             )
         else:
-            return True
+            return None
 
         if not filename:
             if interaction.ui.xform() == "text.html.markdown":
@@ -147,4 +147,4 @@ class Action:
             self._logger.debug("Command: %s", command)
             if isinstance(command, str):
                 os.system(command)
-        return True
+        return None

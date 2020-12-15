@@ -1,6 +1,7 @@
 """ some utilities that didn't fit elsewhere
 """
 import ast
+
 import logging
 import html
 import os
@@ -8,11 +9,13 @@ import stat
 from math import floor
 import re
 
+from distutils.spawn import find_executable
 from pathlib import Path
 from typing import Any
 from typing import List
 from typing import Mapping
 from typing import Optional
+from typing import Tuple
 from typing import Union
 
 from jinja2 import Environment, TemplateError
@@ -235,3 +238,32 @@ def find_ini_config_file(app_name: str) -> Optional[str]:
         )
 
     return path or None
+
+
+def check_for_ansible() -> Tuple[bool, str]:
+    """check for the ansible-playbook command, runner will need it"""
+    ansible_location = find_executable("ansible-playbook")
+    if not ansible_location:
+        msg_parts = [
+            "The 'ansible-playbook' command could not be found or was not executable,",
+            "ansible is required when running without an Ansible Execution Environment.",
+            "Try one of",
+            "     'pip install ansible-base'",
+            "     'pip install ansible-core'",
+            "     'pip install ansible'",
+            "or simply",
+            "     '-ee' or '--execution-environment'",
+            "to use an Ansible Execution Enviroment",
+        ]
+        return False, "\n".join(msg_parts)
+    msg = f"ansible-playbook found at {ansible_location}"
+    return True, msg
+
+
+def set_ansible_envar() -> None:
+    """Set an envar if not set, runner will need this"""
+    ansible_config = find_ini_config_file("ansible")
+    # set as env var, since we hand env vars over to runner
+    if ansible_config and not os.getenv("ANSIBLE_CONFIG"):
+        os.environ.setdefault("ANSIBLE_CONFIG", ansible_config)
+        logger.debug("ANSIBLE_CONFIG set to %s", ansible_config)
