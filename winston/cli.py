@@ -142,6 +142,7 @@ def setup_logger(args):
 
 
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:
+    # pylint: disable=too-many-branches
     """parse some params and update"""
     parser = CliArgs(APP_NAME).parser
 
