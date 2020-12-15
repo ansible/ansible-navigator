@@ -115,10 +115,13 @@ def handle_ide(args: Namespace) -> None:
     """Based on the IDE, set the editor and other args"""
     if args.ide == "vim":
         args.editor = "vi +{line_number} {filename}"
+        args.editor_is_console = True
     elif args.ide == "vscode":
         args.editor = "code -g {filename}:{line_number}"
+        args.editor_is_console = False
     elif args.ide == "pycharm":
         args.editor = "charm  --line {line_number} {filename}"
+        args.editor_is_console = False
 
 
 def setup_logger(args):

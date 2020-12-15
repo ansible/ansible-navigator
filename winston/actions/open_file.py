@@ -142,9 +142,12 @@ class Action:
                 with open(filename, "w") as outfile:
                     outfile.write(obj)
 
-        with SuspendCurses():
-            command = app.args.editor.format(filename=filename, line_number=line_number)
-            self._logger.debug("Command: %s", command)
-            if isinstance(command, str):
+        command = app.args.editor.format(filename=filename, line_number=line_number)
+        self._logger.debug("Command: %s", command)
+        if isinstance(command, str):
+            if self._args.editor_is_console:
+                with SuspendCurses():
+                    os.system(command)
+            else:
                 os.system(command)
         return None
