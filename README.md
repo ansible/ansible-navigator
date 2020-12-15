@@ -10,14 +10,45 @@ Although winston is in his infancy, he wants nothing more than to bring all the 
 git clone git@github.com:ansible-network/winston.git
 cd winston
 pip install .
+```
 
+### Welcome
+Start at the welcome page, from the welcome page you can run playbooks, explore inventories, review docs, and check out blogs
+```
+winston
+```
+
+### Other things to try direct from the command line
+
+Review the help
+```
 winston --help
+```
+
+Checkout some blogs
+```
 winston blog
 winston bullhorn
 winston redhat
+```
+
+Review documentation
+```
 winston doc ansible.netcommon.cli_command
+```
+
+Run and explore a playbook
+```
 winston explore site.yaml -i inventory.yaml
+```
+
+Review and explore and inventory
+```
 winston inventory -i inventory.yaml
+```
+
+Run a playbook with classic output
+```
 winston playbook site.yaml -i inventory.yaml
 ```
 
