@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 import signal
+import time
 
 from argparse import _SubParsersAction
 from argparse import ArgumentParser
@@ -29,9 +30,9 @@ from .utils import find_ini_config_file
 from .utils import set_ansible_envar
 from .web_xterm_js import WebXtermJs
 
-logger = logging.getLogger()
-
 APP_NAME = "winston"
+
+logger = logging.getLogger(APP_NAME)
 
 
 class NoSuch:  # pylint: disable=too-few-public-methods
@@ -130,7 +131,11 @@ def setup_logger(args):
         with open(args.logfile, "w"):
             pass
     hdlr = logging.FileHandler(args.logfile)
-    formatter = logging.Formatter("%(asctime)s %(levelname)s '%(module)s.%(funcName)s' %(message)s")
+    formatter = logging.Formatter(
+        fmt="%(asctime)s.%(msecs)03d %(levelname)s '%(name)s.%(funcName)s' %(message)s",
+        datefmt="%y%m%d%H%M%S",
+    )
+    formatter.converter = time.gmtime
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
     logger.setLevel(getattr(logging, args.loglevel.upper()))

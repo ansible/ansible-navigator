@@ -21,7 +21,7 @@ class Action:
     KEGEX = r"^d(?:oc)?(\s(?P<plugin>.*))?$"
 
     def __init__(self):
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
         self._app = None
 
     def run(self, interaction: Interaction, app: App) -> Union[Interaction, None]:

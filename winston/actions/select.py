@@ -18,7 +18,7 @@ class Action:
     KEGEX = r"^\d+$"
 
     def __init__(self):
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
 
     def run(self, interaction: Interaction, app: App) -> None:
         """Handle :[0-n]

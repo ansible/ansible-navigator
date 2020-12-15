@@ -150,7 +150,7 @@ class UserInterface:
         self._filter_content_keys: Callable[[Dict[Any, Any]], Dict[Any, Any]]
         self._hide_keys = True
         self._kegexes = kegexes
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
         self._menu_filter: Union[Pattern, None] = None
         self._menu_indicies: Tuple[int, ...] = tuple()
         self._no_osc4 = no_osc4

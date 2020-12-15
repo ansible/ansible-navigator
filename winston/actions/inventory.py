@@ -96,7 +96,7 @@ class Action(App):
     def __init__(self):
         super().__init__()
         self._calling_app: App
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
         self.__inventory: Dict[Any, Any] = {}
         self._inventory_error: str = ""
         self._host_vars: Dict[str, Dict[Any, Any]]

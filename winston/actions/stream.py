@@ -15,7 +15,7 @@ class Action:
     KEGEX = r"^st(?:ream)?$"
 
     def __init__(self):
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
 
     def run(self, interaction: Interaction, app: App) -> Interaction:
         """Handle :stream

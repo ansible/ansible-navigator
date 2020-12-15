@@ -202,12 +202,16 @@ class Action(App):
 
     def __init__(self):
         super().__init__()
-        self._name = "explore"
-        self.name = f"{self._name}_{str(uuid.uuid4())}"
+
+        # for display purposes use the 4: of the uuid
+        self._name_at_cli = "explore"
+        self._uuid = str(uuid.uuid4())
+        self.name = self._name_at_cli + self._uuid[-4:]
+        self._logger = logging.getLogger(f"{__name__}.{self._uuid[-4:]}")
+
         self.args: Namespace
         self._interaction: Interaction
         self._calling_app: App
-        self._logger = logging.getLogger()
         self._parser_error: str
         self._subaction_type: str
 
@@ -226,13 +230,21 @@ class Action(App):
             select_func=self._task_list_for_play,
         )
 
-    def parser_error(self, message):
-        """callback for parser error"""
+    def parser_error(self, message: str) -> Tuple[None, None]:
+        """callback for parser error
+
+        :param message: A message from the parser
+        :type message: str
+        """
         self._parser_error = message
         return None, None
 
     def playbook(self, args: Namespace) -> None:
-        """Run in oldschool mode, just stdout"""
+        """Run in oldschool mode, just stdout
+
+        :param args: The parsed args from the cli
+        :type args: Namespace
+        """
         self._subaction_type = "playbook"
         self._logger.debug("subaction type is %s", self._subaction_type)
         self.args = args
@@ -247,7 +259,7 @@ class Action(App):
 
     def run(self, interaction: Interaction, app) -> None:
         # pylint: disable=too-many-branches
-        """Handle :inventory
+        """run :explore or :load
 
         :param interaction: The interaction from the user
         :type interaction: Interaction
@@ -273,7 +285,9 @@ class Action(App):
             return None
 
         # update the args to a unique name
-        self.args.app = self.name
+        # this ensures no collision between
+        # this instance and the original cli call
+        self.args.app = self._uuid
 
         self.steps.append(self._plays)
         previous_scroll = interaction.ui.scroll()
@@ -310,15 +324,22 @@ class Action(App):
         return None
 
     def _init_explore(self) -> bool:
+        """in the case of :explore, parse the user input
+
+        0) if no playbook or params, use the original cli args
+        1) if just a playbook was provided, use the cli args and the playbook
+        2) if other params were provided, use those entirely
+        """
+
         playbook = self._interaction.action.match.groupdict().get("playbook")
         params = self._interaction.action.match.groupdict().get("params")
         if playbook:
             playbook = os.path.abspath(playbook)
             if params:
                 self._logger.debug(
-                    "Parsing full cli command: %s %s %s", self._name, playbook, params
+                    "Parsing full cli command: %s %s %s", self._name_at_cli, playbook, params
                 )
-                params = [self._name] + [playbook] + params.split()
+                params = [self._name_at_cli] + [playbook] + params.split()
                 new_args = self._update_args(params)
                 if new_args:
                     self.args = new_args
@@ -337,6 +358,11 @@ class Action(App):
         return True
 
     def _init_load(self, artifact_file: str) -> bool:
+        """in the case of :load, load the artifact
+        check for a version, to be safe
+        copy the calling app args as our our so the can be updated safely
+        with a uuid attached to the name
+        """
         self._logger.debug("Starting load artifact request")
 
         try:
@@ -369,6 +395,7 @@ class Action(App):
         return True
 
     def _take_step(self) -> None:
+        """run the current step on the stack"""
         if isinstance(self.steps.current, Interaction):
             result = self.actions.run(
                 action=self.steps.current.name,
@@ -411,6 +438,10 @@ class Action(App):
             self.steps.append(result)
 
     def _update_args(self, params: List) -> Union[Namespace, None]:
+        """pass the param through the original cli parser
+        as if explore was run from the command line
+        provide an error callback so the app doesn't sys.exit if the aprsing fails
+        """
 
         try:
             msgs, new_args = self._calling_app.args.parse_and_update(
@@ -550,11 +581,13 @@ class Action(App):
             else:
                 self._plays.value[idx]["__% completed"] = "0%"
 
-    def _prepare_to_quit(self, interaction: Interaction) -> Union[bool, None]:
+    def _prepare_to_quit(self, interaction: Interaction) -> bool:
         """Looks like we're headed out of here
 
-        :param result: the result from the ui
-        :type result: dict
+        :param interaction: the quit interaction
+        :type interaction: Interaction
+        :return: a bool indicating whether of not it's safe to exit
+        :rtype: bool
         """
         self.update()
         if not self.runner.finished:
@@ -567,11 +600,16 @@ class Action(App):
                     self.write_artifact(self.args.artifact)
                 return True
             self._logger.warning("Quit requested but playbook running, try q! or quit!")
-            return None
+            return False
         self._logger.debug("runner not running")
         return True
 
     def _task_list_for_play(self) -> Step:
+        """generate a menu of task for the currently selected play
+
+        :return: The menu step
+        :rtype: Step
+        """
         value = self.steps.current.selected["tasks"]
         step = Step(
             name="task_list",
@@ -583,6 +621,11 @@ class Action(App):
         return step
 
     def _task_from_task_list(self) -> Step:
+        """generate task content for the selected task
+
+        :return: content whic show a task
+        :rtype: Step
+        """
         value = self.steps.current.value
         index = self.steps.current.index
         step = Step(name="task", tipe="content", index=index, value=value)
@@ -606,7 +649,11 @@ class Action(App):
                 self._runner_finished = True
 
     def _get_status(self) -> Tuple[str, int]:
-        """Get the status and color"""
+        """Get the status and color
+
+        :return: status string, status color
+        :rtype: tuple of str and int
+        """
         if self.runner and self.runner.finished:
             status = self.runner.status
             if self.runner.status == "failed":
@@ -646,6 +693,10 @@ class Action(App):
         self._logger.info("Saved artifact as %s", filename)
 
     def rerun(self) -> None:
+        """rerun the current playbook
+        since we're not reinstantiating explore,
+        drain the queue, clear the steps, reset the index, etc
+        """
         if self.runner.finished:
             if self._subaction_type == "explore":
                 self._plays.value = []
@@ -660,6 +711,5 @@ class Action(App):
                 return
             self._logger.error("No rerun available when artifact is loaded")
             return
-        else:
-            self._logger.warning("Playbook rerun ignored, current playbook not complete")
-            return
+        self._logger.warning("Playbook rerun ignored, current playbook not complete")
+        return

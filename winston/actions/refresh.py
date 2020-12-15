@@ -15,7 +15,7 @@ class Action:
     KEGEX = r"^KEY_F\(5\)$"
 
     def __init__(self):
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
 
     # pylint: disable=no-self-use
     def run(self, interaction: Interaction, app: App) -> None:

@@ -43,7 +43,7 @@ class Action:
     KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
 
     def __init__(self):
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
 
     def _content(self, content: Content, match: Match) -> Tuple[Union[str, None], str, Any]:
         filename = None
