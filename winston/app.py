@@ -1,12 +1,14 @@
 """ simple base class for apps
 """
 import logging
-
+from argparse import Namespace
+from typing import List
 from typing import Tuple
 from typing import Union
 
-import winston.actions as actions
+from winston.actions import kegexes
 
+from .app_public import AppPublic
 from .steps import Steps
 from .ui import Action
 
@@ -15,15 +17,18 @@ class App:
     # pylint: disable=too-few-public-methods
     """simple base class for apps"""
 
-    def __init__(self, args=None):
-        self.actions: type.ModuleType = actions
-        self.args = args
+    def __init__(self, args: Namespace):
+
+        # allow args to be set after __init__
+        self.args: Namespace = args
+
         self.name = "app_base_class"
-        self.stdout = []
+        self.stdout: List = []
         self.steps = Steps()
         self._logger = logging.getLogger(__name__)
 
-    def _action_match(self, entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
+    @staticmethod
+    def _action_match(entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
         """attempt to match the user input against the regexes
         provided by each action
 
@@ -32,10 +37,27 @@ class App:
         :return: The name and matching action or not
         :rtype: str, Action or None, None
         """
-        for kegex in self.actions.kegexes():
+        for kegex in kegexes():
             if match := kegex.kegex.match(entry):
                 return kegex.name, Action(match=match, value=entry)
         return None, None
+
+    @property
+    def app(self) -> AppPublic:
+        """this will be passed to other actions to limit the scope of
+        what can be mutated internally
+        """
+        if self.args:
+            return AppPublic(
+                args=self.args,
+                name=self.name,
+                rerun=self.rerun,
+                stdout=self.stdout,
+                steps=self.steps,
+                update=self.update,
+                write_artifact=self.write_artifact,
+            )
+        raise AttributeError("app passed without args initialized")
 
     def update(self) -> None:
         """update, define in child if necessary"""

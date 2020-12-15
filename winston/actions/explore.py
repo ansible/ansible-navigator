@@ -16,9 +16,13 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
+
+from . import run as run_action
 from . import _actions as actions
+
 from ._runner import PlaybookRunner
 from ..app import App
+from ..app_public import AppPublic
 from ..curses_defs import CursesLinePart
 from ..curses_defs import CursesLines
 from ..steps import Step
@@ -200,10 +204,9 @@ class Action(App):
             \s(?P<artifact>\S+))
             $"""
 
-    def __init__(self):
-        super().__init__()
-
+    def __init__(self, args):
         # for display purposes use the 4: of the uuid
+        super().__init__(args=args)
         self._name_at_cli = "explore"
         self._uuid = str(uuid.uuid4())
         self.name = self._name_at_cli + self._uuid[-4:]
@@ -211,7 +214,7 @@ class Action(App):
 
         self.args: Namespace
         self._interaction: Interaction
-        self._calling_app: App
+        self._calling_app: AppPublic
         self._parser_error: str
         self._subaction_type: str
 
@@ -239,7 +242,7 @@ class Action(App):
         self._parser_error = message
         return None, None
 
-    def playbook(self, args: Namespace) -> None:
+    def playbook(self) -> None:
         """Run in oldschool mode, just stdout
 
         :param args: The parsed args from the cli
@@ -247,7 +250,6 @@ class Action(App):
         """
         self._subaction_type = "playbook"
         self._logger.debug("subaction type is %s", self._subaction_type)
-        self.args = args
         self._run_runner()
         while True:
             self._dequeue()
@@ -257,7 +259,7 @@ class Action(App):
                 self._logger.debug("runner finished")
                 break
 
-    def run(self, interaction: Interaction, app) -> None:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
         """run :explore or :load
 
@@ -266,6 +268,7 @@ class Action(App):
         :param app: The app instance
         :type app: App
         """
+
         self._calling_app = app
         self._interaction = interaction
 
@@ -355,6 +358,7 @@ class Action(App):
             self._logger.debug("Using original cli commands")
             self.args = copy.copy(self._calling_app.args)
         self._run_runner()
+        self._logger.info("Explore initialized and playbook started.")
         return True
 
     def _init_load(self, artifact_file: str) -> bool:
@@ -397,10 +401,10 @@ class Action(App):
     def _take_step(self) -> None:
         """run the current step on the stack"""
         if isinstance(self.steps.current, Interaction):
-            result = self.actions.run(
-                action=self.steps.current.name,
-                app=self,
-                interaction=self.steps.current,
+            result = run_action(
+                self.steps.current.name,
+                self.app,
+                self.steps.current,
             )
         elif isinstance(self.steps.current, Step):
             if self.steps.current.show_func:
@@ -644,6 +648,7 @@ class Action(App):
             if self.runner.finished and not self._runner_finished:
                 # self._interaction.ui.disable_refresh()
                 self._logger.debug("runner finished")
+                self._logger.info("Playbook complete")
                 if hasattr(self.args, "artifact"):
                     self.write_artifact(self.args.artifact)
                 self._runner_finished = True

@@ -57,10 +57,11 @@ def get(package: str, action: str) -> Callable:
     return _ACTIONS[package][action].cls
 
 
-def call(package: str, action: str, *args: Any, **kwargs: Any) -> Any:
+def call(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
     """Call the given action"""
     action_cls = get(package, action)
-    return action_cls().run(*args, **kwargs)
+    app, interaction = args
+    return action_cls(app.args).run(app=app, interaction=interaction)
 
 
 def _import(package: str, action: str) -> None:

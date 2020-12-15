@@ -1,6 +1,8 @@
 """ jump to one action
 """
 
+from winston.actions import kegexes
+from winston.actions import run as run_action
 
 from .app import App
 from .steps import Steps
@@ -31,7 +33,7 @@ class ActionRunner(App):
         self._ui = UserInterface(
             screen_miny=3,
             no_osc4=self.args.no_osc4,
-            kegexes=self.actions.kegexes,
+            kegexes=kegexes,
             refresh=refresh,
             share_dir=self.args.share_dir,
         )
@@ -55,10 +57,10 @@ class ActionRunner(App):
                 self.steps.append(initial_interaction)
 
             if isinstance(self.steps.current, Interaction):
-                interaction = self.actions.run(
-                    action=self.steps.current.name,
-                    app=self,
-                    interaction=self.steps.current,
+                interaction = run_action(
+                    self.steps.current.name,
+                    self.app,
+                    self.steps.current,
                 )
             if interaction is None:
                 self.steps.back_one()

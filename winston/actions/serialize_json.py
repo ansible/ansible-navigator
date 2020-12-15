@@ -1,7 +1,7 @@
 """ :json """
 import logging
 from . import _actions as actions
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -13,11 +13,12 @@ class Action:
 
     KEGEX = r"^j(?:son)?$"
 
-    def __init__(self):
+    def __init__(self, args):
+        self._args = args
         self._logger = logging.getLogger(__name__)
 
     # pylint: disable=unused-argument
-    def run(self, interaction: Interaction, app: App) -> None:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle :json
 
         :param interaction: The interaction from the user

@@ -11,8 +11,14 @@ from typing import Any
 from typing import Dict
 from typing import List
 from typing import Union
+
+from . import run as run_action
 from . import _actions as actions
+
+
 from ..app import App
+from ..app_public import AppPublic
+
 from ..curses_defs import CursesLinePart
 from ..curses_defs import CursesLines
 from ..steps import Step
@@ -93,9 +99,9 @@ class Action(App):
 
     KEGEX = r"^i(?:nventory)?(\s(?P<inventories>.*))?$"
 
-    def __init__(self):
-        super().__init__()
-        self._calling_app: App
+    def __init__(self, args):
+        super().__init__(args=args)
+        self._calling_app: AppPublic
         self._logger = logging.getLogger(__name__)
         self.__inventory: Dict[Any, Any] = {}
         self._inventory_error: str = ""
@@ -123,7 +129,7 @@ class Action(App):
     def _show_columns(self):
         return self.args.inventory_columns.split(",")
 
-    def run(self, interaction: Interaction, app) -> None:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
         """Handle :inventory
 
@@ -132,6 +138,7 @@ class Action(App):
         :param app: The app instance
         :type app: App
         """
+        super().__init__(args=app.args)
         self._logger.debug("inventory requested")
         self._calling_app = app
         self.args = app.args
@@ -172,10 +179,10 @@ class Action(App):
 
     def _take_step(self) -> None:
         if isinstance(self.steps.current, Interaction):
-            result = self.actions.run(
-                action=self.steps.current.name,
-                app=self,
-                interaction=self.steps.current,
+            result = run_action(
+                self.steps.current.name,
+                self.app,
+                self.steps.current,
             )
         elif isinstance(self.steps.current, Step):
             if self.steps.current.type == "menu":
@@ -206,6 +213,7 @@ class Action(App):
         )
 
         step = Step(
+            name="play_menu",
             columns=["title", "description"],
             select_func=self._step_from_main_menu,
             tipe="menu",

@@ -14,7 +14,7 @@ from typing import Union
 from xml.etree.ElementTree import Element
 
 from . import _actions as actions
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Interaction
 
 
@@ -59,10 +59,11 @@ class Action:
 
     KEGEX = r"^(?P<rss>blog|bullhorn|redhat)$"
 
-    def __init__(self):
+    def __init__(self, args):
+        self._args = args
         self._logger = logging.getLogger(__name__)
 
-    def run(self, interaction: Interaction, app: App) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Handle <esc>
 
         :param interaction: The interaction from the user

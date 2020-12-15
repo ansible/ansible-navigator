@@ -84,7 +84,6 @@ def update_args(
                                 default = get_default(parser, section_name, key)
                                 if isinstance(default, NoSuch):
                                     continue
-
                                 if isinstance(arg_value, bool):
                                     bool_key: bool = section.getboolean(key)
                                     if bool_key != arg_value == default:
@@ -106,6 +105,7 @@ def update_args(
                                 msg = f"{key} was not provided, using entry '{key}={value}'"
                                 msgs.append(msg)
                                 setattr(args, key, value)
+
     else:
         msgs.append("No config file file found")
     return msgs
@@ -159,14 +159,22 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
+    if hasattr(args, "playbook"):
+        if args.playbook:
+            args.playbook = os.path.abspath(args.playbook)
+        else:
+            parser.error("a playbook is required when using explore or playbook")
+
     if hasattr(args, "inventory"):
         args.inventory = list(itertools.chain.from_iterable(args.inventory))
+        args.inventory = [os.path.abspath(i) for i in args.inventory]
         if not args.inventory and args.app == "inventory":
             parser.error("an inventory is required when using the inventory explorer")
 
     if hasattr(args, "artifact"):
-        if hasattr(args, "playbook") and args.artifact == get_default(parser, args.app, "artifact"):
-            args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
+        if hasattr(args, "playbook") and args.playbook:
+            if args.artifact == get_default(parser, args.app, "artifact"):
+                args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
         else:
             args.artifact = os.path.abspath(args.artifact)
 
@@ -187,7 +195,7 @@ def run(args: Namespace) -> None:
     """run the appropriate app"""
     try:
         if args.app in ["playbook", "playquietly"]:
-            non_ui_app = partial(Player().playbook, args)
+            non_ui_app = partial(Player(args).playbook)
             if args.web:
                 WebXtermJs().run(func=non_ui_app)
             else:

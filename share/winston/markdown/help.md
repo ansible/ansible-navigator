@@ -7,8 +7,10 @@ arrow up, arrow down                    Scroll up/down
 :blog                                   Check out the recent Ansible blog entries
 :bullhorn                               Catch up on the latest bullhorn issues
 :d <plugin> :doc <plugin>               Show a plugin doc
+:e, :explore <playbook> -i <inventory>  Run a playbook using explore
 :f, :filter <re>                        Filter page lines using a regex
 :h, :help                               This page
+:i, :inventory                          Explore an inventory
 :l, :log                                Review current log file
 :o, :open                               Open current page in the editor
 :o, :open {{ some_key }}                Open file path in a key's value

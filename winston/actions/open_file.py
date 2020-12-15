@@ -13,7 +13,7 @@ from typing import Match
 from typing import Tuple
 
 from . import _actions as actions
-from ..app import App
+from ..app_public import AppPublic
 from ..ui import Content
 from ..ui import Interaction
 from ..ui import Menu
@@ -42,7 +42,8 @@ class Action:
 
     KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
 
-    def __init__(self):
+    def __init__(self, args):
+        self._args = args
         self._logger = logging.getLogger(__name__)
 
     def _content(self, content: Content, match: Match) -> Tuple[Union[str, None], str, Any]:
@@ -96,7 +97,7 @@ class Action:
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
         return filename, line_number, obj
 
-    def run(self, interaction: Interaction, app: App) -> None:
+    def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle :open
 
         :param interaction: The interaction from the user
