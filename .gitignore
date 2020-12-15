@@ -8,6 +8,7 @@
 *.cfg
 *.yaml
 collections
+*_artifact.json
 # runner artifacts
 artifacts 
 # app artifact

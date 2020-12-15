@@ -707,7 +707,7 @@ class UserInterface:
         color = curses.color_pair(color % self._number_colors)
 
         text = str(coltext)[0 : adj_colws[colno]]
-        if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "duration":
+        if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "__duration":
             # right jusitfy on header if int, bool, float or "duration"
             print_at = col_starts[colno] + len(header[colno][1]) - len(text)
         elif re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", str(coltext)):
@@ -846,9 +846,11 @@ class UserInterface:
         :return: the serialize lines ready for display
         :rtype: CursesLines
         """
-        obj = self._filter_content_keys(obj) if self._hide_keys and isinstance(obj, dict) else obj
-        lines = self._serialize_color(obj)
         heading = self._content_heading(obj, self._screen_w)
+        filtered_obj = (
+            self._filter_content_keys(obj) if self._hide_keys and isinstance(obj, dict) else obj
+        )
+        lines = self._serialize_color(filtered_obj)
         return heading, lines
 
     def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:

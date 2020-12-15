@@ -40,13 +40,13 @@ class ActionRunner(App):
         # pylint: disable=protected-access
         """Run with the interface and runner"""
         self.initialize_ui(DEFAULT_REFRESH)
-        name, action = self._ui._action_match(
-            " ".join(filter(None, (self.args.app, vars(self.args).get("value", ""))))
-        )
-        interaction = Interaction(
-            name=name, action=action, menu=None, content=None, ui=self._ui._ui
-        )
-        self._run_app(interaction)
+        requested = " ".join(filter(None, (self.args.app, vars(self.args).get("value", ""))))
+        name, action = self._action_match(requested)
+        if name and action:
+            interaction = Interaction(
+                name=name, action=action, menu=None, content=None, ui=self._ui._ui
+            )
+            self._run_app(interaction)
 
     def _run_app(self, initial_interaction: Interaction) -> None:
         """enter the endless loop"""
@@ -62,6 +62,8 @@ class ActionRunner(App):
                 )
             if interaction is None:
                 self.steps.back_one()
+                if not self.steps:
+                    break
             elif interaction.name == "quit":
                 break
             else:

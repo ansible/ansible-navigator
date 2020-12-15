@@ -39,7 +39,7 @@ class NoSuch:  # pylint: disable=too-few-public-methods
 
 
 # pylint: disable=protected-access
-def get_default(parser: ArgumentParser, section: str, name: str) -> Union[str, NoSuch]:
+def get_default(parser: ArgumentParser, section: str, name: str) -> Union[str, List, NoSuch]:
     """get a default value from the root or subparsers"""
     if section == "default":
         return parser.get_default(name)
@@ -48,7 +48,7 @@ def get_default(parser: ArgumentParser, section: str, name: str) -> Union[str, N
     )
     choice = subparser_action.choices.get(section, "")
     if isinstance(choice, ArgumentParser):
-        if default := choice.get_default(name):
+        if (default := choice.get_default(name)) is not None:
             return default
     return NoSuch()
 
@@ -76,35 +76,35 @@ def update_args(
         if config_file:
             cdict = dict(config)
             for section_name, section in cdict.items():
-                for key, value in section.items():
-                    if hasattr(args, key):
-                        if (arg_value := getattr(args, key)) is not None:
-                            default = get_default(parser, section_name, key)
-                            if isinstance(default, NoSuch):
-                                continue
+                if section_name in ["default", args.app]:
+                    for key, value in section.items():
+                        if hasattr(args, key):
+                            if (arg_value := getattr(args, key)) is not None:
+                                default = get_default(parser, section_name, key)
+                                if isinstance(default, NoSuch):
+                                    continue
 
-                            if isinstance(arg_value, bool):
-                                bool_key: bool = section.getboolean(key)
-                                if bool_key != arg_value == default:
-                                    msg = (
-                                        f"{key} was default, using entry '{key}={bool_key}' as bool"
-                                    )
+                                if isinstance(arg_value, bool):
+                                    bool_key: bool = section.getboolean(key)
+                                    if bool_key != arg_value == default:
+                                        msg = f"{key} was default, "
+                                        msg += "using entry '{key}={bool_key}' as bool"
+                                        msgs.append(msg)
+                                        setattr(args, key, bool_key)
+                                elif (arg_value == [] == default) and value:
+                                    use_value = [value.split(",")]
+                                    setattr(args, key, use_value)
+                                    msg = f"{key} was default list, "
+                                    msg += f"using entry.split(',') '{key}:{use_value}'"
                                     msgs.append(msg)
-                                    setattr(args, key, bool_key)
-                            elif arg_value == [] and default is None and value:
-                                use_value = [value.split(",")]
-                                setattr(args, key, use_value)
-                                msg = f"{key} was default list, "
-                                msg += f"using entry.split(',') '{key}:{use_value}'"
+                                elif default == arg_value != value:
+                                    setattr(args, key, value)
+                                    msg = f"{key} was default, using entry '{key}={value}'"
+                                    msgs.append(msg)
+                            else:
+                                msg = f"{key} was not provided, using entry '{key}={value}'"
                                 msgs.append(msg)
-                            elif default == arg_value != value:
                                 setattr(args, key, value)
-                                msg = f"{key} was default, using entry '{key}={value}'"
-                                msgs.append(msg)
-                        else:
-                            msg = f"{key} was not provided, using entry '{key}={value}'"
-                            msgs.append(msg)
-                            setattr(args, key, value)
     else:
         msgs.append("No config file file found")
     return msgs
@@ -151,11 +151,13 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     args.logfile = os.path.abspath(args.logfile)
     handle_ide(args)
 
-    if args.app == "load" and not os.path.exists(args.artifact):
+    if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
     if hasattr(args, "inventory"):
         args.inventory = list(itertools.chain.from_iterable(args.inventory))
+        if not args.inventory and args.app == "inventory":
+            parser.error("an inventory is required when using the inventory explorer")
 
     if hasattr(args, "artifact"):
         if hasattr(args, "playbook") and args.artifact == get_default(parser, args.app, "artifact"):

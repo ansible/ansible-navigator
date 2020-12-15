@@ -2,9 +2,13 @@
 """
 import logging
 
+from typing import Tuple
+from typing import Union
+
 import winston.actions as actions
 
 from .steps import Steps
+from .ui import Action
 
 
 class App:
@@ -18,6 +22,20 @@ class App:
         self.stdout = []
         self.steps = Steps()
         self._logger = logging.getLogger(__name__)
+
+    def _action_match(self, entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
+        """attempt to match the user input against the regexes
+        provided by each action
+
+        :param entry: the user input
+        :type entry: str
+        :return: The name and matching action or not
+        :rtype: str, Action or None, None
+        """
+        for kegex in self.actions.kegexes():
+            if match := kegex.kegex.match(entry):
+                return kegex.name, Action(match=match, value=entry)
+        return None, None
 
     def update(self) -> None:
         """update, define in child if necessary"""

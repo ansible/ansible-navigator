@@ -33,7 +33,7 @@ RESULT_TO_COLOR = [
     ("(?i)^ok$", 10),
     ("(?i)^ignored$", 13),
     ("(?i)^skipped$", 14),
-    ("(?i)^in progress$", 8),
+    ("(?i)^in_progress$", 8),
 ]
 
 get_color = lambda word: next((x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)), 0)
@@ -49,33 +49,33 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> int:
 
     colval = entry[colname]
     color = 0
-    if "play name" in entry:
+    if "__play_name" in entry:
         if not colval:
             color = 8
-        elif colname in ["% completed", "task count", "play name"]:
-            failures = entry["failed"] + entry["unreachable"]
+        elif colname in ["__% completed", "__task_count", "__play_name"]:
+            failures = entry["__failed"] + entry["__unreachable"]
             if failures:
                 color = 9
-            elif entry["ok"]:
+            elif entry["__ok"]:
                 color = 10
             else:
                 color = 8
-        elif colname == "changed":
+        elif colname == "__changed":
             color = 11
         else:
-            color = get_color(colname)
+            color = get_color(colname[2:])
 
     elif "task" in entry:
-        if entry["result"].lower() == "in progress":
-            color = get_color(entry["result"])
-        elif colname in ["result", "host", "number", "task", "task action"]:
-            color = get_color(entry["result"])
-        elif colname == "changed":
-            if colval:
+        if entry["__result"].lower() == "__in_progress":
+            color = get_color(entry["__result"])
+        elif colname in ["__result", "__host", "__number", "__task", "__task_action"]:
+            color = get_color(entry["__result"])
+        elif colname == "__changed":
+            if colval is True:
                 color = 11
             else:
-                color = 8
-        elif colname == "duration":
+                color = get_color(entry["__result"])
+        elif colname == "__duration":
             color = 12
 
     return color
@@ -94,7 +94,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
     if isinstance(obj, dict) and "task" in obj:
         heading = []
-        detail = "PLAY [{play}:{tnum}] ".format(play=obj["play"], tnum=obj["number"])
+        detail = "PLAY [{play}:{tnum}] ".format(play=obj["play"], tnum=obj["__number"])
         stars = "*" * (screen_w - len(detail))
         heading.append(
             tuple(
@@ -124,19 +124,19 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
             )
         )
 
-        if obj["changed"] is True:
+        if obj["__changed"] is True:
             color = 11
             res = "CHANGED"
         else:
-            color = next((x[1] for x in RESULT_TO_COLOR if re.match(x[0], obj["result"])), 0)
-            res = obj["result"]
+            color = next((x[1] for x in RESULT_TO_COLOR if re.match(x[0], obj["__result"])), 0)
+            res = obj["__result"]
 
         if "res" in obj and "msg" in obj["res"]:
             msg = str(obj["res"]["msg"]).replace("\n", " ").replace("\r", "")
         else:
             msg = ""
 
-        string = "{res}: [{host}] {msg}".format(res=res, host=obj["host"], msg=msg)
+        string = "{res}: [{host}] {msg}".format(res=res, host=obj["__host"], msg=msg)
         string = string + (" " * (screen_w - len(string) + 1))
         heading.append(
             tuple(
@@ -160,26 +160,26 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 
 
 PLAY_COLUMNS = [
-    "play name",
-    "ok",
-    "changed",
-    "unreachable",
-    "failed",
-    "skipped",
-    "ignored",
-    "in progress",
-    "task count",
-    "% completed",
+    "__play_name",
+    "__ok",
+    "__changed",
+    "__unreachable",
+    "__failed",
+    "__skipped",
+    "__ignored",
+    "__in_progress",
+    "__task_count",
+    "__% completed",
 ]
 
 TASK_LIST_COLUMNS = [
-    "result",
-    "host",
-    "number",
-    "changed",
-    "task",
-    "task action",
-    "duration",
+    "__result",
+    "__host",
+    "__number",
+    "__changed",
+    "__task",
+    "__task_action",
+    "__duration",
 ]
 
 
@@ -189,7 +189,16 @@ class Action(App):
     # pylint: disable=too-many-instance-attributes
     """:explore"""
 
-    KEGEX = r"^e(?:xplore)?(\s(?P<playbook>\S+))?(\s(?P<params>.*))?$"
+    KEGEX = r"""
+            (?x)
+            ^
+            (?P<explore>e(?:xplore)?
+            (\s(?P<playbook>\S+))?
+            (\s(?P<params>.*))?)
+            |
+            (?P<load>l(?:oad)?
+            \s(?P<artifact>\S+))
+            $"""
 
     def __init__(self):
         super().__init__()
@@ -200,11 +209,12 @@ class Action(App):
         self._calling_app: App
         self._logger = logging.getLogger()
         self._parser_error: str
+        self._subaction_type: str
 
         self._msg_from_plays = (None, None)
         self._queue = Queue()
         self.runner = None
-        self._runner_finished = None
+        self._runner_finished: bool
         self._auto_scroll = False
 
         self._plays = Step(
@@ -223,6 +233,8 @@ class Action(App):
 
     def playbook(self, args: Namespace) -> None:
         """Run in oldschool mode, just stdout"""
+        self._subaction_type = "playbook"
+        self._logger.debug("subaction type is %s", self._subaction_type)
         self.args = args
         self._run_runner()
         while True:
@@ -242,12 +254,64 @@ class Action(App):
         :param app: The app instance
         :type app: App
         """
-        self._logger.debug("explorer requested")
         self._calling_app = app
         self._interaction = interaction
 
-        playbook = interaction.action.match.groupdict().get("playbook")
-        params = interaction.action.match.groupdict().get("params")
+        if interaction.action.match.groupdict()["explore"]:
+            self._subaction_type = "explore"
+            self._logger.debug("subaction type is %s", self._subaction_type)
+            initialized = self._init_explore()
+        elif interaction.action.match.groupdict()["load"]:
+            self._subaction_type = "load"
+            self._logger.debug("subaction type is %s", self._subaction_type)
+            artifact_file = os.path.abspath(interaction.action.match.groupdict()["artifact"])
+            initialized = self._init_load(artifact_file)
+        else:
+            return None
+
+        if not initialized:
+            return None
+
+        # update the args to a unique name
+        self.args.app = self.name
+
+        self.steps.append(self._plays)
+        previous_scroll = interaction.ui.scroll()
+        interaction.ui.scroll(0)
+
+        while True:
+            self.update()
+
+            self._take_step()
+
+            if not self.steps:
+                # if we came from the cli
+                if self._calling_app.args.app in ("explore", "load"):
+                    self._logger.debug("called from cli addining original step to stack")
+                    self.steps.append(self._plays)
+                elif not self._runner_finished:
+                    self._logger.error("Can not step back while playbook in progress, :q! to exit")
+                    self.steps.append(self._plays)
+                else:
+                    self._logger.debug(
+                        "no steps remaining for %s returning to calling app", self.name
+                    )
+                    break
+
+            if self.steps.current.name == "quit":
+                if self.args.app == "load":
+                    return self.steps.current
+                done = self._prepare_to_quit(self.steps.current)
+                if done:
+                    return self.steps.current
+                self.steps.back_one()
+
+        interaction.ui.scroll(previous_scroll)
+        return None
+
+    def _init_explore(self) -> bool:
+        playbook = self._interaction.action.match.groupdict().get("playbook")
+        params = self._interaction.action.match.groupdict().get("params")
         if playbook:
             playbook = os.path.abspath(playbook)
             if params:
@@ -259,7 +323,7 @@ class Action(App):
                 if new_args:
                     self.args = new_args
                 else:
-                    return None
+                    return False
             else:
                 self.args = copy.copy(self._calling_app.args)
                 self.args.playbook = playbook
@@ -268,39 +332,41 @@ class Action(App):
                 )
         else:
             self._logger.debug("Using original cli commands")
-            self.args = self._calling_app.args
-
+            self.args = copy.copy(self._calling_app.args)
         self._run_runner()
-        self.steps.append(self._plays)
+        return True
 
-        previous_scroll = interaction.ui.scroll()
-        interaction.ui.scroll(0)
+    def _init_load(self, artifact_file: str) -> bool:
+        self._logger.debug("Starting load artifact request")
 
-        while True:
-            self._calling_app.update()
-            self.update()
+        try:
+            with open(artifact_file) as json_file:
+                data = json.load(json_file)
+        except json.JSONDecodeError as exc:
+            self._logger.debug("json decode error: %s", str(exc))
+            self._logger.debug("tried: %s", data)
+            self._logger.error("Unable to parse artifact file")
+            return False
 
-            self._take_step()
+        if (version := data.get("version", "")).startswith("1."):
+            try:
+                self._plays.value = data["plays"]
+                self._interaction.ui.update_status(data["status"], data["status_color"])
+                self.stdout = data["stdout"]
+            except KeyError as exc:
+                self._logger.debug("missing keys from artifact file")
+                self._logger.debug("error was: %s", str(exc))
+                return False
+        else:
+            self._logger.error(
+                "Incompatible artifact version, got '%s', compatible = '1.y.z'", version
+            )
+            return False
 
-            if self.steps.current.name == "quit":
-                if self.args.app == "load":
-                    return self.steps.current
-                done = self._prepare_to_quit(self.steps.current)
-                if done:
-                    return self.steps.current
-                self.steps.back_one()
-
-            if not self.steps:
-                if self._calling_app.args.app == self.name:
-                    self.steps.append(self._plays)
-                elif not self._runner_finished:
-                    self._logger.error("Can not step back while playbook in progress, :q! to exit")
-                    self.steps.append(self._plays)
-                else:
-                    break
-
-        interaction.ui.scroll(previous_scroll)
-        return None
+        self.args = copy.copy(self._calling_app.args)
+        self._runner_finished = True
+        self._logger.debug("Completed load artifact request")
+        return True
 
     def _take_step(self) -> None:
         if isinstance(self.steps.current, Interaction):
@@ -386,11 +452,10 @@ class Action(App):
 
     def _run_runner(self) -> None:
         """ spin up runner """
-        self._logger.debug("Starting playbook run request")
         self.runner = PlaybookRunner(args=self.args, queue=self._queue)
         self.runner.run()
         self._runner_finished = False
-        self._logger.debug("Completed playbook run request")
+        self._logger.debug("runner requested to start")
 
     def _dequeue(self) -> None:
         """Drain the runner queue"""
@@ -400,7 +465,7 @@ class Action(App):
             self._handle_message(message)
             drain_count += 1
         if drain_count:
-            self._logger.debug("Drained %s ansible-runner events", drain_count)
+            self._logger.debug("Drained %s events", drain_count)
 
     def _handle_message(self, message: dict) -> None:
         # pylint: disable=too-many-branches
@@ -424,16 +489,13 @@ class Action(App):
 
         if event == "playbook_on_play_start":
             play = message["event_data"]
-            play["play name"] = play["name"]
-            del play["name"]
+            play["__play_name"] = play["name"]
             play["tasks"] = []
             self._plays.value.append(play)
 
         if event.startswith("runner_on_"):
             runner_event = event.split("_")[2]
             task = message["event_data"]
-            task["task action"] = task["task_action"]
-            del task["task_action"]
             play_id = next(
                 idx for idx, p in enumerate(self._plays.value) if p["uuid"] == task["play_uuid"]
             )
@@ -442,10 +504,9 @@ class Action(App):
                     result = "ignored"
                 else:
                     result = runner_event
-                task["result"] = result.upper()
-                task["changed"] = task.get("res", {}).get("changed", False)
-                task["_duration"] = task["duration"]
-                task["duration"] = human_time(seconds=round(task["duration"], 2))
+                task["__result"] = result.upper()
+                task["__changed"] = task.get("res", {}).get("changed", False)
+                task["__duration"] = human_time(seconds=round(task["duration"], 2))
                 for idx, play_task in enumerate(self._plays.value[play_id]["tasks"]):
                     if task["task_uuid"] == play_task["task_uuid"]:
                         if task["host"] == play_task["host"]:
@@ -454,10 +515,13 @@ class Action(App):
                 self._plays.value[play_id]["tasks"][task_id].update(task)
 
             elif runner_event == "start":
-                task["result"] = "IN PROGRESS"
-                task["changed"] = "unknown"
-                task["duration"] = None
-                task["number"] = len(self._plays.value[play_id]["tasks"])
+                task["__host"] = task["host"]
+                task["__result"] = "IN_PROGRESS"
+                task["__changed"] = "unknown"
+                task["__duration"] = None
+                task["__number"] = len(self._plays.value[play_id]["tasks"])
+                task["__task"] = task["task"]
+                task["__task_action"] = task["task_action"]
                 self._plays.value[play_id]["tasks"].append(task)
 
     def _play_stats(self) -> None:
@@ -465,26 +529,26 @@ class Action(App):
         on it's tasks
         """
         for idx, play in enumerate(self._plays.value):
-            total = ["ok", "skipped", "failed", "unreachable", "ignored", "in progress"]
+            total = ["__ok", "__skipped", "__failed", "__unreachable", "__ignored", "__in_progress"]
             self._plays.value[idx].update(
                 {
-                    tot: len([t for t in play["tasks"] if t["result"].lower() == tot])
+                    tot: len([t for t in play["tasks"] if t["__result"].lower() == tot[2:]])
                     for tot in total
                 }
             )
-            self._plays.value[idx]["changed"] = len(
-                [t for t in play["tasks"] if t["changed"] is True]
+            self._plays.value[idx]["__changed"] = len(
+                [t for t in play["tasks"] if t["__changed"] is True]
             )
             task_count = len(play["tasks"])
-            self._plays.value[idx]["task count"] = task_count
-            completed = task_count - self._plays.value[idx]["in progress"]
+            self._plays.value[idx]["__task_count"] = task_count
+            completed = task_count - self._plays.value[idx]["__in_progress"]
             if completed:
                 new = round((completed / task_count * 100))
-                current = self._plays.value[idx].get("_pcomplete", 0)
-                self._plays.value[idx]["_pcomplete"] = max(new, current)
-                self._plays.value[idx]["% completed"] = str(max(new, current)) + "%"
+                current = self._plays.value[idx].get("__pcomplete", 0)
+                self._plays.value[idx]["__pcomplete"] = max(new, current)
+                self._plays.value[idx]["__% completed"] = str(max(new, current)) + "%"
             else:
-                self._plays.value[idx]["% completed"] = "0%"
+                self._plays.value[idx]["__% completed"] = "0%"
 
     def _prepare_to_quit(self, interaction: Interaction) -> Union[bool, None]:
         """Looks like we're headed out of here
@@ -526,6 +590,10 @@ class Action(App):
 
     def update(self) -> None:
         """Drain the queue, set the status and write the artifact if needed"""
+
+        # let the calling app update as well
+        self._calling_app.update()
+
         if self.runner:
             self._dequeue()
             self._set_status()
@@ -568,6 +636,7 @@ class Action(App):
         status, status_color = self._get_status()
         with open(filename, "w") as outfile:
             artifact = {
+                "version": "1.0.0",
                 "plays": self._plays.value,
                 "stdout": self.stdout,
                 "status": status,
@@ -575,3 +644,22 @@ class Action(App):
             }
             json.dump(artifact, outfile, indent=4)
         self._logger.info("Saved artifact as %s", filename)
+
+    def rerun(self) -> None:
+        if self.runner.finished:
+            if self._subaction_type == "explore":
+                self._plays.value = []
+                self._plays.index = None
+                self._msg_from_plays = (None, None)
+                self._queue.queue.clear()
+                self.stdout = []
+                self._run_runner()
+                self.steps.clear()
+                self.steps.append(self._plays)
+                self._logger.debug("Playbook rerun triggered")
+                return
+            self._logger.error("No rerun available when artifact is loaded")
+            return
+        else:
+            self._logger.warning("Playbook rerun ignored, current playbook not complete")
+            return

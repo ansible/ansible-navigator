@@ -157,14 +157,14 @@ class Action(App):
             self._calling_app.update()
             self._take_step()
 
-            if self.steps.current.name == "quit":
-                return self.steps.current
-
             if not self.steps:
                 if self.args.app == self.name:
                     self.steps.append(self._build_main_menu())
                 else:
                     break
+
+            if self.steps.current.name == "quit":
+                return self.steps.current
 
         interaction.ui.scroll(previous_scroll)
         interaction.ui.menu_filter(previous_filter)

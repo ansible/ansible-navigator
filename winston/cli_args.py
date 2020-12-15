@@ -190,9 +190,10 @@ class CliArgs:
     @staticmethod
     def _load_params(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "artifact",
+            "value",
             default=None,
             help="The file name of the artifact",
+            metavar="artifact",
             type=_abspath,
         )
         parser.set_defaults(requires_ansible=False)

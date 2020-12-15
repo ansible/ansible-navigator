@@ -1,4 +1,5 @@
 """ :rerun """
+import copy
 import logging
 from . import _actions as actions
 from ..app import App
@@ -29,4 +30,8 @@ class Action:
         :type app: App
         """
         self._logger.debug("rerun requested")
+        this = copy.copy(app.steps.current)
         app.rerun()
+        # ensure we are last on the stack
+        if app.steps.current != this:
+            app.steps.append(this)

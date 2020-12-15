@@ -39,6 +39,6 @@ class Action:
                 "Stepping back in %s from %s to %s", app.name, step.name, app.steps.current.name
             )
         else:
-            self._logger.debug("Stepping out of %s", app.name)
+            self._logger.debug("Return to %s, at last step", app.name)
 
         app.steps.append(this)  # put this back on
