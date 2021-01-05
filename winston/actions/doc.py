@@ -9,7 +9,7 @@ from distutils.spawn import find_executable
 from typing import Union
 from . import _actions as actions
 from ..app_public import AppPublic
-from ..ui import Interaction
+from ..ui_framework import Interaction
 
 
 @actions.register

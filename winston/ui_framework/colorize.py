@@ -11,8 +11,8 @@ import curses
 import functools
 
 from itertools import chain
-from .tm_tokenize.grammars import Grammars
-from .tm_tokenize.tokenize import tokenize
+from ..tm_tokenize.grammars import Grammars
+from ..tm_tokenize.tokenize import tokenize
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 

@@ -6,7 +6,7 @@ from typing import Tuple
 
 
 class CursesLinePart(NamedTuple):
-    """One chuck of a line of text"""
+    """One chunk of a line of text"""
 
     column: int
     string: str

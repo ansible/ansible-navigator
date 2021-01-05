@@ -1,8 +1,8 @@
 """ refresh"""
 import logging
 from . import _actions as actions
-from ..ui import Interaction
 from ..app_public import AppPublic
+from ..ui_framework import Interaction
 
 
 @actions.register

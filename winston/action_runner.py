@@ -6,8 +6,8 @@ from winston.actions import run as run_action
 
 from .app import App
 from .steps import Steps
-from .ui import Interaction
-from .ui import UserInterface
+from .ui_framework import Interaction
+from .ui_framework import UserInterface
 
 DEFAULT_REFRESH = 100
 

@@ -16,14 +16,14 @@ from typing import Union
 from . import run as run_action
 from . import _actions as actions
 
-
 from ..app import App
 from ..app_public import AppPublic
 
-from ..curses_defs import CursesLinePart
-from ..curses_defs import CursesLines
 from ..steps import Step
-from ..ui import Interaction
+
+from ..ui_framework import CursesLinePart
+from ..ui_framework import CursesLines
+from ..ui_framework import Interaction
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:

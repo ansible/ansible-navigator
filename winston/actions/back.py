@@ -4,7 +4,7 @@ import logging
 from . import _actions as actions
 from ..app_public import AppPublic
 from ..steps import Step
-from ..ui import Interaction
+from ..ui_framework import Interaction
 
 
 @actions.register
