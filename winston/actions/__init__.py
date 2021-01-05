@@ -2,7 +2,7 @@
 from typing import Callable
 from typing import Union
 from . import _actions as actions
-from ..ui import Interaction
+from ..ui_framework import Interaction
 from ..app_public import AppPublic
 
 names = actions.names_factory(__package__)

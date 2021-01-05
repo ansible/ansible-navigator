@@ -15,7 +15,7 @@ from xml.etree.ElementTree import Element
 
 from . import _actions as actions
 from ..app_public import AppPublic
-from ..ui import Interaction
+from ..ui_framework import Interaction
 
 
 class Blog(NamedTuple):

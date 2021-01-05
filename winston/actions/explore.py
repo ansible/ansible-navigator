@@ -23,10 +23,13 @@ from . import _actions as actions
 from ._runner import PlaybookRunner
 from ..app import App
 from ..app_public import AppPublic
-from ..curses_defs import CursesLinePart
-from ..curses_defs import CursesLines
+
 from ..steps import Step
-from ..ui import Interaction
+
+from ..ui_framework import CursesLinePart
+from ..ui_framework import CursesLines
+from ..ui_framework import Interaction
+
 from ..utils import check_for_ansible
 from ..utils import human_time
 from ..utils import set_ansible_envar

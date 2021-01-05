@@ -21,13 +21,18 @@ from typing import Pattern
 from typing import Tuple
 from typing import Union
 
+from .colorize import Colorize
+from .colorize import rgb_to_ansi  # , hex_to_rgb_curses
+
+
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
-from .colorize import Colorize, rgb_to_ansi, hex_to_rgb_curses
+
+from .curses_window import CursesWindow
 from .ui_one_line_input import OneLineInput
-from .utils import convert_percentages, distribute
-from .yaml import yaml, Dumper
+from ..utils import convert_percentages, distribute
+from ..yaml import yaml, Dumper
 
 
 STND_KEYS = {
@@ -39,28 +44,6 @@ STND_KEYS = {
 END_KEYS = {
     ":help": "help",
 }
-
-COLOR_MAP = {
-    "terminal.ansiBlack": 0,
-    "terminal.ansiRed": 1,
-    "terminal.ansiGreen": 2,
-    "terminal.ansiYellow": 3,
-    "terminal.ansiBlue": 4,
-    "terminal.ansiMagenta": 5,
-    "terminal.ansiCyan": 6,
-    "terminal.ansiWhite": 7,
-    "terminal.ansiBrightBlack": 8,
-    "terminal.ansiBrightRed": 9,
-    "terminal.ansiBrightGreen": 10,
-    "terminal.ansiBrightYellow": 11,
-    "terminal.ansiBrightBlue": 12,
-    "terminal.ansiBrightMagenta": 13,
-    "terminal.ansiBrightCyan": 14,
-    "terminal.ansiBrightWhite": 15,
-}
-
-
-DEFAULT_COLORS = "terminal_colors.json"
 
 
 class Action(NamedTuple):
@@ -113,7 +96,7 @@ class MenuItem(NamedTuple):
 MenuItems = Tuple[MenuItem, ...]
 
 
-class UserInterface:
+class UserInterface(CursesWindow):
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-arguments
@@ -140,10 +123,10 @@ class UserInterface:
         :param no_osc4: enable/disable osc4 terminal color change support
         :type no_osc4: str (enabled/disabled)
         """
+        super().__init__(no_osc4=no_osc4, share_dir=share_dir)
         self._color_menu_item: Callable[[int, str, Dict[str, Any]], int]
         self._colorizer = Colorize(share_dir=share_dir)
         self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
-        self._custom_colors_enabled = False
         self._default_colors = None
         self._default_pairs = None
         self._default_obj_serialization = "source.yaml"
@@ -153,8 +136,7 @@ class UserInterface:
         self._logger = logging.getLogger(__name__)
         self._menu_filter: Union[Pattern, None] = None
         self._menu_indicies: Tuple[int, ...] = tuple()
-        self._no_osc4 = no_osc4
-        self._number_colors = 0
+
         self._one_line_input = OneLineInput()
         self._pbar_width = pbar_width
         self._prefix_color = 8
@@ -162,7 +144,6 @@ class UserInterface:
         self._rgb_to_curses_color_idx: Dict[str, int] = {}
         self._screen_miny = screen_miny
         self._scroll = 0
-        self._theme_dir = os.path.join(share_dir, "themes")
         self._xform = self._default_obj_serialization
         self._status = ""
         self._status_color = 0
@@ -254,110 +235,6 @@ class UserInterface:
         )
         return res
 
-    @property
-    def _screen_w(self) -> int:
-        """return the screen width
-
-        :return: the current screen width
-        :rtype: int
-        """
-        return self._screen.getmaxyx()[1]
-
-    @property
-    def _screen_h(self):
-        """return the screen height, or notify if too small
-
-        :return: the current screen height
-        :rtype: int
-        """
-        while True:
-            if self._screen.getmaxyx()[0] >= self._screen_miny:
-                return self._screen.getmaxyx()[0] - 1
-            curses.flash()
-            curses.beep()
-            self._screen.refresh()
-
-    def _set_colors(self) -> None:
-        """Set the colors for curses"""
-        curses.use_default_colors()
-
-        self._logger.debug("curses.COLORS: %s", curses.COLORS)
-        self._logger.debug("curses.can_change_color: %s", curses.can_change_color())
-        self._logger.debug("self._no_osc4: %s", self._no_osc4)
-        if curses.COLORS > 16:
-            if self._no_osc4 is True:
-                self._custom_colors_enabled = False
-            else:
-                self._custom_colors_enabled = curses.can_change_color()
-        else:
-            self._custom_colors_enabled = False
-        self._logger.debug("_custom_colors_enabled: %s", self._custom_colors_enabled)
-
-        if self._custom_colors_enabled:
-            with open(os.path.join(self._theme_dir, DEFAULT_COLORS)) as data_file:
-                colors = json.load(data_file)
-
-            for color_name, color_hex in colors.items():
-                idx = COLOR_MAP[color_name]
-                color = hex_to_rgb_curses(color_hex)
-                curses.init_color(idx, *color)
-            self._logger.debug("Custom colors set")
-        else:
-            self._logger.debug("Using terminal defaults")
-
-        if self._custom_colors_enabled:
-            # set to 16, since 17+ are used on demand for RGBs
-            self._number_colors = 16
-        else:
-            # Stick to the define terminal colors, RGB will be mapped to these
-            self._number_colors = curses.COLORS
-
-        for i in range(0, self._number_colors):
-            curses.init_pair(i, i, -1)
-
-    def _add_line(self, lineno: int, line: CursesLine, prefix: Union[str, None] = None) -> None:
-        """add a line to the screen
-
-        :param lineno: the line number
-        :type lineno: int
-        :param line: The line to add
-        :type line: CursesLine
-        :param prefix: The prefix for the line
-        :type prefix: str or None
-        """
-        if prefix:
-            self._screen.addstr(
-                lineno, 0, prefix, curses.color_pair(self._prefix_color % self._number_colors)
-            )
-        if line:
-            self._screen.move(lineno, 0)
-            for line_part in line:
-                column = line_part.column + len(prefix or "")
-                if column <= self._screen_w:
-                    text = line_part.string[0 : self._screen_w - column + 1]
-                    try:
-                        self._screen.addstr(
-                            lineno, column, text, line_part.color | line_part.decoration
-                        )
-                    except curses.error:
-                        # curses error at last column but I don't care
-                        # because it still draws it
-                        # https://stackoverflow.com/questions/10877469/
-                        # ncurses-setting-last-character-on-screen-without-scrolling-enabled
-                        if lineno == self._screen_h and column + len(text) == self._screen_w:
-                            pass
-                        else:
-                            self._logger.debug("curses error")
-                            self._logger.debug("screen_h: %s, lineno: %s", self._screen_h, lineno)
-                            self._logger.debug(
-                                "screen_w: %s, column: %s text: %s, lentext: %s, end_col: %s",
-                                self._screen_w,
-                                column,
-                                text,
-                                len(text),
-                                column + len(text),
-                            )
-
     def _footer(self, key_dict: dict) -> CursesLine:
         """build a footer from the key dict
         spread the columns out evenly
@@ -439,7 +316,11 @@ class UserInterface:
                         color=color,
                         decoration=0,
                     )
-                    self._add_line(min(lineno, max_lines + len_heading), tuple([line_part]))
+                    self._add_line(
+                        window=self._screen,
+                        lineno=min(lineno, max_lines + len_heading),
+                        line=tuple([line_part]),
+                    )
 
     def _get_input_line(self) -> str:
         """get one line of input from the user
@@ -449,7 +330,7 @@ class UserInterface:
         """
         self.disable_refresh()
         clp = CursesLinePart(column=0, string=":", color=curses.color_pair(0), decoration=0)
-        self._add_line(self._screen_h, tuple([clp]))
+        self._add_line(window=self._screen, lineno=self._screen_h, line=tuple([clp]))
         self._screen.refresh()
         curses.curs_set(1)
         input_window = curses.newwin(1, self._screen_w, self._screen_h, 1)
@@ -495,15 +376,17 @@ class UserInterface:
             self._screen.erase()
             prefix = " " * (index_width + len("|")) if indent_heading else None
             for idx, line in enumerate(display_heading):
-                self._add_line(idx, line, prefix=prefix)
-            self._add_line(self._screen_h, footer)
+                self._add_line(window=self._screen, lineno=idx, line=line, prefix=prefix)
+            self._add_line(window=self._screen, lineno=self._screen_h, line=footer)
 
             body_start = self.scroll() - max_lines
             body_stop = self.scroll()
             for idx, line in enumerate(lines[body_start:body_stop]):
                 line_index = body_start + idx
                 prefix = "{idx}\u2502".format(idx=str(line_index).rjust(index_width))
-                self._add_line(idx + len(display_heading), line, prefix=prefix)
+                self._add_line(
+                    window=self._screen, lineno=idx + len(display_heading), line=line, prefix=prefix
+                )
 
             self._scroll_bar(
                 max_lines=max_lines,

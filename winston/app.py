@@ -10,7 +10,7 @@ from winston.actions import kegexes
 
 from .app_public import AppPublic
 from .steps import Steps
-from .ui import Action
+from .ui_framework.ui import Action
 
 
 class App:

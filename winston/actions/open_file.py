@@ -11,13 +11,15 @@ from typing import Dict
 from typing import List
 from typing import Match
 from typing import Tuple
+from typing import Union
 
 from . import _actions as actions
 from ..app_public import AppPublic
-from ..ui import Content
-from ..ui import Interaction
-from ..ui import Menu
-from ..ui import Union
+
+from ..ui_framework import Content
+from ..ui_framework import Interaction
+from ..ui_framework import Menu
+
 from ..utils import templar
 from ..yaml import yaml, Dumper
 

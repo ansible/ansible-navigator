@@ -6,7 +6,7 @@ import re
 
 from . import _actions as actions
 from ..app_public import AppPublic
-from ..ui import Interaction
+from ..ui_framework import Interaction
 from ..yaml import yaml, Dumper
 
 
