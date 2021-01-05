@@ -65,12 +65,13 @@ class FromPresenter(CursesWindow):
         self._prompt_end = max([len(form_field.full_prompt) for form_field in self._form.fields])
         self._input_start = self._prompt_end + len(self._seperator)
 
-        widths = [len(self._form.title), FieldValidators().__max_width__() + self._input_start]
+        widths = []
         for field in self._form.fields:
             if hasattr(field, "value") and field.value is not unknown:
                 widths.append(len(str(field.value)) + self._input_start)
             if hasattr(field, "options"):
                 widths.extend((len(option.text) + self._input_start for option in field.options))
+            widths.append(len(field.validator(hint=True)) + self._input_start)
         self._form_width = max(widths) + BUTTON_SPACE
 
         height = 2  # title, hline

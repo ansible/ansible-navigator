@@ -21,14 +21,6 @@ class Validation(NamedTuple):
 class FieldValidators:
     """a box in which validators are put"""
 
-    def __max_width__(self):
-        method_list = [
-            func
-            for func in dir(self)
-            if not func.startswith("__") and callable(getattr(self, func))
-        ]
-        return max([len(getattr(self, func)(hint=True)) for func in method_list])
-
     @staticmethod
     def all_true(response: List = [], hint: bool = False) -> Union[Validation, str]:
         # pylint: disable=dangerous-default-value
