@@ -12,6 +12,7 @@ Some things you can try from here:
 - `:open`                                   Open current page in the IDE
 - `:quit`                                   Quit the application
 - `:redhat`                                 See the latest from Red Hat
+- `:sample_form`                            Prototype curses form rendered
 
 happy automating,
 

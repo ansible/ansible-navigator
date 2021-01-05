@@ -40,10 +40,10 @@ class FromPresenter(CursesWindow):
 
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-few-public-methods
-    def __init__(self, form):
+    def __init__(self, form, screen):
         super().__init__()
-        self._init_curses()
         self._form = form
+        self._screen = screen
         self._line_number: int = 0
         self._prompt_end: int = 0
         self._input_start: int = 0
@@ -191,7 +191,7 @@ class FromPresenter(CursesWindow):
         cl_default = CursesLinePart(
             prompt_start + len(form_field.prompt),
             str(form_field.formatted_default),
-            curses.color_pair(6),
+            curses.color_pair(4),
             0,
         )
         cl_seperator = CursesLinePart(
@@ -204,16 +204,17 @@ class FromPresenter(CursesWindow):
         clp = CursesLinePart(0, self._form.title.upper(), curses.color_pair(0), 0)
         return (clp,)
 
-    def present(self, _stdscr: Window) -> "Form":
+    def present(self) -> "Form":
         """present the form to the user"""
+        self._screen.clear()
+        self._screen.refresh()
         idx = 0
         pad = curses.newpad(MAX_FORM_H, MAX_FORM_W)
         shared_input_line_cache: List[str] = []
         for form_field in self._form.fields:
-            form_field.window_handler = form_field.window_handler()
+            form_field.window_handler = form_field.window_handler(screen=self._screen)
             if isinstance(form_field.window_handler, FormHandlerText):
                 form_field.window_handler.input_line_cache = shared_input_line_cache
-        curses.curs_set(0)
 
         while True:
             self._dimensions()

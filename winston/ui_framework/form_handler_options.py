@@ -21,6 +21,10 @@ if TYPE_CHECKING:
 class FormHandlerOptions(CursesWindow):
     """handle form checkbox field"""
 
+    def __init__(self, screen):
+        super().__init__()
+        self._screen = screen
+
     def populate(self, form_field, active):
         """populate the window with the checkboxes"""
         for idx, option in enumerate(form_field.options):
@@ -39,7 +43,6 @@ class FormHandlerOptions(CursesWindow):
 
         """handle the check box field"""
         form_field = form_fields[idx]
-        curses.curs_set(0)
         active = 0
 
         while True:
@@ -73,5 +76,4 @@ class FormHandlerOptions(CursesWindow):
             elif char in [curses_ascii.NL, curses_ascii.CR]:
                 break
 
-        curses.curs_set(1)
         return form_field, char

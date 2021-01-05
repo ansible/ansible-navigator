@@ -18,10 +18,11 @@ if TYPE_CHECKING:
 class FormHandlerButton(CursesWindow):
     """handle form button"""
 
-    def __init__(self):
+    def __init__(self, screen):
         super().__init__()
         self._form_field = None
         self._form_fields = None
+        self._screen = screen
 
     def populate(self):
         """populate the window with the checkboxes"""
@@ -37,7 +38,6 @@ class FormHandlerButton(CursesWindow):
 
     def handle(self, idx, form_fields: List) -> Tuple["FieldButton", int]:
         """handle the check box field"""
-        curses.curs_set(0)
         self._form_fields = form_fields
         self._form_field = form_fields[idx]
         self.populate()
@@ -52,6 +52,4 @@ class FormHandlerButton(CursesWindow):
                 if not self._form_field.disabled:
                     self._form_field.pressed = True
                 break
-
-        curses.curs_set(1)
         return self._form_field, char

@@ -52,14 +52,15 @@ class CursesWindow:
 
     """abstration for a curses window"""
 
-    def __init__(self, no_osc4: bool = False, share_dir: str = ""):
+    def __init__(self):
         self._logger = logging.getLogger(__name__)
+
         self._screen: Window
         self.win: Window
         self._screen_miny = 3
         self._prefix_color = 8
-        self._no_osc4 = no_osc4
-        self._theme_dir = os.path.join(share_dir, "themes")
+        self._no_osc4: bool
+        self._theme_dir: str
         self._number_colors = 0
         self._custom_colors_enabled = False
 

@@ -15,13 +15,14 @@ from .sentinals import unknown
 class FormHandlerText(CursesWindow, Textbox):
     """Get one line of text input"""
 
-    def __init__(self):
+    def __init__(self, screen):
         super().__init__()
         self.input_line_cache = []
         self.input_line_pointer = 0
         self._arrowing = False
         self.insert_mode = False
         self.stripspaces = True
+        self._screen = screen
 
     def _paint_from_line_cache(self) -> None:
         """put the text from the line cache in the text input window"""

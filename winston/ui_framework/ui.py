@@ -30,6 +30,10 @@ from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
 
 from .curses_window import CursesWindow
+from .curses_window import Window
+
+from .form import Form
+
 from .ui_one_line_input import OneLineInput
 from ..utils import convert_percentages, distribute
 from ..yaml import yaml, Dumper
@@ -123,7 +127,7 @@ class UserInterface(CursesWindow):
         :param no_osc4: enable/disable osc4 terminal color change support
         :type no_osc4: str (enabled/disabled)
         """
-        super().__init__(no_osc4=no_osc4, share_dir=share_dir)
+        super().__init__()
         self._color_menu_item: Callable[[int, str, Dict[str, Any]], int]
         self._colorizer = Colorize(share_dir=share_dir)
         self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
@@ -136,6 +140,7 @@ class UserInterface(CursesWindow):
         self._logger = logging.getLogger(__name__)
         self._menu_filter: Union[Pattern, None] = None
         self._menu_indicies: Tuple[int, ...] = tuple()
+        self._no_osc4 = no_osc4
 
         self._one_line_input = OneLineInput()
         self._pbar_width = pbar_width
@@ -144,13 +149,14 @@ class UserInterface(CursesWindow):
         self._rgb_to_curses_color_idx: Dict[str, int] = {}
         self._screen_miny = screen_miny
         self._scroll = 0
+        self._theme_dir = os.path.join(share_dir, "themes")
         self._xform = self._default_obj_serialization
         self._status = ""
         self._status_color = 0
 
         curses.curs_set(0)
         self._set_colors()
-        self._screen = curses.initscr()
+        self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
 
     def disable_refresh(self) -> None:
@@ -736,6 +742,10 @@ class UserInterface(CursesWindow):
         lines = self._serialize_color(filtered_obj)
         return heading, lines
 
+    def _show_form(self, obj: Form) -> Form:
+        res = obj.present(screen=self._screen)
+        return res
+
     def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
@@ -918,7 +928,7 @@ class UserInterface(CursesWindow):
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: 0,
         content_heading: Callable = lambda *args, **kwargs: None,
-    ) -> Interaction:
+    ) -> Union[Interaction, Form]:
         """Show something on the screen
 
         :param obj: The inbound object
@@ -939,6 +949,11 @@ class UserInterface(CursesWindow):
         self._filter_content_keys = filter_content_keys
         columns = columns or []
         self.xform(xform or self._default_obj_serialization)
+
+        if isinstance(obj, Form):
+            form_result = self._show_form(obj)
+            return form_result
+
         if index is not None and isinstance(obj, list):
             result = self._show_obj_from_list(obj, index, await_input)
         elif columns and isinstance(obj, list):

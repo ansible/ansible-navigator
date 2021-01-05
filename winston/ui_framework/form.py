@@ -21,13 +21,13 @@ class Form:
     title = ""
     _dict: Dict = field(default_factory=dict)
 
-    def present(self, stdscrn):
+    def present(self, screen):
         """present the form the to user and return the results"""
         self.fields.append(
             FieldButton(name="submit", text="Submit", validator=FieldValidators.all_true, color=10)
         )
         self.fields.append(FieldButton(name="cancel", text="Cancel", color=9))
-        FromPresenter(form=self).present(stdscrn)
+        FromPresenter(form=self, screen=screen).present()
         self.submitted = self.fields[-2].pressed
         self.cancelled = self.fields[-1].pressed
         return self
