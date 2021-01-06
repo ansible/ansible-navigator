@@ -9,6 +9,8 @@ import logging
 import os
 import re
 
+from curses import ascii as curses_ascii
+
 from functools import lru_cache
 from math import ceil, floor
 from typing import Any
@@ -20,6 +22,7 @@ from typing import NamedTuple
 from typing import Pattern
 from typing import Tuple
 from typing import Union
+from winston.ui_framework.field_text import FieldText
 
 from .colorize import Colorize
 from .colorize import rgb_to_ansi  # , hex_to_rgb_curses
@@ -34,7 +37,9 @@ from .curses_window import Window
 
 from .form import Form
 
-from .ui_one_line_input import OneLineInput
+from .field_text import FieldText
+from .form_handler_text import FormHandlerText
+
 from ..utils import convert_percentages, distribute
 from ..yaml import yaml, Dumper
 
@@ -142,7 +147,6 @@ class UserInterface(CursesWindow):
         self._menu_indicies: Tuple[int, ...] = tuple()
         self._no_osc4 = no_osc4
 
-        self._one_line_input = OneLineInput()
         self._pbar_width = pbar_width
         self._prefix_color = 8
         self._refresh = [refresh]
@@ -158,6 +162,7 @@ class UserInterface(CursesWindow):
         self._set_colors()
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
+        self._one_line_input = FormHandlerText(screen=self._screen)
 
     def disable_refresh(self) -> None:
         """Disable the screen refresh"""
@@ -335,13 +340,20 @@ class UserInterface(CursesWindow):
         :rtype: str
         """
         self.disable_refresh()
+        form_field = FieldText(name="one_line", prompt="")
         clp = CursesLinePart(column=0, string=":", color=curses.color_pair(0), decoration=0)
         self._add_line(window=self._screen, lineno=self._screen_h, line=tuple([clp]))
         self._screen.refresh()
-        curses.curs_set(1)
-        input_window = curses.newwin(1, self._screen_w, self._screen_h, 1)
-        self._one_line_input.init_screen(input_window, insert_mode=True)
-        user_input = self._one_line_input.edit()
+        self._one_line_input.win = curses.newwin(1, self._screen_w, self._screen_h, 1)
+        self._one_line_input.win.keypad(True)
+        while True:
+            user_input, char = self._one_line_input.handle(0, [form_field])
+            if char == curses_ascii.ESC:
+                break
+            if char in (curses.KEY_ENTER, 10, 13):
+                break
+            if char == curses.KEY_RESIZE:
+                break
         self.restore_refresh()
         curses.curs_set(0)
         return user_input
