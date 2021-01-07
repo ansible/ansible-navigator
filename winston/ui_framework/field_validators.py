@@ -34,7 +34,7 @@ class FieldValidators:
         return Validation(value=value, error_msg=msg)
 
     @staticmethod
-    def file_path(text: str = "", hint=False) -> Union[Validation, str]:
+    def valid_file_path(text: str = "", hint=False) -> Union[Validation, str]:
         """validate that a file path is a real file"""
         msg = "Please enter a valid file path"
         if hint:
@@ -44,6 +44,37 @@ class FieldValidators:
             msg = ""
         else:
             value = text
+        return Validation(value=value, error_msg=msg)
+
+    @staticmethod
+    def valid_path(text: str = "", hint=False) -> Union[Validation, str]:
+        """validate that a path is real"""
+        msg = "Please enter a valid file or directory path"
+        if hint:
+            return msg
+        value = os.path.abspath(os.path.expanduser(text))
+        if os.path.exists(value):
+            msg = ""
+        else:
+            value = text
+        return Validation(value=value, error_msg=msg)
+
+    @staticmethod
+    def valid_path_or_none(text: str = "", hint=False) -> Union[Validation, str]:
+        """validate that a path is real"""
+        msg = "Please enter a valid path or leave blank"
+        if hint:
+            return msg
+
+        if text == "":
+            msg = ""
+            value = text
+        else:
+            value = os.path.abspath(os.path.expanduser(text))
+            if os.path.exists(value):
+                msg = ""
+            else:
+                value = text
         return Validation(value=value, error_msg=msg)
 
     @staticmethod

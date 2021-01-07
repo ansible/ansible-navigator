@@ -24,6 +24,7 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import dict_to_form
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
@@ -109,7 +110,7 @@ class Action(App):
         self._host_vars: Dict[str, Dict[Any, Any]]
         self.name = "inventory"
         self._interaction: Interaction
-        self._inventories = List[str]
+        self._inventories: List[str] = []
         self._inventories_mtime: Tuple[float, ...]
 
     @property
@@ -151,13 +152,19 @@ class Action(App):
         self.stdout = app.stdout
         self._interaction = interaction
 
-        self._generate_inventory()
+        self._build_inventory_list()
+        if not self._inventories:
+            return None
 
+        self._collect_inventory_details()
         if not self._inventory:
             return None
 
         if self._inventory_error:
-            self._interaction.ui.show(self._inventory_error, xform="source.ansi")
+            while True:
+                interaction = self._interaction.ui.show(self._inventory_error, xform="source.ansi")
+                if interaction.name != "refresh":
+                    break
             return None
 
         self.steps.append(self._build_main_menu())
@@ -180,8 +187,12 @@ class Action(App):
             self._set_inventories_mtime()
             if current_mtime != self._inventories_mtime:
                 self._logger.debug("inventory changed")
-                self._generate_inventory()
 
+                self._build_inventory_list()
+                if not self._inventories:
+                    break
+
+                self._collect_inventory_details()
                 if not self._inventory:
                     break
 
@@ -198,6 +209,7 @@ class Action(App):
 
     def _take_step(self) -> None:
 
+        result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(
                 self.steps.current.name,
@@ -221,6 +233,7 @@ class Action(App):
                     content_heading=content_heading,
                     filter_content_keys=filter_content_keys,
                 )
+
         if result is None:
             self.steps.back_one()
         else:
@@ -344,19 +357,61 @@ class Action(App):
             return self._build_host_content()
         raise TypeError("unknown step type")
 
-    def _generate_inventory(self) -> None:
+    def _build_inventory_list(self) -> None:
         if inventories := self._interaction.action.match.groupdict()["inventories"]:
-            inventories = [os.path.abspath(i) for i in inventories.split(",")]
+            inventories = tuple(
+                os.path.abspath(os.path.expanduser(i.strip())) for i in inventories.split(",")
+            )
             self._logger.debug("inventories set by user: %s", inventories)
         elif hasattr(self.args, "inventory") and (inventories := self.args.inventory):
             self._logger.info("no inventory provided, using inventory from args")
         else:
+            inventories = []
             self._logger.error("no inventory set at command line or requested")
-            return
+
+        if [os.path.exists(inv) for inv in inventories] != [True]:
+            FType = Dict[str, Any]
+            form_dict: FType = {
+                "title": "One or more inventory sources could not be found",
+                "fields": [],
+            }
+            if inventories:
+                for idx, inv in enumerate(inventories):
+                    form_field = {
+                        "name": f"inv_{idx}",
+                        "pre_populate": inv,
+                        "prompt": f"{idx}. Inventory source",
+                        "type": "text_input",
+                        "validator": {"name": "valid_path_or_none"},
+                    }
+                    form_dict["fields"].append(form_field)
+            else:
+                form_field = {
+                    "name": "inv_0",
+                    "prompt": "0. Inventory source",
+                    "type": "text_input",
+                    "validator": {"name": "valid_path_or_none"},
+                }
+                form_dict["fields"].append(form_field)
+
+            form = dict_to_form(form_dict)
+            self._interaction.ui.show(form)
+
+            if form.cancelled:
+                return
+
+            inventories = tuple(
+                field.value
+                for field in form.fields
+                if hasattr(field, "value") and field.value != ""
+            )
+            if not inventories:
+                return
 
         self._inventories = inventories
         self._set_inventories_mtime()
 
+    def _collect_inventory_details(self) -> None:
         if self.args.execution_environment:
             self._logger.debug("trying execution environment")
             self._try_ee()
