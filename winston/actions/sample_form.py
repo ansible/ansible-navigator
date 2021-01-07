@@ -77,7 +77,7 @@ form:
     type: text_input
     prompt: Provide a valid file path
     validator:
-      name: file_path
+      name: valid_file_path
     pre_populate: /etc/hostname
 """
 
