@@ -3,6 +3,11 @@
 import yaml
 
 try:
-    from yaml import CDumper as Dumper  # type: ignore
+    from yaml import CDumper as Dumper
 except ImportError:
     from yaml import Dumper  # type: ignore
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader  # type: ignore

@@ -4,6 +4,7 @@
 Some things you can try from here:
 - `:blog`                                   Check out the recent Ansible blog entries
 - `:bullhorn`                               Catch up on the latest bullhorn issues
+- `:config`                                 Explore the current ansible configuration
 - `:doc <plugin>`                           Show a plugin doc
 - `:explore <playbook> -i <inventory>`      Run a playbook with explore
 - `:help`                                   Show the main help page
