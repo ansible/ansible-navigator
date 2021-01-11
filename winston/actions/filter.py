@@ -27,7 +27,6 @@ class Action:
         :type app: App
         """
         self._logger.debug("filter requested")
-        interaction.ui.scroll(0)
         menu_filter = interaction.action.match.groupdict()["regex"]
         interaction.ui.menu_filter(menu_filter)
         self._logger.debug("requested filter set to %s", menu_filter)

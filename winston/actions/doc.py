@@ -41,8 +41,8 @@ class Action:
             self._logger.debug("plugin set by user: %s", plugin)
         elif interaction.content:
             try:
-                plugin = interaction.content.showing["task action"]
-                self._logger.debug("plugin derived from 'task action': %s", plugin)
+                plugin = interaction.content.showing["task_action"]
+                self._logger.debug("plugin derived from 'task_action': %s", plugin)
             except (KeyError, AttributeError):
                 self._logger.info("no plugin provided or found in content")
                 return None

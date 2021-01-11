@@ -902,6 +902,8 @@ class UserInterface(CursesWindow):
                     for idx, mi in enumerate(menu_items)
                     if self._obj_match_filter(mi.obj, columns)
                 )
+                if self._scroll > len(self._menu_indicies):
+                    self._scroll = len(self._menu_indicies)
             else:
                 self._menu_indicies = tuple(range(len(menu_items)))
 
