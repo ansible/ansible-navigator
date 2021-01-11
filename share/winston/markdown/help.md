@@ -6,6 +6,7 @@ esc                                     Go back
 arrow up, arrow down                    Scroll up/down
 :blog                                   Check out the recent Ansible blog entries
 :bullhorn                               Catch up on the latest bullhorn issues
+:config                                 Explore the current ansible configuration
 :d, :doc <plugin>                       Show a plugin doc
 :e, :explore <playbook> -i <inventory>  Run a playbook using explore
 :f, :filter <re>                        Filter page lines using a regex
