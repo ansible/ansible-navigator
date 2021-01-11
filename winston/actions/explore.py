@@ -15,6 +15,7 @@ from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Union
+from winston.ui_framework.form_utils import form_to_dict
 
 
 from . import run as run_action
@@ -29,6 +30,8 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import dict_to_form
+
 
 from ..utils import check_for_ansible
 from ..utils import human_time
@@ -282,7 +285,9 @@ class Action(App):
         elif interaction.action.match.groupdict()["load"]:
             self._subaction_type = "load"
             self._logger.debug("subaction type is %s", self._subaction_type)
-            artifact_file = os.path.abspath(interaction.action.match.groupdict()["artifact"])
+            artifact_file = os.path.abspath(
+                os.path.expanduser(interaction.action.match.groupdict()["artifact"])
+            )
             initialized = self._init_load(artifact_file)
         else:
             return None
@@ -330,36 +335,46 @@ class Action(App):
         return None
 
     def _init_explore(self) -> bool:
-        """in the case of :explore, parse the user input
+        """in the case of :explore, parse the user input"""
+        playbook = ""
+        if p_from_int := self._interaction.action.match.groupdict().get("playbook"):
+            self._logger.debug("Using playbook provided in interaction")
+            playbook = os.path.abspath(os.path.expanduser(p_from_int))
+        elif hasattr(self._calling_app.args, "playbook") and self._calling_app.args:
+            self._logger.debug("Using playbook from calling app")
+            playbook = self._calling_app.args.playbook
 
-        0) if no playbook or params, use the original cli args
-        1) if just a playbook was provided, use the cli args and the playbook
-        2) if other params were provided, use those entirely
-        """
-
-        playbook = self._interaction.action.match.groupdict().get("playbook")
-        params = self._interaction.action.match.groupdict().get("params")
-        if playbook:
-            playbook = os.path.abspath(playbook)
-            if params:
-                self._logger.debug(
-                    "Parsing full cli command: %s %s %s", self._name_at_cli, playbook, params
-                )
-                params = [self._name_at_cli] + [playbook] + params.split()
-                new_args = self._update_args(params)
-                if new_args:
-                    self.args = new_args
-                else:
-                    return False
-            else:
-                self.args = copy.copy(self._calling_app.args)
-                self.args.playbook = playbook
-                self._logger.debug(
-                    "Using original cli commands with updated playbook: %s", playbook
-                )
+        if params := self._interaction.action.match.groupdict().get("params"):
+            self._logger.debug("Using params provided in interaction")
+            params = [self._name_at_cli] + [playbook] + params.split()
+            new_args = self._update_args(params)
+            if new_args is None:
+                return False
         else:
-            self._logger.debug("Using original cli commands")
-            self.args = copy.copy(self._calling_app.args)
+            self._logger.debug("Using params from calling app")
+            new_args = copy.copy(self._calling_app.args)
+
+        playbook_valid = os.path.exists(playbook)
+        inventory_valid = all((os.path.exists(inv) for inv in getattr(new_args, "inventory", ())))
+
+        if playbook_valid and inventory_valid:
+            new_args.playbook = playbook
+        else:
+            populated_form = self._prompt_for_playbook(new_args, playbook)
+            if populated_form["cancelled"]:
+                return False
+            new_args.playbook = populated_form["fields"]["playbook"]["value"]
+            new_args.inventory = [
+                field["value"]
+                for field in populated_form["fields"].values()
+                if field["name"].startswith("inv_") and field["value"] != ""
+            ]
+            new_args.cmd_line = populated_form["fields"]["cmd_line"]["value"].split()
+
+        self.args = new_args
+        for key, value in vars(self.args).items():
+            self._logger.debug("Running with %s=%s %s", key, value, type(value))
+
         self._run_runner()
         self._logger.info("Explore initialized and playbook started.")
         return True
@@ -372,12 +387,17 @@ class Action(App):
         """
         self._logger.debug("Starting load artifact request")
 
+        if not os.path.exists(artifact_file):
+            populated_form = self._prompt_for_artifact(artifact_file=artifact_file)
+            if populated_form["cancelled"]:
+                return False
+            artifact_file = populated_form["fields"]["artifact_file"]["value"]
+
         try:
             with open(artifact_file) as json_file:
                 data = json.load(json_file)
         except json.JSONDecodeError as exc:
             self._logger.debug("json decode error: %s", str(exc))
-            self._logger.debug("tried: %s", data)
             self._logger.error("Unable to parse artifact file")
             return False
 
@@ -401,8 +421,80 @@ class Action(App):
         self._logger.debug("Completed load artifact request")
         return True
 
+    def _prompt_for_artifact(self, artifact_file: str) -> Dict[Any, Any]:
+        """ propmpt for a valid artifcat file """
+        FType = Dict[str, Any]
+        form_dict: FType = {
+            "title": "Artifcat file not found, please confirm the following",
+            "fields": [],
+        }
+        form_field = {
+            "name": "artifact_file",
+            "prompt": "Path to artifact file",
+            "type": "text_input",
+            "validator": {"name": "valid_file_path"},
+            "pre_populate": artifact_file,
+        }
+        form_dict["fields"].append(form_field)
+        form = dict_to_form(form_dict)
+        self._interaction.ui.show(form)
+        populated_form = form_to_dict(form, key_on_name=True)
+        return populated_form
+
+    def _prompt_for_playbook(self, new_args: Namespace, playbook: str) -> Dict[Any, Any]:
+        """prepopulate a form to confirm the playbook details"""
+
+        self._logger.debug("Inventory/Playbook not set, provided, or valid, prompting")
+        FType = Dict[str, Any]
+        form_dict: FType = {
+            "title": "Inventory or playbook not found, please confirm the following",
+            "fields": [],
+        }
+        form_field = {
+            "name": "playbook",
+            "pre_populate": playbook,
+            "prompt": "Path to playbook",
+            "type": "text_input",
+            "validator": {"name": "valid_file_path"},
+        }
+        form_dict["fields"].append(form_field)
+
+        if hasattr(new_args, "inventory"):
+            for idx, inv in enumerate(new_args.inventory):
+                form_field = {
+                    "name": f"inv_{idx}",
+                    "pre_populate": inv,
+                    "prompt": "Inventory source",
+                    "type": "text_input",
+                    "validator": {"name": "valid_path_or_none"},
+                }
+                form_dict["fields"].append(form_field)
+        else:
+            form_field = {
+                "name": "inv_0",
+                "prompt": "Inventory source",
+                "type": "text_input",
+                "validator": {"name": "valid_path_or_none"},
+            }
+            form_dict["fields"].append(form_field)
+
+        form_field = {
+            "name": "cmd_line",
+            "pre_populate": " ".join(new_args.cmdline),
+            "prompt": "Additional command line paramters",
+            "type": "text_input",
+            "validator": {"name": "none"},
+        }
+        form_dict["fields"].append(form_field)
+        form = dict_to_form(form_dict)
+        self._interaction.ui.show(form)
+        populated_form = form_to_dict(form, key_on_name=True)
+        return populated_form
+
     def _take_step(self) -> None:
         """run the current step on the stack"""
+
+        result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(
                 self.steps.current.name,
@@ -545,12 +637,14 @@ class Action(App):
                 task["__result"] = result.upper()
                 task["__changed"] = task.get("res", {}).get("changed", False)
                 task["__duration"] = human_time(seconds=round(task["duration"], 2))
+                task_id = None
                 for idx, play_task in enumerate(self._plays.value[play_id]["tasks"]):
                     if task["task_uuid"] == play_task["task_uuid"]:
                         if task["host"] == play_task["host"]:
                             task_id = idx
                             break
-                self._plays.value[play_id]["tasks"][task_id].update(task)
+                if task_id is not None:
+                    self._plays.value[play_id]["tasks"][task_id].update(task)
 
             elif runner_event == "start":
                 task["__host"] = task["host"]

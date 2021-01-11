@@ -55,7 +55,8 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
     with the results
     """
     res = form._dict  # pylint: disable=protected-access
-    res["status"] = "submitted" if form.submitted else "cancelled"
+    res["cancelled"] = form.cancelled
+    res["submitted"] = form.submitted
     for idx, field in enumerate(form.fields):
         if isinstance(field, FieldText):
             res["fields"][idx]["response"] = copy.copy(field.response)

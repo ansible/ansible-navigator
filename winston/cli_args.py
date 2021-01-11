@@ -1,13 +1,13 @@
 """ Build the args
 """
 
-from os.path import abspath
+import os
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, _SubParsersAction
 
 
-def _abspath(fpath):
+def _abs_user_path(fpath):
     """don't overload the ap type"""
-    return abspath(fpath)
+    return os.path.abspath(os.path.expanduser(fpath))
 
 
 class CustomHelpFormatter(ArgumentDefaultsHelpFormatter):
@@ -179,7 +179,7 @@ class CliArgs:
             help="The inventory/inventories to use",
             action="append",
             nargs="+",
-            type=_abspath,
+            type=_abs_user_path,
             default=[],
         )
 
@@ -194,7 +194,7 @@ class CliArgs:
             default=None,
             help="The file name of the artifact",
             metavar="artifact",
-            type=_abspath,
+            type=_abs_user_path,
         )
         parser.set_defaults(requires_ansible=False)
 
@@ -240,7 +240,7 @@ class CliArgs:
             "playbook",
             nargs="?",
             help="The name of the playbook(s) to run",
-            type=_abspath,
+            type=_abs_user_path,
         )
         parser.add_argument(
             "-a",
