@@ -10,6 +10,9 @@ from .steps import Steps
 
 
 class AppPublic(NamedTuple):
+    # pylint: disable=inherit-non-class
+    # pylint: disable=too-few-public-methods
+
     """A carrier for app internals that will be
     shared with other actions, immutable
     """

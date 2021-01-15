@@ -19,6 +19,9 @@ from ..ui_framework import Interaction
 
 
 class Blog(NamedTuple):
+    # pylint: disable=inherit-non-class
+    # pylint: disable=too-few-public-methods
+
     """simplent for a blog post"""
 
     title: Union[str, None]

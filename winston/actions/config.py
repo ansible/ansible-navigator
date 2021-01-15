@@ -87,7 +87,7 @@ class Action(App):
 
     # pylint:disable=too-few-public-methods
 
-    KEGEX = r"^c(?:onfig)$"
+    KEGEX = r"^config$"
 
     def __init__(self, args):
         super().__init__(args=args)

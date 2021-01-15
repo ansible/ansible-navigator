@@ -1,4 +1,4 @@
 [MESSAGES CONTROL]
 
-disable=duplicate-code,
+disable=duplicate-code,unsubscriptable-object
   
