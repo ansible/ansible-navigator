@@ -49,6 +49,7 @@ class CliArgs:
             metavar="{command} --help",
         )
         self._blogs()
+        self._collections()
         self._config()
         self._doc()
         self._inventory()
@@ -83,6 +84,9 @@ class CliArgs:
         for entry in blogs:
             parser = self._add_subparser(*entry)
             parser.set_defaults(value=None, requires_ansible=False)
+
+    def _collections(self) -> None:
+        self._add_subparser("collections", "Explore installed collections")
 
     def _config(self) -> None:
         self._add_subparser("config", "Explore the current ansible configuration")
