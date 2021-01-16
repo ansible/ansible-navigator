@@ -29,9 +29,9 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
     # pylint: disable=unused-argument
 
     """color the menu"""
-    if entry.get("__shadowed") == "TRUE":
+    if entry.get("__shadowed") is True:
         return 8
-    if entry.get("__deprecated") == "TRUE":
+    if entry.get("__deprecated") is True:
         return 9
     return 2
 
@@ -48,7 +48,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
     """
 
     heading = []
-    string = f"{obj['__name'].upper()}: {obj['__description']}"
+    string = f"{obj['full_name'].upper()}: {obj['__description']}"
     string = string + (" " * (screen_w - len(string) + 1))
 
     heading.append(
@@ -91,7 +91,7 @@ class Action(App):
         self._collection_cache_path = f"{os.path.expanduser('~')}/.ansible/collection_doc_cache/"
         os.makedirs(self._collection_cache_path, exist_ok=True)
         spec = importlib.util.spec_from_file_location(
-            "kvs", f"{args.share_dir}/utils/catalog_collections.py"
+            "kvs", f"{args.share_dir}/utils/key_value_store.py"
         )
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
@@ -192,6 +192,7 @@ class Action(App):
 
     def _build_plugin_menu(self):
         selected_collection = self._collections[self.steps.current.index]
+        cname_col = f"__{selected_collection['known_as']}"
         plugins = []
         for plugin_chksum, details in selected_collection["plugin_chksums"].items():
             try:
@@ -204,24 +205,25 @@ class Action(App):
                         short_name = plugin["doc"]["name"]
                     else:
                         short_name = plugin["doc"][details["type"]]
-                    plugin["__name"] = f"{selected_collection['known_as']}.{short_name}"
+                    plugin[cname_col] = short_name
+                    plugin["full_name"] = f"{selected_collection['known_as']}.{short_name}"
                     plugin["__type"] = details["type"]
                     plugin["collection_info"] = selected_collection["collection_info"]
                     plugin["collection_info"]["name"] = selected_collection["known_as"]
                     plugin["collection_info"]["shadowed_by"] = selected_collection["hidden_by"]
 
-                    plugin["__version_added"] = plugin["doc"].get("version_added")
+                    plugin["__added"] = plugin["doc"].get("version_added")
                     plugin["__description"] = plugin["doc"]["short_description"]
 
                     runtime_section = "modules" if details["type"] == "module" else details["type"]
-                    plugin["__deprecated"] = "FALSE"
+                    plugin["__deprecated"] = False
                     try:
                         rinfo = selected_collection["runtime"]["plugin_routing"][runtime_section][
                             short_name
                         ]
                         plugin["additional_information"] = rinfo
                         if "deprecation" in rinfo:
-                            plugin["__deprecated"] = "TRUE"
+                            plugin["__deprecated"] = True
                     except KeyError:
                         plugin["additional_information"] = {}
 
@@ -229,13 +231,13 @@ class Action(App):
             except (KeyError, JSONDecodeError) as exc:
                 self._logger.error("error loading plguin doc %s", details)
                 self._logger.debug("error was %s", str(exc))
-        plugins = sorted(plugins, key=lambda i: i["__name"])
+        plugins = sorted(plugins, key=lambda i: i[cname_col])
         return Step(
             name="all_plugins",
             columns=[
-                "__name",
+                cname_col,
                 "__type",
-                "__version_added",
+                "__added",
                 "__deprecated",
                 "__description",
             ],
@@ -265,7 +267,8 @@ class Action(App):
         cmd = [args.container_engine, "run", "-i", "-t"]
         cmd += ["--security-opt", "label=disable"]
         cmd += ["-v", f"{args.share_dir}/utils:/home/runner/cb"]
-        cmd += ["-v", f"{adjacent_collection_dir}:{adjacent_collection_dir}"]
+        if os.path.exists(adjacent_collection_dir):
+            cmd += ["-v", f"{adjacent_collection_dir}:{adjacent_collection_dir}"]
         cmd += [
             "-v",
             f"{self._collection_cache_path}:/home/runner/.ansible/collection_doc_cache",
@@ -321,10 +324,17 @@ class Action(App):
         """
         # pylint: disable=too-many-branches
         try:
-            parsed = json.loads(output.stdout)
+            if not output.stdout.startswith("{"):
+                _warnings, json_str = output.stdout.split("{", 1)
+                json_str = "{" + json_str
+            else:
+                json_str = output.stdout
+            parsed = json.loads(json_str)
             self._logger.debug("json loading output succeeded")
-        except JSONDecodeError as exc:
+        except (JSONDecodeError, ValueError) as exc:
+            self._logger.error("Unable to extract collection json from stdout")
             self._logger.debug("error json loading output: '%s'", str(exc))
+            self._logger.debug(output.stdout)
             return None
 
         for error in parsed["errors"]:
@@ -336,7 +346,7 @@ class Action(App):
         for collection in self._collections:
             collection["__name"] = collection["known_as"]
             collection["__version"] = collection["collection_info"]["version"]
-            collection["__shadowed"] = str(bool(collection["hidden_by"])).upper()
+            collection["__shadowed"] = bool(collection["hidden_by"])
 
         self._stats = parsed["stats"]
         self._logger.debug("stats: %s", self._stats)
