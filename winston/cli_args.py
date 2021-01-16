@@ -86,7 +86,8 @@ class CliArgs:
             parser.set_defaults(value=None, requires_ansible=False)
 
     def _collections(self) -> None:
-        self._add_subparser("collections", "Explore installed collections")
+        parser = self._add_subparser("collections", "Explore installed collections")
+        parser.set_defaults(requires_ansible=True)
 
     def _config(self) -> None:
         self._add_subparser("config", "Explore the current ansible configuration")
