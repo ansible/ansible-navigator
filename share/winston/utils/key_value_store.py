@@ -1,65 +1,82 @@
+""" use sqlite as a k,v store
+"""
 import sqlite3
 
+
 class KeyValueStore(dict):
-    """ use sqlite as a k,v store
-    """
+    """use sqlite as a k,v store"""
+
     def __init__(self, filename):
+        # pylint: disable=super-init-not-called
         self.conn = sqlite3.connect(filename)
-        self.conn.execute("CREATE TABLE IF NOT EXISTS kv (key text unique, value text)")
+        cursor = self.conn.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS kv (key text unique, value text)")
 
     def close(self):
+        """close the connections"""
         self.conn.commit()
         self.conn.close()
 
     def __len__(self):
-        rows = self.conn.execute("SELECT COUNT(*) FROM kv").fetchone()[0]
+        cursor = self.conn.cursor()
+        rows = cursor.execute("SELECT COUNT(*) FROM kv").fetchone()[0]
         return rows if rows is not None else 0
 
     def iterkeys(self):
-        c = self.conn.cursor()
-        for row in self.conn.execute("SELECT key FROM kv"):
+        """iterate keys"""
+        cursor = self.conn.cursor()
+        for row in cursor.execute("SELECT key FROM kv"):
             yield row[0]
 
     def itervalues(self):
-        c = self.conn.cursor()
-        for row in c.execute("SELECT value FROM kv"):
+        """iterate values"""
+        cursor = self.conn.cursor()
+        for row in cursor.execute("SELECT value FROM kv"):
             yield row[0]
 
     def iteritems(self):
-        c = self.conn.cursor()
-        for row in c.execute("SELECT key, value FROM kv"):
+        """iterate items"""
+        cursor = self.conn.cursor()
+        for row in cursor.execute("SELECT key, value FROM kv"):
             yield row[0], row[1]
 
     def keys(self):
+        """return keys"""
         return list(self.iterkeys())
 
     def values(self):
+        """return values"""
         return list(self.itervalues())
 
     def items(self):
+        """return items"""
         return list(self.iteritems())
 
     def __contains__(self, key):
-        return (
-            self.conn.execute("SELECT 1 FROM kv WHERE key = ?", (key,)).fetchone()
-            is not None
-        )
+        """in"""
+        cursor = self.conn.cursor()
+        return cursor.execute("SELECT 1 FROM kv WHERE key = ?", (key,)).fetchone() is not None
 
     def __getitem__(self, key):
-        item = self.conn.execute(
-            "SELECT value FROM kv WHERE key = ?", (key,)
-        ).fetchone()
+        """get"""
+        cursor = self.conn.cursor()
+        item = cursor.execute("SELECT value FROM kv WHERE key = ?", (key,)).fetchone()
         if item is None:
             raise KeyError(key)
         return item[0]
 
     def __setitem__(self, key, value):
-        self.conn.execute("REPLACE INTO kv (key, value) VALUES (?,?)", (key, value))
+        """set"""
+        cursor = self.conn.cursor()
+        cursor.execute("REPLACE INTO kv (key, value) VALUES (?,?)", (key, value))
 
     def __delitem__(self, key):
+        """del"""
         if key not in self:
             raise KeyError(key)
-        self.conn.execute("DELETE FROM kv WHERE key = ?", (key,))
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM kv WHERE key = ?", (key,))
 
     def __iter__(self):
+        """for"""
         return self.iterkeys()

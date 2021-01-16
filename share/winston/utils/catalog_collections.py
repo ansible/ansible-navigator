@@ -1,30 +1,25 @@
 """ catalog collections
 """
 import argparse
-import copy
 import hashlib
 import json
 import multiprocessing
 import os
 import re
-import sqlite3
 import subprocess
 import sys
 
 
-
 from collections import Counter
 from collections import OrderedDict
-from contextlib import contextmanager
 from datetime import datetime
 from glob import glob
 from json.decoder import JSONDecodeError
 from typing import Dict
 from typing import List
 from typing import Tuple
-from typing import Union
 
-from key_value_store import KeyValueStore
+from ansible.utils.plugin_docs import get_docstring  # type: ignore
 
 import yaml
 from yaml.error import YAMLError
@@ -32,42 +27,31 @@ from yaml.error import YAMLError
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import SafeLoader
+    from yaml import SafeLoader  # type: ignore
+
+from key_value_store import KeyValueStore  # type: ignore
+
 
 # since we're going to json dump, leave dates
 SafeLoader.yaml_implicit_resolvers = {
-    k: [r for r in v if r[0] != 'tag:yaml.org,2002:timestamp'] for
-    k, v in SafeLoader.yaml_implicit_resolvers.items()
+    k: [r for r in v if r[0] != "tag:yaml.org,2002:timestamp"]
+    for k, v in SafeLoader.yaml_implicit_resolvers.items()
 }
-
-from ansible.utils.plugin_docs import get_docstring
-
 
 PROCESSES = multiprocessing.cpu_count() - 1
 
-@contextmanager
-def suppress_stdout():
-    with open(os.devnull, "w") as devnull:
-        old_stdout = sys.stdout
-        sys.stdout = devnull
-        try:  
-            yield
-        finally:
-            sys.stdout = old_stdout
-
 
 class CollectionCatalog:
-    """ collection cataloger
-    """
+    # pylint: disable=too-few-public-methods
+    """collection cataloger"""
+
     def __init__(self, directories: List[str]):
         self._directories = directories
         self._collections: OrderedDict[str, Dict] = OrderedDict()
         self._errors: List[Dict[str, str]] = []
 
-
     def _catalog_plugins(self, collection: Dict) -> None:
-        """ catalog the plugins within a collection
-        """
+        """catalog the plugins within a collection"""
         path = collection["path"]
         file_chksums = {}
         if file_manifest_file := collection.get("file_manifest_file", {}).get("name"):
@@ -76,25 +60,28 @@ class CollectionCatalog:
                 with open(fpath) as read_file:
                     try:
                         loaded = json.load(read_file)
-                        file_chksums = {v['name']: v for v in loaded['files']}
+                        file_chksums = {v["name"]: v for v in loaded["files"]}
                     except (JSONDecodeError, KeyError) as exc:
                         self._errors.append({"path": fpath, "error": str(exc)})
 
         exempt = ["action", "module_utils", "doc_fragments"]
-        plugin_dirs = [(f.name, f.path) for f in os.scandir(path + "plugins") if f.is_dir() and f.name not in exempt]
+        plugin_dirs = [
+            (f.name, f.path)
+            for f in os.scandir(path + "plugins")
+            if f.is_dir() and f.name not in exempt
+        ]
         for plugin_type, path in plugin_dirs:
             if plugin_type == "modules":
                 plugin_type = "module"
-            for (dirpath, dirnames, filenames) in os.walk(path):
+            for (dirpath, _dirnames, filenames) in os.walk(path):
                 self._process_plugin_dir(plugin_type, filenames, file_chksums, dirpath, collection)
-    
+
     @staticmethod
     def _generate_chksum(file_path: str, relative_path: str) -> Dict:
-        """ genrate a std checksum for a file
-        """
+        """genrate a std checksum for a file"""
         sha256_hash = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            for byte_block in iter(lambda: f.read(4096), b""):
+        with open(file_path, "rb") as fhand:
+            for byte_block in iter(lambda: fhand.read(4096), b""):
                 sha256_hash.update(byte_block)
         res = {
             "name": relative_path,
@@ -105,9 +92,11 @@ class CollectionCatalog:
         }
         return res
 
-    def _process_plugin_dir(self, plugin_type: str, filenames: List, file_chksums: Dict, dirpath: str, collection: Dict) -> None:
-        """ process each plugin within one plugin directory
-        """
+    def _process_plugin_dir(
+        self, plugin_type: str, filenames: List, file_chksums: Dict, dirpath: str, collection: Dict
+    ) -> None:
+        # pylint: disable=too-many-arguments
+        """process each plugin within one plugin directory"""
         for filename in filenames:
             file_path = f"{dirpath}/{filename}"
             relative_path = file_path.replace(collection["path"], "")
@@ -119,8 +108,7 @@ class CollectionCatalog:
                 collection["plugin_chksums"][chksum] = {"path": relative_path, "type": plugin_type}
 
     def _one_path(self, directory: str) -> None:
-        """ process the contents of an <...>/ansible_collections/ directory
-        """
+        """process the contents of an <...>/ansible_collections/ directory"""
         for directory_path in glob(f"{directory}/*/*/"):
             manifest_file = f"{directory_path}/MANIFEST.json"
             galaxy_file = f"{directory_path}/galaxy.yml"
@@ -139,9 +127,7 @@ class CollectionCatalog:
             elif os.path.exists(galaxy_file):
                 with open(galaxy_file) as read_file:
                     try:
-                        collection = {
-                            "collection_info": yaml.load(read_file, Loader=SafeLoader)
-                        }
+                        collection = {"collection_info": yaml.load(read_file, Loader=SafeLoader)}
                         collection["meta_source"] = "galaxy.yml"
                     except YAMLError:
                         error = {
@@ -150,26 +136,26 @@ class CollectionCatalog:
                         }
                         self._errors.append(error)
             if collection:
-                cname = f"{collection['collection_info']['namespace']}.{collection['collection_info']['name']}"
+                cname = f"{collection['collection_info']['namespace']}"
+                cname += f".{collection['collection_info']['name']}"
                 collection["known_as"] = cname
                 collection["plugins"] = []
                 collection["plugin_chksums"] = {}
                 collection["path"] = directory_path
 
                 runtime_file = f"{directory_path}/meta/runtime.yml"
-                collection['runtime'] = {}
+                collection["runtime"] = {}
                 if os.path.exists(runtime_file):
                     with open(runtime_file) as read_file:
                         try:
-                            collection['runtime'] = yaml.load(read_file, Loader=SafeLoader)
+                            collection["runtime"] = yaml.load(read_file, Loader=SafeLoader)
                         except YAMLError as exc:
                             self._errors.append({"path": runtime_file, "error": str(exc)})
 
                 self._collections[collection["path"]] = collection
-    
+
     def _find_shadows(self) -> None:
-        """ for each collection, determin which other collections are hiding it
-        """
+        """for each collection, determin which other collections are hiding it"""
         collection_list = list(self._collections.values())
         counts = Counter([collection["known_as"] for collection in collection_list])
         for idx, (cpath, o_collection) in reversed(list(enumerate(self._collections.items()))):
@@ -180,8 +166,7 @@ class CollectionCatalog:
                         self._collections[cpath]["hidden_by"].insert(0, i_collection["path"])
 
     def process_directories(self) -> Tuple[Dict, List]:
-        """ process each parent directory
-        """
+        """process each parent directory"""
         for directory in self._directories:
             collection_directory = f"{directory}/ansible_collections"
             if os.path.exists(collection_directory):
@@ -193,14 +178,12 @@ class CollectionCatalog:
 
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
-    """ extract a doc from a plugin, place in completed q
-    """
+    """extract a doc from a plugin, place in completed q"""
     while True:
         entry = pending_queue.get()
-        if entry == None:
+        if entry is None:
             break
-        else:
-            collection_name, chksum, plugin_path = entry
+        collection_name, chksum, plugin_path = entry
 
         try:
             (doc, examples, returndocs, metadata,) = get_docstring(
@@ -208,37 +191,39 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                 fragment_loader=fragment_loader,
                 collection_name=collection_name,
             )
-            message = {"plugin":{
-                "doc": doc,
-                "examples": examples,
-                "returndocs": returndocs,
-                "metadata": metadata,
-            },
-            "timestamp": datetime.utcnow().isoformat()
+            message = {
+                "plugin": {
+                    "doc": doc,
+                    "examples": examples,
+                    "returndocs": returndocs,
+                    "metadata": metadata,
+                },
+                "timestamp": datetime.utcnow().isoformat(),
             }
             completed_queue.put(("plugin", (chksum, json.dumps(message))))
-        except Exception as exc:
+        except Exception as exc:  # pylint: disable=broad-except
             completed_queue.put(("error", (chksum, plugin_path, str(exc))))
 
+
 def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tuple[set, List, int]:
-    """ identify plugins missing from the cache
-    """
+    """identify plugins missing from the cache"""
     handled = set()
     missing = []
     plugin_count = 0
-    for cpath, collection in collections.items():
+    for _cpath, collection in collections.items():
         for chksum, details in collection["plugin_chksums"].items():
             plugin_count += 1
             if chksum not in handled:
                 if chksum not in collection_cache:
-                    missing.append((collection["known_as"], chksum, f"{collection['path']}{details['path']}"))
+                    missing.append(
+                        (collection["known_as"], chksum, f"{collection['path']}{details['path']}")
+                    )
                 handled.add(chksum)
     return handled, missing, plugin_count
 
 
 def parse_args():
-    """ parse the cli args
-    """
+    """parse the cli args"""
     parser = argparse.ArgumentParser(description="Catalog collections.")
     parser.add_argument(
         "-d",
@@ -255,12 +240,12 @@ def parse_args():
         help="path to collection cache",
         default=f"{os.path.expanduser('~')}/.ansible/collection_doc_cache/",
     )
-    args = parser.parse_args()
+    parsed_args = parser.parse_args()
 
-    if adjacent := vars(args).get("adjacent"):
-        directories = [adjacent] + args.dirs
+    if adjacent := vars(parsed_args).get("adjacent"):
+        directories = [adjacent] + parsed_args.dirs
     else:
-        directories = args.dirs
+        directories = parsed_args.dirs
 
     directories.extend(reversed(sys.path))
 
@@ -269,18 +254,18 @@ def parse_args():
         realpath = os.path.realpath(directory)
         if realpath not in resolved:
             resolved.append(realpath)
-    
-    return args, resolved
+
+    return parsed_args, resolved
+
 
 def retrieve_collections_paths() -> Dict:
-    """ retrieve the currently ser collection paths
-    """
+    """retrieve the currently ser collection paths"""
     cmd = ["ansible-config", "dump", "|", "grep", "COLLECTIONS_PATHS"]
     proc_out = run_command(cmd)
     if "error" in proc_out:
         return proc_out
     regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
-    parsed = regex.match(proc_out['stdout'])
+    parsed = regex.match(proc_out["stdout"])
     if parsed:
         try:
             current = yaml.load(parsed.groupdict()["current"], Loader=SafeLoader)
@@ -289,29 +274,27 @@ def retrieve_collections_paths() -> Dict:
             return {"error": str(exc)}
     return {"error": f"corrupt current collection path: {proc_out['stdout']}"}
 
-def retrieve_docs(collection_cache: KeyValueStore, errors: List, missing: List, stats: Dict) -> None:
-    """ extract the docs from the plugins
-    """
+
+def retrieve_docs(
+    collection_cache: KeyValueStore, errors: List, missing: List, stats: Dict
+) -> None:
+    # pylint: disable=too-many-locals
+    """extract the docs from the plugins"""
     pending_queue = multiprocessing.Manager().Queue()
     completed_queue = multiprocessing.Manager().Queue()
     processes = []
-    for n in range(PROCESSES):
-        p = multiprocessing.Process(
-            target=worker, args=(pending_queue, completed_queue)
-        )
-        processes.append(p)
-        p.start()
+    for _proc in range(PROCESSES):
+        proc = multiprocessing.Process(target=worker, args=(pending_queue, completed_queue))
+        processes.append(proc)
+        proc.start()
 
     for entry in missing:
         pending_queue.put(entry)
-    for n in range(PROCESSES):
+    for _proc in range(PROCESSES):
         pending_queue.put(None)
+    for proc in processes:
+        proc.join()
 
-    for p in processes:
-        p.join()
-
-    stats["cache_added_success"] = 0
-    stats["cache_added_errors"] = 0
     while not completed_queue.empty():
         message_type, message = completed_queue.get()
         if message_type == "plugin":
@@ -324,6 +307,7 @@ def retrieve_docs(collection_cache: KeyValueStore, errors: List, missing: List, 
             errors.append({"path": plugin_path, "error": error})
             stats["cache_added_errors"] += 1
 
+
 def run_command(cmd: List) -> Dict:
     """run a command"""
     try:
@@ -334,14 +318,17 @@ def run_command(cmd: List) -> Dict:
     except subprocess.CalledProcessError as exc:
         return {"error": str(exc)}
 
-def main(parent_directories: List, args: argparse.Namespace) -> Dict:
+
+def main() -> Dict:
+    """ main """
     stats = {}
+    stats["cache_added_success"] = 0
+    stats["cache_added_errors"] = 0
+
     collections, errors = CollectionCatalog(directories=parent_directories).process_directories()
     stats["collection_count"] = len(collections)
 
-    collection_cache_path = os.path.abspath(
-        os.path.expanduser(args.collection_cache_path)
-    )
+    collection_cache_path = os.path.abspath(os.path.expanduser(args.collection_cache_path))
     os.makedirs(collection_cache_path, exist_ok=True)
     collection_cache = KeyValueStore(f"{collection_cache_path}/cache.db")
 
@@ -354,9 +341,9 @@ def main(parent_directories: List, args: argparse.Namespace) -> Dict:
         retrieve_docs(collection_cache, errors, missing, stats)
 
     cached_chksums = collection_cache.keys()
-    stats['cache_length'] = len(collection_cache.keys())
+    stats["cache_length"] = len(collection_cache.keys())
 
-    for cpath, collection in collections.items():
+    for _cpath, collection in collections.items():
         for no_doc in set(collection["plugin_chksums"].keys()) - set(cached_chksums):
             del collection["plugin_chksums"][no_doc]
 
@@ -364,23 +351,22 @@ def main(parent_directories: List, args: argparse.Namespace) -> Dict:
     return {"collections": collections, "errors": errors, "stats": stats}
 
 
-
 if __name__ == "__main__":
     start_time = datetime.now()
 
     collection_paths = retrieve_collections_paths()
     if "error" in collection_paths:
-        sys.exit(collection_paths['error'])
+        sys.exit(collection_paths["error"])
     else:
-        current_collection_paths = collection_paths['result']
-    
+        current_collection_paths = collection_paths["result"]
+
     args, parent_directories = parse_args()
 
     # load the fragment_loader _after_ the path is set
     os.environ["ANSIBLE_COLLECTIONS_PATHS"] = ":".join(parent_directories)
-    from ansible.plugins.loader import fragment_loader
+    # pylint: disable=ungrouped-imports
+    from ansible.plugins.loader import fragment_loader  # type: ignore
 
-    result = main(parent_directories, args)
-    result['stats']['duration'] = (datetime.now() - start_time).total_seconds()
+    result = main()
+    result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
     print(json.dumps(result))
-
