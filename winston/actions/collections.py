@@ -1,6 +1,5 @@
 """ :doc """
 import curses
-import importlib.util
 import json
 import logging
 import os
@@ -88,14 +87,8 @@ class Action(App):
         self._app = None
         self._collections = {}
         self._stats = {}
-        self._collection_cache_path = f"{os.path.expanduser('~')}/.ansible/collection_doc_cache/"
-        os.makedirs(self._collection_cache_path, exist_ok=True)
-        spec = importlib.util.spec_from_file_location(
-            "kvs", f"{args.share_dir}/utils/key_value_store.py"
-        )
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        self._collection_cache = mod.KeyValueStore(f"{self._collection_cache_path}/cache.db")
+        self._collection_cache = args.collection_doc_cache
+        self._collection_cache_path = args.collection_doc_cache.path
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
@@ -191,6 +184,7 @@ class Action(App):
         )
 
     def _build_plugin_menu(self):
+        self._collection_cache.open()
         selected_collection = self._collections[self.steps.current.index]
         cname_col = f"__{selected_collection['known_as']}"
         plugins = []
@@ -232,6 +226,8 @@ class Action(App):
                 self._logger.error("error loading plguin doc %s", details)
                 self._logger.debug("error was %s", str(exc))
         plugins = sorted(plugins, key=lambda i: i[cname_col])
+        self._collection_cache.close()
+
         return Step(
             name="all_plugins",
             columns=[
@@ -271,12 +267,13 @@ class Action(App):
             cmd += ["-v", f"{adjacent_collection_dir}:{adjacent_collection_dir}"]
         cmd += [
             "-v",
-            f"{self._collection_cache_path}:/home/runner/.ansible/collection_doc_cache",
+            f"{self._collection_cache_path}:{self._collection_cache_path}",
         ]
 
         cmd += [args.ee_image]
         cmd += ["python3", "/home/runner/cb/catalog_collections.py"]
         cmd += ["-a", adjacent_collection_dir]
+        cmd += ["-c", self._collection_cache_path]
 
         self._logger.debug("ee command: %s", " ".join(cmd))
         self._dispatch(cmd)
@@ -292,6 +289,7 @@ class Action(App):
 
         cmd = ["python3", f"{args.share_dir}/utils/catalog_collections.py"]
         cmd += ["-a", adjacent_collection_dir]
+        cmd += ["-c", self._collection_cache_path]
         self._logger.debug("local command: %s", " ".join(cmd))
         self._dispatch(cmd)
 

@@ -27,10 +27,13 @@ from .cli_args import CliArgs
 from .action_runner import ActionRunner
 from .utils import check_for_ansible
 from .utils import find_ini_config_file
+from .utils import get_and_check_collection_doc_cache
 from .utils import set_ansible_envar
 from .web_xterm_js import WebXtermJs
 
 APP_NAME = "winston"
+COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
+
 
 logger = logging.getLogger(APP_NAME)
 
@@ -190,6 +193,14 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         args.value = None
 
     args.share_dir = os.path.join(sys.prefix, "share", APP_NAME)
+
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    args.cache_dir = f"{cache_home}/{APP_NAME}"
+    msgs, args.collection_doc_cache = get_and_check_collection_doc_cache(
+        args, COLLECTION_DOC_CACHE_FNAME
+    )
+    pre_logger_msgs += msgs
+
     args.original_command = params
 
     return pre_logger_msgs, args

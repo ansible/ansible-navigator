@@ -235,10 +235,7 @@ def parse_args():
 
     parser.add_argument("-a", dest="adjacent", help="prepended to dirs")
     parser.add_argument(
-        "-c",
-        dest="collection_cache_path",
-        help="path to collection cache",
-        default=f"{os.path.expanduser('~')}/.ansible/collection_doc_cache/",
+        "-c", dest="collection_cache_path", help="path to collection cache", required=True
     )
     parsed_args = parser.parse_args()
 
@@ -329,8 +326,7 @@ def main() -> Dict:
     stats["collection_count"] = len(collections)
 
     collection_cache_path = os.path.abspath(os.path.expanduser(args.collection_cache_path))
-    os.makedirs(collection_cache_path, exist_ok=True)
-    collection_cache = KeyValueStore(f"{collection_cache_path}/cache.db")
+    collection_cache = KeyValueStore(collection_cache_path)
 
     handled, missing, plugin_count = identify_missing(collections, collection_cache)
     stats["plugin_count"] = plugin_count

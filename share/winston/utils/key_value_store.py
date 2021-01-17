@@ -9,6 +9,7 @@ class KeyValueStore(dict):
     def __init__(self, filename):
         # pylint: disable=super-init-not-called
         self.conn = sqlite3.connect(filename)
+        self.path = filename
         cursor = self.conn.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS kv (key text unique, value text)")
 
@@ -16,6 +17,10 @@ class KeyValueStore(dict):
         """close the connections"""
         self.conn.commit()
         self.conn.close()
+
+    def open(self):
+        """ establish the connection"""
+        self.conn = sqlite3.connect(self.path)
 
     def __len__(self):
         cursor = self.conn.cursor()
