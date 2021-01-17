@@ -194,7 +194,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 
     args.share_dir = os.path.join(sys.prefix, "share", APP_NAME)
 
-    cache_home = os.environ.get("$XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     args.cache_dir = f"{cache_home}/{APP_NAME}"
     msgs, args.collection_doc_cache = get_and_check_collection_doc_cache(
         args, COLLECTION_DOC_CACHE_FNAME
