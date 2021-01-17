@@ -3,6 +3,7 @@
 import ast
 
 import logging
+import importlib.util
 import html
 import os
 import stat
@@ -12,6 +13,7 @@ import re
 from distutils.spawn import find_executable
 from pathlib import Path
 from typing import Any
+from typing import Dict
 from typing import List
 from typing import Mapping
 from typing import Optional
@@ -20,6 +22,7 @@ from typing import Union
 
 from jinja2 import Environment, TemplateError
 
+from ._version import __version__ as VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -267,3 +270,39 @@ def set_ansible_envar() -> None:
     if ansible_config and not os.getenv("ANSIBLE_CONFIG"):
         os.environ.setdefault("ANSIBLE_CONFIG", ansible_config)
         logger.debug("ANSIBLE_CONFIG set to %s", ansible_config)
+
+
+def get_and_check_collection_doc_cache(args, collection_doc_cache_fname: str) -> Tuple[List, Dict]:
+    """ensure the collection doc cache
+    has the current version of the application
+    as a safeguard, always delete and rebuild if not
+    """
+    messages = []
+    os.makedirs(args.cache_dir, exist_ok=True)
+    collection_doc_cache_path = f"{args.cache_dir}/{collection_doc_cache_fname}"
+    messages.append(f"Collection doc cache: path={collection_doc_cache_path}")
+    collection_cache = _get_kvs(args, collection_doc_cache_path)
+    if "version" in collection_cache:
+        cache_version = collection_cache["version"]
+    else:
+        cache_version = None
+    messages.append(f"Collection doc cache: current version={cache_version}")
+    if cache_version is None or cache_version != VERSION:
+        messages.append("Collection doc cache: version was empty or incorrect, rebuilding")
+        collection_cache.close()
+        os.remove(collection_doc_cache_path)
+        collection_cache.__init__(collection_doc_cache_path)
+        collection_cache["version"] = VERSION
+        cache_version = collection_cache["version"]
+        messages.append(f"Collection doc cache: current version={cache_version}")
+    collection_cache.close()
+    return messages, collection_cache
+
+
+def _get_kvs(args, collection_doc_cache_path):
+    spec = importlib.util.spec_from_file_location(
+        "kvs", f"{args.share_dir}/utils/key_value_store.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.KeyValueStore(collection_doc_cache_path)
