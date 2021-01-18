@@ -32,6 +32,16 @@ winston bullhorn
 winston redhat
 ```
 
+Review current configuration
+```
+winston config
+```
+
+Explore available collections
+```
+winston collections
+```
+
 Review documentation
 ```
 winston doc ansible.netcommon.cli_command
