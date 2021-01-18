@@ -371,7 +371,7 @@ class Action(App):
             inventories = []
             self._logger.error("no inventory set at command line or requested")
 
-        if not all((os.path.exists(inv) for inv in inventories)):
+        if not inventories or not all((os.path.exists(inv) for inv in inventories)):
             FType = Dict[str, Any]
             form_dict: FType = {
                 "title": "One or more inventory sources could not be found",
