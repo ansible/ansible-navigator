@@ -50,7 +50,6 @@ DEFAULT_COLORS = "terminal_colors.json"
 class CursesWindow:
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
-
     """abstration for a curses window"""
 
     def __init__(self):
