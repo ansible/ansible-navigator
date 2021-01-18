@@ -58,7 +58,6 @@ END_KEYS = {
 # pylint: disable=inherit-non-class
 # pylint: disable=too-few-public-methods
 
-
 class Action(NamedTuple):
     """the user's input"""
 
@@ -104,7 +103,6 @@ class MenuItem(NamedTuple):
 
     obj: Dict
     line: CursesLine
-
 
 # pylint: enable=inherit-non-class
 # pylint: enable=too-few-public-methods
