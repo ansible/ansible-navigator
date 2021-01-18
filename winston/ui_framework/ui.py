@@ -67,14 +67,12 @@ class Action(NamedTuple):
 
 
 class Content(NamedTuple):
-
     """what's on the screen, when showing content"""
 
     showing: Any
 
 
 class Menu(NamedTuple):
-
     """details about the currently showing menu"""
 
     current: List
