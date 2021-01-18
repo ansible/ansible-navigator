@@ -22,7 +22,6 @@ from typing import NamedTuple
 from typing import Pattern
 from typing import Tuple
 from typing import Union
-from winston.ui_framework.field_text import FieldText
 
 from .colorize import Colorize
 from .colorize import rgb_to_ansi  # , hex_to_rgb_curses
@@ -40,7 +39,9 @@ from .form import Form
 from .field_text import FieldText
 from .form_handler_text import FormHandlerText
 
-from ..utils import convert_percentages, distribute
+from .menu_builder import MenuBuilder
+
+
 from ..yaml import yaml, Dumper
 
 
@@ -54,6 +55,9 @@ END_KEYS = {
     ":help": "help",
 }
 
+# pylint: disable=inherit-non-class
+# pylint: disable=too-few-public-methods
+
 
 class Action(NamedTuple):
     """the user's input"""
@@ -63,12 +67,14 @@ class Action(NamedTuple):
 
 
 class Content(NamedTuple):
+
     """what's on the screen, when showing content"""
 
     showing: Any
 
 
 class Menu(NamedTuple):
+
     """details about the currently showing menu"""
 
     current: List
@@ -101,6 +107,9 @@ class MenuItem(NamedTuple):
     obj: Dict
     line: CursesLine
 
+
+# pylint: enable=inherit-non-class
+# pylint: enable=too-few-public-methods
 
 MenuItems = Tuple[MenuItem, ...]
 
@@ -444,181 +453,6 @@ class UserInterface(CursesWindow):
             elif key in ["^B", "KEY_PPAGE"]:
                 self.scroll(max(self.scroll() - max_lines, max_lines))
 
-    def _menu(self, dicts: List, cols: List) -> Tuple[CursesLines, CursesLines]:
-        """Build a text menu from a list of dicts given columns(root keys)
-
-        :param dicts: A list of dicts
-        :type dicts: list
-        :param cols: The columns (keys) to use in the dicts
-        :type cols: list of strings
-        :return: the heading and body of the menu
-        :rtype: (CursesLines, CursesLines)
-        """
-        line_prefix_w = len(str(len(dicts))) + len("|")
-        dicts = convert_percentages(dicts, cols, self._pbar_width)
-        lines = [[str(d.get(c)) for c in cols] for d in dicts]
-        colws = [
-            max([len(str(v)) for v in c])
-            for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]])
-        ]
-        # add a space
-        colws = [c + 1 for c in colws]
-
-        available = self._screen_w - line_prefix_w - 1  # scrollbar width
-        adj_colws = distribute(available, colws)
-
-        col_starts = [0]
-        for idx, colw in enumerate(adj_colws):
-            col_starts.append(colw + col_starts[idx])
-
-        menu_layout = tuple([col_starts, cols, adj_colws])
-        header = self._menu_header_line(menu_layout)
-
-        menu_layout = tuple([col_starts, cols, adj_colws, header])
-        curses_lines = self._menu_lines(dicts, menu_layout)
-
-        return tuple([header]), curses_lines
-
-    def _menu_header_line(self, menu_layout: Tuple[List, ...]) -> CursesLine:
-        """Generate the menu header line
-
-        :param menu_layout: A tuple of menu details
-        :type menu_layout: tuple
-        :param menu_layout[0]: the starting in for each column
-        :type menu_layout[0]: list of ints
-        :param menu_layout[1]: the columns of the menu
-        :type menu_layout[1]: list of strings
-        :param menu_layout[2]: the adjusted column widths
-        :type menu_layout[2]: list of ints
-        :return: the menu head line
-        :type: CursesLine
-        """
-        _col_starts, cols, _adj_colws = menu_layout
-        return tuple(self._menu_header_line_part(colno, menu_layout) for colno in range(len(cols)))
-
-    @staticmethod
-    def _menu_header_line_part(colno: int, menu_layout: Tuple[List, ...]) -> CursesLinePart:
-        """Generate one part of the menu header line
-
-        :param colno: The column number
-        :type colno: int
-        :param menu_layout: A tuple of menu details
-        :type menu_layout: tuple
-        :param menu_layout[0]: the starting in for each column
-        :type menu_layout[0]: list of ints
-        :param menu_layout[1]: the columns of the menu
-        :type menu_layout[1]: list of strings
-        :param menu_layout[2]: the adjusted column widths
-        :type menu_layout[2]: list of ints
-        :return: the menu head line
-        :type: CursesLinePart
-        """
-        col_starts, cols, adj_colws = menu_layout
-        coltext = re.sub("^__", "", cols[colno])
-        coltext = re.sub("_", " ", coltext)
-        adj_entry = coltext[0 : adj_colws[colno]].upper()
-        # right justifyheader if %
-        if coltext.startswith("% "):
-            return CursesLinePart(
-                column=col_starts[colno] + adj_colws[colno] - len(adj_entry),
-                string=adj_entry,
-                color=curses.color_pair(0),
-                decoration=curses.A_UNDERLINE,
-            )
-        return CursesLinePart(
-            column=col_starts[colno], string=adj_entry, color=0, decoration=curses.A_UNDERLINE
-        )
-
-    def _menu_lines(self, dicts: List[Dict], menu_layout: Tuple[List, ...]) -> CursesLines:
-        """Generate all the menu lines
-
-        :params dicts: A list of dicts from which the menu will be generated
-        :type dicts: List of Dicts
-        :param menu_layout: A tuple of menu details
-        :type menu_layout: tuple
-        :param menu_layout[0]: the starting in for each column
-        :type menu_layout[0]: list of ints
-        :param menu_layout[1]: the columns of the menu
-        :type menu_layout[1]: list of strings
-        :param menu_layout[2]: the adjusted column widths
-        :type menu_layout[2]: list of ints
-        :param menu_layout[3]: the menu header, used to determine justification
-        :type memu_layout[3]: CursesLine
-        :return: the menu lines
-        :type: CursesLines
-        """
-        return tuple(self._menu_line(dyct, menu_layout) for dyct in dicts)
-
-    def _menu_line(self, dyct: dict, menu_layout: Tuple[List, ...]) -> CursesLine:
-        """Generate one the menu line
-
-        :param dyct: One dict from which the menu line will be generated
-        :type dyct: dict
-        :param menu_layout: A tuple of menu details
-        :type menu_layout: tuple
-        :param menu_layout[0]: the starting in for each column
-        :type menu_layout[0]: list of ints
-        :param menu_layout[1]: the columns of the menu
-        :type menu_layout[1]: list of strings
-        :param menu_layout[2]: the adjusted column widths
-        :type menu_layout[2]: list of ints
-        :param menu_layout[3]: the menu header, used to determine justification
-        :type memu_layout[3]: CursesLine
-        :return: a menu line
-        :type: CursesLine
-        """
-        _col_starts, cols, _adj_colws, _header = menu_layout
-        menu_line = (dyct.get(c) for c in cols)
-        return tuple(
-            self._menu_line_part(colno, coltext, dyct, menu_layout)
-            for colno, coltext in enumerate(menu_line)
-        )
-
-    def _menu_line_part(
-        self,
-        colno: int,
-        coltext: Any,
-        dyct: dict,
-        menu_layout: Tuple[List, ...],
-    ) -> CursesLinePart:
-        """Generate one menu line part
-
-        :param colno: The column number of the line part
-        :type colno: int
-        :param coltext: The text to be placed at the given column
-        :type: coltext: str
-        :param dyct: the dict from which the menu line will be generated
-        :type dyct: dict
-        :param menu_layout: A tuple of menu details
-        :type menu_layout: tuple
-        :param menu_layout[0]: the starting in for each column
-        :type menu_layout[0]: list of ints
-        :param menu_layout[1]: the columns of the menu
-        :type menu_layout[1]: list of strings
-        :param menu_layout[2]: the adjusted column widths
-        :type menu_layout[2]: list of ints
-        :param menu_layout[3]: the menu header, used to determine justification
-        :type memu_layout[3]: CursesLine
-        :return: a menu line part
-        :type: CursesLinePart
-        """
-        col_starts, cols, adj_colws, header = menu_layout
-
-        color = self._color_menu_item(colno, cols[colno], dyct)
-        color = curses.color_pair(color % self._number_colors)
-
-        text = str(coltext)[0 : adj_colws[colno]]
-        if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "__duration":
-            # right jusitfy on header if int, bool, float or "duration"
-            print_at = col_starts[colno] + len(header[colno][1]) - len(text)
-        elif re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", str(coltext)):
-            # right justify in column if %
-            print_at = col_starts[colno] + adj_colws[colno] - len(text)
-        else:
-            # left justify
-            print_at = col_starts[colno]
-        return CursesLinePart(column=print_at, string=str(text), color=color, decoration=0)
-
     def _action_match(self, entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
         """attempt to match the user input against the regexes
         provided by each action
@@ -867,7 +701,7 @@ class UserInterface(CursesWindow):
         return regex.search(str(value))
 
     def _get_heading_menu_items(
-        self, current: List, columns: List
+        self, current: List, columns: List, distribution: str
     ) -> Tuple[CursesLines, MenuItems]:
         """build the menu
 
@@ -875,14 +709,28 @@ class UserInterface(CursesWindow):
         :type current: dict
         :param columns: The keys from the dic to use as columns
         :type columns: list
+        :param distribute: method for width deficit
+        :type distribute: str
         :return: The heading and menu items
         :rtype: CursesLines, MenuItems
         """
-        menu_heading, lines = self._menu(current, columns)
+        menu_builder = MenuBuilder(
+            pbar_width=self._pbar_width,
+            screen_w=self._screen_w,
+            number_colors=self._number_colors,
+            color_menu_item=self._color_menu_item,
+            distribution=distribution,
+        )
+        menu_heading, lines = menu_builder.build(
+            current,
+            columns,
+        )
         menu_items = tuple(MenuItem(obj=z[0], line=z[1]) for z in zip(current, lines))
         return menu_heading, menu_items
 
-    def _show_menu(self, current: List, columns: List, await_input: bool) -> Interaction:
+    def _show_menu(
+        self, current: List, columns: List, await_input: bool, distribution: str
+    ) -> Interaction:
         """Show a menu on the screen
 
         :param current: A dict
@@ -891,10 +739,12 @@ class UserInterface(CursesWindow):
         :type columns: list
         :param await_input: Should we wait for user input?
         :type await_input: bool
+        :param distribute: method for width deficit
+        :type distribute: str
         :return: interaction with the user
         :rtype: Interaction
         """
-        menu_heading, menu_items = self._get_heading_menu_items(current, columns)
+        menu_heading, menu_items = self._get_heading_menu_items(current, columns, distribution)
         while True:
             if self.menu_filter():
                 self._menu_indicies = tuple(
@@ -916,7 +766,9 @@ class UserInterface(CursesWindow):
             )
 
             if entry == "KEY_RESIZE":
-                menu_heading, menu_items = self._get_heading_menu_items(current, columns)
+                menu_heading, menu_items = self._get_heading_menu_items(
+                    current, columns, distribution
+                )
                 continue
 
             name, action = self._action_match(entry)
@@ -939,6 +791,7 @@ class UserInterface(CursesWindow):
         index: int = None,
         columns: List = None,
         await_input: bool = True,
+        distribution: str = "fair",
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: 0,
         content_heading: Callable = lambda *args, **kwargs: None,
@@ -971,7 +824,7 @@ class UserInterface(CursesWindow):
         if index is not None and isinstance(obj, list):
             result = self._show_obj_from_list(obj, index, await_input)
         elif columns and isinstance(obj, list):
-            result = self._show_menu(obj, columns, await_input)
+            result = self._show_menu(obj, columns, await_input, distribution)
         else:
             result = self._show_obj_from_list([obj], 0, await_input)
         return result
