@@ -35,15 +35,11 @@ from .curses_window import CursesWindow
 from .curses_window import Window
 
 from .form import Form
-
 from .field_text import FieldText
 from .form_handler_text import FormHandlerText
-
 from .menu_builder import MenuBuilder
 
-
 from ..yaml import yaml, Dumper
-
 
 STND_KEYS = {
     "^f/PgUp": "page up",
@@ -57,6 +53,7 @@ END_KEYS = {
 
 # pylint: disable=inherit-non-class
 # pylint: disable=too-few-public-methods
+
 
 class Action(NamedTuple):
     """the user's input"""
@@ -103,6 +100,7 @@ class MenuItem(NamedTuple):
 
     obj: Dict
     line: CursesLine
+
 
 # pylint: enable=inherit-non-class
 # pylint: enable=too-few-public-methods
