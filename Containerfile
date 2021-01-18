@@ -7,3 +7,4 @@ ADD setup.* $HOME/src/winston/
 
 RUN pip install $HOME/src/winston
 
+# podman run -i -t -e TERM=${TERM} -v ${PWD}:${PWD} -w ${PWD} --security-opt label=disable winston_img winston
