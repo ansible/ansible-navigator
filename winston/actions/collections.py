@@ -336,7 +336,7 @@ class Action(App):
             return None
 
         for error in parsed["errors"]:
-            self._logger.debug("error: %s", error["error"])
+            self._logger.error("%s %s", error["path"], error["error"])
 
         self._collections = sorted(
             list(parsed["collections"].values()), key=lambda i: i["known_as"]
@@ -347,5 +347,7 @@ class Action(App):
             collection["__shadowed"] = bool(collection["hidden_by"])
 
         self._stats = parsed["stats"]
-        self._logger.debug("stats: %s", self._stats)
+
+        for stat, value in self._stats.items():
+            self._logger.debug("%s: %s", stat, value)
         return None

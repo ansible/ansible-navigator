@@ -32,12 +32,6 @@ except ImportError:
 from key_value_store import KeyValueStore  # type: ignore
 
 
-# since we're going to json dump, leave dates
-SafeLoader.yaml_implicit_resolvers = {
-    k: [r for r in v if r[0] != "tag:yaml.org,2002:timestamp"]
-    for k, v in SafeLoader.yaml_implicit_resolvers.items()
-}
-
 PROCESSES = multiprocessing.cpu_count() - 1
 
 
@@ -186,12 +180,19 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
         collection_name, chksum, plugin_path = entry
 
         try:
-            (doc, examples, returndocs, metadata,) = get_docstring(
+            (doc, examples, returndocs, metadata) = get_docstring(
                 filename=plugin_path,
                 fragment_loader=fragment_loader,
                 collection_name=collection_name,
             )
-            message = {
+
+        except Exception as exc:  # pylint: disable=broad-except
+            err_message = f"{type(exc).__name__} (get_docstring): {str(exc)}"
+            completed_queue.put(("error", (chksum, plugin_path, err_message)))
+            continue
+
+        try:
+            q_message = {
                 "plugin": {
                     "doc": doc,
                     "examples": examples,
@@ -200,9 +201,10 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                 },
                 "timestamp": datetime.utcnow().isoformat(),
             }
-            completed_queue.put(("plugin", (chksum, json.dumps(message))))
-        except Exception as exc:  # pylint: disable=broad-except
-            completed_queue.put(("error", (chksum, plugin_path, str(exc))))
+            completed_queue.put(("plugin", (chksum, json.dumps(q_message, default=str))))
+        except JSONDecodeError as exc:
+            err_message = f"{type(exc).__name__} (json_decode_doc): {str(exc)}"
+            completed_queue.put(("error", (chksum, plugin_path, err_message)))
 
 
 def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tuple[set, List, int]:
@@ -365,4 +367,4 @@ if __name__ == "__main__":
 
     result = main()
     result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
-    print(json.dumps(result))
+    print(json.dumps(result, default=str))
