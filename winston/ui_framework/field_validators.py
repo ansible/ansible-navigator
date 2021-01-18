@@ -12,6 +12,8 @@ from .sentinals import Unknown
 
 
 class Validation(NamedTuple):
+    # pylint: disable=inherit-non-class
+    # pylint: disable=too-few-public-methods
     """the response from a validation"""
 
     value: Any

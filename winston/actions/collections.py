@@ -159,6 +159,7 @@ class Action(App):
                     obj=self.steps.current.value,
                     columns=self.steps.current.columns,
                     color_menu_item=color_menu,
+                    distribution="sacrifice",
                 )
             elif self.steps.current.type == "content":
                 result = self._interaction.ui.show(

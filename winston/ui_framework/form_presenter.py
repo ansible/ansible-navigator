@@ -12,13 +12,11 @@ from typing import Union
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLine
 from .curses_window import CursesWindow
-from .curses_window import Window
 
 from .field_button import FieldButton
 from .field_checks import FieldChecks
 from .field_radio import FieldRadio
 from .field_text import FieldText
-from .field_validators import FieldValidators
 from .form_handler_text import FormHandlerText
 from .sentinals import unknown
 

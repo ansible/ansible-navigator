@@ -1,3 +1,5 @@
+""" simple utils for working with forms
+"""
 import copy
 from functools import partial
 from typing import Dict
