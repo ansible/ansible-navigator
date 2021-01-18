@@ -34,7 +34,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
     # pylint: disable=unused-argument
 
     """color the menu"""
-    if entry["__default"] != "TRUE":
+    if entry["__default"] is False:
         return 3
     return 2
 
@@ -52,7 +52,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
     heading = []
     string = obj["option"].replace("_", " ")
-    if obj["__default"] != "TRUE":
+    if obj["__default"] is False:
         string += f" (current: {obj['__current_value']})  (default: {obj['default']})"
         color = 3
     else:
@@ -313,9 +313,9 @@ class Action(App):
         for key, value in parsed.items():
             value["option"] = key
             if value["source"] == "default":
-                value["__default"] = "TRUE"
+                value["__default"] = True
             else:
-                value["__default"] = "FALSE"
+                value["__default"] = False
 
         self._config = list(parsed.values())
         self._logger.debug("parsed and merged list and dump sucessfully")
