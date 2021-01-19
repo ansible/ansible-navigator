@@ -434,6 +434,7 @@ class Action(App):
     def _try_ee(self) -> None:
         inventory_paths = (os.path.dirname(i) for i in self._inventories)
         cmd = [self.args.container_engine, "run", "-i", "-t"]
+        cmd += ["--security-opt", "label=disable"]
 
         for inventory_path in inventory_paths:
             cmd.extend(["-v", f"{inventory_path}:{inventory_path}"])
