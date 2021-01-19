@@ -91,7 +91,7 @@ def update_args(
                                     bool_key: bool = section.getboolean(key)
                                     if bool_key != arg_value == default:
                                         msg = f"{key} was default, "
-                                        msg += "using entry '{key}={bool_key}' as bool"
+                                        msg += f"using entry '{key}={bool_key}' as bool"
                                         msgs.append(msg)
                                         setattr(args, key, bool_key)
                                 elif (arg_value == [] == default) and value:

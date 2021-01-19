@@ -11,6 +11,7 @@ from json.decoder import JSONDecodeError
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Tuple
 from typing import Union
 
 from . import run as run_action
@@ -77,18 +78,30 @@ class Action(App):
     # pylint:disable=too-few-public-methods
     # pylint:disable=too-many-instance-attributes
 
-    KEGEX = r"^collections$"
+    KEGEX = r"^collections(\s(?P<params>.*))?$"
 
     def __init__(self, args):
         super().__init__(args=args)
-        self._args = args
+        self._args: Namespace = args
         self._interaction: Interaction
         self._logger = logging.getLogger(__name__)
         self._app = None
-        self._collections = {}
-        self._stats = {}
+        self._collections: List = []
+        self._stats: Dict = {}
         self._collection_cache = args.collection_doc_cache
         self._collection_cache_path = args.collection_doc_cache.path
+        self._adjacent_collection_dir: str
+        self._parser_error: str = ""
+
+    
+    def parser_error(self, message: str) -> Tuple[None, None]:
+        """callback for parser error
+
+        :param message: A message from the parser
+        :type message: str
+        """
+        self._parser_error = message
+        return None, None
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
@@ -111,10 +124,25 @@ class Action(App):
             await_input=False,
         )
 
+        if provided_params := interaction.action.match.groupdict()["params"]:
+            self._logger.debug("Parsing provide params: %s", provided_params)
+            params = f"collections {provided_params}".split()
+            messages, new_args = self.app.args.parse_and_update(
+                params=params, error_cb=self.parser_error
+            )
+            for message in messages:
+                self._logger.debug(message)
+            if self._parser_error:
+                self._logger.error(self._parser_error)
+                return None
+           
+
+
         if app.args.execution_environment:
-            self._logger.debug("trying execution environment")
+            self._logger.debug("running execution environment")
             self._try_ee(app.args)
         else:
+            self._logger.debug("running local")
             self._try_local(app.args)
 
         if not self._collections:
@@ -176,9 +204,14 @@ class Action(App):
 
     def _build_main_menu(self):
         """build the main menu of options"""
+        if self.app.args.execution_environment:
+            columns=["__name", "__version", "__shadowed", "__type", "path"]
+        else:
+            columns=["__name", "__version", "__shadowed", "path"]
+
         return Step(
             name="all_collections",
-            columns=["__name", "__version", "__shadowed", "path"],
+            columns=columns,
             select_func=self._build_plugin_menu,
             tipe="menu",
             value=self._collections,
@@ -259,14 +292,14 @@ class Action(App):
         else:
             playbook_dir = os.getcwd()
 
-        adjacent_collection_dir = playbook_dir + "/collections"
+        self._adjacent_collection_dir = playbook_dir + "/collections"
 
         cmd = [args.container_engine, "run", "-i", "-t"]
 
         cmd += ["-v", f"{args.share_dir}/utils:{args.share_dir}/utils:z"]
 
-        if os.path.exists(adjacent_collection_dir):
-            cmd += ["-v", f"{adjacent_collection_dir}:{adjacent_collection_dir}:z"]
+        if os.path.exists(self._adjacent_collection_dir):
+            cmd += ["-v", f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"]
 
         cmd += [
             "-v",
@@ -275,7 +308,7 @@ class Action(App):
 
         cmd += [args.ee_image]
         cmd += ["python3", f"{args.share_dir}/utils/catalog_collections.py"]
-        cmd += ["-a", adjacent_collection_dir]
+        cmd += ["-a", self._adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
 
         self._logger.debug("ee command: %s", " ".join(cmd))
@@ -348,6 +381,11 @@ class Action(App):
             collection["__name"] = collection["known_as"]
             collection["__version"] = collection["collection_info"]["version"]
             collection["__shadowed"] = bool(collection["hidden_by"])
+            if self.app.args.execution_environment:
+                if collection['path'].startswith(self._adjacent_collection_dir):
+                    collection['__type'] = "bind_mount"
+                else:
+                    collection['__type'] = "contained"
 
         self._stats = parsed["stats"]
 
