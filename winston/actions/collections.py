@@ -82,7 +82,7 @@ class Action(App):
 
     def __init__(self, args):
         super().__init__(args=args)
-        self._args: Namespace = args
+        self._args: Namespace
         self._interaction: Interaction
         self._logger = logging.getLogger(__name__)
         self._app = None
@@ -127,23 +127,27 @@ class Action(App):
         if provided_params := interaction.action.match.groupdict()["params"]:
             self._logger.debug("Parsing provide params: %s", provided_params)
             params = f"collections {provided_params}".split()
-            messages, new_args = self.app.args.parse_and_update(
+            messages, self._args = self.app.args.parse_and_update(
                 params=params, error_cb=self.parser_error
             )
+            # assume this is params provided
+            self._args.execution_environment = True
             for message in messages:
                 self._logger.debug(message)
             if self._parser_error:
                 self._logger.error(self._parser_error)
                 return None
+        else:
+            self._args = self._app.args
            
 
 
-        if app.args.execution_environment:
+        if self._args.execution_environment:
             self._logger.debug("running execution environment")
-            self._try_ee(app.args)
+            self._try_ee()
         else:
             self._logger.debug("running local")
-            self._try_local(app.args)
+            self._try_local()
 
         if not self._collections:
             interaction.ui.scroll(previous_scroll)
@@ -204,7 +208,7 @@ class Action(App):
 
     def _build_main_menu(self):
         """build the main menu of options"""
-        if self.app.args.execution_environment:
+        if self._args.execution_environment:
             columns=["__name", "__version", "__shadowed", "__type", "path"]
         else:
             columns=["__name", "__version", "__shadowed", "path"]
@@ -285,18 +289,18 @@ class Action(App):
             index=self.steps.current.index,
         )
 
-    def _try_ee(self, args: Namespace) -> None:
+    def _try_ee(self) -> None:
         """run collection catalog in ee"""
-        if "playbook" in self._app.args:
-            playbook_dir = os.path.dirname(args.playbook)
+        if "playbook" in self._args:
+            playbook_dir = os.path.dirname(self._args.playbook)
         else:
             playbook_dir = os.getcwd()
 
         self._adjacent_collection_dir = playbook_dir + "/collections"
 
-        cmd = [args.container_engine, "run", "-i", "-t"]
+        cmd = [self._args.container_engine, "run", "-i", "-t"]
 
-        cmd += ["-v", f"{args.share_dir}/utils:{args.share_dir}/utils:z"]
+        cmd += ["-v", f"{self._args.share_dir}/utils:{self._args.share_dir}/utils:z"]
 
         if os.path.exists(self._adjacent_collection_dir):
             cmd += ["-v", f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"]
@@ -306,8 +310,8 @@ class Action(App):
             f"{self._collection_cache_path}:{self._collection_cache_path}:z",
         ]
 
-        cmd += [args.ee_image]
-        cmd += ["python3", f"{args.share_dir}/utils/catalog_collections.py"]
+        cmd += [self._args.ee_image]
+        cmd += ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]
         cmd += ["-a", self._adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
 
@@ -316,7 +320,7 @@ class Action(App):
 
     def _try_local(self, args: Namespace) -> None:
         """run config locally"""
-        if "playbook" in self._app.args:
+        if "playbook" in self._args:
             playbook_dir = os.path.dirname(args.playbook)
         else:
             playbook_dir = os.getcwd()
@@ -381,7 +385,7 @@ class Action(App):
             collection["__name"] = collection["known_as"]
             collection["__version"] = collection["collection_info"]["version"]
             collection["__shadowed"] = bool(collection["hidden_by"])
-            if self.app.args.execution_environment:
+            if self._args.execution_environment:
                 if collection['path'].startswith(self._adjacent_collection_dir):
                     collection['__type'] = "bind_mount"
                 else:
