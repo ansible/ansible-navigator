@@ -262,17 +262,19 @@ class Action(App):
         adjacent_collection_dir = playbook_dir + "/collections"
 
         cmd = [args.container_engine, "run", "-i", "-t"]
-        cmd += ["--security-opt", "label=disable"]
-        cmd += ["-v", f"{args.share_dir}/utils:/home/runner/cb"]
+
+        cmd += ["-v", f"{args.share_dir}/utils:{args.share_dir}/utils:z"]
+
         if os.path.exists(adjacent_collection_dir):
-            cmd += ["-v", f"{adjacent_collection_dir}:{adjacent_collection_dir}"]
+            cmd += ["-v", f"{adjacent_collection_dir}:{adjacent_collection_dir}:z"]
+
         cmd += [
             "-v",
-            f"{self._collection_cache_path}:{self._collection_cache_path}",
+            f"{self._collection_cache_path}:{self._collection_cache_path}:z",
         ]
 
         cmd += [args.ee_image]
-        cmd += ["python3", "/home/runner/cb/catalog_collections.py"]
+        cmd += ["python3", f"{args.share_dir}/utils/catalog_collections.py"]
         cmd += ["-a", adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
 
