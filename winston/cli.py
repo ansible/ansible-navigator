@@ -192,7 +192,6 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         args.app = "welcome"
         args.value = None
 
-
     share_dir = os.path.join(sys.prefix, "share", APP_NAME)
     if os.path.exists(share_dir):
         args.share_dir = share_dir
@@ -202,7 +201,6 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
             args.share_dir = share_dir
         else:
             sys.exit("problem finding share dir")
-
 
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     args.cache_dir = f"{cache_home}/{APP_NAME}"

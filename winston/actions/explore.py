@@ -355,7 +355,9 @@ class Action(App):
             new_args = copy.copy(self._calling_app.args)
 
         playbook_valid = os.path.exists(playbook)
-        inventory_valid = all((os.path.exists(inv) for inv in getattr(new_args, "inventory", ())))
+        inventory_valid = bool(getattr(new_args, "inventory", ())) and all(
+            (os.path.exists(inv) for inv in getattr(new_args, "inventory", ()))
+        )
 
         if playbook_valid and inventory_valid:
             new_args.playbook = playbook
@@ -369,7 +371,7 @@ class Action(App):
                 for field in populated_form["fields"].values()
                 if field["name"].startswith("inv_") and field["value"] != ""
             ]
-            new_args.cmd_line = populated_form["fields"]["cmd_line"]["value"].split()
+            new_args.cmdline = populated_form["fields"]["cmdline"]["value"].split()
 
         self.args = new_args
         for key, value in vars(self.args).items():
@@ -425,7 +427,7 @@ class Action(App):
         """ propmpt for a valid artifcat file """
         FType = Dict[str, Any]
         form_dict: FType = {
-            "title": "Artifcat file not found, please confirm the following",
+            "title": "Artifact file not found, please confirm the following",
             "fields": [],
         }
         form_field = {
@@ -479,7 +481,7 @@ class Action(App):
             form_dict["fields"].append(form_field)
 
         form_field = {
-            "name": "cmd_line",
+            "name": "cmdline",
             "pre_populate": " ".join(new_args.cmdline),
             "prompt": "Additional command line paramters",
             "type": "text_input",
