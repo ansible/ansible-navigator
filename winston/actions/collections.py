@@ -125,15 +125,17 @@ class Action(App):
         )
 
         if provided_params := interaction.action.match.groupdict()["params"]:
-            self._logger.debug("Parsing provide params: %s", provided_params)
-            params = f"collections {provided_params}".split()
+            params = f"collections {provided_params}"
+            self._logger.debug("Parsing params: %s", params)
             messages, self._args = self.app.args.parse_and_update(
-                params=params, error_cb=self.parser_error
+                params=params.split(), error_cb=self.parser_error
             )
-            # assume this is params provided
+            # assume this is a provided param
             self._args.execution_environment = True
             for message in messages:
                 self._logger.debug(message)
+            for key, value in vars(self._args).items():
+                self._logger.debug("Running with %s=%s %s", key, value, type(value))
             if self._parser_error:
                 self._logger.error(self._parser_error)
                 return None
@@ -318,16 +320,16 @@ class Action(App):
         self._logger.debug("ee command: %s", " ".join(cmd))
         self._dispatch(cmd)
 
-    def _try_local(self, args: Namespace) -> None:
+    def _try_local(self) -> None:
         """run config locally"""
         if "playbook" in self._args:
-            playbook_dir = os.path.dirname(args.playbook)
+            playbook_dir = os.path.dirname(self._args.playbook)
         else:
             playbook_dir = os.getcwd()
 
         adjacent_collection_dir = playbook_dir + "/collections"
 
-        cmd = ["python3", f"{args.share_dir}/utils/catalog_collections.py"]
+        cmd = ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]
         cmd += ["-a", adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
         self._logger.debug("local command: %s", " ".join(cmd))
