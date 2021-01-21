@@ -93,7 +93,6 @@ class Action(App):
         self._adjacent_collection_dir: str
         self._parser_error: str = ""
 
-    
     def parser_error(self, message: str) -> Tuple[None, None]:
         """callback for parser error
 
@@ -141,8 +140,6 @@ class Action(App):
                 return None
         else:
             self._args = self._app.args
-           
-
 
         if self._args.execution_environment:
             self._logger.debug("running execution environment")
@@ -211,9 +208,9 @@ class Action(App):
     def _build_main_menu(self):
         """build the main menu of options"""
         if self._args.execution_environment:
-            columns=["__name", "__version", "__shadowed", "__type", "path"]
+            columns = ["__name", "__version", "__shadowed", "__type", "path"]
         else:
-            columns=["__name", "__version", "__shadowed", "path"]
+            columns = ["__name", "__version", "__shadowed", "path"]
 
         return Step(
             name="all_collections",
@@ -388,10 +385,10 @@ class Action(App):
             collection["__version"] = collection["collection_info"]["version"]
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
-                if collection['path'].startswith(self._adjacent_collection_dir):
-                    collection['__type'] = "bind_mount"
+                if collection["path"].startswith(self._adjacent_collection_dir):
+                    collection["__type"] = "bind_mount"
                 else:
-                    collection['__type'] = "contained"
+                    collection["__type"] = "contained"
 
         self._stats = parsed["stats"]
 
