@@ -1,6 +1,7 @@
 """ :inventory """
 import curses
 import logging
+import glob
 import json
 import os
 import subprocess
@@ -10,7 +11,6 @@ from subprocess import CompletedProcess
 from typing import Any
 from typing import Dict
 from typing import List
-from typing import Tuple
 from typing import Union
 
 from . import run as run_action
@@ -111,7 +111,7 @@ class Action(App):
         self.name = "inventory"
         self._interaction: Interaction
         self._inventories: List[str] = []
-        self._inventories_mtime: Tuple[float, ...]
+        self._inventories_mtime: float
 
     @property
     def _inventory(self) -> Dict[Any, Any]:
@@ -134,7 +134,20 @@ class Action(App):
         return self.args.inventory_columns.split(",")
 
     def _set_inventories_mtime(self) -> None:
-        self._inventories_mtime = tuple(os.path.getmtime(i) for i in self._inventories)
+        mtimes = []
+        for inventory in self._inventories:
+            if os.path.isdir(inventory):
+                mtimes.append(
+                    max(
+                        (
+                            os.path.getmtime(e)
+                            for e in glob.glob(os.path.join(inventory, "**"), recursive=True)
+                        )
+                    )
+                )
+            elif os.path.isfile(inventory):
+                mtimes.append(os.path.getmtime(inventory))
+        self._inventories_mtime = max(mtimes)
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
@@ -184,6 +197,7 @@ class Action(App):
                     break
 
             current_mtime = self._inventories_mtime
+            self._logger.debug(current_mtime)
             self._set_inventories_mtime()
             if current_mtime != self._inventories_mtime:
                 self._logger.debug("inventory changed")
