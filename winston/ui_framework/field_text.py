@@ -71,7 +71,7 @@ class FieldText:
         if response == "" and not self.default is nonexistent:
             response = str(self.default)
         # no repsonse or validator is none
-        if response or getattr(self.validator, "__name__", None).endswith("none"):
+        if response or getattr(self.validator, "__name__", "").endswith("none"):
             validation = self.validator(text=response)
             if not validation.error_msg:
                 self.validate(response)
