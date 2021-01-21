@@ -197,7 +197,6 @@ class Action(App):
                     break
 
             current_mtime = self._inventories_mtime
-            self._logger.debug(current_mtime)
             self._set_inventories_mtime()
             if current_mtime != self._inventories_mtime:
                 self._logger.debug("inventory changed")
