@@ -7,7 +7,7 @@ Although winston is in his infancy, he wants nothing more than to bring all the 
 ## Quick start
 
 ```
-git clone git@github.com:ansible-network/winston.git
+git clone https://github.com/ansible/winston.git
 cd winston
 pip install .
 ```
