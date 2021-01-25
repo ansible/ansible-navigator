@@ -3,6 +3,7 @@
 import itertools
 import logging
 import os
+import pkg_resources
 import sys
 import signal
 import time
@@ -200,7 +201,13 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         if os.path.exists(share_dir):
             args.share_dir = share_dir
         else:
-            sys.exit("problem finding share dir")
+            # check if the package was installed with pip --editable with an .egg-link
+            site = pkg_resources.get_distribution(APP_NAME).location
+            share_dir = os.path.join(site, 'share', 'winston')
+            if os.path.exists(share_dir):
+                args.share_dir = share_dir
+            else:
+                sys.exit("problem finding share dir")
 
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     args.cache_dir = f"{cache_home}/{APP_NAME}"
