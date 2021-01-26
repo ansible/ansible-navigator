@@ -5,7 +5,6 @@ import functools
 import importlib
 import re
 from collections import namedtuple
-from importlib import resources
 
 from typing import Any
 from typing import Callable
@@ -14,9 +13,14 @@ from typing import Generator
 from typing import List
 from typing import Tuple
 
+try:
+    from importlib import resources
+except ImportError:
+    import importlib_resources as resources  # type: ignore
+
 
 # Basic structure for storing information about one action
-ActionT = namedtuple("Action", ("name", "cls", "kegex"))
+ActionT = namedtuple("ActionT", ("name", "cls", "kegex"))
 
 Kegex = namedtuple("Kegex", ("name", "kegex"))
 
@@ -71,7 +75,7 @@ def _import(package: str, action: str) -> None:
 
 def _import_all(package: str) -> None:
     """Import all actions in a package"""
-    files = resources.contents(package)
+    files = resources.contents(package)  # type: ignore
     actions = [f[:-3] for f in files if f.endswith(".py") and f[0] != "_"]
     for action in actions:
         _import(package, action)

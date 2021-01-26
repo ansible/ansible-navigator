@@ -337,14 +337,17 @@ class Action(App):
     def _init_explore(self) -> bool:
         """in the case of :explore, parse the user input"""
         playbook = ""
-        if p_from_int := self._interaction.action.match.groupdict().get("playbook"):
+
+        p_from_int = self._interaction.action.match.groupdict().get("playbook")
+        if p_from_int:
             self._logger.debug("Using playbook provided in interaction")
             playbook = os.path.abspath(os.path.expanduser(p_from_int))
         elif hasattr(self._calling_app.args, "playbook") and self._calling_app.args:
             self._logger.debug("Using playbook from calling app")
             playbook = self._calling_app.args.playbook
 
-        if params := self._interaction.action.match.groupdict().get("params"):
+        params = self._interaction.action.match.groupdict().get("params")
+        if params:
             self._logger.debug("Using params provided in interaction")
             params = [self._name_at_cli] + [playbook] + params.split()
             new_args = self._update_args(params)
@@ -403,7 +406,8 @@ class Action(App):
             self._logger.error("Unable to parse artifact file")
             return False
 
-        if (version := data.get("version", "")).startswith("1."):
+        version = data.get("version", "")
+        if version.startswith("1."):
             try:
                 self._plays.value = data["plays"]
                 self._interaction.ui.update_status(data["status"], data["status_color"])
@@ -558,7 +562,8 @@ class Action(App):
 
         args = copy.copy(self._calling_app.args)
         for key, value in vars(new_args).items():
-            if (arg_value := getattr(args, key, None)) != value:
+            arg_value = getattr(args, key, None)
+            if arg_value != value:
                 self._logger.debug(
                     "Overriding previous cli param '%s:%s' with '%s:%s'", key, arg_value, key, value
                 )

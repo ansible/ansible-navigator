@@ -38,7 +38,8 @@ class App:
         :rtype: str, Action or None, None
         """
         for kegex in kegexes():
-            if match := kegex.kegex.match(entry):
+            match = kegex.kegex.match(entry)
+            if match:
                 return kegex.name, Action(match=match, value=entry)
         return None, None
 

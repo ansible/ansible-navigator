@@ -205,7 +205,8 @@ class WebXtermJs:
         """
         try:
             async for message in self._connected_clients[0]:
-                if match := re.match(r"^\\e\[8;(?P<rows>\d+);(?P<cols>\d+)t$", message):
+                match = re.match(r"^\\e\[8;(?P<rows>\d+);(?P<cols>\d+)t$", message)
+                if match:
                     self._set_winsize(
                         pty_fd,
                         int(match.groupdict()["rows"]),

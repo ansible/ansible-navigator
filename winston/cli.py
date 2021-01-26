@@ -3,7 +3,7 @@
 import itertools
 import logging
 import os
-import pkg_resources
+import pkg_resources  # pylint: disable=wrong-import-order
 import sys
 import signal
 import time
@@ -53,7 +53,8 @@ def get_default(parser: ArgumentParser, section: str, name: str) -> Union[str, L
     )
     choice = subparser_action.choices.get(section, "")
     if isinstance(choice, ArgumentParser):
-        if (default := choice.get_default(name)) is not None:
+        default = choice.get_default(name)
+        if default is not None:
             return default
     return NoSuch()
 
@@ -84,7 +85,8 @@ def update_args(
                 if section_name in ["default", args.app]:
                     for key, value in section.items():
                         if hasattr(args, key):
-                            if (arg_value := getattr(args, key)) is not None:
+                            arg_value = getattr(args, key)
+                            if arg_value is not None:
                                 default = get_default(parser, section_name, key)
                                 if isinstance(default, NoSuch):
                                     continue
@@ -150,6 +152,7 @@ def setup_logger(args):
 
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:
     # pylint: disable=too-many-branches
+    # pylint: disable=too-many-statements
     """parse some params and update"""
     parser = CliArgs(APP_NAME).parser
 
@@ -203,7 +206,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         else:
             # check if the package was installed with pip --editable with an .egg-link
             site = pkg_resources.get_distribution(APP_NAME).location
-            share_dir = os.path.join(site, 'share', 'winston')
+            share_dir = os.path.join(site, "share", "winston")
             if os.path.exists(share_dir):
                 args.share_dir = share_dir
             else:

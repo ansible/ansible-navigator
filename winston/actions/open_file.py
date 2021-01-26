@@ -53,7 +53,8 @@ class Action:
         line_number = "0"
         obj = None
         self._logger.debug("content is showing")
-        if something := match.groupdict()["something"]:
+        something = match.groupdict()["something"]
+        if something:
             self._logger.debug("asked to open something")
             if something.startswith("{{"):
                 self._logger.debug("something appears to be a template: %s", something)

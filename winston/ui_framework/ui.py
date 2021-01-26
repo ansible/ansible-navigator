@@ -78,6 +78,7 @@ class Menu(NamedTuple):
 class Ui(NamedTuple):
     """select functions that can be called from an action"""
 
+    clear: Callable
     menu_filter: Callable
     scroll: Callable
     show: Callable
@@ -167,6 +168,11 @@ class UserInterface(CursesWindow):
         self._screen.timeout(refresh)
         self._one_line_input = FormHandlerText(screen=self._screen)
 
+    def clear(self) -> None:
+        """ clear the screen"""
+        self._screen.clear()
+        self._screen.refresh()
+
     def disable_refresh(self) -> None:
         """Disable the screen refresh"""
         self._refresh.append(self._refresh[-1])
@@ -241,6 +247,7 @@ class UserInterface(CursesWindow):
         :rtype: Ui
         """
         res = Ui(
+            clear=self.clear,
             menu_filter=self.menu_filter,
             scroll=self.scroll,
             show=self.show,
@@ -457,7 +464,8 @@ class UserInterface(CursesWindow):
         :rtype: str, Action or None, None
         """
         for kegex in self._kegexes():
-            if match := kegex.kegex.match(entry):
+            match = kegex.kegex.match(entry)
+            if match:
                 return kegex.name, Action(match=match, value=entry)
         return None, None
 
@@ -630,7 +638,9 @@ class UserInterface(CursesWindow):
             elif entry == "-":
                 less = list(reversed([i for i in self._menu_indicies if i - index < 0]))
                 more = list(reversed([i for i in self._menu_indicies if i - index > 0]))
-                if ordered_indicies := less + more:
+
+                ordered_indicies = less + more
+                if ordered_indicies:
                     index = ordered_indicies[0]
                     self.scroll(0)
                     entry = "KEY_F(5)"
@@ -638,7 +648,9 @@ class UserInterface(CursesWindow):
             elif entry == "+":
                 more = [i for i in self._menu_indicies if i - index > 0]
                 less = [i for i in self._menu_indicies if i - index < 0]
-                if ordered_indicies := more + less:
+
+                ordered_indicies = more + less
+                if ordered_indicies:
                     index = ordered_indicies[0]
                     self.scroll(0)
                     entry = "KEY_F(5)"

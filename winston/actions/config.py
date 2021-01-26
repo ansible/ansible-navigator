@@ -253,7 +253,12 @@ class Action(App):
         """run a command"""
         try:
             proc_out = subprocess.run(
-                " ".join(cmd), capture_output=True, check=True, text=True, shell=True
+                " ".join(cmd),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True,
+                universal_newlines=True,
+                shell=True,
             )
             self._logger.debug(
                 "ansible-config output %s", proc_out.stdout[0:100].replace("\n", " ") + "<...>"
@@ -279,7 +284,8 @@ class Action(App):
 
         regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
         for line in dump_output.stdout.splitlines():
-            if extracted := regex.match(line):
+            extracted = regex.match(line)
+            if extracted:
                 variable = extracted.groupdict()["variable"]
                 try:
                     source = yaml.load(extracted.groupdict()["source"], Loader=Loader)

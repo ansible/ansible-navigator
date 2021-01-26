@@ -37,7 +37,8 @@ class Action:
         self._logger.debug("doc requested")
         self._app = app
 
-        if plugin := interaction.action.match.groupdict()["plugin"]:
+        plugin = interaction.action.match.groupdict()["plugin"]
+        if plugin:
             self._logger.debug("plugin set by user: %s", plugin)
         elif interaction.content:
             try:
@@ -101,7 +102,12 @@ class Action:
         self._logger.debug("ee command: %s", " ".join(cmd))
         try:
             proc_out = subprocess.run(
-                " ".join(cmd), capture_output=True, check=True, text=True, shell=True
+                " ".join(cmd),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True,
+                universal_newlines=True,
+                shell=True,
             )
             parts = proc_out.stdout.split("{", 1)
             stderr = parts[0]
@@ -134,7 +140,12 @@ class Action:
                 self._app.args.type = None
 
             proc_out = subprocess.run(
-                " ".join(cmd), capture_output=True, check=True, text=True, shell=True
+                " ".join(cmd),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True,
+                universal_newlines=True,
+                shell=True,
             )
             self._logger.debug("ansible-doc output %s", proc_out)
 

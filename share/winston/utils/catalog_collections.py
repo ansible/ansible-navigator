@@ -48,7 +48,9 @@ class CollectionCatalog:
         """catalog the plugins within a collection"""
         path = collection["path"]
         file_chksums = {}
-        if file_manifest_file := collection.get("file_manifest_file", {}).get("name"):
+
+        file_manifest_file = collection.get("file_manifest_file", {}).get("name")
+        if file_manifest_file:
             fpath = f"{path}/{file_manifest_file}"
             if os.path.exists(fpath):
                 with open(fpath) as read_file:
@@ -96,7 +98,8 @@ class CollectionCatalog:
             relative_path = file_path.replace(collection["path"], "")
             _basename, extention = os.path.splitext(filename)
             if not filename.startswith("__") and extention == ".py":
-                if not (chksum_dict := file_chksums.get(relative_path)):
+                chksum_dict = file_chksums.get(relative_path)
+                if not chksum_dict:
                     chksum_dict = self._generate_chksum(file_path, relative_path)
                 chksum = chksum_dict[f"chksum_{chksum_dict['chksum_type']}"]
                 collection["plugin_chksums"][chksum] = {"path": relative_path, "type": plugin_type}
@@ -174,8 +177,11 @@ class CollectionCatalog:
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
     """extract a doc from a plugin, place in completed q"""
     # pylint: disable=ungrouped-imports
+    # pylint: disable=import-outside-toplevel
+
     # load the fragment_loader _after_ the path is set
     from ansible.plugins.loader import fragment_loader  # type: ignore
+
     while True:
         entry = pending_queue.get()
         if entry is None:
@@ -244,7 +250,8 @@ def parse_args():
     )
     parsed_args = parser.parse_args()
 
-    if adjacent := vars(parsed_args).get("adjacent"):
+    adjacent = vars(parsed_args).get("adjacent")
+    if adjacent:
         directories = [adjacent] + parsed_args.dirs
     else:
         directories = parsed_args.dirs
@@ -314,7 +321,12 @@ def run_command(cmd: List) -> Dict:
     """run a command"""
     try:
         proc_out = subprocess.run(
-            " ".join(cmd), capture_output=True, check=True, text=True, shell=True
+            " ".join(cmd),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+            universal_newlines=True,
+            shell=True,
         )
         return {"stdout": proc_out.stdout}
     except subprocess.CalledProcessError as exc:
@@ -364,7 +376,7 @@ if __name__ == "__main__":
     args, parent_directories = parse_args()
 
     os.environ["ANSIBLE_COLLECTIONS_PATHS"] = ":".join(parent_directories)
-    
+
     result = main()
     result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
     print(json.dumps(result, default=str))
