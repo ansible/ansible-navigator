@@ -173,6 +173,9 @@ class CollectionCatalog:
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
     """extract a doc from a plugin, place in completed q"""
+    # pylint: disable=ungrouped-imports
+    # load the fragment_loader _after_ the path is set
+    from ansible.plugins.loader import fragment_loader  # type: ignore
     while True:
         entry = pending_queue.get()
         if entry is None:
@@ -360,11 +363,8 @@ if __name__ == "__main__":
 
     args, parent_directories = parse_args()
 
-    # load the fragment_loader _after_ the path is set
     os.environ["ANSIBLE_COLLECTIONS_PATHS"] = ":".join(parent_directories)
-    # pylint: disable=ungrouped-imports
-    from ansible.plugins.loader import fragment_loader  # type: ignore
-
+    
     result = main()
     result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
     print(json.dumps(result, default=str))
