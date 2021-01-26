@@ -123,7 +123,8 @@ class Action(App):
             await_input=False,
         )
 
-        if provided_params := interaction.action.match.groupdict()["params"]:
+        provided_params = interaction.action.match.groupdict()["params"]
+        if provided_params:
             params = f"collections {provided_params}"
             self._logger.debug("Parsing params: %s", params)
             messages, self._args = self.app.args.parse_and_update(
@@ -344,7 +345,12 @@ class Action(App):
         """run a command"""
         try:
             proc_out = subprocess.run(
-                " ".join(cmd), capture_output=True, check=True, text=True, shell=True
+                " ".join(cmd),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True,
+                universal_newlines=True,
+                shell=True,
             )
             self._logger.debug("cmd output %s", proc_out.stdout[0:100].replace("\n", " ") + "<...>")
             return proc_out

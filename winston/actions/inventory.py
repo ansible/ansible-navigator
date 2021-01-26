@@ -293,7 +293,8 @@ class Action(App):
 
             columns = ["__name", "__taxonomy", "__type"]
 
-            if hosts := self._inventory[key].get("hosts", None):
+            hosts = self._inventory[key].get("hosts", None)
+            if hosts:
                 columns.extend(self._show_columns)
                 for host in hosts:
                     menu_entry = MenuEntry(**self._host_vars[host])
@@ -302,7 +303,8 @@ class Action(App):
                     menu_entry["__type"] = "host"
                     menu.append(menu_entry)
 
-            if children := self._inventory[key].get("children", None):
+            children = self._inventory[key].get("children", None)
+            if children:
                 for child in children:
                     menu_entry = MenuEntry()
                     menu_entry["__name"] = child
@@ -373,12 +375,15 @@ class Action(App):
         raise TypeError("unknown step type")
 
     def _build_inventory_list(self) -> None:
-        if inventories := self._interaction.action.match.groupdict()["inventories"]:
+        inventories = self._interaction.action.match.groupdict()["inventories"]
+        if inventories:
             inventories = tuple(
                 os.path.abspath(os.path.expanduser(i.strip())) for i in inventories.split(",")
             )
             self._logger.debug("inventories set by user: %s", inventories)
-        elif hasattr(self.args, "inventory") and (inventories := self.args.inventory):
+
+        elif hasattr(self.args, "inventory") and self.args.inventory:
+            inventories = self.args.inventory
             self._logger.info("no inventory provided, using inventory from args")
         else:
             inventories = []
@@ -496,7 +501,12 @@ class Action(App):
     def _run_command(self, cmdline: str) -> Union[CompletedProcess, None]:
         try:
             proc_out = subprocess.run(
-                cmdline, capture_output=True, check=True, text=True, shell=True
+                cmdline,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True,
+                universal_newlines=True,
+                shell=True,
             )
             return proc_out
 

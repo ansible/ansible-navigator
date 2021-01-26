@@ -108,7 +108,8 @@ class FromPresenter(CursesWindow):
                     lines.append((self._line_number, tuple([option_line])))
                     self._line_number += 1
 
-            if error := self._generate_error(form_field):
+            error = self._generate_error(form_field)
+            if error:
                 lines.append((self._line_number, error))
                 self._line_number += 1
 

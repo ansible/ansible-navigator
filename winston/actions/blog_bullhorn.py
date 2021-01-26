@@ -1,6 +1,7 @@
 """ :blog """
 import logging
 import re
+import time
 import xml.etree.ElementTree as ET
 import urllib.request
 import urllib.error
@@ -114,6 +115,10 @@ class Action:
             app.update()
             if next_interaction.name == "select" and isinstance(next_interaction.action.value, int):
                 webbrowser.open_new_tab(f2show[next_interaction.action.value]["link"])
+                interaction.ui.clear()
+                time.sleep(1)  # let webbrowser print it's garbage
+                interaction.ui.clear()
+
             elif next_interaction.name != "refresh":
                 break
 

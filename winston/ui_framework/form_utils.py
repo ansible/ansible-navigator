@@ -23,15 +23,18 @@ def dict_to_form(form_data: Dict) -> Form:
         if field["type"] == "text_input":
             field_params["validator"] = getattr(FieldValidators, field["validator"]["name"])
 
-            if choices := field["validator"].get("choices"):
+            choices = field["validator"].get("choices")
+            if choices:
                 field_params["validator"] = partial(field_params["validator"], choices=choices)
 
-            if default := field.get("default"):
+            default = field.get("default")
+            if default:
                 field_params["default"] = default
 
             frm_field_text = FieldText(**field_params)
 
-            if pre_populate := field.get("pre_populate"):
+            pre_populate = field.get("pre_populate")
+            if pre_populate:
                 frm_field_text.pre_populate(pre_populate)
 
             form.fields.append(frm_field_text)
@@ -39,9 +42,12 @@ def dict_to_form(form_data: Dict) -> Form:
         elif field["type"] in ["checkbox", "radio"]:
             field_params["options"] = [FieldOption(**option) for option in field["options"]]
             if field["type"] == "checkbox":
-                if max_selected := field.get("max_selected"):
+                max_selected = field.get("max_selected")
+                if max_selected:
                     field_params["max_selected"] = max_selected
-                if min_selected := field.get("min_selected"):
+
+                min_selected = field.get("min_selected")
+                if min_selected:
                     field_params["min_selected"] = min_selected
                 frm_field_checks = FieldChecks(**field_params)
                 form.fields.append(frm_field_checks)
