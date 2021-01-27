@@ -8,9 +8,23 @@ Although winston is in his infancy, he wants nothing more than to bring all the 
 
 ```
 git clone https://github.com/ansible/winston.git
-cd winston
-pip install .
+mkdir winston_demo
+cd winston_demo
+python3 -m venv venv
+source ven/bin/activate
+pip install -U setuptools
+pip install ../winston
 ```
+
+RHEL/Centos8 prerequisites:
+
+```
+sudo dnf install python3
+sudo dnf install gcc python3-devel
+```
+
+
+
 
 ### Welcome
 Start at the welcome page, from the welcome page you can run playbooks, explore inventories, review docs, and check out blogs

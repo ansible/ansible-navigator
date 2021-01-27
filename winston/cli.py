@@ -265,7 +265,7 @@ def main():
                 logger.debug(msg)
             else:
                 logger.critical(msg)
-                print(f"\x1b[31m[ERROR]: {msg}")
+                print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
                 sys.exit(1)
         set_ansible_envar()
 
