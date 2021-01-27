@@ -11,12 +11,12 @@ git clone https://github.com/ansible/winston.git
 mkdir winston_demo
 cd winston_demo
 python3 -m venv venv
-source ven/bin/activate
+source venv/bin/activate
 pip install -U setuptools
 pip install ../winston
 ```
 
-RHEL/Centos8 prerequisites:
+RHEL8/Centos8 prerequisites:
 
 ```
 sudo dnf install python3
