@@ -176,7 +176,7 @@ def find_ini_config_file(app_name: str) -> Optional[str]:
     except OSError:
         pass
 
-    potential_paths.append(f"{str(Path.home())}{filename}")
+    potential_paths.append(f"{str(Path.home())}/{filename}")
     potential_paths.append(f"/etc/{app_name}/{filename}")
 
     for path in potential_paths:
