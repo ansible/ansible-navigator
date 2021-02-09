@@ -212,7 +212,6 @@ class MenuBuilder:
             # right jusitfy on header if int, bool, float or "duration"
             print_at = col_starts[colno] + len(header[colno][1]) - len(text)
         elif _is_progress(str(coltext)):
-            # elif re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", str(coltext)):
             # right justify in column if %
             print_at = col_starts[colno] + adj_colws[colno] - len(text)
         else:
