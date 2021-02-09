@@ -91,11 +91,20 @@ class Action:
             obj = content.showing
         return filename, line_number, obj
 
+    @staticmethod
+    def _remove_dbl_un(string):
+        if string.startswith("__"):
+            return string.replace("__", "", 1)
+        return string
+
     def _menu(self, menu: Menu, menu_filter: Callable) -> Tuple[None, str, List[Dict[Any, Any]]]:
         filename = None
         line_number = "0"
         self._logger.debug("menu is showing, open that")
-        obj = [{k: v for k, v in c.items() if k in menu.columns} for c in menu.current]
+        obj = [
+            {self._remove_dbl_un(k): v for k, v in c.items() if k in menu.columns}
+            for c in menu.current
+        ]
         if menu_filter():
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
         return filename, line_number, obj

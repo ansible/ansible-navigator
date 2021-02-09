@@ -1,6 +1,7 @@
 """ build a menu
 """
 import curses
+import functools
 import re
 
 from typing import Any
@@ -12,9 +13,8 @@ from typing import Tuple
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
-from .utils import convert_percentages
+from .utils import convert_percentage
 from .utils import distribute
-from .utils import sacrifice
 
 
 class MenuBuilder:
@@ -27,20 +27,18 @@ class MenuBuilder:
         screen_w: int,
         number_colors: int,
         color_menu_item: Callable,
-        distribution: str,
     ):
         # pylint: disable=too-many-arguments
         self._number_colors = number_colors
         self._pbar_width = pbar_width
         self._screen_w = screen_w
         self._color_menu_item = color_menu_item
-        self._distribution = distribution
 
-    def build(self, dicts: List, cols: List) -> Tuple[CursesLines, CursesLines]:
+    def build(self, dicts: List, cols: List, indicies) -> Tuple[CursesLines, CursesLines]:
         """main entry point for menu builer"""
-        return self._menu(dicts, cols)
+        return self._menu(dicts, cols, indicies)
 
-    def _menu(self, dicts: List, cols: List) -> Tuple[CursesLines, CursesLines]:
+    def _menu(self, dicts: List, cols: List, indicies) -> Tuple[CursesLines, CursesLines]:
         """Build a text menu from a list of dicts given columns(root keys)
 
         :param dicts: A list of dicts
@@ -48,12 +46,16 @@ class MenuBuilder:
         :param cols: The columns (keys) to use in the dicts
         :type cols: list of strings
         :return: the heading and body of the menu
+        :param showing: A range of what's showing in the UI
+        :type showing: Tuple(first, last)
         :rtype: (CursesLines, CursesLines)
-        :param distribute: How to distribute the excess/deficit
         """
         line_prefix_w = len(str(len(dicts))) + len("|")
-        dicts = convert_percentages(dicts, cols, self._pbar_width)
-        lines = [[str(d.get(c)) for c in cols] for d in dicts]
+
+        for idx in indicies:
+            convert_percentage(dicts[idx], cols, self._pbar_width)
+
+        lines = [[str(dicts[idx].get(c)) for c in cols] for idx in indicies]
         colws = [
             max([len(str(v)) for v in c])
             for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]])
@@ -62,12 +64,7 @@ class MenuBuilder:
         colws = [c + 1 for c in colws]
 
         available = self._screen_w - line_prefix_w - 1  # scrollbar width
-        if self._distribution == "fair":
-            adj_colws = distribute(available, colws)
-        elif self._distribution == "sacrifice":
-            adj_colws = sacrifice(available, colws)
-        else:
-            raise ValueError("unknown distribution method")
+        adj_colws = distribute(available, colws)
 
         col_starts = [0]
         for idx, colw in enumerate(adj_colws):
@@ -77,9 +74,8 @@ class MenuBuilder:
         header = self._menu_header_line(menu_layout)
 
         menu_layout = tuple([col_starts, cols, adj_colws, header])
-        curses_lines = self._menu_lines(dicts, menu_layout)
-
-        return tuple([header]), curses_lines
+        menu_lines = self._menu_lines(dicts, menu_layout, indicies)
+        return tuple([header]), menu_lines
 
     def _menu_header_line(self, menu_layout: Tuple[List, ...]) -> CursesLine:
         """Generate the menu header line
@@ -131,7 +127,9 @@ class MenuBuilder:
             column=col_starts[colno], string=adj_entry, color=0, decoration=curses.A_UNDERLINE
         )
 
-    def _menu_lines(self, dicts: List[Dict], menu_layout: Tuple[List, ...]) -> CursesLines:
+    def _menu_lines(
+        self, dicts: List[Dict], menu_layout: Tuple[List, ...], indicies
+    ) -> CursesLines:
         """Generate all the menu lines
 
         :params dicts: A list of dicts from which the menu will be generated
@@ -149,7 +147,7 @@ class MenuBuilder:
         :return: the menu lines
         :type: CursesLines
         """
-        return tuple(self._menu_line(dyct, menu_layout) for dyct in dicts)
+        return tuple(self._menu_line(dicts[idx], menu_layout) for idx in indicies)
 
     def _menu_line(self, dyct: dict, menu_layout: Tuple[List, ...]) -> CursesLine:
         """Generate one the menu line
@@ -213,10 +211,16 @@ class MenuBuilder:
         if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "__duration":
             # right jusitfy on header if int, bool, float or "duration"
             print_at = col_starts[colno] + len(header[colno][1]) - len(text)
-        elif re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", str(coltext)):
+        elif _is_progress(str(coltext)):
+            # elif re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", str(coltext)):
             # right justify in column if %
             print_at = col_starts[colno] + adj_colws[colno] - len(text)
         else:
             # left justify
             print_at = col_starts[colno]
         return CursesLinePart(column=print_at, string=str(text), color=color, decoration=0)
+
+
+@functools.lru_cache
+def _is_progress(string):
+    return bool(re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", string))

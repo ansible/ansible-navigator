@@ -191,7 +191,6 @@ class Action(App):
                     obj=self.steps.current.value,
                     columns=self.steps.current.columns,
                     color_menu_item=color_menu,
-                    distribution="sacrifice",
                 )
             elif self.steps.current.type == "content":
                 result = self._interaction.ui.show(
@@ -243,6 +242,7 @@ class Action(App):
                     plugin["collection_info"] = selected_collection["collection_info"]
                     plugin["collection_info"]["name"] = selected_collection["known_as"]
                     plugin["collection_info"]["shadowed_by"] = selected_collection["hidden_by"]
+                    plugin["collection_info"]["path"] = selected_collection["path"]
 
                     plugin["__added"] = plugin["doc"].get("version_added")
                     plugin["__description"] = plugin["doc"]["short_description"]

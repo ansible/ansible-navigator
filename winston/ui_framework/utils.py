@@ -1,12 +1,13 @@
 """ some ui specific utils
 """
+import functools
 import re
 from math import floor
 
 from typing import List
 
 
-def convert_percentages(dicts: List, keys: List, pbar_width: int) -> List:
+def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
     """convert a string % to a little progress bar
     not recursive
     80% = 80%|XXXXXXXX  |
@@ -18,17 +19,23 @@ def convert_percentages(dicts: List, keys: List, pbar_width: int) -> List:
     :param pbar_width: The width of the progress bar
     :type pbar_width: int
     """
-    for idx, entry in enumerate(dicts):
-        for key in [k for k in entry.keys() if k in keys]:
-            value = entry[key]
-            if re.match(r"^\d{1,3}%$", str(value)):
-                numx = floor(pbar_width / 100 * int(value[0:-1]))
-                entry["_" + key] = value
-                entry[key] = "{value} {numx}".format(
-                    value=value.rjust(4), numx=("\u2587" * numx).ljust(pbar_width)
-                )
-        dicts[idx] = entry
-    return dicts
+    for key in keys:
+        value = dyct[key]
+        if is_percent(str(value)):
+            numx = floor(pbar_width / 100 * int(value[0:-1]))
+            dyct["_" + key] = value
+            dyct[key] = "{value} {numx}".format(
+                value=value.rjust(4), numx=("\u2587" * numx).ljust(pbar_width)
+            )
+
+
+@functools.lru_cache
+def is_percent(string):
+    """is a string a percent?"""
+    if string.endswith("%"):
+        if re.match(r"^\d{1,3}%$", string):
+            return True
+    return False
 
 
 def distribute(available, weights):
@@ -40,6 +47,16 @@ def distribute(available, weights):
     :param weights: numbers
     :type weights: list of int
     """
+    total = sum(weights)
+    if available < total:
+        while available != total:
+            maxv = max(weights)
+            maxvs = [i for i, j in enumerate(weights) if j == maxv]
+            for idx in maxvs:
+                weights[idx] -= 1
+                if sum(weights) == available:
+                    return weights
+
     distributed_amounts = []
     total_weights = sum(weights)
     for weight in weights:
@@ -50,18 +67,3 @@ def distribute(available, weights):
         total_weights -= weight
         available -= distributed_amount
     return distributed_amounts
-
-
-def sacrifice(available, weights):
-    """if available > total
-    reduce last until it match next biggest
-    """
-    total = sum(weights)
-    if available < total:
-        second_largest = max(weights[0:-1])
-        sum_but_last = sum(weights[0:-1])
-        if sum_but_last > available:
-            weights[-1] = second_largest
-        else:
-            weights[-1] = available - sum_but_last
-    return distribute(available, weights)

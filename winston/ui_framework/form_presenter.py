@@ -223,7 +223,7 @@ class FromPresenter(CursesWindow):
             pad.clear()
             for line in self._generate_form():
                 self._add_line(pad, *line)
-            pad.refresh(0, 0, 0, self._pad_left, self._screen_h, self._screen_w - 1)
+            pad.refresh(0, 0, 0, self._pad_left, self._screen_h - 1, self._screen_w - 1)
 
             idx = idx % len(self._form.fields)
             form_field = self._form.fields[idx]
