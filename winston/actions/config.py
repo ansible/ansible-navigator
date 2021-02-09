@@ -26,9 +26,6 @@ from ..ui_framework import Interaction
 from ..yaml import yaml
 from ..yaml import Loader
 
-# max len for str repr of current
-MAX_CURRENT_LEN = 20
-
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
     # pylint: disable=unused-argument
@@ -178,7 +175,7 @@ class Action(App):
         """build the main menu of options"""
         return Step(
             name="all_options",
-            columns=["option", "__default", "__current_value", "source", "via"],
+            columns=["option", "__default", "source", "via", "__current_value"],
             select_func=self._build_option_content,
             tipe="menu",
             value=self._config,
@@ -303,12 +300,7 @@ class Action(App):
                         parsed[variable]["source"] = source
                         parsed[variable]["via"] = source
                     parsed[variable]["current"] = current
-                    if len(extracted.groupdict()["current"]) > MAX_CURRENT_LEN:
-                        parsed[variable]["__current_value"] = (
-                            extracted.groupdict()["current"][0:MAX_CURRENT_LEN] + "..."
-                        )
-                    else:
-                        parsed[variable]["__current_value"] = extracted.groupdict()["current"]
+                    parsed[variable]["__current_value"] = extracted.groupdict()["current"]
                 except KeyError as exc:
                     self._logger.error("variable '%s' not found in list output")
                     return None

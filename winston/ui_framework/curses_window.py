@@ -82,7 +82,7 @@ class CursesWindow:
         """
         while True:
             if self._screen.getmaxyx()[0] >= self._screen_miny:
-                return self._screen.getmaxyx()[0] - 1
+                return self._screen.getmaxyx()[0]
             curses.flash()
             curses.beep()
             self._screen.refresh()
@@ -115,11 +115,11 @@ class CursesWindow:
                     try:
                         win.addstr(lineno, column, text, line_part.color | line_part.decoration)
                     except curses.error:
-                        # curses error at last column but I don't care
+                        # curses error at last column & row but I don't care
                         # because it still draws it
                         # https://stackoverflow.com/questions/10877469/
                         # ncurses-setting-last-character-on-screen-without-scrolling-enabled
-                        if lineno == self._screen_h and column + len(text) == self._screen_w:
+                        if lineno == self._screen_h - 1 and column + len(text) == self._screen_w:
                             pass
                         else:
                             self._logger.debug("curses error")

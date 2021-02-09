@@ -96,19 +96,6 @@ class Interaction(NamedTuple):
     menu: Union[Menu, None] = None
 
 
-class MenuItem(NamedTuple):
-    """One menu item"""
-
-    obj: Dict
-    line: CursesLine
-
-
-# pylint: enable=inherit-non-class
-# pylint: enable=too-few-public-methods
-
-MenuItems = Tuple[MenuItem, ...]
-
-
 class UserInterface(CursesWindow):
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-few-public-methods
@@ -308,7 +295,7 @@ class UserInterface(CursesWindow):
         return tuple(footer)
 
     def _scroll_bar(
-        self, max_lines: int, len_heading: int, len_lines: int, body_start: int, body_stop: int
+        self, viewport_h: int, len_heading: int, menu_size: int, body_start: int, body_stop: int
     ) -> None:
         """Add a scroll bar if the lines > viewport
 
@@ -323,25 +310,23 @@ class UserInterface(CursesWindow):
         :param body_stop: the end of the body
         :type body_stop: int
         """
-        if len_lines:
-            if len_lines > max_lines:
-                start_scroll_bar = body_start / len_lines * max_lines
-                stop_scroll_bar = body_stop / len_lines * max_lines
-                len_scroll_bar = ceil(stop_scroll_bar - start_scroll_bar)
-                color = curses.color_pair(self._prefix_color % self._number_colors)
-                for idx in range(int(start_scroll_bar), int(start_scroll_bar + len_scroll_bar)):
-                    lineno = idx + len_heading
-                    line_part = CursesLinePart(
-                        column=self._screen_w - 1,
-                        string="\u2592",
-                        color=color,
-                        decoration=0,
-                    )
-                    self._add_line(
-                        window=self._screen,
-                        lineno=min(lineno, max_lines + len_heading),
-                        line=tuple([line_part]),
-                    )
+        start_scroll_bar = body_start / menu_size * viewport_h
+        stop_scroll_bar = body_stop / menu_size * viewport_h
+        len_scroll_bar = ceil(stop_scroll_bar - start_scroll_bar)
+        color = curses.color_pair(self._prefix_color % self._number_colors)
+        for idx in range(int(start_scroll_bar), int(start_scroll_bar + len_scroll_bar)):
+            lineno = idx + len_heading
+            line_part = CursesLinePart(
+                column=self._screen_w - 1,
+                string="\u2592",
+                color=color,
+                decoration=0,
+            )
+            self._add_line(
+                window=self._screen,
+                lineno=min(lineno, viewport_h + len_heading),
+                line=tuple([line_part]),
+            )
 
     def _get_input_line(self) -> str:
         """get one line of input from the user
@@ -352,9 +337,10 @@ class UserInterface(CursesWindow):
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
         clp = CursesLinePart(column=0, string=":", color=curses.color_pair(0), decoration=0)
-        self._add_line(window=self._screen, lineno=self._screen_h, line=tuple([clp]))
+        input_at = self._screen_h - 1  # screen y is zero based
+        self._add_line(window=self._screen, lineno=input_at, line=tuple([clp]))
         self._screen.refresh()
-        self._one_line_input.win = curses.newwin(1, self._screen_w, self._screen_h, 1)
+        self._one_line_input.win = curses.newwin(1, self._screen_w, input_at, 1)
         self._one_line_input.win.keypad(True)
         while True:
             user_input, char = self._one_line_input.handle(0, [form_field])
@@ -371,13 +357,16 @@ class UserInterface(CursesWindow):
     def _display(
         self,
         lines: CursesLines,
+        line_numbers: Tuple[int, ...],
         heading: Union[CursesLines, None],
         indent_heading: int,
         key_dict: dict,
         await_input: bool,
+        count: int,
     ) -> str:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         """show something on the screen
 
         :param lines: The lines to show
@@ -391,38 +380,42 @@ class UserInterface(CursesWindow):
         :return: the key pressed
         :rtype: str
         """
-        display_heading = heading or ()
+        heading = heading or ()
+        heading_len = len(heading)
         footer = self._footer(dict(**STND_KEYS, **key_dict, **END_KEYS))
+        footer_at = self._screen_h - 1  # screen is 0 based index
+        footer_len = 1
 
-        max_lines = self._screen_h - len(display_heading)
-        self.scroll(max(self.scroll(), max_lines))
+        viewport_h = self._screen_h - len(heading) - footer_len
+        self.scroll(max(self.scroll(), viewport_h))
 
-        index_width = len(str(len(lines)))
+        index_width = len(str(count))
+
         keypad = set(str(x) for x in range(0, 10))
         other_valid_keys = ["+", "-", "_", "KEY_F(5)", "^[", "\x1b"]
+
         while True:
             self._screen.erase()
             prefix = " " * (index_width + len("|")) if indent_heading else None
-            for idx, line in enumerate(display_heading):
+            for idx, line in enumerate(heading):
                 self._add_line(window=self._screen, lineno=idx, line=line, prefix=prefix)
-            self._add_line(window=self._screen, lineno=self._screen_h, line=footer)
+            self._add_line(window=self._screen, lineno=footer_at, line=footer)
 
-            body_start = self.scroll() - max_lines
-            body_stop = self.scroll()
-            for idx, line in enumerate(lines[body_start:body_stop]):
-                line_index = body_start + idx
+            for idx, line in enumerate(lines):
+                line_index = line_numbers[idx]
                 prefix = "{idx}\u2502".format(idx=str(line_index).rjust(index_width))
                 self._add_line(
-                    window=self._screen, lineno=idx + len(display_heading), line=line, prefix=prefix
+                    window=self._screen, lineno=idx + len(heading), line=line, prefix=prefix
                 )
 
-            self._scroll_bar(
-                max_lines=max_lines,
-                len_heading=len(display_heading),
-                len_lines=len(lines),
-                body_start=body_start,
-                body_stop=body_stop,
-            )
+            if count > viewport_h:
+                self._scroll_bar(
+                    viewport_h=viewport_h,
+                    len_heading=len(heading),
+                    menu_size=count,
+                    body_start=self._scroll - viewport_h,
+                    body_stop=self._scroll,
+                )
 
             self._screen.refresh()
 
@@ -432,27 +425,36 @@ class UserInterface(CursesWindow):
             else:
                 key = "KEY_F(5)"
 
+            return_value = None
             if key == "KEY_RESIZE":
-                self.scroll(min(body_start + self._screen_h - len(display_heading), len(lines)))
-                return key
-
-            if key in keypad or key in other_valid_keys:
-                return key
-
-            if key == ":":
+                new_scroll = min(
+                    self._scroll - viewport_h + self._screen_h - heading_len - footer_len,
+                    len(lines),
+                )
+                self.scroll(new_scroll)
+                return_value = key
+            elif key in keypad or key in other_valid_keys:
+                return_value = key
+            elif key == "KEY_DOWN":
+                self.scroll(max(min(self.scroll() + 1, count), viewport_h))
+                return_value = key
+            elif key == "KEY_UP":
+                self.scroll(max(self.scroll() - 1, viewport_h))
+                return_value = key
+            elif key in ["^F", "KEY_NPAGE"]:
+                self.scroll(max(min(self.scroll() + viewport_h, count), viewport_h))
+                return_value = key
+            elif key in ["^B", "KEY_PPAGE"]:
+                self.scroll(max(self.scroll() - viewport_h, viewport_h))
+                return_value = key
+            elif key == ":":
                 colon_entry = self._get_input_line()
                 if colon_entry is None:
                     continue
-                return colon_entry
+                return_value = colon_entry
 
-            if key == "KEY_DOWN":
-                self.scroll(max(min(self.scroll() + 1, len(lines)), max_lines))
-            elif key == "KEY_UP":
-                self.scroll(max(self.scroll() - 1, max_lines))
-            elif key in ["^F", "KEY_NPAGE"]:
-                self.scroll(max(min(self.scroll() + max_lines, len(lines)), max_lines))
-            elif key in ["^B", "KEY_PPAGE"]:
-                self.scroll(max(self.scroll() - max_lines, max_lines))
+            if return_value is not None:
+                return return_value
 
     def _action_match(self, entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
         """attempt to match the user input against the regexes
@@ -598,6 +600,7 @@ class UserInterface(CursesWindow):
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         """Show an object on the display
 
         :param objs: A list of one or more object
@@ -609,6 +612,18 @@ class UserInterface(CursesWindow):
         """
         heading, lines = self._filter_and_serialize(objs[index])
         while True:
+            if heading is not None:
+                heading_len = len(heading)
+            else:
+                heading_len = 0
+            footer_len = 1
+
+            if self.scroll() == 0:
+                last_line_idx = min(len(lines) - 1, self._screen_h - heading_len - footer_len - 1)
+            else:
+                last_line_idx = min(len(lines) - 1, self._scroll - 1)
+
+            first_line_idx = max(0, last_line_idx - (self._screen_h - 1 - heading_len - footer_len))
 
             if len(objs) > 1:
                 key_dict = {
@@ -619,13 +634,20 @@ class UserInterface(CursesWindow):
             else:
                 key_dict = {}
 
+            line_numbers = tuple(range(first_line_idx, last_line_idx + 1))
+
             entry = self._display(
-                lines=lines,
+                lines=lines[first_line_idx : last_line_idx + 1],
+                line_numbers=line_numbers,
                 heading=heading,
                 indent_heading=False,
                 key_dict=key_dict,
                 await_input=await_input,
+                count=len(lines),
             )
+            if entry in ["KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
+                continue
+
             if entry == "KEY_RESIZE":
                 # only the heading knows about the screen_w and screen_h
                 heading = self._content_heading(objs[index], self._screen_w)
@@ -685,11 +707,10 @@ class UserInterface(CursesWindow):
         :return: True if a mtch else False
         :rtype: bool
         """
-        return any(
-            self._search_value(self.menu_filter(), str(val))
-            for key, val in obj.items()
-            if key in columns
-        )
+        for key in columns:
+            if self._search_value(self.menu_filter(), obj[key]):
+                return True
+        return False
 
     @staticmethod
     @lru_cache(maxsize=None)
@@ -707,8 +728,8 @@ class UserInterface(CursesWindow):
         return regex.search(str(value))
 
     def _get_heading_menu_items(
-        self, current: List, columns: List, distribution: str
-    ) -> Tuple[CursesLines, MenuItems]:
+        self, current: List, columns: List, indicies
+    ) -> Tuple[CursesLines, CursesLines]:
         """build the menu
 
         :param current: A dict
@@ -718,25 +739,22 @@ class UserInterface(CursesWindow):
         :param distribute: method for width deficit
         :type distribute: str
         :return: The heading and menu items
-        :rtype: CursesLines, MenuItems
+        :rtype: CursesLines, CursesLines
         """
         menu_builder = MenuBuilder(
             pbar_width=self._pbar_width,
             screen_w=self._screen_w,
             number_colors=self._number_colors,
             color_menu_item=self._color_menu_item,
-            distribution=distribution,
         )
-        menu_heading, lines = menu_builder.build(
+        menu_heading, menu_items = menu_builder.build(
             current,
             columns,
+            indicies,
         )
-        menu_items = tuple(MenuItem(obj=z[0], line=z[1]) for z in zip(current, lines))
         return menu_heading, menu_items
 
-    def _show_menu(
-        self, current: List, columns: List, await_input: bool, distribution: str
-    ) -> Interaction:
+    def _show_menu(self, current: List, columns: List, await_input: bool) -> Interaction:
         """Show a menu on the screen
 
         :param current: A dict
@@ -745,49 +763,54 @@ class UserInterface(CursesWindow):
         :type columns: list
         :param await_input: Should we wait for user input?
         :type await_input: bool
-        :param distribute: method for width deficit
-        :type distribute: str
         :return: interaction with the user
         :rtype: Interaction
         """
-        menu_heading, menu_items = self._get_heading_menu_items(current, columns, distribution)
+
         while True:
+
+            if self.scroll() == 0:
+                last_line_idx = min(len(current) - 1, self._screen_h - 3)
+            else:
+                last_line_idx = min(len(current) - 1, self._scroll - 1)
+
+            first_line_idx = max(0, last_line_idx - (self._screen_h - 3))
+
             if self.menu_filter():
                 self._menu_indicies = tuple(
-                    idx
-                    for idx, mi in enumerate(menu_items)
-                    if self._obj_match_filter(mi.obj, columns)
+                    idx for idx, mi in enumerate(current) if self._obj_match_filter(mi, columns)
                 )
-                if self._scroll > len(self._menu_indicies):
-                    self._scroll = len(self._menu_indicies)
+                line_numbers = tuple(range(last_line_idx - first_line_idx + 1))
+                self._scroll = min(len(self._menu_indicies), self._scroll)
             else:
-                self._menu_indicies = tuple(range(len(menu_items)))
+                self._menu_indicies = tuple(range(len(current)))
+                line_numbers = self._menu_indicies[first_line_idx : last_line_idx + 1]
+
+            showing_idxs = self._menu_indicies[first_line_idx : last_line_idx + 1]
+            menu_heading, menu_lines = self._get_heading_menu_items(current, columns, showing_idxs)
 
             entry = self._display(
-                lines=tuple(menu_items[idx].line for idx in self._menu_indicies),
+                lines=menu_lines,
+                line_numbers=line_numbers,
+                count=len(self._menu_indicies),
                 heading=menu_heading,
                 indent_heading=True,
                 key_dict={"[0-9]": "goto"},
                 await_input=await_input,
             )
 
-            if entry == "KEY_RESIZE":
-                menu_heading, menu_items = self._get_heading_menu_items(
-                    current, columns, distribution
-                )
+            if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
                 continue
 
             name, action = self._action_match(entry)
             if name and action:
                 if name == "select":
-                    if menu_items:
+                    if current:
                         index = self._menu_indicies[int(entry) % len(self._menu_indicies)]
                         action = action._replace(value=index)
                     else:
                         continue
-                clean_columns = [re.sub("^__", "", col) for col in columns]
-                clean_current = [{re.sub("^__", "", k): v for k, v in me.items()} for me in current]
-                menu = Menu(current=clean_current, columns=clean_columns)
+                menu = Menu(current=current, columns=columns)
                 return Interaction(name=name, action=action, menu=menu, ui=self._ui)
 
     def show(
@@ -797,7 +820,6 @@ class UserInterface(CursesWindow):
         index: int = None,
         columns: List = None,
         await_input: bool = True,
-        distribution: str = "fair",
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: 0,
         content_heading: Callable = lambda *args, **kwargs: None,
@@ -830,7 +852,7 @@ class UserInterface(CursesWindow):
         if index is not None and isinstance(obj, list):
             result = self._show_obj_from_list(obj, index, await_input)
         elif columns and isinstance(obj, list):
-            result = self._show_menu(obj, columns, await_input, distribution)
+            result = self._show_menu(obj, columns, await_input)
         else:
             result = self._show_obj_from_list([obj], 0, await_input)
         return result
