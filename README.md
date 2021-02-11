@@ -84,8 +84,8 @@ winston playbook site.yaml -i inventory.yaml
 ## help
 
 ```
-(venv) ➜  winston git:(env_vars_cfg) ✗ python -m winston --help
-usage: __main__.py [-h] [-ce {podman,docker}] [-ee] [-eei EE_IMAGE] [-ic INVENTORY_COLUMNS] [--ide {pycharm,vim,vscode}] [-lf LOGFILE] [-ll {debug,info,warning,error,critical}] [-no-osc4] [--web]
+winston --help
+usage: winston [-h] [-ce {podman,docker}] [-ee] [-eei EE_IMAGE] [-ic INVENTORY_COLUMNS] [--ide {pycharm,vim,vscode}] [-lf LOGFILE] [-ll {debug,info,warning,error,critical}] [-no-osc4] [--web]
                    {command} --help ...
 
 optional arguments:
