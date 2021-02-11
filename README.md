@@ -132,7 +132,7 @@ subcommands:
 ```
 [default]
 container_engine              = podman
-ee-image                      = quay.io/ansible/network-ee
+ee_image                      = quay.io/ansible/network-ee
 execution_environment         = true
 ide                           = vscode
 inventory                     = ~/github/demo_content/inventory
