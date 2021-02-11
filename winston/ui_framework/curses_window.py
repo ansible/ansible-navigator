@@ -101,7 +101,7 @@ class CursesWindow:
         :param prefix: The prefix for the line
         :type prefix: str or None
         """
-        win = window  # self.win if self.win else self._screen
+        win = window
         if prefix:
             win.addstr(
                 lineno, 0, prefix, curses.color_pair(self._prefix_color % self._number_colors)
@@ -119,8 +119,11 @@ class CursesWindow:
                         # because it still draws it
                         # https://stackoverflow.com/questions/10877469/
                         # ncurses-setting-last-character-on-screen-without-scrolling-enabled
-                        if lineno == self._screen_h - 1 and column + len(text) == self._screen_w:
+                        # if lineno == self._screen_h - 1 and column + len(text) == self._screen_w:
+                        #     pass
+                        if lineno == win.getyx()[0] and column + len(text) == win.getyx()[1] + 1:
                             pass
+
                         else:
                             self._logger.debug("curses error")
                             self._logger.debug("screen_h: %s, lineno: %s", self._screen_h, lineno)

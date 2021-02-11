@@ -85,7 +85,7 @@ class Action(App):
         self._args: Namespace
         self._interaction: Interaction
         self._logger = logging.getLogger(__name__)
-        self._app = None
+        self._calling_app: AppPublic
         self._collections: List = []
         self._stats: Dict = {}
         self._collection_cache = args.collection_doc_cache
@@ -102,6 +102,9 @@ class Action(App):
         self._parser_error = message
         return None, None
 
+    def update(self):
+        self._calling_app.update()
+
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
         """Handle :doc
@@ -112,8 +115,9 @@ class Action(App):
         :type app: App
         """
         self._logger.debug("collections requested")
-        self._app = app
+        self._calling_app = app
         self._interaction = interaction
+        self.stdout = self._calling_app.stdout
 
         previous_scroll = interaction.ui.scroll()
         interaction.ui.scroll(0)
@@ -127,7 +131,7 @@ class Action(App):
         if provided_params:
             params = f"collections {provided_params}"
             self._logger.debug("Parsing params: %s", params)
-            messages, self._args = self.app.args.parse_and_update(
+            messages, self._args = self._calling_app.args.parse_and_update(
                 params=params.split(), error_cb=self.parser_error
             )
             # assume this is a provided param
@@ -140,7 +144,7 @@ class Action(App):
                 self._logger.error(self._parser_error)
                 return None
         else:
-            self._args = self._app.args
+            self._args = self._calling_app.args
 
         if self._args.execution_environment:
             self._logger.debug("running execution environment")
@@ -158,7 +162,7 @@ class Action(App):
         interaction.ui.scroll(0)
 
         while True:
-            self._app.update()
+            self.update()
             self._take_step()
 
             if not self.steps:

@@ -25,7 +25,7 @@ class FormHandlerButton(CursesWindow):
         self._screen = screen
 
     def populate(self):
-        """populate the window with the checkboxes"""
+        """populate the window with the button"""
         if self._form_field.disabled is True:
             color = 8
         else:

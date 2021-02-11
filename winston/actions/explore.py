@@ -342,7 +342,7 @@ class Action(App):
         if p_from_int:
             self._logger.debug("Using playbook provided in interaction")
             playbook = os.path.abspath(os.path.expanduser(p_from_int))
-        elif hasattr(self._calling_app.args, "playbook") and self._calling_app.args:
+        elif getattr(self._calling_app.args, "playbook", None):
             self._logger.debug("Using playbook from calling app")
             playbook = self._calling_app.args.playbook
 
