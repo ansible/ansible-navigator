@@ -119,8 +119,6 @@ class CursesWindow:
                         # because it still draws it
                         # https://stackoverflow.com/questions/10877469/
                         # ncurses-setting-last-character-on-screen-without-scrolling-enabled
-                        # if lineno == self._screen_h - 1 and column + len(text) == self._screen_w:
-                        #     pass
                         if lineno == win.getyx()[0] and column + len(text) == win.getyx()[1] + 1:
                             pass
 
