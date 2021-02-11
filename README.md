@@ -71,6 +71,11 @@ Review and explore and inventory
 winston inventory -i inventory.yaml
 ```
 
+Review running and preious jobs
+```
+winston jobs
+```
+
 Run a playbook with classic output
 ```
 winston playbook site.yaml -i inventory.yaml
@@ -79,9 +84,9 @@ winston playbook site.yaml -i inventory.yaml
 ## help
 
 ```
-(venv) ➜  winston git:(inventory) ✗ winston --help
-usage: winston [-h] [-ce {podman,docker}] [-ee] [-eei EE_IMAGE] [--inventory_columns INVENTORY_COLUMNS] [--ide {pycharm,vim,vscode}] [-lf LOGFILE] [-ll {debug,info,warning,error,critical}] [-no-osc4] [--web]
-               {command} --help ...
+winston --help
+usage: winston [-h] [-ce {podman,docker}] [-ee] [-eei EE_IMAGE] [-ic INVENTORY_COLUMNS] [--ide {pycharm,vim,vscode}] [-lf LOGFILE] [-ll {debug,info,warning,error,critical}] [-no-osc4] [--web]
+                   {command} --help ...
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -91,7 +96,7 @@ optional arguments:
                         Run the playbook in an Execution Environment (default: False)
   -eei EE_IMAGE, --ee-image EE_IMAGE
                         Specify the name of the container image containing an Execution Environment (default: quay.io/ansible/ansible-runner:devel)
-  --inventory_columns INVENTORY_COLUMNS
+  -ic INVENTORY_COLUMNS, --inventory-columns INVENTORY_COLUMNS
                         Additional columns to be shown in the inventory views, comma delimited, eg 'xxx,yyy,zzz' (default: )
   --ide {pycharm,vim,vscode}
                         Specify the current ide (default: vim)
@@ -108,9 +113,12 @@ subcommands:
   {command} --help      additional help
     blog                Check out the recent Ansible blog entries
     bullhorn            Catch up on the latest bullhorn issues
+    collections         Explore installed collections
+    config              Explore the current ansible configuration
     doc                 Show a plugin doc
     explore             Run playbook(s) interactive
     inventory           Explore inventories
+    jobs                Review tower jobs
     load                Load an artifact
     playbook            Run playbook(s)
     playquietly         Run playbook(s) quietly
@@ -124,24 +132,17 @@ subcommands:
 ```
 [default]
 container_engine              = podman
-ee_image                      = ee_libssh
-execution_environment         = False
+ee_image                      = quay.io/ansible/network-ee
+execution_environment         = true
 ide                           = vscode
+inventory                     = ~/github/demo_content/inventory
 inventory_columns             = ansible_network_os,ansible_network_cli_ssh_type,ansible_connection
 loglevel                      = debug
-no_osc4                       = True
-
-[explore]
-playbook                      = site.yaml
-inventory                     = inventory.yaml
-forks                         = 15
-
-[inventory]
-inventory                     = inventory.yaml
-
-[playbook]
-playbook                      = site.yaml
-inventory                     = inventory.yaml
+no_osc4                       = true
+playbook                      = ~/github/demo_content/gather.yaml
+tower_password                = password
+tower_url                     = http://myserver
+tower_username                = username
 
 ```
 
@@ -156,11 +157,14 @@ esc                                     Go back
 arrow up, arrow down                    Scroll up/down
 :blog                                   Check out the recent Ansible blog entries
 :bullhorn                               Catch up on the latest bullhorn issues
+:collections                            Explore installed collections
+:config                                 Explore the current ansible configuration
 :d, :doc <plugin>                       Show a plugin doc
 :e, :explore <playbook> -i <inventory>  Run a playbook using explore
 :f, :filter <re>                        Filter page lines using a regex
 :h, :help                               This page
 :i, :inventory <inventory>              Explore the current or alternate inventory
+:j, :jobs                               Explore running and previously run jobs
 :l, :log                                Review current log file
 :o, :open                               Open current page in the editor
 :o, :open {{ some_key }}                Open file path in a key's value

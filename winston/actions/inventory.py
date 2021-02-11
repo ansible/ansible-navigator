@@ -149,6 +149,9 @@ class Action(App):
                 mtimes.append(os.path.getmtime(inventory))
         self._inventories_mtime = max(mtimes)
 
+    def update(self):
+        self._calling_app.update()
+
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
         """Handle :inventory
@@ -158,7 +161,6 @@ class Action(App):
         :param app: The app instance
         :type app: App
         """
-        super().__init__(args=app.args)
         self._logger.debug("inventory requested")
         self._calling_app = app
         self.args = app.args
@@ -187,7 +189,7 @@ class Action(App):
 
         while True:
 
-            self._calling_app.update()
+            self.update()
             self._take_step()
 
             if not self.steps:

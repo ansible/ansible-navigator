@@ -5,6 +5,7 @@ from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
 
+from .form import Form
 from .form_utils import dict_to_form
 from .form_utils import form_to_dict
 

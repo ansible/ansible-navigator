@@ -12,6 +12,7 @@ from argparse import _SubParsersAction
 from argparse import ArgumentParser
 from argparse import Namespace
 from functools import partial
+from typing import Any
 from typing import Callable
 from typing import List
 from typing import Tuple
@@ -43,29 +44,45 @@ class NoSuch:  # pylint: disable=too-few-public-methods
     """sentinal"""
 
 
-# pylint: disable=protected-access
-def get_default(parser: ArgumentParser, section: str, name: str) -> Union[str, List, NoSuch]:
-    """get a default value from the root or subparsers"""
-    if section == "default":
-        return parser.get_default(name)
-    subparser_action = next(
-        action for action in parser._actions if isinstance(action, _SubParsersAction)
-    )
-    choice = subparser_action.choices.get(section, "")
-    if isinstance(choice, ArgumentParser):
-        default = choice.get_default(name)
-        if default is not None:
-            return default
-    return NoSuch()
+def error_and_exit_early(msg):
+    """get out of here fast"""
+    print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
+    sys.exit(1)
 
 
-# pylint: enable=protected-access
+def get_param(
+    parser: ArgumentParser, name: str
+) -> Tuple[Union[str, None], Union[str, List, None], Any]:
+    # pylint: disable=protected-access
+
+    """get the param from the argparser
+    try short and long variations, _ or -
+    """
+    variations = [
+        f"-{name}",
+        f"--{name}",
+        f"-{name.replace('_', '-')}",
+        f"--{name.replace('_', '-')}",
+    ]
+
+    for action in parser._actions:
+        if any([v in action.option_strings for v in variations]):
+            return action.dest, action.default, action.type
+        if name == action.dest and action.nargs == "?":
+            return action.dest, action.default, action.type
+        if isinstance(action, _SubParsersAction):
+            for _parser_name, sub_parser in action.choices.items():
+                sub_parser_dest, sub_parser_default, sub_parser_type = get_param(sub_parser, name)
+                if sub_parser_dest is not None:
+                    return sub_parser_dest, sub_parser_default, sub_parser_type
+    return None, None, None
 
 
 def update_args(
     config_file: Union[str, None], args: Namespace, parser: ArgumentParser
 ) -> List[str]:
     # pylint: disable=too-many-nested-blocks
+    # pylint: disable=too-many-locals
     # pylint: disable=too-many-branches
     """Update the provided args with ansible.cfg entries
 
@@ -78,39 +95,43 @@ def update_args(
     if config_file:
         msgs.append(f"Using {config_file}")
         config = ConfigParser()
-        config.read(config_file)
+        try:
+            config.read(config_file)
+        except Exception as exc:  # pylint:disable=broad-except
+            error_and_exit_early(str(exc))
         if config_file:
             cdict = dict(config)
             for section_name, section in cdict.items():
                 if section_name in ["default", args.app]:
                     for key, value in section.items():
-                        if hasattr(args, key):
-                            arg_value = getattr(args, key)
-                            if arg_value is not None:
-                                default = get_default(parser, section_name, key)
-                                if isinstance(default, NoSuch):
-                                    continue
-                                if isinstance(arg_value, bool):
+                        dest, default, tipe = get_param(parser, key)
+                        msgs.append(f"ini entry: {key} matched to arg: {dest}")
+                        if dest:
+                            arg_value = getattr(args, dest, NoSuch())
+                            if arg_value == default or isinstance(arg_value, NoSuch):
+                                if isinstance(default, bool):
                                     bool_key: bool = section.getboolean(key)
-                                    if bool_key != arg_value == default:
-                                        msg = f"{key} was default, "
-                                        msg += f"using entry '{key}={bool_key}' as bool"
-                                        msgs.append(msg)
-                                        setattr(args, key, bool_key)
-                                elif (arg_value == [] == default) and value:
+                                    msg = f"{dest} was default, "
+                                    msg += f"using entry '{bool_key}'"
+                                    msgs.append(msg)
+                                    setattr(args, dest, bool_key)
+                                elif [] == default:
                                     use_value = [value.split(",")]
-                                    setattr(args, key, use_value)
-                                    msg = f"{key} was default list, "
-                                    msg += f"using entry.split(',') '{key}:{use_value}'"
+                                    setattr(args, dest, use_value)
+                                    msg = f"{dest} was default list, "
+                                    msg += f"using entry.split(',') '{use_value}'"
                                     msgs.append(msg)
-                                elif default == arg_value != value:
-                                    setattr(args, key, value)
-                                    msg = f"{key} was default, using entry '{key}={value}'"
+                                else:
+                                    if isinstance(tipe, int):
+                                        inted = int(value)
+                                        setattr(args, dest, inted)
+                                    elif callable(tipe):
+                                        called = tipe(value)
+                                        setattr(args, dest, called)
+                                    else:
+                                        setattr(args, dest, value)
+                                    msg = f"{dest} was not provided, using '{value}'"
                                     msgs.append(msg)
-                            else:
-                                msg = f"{key} was not provided, using entry '{key}={value}'"
-                                msgs.append(msg)
-                                setattr(args, key, value)
 
     else:
         msgs.append("No config file file found")
@@ -164,30 +185,22 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     config_file = find_ini_config_file(APP_NAME)
     pre_logger_msgs = update_args(config_file, args, parser)
 
-    args.logfile = os.path.abspath(args.logfile)
+    args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
     handle_ide(args)
 
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
-    if hasattr(args, "playbook"):
-        if args.playbook:
-            args.playbook = os.path.abspath(args.playbook)
-        else:
-            parser.error("a playbook is required when using explore or playbook")
-
     if hasattr(args, "inventory"):
         args.inventory = list(itertools.chain.from_iterable(args.inventory))
-        args.inventory = [os.path.abspath(i) for i in args.inventory]
+        args.inventory = [os.path.abspath(os.path.expanduser(i)) for i in args.inventory]
         if not args.inventory and args.app == "inventory":
             parser.error("an inventory is required when using the inventory explorer")
 
     if hasattr(args, "artifact"):
         if hasattr(args, "playbook") and args.playbook:
-            if args.artifact == get_default(parser, args.app, "artifact"):
+            if args.artifact == get_param(parser, "artifact")[1]:
                 args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
-        else:
-            args.artifact = os.path.abspath(args.artifact)
 
     if args.web:
         args.no_osc4 = True
@@ -265,8 +278,7 @@ def main():
                 logger.debug(msg)
             else:
                 logger.critical(msg)
-                print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
-                sys.exit(1)
+                error_and_exit_early(msg)
         set_ansible_envar()
 
     for key, value in vars(args).items():
