@@ -1,5 +1,6 @@
 """ start here
 """
+import configparser
 import itertools
 import logging
 import os
@@ -19,7 +20,6 @@ from typing import Tuple
 from typing import Union
 
 
-from configparser import ConfigParser
 
 from curses import wrapper
 
@@ -38,6 +38,13 @@ COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
 
 logger = logging.getLogger(APP_NAME)
+
+class EnvInterpolation(configparser.BasicInterpolation):
+    """Interpolation which expands environment variables in values."""
+
+    def before_get(self, parser, section, option, value, defaults):
+        value = super().before_get(parser, section, option, value, defaults)
+        return os.path.expandvars(value)
 
 
 class NoSuch:  # pylint: disable=too-few-public-methods
@@ -94,7 +101,7 @@ def update_args(
     msgs = []
     if config_file:
         msgs.append(f"Using {config_file}")
-        config = ConfigParser()
+        config = configparser.ConfigParser(interpolation=EnvInterpolation())
         try:
             config.read(config_file)
         except Exception as exc:  # pylint:disable=broad-except
