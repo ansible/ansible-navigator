@@ -698,7 +698,7 @@ class Action(App):
         :rtype: bool
         """
         self.update()
-        if not self.runner.finished:
+        if self.runner is not None and not self.runner.finished:
             if interaction.action.match.groupdict()["exclamation"]:
                 self._logger.debug("shutting down runner")
                 self.runner.cancelled = True

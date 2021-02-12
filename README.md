@@ -129,6 +129,8 @@ subcommands:
 
 ## winston.cfg example
 
+Environment variables will be expanded atuomatically.
+
 ```
 [default]
 container_engine              = podman
@@ -140,7 +142,7 @@ inventory_columns             = ansible_network_os,ansible_network_cli_ssh_type,
 loglevel                      = debug
 no_osc4                       = true
 playbook                      = ~/github/demo_content/gather.yaml
-tower_password                = password
+tower_password                = $TOWER_PASSWORD
 tower_url                     = http://myserver
 tower_username                = username
 
