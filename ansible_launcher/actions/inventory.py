@@ -355,11 +355,12 @@ class Action(App):
         self.steps.append(self.steps.current.select_func())
 
     def _build_host_menu(self) -> Step:
+        columns = ["inventory_hostname"] + self._show_columns
         menu = Menu()
         for host in self._host_vars.values():
             host["__type"] = "host"
+            host.update({c: "" for c in columns if c not in host})
             menu.append(MenuEntry(host))
-        columns = ["inventory_hostname"] + self._show_columns
         return Step(
             columns=columns,
             name="host_menu",
