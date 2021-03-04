@@ -60,7 +60,6 @@ class CliArgs:
         self._load()
         self._explore()
         self._playbook()
-        self._playquietly()
 
     def _add_subparser(self, name: str, desc: str) -> ArgumentParser:
         return self._subparsers.add_parser(
@@ -240,11 +239,6 @@ class CliArgs:
 
     def _playbook(self) -> None:
         parser = self._add_subparser("playbook", "Run playbook(s)")
-        self._playbook_params(parser)
-        self._inventory_params(parser)
-
-    def _playquietly(self) -> None:
-        parser = self._add_subparser("playquietly", "Run playbook(s) quietly")
         self._playbook_params(parser)
         self._inventory_params(parser)
 

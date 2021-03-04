@@ -247,7 +247,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 def run(args: Namespace) -> None:
     """run the appropriate app"""
     try:
-        if args.app in ["playbook", "playquietly"]:
+        if args.app == "playbook":
             non_ui_app = partial(Player(args).playbook)
             if args.web:
                 WebXtermJs().run(func=non_ui_app)
