@@ -10,7 +10,6 @@ Some things you can try from here:
 - `:explore <playbook> -i <inventory>`      Run a playbook with explore
 - `:help`                                   Show the main help page
 - `:inventory <inventory>`                  Explore an inventory
-- `:jobs`                                   Explore running and previously run jobs 
 - `:log`                                    Review the application log    
 - `:open`                                   Open current page in the IDE
 - `:quit`                                   Quit the application

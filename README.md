@@ -104,7 +104,6 @@ arrow up, arrow down                    Scroll up/down
 :f, :filter <re>                        Filter page lines using a regex
 :h, :help                               This page
 :i, :inventory <inventory>              Explore the current or alternate inventory
-:j, :jobs                               Explore running and previously run jobs
 :l, :log                                Review current log file
 :o, :open                               Open current page in the editor
 :o, :open {{ some_key }}                Open file path in a key's value

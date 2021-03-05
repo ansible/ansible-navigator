@@ -5,8 +5,6 @@ https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
 import os
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, _SubParsersAction
 
-from .actions.jobs import DEFAULT_TOWER_REFRESH
-
 
 def _abs_user_path(fpath):
     """don't overload the ap type"""
@@ -56,7 +54,6 @@ class CliArgs:
         self._config()
         self._doc()
         self._inventory()
-        self._tower_jobs()
         self._load()
         self._explore()
         self._playbook()
@@ -263,36 +260,6 @@ class CliArgs:
             default="<playbook_dir>/<playbook_name>_artifact.json",
         )
         parser.set_defaults(requires_ansible=True)
-
-    def _tower_jobs(self) -> None:
-        parser = self._add_subparser("jobs", "Review tower jobs")
-        self._tower_details(parser)
-
-    @staticmethod
-    def _tower_details(parser) -> None:
-        parser.add_argument(
-            "-th",
-            "--tower-url",
-            help="Specify the URL of the tower host",
-        )
-        parser.add_argument("-tu", "--tower-username", help="The tower username")
-        parser.add_argument(
-            "-tp",
-            "--tower-password",
-            help="The tower password",
-        )
-        parser.add_argument(
-            "-tt",
-            "--tower-token",
-            help="The tower token",
-        )
-        parser.add_argument(
-            "-tr",
-            "--tower-refresh",
-            help="The number of seconds to wait between tower job list refreshes",
-            default=DEFAULT_TOWER_REFRESH,
-            type=int,
-        )
 
     @staticmethod
     def _web_params(parser: ArgumentParser) -> None:
