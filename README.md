@@ -1,19 +1,17 @@
-## winston
+## ansible-launcher
 
-### A protoype CLI for the Red Hat Ansible Automation Platform
-
-Although winston is in his infancy, he wants nothing more than to bring all the people, teams, tools and automation together to ensure experience doesn't come at the cost of outcomes.
+A TUI for the Red Hat Ansible Automation Platform
 
 ## Quick start
 
 ```
-git clone https://github.com/ansible/winston.git
-mkdir winston_demo
-cd winston_demo
+git clone https://github.com/ansible/ansible-launcher.git
+mkdir ansible-launcher_demo
+cd ansible-launcher_demo
 python3 -m venv venv
 source venv/bin/activate
 pip install -U setuptools
-pip install ../winston
+pip install ../ansible-launcher
 ```
 
 RHEL8/Centos8 prerequisites:
@@ -24,110 +22,53 @@ sudo dnf install gcc python3-devel
 ```
 
 
-
-
 ### Welcome
 Start at the welcome page, from the welcome page you can run playbooks, explore inventories, review docs, and check out blogs
 ```
-winston
+ansible-launcher
 ```
 
 ### Other things to try direct from the command line
 
 Review the help
 ```
-winston --help
-```
-
-Checkout some blogs
-```
-winston blog
-winston bullhorn
-winston redhat
+ansible-launcher --help
 ```
 
 Review current configuration
 ```
-winston config
+ansible-launcher config
 ```
 
 Explore available collections
 ```
-winston collections
+ansible-launcher collections
 ```
 
 Review documentation
 ```
-winston doc ansible.netcommon.cli_command
+ansible-launcher doc ansible.netcommon.cli_command
 ```
 
 Run and explore a playbook
 ```
-winston explore site.yaml -i inventory.yaml
+ansible-launcher explore site.yaml -i inventory.yaml
 ```
 
 Review and explore and inventory
 ```
-winston inventory -i inventory.yaml
-```
-
-Review running and preious jobs
-```
-winston jobs
+ansible-launcher inventory -i inventory.yaml
 ```
 
 Run a playbook with classic output
 ```
-winston playbook site.yaml -i inventory.yaml
-```
-
-## help
-
-```
-winston --help
-usage: winston [-h] [-ce {podman,docker}] [-ee] [-eei EE_IMAGE] [-ic INVENTORY_COLUMNS] [--ide {pycharm,vim,vscode}] [-lf LOGFILE] [-ll {debug,info,warning,error,critical}] [-no-osc4] [--web]
-                   {command} --help ...
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -ce {podman,docker}, --container-engine {podman,docker}
-                        Specify the container engine to run the Execution Environment (default: podman)
-  -ee, --execution-environment
-                        Run the playbook in an Execution Environment (default: False)
-  -eei EE_IMAGE, --ee-image EE_IMAGE
-                        Specify the name of the container image containing an Execution Environment (default: quay.io/ansible/ansible-runner:devel)
-  -ic INVENTORY_COLUMNS, --inventory-columns INVENTORY_COLUMNS
-                        Additional columns to be shown in the inventory views, comma delimited, eg 'xxx,yyy,zzz' (default: )
-  --ide {pycharm,vim,vscode}
-                        Specify the current ide (default: vim)
-  -lf LOGFILE, --logfile LOGFILE
-                        Specify the application log file location (default: ./winston.log)
-  -ll {debug,info,warning,error,critical}, --loglevel {debug,info,warning,error,critical}
-                        Specify the application log level (default: info)
-  -no-osc4              Disable OSC-4 support (xterm.js color fix) (default: False)
-  --web                 Run the application in a browser rather than the current terminal (default: False)
-
-subcommands:
-  valid subcommands
-
-  {command} --help      additional help
-    blog                Check out the recent Ansible blog entries
-    bullhorn            Catch up on the latest bullhorn issues
-    collections         Explore installed collections
-    config              Explore the current ansible configuration
-    doc                 Show a plugin doc
-    explore             Run playbook(s) interactive
-    inventory           Explore inventories
-    jobs                Review tower jobs
-    load                Load an artifact
-    playbook            Run playbook(s)
-    playquietly         Run playbook(s) quietly
-    redhat              See the latest from Red Hat
-
+ansible-launcher playbook site.yaml -i inventory.yaml
 ```
 
 
-## winston.cfg example
+## ansible_launcher.cfg example
+
+Note: the config file currently uses an underscore not dash
 
 Environment variables will be expanded atuomatically.
 
@@ -142,9 +83,6 @@ inventory_columns             = ansible_network_os,ansible_network_cli_ssh_type,
 loglevel                      = debug
 no_osc4                       = true
 playbook                      = ~/github/demo_content/gather.yaml
-tower_password                = $TOWER_PASSWORD
-tower_url                     = http://myserver
-tower_username                = username
 
 ```
 

@@ -33,7 +33,7 @@ from .utils import get_and_check_collection_doc_cache
 from .utils import set_ansible_envar
 from .web_xterm_js import WebXtermJs
 
-APP_NAME = "winston"
+APP_NAME = "ansible_launcher"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
 
@@ -226,7 +226,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         else:
             # check if the package was installed with pip --editable with an .egg-link
             site = pkg_resources.get_distribution(APP_NAME).location
-            share_dir = os.path.join(site, "share", "winston")
+            share_dir = os.path.join(site, "share", APP_NAME)
             if os.path.exists(share_dir):
                 args.share_dir = share_dir
             else:

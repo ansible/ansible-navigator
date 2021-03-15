@@ -15,8 +15,6 @@ from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Union
-from winston.ui_framework.form_utils import form_to_dict
-
 
 from . import run as run_action
 from . import _actions as actions
@@ -31,6 +29,8 @@ from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
+from ..ui_framework.form_utils import form_to_dict
+
 
 
 from ..utils import check_for_ansible
