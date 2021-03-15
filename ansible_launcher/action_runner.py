@@ -1,8 +1,8 @@
 """ jump to one action
 """
 
-from winston.actions import kegexes
-from winston.actions import run as run_action
+from ansible_launcher.actions import kegexes
+from ansible_launcher.actions import run as run_action
 
 from .app import App
 from .steps import Steps

@@ -6,7 +6,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from winston.actions import kegexes
+from ansible_launcher.actions import kegexes
 
 from .app_public import AppPublic
 from .steps import Steps

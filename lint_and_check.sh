@@ -1,5 +1,5 @@
-black -l100 winston 
-black -l100 share/winston/utils
-mypy winston share/winston/utils
-pylint ./winston/*.* ./winston/actions ./share/winston/utils ./winston/ui_framework
+black -l100 ansible_launcher 
+black -l100 share/ansible_launcher/utils
+mypy ansible_launcher share/ansible_launcher/utils
+pylint ./ansible_launcher/*.* ./ansible_launcher/actions ./share/ansible_launcher/utils ./ansible_launcher/ui_framework
 
