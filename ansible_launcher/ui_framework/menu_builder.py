@@ -220,6 +220,6 @@ class MenuBuilder:
         return CursesLinePart(column=print_at, string=str(text), color=color, decoration=0)
 
 
-@functools.lru_cache
+@functools.lru_cache(maxsize=None)
 def _is_progress(string):
     return bool(re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", string))
