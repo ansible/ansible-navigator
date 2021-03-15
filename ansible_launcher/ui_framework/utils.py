@@ -29,7 +29,7 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
             )
 
 
-@functools.lru_cache
+@functools.lru_cache(maxsize=None)
 def is_percent(string):
     """is a string a percent?"""
     if string.endswith("%"):

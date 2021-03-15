@@ -20,7 +20,6 @@ from typing import Tuple
 from typing import Union
 
 
-
 from curses import wrapper
 
 from .actions.explore import Action as Player
@@ -38,6 +37,7 @@ COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
 
 logger = logging.getLogger(APP_NAME)
+
 
 class EnvInterpolation(configparser.BasicInterpolation):
     """Interpolation which expands environment variables in values."""

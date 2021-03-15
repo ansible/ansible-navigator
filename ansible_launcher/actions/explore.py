@@ -32,7 +32,6 @@ from ..ui_framework import dict_to_form
 from ..ui_framework.form_utils import form_to_dict
 
 
-
 from ..utils import check_for_ansible
 from ..utils import human_time
 from ..utils import set_ansible_envar
