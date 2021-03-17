@@ -49,7 +49,6 @@ class CliArgs:
             dest="app",
             metavar="{command} --help",
         )
-        self._blogs()
         self._collections()
         self._config()
         self._doc()
@@ -74,16 +73,6 @@ class CliArgs:
         self._log_params(self._base_parser)
         self._no_osc4_params(self._base_parser)
         self._web_params(self._base_parser)
-
-    def _blogs(self) -> None:
-        blogs = (
-            ("blog", "Check out the recent Ansible blog entries"),
-            ("bullhorn", "Catch up on the latest bullhorn issues"),
-            ("redhat", "See the latest from Red Hat"),
-        )
-        for entry in blogs:
-            parser = self._add_subparser(*entry)
-            parser.set_defaults(value=None, requires_ansible=False)
 
     def _collections(self) -> None:
         parser = self._add_subparser("collections", "Explore installed collections")
