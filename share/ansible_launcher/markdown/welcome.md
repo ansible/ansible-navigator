@@ -4,7 +4,7 @@
 Some things you can try from here:
 - `:blog`                                   Check out the recent Ansible blog entries
 - `:bullhorn`                               Catch up on the latest bullhorn issues
-- `:config`                                 Explore the current ansible configuration
+- `:config`                                 Explore the current Ansible configuration
 - `:collections`                            Explore installed collections
 - `:doc <plugin>`                           Show a plugin doc
 - `:explore <playbook> -i <inventory>`      Run a playbook with explore
@@ -18,4 +18,4 @@ Some things you can try from here:
 
 happy automating,
 
--winston
+-ansible-navigator
