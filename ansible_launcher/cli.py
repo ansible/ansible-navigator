@@ -35,18 +35,21 @@ from .web_xterm_js import WebXtermJs
 APP_NAME = "ansible_launcher"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
+# datadirs (/usr/share) to search for the ansible-launcher data files
+# First found wins
 _POTENTIAL_SHARE_DIRS = (
-    # System paths
-    # On most Linux installs, these would resolve to:
-    # /usr/share/APP_NAME
-    # /usr/local/share/APP_NAME
-    # ~/.local/share/APP_NAME
-    os.path.join(sysconfig.get_config_var("datarootdir"), APP_NAME),
-    os.path.join(sysconfig.get_config_var("prefix"), "local", "share", APP_NAME),
-    os.path.join(sysconfig.get_config_var("userbase"), "share", APP_NAME),
     # Development path
     # We want the share directory to resolve adjacent to the directory the code lives in
+    # as that's the layout in the source.
     os.path.join(os.path.dirname(__file__), "..", "share", APP_NAME),
+    # System paths
+    # On most Linux installs, these would resolve to:
+    # ~/.local/share/APP_NAME
+    # /usr/share/APP_NAME
+    # /usr/local/share/APP_NAME
+    os.path.join(sysconfig.get_config_var("userbase"), "share", APP_NAME),
+    os.path.join(sysconfig.get_config_var("datarootdir"), APP_NAME),
+    os.path.join(sysconfig.get_config_var("prefix"), "local", "share", APP_NAME),
 )
 
 
