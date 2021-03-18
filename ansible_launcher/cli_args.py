@@ -114,6 +114,7 @@ class CliArgs:
             help=f'Choose which plugin type: {{{",".join(tipes)}}}',
             choices=tipes,
             default="module",
+            dest="type",
             metavar="",
         )
         parser.set_defaults(requires_ansible=True)
@@ -126,11 +127,13 @@ class CliArgs:
             help="Specify the container engine to run the Execution Environment",
             choices=["podman", "docker"],
             default="podman",
+            dest="container_engine",
         )
         parser.add_argument(
             "--ee",
             "--execution-environment",
             action="store_true",
+            dest="execution_environment",
             help="Run the playbook in an Execution Environment",
         )
         parser.add_argument(
@@ -138,6 +141,7 @@ class CliArgs:
             "--ee-image",
             help="Specify the name of the container image containing an Execution Environment",
             default="quay.io/ansible/ansible-runner:devel",
+            dest="ee_image",
         )
 
     def _explore(self) -> None:
@@ -152,6 +156,7 @@ class CliArgs:
             help="Specify the current ide",
             choices=["pycharm", "vim", "vscode"],
             default="vim",
+            dest="ide",
         )
 
     @staticmethod
@@ -164,6 +169,7 @@ class CliArgs:
                 " comma delimited, eg 'xxx,yyy,zzz'"
             ),
             default="",
+            dest="inventory_columns",
         )
 
     def _inventory(self) -> None:
@@ -180,6 +186,7 @@ class CliArgs:
             nargs="+",
             type=_abs_user_path,
             default=[],
+            dest="inventory",
         )
 
     def _load(self) -> None:
@@ -221,6 +228,7 @@ class CliArgs:
             "--no-osc4",
             action="store_true",
             help="Disable OSC-4 support (xterm.js color fix)",
+            dest="no_osc4",
         )
 
     def _playbook(self) -> None:
@@ -241,6 +249,7 @@ class CliArgs:
             "--artifact",
             help="Specify the artifact file name for playbook results",
             default="<playbook_dir>/<playbook_name>_artifact.json",
+            dest="artifact",
         )
         parser.set_defaults(requires_ansible=True)
 
@@ -250,4 +259,5 @@ class CliArgs:
             "--web",
             action="store_true",
             help="Run the application in a browser rather than the current terminal",
+            dest="web",
         )
