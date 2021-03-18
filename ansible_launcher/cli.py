@@ -4,8 +4,8 @@ import configparser
 import itertools
 import logging
 import os
-import pkg_resources  # pylint: disable=wrong-import-order
 import sys
+import sysconfig
 import signal
 import time
 
@@ -34,6 +34,23 @@ from .web_xterm_js import WebXtermJs
 
 APP_NAME = "ansible_launcher"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
+
+# datadirs (/usr/share) to search for the ansible-launcher data files
+# First found wins
+_POTENTIAL_SHARE_DIRS = (
+    # Development path
+    # We want the share directory to resolve adjacent to the directory the code lives in
+    # as that's the layout in the source.
+    os.path.join(os.path.dirname(__file__), "..", "share", APP_NAME),
+    # System paths
+    # On most Linux installs, these would resolve to:
+    # ~/.local/share/APP_NAME
+    # /usr/share/APP_NAME
+    # /usr/local/share/APP_NAME
+    os.path.join(sysconfig.get_config_var("userbase"), "share", APP_NAME),
+    os.path.join(sysconfig.get_config_var("datarootdir"), APP_NAME),
+    os.path.join(sysconfig.get_config_var("prefix"), "local", "share", APP_NAME),
+)
 
 
 logger = logging.getLogger(APP_NAME)
@@ -216,21 +233,12 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         args.app = "welcome"
         args.value = None
 
-    share_dir = os.path.join(sys.prefix, "share", APP_NAME)
-    if os.path.exists(share_dir):
-        args.share_dir = share_dir
-    else:
-        share_dir = os.path.join(sys.prefix, "local", "share", APP_NAME)
+    for share_dir in _POTENTIAL_SHARE_DIRS:
         if os.path.exists(share_dir):
             args.share_dir = share_dir
-        else:
-            # check if the package was installed with pip --editable with an .egg-link
-            site = pkg_resources.get_distribution(APP_NAME).location
-            share_dir = os.path.join(site, "share", APP_NAME)
-            if os.path.exists(share_dir):
-                args.share_dir = share_dir
-            else:
-                sys.exit("problem finding share dir")
+            break
+    else:  # python for-else
+        sys.exit("problem finding share dir")
 
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     args.cache_dir = f"{cache_home}/{APP_NAME}"
