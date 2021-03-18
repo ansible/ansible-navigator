@@ -121,20 +121,20 @@ class CliArgs:
     @staticmethod
     def _ee_params(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "-ce",
+            "--ce",
             "--container-engine",
             help="Specify the container engine to run the Execution Environment",
             choices=["podman", "docker"],
             default="podman",
         )
         parser.add_argument(
-            "-ee",
+            "--ee",
             "--execution-environment",
             action="store_true",
             help="Run the playbook in an Execution Environment",
         )
         parser.add_argument(
-            "-eei",
+            "--eei",
             "--ee-image",
             help="Specify the name of the container image containing an Execution Environment",
             default="quay.io/ansible/ansible-runner:devel",
@@ -157,7 +157,7 @@ class CliArgs:
     @staticmethod
     def _inventory_columns(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "-ic",
+            "--ic",
             "--inventory-columns",
             help=(
                 "Additional columns to be shown in the inventory views,"
@@ -199,14 +199,14 @@ class CliArgs:
 
     def _log_params(self, parser: ArgumentParser) -> None:
         parser.add_argument(
-            "-lf",
+            "--lf",
             "--logfile",
             default=f"./{self._app_name}.log",
             dest="logfile",
             help="Specify the application log file location",
         )
         parser.add_argument(
-            "-ll",
+            "--ll",
             "--loglevel",
             default="info",
             dest="loglevel",
@@ -218,7 +218,7 @@ class CliArgs:
     @staticmethod
     def _no_osc4_params(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "-no-osc4",
+            "--no-osc4",
             action="store_true",
             help="Disable OSC-4 support (xterm.js color fix)",
         )
