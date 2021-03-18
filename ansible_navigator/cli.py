@@ -32,7 +32,7 @@ from .utils import get_and_check_collection_doc_cache
 from .utils import set_ansible_envar
 from .web_xterm_js import WebXtermJs
 
-APP_NAME = "ansible_launcher"
+APP_NAME = "ansible_navigator"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
 # datadirs (/usr/share) to search for the ansible-launcher data files
