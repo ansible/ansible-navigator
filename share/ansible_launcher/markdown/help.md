@@ -4,8 +4,6 @@ esc                                     Go back
 ^f/PgUp                                 Page up
 ^b/PgDn                                 Page down
 arrow up, arrow down                    Scroll up/down
-:blog                                   Check out the recent Ansible blog entries
-:bullhorn                               Catch up on the latest bullhorn issues
 :collections                            Explore installed collections
 :config                                 Explore the current Ansible configuration
 :d, :doc <plugin>                       Show a plugin doc
@@ -18,7 +16,6 @@ arrow up, arrow down                    Scroll up/down
 :o, :open {{ some_key }}                Open file path in a key's value
 :q, :quit                               Quit the application
 :q!, :quit!, ^c                         Force quit while a playbook is running
-:redhat                                 See the latest from Red Hat
 :rr, :rerun                             Rerun the playbook
 :s, :save <file>                        Save current plays as an artifact
 :st, :stream                            Watch playbook results real time
