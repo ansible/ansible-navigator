@@ -1,17 +1,17 @@
-## ansible-launcher
+## ansible-navigator
 
 A TUI for the Red Hat Ansible Automation Platform
 
 ## Quick start
 
 ```
-git clone https://github.com/ansible/ansible-launcher.git
-mkdir ansible-launcher_demo
-cd ansible-launcher_demo
+git clone https://github.com/ansible/ansible-navigator.git
+mkdir ansible-navigator_demo
+cd ansible-navigator_demo
 python3 -m venv venv
 source venv/bin/activate
 pip install -U setuptools
-pip install ../ansible-launcher
+pip install ../ansible-navigator
 ```
 
 RHEL8/Centos8 prerequisites:
@@ -25,48 +25,48 @@ sudo dnf install gcc python3-devel
 ### Welcome
 Start at the welcome page, from the welcome page you can run playbooks, explore inventories, and review docs
 ```
-ansible-launcher
+ansible-navigator
 ```
 
 ### Other things to try direct from the command line
 
 Review the help
 ```
-ansible-launcher --help
+ansible-navigator --help
 ```
 
 Review current configuration
 ```
-ansible-launcher config
+ansible-navigator config
 ```
 
 Explore available collections
 ```
-ansible-launcher collections
+ansible-navigator collections
 ```
 
 Review documentation
 ```
-ansible-launcher doc ansible.netcommon.cli_command
+ansible-navigator doc ansible.netcommon.cli_command
 ```
 
 Run and explore a playbook
 ```
-ansible-launcher explore site.yaml -i inventory.yaml
+ansible-navigator explore site.yaml -i inventory.yaml
 ```
 
 Review and explore and inventory
 ```
-ansible-launcher inventory -i inventory.yaml
+ansible-navigator inventory -i inventory.yaml
 ```
 
 Run a playbook with classic output
 ```
-ansible-launcher playbook site.yaml -i inventory.yaml
+ansible-navigator playbook site.yaml -i inventory.yaml
 ```
 
 
-## ansible_launcher.cfg example
+## ansible_navigator.cfg example
 
 Note: the config file currently uses an underscore not dash
 
