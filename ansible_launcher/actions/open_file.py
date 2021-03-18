@@ -84,7 +84,7 @@ class Action:
                         line_number,
                     )
                 else:
-                    self._logger("something just a plain string")
+                    self._logger.debug("something just a plain string")
                     obj = something
         else:
             self._logger.debug("something not provided")
