@@ -45,9 +45,11 @@ _POTENTIAL_SHARE_DIRS = (
     # System paths
     # On most Linux installs, these would resolve to:
     # ~/.local/share/APP_NAME
-    # /usr/share/APP_NAME
+    # /usr/share/APP_NAME  (or the venv equivalent)
+    # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
     # /usr/local/share/APP_NAME
     os.path.join(sysconfig.get_config_var("userbase"), "share", APP_NAME),
+    os.path.join(sys.prefix, "share", APP_NAME),
     os.path.join(sysconfig.get_config_var("datarootdir"), APP_NAME),
     os.path.join(sysconfig.get_config_var("prefix"), "local", "share", APP_NAME),
 )
