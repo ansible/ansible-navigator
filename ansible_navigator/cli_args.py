@@ -54,8 +54,7 @@ class CliArgs:
         self._doc()
         self._inventory()
         self._load()
-        self._explore()
-        self._playbook()
+        self._run()
 
     def _add_subparser(self, name: str, desc: str) -> ArgumentParser:
         return self._subparsers.add_parser(
@@ -73,6 +72,7 @@ class CliArgs:
         self._log_params(self._base_parser)
         self._no_osc4_params(self._base_parser)
         self._web_params(self._base_parser)
+        self._navigator_mode(self._base_parser)
 
     def _collections(self) -> None:
         parser = self._add_subparser("collections", "Explore installed collections")
@@ -144,8 +144,10 @@ class CliArgs:
             dest="ee_image",
         )
 
-    def _explore(self) -> None:
-        parser = self._add_subparser("explore", "Run playbook(s) interactive")
+    def _run(self) -> None:
+        parser = self._add_subparser(
+            "run", "Run Ansible playbook in either interactive or stdout mode"
+        )
         self._playbook_params(parser)
         self._inventory_params(parser)
 
@@ -231,11 +233,6 @@ class CliArgs:
             dest="no_osc4",
         )
 
-    def _playbook(self) -> None:
-        parser = self._add_subparser("playbook", "Run playbook(s)")
-        self._playbook_params(parser)
-        self._inventory_params(parser)
-
     @staticmethod
     def _playbook_params(parser: ArgumentParser) -> None:
         parser.add_argument(
@@ -260,4 +257,16 @@ class CliArgs:
             action="store_true",
             help="Run the application in a browser rather than the current terminal",
             dest="web",
+        )
+
+    @staticmethod
+    def _navigator_mode(parser: ArgumentParser) -> None:
+        parser.add_argument(
+            "-m",
+            "--mode",
+            default="stdout",
+            dest="navigator_mode",
+            choices=["stdout", "interactive"],
+            help="Specify the navigator mode to run",
+            type=str,
         )

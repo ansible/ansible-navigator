@@ -1,14 +1,14 @@
 """ ansible_runner w/ queue and
 event handler
 """
-import itertools
+import sys
 import logging
 import os
 from ansible_runner import Runner  # type: ignore
-from ansible_runner import run_async
+from ansible_runner import run_command_async
 
 
-class PlaybookRunner:
+class CommandRunner:
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
     """a runner wrapper"""
@@ -23,9 +23,19 @@ class PlaybookRunner:
         self._logger = logging.getLogger(__name__)
         self._playbook = args.playbook
         self._queue = queue
+        self._app = args.app
         self.cancelled = False
         self.finished = False
         self.status = None
+        self._navigator_mode = args.navigator_mode
+        self._executable_cmd = {
+            "config": "ansible-config",
+            "doc": "ansible-doc",
+            "galaxy": "ansible-galaxy",
+            "inventory": "ansible-inventory",
+            "run": "ansible-playbook",
+            "test": "ansible-test",
+        }.get(args.app, None)
 
     def runner_finished_callback(self, runner: Runner):
         """called when runner finishes
@@ -45,36 +55,49 @@ class PlaybookRunner:
 
     def run(self):
         """run"""
+        runner_args = {}
 
-        runner_args = {
-            "json_mode": True,
-            "quiet": True,
-            "event_handler": self._event_handler,
-            "envvars": {k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")},
-            "cancel_callback": self.runner_cancelled_callback,
-            "finished_callback": self.runner_finished_callback,
-        }
+        if self._executable_cmd is None:
+            raise ValueError(f"ansible command not found for app '{self._app}'")
+
         if self._ee:
-            inventory = [["-i", inv] for inv in self._inventory] if self._inventory else []
-            inventory = list(itertools.chain.from_iterable(inventory))
-            add_args = {
-                "cli_execenv_cmd": "playbook",
-                "cmdline": [self._playbook] + inventory + self._cmdline,
-                "container_image": self._eei,
+            runner_args.update(
+                {
+                    "container_image": self._eei,
+                    "process_isolation_executable": self._ce,
+                    "process_isolation": True,
+                }
+            )
+
+        if self._playbook:
+            self._cmdline.append(self._playbook)
+            runner_args.update({"cwd": os.path.dirname(os.path.abspath(self._playbook))})
+
+        for inv in self._inventory:
+            self._cmdline.extend(["-i", inv])
+
+        runner_args.update(
+            {
+                "executable_cmd": self._executable_cmd,
+                "cmdline_args": self._cmdline,
+                "json_mode": True,
+                "quiet": True,
+                "envvars": {k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")},
                 "private_data_dir": ".",
-                "process_isolation_executable": self._ce,
-                "process_isolation": True,
+                "event_handler": self._event_handler,
+                "cancel_callback": self.runner_cancelled_callback,
+                "finished_callback": self.runner_finished_callback,
             }
-        else:
-            add_args = {
-                "cmdline": " ".join(self._cmdline),
-                "inventory": self._inventory,
-                "playbook": self._playbook,
-            }
-        runner_args.update(add_args)
+        )
+
+        if self._navigator_mode == "stdout":
+            runner_args.update(
+                {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr}
+            )
+
         for key, value in runner_args.items():
             self._logger.debug("Runner arg: %s:%s", key, value)
 
-        thread, _runner = run_async(**runner_args)
+        thread, _runner = run_command_async(**runner_args)
         self.status = "running"
         return thread

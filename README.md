@@ -52,7 +52,7 @@ ansible-navigator doc ansible.netcommon.cli_command
 
 Run and explore a playbook
 ```
-ansible-navigator explore site.yaml -i inventory.yaml
+ansible-navigator run -m interactive site.yaml -i inventory.yaml
 ```
 
 Review and explore and inventory
@@ -60,9 +60,9 @@ Review and explore and inventory
 ansible-navigator inventory -i inventory.yaml
 ```
 
-Run a playbook with classic output
+Run a playbook with classic output (default mode)
 ```
-ansible-navigator playbook site.yaml -i inventory.yaml
+ansible-navigator run -m stdout site.yaml -i inventory.yaml
 ```
 
 
@@ -98,7 +98,7 @@ arrow up, arrow down                    Scroll up/down
 :collections                            Explore installed collections
 :config                                 Explore the current Ansible configuration
 :d, :doc <plugin>                       Show a plugin doc
-:e, :explore <playbook> -i <inventory>  Run a playbook using explore
+:r, :run <playbook> -i <inventory>      Run a playbook using in interactive mode
 :f, :filter <re>                        Filter page lines using a regex
 :h, :help                               This page
 :i, :inventory <inventory>              Explore the current or alternate inventory
