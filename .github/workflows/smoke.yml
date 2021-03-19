@@ -1,0 +1,78 @@
+---
+name: Smoke tests
+on:
+  push:
+  pull_request:
+  schedule:
+    # A daily build, just in case deps break anything, etc.
+    - cron: 0 12 * * *
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get remove -y 'ansible*'
+          pip install ansible-core
+          pip install .
+
+      # Can we launch the thing at all?
+      - run: ansible-navigator --help
+
+      # But what if... What if... we could do better?
+      - name: Do some quick functional smoke tests
+        run: |
+          keys() { tmux send-keys -t smoke: "$@"; sleep 1; }
+          back() { keys Escape; }
+          current() { tmux capture-pane -t smoke: -S - -E - -p; }
+          substr() {
+            echo
+            echo '-----------------------------------------------------'
+            current # Output every time for debugging
+            echo '-----------------------------------------------------'
+            if current | grep -q "$1"; then
+              echo -e "\033[1;32mPASS\033[m: substring '$1' found in above output"
+              return 0
+            else
+              echo -e "\033[1;31mFAIL\033[m: substring '$1' not found in above output"
+              return 1
+            fi
+          }
+
+          tmux new-session -d -s smoke
+
+          # Main page
+          keys ansible-navigator Enter
+          substr 'Some things you can try'
+
+          # Help page
+          keys :help Enter
+          substr 'Go back'
+
+          # Second help page
+          keys PgDn
+          substr TASKS
+
+          # 'debug' module doc page from help page
+          keys ':doc debug' Enter
+          substr 'collection: ansible.builtin'
+
+          # Back to help page -- but we end up back at the top...
+          back
+          substr 'Go back'
+
+          # Back to main page
+          back
+          substr 'Some things you can try'
+
+          # config + filter
+          keys :config Enter
+          sleep 5 # config takes time to render
+          keys ':f COW' Enter
+          substr ANSIBLE_COW_SELECTION
