@@ -40,6 +40,10 @@ class FormHandlerText(CursesWindow, Textbox):
     def _do_command(self, char: int) -> int:
         # pylint: disable=too-many-branches
 
+        # in the case the term returns 127 instead of 263
+        if char == curses_ascii.DEL:
+            char = curses.KEY_BACKSPACE
+
         if char == curses.KEY_IC:
             self.insert_mode = not self.insert_mode
             ret = 1
