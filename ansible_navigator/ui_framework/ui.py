@@ -8,6 +8,7 @@ import logging
 
 import os
 import re
+import string
 
 from curses import ascii as curses_ascii
 
@@ -53,6 +54,39 @@ END_KEYS = {
 
 # pylint: disable=inherit-non-class
 # pylint: disable=too-few-public-methods
+
+
+# from http://stackoverflow.com/a/15423007/115478
+def should_use_block(value):
+    """Returns true if string should be in block format"""
+    for c in u"\u000a\u000d\u001c\u001d\u001e\u0085\u2028\u2029":
+        if c in value:
+            return True
+    return False
+
+
+def my_represent_scalar(self, tag, value, style=None):
+    """Uses block style for multi-line strings"""
+    if style is None:
+        if should_use_block(value):
+            style = '|'
+            # we care more about readable than accuracy, so...
+            # ...no trailing space
+            value = value.rstrip()
+            # ...and non-printable characters
+            value = ''.join(x for x in value if x in string.printable or ord(x) >= 0xA0)
+            # ...tabs prevent blocks from expanding
+            value = value.expandtabs()
+            # ...and odd bits of whitespace
+            value = re.sub(r'[\x0b\x0c\r]', '', value)
+            # ...as does trailing space
+            value = re.sub(r' +\n', '\n', value)
+        else:
+            style = self.default_style
+    node = yaml.representer.ScalarNode(tag, value, style=style)
+    if self.alias_key is not None:
+        self.represented_objects[self.alias_key] = node
+    return node
 
 
 class Action(NamedTuple):
@@ -154,6 +188,8 @@ class UserInterface(CursesWindow):
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
         self._one_line_input = FormHandlerText(screen=self._screen)
+
+        yaml.representer.BaseRepresenter.represent_scalar = my_represent_scalar
 
     def clear(self) -> None:
         """ clear the screen"""
