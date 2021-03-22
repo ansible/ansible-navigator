@@ -337,7 +337,7 @@ class Action(App):
             values = [
                 host_vars[m_entry.get("__name", m_entry.get("inventory_hostname"))]
                 for m_entry in self.steps.current.value
-                if not "__type" in m_entry or m_entry["__type"] == "host"
+                if "__type" not in m_entry or m_entry["__type"] == "host"
             ]
             entry = Step(
                 name="host_content",

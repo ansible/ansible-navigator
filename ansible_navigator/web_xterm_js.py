@@ -37,7 +37,7 @@ HTML_PAGE = Template(
 <!doctype html>
 <html>
 <head>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
     <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-search/lib/xterm-addon-search.js"></script>
@@ -83,7 +83,7 @@ socket.addEventListener('close', function (event) {
 });
 const term = new Terminal(),
       attachAddon = new AttachAddon.AttachAddon(socket, true, true);
-	  fitAddon = new FitAddon.FitAddon();
+      fitAddon = new FitAddon.FitAddon();
       searchAddon = new SearchAddon.SearchAddon();
       webLinksAddon = new WebLinksAddon.WebLinksAddon();
 term.loadAddon(attachAddon);
