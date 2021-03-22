@@ -182,7 +182,7 @@ def setup_logger(args):
     :type args: argparse namespace
     """
     if os.path.exists(args.logfile):
-        with open(args.logfile, "w"):
+        with open(args.logfile, "a"):
             pass
     hdlr = logging.FileHandler(args.logfile)
     formatter = logging.Formatter(

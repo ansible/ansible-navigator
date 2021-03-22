@@ -8,6 +8,7 @@ import os
 import re
 import uuid
 
+from datetime import datetime
 from argparse import Namespace
 from queue import Queue
 from typing import Any
@@ -260,7 +261,7 @@ class Action(App):
             self._dequeue()
             if self.runner.finished:
                 if self.args.artifact:
-                    self.write_artifact(self.args.artifact)
+                    self.write_artifact(self.args.artifact + '_' + datetime.isoformat(datetime.now()))
                 self._logger.debug("runner finished")
                 break
 
@@ -704,7 +705,7 @@ class Action(App):
                 while not self.runner.finished:
                     pass
                 if hasattr(self.args, "artifact"):
-                    self.write_artifact(self.args.artifact)
+                    self.write_artifact(self.args.artifact + '_' + datetime.isoformat(datetime.now()))
                 return True
             self._logger.warning("Quit requested but playbook running, try q! or quit!")
             return False
@@ -753,7 +754,7 @@ class Action(App):
                 self._logger.debug("runner finished")
                 self._logger.info("Playbook complete")
                 if hasattr(self.args, "artifact"):
-                    self.write_artifact(self.args.artifact)
+                    self.write_artifact(self.args.artifact + '_' + datetime.isoformat(datetime.now()))
                 self._runner_finished = True
 
     def _get_status(self) -> Tuple[str, int]:
