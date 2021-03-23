@@ -39,7 +39,7 @@ from .field_text import FieldText
 from .form_handler_text import FormHandlerText
 from .menu_builder import MenuBuilder
 
-from ..yaml import yaml, Dumper
+from ..yaml import yaml, HumanDumper
 
 STND_KEYS = {
     "^f/PgUp": "page up",
@@ -483,7 +483,7 @@ class UserInterface(CursesWindow):
             return self._colorizer.render(doc=obj, scope=self.xform())
         if self.xform() == "source.yaml":
             string = yaml.dump(
-                obj, default_flow_style=False, Dumper=Dumper, explicit_start=True, sort_keys=True
+                obj, default_flow_style=False, Dumper=HumanDumper, explicit_start=True, sort_keys=True
             )
         elif self.xform() == "source.json":
             string = json.dumps(obj, indent=4, sort_keys=True)
