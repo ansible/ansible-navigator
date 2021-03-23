@@ -11,7 +11,6 @@ Some things you can try from here:
 - `:log`                                    Review the application log
 - `:open`                                   Open current page in the IDE
 - `:quit`                                   Quit the application
-- `:sample_form`                            Prototype curses form rendered
 
 happy automating,
 
