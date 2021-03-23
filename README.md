@@ -11,6 +11,7 @@ cd ansible-navigator_demo
 python3 -m venv venv
 source venv/bin/activate
 pip install -U setuptools
+pip install -U ansible
 pip install ../ansible-navigator
 ```
 
