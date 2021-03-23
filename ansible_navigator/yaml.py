@@ -28,7 +28,7 @@ class HumanDumper(Dumper):
             # Replace some whitespace chars
             value = re.sub(r'[\r]', '', value)
 
-        return super(HumanDumper, self).represent_scalar(tag, value, style)
+        return super().represent_scalar(tag, value, style)
 
 
 # from http://stackoverflow.com/a/15423007/115478
