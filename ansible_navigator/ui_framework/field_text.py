@@ -52,7 +52,7 @@ class FieldText:
 
     def validate(self, response: str) -> None:
         """validate the repsonse"""
-        if response == "" and not self.default is nonexistent:
+        if response == "" and self.default is not nonexistent:
             response = str(self.default)
 
         self.response = response
@@ -68,7 +68,7 @@ class FieldText:
         """conditional validation used for tab,
         only accept the value if it validates, otherwise move along
         """
-        if response == "" and not self.default is nonexistent:
+        if response == "" and self.default is not nonexistent:
             response = str(self.default)
         # no repsonse or validator is none
         if response or getattr(self.validator, "__name__", "").endswith("none"):

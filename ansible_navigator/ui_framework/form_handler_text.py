@@ -80,7 +80,7 @@ class FormHandlerText(CursesWindow, Textbox):
         "Edit in the widget window and collect the results."
         form_field = form_fields[idx]
 
-        if not form_field.response is unknown:
+        if form_field.response is not unknown:
             clp = CursesLinePart(0, form_field.response, curses.color_pair(0), 0)
             self._add_line(self.win, 0, tuple([clp]))
         else:
