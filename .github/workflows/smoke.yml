@@ -23,7 +23,10 @@ jobs:
           pip install .
 
       # Can we launch the thing at all?
-      - run: ansible-navigator --help
+      - name: Run ansible-navigator --help
+        run: |
+          export PATH=$PATH:~/.local/bin
+          ansible-navigator --help
 
       # But what if... What if... we could do better?
       - name: Do some quick functional smoke tests
@@ -46,6 +49,9 @@ jobs:
           }
 
           tmux new-session -d -s smoke
+
+          # Add where pip drops the entrypoint to our PATH
+          keys 'export PATH=$PATH:~/.local/bin' Enter
 
           # Main page
           keys ansible-navigator Enter
