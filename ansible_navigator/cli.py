@@ -38,11 +38,12 @@ COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
 logger = logging.getLogger(APP_NAME)
 
+
 def _get_share_dir() -> Optional[str]:
-    '''
+    """
     returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
     ansible-launcher data files. First found wins.
-    '''
+    """
 
     # Development path
     # We want the share directory to resolve adjacent to the directory the code lives in
