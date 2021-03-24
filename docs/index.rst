@@ -4,7 +4,7 @@
 Ansible Navigator Documentation
 ################################
 
-``ansible-navigator`` is a command based tool for interacting with Ansible Automation Platform.
+``ansible-navigator`` is a command based tool for creating, reviewing, and troubleshooting Ansible content, including inventories, playbooks, and collections.
 
 
 .. toctree::
