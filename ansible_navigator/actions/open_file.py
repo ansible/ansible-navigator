@@ -78,7 +78,7 @@ class Action:
                 if os.path.isfile(parts[0]):
                     filename = parts[0]
                     line_number = parts[1:][0] if parts[1:] else line_number
-                    self._logger(
+                    self._logger.debug(
                         "something not a template, but is a valid filename %s:%s",
                         filename,
                         line_number,
