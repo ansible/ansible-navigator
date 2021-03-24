@@ -4,7 +4,7 @@
 Ansible Navigator User Guide
 ################################
 
-``ansible-navigator`` provides both an Ansible command passthroug mode and a more interactive texual user interface mode for creating playbooks and roles for Ansible Automation Platform.
+``ansible-navigator`` provides both an Ansible command passthrough mode and a more interactive textual user interface mode for creating playbooks and roles for Ansible Automation Platform.
 
 
 .. toctree::
