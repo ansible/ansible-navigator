@@ -1,3 +1,4 @@
+mypy
 pycodestyle
 pytest
 pytest-cov
