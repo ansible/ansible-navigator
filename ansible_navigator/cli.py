@@ -24,13 +24,16 @@ from typing import Union
 from curses import wrapper
 
 from .cli_args import CliArgs
+from .config import NavigatorConfig
 from .action_runner import ActionRunner
 from .utils import check_for_ansible
 from .utils import find_ini_config_file
 from .utils import get_and_check_collection_doc_cache
 from .utils import set_ansible_envar
+from .yaml import yaml, SafeLoader
 
 APP_NAME = "ansible_navigator"
+APP_PRETTY_NAME = "ansible-navigator"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
 logger = logging.getLogger(APP_NAME)
@@ -78,6 +81,19 @@ def _get_share_dir() -> Optional[str]:
     # No path found above
     return None
 
+# Config file dirs. This is modeled after _POTENTIAL_SHARE_DIRS, kind of.
+_POTENTIAL_ETC_DIRS = (
+    # Development path
+    os.path.join(os.path.dirname(__file__), "..", "etc", APP_PRETTY_NAME),
+    # System paths
+    # On most Linux installs, these would resolve to:
+    # ~/.config/APP_PRETTY_NAME
+    # /etc/APP_PRETTY_NAME
+    # /usr/local/etc/APP_PRETTY_NAME
+    os.path.join(os.path.expanduser('~'), ".config", APP_PRETTY_NAME),
+    os.path.join("/", "etc", APP_PRETTY_NAME),
+    os.path.join(sysconfig.get_config_var("prefix"), "local", "etc", APP_PRETTY_NAME),
+)
 
 class EnvInterpolation(configparser.BasicInterpolation):
     """Interpolation which expands environment variables in values."""
@@ -156,8 +172,8 @@ def update_args(
                         dest, default, tipe = get_param(parser, key)
                         msgs.append(f"ini entry: {key} matched to arg: {dest}")
                         if dest:
-                            arg_value = getattr(args, dest, NoSuch())
-                            if arg_value == default or isinstance(arg_value, NoSuch):
+                            arg_value = getattr(args, dest, Sentinel())
+                            if arg_value == default or isinstance(arg_value, Sentinel):
                                 if isinstance(default, bool):
                                     bool_key: bool = section.getboolean(key)
                                     msg = f"{dest} was default, "
@@ -185,19 +201,6 @@ def update_args(
     else:
         msgs.append("No config file file found")
     return msgs
-
-
-def handle_ide(args: Namespace) -> None:
-    """Based on the IDE, set the editor and other args"""
-    if args.ide == "vim":
-        args.editor = "vi +{line_number} {filename}"
-        args.editor_is_console = True
-    elif args.ide == "vscode":
-        args.editor = "code -g {filename}:{line_number}"
-        args.editor_is_console = False
-    elif args.ide == "pycharm":
-        args.editor = "charm  --line {line_number} {filename}"
-        args.editor_is_console = False
 
 
 def setup_logger(args):
@@ -235,7 +238,6 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     pre_logger_msgs = update_args(config_file, args, parser)
 
     args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
-    handle_ide(args)
 
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
@@ -260,6 +262,18 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         args.share_dir = share_dir
     else:
         sys.exit("problem finding share dir")
+
+    for conf_dir in _POTENTIAL_ETC_DIRS:
+        conf_path = os.path.join(conf_dir, "settings.yml")
+        if os.path.exists(conf_path):
+            with open(conf_path, 'r') as conf_fh:
+                config = yaml.load(conf_fh, Loader=SafeLoader)
+                if config:
+                    args.config = NavigatorConfig(config)
+                    break
+    else:  # python for-else
+        # TODO: Is bailing out right? Or just use defaults?
+        sys.exit("problem finding config dir")
 
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     args.cache_dir = f"{cache_home}/{APP_NAME}"

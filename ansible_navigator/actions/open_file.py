@@ -20,7 +20,7 @@ from ..ui_framework import Content
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 
-from ..utils import templar
+from ..utils import templar, Sentinel
 from ..yaml import yaml, Dumper
 
 
@@ -154,10 +154,20 @@ class Action:
                 with open(filename, "w") as outfile:
                     outfile.write(obj)
 
-        command = app.args.editor.format(filename=filename, line_number=line_number)
+        # First, we see if the user asked for a specific editor. If so, use it.
+        # If not, see if EDITOR is set. If it is, use it. Lastly, fall back to
+        # default config (vi) as a last attempt.
+        if 'EDITOR' in os.environ:
+            command_default = '%s {filename}' % os.environ.get('EDITOR')
+        else:
+            command_default = Sentinel
+
+        command = app.args.config.get(['ansible-navigator', 'editor', 'command'], default=command_default).format(filename=filename, line_number=line_number)
+        is_console = app.args.config.get(['ansible-navigator', 'editor', 'console'])
+
         self._logger.debug("Command: %s", command)
         if isinstance(command, str):
-            if self._args.editor_is_console:
+            if is_console:
                 with SuspendCurses():
                     os.system(command)
             else:

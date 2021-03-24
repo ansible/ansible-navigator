@@ -33,8 +33,14 @@ except ImportError:
     HAS_ANSIBLE = False
 
 
+# Same usage as ansible.utils.sentinel.Sentinel.
+class Sentinel:
+    def __new__(cls):
+        return cls
+
+
 def human_time(seconds: int) -> str:
-    """convert seconds into huma readable
+    """convert seconds into human readable
     00d00h00m00s format"""
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))
