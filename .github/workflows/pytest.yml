@@ -1,0 +1,37 @@
+---
+name: tox/pytest tests
+on:
+  push:
+  pull_request:
+  schedule:
+    # A daily build, just in case deps break anything, etc.
+    - cron: 0 12 * * *
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.6"
+          - "3.7"
+          - "3.8"
+          - "3.9"
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python --version
+          sudo apt-get remove -y 'ansible*'
+          pip install ansible-core tox
+          pip install -r requirements-test.txt
+
+      - name: Run tox
+        run: tox -e py

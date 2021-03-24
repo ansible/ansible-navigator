@@ -67,6 +67,7 @@ jobs:
 
           # 'debug' module doc page from help page
           keys ':doc debug' Enter
+          sleep 2 # this seems to take a bit
           substr 'collection: ansible.builtin'
 
           # Back to help page -- but we end up back at the top...
