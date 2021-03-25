@@ -36,6 +36,6 @@ jobs:
       # We want to use -e py here so that tox doesn't detect the "default" GHA
       # python install and only uses the one in $PATH installed above.
       # But we also want to run all the other non py* envs such as type and
-      # sanity.
+      # black.
       - name: Run tox
         run: tox -e py,$(tox -l | grep -v ^py | tr '\n' ,)
