@@ -1,5 +1,4 @@
 black
 mypy
-pycodestyle
 pytest
 pytest-cov
