@@ -11,6 +11,7 @@ from typing import Dict
 from typing import List
 from typing import Match
 from typing import Tuple
+from typing import Type
 from typing import Union
 
 from . import _actions as actions
@@ -157,6 +158,7 @@ class Action:
         # First, we see if the user asked for a specific editor. If so, use it.
         # If not, see if EDITOR is set. If it is, use it. Lastly, fall back to
         # default config (vi) as a last attempt.
+        command_default: Union[str, Type[Sentinel]]
         if "EDITOR" in os.environ:
             command_default = "%s {filename}" % os.environ.get("EDITOR")
         else:
