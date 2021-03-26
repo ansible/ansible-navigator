@@ -65,7 +65,7 @@ Interactive mode provides a welcome screen with the available options.
 
 .. code-block:: text
 
-  0│## Welcome
+   │## Welcome
   1│--------------------------------------------------------------------------------------
   2│
   3│Some things you can try from here:
@@ -78,11 +78,11 @@ Interactive mode provides a welcome screen with the available options.
   10│- `:log`                                    Review the application log
   11│- `:open`                                   Open current page in the IDE
   12│- `:quit`                                   Quit the application
-  13│- `:sample_form`                            Prototype curses form rendered
-  14│
-  15│happy automating,
-  16│
-  17│-ansible-navigator
+  13│
+  14│happy automating,
+  15│
+  16│-ansible-navigator
+
 
 ``ansible-navigator`` in interactive mode gives similar options to command mode, but includes a rich set of exploration options you can view by typing the help option. The following subset of options shows the interactive options that help you explore content, run, and troubleshoot your playbooks:
 
