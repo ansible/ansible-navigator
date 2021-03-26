@@ -1,0 +1,4 @@
+---
+- project:
+    templates:
+      - ansible-navigator-jobs
