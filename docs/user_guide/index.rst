@@ -13,6 +13,4 @@ Ansible Navigator User Guide
    overview
    exploring_content
    managing_inventories
-   running_playbooks
-   using_docs
-   
+   running_playbooks   
