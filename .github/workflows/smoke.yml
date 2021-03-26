@@ -31,7 +31,7 @@ jobs:
       # But what if... What if... we could do better?
       - name: Do some quick functional smoke tests
         run: |
-          keys() { tmux send-keys -t smoke: "$@"; sleep 1; }
+          keys() { tmux send-keys -t smoke: "$@"; sleep 2; }
           back() { keys Escape; }
           current() { tmux capture-pane -t smoke: -S - -E - -p; }
           substr() {
@@ -79,6 +79,6 @@ jobs:
 
           # config + filter
           keys :config Enter
-          sleep 5 # config takes time to render
+          sleep 4 # config takes time to render
           keys ':f COW' Enter
           substr ANSIBLE_COW_SELECTION

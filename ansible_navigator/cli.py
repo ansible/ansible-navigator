@@ -16,6 +16,7 @@ from functools import partial
 from typing import Any
 from typing import Callable
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -35,27 +36,50 @@ from .web_xterm_js import WebXtermJs
 APP_NAME = "ansible_navigator"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
-# datadirs (/usr/share) to search for the ansible-launcher data files
-# First found wins
-_POTENTIAL_SHARE_DIRS = (
+logger = logging.getLogger(APP_NAME)
+
+
+def _get_share_dir() -> Optional[str]:
+    """
+    returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
+    ansible-launcher data files. First found wins.
+    """
+
     # Development path
     # We want the share directory to resolve adjacent to the directory the code lives in
     # as that's the layout in the source.
-    os.path.join(os.path.dirname(__file__), "..", "share", APP_NAME),
-    # System paths
-    # On most Linux installs, these would resolve to:
+    path = os.path.join(os.path.dirname(__file__), "..", "share", APP_NAME)
+    if os.path.exists(path):
+        return path
+
     # ~/.local/share/APP_NAME
+    userbase = sysconfig.get_config_var("userbase")
+    if userbase is not None:
+        path = os.path.join(userbase, "share", APP_NAME)
+        if os.path.exists(path):
+            return path
+
     # /usr/share/APP_NAME  (or the venv equivalent)
+    path = os.path.join(sys.prefix, "share", APP_NAME)
+    if os.path.exists(path):
+        return path
+
     # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
+    datarootdir = sysconfig.get_config_var("datarootdir")
+    if datarootdir is not None:
+        path = os.path.join(datarootdir, APP_NAME)
+        if os.path.exists(path):
+            return path
+
     # /usr/local/share/APP_NAME
-    os.path.join(sysconfig.get_config_var("userbase"), "share", APP_NAME),
-    os.path.join(sys.prefix, "share", APP_NAME),
-    os.path.join(sysconfig.get_config_var("datarootdir"), APP_NAME),
-    os.path.join(sysconfig.get_config_var("prefix"), "local", "share", APP_NAME),
-)
+    prefix = sysconfig.get_config_var("prefix")
+    if prefix is not None:
+        path = os.path.join(prefix, "local", "share", APP_NAME)
+        if os.path.exists(path):
+            return path
 
-
-logger = logging.getLogger(APP_NAME)
+    # No path found above
+    return None
 
 
 class EnvInterpolation(configparser.BasicInterpolation):
@@ -235,11 +259,10 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         args.app = "welcome"
         args.value = None
 
-    for share_dir in _POTENTIAL_SHARE_DIRS:
-        if os.path.exists(share_dir):
-            args.share_dir = share_dir
-            break
-    else:  # python for-else
+    share_dir = _get_share_dir()
+    if share_dir is not None:
+        args.share_dir = share_dir
+    else:
         sys.exit("problem finding share dir")
 
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
