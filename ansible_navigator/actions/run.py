@@ -45,7 +45,9 @@ RESULT_TO_COLOR = [
     ("(?i)^in_progress$", 8),
 ]
 
-get_color = lambda word: next((x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)), 0)
+get_color = lambda word: next(  # noqa: E731
+    (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)), 0
+)
 
 
 def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> int:
@@ -109,10 +111,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
             tuple(
                 [
                     CursesLinePart(
-                        column=0,
-                        string=detail + stars,
-                        color=curses.color_pair(0),
-                        decoration=0,
+                        column=0, string=detail + stars, color=curses.color_pair(0), decoration=0
                     )
                 ]
             )
@@ -124,10 +123,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
             tuple(
                 [
                     CursesLinePart(
-                        column=0,
-                        string=detail + stars,
-                        color=curses.color_pair(0),
-                        decoration=0,
+                        column=0, string=detail + stars, color=curses.color_pair(0), decoration=0
                     )
                 ]
             )
@@ -501,11 +497,7 @@ class Action(App):
 
         result = None
         if isinstance(self.steps.current, Interaction):
-            result = run_action(
-                self.steps.current.name,
-                self.app,
-                self.steps.current,
-            )
+            result = run_action(self.steps.current.name, self.app, self.steps.current)
         elif isinstance(self.steps.current, Step):
             if self.steps.current.show_func:
                 self.steps.current.show_func()

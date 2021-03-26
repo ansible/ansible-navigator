@@ -1,4 +1,0 @@
-black
-mypy
-pytest
-pytest-cov

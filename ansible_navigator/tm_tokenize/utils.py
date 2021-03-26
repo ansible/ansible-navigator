@@ -1,5 +1,5 @@
-from typing import List
-from typing import Match
+from typing import List  # noqa: F401
+from typing import Match  # noqa: F401
 from typing import TypeVar
 
 

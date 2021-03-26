@@ -93,7 +93,7 @@ class Colorize:
         :rtype: list
         """
         if scope == "source.ansi":
-            return [ansi_to_curses(l) for l in doc.splitlines()]
+            return [ansi_to_curses(l) for l in doc.splitlines()]  # noqa: E741
         try:
             compiler = self._grammars.compiler_for_scope(scope)
         except KeyError:
@@ -107,7 +107,7 @@ class Colorize:
                 state, regions = tokenize(compiler, state, line, first_line)
                 lines.append((regions, line))
             return columns_and_colors(lines, self._schema)
-        res = [[{"column": 0, "chars": l, "color": None}] for l in doc.splitlines()]
+        res = [[{"column": 0, "chars": l, "color": None}] for l in doc.splitlines()]  # noqa: E741
         return res
 
 
@@ -148,7 +148,7 @@ def hex_to_rgb_curses(value):
     :return: The colors scaled to 1000
     :rtype: tuple
     """
-    scale = lambda x: int(x * 1000 / 255)
+    scale = lambda x: int(x * 1000 / 255)  # noqa: E731
     red, green, blue = hex_to_rgb(value)
     return (scale(red), scale(green), scale(blue))
 

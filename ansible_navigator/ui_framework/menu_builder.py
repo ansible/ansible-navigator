@@ -22,11 +22,7 @@ class MenuBuilder:
     """build a menu from list of dicts"""
 
     def __init__(
-        self,
-        pbar_width: int,
-        screen_w: int,
-        number_colors: int,
-        color_menu_item: Callable,
+        self, pbar_width: int, screen_w: int, number_colors: int, color_menu_item: Callable
     ):
         # pylint: disable=too-many-arguments
         self._number_colors = number_colors
@@ -175,11 +171,7 @@ class MenuBuilder:
         )
 
     def _menu_line_part(
-        self,
-        colno: int,
-        coltext: Any,
-        dyct: dict,
-        menu_layout: Tuple[List, ...],
+        self, colno: int, coltext: Any, dyct: dict, menu_layout: Tuple[List, ...]
     ) -> CursesLinePart:
         """Generate one menu line part
 

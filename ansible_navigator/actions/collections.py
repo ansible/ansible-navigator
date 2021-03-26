@@ -179,11 +179,7 @@ class Action(App):
         """take one step"""
         result = None
         if isinstance(self.steps.current, Interaction):
-            result = run_action(
-                self.steps.current.name,
-                self.app,
-                self.steps.current,
-            )
+            result = run_action(self.steps.current.name, self.app, self.steps.current)
         elif isinstance(self.steps.current, Step):
             if self.steps.current.show_func:
                 current_index = self.steps.current.index
@@ -272,13 +268,7 @@ class Action(App):
 
         return Step(
             name="all_plugins",
-            columns=[
-                cname_col,
-                "__type",
-                "__added",
-                "__deprecated",
-                "__description",
-            ],
+            columns=[cname_col, "__type", "__added", "__deprecated", "__description"],
             select_func=self._build_plugin_content,
             tipe="menu",
             value=plugins,
@@ -309,10 +299,7 @@ class Action(App):
         if os.path.exists(self._adjacent_collection_dir):
             cmd += ["-v", f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"]
 
-        cmd += [
-            "-v",
-            f"{self._collection_cache_path}:{self._collection_cache_path}:z",
-        ]
+        cmd += ["-v", f"{self._collection_cache_path}:{self._collection_cache_path}:z"]
 
         cmd += [self._args.ee_image]
         cmd += ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]

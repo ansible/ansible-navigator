@@ -42,10 +42,7 @@ class CompiledRule(Protocol):
         ...
 
     def start(
-        self,
-        compiler: "Compiler",
-        match: Match[str],
-        state: "State",
+        self, compiler: "Compiler", match: Match[str], state: "State"
     ) -> Tuple["State", bool, Regions]:
         ...
 
@@ -146,10 +143,7 @@ class EndRule(NamedTuple):
     u_rules: Tuple["_Rule", ...]
 
     def start(
-        self,
-        compiler: "Compiler",
-        match: Match[str],
-        state: "State",
+        self, compiler: "Compiler", match: Match[str], state: "State"
     ) -> Tuple["State", bool, "Regions"]:
         scope = state.cur.scope + self.name
         next_scope = scope + self.content_name
@@ -162,11 +156,7 @@ class EndRule(NamedTuple):
         return state, True, regions
 
     def _end_ret(
-        self,
-        compiler: "Compiler",
-        state: "State",
-        pos: int,
-        m: Match[str],
+        self, compiler: "Compiler", state: "State", pos: int, m: Match[str]
     ) -> Tuple["State", int, bool, "Regions"]:
         ret = []
         if m.start() > pos:
@@ -212,10 +202,7 @@ class MatchRule(NamedTuple):
     captures: "Captures"
 
     def start(
-        self,
-        compiler: "Compiler",
-        match: Match[str],
-        state: "State",
+        self, compiler: "Compiler", match: Match[str], state: "State"
     ) -> Tuple["State", bool, "Regions"]:
         scope = state.cur.scope + self.name
         return state, False, _captures(compiler, scope, match, self.captures)
@@ -239,10 +226,7 @@ class PatternRule(NamedTuple):
     u_rules: Tuple["_Rule", ...]
 
     def start(
-        self,
-        compiler: "Compiler",
-        match: Match[str],
-        state: "State",
+        self, compiler: "Compiler", match: Match[str], state: "State"
     ) -> Tuple["State", bool, "Regions"]:
         raise AssertionError(f"unreachable {self}")
 
@@ -276,11 +260,7 @@ class Rule(NamedTuple):
     repository: FChainMap[str, _Rule]
 
     @classmethod
-    def make(
-        cls,
-        dct: Dict[str, Any],
-        parent_repository: FChainMap[str, _Rule],
-    ) -> _Rule:
+    def make(cls, dct: Dict[str, Any], parent_repository: FChainMap[str, _Rule]) -> _Rule:
         if "repository" in dct:
             # this looks odd, but it's so we can have a self-referential
             # immutable-after-construction chain map
@@ -372,10 +352,7 @@ class WhileRule(NamedTuple):
     u_rules: Tuple["_Rule", ...]
 
     def start(
-        self,
-        compiler: "Compiler",
-        match: Match[str],
-        state: "State",
+        self, compiler: "Compiler", match: Match[str], state: "State"
     ) -> Tuple["State", bool, "Regions"]:
         scope = state.cur.scope + self.name
         next_scope = scope + self.content_name
@@ -418,10 +395,7 @@ class WhileRule(NamedTuple):
 
 
 def _captures(
-    compiler: "Compiler",
-    scope: "Scope",
-    match: Match[str],
-    captures: "Captures",
+    compiler: "Compiler", scope: "Scope", match: Match[str], captures: "Captures"
 ) -> "Regions":
     ret: List[Region] = []
     pos, pos_end = match.span()
@@ -446,15 +420,7 @@ def _captures(
             if start > oldtok.start:
                 newtok.append(oldtok._replace(end=start))
 
-            newtok.extend(
-                _inner_capture_parse(
-                    compiler,
-                    start,
-                    match[i],
-                    oldtok.scope,
-                    rule,
-                ),
-            )
+            newtok.extend(_inner_capture_parse(compiler, start, match[i], oldtok.scope, rule))
 
             if end < oldtok.end:
                 newtok.append(oldtok._replace(start=end))
@@ -463,9 +429,7 @@ def _captures(
             if start > pos:
                 ret.append(Region(pos, start, scope))
 
-            ret.extend(
-                _inner_capture_parse(compiler, start, match[i], scope, rule),
-            )
+            ret.extend(_inner_capture_parse(compiler, start, match[i], scope, rule))
 
             pos = end
 
@@ -475,11 +439,7 @@ def _captures(
 
 
 def _inner_capture_parse(
-    compiler: "Compiler",
-    start: int,
-    s: str,
-    scope: "Scope",
-    rule: "CompiledRule",
+    compiler: "Compiler", start: int, s: str, scope: "Scope", rule: "CompiledRule"
 ) -> "Regions":
     state = State.root(Entry(scope + rule.name, rule, (s, 0)))
     _, regions = tokenize(compiler, state, s, first_line=False)

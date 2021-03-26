@@ -229,11 +229,7 @@ class Action(App):
 
         result = None
         if isinstance(self.steps.current, Interaction):
-            result = run_action(
-                self.steps.current.name,
-                self.app,
-                self.steps.current,
-            )
+            result = run_action(self.steps.current.name, self.app, self.steps.current)
         elif isinstance(self.steps.current, Step):
             if self.steps.current.show_func:
                 current_index = self.steps.current.index
