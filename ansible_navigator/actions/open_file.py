@@ -157,13 +157,15 @@ class Action:
         # First, we see if the user asked for a specific editor. If so, use it.
         # If not, see if EDITOR is set. If it is, use it. Lastly, fall back to
         # default config (vi) as a last attempt.
-        if 'EDITOR' in os.environ:
-            command_default = '%s {filename}' % os.environ.get('EDITOR')
+        if "EDITOR" in os.environ:
+            command_default = "%s {filename}" % os.environ.get("EDITOR")
         else:
             command_default = Sentinel
 
-        command = app.args.config.get(['ansible-navigator', 'editor', 'command'], default=command_default).format(filename=filename, line_number=line_number)
-        is_console = app.args.config.get(['ansible-navigator', 'editor', 'console'])
+        command = app.args.config.get(
+            ["ansible-navigator", "editor", "command"], default=command_default
+        ).format(filename=filename, line_number=line_number)
+        is_console = app.args.config.get(["ansible-navigator", "editor", "console"])
 
         self._logger.debug("Command: %s", command)
         if isinstance(command, str):

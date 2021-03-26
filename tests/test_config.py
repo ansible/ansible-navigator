@@ -53,6 +53,7 @@ def test_config_get(dct, keys, default, expected):
     cfg = NavigatorConfig(dct)
     assert cfg.get(keys, default) == expected
 
+
 @pytest.mark.parametrize(
     "dct, keys, default, expected",
     [

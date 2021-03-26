@@ -15,6 +15,7 @@ _DEFAULTS = {
     },
 }
 
+
 class NavigatorConfig:
     def __init__(self, dct: Dict):
         self.config = dct
