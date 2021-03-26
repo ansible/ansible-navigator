@@ -21,6 +21,15 @@ class NavigatorConfig:
         self.config = dct
 
     def get(self, keys: List[str], default: Any = Sentinel) -> Any:
+        """
+        Takes a list of keys that correspond to nested keys in config.
+        If the key is found in the config, return the value.
+        Otherwise, if a non-Sentinel default is given, return that.
+        Lastly look to the internal default config [defined above] and pull
+        out the value from there.
+
+        If after all that the key didn't match, throw KeyError.
+        """
         current = self.config
         for key in keys:
             if isinstance(current, dict) and key in current:
