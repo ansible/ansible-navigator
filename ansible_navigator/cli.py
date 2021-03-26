@@ -19,6 +19,7 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
+from yaml.scanner import ScannerError
 
 
 from curses import wrapper
@@ -81,19 +82,43 @@ def _get_share_dir() -> Optional[str]:
     # No path found above
     return None
 
-# Config file dirs. This is modeled after _POTENTIAL_SHARE_DIRS, kind of.
-_POTENTIAL_ETC_DIRS = (
+
+def _get_conf_dir() -> Optional[str]:
+    """
+    returns config dir (e.g. /etc/ansible-nagivator). First found wins.
+    """
+
     # Development path
-    os.path.join(os.path.dirname(__file__), "..", "etc", APP_PRETTY_NAME),
-    # System paths
-    # On most Linux installs, these would resolve to:
+    path = os.path.join(os.path.dirname(__file__), "..", "etc", APP_PRETTY_NAME)
+    if os.path.exists(path):
+        return path
+
     # ~/.config/APP_PRETTY_NAME
+    path = os.path.join(os.path.expanduser("~"), ".config", APP_PRETTY_NAME)
+    if os.path.exists(path):
+        return path
+
+    # virtualenv /etc
+    venv = os.environ.get("VIRTUAL_ENV")
+    if venv:
+        path = os.path.join(venv, "etc", APP_PRETTY_NAME)
+        if os.path.exists(path):
+            return path
+
     # /etc/APP_PRETTY_NAME
+    path = os.path.join("/", "etc", APP_PRETTY_NAME)
+    if os.path.exists(path):
+        return path
+
     # /usr/local/etc/APP_PRETTY_NAME
-    os.path.join(os.path.expanduser('~'), ".config", APP_PRETTY_NAME),
-    os.path.join("/", "etc", APP_PRETTY_NAME),
-    os.path.join(sysconfig.get_config_var("prefix"), "local", "etc", APP_PRETTY_NAME),
-)
+    prefix = sysconfig.get_config_var("prefix")
+    if prefix:
+        path = os.path.join(prefix, "local", "etc", APP_PRETTY_NAME)
+        if os.path.exists(path):
+            return path
+
+    return None
+
 
 class EnvInterpolation(configparser.BasicInterpolation):
     """Interpolation which expands environment variables in values."""
@@ -239,6 +264,8 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 
     args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
 
+    msgs = []
+
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
@@ -261,26 +288,50 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     if share_dir is not None:
         args.share_dir = share_dir
     else:
-        sys.exit("problem finding share dir")
+        error_and_exit_early("problem finding share dir")
 
-    for conf_dir in _POTENTIAL_ETC_DIRS:
-        conf_path = os.path.join(conf_dir, "settings.yml")
-        if os.path.exists(conf_path):
-            with open(conf_path, 'r') as conf_fh:
-                config = yaml.load(conf_fh, Loader=SafeLoader)
-                if config:
-                    args.config = NavigatorConfig(config)
-                    break
-    else:  # python for-else
-        # TODO: Is bailing out right? Or just use defaults?
-        sys.exit("problem finding config dir")
+    if os.path.exists("ansible-navigator.yml"):
+        # If there's a local config, use it
+        config_path = "ansible-navigator.yml"
+        msgs.append("Found a config file in current working directory; using it.")
+    else:
+        # Otherwise, try to find it a different way
+        config_dir = _get_conf_dir()
+        if config_dir is not None:
+            config_path = os.path.join(config_dir, "ansible-navigator.yml")
+            if os.path.exists(config_path):
+                msgs.append("Found config file at {0}".format(config_path))
+            else:
+                # TODO: Is bailing out right? Or just use defaults?
+                error_and_exit_early(
+                    "Found config directory at {0} but ansible-navigator.yml did not exist".format(
+                        config_dir
+                    )
+                )
+        else:
+            error_and_exit_early("Could not find config directory")
+
+    with open(config_path, "r") as config_fh:
+        try:
+            config = yaml.load(config_fh, Loader=SafeLoader)
+        except ScannerError:
+            error_and_exit_early("Config file at {0} but it failed to parse.".format(config_path))
+
+    if config and config.get("ansible-navigator"):
+        msgs.append("Successfully parsed config file")
+        args.config = NavigatorConfig(config)
+    else:
+        error_and_exit_early(
+            "Config file was empty, null, or did not contain an 'ansible-navigator' key"
+        )
 
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     args.cache_dir = f"{cache_home}/{APP_NAME}"
-    msgs, args.collection_doc_cache = get_and_check_collection_doc_cache(
+    more_msgs, args.collection_doc_cache = get_and_check_collection_doc_cache(
         args, COLLECTION_DOC_CACHE_FNAME
     )
     pre_logger_msgs += msgs
+    pre_logger_msgs += more_msgs
 
     args.original_command = params
 
