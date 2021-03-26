@@ -98,6 +98,13 @@ def _get_conf_dir() -> Optional[str]:
     if os.path.exists(path):
         return path
 
+    # ~/.local/etc/APP_PRETTY_NAME
+    userbase = sysconfig.get_config_var("userbase")
+    if userbase:
+        path = os.path.join(userbase, "etc", APP_PRETTY_NAME)
+        if os.path.exists(path):
+            return path
+
     # virtualenv /etc
     venv = os.environ.get("VIRTUAL_ENV")
     if venv:
