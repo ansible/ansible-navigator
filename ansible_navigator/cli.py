@@ -31,6 +31,7 @@ from .utils import check_for_ansible
 from .utils import find_ini_config_file
 from .utils import get_and_check_collection_doc_cache
 from .utils import set_ansible_envar
+from .utils import Sentinel
 from .yaml import yaml, SafeLoader
 
 APP_NAME = "ansible_navigator"
