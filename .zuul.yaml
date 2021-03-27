@@ -1,0 +1,6 @@
+---
+- project:
+    check:
+      jobs:
+        - ansible-tox-docs
+        - ansible-tox-py38
