@@ -28,7 +28,6 @@ from .cli_args import CliArgs
 from .config import NavigatorConfig
 from .action_runner import ActionRunner
 from .utils import check_for_ansible
-from .utils import find_ini_config_file
 from .utils import get_and_check_collection_doc_cache
 from .utils import set_ansible_envar
 from .utils import Sentinel
@@ -84,32 +83,46 @@ def _get_share_dir() -> Optional[str]:
     return None
 
 
-def _get_conf_dir() -> Optional[str]:
+def _get_conf_dir(filename: Optional[str] = None) -> (Optional[str], List[str]):
     """
     returns config dir (e.g. /etc/ansible-nagivator). First found wins.
+    If a filename is given, ensures the file exists in the directory.
     """
+
+    potential_paths = []
+    msgs = []
 
     # Development path
     path = os.path.join(os.path.dirname(__file__), "..", "etc", APP_PRETTY_NAME)
-    if os.path.exists(path):
-        return path
+    potential_paths.append(path)
 
     # ~/.config/APP_PRETTY_NAME
     path = os.path.join(os.path.expanduser("~"), ".config", APP_PRETTY_NAME)
-    if os.path.exists(path):
-        return path
+    potential_paths.append(path)
 
     # /etc/APP_PRETTY_NAME
     path = os.path.join("/", "etc", APP_PRETTY_NAME)
-    if os.path.exists(path):
-        return path
+    potential_paths.append(path)
 
     # /usr/local/etc/APP_PRETTY_NAME
     prefix = sysconfig.get_config_var("prefix")
     if prefix:
         path = os.path.join(prefix, "local", "etc", APP_PRETTY_NAME)
-        if os.path.exists(path):
+        potential_paths.append(path)
+
+    for path in potential_paths:
+        must_exist = os.join(path, filename) if filename is not None else path
+        if not os.path.exists(must_exist):
+            continue
+
+        try:
+            perms = os.stat(path)
+            if perms.st_mode & stat.S_IWOTH:
+                msgs.append('Ignoring potential configuration directory {0} because it is world-writable.')
+                continue
             return path
+        except OSError:
+            continue
 
     return None
 
@@ -162,19 +175,32 @@ def get_param(
     return None, None, None
 
 
-def update_args(
-    config_file: Union[str, None], args: Namespace, parser: ArgumentParser
-) -> List[str]:
-    # pylint: disable=too-many-nested-blocks
-    # pylint: disable=too-many-locals
-    # pylint: disable=too-many-branches
-    """Update the provided args with ansible.cfg entries
-
-    :param args: the cli args
-    :type args: args namespace
-    :param parser: the arg parser
-    :type parser: ArgParse instance
+def update_args(args: Namespace) -> List[str]:
     """
+    Updates args with the corresponding values in the "argument-defaults"
+    portion of the ansible-navigator config file.
+
+    NOTE:
+    argparse, in its infinite wisdom, doesn't allow us to check whether a
+    parameter was actually supplied or not, on the commandline. That is, if we
+    get something that matches the default value on the arg, we have no way of
+    knowing if the user supplied that (default) value, or if they just didn't
+    specify the field at all. This represents a BUG in how we handle default
+    values here, but I don't think we have an easy way around it.
+
+    As a practical example of the consequences: If a config file has
+    `loglevel: error` and the user specifies `--loglevel info` (which is the
+    default for loglevel), we will end up using error.
+    """
+
+    msgs = []
+
+    # If no config file was parsed and added to args, there's nothing to do
+    if not hasattr(args, 'config') or not args.config:
+        msgs.append('No config file parsed, no default parameters to override.')
+        return msgs
+
+    defaults = config.get(['ansible-navigator', 'argument-defaults'], {})
     msgs = []
     if config_file:
         msgs.append(f"Using {config_file}")
@@ -258,8 +284,6 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 
     args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
 
-    msgs = []
-
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
@@ -287,14 +311,14 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     if os.path.exists("ansible-navigator.yml"):
         # If there's a local config, use it
         config_path = "ansible-navigator.yml"
-        msgs.append("Found a config file in current working directory; using it.")
+        pre_logger_msgs.append("Found a config file in current working directory; using it.")
     else:
         # Otherwise, try to find it a different way
         config_dir = _get_conf_dir()
         if config_dir is not None:
             config_path = os.path.join(config_dir, "ansible-navigator.yml")
             if os.path.exists(config_path):
-                msgs.append("Found config file at {0}".format(config_path))
+                pre_logger_msgs.append("Found config file at {0}".format(config_path))
             else:
                 # TODO: Is bailing out right? Or just use defaults?
                 error_and_exit_early(
@@ -312,20 +336,51 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
             error_and_exit_early("Config file at {0} but it failed to parse.".format(config_path))
 
     if config and config.get("ansible-navigator"):
-        msgs.append("Successfully parsed config file")
+        pre_logger_msgs.append("Successfully parsed config file")
         args.config = NavigatorConfig(config)
     else:
         error_and_exit_early(
             "Config file was empty, null, or did not contain an 'ansible-navigator' key"
         )
 
+    pre_logger_msgs += update_args(args)
+
+    args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
+
+    if args.app == "load" and not os.path.exists(args.value):
+        parser.error(f"The file specified with load could not be found. {args.load}")
+
+    if hasattr(args, "inventory"):
+        args.inventory = list(itertools.chain.from_iterable(args.inventory))
+        args.inventory = [os.path.abspath(os.path.expanduser(i)) for i in args.inventory]
+        if not args.inventory and args.app == "inventory":
+            parser.error("an inventory is required when using the inventory explorer")
+
+    if hasattr(args, "artifact"):
+        if hasattr(args, "playbook") and args.playbook:
+            if args.artifact == get_param(parser, "artifact")[1]:
+                args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
+
+    if args.web:
+        args.no_osc4 = True
+
+    if not args.app:
+        args.app = "welcome"
+        args.value = None
+
+    share_dir = _get_share_dir()
+    if share_dir is not None:
+        args.share_dir = share_dir
+    else:
+        error_and_exit_early("problem finding share dir")
+
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     args.cache_dir = f"{cache_home}/{APP_NAME}"
-    more_msgs, args.collection_doc_cache = get_and_check_collection_doc_cache(
+    msgs, args.collection_doc_cache = get_and_check_collection_doc_cache(
         args, COLLECTION_DOC_CACHE_FNAME
     )
+
     pre_logger_msgs += msgs
-    pre_logger_msgs += more_msgs
 
     args.original_command = params
 

@@ -153,54 +153,6 @@ def dispatch(obj, replacements):
     return obj
 
 
-def find_ini_config_file(app_name: str) -> Optional[str]:
-    """ Load config file(first found is used): ENV, CWD, HOME, /etc/app_name """
-
-    path = None
-    potential_paths = []
-    filename = f"{app_name}.cfg"
-
-    # Environment setting
-    path_from_env = os.getenv(f"{app_name}_config".upper())
-    if path_from_env is not None:
-        path_from_env = os.path.abspath(path_from_env)
-        if os.path.isdir(path_from_env):
-            path_from_env = os.path.join(path_from_env, filename)
-        potential_paths.append(path_from_env)
-
-    # Current working directory
-    warn_cmd_public = False
-    try:
-        cwd = os.getcwd()
-        perms = os.stat(cwd)
-        cwd_cfg = os.path.join(cwd, filename)
-        if perms.st_mode & stat.S_IWOTH:
-            if os.path.exists(cwd_cfg):
-                warn_cmd_public = True
-        else:
-            potential_paths.append(cwd_cfg)
-    except OSError:
-        pass
-
-    potential_paths.append(f"{str(Path.home())}/{filename}")
-    potential_paths.append(f"/etc/{app_name}/{filename}")
-
-    for path in potential_paths:
-        if os.path.exists(path) and os.access(path, os.R_OK):
-            break
-        path = ""
-
-    if path_from_env != path and warn_cmd_public:
-        logger.warning(
-            "%s is being run in a world writable directory (%s)," " ignoring it as an %s source.",
-            app_name.capitalize(),
-            cwd,
-            app_name,
-        )
-
-    return path or None
-
-
 def check_for_ansible() -> Tuple[bool, str]:
     """check for the ansible-playbook command, runner will need it"""
     ansible_location = find_executable("ansible-playbook")
