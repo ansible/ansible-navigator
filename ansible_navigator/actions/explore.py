@@ -19,7 +19,7 @@ from typing import Union
 from . import run as run_action
 from . import _actions as actions
 
-from ._runner import PlaybookRunner
+from ..runner.api import CommandRunnerAsync
 from ..app import App
 from ..app_public import AppPublic
 
@@ -588,7 +588,7 @@ class Action(App):
 
     def _run_runner(self) -> None:
         """ spin up runner """
-        self.runner = PlaybookRunner(args=self.args, queue=self._queue)
+        self.runner = CommandRunnerAsync(args=self.args, queue=self._queue)
         self.runner.run()
         self._runner_finished = False
         self._logger.debug("runner requested to start")
