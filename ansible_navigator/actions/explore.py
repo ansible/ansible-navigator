@@ -805,8 +805,8 @@ class Action(App):
         since we're not reinstantiating explore,
         drain the queue, clear the steps, reset the index, etc
         """
-        if self.runner.finished:
-            if self._subaction_type == "explore":
+        if self._subaction_type == "explore":
+            if self.runner.finished:
                 self._plays.value = []
                 self._plays.index = None
                 self._msg_from_plays = (None, None)
@@ -817,7 +817,11 @@ class Action(App):
                 self.steps.append(self._plays)
                 self._logger.debug("Playbook rerun triggered")
                 return
+            else:
+                self._logger.warning("Playbook rerun ignored, current playbook not complete")
+                return
+        elif self._subaction_type == 'load':
             self._logger.error("No rerun available when artifact is loaded")
             return
-        self._logger.warning("Playbook rerun ignored, current playbook not complete")
-        return
+
+            
