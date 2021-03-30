@@ -141,11 +141,7 @@ class Action(App):
         """take one step"""
         result = None
         if isinstance(self.steps.current, Interaction):
-            result = run_action(
-                self.steps.current.name,
-                self.app,
-                self.steps.current,
-            )
+            result = run_action(self.steps.current.name, self.app, self.steps.current)
         elif isinstance(self.steps.current, Step):
             if self.steps.current.show_func:
                 current_index = self.steps.current.index
@@ -286,11 +282,11 @@ class Action(App):
                 variable = extracted.groupdict()["variable"]
                 try:
                     source = yaml.load(extracted.groupdict()["source"], Loader=Loader)
-                except yaml.YAMLError as exc:
+                except yaml.YAMLError as exc:  # noqa: F841
                     source = extracted.groupdict()["source"]
                 try:
                     current = yaml.load(extracted.groupdict()["current"], Loader=Loader)
-                except yaml.YAMLError as exc:
+                except yaml.YAMLError as exc:  # noqa: F841
                     current = extracted.groupdict()["current"]
                 try:
                     if isinstance(source, dict):
@@ -301,7 +297,7 @@ class Action(App):
                         parsed[variable]["via"] = source
                     parsed[variable]["current"] = current
                     parsed[variable]["__current_value"] = extracted.groupdict()["current"]
-                except KeyError as exc:
+                except KeyError as exc:  # noqa: F841
                     self._logger.error("variable '%s' not found in list output")
                     return None
             else:

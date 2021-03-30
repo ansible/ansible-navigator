@@ -84,8 +84,7 @@ class BaseRunner:
         self.finished = True
 
     def runner_cancelled_callback(self):
-        """check by runner to see if it should cancel
-        """
+        """check by runner to see if it should cancel"""
         return self.cancelled
 
 
@@ -118,10 +117,7 @@ class CommandBaseRunner(BaseRunner):
             self._cmdline.extend(["-i", inv])
 
         self._runner_args.update(
-            {
-                "executable_cmd": self._executable_cmd,
-                "cmdline_args": self._cmdline,
-            }
+            {"executable_cmd": self._executable_cmd, "cmdline_args": self._cmdline}
         )
 
         if self._navigator_mode == "stdout":

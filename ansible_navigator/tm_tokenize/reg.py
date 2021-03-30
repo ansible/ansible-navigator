@@ -10,11 +10,11 @@ import onigurumacffi  # type: ignore
 from .region import Region
 
 if TYPE_CHECKING:
-    from ._types import Protocol
+    from ._types import Protocol  # noqa: F401
     from .compiler import Compiler
     from .region import Regions
-    from .rules import _Rule
-    from .rules import CompiledRule
+    from .rules import _Rule  # noqa: F401
+    from .rules import CompiledRule  # noqa: F401
     from .rules import CompiledRegsetRule
     from .state import State
 
@@ -48,22 +48,10 @@ class _Reg:
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._pattern!r})"
 
-    def search(
-        self,
-        line: str,
-        pos: int,
-        first_line: bool,
-        boundary: bool,
-    ) -> Optional[Match[str]]:
+    def search(self, line: str, pos: int, first_line: bool, boundary: bool) -> Optional[Match[str]]:
         return self._reg.search(line, pos, flags=_FLAGS[first_line, boundary])
 
-    def match(
-        self,
-        line: str,
-        pos: int,
-        first_line: bool,
-        boundary: bool,
-    ) -> Optional[Match[str]]:
+    def match(self, line: str, pos: int, first_line: bool, boundary: bool) -> Optional[Match[str]]:
         return self._reg.match(line, pos, flags=_FLAGS[first_line, boundary])
 
 
@@ -77,11 +65,7 @@ class _RegSet:
         return f"{type(self).__name__}({args})"
 
     def search(
-        self,
-        line: str,
-        pos: int,
-        first_line: bool,
-        boundary: bool,
+        self, line: str, pos: int, first_line: bool, boundary: bool
     ) -> Tuple[int, Optional[Match[str]]]:
         return self._set.search(line, pos, flags=_FLAGS[first_line, boundary])
 

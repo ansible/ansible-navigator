@@ -208,9 +208,7 @@ class WebXtermJs:
                 match = re.match(r"^\\e\[8;(?P<rows>\d+);(?P<cols>\d+)t$", message)
                 if match:
                     self._set_winsize(
-                        pty_fd,
-                        int(match.groupdict()["rows"]),
-                        int(match.groupdict()["cols"]),
+                        pty_fd, int(match.groupdict()["rows"]), int(match.groupdict()["cols"])
                     )
                     self._current_winsize = match.groupdict()
                     for watcher in self._connected_clients[1:]:

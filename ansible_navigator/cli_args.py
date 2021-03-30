@@ -87,12 +87,7 @@ class CliArgs:
 
     @staticmethod
     def _doc_params(parser: ArgumentParser) -> None:
-        parser.add_argument(
-            "value",
-            metavar="plugin",
-            help="The name of the plugin",
-            type=str,
-        )
+        parser.add_argument("value", metavar="plugin", help="The name of the plugin", type=str)
         tipes = (
             "become",
             "cache",
@@ -236,10 +231,7 @@ class CliArgs:
     @staticmethod
     def _playbook_params(parser: ArgumentParser) -> None:
         parser.add_argument(
-            "playbook",
-            nargs="?",
-            help="The name of the playbook(s) to run",
-            type=_abs_user_path,
+            "playbook", nargs="?", help="The name of the playbook(s) to run", type=_abs_user_path
         )
         parser.add_argument(
             "-a",

@@ -38,10 +38,7 @@ class Compiler:
 
     @functools.lru_cache(maxsize=None)
     def _include(
-        self,
-        grammar: "Grammar",
-        repository: FChainMap[str, "_Rule"],
-        s: str,
+        self, grammar: "Grammar", repository: FChainMap[str, "_Rule"], s: str
     ) -> Tuple[List[str], Tuple["_Rule", ...]]:
         if s == "$self":
             return self._patterns(grammar, grammar.patterns)
@@ -60,19 +57,13 @@ class Compiler:
 
     @functools.lru_cache(maxsize=None)
     def _patterns(
-        self,
-        grammar: "Grammar",
-        rules: Tuple["_Rule", ...],
+        self, grammar: "Grammar", rules: Tuple["_Rule", ...]
     ) -> Tuple[List[str], Tuple["_Rule", ...]]:
         ret_regs = []
         ret_rules: List["_Rule"] = []
         for rule in rules:
             if rule.include is not None:
-                tmp_regs, tmp_rules = self._include(
-                    grammar,
-                    rule.repository,
-                    rule.include,
-                )
+                tmp_regs, tmp_rules = self._include(grammar, rule.repository, rule.include)
                 ret_regs.extend(tmp_regs)
                 ret_rules.extend(tmp_rules)
             elif rule.match is None and rule.begin is None and rule.patterns:
@@ -89,11 +80,7 @@ class Compiler:
                 raise AssertionError(f"unreachable {rule}")
         return ret_regs, tuple(ret_rules)
 
-    def _captures_ref(
-        self,
-        grammar: "Grammar",
-        captures: "Captures",
-    ) -> "Captures":
+    def _captures_ref(self, grammar: "Grammar", captures: "Captures") -> "Captures":
         return tuple((n, self._visit_rule(grammar, r)) for n, r in captures)
 
     def _compile_root(self, grammar: "Grammar") -> "PatternRule":

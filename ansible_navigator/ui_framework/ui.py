@@ -41,15 +41,8 @@ from .menu_builder import MenuBuilder
 
 from ..yaml import yaml, Dumper
 
-STND_KEYS = {
-    "^f/PgUp": "page up",
-    "^b/PgDn": "page down",
-    "\u2191\u2193": "scroll",
-    "esc": "back",
-}
-END_KEYS = {
-    ":help": "help",
-}
+STND_KEYS = {"^f/PgUp": "page up", "^b/PgDn": "page down", "\u2191\u2193": "scroll", "esc": "back"}
+END_KEYS = {":help": "help"}
 
 # pylint: disable=inherit-non-class
 # pylint: disable=too-few-public-methods
@@ -317,10 +310,7 @@ class UserInterface(CursesWindow):
         for idx in range(int(start_scroll_bar), int(start_scroll_bar + len_scroll_bar)):
             lineno = idx + len_heading
             line_part = CursesLinePart(
-                column=self._screen_w - 1,
-                string="\u2592",
-                color=color,
-                decoration=0,
+                column=self._screen_w - 1, string="\u2592", color=color, decoration=0
             )
             self._add_line(
                 window=self._screen,
@@ -626,11 +616,7 @@ class UserInterface(CursesWindow):
             first_line_idx = max(0, last_line_idx - (self._screen_h - 1 - heading_len - footer_len))
 
             if len(objs) > 1:
-                key_dict = {
-                    "+": "previous",
-                    "-": "next",
-                    "[0-9]": "goto",
-                }
+                key_dict = {"+": "previous", "-": "next", "[0-9]": "goto"}
             else:
                 key_dict = {}
 
@@ -747,11 +733,7 @@ class UserInterface(CursesWindow):
             number_colors=self._number_colors,
             color_menu_item=self._color_menu_item,
         )
-        menu_heading, menu_items = menu_builder.build(
-            current,
-            columns,
-            indicies,
-        )
+        menu_heading, menu_items = menu_builder.build(current, columns, indicies)
         return menu_heading, menu_items
 
     def _show_menu(self, current: List, columns: List, await_input: bool) -> Interaction:

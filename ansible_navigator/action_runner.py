@@ -57,11 +57,7 @@ class ActionRunner(App):
                 self.steps.append(initial_interaction)
 
             if isinstance(self.steps.current, Interaction):
-                interaction = run_action(
-                    self.steps.current.name,
-                    self.app,
-                    self.steps.current,
-                )
+                interaction = run_action(self.steps.current.name, self.app, self.steps.current)
             if interaction is None:
                 self.steps.back_one()
                 if not self.steps:

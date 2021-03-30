@@ -140,7 +140,7 @@ def dispatch(obj, replacements):
     if isinstance(obj, dict):
         obj = {k: dispatch(v, replacements) for k, v in obj.items()}
     elif isinstance(obj, list):
-        obj = [dispatch(l, replacements) for l in obj]
+        obj = [dispatch(l, replacements) for l in obj]  # noqa: E741
     elif isinstance(obj, str):
         for replacement in replacements:
             obj = obj.replace(replacement[0], replacement[1])

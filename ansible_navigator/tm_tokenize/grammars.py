@@ -41,11 +41,7 @@ class Grammar(NamedTuple):
         else:
             repository = FChainMap()
         patterns = tuple(Rule.make(d, repository) for d in data["patterns"])
-        return cls(
-            scope_name=scope_name,
-            repository=repository,
-            patterns=patterns,
-        )
+        return cls(scope_name=scope_name, repository=repository, patterns=patterns)
 
 
 class Grammars:

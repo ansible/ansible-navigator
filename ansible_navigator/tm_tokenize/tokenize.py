@@ -11,10 +11,7 @@ if TYPE_CHECKING:
 
 
 def tokenize(
-    compiler: "Compiler",
-    state: State,
-    line: str,
-    first_line: bool,
+    compiler: "Compiler", state: State, line: str, first_line: bool
 ) -> Tuple[State, Regions]:
 
     """tokenize a string into it's parts"""
@@ -28,40 +25,19 @@ def tokenize(
         while_stack.append((while_rule, idx))
         while_state = State(state.entries[:idx], tuple(while_stack))
 
-        while_res = while_rule.continues(
-            compiler,
-            while_state,
-            line,
-            pos,
-            first_line,
-            boundary,
-        )
+        while_res = while_rule.continues(compiler, while_state, line, pos, first_line, boundary)
         if while_res is None:
             state = while_state.pop_while()
             break
         pos, boundary, regions = while_res
         ret.extend(regions)
 
-    search_res = state.cur.rule.search(
-        compiler,
-        state,
-        line,
-        pos,
-        first_line,
-        boundary,
-    )
+    search_res = state.cur.rule.search(compiler, state, line, pos, first_line, boundary)
     while search_res is not None:
         state, pos, boundary, regions = search_res
         ret.extend(regions)
 
-        search_res = state.cur.rule.search(
-            compiler,
-            state,
-            line,
-            pos,
-            first_line,
-            boundary,
-        )
+        search_res = state.cur.rule.search(compiler, state, line, pos, first_line, boundary)
 
     if pos < len(line):
         ret.append(Region(pos, len(line), state.cur.scope))
