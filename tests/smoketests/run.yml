@@ -15,6 +15,15 @@
 
     - name: Prepare tmux session that we can use for tests
       shell: tmux new-session -d -s smoke
+
+    - name: Run `ansible-navigator --help`
+      command: ansible-navigator --help
+      register: anh
+
+    - assert:
+        that:
+          - '"show this help message and exit" in anh.stdout'
+
   roles:
     # Add where pip drops the entrypoint to our PATH
     - role: send_keys
