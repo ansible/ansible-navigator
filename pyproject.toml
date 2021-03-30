@@ -1,2 +1,13 @@
 [tool.black]
 line-length = 100
+
+
+[tool.pylint]
+    [tool.pylint.master]
+    ignore="tm_tokenize"
+
+    [tool.pylint.messages_control]
+    disable = "C0330, C0326"
+
+    [tool.pylint.format]
+    max-line-length = 100

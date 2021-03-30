@@ -1,4 +1,8 @@
 black
 flake8
+lxml
+mypy
+pylint
+pytest-cov
 pytest-xdist
 yamllint
