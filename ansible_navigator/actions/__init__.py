@@ -8,10 +8,10 @@ from ..app_public import AppPublic
 names = actions.names_factory(__package__)
 
 
-run: Callable[[str, AppPublic, Interaction], Union[None, Interaction]] = actions.call_factory(
-    __package__
-)
+run_action: Callable[
+    [str, AppPublic, Interaction], Union[None, Interaction]
+] = actions.call_factory(__package__)
 kegexes: Callable = actions.kegexes_factory(__package__)
 
 
-__all__ = ["kegexes", "names", "run"]
+__all__ = ["kegexes", "names", "run_action"]

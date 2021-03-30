@@ -1,12 +1,12 @@
 """ ansible_runner sync and async with
 event handler
 """
-import itertools
+import sys
 import logging
 import os
 import time
 from ansible_runner import Runner  # type: ignore
-from ansible_runner import run_async, run
+from ansible_runner import run_command_async, run_command
 
 from typing import Tuple
 
@@ -14,85 +14,155 @@ from typing import Tuple
 class BaseRunner:
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
-    """a base runner wrapper"""
+    def __init__(
+        self,
+        container_engine=None,
+        execution_environment=None,
+        ee_image=False,
+        navigator_mode=None,
+        container_volume_mounts=None,
+        container_options=None,
+        container_workdir=None,
+    ) -> None:
+        """BaseRunner class handle common argument for ansible-runner interface class
 
-    def __init__(self, args) -> None:
-        self._ce = args.container_engine if hasattr(args, "container_engine") else None
-        self._cmdline = args.cmdline if hasattr(args, "cmdline") else None
-        self._ee = args.execution_environment if hasattr(args, "execution_environment") else None
-        self._eei = args.ee_image if hasattr(args, "ee_image") else None
-        self._inventory = args.inventory if hasattr(args, "inventory") else None
-        self._logger = logging.getLogger(__name__)
-        self._playbook = args.playbook if hasattr(args, "playbook") else None
+        Args:
+            container_engine ([str], optional): container engine used to isolate execution. Defaults to podman.
+            execution_environment ([bool], optional): Boolean argument controls execution environment enable or not. Defaults to False.
+            ee_image ([str], optional): Container image to use when running an command. Defaults to None.
+            navigator_mode ([str], optional): Valid value is either ``stdout`` or ``interactive``. If value is set to ``stdout`` passed the
+                                              ``stdin`` of current running process is passed to ``ansible-runner`` which enables receiving commandline
+                                              prompts after the executing the command. If value is set to ``interactive`` the ``ansible-navigator`` will
+                                              run using text user interface (TUI).
+            container_volume_mounts ([list], optional): List of bind mounts in the form ``host_dir:/container_dir:labels``. Defaults to None.
+            container_options ([str], optional): List of container options to pass to execution engine. Defaults to None.
+            container_workdir ([str], optional): The working directory within the container. Defaults to None.
+        """
+        self._ce = container_engine
+        self._ee = execution_environment
+        self._eei = ee_image
+        self._navigator_mode = navigator_mode
+
         self.cancelled = False
         self.finished = False
         self.status = None
+        self._logger = logging.getLogger(__name__)
+        self._runner_args = {}
+        if self._ee:
+            self._runner_args.update(
+                {
+                    "container_image": self._eei,
+                    "process_isolation_executable": self._ce,
+                    "process_isolation": True,
+                    "container_volume_mounts": container_volume_mounts,
+                    "container_options": container_options,
+                    "container_workdir": container_workdir,
+                }
+            )
+        self._runner_args.update(
+            {
+                "json_mode": True,
+                "quiet": True,
+                "envvars": {k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")},
+                "cancel_callback": self.runner_cancelled_callback,
+                "finished_callback": self.runner_finished_callback,
+            }
+        )
+
+        if self._navigator_mode == "stdout":
+            self._runner_args.update(
+                {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr}
+            )
 
     def runner_finished_callback(self, runner: Runner):
         """called when runner finishes
 
-        :param runner: a runner instance
-        :type runner: Runner
+        Args:
+            runner (Runner): a runner instance
         """
         self.status = runner.status
         self.finished = True
 
     def runner_cancelled_callback(self):
-        """check by runner to see if it should cancel"""
+        """check by runner to see if it should cancel
+        """
         return self.cancelled
 
 
-class CommandRunnerAsync(BaseRunner):
+class CommandBaseRunner(BaseRunner):
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
     """a runner async wrapper"""
 
-    def __init__(self, args, queue):
+    def __init__(self, executable_cmd, cmdline=None, playbook=None, inventory=None, **kwargs):
+        """Base class to handle common arguments of ``run_command`` interface for ``ansible-runner``
+        Args:
+            executable_cmd ([str]): The command to be invoked.
+            cmdline ([list], optional): A list of arguments to be passed to the executable command. Defaults to None.
+            playbook ([str], optional): The playbook file name to run. Defaults to None.
+            inventory ([list], optional): List of path to the inventory files. Defaults to None.
+        """
+        self._executable_cmd = executable_cmd
+        self._cmdline = cmdline if cmdline else []
+        self._playbook = playbook
+        self._inventory = inventory
+        super(CommandBaseRunner, self).__init__(**kwargs)
+
+    def generate_run_command_args(self) -> None:
+        """generate arguments required to be passed to ansible-runner"""
+        if self._playbook:
+            self._cmdline.append(self._playbook)
+            self._runner_args.update({"cwd": os.path.dirname(os.path.abspath(self._playbook))})
+
+        for inv in self._inventory:
+            self._cmdline.extend(["-i", inv])
+
+        self._runner_args.update(
+            {
+                "executable_cmd": self._executable_cmd,
+                "cmdline_args": self._cmdline,
+            }
+        )
+
+        if self._navigator_mode == "stdout":
+            self._runner_args.update(
+                {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr}
+            )
+
+        for key, value in self._runner_args.items():
+            self._logger.debug("Runner arg: %s:%s", key, value)
+
+
+class CommandRunnerAsync(CommandBaseRunner):
+    # pylint: disable=too-few-public-methods
+    # pylint: disable=too-many-instance-attributes
+    """a runner async wrapper"""
+
+    def __init__(self, executable_cmd, queue, **kwargs):
+        """class to handle arguments of ``run_command_async`` interface for ``ansible-runner``.
+           For common arguments refer documentation of ``CommandBaseRunner`` class
+
+        Args:
+            executable_cmd ([str]): The command to be invoked.
+            queue ([Queue]): The queue to post events from ``anisble-runner``
+        """
         self._eventq = None
         self._queue = queue
-        super(CommandRunnerAsync, self).__init__(args)
+        super(CommandRunnerAsync, self).__init__(executable_cmd, **kwargs)
 
     def _event_handler(self, event):
         self._queue.put(event)
 
     def run(self):
         """run"""
-
-        runner_args = {
-            "json_mode": True,
-            "quiet": True,
-            "event_handler": self._event_handler,
-            "envvars": {k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")},
-            "cancel_callback": self.runner_cancelled_callback,
-            "finished_callback": self.runner_finished_callback,
-        }
-        if self._ee:
-            inventory = [["-i", inv] for inv in self._inventory] if self._inventory else []
-            inventory = list(itertools.chain.from_iterable(inventory))
-            add_args = {
-                "cli_execenv_cmd": "playbook",
-                "cmdline": [self._playbook] + inventory + self._cmdline,
-                "container_image": self._eei,
-                "private_data_dir": ".",
-                "process_isolation_executable": self._ce,
-                "process_isolation": True,
-            }
-        else:
-            add_args = {
-                "cmdline": " ".join(self._cmdline),
-                "inventory": self._inventory,
-                "playbook": self._playbook,
-            }
-        runner_args.update(add_args)
-        for key, value in runner_args.items():
-            self._logger.debug("Runner arg: %s:%s", key, value)
-
-        thread, _runner = run_async(**runner_args)
+        self.generate_run_command_args()
+        self._runner_args.update({"event_handler": self._event_handler})
+        thread, _runner = run_command_async(**self._runner_args)
         self.status = "running"
         return thread
 
 
-class CommandRunner(BaseRunner):
+class CommandRunner(CommandBaseRunner):
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
     """a runner wrapper"""
@@ -100,35 +170,8 @@ class CommandRunner(BaseRunner):
     def run(self) -> Tuple[str, str]:
         """run"""
 
-        runner_args = {
-            "json_mode": True,
-            "quiet": True,
-            "envvars": {k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")},
-            "cancel_callback": self.runner_cancelled_callback,
-            "finished_callback": self.runner_finished_callback,
-        }
-        if self._ee:
-            inventory = [["-i", inv] for inv in self._inventory] if self._inventory else []
-            inventory = list(itertools.chain.from_iterable(inventory))
-            add_args = {
-                "cli_execenv_cmd": "playbook",
-                "cmdline": [self._playbook] + inventory + self._cmdline,
-                "container_image": self._eei,
-                "private_data_dir": ".",
-                "process_isolation_executable": self._ce,
-                "process_isolation": True,
-            }
-        else:
-            add_args = {
-                "cmdline": " ".join(self._cmdline),
-                "inventory": self._inventory,
-                "playbook": self._playbook,
-            }
-        runner_args.update(add_args)
-        for key, value in runner_args.items():
-            self._logger.debug("Runner arg: %s:%s", key, value)
-
-        _runner = run(**runner_args)
+        self.generate_run_command_args()
+        _runner = run_command(**self._runner_args)
         while not self.finished:
             time.sleep(0.01)
             continue

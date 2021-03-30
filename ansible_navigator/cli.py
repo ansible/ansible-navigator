@@ -23,7 +23,7 @@ from typing import Union
 
 from curses import wrapper
 
-from .actions.explore import Action as Player
+from .actions.run import Action as Player
 
 from .cli_args import CliArgs
 from .action_runner import ActionRunner
@@ -280,7 +280,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 def run(args: Namespace) -> None:
     """run the appropriate app"""
     try:
-        if args.app == "playbook":
+        if args.app == "run" and args.navigator_mode == "stdout":
             non_ui_app = partial(Player(args).playbook)
             if args.web:
                 WebXtermJs().run(func=non_ui_app)
