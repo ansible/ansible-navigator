@@ -118,10 +118,7 @@ class CommandBaseRunner(BaseRunner):
             self._cmdline.extend(["-i", inv])
 
         self._runner_args.update(
-            {
-                "executable_cmd": self._executable_cmd,
-                "cmdline_args": self._cmdline,
-            }
+            {"executable_cmd": self._executable_cmd, "cmdline_args": self._cmdline}
         )
 
         if self._navigator_mode == "stdout":

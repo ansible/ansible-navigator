@@ -587,7 +587,7 @@ class Action(App):
             "container_engine": self.args.container_engine,
             "execution_environment": self.args.execution_environment,
             "ee_image": self.args.ee_image,
-            "navigator_mode": self.args.navigator_mode
+            "navigator_mode": self.args.navigator_mode,
         }
         self.runner = CommandRunnerAsync(
             executable_cmd="ansible-playbook", queue=self._queue, **kwargs
@@ -821,7 +821,7 @@ class Action(App):
                 self._logger.debug("Playbook rerun triggered")
             else:
                 self._logger.warning("Playbook rerun ignored, current playbook not complete")
-        elif self._subaction_type == 'load':
+        elif self._subaction_type == "load":
             self._logger.error("No rerun available when artifact is loaded")
         else:
             self._logger.error("sub-action type '%s' is invalid", self._subaction_type)
