@@ -1,3 +1,4 @@
+---
 - name: Get current output
   command: "tmux capture-pane -t smoke: -S - -E - -p"
   register: current

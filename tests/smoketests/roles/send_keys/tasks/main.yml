@@ -1,3 +1,4 @@
+---
 - name: "Send keys: {{ keys }}"
   command:
     argv: "{{ command_prefix + keys }}"
