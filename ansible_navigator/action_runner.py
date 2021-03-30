@@ -2,7 +2,7 @@
 """
 
 from ansible_navigator.actions import kegexes
-from ansible_navigator.actions import run as run_action
+from ansible_navigator.actions import run_action
 
 from .app import App
 from .steps import Steps

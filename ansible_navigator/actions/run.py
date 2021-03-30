@@ -1,4 +1,4 @@
-""" :explore
+""" :run
 """
 import copy
 import curses
@@ -16,7 +16,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from . import run as run_action
+from . import run_action
 from . import _actions as actions
 
 from ..runner.api import CommandRunnerAsync
@@ -196,12 +196,12 @@ TASK_LIST_COLUMNS = [
 class Action(App):
 
     # pylint: disable=too-many-instance-attributes
-    """:explore"""
+    """:run"""
 
     KEGEX = r"""
             (?x)
             ^
-            (?P<explore>e(?:xplore)?
+            (?P<run>r(?:un)?
             (\s(?P<playbook>\S+))?
             (\s(?P<params>.*))?)
             |
@@ -212,7 +212,7 @@ class Action(App):
     def __init__(self, args):
         # for display purposes use the 4: of the uuid
         super().__init__(args=args)
-        self._name_at_cli = "explore"
+        self._name_at_cli = "run"
         self._uuid = str(uuid.uuid4())
         self.name = self._name_at_cli + self._uuid[-4:]
         self._logger = logging.getLogger(f"{__name__}.{self._uuid[-4:]}")
@@ -266,7 +266,7 @@ class Action(App):
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
-        """run :explore or :load
+        """run :run or :load
 
         :param interaction: The interaction from the user
         :type interaction: Interaction
@@ -277,10 +277,10 @@ class Action(App):
         self._calling_app = app
         self._interaction = interaction
 
-        if interaction.action.match.groupdict()["explore"]:
-            self._subaction_type = "explore"
+        if interaction.action.match.groupdict()["run"]:
+            self._subaction_type = "run"
             self._logger.debug("subaction type is %s", self._subaction_type)
-            initialized = self._init_explore()
+            initialized = self._init_run()
         elif interaction.action.match.groupdict()["load"]:
             self._subaction_type = "load"
             self._logger.debug("subaction type is %s", self._subaction_type)
@@ -310,8 +310,8 @@ class Action(App):
 
             if not self.steps:
                 # if we came from the cli
-                if self._calling_app.args.app in ("explore", "load"):
-                    self._logger.debug("called from cli addining original step to stack")
+                if self._calling_app.args.app in ("run", "load"):
+                    self._logger.debug("called from cli adding original step to stack")
                     self.steps.append(self._plays)
                 elif not self._runner_finished:
                     self._logger.error("Can not step back while playbook in progress, :q! to exit")
@@ -333,8 +333,8 @@ class Action(App):
         interaction.ui.scroll(previous_scroll)
         return None
 
-    def _init_explore(self) -> bool:
-        """in the case of :explore, parse the user input"""
+    def _init_run(self) -> bool:
+        """in the case of :run, parse the user input"""
         playbook = ""
 
         p_from_int = self._interaction.action.match.groupdict().get("playbook")
@@ -380,7 +380,7 @@ class Action(App):
             self._logger.debug("Running with %s=%s %s", key, value, type(value))
 
         self._run_runner()
-        self._logger.info("Explore initialized and playbook started.")
+        self._logger.info("Run initialized and playbook started.")
         return True
 
     def _init_load(self, artifact_file: str) -> bool:
@@ -543,7 +543,7 @@ class Action(App):
 
     def _update_args(self, params: List) -> Union[Namespace, None]:
         """pass the param through the original cli parser
-        as if explore was run from the command line
+        as if run was invoked from the command line
         provide an error callback so the app doesn't sys.exit if the aprsing fails
         """
 
@@ -588,7 +588,18 @@ class Action(App):
 
     def _run_runner(self) -> None:
         """ spin up runner """
-        self.runner = CommandRunnerAsync(args=self.args, queue=self._queue)
+        kwargs = {
+            "playbook": self.args.playbook,
+            "inventory": self.args.inventory,
+            "cmdline": self.args.cmdline,
+            "container_engine": self.args.container_engine,
+            "execution_environment": self.args.execution_environment,
+            "ee_image": self.args.ee_image,
+            "navigator_mode": self.args.navigator_mode
+        }
+        self.runner = CommandRunnerAsync(
+            executable_cmd="ansible-playbook", queue=self._queue, **kwargs
+        )
         self.runner.run()
         self._runner_finished = False
         self._logger.debug("runner requested to start")
@@ -802,10 +813,10 @@ class Action(App):
 
     def rerun(self) -> None:
         """rerun the current playbook
-        since we're not reinstantiating explore,
+        since we're not reinstantiating run,
         drain the queue, clear the steps, reset the index, etc
         """
-        if self._subaction_type == "explore":
+        if self._subaction_type == "run":
             if self.runner.finished:
                 self._plays.value = []
                 self._plays.index = None
@@ -816,12 +827,9 @@ class Action(App):
                 self.steps.clear()
                 self.steps.append(self._plays)
                 self._logger.debug("Playbook rerun triggered")
-                return
             else:
                 self._logger.warning("Playbook rerun ignored, current playbook not complete")
-                return
         elif self._subaction_type == 'load':
             self._logger.error("No rerun available when artifact is loaded")
-            return
-
-            
+        else:
+            self._logger.error("sub-action type '%s' is invalid", self._subaction_type)
