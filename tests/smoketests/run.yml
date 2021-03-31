@@ -1,13 +1,6 @@
 ---
 - hosts: localhost
   pre_tasks:
-    - name: Install system dependencies
-      become: true
-      package:
-        name:
-          - git
-          - tmux
-
     - name: Install ansible-navigator
       pip:
         chdir: "{{ playbook_dir }}/../../"
