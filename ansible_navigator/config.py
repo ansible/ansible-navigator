@@ -5,14 +5,37 @@ from .utils import Sentinel
 # TODO: This maybe can/should move to a yaml file in some data (not share) dir
 # at some point in the future. In any case, the structure here should mimic what
 # we'd expect the yaml file to parse to. Every config option should have a
-# default here.
+# default here, ideally.
 _DEFAULTS = {
     "ansible-navigator": {
         "editor": {
             "command": "vi +{line_number} {filename}",
             "console": True,
         },
+        "container-engine": "podman",
+        "doc-plugin-type": "module",
+        "execution-environment": False,
+        "execution-environment-image": "quay.io/ansible/ansible-runner:devel",
+        "inventory": [],
+        "inventory-columns": "",
+        "logfile": "./ansible-navigator.log",
+        "loglevel": "info",
+        "mode": "interactive",
+        "playbook-artifact": "{playbook_dir}/{playbook_name}_artifact.json",
     },
+}
+
+# This maps argparse destination variables to config paths
+ARGPARSE_TO_CONFIG = {
+    'artifact': ['ansible-navigator', 'playbook-artifact'],
+    'container_engine': ['ansible-navigator', 'container-engine'],
+    'ee_image': ['ansible-navigator', 'execution-environment-image'],
+    'execution_environment': ['ansible-navigator', 'execution-environment'],
+    'inventory': ['ansible-navigator', 'inventory'],
+    'inventory_columns': ['ansible-navigator', 'inventory-columns'],
+    'logfile': ['ansible-navigator', 'logfile'],
+    'loglevel': ['ansible-navigator', 'loglevel'],
+    'mode': ['ansible-navigator', 'mode'],
 }
 
 

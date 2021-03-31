@@ -4,6 +4,7 @@ https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
 
 import os
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, _SubParsersAction
+from .utils import Sentinel
 
 
 def _abs_user_path(fpath):
@@ -68,7 +69,6 @@ class CliArgs:
     def _base(self) -> None:
         self._ee_params(self._base_parser)
         self._inventory_columns(self._base_parser)
-        self._ide_params(self._base_parser)
         self._log_params(self._base_parser)
         self._no_osc4_params(self._base_parser)
         self._mode(self._base_parser)
@@ -107,7 +107,7 @@ class CliArgs:
             "--type",
             help=f'Choose which plugin type: {{{",".join(tipes)}}}',
             choices=tipes,
-            default="module",
+            default=Sentinel,
             dest="type",
             metavar="",
         )
@@ -120,7 +120,7 @@ class CliArgs:
             "--container-engine",
             help="Specify the container engine to run the Execution Environment",
             choices=["podman", "docker"],
-            default="podman",
+            default=Sentinel,
             dest="container_engine",
         )
         parser.add_argument(
@@ -134,7 +134,7 @@ class CliArgs:
             "--eei",
             "--ee-image",
             help="Specify the name of the container image containing an Execution Environment",
-            default="quay.io/ansible/ansible-runner:devel",
+            default=Sentinel,
             dest="ee_image",
         )
 
@@ -146,16 +146,6 @@ class CliArgs:
         self._inventory_params(parser)
 
     @staticmethod
-    def _ide_params(parser: ArgumentParser) -> None:
-        parser.add_argument(
-            "--ide",
-            help="Specify the current ide",
-            choices=["pycharm", "vim", "vscode"],
-            default="vim",
-            dest="ide",
-        )
-
-    @staticmethod
     def _inventory_columns(parser: ArgumentParser) -> None:
         parser.add_argument(
             "--ic",
@@ -164,7 +154,7 @@ class CliArgs:
                 "Additional columns to be shown in the inventory views,"
                 " comma delimited, eg 'xxx,yyy,zzz'"
             ),
-            default="",
+            default=Sentinel,
             dest="inventory_columns",
         )
 
@@ -181,7 +171,7 @@ class CliArgs:
             action="append",
             nargs="+",
             type=_abs_user_path,
-            default=[],
+            default=Sentinel,
             dest="inventory",
         )
 
@@ -204,14 +194,14 @@ class CliArgs:
         parser.add_argument(
             "--lf",
             "--logfile",
-            default=f"./{self._app_name}.log",
+            default=Sentinel,
             dest="logfile",
             help="Specify the application log file location",
         )
         parser.add_argument(
             "--ll",
             "--loglevel",
-            default="info",
+            default=Sentinel,
             dest="loglevel",
             choices=["debug", "info", "warning", "error", "critical"],
             help="Specify the application log level",
@@ -236,7 +226,7 @@ class CliArgs:
             "-a",
             "--artifact",
             help="Specify the artifact file name for playbook results",
-            default="<playbook_dir>/<playbook_name>_artifact.json",
+            default=Sentinel,
             dest="artifact",
         )
         parser.set_defaults(requires_ansible=True)
@@ -246,8 +236,7 @@ class CliArgs:
         parser.add_argument(
             "-m",
             "--mode",
-            default="interactive",
-            dest="mode",
+            default=Sentinel,
             choices=["stdout", "interactive"],
             help="Specify the navigator mode to run",
             type=str,

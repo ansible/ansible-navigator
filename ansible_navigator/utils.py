@@ -7,6 +7,7 @@ import importlib.util
 import html
 import os
 import stat
+import sysconfig
 
 from distutils.spawn import find_executable
 from pathlib import Path
@@ -173,9 +174,67 @@ def check_for_ansible() -> Tuple[bool, str]:
     return True, msg
 
 
+def get_conf_dir(filename: Optional[str] = None) -> (Optional[str], List[str]):
+    """
+    returns config dir (e.g. /etc/ansible-nagivator). First found wins.
+    If a filename is given, ensures the file exists in the directory.
+
+    TODO: This is a pretty expensive function (lots of statting things on disk).
+          We should probably cache the potential paths somewhere, eventually.
+    """
+
+    potential_paths = []
+    msgs = []
+
+    # .ansible-navigator of current direcotry
+    potential_paths.append(".ansible-navigator")
+
+    # Development path
+    path = os.path.join(os.path.dirname(__file__), "..", "etc", "ansible-nagivator")
+    potential_paths.append(path)
+
+    # ~/.config/ansible-navigator
+    path = os.path.join(os.path.expanduser("~"), ".config", "ansible-nagivator")
+    potential_paths.append(path)
+
+    # /etc/ansible-navigator
+    path = os.path.join("/", "etc", "ansible-nagivator")
+    potential_paths.append(path)
+
+    # /usr/local/etc/ansible-navigator
+    prefix = sysconfig.get_config_var("prefix")
+    if prefix:
+        path = os.path.join(prefix, "local", "etc", "ansible-nagivator")
+        potential_paths.append(path)
+
+    for path in potential_paths:
+        must_exist = os.path.join(path, filename) if filename is not None else path
+        if not os.path.exists(must_exist):
+            continue
+
+        try:
+            perms = os.stat(path)
+            if perms.st_mode & stat.S_IWOTH:
+                msgs.append('Ignoring potential configuration directory {0} because it is world-writable.')
+                continue
+            return (path, msgs)
+        except OSError:
+            continue
+
+    return (None, msgs)
+
+
 def set_ansible_envar() -> None:
     """Set an envar if not set, runner will need this"""
-    ansible_config = find_ini_config_file("ansible")
+    ansible_config, msgs = get_conf_dir("ansible.cfg")
+
+    for msg in msgs:
+        logger.debug(msg)
+
+    if ansible_config is not None:
+        # We'll get the directory back, not the full file path.
+        ansible_config = os.path.join(ansible_config, "ansible.cfg")
+
     # set as env var, since we hand env vars over to runner
     if ansible_config and not os.getenv("ANSIBLE_CONFIG"):
         os.environ.setdefault("ANSIBLE_CONFIG", ansible_config)

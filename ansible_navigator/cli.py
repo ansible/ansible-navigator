@@ -25,12 +25,9 @@ from yaml.scanner import ScannerError
 from curses import wrapper
 
 from .cli_args import CliArgs
-from .config import NavigatorConfig
+from .config import ARGPARSE_TO_CONFIG, NavigatorConfig
 from .action_runner import ActionRunner
-from .utils import check_for_ansible
-from .utils import get_and_check_collection_doc_cache
-from .utils import set_ansible_envar
-from .utils import Sentinel
+from .utils import check_for_ansible, get_and_check_collection_doc_cache, get_conf_dir, set_ansible_envar, Sentinel
 from .yaml import yaml, SafeLoader
 
 APP_NAME = "ansible_navigator"
@@ -80,50 +77,6 @@ def _get_share_dir() -> Optional[str]:
             return path
 
     # No path found above
-    return None
-
-
-def _get_conf_dir(filename: Optional[str] = None) -> (Optional[str], List[str]):
-    """
-    returns config dir (e.g. /etc/ansible-nagivator). First found wins.
-    If a filename is given, ensures the file exists in the directory.
-    """
-
-    potential_paths = []
-    msgs = []
-
-    # Development path
-    path = os.path.join(os.path.dirname(__file__), "..", "etc", APP_PRETTY_NAME)
-    potential_paths.append(path)
-
-    # ~/.config/APP_PRETTY_NAME
-    path = os.path.join(os.path.expanduser("~"), ".config", APP_PRETTY_NAME)
-    potential_paths.append(path)
-
-    # /etc/APP_PRETTY_NAME
-    path = os.path.join("/", "etc", APP_PRETTY_NAME)
-    potential_paths.append(path)
-
-    # /usr/local/etc/APP_PRETTY_NAME
-    prefix = sysconfig.get_config_var("prefix")
-    if prefix:
-        path = os.path.join(prefix, "local", "etc", APP_PRETTY_NAME)
-        potential_paths.append(path)
-
-    for path in potential_paths:
-        must_exist = os.join(path, filename) if filename is not None else path
-        if not os.path.exists(must_exist):
-            continue
-
-        try:
-            perms = os.stat(path)
-            if perms.st_mode & stat.S_IWOTH:
-                msgs.append('Ignoring potential configuration directory {0} because it is world-writable.')
-                continue
-            return path
-        except OSError:
-            continue
-
     return None
 
 
@@ -177,20 +130,32 @@ def get_param(
 
 def update_args(args: Namespace) -> List[str]:
     """
-    Updates args with the corresponding values in the "argument-defaults"
-    portion of the ansible-navigator config file.
+    Updates args with the corresponding config values (or their defaults) unless
+    explicitly specified by the user.
 
     NOTE:
     argparse, in its infinite wisdom, doesn't allow us to check whether a
     parameter was actually supplied or not, on the commandline. That is, if we
     get something that matches the default value on the arg, we have no way of
-    knowing if the user supplied that (default) value, or if they just didn't
-    specify the field at all. This represents a BUG in how we handle default
-    values here, but I don't think we have an easy way around it.
+    knowing if the user supplied a value that matched the default, or if they
+    just didn't specify the field at all. To compensate for this, all options
+    which are "defaultable" via config have an argparse default of
+    util.Sentinel.
 
-    As a practical example of the consequences: If a config file has
-    `loglevel: error` and the user specifies `--loglevel info` (which is the
-    default for loglevel), we will end up using error.
+    ---
+
+    How this function works (in practice):
+    1) We iterate over all defaultable args (given in config.ARGPARSE_TO_CONFIG)
+    2) If the attribute doesn't exist in args at all, it's not relevant to this
+       (sub)command, so move on and ignore it.
+    3) If the current value of the arg is *not* Sentinel, then the user
+       specified some value on the CLI; leave it alone.
+    4) If the value *is* Sentinel, then the user didn't specify a value on the
+       CLI, so look in config. If it exists in the user's config, pull the value
+       out and use it. Otherwise, fallback to the default config.
+    5) (should never happen) If the value doesn't exist in default config, we
+       will get a KeyError back from the config subsystem. We let that bubble up
+       and catch it by the global exception handler.
     """
 
     msgs = []
@@ -200,53 +165,30 @@ def update_args(args: Namespace) -> List[str]:
         msgs.append('No config file parsed, no default parameters to override.')
         return msgs
 
-    defaults = config.get(['ansible-navigator', 'argument-defaults'], {})
-    msgs = []
-    if config_file:
-        msgs.append(f"Using {config_file}")
-        config = configparser.ConfigParser(interpolation=EnvInterpolation())
-        try:
-            config.read(config_file)
-        except Exception as exc:  # pylint:disable=broad-except
-            error_and_exit_early(str(exc))
-        if config_file:
-            cdict = dict(config)
-            for section_name, section in cdict.items():
-                if section_name in ["default", args.app]:
-                    for key, value in section.items():
-                        dest, default, tipe = get_param(parser, key)
-                        msgs.append(f"ini entry: {key} matched to arg: {dest}")
-                        if dest:
-                            arg_value = getattr(args, dest, Sentinel())
-                            if arg_value == default or isinstance(arg_value, Sentinel):
-                                if isinstance(default, bool):
-                                    bool_key: bool = section.getboolean(key)
-                                    msg = f"{dest} was default, "
-                                    msg += f"using entry '{bool_key}'"
-                                    msgs.append(msg)
-                                    setattr(args, dest, bool_key)
-                                elif [] == default:
-                                    use_value = [value.split(",")]
-                                    setattr(args, dest, use_value)
-                                    msg = f"{dest} was default list, "
-                                    msg += f"using entry.split(',') '{use_value}'"
-                                    msgs.append(msg)
-                                else:
-                                    if isinstance(tipe, int):
-                                        inted = int(value)
-                                        setattr(args, dest, inted)
-                                    elif callable(tipe):
-                                        called = tipe(value)
-                                        setattr(args, dest, called)
-                                    else:
-                                        setattr(args, dest, value)
-                                    msg = f"{dest} was not provided, using '{value}'"
-                                    msgs.append(msg)
+    # Iterate through each "defaultable" (config-file-settable) path and do the
+    # deed.
+    for attr, path in ARGPARSE_TO_CONFIG.items():
+        if not hasattr(args, attr):
+            # If the attribute doesn't exist at all, skip it.
+            # This probably means it's in a subparser that isn't relevant to the
+            # command currently being run by the user.
+            continue
 
-    else:
-        msgs.append("No config file file found")
+        if getattr(args, attr) is not Sentinel:
+            # Not Sentinel means that the user specified it. Leave it alone!
+            continue
+
+        # If we made it here, then the user didn't specify the argument.
+        # If this ever throws KeyError, it's because something was added to the
+        # ARGPARSE_TO_CONFIG mapping, but the key path in the default config
+        # doesn't exist. There's not much to do in this case, so fall back to
+        # the general exception handler (whenever it exists) and let it be the
+        # thing that tells the user the bad news.
+        value = args.config.get(path)
+        msgs.append("Setting arg {0} to {1} via config".format(attr, value))
+        setattr(args, attr, value)
+
     return msgs
-
 
 def setup_logger(args):
     """set up the logger
@@ -267,6 +209,58 @@ def setup_logger(args):
     logger.addHandler(hdlr)
     logger.setLevel(getattr(logging, args.loglevel.upper()))
 
+def setup_config() -> Tuple[List[str], NavigatorConfig]:
+    pre_logger_msgs = []
+    found_config = False
+
+    if os.path.exists("ansible-navigator.yml"):
+        # If there's a local config, use it
+        found_config = True
+        config_path = "ansible-navigator.yml"
+        pre_logger_msgs.append("Found a config file in current working directory; using it.")
+    else:
+        # Otherwise, try to find it a different way
+        config_dir, msgs = get_conf_dir()
+        pre_logger_msgs += msgs
+        if config_dir is not None:
+            config_path = os.path.join(config_dir, "ansible-navigator.yml")
+            if os.path.exists(config_path):
+                pre_logger_msgs.append("Found config file at {0}".format(config_path))
+                found_config = True
+            else:
+                pre_logger_msgs.append(
+                    "Found config directory at {0} but ansible-navigator.yml did not exist".format(
+                        config_dir
+                    )
+                )
+        else:
+            #error_and_exit_early("Could not find config directory")
+            pre_logger_msgs.append("Could not find config directory, using all defaults.")
+
+    config = {}
+    if found_config:
+        with open(config_path, "r") as config_fh:
+            try:
+                config = yaml.load(config_fh, Loader=SafeLoader)
+            except ScannerError:
+                error_and_exit_early("Config file at {0} but it failed to parse it.".format(config_path))
+
+
+    if found_config and config and config.get("ansible-navigator"):
+        # If the config file was found and has the key we expect, log and use it
+        pre_logger_msgs.append("Successfully parsed config file")
+        return pre_logger_msgs, NavigatorConfig(config)
+    elif not found_config:
+        # If the config file wasn't found, that's still okay. In this case, we
+        # instantiate NavigatorConfig with an empty dict.
+        return pre_logger_msgs, NavigatorConfig(config)
+    else:
+        # But if we found a config and it looks wrong (missing toplevel key or is
+        # somehow otherwise empty/null), bail out!
+        error_and_exit_early(
+            "Config file was empty, null, or did not contain an 'ansible-navigator' key"
+        )
+
 
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:
     # pylint: disable=too-many-branches
@@ -279,70 +273,10 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     args, cmdline = parser.parse_known_args(params)
     args.cmdline = cmdline
 
-    config_file = find_ini_config_file(APP_NAME)
-    pre_logger_msgs = update_args(config_file, args, parser)
-
-    args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
-
-    if args.app == "load" and not os.path.exists(args.value):
-        parser.error(f"The file specified with load could not be found. {args.load}")
-
-    if hasattr(args, "inventory"):
-        args.inventory = list(itertools.chain.from_iterable(args.inventory))
-        args.inventory = [os.path.abspath(os.path.expanduser(i)) for i in args.inventory]
-        if not args.inventory and args.app == "inventory":
-            parser.error("an inventory is required when using the inventory explorer")
-
-    if hasattr(args, "artifact"):
-        if hasattr(args, "playbook") and args.playbook:
-            if args.artifact == get_param(parser, "artifact")[1]:
-                args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
-
-    if not args.app:
-        args.app = "welcome"
-        args.value = None
-
-    share_dir = _get_share_dir()
-    if share_dir is not None:
-        args.share_dir = share_dir
-    else:
-        error_and_exit_early("problem finding share dir")
-
-    if os.path.exists("ansible-navigator.yml"):
-        # If there's a local config, use it
-        config_path = "ansible-navigator.yml"
-        pre_logger_msgs.append("Found a config file in current working directory; using it.")
-    else:
-        # Otherwise, try to find it a different way
-        config_dir = _get_conf_dir()
-        if config_dir is not None:
-            config_path = os.path.join(config_dir, "ansible-navigator.yml")
-            if os.path.exists(config_path):
-                pre_logger_msgs.append("Found config file at {0}".format(config_path))
-            else:
-                # TODO: Is bailing out right? Or just use defaults?
-                error_and_exit_early(
-                    "Found config directory at {0} but ansible-navigator.yml did not exist".format(
-                        config_dir
-                    )
-                )
-        else:
-            error_and_exit_early("Could not find config directory")
-
-    with open(config_path, "r") as config_fh:
-        try:
-            config = yaml.load(config_fh, Loader=SafeLoader)
-        except ScannerError:
-            error_and_exit_early("Config file at {0} but it failed to parse.".format(config_path))
-
-    if config and config.get("ansible-navigator"):
-        pre_logger_msgs.append("Successfully parsed config file")
-        args.config = NavigatorConfig(config)
-    else:
-        error_and_exit_early(
-            "Config file was empty, null, or did not contain an 'ansible-navigator' key"
-        )
-
+    pre_logger_msgs = []
+    config_msgs, config = setup_config()
+    pre_logger_msgs += config_msgs
+    args.config = config
     pre_logger_msgs += update_args(args)
 
     args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
@@ -360,9 +294,6 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         if hasattr(args, "playbook") and args.playbook:
             if args.artifact == get_param(parser, "artifact")[1]:
                 args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
-
-    if args.web:
-        args.no_osc4 = True
 
     if not args.app:
         args.app = "welcome"
