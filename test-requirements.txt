@@ -1,4 +1,5 @@
 black
 flake8
 pytest-xdist
+pytest-cov
 yamllint
