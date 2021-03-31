@@ -6,7 +6,6 @@
 ############# local dev crap
 .dev/
 *.cfg
-*.yaml
 collections
 *_artifact.json
 # runner artifacts
@@ -86,7 +85,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+doc/build/*
 
 # PyBuilder
 target/
