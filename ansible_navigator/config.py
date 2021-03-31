@@ -27,15 +27,15 @@ _DEFAULTS = {
 
 # This maps argparse destination variables to config paths
 ARGPARSE_TO_CONFIG = {
-    'artifact': ['ansible-navigator', 'playbook-artifact'],
-    'container_engine': ['ansible-navigator', 'container-engine'],
-    'ee_image': ['ansible-navigator', 'execution-environment-image'],
-    'execution_environment': ['ansible-navigator', 'execution-environment'],
-    'inventory': ['ansible-navigator', 'inventory'],
-    'inventory_columns': ['ansible-navigator', 'inventory-columns'],
-    'logfile': ['ansible-navigator', 'logfile'],
-    'loglevel': ['ansible-navigator', 'loglevel'],
-    'mode': ['ansible-navigator', 'mode'],
+    "artifact": ["ansible-navigator", "playbook-artifact"],
+    "container_engine": ["ansible-navigator", "container-engine"],
+    "ee_image": ["ansible-navigator", "execution-environment-image"],
+    "execution_environment": ["ansible-navigator", "execution-environment"],
+    "inventory": ["ansible-navigator", "inventory"],
+    "inventory_columns": ["ansible-navigator", "inventory-columns"],
+    "logfile": ["ansible-navigator", "logfile"],
+    "loglevel": ["ansible-navigator", "loglevel"],
+    "mode": ["ansible-navigator", "mode"],
 }
 
 

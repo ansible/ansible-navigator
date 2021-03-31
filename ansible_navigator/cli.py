@@ -27,7 +27,13 @@ from curses import wrapper
 from .cli_args import CliArgs
 from .config import ARGPARSE_TO_CONFIG, NavigatorConfig
 from .action_runner import ActionRunner
-from .utils import check_for_ansible, get_and_check_collection_doc_cache, get_conf_dir, set_ansible_envar, Sentinel
+from .utils import (
+    check_for_ansible,
+    get_and_check_collection_doc_cache,
+    get_conf_dir,
+    set_ansible_envar,
+    Sentinel,
+)
 from .yaml import yaml, SafeLoader
 
 APP_NAME = "ansible_navigator"
@@ -161,8 +167,8 @@ def update_args(args: Namespace) -> List[str]:
     msgs = []
 
     # If no config file was parsed and added to args, there's nothing to do
-    if not hasattr(args, 'config') or not args.config:
-        msgs.append('No config file parsed, no default parameters to override.')
+    if not hasattr(args, "config") or not args.config:
+        msgs.append("No config file parsed, no default parameters to override.")
         return msgs
 
     # Iterate through each "defaultable" (config-file-settable) path and do the
@@ -190,6 +196,7 @@ def update_args(args: Namespace) -> List[str]:
 
     return msgs
 
+
 def setup_logger(args):
     """set up the logger
 
@@ -208,6 +215,7 @@ def setup_logger(args):
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
     logger.setLevel(getattr(logging, args.loglevel.upper()))
+
 
 def setup_config() -> Tuple[List[str], NavigatorConfig]:
     pre_logger_msgs = []
@@ -234,7 +242,7 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
                     )
                 )
         else:
-            #error_and_exit_early("Could not find config directory")
+            # error_and_exit_early("Could not find config directory")
             pre_logger_msgs.append("Could not find config directory, using all defaults.")
 
     config = {}
@@ -243,8 +251,9 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
             try:
                 config = yaml.load(config_fh, Loader=SafeLoader)
             except ScannerError:
-                error_and_exit_early("Config file at {0} but it failed to parse it.".format(config_path))
-
+                error_and_exit_early(
+                    "Config file at {0} but it failed to parse it.".format(config_path)
+                )
 
     if found_config and config and config.get("ansible-navigator"):
         # If the config file was found and has the key we expect, log and use it
