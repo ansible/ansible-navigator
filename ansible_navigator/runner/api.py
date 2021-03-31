@@ -5,15 +5,19 @@ import sys
 import logging
 import os
 import time
-from ansible_runner import Runner  # type: ignore
-from ansible_runner import run_command_async, run_command
 
 from typing import Tuple
 
+from ansible_runner import Runner  # type: ignore
+from ansible_runner import run_command_async, run_command
+
 
 class BaseRunner:
+    """BaseRunner class"""
+
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-arguments
     def __init__(
         self,
         container_engine=None,
@@ -27,16 +31,26 @@ class BaseRunner:
         """BaseRunner class handle common argument for ansible-runner interface class
 
         Args:
-            container_engine ([str], optional): container engine used to isolate execution. Defaults to podman.
-            execution_environment ([bool], optional): Boolean argument controls execution environment enable or not. Defaults to False.
-            ee_image ([str], optional): Container image to use when running an command. Defaults to None.
-            navigator_mode ([str], optional): Valid value is either ``stdout`` or ``interactive``. If value is set to ``stdout`` passed the
-                                              ``stdin`` of current running process is passed to ``ansible-runner`` which enables receiving commandline
-                                              prompts after the executing the command. If value is set to ``interactive`` the ``ansible-navigator`` will
+            container_engine ([str], optional): container engine used to isolate execution.
+                                                Defaults to podman. # noqa: E501
+            execution_environment ([bool], optional): Boolean argument controls execution
+                                                      environment enable or not. Defaults to False.
+            ee_image ([str], optional): Container image to use when running an command.
+                                        Defaults to None.
+            navigator_mode ([str], optional): Valid value is either ``stdout`` or ``interactive``.
+                                              If value is set to ``stdout`` passed the
+                                              ``stdin`` of current running process is passed to
+                                              ``ansible-runner`` which enables receiving commandline
+                                              prompts after the executing the command. If value is
+                                              set to ``interactive`` the ``ansible-navigator`` will
                                               run using text user interface (TUI).
-            container_volume_mounts ([list], optional): List of bind mounts in the form ``host_dir:/container_dir:labels``. Defaults to None.
-            container_options ([str], optional): List of container options to pass to execution engine. Defaults to None.
-            container_workdir ([str], optional): The working directory within the container. Defaults to None.
+            container_volume_mounts ([list], optional): List of bind mounts in the form
+                                                        ``host_dir:/container_dir:labels``.
+                                                        Defaults to None.
+            container_options ([str], optional): List of container options to pass to execution
+                                                 engine. Defaults to None.
+            container_workdir ([str], optional): The working directory within the container.
+                                                 Defaults to None.
         """
         self._ce = container_engine
         self._ee = execution_environment
@@ -97,7 +111,8 @@ class CommandBaseRunner(BaseRunner):
         """Base class to handle common arguments of ``run_command`` interface for ``ansible-runner``
         Args:
             executable_cmd ([str]): The command to be invoked.
-            cmdline ([list], optional): A list of arguments to be passed to the executable command. Defaults to None.
+            cmdline ([list], optional): A list of arguments to be passed to the executable command.
+                                        Defaults to None.
             playbook ([str], optional): The playbook file name to run. Defaults to None.
             inventory ([list], optional): List of path to the inventory files. Defaults to None.
         """
@@ -105,7 +120,7 @@ class CommandBaseRunner(BaseRunner):
         self._cmdline = cmdline if cmdline else []
         self._playbook = playbook
         self._inventory = inventory
-        super(CommandBaseRunner, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def generate_run_command_args(self) -> None:
         """generate arguments required to be passed to ansible-runner"""
@@ -144,7 +159,7 @@ class CommandRunnerAsync(CommandBaseRunner):
         """
         self._eventq = None
         self._queue = queue
-        super(CommandRunnerAsync, self).__init__(executable_cmd, **kwargs)
+        super().__init__(executable_cmd, **kwargs)
 
     def _event_handler(self, event):
         self._queue.put(event)
@@ -171,9 +186,9 @@ class CommandRunner(CommandBaseRunner):
         while not self.finished:
             time.sleep(0.01)
             continue
-        out = _runner.stdout.read()
+        out = _runner.stdout.read()  # pylint: disable=no-member
         if hasattr(_runner, "stderr"):
-            err = _runner.stderr.read()
+            err = _runner.stderr.read()  # pylint: disable=no-member
         else:
             err = ""
         return out, err

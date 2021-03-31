@@ -133,8 +133,7 @@ class Action(App):
     def _show_columns(self) -> List:
         if self.args.inventory_columns:
             return self.args.inventory_columns.split(",")
-        else:
-            return []
+        return []
 
     def _set_inventories_mtime(self) -> None:
         mtimes = []

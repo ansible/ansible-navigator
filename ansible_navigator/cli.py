@@ -31,7 +31,6 @@ from .utils import check_for_ansible
 from .utils import find_ini_config_file
 from .utils import get_and_check_collection_doc_cache
 from .utils import set_ansible_envar
-from .web_xterm_js import WebXtermJs
 
 APP_NAME = "ansible_navigator"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
@@ -85,7 +84,9 @@ def _get_share_dir() -> Optional[str]:
 class EnvInterpolation(configparser.BasicInterpolation):
     """Interpolation which expands environment variables in values."""
 
-    def before_get(self, parser, section, option, value, defaults):
+    def before_get(
+        self, parser, section, option, value, defaults
+    ):  # pylint: disable=too-many-arguments
         value = super().before_get(parser, section, option, value, defaults)
         return os.path.expandvars(value)
 
@@ -116,7 +117,7 @@ def get_param(
     ]
 
     for action in parser._actions:
-        if any([v in action.option_strings for v in variations]):
+        if any((v in action.option_strings for v in variations)):
             return action.dest, action.default, action.type
         if name == action.dest and action.nargs == "?":
             return action.dest, action.default, action.type
@@ -252,9 +253,6 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
             if args.artifact == get_param(parser, "artifact")[1]:
                 args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
 
-    if args.web:
-        args.no_osc4 = True
-
     if not args.app:
         args.app = "welcome"
         args.value = None
@@ -282,15 +280,9 @@ def run(args: Namespace) -> None:
     try:
         if args.app == "run" and args.navigator_mode == "stdout":
             non_ui_app = partial(Player(args).playbook)
-            if args.web:
-                WebXtermJs().run(func=non_ui_app)
-            else:
-                non_ui_app()
+            non_ui_app()
         else:
-            if args.web:
-                WebXtermJs().run(curses_app=ActionRunner(args=args).run)
-            else:
-                wrapper(ActionRunner(args=args).run)
+            wrapper(ActionRunner(args=args).run)
     except KeyboardInterrupt:
         logger.warning("Dirty exit, killing the pid")
         os.kill(os.getpid(), signal.SIGTERM)

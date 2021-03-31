@@ -1,6 +1,9 @@
 ansible-core
 black
 flake8
-pytest-xdist
+lxml
+mypy
+pylint
 pytest-cov
+pytest-xdist
 yamllint

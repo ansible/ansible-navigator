@@ -7,7 +7,7 @@ arrow up, arrow down                                  Scroll up/down
 :collections                                          Explore installed collections
 :config                                               Explore the current Ansible configuration
 :d, :doc <plugin>                                     Show a plugin doc
-:r, :run <playbook> -i <inventory> -m interactive     Run a playbook in interactive mode
+:r, :run <playbook> -i <inventory>                    Run a playbook in interactive mode
 :f, :filter <re>                                      Filter page lines using a regex
 :h, :help                                             This page
 :i, :inventory <inventory>                            Explore the current or alternate inventory
