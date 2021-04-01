@@ -36,9 +36,14 @@ Review the help
 ansible-navigator --help
 ```
 
-Review current configuration
+Review current configuration (default mode)
 ```
-ansible-navigator config
+ansible-navigator config -m interactive
+```
+
+Review current configuration in classic mode
+```
+ansible-navigator config -m stdout dump
 ```
 
 Explore available collections
