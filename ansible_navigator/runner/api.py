@@ -12,7 +12,7 @@ from typing import List
 from typing import Dict
 
 from ansible_runner import Runner  # type: ignore
-from ansible_runner import run_command_async, run_command
+from ansible_runner import run_command_async, run_command, get_ansible_config
 
 
 class BaseRunner:
@@ -30,6 +30,7 @@ class BaseRunner:
         container_volume_mounts: Optional[List] = None,
         container_options: Optional[List] = None,
         container_workdir: Optional[str] = None,
+        cwd: Optional[str] = None,
     ) -> None:
         """BaseRunner class handle common argument for ansible-runner interface class
 
@@ -54,12 +55,13 @@ class BaseRunner:
                                                  engine. Defaults to None.
             container_workdir ([str], optional): The working directory within the container.
                                                  Defaults to None.
+            cwd ([str], optional): The current local working directory. Defaults to None.
         """
         self._ce = container_engine
         self._ee = execution_environment
         self._eei = ee_image
         self._navigator_mode = navigator_mode
-
+        self._cwd = cwd
         self.cancelled: bool = False
         self.finished: bool = False
         self.status: Optional[str] = None
@@ -85,6 +87,8 @@ class BaseRunner:
                 "finished_callback": self.runner_finished_callback,
             }
         )
+        if self._cwd:
+            self._runner_args.update({"cwd": self._cwd})
 
         if self._navigator_mode == "stdout":
             self._runner_args.update(
@@ -195,3 +199,32 @@ class CommandRunner(CommandBaseRunner):
         self.generate_run_command_args()
         out, err = run_command(**self._runner_args)
         return out, err
+
+
+class AnsibleCfgRunner(BaseRunner):
+    """abstraction for ansible-config command-line"""
+
+    def get_ansible_config(
+        self, action: str, config_file: Optional[str] = None, only_changed: Optional[bool] = None
+    ) -> Tuple[str, str]:
+        """Run ansible-config command and get the configuration related details
+
+        Args:
+            action (str): The configuration fetch action to perform. Valid values are
+                          one of ``list``, ``dump``, ``view``. The ``list`` action
+                          will fetch all the config options along with config description,
+                         ``dump`` action will fetch all the active config and ``view``
+                         action will return the active configuration file view.
+            config_file (Optional, optional): Path to configuration file, defaults to
+                                              first file found in precedence.. Defaults to None.
+            only_changed (Optional, optional): The boolean value when set to ``True`` returns only
+                                               the configurations that have changed from the
+                                               default. This parameter is applicable only when
+                                               ``action`` is set to ``dump``.. Defaults to None.
+
+        Returns:
+            Tuple[str, str]: Returns a tuple of response and error string (if any).
+        """
+        return get_ansible_config(
+            action, config_file=config_file, only_changed=only_changed, **self._runner_args
+        )
