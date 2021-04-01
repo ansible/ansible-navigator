@@ -14,9 +14,6 @@ from typing import Dict
 from ansible_runner import Runner  # type: ignore
 from ansible_runner import run_command_async, run_command
 
-from ansible_runner import Runner  # type: ignore
-from ansible_runner import run_command_async, run_command
-
 
 class BaseRunner:
     """BaseRunner class"""
