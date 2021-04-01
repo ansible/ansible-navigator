@@ -204,7 +204,7 @@ class CommandRunner(CommandBaseRunner):
 class AnsibleCfgRunner(BaseRunner):
     """abstraction for ansible-config command-line"""
 
-    def get_ansible_config(
+    def fetch_ansible_config(
         self, action: str, config_file: Optional[str] = None, only_changed: Optional[bool] = None
     ) -> Tuple[str, str]:
         """Run ansible-config command and get the configuration related details

@@ -194,8 +194,8 @@ class Action(App):
         }
         if self.args.navigator_mode == "interactive":
             self._runner = AnsibleCfgRunner(**kwargs)
-            list_output, list_output_err = self._runner.get_ansible_config("list")
-            dump_output, dump_output_err = self._runner.get_ansible_config("dump")
+            list_output, list_output_err = self._runner.fetch_ansible_config("list")
+            dump_output, dump_output_err = self._runner.fetch_ansible_config("dump")
             output_error = list_output_err or dump_output_err
             if output_error:
                 msg = f"Error occurred while fetching ansible config: '{output_error}'"
