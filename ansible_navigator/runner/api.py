@@ -4,9 +4,12 @@ event handler
 import sys
 import logging
 import os
-import time
 
+from queue import Queue
 from typing import Tuple
+from typing import Optional
+from typing import List
+from typing import Dict
 
 from ansible_runner import Runner  # type: ignore
 from ansible_runner import run_command_async, run_command
@@ -20,13 +23,13 @@ class BaseRunner:
     # pylint: disable=too-many-arguments
     def __init__(
         self,
-        container_engine=None,
-        execution_environment=None,
-        ee_image=False,
-        navigator_mode=None,
-        container_volume_mounts=None,
-        container_options=None,
-        container_workdir=None,
+        container_engine: Optional[str] = None,
+        execution_environment: Optional[bool] = False,
+        ee_image: Optional[str] = None,
+        navigator_mode: Optional[str] = None,
+        container_volume_mounts: Optional[List] = None,
+        container_options: Optional[List] = None,
+        container_workdir: Optional[str] = None,
     ) -> None:
         """BaseRunner class handle common argument for ansible-runner interface class
 
@@ -57,11 +60,11 @@ class BaseRunner:
         self._eei = ee_image
         self._navigator_mode = navigator_mode
 
-        self.cancelled = False
-        self.finished = False
-        self.status = None
+        self.cancelled: bool = False
+        self.finished: bool = False
+        self.status: Optional[str] = None
         self._logger = logging.getLogger(__name__)
-        self._runner_args = {}
+        self._runner_args: Dict = {}
         if self._ee:
             self._runner_args.update(
                 {
@@ -107,7 +110,14 @@ class CommandBaseRunner(BaseRunner):
     # pylint: disable=too-many-instance-attributes
     """a runner async wrapper"""
 
-    def __init__(self, executable_cmd, cmdline=None, playbook=None, inventory=None, **kwargs):
+    def __init__(
+        self,
+        executable_cmd: str,
+        cmdline: Optional[List] = None,
+        playbook: Optional[str] = None,
+        inventory: Optional[List] = None,
+        **kwargs
+    ):
         """Base class to handle common arguments of ``run_command`` interface for ``ansible-runner``
         Args:
             executable_cmd ([str]): The command to be invoked.
@@ -128,8 +138,9 @@ class CommandBaseRunner(BaseRunner):
             self._cmdline.append(self._playbook)
             self._runner_args.update({"cwd": os.path.dirname(os.path.abspath(self._playbook))})
 
-        for inv in self._inventory:
-            self._cmdline.extend(["-i", inv])
+        if self._inventory:
+            for inv in self._inventory:
+                self._cmdline.extend(["-i", inv])
 
         self._runner_args.update(
             {"executable_cmd": self._executable_cmd, "cmdline_args": self._cmdline}
@@ -149,7 +160,7 @@ class CommandRunnerAsync(CommandBaseRunner):
     # pylint: disable=too-many-instance-attributes
     """a runner async wrapper"""
 
-    def __init__(self, executable_cmd, queue, **kwargs):
+    def __init__(self, executable_cmd: str, queue: Queue, **kwargs):
         """class to handle arguments of ``run_command_async`` interface for ``ansible-runner``.
            For common arguments refer documentation of ``CommandBaseRunner`` class
 
@@ -182,13 +193,5 @@ class CommandRunner(CommandBaseRunner):
         """run"""
 
         self.generate_run_command_args()
-        _runner = run_command(**self._runner_args)
-        while not self.finished:
-            time.sleep(0.01)
-            continue
-        out = _runner.stdout.read()  # pylint: disable=no-member
-        if hasattr(_runner, "stderr"):
-            err = _runner.stderr.read()  # pylint: disable=no-member
-        else:
-            err = ""
+        out, err = run_command(**self._runner_args)
         return out, err

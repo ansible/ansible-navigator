@@ -9,10 +9,12 @@ import re
 import uuid
 
 from argparse import Namespace
+from distutils.spawn import find_executable
 from queue import Queue
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -423,7 +425,7 @@ class Action(App):
         return True
 
     def _prompt_for_artifact(self, artifact_file: str) -> Dict[Any, Any]:
-        """ propmpt for a valid artifcat file """
+        """prompt for a valid artifact file """
         FType = Dict[str, Any]
         form_dict: FType = {
             "title": "Artifact file not found, please confirm the following",
@@ -580,6 +582,7 @@ class Action(App):
 
     def _run_runner(self) -> None:
         """ spin up runner """
+        executable_cmd: Optional[str]
         kwargs = {
             "playbook": self.args.playbook,
             "inventory": self.args.inventory,
@@ -589,9 +592,15 @@ class Action(App):
             "ee_image": self.args.ee_image,
             "navigator_mode": self.args.navigator_mode,
         }
-        self.runner = CommandRunnerAsync(
-            executable_cmd="ansible-playbook", queue=self._queue, **kwargs
-        )
+        if self.args.execution_environment:
+            executable_cmd = "ansible-playbook"
+        else:
+            executable_cmd = find_executable("ansible-playbook")
+            if not executable_cmd:
+                self._logger.error("'ansible-playbook' executable not found")
+                return
+
+        self.runner = CommandRunnerAsync(executable_cmd=executable_cmd, queue=self._queue, **kwargs)
         self.runner.run()
         self._runner_finished = False
         self._logger.debug("runner requested to start")
