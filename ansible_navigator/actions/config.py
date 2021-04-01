@@ -208,10 +208,11 @@ class Action(App):
             if self.args.execution_environment:
                 ansible_config_path = "ansible-config"
             else:
-                ansible_config_path = find_executable("ansible-config")
-                if ansible_config_path is None:
+                exec_path = find_executable("ansible-config")
+                if exec_path is None:
                     self._logger.error("no ansible-config command found in path")
                     return
+                ansible_config_path = exec_path
 
             kwargs.update({"cmdline": self.args.cmdline})
 
