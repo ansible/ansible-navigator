@@ -8,18 +8,20 @@ from .utils import Sentinel
 # default here, ideally.
 _DEFAULTS = {
     "ansible-navigator": {
+        "container-engine": "podman",
+        "doc-plugin-type": "module",
         "editor": {
             "command": "vi +{line_number} {filename}",
             "console": True,
         },
-        "container-engine": "podman",
-        "doc-plugin-type": "module",
         "execution-environment": False,
         "execution-environment-image": "quay.io/ansible/ansible-runner:devel",
         "inventory": [],
         "inventory-columns": "",
-        "logfile": "./ansible-navigator.log",
-        "loglevel": "info",
+        "log": {
+            "file": "./ansible-navigator.log",
+            "level": "info",
+        },
         "mode": "interactive",
         "playbook-artifact": "{playbook_dir}/{playbook_name}_artifact.json",
     },
@@ -33,9 +35,10 @@ ARGPARSE_TO_CONFIG = {
     "execution_environment": ["ansible-navigator", "execution-environment"],
     "inventory": ["ansible-navigator", "inventory"],
     "inventory_columns": ["ansible-navigator", "inventory-columns"],
-    "logfile": ["ansible-navigator", "logfile"],
-    "loglevel": ["ansible-navigator", "loglevel"],
+    "logfile": ["ansible-navigator", "log", "file"],
+    "loglevel": ["ansible-navigator", "log", "level"],
     "mode": ["ansible-navigator", "mode"],
+    "type": ["ansible-navigator", "doc-plugin-type"],
 }
 
 
@@ -43,7 +46,7 @@ class NavigatorConfig:
     def __init__(self, dct: Dict):
         self.config = dct
 
-    def get(self, keys: List[str], default: Any = Sentinel) -> Any:
+    def get(self, keys: List[str], default: Any = Sentinel, fmt: Dict[str, Any] = {}) -> Any:
         """
         Takes a list of keys that correspond to nested keys in config.
         If the key is found in the config, return the value.
@@ -60,11 +63,11 @@ class NavigatorConfig:
             else:
                 break
         else:
-            return current
+            return current.format(**fmt)
 
         # If we made it here, the config key wasn't found.
         if default is not Sentinel:
-            return default
+            return default.format(**fmt)
 
         current = _DEFAULTS
         for key in keys:
@@ -73,6 +76,6 @@ class NavigatorConfig:
             else:
                 break
         else:
-            return current
+            return current.format(**fmt)
 
         raise KeyError(keys)
