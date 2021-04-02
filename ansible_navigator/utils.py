@@ -217,14 +217,17 @@ def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[st
         must_exist = os.path.join(path, filename) if filename is not None else path
         if not os.path.exists(must_exist):
             msgs.append(
-                "Skipping {0} because required file {1} does not exist".format(path, filename))
+                "Skipping {0} because required file {1} does not exist".format(path, filename)
+            )
             continue
 
         try:
             perms = os.stat(path)
             if perms.st_mode & stat.S_IWOTH:
                 msgs.append(
-                    "Ignoring potential configuration directory {0} because it is world-writable.".format(path)
+                    "Ignoring potential configuration directory {0} because it is world-writable.".format(
+                        path
+                    )
                 )
                 continue
             return (path, msgs)
