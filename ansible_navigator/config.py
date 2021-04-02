@@ -6,6 +6,9 @@ from .utils import Sentinel
 # at some point in the future. In any case, the structure here should mimic what
 # we'd expect the yaml file to parse to. Every config option should have a
 # default here, ideally.
+#
+# NOTE!!! If you change any default here, update the documentation file in
+#         docs/configuration.rst
 _DEFAULTS = {
     "ansible-navigator": {
         "container-engine": "podman",
