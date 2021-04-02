@@ -27,3 +27,4 @@ ansible-navigator:
     # console: false
   log:
     level: debug
+    file: /tmp/ansible-navigator.log

@@ -1,0 +1,59 @@
+---
+- name: Ensure config file gets picked up from ~/.config
+  hosts: localhost
+  pre_tasks:
+    - name: Create ~/.config/ansible-navigator
+      file:
+        path: ~/.config/ansible-navigator
+        state: directory
+
+    - copy:
+        src: "{{ playbook_dir }}/../../../docs/sample-config.yml"
+        dest: ~/.config/ansible-navigator/ansible-navigator.yml
+
+    - include_role:
+        name: tmux/setup
+
+  roles:
+    # Add where pip drops the entrypoint to our PATH
+    - role: send_keys
+      keys:
+        - export PATH=$PATH:~/.local/bin
+        - Enter
+
+    # Main page
+    - role: send_keys
+      keys:
+        - ansible-navigator
+        - Enter
+      expected: Some things you can try
+
+    # Quit
+    - role: send_keys
+      keys:
+        - :quit
+        - Enter
+
+  post_tasks:
+    - name: Ensure the configured logfile exists
+      stat:
+        path: /tmp/ansible-navigator.log
+      register: logfile
+
+    - assert:
+        that:
+          - logfile.stat.exists
+
+    - name: Tear down tmux
+      include_role:
+        name: tmux/destroy
+
+    - name: Remove temporary log file
+      file:
+        path: /tmp/ansible-navigator.log
+        state: absent
+
+    - name: Remove config file
+      file:
+        path: ~/.config/ansible-navigator
+        state: absent

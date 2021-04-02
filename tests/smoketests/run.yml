@@ -1,13 +1,10 @@
 ---
 - hosts: localhost
-  pre_tasks:
+  tasks:
     - name: Install ansible-navigator
       pip:
         chdir: "{{ playbook_dir }}/../../"
         name: .
-
-    - name: Prepare tmux session that we can use for tests
-      shell: tmux new-session -d -s smoke
 
     - name: Run `ansible-navigator --help`
       command: ansible-navigator --help
@@ -17,67 +14,7 @@
         that:
           - '"show this help message and exit" in anh.stdout'
 
-  roles:
-    # Add where pip drops the entrypoint to our PATH
-    - role: send_keys
-      keys:
-        - export PATH=$PATH:~/.local/bin
-        - Enter
-
-    # Main page
-    - role: send_keys
-      keys:
-        - ansible-navigator
-        - Enter
-      expected: Some things you can try
-
-    # Help page
-    - role: send_keys
-      keys:
-        - :help
-        - Enter
-      expected: Go back
-
-    # Second help page
-    - role: send_keys
-      keys:
-        - PgDn
-      expected: TASKS
-
-    # 'debug' module doc page from help page
-    - role: send_keys
-      keys:
-        - :doc debug
-        - Enter
-      expected: "collection: ansible.builtin"
-
-    # Back to help page -- but we end up back at the top...
-    - role: send_keys
-      keys:
-        - Escape
-      expected: Go back
-
-    # Back to main menu
-    - role: send_keys
-      keys:
-        - Escape
-      expected: Some things you can try
-
-    # Config + filter
-    - role: send_keys
-      keys:
-        - :config
-        - Enter
-      sleep: 4 # Config takes some time to render
-
-    - role: send_keys
-      keys:
-        - :f COW
-        - Enter
-      expected: ANSIBLE_COW_SELECTION
-
-  post_tasks:
-    # Clean up if we make it this far.
-    - name: Kill tmux session
-      command: "tmux kill-session -t smoke:"
-      ignore_errors: true
+# Add each scenario here. Each scenario playbook is responsible for calling the
+# tmux/setup role at the top and tmux/destroy at the end.
+- import_playbook: scenarios/00smoke.yml
+- import_playbook: scenarios/test_user_config.yml
