@@ -272,7 +272,6 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 
     if hasattr(args, "artifact"):
         # Would like to do this when importing config values in update_args()
-        # and make use of NavigatorConfig#get's fmt param some day.
         args.artifact = args.artifact.format(
             playbook_dir=os.path.dirname(args.playbook),
             playbook_name=os.path.splitext(os.path.basename(args.playbook))[0],

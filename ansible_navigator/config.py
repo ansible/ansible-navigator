@@ -49,7 +49,7 @@ class NavigatorConfig:
     def __init__(self, dct: Dict):
         self.config = dct
 
-    def get(self, keys: List[str], default: Any = Sentinel, fmt: Dict[str, Any] = {}) -> Any:
+    def get(self, keys: List[str], default: Any = Sentinel) -> Any:
         """
         Takes a list of keys that correspond to nested keys in config.
         If the key is found in the config, return the value.
@@ -66,11 +66,11 @@ class NavigatorConfig:
             else:
                 break
         else:
-            return current.format(**fmt)
+            return current
 
         # If we made it here, the config key wasn't found.
         if default is not Sentinel:
-            return default.format(**fmt)
+            return default
 
         current = _DEFAULTS
         for key in keys:
@@ -79,6 +79,6 @@ class NavigatorConfig:
             else:
                 break
         else:
-            return current.format(**fmt)
+            return current
 
         raise KeyError(keys)

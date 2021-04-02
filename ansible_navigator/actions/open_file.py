@@ -166,9 +166,8 @@ class Action:
 
         command = app.args.config.get(
             ["ansible-navigator", "editor", "command"],
-            default=command_default,
-            fmt={"filename": filename, "line_number": line_number},
-        )
+            default=command_default
+        ).format(filename=filename, line_number=line_number)
         is_console = app.args.config.get(["ansible-navigator", "editor", "console"])
 
         self._logger.debug("Command: %s", command)
