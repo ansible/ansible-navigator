@@ -182,7 +182,7 @@ def check_for_ansible() -> Tuple[bool, str]:
 
 def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[str]]:
     """
-    returns config dir (e.g. /etc/ansible-nagivator). First found wins.
+    returns config dir (e.g. /etc/ansible-navigator). First found wins.
     If a filename is given, ensures the file exists in the directory.
 
     TODO: This is a pretty expensive function (lots of statting things on disk).
@@ -196,33 +196,35 @@ def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[st
     potential_paths.append(".ansible-navigator")
 
     # Development path
-    path = os.path.join(os.path.dirname(__file__), "..", "etc", "ansible-nagivator")
+    path = os.path.join(os.path.dirname(__file__), "..", "etc", "ansible-navigator")
     potential_paths.append(path)
 
     # ~/.config/ansible-navigator
-    path = os.path.join(os.path.expanduser("~"), ".config", "ansible-nagivator")
+    path = os.path.join(os.path.expanduser("~"), ".config", "ansible-navigator")
     potential_paths.append(path)
 
     # /etc/ansible-navigator
-    path = os.path.join("/", "etc", "ansible-nagivator")
+    path = os.path.join("/", "etc", "ansible-navigator")
     potential_paths.append(path)
 
     # /usr/local/etc/ansible-navigator
     prefix = sysconfig.get_config_var("prefix")
     if prefix:
-        path = os.path.join(prefix, "local", "etc", "ansible-nagivator")
+        path = os.path.join(prefix, "local", "etc", "ansible-navigator")
         potential_paths.append(path)
 
     for path in potential_paths:
         must_exist = os.path.join(path, filename) if filename is not None else path
         if not os.path.exists(must_exist):
+            msgs.append(
+                "Skipping {0} because required file {1} does not exist".format(path, filename))
             continue
 
         try:
             perms = os.stat(path)
             if perms.st_mode & stat.S_IWOTH:
                 msgs.append(
-                    "Ignoring potential configuration directory {0} because it is world-writable."
+                    "Ignoring potential configuration directory {0} because it is world-writable.".format(path)
                 )
                 continue
             return (path, msgs)
