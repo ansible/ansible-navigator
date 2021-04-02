@@ -180,7 +180,7 @@ def check_for_ansible() -> Tuple[bool, str]:
     return True, msg
 
 
-def get_conf_dir(filename: Optional[str] = None) -> (Optional[str], List[str]):
+def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[str]]:
     """
     returns config dir (e.g. /etc/ansible-nagivator). First found wins.
     If a filename is given, ensures the file exists in the directory.

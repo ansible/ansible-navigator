@@ -14,6 +14,7 @@ from curses import wrapper
 from functools import partial
 from typing import Callable
 from typing import List
+from typing import NoReturn
 from typing import Optional
 from typing import Tuple
 from yaml.scanner import ScannerError
@@ -89,7 +90,7 @@ class EnvInterpolation(configparser.BasicInterpolation):
         return os.path.expandvars(value)
 
 
-def error_and_exit_early(msg):
+def error_and_exit_early(msg) -> NoReturn:
     """get out of here fast"""
     print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
     sys.exit(1)
@@ -178,6 +179,8 @@ def setup_logger(args):
     logger.setLevel(getattr(logging, args.loglevel.upper()))
 
 
+# Some branches here call error_and_exit_early() which doesn't return, it exits.
+# pylint: disable=inconsistent-return-statements
 def setup_config() -> Tuple[List[str], NavigatorConfig]:
     """
     Load up a configuration file, logging each step.
@@ -225,7 +228,6 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
     error_and_exit_early(
         "Config file was empty, null, or did not contain an 'ansible-navigator' key"
     )
-    return None  # sate pylint...
 
 
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:
@@ -239,7 +241,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     args, cmdline = parser.parse_known_args(params)
     args.cmdline = cmdline
 
-    pre_logger_msgs = []
+    pre_logger_msgs: List[str] = []
     config_msgs, config = setup_config()
     pre_logger_msgs += config_msgs
     args.config = config
