@@ -190,7 +190,7 @@ class CliArgs:
         )
         parser.set_defaults(requires_ansible=False)
 
-    def _log_params(self, parser: ArgumentParser) -> None:
+    def _log_params(self, parser: ArgumentParser) -> None:  # pylint: disable=no-self-use
         parser.add_argument(
             "--lf",
             "--logfile",

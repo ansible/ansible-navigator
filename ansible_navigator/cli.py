@@ -9,20 +9,14 @@ import sysconfig
 import signal
 import time
 
-from argparse import _SubParsersAction
-from argparse import ArgumentParser
 from argparse import Namespace
+from curses import wrapper
 from functools import partial
-from typing import Any
 from typing import Callable
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Union
 from yaml.scanner import ScannerError
-
-
-from curses import wrapper
 
 from .cli_args import CliArgs
 from .config import ARGPARSE_TO_CONFIG, NavigatorConfig
@@ -185,32 +179,26 @@ def setup_logger(args):
 
 
 def setup_config() -> Tuple[List[str], NavigatorConfig]:
+    """
+    Load up a configuration file, logging each step.
+    Return (log messages, NavigatorConfig).
+    If the config can't be found/loaded, use default settings.
+    If it's found but empty or not well formed, bail out.
+    """
     pre_logger_msgs = []
     found_config = False
 
-    if os.path.exists("ansible-navigator.yml"):
-        # If there's a local config, use it
+    # Otherwise, try to find it a different way
+    config_dir, msgs = get_conf_dir("ansible-navigator.yml")
+    pre_logger_msgs += msgs
+    if config_dir is not None:
+        # Since we give get_conf_dir our config path, it's guaranteed to exist
+        # if config_dir is not None.
+        config_path = os.path.join(config_dir, "ansible-navigator.yml")
+        pre_logger_msgs.append("Found config file at {0}".format(config_path))
         found_config = True
-        config_path = "ansible-navigator.yml"
-        pre_logger_msgs.append("Found a config file in current working directory; using it.")
     else:
-        # Otherwise, try to find it a different way
-        config_dir, msgs = get_conf_dir()
-        pre_logger_msgs += msgs
-        if config_dir is not None:
-            config_path = os.path.join(config_dir, "ansible-navigator.yml")
-            if os.path.exists(config_path):
-                pre_logger_msgs.append("Found config file at {0}".format(config_path))
-                found_config = True
-            else:
-                pre_logger_msgs.append(
-                    "Found config directory at {0} but ansible-navigator.yml did not exist".format(
-                        config_dir
-                    )
-                )
-        else:
-            # error_and_exit_early("Could not find config directory")
-            pre_logger_msgs.append("Could not find config directory, using all defaults.")
+        pre_logger_msgs.append("Could not find config directory, using all defaults.")
 
     config = {}
     if found_config:
@@ -226,16 +214,18 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
         # If the config file was found and has the key we expect, log and use it
         pre_logger_msgs.append("Successfully parsed config file")
         return pre_logger_msgs, NavigatorConfig(config)
-    elif not found_config:
+
+    if not found_config:
         # If the config file wasn't found, that's still okay. In this case, we
         # instantiate NavigatorConfig with an empty dict.
         return pre_logger_msgs, NavigatorConfig(config)
-    else:
-        # But if we found a config and it looks wrong (missing toplevel key or is
-        # somehow otherwise empty/null), bail out!
-        error_and_exit_early(
-            "Config file was empty, null, or did not contain an 'ansible-navigator' key"
-        )
+
+    # But if we found a config and it looks wrong (missing toplevel key or is
+    # somehow otherwise empty/null), bail out!
+    error_and_exit_early(
+        "Config file was empty, null, or did not contain an 'ansible-navigator' key"
+    )
+    return None  # sate pylint...
 
 
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:

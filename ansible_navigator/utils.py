@@ -10,7 +10,6 @@ import stat
 import sysconfig
 
 from distutils.spawn import find_executable
-from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import List
@@ -34,8 +33,14 @@ except ImportError:
     HAS_ANSIBLE = False
 
 
-# Same usage as ansible.utils.sentinel.Sentinel.
-class Sentinel:
+class Sentinel:  # pylint: disable=too-few-public-methods
+    """
+    Used as a sentinel value when None won't suffice.
+    Same usage as ansible.utils.sentinel.Sentinel.
+    Usually the class itself is what we use as the value, not an instance of it.
+    foo = Sentinel
+    if foo is Sentinel: ...
+    """
     def __new__(cls):
         return cls
 
