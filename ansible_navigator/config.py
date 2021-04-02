@@ -53,6 +53,7 @@ class NavigatorConfig:  # pylint: disable=too-few-public-methods
     """
     A simple wrapper around a dict, with a method that handles defaults nicely.
     """
+
     def __init__(self, dct: Dict):
         self.config = dct
 

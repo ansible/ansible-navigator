@@ -41,6 +41,7 @@ class Sentinel:  # pylint: disable=too-few-public-methods
     foo = Sentinel
     if foo is Sentinel: ...
     """
+
     def __new__(cls):
         return cls
 
