@@ -106,34 +106,6 @@ def error_and_exit_early(msg):
     sys.exit(1)
 
 
-def get_param(
-    parser: ArgumentParser, name: str
-) -> Tuple[Union[str, None], Union[str, List, None], Any]:
-    # pylint: disable=protected-access
-
-    """get the param from the argparser
-    try short and long variations, _ or -
-    """
-    variations = [
-        f"-{name}",
-        f"--{name}",
-        f"-{name.replace('_', '-')}",
-        f"--{name.replace('_', '-')}",
-    ]
-
-    for action in parser._actions:
-        if any((v in action.option_strings for v in variations)):
-            return action.dest, action.default, action.type
-        if name == action.dest and action.nargs == "?":
-            return action.dest, action.default, action.type
-        if isinstance(action, _SubParsersAction):
-            for _parser_name, sub_parser in action.choices.items():
-                sub_parser_dest, sub_parser_default, sub_parser_type = get_param(sub_parser, name)
-                if sub_parser_dest is not None:
-                    return sub_parser_dest, sub_parser_default, sub_parser_type
-    return None, None, None
-
-
 def update_args(args: Namespace) -> List[str]:
     """
     Updates args with the corresponding config values (or their defaults) unless
@@ -300,9 +272,11 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
             parser.error("an inventory is required when using the inventory explorer")
 
     if hasattr(args, "artifact"):
-        if hasattr(args, "playbook") and args.playbook:
-            if args.artifact == get_param(parser, "artifact")[1]:
-                args.artifact = f"{os.path.splitext(args.playbook)[0]}_artifact.json"
+        # Would like to do this when importing config values in update_args()
+        # and make use of NavigatorConfig#get's fmt param some day.
+        args.artifact = args.artifact.format(
+            playbook_dir=os.path.dirname(args.playbook),
+            playbook_name=os.path.splitext(os.path.basename(args.playbook))[0])
 
     if not args.app:
         args.app = "welcome"
