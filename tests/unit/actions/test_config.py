@@ -32,7 +32,6 @@ from ansible_navigator.steps import Steps
 
 def callable_pass():
     """a do nothing callable"""
-    pass
 
 
 def run_action_stdout(name: str, cmdline: List) -> Tuple[Any, str, str]:
