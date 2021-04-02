@@ -95,10 +95,6 @@ class EnvInterpolation(configparser.BasicInterpolation):
         return os.path.expandvars(value)
 
 
-class NoSuch:  # pylint: disable=too-few-public-methods
-    """sentinal"""
-
-
 def error_and_exit_early(msg):
     """get out of here fast"""
     print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
