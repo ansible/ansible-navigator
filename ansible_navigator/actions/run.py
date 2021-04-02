@@ -196,8 +196,7 @@ class Action(App):
     # pylint: disable=too-many-instance-attributes
     """:run"""
 
-    KEGEX = r"""
-            (?x)
+    KEGEX = r"""(?x)
             ^
             (?P<run>r(?:un)?
             (\s(?P<playbook>\S+))?
