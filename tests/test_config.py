@@ -105,6 +105,11 @@ def test_config_get_keyerror(dct, keys, default, expected):
             "become",
         ),
         (
+            ["doc", "-t", "become", "sudo"],
+            "type",
+            "become",
+        ),
+        (
             ["config"],
             "ee_image",
             "quay.io/ansible/ansible-runner:devel",
@@ -123,6 +128,7 @@ def test_config_get_keyerror(dct, keys, default, expected):
     ids=[
         "commandline overrides config file value",
         "config file overrides internal default value",
+        "explicitly specifying the default still uses default",
         "internal default value gets picked if not overridden",
         "nested config option default",
         "nested config option override by commandline",
