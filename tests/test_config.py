@@ -145,6 +145,6 @@ def test_update_args(config, given, argname, expected):
     args, cmdline = parser.parse_known_args(given)
     args.cmdline = cmdline
     args.config = config
-    msgs = update_args(args)
+    update_args(args)
 
     assert getattr(args, argname, Sentinel) == expected
