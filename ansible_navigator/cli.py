@@ -275,7 +275,8 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         # and make use of NavigatorConfig#get's fmt param some day.
         args.artifact = args.artifact.format(
             playbook_dir=os.path.dirname(args.playbook),
-            playbook_name=os.path.splitext(os.path.basename(args.playbook))[0])
+            playbook_name=os.path.splitext(os.path.basename(args.playbook))[0],
+        )
 
     if not args.app:
         args.app = "welcome"

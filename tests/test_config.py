@@ -89,6 +89,7 @@ def test_config_get_keyerror(dct, keys, default, expected):
         cfg = NavigatorConfig(dct)
         assert cfg.get(keys, default)
 
+
 # TODO: Maybe move to test_cli.py
 @pytest.mark.parametrize(
     "given, argname, expected",
