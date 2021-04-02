@@ -37,7 +37,6 @@ from .utils import (
 from .yaml import yaml, SafeLoader
 
 APP_NAME = "ansible_navigator"
-APP_PRETTY_NAME = "ansible-navigator"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
 
 logger = logging.getLogger(APP_NAME)
