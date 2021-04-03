@@ -225,9 +225,8 @@ def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[st
             perms = os.stat(path)
             if perms.st_mode & stat.S_IWOTH:
                 msgs.append(
-                    "Ignoring potential configuration directory {0} because it is world-writable.".format(
-                        path
-                    )
+                    "Ignoring potential configuration directory {0} because it "
+                    "is world-writable.".format(path)
                 )
                 continue
             return (path, msgs)
