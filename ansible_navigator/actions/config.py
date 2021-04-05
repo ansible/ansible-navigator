@@ -189,10 +189,10 @@ class Action(App):
             "container_engine": self.args.container_engine,
             "execution_environment": self.args.execution_environment,
             "ee_image": self.args.ee_image,
-            "navigator_mode": self.args.navigator_mode,
+            "navigator_mode": self.args.mode,
             "cwd": os.getcwd(),
         }
-        if self.args.navigator_mode == "interactive":
+        if self.args.mode == "interactive":
             self._runner = AnsibleCfgRunner(**kwargs)
             list_output, list_output_err = self._runner.fetch_ansible_config("list")
             dump_output, dump_output_err = self._runner.fetch_ansible_config("dump")
