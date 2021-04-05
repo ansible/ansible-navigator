@@ -245,7 +245,7 @@ class Action(App):
         self._parser_error = message
         return None, None
 
-    def playbook(self) -> None:
+    def run_stdout(self) -> None:
         """Run in oldschool mode, just stdout
 
         :param args: The parsed args from the cli
@@ -626,8 +626,6 @@ class Action(App):
 
         if "stdout" in message and message["stdout"]:
             self.stdout.extend(message["stdout"].splitlines())
-            if self.args.app == "playbook":
-                print(message["stdout"])
 
         if event in ["verbose", "error"]:
             if "ERROR!" in message["stdout"]:

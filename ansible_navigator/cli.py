@@ -23,8 +23,6 @@ from typing import Union
 
 from curses import wrapper
 
-from .actions.run import Action as Player
-
 from .cli_args import CliArgs
 from .action_runner import ActionRunner
 from .utils import check_for_ansible
@@ -278,8 +276,20 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 def run(args: Namespace) -> None:
     """run the appropriate app"""
     try:
-        if args.app == "run" and args.navigator_mode == "stdout":
-            non_ui_app = partial(Player(args).playbook)
+        if args.app in ["run", "config"] and args.navigator_mode == "stdout":
+            try:
+                app_action = __import__(
+                    f"actions.{args.app}", globals(), fromlist=["Action"], level=1
+                )
+            except ImportError as exc:
+                msg = (
+                    f"either action '{args.app}' is invalid or does not support"
+                    f" mode '{args.navigator_mode}'. Failed with error {exc}"
+                )
+                logger.error(msg)
+                error_and_exit_early(str(msg))
+
+            non_ui_app = partial(app_action.Action(args).run_stdout)
             non_ui_app()
         else:
             wrapper(ActionRunner(args=args).run)

@@ -3,18 +3,16 @@ import curses
 import logging
 import os
 import re
-import subprocess
 
-from argparse import Namespace
 from distutils.spawn import find_executable
-
 from typing import Any
 from typing import Dict
-from typing import List
 from typing import Union
 
 from . import run_action
 from . import _actions as actions
+
+from ..runner.api import AnsibleCfgRunner, CommandRunner
 from ..app import App
 from ..app_public import AppPublic
 from ..steps import Step
@@ -93,6 +91,7 @@ class Action(App):
         self._logger = logging.getLogger(__name__)
         self._app = None
         self._config = None
+        self._runner = None
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
@@ -103,18 +102,11 @@ class Action(App):
         :param app: The app instance
         :type app: App
         """
-        self._logger.debug("config requested")
+        self._logger.debug("config requested in interactive mode")
         self._app = app
         self._interaction = interaction
 
-        if app.args.execution_environment:
-            self._logger.debug("trying execution environment")
-            self._try_ee(app.args)
-
-        if self._config is None:
-            self._logger.debug("trying local")
-            self._try_local(app.args)
-
+        self._run_runner()
         if self._config is None:
             return None
 
@@ -136,6 +128,11 @@ class Action(App):
         interaction.ui.scroll(previous_scroll)
         interaction.ui.menu_filter(previous_filter)
         return None
+
+    def run_stdout(self) -> None:
+        """Run in oldschool mode, just stdout"""
+        self._logger.debug("config requested in stdout mode")
+        self._run_runner()
 
     def _take_step(self) -> None:
         """take one step"""
@@ -186,82 +183,41 @@ class Action(App):
             index=self.steps.current.index,
         )
 
-    def _try_ee(self, args: Namespace) -> None:
-        """run config in ee"""
-        if "playbook" in self._app.args:
-            playbook_dir = os.path.dirname(args.playbook)
+    def _run_runner(self) -> None:
+        """ spin up runner """
+        kwargs = {
+            "container_engine": self.args.container_engine,
+            "execution_environment": self.args.execution_environment,
+            "ee_image": self.args.ee_image,
+            "navigator_mode": self.args.navigator_mode,
+            "cwd": os.getcwd(),
+        }
+        if self.args.navigator_mode == "interactive":
+            self._runner = AnsibleCfgRunner(**kwargs)
+            list_output, list_output_err = self._runner.fetch_ansible_config("list")
+            dump_output, dump_output_err = self._runner.fetch_ansible_config("dump")
+            output_error = list_output_err or dump_output_err
+            if output_error:
+                msg = f"Error occurred while fetching ansible config: '{output_error}'"
+                self._logger.error(msg)
+            if list_output is None or dump_output is None:
+                return
+
+            self._parse_and_merge(list_output, dump_output)
         else:
-            playbook_dir = os.getcwd()
-
-        cmd = [args.container_engine, "run", "-i", "-t"]
-        cmd.extend(["--env", "ANSIBLE_NOCOLOR=True"])
-        cmd.extend(["-v", "{pdir}:{pdir}".format(pdir=playbook_dir)])
-        cmd.extend([args.ee_image])
-        cmd.extend(["cd", playbook_dir, "&&", "ansible-config"])
-
-        list_cmd = cmd + ["list"]
-        dump_cmd = cmd + ["dump"]
-
-        self._logger.debug("ee list command: %s", " ".join(list_cmd))
-        self._logger.debug("ee dump command: %s", " ".join(dump_cmd))
-
-        self._dispatch(list_cmd, dump_cmd)
-
-    def _try_local(self, args: Namespace) -> None:
-        """run config locally"""
-        aconfig_path = find_executable("ansible-config")
-        if aconfig_path:
-            if "playbook" in self._app.args:
-                playbook_dir = os.path.dirname(args.playbook)
+            if self.args.execution_environment:
+                ansible_config_path = "ansible-config"
             else:
-                playbook_dir = os.getcwd()
+                exec_path = find_executable("ansible-config")
+                if exec_path is None:
+                    self._logger.error("no ansible-config command found in path")
+                    return
+                ansible_config_path = exec_path
 
-            self._logger.debug("local ansible-config path is: %s", aconfig_path)
-            cmd = ["cd", playbook_dir, "&&", aconfig_path]
-            list_cmd = cmd + ["list"]
-            dump_cmd = cmd + ["dump"]
+            kwargs.update({"cmdline": self.args.cmdline})
 
-            self._logger.debug("local list command: %s", " ".join(list_cmd))
-            self._logger.debug("local dump command: %s", " ".join(dump_cmd))
-
-            self._dispatch(list_cmd, dump_cmd)
-            return
-
-        msg = "no ansible-config command found in path"
-        self._logger.error(msg)
-        return
-
-    def _dispatch(self, list_cmd: List[str], dump_cmd: List[str]) -> None:
-        """run the individual config commands and parse"""
-        list_output = self._run_command(list_cmd)
-        if list_output is None:
-            return None
-        dump_output = self._run_command(dump_cmd)
-        if dump_output is None:
-            return None
-        self._parse_and_merge(list_output, dump_output)
-        return None
-
-    def _run_command(self, cmd) -> Union[None, subprocess.CompletedProcess]:
-        """run a command"""
-        try:
-            proc_out = subprocess.run(
-                " ".join(cmd),
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                check=True,
-                universal_newlines=True,
-                shell=True,
-            )
-            self._logger.debug(
-                "ansible-config output %s", proc_out.stdout[0:100].replace("\n", " ") + "<...>"
-            )
-            return proc_out
-
-        except subprocess.CalledProcessError as exc:
-            self._logger.debug("command execution failed: '%s'", str(exc))
-            self._logger.debug("command execution failed: '%s'", exc.output)
-            return None
+            self._runner = CommandRunner(executable_cmd=ansible_config_path, **kwargs)
+            self._runner.run()
 
     def _parse_and_merge(self, list_output, dump_output) -> None:
         """yaml load the list, and parse the dump
@@ -269,14 +225,14 @@ class Action(App):
         """
         # pylint: disable=too-many-branches
         try:
-            parsed = yaml.load(list_output.stdout, Loader=Loader)
+            parsed = yaml.load(list_output, Loader=Loader)
             self._logger.debug("yaml loading list output succeeded")
         except yaml.YAMLError as exc:
             self._logger.debug("error yaml loading list output: '%s'", str(exc))
             return None
 
         regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
-        for line in dump_output.stdout.splitlines():
+        for line in dump_output.splitlines():
             extracted = regex.match(line)
             if extracted:
                 variable = extracted.groupdict()["variable"]
@@ -312,5 +268,5 @@ class Action(App):
                 value["__default"] = False
 
         self._config = list(parsed.values())
-        self._logger.debug("parsed and merged list and dump sucessfully")
+        self._logger.debug("parsed and merged list and dump successfully")
         return None
