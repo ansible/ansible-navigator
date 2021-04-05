@@ -1,9 +1,11 @@
 """ Build the args
 https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
 """
-
 import os
-from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, _SubParsersAction
+from argparse import ArgumentParser, HelpFormatter, _SubParsersAction
+
+from .config import ARGPARSE_TO_CONFIG
+from .config import NavigatorConfig
 from .utils import Sentinel
 
 
@@ -12,7 +14,7 @@ def _abs_user_path(fpath):
     return os.path.abspath(os.path.expanduser(fpath))
 
 
-class CustomHelpFormatter(ArgumentDefaultsHelpFormatter):
+class CustomHelpFormatter(HelpFormatter):
     """sort the subcommands"""
 
     def _iter_indented_subactions(self, action):
@@ -31,6 +33,32 @@ class CustomHelpFormatter(ArgumentDefaultsHelpFormatter):
             self._dedent()
 
 
+class ArgumentParserDefaultFromConfig(ArgumentParser):
+    """Manually update the help text with a default value from
+    NavigatorConfig, otherwise argparse would simply show Sentinal across
+    the board
+
+    The 'dest' for an argparse param is used for the lookup in the
+    config, therefore, the argparse dest, and config key need to stay
+    in sync
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.navigator_config = NavigatorConfig(ARGPARSE_TO_CONFIG)
+        super().__init__(*args, **kwargs)
+
+    def add_argument(self, *args, **kwargs):
+        """add the default to the help"""
+        arg_dest = kwargs.get("dest")
+        if arg_dest is not None:
+            mapped_to = ARGPARSE_TO_CONFIG.get(arg_dest)
+            if all((mapped_to, kwargs.get("help"))):
+                default_value = self.navigator_config.get(mapped_to)
+                if not isinstance(default_value, Sentinel):
+                    kwargs["help"] += " (default: {})".format(default_value)
+        super().add_argument(*args, **kwargs)
+
+
 class CliArgs:
     """Build the args"""
 
@@ -38,9 +66,9 @@ class CliArgs:
     def __init__(self, app_name: str):
 
         self._app_name = app_name
-        self._base_parser = ArgumentParser(add_help=False)
+        self._base_parser = ArgumentParserDefaultFromConfig(add_help=False)
         self._base()
-        self.parser = ArgumentParser(
+        self.parser = ArgumentParserDefaultFromConfig(
             formatter_class=CustomHelpFormatter, parents=[self._base_parser]
         )
         self._subparsers = self.parser.add_subparsers(
