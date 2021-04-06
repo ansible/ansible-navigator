@@ -1,5 +1,6 @@
 """ some common funcs for the tests
 """
+import os
 import re
 import sys
 import tempfile
@@ -98,13 +99,16 @@ class ActionRunTest:
         args = Namespace(**self._app_args)
         action = self._app_action.Action(args=args)
 
+        # get a tty, runner/docker requires it
+        _mtty, stty = os.openpty()
+
         # preserve current stdin, stdout, stderr
         __stdin__ = sys.stdin
         __stdout__ = sys.stdout
         __stderr__ = sys.stderr
 
         # pytest psuedo stdin doesn't fileno(), use original
-        sys.stdin = sys.__stdin__
+        sys.stdin = stty
 
         # set stderr and stdout to fds
         sys.stdout = tempfile.TemporaryFile()  # type: ignore
