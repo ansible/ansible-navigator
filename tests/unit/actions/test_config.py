@@ -40,7 +40,7 @@ def run_action_stdout(name: str, cmdline: List) -> Tuple[Any, str, str]:
         container_engine=None,
         execution_environment=None,
         ee_image=None,
-        navigator_mode="stdout",
+        mode="stdout",
         cmdline=cmdline,
     )
     action = Action(args=args)

@@ -71,7 +71,7 @@ class CliArgs:
         self._ide_params(self._base_parser)
         self._log_params(self._base_parser)
         self._no_osc4_params(self._base_parser)
-        self._navigator_mode(self._base_parser)
+        self._mode(self._base_parser)
 
     def _collections(self) -> None:
         parser = self._add_subparser("collections", "Explore installed collections")
@@ -242,12 +242,12 @@ class CliArgs:
         parser.set_defaults(requires_ansible=True)
 
     @staticmethod
-    def _navigator_mode(parser: ArgumentParser) -> None:
+    def _mode(parser: ArgumentParser) -> None:
         parser.add_argument(
             "-m",
             "--mode",
             default="interactive",
-            dest="navigator_mode",
+            dest="mode",
             choices=["stdout", "interactive"],
             help="Specify the navigator mode to run",
             type=str,
