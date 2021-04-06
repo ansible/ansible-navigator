@@ -462,7 +462,7 @@ class Action(App):
         }
         form_dict["fields"].append(form_field)
 
-        if hasattr(new_args, "inventory"):
+        if hasattr(new_args, "inventory") and new_args.inventory:
             for idx, inv in enumerate(new_args.inventory):
                 form_field = {
                     "name": f"inv_{idx}",
