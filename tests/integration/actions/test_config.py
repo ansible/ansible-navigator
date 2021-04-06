@@ -1,8 +1,10 @@
 """ config integration tests
 """
 import os
-from .._common import ActionRunTest
+
 from tests import defaults
+
+from .._common import ActionRunTest
 
 
 def test_run_config_interactive() -> None:

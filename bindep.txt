@@ -1,3 +1,4 @@
 # Needed for Zuul (CI) to run smoke tests
 git
 tmux
+podman
