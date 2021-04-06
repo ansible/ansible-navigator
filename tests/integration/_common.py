@@ -21,11 +21,12 @@ from ansible_navigator.steps import Steps
 
 class ActionRunTest:
     def __init__(
-        self, action_name,
+        self,
+        action_name,
         container_engine: Optional[str] = None,
         execution_environment: Optional[str] = None,
         ee_image: Optional[str] = None,
-        cwd: Optional[str] = None,
+        cwd: Optional[List] = None,
     ) -> None:
         self._action_name = action_name
         self._container_engine = container_engine
@@ -50,8 +51,13 @@ class ActionRunTest:
         """a do nothing callable"""
         pass
 
-    def run_action_interactive(self) -> Tuple[Any, str, str]:
-        """run the action"""
+    def run_action_interactive(self) -> Any:
+        """run the action
+
+        The return type is set to Any here since not all actions
+        have the same signature, the cooresponding integration test
+        will be using the action internals for asserts
+        """
         self._app_args.update({"mode": "interactive"})
         args = Namespace(**self._app_args)
         action = self._app_action.Action(args=args)
@@ -86,7 +92,7 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, cmdline: List) -> Tuple[Any, str, str]:
+    def run_action_stdout(self, cmdline: List) -> Tuple[str, str]:
         """run the action"""
         self._app_args.update({"mode": "stdout", "cmdline": cmdline})
         args = Namespace(**self._app_args)
