@@ -108,7 +108,7 @@ class ActionRunTest:
         __stderr__ = sys.stderr
 
         # pytest psuedo stdin doesn't fileno(), use original
-        sys.stdin = stty
+        sys.stdin = stty  # type: ignore
 
         # set stderr and stdout to fds
         sys.stdout = tempfile.TemporaryFile()  # type: ignore
