@@ -590,7 +590,7 @@ class Action(App):
             "container_engine": self.args.container_engine,
             "execution_environment": self.args.execution_environment,
             "ee_image": self.args.ee_image,
-            "navigator_mode": self.args.navigator_mode,
+            "navigator_mode": self.args.mode,
         }
         if self.args.execution_environment:
             executable_cmd = "ansible-playbook"

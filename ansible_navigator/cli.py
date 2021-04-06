@@ -276,7 +276,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 def run(args: Namespace) -> None:
     """run the appropriate app"""
     try:
-        if args.app in ["run", "config"] and args.navigator_mode == "stdout":
+        if args.app in ["run", "config"] and args.mode == "stdout":
             try:
                 app_action = __import__(
                     f"actions.{args.app}", globals(), fromlist=["Action"], level=1
@@ -284,7 +284,7 @@ def run(args: Namespace) -> None:
             except ImportError as exc:
                 msg = (
                     f"either action '{args.app}' is invalid or does not support"
-                    f" mode '{args.navigator_mode}'. Failed with error {exc}"
+                    f" mode '{args.mode}'. Failed with error {exc}"
                 )
                 logger.error(msg)
                 error_and_exit_early(str(msg))
