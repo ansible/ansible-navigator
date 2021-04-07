@@ -40,6 +40,18 @@
         name: tmux/setup
 
   roles:
+    - role: send_keys
+      keys:
+        - echo ~
+        - Enter
+      expected: z
+
+    - role: send_keys
+      keys:
+        - 'echo $HOME'
+        - Enter
+      expected: z
+
     # Add where pip drops the entrypoint to our PATH
     - role: send_keys
       keys:
