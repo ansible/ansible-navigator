@@ -6,6 +6,15 @@
       file:
         path: ~/.config/ansible-navigator
         state: directory
+      register: foo
+
+    - debug: var=foo
+
+    - stat:
+        path: ~/.config/ansible-navigator
+      register: foo
+
+    - debug: var=foo
 
     - copy:
         src: "{{ playbook_dir }}/../../../docs/sample-config.yml"
