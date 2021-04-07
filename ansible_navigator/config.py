@@ -17,12 +17,23 @@ from .utils import Sentinel
 #
 # NOTE!!! If you change any default here, update the documentation file in
 #         docs/configuration.rst
+
+
+def generate_editor_command():
+    """generate a command for EDITOR is env var is set"""
+    if "EDITOR" in os.environ:
+        command = "%s {filename}" % os.environ.get("EDITOR")
+    else:
+        command = "vi +{line_number} {filename}"
+    return command
+
+
 _DEFAULTS = {
     "ansible-navigator": {
         "container-engine": "podman",
         "doc-plugin-type": "module",
         "editor": {
-            "command": os.environ.get("EDITOR", "vi +{line_number} {filename}"),
+            "command": generate_editor_command(),
             "console": True,
         },
         "execution-environment": True,

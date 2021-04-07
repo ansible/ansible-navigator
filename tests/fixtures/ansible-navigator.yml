@@ -1,0 +1,7 @@
+ansible-navigator:
+  editor:
+    command: emacs -nw +{line_number} {filename}
+    console: False
+  doc-plugin-type: become
+  log:
+    level: critical

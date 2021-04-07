@@ -43,6 +43,7 @@ def test_fixtures_dir():
             "loglevel",
             "debug",
         ),
+        ([], "editor_command", "emacs -nw +{line_number} {filename}"),
         (
             ["inventory", "-i", "/tmp/inventory.yaml"],
             "inventory",
@@ -76,6 +77,7 @@ def test_fixtures_dir():
         "internal default value gets picked if not overridden",
         "nested config option default",
         "nested config option override by commandline",
+        "check editor command",
         "simple inventory test",
         "playbook with inventory",
         "multiple inventory",
@@ -91,4 +93,26 @@ def test_update_args(mocker, test_fixtures_dir, given, argname, expected):
     from ansible_navigator.cli import parse_and_update
 
     _pre_logger_msgs, args = parse_and_update(given)
-    assert vars(args)[argname] == expected
+    result = vars(args)[argname]
+    assert result == expected
+
+
+# pylint: disable=import-outside-toplevel
+def test_editor_command_default(mocker):
+    """test editor with defualt"""
+    mocker.patch("ansible_navigator.utils.get_conf_dir", return_value=(None, []))
+    from ansible_navigator.cli import parse_and_update
+
+    _pre_logger_msgs, args = parse_and_update([])
+    assert args.editor_command == "vi +{line_number} {filename}"
+
+
+# pylint: disable=import-outside-toplevel
+def test_editor_command_env(mocker):
+    """test editor with defualt"""
+    os.environ["EDITOR"] = "emacs"
+    mocker.patch("ansible_navigator.utils.get_conf_dir", return_value=(None, []))
+    from ansible_navigator.cli import parse_and_update
+
+    _pre_logger_msgs, args = parse_and_update([])
+    assert args.editor_command == "emacs {filename}"
