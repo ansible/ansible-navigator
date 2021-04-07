@@ -10,6 +10,22 @@
 
     - debug: var=foo
 
+    - shell: 'echo $HOME'
+      register: foo
+
+    - debug: var=foo
+
+    - shell: 'echo ~'
+      register: foo
+
+    - debug: var=foo
+
+    - stat:
+        path: '~'
+      register: foo
+
+    - debug: var=foo
+
     - stat:
         path: ~/.config/ansible-navigator
       register: foo
