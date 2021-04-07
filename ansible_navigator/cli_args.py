@@ -154,7 +154,7 @@ class CliArgs:
         parser.add_argument(
             "--econ",
             "--editor-console",
-            help="Specify if the  editor is console based",
+            help="Specify if the editor is console based",
             default=Sentinel,
             dest="editor_console",
         )
