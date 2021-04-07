@@ -1,8 +1,12 @@
 """
 Configuration subsystem for ansible-navigator
 """
+import os
 
-from typing import Any, Dict, List
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Tuple
 
 from .utils import Sentinel
 
@@ -18,34 +22,39 @@ _DEFAULTS = {
         "container-engine": "podman",
         "doc-plugin-type": "module",
         "editor": {
-            "command": "vi +{line_number} {filename}",
+            "command": os.environ.get("EDITOR", "vi +{line_number} {filename}"),
             "console": True,
         },
-        "execution-environment": False,
+        "execution-environment": True,
         "execution-environment-image": "quay.io/ansible/ansible-runner:devel",
         "inventory": [],
-        "inventory-columns": "",
+        "inventory-columns": [],
         "log": {
             "file": "./ansible-navigator.log",
             "level": "info",
         },
         "mode": "interactive",
+        "no-osc4": False,
         "playbook-artifact": "{playbook_dir}/{playbook_name}_artifact.json",
     },
 }
 
 # This maps argparse destination variables to config paths
+ROOT = "ansible-navigator"
 ARGPARSE_TO_CONFIG = {
-    "artifact": ["ansible-navigator", "playbook-artifact"],
-    "container_engine": ["ansible-navigator", "container-engine"],
-    "ee_image": ["ansible-navigator", "execution-environment-image"],
-    "execution_environment": ["ansible-navigator", "execution-environment"],
-    "inventory": ["ansible-navigator", "inventory"],
-    "inventory_columns": ["ansible-navigator", "inventory-columns"],
-    "logfile": ["ansible-navigator", "log", "file"],
-    "loglevel": ["ansible-navigator", "log", "level"],
-    "mode": ["ansible-navigator", "mode"],
-    "type": ["ansible-navigator", "doc-plugin-type"],
+    "artifact": [ROOT, "playbook-artifact"],
+    "container_engine": [ROOT, "container-engine"],
+    "editor_command": [ROOT, "editor", "command"],
+    "editor_console": [ROOT, "editor", "console"],
+    "ee_image": [ROOT, "execution-environment-image"],
+    "execution_environment": [ROOT, "execution-environment"],
+    "inventory": [ROOT, "inventory"],
+    "inventory_columns": [ROOT, "inventory-columns"],
+    "logfile": [ROOT, "log", "file"],
+    "loglevel": [ROOT, "log", "level"],
+    "mode": [ROOT, "mode"],
+    "no_osc4": [ROOT, "no-osc4"],
+    "type": [ROOT, "doc-plugin-type"],
 }
 
 
@@ -57,7 +66,7 @@ class NavigatorConfig:  # pylint: disable=too-few-public-methods
     def __init__(self, dct: Dict):
         self.config = dct
 
-    def get(self, keys: List[str], default: Any = Sentinel) -> Any:
+    def get(self, keys: List[str], default: Any = Sentinel) -> Tuple[str, Any]:
         """
         Takes a list of keys that correspond to nested keys in config.
         If the key is found in the config, return the value.
@@ -74,11 +83,11 @@ class NavigatorConfig:  # pylint: disable=too-few-public-methods
             else:
                 break
         else:
-            return current
+            return "user provided config file", current
 
         # If we made it here, the config key wasn't found.
         if default is not Sentinel:
-            return default
+            return "argparse default", default
 
         current = _DEFAULTS
         for key in keys:
@@ -87,6 +96,6 @@ class NavigatorConfig:  # pylint: disable=too-few-public-methods
             else:
                 break
         else:
-            return current
+            return "default configuration", current
 
         raise KeyError(keys)

@@ -261,13 +261,13 @@ def get_and_check_collection_doc_cache(args, collection_doc_cache_fname: str) ->
     messages = []
     os.makedirs(args.cache_dir, exist_ok=True)
     collection_doc_cache_path = f"{args.cache_dir}/{collection_doc_cache_fname}"
-    messages.append(f"Collection doc cache: path={collection_doc_cache_path}")
+    messages.append(f"Collection doc cache: 'path' is '{collection_doc_cache_path}'")
     collection_cache = _get_kvs(args, collection_doc_cache_path)
     if "version" in collection_cache:
         cache_version = collection_cache["version"]
     else:
         cache_version = None
-    messages.append(f"Collection doc cache: current version={cache_version}")
+    messages.append(f"Collection doc cache: 'current version' is '{cache_version}'")
     if cache_version is None or cache_version != VERSION:
         messages.append("Collection doc cache: version was empty or incorrect, rebuilding")
         collection_cache.close()
@@ -275,7 +275,7 @@ def get_and_check_collection_doc_cache(args, collection_doc_cache_fname: str) ->
         collection_cache.__init__(collection_doc_cache_path)
         collection_cache["version"] = VERSION
         cache_version = collection_cache["version"]
-        messages.append(f"Collection doc cache: current version={cache_version}")
+        messages.append(f"Collection doc cache: 'current version' is '{cache_version}'")
     collection_cache.close()
     return messages, collection_cache
 

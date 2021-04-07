@@ -131,9 +131,7 @@ class Action(App):
 
     @property
     def _show_columns(self) -> List:
-        if self.args.inventory_columns:
-            return self.args.inventory_columns.split(",")
-        return []
+        return self.args.inventory_columns
 
     def _set_inventories_mtime(self) -> None:
         mtimes = []

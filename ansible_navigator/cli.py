@@ -152,8 +152,8 @@ def update_args(args: Namespace) -> List[str]:
         # doesn't exist. There's not much to do in this case, so fall back to
         # the general exception handler (whenever it exists) and let it be the
         # thing that tells the user the bad news.
-        value = args.config.get(path)
-        msgs.append("Setting arg {0} to {1} via config".format(attr, value))
+        source, value = args.config.get(path)
+        msgs.append(f"Setting arg '{attr}' to '{value}' via {source}")
         setattr(args, attr, value)
 
     return msgs
@@ -339,7 +339,7 @@ def main():
         set_ansible_envar()
 
     for key, value in vars(args).items():
-        logger.debug("Running with %s=%s %s", key, value, type(value))
+        logger.debug("Running with '%s' as '%s' %s", key, value, type(value))
 
     run(args)
 

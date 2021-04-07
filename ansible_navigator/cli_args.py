@@ -53,9 +53,9 @@ class ArgumentParserDefaultFromConfig(ArgumentParser):
         if arg_dest is not None:
             mapped_to = ARGPARSE_TO_CONFIG.get(arg_dest)
             if all((mapped_to, kwargs.get("help"))):
-                default_value = self.navigator_config.get(mapped_to)
+                _config_source, default_value = self.navigator_config.get(mapped_to)
                 if not isinstance(default_value, Sentinel):
-                    kwargs["help"] += " (default: {})".format(default_value)
+                    kwargs["help"] += f" (default: {default_value})"
         super().add_argument(*args, **kwargs)
 
 
@@ -95,6 +95,7 @@ class CliArgs:
         )
 
     def _base(self) -> None:
+        self._editor_params(self._base_parser)
         self._ee_params(self._base_parser)
         self._inventory_columns(self._base_parser)
         self._log_params(self._base_parser)
@@ -140,6 +141,23 @@ class CliArgs:
             metavar="",
         )
         parser.set_defaults(requires_ansible=True)
+
+    @staticmethod
+    def _editor_params(parser: ArgumentParser) -> None:
+        parser.add_argument(
+            "--ecmd",
+            "--editor-command",
+            help="Specify the editor command, filename and line number",
+            default=Sentinel,
+            dest="editor_command",
+        )
+        parser.add_argument(
+            "--econ",
+            "--editor-console",
+            help="Specify if the  editor is console based",
+            default=Sentinel,
+            dest="editor_console",
+        )
 
     @staticmethod
     def _ee_params(parser: ArgumentParser) -> None:
@@ -241,6 +259,7 @@ class CliArgs:
         parser.add_argument(
             "--no-osc4",
             action="store_true",
+            default=Sentinel,
             help="Disable OSC-4 support (xterm.js color fix)",
             dest="no_osc4",
         )
