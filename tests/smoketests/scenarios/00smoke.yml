@@ -54,7 +54,7 @@
       keys:
         - :config
         - Enter
-      sleep: 4 # Config takes some time to render
+      expected: ANSIBLE_
 
     - role: send_keys
       keys:

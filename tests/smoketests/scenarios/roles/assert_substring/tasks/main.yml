@@ -1,13 +1,12 @@
 ---
-- name: Get current output
-  command: "tmux capture-pane -t smoke: -S - -E - -p"
-  register: current
-
-- name: Show current output
-  debug:
-    msg: "{{ current.stdout_lines }}"
-
-- name: Ensure that expected substring '{{ expected }}' is in the output
-  assert:
-    that:
-      - expected in current.stdout
+- block:
+  - name: Get current output
+    command: "tmux capture-pane -t smoke: -S - -E - -p"
+    register: current
+    until: expected in current.stdout
+    retries: "{{ retries }}"
+    delay: "{{ delay }}"
+  always:
+    - name: Show current output
+      debug:
+        msg: "{{ current.stdout_lines }}"
