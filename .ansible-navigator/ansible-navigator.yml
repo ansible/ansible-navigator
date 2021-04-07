@@ -1,8 +1,0 @@
-ansible-navigator:
-  container-engine: docker
-  editor:
-    command: code -g {filename}:{line_number}
-    console: False 
-  log:
-    level: debug
-  no-osc4: True
