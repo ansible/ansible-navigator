@@ -11,7 +11,7 @@ Installing ansible-navigator
 Installing ansible-navigator in a virtual environment
 ======================================================
 
-If you are installing ``ansible-navigator`` on Red Hat Enterprise Linux version 8 or Centos8, you first need to install ``python3``:
+If you are installing ``ansible-navigator`` on Red Hat Enterprise Linux version 8 or CentOS 8, you first need to install ``python3``:
 
 .. code-block:: bash
 
@@ -59,3 +59,21 @@ To install ``ansible-navigator`` in a virtual environment:
 .. code-block:: bash
 
   ansible-navigator --help
+
+
+Configuration Files
+===================
+
+Several options in ``ansible-navigator`` can be configured by making use of a
+configuration file. The configuration file can live in one of several places.
+Currently the following paths are checked and the first match is used:
+
+- ``[ansible-navigator source code root]/etc/ansible-navigator/ansible-navigator.yml``
+- ``~/.config/ansible-navigator/ansible-navigator.yml``
+- ``/etc/ansible-navigator/ansible-navigator.yml``
+- ``[prefix]/etc/ansible-navigator/ansible-navigator.yml`` (e.g., ``/usr/local/etc/...``)
+
+Here is an example conifguration file which can be copied into one of those paths.
+
+.. literalinclude:: sample-config.yml
+   :language: yaml

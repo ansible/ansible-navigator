@@ -11,6 +11,7 @@ from typing import Dict
 from typing import List
 from typing import Match
 from typing import Tuple
+from typing import Type
 from typing import Union
 
 from . import _actions as actions
@@ -20,7 +21,7 @@ from ..ui_framework import Content
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 
-from ..utils import templar
+from ..utils import templar, Sentinel
 from ..yaml import yaml, Dumper
 
 
@@ -109,6 +110,7 @@ class Action:
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
         return filename, line_number, obj
 
+    # pylint: disable=too-many-branches
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle :open
 
@@ -154,10 +156,23 @@ class Action:
                 with open(filename, "w") as outfile:
                     outfile.write(obj)
 
-        command = app.args.editor.format(filename=filename, line_number=line_number)
+        # First, we see if the user asked for a specific editor. If so, use it.
+        # If not, see if EDITOR is set. If it is, use it. Lastly, fall back to
+        # default config (vi) as a last attempt.
+        command_default: Union[str, Type[Sentinel]]
+        if "EDITOR" in os.environ:
+            command_default = "%s {filename}" % os.environ.get("EDITOR")
+        else:
+            command_default = Sentinel
+
+        command = app.args.config.get(
+            ["ansible-navigator", "editor", "command"], default=command_default
+        ).format(filename=filename, line_number=line_number)
+        is_console = app.args.config.get(["ansible-navigator", "editor", "console"])
+
         self._logger.debug("Command: %s", command)
         if isinstance(command, str):
-            if self._args.editor_is_console:
+            if is_console:
                 with SuspendCurses():
                     os.system(command)
             else:

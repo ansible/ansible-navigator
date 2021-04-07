@@ -7,9 +7,9 @@ import importlib.util
 import html
 import os
 import stat
+import sysconfig
 
 from distutils.spawn import find_executable
-from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import List
@@ -33,8 +33,21 @@ except ImportError:
     HAS_ANSIBLE = False
 
 
+class Sentinel:  # pylint: disable=too-few-public-methods
+    """
+    Used as a sentinel value when None won't suffice.
+    Same usage as ansible.utils.sentinel.Sentinel.
+    Usually the class itself is what we use as the value, not an instance of it.
+    foo = Sentinel
+    if foo is Sentinel: ...
+    """
+
+    def __new__(cls):
+        return cls
+
+
 def human_time(seconds: int) -> str:
-    """convert seconds into huma readable
+    """convert seconds into human readable
     00d00h00m00s format"""
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))
@@ -147,54 +160,6 @@ def dispatch(obj, replacements):
     return obj
 
 
-def find_ini_config_file(app_name: str) -> Optional[str]:
-    """ Load config file(first found is used): ENV, CWD, HOME, /etc/app_name """
-
-    path = None
-    potential_paths = []
-    filename = f"{app_name}.cfg"
-
-    # Environment setting
-    path_from_env = os.getenv(f"{app_name}_config".upper())
-    if path_from_env is not None:
-        path_from_env = os.path.abspath(path_from_env)
-        if os.path.isdir(path_from_env):
-            path_from_env = os.path.join(path_from_env, filename)
-        potential_paths.append(path_from_env)
-
-    # Current working directory
-    warn_cmd_public = False
-    try:
-        cwd = os.getcwd()
-        perms = os.stat(cwd)
-        cwd_cfg = os.path.join(cwd, filename)
-        if perms.st_mode & stat.S_IWOTH:
-            if os.path.exists(cwd_cfg):
-                warn_cmd_public = True
-        else:
-            potential_paths.append(cwd_cfg)
-    except OSError:
-        pass
-
-    potential_paths.append(f"{str(Path.home())}/{filename}")
-    potential_paths.append(f"/etc/{app_name}/{filename}")
-
-    for path in potential_paths:
-        if os.path.exists(path) and os.access(path, os.R_OK):
-            break
-        path = ""
-
-    if path_from_env != path and warn_cmd_public:
-        logger.warning(
-            "%s is being run in a world writable directory (%s)," " ignoring it as an %s source.",
-            app_name.capitalize(),
-            cwd,
-            app_name,
-        )
-
-    return path or None
-
-
 def check_for_ansible() -> Tuple[bool, str]:
     """check for the ansible-playbook command, runner will need it"""
     ansible_location = find_executable("ansible-playbook")
@@ -215,9 +180,73 @@ def check_for_ansible() -> Tuple[bool, str]:
     return True, msg
 
 
+def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[str]]:
+    """
+    returns config dir (e.g. /etc/ansible-navigator). First found wins.
+    If a filename is given, ensures the file exists in the directory.
+
+    TODO: This is a pretty expensive function (lots of statting things on disk).
+          We should probably cache the potential paths somewhere, eventually.
+    """
+
+    potential_paths = []
+    msgs = []
+
+    # .ansible-navigator of current direcotry
+    potential_paths.append(".ansible-navigator")
+
+    # Development path
+    path = os.path.join(os.path.dirname(__file__), "..", "etc", "ansible-navigator")
+    potential_paths.append(path)
+
+    # ~/.config/ansible-navigator
+    path = os.path.join(os.path.expanduser("~"), ".config", "ansible-navigator")
+    potential_paths.append(path)
+
+    # /etc/ansible-navigator
+    path = os.path.join("/", "etc", "ansible-navigator")
+    potential_paths.append(path)
+
+    # /usr/local/etc/ansible-navigator
+    prefix = sysconfig.get_config_var("prefix")
+    if prefix:
+        path = os.path.join(prefix, "local", "etc", "ansible-navigator")
+        potential_paths.append(path)
+
+    for path in potential_paths:
+        must_exist = os.path.join(path, filename) if filename is not None else path
+        if not os.path.exists(must_exist):
+            msgs.append(
+                "Skipping {0} because required file {1} does not exist".format(path, filename)
+            )
+            continue
+
+        try:
+            perms = os.stat(path)
+            if perms.st_mode & stat.S_IWOTH:
+                msgs.append(
+                    "Ignoring potential configuration directory {0} because it "
+                    "is world-writable.".format(path)
+                )
+                continue
+            return (path, msgs)
+        except OSError:
+            continue
+
+    return (None, msgs)
+
+
 def set_ansible_envar() -> None:
     """Set an envar if not set, runner will need this"""
-    ansible_config = find_ini_config_file("ansible")
+    ansible_config, msgs = get_conf_dir("ansible.cfg")
+
+    for msg in msgs:
+        logger.debug(msg)
+
+    if ansible_config is not None:
+        # We'll get the directory back, not the full file path.
+        ansible_config = os.path.join(ansible_config, "ansible.cfg")
+
     # set as env var, since we hand env vars over to runner
     if ansible_config and not os.getenv("ANSIBLE_CONFIG"):
         os.environ.setdefault("ANSIBLE_CONFIG", ansible_config)

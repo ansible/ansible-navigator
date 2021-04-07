@@ -1,9 +1,12 @@
 """ Build the args
 https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
 """
-
 import os
-from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, _SubParsersAction
+from argparse import ArgumentParser, HelpFormatter, _SubParsersAction
+
+from .config import ARGPARSE_TO_CONFIG
+from .config import NavigatorConfig
+from .utils import Sentinel
 
 
 def _abs_user_path(fpath):
@@ -11,7 +14,7 @@ def _abs_user_path(fpath):
     return os.path.abspath(os.path.expanduser(fpath))
 
 
-class CustomHelpFormatter(ArgumentDefaultsHelpFormatter):
+class CustomHelpFormatter(HelpFormatter):
     """sort the subcommands"""
 
     def _iter_indented_subactions(self, action):
@@ -30,6 +33,32 @@ class CustomHelpFormatter(ArgumentDefaultsHelpFormatter):
             self._dedent()
 
 
+class ArgumentParserDefaultFromConfig(ArgumentParser):
+    """Manually update the help text with a default value from
+    NavigatorConfig, otherwise argparse would simply show Sentinal across
+    the board
+
+    The 'dest' for an argparse param is used for the lookup in the
+    config, therefore, the argparse dest, and config key need to stay
+    in sync
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.navigator_config = NavigatorConfig(ARGPARSE_TO_CONFIG)
+        super().__init__(*args, **kwargs)
+
+    def add_argument(self, *args, **kwargs):
+        """add the default to the help"""
+        arg_dest = kwargs.get("dest")
+        if arg_dest is not None:
+            mapped_to = ARGPARSE_TO_CONFIG.get(arg_dest)
+            if all((mapped_to, kwargs.get("help"))):
+                default_value = self.navigator_config.get(mapped_to)
+                if not isinstance(default_value, Sentinel):
+                    kwargs["help"] += " (default: {})".format(default_value)
+        super().add_argument(*args, **kwargs)
+
+
 class CliArgs:
     """Build the args"""
 
@@ -37,9 +66,9 @@ class CliArgs:
     def __init__(self, app_name: str):
 
         self._app_name = app_name
-        self._base_parser = ArgumentParser(add_help=False)
+        self._base_parser = ArgumentParserDefaultFromConfig(add_help=False)
         self._base()
-        self.parser = ArgumentParser(
+        self.parser = ArgumentParserDefaultFromConfig(
             formatter_class=CustomHelpFormatter, parents=[self._base_parser]
         )
         self._subparsers = self.parser.add_subparsers(
@@ -68,7 +97,6 @@ class CliArgs:
     def _base(self) -> None:
         self._ee_params(self._base_parser)
         self._inventory_columns(self._base_parser)
-        self._ide_params(self._base_parser)
         self._log_params(self._base_parser)
         self._no_osc4_params(self._base_parser)
         self._mode(self._base_parser)
@@ -107,7 +135,7 @@ class CliArgs:
             "--type",
             help=f'Choose which plugin type: {{{",".join(tipes)}}}',
             choices=tipes,
-            default="module",
+            default=Sentinel,
             dest="type",
             metavar="",
         )
@@ -120,7 +148,7 @@ class CliArgs:
             "--container-engine",
             help="Specify the container engine to run the Execution Environment",
             choices=["podman", "docker"],
-            default="podman",
+            default=Sentinel,
             dest="container_engine",
         )
         parser.add_argument(
@@ -134,7 +162,7 @@ class CliArgs:
             "--eei",
             "--ee-image",
             help="Specify the name of the container image containing an Execution Environment",
-            default="quay.io/ansible/ansible-runner:devel",
+            default=Sentinel,
             dest="ee_image",
         )
 
@@ -146,16 +174,6 @@ class CliArgs:
         self._inventory_params(parser)
 
     @staticmethod
-    def _ide_params(parser: ArgumentParser) -> None:
-        parser.add_argument(
-            "--ide",
-            help="Specify the current ide",
-            choices=["pycharm", "vim", "vscode"],
-            default="vim",
-            dest="ide",
-        )
-
-    @staticmethod
     def _inventory_columns(parser: ArgumentParser) -> None:
         parser.add_argument(
             "--ic",
@@ -164,7 +182,7 @@ class CliArgs:
                 "Additional columns to be shown in the inventory views,"
                 " comma delimited, eg 'xxx,yyy,zzz'"
             ),
-            default="",
+            default=Sentinel,
             dest="inventory_columns",
         )
 
@@ -181,7 +199,7 @@ class CliArgs:
             action="append",
             nargs="+",
             type=_abs_user_path,
-            default=[],
+            default=Sentinel,
             dest="inventory",
         )
 
@@ -200,18 +218,18 @@ class CliArgs:
         )
         parser.set_defaults(requires_ansible=False)
 
-    def _log_params(self, parser: ArgumentParser) -> None:
+    def _log_params(self, parser: ArgumentParser) -> None:  # pylint: disable=no-self-use
         parser.add_argument(
             "--lf",
             "--logfile",
-            default=f"./{self._app_name}.log",
+            default=Sentinel,
             dest="logfile",
             help="Specify the application log file location",
         )
         parser.add_argument(
             "--ll",
             "--loglevel",
-            default="info",
+            default=Sentinel,
             dest="loglevel",
             choices=["debug", "info", "warning", "error", "critical"],
             help="Specify the application log level",
@@ -236,7 +254,7 @@ class CliArgs:
             "-a",
             "--artifact",
             help="Specify the artifact file name for playbook results",
-            default="<playbook_dir>/<playbook_name>_artifact.json",
+            default=Sentinel,
             dest="artifact",
         )
         parser.set_defaults(requires_ansible=True)
@@ -246,8 +264,7 @@ class CliArgs:
         parser.add_argument(
             "-m",
             "--mode",
-            default="interactive",
-            dest="mode",
+            default=Sentinel,
             choices=["stdout", "interactive"],
             help="Specify the navigator mode to run",
             type=str,
