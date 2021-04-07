@@ -86,8 +86,7 @@ def test_fixtures_dir():
 # pylint:disable=redefined-outer-name
 # pylint: disable=import-outside-toplevel
 def test_update_args(mocker, test_fixtures_dir, given, argname, expected):
-    """ test the parse and update function
-    """
+    """test the parse and update function"""
     mocker.patch("ansible_navigator.utils.get_conf_dir", return_value=(test_fixtures_dir, []))
     from ansible_navigator.cli import parse_and_update
 
