@@ -8,33 +8,6 @@
         state: directory
       register: fileres
 
-    - debug: var=fileres
-
-    - shell: 'echo $HOME'
-      register: foo
-
-    - debug: var=foo
-
-    - shell: 'echo ~'
-      register: foo
-
-    - debug: var=foo
-
-    - stat:
-        path: '~'
-      register: foo
-
-    - debug: var=foo
-
-    - stat:
-        path: ~/.config/ansible-navigator
-      register: foo
-
-    - debug: var=foo
-
-    # For some reason, copy dest expands ~ to /home/zuul/ on Zuul, while
-    # stat and file and other modules expand it to /tmp/. This might be an
-    # Ansible bug? Or a weird Zuul config?
     - copy:
         src: "{{ playbook_dir }}/../../../docs/sample-config.yml"
         dest: "{{ fileres.path }}/ansible-navigator.yml"
