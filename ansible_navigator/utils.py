@@ -10,8 +10,10 @@ import stat
 import sysconfig
 
 from distutils.spawn import find_executable
+
 from typing import Any
 from typing import Dict
+from typing import Generator
 from typing import List
 from typing import Mapping
 from typing import Optional
@@ -61,6 +63,15 @@ def human_time(seconds: int) -> str:
     if minutes > 0:
         return "%s%dm%ds" % (sign_string, minutes, seconds)
     return "%s%ds" % (sign_string, seconds)
+
+
+def flatten_list(lyst: List) -> Generator:
+    """flatten a list of lists"""
+    for element in lyst:
+        if isinstance(element, list):
+            yield from flatten_list(element)
+        else:
+            yield element
 
 
 def to_list(thing: Union[str, List]) -> List:

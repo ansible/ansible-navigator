@@ -217,7 +217,7 @@ class CliArgs:
             action="append",
             nargs="+",
             type=_abs_user_path,
-            default=Sentinel,
+            default=[Sentinel],
             dest="inventory",
         )
 

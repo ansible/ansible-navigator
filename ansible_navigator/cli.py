@@ -1,7 +1,5 @@
 """ start here
 """
-import configparser
-import itertools
 import logging
 import os
 import sys
@@ -20,15 +18,17 @@ from typing import Tuple
 from yaml.scanner import ScannerError
 
 from .cli_args import CliArgs
-from .config import ARGPARSE_TO_CONFIG, NavigatorConfig
+from .config import ARGPARSE_TO_CONFIG
+from .config import NavigatorConfig
 from .action_runner import ActionRunner
-from .utils import (
-    check_for_ansible,
-    get_and_check_collection_doc_cache,
-    get_conf_dir,
-    set_ansible_envar,
-    Sentinel,
-)
+
+from .utils import check_for_ansible
+from .utils import flatten_list
+from .utils import get_and_check_collection_doc_cache
+from .utils import get_conf_dir
+from .utils import set_ansible_envar
+from .utils import Sentinel
+
 from .yaml import yaml, SafeLoader
 
 APP_NAME = "ansible_navigator"
@@ -78,16 +78,6 @@ def _get_share_dir() -> Optional[str]:
 
     # No path found above
     return None
-
-
-class EnvInterpolation(configparser.BasicInterpolation):
-    """Interpolation which expands environment variables in values."""
-
-    def before_get(
-        self, parser, section, option, value, defaults
-    ):  # pylint: disable=too-many-arguments
-        value = super().before_get(parser, section, option, value, defaults)
-        return os.path.expandvars(value)
 
 
 def error_and_exit_early(msg) -> NoReturn:
@@ -142,7 +132,7 @@ def update_args(args: Namespace) -> List[str]:
             # command currently being run by the user.
             continue
 
-        if getattr(args, attr) is not Sentinel:
+        if getattr(args, attr) not in [Sentinel, [Sentinel]]:
             # Not Sentinel means that the user specified it. Leave it alone!
             continue
 
@@ -253,7 +243,11 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         parser.error(f"The file specified with load could not be found. {args.load}")
 
     if hasattr(args, "inventory"):
-        args.inventory = list(itertools.chain.from_iterable(args.inventory))
+        # The default argparse value is [Sentinel] for default detection purposes
+        # at this point it's been set to a user value so we can remove any Sentinels
+        args.inventory = [i for i in args.inventory if i is not Sentinel]
+        # because the default argpars for inventory is a list, new invetories get added as a list
+        args.inventory = flatten_list(args.inventory)
         args.inventory = [os.path.abspath(os.path.expanduser(i)) for i in args.inventory]
         if not args.inventory and args.app == "inventory":
             parser.error("an inventory is required when using the inventory explorer")
@@ -338,7 +332,7 @@ def main():
                 error_and_exit_early(msg)
         set_ansible_envar()
 
-    for key, value in vars(args).items():
+    for key, value in sorted(vars(args).items()):
         logger.debug("Running with '%s' as '%s' %s", key, value, type(value))
 
     run(args)
