@@ -3,6 +3,8 @@
 import os
 import pytest
 
+from ansible_navigator.cli import parse_and_update
+
 
 @pytest.fixture
 def test_fixtures_dir():
@@ -89,8 +91,7 @@ def test_fixtures_dir():
 # pylint: disable=import-outside-toplevel
 def test_update_args(mocker, test_fixtures_dir, given, argname, expected):
     """test the parse and update function"""
-    mocker.patch("ansible_navigator.utils.get_conf_dir", return_value=(test_fixtures_dir, []))
-    from ansible_navigator.cli import parse_and_update
+    mocker.patch("ansible_navigator.cli.get_conf_dir", return_value=(test_fixtures_dir, []))
 
     _pre_logger_msgs, args = parse_and_update(given)
     result = vars(args)[argname]
@@ -100,19 +101,7 @@ def test_update_args(mocker, test_fixtures_dir, given, argname, expected):
 # pylint: disable=import-outside-toplevel
 def test_editor_command_default(mocker):
     """test editor with defualt"""
-    mocker.patch("ansible_navigator.utils.get_conf_dir", return_value=(None, []))
-    from ansible_navigator.cli import parse_and_update
+    mocker.patch("ansible_navigator.cli.get_conf_dir", return_value=(None, []))
 
     _pre_logger_msgs, args = parse_and_update([])
     assert args.editor_command == "vi +{line_number} {filename}"
-
-
-# pylint: disable=import-outside-toplevel
-def test_editor_command_env(mocker):
-    """test editor with defualt"""
-    os.environ["EDITOR"] = "emacs"
-    mocker.patch("ansible_navigator.utils.get_conf_dir", return_value=(None, []))
-    from ansible_navigator.cli import parse_and_update
-
-    _pre_logger_msgs, args = parse_and_update([])
-    assert args.editor_command == "emacs {filename}"
