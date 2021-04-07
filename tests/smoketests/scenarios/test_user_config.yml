@@ -37,7 +37,7 @@
     # Ansible bug? Or a weird Zuul config?
     - copy:
         src: "{{ playbook_dir }}/../../../docs/sample-config.yml"
-        dest: "{{ fileres.path }}/.config/ansible-navigator/ansible-navigator.yml"
+        dest: "{{ fileres.path }}/ansible-navigator.yml"
 
     - include_role:
         name: tmux/setup
