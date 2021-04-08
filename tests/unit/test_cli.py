@@ -3,7 +3,7 @@
 import os
 import pytest
 
-from ansible_navigator.cli import parse_and_update
+import ansible_navigator.cli as cli
 
 
 @pytest.fixture
@@ -88,20 +88,24 @@ def test_fixtures_dir():
     ],
 )
 # pylint:disable=redefined-outer-name
-# pylint: disable=import-outside-toplevel
-def test_update_args(mocker, test_fixtures_dir, given, argname, expected):
+def test_update_args(monkeypatch, test_fixtures_dir, given, argname, expected):
     """test the parse and update function"""
-    mocker.patch("ansible_navigator.cli.get_conf_dir", return_value=(test_fixtures_dir, []))
 
-    _pre_logger_msgs, args = parse_and_update(given)
+    def get_conf_dir(*_args, **_kwargs):
+        return test_fixtures_dir, []
+
+    monkeypatch.setattr(cli, "get_conf_dir", get_conf_dir)
+    _pre_logger_msgs, args = cli.parse_and_update(given)
     result = vars(args)[argname]
     assert result == expected
 
 
-# pylint: disable=import-outside-toplevel
-def test_editor_command_default(mocker):
+def test_editor_command_default(monkeypatch):
     """test editor with defualt"""
-    mocker.patch("ansible_navigator.cli.get_conf_dir", return_value=(None, []))
 
-    _pre_logger_msgs, args = parse_and_update([])
+    def get_conf_dir(*_args, **_kwargs):
+        return None, []
+
+    monkeypatch.setattr(cli, "get_conf_dir", get_conf_dir)
+    _pre_logger_msgs, args = cli.parse_and_update([])
     assert args.editor_command == "vi +{line_number} {filename}"
