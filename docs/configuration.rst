@@ -79,6 +79,9 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
 | ``mode``                        | ``interactive``                                  | Whether to run in interactive or stdout    | ``--mode``                  |
 |                                 |                                                  | mode.                                      |                             |
 +---------------------------------+--------------------------------------------------+--------------------------------------------+-----------------------------+
+| ``no-osc4``                     | ``False``                                        | Disable terminal color changing            | ``--no_osc4``               |
+|                                 |                                                  |                                            |                             |
++---------------------------------+--------------------------------------------------+--------------------------------------------+-----------------------------+
 | ``playbook-artifact``           | ``{playbook_dir}/{playbook_name}_artifact.json`` | The artifact path and filename for         |                             |
 |                                 |                                                  | playbook results.                          |                             |
 |                                 |                                                  |                                            |                             |

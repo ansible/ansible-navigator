@@ -72,24 +72,24 @@ ansible-navigator run -m stdout site.yaml -i inventory.yaml
 ```
 
 
-## ansible_navigator.cfg example
+## ansible-navigator.yml example
 
-Note: the config file currently uses an underscore not dash
-
-Environment variables will be expanded automatically.
-
-```
-[default]
-container_engine              = podman
-ee_image                      = quay.io/ansible/network-ee
-execution_environment         = true
-ide                           = vscode
-inventory                     = ~/github/demo_content/inventory
-inventory_columns             = ansible_network_os,ansible_network_cli_ssh_type,ansible_connection
-loglevel                      = debug
-no_osc4                       = true
-playbook                      = ~/github/demo_content/gather.yaml
-
+```yaml
+ansible-navigator:
+  container-engine: docker
+  editor:
+    command: code -g {filename}:{line_number}
+    console: False
+  execution-environment-image: quay.io/ansible/network-ee
+  inventory:
+    - ../nav_demo/inventory.yaml
+  inventory-columns:
+    - ansible_network_os
+    - ansible_network_cli_ssh_type
+    - ansible_connection
+  log:
+    level: debug
+  no-osc4: True
 ```
 
 ## in app key bindings

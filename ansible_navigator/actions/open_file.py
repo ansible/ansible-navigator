@@ -11,7 +11,6 @@ from typing import Dict
 from typing import List
 from typing import Match
 from typing import Tuple
-from typing import Type
 from typing import Union
 
 from . import _actions as actions
@@ -21,7 +20,7 @@ from ..ui_framework import Content
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 
-from ..utils import templar, Sentinel
+from ..utils import templar
 from ..yaml import yaml, Dumper
 
 
@@ -156,19 +155,8 @@ class Action:
                 with open(filename, "w") as outfile:
                     outfile.write(obj)
 
-        # First, we see if the user asked for a specific editor. If so, use it.
-        # If not, see if EDITOR is set. If it is, use it. Lastly, fall back to
-        # default config (vi) as a last attempt.
-        command_default: Union[str, Type[Sentinel]]
-        if "EDITOR" in os.environ:
-            command_default = "%s {filename}" % os.environ.get("EDITOR")
-        else:
-            command_default = Sentinel
-
-        command = app.args.config.get(
-            ["ansible-navigator", "editor", "command"], default=command_default
-        ).format(filename=filename, line_number=line_number)
-        is_console = app.args.config.get(["ansible-navigator", "editor", "console"])
+        command = app.args.editor_command.format(filename=filename, line_number=line_number)
+        is_console = app.args.editor_console
 
         self._logger.debug("Command: %s", command)
         if isinstance(command, str):
