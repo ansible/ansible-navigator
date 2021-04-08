@@ -242,6 +242,10 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
+    # don't expand "" (the default)
+    if hasattr(args, "playbook") and args.playbook:
+        args.playbook = os.path.abspath(os.path.expanduser(args.playbook))
+
     if hasattr(args, "inventory"):
         # The default argparse value is [Sentinel] for default detection purposes
         # at this point it's been set to a user value so we can remove any Sentinels

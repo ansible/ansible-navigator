@@ -334,6 +334,7 @@ class Action(App):
         else:
             playbook = ""
 
+        new_cmd = [self._name_at_cli]
         # if we have a playbook, use params, inventory, etc
         if playbook:
             # Use the provided params, or inventory and cmdline previously provided
@@ -350,17 +351,19 @@ class Action(App):
             else:
                 self._logger.debug("Params set to [], params not provided, or calling app not run")
 
-            new_cmd = [self._name_at_cli] + [playbook] + params
-            self._logger.debug("Parsing: %s", " ".join(new_cmd))
+            new_cmd += [playbook] + params
 
-            # Parse as if provided from the cmdline
-            new_args = self._update_args(new_cmd)
-            if new_args is None:
-                return False
-            self.args = new_args
+        self._logger.debug("Parsing: %s", " ".join(new_cmd))
+
+        # Parse as if provided from the cmdline
+        # this will pull in any default or config settings
+        new_args = self._update_args(new_cmd)
+        if new_args is None:
+            return False
+        self.args = new_args
 
         # Ensure the playbook and inventory are valid
-        playbook_valid = os.path.exists(playbook)
+        playbook_valid = os.path.exists(self.args.playbook)
         inventory_valid = all((os.path.exists(inv) for inv in self.args.inventory))
 
         if not all((playbook_valid, inventory_valid)):
@@ -454,9 +457,10 @@ class Action(App):
         """prepopulate a form to confirm the playbook details"""
 
         self._logger.debug("Inventory/Playbook not set, provided, or valid, prompting")
+
         FType = Dict[str, Any]
         form_dict: FType = {
-            "title": "Inventory or playbook not found, please confirm the following",
+            "title": "Inventory and/or playbook not found, please confirm the following",
             "fields": [],
         }
         form_field = {
@@ -468,7 +472,7 @@ class Action(App):
         }
         form_dict["fields"].append(form_field)
 
-        if self.args.inventory:
+        if hasattr(self.args, "inventory") and self.args.inventory:
             for idx, inv in enumerate(self.args.inventory):
                 form_field = {
                     "name": f"inv_{idx}",
