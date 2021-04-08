@@ -6,5 +6,4 @@ mypy
 pylint
 pytest-cov
 pytest-xdist
-pytest-mock
 yamllint
