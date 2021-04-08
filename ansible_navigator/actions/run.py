@@ -375,7 +375,7 @@ class Action(App):
                 if field["name"].startswith("inv_") and field["value"] != "":
                     new_cmd.extend(["-i", field["value"]])
             if populated_form["fields"]["cmdline"]["value"]:
-                new_cmd.append(populated_form["fields"]["cmdline"]["value"])
+                new_cmd.extend(populated_form["fields"]["cmdline"]["value"].split())
 
             # Parse as if provided from the cmdline
             new_args = self._update_args(new_cmd)
