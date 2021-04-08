@@ -252,15 +252,9 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         if not args.inventory and args.app == "inventory":
             parser.error("an inventory is required when using the inventory explorer")
 
-    if hasattr(args, "artifact"):
-        # Would like to do this when importing config values in update_args()
-        args.artifact = args.artifact.format(
-            playbook_dir=os.path.dirname(args.playbook),
-            playbook_name=os.path.splitext(os.path.basename(args.playbook))[0],
-        )
-
     if not args.app:
         args.app = "welcome"
+        args.mode = "interactive"
         args.value = None
 
     share_dir = _get_share_dir()
@@ -278,6 +272,10 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     pre_logger_msgs += msgs
 
     args.original_command = params
+    args.parse_and_update = parse_and_update
+
+    for key, value in sorted(vars(args).items()):
+        pre_logger_msgs.append(f"Running with {key} as {value} {type(value)}")
 
     return pre_logger_msgs, args
 
@@ -313,7 +311,6 @@ def main():
     # pylint: disable=too-many-branches
 
     pre_logger_msgs, args = parse_and_update(sys.argv[1:])
-    args.parse_and_update = parse_and_update
 
     setup_logger(args)
     for msg in pre_logger_msgs:
@@ -331,9 +328,6 @@ def main():
                 logger.critical(msg)
                 error_and_exit_early(msg)
         set_ansible_envar()
-
-    for key, value in sorted(vars(args).items()):
-        logger.debug("Running with '%s' as '%s' %s", key, value, type(value))
 
     run(args)
 

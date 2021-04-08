@@ -46,14 +46,14 @@ _DEFAULTS = {
         },
         "mode": "interactive",
         "no-osc4": False,
-        "playbook-artifact": "{playbook_dir}/{playbook_name}_artifact.json",
+        "playbook": "",
+        "playbook-artifact": "{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json",
     },
 }
 
 # This maps argparse destination variables to config paths
 ROOT = "ansible-navigator"
 ARGPARSE_TO_CONFIG = {
-    "artifact": [ROOT, "playbook-artifact"],
     "container_engine": [ROOT, "container-engine"],
     "editor_command": [ROOT, "editor", "command"],
     "editor_console": [ROOT, "editor", "console"],
@@ -64,6 +64,8 @@ ARGPARSE_TO_CONFIG = {
     "logfile": [ROOT, "log", "file"],
     "loglevel": [ROOT, "log", "level"],
     "mode": [ROOT, "mode"],
+    "playbook": [ROOT, "playbook"],
+    "playbook_artifact": [ROOT, "playbook-artifact"],
     "no_osc4": [ROOT, "no-osc4"],
     "type": [ROOT, "doc-plugin-type"],
 }
