@@ -837,5 +837,4 @@ class UserInterface(CursesWindow):
             result = self._show_menu(obj, columns, await_input)
         else:
             result = self._show_obj_from_list([obj], 0, await_input)
-        self._logger.debug(result)
         return result
