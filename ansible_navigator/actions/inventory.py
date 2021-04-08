@@ -4,10 +4,8 @@ import logging
 import glob
 import json
 import os
-import subprocess
 
 from distutils.spawn import find_executable
-from subprocess import CompletedProcess
 from typing import Any
 from typing import Dict
 from typing import List
@@ -18,6 +16,8 @@ from . import _actions as actions
 
 from ..app import App
 from ..app_public import AppPublic
+
+from ..runner.api import CommandRunner, InventoryRunner
 
 from ..steps import Step
 
@@ -112,6 +112,7 @@ class Action(App):
         self._interaction: Interaction
         self._inventories: List[str] = []
         self._inventories_mtime: float
+        self._runner = None
 
     @property
     def _inventory(self) -> Dict[Any, Any]:
@@ -161,7 +162,7 @@ class Action(App):
         :param app: The app instance
         :type app: App
         """
-        self._logger.debug("inventory requested")
+        self._logger.debug("inventory requested in interactive mode")
         self._calling_app = app
         self.args = app.args
         self.stdout = app.stdout
@@ -188,10 +189,8 @@ class Action(App):
         self._interaction.ui.scroll(0)
 
         while True:
-
             self.update()
             self._take_step()
-
             if not self.steps:
                 if self.args.app == self.name:
                     self.steps.append(self._build_main_menu())
@@ -221,6 +220,13 @@ class Action(App):
         interaction.ui.scroll(previous_scroll)
         interaction.ui.menu_filter(previous_filter)
         return None
+
+    def run_stdout(self) -> None:
+        """Run in oldschool mode, just stdout"""
+        self._logger.debug("inventory requested in stdout mode")
+        if hasattr(self.args, "inventory") and self.args.inventory:
+            self._inventories = self.args.inventory
+        self._collect_inventory_details()
 
     def _take_step(self) -> None:
 
@@ -430,60 +436,49 @@ class Action(App):
         self._set_inventories_mtime()
 
     def _collect_inventory_details(self) -> None:
-        if self.args.execution_environment:
-            self._logger.debug("trying execution environment")
-            self._try_ee()
+
+        kwargs = {
+            "container_engine": self.args.container_engine,
+            "execution_environment": self.args.execution_environment,
+            "ee_image": self.args.ee_image,
+            "navigator_mode": self.args.mode,
+            "cwd": os.getcwd(),
+        }
+        if self.args.mode == "interactive":
+            self._runner = InventoryRunner(**kwargs)
+            inventory_output, inventory_err = self._runner.fetch_inventory(
+                "list", self._inventories
+            )
+            if inventory_output:
+                parts = inventory_output.split("{", 1)
+                if inventory_err:
+                    inventory_err = parts[0] + inventory_err
+                else:
+                    inventory_err = parts[0]
+
+                if len(parts) == 2:
+                    inventory_output = "{" + parts[1]
+                else:
+                    inventory_output = ""
+            if inventory_err:
+                msg = f"Error occurred while fetching ansible inventory: '{inventory_err}'"
+                self._logger.error(msg)
+
+            self._extract_inventory(inventory_output, inventory_err)
         else:
-            self._logger.debug("trying local")
-            self._try_local()
-
-    @staticmethod
-    def _inventory_cmdline(
-        inventories: List[str], executable: str = "ansible-inventory"
-    ) -> List[str]:
-        cmd = [executable]
-        for inventory in inventories:
-            cmd.extend(["-i", inventory])
-        cmd.extend(["--list"])
-        return cmd
-
-    def _try_ee(self) -> None:
-        inventory_paths = (os.path.dirname(i) for i in self._inventories)
-        cmd = [self.args.container_engine, "run", "-i", "-t"]
-
-        for inventory_path in inventory_paths:
-            cmd.extend(["-v", f"{inventory_path}:{inventory_path}:z"])
-
-        cmd.extend([self.args.ee_image])
-        cmd.extend(self._inventory_cmdline(self._inventories))
-
-        cmdline = " ".join(cmd)
-        self._logger.debug("running: %s", cmdline)
-        result = self._run_command(cmdline)
-        if result:
-            parts = result.stdout.split("{", 1)
-            stderr = parts[0]
-
-            if len(parts) == 2:
-                stdout = "{" + parts[1]
+            if self.args.execution_environment:
+                ansible_inventory_path = "ansible-inventory"
             else:
-                stdout = ""
-            self._extract_inventory(stdout, stderr)
+                exec_path = find_executable("ansible-inventory")
+                if exec_path is None:
+                    self._logger.error("no ansible-inventory command found in path")
+                    return
+                ansible_inventory_path = exec_path
 
-    def _try_local(self) -> None:
-        icmd_path = find_executable("ansible-inventory")
-        if not icmd_path:
-            msg = "no ansible-inventory command found in path"
-            self._logger.error(msg)
-            self._inventory_error = msg
-            return
+            kwargs.update({"cmdline": self.args.cmdline, "inventory": self._inventories})
 
-        cmd = self._inventory_cmdline(self._inventories, executable=icmd_path)
-        cmdline = " ".join(cmd)
-        self._logger.debug("running: %s", cmd)
-        result = self._run_command(cmdline)
-        if result:
-            self._extract_inventory(result.stdout, result.stderr)
+            self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
+            self._runner.run()
 
     def _extract_inventory(self, stdout: str, stderr: str) -> None:
         try:
@@ -495,21 +490,3 @@ class Action(App):
             self._logger.debug("json decode error: %s", str(exc))
             self._logger.debug("tried: %s", stdout)
             self._inventory_error = stdout
-
-    def _run_command(self, cmdline: str) -> Union[CompletedProcess, None]:
-        try:
-            proc_out = subprocess.run(
-                cmdline,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                check=True,
-                universal_newlines=True,
-                shell=True,
-            )
-            return proc_out
-
-        except subprocess.CalledProcessError as exc:
-            self._logger.debug("command execution failed: '%s'", str(exc))
-            self._logger.debug("command execution failed: '%s'", exc.output)
-            self._inventory_error = exc.output
-            return None
