@@ -2,6 +2,7 @@
 """
 import copy
 import curses
+import datetime
 import json
 import logging
 import os
@@ -34,9 +35,7 @@ from ..ui_framework import dict_to_form
 from ..ui_framework.form_utils import form_to_dict
 
 
-from ..utils import check_for_ansible
 from ..utils import human_time
-from ..utils import set_ansible_envar
 
 
 RESULT_TO_COLOR = [
@@ -217,7 +216,6 @@ class Action(App):
         self.args: Namespace
         self._interaction: Interaction
         self._calling_app: AppPublic
-        self._parser_error: str
         self._subaction_type: str
 
         self._msg_from_plays = (None, None)
@@ -235,15 +233,6 @@ class Action(App):
             select_func=self._task_list_for_play,
         )
 
-    def parser_error(self, message: str) -> Tuple[None, None]:
-        """callback for parser error
-
-        :param message: A message from the parser
-        :type message: str
-        """
-        self._parser_error = message
-        return None, None
-
     def run_stdout(self) -> None:
         """Run in oldschool mode, just stdout
 
@@ -257,7 +246,7 @@ class Action(App):
             self._dequeue()
             if self.runner.finished:
                 if self.args.artifact:
-                    self.write_artifact(self.args.artifact)
+                    self.write_artifact()
                 self._logger.debug("runner finished")
                 break
 
@@ -330,51 +319,72 @@ class Action(App):
         interaction.ui.scroll(previous_scroll)
         return None
 
+    # pylint: disable=too-many-branches
     def _init_run(self) -> bool:
         """in the case of :run, parse the user input"""
-        playbook = ""
 
+        # Use the provided playbook, or the previously specified playbook
         p_from_int = self._interaction.action.match.groupdict().get("playbook")
         if p_from_int:
-            self._logger.debug("Using playbook provided in interaction")
-            playbook = os.path.abspath(os.path.expanduser(p_from_int))
+            self._logger.debug("Using playbook provided by user")
+            playbook = p_from_int
         elif getattr(self._calling_app.args, "playbook", None):
             self._logger.debug("Using playbook from calling app")
             playbook = self._calling_app.args.playbook
-
-        params = self._interaction.action.match.groupdict().get("params")
-        if params:
-            self._logger.debug("Using params provided in interaction")
-            params = [self._name_at_cli] + [playbook] + params.split()
-            new_args = self._update_args(params)
-            if new_args is None:
-                return False
         else:
-            self._logger.debug("Using params from calling app")
-            new_args = copy.copy(self._calling_app.args)
+            playbook = ""
 
-        playbook_valid = os.path.exists(playbook)
-        inventory_valid = bool(getattr(new_args, "inventory", ())) and all(
-            (os.path.exists(inv) for inv in getattr(new_args, "inventory", ()))
-        )
+        new_cmd = [self._name_at_cli]
+        # if we have a playbook, use params, inventory, etc
+        if playbook:
+            # Use the provided params, or inventory and cmdline previously provided
+            params = []
+            user_provided_params = self._interaction.action.match.groupdict().get("params")
+            if user_provided_params:
+                self._logger.debug("Using params provided by user")
+                params.extend(user_provided_params.split())
+            elif self._calling_app.args.app == "run":
+                self._logger.debug("Calling app was run, reusing inv + cmdline from calling app")
+                for inventory in self._calling_app.args.inventory:
+                    params.extend(["-i", inventory])
+                params += self._calling_app.args.cmdline
+            else:
+                self._logger.debug("Params set to [], params not provided, or calling app not run")
 
-        if playbook_valid and inventory_valid:
-            new_args.playbook = playbook
-        else:
-            populated_form = self._prompt_for_playbook(new_args, playbook)
+            new_cmd += [playbook] + params
+
+        self._logger.debug("Parsing: %s", " ".join(new_cmd))
+
+        # Parse as if provided from the cmdline
+        # this will pull in any default or config settings
+        new_args = self._update_args(new_cmd)
+        if new_args is None:
+            return False
+        self.args = new_args
+
+        # Ensure the playbook and inventory are valid
+        playbook_valid = os.path.exists(self.args.playbook)
+        inventory_valid = all((os.path.exists(inv) for inv in self.args.inventory))
+
+        if not all((playbook_valid, inventory_valid)):
+
+            populated_form = self._prompt_for_playbook()
             if populated_form["cancelled"]:
                 return False
-            new_args.playbook = populated_form["fields"]["playbook"]["value"]
-            new_args.inventory = [
-                field["value"]
-                for field in populated_form["fields"].values()
-                if field["name"].startswith("inv_") and field["value"] != ""
-            ]
-            new_args.cmdline = populated_form["fields"]["cmdline"]["value"].split()
 
-        self.args = new_args
-        for key, value in vars(self.args).items():
-            self._logger.debug("Running with %s=%s %s", key, value, type(value))
+            new_cmd = [self._name_at_cli]
+            new_cmd.append(populated_form["fields"]["playbook"]["value"])
+            for field in populated_form["fields"].values():
+                if field["name"].startswith("inv_") and field["value"] != "":
+                    new_cmd.extend(["-i", field["value"]])
+            if populated_form["fields"]["cmdline"]["value"]:
+                new_cmd.extend(populated_form["fields"]["cmdline"]["value"].split())
+
+            # Parse as if provided from the cmdline
+            new_args = self._update_args(new_cmd)
+            if new_args is None:
+                return False
+            self.args = new_args
 
         self._run_runner()
         self._logger.info("Run initialized and playbook started.")
@@ -443,26 +453,27 @@ class Action(App):
         populated_form = form_to_dict(form, key_on_name=True)
         return populated_form
 
-    def _prompt_for_playbook(self, new_args: Namespace, playbook: str) -> Dict[Any, Any]:
+    def _prompt_for_playbook(self) -> Dict[Any, Any]:
         """prepopulate a form to confirm the playbook details"""
 
         self._logger.debug("Inventory/Playbook not set, provided, or valid, prompting")
+
         FType = Dict[str, Any]
         form_dict: FType = {
-            "title": "Inventory or playbook not found, please confirm the following",
+            "title": "Inventory and/or playbook not found, please confirm the following",
             "fields": [],
         }
         form_field = {
             "name": "playbook",
-            "pre_populate": playbook,
+            "pre_populate": self.args.playbook,
             "prompt": "Path to playbook",
             "type": "text_input",
             "validator": {"name": "valid_file_path"},
         }
         form_dict["fields"].append(form_field)
 
-        if hasattr(new_args, "inventory") and new_args.inventory:
-            for idx, inv in enumerate(new_args.inventory):
+        if hasattr(self.args, "inventory") and self.args.inventory:
+            for idx, inv in enumerate(self.args.inventory):
                 form_field = {
                     "name": f"inv_{idx}",
                     "pre_populate": inv,
@@ -482,7 +493,7 @@ class Action(App):
 
         form_field = {
             "name": "cmdline",
-            "pre_populate": " ".join(new_args.cmdline),
+            "pre_populate": " ".join(self.args.cmdline),
             "prompt": "Additional command line paramters",
             "type": "text_input",
             "validator": {"name": "none"},
@@ -539,38 +550,10 @@ class Action(App):
         as if run was invoked from the command line
         provide an error callback so the app doesn't sys.exit if the aprsing fails
         """
+        args = super()._update_args(params)
 
-        try:
-            msgs, new_args = self._calling_app.args.parse_and_update(
-                params=params, error_cb=self.parser_error
-            )
-        except TypeError:
-            self._logger.error("While attempting to parse %s:", " ".join(params))
-            self._logger.error(self._parser_error)
+        if args is None:
             return None
-
-        for msg in msgs:
-            self._logger.debug(msg)
-
-        args = copy.copy(self._calling_app.args)
-        for key, value in vars(new_args).items():
-            arg_value = getattr(args, key, None)
-            if arg_value != value:
-                self._logger.debug(
-                    "Overriding previous cli param '%s:%s' with '%s:%s'", key, arg_value, key, value
-                )
-                setattr(args, key, value)
-
-        if not hasattr(args, "requires_ansible") or args.requires_ansible:
-            if not args.execution_environment:
-                success, msg = check_for_ansible()
-                if success:
-                    self._logger.debug(msg)
-                else:
-                    self._logger.critical(msg)
-                    return None
-            set_ansible_envar()
-
         if not hasattr(args, "playbook"):
             self._logger.error(
                 "No playbook specified or previous provided when starting application"
@@ -712,8 +695,7 @@ class Action(App):
                 self.runner.cancelled = True
                 while not self.runner.finished:
                     pass
-                if hasattr(self.args, "artifact"):
-                    self.write_artifact(self.args.artifact)
+                self.write_artifact()
                 return True
             self._logger.warning("Quit requested but playbook running, try q! or quit!")
             return False
@@ -761,8 +743,7 @@ class Action(App):
                 # self._interaction.ui.disable_refresh()
                 self._logger.debug("runner finished")
                 self._logger.info("Playbook complete")
-                if hasattr(self.args, "artifact"):
-                    self.write_artifact(self.args.artifact)
+                self.write_artifact()
                 self._runner_finished = True
 
     def _get_status(self) -> Tuple[str, int]:
@@ -791,23 +772,33 @@ class Action(App):
         status, status_color = self._get_status()
         self._interaction.ui.update_status(status, status_color)
 
-    def write_artifact(self, filename: str) -> None:
+    def write_artifact(self, filename: Optional[str] = None) -> None:
         """Write the artifact
 
         :param filename: The file to write to
         :type filename: str
         """
-        status, status_color = self._get_status()
-        with open(filename, "w") as outfile:
-            artifact = {
-                "version": "1.0.0",
-                "plays": self._plays.value,
-                "stdout": self.stdout,
-                "status": status,
-                "status_color": status_color,
-            }
-            json.dump(artifact, outfile, indent=4)
-        self._logger.info("Saved artifact as %s", filename)
+
+        if self.args.playbook_artifact or filename is not None:
+            status, status_color = self._get_status()
+            ts_utc = datetime.datetime.now(tz=datetime.timezone.utc)
+            if filename is None:
+                filename = self.args.playbook_artifact.format(
+                    playbook_dir=os.path.dirname(self.args.playbook),
+                    playbook_name=os.path.splitext(os.path.basename(self.args.playbook))[0],
+                    ts_utc=ts_utc,
+                )
+
+            with open(filename, "w") as outfile:
+                artifact = {
+                    "version": "1.0.0",
+                    "plays": self._plays.value,
+                    "stdout": self.stdout,
+                    "status": status,
+                    "status_color": status_color,
+                }
+                json.dump(artifact, outfile, indent=4)
+            self._logger.info("Saved artifact as %s", filename)
 
     def rerun(self) -> None:
         """rerun the current playbook

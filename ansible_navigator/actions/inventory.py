@@ -99,7 +99,7 @@ class Action(App):
     # pylint:disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
 
-    KEGEX = r"^i(?:nventory)?(\s(?P<inventories>.*))?$"
+    KEGEX = r"^i(?:nventory)?(\s(?P<params>.*))?$"
 
     def __init__(self, args):
         super().__init__(args=args)
@@ -379,19 +379,20 @@ class Action(App):
         raise TypeError("unknown step type")
 
     def _build_inventory_list(self) -> None:
-        inventories = self._interaction.action.match.groupdict()["inventories"]
-        if inventories:
-            inventories = tuple(
-                os.path.abspath(os.path.expanduser(i.strip())) for i in inventories.split(",")
-            )
-            self._logger.debug("inventories set by user: %s", inventories)
 
-        elif hasattr(self.args, "inventory") and self.args.inventory:
-            inventories = self.args.inventory
-            self._logger.info("no inventory provided, using inventory from args")
-        else:
-            inventories = []
-            self._logger.error("no inventory set at command line or requested")
+        params = [self.name]
+        user_provided = self._interaction.action.match.groupdict()["params"]
+
+        # either the user provided new inventories or none previously set:
+        if user_provided is not None or not hasattr(self.args, "inventory"):
+            params.append(user_provided)
+            # Parse as if provided from the cmdline
+            new_args = self._update_args(params)
+            if new_args is None:
+                return
+            self.args = new_args
+
+        inventories = self.args.inventory
 
         if not inventories or not all((os.path.exists(inv) for inv in inventories)):
             FType = Dict[str, Any]
@@ -424,16 +425,17 @@ class Action(App):
             if form.cancelled:
                 return
 
-            inventories = tuple(
+            inventories = [
                 field.value
                 for field in form.fields
                 if hasattr(field, "value") and field.value != ""
-            )
+            ]
             if not inventories:
                 return
 
         self._inventories = inventories
         self._set_inventories_mtime()
+        return
 
     def _collect_inventory_details(self) -> None:
 
