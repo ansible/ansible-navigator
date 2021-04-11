@@ -1,0 +1,21 @@
+hosts:
+  children:
+    group01:
+      hosts:
+        host0101:
+          ansible_host: host0101.test.com
+      vars:
+        ansible_become: True
+        ansible_network_os: org.coll.nos
+        ansible_connection: ansible.netcommon.network_cli
+    group02:
+      hosts:
+        host0201:
+          ansible_host: host0201.test.com
+      vars:
+        ansible_become: True
+        ansible_become_pass: test
+    group03:
+      hosts:
+        host0301:
+          ansible_host: host0301.test.com

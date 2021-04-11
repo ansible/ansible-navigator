@@ -1,0 +1,28 @@
+=  TITLEDESCRIPTION
+0│Browse groups   Explore each inventory group and group members members
+1│Browse hosts    Explore the inventory with a list of all hosts
+^f/PgUp page up ^b/PgDn page down ↑↓ scroll esc back [0-9] goto :help help
+:=0NAME TAXONOMYTYPE
+hostsallgroup
+ungroupedallgroup
+^f/PgUp page up ^b/PgDn page down ↑↓ scroll esc back [0-9] goto :help help
+:=0TAXONOMY    
+group01all▸hosts
+group02  all▸hosts
+2│group03all▸hostsgroup
+^f/PgUp page up ^b/PgDn page down ↑↓ scroll esc back [0-9] goto :help help
+:=0TAXONOMYTYPE ANSIBLE NETWORK ANSIBLE NETWORK ANSIBLE CONNECTI
+host0101 all▸hosts▸grouphost org.coll.nos    None   ansible.netcommo
+
+^f/PgUp page up ^b/PgDn page down ↑↓ scroll esc back [0-9] goto :help help
+:=0[host0101] org.coll.nos                                                         ---
+1│ansible_become: true
+2│ansible_connection: ansible.netcommon.network_cli
+3│ansible_host: host0101.test.com
+4│ansible_network_os: org.coll.nos
+5│group01_foo: group01_bar
+6│host0101_foo: host0101_bar
+7│inventory_hostname: host0101
+^f/PgUp page up    ^b/PgDn page down    ↑↓ scroll    esc back    :help help
+:=quit>
+>

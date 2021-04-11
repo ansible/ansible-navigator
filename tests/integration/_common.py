@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+import pexpect
 import tempfile
 
 from argparse import Namespace
@@ -12,12 +13,16 @@ from typing import List
 from typing import Tuple
 from typing import Optional
 
+from distutils.spawn import find_executable
+
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
 from ansible_navigator.ui_framework.ui import Ui
 
 from ansible_navigator.steps import Steps
+
+from .. import defaults
 
 
 class ActionRunTest:
@@ -54,7 +59,6 @@ class ActionRunTest:
 
     def run_action_interactive(self) -> Any:
         """run the action
-
         The return type is set to Any here since not all actions
         have the same signature, the cooresponding integration test
         will be using the action internals for asserts
@@ -131,3 +135,75 @@ class ActionRunTest:
         sys.stderr = __stderr__
 
         return stdout, stderr
+
+
+def get_executable_path(name):
+    if name is None:
+        name = "python"
+    exec_path = find_executable(name)
+    if not exec_path:
+        raise ValueError(f"{name} executable not found")
+    return exec_path
+
+
+def _run_command(
+    command: List,
+    user_interactions: List,
+    expected_patterns: List,
+    config_path: Optional[str] = None,
+):
+    env = os.environ.copy()
+    if len(user_interactions) != len(expected_patterns):
+        raise ValueError("length of 'user_interactions' and 'expected_patterns' should be same")
+    if config_path is None:
+        config_path = os.path.join(
+            os.path.dirname(__file__), "..", "fixtures", "ansible-navigator.yaml"
+        )
+    env.update({"ANSIBLE_NAVIGATOR_CONFIG": config_path})
+
+    stdout_handle = tempfile.TemporaryFile(mode="w+")
+
+    try:
+        child = pexpect.spawn(
+            command[0],
+            command[1:],
+            cwd=os.path.join(os.path.dirname(__file__), "..", ".."),
+            env=env,
+            encoding="utf-8",
+            codec_errors="replace",
+            echo=False,
+            use_poll=defaults.pexpect_use_poll,
+        )
+        child.logfile_read = stdout_handle
+        while child.isalive():
+            result_id = child.expect(expected_patterns, timeout=defaults.pexpect_timeout)
+            interaction = user_interactions[result_id]
+            expected_patterns.pop(result_id)
+            user_interactions.pop(result_id)
+            child.sendline(interaction)
+    except pexpect.exceptions.EOF:
+        pass
+
+    stdout_handle.seek(0)
+    out = stdout_handle.read()
+    stdout_handle.flush()
+    stdout_handle.close()
+    child.close()
+
+    return out
+
+
+def _sanitize_response(data):
+    ansi_escape = re.compile("\x1B(?:[@-Z\\-_]|\\[[0-?]*[ -/]*[@-~])|\\(B")
+    return ansi_escape.sub("", data)
+
+
+def execute_command(
+    cmdline_args, user_interactions, expected_patterns, exe_name=None, sanitize=True
+):
+    py_exec = get_executable_path(exe_name)
+    cmd = [py_exec] + cmdline_args
+    out = _run_command(cmd, user_interactions, expected_patterns)
+    if sanitize:
+        out = _sanitize_response(out)
+    return out
