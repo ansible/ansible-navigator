@@ -181,8 +181,8 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
     pre_logger_msgs = []
     found_config = False
 
-    if os.environ.get('ANSIBLE_NAVIGATOR_CONFIG'):
-        config_path = os.environ.get('ANSIBLE_NAVIGATOR_CONFIG')
+    if os.environ.get("ANSIBLE_NAVIGATOR_CONFIG"):
+        config_path = os.environ.get("ANSIBLE_NAVIGATOR_CONFIG")
         if os.path.isfile(config_path) and os.path.exists(config_path):
             found_config = True
 
