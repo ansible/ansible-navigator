@@ -181,17 +181,29 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
     pre_logger_msgs = []
     found_config = False
 
+    if os.environ.get('ANSIBLE_NAVIGATOR_CONFIG'):
+        config_path = os.environ.get('ANSIBLE_NAVIGATOR_CONFIG')
+        if os.path.isfile(config_path) and os.path.exists(config_path):
+            found_config = True
+
     # Otherwise, try to find it a different way
-    config_dir, msgs = get_conf_dir("ansible-navigator.yml")
-    pre_logger_msgs += msgs
-    if config_dir is not None:
-        # Since we give get_conf_dir our config path, it's guaranteed to exist
-        # if config_dir is not None.
-        config_path = os.path.join(config_dir, "ansible-navigator.yml")
-        pre_logger_msgs.append("Found config file at {0}".format(config_path))
-        found_config = True
-    else:
-        pre_logger_msgs.append("Could not find config directory, using all defaults.")
+    if not found_config:
+        found_filename = None
+        for filename in ["ansible-navigator.yml", "ansible-navigator.yaml"]:
+            config_dir, msgs = get_conf_dir(filename)
+            pre_logger_msgs += msgs
+            if config_dir:
+                found_filename = filename
+                break
+
+        if config_dir is not None:
+            # Since we give get_conf_dir our config path, it's guaranteed to exist
+            # if config_dir is not None.
+            config_path = os.path.join(config_dir, found_filename)
+            pre_logger_msgs.append("Found config file at {0}".format(config_path))
+            found_config = True
+        else:
+            pre_logger_msgs.append("Could not find config directory, using all defaults.")
 
     config = {}
     if found_config:

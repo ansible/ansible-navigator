@@ -14,13 +14,19 @@ Several options in ``ansible-navigator`` can be configured by making use of a
 configuration file. The configuration file can live in one of several places.
 Currently the following paths are checked and the first match is used:
 
+- ``ANSIBLE_NAVIGATOR_CONFIG`` (configuration file path environment variable if set)
 - ``./.ansible-navigator/ansible-navigator.yml`` (project-specific directory)
 - ``[ansible-navigator source code root]/etc/ansible-navigator/ansible-navigator.yml``
 - ``~/.config/ansible-navigator/ansible-navigator.yml``
 - ``/etc/ansible-navigator/ansible-navigator.yml``
 - ``[prefix]/etc/ansible-navigator/ansible-navigator.yml`` (e.g., ``/usr/local/etc/...``)
 
-Here is an example conifguration file which can be copied into one of those paths.
+.. note::
+   The configuration file extension can be either ``.yml`` or ``.yaml``. If files with both
+   extension are present in that case ``.yml`` is given preference over ``.yaml``.
+
+
+Here is an example configuration file which can be copied into one of those paths.
 
 .. literalinclude:: sample-config.yml
    :language: yaml
