@@ -1,5 +1,6 @@
 """ start here
 """
+import json
 import logging
 import os
 import sys
@@ -12,7 +13,6 @@ from curses import wrapper
 from functools import partial
 from typing import Callable
 from typing import List
-from typing import NoReturn
 from typing import Optional
 from typing import Tuple
 from yaml.scanner import ScannerError
@@ -23,9 +23,10 @@ from .config import NavigatorConfig
 from .action_runner import ActionRunner
 
 from .utils import check_for_ansible
+from .utils import error_and_exit_early
 from .utils import flatten_list
 from .utils import get_and_check_collection_doc_cache
-from .utils import get_conf_dir
+from .utils import get_conf_path
 from .utils import set_ansible_envar
 from .utils import Sentinel
 
@@ -78,12 +79,6 @@ def _get_share_dir() -> Optional[str]:
 
     # No path found above
     return None
-
-
-def error_and_exit_early(msg) -> NoReturn:
-    """get out of here fast"""
-    print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
-    sys.exit(1)
 
 
 def update_args(args: Namespace) -> List[str]:
@@ -187,33 +182,36 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
             found_config = True
 
     # Otherwise, try to find it a different way
-    if not found_config:
-        found_filename = None
-        for filename in ["ansible-navigator.yml", "ansible-navigator.yaml"]:
-            config_dir, msgs = get_conf_dir(filename)
-            pre_logger_msgs += msgs
-            if config_dir:
-                found_filename = filename
-                break
-
-        if config_dir is not None:
-            # Since we give get_conf_dir our config path, it's guaranteed to exist
-            # if config_dir is not None.
-            config_path = os.path.join(config_dir, found_filename)
-            pre_logger_msgs.append("Found config file at {0}".format(config_path))
-            found_config = True
-        else:
-            pre_logger_msgs.append("Could not find config directory, using all defaults.")
+    config_path, msgs = get_conf_path(
+        "ansible-navigator", allowed_extensions=["yml", "yaml", "json"]
+    )
+    pre_logger_msgs += msgs
+    if config_path is not None:
+        pre_logger_msgs.append("Found config file at {0}".format(config_path))
+        found_config = True
+    else:
+        pre_logger_msgs.append(
+            "Could not find config directory." " Using all default values for configuration."
+        )
 
     config = {}
     if found_config:
         with open(config_path, "r") as config_fh:
-            try:
-                config = yaml.load(config_fh, Loader=SafeLoader)
-            except ScannerError:
-                error_and_exit_early(
-                    "Config file at {0} but it failed to parse it.".format(config_path)
-                )
+            if config_path.endswith(".json"):
+                try:
+                    config = json.load(config_fh)
+                except (TypeError, json.decoder.JSONDecodeError) as exe:
+                    msg = "Invalid JSON config found in file '{0}'." " Failed with '{1}'".format(
+                        config_fh, str(exe)
+                    )
+                    error_and_exit_early(msg)
+            else:
+                try:
+                    config = yaml.load(config_fh, Loader=SafeLoader)
+                except ScannerError:
+                    error_and_exit_early(
+                        "Config file at {0} but it failed to parse it.".format(config_path)
+                    )
 
     if found_config and config and config.get("ansible-navigator"):
         # If the config file was found and has the key we expect, log and use it
