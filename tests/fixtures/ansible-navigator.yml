@@ -14,3 +14,4 @@ ansible-navigator:
     file: "./ansible-navigator.log"
     level: "debug"
   no-osc4: True
+  
