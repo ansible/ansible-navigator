@@ -4,6 +4,7 @@ ansible-navigator:
   editor:
     command: code -g {filename}:{line_number}
     console: False
+  doc-plugin-type: become
   execution-environment-image: quay.io/ansible/ansible-runner:devel
   execution-environment: False
   inventory-columns:
@@ -11,7 +12,5 @@ ansible-navigator:
     - ansible_network_cli_ssh_type
     - ansible_connection
   log:
-    file: "./ansible-navigator.log"
-    level: "debug"
+    level: critical
   no-osc4: True
-  
