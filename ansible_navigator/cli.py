@@ -178,7 +178,7 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
 
     if os.environ.get("ANSIBLE_NAVIGATOR_CONFIG"):
         config_path = os.environ.get("ANSIBLE_NAVIGATOR_CONFIG")
-        if os.path.isfile(config_path) and os.path.exists(config_path):
+        if config_path and os.path.isfile(config_path) and os.path.exists(config_path):
             found_config = True
 
     # Otherwise, try to find it a different way

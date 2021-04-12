@@ -242,8 +242,8 @@ def get_conf_path(
           We should probably cache the potential paths somewhere, eventually.
     """
 
-    potential_paths = []
-    msgs = []
+    potential_paths: List[str] = []
+    msgs: List[str] = []
 
     # .ansible-navigator of current direcotry
     potential_paths.append(".ansible-navigator")
