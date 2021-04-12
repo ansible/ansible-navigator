@@ -20,8 +20,8 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
     :type pbar_width: int
     """
     for key in keys:
-        value = dyct[key]
-        if is_percent(str(value)):
+        value = dyct.get(key)
+        if value and is_percent(str(value)):
             numx = floor(pbar_width / 100 * int(value[0:-1]))
             dyct["_" + key] = value
             dyct[key] = "{value} {numx}".format(
