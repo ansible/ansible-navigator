@@ -3,6 +3,8 @@ import os
 import libtmux
 import time
 
+from .. import defaults
+
 
 EXECUTION_MODES = ["interactive", "stdout"]
 
@@ -52,7 +54,7 @@ def run_command_tmux_session():
             pane.send_keys(f"cd {cwd}")
             for user_interaction in user_interactions:
                 pane.send_keys(user_interaction)
-                time.sleep(1)
+                time.sleep(defaults.tumx_read_delay_after_user_interaction)
                 out += '\n'.join(window.cmd('capture-pane', '-p').stdout)
         finally:
             if server.has_session(session_name):
