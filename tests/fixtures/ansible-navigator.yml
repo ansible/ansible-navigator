@@ -2,7 +2,7 @@
 ansible-navigator:
   container-engine: podman
   editor:
-    command: code -g {filename}:{line_number}
+    command: emacs -nw +{line_number} {filename}
     console: False
   doc-plugin-type: become
   execution-environment-image: quay.io/ansible/ansible-runner:devel

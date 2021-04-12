@@ -16,6 +16,11 @@ def test_fixtures_dir():
 
 @pytest.fixture
 def output_fixture():
+    """The combination of mode and test_name corresponds to file-name path
+    ``<library-root-folder>/tests/fixtures/output/<mode>/<test_name>.txt``.
+    Ensure the fixture for test_name is added in the right path.
+    """
+
     def _method(mode, test_name):
         if mode not in EXECUTION_MODES:
             raise ValueError(
@@ -33,15 +38,21 @@ def output_fixture():
 
     return _method
 
+
 @pytest.fixture
-def run_command_tmux_session():
-    def _method(window_name, user_interactions, config_path=None, session_name="ansible-navigator-test"):
-        out = ''
-        cwd=os.path.join(os.path.dirname(__file__), "..", "..")
+def run_command_using_tmux_session():
+    def _method(
+        window_name,
+        user_interactions,
+        config_path=None,
+        session_name="ansible-navigator-integration-test",
+    ):
+        out = ""
+        cwd = os.path.join(os.path.dirname(__file__), "..", "..")
 
         if config_path is None:
             config_path = os.path.join(
-                os.path.dirname(__file__), "..", "fixtures", "ansible-navigator.yaml"
+                os.path.dirname(__file__), "..", "fixtures", "ansible-navigator.yml"
             )
         os.environ.update({"ANSIBLE_NAVIGATOR_CONFIG": config_path})
 
@@ -53,13 +64,12 @@ def run_command_tmux_session():
             # ensure cwd is library top level folder
             pane.send_keys(f"cd {cwd}")
             for user_interaction in user_interactions:
-                pane.send_keys(user_interaction)
+                pane.send_keys(user_interaction, suppress_history=False)
                 time.sleep(defaults.tumx_read_delay_after_user_interaction)
-                out += '\n'.join(window.cmd('capture-pane', '-p').stdout)
+                out += "\n".join(window.cmd("capture-pane", "-p").stdout)
         finally:
             if server.has_session(session_name):
                 session.kill_session()
-            server.kill_server()
 
         return out
 
