@@ -4,8 +4,9 @@ import os
 import pytest
 import stat
 
-from types import SimpleNamespace
 from typing import List
+from typing import Optional
+from types import SimpleNamespace
 
 import ansible_navigator.utils as utils
 
@@ -82,5 +83,29 @@ def test_get_conf_path_allowed_extension_passed(monkeypatch) -> None:
     )
 
     assert received_config_file_path == expected_config_file_path
-    log_msg = "Skipping .ansible-navigator because required file ansible-navigator does not exist"
+    log_msg = "Skipping .ansible-navigator/ansible-navigator.json because it does not exist"
     assert log_msg in msgs
+
+
+@pytest.mark.parametrize(
+    "set_env, file_path, anticpated_result",
+    [
+        (True, os.path.abspath(__file__), os.path.abspath(__file__)),
+        (True, "", None),
+        (False, None, None),
+    ],
+    ids=[
+        "set and valid",
+        "set and invalid",
+        "not set",
+    ],
+)
+def test_env_var_is_file_path(
+    monkeypatch, set_env: bool, file_path: str, anticpated_result: Optional[str]
+) -> None:
+    """test env var is a file path"""
+    envvar = "ANSIBLE_NAVIGATOR_CONFIG"
+    if set_env:
+        monkeypatch.setenv(envvar, file_path)
+    result = utils.env_var_is_file_path(envvar, "config")
+    assert result[0] == anticpated_result
