@@ -1,5 +1,7 @@
 import pytest
 import os
+import libtmux
+import time
 
 
 EXECUTION_MODES = ["interactive", "stdout"]
@@ -26,6 +28,38 @@ def output_fixture():
 
         with open(fixture_file_path) as fp:
             return fp.read()
+
+    return _method
+
+@pytest.fixture
+def run_command_tmux_session():
+    def _method(window_name, user_interactions, config_path=None, session_name="ansible-navigator-test"):
+        out = ''
+        cwd=os.path.join(os.path.dirname(__file__), "..", "..")
+
+        if config_path is None:
+            config_path = os.path.join(
+                os.path.dirname(__file__), "..", "fixtures", "ansible-navigator.yaml"
+            )
+        os.environ.update({"ANSIBLE_NAVIGATOR_CONFIG": config_path})
+
+        try:
+            server = libtmux.Server()
+            session = server.new_session(session_name, kill_session=True)
+            window = session.new_window(window_name)
+            pane = window.panes[0]
+            # ensure cwd is library top level folder
+            pane.send_keys(f"cd {cwd}")
+            for user_interaction in user_interactions:
+                pane.send_keys(user_interaction)
+                time.sleep(1)
+                out += '\n'.join(window.cmd('capture-pane', '-p').stdout)
+        finally:
+            if server.has_session(session_name):
+                session.kill_session()
+            server.kill_server()
+
+        return out
 
     return _method
 

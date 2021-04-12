@@ -7,3 +7,4 @@ pylint
 pytest-cov
 pytest-xdist
 yamllint
+libtmux
