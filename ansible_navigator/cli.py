@@ -23,6 +23,7 @@ from .config import NavigatorConfig
 from .action_runner import ActionRunner
 
 from .utils import check_for_ansible
+from .utils import env_var_is_file_path
 from .utils import error_and_exit_early
 from .utils import flatten_list
 from .utils import get_and_check_collection_doc_cache
@@ -174,28 +175,33 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
     If it's found but empty or not well formed, bail out.
     """
     pre_logger_msgs = []
-    found_config = False
+    config_path = None
 
-    if os.environ.get("ANSIBLE_NAVIGATOR_CONFIG"):
-        config_path = os.environ.get("ANSIBLE_NAVIGATOR_CONFIG")
-        if os.path.isfile(config_path) and os.path.exists(config_path):
-            found_config = True
+    # Check if the conf path is set via an env var
+    cfg_env_var = "ANSIBLE_NAVIGATOR_CONFIG"
+    env_config_path, msgs = env_var_is_file_path(cfg_env_var, "config")
+    pre_logger_msgs += msgs
 
-    # Otherwise, try to find it a different way
-    config_path, msgs = get_conf_path(
+    # Check well know locations
+    found_config_path, msgs = get_conf_path(
         "ansible-navigator", allowed_extensions=["yml", "yaml", "json"]
     )
     pre_logger_msgs += msgs
-    if config_path is not None:
-        pre_logger_msgs.append("Found config file at {0}".format(config_path))
-        found_config = True
+
+    # Pick the envar set first, followed by found, followed by leave as none
+    if env_config_path is not None:
+        config_path = env_config_path
+        pre_logger_msgs.append(f"Using config file at {config_path} set by {cfg_env_var}")
+    elif found_config_path is not None:
+        config_path = found_config_path
+        pre_logger_msgs.append(f"Using config file at {config_path} in search path")
     else:
         pre_logger_msgs.append(
-            "Could not find config directory." " Using all default values for configuration."
+            "No valid config file found, using all default values for configuration."
         )
 
     config = {}
-    if found_config:
+    if config_path is not None:
         with open(config_path, "r") as config_fh:
             if config_path.endswith(".json"):
                 try:
@@ -210,15 +216,15 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
                     config = yaml.load(config_fh, Loader=SafeLoader)
                 except ScannerError:
                     error_and_exit_early(
-                        "Config file at {0} but it failed to parse it.".format(config_path)
+                        "Config file at {0} but failed to parse it.".format(config_path)
                     )
 
-    if found_config and config and config.get("ansible-navigator"):
+    if config_path and config and config.get("ansible-navigator"):
         # If the config file was found and has the key we expect, log and use it
         pre_logger_msgs.append("Successfully parsed config file")
         return pre_logger_msgs, NavigatorConfig(config)
 
-    if not found_config:
+    if not config_path:
         # If the config file wasn't found, that's still okay. In this case, we
         # instantiate NavigatorConfig with an empty dict.
         return pre_logger_msgs, NavigatorConfig(config)

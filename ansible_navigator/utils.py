@@ -193,6 +193,27 @@ def check_for_ansible() -> Tuple[bool, str]:
     return True, msg
 
 
+def env_var_is_file_path(env_var: str, kind: str) -> Tuple[Optional[str], List[str]]:
+    """check if a given env var is a vialbe file path, if so return that path"""
+    file_path = None
+    msgs = []
+    candidate_path = os.environ.get(env_var)
+    if candidate_path is None:
+        msgs.append(f"No {kind} file set by {env_var}")
+    else:
+        msgs.append(f"Found a {kind} file at {candidate_path} set by {env_var}")
+        if os.path.isfile(candidate_path) and os.path.exists(candidate_path):
+            file_path = candidate_path
+            msgs.append(f"{kind.capitalize()} file at {file_path} set by {env_var} is viable")
+            exp_path = os.path.abspath(os.path.expanduser(file_path))
+            if exp_path != file_path:
+                msgs.append(f"{kind.capitalize()} resolves to {exp_path}")
+                file_path = exp_path
+        else:
+            msgs.append(f"{env_var} set as {candidate_path} but not valid")
+    return file_path, msgs
+
+
 def _get_config_file(
     path: str, filename: str, allowed_extensions: List, msgs: List
 ) -> Optional[str]:
@@ -209,9 +230,7 @@ def _get_config_file(
     for name in valid_file_names:
         candidate_config_path = os.path.join(path, name)
         if not os.path.exists(candidate_config_path):
-            msgs.append(
-                "Skipping {0} because required file {1} does not exist".format(path, filename)
-            )
+            msgs.append(f"Skipping {path}/{name} because it does not exist")
             continue
         config_files_found.append(candidate_config_path)
 
@@ -242,8 +261,8 @@ def get_conf_path(
           We should probably cache the potential paths somewhere, eventually.
     """
 
-    potential_paths = []
-    msgs = []
+    potential_paths: List[str] = []
+    msgs: List[str] = []
 
     # .ansible-navigator of current direcotry
     potential_paths.append(".ansible-navigator")
