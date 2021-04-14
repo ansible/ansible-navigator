@@ -7,6 +7,7 @@ import importlib.util
 import html
 import os
 import stat
+import sys
 import sysconfig
 
 from distutils.spawn import find_executable
@@ -19,6 +20,7 @@ from typing import Mapping
 from typing import Optional
 from typing import Tuple
 from typing import Union
+from typing import NoReturn
 
 from jinja2 import Environment, TemplateError
 
@@ -191,17 +193,76 @@ def check_for_ansible() -> Tuple[bool, str]:
     return True, msg
 
 
-def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[str]]:
+def env_var_is_file_path(env_var: str, kind: str) -> Tuple[Optional[str], List[str]]:
+    """check if a given env var is a vialbe file path, if so return that path"""
+    file_path = None
+    msgs = []
+    candidate_path = os.environ.get(env_var)
+    if candidate_path is None:
+        msgs.append(f"No {kind} file set by {env_var}")
+    else:
+        msgs.append(f"Found a {kind} file at {candidate_path} set by {env_var}")
+        if os.path.isfile(candidate_path) and os.path.exists(candidate_path):
+            file_path = candidate_path
+            msgs.append(f"{kind.capitalize()} file at {file_path} set by {env_var} is viable")
+            exp_path = os.path.abspath(os.path.expanduser(file_path))
+            if exp_path != file_path:
+                msgs.append(f"{kind.capitalize()} resolves to {exp_path}")
+                file_path = exp_path
+        else:
+            msgs.append(f"{env_var} set as {candidate_path} but not valid")
+    return file_path, msgs
+
+
+def _get_config_file(
+    path: str, filename: str, allowed_extensions: List, msgs: List
+) -> Optional[str]:
+    """check if filename is present in given path with allowed
+    extensions. If multiple files are present it throws an error
+    as only a single valid config file can be present in the
+    given path.
     """
-    returns config dir (e.g. /etc/ansible-navigator). First found wins.
+    config_files_found = []
+    config_file = None
+    valid_file_names = [
+        f"{filename}.{allowed_extension}" for allowed_extension in allowed_extensions
+    ]
+    for name in valid_file_names:
+        candidate_config_path = os.path.join(path, name)
+        if not os.path.exists(candidate_config_path):
+            msgs.append(f"Skipping {path}/{name} because it does not exist")
+            continue
+        config_files_found.append(candidate_config_path)
+
+    if len(config_files_found) > 1:
+        error_msg = "only one file among '{0}' should be present under" " directory '{1}'".format(
+            ", ".join(valid_file_names), path
+        )
+        error_msg += " instead multiple config files" " found '{0}'".format(
+            ", ".join(config_files_found)
+        )
+        error_and_exit_early(error_msg)
+
+    if len(config_files_found) == 1:
+        config_file = config_files_found[0]
+
+    return config_file
+
+
+def get_conf_path(
+    filename: Optional[str] = None, allowed_extensions: Optional[List] = None
+) -> Tuple[Optional[str], List[str]]:
+    """
+    returns config dir (e.g. /etc/ansible-navigator) if filename is None and
+    config file path if filename provided. First found wins.
     If a filename is given, ensures the file exists in the directory.
 
     TODO: This is a pretty expensive function (lots of statting things on disk).
           We should probably cache the potential paths somewhere, eventually.
     """
 
-    potential_paths = []
-    msgs = []
+    potential_paths: List[str] = []
+    msgs: List[str] = []
 
     # .ansible-navigator of current direcotry
     potential_paths.append(".ansible-navigator")
@@ -225,12 +286,21 @@ def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[st
         potential_paths.append(path)
 
     for path in potential_paths:
-        must_exist = os.path.join(path, filename) if filename is not None else path
-        if not os.path.exists(must_exist):
-            msgs.append(
-                "Skipping {0} because required file {1} does not exist".format(path, filename)
-            )
-            continue
+        if allowed_extensions:
+            if not filename:
+                msg = f"allowed_extensions '{allowed_extensions}' requires filename to be set"
+                error_and_exit_early(msg)
+
+            config_path = _get_config_file(path, filename, allowed_extensions, msgs)
+            if config_path is None:
+                continue
+        else:
+            config_path = os.path.join(path, filename) if filename is not None else path
+            if not os.path.exists(config_path):
+                msgs.append(
+                    "Skipping {0} because required file {1} does not exist".format(path, filename)
+                )
+                continue
 
         try:
             perms = os.stat(path)
@@ -240,7 +310,7 @@ def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[st
                     "is world-writable.".format(path)
                 )
                 continue
-            return (path, msgs)
+            return (config_path, msgs)
         except OSError:
             continue
 
@@ -249,19 +319,15 @@ def get_conf_dir(filename: Optional[str] = None) -> Tuple[Optional[str], List[st
 
 def set_ansible_envar() -> None:
     """Set an envar if not set, runner will need this"""
-    ansible_config, msgs = get_conf_dir("ansible.cfg")
+    ansible_config_path, msgs = get_conf_path("ansible.cfg")
 
     for msg in msgs:
         logger.debug(msg)
 
-    if ansible_config is not None:
-        # We'll get the directory back, not the full file path.
-        ansible_config = os.path.join(ansible_config, "ansible.cfg")
-
     # set as env var, since we hand env vars over to runner
-    if ansible_config and not os.getenv("ANSIBLE_CONFIG"):
-        os.environ.setdefault("ANSIBLE_CONFIG", ansible_config)
-        logger.debug("ANSIBLE_CONFIG set to %s", ansible_config)
+    if ansible_config_path and not os.getenv("ANSIBLE_CONFIG"):
+        os.environ.setdefault("ANSIBLE_CONFIG", ansible_config_path)
+        logger.debug("ANSIBLE_CONFIG set to %s", ansible_config_path)
 
 
 def get_and_check_collection_doc_cache(args, collection_doc_cache_fname: str) -> Tuple[List, Dict]:
@@ -298,3 +364,9 @@ def _get_kvs(args, collection_doc_cache_path):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod.KeyValueStore(collection_doc_cache_path)
+
+
+def error_and_exit_early(msg) -> NoReturn:
+    """get out of here fast"""
+    print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
+    sys.exit(1)

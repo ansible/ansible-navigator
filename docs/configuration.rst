@@ -14,13 +14,23 @@ Several options in ``ansible-navigator`` can be configured by making use of a
 configuration file. The configuration file can live in one of several places.
 Currently the following paths are checked and the first match is used:
 
-- ``./.ansible-navigator/ansible-navigator.yml`` (project-specific directory)
-- ``[ansible-navigator source code root]/etc/ansible-navigator/ansible-navigator.yml``
-- ``~/.config/ansible-navigator/ansible-navigator.yml``
-- ``/etc/ansible-navigator/ansible-navigator.yml``
-- ``[prefix]/etc/ansible-navigator/ansible-navigator.yml`` (e.g., ``/usr/local/etc/...``)
+- ``ANSIBLE_NAVIGATOR_CONFIG`` (configuration file path environment variable if set)
+- ``./.ansible-navigator/<ansible-navigator-filename>`` (project-specific directory)
+- ``[ansible-navigator source code root]/etc/ansible-navigator/<ansible-navigator-filename>``
+- ``~/.config/ansible-navigator/<ansible-navigator-filename>``
+- ``/etc/ansible-navigator/<ansible-navigator-filename>``
+- ``[prefix]/etc/ansible-navigator/<ansible-navigator-filename>`` (e.g., ``/usr/local/etc/...``)
 
-Here is an example conifguration file which can be copied into one of those paths.
+.. note::
+- The configuration file can either be in ``JSON`` or ``YAML`` format.
+- For configuration in ``JSON`` format the file name should be ``ansible-navigator.json``
+- For configuration in ``YAML`` format the file name can be either ``ansible-navigator.yml``
+  or ``ansible-navigator.yaml``.
+- The first found matched directory path (based on order mentioned above) can have only one
+  valid configuration file. If in case more than one configuration files (with different
+  supported extensions) are found it will result in an error to avoid conflict.
+
+You can copy the example configuration file below into one of those paths to start your ``ansible-navigator`` config file.
 
 .. literalinclude:: sample-config.yml
    :language: yaml
