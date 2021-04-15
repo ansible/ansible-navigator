@@ -1,5 +1,6 @@
 """ start here
 """
+import json
 import logging
 import os
 import sys
@@ -12,7 +13,6 @@ from curses import wrapper
 from functools import partial
 from typing import Callable
 from typing import List
-from typing import NoReturn
 from typing import Optional
 from typing import Tuple
 from yaml.scanner import ScannerError
@@ -23,9 +23,11 @@ from .config import NavigatorConfig
 from .action_runner import ActionRunner
 
 from .utils import check_for_ansible
+from .utils import env_var_is_file_path
+from .utils import error_and_exit_early
 from .utils import flatten_list
 from .utils import get_and_check_collection_doc_cache
-from .utils import get_conf_dir
+from .utils import get_conf_path
 from .utils import set_ansible_envar
 from .utils import Sentinel
 
@@ -78,12 +80,6 @@ def _get_share_dir() -> Optional[str]:
 
     # No path found above
     return None
-
-
-def error_and_exit_early(msg) -> NoReturn:
-    """get out of here fast"""
-    print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
-    sys.exit(1)
 
 
 def update_args(args: Namespace) -> List[str]:
@@ -179,36 +175,55 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
     If it's found but empty or not well formed, bail out.
     """
     pre_logger_msgs = []
-    found_config = False
-
-    # Otherwise, try to find it a different way
-    config_dir, msgs = get_conf_dir("ansible-navigator.yml")
+    config_path = None
+    # Check if the conf path is set via an env var
+    cfg_env_var = "ANSIBLE_NAVIGATOR_CONFIG"
+    env_config_path, msgs = env_var_is_file_path(cfg_env_var, "config")
     pre_logger_msgs += msgs
-    if config_dir is not None:
-        # Since we give get_conf_dir our config path, it's guaranteed to exist
-        # if config_dir is not None.
-        config_path = os.path.join(config_dir, "ansible-navigator.yml")
-        pre_logger_msgs.append("Found config file at {0}".format(config_path))
-        found_config = True
+
+    # Check well know locations
+    found_config_path, msgs = get_conf_path(
+        "ansible-navigator", allowed_extensions=["yml", "yaml", "json"]
+    )
+    pre_logger_msgs += msgs
+
+    # Pick the envar set first, followed by found, followed by leave as none
+    if env_config_path is not None:
+        config_path = env_config_path
+        pre_logger_msgs.append(f"Using config file at {config_path} set by {cfg_env_var}")
+    elif found_config_path is not None:
+        config_path = found_config_path
+        pre_logger_msgs.append(f"Using config file at {config_path} in search path")
     else:
-        pre_logger_msgs.append("Could not find config directory, using all defaults.")
+        pre_logger_msgs.append(
+            "No valid config file found, using all default values for configuration."
+        )
 
     config = {}
-    if found_config:
+    if config_path is not None:
         with open(config_path, "r") as config_fh:
-            try:
-                config = yaml.load(config_fh, Loader=SafeLoader)
-            except ScannerError:
-                error_and_exit_early(
-                    "Config file at {0} but it failed to parse it.".format(config_path)
-                )
+            if config_path.endswith(".json"):
+                try:
+                    config = json.load(config_fh)
+                except (TypeError, json.decoder.JSONDecodeError) as exe:
+                    msg = "Invalid JSON config found in file '{0}'." " Failed with '{1}'".format(
+                        config_fh, str(exe)
+                    )
+                    error_and_exit_early(msg)
+            else:
+                try:
+                    config = yaml.load(config_fh, Loader=SafeLoader)
+                except ScannerError:
+                    error_and_exit_early(
+                        "Config file at {0} but failed to parse it.".format(config_path)
+                    )
 
-    if found_config and config and config.get("ansible-navigator"):
+    if config_path and config and config.get("ansible-navigator"):
         # If the config file was found and has the key we expect, log and use it
         pre_logger_msgs.append("Successfully parsed config file")
         return pre_logger_msgs, NavigatorConfig(config)
 
-    if not found_config:
+    if not config_path:
         # If the config file wasn't found, that's still okay. In this case, we
         # instantiate NavigatorConfig with an empty dict.
         return pre_logger_msgs, NavigatorConfig(config)
@@ -223,6 +238,7 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:
     # pylint: disable=too-many-branches
     # pylint: disable=too-many-statements
+    # pylint: disable=too-many-locals
     """parse some params and update"""
     parser = CliArgs(APP_NAME).parser
 
@@ -242,9 +258,24 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
-    # don't expand "" (the default)
-    if hasattr(args, "playbook") and args.playbook:
-        args.playbook = os.path.abspath(os.path.expanduser(args.playbook))
+    # command line will be a list, settings file is a dict
+    if hasattr(args, "set_environment_variable") and isinstance(
+        args.set_environment_variable, list
+    ):
+        args.set_environment_variable = [
+            i for i in args.set_environment_variable if i is not Sentinel
+        ]
+        args.set_environment_variable = flatten_list(args.set_environment_variable)
+        set_envs = {}
+        for env_var in args.set_environment_variable:
+            parts = env_var.split("=")
+            if len(parts) != 2:
+                error_and_exit_early(
+                    "The following set-environment-variable"
+                    f" entry could not be parsed: {env_var}"
+                )
+            set_envs[parts[0]] = parts[1]
+        args.set_environment_variable = set_envs
 
     if hasattr(args, "inventory"):
         # The default argparse value is [Sentinel] for default detection purposes
@@ -255,6 +286,10 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         args.inventory = [os.path.abspath(os.path.expanduser(i)) for i in args.inventory]
         if not args.inventory and args.app == "inventory":
             parser.error("an inventory is required when using the inventory explorer")
+
+    # don't expand "" (the default)
+    if hasattr(args, "playbook") and args.playbook:
+        args.playbook = os.path.abspath(os.path.expanduser(args.playbook))
 
     if not args.app:
         args.app = "welcome"

@@ -178,10 +178,32 @@ class CliArgs:
         )
         parser.add_argument(
             "--eei",
-            "--ee-image",
+            "--execution-environment-image",
             help="Specify the name of the container image containing an Execution Environment",
             default=Sentinel,
-            dest="ee_image",
+            dest="execution_environment_image",
+        )
+        parser.add_argument(
+            "--senv",
+            "--set_environment_variable",
+            action="append",
+            default=[Sentinel],
+            dest="set_environment_variable",
+            help="Specify an environment variable and a value to be set within the \
+                  execution enviroment (--senv MY_VAR=42)",
+            nargs="+",
+        )
+        parser.add_argument(
+            "--penv",
+            "--pass_environment_variable",
+            action="append",
+            default=[Sentinel],
+            dest="pass_environment_variable",
+            help=(
+                "Specify an exiting environment variable to be passed through to and set \
+                 within the execution enviroment (--penv MY_VAR)"
+            ),
+            nargs="+",
         )
 
     def _run(self) -> None:

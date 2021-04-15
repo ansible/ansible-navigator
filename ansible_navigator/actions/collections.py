@@ -301,7 +301,7 @@ class Action(App):
 
         cmd += ["-v", f"{self._collection_cache_path}:{self._collection_cache_path}:z"]
 
-        cmd += [self._args.ee_image]
+        cmd += [self._args.execution_environment_image]
         cmd += ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]
         cmd += ["-a", self._adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]

@@ -32,7 +32,7 @@ def test_fixtures_dir():
         ),
         (
             ["config"],
-            "ee_image",
+            "execution_environment_image",
             "quay.io/ansible/ansible-runner:devel",
         ),
         (
@@ -91,21 +91,21 @@ def test_fixtures_dir():
 def test_update_args(monkeypatch, test_fixtures_dir, given, argname, expected):
     """test the parse and update function"""
 
-    def get_conf_dir(*_args, **_kwargs):
-        return test_fixtures_dir, []
+    def get_conf_path(*_args, **_kwargs):
+        return os.path.join(test_fixtures_dir, "ansible-navigator.yml"), []
 
-    monkeypatch.setattr(cli, "get_conf_dir", get_conf_dir)
+    monkeypatch.setattr(cli, "get_conf_path", get_conf_path)
     _pre_logger_msgs, args = cli.parse_and_update(given)
     result = vars(args)[argname]
     assert result == expected
 
 
 def test_editor_command_default(monkeypatch):
-    """test editor with defualt"""
+    """test editor with default"""
 
-    def get_conf_dir(*_args, **_kwargs):
+    def get_conf_path(*_args, **_kwargs):
         return None, []
 
-    monkeypatch.setattr(cli, "get_conf_dir", get_conf_dir)
+    monkeypatch.setattr(cli, "get_conf_path", get_conf_path)
     _pre_logger_msgs, args = cli.parse_and_update([])
     assert args.editor_command == "vi +{line_number} {filename}"

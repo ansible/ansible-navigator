@@ -46,8 +46,10 @@ _DEFAULTS = {
         },
         "mode": "interactive",
         "no-osc4": False,
+        "pass-environment-variable": [],
         "playbook": "",
         "playbook-artifact": "{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json",
+        "set-environment-variable": {},
     },
 }
 
@@ -57,16 +59,18 @@ ARGPARSE_TO_CONFIG = {
     "container_engine": [ROOT, "container-engine"],
     "editor_command": [ROOT, "editor", "command"],
     "editor_console": [ROOT, "editor", "console"],
-    "ee_image": [ROOT, "execution-environment-image"],
+    "execution_environment_image": [ROOT, "execution-environment-image"],
     "execution_environment": [ROOT, "execution-environment"],
-    "inventory": [ROOT, "inventory"],
     "inventory_columns": [ROOT, "inventory-columns"],
+    "inventory": [ROOT, "inventory"],
     "logfile": [ROOT, "log", "file"],
     "loglevel": [ROOT, "log", "level"],
     "mode": [ROOT, "mode"],
-    "playbook": [ROOT, "playbook"],
-    "playbook_artifact": [ROOT, "playbook-artifact"],
     "no_osc4": [ROOT, "no-osc4"],
+    "pass_environment_variable": [ROOT, "pass-environment-variable"],
+    "playbook_artifact": [ROOT, "playbook-artifact"],
+    "playbook": [ROOT, "playbook"],
+    "set_environment_variable": [ROOT, "set-environment-variable"],
     "type": [ROOT, "doc-plugin-type"],
 }
 

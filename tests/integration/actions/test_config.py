@@ -50,7 +50,7 @@ def test_run_config_interactive_container(container_runtime_installed) -> None:
     kwargs = {
         "container_engine": container_runtime_installed,
         "execution_environment": True,
-        "ee_image": defaults.default_container_image,
+        "execution_environment_image": defaults.default_container_image,
     }
     actionruntest = ActionRunTest("config", **kwargs)
     action_obj = actionruntest.run_action_interactive()
@@ -61,9 +61,10 @@ def test_run_config_interactive_container(container_runtime_installed) -> None:
 def test_run_stdout_dump_container(container_runtime_installed) -> None:
     """test config dump to stdout within execution environment"""
     kwargs = {
+        "set_environment_variable": {"PAGER": "cat"},
         "container_engine": container_runtime_installed,
         "execution_environment": True,
-        "ee_image": defaults.default_container_image,
+        "execution_environment_image": defaults.default_container_image,
     }
     actionruntest = ActionRunTest("config", **kwargs)
     out, _err = actionruntest.run_action_stdout(["dump"])

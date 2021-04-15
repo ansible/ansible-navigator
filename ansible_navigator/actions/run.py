@@ -566,13 +566,15 @@ class Action(App):
         """ spin up runner """
         executable_cmd: Optional[str]
         kwargs = {
-            "playbook": self.args.playbook,
-            "inventory": self.args.inventory,
             "cmdline": self.args.cmdline,
             "container_engine": self.args.container_engine,
+            "execution_environment_image": self.args.execution_environment_image,
             "execution_environment": self.args.execution_environment,
-            "ee_image": self.args.ee_image,
+            "inventory": self.args.inventory,
             "navigator_mode": self.args.mode,
+            "pass_environment_variable": self.args.pass_environment_variable,
+            "playbook": self.args.playbook,
+            "set_environment_variable": self.args.set_environment_variable,
         }
         if self.args.execution_environment:
             executable_cmd = "ansible-playbook"

@@ -25,11 +25,13 @@ class BaseRunner:
         self,
         container_engine: Optional[str] = None,
         execution_environment: Optional[bool] = False,
-        ee_image: Optional[str] = None,
+        execution_environment_image: Optional[str] = None,
         navigator_mode: Optional[str] = None,
         container_volume_mounts: Optional[List] = None,
         container_options: Optional[List] = None,
         container_workdir: Optional[str] = None,
+        set_environment_variable: Optional[Dict] = None,
+        pass_environment_variable: Optional[List] = None,
         cwd: Optional[str] = None,
     ) -> None:
         """BaseRunner class handle common argument for ansible-runner interface class
@@ -39,8 +41,9 @@ class BaseRunner:
                                                 Defaults to podman. # noqa: E501
             execution_environment ([bool], optional): Boolean argument controls execution
                                                       environment enable or not. Defaults to False.
-            ee_image ([str], optional): Container image to use when running an command.
-                                        Defaults to None.
+            execution_environment_image ([str], optional): Container image to use when
+                                                           running an command.
+                                                           Defaults to None.
             navigator_mode ([str], optional): Valid value is either ``stdout`` or ``interactive``.
                                               If value is set to ``stdout`` passed the
                                               ``stdin`` of current running process is passed to
@@ -56,11 +59,15 @@ class BaseRunner:
             container_workdir ([str], optional): The working directory within the container.
                                                  Defaults to None.
             cwd ([str], optional): The current local working directory. Defaults to None.
+            set_environment_variable([dict], optional): Dict of user requested envvars to set
+            pass_environment_variable([list], optional): List of user requested envvars to pass
         """
         self._ce = container_engine
         self._ee = execution_environment
-        self._eei = ee_image
+        self._eei = execution_environment_image
         self._navigator_mode = navigator_mode
+        self._set_environment_variable = set_environment_variable
+        self._pass_environment_variable = pass_environment_variable
         self._cwd = cwd
         self.cancelled: bool = False
         self.finished: bool = False
@@ -82,11 +89,12 @@ class BaseRunner:
             {
                 "json_mode": True,
                 "quiet": True,
-                "envvars": {k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")},
                 "cancel_callback": self.runner_cancelled_callback,
                 "finished_callback": self.runner_finished_callback,
             }
         )
+        self._add_env_vars_to_args()
+
         if self._cwd:
             self._runner_args.update({"cwd": self._cwd})
 
@@ -94,6 +102,10 @@ class BaseRunner:
             self._runner_args.update(
                 {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr}
             )
+
+    def runner_cancelled_callback(self):
+        """check by runner to see if it should cancel"""
+        return self.cancelled
 
     def runner_finished_callback(self, runner: Runner):
         """called when runner finishes
@@ -104,9 +116,22 @@ class BaseRunner:
         self.status = runner.status
         self.finished = True
 
-    def runner_cancelled_callback(self):
-        """check by runner to see if it should cancel"""
-        return self.cancelled
+    def _add_env_vars_to_args(self):
+        self._runner_args["envvars"] = {
+            k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")
+        }
+        if self._set_environment_variable:
+            self._runner_args["envvars"].update(self._set_environment_variable)
+        if self._pass_environment_variable:
+            for env_var in self._pass_environment_variable:
+                value = os.environ.get(env_var)
+                if value is None:
+                    self._logger.warning(
+                        "Pass through enviroment variable `%s`" " not currently set, discarded",
+                        env_var,
+                    )
+                else:
+                    self._runner_args["envvars"][env_var] = value
 
 
 class CommandBaseRunner(BaseRunner):
