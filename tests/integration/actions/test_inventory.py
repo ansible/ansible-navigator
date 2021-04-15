@@ -1,222 +1,86 @@
 """ inventory integration tests
 """
+import json
 import os
 import pytest
-import time
 
-from .._common import get_executable_path, TmuxSession
+from .._common import get_executable_path
+from .._common import TmuxSession
 
 fixtures_dir = os.path.join(os.path.dirname(__file__), "..", "..", "fixtures")
 
-# fmt: off
-inventory_list_out = [
-"""  TITLE                                                                                                                                                             DESCRIPTION
-0│Browse groups                                                                                                                                                     Explore each inventory group and group members members
-1│Browse hosts                                                                                                                                                      Explore the inventory with a list of all hosts
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 01 - Top window
-"""  NAME                                                                                                                                                                                                                                                                                                                           TAXONOMY                                                                                                                                                                                                                                                                                       TYPE
-0│hosts                                                                                                                                                                                                                                                                                                                          all                                                                                                                                                                                                                                                                                            group
-1│ungrouped                                                                                                                                                                                                                                                                                                                      all                                                                                                                                                                                                                                                                                            group
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 02 - Press 0
-"""  NAME                                                                                                                                                                                                                                                                      TAXONOMY                                                                                                                                                                                                                                                                                                                                    TYPE
-0│group01                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-1│group02                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-2│group03                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 03 - Press 0
-"""  NAME                                                                                                                                                                                                                            TAXONOMY                                                                                                                                                                                                                                                                                                                                                                                                                                                        TYPE
-0│host0101                                                                                                                                                                                                                        all▸hosts▸group01                                                                                                                                                                                                                                                                                                                                                                                                                                               host
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 04 - Press 0
-"""[host0101] org.coll.nos
-0│---
-1│ansible_become: true
-2│ansible_connection: ansible.netcommon.network_cli
-3│ansible_host: host0101.test.com
-4│ansible_network_os: org.coll.nos
-5│group01_foo: group01_bar
-6│host0101_foo: host0101_bar
-7│inventory_hostname: host0101
-^f/PgUp page up                                                                                                                                                    ^b/PgDn page down                                                                                                                                                    ↑↓ scroll                                                                                                                                                    esc back                                                                                                                                                    :help help
-""",                 # noqa: E122, E501 # 05 - Press 0
-"""  NAME                                                                                                                                                                                                                            TAXONOMY                                                                                                                                                                                                                                                                                                                                                                                                                                                        TYPE
-0│host0101                                                                                                                                                                                                                        all▸hosts▸group01                                                                                                                                                                                                                                                                                                                                                                                                                                               host
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 06 - Press ESCAPE
-"""  NAME                                                                                                                                                                                                                                                                      TAXONOMY                                                                                                                                                                                                                                                                                                                                    TYPE
-0│group01                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-1│group02                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-2│group03                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 07 - Press ESCAPE
-"""  NAME                                                                                                                                                                                                                            TAXONOMY                                                                                                                                                                                                                                                                                                                                                                                                                                                        TYPE
-0│host0201                                                                                                                                                                                                                        all▸hosts▸group02                                                                                                                                                                                                                                                                                                                                                                                                                                               host
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 08 - Press 1
-"""[host0201]
-0│---
-1│ansible_become: true
-2│ansible_become_pass: test
-3│ansible_host: host0201.test.com
-4│host0201_foo: host0201_bar
-5│inventory_hostname: host0201
-^f/PgUp page up                                                                                                                                                    ^b/PgDn page down                                                                                                                                                    ↑↓ scroll                                                                                                                                                    esc back                                                                                                                                                    :help help
-""",                 # noqa: E122, E501 # 09 - Press 0
-"""  NAME                                                                                                                                                                                                                            TAXONOMY                                                                                                                                                                                                                                                                                                                                                                                                                                                        TYPE
-0│host0201                                                                                                                                                                                                                        all▸hosts▸group02                                                                                                                                                                                                                                                                                                                                                                                                                                               host
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 10 - Press ESCAPE
-"""  NAME                                                                                                                                                                                                                                                                      TAXONOMY                                                                                                                                                                                                                                                                                                                                    TYPE
-0│group01                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-1│group02                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-2│group03                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 11 - Press ESCAPE
-"""  NAME                                                                                                                                                                                                                            TAXONOMY                                                                                                                                                                                                                                                                                                                                                                                                                                                        TYPE
-0│host0301                                                                                                                                                                                                                        all▸hosts▸group03                                                                                                                                                                                                                                                                                                                                                                                                                                               host
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 12 - Press 2
-"""[host0301]
-0│---
-1│ansible_host: host0301.test.com
-2│host0301_foo: host0301_bar
-3│inventory_hostname: host0301
-^f/PgUp page up                                                                                                                                                    ^b/PgDn page down                                                                                                                                                    ↑↓ scroll                                                                                                                                                    esc back                                                                                                                                                    :help help
-""",                 # noqa: E122, E501 # 13 - Press 0
-"""  NAME                                                                                                                                                                                                                            TAXONOMY                                                                                                                                                                                                                                                                                                                                                                                                                                                        TYPE
-0│host0301                                                                                                                                                                                                                        all▸hosts▸group03                                                                                                                                                                                                                                                                                                                                                                                                                                               host
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 14 - Press ESCAPE
-"""  NAME                                                                                                                                                                                                                                                                      TAXONOMY                                                                                                                                                                                                                                                                                                                                    TYPE
-0│group01                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-1│group02                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-2│group03                                                                                                                                                                                                                                                                   all▸hosts                                                                                                                                                                                                                                                                                                                                   group
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 15 - Press ESCAPE
-"""  NAME                                                                                                                                                                                                                                                                                                                           TAXONOMY                                                                                                                                                                                                                                                                                       TYPE
-0│hosts                                                                                                                                                                                                                                                                                                                          all                                                                                                                                                                                                                                                                                            group
-1│ungrouped                                                                                                                                                                                                                                                                                                                      all                                                                                                                                                                                                                                                                                            group
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 16 - Press ESCAPE
-"""  TITLE                                                                                                                                                             DESCRIPTION
-0│Browse groups                                                                                                                                                     Explore each inventory group and group members members
-1│Browse hosts                                                                                                                                                      Explore the inventory with a list of all hosts
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 17 - Press ESCAPE
-"""  INVENTORY HOSTNAME
-0│host0101
-1│host0201
-2│host0301
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 18 - Press 1
-"""[host0101] org.coll.nos
-0│---
-1│ansible_become: true
-2│ansible_connection: ansible.netcommon.network_cli
-3│ansible_host: host0101.test.com
-4│ansible_network_os: org.coll.nos
-5│group01_foo: group01_bar
-6│host0101_foo: host0101_bar
-7│inventory_hostname: host0101
-^f/PgUp page up                                                                                         ^b/PgDn page down                                                                                         ↑↓ scroll                                                                                         esc back                                                                                         + previous                                                                                         - next                                                                                         [0-9] goto                                                                                         :help help
-""",                # noqa: E122, E501  # 19 - Press 0
-"""  INVENTORY HOSTNAME
-0│host0101
-1│host0201
-2│host0301
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                # noqa: E122, E501 # 20 - Press ESCAPE
-"""[host0201]
-0│---
-1│ansible_become: true
-2│ansible_become_pass: test
-3│ansible_host: host0201.test.com
-4│host0201_foo: host0201_bar
-5│inventory_hostname: host0201
-^f/PgUp page up                                                                                         ^b/PgDn page down                                                                                         ↑↓ scroll                                                                                         esc back                                                                                         + previous                                                                                         - next                                                                                         [0-9] goto                                                                                         :help help
-""",                # noqa: E122, E501 # 21 - Press 1
-"""  INVENTORY HOSTNAME
-0│host0101
-1│host0201
-2│host0301
-^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help
-""",                 # noqa: E122, E501 # 22 - Press ESCAPE
-"""[host0301]
-0│---
-1│ansible_host: host0301.test.com
-2│host0301_foo: host0301_bar
-3│inventory_hostname: host0301
-^f/PgUp page up                                                                                         ^b/PgDn page down                                                                                         ↑↓ scroll                                                                                         esc back                                                                                         + previous                                                                                         - next                                                                                         [0-9] goto                                                                                         :help help
-""",                 # noqa: E122, E501 # 23 - Press 2
-"$\n"                # noqa: E122, E501 # 24 - Press :quit
+CLI = (
+    f"{get_executable_path('python')}"
+    " -m ansible_navigator inventory"
+    f" -i {os.path.join(fixtures_dir,'inventory')}"
+)
+
+testdata = [
+    (0, CLI, "ansible-navigator inventory command top window"),
+    (1, ":0", "Browse hosts/ungrouped window"),
+    (2, ":0", "Group list window"),
+    (3, ":0", "group01 hosts detail window"),
+    (4, ":0", "host0101 detail window"),
+    (5, ":back", "Previous window (group01 hosts detail window)"),
+    (6, ":back", "Previous window (Group list window)"),
+    (7, ":1", "group02 hosts detail window"),
+    (8, ":0", "host0201 detail window"),
+    (9, ":back", "Previous window (group02 hosts detail window)"),
+    (10, ":back", "Previous window (Group list window)"),
+    (11, ":2", "group03 hosts detail window"),
+    (12, ":0", "host0301 detail window"),
+    (13, ":back", "Previous window (group03 hosts detail window)"),
+    (14, ":back", "Previous window (Group list window)"),
+    (15, ":back", "Previous window (Browse hosts/ungrouped window)"),
+    (16, ":back", "Previous window (top window)"),
+    (17, ":1", "Inventory hostname window"),
+    (18, ":0", "host0101 detail window"),
+    (19, ":back", "Previous window after host0101 (Inventory hostname window)"),
+    (20, ":1", "host0201 detail window"),
+    (21, ":back", "Previous window after host0201 (Inventory hostname window)"),
+    (22, ":2", "host0301 detail window"),
 ]
 
 
-@pytest.mark.parametrize(
-    "user_input, expected_output",
-    [
-        (
-            "{0} -m ansible_navigator inventory -i {1}".format(get_executable_path('python'),
-                                                               os.path.join(fixtures_dir,
-                                                                            'inventory')),
-            inventory_list_out[0]
-        ),  # "01 - ansible-navigator inventory command top window"
-        ("0", inventory_list_out[1]),  # "02 - Browse hosts/ungrouped window"
-        ("0", inventory_list_out[2]),  # "03 - Group list window"
-        ("0", inventory_list_out[3]),  # "04 - group01 hosts detail window"
-        ("0", inventory_list_out[4]),  # "05 - host0101 detail window"
-        ("Escape", inventory_list_out[5]),  # "06 - Previous window (group01 hosts detail window)"
-        ("Escape", inventory_list_out[6]),  # "07 - Previous window (Group list window)"
-        ("1", inventory_list_out[7]),  # "08 - group02 hosts detail window"
-        ("0", inventory_list_out[8]),  # "09 - host0201 detail window"
-        ("Escape", inventory_list_out[9]),  # "10 - Previous window (group02 hosts detail window)"
-        ("Escape", inventory_list_out[10]),  # "11 - Previous window (Group list window)"
-        ("2", inventory_list_out[11]),  # "12 - group03 hosts detail window"
-        ("0", inventory_list_out[12]),  # "13 - host0301 detail window"
-        ("Escape", inventory_list_out[13]),  # "14 - Previous window (group03 hosts detail window)"
-        ("Escape", inventory_list_out[14]),  # "15 - Previous window (Group list window)"
-        ("Escape", inventory_list_out[15]),  # "16-Previous window (Browse hosts/ungrouped window)"
-        ("Escape", inventory_list_out[16]),  # "17 - Previous window (top window)"
-        ("1", inventory_list_out[17]),  # "18 - Inventory hostname window"
-        ("0", inventory_list_out[18]),  # "19 - host0101 detail window"
-        ("Escape", inventory_list_out[19]),  # "20 - Previous window (Inventory hostname window)"
-        ("1", inventory_list_out[20]),  # "21 - host0201 detail window"
-        ("Escape", inventory_list_out[21]),  # "22 - Previous window (Inventory hostname window)"
-        ("2", inventory_list_out[22]),  # "23 - host0301 detail window"
-        (":quit", inventory_list_out[23]),  # "24 - quit app"
-    ],
-    ids=[
-        "01 - ansible-navigator inventory command top window",
-        "02 - Browse hosts/ungrouped window",
-        "03 - Group list window",
-        "04 - group01 hosts detail window",
-        "05 - host0101 detail window",
-        "06 - Previous window (group01 hosts detail window)",
-        "07 - Previous window (Group list window)",
-        "08 - group02 hosts detail window",
-        "09 - host0201 detail window",
-        "10 - Previous window (group02 hosts detail window)",
-        "11 - Previous window (Group list window)",
-        "12 - group03 hosts detail window",
-        "13 - host0301 detail window",
-        "14 - Previous window (group03 hosts detail window)",
-        "15 - Previous window (Group list window)",
-        "16 - Previous window (Browse hosts/ungrouped window)",
-        "17 - Previous window (top window)",
-        "18 - Inventory hostname window",
-        "19 - host0101 detail window",
-        "20 - Previous window (Inventory hostname window)",
-        "21 - host0201 detail window",
-        "22 - Previous window (Inventory hostname window)",
-        "23 - host0301 detail window",
-        "24 - quit app",
-    ],
-)
-def test_inventory_interactive_inventory_list(tmux_session, user_input, expected_output):
+def test_testdata_indicies():
+    """sanity check on the data because I forgot how to count"""
+    expected = list(range(0, len(testdata)))
+    actual = [x[0] for x in testdata]
+    assert expected == actual
+
+
+@pytest.mark.parametrize("index, user_input, comment", testdata)
+def test_inventory_interactive_inventory_list(request, tmux_session, index, user_input, comment):
+    # pylint:disable=unused-argument
+    """test interactive inventory
+
+    uncomment the update_fixtures line to update the fixtures
+    """
     received_output = tmux_session.interaction(user_input)
-    if user_input != ":quit":
-        assert expected_output in received_output
-    else:
-        assert received_output.endswith(expected_output)
+    # update_fixtures(request, index, received_output, comment) # FIXME: keep commented out
+    dir_path, file_name = fixture_path_from_request(request, index)
+    with open(f"{dir_path}/{file_name}") as infile:
+        expected_output = json.load(infile)["output"]
+    assert expected_output == received_output
+
+
+def update_fixtures(request, index, received_output, comment):
+    """update the fixtures"""
+    dir_path, file_name = fixture_path_from_request(request, index)
+    os.makedirs(dir_path, exist_ok=True)
+    fixture = {
+        "name": request.node.name,
+        "index": index,
+        "comment": comment,
+        "output": received_output,
+    }
+    with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:
+        json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
+
+
+def fixture_path_from_request(request, index):
+    """build a dir and file path for a test"""
+    path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
+    dir_path = f"{fixtures_dir}/{path_in_fixture_dir}/{request.node.originalname}"
+    file_name = f"{index}.json"
+    return dir_path, file_name

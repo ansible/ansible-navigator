@@ -5,20 +5,18 @@ import re
 import sys
 import tempfile
 import time
-import libtmux
 
 from argparse import Namespace
-
+from distutils.spawn import find_executable
 from typing import Any
 from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Optional
 
-from distutils.spawn import find_executable
+import libtmux  # type: ignore
 
-from .. import defaults
-
+from _pytest.monkeypatch import MonkeyPatch
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
@@ -160,6 +158,7 @@ class TmuxSession:
         cwd=None,
         session_name="ansible-navigator-integration-test",
     ) -> None:
+        self._monkeypatch = MonkeyPatch()
         self._window_name = window_name
         self._config_path = config_path
         self._session_name = session_name
@@ -169,31 +168,40 @@ class TmuxSession:
             self._config_path = os.path.join(
                 os.path.dirname(__file__), "..", "fixtures", "ansible-navigator.yml"
             )
-        os.environ.update({"ANSIBLE_NAVIGATOR_CONFIG": self._config_path})
-
         if self._cwd is None:
             # ensure CWD is top folder of library
             self._cwd = os.path.join(os.path.dirname(__file__), "..", "..")
 
     def __enter__(self):
+        # pylint: disable=attribute-defined-outside-init
         self._server = libtmux.Server()
-        self._session = self._server.new_session(self._session_name, kill_session=True)
+        self._session = self._server.new_session(
+            session_name=self._session_name, start_directory=self._cwd, kill_session=True
+        )
         self._window = self._session.new_window(self._window_name)
         self._pane = self._window.panes[0]
-        self._pane.set_width(50)
-        self._pane.set_height(100)
-        # ensure cwd is library top level folder
-        self._pane.send_keys(f"cd {self._cwd}")
+        self._pane.split_window(attach=False)
+        # split vertical
+        self._pane.split_window(vertical=False, attach=False)
+        # attached to upper left
+        self._pane.set_height(20)
+        self._pane.set_width(132)
+        # do this here so it goes away with the tmux shell session
+        self._pane.send_keys(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        os.environ.pop("ANSIBLE_NAVIGATOR_CONFIG")
         if self._server.has_session(self._session_name):
             self._session.kill_session()
 
     def interaction(self, value):
-        out = ""
+        """interact with the tmux session"""
         self._pane.send_keys(value, suppress_history=False)
-        time.sleep(defaults.tumx_read_delay_after_user_interaction)
-        out += "\n".join(self._window.cmd("capture-pane", "-p").stdout) + "\n"
-        return out
+        help_not_on_screen = True
+        while help_not_on_screen:
+            showing = []
+            while not showing:
+                time.sleep(0.1)
+                showing = self._pane.capture_pane()
+            help_not_on_screen = not any(":help help" in line for line in showing)
+        return showing

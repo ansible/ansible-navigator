@@ -1,0 +1,22 @@
+ansible-navigator:
+  container-engine: docker
+  editor:
+    command: code -g {filename}:{line_number}
+    console: False
+  execution-environment-image: quay.io/ansible/network-ee
+  inventory:
+    - ../nav_demo/inventory.yaml
+  inventory-columns:
+    - ansible_network_os
+    - ansible_network_cli_ssh_type
+    - ansible_connection
+  log:
+    level: debug
+  no-osc4: True
+  playbook: ../nav_demo/simple.yaml
+  set-environment-variable:
+    SHELL: foo
+  volume-mounts:
+  - local:
+    mount_as:
+    

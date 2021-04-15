@@ -1,6 +1,5 @@
-import pytest
 import os
-import libtmux
+import pytest
 import time
 
 from .. import defaults
@@ -22,13 +21,15 @@ def tmux_session():
 
 @pytest.fixture(scope="session", autouse=True)
 def container_runtime_available():
+    """check if a container runtime is available"""
+    # pylint: disable=import-outside-toplevel
     import subprocess
     import warnings
 
     runtimes_available = True
     for runtime in ("docker", "podman"):
         try:
-            subprocess.run([runtime, "-v"])
+            subprocess.run([runtime, "-v"], check=False)
         except FileNotFoundError:
             warnings.warn(UserWarning(f"{runtime} not available"))
             runtimes_available = False
@@ -37,11 +38,13 @@ def container_runtime_available():
 
 @pytest.fixture(scope="session")
 def container_runtime_installed():
+    """check if container runtime is available"""
+    # pylint: disable=import-outside-toplevel
     import subprocess
 
     for runtime in ("podman", "docker"):
         try:
-            subprocess.run([runtime, "-v"])
+            subprocess.run([runtime, "-v"], check=False)
             return runtime
         except FileNotFoundError:
             pass
