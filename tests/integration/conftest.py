@@ -61,14 +61,14 @@ def run_command_using_tmux_session():
             session = server.new_session(session_name, kill_session=True)
             window = session.new_window(window_name)
             pane = window.panes[0]
-            pane.set_width(100)
+            pane.set_width(50)
             pane.set_height(100)
             # ensure cwd is library top level folder
             pane.send_keys(f"cd {cwd}")
             for user_interaction in user_interactions:
                 pane.send_keys(user_interaction, suppress_history=False)
                 time.sleep(defaults.tumx_read_delay_after_user_interaction)
-                out += "\n".join(window.cmd("capture-pane", "-p").stdout)
+                out += "\n".join(window.cmd("capture-pane", "-p").stdout) + "\n"
         finally:
             if server.has_session(session_name):
                 session.kill_session()
