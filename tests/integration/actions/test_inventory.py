@@ -4,15 +4,16 @@ import json
 import os
 import pytest
 
+from ... import defaults
 from .._common import get_executable_path
-from .._common import TmuxSession
+from .._common import fixture_path_from_request
+from .._common import update_fixtures
 
-fixtures_dir = os.path.join(os.path.dirname(__file__), "..", "..", "fixtures")
 
 CLI = (
     f"{get_executable_path('python')}"
     " -m ansible_navigator inventory"
-    f" -i {os.path.join(fixtures_dir,'inventory')}"
+    f" -i {os.path.join(defaults.FIXTURES_DIR,'inventory')}"
 )
 
 testdata = [
@@ -62,25 +63,3 @@ def test_inventory_interactive_inventory_list(request, tmux_session, index, user
     with open(f"{dir_path}/{file_name}") as infile:
         expected_output = json.load(infile)["output"]
     assert expected_output == received_output
-
-
-def update_fixtures(request, index, received_output, comment):
-    """update the fixtures"""
-    dir_path, file_name = fixture_path_from_request(request, index)
-    os.makedirs(dir_path, exist_ok=True)
-    fixture = {
-        "name": request.node.name,
-        "index": index,
-        "comment": comment,
-        "output": received_output,
-    }
-    with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:
-        json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
-
-
-def fixture_path_from_request(request, index):
-    """build a dir and file path for a test"""
-    path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
-    dir_path = f"{fixtures_dir}/{path_in_fixture_dir}/{request.node.originalname}"
-    file_name = f"{index}.json"
-    return dir_path, file_name

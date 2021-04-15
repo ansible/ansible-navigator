@@ -1,5 +1,4 @@
-default_container_image = "quay.io/ansible/ansible-runner:devel"
+import os
 
-# TODO: Need to figure the optimal sleep time, if sleep time is less
-# output on the terminal is not caputred correctly
-tumx_read_delay_after_user_interaction = 3
+FIXTURES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "fixtures"))
+DEFAULT_CONTAINER_IMAGE = "quay.io/ansible/ansible-runner:devel"

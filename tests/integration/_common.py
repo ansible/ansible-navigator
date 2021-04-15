@@ -5,6 +5,7 @@ import re
 import sys
 import tempfile
 import time
+import json
 
 from argparse import Namespace
 from distutils.spawn import find_executable
@@ -22,6 +23,8 @@ from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
 from ansible_navigator.ui_framework.ui import Ui
 from ansible_navigator.steps import Steps
+
+from .. import defaults
 
 
 class ActionRunTest:
@@ -205,3 +208,25 @@ class TmuxSession:
                 showing = self._pane.capture_pane()
             help_not_on_screen = not any(":help help" in line for line in showing)
         return showing
+
+
+def update_fixtures(request, index, received_output, comment):
+    """Used by action plugins to generate the fixtures"""
+    dir_path, file_name = fixture_path_from_request(request, index)
+    os.makedirs(dir_path, exist_ok=True)
+    fixture = {
+        "name": request.node.name,
+        "index": index,
+        "comment": comment,
+        "output": received_output,
+    }
+    with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:
+        json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
+
+
+def fixture_path_from_request(request, index):
+    """build a dir and file path for a test"""
+    path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
+    dir_path = f"{defaults.FIXTURES_DIR}/{path_in_fixture_dir}/{request.node.originalname}"
+    file_name = f"{index}.json"
+    return dir_path, file_name

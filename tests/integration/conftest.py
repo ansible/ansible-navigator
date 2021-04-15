@@ -1,8 +1,6 @@
 import os
 import pytest
-import time
 
-from .. import defaults
 from ._common import TmuxSession
 
 EXECUTION_MODES = ["interactive", "stdout"]

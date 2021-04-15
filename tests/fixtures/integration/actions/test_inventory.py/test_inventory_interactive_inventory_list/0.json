@@ -1,5 +1,5 @@
 {
-    "name": "test_inventory_interactive_inventory_list[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator inventory -i /Users/bthornto/github/ansible-navigator/tests/integration/actions/../../fixtures/inventory-ansible-navigator inventory command top window]",
+    "name": "test_inventory_interactive_inventory_list[0-python -m ansible_navigator inventory -i ~/ansible-navigator/tests/integration/actions/../../fixtures/inventory-ansible-navigator inventory command top window]",
     "index": 0,
     "comment": "ansible-navigator inventory command top window",
     "output": [
