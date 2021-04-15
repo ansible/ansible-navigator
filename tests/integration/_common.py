@@ -8,6 +8,7 @@ import tempfile
 from argparse import Namespace
 
 from typing import Any
+from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Optional
@@ -26,18 +27,24 @@ class ActionRunTest:
         action_name,
         container_engine: Optional[str] = None,
         execution_environment: Optional[str] = None,
-        ee_image: Optional[str] = None,
+        execution_environment_image: Optional[str] = None,
         cwd: Optional[List] = None,
+        set_environment_variable: Optional[Dict] = None,
+        pass_environment_variable: Optional[List] = None,
     ) -> None:
         self._action_name = action_name
         self._container_engine = container_engine
         self._execution_environment = execution_environment
-        self._ee_image = ee_image
+        self._execution_environment_image = execution_environment_image
+        self._set_environment_variable = set_environment_variable
+        self._pass_environment_variable = pass_environment_variable
         self._cwd = cwd
         self._app_args = {
             "container_engine": self._container_engine,
             "execution_environment": self._execution_environment,
-            "ee_image": self._ee_image,
+            "execution_environment_image": self._execution_environment_image,
+            "set_environment_variable": self._set_environment_variable,
+            "pass_environment_variable": self._pass_environment_variable,
             "cwd": self._cwd,
         }
         self._app_action = __import__(
@@ -46,11 +53,9 @@ class ActionRunTest:
 
     def callable_pass_one_arg(self, value=0):
         """a do nothing callable"""
-        pass
 
     def callable_pass(self, **kwargs):
         """a do nothing callable"""
-        pass
 
     def run_action_interactive(self) -> Any:
         """run the action

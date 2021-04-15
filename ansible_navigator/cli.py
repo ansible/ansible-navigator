@@ -238,6 +238,7 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:
     # pylint: disable=too-many-branches
     # pylint: disable=too-many-statements
+    # pylint: disable=too-many-locals
     """parse some params and update"""
     parser = CliArgs(APP_NAME).parser
 
@@ -257,9 +258,24 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     if args.app == "load" and not os.path.exists(args.value):
         parser.error(f"The file specified with load could not be found. {args.load}")
 
-    # don't expand "" (the default)
-    if hasattr(args, "playbook") and args.playbook:
-        args.playbook = os.path.abspath(os.path.expanduser(args.playbook))
+    # command line will be a list, settings file is a dict
+    if hasattr(args, "set_environment_variable") and isinstance(
+        args.set_environment_variable, list
+    ):
+        args.set_environment_variable = [
+            i for i in args.set_environment_variable if i is not Sentinel
+        ]
+        args.set_environment_variable = flatten_list(args.set_environment_variable)
+        set_envs = {}
+        for env_var in args.set_environment_variable:
+            parts = env_var.split("=")
+            if len(parts) != 2:
+                error_and_exit_early(
+                    "The following set-environment-variable"
+                    f" entry could not be parsed: {env_var}"
+                )
+            set_envs[parts[0]] = parts[1]
+        args.set_environment_variable = set_envs
 
     if hasattr(args, "inventory"):
         # The default argparse value is [Sentinel] for default detection purposes
@@ -270,6 +286,10 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         args.inventory = [os.path.abspath(os.path.expanduser(i)) for i in args.inventory]
         if not args.inventory and args.app == "inventory":
             parser.error("an inventory is required when using the inventory explorer")
+
+    # don't expand "" (the default)
+    if hasattr(args, "playbook") and args.playbook:
+        args.playbook = os.path.abspath(os.path.expanduser(args.playbook))
 
     if not args.app:
         args.app = "welcome"

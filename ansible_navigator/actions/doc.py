@@ -92,7 +92,7 @@ class Action:
         cmd = [args.container_engine, "run", "-i", "-t"]
         cmd.extend(["--env", "ANSIBLE_NOCOLOR=True"])
         cmd.extend(["-v", "{pdir}:{pdir}".format(pdir=playbook_dir)])
-        cmd.extend([args.ee_image])
+        cmd.extend([args.execution_environment_image])
         cmd.extend(["ansible-doc", "--playbook-dir", playbook_dir, plugin, "--json"])
 
         if self._app.args.app == "doc" and self._app.args.type:

@@ -441,10 +441,12 @@ class Action(App):
 
         kwargs = {
             "container_engine": self.args.container_engine,
-            "execution_environment": self.args.execution_environment,
-            "ee_image": self.args.ee_image,
-            "navigator_mode": self.args.mode,
             "cwd": os.getcwd(),
+            "execution_environment_image": self.args.execution_environment_image,
+            "execution_environment": self.args.execution_environment,
+            "navigator_mode": self.args.mode,
+            "pass_environment_variable": self.args.pass_environment_variable,
+            "set_environment_variable": self.args.set_environment_variable,
         }
         if self.args.mode == "interactive":
             self._runner = InventoryRunner(**kwargs)

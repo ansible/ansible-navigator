@@ -32,7 +32,7 @@ def test_fixtures_dir():
         ),
         (
             ["config"],
-            "ee_image",
+            "execution_environment_image",
             "quay.io/ansible/ansible-runner:devel",
         ),
         (
