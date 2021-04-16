@@ -245,7 +245,7 @@ class Action(App):
         while True:
             self._dequeue()
             if self.runner.finished:
-                if self.args.artifact:
+                if self.args.playbook_artifact:
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break

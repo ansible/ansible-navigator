@@ -1,0 +1,20 @@
+{
+    "version": "1.0.0",
+    "plays": [],
+    "stdout": [
+        "Traceback (most recent call last)",
+        "  File \"/Users/bthornto/github/ansible-navigator/venv/lib/python3.8/site-packages/ansible_runner/runner.py\", line 235, in ru",
+        "    proc_out = run_subprocess",
+        "  File \"/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/subprocess.py\", line 489, in ru",
+        "    with Popen(*popenargs, **kwargs) as process",
+        "  File \"/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/subprocess.py\", line 804, in __init_",
+        "    errread, errwrite) = self._get_handles(stdin, stdout, stderr",
+        "  File \"/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/subprocess.py\", line 1475, in _get_handle",
+        "    p2cread = stdin.fileno(",
+        "  File \"/Users/bthornto/github/ansible-navigator/venv/lib/python3.8/site-packages/_pytest/capture.py\", line 229, in filen",
+        "    raise UnsupportedOperation(\"redirected stdin is pseudofile, has no fileno()\"",
+        "io.UnsupportedOperation: redirected stdin is pseudofile, has no fileno("
+    ],
+    "status": "failed",
+    "status_color": 9
+}

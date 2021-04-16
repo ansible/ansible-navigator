@@ -14,3 +14,14 @@ ansible-navigator:
   log:
     level: critical
   no-osc4: True
+  pass-environment-variable:
+  - TEST_ENV0
+  - TEST_ENV1
+  - TEST_ENV2
+  set-environment-variable:
+    TEST_STR: navigator
+    TEST_BOOL: True
+    TEST_INT: 42
+
+
+
