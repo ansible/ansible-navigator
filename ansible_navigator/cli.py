@@ -139,7 +139,7 @@ def update_args(args: Namespace) -> List[str]:
         # the general exception handler (whenever it exists) and let it be the
         # thing that tells the user the bad news.
         source, value = args.config.get(path)
-        msgs.append(f"Setting arg '{attr}' to '{value}' via {source}")
+        msgs.append(f"Setting arg '{attr}' to '{value}' via {source.value}")
         setattr(args, attr, value)
 
     return msgs

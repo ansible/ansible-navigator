@@ -3,6 +3,7 @@ Configuration subsystem for ansible-navigator
 """
 import os
 
+from enum import Enum
 from typing import Any
 from typing import Dict
 from typing import List
@@ -75,6 +76,14 @@ ARGPARSE_TO_CONFIG = {
 }
 
 
+class NavigatorConfigSource(Enum):
+    """mapping some enums to log friendly text"""
+
+    USER_CFG = "user provided configuration file"
+    ARGPARSE_DEFAULT = "default commandline value"
+    DEFAULT_CFG = "default configuration value"
+
+
 class NavigatorConfig:  # pylint: disable=too-few-public-methods
     """
     A simple wrapper around a dict, with a method that handles defaults nicely.
@@ -83,7 +92,7 @@ class NavigatorConfig:  # pylint: disable=too-few-public-methods
     def __init__(self, dct: Dict):
         self.config = dct
 
-    def get(self, keys: List[str], default: Any = Sentinel) -> Tuple[str, Any]:
+    def get(self, keys: List[str], default: Any = Sentinel) -> Tuple[NavigatorConfigSource, Any]:
         """
         Takes a list of keys that correspond to nested keys in config.
         If the key is found in the config, return the value.
@@ -100,11 +109,11 @@ class NavigatorConfig:  # pylint: disable=too-few-public-methods
             else:
                 break
         else:
-            return "user provided config file", current
+            return NavigatorConfigSource.USER_CFG, current
 
         # If we made it here, the config key wasn't found.
         if default is not Sentinel:
-            return "argparse default", default
+            return NavigatorConfigSource.ARGPARSE_DEFAULT, default
 
         current = _DEFAULTS
         for key in keys:
@@ -113,6 +122,6 @@ class NavigatorConfig:  # pylint: disable=too-few-public-methods
             else:
                 break
         else:
-            return "default configuration", current
+            return NavigatorConfigSource.DEFAULT_CFG, current
 
         raise KeyError(keys)

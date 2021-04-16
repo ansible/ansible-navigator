@@ -18,31 +18,35 @@ SAMPLE_CUSTOM_CONFIG = {
 
 
 @pytest.mark.parametrize(
-    "dct, keys, default, expected",
+    "dct, keys, default, exp_source, exp_value",
     [
         (
             SAMPLE_CUSTOM_CONFIG,
             ["ansible-navigator", "editor", "command"],
             Sentinel,
-            ("user provided config file", "emacs -nw +{line_number} {filename}"),
+            "USER_CFG",
+            "emacs -nw +{line_number} {filename}",
         ),
         (
             {},
             ["ansible-navigator", "editor", "command"],
             Sentinel,
-            ("default configuration", "vi +{line_number} {filename}"),
+            "DEFAULT_CFG",
+            "vi +{line_number} {filename}",
         ),
         (
             {},
             ["ansible-navigator", "editor", "command"],
             "nano {filename}",
-            ("argparse default", "nano {filename}"),
+            "ARGPARSE_DEFAULT",
+            "nano {filename}",
         ),
         (
             {"ansible-navigator": {}},
             ["ansible-navigator", "editor", "command"],
             Sentinel,
-            ("default configuration", "vi +{line_number} {filename}"),
+            "DEFAULT_CFG",
+            "vi +{line_number} {filename}",
         ),
     ],
     ids=[
@@ -52,12 +56,14 @@ SAMPLE_CUSTOM_CONFIG = {
         "config that has some levels but not all the keys we need, valid key",
     ],
 )
-def test_config_get(dct, keys, default, expected):
+def test_config_get(dct, keys, default, exp_source, exp_value):
     """
     Test that NavigatorConfig.get() works in the normal case.
     """
     cfg = NavigatorConfig(dct)
-    assert cfg.get(keys, default) == expected
+    recv_source, recv_value = cfg.get(keys, default)
+    assert exp_source == recv_source.name
+    assert exp_value == recv_value
 
 
 @pytest.mark.parametrize(
