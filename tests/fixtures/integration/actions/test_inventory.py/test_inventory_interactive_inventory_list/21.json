@@ -1,0 +1,12 @@
+{
+    "name": "test_inventory_interactive_inventory_list[21-:back-Previous window after host0201 (Inventory hostname window)]",
+    "index": 21,
+    "comment": "Previous window after host0201 (Inventory hostname window)",
+    "output": [
+        "  INVENTORY HOSTNAME       ANSIBLE NETWORK OS       ANSIBLE NETWORK CLI SSH TYPE           ANSIBLE CONNECTION",
+        "0│host0101                 org.coll.nos             None                                   ansible.netcommon.network_cli",
+        "1│host0201                 None                     None                                   None",
+        "2│host0301                 None                     None                                   None",
+        "^f/PgUp page up          ^b/PgDn page down          ↑↓ scroll          esc back          [0-9] goto          :help help"
+    ]
+}

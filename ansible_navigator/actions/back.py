@@ -13,7 +13,7 @@ class Action:
 
     # pylint: disable=too-few-public-methods
 
-    KEGEX = r"^\^\[|\x1b$"
+    KEGEX = r"^\^\[|\x1b|back$"
 
     def __init__(self, args):
         self._args = args

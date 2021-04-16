@@ -1,0 +1,11 @@
+{
+    "name": "test_inventory_interactive_inventory_list[0-python -m ansible_navigator inventory -i ~/ansible-navigator/tests/integration/actions/../../fixtures/inventory-ansible-navigator inventory command top window]",
+    "index": 0,
+    "comment": "ansible-navigator inventory command top window",
+    "output": [
+        "  TITLE                     DESCRIPTION",
+        "0│Browse groups             Explore each inventory group and group members members",
+        "1│Browse hosts              Explore the inventory with a list of all hosts",
+        "^f/PgUp page up          ^b/PgDn page down          ↑↓ scroll          esc back          [0-9] goto          :help help"
+    ]
+}
