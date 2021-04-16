@@ -17,7 +17,6 @@ from typing import Optional
 
 import libtmux  # type: ignore
 
-from _pytest.monkeypatch import MonkeyPatch
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
@@ -161,7 +160,6 @@ class TmuxSession:
         cwd=None,
         session_name="ansible-navigator-integration-test",
     ) -> None:
-        self._monkeypatch = MonkeyPatch()
         self._window_name = window_name
         self._config_path = config_path
         self._session_name = session_name
