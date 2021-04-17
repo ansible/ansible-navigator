@@ -70,7 +70,8 @@ def test_w_run_command(mocked_runner, command, comment, cli_entry, config_fixtur
                     cli.main()
 
     result = mocked_runner.call_args
-    assert dict(result.kwargs["envvars"], **expected) == result.kwargs["envvars"]
+    for item in expected.items():
+        assert item in result.kwargs["envvars"].items()
 
 
 @mock.patch("ansible_navigator.runner.api.run_command_async")
@@ -97,4 +98,5 @@ def test_w_run_command_async(mocked_runner, command, comment, cli_entry, config_
                     cli.main()
 
     result = mocked_runner.call_args
-    assert dict(result.kwargs["envvars"], **expected) == result.kwargs["envvars"]
+    for item in expected.items():
+        assert item in result.kwargs["envvars"].items()
