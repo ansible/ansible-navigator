@@ -68,9 +68,9 @@ def test_w_run_command(mocked_runner, command, comment, cli_entry, config_fixtur
             with pytest.raises(Exception, match="called"):
                 cli.main()
 
-    result = mocked_runner.call_args
+    _args, kwargs = mocked_runner.call_args
     for item in expected.items():
-        assert item in result.kwargs["envvars"].items()
+        assert item in kwargs["envvars"].items()
 
 
 @mock.patch("ansible_navigator.runner.api.run_command_async")
@@ -95,6 +95,6 @@ def test_w_run_command_async(mocked_runner, command, comment, cli_entry, config_
             with pytest.raises(Exception, match="called"):
                 cli.main()
 
-    result = mocked_runner.call_args
+    _args, kwargs = mocked_runner.call_args
     for item in expected.items():
-        assert item in result.kwargs["envvars"].items()
+        assert item in kwargs["envvars"].items()
