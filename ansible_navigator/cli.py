@@ -217,6 +217,7 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
                     error_and_exit_early(
                         "Config file at {0} but failed to parse it.".format(config_path)
                     )
+    print(pre_logger_msgs)
 
     if config_path and config and config.get("ansible-navigator"):
         # If the config file was found and has the key we expect, log and use it
