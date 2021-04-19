@@ -9,7 +9,6 @@ import pytest
 import ansible_navigator.cli as cli
 
 from .cli2runner import Cli2Runner
-from ..defaults import DEFAULT_CONTAINER_IMAGE
 from ..defaults import FIXTURES_DIR
 
 test_data = [
@@ -58,6 +57,7 @@ class Test(Cli2Runner):
         with mock.patch("sys.argv", cli_entry.split()):
             cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
+                print(os.environ)
                 with pytest.raises(Exception, match="called"):
                     cli.main()
 
@@ -67,4 +67,4 @@ class Test(Cli2Runner):
             assert "process_isolation" not in kwargs
         else:
             for item in expected.items():
-                assert item in kwargs.items()
+                assert False #item in kwargs.items()
