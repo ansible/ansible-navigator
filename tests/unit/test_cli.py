@@ -86,7 +86,7 @@ from ..defaults import FIXTURES_DIR
 def test_update_args_general(monkeypatch, given, argname, expected):
     """test the parse and update function"""
 
-    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/ansible-navigator.yml")
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     _pre_logger_msgs, args = cli.parse_and_update(given)
     result = vars(args)[argname]
     assert result == expected
@@ -94,6 +94,8 @@ def test_update_args_general(monkeypatch, given, argname, expected):
 
 def test_editor_command_default(monkeypatch):
     """test editor with default"""
-    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/ansible-navigator_empty.yml")
+    monkeypatch.setenv(
+        "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
+    )
     _pre_logger_msgs, args = cli.parse_and_update([])
     assert args.editor_command == "vi +{line_number} {filename}"

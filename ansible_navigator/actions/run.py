@@ -338,20 +338,16 @@ class Action(App):
         # if we have a playbook, use params, inventory, etc
         if playbook:
             # Use the provided params, or inventory and cmdline previously provided
-            params = []
             user_provided_params = self._interaction.action.match.groupdict().get("params")
             if user_provided_params:
                 self._logger.debug("Using params provided by user")
-                params.extend(user_provided_params.split())
+                new_cmd += [playbook] + user_provided_params.split()
             elif self._calling_app.args.app == "run":
-                self._logger.debug("Calling app was run, reusing inv + cmdline from calling app")
-                for inventory in self._calling_app.args.inventory:
-                    params.extend(["-i", inventory])
-                params += self._calling_app.args.cmdline
+                self._logger.debug("Calling app was run, reusing all from calling app")
+                new_cmd = self._calling_app.args.original_command
             else:
                 self._logger.debug("Params set to [], params not provided, or calling app not run")
-
-            new_cmd += [playbook] + params
+                new_cmd += [playbook]
 
         self._logger.debug("Parsing: %s", " ".join(new_cmd))
 

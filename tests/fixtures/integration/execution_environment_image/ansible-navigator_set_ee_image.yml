@@ -1,0 +1,3 @@
+---
+ansible-navigator:
+  execution-environment-image: test_image_config

@@ -1,4 +1,4 @@
-""" test the use of set_environment_variable throguh to runner
+""" test the use of execution-environment-image throguh to runner
 """
 import os
 
@@ -9,33 +9,28 @@ import pytest
 import ansible_navigator.cli as cli
 
 from .cli2runner import Cli2Runner
+from ..defaults import DEFAULT_CONTAINER_IMAGE
 from ..defaults import FIXTURES_DIR
 
 test_data = [
-    ("not set", "", "ansible-navigator_empty.yml", {}),
+    ("defaults", "", "ansible-navigator_empty.yml", {"container_image": DEFAULT_CONTAINER_IMAGE}),
     (
-        "set 1 at command line",
-        "--senv TEST_ENV=nav",
+        "set at command line",
+        "--execution-environment-image test_image_cli",
         "ansible-navigator_empty.yml",
-        {"TEST_ENV": "nav"},
+        {"container_image": "test_image_cli"},
     ),
     (
-        "set 2 at command line",
-        "--senv TEST_ENV=nav --senv TEST_ENV2=nav2",
-        "ansible-navigator_empty.yml",
-        {"TEST_ENV": "nav", "TEST_ENV2": "nav2"},
-    ),
-    (
-        "set 3 in config file",
+        "set in config file",
         "",
-        "ansible-navigator.yml",
-        {"TEST_STR": "navigator", "TEST_BOOL": "true", "TEST_INT": "42"},
+        "ansible-navigator_set_ee_image.yml",
+        {"container_image": "test_image_config"},
     ),
     (
         "set command line and config file, command line wins",
-        "--senv TEST_ENV=nav --senv TEST_ENV2=nav2",
-        "ansible-navigator.yml",
-        {"TEST_ENV": "nav", "TEST_ENV2": "nav2"},
+        "--execution-environment True --execution-environment-image test_image_cli",
+        "ansible-navigator_set_ee_image.yml",
+        {"container_image": "test_image_cli"},
     ),
 ]
 
@@ -47,9 +42,9 @@ test_data = [
 )
 class Test(Cli2Runner):
     # pylint: disable=too-few-public-methods
-    """test the use of set_environment_variable throguh to runner"""
+    """test the use of execution-environment-image throguh to runner"""
 
-    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/set_environment_variable"
+    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/execution_environment_image"
 
     STDOUT = {
         "config": "config dump",
@@ -67,7 +62,8 @@ class Test(Cli2Runner):
         """mock the runner call so it raises an exception
         mock the command line with sys.argv
         set the ANSIBLE_NAVIGATOR_CONFIG envvar
-        call cli.main(), check the kwarg envvars passed to the runner func
+        set the expected env vars
+        call cli.main(), check the kwargs passed to the runner func
         """
         mocked_runner.side_effect = Exception("called")
         with mock.patch("sys.argv", cli_entry.split()):
@@ -79,4 +75,4 @@ class Test(Cli2Runner):
         _args, kwargs = mocked_runner.call_args
 
         for item in expected.items():
-            assert item in kwargs["envvars"].items()
+            assert item in kwargs.items()

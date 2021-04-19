@@ -1,4 +1,4 @@
-""" test the use of set_environment_variable throguh to runner
+""" test the use of pass_environment_variable throguh to runner
 """
 import os
 
@@ -8,6 +8,7 @@ import pytest
 
 import ansible_navigator.cli as cli
 
+from .cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
 
 test_data = [
@@ -38,65 +39,46 @@ test_data = [
     ),
 ]
 
-run_commands = [
-    "config dump",
-    "inventory -i test_inventory",
-]
 
-run_async_commands = ["run site.yaml"]
-
-
-@mock.patch("ansible_navigator.runner.api.run_command")
 @pytest.mark.parametrize(
     argnames=("comment", "cli_entry", "config_fixture", "expected"),
     argvalues=test_data,
     ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
 )
-@pytest.mark.parametrize(
-    argnames="command",
-    argvalues=run_commands,
-    ids=[cmd.split()[0] for cmd in run_commands],
-)
-def test_w_run_command(mocked_runner, command, comment, cli_entry, config_fixture, expected):
-    # pylint: disable=unused-argument
-    """test use of set_environment_variable"""
-    mocked_runner.side_effect = Exception("called")
-    cli_entry = f"ansible-navigator {command} {cli_entry} -m stdout"
-    with mock.patch("sys.argv", cli_entry.split()):
-        cfg_path = f"{FIXTURES_DIR}/{config_fixture}"
-        with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
-            with mock.patch.dict(os.environ, expected):
-                with pytest.raises(Exception, match="called"):
-                    cli.main()
+class Test(Cli2Runner):
+    # pylint: disable=too-few-public-methods
+    """test the use of pass_environment_variable throguh to runner"""
 
-    _args, kwargs = mocked_runner.call_args
-    for item in expected.items():
-        assert item in kwargs["envvars"].items()
+    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/pass_environment_variable"
 
+    STDOUT = {
+        "config": "config dump",
+        "inventory": "inventory -i bogus_inventory",
+        "run": "run site.yaml",
+    }
 
-@mock.patch("ansible_navigator.runner.api.run_command_async")
-@pytest.mark.parametrize(
-    argnames=("comment", "cli_entry", "config_fixture", "expected"),
-    argvalues=test_data,
-    ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
-)
-@pytest.mark.parametrize(
-    argnames="command",
-    argvalues=run_async_commands,
-    ids=[cmd.split()[0] for cmd in run_async_commands],
-)
-def test_w_run_command_async(mocked_runner, command, comment, cli_entry, config_fixture, expected):
-    # pylint: disable=unused-argument
-    """test use of set_environment_variable"""
-    mocked_runner.side_effect = Exception("called")
-    cli_entry = f"ansible-navigator {command} {cli_entry} -m stdout"
-    with mock.patch("sys.argv", cli_entry.split()):
-        cfg_path = f"{FIXTURES_DIR}/{config_fixture}"
-        with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
-            with mock.patch.dict(os.environ, expected):
-                with pytest.raises(Exception, match="called"):
-                    cli.main()
+    INTERACTIVE = {
+        "config": "config",
+        "inventory": f"inventory -i {TEST_FIXTURE_DIR}/inventory.yml",
+        "run": f"run {TEST_FIXTURE_DIR}/site.yml",
+    }
 
-    _args, kwargs = mocked_runner.call_args
-    for item in expected.items():
-        assert item in kwargs["envvars"].items()
+    def run_test(self, mocked_runner, cli_entry, config_fixture, expected):
+        """mock the runner call so it raises an exception
+        mock the command line with sys.argv
+        set the ANSIBLE_NAVIGATOR_CONFIG envvar
+        set the expected env vars
+        call cli.main(), check the kwarg envvars passed to the runner func
+        """
+        mocked_runner.side_effect = Exception("called")
+        with mock.patch("sys.argv", cli_entry.split()):
+            cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
+            with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
+                with mock.patch.dict(os.environ, expected):
+                    with pytest.raises(Exception, match="called"):
+                        cli.main()
+
+        _args, kwargs = mocked_runner.call_args
+
+        for item in expected.items():
+            assert item in kwargs["envvars"].items()
