@@ -180,6 +180,7 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
     cfg_env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     env_config_path, msgs = env_var_is_file_path(cfg_env_var, "config")
     pre_logger_msgs += msgs
+    
     # Check well know locations
     found_config_path, msgs = get_conf_path(
         "ansible-navigator", allowed_extensions=["yml", "yaml", "json"]
