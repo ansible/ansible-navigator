@@ -5,6 +5,5 @@ lxml
 mypy
 pylint
 pytest-cov
-pytest-xdist
 yamllint
 libtmux
