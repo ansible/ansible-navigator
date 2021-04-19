@@ -11,7 +11,7 @@ import ansible_navigator.cli as cli
 from .cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
 
-test_data = [
+test_data_ee = [
     ("defaults", "", "ansible-navigator_empty.yml", {"process_isolation": True}),
     ("set at command line", "--execution-environment false", "ansible-navigator_empty.yml", None),
     ("set in config file", "", "ansible-navigator_disable_ee.yml", None),
@@ -26,10 +26,10 @@ test_data = [
 
 @pytest.mark.parametrize(
     argnames=("comment", "cli_entry", "config_fixture", "expected"),
-    argvalues=test_data,
-    ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
+    argvalues=test_data_ee,
+    ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data_ee)],
 )
-class Test(Cli2Runner):
+class TestEe(Cli2Runner):
     # pylint: disable=too-few-public-methods
     """base class for the parametrize"""
 
