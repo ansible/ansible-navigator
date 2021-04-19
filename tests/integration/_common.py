@@ -16,7 +16,6 @@ from typing import Tuple
 from typing import Optional
 
 import libtmux  # type: ignore
-import pytest
 
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.ui_framework.ui import Action as Ui_action
