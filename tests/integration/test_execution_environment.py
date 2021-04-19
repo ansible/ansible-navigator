@@ -6,6 +6,7 @@ from unittest import mock
 
 import pytest
 
+import ansible_navigator.cli as cli
 
 from .cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
@@ -56,9 +57,7 @@ class Test(Cli2Runner):
         with mock.patch("sys.argv", cli_entry.split()):
             cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
-                print(os.environ)
                 with pytest.raises(Exception, match="called"):
-                    import ansible_navigator.cli as cli
                     cli.main()
 
         _args, kwargs = mocked_runner.call_args

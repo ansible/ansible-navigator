@@ -56,7 +56,7 @@ class Cli2Runner:
 
     @pytest.fixture(autouse=True)
     def _setup(self):
-        self.cli_entry = "ansible-navigator {0} {1} -m {2}"
+        self.cli_entry = "ansible-navigator {0} {1} -m {2} --log-level debug"
 
     @mock.patch("ansible_navigator.runner.api.get_ansible_config")
     def test_config_interactive(
