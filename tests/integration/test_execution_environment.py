@@ -8,10 +8,9 @@ import pytest
 
 import ansible_navigator.cli as cli
 
-from .cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
 
-test_data_ee = [
+test_data = [
     ("defaults", "", "ansible-navigator_empty.yml", {"process_isolation": True}),
     ("set at command line", "--execution-environment false", "ansible-navigator_empty.yml", None),
     ("set in config file", "", "ansible-navigator_disable_ee.yml", None),
@@ -26,12 +25,18 @@ test_data_ee = [
 
 @pytest.mark.parametrize(
     argnames=("comment", "cli_entry", "config_fixture", "expected"),
-    argvalues=test_data_ee,
-    ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data_ee)],
+    argvalues=test_data,
+    ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
 )
-class TestEe(Cli2Runner):
+class Test:
     # pylint: disable=too-few-public-methods
-    """base class for the parametrize"""
+    # pylint: disable=unused-argument
+    # pylint: disable=attribute-defined-outside-init
+    # pylint: disable=redefined-outer-name
+    # pylint: disable=too-many-arguments
+    """test execution-environment"""
+
+    __test__ = True
 
     TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/execution_environment_image"
 
@@ -67,3 +72,53 @@ class TestEe(Cli2Runner):
         else:
             for item in expected.items():
                 assert item in kwargs.items()
+
+    @pytest.fixture(autouse=True)
+    def _setup(self):
+        self.cli_entry = "ansible-navigator {0} {1} -m {2}"
+
+    @mock.patch("ansible_navigator.runner.api.get_ansible_config")
+    def test_config_interactive(
+        self, mocked_runner, comment, cli_entry, config_fixture, expected, patch_curses
+    ):
+        """test use of set_environment_variable"""
+        cli_entry = self.cli_entry.format(self.INTERACTIVE["config"], cli_entry, "interactive")
+        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
+
+    @mock.patch("ansible_navigator.runner.api.run_command")
+    def test_config_stdout(self, mocked_runner, comment, cli_entry, config_fixture, expected):
+        # pylint: disable=unused-argument
+        """test use of set_environment_variable"""
+        cli_entry = self.cli_entry.format(self.STDOUT["config"], cli_entry, "stdout")
+        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
+
+    @mock.patch("ansible_navigator.runner.api.get_inventory")
+    def test_inventory_interactive(
+        self, mocked_runner, comment, cli_entry, config_fixture, expected, patch_curses
+    ):
+        """test use of set_environment_variable"""
+        cli_entry = self.cli_entry.format(self.INTERACTIVE["inventory"], cli_entry, "interactive")
+        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
+
+    @mock.patch("ansible_navigator.runner.api.run_command")
+    def test_inventory_stdout(self, mocked_runner, comment, cli_entry, config_fixture, expected):
+        # pylint: disable=unused-argument
+        """test use of set_environment_variable"""
+        cli_entry = self.cli_entry.format(self.STDOUT["inventory"], cli_entry, "stdout")
+        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
+
+    @mock.patch("ansible_navigator.runner.api.run_command_async")
+    def test_run_interactive(
+        self, mocked_runner, comment, cli_entry, config_fixture, expected, patch_curses
+    ):
+        # pylint: disable=unused-argument
+        """test use of set_environment_variable"""
+        cli_entry = self.cli_entry.format(self.INTERACTIVE["run"], cli_entry, "interactive")
+        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
+
+    @mock.patch("ansible_navigator.runner.api.run_command_async")
+    def test_run_stdout(self, mocked_runner, comment, cli_entry, config_fixture, expected):
+        # pylint: disable=unused-argument
+        """test use of set_environment_variable"""
+        cli_entry = self.cli_entry.format(self.STDOUT["run"], cli_entry, "stdout")
+        self.run_test(mocked_runner, cli_entry, config_fixture, expected)

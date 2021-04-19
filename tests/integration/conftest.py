@@ -47,3 +47,14 @@ def container_runtime_installed():
         except FileNotFoundError:
             pass
     pytest.skip("No container runtime is available.")
+
+
+@pytest.fixture
+def patch_curses(monkeypatch):
+    """patch curses so it doesn't Traceback during tests"""
+    # pylint: disable=import-outside-toplevel
+    import curses
+
+    monkeypatch.setattr(curses, "cbreak", lambda: None)
+    monkeypatch.setattr(curses, "nocbreak", lambda: None)
+    monkeypatch.setattr(curses, "endwin", lambda: None)
