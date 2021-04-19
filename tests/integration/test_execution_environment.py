@@ -66,4 +66,4 @@ class Test(Cli2Runner):
             assert "process_isolation" not in kwargs
         else:
             for item in expected.items():
-                assert item in kwargs.items()
+                assert False #item in kwargs.items()

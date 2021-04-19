@@ -4,6 +4,7 @@ comment, cli_entry, config_fixture, expected
 """
 
 import curses
+import logging
 
 from unittest import mock
 
