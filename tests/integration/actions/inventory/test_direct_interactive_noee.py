@@ -1,4 +1,4 @@
-""" config direct from cli interactive w/o ee
+""" inventory direct from cli interactive w/o ee
 """
 import pytest
 
