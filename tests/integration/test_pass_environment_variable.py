@@ -8,6 +8,7 @@ import pytest
 
 import ansible_navigator.cli as cli
 
+from ._common import Cli2Runner
 from ..defaults import FIXTURES_DIR
 
 test_data = [
@@ -44,16 +45,11 @@ test_data = [
     argvalues=test_data,
     ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
 )
-class Test:
-    # pylint: disable=too-few-public-methods
-    # pylint: disable=unused-argument
-    # pylint: disable=attribute-defined-outside-init
-    # pylint: disable=redefined-outer-name
-    # pylint: disable=too-many-arguments
-
+class Test(Cli2Runner):
     """test the use of pass_environment_variable through to runner"""
 
-    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/pass_environment_variable"
+    TEST_DIR_NAME = os.path.basename(__file__).replace("test_", "").replace(".py", "")
+    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/{TEST_DIR_NAME}"
 
     STDOUT = {
         "config": "config dump",
@@ -77,6 +73,7 @@ class Test:
         mocked_runner.side_effect = Exception("called")
         with mock.patch("sys.argv", cli_entry.split()):
             cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
+            assert os.path.exists(cfg_path)
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
                 with mock.patch.dict(os.environ, expected):
                     with pytest.raises(Exception, match="called"):
@@ -86,53 +83,3 @@ class Test:
 
         for item in expected.items():
             assert item in kwargs["envvars"].items()
-
-    @pytest.fixture(autouse=True)
-    def _setup(self):
-        self.cli_entry = "ansible-navigator {0} {1} -m {2}"
-
-    @mock.patch("ansible_navigator.runner.api.get_ansible_config")
-    def test_config_interactive(
-        self, mocked_runner, comment, cli_entry, config_fixture, expected, patch_curses
-    ):
-        """test use of set_environment_variable"""
-        cli_entry = self.cli_entry.format(self.INTERACTIVE["config"], cli_entry, "interactive")
-        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
-
-    @mock.patch("ansible_navigator.runner.api.run_command")
-    def test_config_stdout(self, mocked_runner, comment, cli_entry, config_fixture, expected):
-        # pylint: disable=unused-argument
-        """test use of set_environment_variable"""
-        cli_entry = self.cli_entry.format(self.STDOUT["config"], cli_entry, "stdout")
-        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
-
-    @mock.patch("ansible_navigator.runner.api.get_inventory")
-    def test_inventory_interactive(
-        self, mocked_runner, comment, cli_entry, config_fixture, expected, patch_curses
-    ):
-        """test use of set_environment_variable"""
-        cli_entry = self.cli_entry.format(self.INTERACTIVE["inventory"], cli_entry, "interactive")
-        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
-
-    @mock.patch("ansible_navigator.runner.api.run_command")
-    def test_inventory_stdout(self, mocked_runner, comment, cli_entry, config_fixture, expected):
-        # pylint: disable=unused-argument
-        """test use of set_environment_variable"""
-        cli_entry = self.cli_entry.format(self.STDOUT["inventory"], cli_entry, "stdout")
-        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
-
-    @mock.patch("ansible_navigator.runner.api.run_command_async")
-    def test_run_interactive(
-        self, mocked_runner, comment, cli_entry, config_fixture, expected, patch_curses
-    ):
-        # pylint: disable=unused-argument
-        """test use of set_environment_variable"""
-        cli_entry = self.cli_entry.format(self.INTERACTIVE["run"], cli_entry, "interactive")
-        self.run_test(mocked_runner, cli_entry, config_fixture, expected)
-
-    @mock.patch("ansible_navigator.runner.api.run_command_async")
-    def test_run_stdout(self, mocked_runner, comment, cli_entry, config_fixture, expected):
-        # pylint: disable=unused-argument
-        """test use of set_environment_variable"""
-        cli_entry = self.cli_entry.format(self.STDOUT["run"], cli_entry, "stdout")
-        self.run_test(mocked_runner, cli_entry, config_fixture, expected)

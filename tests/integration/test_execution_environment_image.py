@@ -68,6 +68,7 @@ class Test(Cli2Runner):
         mocked_runner.side_effect = Exception("called")
         with mock.patch("sys.argv", cli_entry.split()):
             cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
+            assert os.path.exists(cfg_path)
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
                 with pytest.raises(Exception, match="called"):
                     cli.main()
