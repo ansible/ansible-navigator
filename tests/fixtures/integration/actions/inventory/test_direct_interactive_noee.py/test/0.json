@@ -1,0 +1,11 @@
+{
+    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator inventory --execution-environment false -i /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
+    "index": 0,
+    "comment": "ansible-navigator inventory command top window",
+    "output": [
+        "  TITLE                                   DESCRIPTION",
+        "0│Browse groups                           Explore each inventory group and group members members",
+        "1│Browse hosts                            Explore the inventory with a list of all hosts",
+        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+    ]
+}

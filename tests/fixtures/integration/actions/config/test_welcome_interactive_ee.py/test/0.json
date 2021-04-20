@@ -20,6 +20,10 @@
         "14│happy automating,",
         "15│",
         "16│-winston",
+<<<<<<< HEAD
+        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+=======
         "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              :help help"
+>>>>>>> 43dbf77b9b84aa2b1d58382581671a7f16f36660
     ]
 }
