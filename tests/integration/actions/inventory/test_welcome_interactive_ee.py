@@ -8,7 +8,7 @@ from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
 from ..._common import get_executable_path
 from ..._common import container_runtime_or_fail
 
-CLI = get_executable_path("python") + " -m ansible_navigator --ll debug"
+CLI = get_executable_path("python") + " -m ansible_navigator"
 
 testdata = [
     (0, CLI, "ansible-navigator inventory command top window"),
