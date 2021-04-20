@@ -38,7 +38,7 @@ class Test:
 
     __test__ = True
 
-    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/execution_environment_image"
+    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/execution_environment"
 
     STDOUT = {
         "config": "config dump",
