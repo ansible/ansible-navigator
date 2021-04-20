@@ -204,9 +204,6 @@ class TmuxSession:
         if self._server.has_session(self._session_name):
             self._session.kill_session()
 
-    def send_only(self, value):
-        self._pane.send_keys(value, suppress_history=False)
-
     def interaction(self, value):
         """interact with the tmux session"""
         self._pane.send_keys(value, suppress_history=False)
