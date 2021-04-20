@@ -28,3 +28,36 @@ ansible-navigator:
   log:
     level: debug
     file: /tmp/ansible-navigator.log
+    
+  # To directly set environemtn variables
+  # within the execution envrionment
+  # provide them and key, value pairs
+  # set-environment-variable:
+  #   AWS_ACCESS_KEY_ID: sample_id
+  #   AWS_SECRET_ACCESS_KEY: sample_key
+  #   AWS_DEFAULT_REGION: sample_region
+  #   AZURE_CLIENT_ID: sample_client_id
+  #   AZURE_SECRET: sample_secret
+  #   AZURE_SUBSCRIPTION_ID: sample_subscription_id
+  #   AZURE_TENANT: sample_tenant
+  #   GCP_AUTH_KIND: sample_auth_kind
+  #   GCP_SERVICE_ACCOUNT_EMAIL: sample_email
+  #   GCP_SERVICE_ACCOUNT_FILE: sample_file
+  #   GCP_SCOPES: sample scopes
+
+  # To pass currently set environemtn variables
+  # to the execution envrionment
+  # provide them as a list
+  # pass-environment-variable:
+  # - AWS_ACCESS_KEY_ID
+  # - AWS_SECRET_ACCESS_KEY
+  # - AWS_DEFAULT_REGION
+  # - AZURE_CLIENT_ID
+  # - AZURE_SECRET
+  # - AZURE_SUBSCRIPTION_ID
+  # - AZURE_TENANT
+  # - GCP_AUTH_KIND
+  # - GCP_SERVICE_ACCOUNT_EMAIL
+  # - GCP_SERVICE_ACCOUNT_FILE
+  # - GCP_SCOPES
+

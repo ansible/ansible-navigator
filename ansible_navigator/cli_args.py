@@ -2,7 +2,11 @@
 https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
 """
 import os
-from argparse import ArgumentParser, HelpFormatter, _SubParsersAction
+
+from argparse import _SubParsersAction
+from argparse import ArgumentParser
+from argparse import ArgumentTypeError
+from argparse import HelpFormatter
 
 from .config import ARGPARSE_TO_CONFIG
 from .config import NavigatorConfig
@@ -12,6 +16,21 @@ from .utils import Sentinel
 def _abs_user_path(fpath):
     """don't overload the ap type"""
     return os.path.abspath(os.path.expanduser(fpath))
+
+
+def str2bool(value):
+    """convert some commonly used values
+    to a boolean
+    """
+    # if isinstance(value, Sentinel):
+    #     return value
+    if isinstance(value, bool):
+        return value
+    if value.lower() in ("yes", "true", "t", "y", "1"):
+        return True
+    if value.lower() in ("no", "false", "f", "n", "0"):
+        return False
+    raise ArgumentTypeError("Boolean value expected.")
 
 
 class CustomHelpFormatter(HelpFormatter):
@@ -172,9 +191,10 @@ class CliArgs:
         parser.add_argument(
             "--ee",
             "--execution-environment",
-            action="store_true",
+            default=Sentinel,
             dest="execution_environment",
             help="Run the playbook in an Execution Environment",
+            type=str2bool,
         )
         parser.add_argument(
             "--eei",

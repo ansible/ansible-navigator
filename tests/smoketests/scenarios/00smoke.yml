@@ -13,7 +13,7 @@
     # Main page
     - role: send_keys
       keys:
-        - ansible-navigator
+        - ansible-navigator --execution-environment false
         - Enter
       expected: Some things you can try
 

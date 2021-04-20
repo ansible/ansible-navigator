@@ -217,6 +217,7 @@ def setup_config() -> Tuple[List[str], NavigatorConfig]:
                     error_and_exit_early(
                         "Config file at {0} but failed to parse it.".format(config_path)
                     )
+    print(pre_logger_msgs)
 
     if config_path and config and config.get("ansible-navigator"):
         # If the config file was found and has the key we expect, log and use it
@@ -255,28 +256,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 
     args.logfile = os.path.abspath(os.path.expanduser(args.logfile))
 
-    if args.app == "load" and not os.path.exists(args.value):
-        parser.error(f"The file specified with load could not be found. {args.load}")
-
-    # command line will be a list, settings file is a dict
-    if hasattr(args, "set_environment_variable") and isinstance(
-        args.set_environment_variable, list
-    ):
-        args.set_environment_variable = [
-            i for i in args.set_environment_variable if i is not Sentinel
-        ]
-        args.set_environment_variable = flatten_list(args.set_environment_variable)
-        set_envs = {}
-        for env_var in args.set_environment_variable:
-            parts = env_var.split("=")
-            if len(parts) != 2:
-                error_and_exit_early(
-                    "The following set-environment-variable"
-                    f" entry could not be parsed: {env_var}"
-                )
-            set_envs[parts[0]] = parts[1]
-        args.set_environment_variable = set_envs
-
+    # post process inventory
     if hasattr(args, "inventory"):
         # The default argparse value is [Sentinel] for default detection purposes
         # at this point it's been set to a user value so we can remove any Sentinels
@@ -287,10 +267,47 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
         if not args.inventory and args.app == "inventory":
             parser.error("an inventory is required when using the inventory explorer")
 
-    # don't expand "" (the default)
+    # post process load
+    if args.app == "load" and not os.path.exists(args.value):
+        parser.error(f"The file specified with load could not be found. {args.load}")
+
+    # post process pass_environment_variable
+    if hasattr(args, "pass_environment_variable"):
+        args.pass_environment_variable = [
+            i for i in args.pass_environment_variable if i is not Sentinel
+        ]
+        args.pass_environment_variable = flatten_list(args.pass_environment_variable)
+
+    # post process playbook
+    #   don't expand "" (the default)
     if hasattr(args, "playbook") and args.playbook:
         args.playbook = os.path.abspath(os.path.expanduser(args.playbook))
 
+    # post process set_environment_variable
+    if hasattr(args, "set_environment_variable"):
+        # command line will be a list, settings file is a dict
+        if isinstance(args.set_environment_variable, list):
+            args.set_environment_variable = [
+                i for i in args.set_environment_variable if i is not Sentinel
+            ]
+            args.set_environment_variable = flatten_list(args.set_environment_variable)
+            set_envs = {}
+            for env_var in args.set_environment_variable:
+                parts = env_var.split("=")
+                if len(parts) != 2:
+                    error_and_exit_early(
+                        "The following set-environment-variable"
+                        f" entry could not be parsed: {env_var}"
+                    )
+                set_envs[parts[0]] = parts[1]
+            args.set_environment_variable = set_envs
+        # coming from settings, ensure everything is a string
+        # we will json dump incase there is complext structure
+        for key, value in args.set_environment_variable.items():
+            if not isinstance(value, str):
+                args.set_environment_variable[key] = json.dumps(value)
+
+    # post process welcome
     if not args.app:
         args.app = "welcome"
         args.mode = "interactive"

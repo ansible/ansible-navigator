@@ -1,15 +1,10 @@
 """ tests for cli
 """
-import os
 import pytest
 
 import ansible_navigator.cli as cli
 
-
-@pytest.fixture
-def test_fixtures_dir():
-    """simple fixture for fixture directory"""
-    return os.path.join(os.path.dirname(__file__), "..", "fixtures")
+from ..defaults import FIXTURES_DIR
 
 
 @pytest.mark.parametrize(
@@ -88,13 +83,10 @@ def test_fixtures_dir():
     ],
 )
 # pylint:disable=redefined-outer-name
-def test_update_args(monkeypatch, test_fixtures_dir, given, argname, expected):
+def test_update_args_general(monkeypatch, given, argname, expected):
     """test the parse and update function"""
 
-    def get_conf_path(*_args, **_kwargs):
-        return os.path.join(test_fixtures_dir, "ansible-navigator.yml"), []
-
-    monkeypatch.setattr(cli, "get_conf_path", get_conf_path)
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     _pre_logger_msgs, args = cli.parse_and_update(given)
     result = vars(args)[argname]
     assert result == expected
@@ -102,10 +94,8 @@ def test_update_args(monkeypatch, test_fixtures_dir, given, argname, expected):
 
 def test_editor_command_default(monkeypatch):
     """test editor with default"""
-
-    def get_conf_path(*_args, **_kwargs):
-        return None, []
-
-    monkeypatch.setattr(cli, "get_conf_path", get_conf_path)
+    monkeypatch.setenv(
+        "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
+    )
     _pre_logger_msgs, args = cli.parse_and_update([])
     assert args.editor_command == "vi +{line_number} {filename}"
