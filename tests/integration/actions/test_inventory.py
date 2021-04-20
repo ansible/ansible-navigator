@@ -7,7 +7,7 @@ import pytest
 from ... import defaults
 from .._common import get_executable_path
 from .._common import fixture_path_from_request
-from .._common import update_fixtures
+from .._common import update_fixtures  # pylint: disable=unused-import
 
 
 CLI = (

@@ -4,15 +4,7 @@ import os
 
 from tests import defaults
 
-from .._common import ActionRunTest
-
-
-def test_run_config_interactive() -> None:
-    """test config in interactive mode"""
-    actionruntest = ActionRunTest("config")
-    action_obj = actionruntest.run_action_interactive()
-    # pylint: disable=protected-access
-    assert action_obj._config[0]["option"] == "ACTION_WARNINGS"
+from ..._common import ActionRunTest
 
 
 def test_run_config_stdout_list() -> None:
@@ -43,19 +35,6 @@ def test_run_stdout_dump_custom_config(test_fixtures_dir) -> None:
     assert "350" in out
     # TODO: handle DEPRECATION WARNINGS
     # assert err == ""
-
-
-def test_run_config_interactive_container(container_runtime_installed) -> None:
-    """test config in interactive mode within execution environment"""
-    kwargs = {
-        "container_engine": container_runtime_installed,
-        "execution_environment": True,
-        "execution_environment_image": defaults.DEFAULT_CONTAINER_IMAGE,
-    }
-    actionruntest = ActionRunTest("config", **kwargs)
-    action_obj = actionruntest.run_action_interactive()
-    # pylint: disable=protected-access
-    assert action_obj._config[0]["option"] == "ACTION_WARNINGS"
 
 
 def test_run_stdout_dump_container(container_runtime_installed) -> None:

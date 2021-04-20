@@ -162,11 +162,13 @@ class TmuxSession:
         config_path=None,
         cwd=None,
         session_name="ansible-navigator-integration-test",
+        setup_commands=None,
     ) -> None:
         self._window_name = window_name
         self._config_path = config_path
         self._session_name = session_name
         self._cwd = cwd
+        self._setup_commands = setup_commands or []
 
         if self._config_path is None:
             self._config_path = os.path.join(
@@ -192,11 +194,18 @@ class TmuxSession:
         self._pane.set_width(132)
         # do this here so it goes away with the tmux shell session
         self._pane.send_keys(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
+
+        # send any other commands needed for setup
+        for command in self._setup_commands:
+            self._pane.send_keys(command)
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if self._server.has_session(self._session_name):
             self._session.kill_session()
+
+    def send_only(self, value):
+        self._pane.send_keys(value, suppress_history=False)
 
     def interaction(self, value):
         """interact with the tmux session"""
@@ -231,6 +240,21 @@ def fixture_path_from_request(request, index):
     dir_path = f"{defaults.FIXTURES_DIR}/{path_in_fixture_dir}/{request.node.originalname}"
     file_name = f"{index}.json"
     return dir_path, file_name
+
+
+def container_runtime_or_fail():
+    """find a container runtime, prefer podman
+    fail if neither available"""
+    # pylint: disable=import-outside-toplevel
+    import subprocess
+
+    for runtime in ("docker", "podman"):
+        try:
+            subprocess.run([runtime, "-v"], check=False)
+            return runtime
+        except FileNotFoundError:
+            pass
+    raise Exception("container runtime required")
 
 
 class Cli2Runner:

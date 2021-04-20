@@ -1,0 +1,27 @@
+{
+    "name": "test[4-:f-clear filter, full list]",
+    "index": 4,
+    "comment": "clear filter, full list",
+    "output": [
+        "    OPTION                        DEFAULT SOURCE  VIA                             CURRENT VALUE",
+        "  0│ACTION_WARNINGS                  True default default                         True                                             ▒",
+        "  1│AGNOSTIC_BECOME_PROMPT           True default default                         True                                             ▒",
+        "  2│ALLOW_WORLD_READABLE_TMPFILES    True default default                         False",
+        "  3│ANSIBLE_CONNECTION_PATH          True default default                         None",
+        "  4│ANSIBLE_COW_ACCEPTLIST           True default default                         ['bud-frogs', 'bunny', 'cheese', 'daemon', 'defau",
+        "  5│ANSIBLE_COW_PATH                 True default default                         None",
+        "  6│ANSIBLE_COW_SELECTION            True default default                         default",
+        "  7│ANSIBLE_FORCE_COLOR              True default default                         False",
+        "  8│ANSIBLE_NOCOLOR                  True default default                         False",
+        "  9│ANSIBLE_NOCOWS                   True default default                         False",
+        " 10│ANSIBLE_PIPELINING               True default default                         False",
+        " 11│ANY_ERRORS_FATAL                 True default default                         False",
+        " 12│BECOME_ALLOW_SAME_USER           True default default                         False",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 14│CACHE_PLUGIN                    False env     ANSIBLE_CACHE_PLUGIN            jsonfile",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 16│CACHE_PLUGIN_PREFIX              True default default                         ansible_facts",
+        " 17│CACHE_PLUGIN_TIMEOUT            False env     ANSIBLE_CACHE_PLUGIN_TIMEOUT    42",
+        "^f/PgUp page up          ^b/PgDn page down          ↑↓ scroll          esc back          [0-9] goto          :help help"
+    ]
+}
