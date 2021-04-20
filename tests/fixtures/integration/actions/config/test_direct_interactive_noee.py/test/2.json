@@ -20,10 +20,6 @@
         "13│via: ANSIBLE_CACHE_PLUGIN_TIMEOUT",
         "14│yaml:",
         "15│  key: facts.cache.timeout",
-<<<<<<< HEAD
         "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              + previous              - next              [0-9] goto              :help help"
-=======
-        "^f/PgUp page up     ^b/PgDn page down     ↑↓ scroll     esc back     + previous     - next     [0-9] goto     :help help"
->>>>>>> 43dbf77b9b84aa2b1d58382581671a7f16f36660
     ]
 }

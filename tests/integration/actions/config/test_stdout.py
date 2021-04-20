@@ -37,11 +37,7 @@ def test_run_stdout_dump_custom_config(test_fixtures_dir) -> None:
     # assert err == ""
 
 
-<<<<<<< HEAD:tests/integration/actions/config/test_stdout.py
 def test_run_stdout_dump_container(container_runtime_or_fail) -> None:
-=======
-def test_run_stdout_dump_container(container_runtime_installed) -> None:
->>>>>>> 43dbf77b9b84aa2b1d58382581671a7f16f36660:tests/integration/actions/test_config.py
     """test config dump to stdout within execution environment"""
     kwargs = {
         "set_environment_variable": {"PAGER": "cat"},

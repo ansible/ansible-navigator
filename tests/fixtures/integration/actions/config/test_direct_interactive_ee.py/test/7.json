@@ -3,20 +3,11 @@
     "index": 7,
     "comment": "return to filtered list",
     "output": [
-<<<<<<< HEAD
         "  OPTION                               DEFAULT     SOURCE      VIA         CURRENT VALUE",
         "0│INVENTORY_ENABLED                       True     default     default     ['host_list', 'script', 'auto', 'yaml', 'ini', 'toml']",
         "1│MODULE_IGNORE_EXTS                      True     default     default     {{(REJECT_EXTS + ('.yaml', '.yml', '.ini'))}}",
         "2│STRING_TYPE_FILTERS                     True     default     default     ['string', 'to_json', 'to_nice_json', 'to_yaml', 'to_nice_yaml', 'ppretty', 'json']",
         "3│YAML_FILENAME_EXTENSIONS                True     default     default     ['.yml', '.yaml', '.json']",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
-=======
-        "  OPTION                   DEFAULT SOURCE  VIA     CURRENT VALUE",
-        "0│INVENTORY_ENABLED           True default default ['host_list', 'script', 'auto', 'yaml', 'ini', 'toml']",
-        "1│MODULE_IGNORE_EXTS          True default default {{(REJECT_EXTS + ('.yaml', '.yml', '.ini'))}}",
-        "2│STRING_TYPE_FILTERS         True default default ['string', 'to_json', 'to_nice_json', 'to_yaml', 'to_nice_yaml', 'ppretty', 'j",
-        "3│YAML_FILENAME_EXTENSIONS    True default default ['.yml', '.yaml', '.json']",
-        "^f/PgUp page up          ^b/PgDn page down          ↑↓ scroll          esc back          [0-9] goto          :help help"
->>>>>>> 43dbf77b9b84aa2b1d58382581671a7f16f36660
     ]
 }

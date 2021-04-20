@@ -169,7 +169,6 @@ class Action(App):
         self._interaction = interaction
 
         self._build_inventory_list()
-
         if not self._inventories:
             return None
 
@@ -387,7 +386,6 @@ class Action(App):
         # either the user provided new inventories or none previously set:
         if user_provided is not None or not hasattr(self.args, "inventory"):
             params.extend(user_provided.split())
-
             # Parse as if provided from the cmdline
             new_args = self._update_args(params)
             if new_args is None:

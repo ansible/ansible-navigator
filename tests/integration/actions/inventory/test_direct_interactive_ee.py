@@ -2,15 +2,8 @@
 """
 import pytest
 
-<<<<<<< HEAD:tests/integration/actions/inventory/test_direct_interactive_ee.py
 from .base import BaseClass
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
-=======
-from ... import defaults
-from .._common import get_executable_path
-from .._common import fixture_path_from_request
-from .._common import update_fixtures  # pylint: disable=unused-import
->>>>>>> 43dbf77b9b84aa2b1d58382581671a7f16f36660:tests/integration/actions/test_inventory.py
 
 from ..._common import get_executable_path
 from ..._common import container_runtime_or_fail

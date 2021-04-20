@@ -8,14 +8,9 @@ from ..._common import get_executable_path
 from ..._common import container_runtime_or_fail
 
 CLI = (
-<<<<<<< HEAD
     get_executable_path("python")
     + " -m ansible_navigator config --execution-environment true --ce "
     + container_runtime_or_fail()
-=======
-    f"{get_executable_path('python')}"
-    f" -m ansible_navigator config --execution-environment true --ce {container_runtime_or_fail()}"
->>>>>>> 43dbf77b9b84aa2b1d58382581671a7f16f36660
 )
 
 testdata = [
