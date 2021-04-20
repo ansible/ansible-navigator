@@ -51,7 +51,7 @@ class Test:
     # pylint: disable=redefined-outer-name
     # pylint: disable=too-many-arguments
 
-    """test the use of pass_environment_variable throguh to runner"""
+    """test the use of pass_environment_variable through to runner"""
 
     TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/pass_environment_variable"
 
