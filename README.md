@@ -2,6 +2,8 @@
 
 A TUI for the Red Hat Ansible Automation Platform
 
+[![asciicast](https://asciinema.org/a/gl7uVblC23dxGGTkVOEigDHCl.svg)](https://asciinema.org/a/gl7uVblC23dxGGTkVOEigDHCl)
+
 ## Quick start
 
 ```
