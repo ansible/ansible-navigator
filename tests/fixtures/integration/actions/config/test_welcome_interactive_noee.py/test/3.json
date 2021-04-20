@@ -1,0 +1,25 @@
+{
+    "name": "test[3-:0-cache plugin details]",
+    "index": 3,
+    "comment": "cache plugin details",
+    "output": [
+        "CACHE PLUGIN TIMEOUT (current: 42)  (default: 86400)",
+        " 0│---",
+        " 1│current: 42",
+        " 2│default: 86400",
+        " 3│description: Expiration timeout for the cache plugin data",
+        " 4│env:",
+        " 5│- name: ANSIBLE_CACHE_PLUGIN_TIMEOUT",
+        " 6│ini:",
+        " 7│- key: fact_caching_timeout",
+        " 8│  section: defaults",
+        " 9│name: Cache Plugin expiration timeout",
+        "10│option: CACHE_PLUGIN_TIMEOUT",
+        "11│source: env",
+        "12│type: integer",
+        "13│via: ANSIBLE_CACHE_PLUGIN_TIMEOUT",
+        "14│yaml:",
+        "15│  key: facts.cache.timeout",
+        "^f/PgUp page up     ^b/PgDn page down     ↑↓ scroll     esc back     + previous     - next     [0-9] goto     :help help"
+    ]
+}
