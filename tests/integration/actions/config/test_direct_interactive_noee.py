@@ -6,9 +6,7 @@ from .base import BaseClass
 
 from ..._common import get_executable_path
 
-CLI = (
-    f"{get_executable_path('python')}" " -m ansible_navigator config --execution-environment false"
-)
+CLI = get_executable_path("python") + " -m ansible_navigator config --execution-environment false"
 
 testdata = [
     (0, CLI, "ansible-navigator config command top window"),

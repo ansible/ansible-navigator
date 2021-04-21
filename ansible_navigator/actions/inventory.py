@@ -385,7 +385,7 @@ class Action(App):
 
         # either the user provided new inventories or none previously set:
         if user_provided is not None or not hasattr(self.args, "inventory"):
-            params.append(user_provided)
+            params.extend(user_provided.split())
             # Parse as if provided from the cmdline
             new_args = self._update_args(params)
             if new_args is None:

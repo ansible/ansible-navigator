@@ -1,0 +1,17 @@
+{
+    "name": "test[19-:0-host0101 detail window]",
+    "index": 19,
+    "comment": "host0101 detail window",
+    "output": [
+        "[host0101] org.coll.nos",
+        "0│---",
+        "1│ansible_become: true",
+        "2│ansible_connection: ansible.netcommon.network_cli",
+        "3│ansible_host: host0101.test.com",
+        "4│ansible_network_os: org.coll.nos",
+        "5│group01_foo: group01_bar",
+        "6│host0101_foo: host0101_bar",
+        "7│inventory_hostname: host0101",
+        "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              + previous              - next              [0-9] goto              :help help"
+    ]
+}

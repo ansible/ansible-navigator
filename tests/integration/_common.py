@@ -170,10 +170,6 @@ class TmuxSession:
         self._cwd = cwd
         self._setup_commands = setup_commands or []
 
-        if self._config_path is None:
-            self._config_path = os.path.join(
-                os.path.dirname(__file__), "..", "fixtures", "ansible-navigator.yml"
-            )
         if self._cwd is None:
             # ensure CWD is top folder of library
             self._cwd = os.path.join(os.path.dirname(__file__), "..", "..")
@@ -191,7 +187,7 @@ class TmuxSession:
         self._pane.split_window(vertical=False, attach=False)
         # attached to upper left
         self._pane.set_height(20)
-        self._pane.set_width(132)
+        self._pane.set_width(200)
         # do this here so it goes away with the tmux shell session
         self._pane.send_keys(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
 

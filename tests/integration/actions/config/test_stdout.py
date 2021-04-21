@@ -37,11 +37,11 @@ def test_run_stdout_dump_custom_config(test_fixtures_dir) -> None:
     # assert err == ""
 
 
-def test_run_stdout_dump_container(container_runtime_installed) -> None:
+def test_run_stdout_dump_container(container_runtime_or_fail) -> None:
     """test config dump to stdout within execution environment"""
     kwargs = {
         "set_environment_variable": {"PAGER": "cat"},
-        "container_engine": container_runtime_installed,
+        "container_engine": container_runtime_or_fail,
         "execution_environment": True,
         "execution_environment_image": defaults.DEFAULT_CONTAINER_IMAGE,
     }

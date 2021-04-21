@@ -1,3 +1,5 @@
+""" base class for config interactive tests
+"""
 import json
 
 import pytest
@@ -26,10 +28,8 @@ class BaseClass:
     def test(self, request, tmux_config_session, index, user_input, comment):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
-        """test interactive config from cli
-
-        uncomment the update_fixtures line to update the fixtures
-        """
+        # pylint: disable=too-many-arguments
+        """test interactive config"""
         received_output = tmux_config_session.interaction(user_input)
         # mask out some config that is subject to change each run
         for idx, line in enumerate(received_output):
