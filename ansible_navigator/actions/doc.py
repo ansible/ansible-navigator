@@ -88,7 +88,7 @@ class Action:
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "set_environment_variable": set_environment_variable
+            "set_environment_variable": set_environment_variable,
         }
         if self._args.mode == "interactive":
             if "playbook" in self._app.args:
@@ -101,11 +101,13 @@ class Action:
                 plugin_type = self._app.args.type
 
             _runner = DocRunner(**kwargs)
-            plugin_doc, plugin_doc_err = _runner.fetch_plugin_doc([self._plugin_name],
-                                                                  plugin_type=plugin_type)
+            plugin_doc, plugin_doc_err = _runner.fetch_plugin_doc(
+                [self._plugin_name], plugin_type=plugin_type
+            )
             if plugin_doc_err:
-                msg = "Error occurred while fetching doc for" \
-                      " plugin {0}: '{1}'".format(self._plugin_name, plugin_doc_err)
+                msg = "Error occurred while fetching doc for" " plugin {0}: '{1}'".format(
+                    self._plugin_name, plugin_doc_err
+                )
                 self._logger.error(msg)
 
             plugin_doc = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
