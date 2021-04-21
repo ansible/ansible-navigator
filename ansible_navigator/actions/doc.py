@@ -7,8 +7,8 @@ from distutils.spawn import find_executable
 from typing import Union
 from . import _actions as actions
 from ..app_public import AppPublic
-from ..runner.api import DocRunner
 from ..runner.api import CommandRunner
+from ..runner.api import DocRunner
 from ..ui_framework import Interaction
 
 
