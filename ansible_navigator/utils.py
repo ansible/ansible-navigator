@@ -250,7 +250,11 @@ def _get_config_file(
 
 
 def get_conf_path(
-    filename: Optional[str] = None, allowed_extensions: Optional[List] = None
+    filename: Optional[str] = None,
+    allowed_extensions: List[str] = [],
+    prepend_paths: List[str] = [],
+    append_paths: List[str] = [],
+    absolute: bool = True,
 ) -> Tuple[Optional[str], List[str]]:
     """
     returns config dir (e.g. /etc/ansible-navigator) if filename is None and
@@ -261,7 +265,7 @@ def get_conf_path(
           We should probably cache the potential paths somewhere, eventually.
     """
 
-    potential_paths: List[str] = []
+    potential_paths: List[str] = prepend_paths
     msgs: List[str] = []
 
     # .ansible-navigator of current direcotry
@@ -284,6 +288,9 @@ def get_conf_path(
     if prefix:
         path = os.path.join(prefix, "local", "etc", "ansible-navigator")
         potential_paths.append(path)
+
+    # Any extra paths given to search after everything else has been searched.
+    potential_paths.extend(append_paths)
 
     for path in potential_paths:
         if allowed_extensions:
@@ -310,6 +317,8 @@ def get_conf_path(
                     "is world-writable.".format(path)
                 )
                 continue
+            if absolute:
+                config_path = os.path.realpath(config_path)
             return (config_path, msgs)
         except OSError:
             continue
@@ -319,7 +328,7 @@ def get_conf_path(
 
 def set_ansible_envar() -> None:
     """Set an envar if not set, runner will need this"""
-    ansible_config_path, msgs = get_conf_path("ansible.cfg")
+    ansible_config_path, msgs = get_conf_path("ansible.cfg", prepend_paths=["."])
 
     for msg in msgs:
         logger.debug(msg)
