@@ -4,6 +4,9 @@ import json
 import os
 
 from distutils.spawn import find_executable
+from typing import Any
+from typing import Dict
+from typing import Optional
 from typing import Union
 from . import _actions as actions
 from ..app_public import AppPublic
@@ -26,6 +29,7 @@ class Action:
         self._app = None
         self._plugin_name = None
         self._interaction_value = None
+        self._runner = None
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
@@ -100,8 +104,8 @@ class Action:
             if self._app.args.app == "doc" and self._app.args.type:
                 plugin_type = self._app.args.type
 
-            _runner = DocRunner(**kwargs)
-            plugin_doc, plugin_doc_err = _runner.fetch_plugin_doc(
+            self._runner = DocRunner(**kwargs)
+            plugin_doc, plugin_doc_err = self._runner.fetch_plugin_doc(
                 [self._plugin_name], plugin_type=plugin_type
             )
             if plugin_doc_err:
@@ -133,12 +137,12 @@ class Action:
 
             kwargs.update({"cmdline": pass_through_arg})
 
-            _runner = CommandRunner(executable_cmd=ansible_doc_path, **kwargs)
-            _runner.run()
+            self._runner = CommandRunner(executable_cmd=ansible_doc_path, **kwargs)
+            self._runner.run()
 
         return plugin_doc
 
-    def _extract_plugin_doc(self, out: str, err: str):
+    def _extract_plugin_doc(self, out: str, err: str) -> Optional[Dict[Any, Any]]:
         plugin_doc = {}
         if self._app.args.execution_environment:
             error_key_name = "execution_environment_errors"
