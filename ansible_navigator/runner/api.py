@@ -173,7 +173,6 @@ class CommandBaseRunner(BaseRunner):
         """generate arguments required to be passed to ansible-runner"""
         if self._playbook:
             self._cmdline.append(self._playbook)
-            self._runner_args.update({"cwd": os.path.dirname(os.path.abspath(self._playbook))})
 
         for inv in self._inventory:
             self._cmdline.extend(["-i", inv])

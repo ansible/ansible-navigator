@@ -110,7 +110,7 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, cmdline: List) -> Tuple[str, str]:
+    def run_action_stdout(self, cmdline: List = []) -> Tuple[str, str]:
         """run the action"""
         self._app_args.update({"mode": "stdout", "cmdline": cmdline})
         args = deepcopy(NavigatorConfiguration)
