@@ -193,7 +193,7 @@ class CliArgs:
             "--execution-environment",
             default=Sentinel,
             dest="execution_environment",
-            help="Run the playbook in an Execution Environment",
+            help="Run with Execution Environment enabled",
             type=str2bool,
         )
         parser.add_argument(
