@@ -349,9 +349,10 @@ class DocRunner(BaseRunner):
                                                    /usr/share/ansible/plugins/modules).
 
         Returns:
-            Tuple[str, str]: Returns a tuple of response and error string. If the value of
-                             ``response_format`` is ``json`` it returns a python
-                             dictionary object.
+            Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]: Returns a tuple of
+                                                    response and error string. If the value of
+                                                    ``response_format`` is ``json`` it returns
+                                                    a python dictionary object.
         """
         return get_plugin_docs(
             plugin_names,
