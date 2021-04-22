@@ -82,7 +82,7 @@ class Action:
         """ spin up runner """
 
         plugin_type = None
-        plugin_doc = None
+        plugin_doc_response: Optional[Dict[Any, Any]] = None
         set_environment_variable = self._args.set_environment_variable.copy()
         set_environment_variable.update({"ANSIBLE_NOCOLOR": "True"})
 
@@ -114,7 +114,7 @@ class Action:
                 )
                 self._logger.error(msg)
 
-            plugin_doc = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
+            plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
         else:
             kwargs.update({"cwd": os.getcwd()})
             if self._args.execution_environment:
@@ -140,9 +140,11 @@ class Action:
             self._runner = CommandRunner(executable_cmd=ansible_doc_path, **kwargs)
             self._runner.run()
 
-        return plugin_doc
+        return plugin_doc_response
 
-    def _extract_plugin_doc(self, out: str, err: str) -> Optional[Dict[Any, Any]]:
+    def _extract_plugin_doc(
+        self, out: Union[Dict[Any, Any], str], err: Union[Dict[Any, Any], str]
+    ) -> Optional[Dict[Any, Any]]:
         plugin_doc = {}
         if self._app.args.execution_environment:
             error_key_name = "execution_environment_errors"

@@ -6,10 +6,12 @@ import logging
 import os
 
 from queue import Queue
-from typing import Tuple
-from typing import Optional
-from typing import List
+from typing import Any
 from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 from ansible_runner import Runner  # type: ignore
 from ansible_runner import get_ansible_config
@@ -320,7 +322,7 @@ class DocRunner(BaseRunner):
         snippet: Optional[bool] = None,
         playbook_dir: Optional[str] = None,
         module_path: Optional[str] = None,
-    ) -> Tuple[str, str]:
+    ) -> Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]:
         """Run ansible-doc command and get the plugin docs related details
 
         Args:
