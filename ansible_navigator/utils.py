@@ -50,6 +50,16 @@ class Sentinel:  # pylint: disable=too-few-public-methods
         return cls
 
 
+class Singleton(type):
+    __instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls.__instances:
+            cls.__instances[cls] = super().__call__(*args, **kwargs)
+
+        return cls.__instances[cls]
+
+
 def human_time(seconds: int) -> str:
     """convert seconds into human readable
     00d00h00m00s format"""

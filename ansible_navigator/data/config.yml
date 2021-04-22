@@ -1,0 +1,273 @@
+# FIXME: auto generate docs/configuration.rst
+# NOTE!!! If you change any default here, update the documentation file in
+#         docs/configuration.rst
+
+#config_name:
+#  description: str/list[str] - the description to use for --help/docs
+#  default: any - optional - the default value
+#  choices: list - optional - valid choices for this option
+#  type: str - optional - The type to validate against (str, int, list, dict, bool)
+#  elements: str - optional - When type is list then this is what each element should be
+#  deprecated: todo add deprecation setup to state why and when it will be removed
+#  version_added: todo add a field that states when it was added for docs
+#
+#  Variables options to define it in
+#      Each take a list with the first having the highest priority
+#      Priority of each type: config < env < cli
+#
+#  config:
+#  - section:
+#    - ansible-navigator
+#    - editor
+#    name: str - the name of key in the section to set the value for
+#    deprecated: see above
+#    version_added: see above
+#
+#  env:
+#  - name: ENV_VAR
+#    deprecated: see above
+#    version_added: see above
+#
+#  cli:
+#  - name: --ce
+#    - list[str] of sub commands this is valid for
+#    deprecated: see above
+#    version_added: see above
+#  - name: --container-engine
+#    deprecated: see above
+#    version_added: see above
+
+container-engine:
+  description:
+  - The container engine to run the Execution Environment
+  choices:
+  - docker
+  - podman
+  default: podman
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    name: container-engine
+  cli:
+  - name: --ce
+  - name: --container-engine
+
+doc-plugin-type:
+  description: Plugin type to display
+  default: module
+  choices:
+  - become
+  - cache
+  - callback
+  - cliconf
+  - connection
+  - httpapi
+  - inventory
+  - lookup
+  - netconf
+  - shell
+  - vars
+  - module
+  - strategy
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    name: doc-plugin-type
+  cli:
+  - name: -t
+  - name: --type
+
+editor-command:
+  description:
+  - The editor command, filename and linenumber
+  - Defaults to "${EDITOR} {filename}" or "vi +{line_number} {filename}" if EDITOR is not defined
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    - editor
+    name: command
+  cli:
+  - name: --ecmd
+  - name: --editor-command
+
+editor-console:
+  description:
+  - Specify whether the editor is console based
+  default: True
+  type: bool
+  config:
+  - section:
+    - ansible-navigator
+    - editor
+    name: console
+  cli:
+  - name: --econ
+  - name: --editor-console
+
+execution-environment:
+  description:
+  - Run the playbook in an Execution Environment
+  default: True
+  type: bool
+  config:
+  - section:
+    - ansible-navigator
+    name: execution-environment
+  cli:
+  - name: --ee
+  - name: --execution-environment
+
+execution-environment-image:
+  description:
+  - The name of the container image containing an Execution Environment
+  default: quay.io/ansible/ansible-runner:devel
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    name: execution-environment-image
+  cli:
+  - name: --eei
+  - name: --execution-environment-image
+
+inventory:
+  description:
+  - The inventory/inventories to use
+  type: list
+  elements: str
+  config:
+  - section:
+    - ansible-navigator
+    name: inventory
+  cli:
+  - name: -i
+  - name: --inventory
+
+inventory-columns:
+  description:
+  - Additional columns to be shown in the inventory views
+  type: list
+  elements: str
+  config:
+  - section:
+    - ansible-navigator
+    name: inventory-columns
+  cli:
+  - name: -ic
+  - name: --inventory-columns
+
+log-file:
+  description:
+  - The application log file location
+  default: ./ansible-navigator.log
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    - log
+    name: file
+  cli:
+  - name: --lf
+  - name: --logfile
+
+log-level:
+  description:
+  - The application log level
+  choices:
+  - debug
+  - info
+  - warning
+  - error
+  - critical
+  default: info
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    - log
+    name: level
+  cli:
+  - name: --ll
+  - name: --loglevel
+
+mode:
+  description:
+  - The navigator mode to run
+  choices:
+  - interactive
+  - stdout
+  default: interactive
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    name: mode
+  cli:
+  - name: -m
+  - name: --mode
+
+no-osc4:
+  description:
+  - Disable OSC-4 support (xterm.js color fix)
+  default: False
+  type: bool
+  config:
+  - section:
+    - ansible-navigator
+    name: no-osc4
+  cli:
+  - name: --no-osc4
+
+pass-environment-variable:
+  description:
+  - A list of existing environment variables to be passed through to and set within the Execution Environment
+  type: list
+  elements: str
+  config:
+  - section:
+    - ansible-navigator
+    name: pass-environment-variable
+  cli:
+  - name: --penv
+  - name: --pass-environment-variable
+
+playbook:
+  description:
+  - The name of the playbook(s) to run
+  type: list
+  elements: str
+  config:
+  - section:
+    - ansible-navigator
+    name: playbook
+  cli:
+  - name: playbook
+
+playbook-artifact:
+  description:
+  - The artifact file name for playbook results
+  default: '{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json'
+  type: str
+  config:
+  - section:
+    - ansible-navigator
+    name: playbook-artifact
+  cli:
+  - name: --pa
+  - name: --playbook-artifact
+
+set-environment-variable:
+  description:
+  - Environment variabels to set within the Execution Environment
+  - When set with the cli args, use the form 'NAME=value' for each environment var
+  type: dict
+  config:
+  - section:
+    - ansible-navigator
+    name: set-environment-variable
+  cli:
+  - name: --senv
+  - name: --set-environment-variable

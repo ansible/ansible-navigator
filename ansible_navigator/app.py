@@ -84,7 +84,7 @@ class App:
     def _update_args(self, params: List) -> Union[Namespace, None]:
         """pass the params through the original cli parser
         as if run was invoked from the command line
-        provide an error callback so the app doesn't sys.exit if the aprsing fails
+        provide an error callback so the app doesn't sys.exit if the parsing fails
         """
 
         try:

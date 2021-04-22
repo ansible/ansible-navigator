@@ -15,23 +15,17 @@ from typing import Callable
 from typing import List
 from typing import Optional
 from typing import Tuple
-from yaml.scanner import ScannerError
 
 from .cli_args import CliArgs
-from .config import ARGPARSE_TO_CONFIG
 from .config import NavigatorConfig
 from .action_runner import ActionRunner
 
 from .utils import check_for_ansible
-from .utils import env_var_is_file_path
 from .utils import error_and_exit_early
 from .utils import flatten_list
 from .utils import get_and_check_collection_doc_cache
-from .utils import get_conf_path
 from .utils import set_ansible_envar
 from .utils import Sentinel
-
-from .yaml import yaml, SafeLoader
 
 APP_NAME = "ansible_navigator"
 COLLECTION_DOC_CACHE_FNAME = "collection_doc_cache.db"
@@ -99,15 +93,14 @@ def update_args(args: Namespace) -> List[str]:
     ---
 
     How this function works (in practice):
-    1) We iterate over all defaultable args (given in config.ARGPARSE_TO_CONFIG)
-    2) If the attribute doesn't exist in args at all, it's not relevant to this
+    1) If the attribute doesn't exist in args at all, it's not relevant to this
        (sub)command, so move on and ignore it.
-    3) If the current value of the arg is *not* Sentinel, then the user
+    2) If the current value of the arg is *not* Sentinel, then the user
        specified some value on the CLI; leave it alone.
-    4) If the value *is* Sentinel, then the user didn't specify a value on the
+    3) If the value *is* Sentinel, then the user didn't specify a value on the
        CLI, so look in config. If it exists in the user's config, pull the value
        out and use it. Otherwise, fallback to the default config.
-    5) (should never happen) If the value doesn't exist in default config, we
+    4) (should never happen) If the value doesn't exist in default config, we
        will get a KeyError back from the config subsystem. We let that bubble up
        and catch it by the global exception handler.
     """
@@ -118,29 +111,6 @@ def update_args(args: Namespace) -> List[str]:
     if not hasattr(args, "config") or not args.config:
         msgs.append("No config file parsed, no default parameters to override.")
         return msgs
-
-    # Iterate through each "defaultable" (config-file-settable) path and do the
-    # deed.
-    for attr, path in ARGPARSE_TO_CONFIG.items():
-        if not hasattr(args, attr):
-            # If the attribute doesn't exist at all, skip it.
-            # This probably means it's in a subparser that isn't relevant to the
-            # command currently being run by the user.
-            continue
-
-        if getattr(args, attr) not in [Sentinel, [Sentinel]]:
-            # Not Sentinel means that the user specified it. Leave it alone!
-            continue
-
-        # If we made it here, then the user didn't specify the argument.
-        # If this ever throws KeyError, it's because something was added to the
-        # ARGPARSE_TO_CONFIG mapping, but the key path in the default config
-        # doesn't exist. There's not much to do in this case, so fall back to
-        # the general exception handler (whenever it exists) and let it be the
-        # thing that tells the user the bad news.
-        source, value = args.config.get(path)
-        msgs.append(f"Setting arg '{attr}' to '{value}' via {source.value}")
-        setattr(args, attr, value)
 
     return msgs
 
@@ -165,76 +135,6 @@ def setup_logger(args):
     logger.setLevel(getattr(logging, args.loglevel.upper()))
 
 
-# Some branches here call error_and_exit_early() which doesn't return, it exits.
-# pylint: disable=inconsistent-return-statements
-def setup_config() -> Tuple[List[str], NavigatorConfig]:
-    """
-    Load up a configuration file, logging each step.
-    Return (log messages, NavigatorConfig).
-    If the config can't be found/loaded, use default settings.
-    If it's found but empty or not well formed, bail out.
-    """
-    pre_logger_msgs = []
-    config_path = None
-    # Check if the conf path is set via an env var
-    cfg_env_var = "ANSIBLE_NAVIGATOR_CONFIG"
-    env_config_path, msgs = env_var_is_file_path(cfg_env_var, "config")
-    pre_logger_msgs += msgs
-
-    # Check well know locations
-    found_config_path, msgs = get_conf_path(
-        "ansible-navigator", allowed_extensions=["yml", "yaml", "json"]
-    )
-    pre_logger_msgs += msgs
-
-    # Pick the envar set first, followed by found, followed by leave as none
-    if env_config_path is not None:
-        config_path = env_config_path
-        pre_logger_msgs.append(f"Using config file at {config_path} set by {cfg_env_var}")
-    elif found_config_path is not None:
-        config_path = found_config_path
-        pre_logger_msgs.append(f"Using config file at {config_path} in search path")
-    else:
-        pre_logger_msgs.append(
-            "No valid config file found, using all default values for configuration."
-        )
-
-    config = {}
-    if config_path is not None:
-        with open(config_path, "r") as config_fh:
-            if config_path.endswith(".json"):
-                try:
-                    config = json.load(config_fh)
-                except (TypeError, json.decoder.JSONDecodeError) as exe:
-                    msg = "Invalid JSON config found in file '{0}'." " Failed with '{1}'".format(
-                        config_fh, str(exe)
-                    )
-                    error_and_exit_early(msg)
-            else:
-                try:
-                    config = yaml.load(config_fh, Loader=SafeLoader)
-                except ScannerError:
-                    error_and_exit_early(
-                        "Config file at {0} but failed to parse it.".format(config_path)
-                    )
-
-    if config_path and config and config.get("ansible-navigator"):
-        # If the config file was found and has the key we expect, log and use it
-        pre_logger_msgs.append("Successfully parsed config file")
-        return pre_logger_msgs, NavigatorConfig(config)
-
-    if not config_path:
-        # If the config file wasn't found, that's still okay. In this case, we
-        # instantiate NavigatorConfig with an empty dict.
-        return pre_logger_msgs, NavigatorConfig(config)
-
-    # But if we found a config and it looks wrong (missing toplevel key or is
-    # somehow otherwise empty/null), bail out!
-    error_and_exit_early(
-        "Config file was empty, null, or did not contain an 'ansible-navigator' key"
-    )
-
-
 def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str], Namespace]:
     # pylint: disable=too-many-branches
     # pylint: disable=too-many-statements
@@ -248,8 +148,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
     args.cmdline = cmdline
 
     pre_logger_msgs: List[str] = []
-    config_msgs, config = setup_config()
-    pre_logger_msgs += config_msgs
+    config = NavigatorConfig()
     args.config = config
     pre_logger_msgs += update_args(args)
 
