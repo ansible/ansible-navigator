@@ -366,7 +366,12 @@ def _get_kvs(args, collection_doc_cache_path):
     return mod.KeyValueStore(collection_doc_cache_path)
 
 
-def error_and_exit_early(msg) -> NoReturn:
+def error_and_exit_early(msg=None, errors=None) -> NoReturn:
     """get out of here fast"""
-    print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
+    template = "\x1b[31m[ERROR]: {msg}\x1b[0m"
+    if msg:
+        print(template.format(msg=msg))
+    if errors:
+        for error in errors:
+            print(template.format(msg=error))
     sys.exit(1)
