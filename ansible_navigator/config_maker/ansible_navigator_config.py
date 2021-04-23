@@ -4,15 +4,34 @@ from .definitions import SubCommand
 from .definitions import Entry
 from .definitions import EntryValue
 
+from ansible_navigator.utils import oxfordcomma
+
 from .ansible_navigator_post_process import PostProcess
+
+PLUGIN_TYPES = (
+            "become",
+            "cache",
+            "callback",
+            "cliconf",
+            "connection",
+            "httpapi",
+            "inventory",
+            "lookup",
+            "module",
+            "netconf",
+            "shell",
+            "strategy",
+            "vars",
+        )
 
 CONFIG = Config(
     application_name="ansible-navigator",
     subcommands=[
-        SubCommand(name="inventory", description="Inventory"),
-        SubCommand(name="config", description="Configuration"),
-        SubCommand(name="doc", description="Documentation"),
-        SubCommand(name="run", description="Run"),
+        SubCommand(name="collections", description="Explore available collections"),
+        SubCommand(name="config", description="Explore the current ansible configuration"),
+        SubCommand(name="doc", description="Review documentation for a module or plugin"),
+        SubCommand(name="inventory", description="Explore an inventory"),
+        SubCommand(name="run", description="Run a playbook"),
     ],
     entries=[
         Entry(
@@ -52,5 +71,21 @@ CONFIG = Config(
             subcommands=["inventory", "run"],
             value=EntryValue(default=[]),
         ),
+        Entry(
+            name="plugin_name",
+            cli_parameters=CliParameters(short="--pn", long="--plugin-name"),
+            description=f"Specify the plugin name",
+            settings_file_path_override="documentation.plugin.name",
+            subcommands=['doc'],
+            value=EntryValue(default=None)
+        ),
+        Entry(
+            name="plugin_type",
+            cli_parameters=CliParameters(short="-pt", long="--plugin-type"),
+            description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
+            settings_file_path_override="documentation.plugin.type",
+            subcommands=['doc'],
+            value=EntryValue(default=None)
+        )
     ],
 )

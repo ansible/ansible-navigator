@@ -1,4 +1,3 @@
-import json
 import os
 
 from ansible_navigator.yaml import SafeLoader
@@ -64,7 +63,7 @@ class ConfigurationMaker:
                     for chunk in path_parts:
                         data = data[chunk]
                     entry.value.current = data
-                    entry.value.source = EntrySource.USER_CLI
+                    entry.value.source = EntrySource.USER_CFG
                 except KeyError:
                     msg = f"{settings_file_path} not found in settings file"
                     self._messages.append(Message(log_level="debug", message=msg))
@@ -95,7 +94,7 @@ class ConfigurationMaker:
     def _check_choices(self):
         for entry in self._config.entries:
             if not entry.internal and entry.choices:
-                if entry.value.current not in entry.choices:   
+                if entry.value.current not in entry.choices:
                     self._errors.append(entry.invalid_choice)
 
 
