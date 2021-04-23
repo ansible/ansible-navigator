@@ -375,3 +375,13 @@ def error_and_exit_early(msg=None, errors=None) -> NoReturn:
         for error in errors:
             print(template.format(msg=error))
     sys.exit(1)
+
+def oxfordcomma(listed, condition):
+    listed = [str(entry) for entry in listed]
+    if len(listed) == 0:
+        return ''
+    if len(listed) == 1:
+        return "'listed[0]'"
+    if len(listed) == 2:
+        return f"'{listed[0]}' {condition} '{listed[1]}'"
+    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"

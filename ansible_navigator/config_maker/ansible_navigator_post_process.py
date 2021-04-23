@@ -28,6 +28,17 @@ class PostProcess:
         value = flatten_list(value)
         value = [self._abs_user_path(entry) for entry in value]
         return value
+    
+    def execution_environment(self, entry, config):
+        # pylint: disable=unused-argument
+        messages = []
+        errors = []
+        try:
+            entry.value.current = self._str2bool(entry.value.current)
+        except ValueError:
+            errors.append(entry.invalid_choice)
+        return messages, errors
+
 
     def inventory(self, entry, config):
         messages = []
