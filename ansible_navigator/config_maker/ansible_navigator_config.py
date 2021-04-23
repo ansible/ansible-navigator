@@ -4,7 +4,7 @@ from .definitions import SubCommand
 from .definitions import Entry
 from .definitions import EntryValue
 
-from .post_process import PostProcess
+from .ansible_navigator_post_process import PostProcess
 
 CONFIG = Config(
     root_settings_key="ansible-navigator",

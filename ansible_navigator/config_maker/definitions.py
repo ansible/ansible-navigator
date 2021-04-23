@@ -63,9 +63,10 @@ class SubCommand(SimpleNamespace):
 class Config(SimpleNamespace):
     """the main object for storing an application config"""
 
+    entries: List[Entry]
+    initial: Any = None
     root_settings_key: str
     subcommands: List[SubCommand]
-    entries: List[Entry]
 
     def __getattribute__(self, attr):
         # pylint: disable=raise-missing-from

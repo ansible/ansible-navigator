@@ -14,11 +14,13 @@ from .ansible_navigator_config import CONFIG
 
 
 class ConfigurationMaker:
-    def __init__(self, params, settings_file_path, config=CONFIG):
+    def __init__(self, params, settings_file_path, apply_original_cli = False, config=CONFIG, save_as_intitial = False):
+        self._apply_roginal_cli = apply_original_cli
         self._config = config
         self._errors = []
         self._messages = []
         self._params = params
+        self._save_as_init = save_as_intitial
         self._settings_file_path = settings_file_path
 
     def run(self):
