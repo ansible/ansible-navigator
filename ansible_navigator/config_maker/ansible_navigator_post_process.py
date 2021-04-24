@@ -18,10 +18,11 @@ class PostProcess:
         """
         if isinstance(value, bool):
             return value
-        if value.lower() in ("yes", "true", "t", "y", "1"):
-            return True
-        if value.lower() in ("no", "false", "f", "n", "0"):
-            return False
+        if isinstance(value, str):
+            if value.lower() in ("yes", "true"):
+                return True
+            if value.lower() in ("no", "false"):
+                return False
         raise ValueError
 
     def _flatten_resolve_list_of_paths(self, value):
@@ -29,8 +30,8 @@ class PostProcess:
         value = [self._abs_user_path(entry) for entry in value]
         return value
     
-    def execution_environment(self, entry, config):
-        # pylint: disable=unused-argument
+    def _true_or_false(self, entry, config):
+        #pylint: disable=unused-argument
         messages = []
         errors = []
         try:
@@ -39,6 +40,12 @@ class PostProcess:
             errors.append(entry.invalid_choice)
         return messages, errors
 
+    
+    def editor_console(self, entry, config):
+        return self._true_or_false(entry, config)
+    
+    def execution_environment(self, entry, config):
+        return self._true_or_false(entry, config)
 
     def inventory(self, entry, config):
         messages = []

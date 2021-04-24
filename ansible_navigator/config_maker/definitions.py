@@ -15,14 +15,15 @@ from ansible_navigator.utils import oxfordcomma
 class CliParameters(SimpleNamespace):
     """a structure to hold the cli param"""
 
-    short: str
     long: str
+    short: str
+
 
 
 class EntryValue(SimpleNamespace):
     """A structure to store a value"""
 
-    default: Any
+    default: Any = Sentinel
     current: Any = Sentinel
     source: Any = Sentinel
 
@@ -33,15 +34,14 @@ class Entry(SimpleNamespace):
     """One entry in the configuration"""
 
     name: str
-    cli_parameters: CliParameters
     description: str
     settings_file_path: str
     value: EntryValue
 
     argparse_params: Dict = {}
     choices: List = []
+    cli_parameters: Union[None, CliParameters] = None
     environment_variable_override: Union[None, str] = None
-    post_process: Union[None, Callable] = None
     internal: bool = False
     settings_file_path_override: Union[None, str] = None
     subcommands: List[str] = []
@@ -50,7 +50,7 @@ class Entry(SimpleNamespace):
         if self.environment_variable_override is not None:
             envvar = f"{prefix}_{self.environment_variable}"
         else:
-            envvar = f"{prefix}_{self.cli_parameters.long.replace('--', '')}"
+            envvar = f"{prefix}_{self.name.replace('--', '')}"
         envvar = envvar.replace('-', '_').upper()
         return envvar
 
@@ -72,7 +72,7 @@ class Entry(SimpleNamespace):
         if self.settings_file_path_override is not None:
             sfp = f"{prefix}.{self.settings_file_path_override}"
         else:
-            sfp = f"{prefix}.{self.cli_parameters.long.replace('--', '')}"
+            sfp = f"{prefix}.{self.name.replace('_', '-')}"
         return sfp
 
 
@@ -93,10 +93,12 @@ class SubCommand(SimpleNamespace):
 class Config(SimpleNamespace):
     """the main object for storing an application config"""
 
-    entries: List[Entry]
-    initial: Any = None
     application_name: str
+    entries: List[Entry]
     subcommands: List[SubCommand]
+    post_processor = Callable
+
+    initial: Any = None
 
     def __getattribute__(self, attr):
         # pylint: disable=raise-missing-from

@@ -27,9 +27,14 @@ class Parser:
     def _add_parser(self, parser, entry) -> None:
         if not entry.internal:
             help_str = f"{entry.description} (default: {entry.value.default})"
-            params = {"default": SUPPRESS, "dest": entry.name, "help": help_str}
+            params = {"default": SUPPRESS, "help": help_str}
             params.update(entry.argparse_params)
-            parser.add_argument(entry.cli_parameters.short, entry.cli_parameters.long, **params)
+            if entry.cli_parameters is None:
+                parser.add_argument(entry.name, **params)
+            else:
+                params["dest"] = entry.name
+                parser.add_argument(entry.cli_parameters.short, entry.cli_parameters.long, **params)
+
 
     def _configure_base(self) -> None:
         for entry in self._config.entries:

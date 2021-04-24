@@ -1,4 +1,8 @@
+import json
 import os
+
+from operator import attrgetter
+from types import SimpleNamespace
 
 from ansible_navigator.yaml import SafeLoader
 from ansible_navigator.yaml import yaml
@@ -24,10 +28,10 @@ class ConfigurationMaker:
         self._settings_file_path = settings_file_path
 
     def run(self):
-        self._set_defaults()
-        self._set_from_settings_file()
-        self._set_from_environment_variable()
-        self._set_from_params()
+        self._apply_defaults()
+        self._apply_settings_file()
+        self._apply_environment_variables()
+        self._apply_cli_params()
         if self._errors:
             error_and_exit_early(errors=self._errors)
 
@@ -40,35 +44,32 @@ class ConfigurationMaker:
             error_and_exit_early(errors=self._errors)
 
         return self._messages, self._config
-
-    def _set_defaults(self):
+    
+    def _apply_defaults(self):
         for entry in self._config.entries:
             entry.value.current = entry.value.default
             entry.value.source = EntrySource.DEFAULT_CFG
 
-    def _set_from_settings_file(self):
+    def _apply_settings_file(self):
         with open(self._settings_file_path, "r") as config_fh:
             try:
                 config = yaml.load(config_fh, Loader=SafeLoader)
-            except yaml.ScannerError:
+                config = json.loads(json.dumps(config), object_hook=lambda item: SimpleNamespace(**item))
+            except yaml.scanner.ScannerError:
                 msg = f"Settings file found {self._settings_file_path}, but failed to load it."
                 self._errors.append(msg)
                 return
         for entry in self._config.entries:
             if not entry.internal:
                 settings_file_path = entry.settings_file_path(self._config.application_name)
-                path_parts = settings_file_path.split(".")
-                data = config
                 try:
-                    for chunk in path_parts:
-                        data = data[chunk]
-                    entry.value.current = data
+                    entry.value.current = attrgetter(settings_file_path)(config)
                     entry.value.source = EntrySource.USER_CFG
-                except KeyError:
+                except AttributeError:
                     msg = f"{settings_file_path} not found in settings file"
                     self._messages.append(Message(log_level="debug", message=msg))
 
-    def _set_from_environment_variable(self):
+    def _apply_environment_variables(self):
         for entry in self._config.entries:
             if not entry.internal:
                 set_envvar = os.environ.get(entry.environment_variable(self._config.application_name))
@@ -76,7 +77,7 @@ class ConfigurationMaker:
                     entry.value.current = set_envvar
                     entry.value.source = EntrySource.ENVIRONMENT_VARIABLE
 
-    def _set_from_params(self):
+    def _apply_cli_params(self):
         parser = Parser(self._config).parser
         args, cmdline = parser.parse_known_args(self._params)
         self._config.entry("cmdline").value.current = cmdline
@@ -86,8 +87,9 @@ class ConfigurationMaker:
 
     def _post_process(self):
         for entry in self._config.entries:
-            if entry.post_process:
-                messages, errors = entry.post_process(entry, self._config)
+            processor = getattr(self._config.post_processor, entry.name, None)
+            if callable(processor):
+                messages, errors = processor(entry, self._config)
                 self._messages.extend(messages)
                 self._errors.extend(errors)
     

@@ -1,3 +1,8 @@
+# sanity check config in tests
+# no - in name
+# long = name
+# value exists
+
 from ansible_navigator.config_maker import ConfigurationMaker
 
 from ansible_navigator.utils import get_conf_path
