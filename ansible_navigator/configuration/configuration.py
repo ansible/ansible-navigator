@@ -10,24 +10,22 @@ from ansible_navigator.yaml import yaml
 
 from ansible_navigator.utils import error_and_exit_early
 
-from .parser import Parser
-from .definitions import EntrySource
-from .definitions import Message
-
-from .ansible_navigator_config import CONFIG
+from ansible_navigator.configuration.parser import Parser
+from ansible_navigator.configuration.definitions import EntrySource
+from ansible_navigator.configuration.definitions import Message
 
 
-class ConfigurationMaker:
-    def __init__(self, params, settings_file_path, apply_original_cli = False, config=CONFIG, save_as_intitial = False):
+class Configuration:
+    def __init__(self, params, settings_file_path, application_configuration, apply_original_cli = False, save_as_intitial = False):
         self._apply_roginal_cli = apply_original_cli
-        self._config = config
+        self._config = application_configuration
         self._errors = []
         self._messages = []
         self._params = params
         self._save_as_init = save_as_intitial
         self._settings_file_path = settings_file_path
 
-    def run(self):
+    def configure(self):
         self._apply_defaults()
         self._apply_settings_file()
         self._apply_environment_variables()
@@ -60,7 +58,7 @@ class ConfigurationMaker:
                 self._errors.append(msg)
                 return
         for entry in self._config.entries:
-            if not entry.internal:
+            if entry.cli_parameters:
                 settings_file_path = entry.settings_file_path(self._config.application_name)
                 try:
                     entry.value.current = attrgetter(settings_file_path)(config)
@@ -71,7 +69,7 @@ class ConfigurationMaker:
 
     def _apply_environment_variables(self):
         for entry in self._config.entries:
-            if not entry.internal:
+            if entry.cli_parameters:
                 set_envvar = os.environ.get(entry.environment_variable(self._config.application_name))
                 if set_envvar is not None:
                     entry.value.current = set_envvar
@@ -95,7 +93,7 @@ class ConfigurationMaker:
     
     def _check_choices(self):
         for entry in self._config.entries:
-            if not entry.internal and entry.choices:
+            if entry.cli_parameters and entry.choices:
                 if entry.value.current not in entry.choices:
                     self._errors.append(entry.invalid_choice)
 

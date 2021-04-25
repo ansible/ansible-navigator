@@ -6,7 +6,7 @@ from ansible_navigator.utils import flatten_list
 from .definitions import Message
 
 
-class PostProcess:
+class ApplicationPostProcessor:
     @staticmethod
     def _abs_user_path(fpath):
         return os.path.abspath(os.path.expanduser(fpath))
@@ -39,7 +39,6 @@ class PostProcess:
         except ValueError:
             errors.append(entry.invalid_choice)
         return messages, errors
-
     
     def editor_console(self, entry, config):
         return self._true_or_false(entry, config)
@@ -54,6 +53,9 @@ class PostProcess:
         if config.app == "inventory" and not inventory.value.current:
             msg = "An inventory is required when using the inventory subcommand"
             errors.append(msg)
+            return messages, errors
         inventory.value.current = self._flatten_resolve_list_of_paths(inventory.value.current)
         messages.append(Message(log_level="debug", message="Completed inventory post processing"))
         return messages, errors
+
+

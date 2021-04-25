@@ -15,17 +15,28 @@ from ansible_navigator.utils import oxfordcomma
 class CliParameters(SimpleNamespace):
     """a structure to hold the cli param"""
 
-    long: str
-    short: str
+    action: Union[None, str] = None
+    long_override: Union[None, str] = None
+    nargs: Union[None, Dict] = None
+    positional: bool = False
+    short: Union[None, str] = None
 
 
+class EntrySource(Enum):
+    """mapping some enums to log friendly text"""
 
+    DEFAULT_CFG = "default configuration value"
+    ENVIRONMENT_VARIABLE = "environemnt variable"
+    USER_CFG = "user provided configuration file"
+    USER_CLI = "cli parameters"
+
+   
 class EntryValue(SimpleNamespace):
     """A structure to store a value"""
 
     default: Any = Sentinel
     current: Any = Sentinel
-    source: Any = Sentinel
+    source: Union[EntrySource, Sentinel] = Sentinel
 
 
 class Entry(SimpleNamespace):
@@ -38,7 +49,6 @@ class Entry(SimpleNamespace):
     settings_file_path: str
     value: EntryValue
 
-    argparse_params: Dict = {}
     choices: List = []
     cli_parameters: Union[None, CliParameters] = None
     environment_variable_override: Union[None, str] = None
@@ -76,13 +86,6 @@ class Entry(SimpleNamespace):
         return sfp
 
 
-class EntrySource(Enum):
-    """mapping some enums to log friendly text"""
-
-    DEFAULT_CFG = "default configuration value"
-    ENVIRONMENT_VARIABLE = "environemnt variable"
-    USER_CFG = "user provided configuration file"
-    USER_CLI = "cli parameters"
 
 
 class SubCommand(SimpleNamespace):

@@ -23,18 +23,32 @@ class Parser:
             metavar="{command} --help",
         )
         self._configure_subparsers()
+    
+    def generate_argument(self, entry):
+        kwargs = {}
+        kwargs['help'] = f"{entry.description} (default: {entry.value.default})"
+        kwargs['default'] = SUPPRESS
+
+        if entry.cli_parameters.positional:
+            long = None
+        else:
+            long = entry.cli_parameters.long_override or f"--{entry.name_dashed}"
+            kwargs["dest"] = entry.name
+
+        options = ["action", "nargs"]
+        for option in options:
+            if getattr(entry.cli_parameters, option,) is not None:
+                kwargs[option] = getattr(entry.cli_parameters, option)
+        
+        return entry.cli_parameters.short, long, kwargs
 
     def _add_parser(self, parser, entry) -> None:
-        if not entry.internal:
-            help_str = f"{entry.description} (default: {entry.value.default})"
-            params = {"default": SUPPRESS, "help": help_str}
-            params.update(entry.argparse_params)
-            if entry.cli_parameters is None:
-                parser.add_argument(entry.name, **params)
+        if entry.cli_parameters:
+            short, long, kwargs = self.generate_argument(entry)
+            if not all((short, long)):
+                parser.add_argument(entry.name, **kwargs)
             else:
-                params["dest"] = entry.name
-                parser.add_argument(entry.cli_parameters.short, entry.cli_parameters.long, **params)
-
+                parser.add_argument(short, long, **kwargs)
 
     def _configure_base(self) -> None:
         for entry in self._config.entries:
