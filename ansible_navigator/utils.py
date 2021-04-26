@@ -67,13 +67,17 @@ def human_time(seconds: int) -> str:
     return "%s%ds" % (sign_string, seconds)
 
 
-def flatten_list(lyst: List) -> Generator:
+def _flatten_list(lyst: List) -> Generator:
     """flatten a list of lists"""
     for element in lyst:
         if isinstance(element, list):
             yield from flatten_list(element)
         else:
             yield element
+
+def flatten_list(lyst: List) -> List:
+    """flatten a list of lists"""
+    return list(_flatten_list(lyst))
 
 
 def to_list(thing: Union[str, List]) -> List:

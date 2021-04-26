@@ -5,6 +5,8 @@ from argparse import ArgumentParser
 from argparse import SUPPRESS
 
 from .definitions import Config
+from ansible_navigator.utils import Sentinel
+
 
 
 class Parser:
@@ -18,28 +20,33 @@ class Parser:
         self.parser = ArgumentParser(parents=[self._base_parser])
         self._subparsers = self.parser.add_subparsers(
             title="Subcommands",
-            help="additional help",
             dest="app",
-            metavar="{command} --help",
         )
         self._configure_subparsers()
     
     def generate_argument(self, entry):
         kwargs = {}
-        kwargs['help'] = f"{entry.description} (default: {entry.value.default})"
+        kwargs['help'] = entry.description
+        if entry.value.default is not Sentinel:
+            kwargs['help'] += f" (default: {entry.value.default})"
         kwargs['default'] = SUPPRESS
+        kwargs['metavar'] = ''
 
         if entry.cli_parameters.positional:
             long = None
+            if entry.cli_parameters.nargs is None:
+                kwargs['nargs'] = "?"
+            else:
+                kwargs['nargs'] = entry.cli_parameters.nargs
         else:
             long = entry.cli_parameters.long_override or f"--{entry.name_dashed}"
             kwargs["dest"] = entry.name
-
-        options = ["action", "nargs"]
-        for option in options:
-            if getattr(entry.cli_parameters, option,) is not None:
-                kwargs[option] = getattr(entry.cli_parameters, option)
+            if entry.cli_parameters.nargs is None:
+                kwargs['nargs'] = entry.cli_parameters.nargs
         
+        if entry.cli_parameters.action is not None:
+            kwargs['action'] = entry.cli_parameters.action
+
         return entry.cli_parameters.short, long, kwargs
 
     def _add_parser(self, parser, entry) -> None:

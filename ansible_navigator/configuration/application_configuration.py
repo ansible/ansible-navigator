@@ -9,6 +9,9 @@ from ansible_navigator.utils import oxfordcomma
 
 from .application_post_processor import ApplicationPostProcessor
 
+def abs_user_path(fpath):
+    return os.path.abspath(os.path.expanduser(fpath))
+
 def generate_editor_command():
     """generate a command for EDITOR is env var is set"""
     if "EDITOR" in os.environ:
@@ -16,6 +19,8 @@ def generate_editor_command():
     else:
         command = "vi +{line_number} {filename}"
     return command
+
+
 
 PLUGIN_TYPES = (
             "become",
@@ -41,6 +46,7 @@ ApplicationConfiguration = Config(
         SubCommand(name="config", description="Explore the current ansible configuration"),
         SubCommand(name="doc", description="Review documentation for a module or plugin"),
         SubCommand(name="inventory", description="Explore an inventory"),
+        SubCommand(name="load", description="Explore a playbook artifact"),
         SubCommand(name="run", description="Run a playbook"),
     ],
     entries=[
@@ -53,6 +59,13 @@ ApplicationConfiguration = Config(
             name="cmdline",
             description="Placeholder for argparse remainder",
             value=EntryValue(default=""),
+        ),
+        Entry(
+            name="container_engine",
+            choices=['podman', 'docker'],
+            cli_parameters=CliParameters(short="--ce"),
+            description="Specify the container engine",
+            value=EntryValue(default='podman'),
         ),
         Entry(
             name="editor_command",
@@ -85,20 +98,73 @@ ApplicationConfiguration = Config(
         Entry(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
-            description="An inventory path",
+            description="Specify an inventory path",
+            settings_file_path_override="inventories",
             subcommands=["inventory", "run"],
-            value=EntryValue(default=[]),
+            value=EntryValue(),
+        ),
+        Entry(
+            name="inventory_column",
+            cli_parameters=CliParameters(action="append", nargs="+", short="--ic"),
+            description="Specify a host attribute to show in the inventory view",
+            settings_file_path_override="inventory-columns",
+            subcommands=["inventory", "run"],
+            value=EntryValue(),
+        ),
+        Entry(
+            name="log_file",
+            cli_parameters=CliParameters(short="--lf"),
+            description="Specify the full path for the ansible-navigator log file",
+            settings_file_path_override="logging.file",
+            value=EntryValue(default=abs_user_path("./ansible-navigator.log")),
+        ),
+        Entry(
+            name="log_level",
+            choices=["debug", "info", "warning", "error", "critical"],
+            cli_parameters=CliParameters(short="--ll"),
+            description="Specify the ansible-navigator log level",
+            settings_file_path_override="logging.level",
+            value=EntryValue(default="warning"),
+        ),
+        Entry(
+            name="mode",
+            choices=["stdout", "interactive"],
+            cli_parameters=CliParameters(short="-m"),
+            description="Specify the user-interface mode",
+            value=EntryValue(default="interactive")
+        ),
+        Entry(
+            name="osc4",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--osc4"),
+            description="Enable terminal color changing support with OSC4",
+            value=EntryValue(default=True),
+        ),
+        Entry(
+            name="pass_environment_variable",
+            cli_parameters=CliParameters(action="append", nargs="+", short="--penv"),
+            description="Specify an exiting environment variable to be passed through to and set \
+                within the execution enviroment (--penv MY_VAR)",
+            settings_file_path_override="pass-environment-variables",
+            value=EntryValue(),
         ),
         Entry(
             name="playbook",
-            cli_parameters=CliParameters(nargs="?", positional=True),
+            cli_parameters=CliParameters(positional=True),
             description="Specify the playbook name",
             subcommands=['run'],
             value=EntryValue()
         ),
         Entry(
+            name="playbook_artifact",
+            cli_parameters=CliParameters(positional=True),
+            description="Specify the path to a playbook artifact",
+            subcommands=['load'],
+            value=EntryValue()
+        ),
+        Entry(
             name="plugin_name",
-            cli_parameters=CliParameters(nargs="?", positional=True),
+            cli_parameters=CliParameters(positional=True),
             description="Specify the plugin name",
             settings_file_path_override="documentation.plugin.name",
             subcommands=['doc'],
@@ -111,6 +177,14 @@ ApplicationConfiguration = Config(
             settings_file_path_override="documentation.plugin.type",
             subcommands=['doc'],
             value=EntryValue(default="module")
+        ),
+        Entry(
+            name="set_environment_variable",
+            cli_parameters=CliParameters(action="append", nargs="+", short="--senv"),
+            description="Specify an environment variable and a value to be set within the \
+                execution enviroment (--senv MY_VAR=42)",
+            settings_file_path_override="set-environment-variables",
+            value=EntryValue()
         )
     ],
 )

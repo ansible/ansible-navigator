@@ -3,7 +3,11 @@ import os
 
 from ansible_navigator.utils import flatten_list
 
+from .definitions import EntrySource
 from .definitions import Message
+
+from ansible_navigator.utils import Sentinel
+
 
 
 class ApplicationPostProcessor:
@@ -49,13 +53,66 @@ class ApplicationPostProcessor:
     def inventory(self, entry, config):
         messages = []
         errors = []
-        inventory = entry
-        if config.app == "inventory" and not inventory.value.current:
+        if config.app == "inventory" and not entry.value.current:
             msg = "An inventory is required when using the inventory subcommand"
             errors.append(msg)
             return messages, errors
-        inventory.value.current = self._flatten_resolve_list_of_paths(inventory.value.current)
-        messages.append(Message(log_level="debug", message="Completed inventory post processing"))
+        if isinstance(entry.value.current, Sentinel):
+            entry.value.current = []
+        else:
+            entry.value.current = flatten_list(entry.value.current)
+            messages.append(Message(log_level="debug", message="Completed inventory post processing"))
         return messages, errors
-
-
+    
+    def inventory_columns(self, entry, config):
+        #pylint: disable=unused-argument
+        messages = []
+        errors = []
+        if isinstance(entry.value.current, Sentinel):
+            entry.value.current = []
+        else:
+            entry.value.current = flatten_list(entry.value.current)
+            messages.append(Message(log_level="debug", message="Completed inventory-column post processing"))
+        return messages, errors
+    
+    def log_file(self, entry, config):
+        #pylint: disable=unused-argument
+        messages = []
+        errors = []
+        entry.value.current = self._abs_user_path(entry.value.current)
+        return messages, errors
+    
+    def osc4(self, entry, config):
+        return self._true_or_false(entry, config)
+    
+    def pass_environment_variable(self, entry, config):
+        #pylint: disable=unused-argument
+        messages = []
+        errors = []
+        if isinstance(entry.value.current, Sentinel):
+            entry.value.current = []
+        else:
+            entry.value.current = flatten_list(entry.value.current)
+        return messages, errors
+    
+    def set_environment_variable(self, entry, config):
+        #pylint: disable=unused-argument
+        messages = []
+        errors = []
+        if isinstance(entry.value.current, Sentinel):
+            entry.value.current = {}
+        elif entry.value.source.name == EntrySource.USER_CLI:
+            entry.value.current = flatten_list(entry.value.current)
+            set_envs = {}
+            for env_var in entry.value.current:
+                parts = env_var.split("=")
+                if len(parts) == 2:
+                    set_envs[parts[0]] = parts[1]
+                else:
+                    msg = (
+                        "The following set-environment-variable"
+                        f" entry could not be parsed: {env_var}"
+                    )
+                    errors.append(msg)
+            entry.value.current = set_envs
+        return messages, errors

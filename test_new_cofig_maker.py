@@ -12,9 +12,13 @@ for entry in ApplicationConfiguration.entries:
     if hasattr(entry, "cli_arguments") and entry.cli_parameters.positional:
         assert entry.short is None
         assert entry.long_override is None
+        if entry.settings_file_path_override is not None:
+                assert "_" not in entry.settings_file_path_override
+
+
 
 conf_path, msgs = get_conf_path(filename="ansible-navigator", allowed_extensions=["yml", "yaml", "json"])
-string = "doc"
+string = "inventory"
 configuration = Configuration(application_configuration=ApplicationConfiguration, params=string.split(), settings_file_path=conf_path, )
 
 msgs, args = configuration.configure()
