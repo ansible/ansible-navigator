@@ -30,9 +30,8 @@ class Parser:
         self._configure_subparsers()
 
     @staticmethod
-    def generate_argument(entry) ->  Tuple[Any, Union[Any, str, None], Dict[str, Any]]:
-        """ Generate an argparse argument
-        """
+    def generate_argument(entry) -> Tuple[Any, Union[Any, str, None], Dict[str, Any]]:
+        """Generate an argparse argument"""
         kwargs = {}
         kwargs["help"] = entry.description
         if entry.value.default is not Sentinel:
