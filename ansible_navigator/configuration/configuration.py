@@ -1,8 +1,8 @@
 import json
 import os
+import pickle
 
-from operator import attrgetter
-from types import SimpleNamespace
+from copy import deepcopy
 
 from ansible_navigator.yaml import SafeLoader
 from ansible_navigator.yaml import yaml
@@ -13,16 +13,24 @@ from ansible_navigator.utils import error_and_exit_early
 from ansible_navigator.configuration.parser import Parser
 from ansible_navigator.configuration.definitions import EntrySource
 from ansible_navigator.configuration.definitions import Message
+from ansible_navigator.configuration.definitions import Config
 
 
 class Configuration:
-    def __init__(self, params, settings_file_path, application_configuration, apply_original_cli = False, save_as_intitial = False):
-        self._apply_roginal_cli = apply_original_cli
+    def __init__(
+        self,
+        params,
+        settings_file_path,
+        application_configuration,
+        apply_previous_cli=False,
+        save_as_intitial=False,
+    ):
+        self._apply_previous_cli = apply_previous_cli
         self._config = application_configuration
         self._errors = []
         self._messages = []
         self._params = params
-        self._save_as_init = save_as_intitial
+        self._save_as_intitial = save_as_intitial
         self._settings_file_path = settings_file_path
 
     def configure(self):
@@ -40,9 +48,13 @@ class Configuration:
         self._check_choices()
         if self._errors:
             error_and_exit_early(errors=self._errors)
+        
+        if self._save_as_intitial:
+            self._config.initial = deepcopy(self._config)
+
 
         return self._messages, self._config
-    
+
     def _apply_defaults(self):
         for entry in self._config.entries:
             entry.value.current = entry.value.default
@@ -52,7 +64,6 @@ class Configuration:
         with open(self._settings_file_path, "r") as config_fh:
             try:
                 config = yaml.load(config_fh, Loader=SafeLoader)
-                config = json.loads(json.dumps(config), object_hook=lambda item: SimpleNamespace(**item))
             except yaml.scanner.ScannerError:
                 msg = f"Settings file found {self._settings_file_path}, but failed to load it."
                 self._errors.append(msg)
@@ -60,17 +71,23 @@ class Configuration:
         for entry in self._config.entries:
             if entry.cli_parameters:
                 settings_file_path = entry.settings_file_path(self._config.application_name)
+                path_parts = settings_file_path.split(".")
+                data = config
                 try:
-                    entry.value.current = attrgetter(settings_file_path)(config)
-                    entry.value.source = EntrySource.USER_CFG
-                except AttributeError:
+                    for key in path_parts:
+                        data = data[key]
+                    entry.value.current = data
+                    entry.value.source = EntrySource.USER_CLI
+                except KeyError:
                     msg = f"{settings_file_path} not found in settings file"
                     self._messages.append(Message(log_level="debug", message=msg))
 
     def _apply_environment_variables(self):
         for entry in self._config.entries:
             if entry.cli_parameters:
-                set_envvar = os.environ.get(entry.environment_variable(self._config.application_name))
+                set_envvar = os.environ.get(
+                    entry.environment_variable(self._config.application_name)
+                )
                 if set_envvar is not None:
                     entry.value.current = set_envvar
                     entry.value.source = EntrySource.ENVIRONMENT_VARIABLE
@@ -87,14 +104,13 @@ class Configuration:
         for entry in self._config.entries:
             processor = getattr(self._config.post_processor, entry.name, None)
             if callable(processor):
-                messages, errors = processor(entry, self._config)
+                messages, errors = processor(entry=entry, config=self._config)
                 self._messages.extend(messages)
                 self._errors.extend(errors)
-    
+
     def _check_choices(self):
         for entry in self._config.entries:
             if entry.cli_parameters and entry.choices:
                 if entry.value.current not in entry.choices:
                     self._errors.append(entry.invalid_choice)
-
-
+    

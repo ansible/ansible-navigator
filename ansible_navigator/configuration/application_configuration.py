@@ -9,8 +9,10 @@ from ansible_navigator.utils import oxfordcomma
 
 from .application_post_processor import ApplicationPostProcessor
 
+
 def abs_user_path(fpath):
     return os.path.abspath(os.path.expanduser(fpath))
+
 
 def generate_editor_command():
     """generate a command for EDITOR is env var is set"""
@@ -21,26 +23,25 @@ def generate_editor_command():
     return command
 
 
-
 PLUGIN_TYPES = (
-            "become",
-            "cache",
-            "callback",
-            "cliconf",
-            "connection",
-            "httpapi",
-            "inventory",
-            "lookup",
-            "module",
-            "netconf",
-            "shell",
-            "strategy",
-            "vars",
-        )
+    "become",
+    "cache",
+    "callback",
+    "cliconf",
+    "connection",
+    "httpapi",
+    "inventory",
+    "lookup",
+    "module",
+    "netconf",
+    "shell",
+    "strategy",
+    "vars",
+)
 
 ApplicationConfiguration = Config(
     application_name="ansible-navigator",
-    post_processor = ApplicationPostProcessor(),
+    post_processor=ApplicationPostProcessor(),
     subcommands=[
         SubCommand(name="collections", description="Explore available collections"),
         SubCommand(name="config", description="Explore the current ansible configuration"),
@@ -62,10 +63,10 @@ ApplicationConfiguration = Config(
         ),
         Entry(
             name="container_engine",
-            choices=['podman', 'docker'],
+            choices=["podman", "docker"],
             cli_parameters=CliParameters(short="--ce"),
             description="Specify the container engine",
-            value=EntryValue(default='podman'),
+            value=EntryValue(default="podman"),
         ),
         Entry(
             name="editor_command",
@@ -131,7 +132,7 @@ ApplicationConfiguration = Config(
             choices=["stdout", "interactive"],
             cli_parameters=CliParameters(short="-m"),
             description="Specify the user-interface mode",
-            value=EntryValue(default="interactive")
+            value=EntryValue(default="interactive"),
         ),
         Entry(
             name="osc4",
@@ -152,31 +153,31 @@ ApplicationConfiguration = Config(
             name="playbook",
             cli_parameters=CliParameters(positional=True),
             description="Specify the playbook name",
-            subcommands=['run'],
-            value=EntryValue()
+            subcommands=["run"],
+            value=EntryValue(),
         ),
         Entry(
             name="playbook_artifact",
             cli_parameters=CliParameters(positional=True),
             description="Specify the path to a playbook artifact",
-            subcommands=['load'],
-            value=EntryValue()
+            subcommands=["load"],
+            value=EntryValue(),
         ),
         Entry(
             name="plugin_name",
             cli_parameters=CliParameters(positional=True),
             description="Specify the plugin name",
             settings_file_path_override="documentation.plugin.name",
-            subcommands=['doc'],
-            value=EntryValue()
+            subcommands=["doc"],
+            value=EntryValue(),
         ),
         Entry(
             name="plugin_type",
             cli_parameters=CliParameters(short="--pt"),
             description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
             settings_file_path_override="documentation.plugin.type",
-            subcommands=['doc'],
-            value=EntryValue(default="module")
+            subcommands=["doc"],
+            value=EntryValue(default="module"),
         ),
         Entry(
             name="set_environment_variable",
@@ -184,7 +185,7 @@ ApplicationConfiguration = Config(
             description="Specify an environment variable and a value to be set within the \
                 execution enviroment (--senv MY_VAR=42)",
             settings_file_path_override="set-environment-variables",
-            value=EntryValue()
-        )
+            value=EntryValue(),
+        ),
     ],
 )

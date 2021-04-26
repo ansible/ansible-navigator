@@ -12,6 +12,7 @@ from typing import Union
 from ansible_navigator.utils import Sentinel
 from ansible_navigator.utils import oxfordcomma
 
+
 class CliParameters(SimpleNamespace):
     """a structure to hold the cli param"""
 
@@ -30,7 +31,7 @@ class EntrySource(Enum):
     USER_CFG = "user provided configuration file"
     USER_CLI = "cli parameters"
 
-   
+
 class EntryValue(SimpleNamespace):
     """A structure to store a value"""
 
@@ -61,31 +62,30 @@ class Entry(SimpleNamespace):
             envvar = f"{prefix}_{self.environment_variable}"
         else:
             envvar = f"{prefix}_{self.name.replace('--', '')}"
-        envvar = envvar.replace('-', '_').upper()
+        envvar = envvar.replace("-", "_").upper()
         return envvar
-
 
     @property
     def invalid_choice(self):
-        name = self.name.replace('_', "-")
-        msg = (f"{name} must be one of " +
-                oxfordcomma(self.choices, "or") +
-                f", but set as '{self.value.current}' in " +
-                self.value.source.value)  
+        name = self.name.replace("_", "-")
+        msg = (
+            f"{name} must be one of "
+            + oxfordcomma(self.choices, "or")
+            + f", but set as '{self.value.current}' in "
+            + self.value.source.value
+        )
         return msg
-    
+
     @property
     def name_dashed(self):
         return self.name.replace("_", "-")
- 
+
     def settings_file_path(self, prefix):
         if self.settings_file_path_override is not None:
             sfp = f"{prefix}.{self.settings_file_path_override}"
         else:
             sfp = f"{prefix}.{self.name.replace('_', '-')}"
         return sfp
-
-
 
 
 class SubCommand(SimpleNamespace):
@@ -107,26 +107,16 @@ class Config(SimpleNamespace):
         # pylint: disable=raise-missing-from
         """Returns the respective item."""
         try:
-            return object.__getattribute__(self, attr)
-        except AttributeError as exc:
-            found_entry = [entry for entry in self.entries if entry.name == attr]
-            if len(found_entry) > 1:
-                raise AttributeError(
-                    f"'{self.__class__.__name__}' object has multiple attributes '{attr}'"
-                )
-            if not found_entry:
-                raise exc
-            return found_entry[0].value.current
+            found_entry = [entry for entry in object.__getattribute__(self, "entries") if entry.name == attr]
+            if found_entry:
+                return found_entry[0].value.current
+        except AttributeError:
+            pass
+        return object.__getattribute__(self, attr)
 
     def entry(self, name):
         """retrieve a configuration entry by name"""
         found_entry = [entry for entry in self.entries if entry.name == name]
-        if len(found_entry) > 1:
-            raise AttributeError(
-                f"'{self.__class__.__name__}' object has multiple attributes '{name}'"
-            )
-        if not found_entry:
-            raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
         return found_entry[0]
 
 
