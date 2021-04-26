@@ -32,6 +32,11 @@ class Configuration:
         self._params = params
         self._save_as_intitial = save_as_intitial
         self._settings_file_path = settings_file_path
+        self._sanity_check()
+    
+    def _sanity_check(self):
+        if self._apply_previous_cli and self._save_as_intitial:
+            raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
 
     def configure(self):
         self._apply_defaults()
@@ -49,11 +54,13 @@ class Configuration:
         if self._errors:
             error_and_exit_early(errors=self._errors)
         
+        if self._apply_previous_cli:
+            self._apply_previous_cli_to_current()
+        
         if self._save_as_intitial:
             self._config.initial = deepcopy(self._config)
 
-
-        return self._messages, self._config
+        return self._messages
 
     def _apply_defaults(self):
         for entry in self._config.entries:
@@ -77,7 +84,7 @@ class Configuration:
                     for key in path_parts:
                         data = data[key]
                     entry.value.current = data
-                    entry.value.source = EntrySource.USER_CLI
+                    entry.value.source = EntrySource.USER_CFG
                 except KeyError:
                     msg = f"{settings_file_path} not found in settings file"
                     self._messages.append(Message(log_level="debug", message=msg))
@@ -113,4 +120,17 @@ class Configuration:
             if entry.cli_parameters and entry.choices:
                 if entry.value.current not in entry.choices:
                     self._errors.append(entry.invalid_choice)
+    
+    def _apply_previous_cli_to_current(self):
+        if self._config.initial is None:
+            raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
+        for current_entry in self._config.entries:
+            if current_entry.cli_parameters and current_entry.value.source.name != "USER_CLI":
+                previous_entry = self._config.initial.entry(current_entry.name)
+                if previous_entry.value.source.name == "USER_CLI":
+                    current_entry.value.current = previous_entry.value.current
+                    current_entry.value.source = EntrySource.PREVIOUS_CLI
+
+
+
     

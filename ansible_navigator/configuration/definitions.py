@@ -28,6 +28,7 @@ class EntrySource(Enum):
 
     DEFAULT_CFG = "default configuration value"
     ENVIRONMENT_VARIABLE = "environemnt variable"
+    PREVIOUS_CLI = "previous cli command"
     USER_CFG = "user provided configuration file"
     USER_CLI = "cli parameters"
 
@@ -104,15 +105,14 @@ class Config(SimpleNamespace):
     initial: Any = None
 
     def __getattribute__(self, attr):
-        # pylint: disable=raise-missing-from
         """Returns the respective item."""
         try:
-            found_entry = [entry for entry in object.__getattribute__(self, "entries") if entry.name == attr]
+            found_entry = [entry for entry in super().__getattribute__("entries") if entry.name == attr]
             if found_entry:
                 return found_entry[0].value.current
         except AttributeError:
             pass
-        return object.__getattribute__(self, attr)
+        return super().__getattribute__(attr)
 
     def entry(self, name):
         """retrieve a configuration entry by name"""
