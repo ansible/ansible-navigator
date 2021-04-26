@@ -61,6 +61,12 @@ def test_no_duplicate_shorts():
     assert not any(k for (k, v) in values.items() if v > 1)
 
 
+def test_entries_are_alphbetical():
+    """Ensure entries are alphabetical"""
+    values = [entry.name for entry in ApplicationConfiguration.entries]
+    assert values == sorted(values)
+
+
 def test_all_entries_set_to_default(tmpdir):
     """Ensure all entries are set to a default value"""
     config = {"ansible-navigator": None}
