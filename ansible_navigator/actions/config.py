@@ -12,9 +12,10 @@ from typing import Union
 from . import run_action
 from . import _actions as actions
 
-from ..runner.api import AnsibleCfgRunner, CommandRunner
 from ..app import App
 from ..app_public import AppPublic
+from ..runner.api import AnsibleCfgRunner
+from ..runner.api import CommandRunner
 from ..steps import Step
 
 from ..ui_framework import CursesLinePart

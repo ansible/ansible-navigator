@@ -338,7 +338,7 @@ def parse_and_update(params: List, error_cb: Callable = None) -> Tuple[List[str]
 def run(args: Namespace) -> None:
     """run the appropriate app"""
     try:
-        if args.app in ["run", "config", "inventory"] and args.mode == "stdout":
+        if args.app in ["run", "config", "inventory", "doc"] and args.mode == "stdout":
             try:
                 app_action = __import__(
                     f"actions.{args.app}", globals(), fromlist=["Action"], level=1
