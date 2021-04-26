@@ -11,11 +11,13 @@ from .application_post_processor import ApplicationPostProcessor
 
 
 def abs_user_path(fpath):
+    """ Resolve a path
+    """
     return os.path.abspath(os.path.expanduser(fpath))
 
 
 def generate_editor_command():
-    """generate a command for EDITOR is env var is set"""
+    """Generate a default for editor_command if EDITOR is set"""
     if "EDITOR" in os.environ:
         command = "%s {filename}" % os.environ.get("EDITOR")
     else:

@@ -4,8 +4,14 @@
 from argparse import ArgumentParser
 from argparse import SUPPRESS
 
-from .definitions import Config
+from typing import Any
+from typing import Dict
+from typing import Tuple
+from typing import Union
+
 from ansible_navigator.utils import Sentinel
+
+from .definitions import Config
 
 
 class Parser:
@@ -23,7 +29,10 @@ class Parser:
         )
         self._configure_subparsers()
 
-    def generate_argument(self, entry):
+    @staticmethod
+    def generate_argument(entry) ->  Tuple[Any, Union[Any, str, None], Dict[str, Any]]:
+        """ Generate an argparse argument
+        """
         kwargs = {}
         kwargs["help"] = entry.description
         if entry.value.default is not Sentinel:

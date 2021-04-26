@@ -1,6 +1,6 @@
 import os
 
-
+from typing import List
 from .definitions import Message
 
 from ansible_navigator.utils import Sentinel
@@ -20,12 +20,14 @@ def _post_processor(func):
 
 
 class ApplicationPostProcessor:
+    """application post processor"""
+
     @staticmethod
     def _abs_user_path(fpath):
         return os.path.abspath(os.path.expanduser(fpath))
 
     @staticmethod
-    def _str2bool(value):
+    def _str2bool(value) -> bool:
         """convert some commonly used values
         to a boolean
         """
@@ -38,13 +40,13 @@ class ApplicationPostProcessor:
                 return False
         raise ValueError
 
-    def flatten_list(self, lyst):
+    def _flatten_list(self, lyst) -> List:
         if isinstance(lyst, list):
-            return [a for i in lyst for a in self.flatten_list(i)]
+            return [a for i in lyst for a in self._flatten_list(i)]
         return [lyst]
 
     def _flatten_resolve_list_of_paths(self, value):
-        value = self.flatten_list(value)
+        value = self._flatten_list(value)
         value = [self._abs_user_path(entry) for entry in value]
         return value
 
@@ -60,14 +62,17 @@ class ApplicationPostProcessor:
 
     @_post_processor
     def editor_console(self, entry, config):
+        """Post process editor_console"""
         return self._true_or_false(entry, config)
 
     @_post_processor
     def execution_environment(self, entry, config):
+        """Post process execution_environment"""
         return self._true_or_false(entry, config)
 
     @_post_processor
     def inventory(self, entry, config):
+        """Post process inventory"""
         messages = []
         errors = []
         if config.app == "inventory" and not entry.value.current:
@@ -83,12 +88,13 @@ class ApplicationPostProcessor:
     @_post_processor
     def inventory_columns(self, entry, config):
         # pylint: disable=unused-argument
+        """Post process inventory_columns"""
         messages = []
         errors = []
         if isinstance(entry.value.current, Sentinel):
             entry.value.current = []
         else:
-            entry.value.current = self.flatten_list(entry.value.current)
+            entry.value.current = self._flatten_list(entry.value.current)
             messages.append(
                 Message(log_level="debug", message="Completed inventory-column post processing")
             )
@@ -97,6 +103,7 @@ class ApplicationPostProcessor:
     @_post_processor
     def log_file(self, entry, config):
         # pylint: disable=unused-argument
+        """Post process log_file"""
         messages = []
         errors = []
         entry.value.current = self._abs_user_path(entry.value.current)
@@ -104,28 +111,31 @@ class ApplicationPostProcessor:
 
     @_post_processor
     def osc4(self, entry, config):
+        """Post process osc4"""
         return self._true_or_false(entry, config)
 
     @_post_processor
     def pass_environment_variable(self, entry, config):
         # pylint: disable=unused-argument
+        """Post process pass_environment_variable"""
         messages = []
         errors = []
         if isinstance(entry.value.current, Sentinel):
             entry.value.current = []
         else:
-            entry.value.current = self.flatten_list(entry.value.current)
+            entry.value.current = self._flatten_list(entry.value.current)
         return messages, errors
 
     @_post_processor
     def set_environment_variable(self, entry, config):
         # pylint: disable=unused-argument
+        """Post process set_environment_variable"""
         messages = []
         errors = []
         if isinstance(entry.value.current, Sentinel):
             entry.value.current = {}
         elif entry.value.source.name == "USER_CLI":
-            flattened = self.flatten_list(entry.value.current)
+            flattened = self._flatten_list(entry.value.current)
             set_envs = {}
             for env_var_pair in flattened:
                 parts = env_var_pair.split("=")

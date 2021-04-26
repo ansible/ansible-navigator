@@ -14,7 +14,8 @@ from ansible_navigator.utils import oxfordcomma
 
 
 class CliParameters(SimpleNamespace):
-    """a structure to hold the cli param"""
+    # pylint: disable=too-few-public-methods
+    """An object to hold the cli parameters"""
 
     action: Union[None, str] = None
     long_override: Union[None, str] = None
@@ -24,7 +25,7 @@ class CliParameters(SimpleNamespace):
 
 
 class EntrySource(Enum):
-    """mapping some enums to log friendly text"""
+    """Mapping some enums to log friendly text"""
 
     DEFAULT_CFG = "default configuration value"
     ENVIRONMENT_VARIABLE = "environemnt variable"
@@ -34,21 +35,20 @@ class EntrySource(Enum):
 
 
 class EntryValue(SimpleNamespace):
-    """A structure to store a value"""
+    # pylint: disable=too-few-public-methods
+    """An object to store a value"""
 
-    default: Any = Sentinel
-    current: Any = Sentinel
-    source: Union[EntrySource, Sentinel] = Sentinel
+    default: Any = Sentinel()
+    current: Any = Sentinel()
+    source: Union[EntrySource, Sentinel] = Sentinel()
 
 
 class Entry(SimpleNamespace):
-    # pylint: disable=inherit-non-class
     # pylint: disable=too-few-public-methods
     """One entry in the configuration"""
 
     name: str
     description: str
-    settings_file_path: str
     value: EntryValue
 
     choices: List = []
@@ -58,7 +58,8 @@ class Entry(SimpleNamespace):
     settings_file_path_override: Union[None, str] = None
     subcommands: List[str] = []
 
-    def environment_variable(self, prefix):
+    def environment_variable(self, prefix: str) -> str:
+        """Generate an effective environment variable for this entry"""
         if self.environment_variable_override is not None:
             envvar = f"{prefix}_{self.environment_variable}"
         else:
@@ -67,8 +68,11 @@ class Entry(SimpleNamespace):
         return envvar
 
     @property
-    def invalid_choice(self):
+    def invalid_choice(self) -> str:
+        """Generate an invalid choice message for this entry"""
         name = self.name.replace("_", "-")
+        if isinstance(self.value.source, Sentinel):
+            raise ValueError(f"Current source not set for {self.name}")
         msg = (
             f"{name} must be one of "
             + oxfordcomma(self.choices, "or")
@@ -78,10 +82,12 @@ class Entry(SimpleNamespace):
         return msg
 
     @property
-    def name_dashed(self):
+    def name_dashed(self) -> str:
+        """Generate a dashed version of the name"""
         return self.name.replace("_", "-")
 
-    def settings_file_path(self, prefix):
+    def settings_file_path(self, prefix: str) -> str:
+        """Generate an effective settings file path for this entry"""
         if self.settings_file_path_override is not None:
             sfp = f"{prefix}.{self.settings_file_path_override}"
         else:
@@ -90,12 +96,14 @@ class Entry(SimpleNamespace):
 
 
 class SubCommand(SimpleNamespace):
+    """An object to hold a subcommand"""
+
     name: str
     description: str
 
 
 class Config(SimpleNamespace):
-    """the main object for storing an application config"""
+    """The main object for storing an application config"""
 
     application_name: str
     entries: List[Entry]
@@ -104,22 +112,26 @@ class Config(SimpleNamespace):
 
     initial: Any = None
 
-    def __getattribute__(self, attr):
-        """Returns the respective item."""
+    def __getattribute__(self, attr: str) -> Any:
+        """Returns a matching entry or the default bwo super"""
         try:
-            found_entry = [entry for entry in super().__getattribute__("entries") if entry.name == attr]
+            found_entry = [
+                entry for entry in super().__getattribute__("entries") if entry.name == attr
+            ]
             if found_entry:
                 return found_entry[0].value.current
         except AttributeError:
             pass
         return super().__getattribute__(attr)
 
-    def entry(self, name):
-        """retrieve a configuration entry by name"""
+    def entry(self, name) -> Entry:
+        """Retrieve a configuration entry by name"""
         found_entry = [entry for entry in self.entries if entry.name == name]
         return found_entry[0]
 
 
 class Message(NamedTuple):
+    """An object ot hold a message"""
+
     log_level: str
     message: str

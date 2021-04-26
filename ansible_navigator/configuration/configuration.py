@@ -1,19 +1,17 @@
-import json
+""" The configuration object
+"""
 import os
-import pickle
 
 from copy import deepcopy
+from typing import List
 
-from ansible_navigator.yaml import SafeLoader
-from ansible_navigator.yaml import yaml
-
-
-from ansible_navigator.utils import error_and_exit_early
 
 from ansible_navigator.configuration.parser import Parser
 from ansible_navigator.configuration.definitions import EntrySource
 from ansible_navigator.configuration.definitions import Message
-from ansible_navigator.configuration.definitions import Config
+from ansible_navigator.utils import error_and_exit_early
+from ansible_navigator.yaml import SafeLoader
+from ansible_navigator.yaml import yaml
 
 
 class Configuration:
@@ -33,12 +31,13 @@ class Configuration:
         self._save_as_intitial = save_as_intitial
         self._settings_file_path = settings_file_path
         self._sanity_check()
-    
-    def _sanity_check(self):
+
+    def _sanity_check(self) -> None:
         if self._apply_previous_cli and self._save_as_intitial:
             raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
 
-    def configure(self):
+    def configure(self) -> List[Message]:
+        """Perform the configuration"""
         self._apply_defaults()
         self._apply_settings_file()
         self._apply_environment_variables()
@@ -53,21 +52,21 @@ class Configuration:
         self._check_choices()
         if self._errors:
             error_and_exit_early(errors=self._errors)
-        
+
         if self._apply_previous_cli:
             self._apply_previous_cli_to_current()
-        
+
         if self._save_as_intitial:
             self._config.initial = deepcopy(self._config)
 
         return self._messages
 
-    def _apply_defaults(self):
+    def _apply_defaults(self) -> None:
         for entry in self._config.entries:
             entry.value.current = entry.value.default
             entry.value.source = EntrySource.DEFAULT_CFG
 
-    def _apply_settings_file(self):
+    def _apply_settings_file(self) -> None:
         with open(self._settings_file_path, "r") as config_fh:
             try:
                 config = yaml.load(config_fh, Loader=SafeLoader)
@@ -89,7 +88,7 @@ class Configuration:
                     msg = f"{settings_file_path} not found in settings file"
                     self._messages.append(Message(log_level="debug", message=msg))
 
-    def _apply_environment_variables(self):
+    def _apply_environment_variables(self) -> None:
         for entry in self._config.entries:
             if entry.cli_parameters:
                 set_envvar = os.environ.get(
@@ -99,7 +98,7 @@ class Configuration:
                     entry.value.current = set_envvar
                     entry.value.source = EntrySource.ENVIRONMENT_VARIABLE
 
-    def _apply_cli_params(self):
+    def _apply_cli_params(self) -> None:
         parser = Parser(self._config).parser
         args, cmdline = parser.parse_known_args(self._params)
         self._config.entry("cmdline").value.current = cmdline
@@ -107,7 +106,7 @@ class Configuration:
             self._config.entry(param).value.current = value
             self._config.entry(param).value.source = EntrySource.USER_CLI
 
-    def _post_process(self):
+    def _post_process(self) -> None:
         for entry in self._config.entries:
             processor = getattr(self._config.post_processor, entry.name, None)
             if callable(processor):
@@ -115,13 +114,13 @@ class Configuration:
                 self._messages.extend(messages)
                 self._errors.extend(errors)
 
-    def _check_choices(self):
+    def _check_choices(self) -> None:
         for entry in self._config.entries:
             if entry.cli_parameters and entry.choices:
                 if entry.value.current not in entry.choices:
                     self._errors.append(entry.invalid_choice)
-    
-    def _apply_previous_cli_to_current(self):
+
+    def _apply_previous_cli_to_current(self) -> None:
         if self._config.initial is None:
             raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
         for current_entry in self._config.entries:
@@ -130,7 +129,3 @@ class Configuration:
                 if previous_entry.value.source.name == "USER_CLI":
                     current_entry.value.current = previous_entry.value.current
                     current_entry.value.source = EntrySource.PREVIOUS_CLI
-
-
-
-    

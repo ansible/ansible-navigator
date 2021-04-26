@@ -1,5 +1,3 @@
-
-
 from collections import Counter
 
 from ansible_navigator.configuration import Configuration
