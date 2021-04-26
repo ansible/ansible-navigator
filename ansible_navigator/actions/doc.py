@@ -79,7 +79,7 @@ class Action:
         self._run_runner()
 
     def _run_runner(self) -> Union[dict, None]:
-        """ spin up runner """
+        """spin up runner"""
 
         plugin_type = None
         plugin_doc_response: Optional[Dict[Any, Any]] = None
