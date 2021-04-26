@@ -5,16 +5,20 @@ import os
 from copy import deepcopy
 from typing import List
 
+from .definitions import EntrySource
+from .definitions import Message
+from .parser import Parser
 
-from ansible_navigator.configuration.parser import Parser
-from ansible_navigator.configuration.definitions import EntrySource
-from ansible_navigator.configuration.definitions import Message
-from ansible_navigator.utils import error_and_exit_early
-from ansible_navigator.yaml import SafeLoader
-from ansible_navigator.yaml import yaml
+from ..utils import error_and_exit_early
+from ..yaml import SafeLoader
+from ..yaml import yaml
 
 
 class Configuration:
+    # pylint: disable=too-many-arguments
+    # pylint: disable=too-few-public-methods
+    """the configuration class"""
+
     def __init__(
         self,
         params,
@@ -84,6 +88,9 @@ class Configuration:
                         data = data[key]
                     entry.value.current = data
                     entry.value.source = EntrySource.USER_CFG
+                except TypeError:
+                    msg = f"{settings_file_path} empty"
+                    self._messages.append(Message(log_level="debug", message=msg))
                 except KeyError:
                     msg = f"{settings_file_path} not found in settings file"
                     self._messages.append(Message(log_level="debug", message=msg))
@@ -103,6 +110,8 @@ class Configuration:
         args, cmdline = parser.parse_known_args(self._params)
         self._config.entry("cmdline").value.current = cmdline
         for param, value in vars(args).items():
+            if self._config.entry(param).subcommand_value is True and value is None:
+                continue
             self._config.entry(param).value.current = value
             self._config.entry(param).value.source = EntrySource.USER_CLI
 

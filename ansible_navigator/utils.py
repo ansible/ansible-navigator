@@ -14,7 +14,6 @@ from distutils.spawn import find_executable
 
 from typing import Any
 from typing import Dict
-from typing import Generator
 from typing import List
 from typing import Mapping
 from typing import Optional
@@ -72,6 +71,13 @@ def to_list(thing: Union[str, List]) -> List:
     if not isinstance(thing, list):
         return [thing]
     return thing
+
+
+def flatten_list(lyst) -> List:
+    """flatten a list of lists"""
+    if isinstance(lyst, list):
+        return [a for i in lyst for a in flatten_list(i)]
+    return [lyst]
 
 
 def templar(string: str, template_vars: Mapping) -> Any:
@@ -367,10 +373,12 @@ def error_and_exit_early(msg=None, errors=None) -> NoReturn:
             print(template.format(msg=error))
     sys.exit(1)
 
+
 def oxfordcomma(listed, condition):
+    """format a list into a sentance"""
     listed = [f"'{str(entry)}'" for entry in listed]
     if len(listed) == 0:
-        return ''
+        return ""
     if len(listed) == 1:
         return listed[0]
     if len(listed) == 2:

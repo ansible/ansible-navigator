@@ -1,13 +1,15 @@
+""" the ansible-navigator configuration
+"""
 import os
+
+from .application_post_processor import ApplicationPostProcessor
 from .definitions import Config
 from .definitions import CliParameters
 from .definitions import SubCommand
 from .definitions import Entry
 from .definitions import EntryValue
 
-from ansible_navigator.utils import oxfordcomma
-
-from .application_post_processor import ApplicationPostProcessor
+from ..utils import oxfordcomma
 
 
 def abs_user_path(fpath):
@@ -55,12 +57,13 @@ ApplicationConfiguration = Config(
         Entry(
             name="app",
             description="Placeholder for subcommand name",
+            subcommand_value=True,
             value=EntryValue(default="welcome"),
         ),
         Entry(
             name="cmdline",
             description="Placeholder for argparse remainder",
-            value=EntryValue(default=""),
+            value=EntryValue(default=[]),
         ),
         Entry(
             name="container_engine",

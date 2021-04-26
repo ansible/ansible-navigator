@@ -9,9 +9,9 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from ansible_navigator.utils import Sentinel
-
 from .definitions import Config
+
+from ..utils import Sentinel
 
 
 class Parser:
@@ -23,10 +23,7 @@ class Parser:
         self._base_parser = ArgumentParser(add_help=False)
         self._configure_base()
         self.parser = ArgumentParser(parents=[self._base_parser])
-        self._subparsers = self.parser.add_subparsers(
-            title="Subcommands",
-            dest="app",
-        )
+        self._subparsers = self.parser.add_subparsers(title="Subcommands", dest="app")
         self._configure_subparsers()
 
     @staticmethod

@@ -1,3 +1,5 @@
+""" cofiguration definitions
+"""
 from enum import Enum
 
 from types import SimpleNamespace
@@ -7,10 +9,11 @@ from typing import Callable
 from typing import Dict
 from typing import List
 from typing import NamedTuple
+from typing import Type
 from typing import Union
 
-from ansible_navigator.utils import Sentinel
-from ansible_navigator.utils import oxfordcomma
+from ..utils import Sentinel
+from ..utils import oxfordcomma
 
 
 class CliParameters(SimpleNamespace):
@@ -38,9 +41,9 @@ class EntryValue(SimpleNamespace):
     # pylint: disable=too-few-public-methods
     """An object to store a value"""
 
-    default: Any = Sentinel()
-    current: Any = Sentinel()
-    source: Union[EntrySource, Sentinel] = Sentinel()
+    default: Any = Sentinel
+    current: Any = Sentinel
+    source: Union[EntrySource, Type[Sentinel]] = Sentinel
 
 
 class Entry(SimpleNamespace):
@@ -57,6 +60,7 @@ class Entry(SimpleNamespace):
     internal: bool = False
     settings_file_path_override: Union[None, str] = None
     subcommands: List[str] = []
+    subcommand_value: bool = False
 
     def environment_variable(self, prefix: str) -> str:
         """Generate an effective environment variable for this entry"""
@@ -71,15 +75,15 @@ class Entry(SimpleNamespace):
     def invalid_choice(self) -> str:
         """Generate an invalid choice message for this entry"""
         name = self.name.replace("_", "-")
-        if isinstance(self.value.source, Sentinel):
-            raise ValueError(f"Current source not set for {self.name}")
-        msg = (
-            f"{name} must be one of "
-            + oxfordcomma(self.choices, "or")
-            + f", but set as '{self.value.current}' in "
-            + self.value.source.value
-        )
-        return msg
+        if isinstance(self.value.source, EntrySource):
+            msg = (
+                f"{name} must be one of "
+                + oxfordcomma(self.choices, "or")
+                + f", but set as '{self.value.current}' in "
+                + self.value.source.value
+            )
+            return msg
+        raise ValueError(f"Current source not set for {self.name}")
 
     @property
     def name_dashed(self) -> str:
@@ -96,6 +100,7 @@ class Entry(SimpleNamespace):
 
 
 class SubCommand(SimpleNamespace):
+    # pylint: disable=too-few-public-methods
     """An object to hold a subcommand"""
 
     name: str

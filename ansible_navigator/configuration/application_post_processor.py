@@ -1,9 +1,12 @@
+""" post processing of ansible-navigator configuration
+"""
 import os
 
 from typing import List
+
 from .definitions import Message
 
-from ansible_navigator.utils import Sentinel
+from ..utils import Sentinel
 
 
 def _post_processor(func):
@@ -79,7 +82,7 @@ class ApplicationPostProcessor:
             msg = "An inventory is required when using the inventory subcommand"
             errors.append(msg)
             return messages, errors
-        if isinstance(entry.value.current, Sentinel):
+        if entry.value.current is Sentinel:
             entry.value.current = []
         else:
             entry.value.current = self._flatten_resolve_list_of_paths(entry.value.current)
@@ -120,7 +123,7 @@ class ApplicationPostProcessor:
         """Post process pass_environment_variable"""
         messages = []
         errors = []
-        if isinstance(entry.value.current, Sentinel):
+        if entry.value.current is Sentinel:
             entry.value.current = []
         else:
             entry.value.current = self._flatten_list(entry.value.current)
