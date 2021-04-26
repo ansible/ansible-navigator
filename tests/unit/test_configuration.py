@@ -1,8 +1,6 @@
-""" tests for cofiuration subsystem
+""" tests for configuration subsystem
 """
-import os
 from collections import Counter
-from unittest import mock
 
 from ansible_navigator.configuration import ApplicationConfiguration
 from ansible_navigator.configuration import Configuration
