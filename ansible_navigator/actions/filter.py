@@ -7,7 +7,7 @@ from ..ui_framework import Interaction
 
 @actions.register
 class Action:
-    """ :filter """
+    """:filter"""
 
     # pylint: disable=too-few-public-methods
 

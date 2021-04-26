@@ -184,7 +184,7 @@ class Action(App):
         )
 
     def _run_runner(self) -> None:
-        """ spin up runner """
+        """spin up runner"""
         kwargs = {
             "container_engine": self.args.container_engine,
             "cwd": os.getcwd(),

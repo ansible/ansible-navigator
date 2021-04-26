@@ -430,7 +430,7 @@ class Action(App):
         return True
 
     def _prompt_for_artifact(self, artifact_file: str) -> Dict[Any, Any]:
-        """prompt for a valid artifact file """
+        """prompt for a valid artifact file"""
         FType = Dict[str, Any]
         form_dict: FType = {
             "title": "Artifact file not found, please confirm the following",
@@ -559,7 +559,7 @@ class Action(App):
         return args
 
     def _run_runner(self) -> None:
-        """ spin up runner """
+        """spin up runner"""
         executable_cmd: Optional[str]
         kwargs = {
             "cmdline": self.args.cmdline,
@@ -766,7 +766,7 @@ class Action(App):
         return status, status_color
 
     def _set_status(self) -> None:
-        """ Set the ui status """
+        """Set the ui status"""
         status, status_color = self._get_status()
         self._interaction.ui.update_status(status, status_color)
 

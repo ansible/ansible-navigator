@@ -37,7 +37,7 @@ def register(cls: Any) -> Any:
 
 
 def kegex(package: str, action: str) -> Tuple:
-    """ Return a tuple of name, kegex for a action """
+    """Return a tuple of name, kegex for a action"""
     _import(package, action)
     # tple = Kegex(name=_ACTIONS[package][action].name, kegex=_ACTIONS[package][action].kegex)
     return _ACTIONS[package][action]
