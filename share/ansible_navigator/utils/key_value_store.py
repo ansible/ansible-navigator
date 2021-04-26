@@ -19,7 +19,7 @@ class KeyValueStore(dict):
         self.conn.close()
 
     def open(self):
-        """ establish the connection"""
+        """establish the connection"""
         self.conn = sqlite3.connect(self.path)
 
     def __len__(self):
