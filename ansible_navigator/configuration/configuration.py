@@ -89,8 +89,9 @@ class Configuration:
                     entry.value.current = data
                     entry.value.source = EntrySource.USER_CFG
                 except TypeError:
-                    msg = f"{settings_file_path} empty"
-                    self._messages.append(Message(log_level="debug", message=msg))
+                    msg = f"{self._settings_file_path} empty"
+                    self._errors.append(msg)
+                    return
                 except KeyError:
                     msg = f"{settings_file_path} not found in settings file"
                     self._messages.append(Message(log_level="debug", message=msg))

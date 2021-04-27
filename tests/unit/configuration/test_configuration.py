@@ -2,12 +2,16 @@
 """
 import os
 from collections import Counter
+from copy import deepcopy
 from unittest import mock
 
 import pytest
 
 from ansible_navigator.configuration.application_configuration import generate_editor_command
 from ansible_navigator.configuration import ApplicationConfiguration
+from ansible_navigator.configuration import Configuration
+from ansible_navigator.configuration.definitions import Config
+
 
 from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
@@ -16,7 +20,7 @@ from .data import CLI_DATA
 from .data import ENVVAR_DATA
 from .data import SETTINGS
 
-from .utils import generate_config
+from .utils import fixture_generate_config
 from .utils import generate_params_from_entries
 from .utils import id_for_base
 from .utils import id_for_cli
@@ -91,7 +95,7 @@ def test_all_entries_set_to_default(empty):
     """Ensure all entries are set to a default value"""
     entry, _expected = empty
     assert entry.value.source.name == "DEFAULT_CFG", entry
-    if entry.name not in ["inventory", "pass_environment_variable"]:
+    if entry.name not in ["inventory", "inventory_column", "pass_environment_variable"]:
         assert entry.value.current == entry.value.default, entry
     else:
         assert entry.value.current == [], entry
@@ -117,7 +121,9 @@ def test_no_missing_envvar_data():
 
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("entry, value, expected", ENVVAR_DATA)
-def test_all_entries_reflect_envar_settings(settings, source_other, entry, value, expected):
+def test_all_entries_reflect_envar_settings(
+    generate_config, settings, source_other, entry, value, expected
+):
     # pylint: disable=unused-argument
     """Ensure all entries are set to an entry in a settings file"""
     environment_variable = ApplicationConfiguration.entry(entry).environment_variable(
@@ -133,7 +139,9 @@ def test_all_entries_reflect_envar_settings(settings, source_other, entry, value
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
-def test_all_entries_reflect_cli(settings, source_other, base, cli_entry, expected):
+def test_all_entries_reflect_cli(
+    generate_config, settings, source_other, base, cli_entry, expected
+):
     """Ensure all entries are set by the cli"""
     if base is None:
         params = cli_entry.split()
@@ -151,7 +159,41 @@ def test_all_entries_reflect_cli(settings, source_other, base, cli_entry, expect
             assert entry.value.source.name == source_other, entry
 
 
-def test_editor_command_from_editor():
+def test_apply_previous_cli(generate_config):
+    params = "doc shell --ee False --eei test_image"
+    expected = {
+        "app": "doc",
+        "execution_environment": False,
+        "execution_environment_image": "test_image",
+    }
+
+    application_configuration = deepcopy(ApplicationConfiguration)
+    configuration = Configuration(
+        application_configuration=application_configuration,
+        params=params.split(),
+        save_as_intitial=True,
+    )
+    configuration.configure()
+    for key, value in expected.items():
+        assert application_configuration.entry(key).value.current == value
+        assert application_configuration.entry(key).value.source.name == "USER_CLI"
+
+    assert isinstance(application_configuration.initial, Config)
+
+    params = "doc"
+    configuration = Configuration(
+        application_configuration=application_configuration,
+        params=params.split(),
+        apply_previous_cli=True,
+    )
+    configuration.configure()
+    for key, value in expected.items():
+        if key != "app":
+            assert application_configuration.entry(key).value.current == value
+            assert application_configuration.entry(key).value.source.name == "PREVIOUS_CLI"
+
+
+def test_editor_command_from_editor(generate_config):
     """Ensure the editor_command defaults to EDITOR if set"""
     with mock.patch.dict(os.environ, {"EDITOR": "nano"}):
         # since this was already loaded, force it
@@ -160,7 +202,7 @@ def test_editor_command_from_editor():
         assert application_configuration.editor_command == "nano {filename}"
 
 
-def test_not_a_bool():
+def test_not_a_bool(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit early for wrong type of value"""
     import ansible_navigator.configuration.configuration
@@ -180,3 +222,40 @@ def test_not_a_bool():
         " but set as '5' in user provided configuration file"
     )
     assert kwargs["errors"][0] == error
+
+
+def test_badly_formatted_envar(generate_config):
+    # pylint: disable=import-outside-toplevel
+    """Ensure exit early for badly formatted set env var"""
+    import ansible_navigator.configuration.configuration
+
+    params = "run site.yml --senv TK1:TV1"
+    with mock.patch.object(
+        ansible_navigator.configuration.configuration, "error_and_exit_early"
+    ) as mock_method:
+        mock_method.side_effect = Exception("called")
+        with pytest.raises(Exception, match="called"):
+            _application_configuration, _settings_contents = generate_config(params=params.split())
+    _args, kwargs = mock_method.call_args
+    assert len(kwargs["errors"]) == 1
+    error = "The following set-environment-variable entry could not be parsed: TK1:TV1"
+    assert kwargs["errors"][0] == error
+
+
+def test_broken_settings_file(generate_config):
+    # pylint: disable=import-outside-toplevel
+    """Ensure exit early for wrong type of value"""
+    import ansible_navigator.configuration.configuration
+
+    with mock.patch.object(
+        ansible_navigator.configuration.configuration, "error_and_exit_early"
+    ) as mock_method:
+        mock_method.side_effect = Exception("called")
+        with pytest.raises(Exception, match="called"):
+            _application_configuration, _settings_contents = generate_config(
+                setting_file_name="ansible-navigator_broken.yml"
+            )
+    _args, kwargs = mock_method.call_args
+    assert len(kwargs["errors"]) == 1
+    error = "/ansible-navigator_broken.yml empty"
+    assert kwargs["errors"][0].endswith(error)

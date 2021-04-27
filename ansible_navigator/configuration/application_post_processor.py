@@ -106,12 +106,12 @@ class ApplicationPostProcessor:
         return messages, errors
 
     @_post_processor
-    def inventory_columns(self, entry, config) -> Tuple[List[Message], List[str]]:
+    def inventory_column(self, entry, config) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process inventory_columns"""
         messages: List[Message] = []
         errors: List[str] = []
-        if isinstance(entry.value.current, Sentinel):
+        if entry.value.current is Sentinel:
             entry.value.current = []
         else:
             entry.value.current = self._flatten_list(entry.value.current)

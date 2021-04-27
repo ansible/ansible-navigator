@@ -3,6 +3,7 @@
 import os
 from copy import deepcopy
 
+import pytest
 
 from ansible_navigator.configuration import ApplicationConfiguration
 from ansible_navigator.configuration import Configuration
@@ -17,7 +18,7 @@ from ...defaults import FIXTURES_DIR
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration")
 
 
-def generate_config(params=None, setting_file_name=None):
+def _generate_config(params=None, setting_file_name=None):
     """Generate a configuration given a settings file"""
     if params is None:
         params = []
@@ -40,9 +41,14 @@ def generate_config(params=None, setting_file_name=None):
     return application_configuration, settings_contents
 
 
+@pytest.fixture(name="generate_config")
+def fixture_generate_config():
+    return _generate_config
+
+
 def generate_params_from_entries(setting_file_name):
     """Generate params from a configurations' entries"""
-    application_configuration, settings_contents = generate_config(
+    application_configuration, settings_contents = _generate_config(
         setting_file_name=setting_file_name
     )
     argvalues = [(entry, settings_contents) for entry in application_configuration.entries]
