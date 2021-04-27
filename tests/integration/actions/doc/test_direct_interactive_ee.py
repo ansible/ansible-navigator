@@ -51,7 +51,7 @@ testdata_module_doc_not_exist = [
 class TestModuleDoc(BaseClass):
     """run the tests"""
 
-    UPDATE_FIXTURES = True
+    UPDATE_FIXTURES = False
 
 
 @pytest.mark.parametrize(
@@ -60,7 +60,7 @@ class TestModuleDoc(BaseClass):
 class TestLookUpDoc(BaseClass):
     """run the tests"""
 
-    UPDATE_FIXTURES = True
+    UPDATE_FIXTURES = False
 
 
 @pytest.mark.parametrize(
