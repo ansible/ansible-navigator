@@ -80,21 +80,20 @@ class Configuration:
                     self._errors.append(msg)
                     return
             for entry in self._config.entries:
-                if entry.cli_parameters:
-                    settings_file_path = entry.settings_file_path(self._config.application_name)
-                    path_parts = settings_file_path.split(".")
-                    data = config
-                    try:
-                        for key in path_parts:
-                            data = data[key]
-                        entry.value.current = data
-                        entry.value.source = EntrySource.USER_CFG
-                    except TypeError:
-                        msg = f"{settings_file_path} empty"
-                        self._messages.append(Message(log_level="debug", message=msg))
-                    except KeyError:
-                        msg = f"{settings_file_path} not found in settings file"
-                        self._messages.append(Message(log_level="debug", message=msg))
+                settings_file_path = entry.settings_file_path(self._config.application_name)
+                path_parts = settings_file_path.split(".")
+                data = config
+                try:
+                    for key in path_parts:
+                        data = data[key]
+                    entry.value.current = data
+                    entry.value.source = EntrySource.USER_CFG
+                except TypeError:
+                    msg = f"{settings_file_path} empty"
+                    self._messages.append(Message(log_level="debug", message=msg))
+                except KeyError:
+                    msg = f"{settings_file_path} not found in settings file"
+                    self._messages.append(Message(log_level="debug", message=msg))
 
     def _apply_environment_variables(self) -> None:
         for entry in self._config.entries:
@@ -111,6 +110,7 @@ class Configuration:
         args, cmdline = parser.parse_known_args(self._params)
         if cmdline:
             self._config.entry("cmdline").value.current = cmdline
+            self._config.entry("cmdline").value.source = EntrySource.USER_CLI
         for param, value in vars(args).items():
             if self._config.entry(param).subcommand_value is True and value is None:
                 continue

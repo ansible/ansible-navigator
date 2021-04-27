@@ -147,6 +147,16 @@ class ApplicationPostProcessor:
         return messages, errors
 
     @_post_processor
+    def playbook(self, entry, config) -> Tuple[List[Message], List[str]]:
+        # pylint: disable=unused-argument
+        """Post process pass_environment_variable"""
+        messages: List[Message] = []
+        errors: List[str] = []
+        if isinstance(entry.value.current, str):
+            entry.value.current = self._abs_user_path(entry.value.current)
+        return messages, errors
+
+    @_post_processor
     def set_environment_variable(self, entry, config) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process set_environment_variable"""

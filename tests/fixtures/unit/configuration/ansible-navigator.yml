@@ -1,5 +1,6 @@
 ---
 ansible-navigator:
+  cmdline: "--forks 15"
   container-engine: podman
   editor:
     command: test_command
@@ -25,7 +26,7 @@ ansible-navigator:
     - ONE
     - TWO
     - THREE
-  playbook: test_playbook.yml
+  playbook: /tmp/test_playbook.yml
   playbook-artifact: test_artifact.json
   set-environment-variables:
     KEY1: VALUE1

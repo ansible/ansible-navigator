@@ -1,61 +1,29 @@
 """ tests for configuration subsystem
 """
 import os
-import sys
 from collections import Counter
-from copy import deepcopy
 from unittest import mock
-
 
 import pytest
 
 from ansible_navigator.configuration.application_configuration import generate_editor_command
 from ansible_navigator.configuration import ApplicationConfiguration
-from ansible_navigator.configuration import Configuration
 
-from ansible_navigator.configuration.definitions import Entry
+from .data import BASE_EXPECTED
+from .data import BASE_LONG_CLI
+from .data import BASE_SHORT_CLI
+from .data import CLI_DATA
+from .data import ENVVAR_DATA
+from .data import SETTINGS
 
-from ansible_navigator.yaml import yaml
-from ansible_navigator.yaml import Loader
+from .utils import generate_config
+from .utils import generate_params_from_entries
+from .utils import id_for_base
+from .utils import id_for_cli
+from .utils import id_for_name
+from .utils import id_for_settings
 
-from ..defaults import FIXTURES_DIR
-
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration")
-
-
-def name_for_id(val):
-    """Return an id based on entry name"""
-    if isinstance(val, Entry):
-        return val.name
-    return ""
-
-
-def generate_config(setting_file_name=None):
-    """Generate a configuration given a settings file"""
-    if setting_file_name:
-        settings_file_path = os.path.join(TEST_FIXTURE_DIR, setting_file_name)
-        with open(settings_file_path) as file:
-            settings_contents = yaml.load(file, Loader=Loader)
-    else:
-        settings_file_path = None
-        settings_contents = {}
-
-    application_configuration = deepcopy(ApplicationConfiguration)
-    configuration = Configuration(
-        application_configuration=application_configuration,
-        params="",
-        settings_file_path=settings_file_path,
-    )
-    configuration.configure()
-    return application_configuration, settings_contents
-
-
-def generate_params_from_entries(setting_file_name):
-    """Generate params from a configurations' entries"""
-    application_configuration, settings_contents = generate_config(setting_file_name)
-    argvalues = [(entry, settings_contents) for entry in application_configuration.entries]
-    ids = [entry.name for entry in application_configuration.entries]
-    return argvalues, ids
+from ...defaults import FIXTURES_DIR
 
 
 def pytest_generate_tests(metafunc):
@@ -68,19 +36,19 @@ def pytest_generate_tests(metafunc):
         metafunc.parametrize("full", argvalues, ids=ids)
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=name_for_id)
+@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
 def test_no_dash_in_name(entry):
     """Ensure no names contain a -"""
     assert "-" not in entry.name
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=name_for_id)
+@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
 def test_no_dash_in_environment_variable(entry):
     """Ensure no environment variable has a dash"""
     assert "-" not in entry.environment_variable("ansible_navigator")
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=name_for_id)
+@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
 def test_no_short_long_if_postional(entry):
     """Ensure no postional argument has a short or long set"""
     if hasattr(entry, "cli_arguments") and entry.cli_parameters.positional:
@@ -88,7 +56,7 @@ def test_no_short_long_if_postional(entry):
         assert entry.long_override is None
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=name_for_id)
+@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
 def test_no_underscore_in_path(entry):
     """Ensure no long override has an _"""
     if entry.settings_file_path_override is not None:
@@ -140,47 +108,47 @@ def test_all_entries_reflect_settings_file(full):
         assert entry.value.current == expected, entry
 
 
-test_data = [
-    ("app", "doc", "doc"),
-    ("cmdline", "--forks 15", ["--forks", "15"]),
-    ("container_engine", "docker", "docker"),
-    ("editor_command", "nano", "nano"),
-    ("editor_console", "false", False),
-    ("execution_environment", "false", False),
-    ("execution_environment_image", "test_image", "test_image"),
-    ("inventory", "/tmp/test1.yaml,/tmp/test2.yml", ["/tmp/test1.yaml", "/tmp/test2.yml"]),
-    ("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"]),
-    ("log_file", "/tmp/app.log", "/tmp/app.log"),
-    ("log_level", "info", "info"),
-    ("mode", "stdout", "stdout"),
-    ("osc4", "false", False),
-    ("pass_environment_variable", "a,b,c", ["a", "b", "c"]),
-    ("playbook", "/tmp/site.yaml", "/tmp/site.yaml"),
-    ("playbook_artifact", "/tmp/play.json", "/tmp/play.json"),
-    ("plugin_name", "shell", "shell"),
-    ("plugin_type", "become", "become"),
-    ("set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}),
-]
-
-
-def test_no_missing_test_data():
-    """Ensure the test_data covers all entries"""
+def test_no_missing_envvar_data():
+    """Ensure the ENVVAR_DATA covers all entries"""
     entry_names = [entry.name for entry in ApplicationConfiguration.entries]
-    data_names = [entry[0] for entry in test_data]
+    data_names = [entry[0] for entry in ENVVAR_DATA]
     assert entry_names == data_names
 
 
-@pytest.mark.parametrize("entry, value, expected", test_data)
-def test_all_entries_reflect_envar_settings(entry, value, expected):
+@pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
+@pytest.mark.parametrize("entry, value, expected", ENVVAR_DATA)
+def test_all_entries_reflect_envar_settings(settings, source_other, entry, value, expected):
+    # pylint: disable=unused-argument
     """Ensure all entries are set to an entry in a settings file"""
     environment_variable = ApplicationConfiguration.entry(entry).environment_variable(
         "ansible_navigator"
     )
     with mock.patch.dict(os.environ, {environment_variable: str(value)}):
-        application_configuration, _settings_contents = generate_config("ansible-navigator.yml")
+        application_configuration, _settings_contents = generate_config(setting_file_name=settings)
         entry = application_configuration.entry(entry)
         assert entry.value.source.name == "ENVIRONMENT_VARIABLE"
         assert entry.value.current == expected
+
+
+@pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
+@pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
+@pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
+def test_all_entries_reflect_cli(settings, source_other, base, cli_entry, expected):
+    """Ensure all entries are set by the cli"""
+    if base is None:
+        params = cli_entry.split()
+    else:
+        params = cli_entry.split() + " ".join(base.splitlines()).split()
+        expected.update(BASE_EXPECTED)
+    application_configuration, _settings_contents = generate_config(
+        params=params, setting_file_name=settings
+    )
+    for key, value in expected.items():
+        assert application_configuration.entry(key).value.current == value
+        assert application_configuration.entry(key).value.source.name == "USER_CLI"
+    for entry in application_configuration.entries:
+        if entry.name not in expected:
+            assert entry.value.source.name == source_other, entry
 
 
 def test_editor_command_from_editor():
