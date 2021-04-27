@@ -2,6 +2,7 @@
 """
 import pytest
 
+from typing import List
 from .base import BaseClass
 
 from ..._common import container_runtime_or_fail
@@ -13,7 +14,7 @@ CLI_MODULE_DOC = (
     " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
-testdata_module_doc = [
+testdata_module_doc: List = [
     (0, CLI_MODULE_DOC, "ansible-navigator doc module plugin display", "module_doc_pass", []),
 ]
 
@@ -23,7 +24,7 @@ CLI_LOOKUP_DOC = (
     " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
-testdata_lookup_doc = [
+testdata_lookup_doc: List = [
     (0, CLI_LOOKUP_DOC, "ansible-navigator doc lookup plugin display", "lookup_doc_pass", []),
 ]
 

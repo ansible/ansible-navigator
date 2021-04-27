@@ -2,6 +2,7 @@
 """
 import pytest
 
+from typing import List
 from .base import BaseClass
 
 from ..._common import get_executable_path
@@ -11,7 +12,7 @@ CLI_MODULE_DOC = (
     get_executable_path("python")
     + " -m ansible_navigator doc testorg.coll_1.mod_1 --execution-environment false"
 )
-testdata_module_doc = [
+testdata_module_doc: List = [
     (0, CLI_MODULE_DOC, "ansible-navigator doc module plugin display", "module_doc_pass", []),
 ]
 
@@ -20,7 +21,7 @@ CLI_LOOKUP_DOC = (
     get_executable_path("python")
     + " -m ansible_navigator doc testorg.coll_1.lookup_1 -t lookup --execution-environment false"
 )
-testdata_lookup_doc = [
+testdata_lookup_doc: List = [
     (0, CLI_LOOKUP_DOC, "ansible-navigator doc lookup plugin display", "lookup_doc_pass", []),
 ]
 

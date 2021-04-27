@@ -2,6 +2,7 @@
 """
 import pytest
 
+from typing import List
 from .base import BaseClass
 
 from ..._common import get_executable_path
@@ -9,14 +10,14 @@ from ..._common import get_executable_path
 # module doc
 CLI_WELCOME_SCREEN = get_executable_path("python") + " -m ansible_navigator"
 test_module_doc_pass = "module_doc_pass"
-testdata_module_doc = [
+testdata_module_doc: List = [
     (0, CLI_WELCOME_SCREEN, "ansible-navigator welcome screen", test_module_doc_pass, []),
     (1, ":doc testorg.coll_1.mod_1", "move to module doc screen", test_module_doc_pass, []),
 ]
 
 # lookup plugin doc
 test_lookup_doc_pass = "lookup_doc_pass"
-testdata_lookup_doc = [
+testdata_lookup_doc: List = [
     (0, CLI_WELCOME_SCREEN, "ansible-navigator welcome screen", test_lookup_doc_pass, []),
     (
         1,
