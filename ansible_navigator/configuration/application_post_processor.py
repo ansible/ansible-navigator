@@ -2,8 +2,13 @@
 """
 import os
 
+from typing import Any
 from typing import List
+from typing import Tuple
 
+from .definitions import Entry
+from .definitions import EntrySource
+from .definitions import Config
 from .definitions import Message
 
 from ..utils import Sentinel
@@ -30,7 +35,7 @@ class ApplicationPostProcessor:
         return os.path.abspath(os.path.expanduser(fpath))
 
     @staticmethod
-    def _str2bool(value) -> bool:
+    def _str2bool(value: Any) -> bool:
         """convert some commonly used values
         to a boolean
         """
@@ -43,41 +48,53 @@ class ApplicationPostProcessor:
                 return False
         raise ValueError
 
-    def _flatten_list(self, lyst) -> List:
+    def _flatten_list(self, lyst: Any) -> List:
         if isinstance(lyst, list):
             return [a for i in lyst for a in self._flatten_list(i)]
         return [lyst]
 
-    def _flatten_resolve_list_of_paths(self, value):
+    def _flatten_resolve_list_of_paths(self, value: List) -> List[str]:
         value = self._flatten_list(value)
         value = [self._abs_user_path(entry) for entry in value]
         return value
 
-    def _true_or_false(self, entry, config):
+    def _true_or_false(self, entry: Entry, config: Config) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
-        messages = []
-        errors = []
+        messages: List[Message] = []
+        errors: List[str] = []
         try:
             entry.value.current = self._str2bool(entry.value.current)
         except ValueError:
             errors.append(entry.invalid_choice)
         return messages, errors
 
+    @staticmethod
     @_post_processor
-    def editor_console(self, entry, config):
+    def cmdline(entry: Entry, config: Config) -> Tuple[List[Message], List[str]]:
+        # pylint: disable=unused-argument
+        """Post process cmdline"""
+        messages: List[Message] = []
+        errors: List[str] = []
+        if isinstance(entry.value.source, EntrySource):
+            if entry.value.source.name == "ENVIRONMENT_VARIABLE":
+                entry.value.current = entry.value.current.split()
+        return messages, errors
+
+    @_post_processor
+    def editor_console(self, entry, config) -> Tuple[List[Message], List[str]]:
         """Post process editor_console"""
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def execution_environment(self, entry, config):
+    def execution_environment(self, entry, config) -> Tuple[List[Message], List[str]]:
         """Post process execution_environment"""
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def inventory(self, entry, config):
+    def inventory(self, entry, config) -> Tuple[List[Message], List[str]]:
         """Post process inventory"""
-        messages = []
-        errors = []
+        messages: List[Message] = []
+        errors: List[str] = []
         if config.app == "inventory" and not entry.value.current:
             msg = "An inventory is required when using the inventory subcommand"
             errors.append(msg)
@@ -89,11 +106,11 @@ class ApplicationPostProcessor:
         return messages, errors
 
     @_post_processor
-    def inventory_columns(self, entry, config):
+    def inventory_columns(self, entry, config) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process inventory_columns"""
-        messages = []
-        errors = []
+        messages: List[Message] = []
+        errors: List[str] = []
         if isinstance(entry.value.current, Sentinel):
             entry.value.current = []
         else:
@@ -104,25 +121,25 @@ class ApplicationPostProcessor:
         return messages, errors
 
     @_post_processor
-    def log_file(self, entry, config):
+    def log_file(self, entry, config) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process log_file"""
-        messages = []
-        errors = []
+        messages: List[Message] = []
+        errors: List[str] = []
         entry.value.current = self._abs_user_path(entry.value.current)
         return messages, errors
 
     @_post_processor
-    def osc4(self, entry, config):
+    def osc4(self, entry, config) -> Tuple[List[Message], List[str]]:
         """Post process osc4"""
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def pass_environment_variable(self, entry, config):
+    def pass_environment_variable(self, entry, config) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process pass_environment_variable"""
-        messages = []
-        errors = []
+        messages: List[Message] = []
+        errors: List[str] = []
         if entry.value.current is Sentinel:
             entry.value.current = []
         else:
@@ -130,14 +147,14 @@ class ApplicationPostProcessor:
         return messages, errors
 
     @_post_processor
-    def set_environment_variable(self, entry, config):
+    def set_environment_variable(self, entry, config) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process set_environment_variable"""
-        messages = []
-        errors = []
+        messages: List[Message] = []
+        errors: List[str] = []
         if isinstance(entry.value.current, Sentinel):
             entry.value.current = {}
-        elif entry.value.source.name == "USER_CLI":
+        elif entry.value.source.name in ["ENVIRONMENT_VARIABLE", "USER_CLI"]:
             flattened = self._flatten_list(entry.value.current)
             set_envs = {}
             for env_var_pair in flattened:

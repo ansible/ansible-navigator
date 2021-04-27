@@ -104,6 +104,7 @@ ApplicationConfiguration = Config(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
             description="Specify an inventory path",
+            environment_variable_override="inventories",
             settings_file_path_override="inventories",
             subcommands=["inventory", "run"],
             value=EntryValue(),
@@ -112,6 +113,7 @@ ApplicationConfiguration = Config(
             name="inventory_column",
             cli_parameters=CliParameters(action="append", nargs="+", short="--ic"),
             description="Specify a host attribute to show in the inventory view",
+            environment_variable_override="inventory_columns",
             settings_file_path_override="inventory-columns",
             subcommands=["inventory", "run"],
             value=EntryValue(),
@@ -150,6 +152,7 @@ ApplicationConfiguration = Config(
             cli_parameters=CliParameters(action="append", nargs="+", short="--penv"),
             description="Specify an exiting environment variable to be passed through to and set \
                 within the execution enviroment (--penv MY_VAR)",
+            environment_variable_override="pass_environment_variables",
             settings_file_path_override="pass-environment-variables",
             value=EntryValue(),
         ),
@@ -188,6 +191,7 @@ ApplicationConfiguration = Config(
             cli_parameters=CliParameters(action="append", nargs="+", short="--senv"),
             description="Specify an environment variable and a value to be set within the \
                 execution enviroment (--senv MY_VAR=42)",
+            environment_variable_override="set_environment_variables",
             settings_file_path_override="set-environment-variables",
             value=EntryValue(),
         ),

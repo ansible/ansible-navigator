@@ -1,0 +1,33 @@
+---
+ansible-navigator:
+  container-engine: podman
+  editor:
+    command: test_command
+    console: False
+  documentation:
+    plugin:
+      name: shell
+      type: become
+  execution-environment-image: test_image
+  execution-environment: False
+  inventories:
+    - /tmp/test_inventory.yml
+  inventory-columns:
+    - ansible_network_os
+    - ansible_network_cli_ssh_type
+    - ansible_connection
+  logging:
+    level: critical
+    file: /tmp/log.txt
+  mode: stdout
+  osc4: False
+  pass-environment-variables:
+    - ONE
+    - TWO
+    - THREE
+  playbook: test_playbook.yml
+  playbook-artifact: test_artifact.json
+  set-environment-variables:
+    KEY1: VALUE1
+    KEY2: VALUE2
+    KEY3: VALUE3

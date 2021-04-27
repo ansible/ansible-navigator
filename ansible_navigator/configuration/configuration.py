@@ -22,10 +22,10 @@ class Configuration:
     def __init__(
         self,
         params,
-        settings_file_path,
         application_configuration,
         apply_previous_cli=False,
         save_as_intitial=False,
+        settings_file_path=None,
     ):
         self._apply_previous_cli = apply_previous_cli
         self._config = application_configuration
@@ -71,44 +71,46 @@ class Configuration:
             entry.value.source = EntrySource.DEFAULT_CFG
 
     def _apply_settings_file(self) -> None:
-        with open(self._settings_file_path, "r") as config_fh:
-            try:
-                config = yaml.load(config_fh, Loader=SafeLoader)
-            except yaml.scanner.ScannerError:
-                msg = f"Settings file found {self._settings_file_path}, but failed to load it."
-                self._errors.append(msg)
-                return
-        for entry in self._config.entries:
-            if entry.cli_parameters:
-                settings_file_path = entry.settings_file_path(self._config.application_name)
-                path_parts = settings_file_path.split(".")
-                data = config
+        if self._settings_file_path:
+            with open(self._settings_file_path, "r") as config_fh:
                 try:
-                    for key in path_parts:
-                        data = data[key]
-                    entry.value.current = data
-                    entry.value.source = EntrySource.USER_CFG
-                except TypeError:
-                    msg = f"{settings_file_path} empty"
-                    self._messages.append(Message(log_level="debug", message=msg))
-                except KeyError:
-                    msg = f"{settings_file_path} not found in settings file"
-                    self._messages.append(Message(log_level="debug", message=msg))
+                    config = yaml.load(config_fh, Loader=SafeLoader)
+                except yaml.scanner.ScannerError:
+                    msg = f"Settings file found {self._settings_file_path}, but failed to load it."
+                    self._errors.append(msg)
+                    return
+            for entry in self._config.entries:
+                if entry.cli_parameters:
+                    settings_file_path = entry.settings_file_path(self._config.application_name)
+                    path_parts = settings_file_path.split(".")
+                    data = config
+                    try:
+                        for key in path_parts:
+                            data = data[key]
+                        entry.value.current = data
+                        entry.value.source = EntrySource.USER_CFG
+                    except TypeError:
+                        msg = f"{settings_file_path} empty"
+                        self._messages.append(Message(log_level="debug", message=msg))
+                    except KeyError:
+                        msg = f"{settings_file_path} not found in settings file"
+                        self._messages.append(Message(log_level="debug", message=msg))
 
     def _apply_environment_variables(self) -> None:
         for entry in self._config.entries:
-            if entry.cli_parameters:
-                set_envvar = os.environ.get(
-                    entry.environment_variable(self._config.application_name)
-                )
-                if set_envvar is not None:
+            set_envvar = os.environ.get(entry.environment_variable(self._config.application_name))
+            if set_envvar is not None:
+                if entry.cli_parameters is not None and entry.cli_parameters.nargs == "+":
+                    entry.value.current = set_envvar.split(",")
+                else:
                     entry.value.current = set_envvar
-                    entry.value.source = EntrySource.ENVIRONMENT_VARIABLE
+                entry.value.source = EntrySource.ENVIRONMENT_VARIABLE
 
     def _apply_cli_params(self) -> None:
         parser = Parser(self._config).parser
         args, cmdline = parser.parse_known_args(self._params)
-        self._config.entry("cmdline").value.current = cmdline
+        if cmdline:
+            self._config.entry("cmdline").value.current = cmdline
         for param, value in vars(args).items():
             if self._config.entry(param).subcommand_value is True and value is None:
                 continue
