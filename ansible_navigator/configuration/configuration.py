@@ -49,8 +49,11 @@ class Configuration:
         self._sanity_check()
 
     def _sanity_check(self) -> None:
-        if self._apply_previous_cli_entries is not None and self._save_as_intitial:
-            raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
+        if self._apply_previous_cli_entries is not None:
+            if self._save_as_intitial is True:
+                raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
+            if self._config.initial is None:
+                raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
 
     def configure(self) -> List[Message]:
         """Perform the configuration"""
@@ -155,8 +158,6 @@ class Configuration:
         7) replace the current with the previous
         """
         if self._apply_previous_cli_entries is not None:
-            if self._config.initial is None:
-                raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
             for current_entry in self._config.entries:
                 if current_entry.subcommand_value is not True:
                     if isinstance(current_entry.value.source, EntrySource):

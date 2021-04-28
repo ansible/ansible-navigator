@@ -314,6 +314,77 @@ def test_apply_previous_cli_some(generate_config):
     assert application_configuration.entry("cmdline").value.source.name == "DEFAULT_CFG"
 
 
+def test_apply_previous_cli_mixed(generate_config):
+    """Ensure a mixed config tests pass"""
+
+    params = "doc shell --ee False --eei test_image --forks 15"
+    application_configuration = deepcopy(ApplicationConfiguration)
+
+    configuration = Configuration(
+        application_configuration=application_configuration,
+        params=params.split(),
+        save_as_intitial=True,
+    )
+    with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
+        configuration.configure()
+
+    expected = {
+        "app": "doc",
+        "cmdline": ["--forks", "15"],
+        "execution_environment": False,
+        "execution_environment_image": "test_image",
+    }
+    # all expected set at command line
+    for key, value in expected.items():
+        assert application_configuration.entry(key).value.current == value
+        assert application_configuration.entry(key).value.source.name == "USER_CLI"
+
+    # penv set as environment variable
+    assert application_configuration.pass_environment_variable == ["ENV1", "ENV2"]
+    assert (
+        application_configuration.entry("pass_environment_variable").value.source.name
+        == "ENVIRONMENT_VARIABLE"
+    )
+
+    assert isinstance(application_configuration.initial, Config)
+
+    params = "doc --eei different_image"
+    configuration = Configuration(
+        application_configuration=application_configuration,
+        params=params.split(),
+        apply_previous_cli_entries=["all"],
+    )
+    with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES": "ENV1=VAL1"}):
+        configuration.configure()
+
+    # ee is carried forward because it was not in the command
+    assert application_configuration.execution_environment is False
+    assert (
+        application_configuration.entry("execution_environment").value.source.name == "PREVIOUS_CLI"
+    )
+
+    # eei is pulled from the current command
+    assert application_configuration.execution_environment_image == "different_image"
+    assert (
+        application_configuration.entry("execution_environment_image").value.source.name
+        == "USER_CLI"
+    )
+
+    # penv is default because it is no longer set
+    assert application_configuration.pass_environment_variable == []
+    assert (
+        application_configuration.entry("pass_environment_variable").value.source.name
+        == "DEFAULT_CFG"
+    )
+
+    # senv is set because it is a new envvar
+    assert application_configuration.set_environment_variable == {"ENV1": "VAL1"}
+    assert (
+        application_configuration.entry("set_environment_variable").value.source.name
+        == "ENVIRONMENT_VARIABLE"
+    )
+
+
 def test_editor_command_from_editor(generate_config):
     """Ensure the editor_command defaults to EDITOR if set"""
     with mock.patch.dict(os.environ, {"EDITOR": "nano"}):
@@ -428,3 +499,39 @@ def test_mutual_exclusivity_for_configuration_init(generate_config):
             save_as_intitial=True,
             apply_previous_cli_entries=["all"],
         )
+
+
+def test_apply_before_initial_saved(generate_config):
+    """Ensure the apply_previous_cli_entries cant' be used before save_as_intitial"""
+    with pytest.raises(ValueError, match="enabled prior to"):
+        Configuration(
+            params=None,
+            application_configuration=ApplicationConfiguration,
+            apply_previous_cli_entries=["all"],
+        ).configure()
+
+
+@pytest.mark.parametrize(
+    "entry", [entry for entry in ApplicationConfiguration.entries if entry.choices], ids=id_for_name
+)
+def test_poor_choices(generate_config, entry):
+    # pylint: disable=import-outside-toplevel
+    """Ensure exit early for poor choices"""
+    import ansible_navigator.configuration.configuration
+
+    def test(param):
+        with mock.patch.object(
+            ansible_navigator.configuration.configuration, "error_and_exit_early"
+        ) as mock_method:
+            mock_method.side_effect = Exception("called")
+            with pytest.raises(Exception, match="called"):
+                _application_configuration, _settings_contents = generate_config(
+                    params=[param, "Sentinel"]
+                )
+        _args, kwargs = mock_method.call_args
+        assert len(kwargs["errors"]) == 1
+        error = "must be one of"
+        assert error in kwargs["errors"][0]
+
+    test(entry.cli_parameters.short)
+    test(entry.cli_parameters.long_override or f"--{entry.name_dashed}")
