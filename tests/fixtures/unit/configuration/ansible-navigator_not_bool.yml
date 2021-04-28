@@ -1,0 +1,4 @@
+---
+ansible-navigator:
+  execution-environment:
+    enabled: 5

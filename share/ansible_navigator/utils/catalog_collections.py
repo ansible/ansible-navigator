@@ -334,7 +334,7 @@ def run_command(cmd: List) -> Dict:
 
 
 def main() -> Dict:
-    """ main """
+    """main"""
     stats = {}
     stats["cache_added_success"] = 0
     stats["cache_added_errors"] = 0

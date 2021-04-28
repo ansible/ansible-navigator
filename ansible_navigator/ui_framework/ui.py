@@ -149,7 +149,7 @@ class UserInterface(CursesWindow):
         self._one_line_input = FormHandlerText(screen=self._screen)
 
     def clear(self) -> None:
-        """ clear the screen"""
+        """clear the screen"""
         self._screen.clear()
         self._screen.refresh()
 

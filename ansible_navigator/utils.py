@@ -14,7 +14,6 @@ from distutils.spawn import find_executable
 
 from typing import Any
 from typing import Dict
-from typing import Generator
 from typing import List
 from typing import Mapping
 from typing import Optional
@@ -67,20 +66,18 @@ def human_time(seconds: int) -> str:
     return "%s%ds" % (sign_string, seconds)
 
 
-def flatten_list(lyst: List) -> Generator:
-    """flatten a list of lists"""
-    for element in lyst:
-        if isinstance(element, list):
-            yield from flatten_list(element)
-        else:
-            yield element
-
-
 def to_list(thing: Union[str, List]) -> List:
     """convert something to a list if necessary"""
     if not isinstance(thing, list):
         return [thing]
     return thing
+
+
+def flatten_list(lyst) -> List:
+    """flatten a list of lists"""
+    if isinstance(lyst, list):
+        return [a for i in lyst for a in flatten_list(i)]
+    return [lyst]
 
 
 def templar(string: str, template_vars: Mapping) -> Any:
@@ -366,7 +363,43 @@ def _get_kvs(args, collection_doc_cache_path):
     return mod.KeyValueStore(collection_doc_cache_path)
 
 
-def error_and_exit_early(msg) -> NoReturn:
+def error_and_exit_early(msg=None, errors=None) -> NoReturn:
     """get out of here fast"""
-    print(f"\x1b[31m[ERROR]: {msg}\x1b[0m")
+    template = "\x1b[31m[ERROR]: {msg}\x1b[0m"
+    if msg:
+        print(template.format(msg=msg))
+    if errors:
+        for error in errors:
+            print(template.format(msg=error))
     sys.exit(1)
+
+
+def oxfordcomma(listed, condition):
+    """Format a list into a sentance"""
+    listed = [f"'{str(entry)}'" for entry in listed]
+    if len(listed) == 0:
+        return ""
+    if len(listed) == 1:
+        return listed[0]
+    if len(listed) == 2:
+        return f"{listed[0]} {condition} {listed[1]}"
+    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
+
+
+def abs_user_path(fpath):
+    """Resolve a path"""
+    return os.path.abspath(os.path.expanduser(fpath))
+
+
+def str2bool(value: Any) -> bool:
+    """Convert some commonly used values
+    to a boolean
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        if value.lower() in ("yes", "true"):
+            return True
+        if value.lower() in ("no", "false"):
+            return False
+    raise ValueError
