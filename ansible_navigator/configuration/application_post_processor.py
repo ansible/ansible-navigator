@@ -69,7 +69,7 @@ class ApplicationPostProcessor:
         """Post process inventory"""
         messages: List[Message] = []
         errors: List[str] = []
-        if config.app == "inventory" and not entry.value.current:
+        if config.app == "inventory" and entry.value.current is Sentinel:
             msg = "An inventory is required when using the inventory subcommand"
             errors.append(msg)
             return messages, errors
@@ -149,7 +149,7 @@ class ApplicationPostProcessor:
         """Post process set_environment_variable"""
         messages: List[Message] = []
         errors: List[str] = []
-        if isinstance(entry.value.current, Sentinel):
+        if entry.value.current is Sentinel:
             entry.value.current = {}
         elif entry.value.source.name in ["ENVIRONMENT_VARIABLE", "USER_CLI"]:
             flattened = flatten_list(entry.value.current)

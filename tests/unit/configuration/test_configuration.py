@@ -93,10 +93,13 @@ def test_all_entries_reflect_default(generate_config, entry):
     application_configuration, _settings_contents = generate_config()
     configured_entry = application_configuration.entry(entry.name)
     assert configured_entry.value.source.name == "DEFAULT_CFG", entry
-    if entry.name not in ["inventory", "inventory_column", "pass_environment_variable"]:
-        assert configured_entry.value.current == entry.value.default, entry
-    else:
+
+    if entry.name in ["inventory", "inventory_column", "pass_environment_variable"]:
         assert configured_entry.value.current == [], entry
+    elif entry.name in ["set_environment_variable"]:
+        assert configured_entry.value.current == {}, entry
+    else:
+        assert configured_entry.value.current == entry.value.default, entry
 
 
 @pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
@@ -362,7 +365,7 @@ def test_badly_formatted_envar(generate_config):
 
 def test_broken_settings_file(generate_config):
     # pylint: disable=import-outside-toplevel
-    """Ensure exit early for wrong type of value"""
+    """Ensure exit early for broken settings file"""
     import ansible_navigator.configuration.configuration
 
     with mock.patch.object(
@@ -377,3 +380,51 @@ def test_broken_settings_file(generate_config):
     assert len(kwargs["errors"]) == 1
     error = "/ansible-navigator_broken.yml empty"
     assert kwargs["errors"][0].endswith(error)
+
+
+def test_garbage_settings_file(generate_config):
+    # pylint: disable=import-outside-toplevel
+    """Ensure exit early for garbage settings file"""
+    import ansible_navigator.configuration.configuration
+
+    with mock.patch.object(
+        ansible_navigator.configuration.configuration, "error_and_exit_early"
+    ) as mock_method:
+        mock_method.side_effect = Exception("called")
+        with pytest.raises(Exception, match="called"):
+            _application_configuration, _settings_contents = generate_config(
+                setting_file_name=os.path.abspath(__file__)
+            )
+    _args, kwargs = mock_method.call_args
+    assert len(kwargs["errors"]) == 1
+    error = "but failed to load it."
+    assert kwargs["errors"][0].endswith(error)
+
+
+def test_inventory_no_inventory(generate_config):
+    # pylint: disable=import-outside-toplevel
+    """Ensure exit early for wrong type of value"""
+    import ansible_navigator.configuration.configuration
+
+    with mock.patch.object(
+        ansible_navigator.configuration.configuration, "error_and_exit_early"
+    ) as mock_method:
+        mock_method.side_effect = Exception("called")
+        with pytest.raises(Exception, match="called"):
+            _application_configuration, _settings_contents = generate_config(params=["inventory"])
+    _args, kwargs = mock_method.call_args
+    assert len(kwargs["errors"]) == 1
+    error = "An inventory is required when using the inventory subcommand"
+    assert kwargs["errors"][0] == error
+
+
+def test_mutual_exclusivity_for_configuration_init(generate_config):
+    """Ensure the configuration cannot be intited with both
+    apply_previous_cli_entries and save_as_intitial"""
+    with pytest.raises(ValueError, match="cannot be used with"):
+        Configuration(
+            params=None,
+            application_configuration=None,
+            save_as_intitial=True,
+            apply_previous_cli_entries=["all"],
+        )

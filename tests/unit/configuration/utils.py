@@ -25,7 +25,11 @@ def _generate_config(params=None, setting_file_name=None):
     if setting_file_name:
         settings_file_path = os.path.join(TEST_FIXTURE_DIR, setting_file_name)
         with open(settings_file_path) as file:
-            settings_contents = yaml.load(file, Loader=Loader)
+            try:
+                settings_contents = yaml.load(file, Loader=Loader)
+            except yaml.parser.ParserError:
+                # let the config subsystem catch the invalid yaml file
+                settings_contents = {}
     else:
         settings_file_path = None
         settings_contents = {}

@@ -86,7 +86,7 @@ class Configuration:
             with open(self._settings_file_path, "r") as config_fh:
                 try:
                     config = yaml.load(config_fh, Loader=SafeLoader)
-                except yaml.scanner.ScannerError:
+                except (yaml.scanner.ScannerError, yaml.parser.ParserError):
                     msg = f"Settings file found {self._settings_file_path}, but failed to load it."
                     self._errors.append(msg)
                     return
