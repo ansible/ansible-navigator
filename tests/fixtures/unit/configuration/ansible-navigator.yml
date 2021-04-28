@@ -1,8 +1,9 @@
 ---
 ansible-navigator:
+  app: run
   cmdline: "--forks 15"
   editor:
-    command: test_command
+    command: vim_from_setting
     console: False
   documentation:
     plugin:

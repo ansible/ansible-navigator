@@ -1,5 +1,16 @@
 """ data used by the adjacent tests
+
+Note: Some of these are defined as dictionaries for ease but all should be frozen
+before use so they are immutable within the tests
 """
+
+
+def d2f(dict):
+    """turn the data dictionary into a frozenset
+    so they are immutable
+    """
+    return tuple(dict.items())
+
 
 BASE_SHORT_CLI = """
 --ecmd vim_base
@@ -31,18 +42,20 @@ BASE_LONG_CLI = """
 --set-environment-variable E2=V2
 """
 
-BASE_EXPECTED = {
-    "editor_command": "vim_base",
-    "editor_console": True,
-    "execution_environment": False,
-    "execution_environment_image": "test_image",
-    "log_file": "/tmp/app.log",
-    "log_level": "warning",
-    "mode": "stdout",
-    "osc4": False,
-    "pass_environment_variable": ["FOO", "BAR"],
-    "set_environment_variable": {"E1": "V1", "E2": "V2"},
-}
+BASE_EXPECTED = d2f(
+    {
+        "editor_command": "vim_base",
+        "editor_console": True,
+        "execution_environment": False,
+        "execution_environment_image": "test_image",
+        "log_file": "/tmp/app.log",
+        "log_level": "warning",
+        "mode": "stdout",
+        "osc4": False,
+        "pass_environment_variable": ["FOO", "BAR"],
+        "set_environment_variable": {"E1": "V1", "E2": "V2"},
+    }
+)
 
 
 CLI_DATA_COLLECTIONS = [
@@ -140,15 +153,21 @@ CLI_DATA_RUN = [
 ]
 
 
-CLI_DATA = (
-    CLI_DATA_COLLECTIONS  # type: ignore
-    + CLI_DATA_CONFIG  # type: ignore
-    + CLI_DATA_DOC  # type: ignore
-    + CLI_DATA_INVENTORY  # type: ignore
-    + CLI_DATA_INVENTORY_COLUMNS  # type: ignore
-    + CLI_DATA_LOAD  # type: ignore
-    + CLI_DATA_RUN  # type: ignore
-)
+def cli_data():
+    aggregated = (
+        CLI_DATA_COLLECTIONS  # type: ignore
+        + CLI_DATA_CONFIG  # type: ignore
+        + CLI_DATA_DOC  # type: ignore
+        + CLI_DATA_INVENTORY  # type: ignore
+        + CLI_DATA_INVENTORY_COLUMNS  # type: ignore
+        + CLI_DATA_LOAD  # type: ignore
+        + CLI_DATA_RUN  # type: ignore
+    )
+    frozen = [(cmd, d2f(expected)) for cmd, expected in aggregated]
+    return frozen
+
+
+CLI_DATA = cli_data()
 
 ENVVAR_DATA = [
     ("app", "doc", "doc"),

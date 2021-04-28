@@ -2,6 +2,7 @@
 """
 
 from argparse import ArgumentParser
+from argparse import _SubParsersAction
 from argparse import SUPPRESS
 
 from typing import Any
@@ -23,7 +24,7 @@ class Parser:
         self._base_parser = ArgumentParser(add_help=False)
         self._configure_base()
         self.parser = ArgumentParser(parents=[self._base_parser])
-        self._subparsers = self.parser.add_subparsers(title="Subcommands", dest="app")
+        self._subparsers = self._add_subparsers()
         self._configure_subparsers()
 
     @staticmethod
@@ -60,6 +61,17 @@ class Parser:
                 parser.add_argument(entry.name, **kwargs)
             else:
                 parser.add_argument(short, long, **kwargs)
+
+    def _add_subparsers(self) -> _SubParsersAction:
+        subcommand_value = [
+            entry for entry in self._config.entries if entry.subcommand_value is True
+        ]
+        if len(subcommand_value) == 0:
+            raise ValueError("No entry with subparser value defined")
+        if len(subcommand_value) > 1:
+            raise ValueError("Multiple entries with subparser value defined")
+        entry = subcommand_value[0]
+        return self.parser.add_subparsers(title=entry.short_description, dest=entry.name)
 
     def _configure_base(self) -> None:
         for entry in self._config.entries:

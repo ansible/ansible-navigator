@@ -52,7 +52,7 @@ ApplicationConfiguration = Config(
     entries=[
         Entry(
             name="app",
-            short_description="Placeholder for subcommand name",
+            short_description="Subcommands",
             subcommand_value=True,
             value=EntryValue(default="welcome"),
         ),

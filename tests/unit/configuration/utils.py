@@ -5,7 +5,6 @@ from copy import deepcopy
 
 import pytest
 
-from ansible_navigator.configuration import ApplicationConfiguration
 from ansible_navigator.configuration import Configuration
 
 from ansible_navigator.configuration.definitions import Entry
@@ -31,7 +30,9 @@ def _generate_config(params=None, setting_file_name=None):
         settings_file_path = None
         settings_contents = {}
 
-    application_configuration = deepcopy(ApplicationConfiguration)
+    from ansible_navigator.configuration import ApplicationConfiguration
+
+    application_configuration = ApplicationConfiguration
     configuration = Configuration(
         application_configuration=application_configuration,
         params=params,
@@ -44,16 +45,6 @@ def _generate_config(params=None, setting_file_name=None):
 @pytest.fixture(name="generate_config")
 def fixture_generate_config():
     return _generate_config
-
-
-def generate_params_from_entries(setting_file_name):
-    """Generate params from a configurations' entries"""
-    application_configuration, settings_contents = _generate_config(
-        setting_file_name=setting_file_name
-    )
-    argvalues = [(entry, settings_contents) for entry in application_configuration.entries]
-    ids = [entry.name for entry in application_configuration.entries]
-    return argvalues, ids
 
 
 def id_for_base(val):
