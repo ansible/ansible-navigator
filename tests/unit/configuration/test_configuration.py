@@ -159,10 +159,11 @@ def test_all_entries_reflect_cli(
             assert entry.value.source.name == source_other, entry
 
 
-def test_apply_previous_cli(generate_config):
-    params = "doc shell --ee False --eei test_image"
+def test_apply_previous_cli_all(generate_config):
+    params = "doc shell --ee False --eei test_image --forks 15"
     expected = {
         "app": "doc",
+        "cmdline": ["--forks", "15"],
         "execution_environment": False,
         "execution_environment_image": "test_image",
     }
@@ -184,13 +185,57 @@ def test_apply_previous_cli(generate_config):
     configuration = Configuration(
         application_configuration=application_configuration,
         params=params.split(),
-        apply_previous_cli=True,
+        apply_previous_cli_entries=["all"],
     )
     configuration.configure()
     for key, value in expected.items():
         if key != "app":
             assert application_configuration.entry(key).value.current == value
             assert application_configuration.entry(key).value.source.name == "PREVIOUS_CLI"
+
+
+def test_apply_previous_cli_some(generate_config):
+    params = "doc shell --ee False --eei test_image --forks 15"
+    application_configuration = deepcopy(ApplicationConfiguration)
+    configuration = Configuration(
+        application_configuration=application_configuration,
+        params=params.split(),
+        save_as_intitial=True,
+    )
+
+    configuration.configure()
+
+    expected = {
+        "app": "doc",
+        "cmdline": ["--forks", "15"],
+        "execution_environment": False,
+        "execution_environment_image": "test_image",
+    }
+    for key, value in expected.items():
+        assert application_configuration.entry(key).value.current == value
+        assert application_configuration.entry(key).value.source.name == "USER_CLI"
+
+    assert isinstance(application_configuration.initial, Config)
+
+    params = "doc"
+    configuration = Configuration(
+        application_configuration=application_configuration,
+        params=params.split(),
+        apply_previous_cli_entries=["execution_environment", "execution_environment_image"],
+    )
+    configuration.configure()
+
+    expected = {
+        "app": "doc",
+        "execution_environment": False,
+        "execution_environment_image": "test_image",
+    }
+    for key, value in expected.items():
+        if key != "app":
+            assert application_configuration.entry(key).value.current == value
+            assert application_configuration.entry(key).value.source.name == "PREVIOUS_CLI"
+    assert application_configuration.cmdline == []
+    assert application_configuration.entry("cmdline").value.source.name == "DEFAULT_CFG"
 
 
 def test_editor_command_from_editor(generate_config):

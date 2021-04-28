@@ -1,7 +1,6 @@
 ---
 ansible-navigator:
   cmdline: "--forks 15"
-  container-engine: podman
   editor:
     command: test_command
     console: False
@@ -9,8 +8,19 @@ ansible-navigator:
     plugin:
       name: shell
       type: become
-  execution-environment-image: test_image
-  execution-environment: False
+  execution-environment:
+    container-engine: podman
+    enabled: False
+    environment-variables:
+      pass:
+        - ONE
+        - TWO
+        - THREE
+      set:
+        KEY1: VALUE1
+        KEY2: VALUE2
+        KEY3: VALUE3
+    image: test_image
   inventories:
     - /tmp/test_inventory.yml
   inventory-columns:
@@ -22,13 +32,5 @@ ansible-navigator:
     file: /tmp/log.txt
   mode: stdout
   osc4: False
-  pass-environment-variables:
-    - ONE
-    - TWO
-    - THREE
   playbook: /tmp/test_playbook.yml
   playbook-artifact: test_artifact.json
-  set-environment-variables:
-    KEY1: VALUE1
-    KEY2: VALUE2
-    KEY3: VALUE3

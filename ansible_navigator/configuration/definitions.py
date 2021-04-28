@@ -51,7 +51,7 @@ class Entry(SimpleNamespace):
     """One entry in the configuration"""
 
     name: str
-    description: str
+    short_description: str
     value: EntryValue
 
     choices: List = []

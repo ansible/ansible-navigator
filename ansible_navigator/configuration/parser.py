@@ -30,7 +30,7 @@ class Parser:
     def generate_argument(entry) -> Tuple[Any, Union[Any, str, None], Dict[str, Any]]:
         """Generate an argparse argument"""
         kwargs = {}
-        kwargs["help"] = entry.description
+        kwargs["help"] = entry.short_description
         if entry.value.default is not Sentinel:
             kwargs["help"] += f" (default: {entry.value.default})"
         kwargs["default"] = SUPPRESS

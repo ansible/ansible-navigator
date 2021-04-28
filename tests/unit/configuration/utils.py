@@ -68,6 +68,7 @@ def id_for_base(val):
 
 
 def id_for_cli(val):
+    """Generate an id for a cli entry"""
     if isinstance(val, str):
         return val
     return ""
@@ -81,6 +82,7 @@ def id_for_name(val):
 
 
 def id_for_settings(val):
+    """Generate an id for a settings entry"""
     if val in ["DEFAULT_CFG", "USER_CFG"]:
         return f"others={val}"
     if val == "ansible-navigator_empty.yml":

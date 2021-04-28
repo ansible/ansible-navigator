@@ -4,7 +4,9 @@ import os
 
 from copy import deepcopy
 from typing import List
+from typing import Union
 
+from .definitions import Config
 from .definitions import EntrySource
 from .definitions import Message
 from .parser import Parser
@@ -21,23 +23,33 @@ class Configuration:
 
     def __init__(
         self,
-        params,
-        application_configuration,
-        apply_previous_cli=False,
-        save_as_intitial=False,
-        settings_file_path=None,
+        params: List[str],
+        application_configuration: Config,
+        apply_previous_cli_entries: Union[List, None] = None,
+        save_as_intitial: bool = False,
+        settings_file_path: str = None,
     ):
-        self._apply_previous_cli = apply_previous_cli
+        """
+        :param params: A list of parameters ie ['-x', 'value']
+        :param application_configuration: An application specific Config object
+        :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
+                                           is not a USER_CLI sourced value, a list of entry names
+                                           ['all'] will apply all previous
+        :param save_as_initial: Save the resulting configuration as the 'initial' configuration
+                                The 'initial' will be used as a source for apply_previous_cli
+        :param settings_file_path: The full path to a settings file
+        """
+        self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
-        self._errors = []
-        self._messages = []
+        self._errors: List[str] = []
+        self._messages: List[Message] = []
         self._params = params
         self._save_as_intitial = save_as_intitial
         self._settings_file_path = settings_file_path
         self._sanity_check()
 
     def _sanity_check(self) -> None:
-        if self._apply_previous_cli and self._save_as_intitial:
+        if self._apply_previous_cli_entries is not None and self._save_as_intitial:
             raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
 
     def configure(self) -> List[Message]:
@@ -57,8 +69,7 @@ class Configuration:
         if self._errors:
             error_and_exit_early(errors=self._errors)
 
-        if self._apply_previous_cli:
-            self._apply_previous_cli_to_current()
+        self._apply_previous_cli_to_current()
 
         if self._save_as_intitial:
             self._config.initial = deepcopy(self._config)
@@ -133,11 +144,27 @@ class Configuration:
                     self._errors.append(entry.invalid_choice)
 
     def _apply_previous_cli_to_current(self) -> None:
-        if self._config.initial is None:
-            raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
-        for current_entry in self._config.entries:
-            if current_entry.cli_parameters and current_entry.value.source.name != "USER_CLI":
-                previous_entry = self._config.initial.entry(current_entry.name)
-                if previous_entry.value.source.name == "USER_CLI":
-                    current_entry.value.current = previous_entry.value.current
-                    current_entry.value.source = EntrySource.PREVIOUS_CLI
+        # pylint: disable=too-many-nested-blocks
+        """
+        1) for each current entry
+        2) that isn't the subcommand holder
+        3) and the source is an EntrySource
+        4) and wasn't set by the current cli (USER_CLI)
+        5) get the previous entry
+        6) if it was set by the previous cli (USER_CLI)
+        7) replace the current with the previous
+        """
+        if self._apply_previous_cli_entries is not None:
+            if self._config.initial is None:
+                raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
+            for current_entry in self._config.entries:
+                if current_entry.subcommand_value is not True:
+                    if isinstance(current_entry.value.source, EntrySource):
+                        if current_entry.value.source.name != "USER_CLI":
+                            if self._apply_previous_cli_entries == ["all"] or (
+                                current_entry.name in self._apply_previous_cli_entries
+                            ):
+                                previous_entry = self._config.initial.entry(current_entry.name)
+                                if previous_entry.value.source.name == "USER_CLI":
+                                    current_entry.value.current = previous_entry.value.current
+                                    current_entry.value.source = EntrySource.PREVIOUS_CLI

@@ -375,7 +375,7 @@ def error_and_exit_early(msg=None, errors=None) -> NoReturn:
 
 
 def oxfordcomma(listed, condition):
-    """format a list into a sentance"""
+    """Format a list into a sentance"""
     listed = [f"'{str(entry)}'" for entry in listed]
     if len(listed) == 0:
         return ""
@@ -384,3 +384,22 @@ def oxfordcomma(listed, condition):
     if len(listed) == 2:
         return f"{listed[0]} {condition} {listed[1]}"
     return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
+
+
+def abs_user_path(fpath):
+    """Resolve a path"""
+    return os.path.abspath(os.path.expanduser(fpath))
+
+
+def str2bool(value: Any) -> bool:
+    """Convert some commonly used values
+    to a boolean
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        if value.lower() in ("yes", "true"):
+            return True
+        if value.lower() in ("no", "false"):
+            return False
+    raise ValueError

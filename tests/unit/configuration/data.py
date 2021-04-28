@@ -62,6 +62,7 @@ CLI_DATA_DOC = [
 ]
 CLI_DATA_INVENTORY = [
     ("inventory -i /tmp/inv1.yml", {"app": "inventory", "inventory": ["/tmp/inv1.yml"]}),
+    ("inventory -i host1,host2", {"app": "inventory", "inventory": ["host1,host2"]}),
     (
         "inventory -i /tmp/inv1.yml -i /tmp/inv2.yml",
         {"app": "inventory", "inventory": ["/tmp/inv1.yml", "/tmp/inv2.yml"]},
