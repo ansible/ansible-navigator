@@ -4,6 +4,7 @@ import os
 
 from copy import deepcopy
 from typing import List
+from typing import Tuple
 from typing import Union
 
 from .definitions import ApplicationConfiguration
@@ -11,7 +12,6 @@ from .definitions import EntrySource
 from .definitions import Message
 from .parser import Parser
 
-from ..utils import error_and_exit_early
 from ..yaml import SafeLoader
 from ..yaml import yaml
 
@@ -55,29 +55,37 @@ class Configurator:
             if self._config.initial is None:
                 raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
 
-    def configure(self) -> List[Message]:
+    def configure(self) -> Tuple[List[Message], List[str]]:
         """Perform the configuration"""
         self._apply_defaults()
         self._apply_settings_file()
         self._apply_environment_variables()
         self._apply_cli_params()
         if self._errors:
-            error_and_exit_early(errors=self._errors)
+            return self._messages, self._errors
 
         self._post_process()
         if self._errors:
-            error_and_exit_early(errors=self._errors)
+            return self._messages, self._errors
 
         self._check_choices()
         if self._errors:
-            error_and_exit_early(errors=self._errors)
+            return self._messages, self._errors
 
         self._apply_previous_cli_to_current()
 
         if self._save_as_intitial:
             self._config.initial = deepcopy(self._config)
 
-        return self._messages
+        return self._messages, self._errors
+
+    def _argparse_error_handler(self, message: str):
+        """callback for argparse error handling to prevent sys.exit
+
+        :param message: A message from the parser
+        :type message: str
+        """
+        self._errors.append(message)
 
     def _apply_defaults(self) -> None:
         for entry in self._config.entries:
@@ -122,7 +130,11 @@ class Configurator:
 
     def _apply_cli_params(self) -> None:
         parser = Parser(self._config).parser
-        args, cmdline = parser.parse_known_args(self._params)
+        setattr(parser, "error", self._argparse_error_handler)
+        parser_response = parser.parse_known_args(self._params)
+        if parser_response is None:
+            return
+        args, cmdline = parser_response
         if cmdline:
             self._config.entry("cmdline").value.current = cmdline
             self._config.entry("cmdline").value.source = EntrySource.USER_CLI
