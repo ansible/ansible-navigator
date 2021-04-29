@@ -163,12 +163,16 @@ class TmuxSession:
         cwd=None,
         session_name="ansible-navigator-integration-test",
         setup_commands=None,
+        pane_height=20,
+        pane_width=200
     ) -> None:
         self._window_name = window_name
         self._config_path = config_path
         self._session_name = session_name
         self._cwd = cwd
         self._setup_commands = setup_commands or []
+        self._pane_height = pane_height
+        self._pane_width = pane_width
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -186,8 +190,8 @@ class TmuxSession:
         # split vertical
         self._pane.split_window(vertical=False, attach=False)
         # attached to upper left
-        self._pane.set_height(20)
-        self._pane.set_width(200)
+        self._pane.set_height(self._pane_height)
+        self._pane.set_width(self._pane_width)
         # do this here so it goes away with the tmux shell session
         self._pane.send_keys(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
 
