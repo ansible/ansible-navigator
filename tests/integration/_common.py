@@ -163,12 +163,16 @@ class TmuxSession:
         cwd=None,
         session_name="ansible-navigator-integration-test",
         setup_commands=None,
+        pane_height=20,
+        pane_width=200,
     ) -> None:
         self._window_name = window_name
         self._config_path = config_path
         self._session_name = session_name
         self._cwd = cwd
         self._setup_commands = setup_commands or []
+        self._pane_height = pane_height
+        self._pane_width = pane_width
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -186,8 +190,8 @@ class TmuxSession:
         # split vertical
         self._pane.split_window(vertical=False, attach=False)
         # attached to upper left
-        self._pane.set_height(20)
-        self._pane.set_width(200)
+        self._pane.set_height(self._pane_height)
+        self._pane.set_width(self._pane_width)
         # do this here so it goes away with the tmux shell session
         self._pane.send_keys(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
 
@@ -213,9 +217,9 @@ class TmuxSession:
         return showing
 
 
-def update_fixtures(request, index, received_output, comment):
+def update_fixtures(request, index, received_output, comment, testname=None):
     """Used by action plugins to generate the fixtures"""
-    dir_path, file_name = fixture_path_from_request(request, index)
+    dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
     os.makedirs(dir_path, exist_ok=True)
     fixture = {
         "name": request.node.name,
@@ -227,10 +231,13 @@ def update_fixtures(request, index, received_output, comment):
         json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
 
 
-def fixture_path_from_request(request, index):
+def fixture_path_from_request(request, index, testname=None):
     """build a dir and file path for a test"""
     path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
-    dir_path = f"{defaults.FIXTURES_DIR}/{path_in_fixture_dir}/{request.node.originalname}"
+    dir_path = os.path.join(defaults.FIXTURES_DIR, path_in_fixture_dir, request.node.originalname)
+    if testname:
+        dir_path = os.path.join(dir_path, testname)
+
     file_name = f"{index}.json"
     return dir_path, file_name
 
@@ -241,7 +248,7 @@ def container_runtime_or_fail():
     # pylint: disable=import-outside-toplevel
     import subprocess
 
-    for runtime in ("docker", "podman"):
+    for runtime in ("podman", "docker"):
         try:
             subprocess.run([runtime, "-v"], check=False)
             return runtime

@@ -1,0 +1,27 @@
+{
+    "name": "test[1-:doc testorg.coll_1.lookup_1 -t lookup-move to lookup plugin doc screen-lookup_doc_pass-expected_in_output1]",
+    "index": 1,
+    "comment": "move to lookup plugin doc screen",
+    "output": [
+        " 0│---                                                                                                                                                                                                 ▒",
+        " 1│testorg.coll_1.lookup_1:                                                                                                                                                                            ▒",
+        " 2│  doc:                                                                                                                                                                                              ▒",
+        " 3│    author: test                                                                                                                                                                                    ▒",
+        " 4│    collection: testorg.coll_1                                                                                                                                                                      ▒",
+        " 5│    description:                                                                                                                                                                                    ▒",
+        " 6│    - This is test lookup plugin                                                                                                                                                                    ▒",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 8│    name: lookup_1                                                                                                                                                                                  ▒",
+        " 9│    notes:",
+        "10│    - This is a dummy lookup plugin",
+        "11│    options:",
+        "12│      bar:",
+        "13│        default: candidate",
+        "14│        description:",
+        "15│        - Dummy option I(bar)",
+        "16│        type: str",
+        "17│      foo:",
+        "18│        description:",
+        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+    ]
+}
