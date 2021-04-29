@@ -109,7 +109,7 @@ def test_invalid_choice_not_set():
 
 
 def test_cutom_nargs_for_postional():
-    """Ensure a Config without a subparse entry fails"""
+    """Ensure a nargs for a positional are carried forward"""
     TestConfig = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
@@ -137,7 +137,7 @@ def test_cutom_nargs_for_postional():
 
 
 def test_apply_cli_source_not_set():
-    """Ensure a Config without a subparse entry fails"""
+    """Ensure a Config iterates correctly"""
     TestConfig = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=NavigatorPostProcessor(),

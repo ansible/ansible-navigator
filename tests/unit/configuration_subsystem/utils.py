@@ -3,11 +3,18 @@
 import os
 from copy import deepcopy
 
+from typing import Dict
+from typing import List
+from typing import NamedTuple
+
 import pytest
 
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import Entry
+from ansible_navigator.configuration_subsystem.definitions import Message
+
 
 from ansible_navigator.yaml import yaml
 from ansible_navigator.yaml import Loader
@@ -17,7 +24,14 @@ from ...defaults import FIXTURES_DIR
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
 
 
-def _generate_config(params=None, setting_file_name=None):
+class GenerateConfigResponse(NamedTuple):
+    messages: List[Message]
+    errors: List[str]
+    application_configuration: ApplicationConfiguration
+    settings_contents: Dict
+
+
+def _generate_config(params=None, setting_file_name=None) -> GenerateConfigResponse:
     """Generate a configuration given a settings file"""
     if params is None:
         params = []
@@ -31,7 +45,7 @@ def _generate_config(params=None, setting_file_name=None):
                 # let the config subsystem catch the invalid yaml file
                 settings_contents = {}
     else:
-        settings_file_path = None
+        settings_file_path = ""
         settings_contents = {}
 
     from ansible_navigator.configuration_subsystem.navigator_configuration import (
@@ -42,10 +56,15 @@ def _generate_config(params=None, setting_file_name=None):
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params,
-        settings_file_path=settings_file_path,
+        settings_file_path=settings_file_path or None,
     )
-    configurator.configure()
-    return application_configuration, settings_contents
+    messages, errors = configurator.configure()
+    return GenerateConfigResponse(
+        messages=messages,
+        errors=errors,
+        application_configuration=application_configuration,
+        settings_contents=settings_contents,
+    )
 
 
 @pytest.fixture(name="generate_config")
