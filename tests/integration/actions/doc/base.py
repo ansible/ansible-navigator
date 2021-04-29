@@ -12,7 +12,7 @@ from ..._common import TmuxSession
 
 from ....defaults import FIXTURES_COLLECTION_DIR
 
-
+from pprint import pprint
 class BaseClass:
     """base class for interactive config tests"""
 
@@ -51,6 +51,8 @@ class BaseClass:
         # mask out some config that is subject to change each run
         if expected_in_output:
             received_output = "\n".join(received_output)
+            pprint(f"---------out----------:\n{out}")
+            pprint(f"---------expected_in_output----------:\n{expected_in_output}")
             for out in expected_in_output:
                 assert out in received_output
         else:
@@ -71,5 +73,6 @@ class BaseClass:
             dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
             with open(f"{dir_path}/{file_name}") as infile:
                 expected_output = json.load(infile)["output"]
-
+            pprint(f"---------expected_output----------:\n{expected_output}")
+            pprint(f"---------updated_received_output----------:\n{updated_received_output}")
             assert expected_output == updated_received_output
