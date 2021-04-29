@@ -10,7 +10,7 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from .definitions import Config
+from .definitions import ApplicationConfiguration
 
 from ..utils import Sentinel
 
@@ -19,7 +19,7 @@ class Parser:
     """Build the args"""
 
     # pylint: disable=too-few-public-methods
-    def __init__(self, config: Config):
+    def __init__(self, config: ApplicationConfiguration):
         self._config = config
         self._base_parser = ArgumentParser(add_help=False)
         self._configure_base()

@@ -5,16 +5,16 @@ from copy import deepcopy
 
 import pytest
 
-from ansible_navigator.configuration import Configuration
+from ansible_navigator.configuration_subsystem.configurator import Configurator
 
-from ansible_navigator.configuration.definitions import Entry
+from ansible_navigator.configuration_subsystem.definitions import Entry
 
 from ansible_navigator.yaml import yaml
 from ansible_navigator.yaml import Loader
 
 from ...defaults import FIXTURES_DIR
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration")
+TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
 
 
 def _generate_config(params=None, setting_file_name=None):
@@ -34,15 +34,17 @@ def _generate_config(params=None, setting_file_name=None):
         settings_file_path = None
         settings_contents = {}
 
-    from ansible_navigator.configuration import ApplicationConfiguration
+    from ansible_navigator.configuration_subsystem.navigator_configuration import (
+        NavigatorConfiguration,
+    )
 
-    application_configuration = ApplicationConfiguration
-    configuration = Configuration(
+    application_configuration = NavigatorConfiguration
+    configurator = Configurator(
         application_configuration=application_configuration,
         params=params,
         settings_file_path=settings_file_path,
     )
-    configuration.configure()
+    configurator.configure()
     return application_configuration, settings_contents
 
 

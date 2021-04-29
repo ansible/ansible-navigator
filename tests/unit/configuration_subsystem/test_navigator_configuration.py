@@ -7,10 +7,13 @@ from unittest import mock
 
 import pytest
 
-from ansible_navigator.configuration.application_configuration import generate_editor_command
-from ansible_navigator.configuration import ApplicationConfiguration
-from ansible_navigator.configuration import Configuration
-from ansible_navigator.configuration.definitions import Config
+from ansible_navigator.configuration_subsystem.configurator import Configurator
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+
+from ansible_navigator.configuration_subsystem.navigator_configuration import (
+    generate_editor_command,
+)
+from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
 
 from .data import BASE_EXPECTED
@@ -31,7 +34,7 @@ from ...defaults import FIXTURES_DIR
 
 def test_no_duplicate_names():
     """Ensure no name is duplicated"""
-    values = Counter([entry.name for entry in ApplicationConfiguration.entries])
+    values = Counter([entry.name for entry in NavigatorConfiguration.entries])
     assert not any(k for (k, v) in values.items() if v > 1)
 
 
@@ -40,7 +43,7 @@ def test_no_duplicate_shorts():
     values = Counter(
         [
             entry.cli_parameters.short
-            for entry in ApplicationConfiguration.entries
+            for entry in NavigatorConfiguration.entries
             if entry.cli_parameters is not None
         ]
     )
@@ -49,30 +52,30 @@ def test_no_duplicate_shorts():
 
 def test_no_missing_envvar_data():
     """Ensure the ENVVAR_DATA covers all entries"""
-    entry_names = [entry.name for entry in ApplicationConfiguration.entries]
+    entry_names = [entry.name for entry in NavigatorConfiguration.entries]
     data_names = [entry[0] for entry in ENVVAR_DATA]
     assert entry_names == data_names
 
 
 def test_entries_are_alphbetical():
     """Ensure entries are alphabetical"""
-    values = [entry.name for entry in ApplicationConfiguration.entries]
+    values = [entry.name for entry in NavigatorConfiguration.entries]
     assert values == sorted(values)
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
+@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_no_dash_in_name(entry):
     """Ensure no names contain a -"""
     assert "-" not in entry.name
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
+@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_no_dash_in_environment_variable(entry):
     """Ensure no environment variable has a dash"""
     assert "-" not in entry.environment_variable("ansible_navigator")
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
+@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_no_short_long_if_postional(entry):
     """Ensure no postional argument has a short or long set"""
     if hasattr(entry, "cli_arguments") and entry.cli_parameters.positional:
@@ -80,14 +83,14 @@ def test_no_short_long_if_postional(entry):
         assert entry.long_override is None
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
+@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_no_underscore_in_path(entry):
     """Ensure no long override has an _"""
     if entry.settings_file_path_override is not None:
         assert "_" not in entry.settings_file_path_override
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
+@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_all_entries_reflect_default(generate_config, entry):
     """Ensure all entries are set to a default value"""
     application_configuration, _settings_contents = generate_config()
@@ -114,7 +117,7 @@ def test_all_entries_reflect_cli_given_envvars(generate_config, base, cli_entry,
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     envvars = {}
-    for entry in ApplicationConfiguration.entries:
+    for entry in NavigatorConfiguration.entries:
         envvar_name = entry.environment_variable("ansible_navigator")
         envvar_value = [value[1] for value in ENVVAR_DATA if value[0] == entry.name]
         assert len(envvar_value) == 1, entry.name
@@ -177,7 +180,7 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     envvars = {}
-    for entry in ApplicationConfiguration.entries:
+    for entry in NavigatorConfiguration.entries:
         envvar_name = entry.environment_variable("ansible_navigator")
         envvar_value = [value[1] for value in ENVVAR_DATA if value[0] == entry.name]
         assert len(envvar_value) == 1, entry.name
@@ -206,7 +209,7 @@ def test_all_entries_reflect_envvar_given_settings(
     even though settings file has been provided, the others
     should by default or user cfg
     """
-    environment_variable = ApplicationConfiguration.entry(entry).environment_variable(
+    environment_variable = NavigatorConfiguration.entry(entry).environment_variable(
         "ansible_navigator"
     )
     with mock.patch.dict(os.environ, {environment_variable: str(value)}):
@@ -219,7 +222,7 @@ def test_all_entries_reflect_envvar_given_settings(
             assert other_entry.value.source.name == source_other, other_entry
 
 
-@pytest.mark.parametrize("entry", ApplicationConfiguration.entries, ids=id_for_name)
+@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_all_entries_reflect_settings_given_settings(generate_config, entry):
     """Ensure all entries are set to an entry in a settings file"""
     application_configuration, settings_contents = generate_config(
@@ -244,26 +247,26 @@ def test_apply_previous_cli_all(generate_config):
         "execution_environment_image": "test_image",
     }
 
-    application_configuration = deepcopy(ApplicationConfiguration)
-    configuration = Configuration(
+    application_configuration = deepcopy(NavigatorConfiguration)
+    configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
         save_as_intitial=True,
     )
-    configuration.configure()
+    configurator.configure()
     for key, value in expected.items():
         assert application_configuration.entry(key).value.current == value
         assert application_configuration.entry(key).value.source.name == "USER_CLI"
 
-    assert isinstance(application_configuration.initial, Config)
+    assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     params = "doc"
-    configuration = Configuration(
+    configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
         apply_previous_cli_entries=["all"],
     )
-    configuration.configure()
+    configurator.configure()
     for key, value in expected.items():
         if key != "app":
             assert application_configuration.entry(key).value.current == value
@@ -272,14 +275,14 @@ def test_apply_previous_cli_all(generate_config):
 
 def test_apply_previous_cli_some(generate_config):
     params = "doc shell --ee False --eei test_image --forks 15"
-    application_configuration = deepcopy(ApplicationConfiguration)
-    configuration = Configuration(
+    application_configuration = deepcopy(NavigatorConfiguration)
+    configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
         save_as_intitial=True,
     )
 
-    configuration.configure()
+    configurator.configure()
 
     expected = {
         "app": "doc",
@@ -291,15 +294,15 @@ def test_apply_previous_cli_some(generate_config):
         assert application_configuration.entry(key).value.current == value
         assert application_configuration.entry(key).value.source.name == "USER_CLI"
 
-    assert isinstance(application_configuration.initial, Config)
+    assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     params = "doc"
-    configuration = Configuration(
+    configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
         apply_previous_cli_entries=["execution_environment", "execution_environment_image"],
     )
-    configuration.configure()
+    configurator.configure()
 
     expected = {
         "app": "doc",
@@ -318,15 +321,15 @@ def test_apply_previous_cli_mixed(generate_config):
     """Ensure a mixed config tests pass"""
 
     params = "doc shell --ee False --eei test_image --forks 15"
-    application_configuration = deepcopy(ApplicationConfiguration)
+    application_configuration = deepcopy(NavigatorConfiguration)
 
-    configuration = Configuration(
+    configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
         save_as_intitial=True,
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
-        configuration.configure()
+        configurator.configure()
 
     expected = {
         "app": "doc",
@@ -346,16 +349,16 @@ def test_apply_previous_cli_mixed(generate_config):
         == "ENVIRONMENT_VARIABLE"
     )
 
-    assert isinstance(application_configuration.initial, Config)
+    assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     params = "doc --eei different_image"
-    configuration = Configuration(
+    configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
         apply_previous_cli_entries=["all"],
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES": "ENV1=VAL1"}):
-        configuration.configure()
+        configurator.configure()
 
     # ee is carried forward because it was not in the command
     assert application_configuration.execution_environment is False
@@ -389,7 +392,7 @@ def test_editor_command_from_editor(generate_config):
     """Ensure the editor_command defaults to EDITOR if set"""
     with mock.patch.dict(os.environ, {"EDITOR": "nano"}):
         # since this was already loaded, force it
-        ApplicationConfiguration.entry("editor_command").value.default = generate_editor_command()
+        NavigatorConfiguration.entry("editor_command").value.default = generate_editor_command()
         application_configuration, _settings_contents = generate_config()
         assert application_configuration.editor_command == "nano {filename}"
 
@@ -397,10 +400,10 @@ def test_editor_command_from_editor(generate_config):
 def test_not_a_bool(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit early for wrong type of value"""
-    import ansible_navigator.configuration.configuration
+    import ansible_navigator.configuration_subsystem.configurator
 
     with mock.patch.object(
-        ansible_navigator.configuration.configuration, "error_and_exit_early"
+        ansible_navigator.configuration_subsystem.configurator, "error_and_exit_early"
     ) as mock_method:
         mock_method.side_effect = Exception("called")
         with pytest.raises(Exception, match="called"):
@@ -419,11 +422,11 @@ def test_not_a_bool(generate_config):
 def test_badly_formatted_envar(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit early for badly formatted set env var"""
-    import ansible_navigator.configuration.configuration
+    import ansible_navigator.configuration_subsystem.configurator
 
     params = "run site.yml --senv TK1:TV1"
     with mock.patch.object(
-        ansible_navigator.configuration.configuration, "error_and_exit_early"
+        ansible_navigator.configuration_subsystem.configurator, "error_and_exit_early"
     ) as mock_method:
         mock_method.side_effect = Exception("called")
         with pytest.raises(Exception, match="called"):
@@ -437,10 +440,10 @@ def test_badly_formatted_envar(generate_config):
 def test_broken_settings_file(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit early for broken settings file"""
-    import ansible_navigator.configuration.configuration
+    import ansible_navigator.configuration_subsystem.configurator
 
     with mock.patch.object(
-        ansible_navigator.configuration.configuration, "error_and_exit_early"
+        ansible_navigator.configuration_subsystem.configurator, "error_and_exit_early"
     ) as mock_method:
         mock_method.side_effect = Exception("called")
         with pytest.raises(Exception, match="called"):
@@ -456,10 +459,10 @@ def test_broken_settings_file(generate_config):
 def test_garbage_settings_file(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit early for garbage settings file"""
-    import ansible_navigator.configuration.configuration
+    import ansible_navigator.configuration_subsystem.configurator
 
     with mock.patch.object(
-        ansible_navigator.configuration.configuration, "error_and_exit_early"
+        ansible_navigator.configuration_subsystem.configurator, "error_and_exit_early"
     ) as mock_method:
         mock_method.side_effect = Exception("called")
         with pytest.raises(Exception, match="called"):
@@ -475,10 +478,10 @@ def test_garbage_settings_file(generate_config):
 def test_inventory_no_inventory(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit early for wrong type of value"""
-    import ansible_navigator.configuration.configuration
+    import ansible_navigator.configuration_subsystem.configurator
 
     with mock.patch.object(
-        ansible_navigator.configuration.configuration, "error_and_exit_early"
+        ansible_navigator.configuration_subsystem.configurator, "error_and_exit_early"
     ) as mock_method:
         mock_method.side_effect = Exception("called")
         with pytest.raises(Exception, match="called"):
@@ -493,7 +496,7 @@ def test_mutual_exclusivity_for_configuration_init(generate_config):
     """Ensure the configuration cannot be intited with both
     apply_previous_cli_entries and save_as_intitial"""
     with pytest.raises(ValueError, match="cannot be used with"):
-        Configuration(
+        Configurator(
             params=None,
             application_configuration=None,
             save_as_intitial=True,
@@ -504,24 +507,24 @@ def test_mutual_exclusivity_for_configuration_init(generate_config):
 def test_apply_before_initial_saved(generate_config):
     """Ensure the apply_previous_cli_entries cant' be used before save_as_intitial"""
     with pytest.raises(ValueError, match="enabled prior to"):
-        Configuration(
+        Configurator(
             params=None,
-            application_configuration=ApplicationConfiguration,
+            application_configuration=NavigatorConfiguration,
             apply_previous_cli_entries=["all"],
         ).configure()
 
 
 @pytest.mark.parametrize(
-    "entry", [entry for entry in ApplicationConfiguration.entries if entry.choices], ids=id_for_name
+    "entry", [entry for entry in NavigatorConfiguration.entries if entry.choices], ids=id_for_name
 )
 def test_poor_choices(generate_config, entry):
     # pylint: disable=import-outside-toplevel
     """Ensure exit early for poor choices"""
-    import ansible_navigator.configuration.configuration
+    import ansible_navigator.configuration_subsystem.configurator
 
     def test(param):
         with mock.patch.object(
-            ansible_navigator.configuration.configuration, "error_and_exit_early"
+            ansible_navigator.configuration_subsystem.configurator, "error_and_exit_early"
         ) as mock_method:
             mock_method.side_effect = Exception("called")
             with pytest.raises(Exception, match="called"):
