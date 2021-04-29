@@ -11,6 +11,7 @@ from typing import Tuple
 from typing import Union
 
 from .definitions import ApplicationConfiguration
+from .definitions import Subset
 
 from ..utils import Sentinel
 
@@ -75,7 +76,8 @@ class Parser:
 
     def _configure_base(self) -> None:
         for entry in self._config.entries:
-            if not entry.subcommands:
+            if entry.subcommands is Subset.ALL:
+                # if not entry.subcommands:
                 self._add_parser(self._base_parser, entry)
 
     def _configure_subparsers(self) -> None:
@@ -87,5 +89,5 @@ class Parser:
                 parents=[self._base_parser],
             )
             for entry in self._config.entries:
-                if subcommand.name in entry.subcommands:
+                if isinstance(entry.subcommands, list) and subcommand.name in entry.subcommands:
                     self._add_parser(parser, entry)
