@@ -4,24 +4,26 @@ configuration
 """
 import pytest
 
-from ansible_navigator.configuration import Configuration
+from ansible_navigator.configuration_subsystem.configurator import Configurator
 
-from ansible_navigator.configuration.application_post_processor import ApplicationPostProcessor
+from ansible_navigator.configuration_subsystem.navigator_post_processor import (
+    NavigatorPostProcessor,
+)
 
-from ansible_navigator.configuration.definitions import CliParameters
-from ansible_navigator.configuration.definitions import Config
-from ansible_navigator.configuration.definitions import Entry
-from ansible_navigator.configuration.definitions import EntryValue
-from ansible_navigator.configuration.definitions import SubCommand
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.configuration_subsystem.definitions import CliParameters
+from ansible_navigator.configuration_subsystem.definitions import Entry
+from ansible_navigator.configuration_subsystem.definitions import EntryValue
+from ansible_navigator.configuration_subsystem.definitions import SubCommand
 
-from ansible_navigator.configuration.parser import Parser
+from ansible_navigator.configuration_subsystem.parser import Parser
 
 
 def test_cmdline_source_not_set():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = Config(
+    TestConfig = ApplicationConfiguration(
         application_name="test_config1",
-        post_processor=ApplicationPostProcessor(),
+        post_processor=NavigatorPostProcessor(),
         subcommands=[
             SubCommand(name="subcommand1", description="subcommand1"),
         ],
@@ -33,15 +35,15 @@ def test_cmdline_source_not_set():
             ),
         ],
     )
-    cfg = Configuration(params=[], application_configuration=TestConfig)
-    cfg._post_process()
-    assert "Completed post processing for cmdline" in cfg._messages[0][1]
-    assert cfg._errors == []
+    configurator = Configurator(params=[], application_configuration=TestConfig)
+    configurator._post_process()
+    assert "Completed post processing for cmdline" in configurator._messages[0][1]
+    assert configurator._errors == []
 
 
 def test_no_subcommand():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = Config(
+    TestConfig = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -50,12 +52,12 @@ def test_no_subcommand():
         entries=[],
     )
     with pytest.raises(ValueError, match="No entry with subparser value defined"):
-        Configuration(params=[], application_configuration=TestConfig).configure()
+        Configurator(params=[], application_configuration=TestConfig).configure()
 
 
 def test_many_subcommand():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = Config(
+    TestConfig = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -77,12 +79,12 @@ def test_many_subcommand():
         ],
     )
     with pytest.raises(ValueError, match="Multiple entries with subparser value defined"):
-        Configuration(params=[], application_configuration=TestConfig).configure()
+        Configurator(params=[], application_configuration=TestConfig).configure()
 
 
 def test_invalid_choice_not_set():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = Config(
+    TestConfig = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -108,7 +110,7 @@ def test_invalid_choice_not_set():
 
 def test_cutom_nargs_for_postional():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = Config(
+    TestConfig = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -136,9 +138,9 @@ def test_cutom_nargs_for_postional():
 
 def test_apply_cli_source_not_set():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = Config(
+    TestConfig = ApplicationConfiguration(
         application_name="test_config1",
-        post_processor=ApplicationPostProcessor(),
+        post_processor=NavigatorPostProcessor(),
         subcommands=[
             SubCommand(name="subcommand1", description="subcommand1"),
         ],
@@ -157,9 +159,9 @@ def test_apply_cli_source_not_set():
         initial=True,
     )
 
-    cfg = Configuration(
+    configurator = Configurator(
         params=[], application_configuration=TestConfig, apply_previous_cli_entries=["all"]
     )
-    cfg._apply_previous_cli_to_current()
-    assert cfg._messages == []
-    assert cfg._errors == []
+    configurator._apply_previous_cli_to_current()
+    assert configurator._messages == []
+    assert configurator._errors == []

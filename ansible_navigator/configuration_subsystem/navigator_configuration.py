@@ -2,12 +2,13 @@
 """
 import os
 
-from .application_post_processor import ApplicationPostProcessor
-from .definitions import Config
+from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import SubCommand
 from .definitions import Entry
 from .definitions import EntryValue
+
+from .navigator_post_processor import NavigatorPostProcessor
 
 from ..utils import abs_user_path
 from ..utils import oxfordcomma
@@ -38,9 +39,9 @@ PLUGIN_TYPES = (
     "vars",
 )
 
-ApplicationConfiguration = Config(
+NavigatorConfiguration = ApplicationConfiguration(
     application_name="ansible-navigator",
-    post_processor=ApplicationPostProcessor(),
+    post_processor=NavigatorPostProcessor(),
     subcommands=[
         SubCommand(name="collections", description="Explore available collections"),
         SubCommand(name="config", description="Explore the current ansible configuration"),

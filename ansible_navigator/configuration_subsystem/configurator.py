@@ -6,7 +6,7 @@ from copy import deepcopy
 from typing import List
 from typing import Union
 
-from .definitions import Config
+from .definitions import ApplicationConfiguration
 from .definitions import EntrySource
 from .definitions import Message
 from .parser import Parser
@@ -16,7 +16,7 @@ from ..yaml import SafeLoader
 from ..yaml import yaml
 
 
-class Configuration:
+class Configurator:
     # pylint: disable=too-many-arguments
     # pylint: disable=too-few-public-methods
     """the configuration class"""
@@ -24,7 +24,7 @@ class Configuration:
     def __init__(
         self,
         params: List[str],
-        application_configuration: Config,
+        application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: Union[List, None] = None,
         save_as_intitial: bool = False,
         settings_file_path: str = None,

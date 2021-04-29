@@ -107,7 +107,7 @@ class SubCommand(SimpleNamespace):
     description: str
 
 
-class Config(SimpleNamespace):
+class ApplicationConfiguration(SimpleNamespace):
     """The main object for storing an application config"""
 
     application_name: str

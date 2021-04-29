@@ -5,7 +5,7 @@ from typing import Tuple
 
 from .definitions import Entry
 from .definitions import EntrySource
-from .definitions import Config
+from .definitions import ApplicationConfiguration
 from .definitions import Message
 
 from ..utils import abs_user_path
@@ -27,11 +27,13 @@ def _post_processor(func):
     return wrapper
 
 
-class ApplicationPostProcessor:
+class NavigatorPostProcessor:
     """application post processor"""
 
     @staticmethod
-    def _true_or_false(entry: Entry, config: Config) -> Tuple[List[Message], List[str]]:
+    def _true_or_false(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         messages: List[Message] = []
         errors: List[str] = []
@@ -43,7 +45,7 @@ class ApplicationPostProcessor:
 
     @staticmethod
     @_post_processor
-    def cmdline(entry: Entry, config: Config) -> Tuple[List[Message], List[str]]:
+    def cmdline(entry: Entry, config: ApplicationConfiguration) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process cmdline"""
         messages: List[Message] = []
@@ -54,7 +56,9 @@ class ApplicationPostProcessor:
         return messages, errors
 
     @_post_processor
-    def editor_console(self, entry, config) -> Tuple[List[Message], List[str]]:
+    def editor_console(
+        self, entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
         """Post process editor_console"""
         return self._true_or_false(entry, config)
 
@@ -65,7 +69,9 @@ class ApplicationPostProcessor:
 
     @staticmethod
     @_post_processor
-    def inventory(entry, config) -> Tuple[List[Message], List[str]]:
+    def inventory(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
         """Post process inventory"""
         messages: List[Message] = []
         errors: List[str] = []
@@ -89,7 +95,9 @@ class ApplicationPostProcessor:
 
     @staticmethod
     @_post_processor
-    def inventory_column(entry, config) -> Tuple[List[Message], List[str]]:
+    def inventory_column(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process inventory_columns"""
         messages: List[Message] = []
@@ -105,7 +113,7 @@ class ApplicationPostProcessor:
 
     @staticmethod
     @_post_processor
-    def log_file(entry, config) -> Tuple[List[Message], List[str]]:
+    def log_file(entry: Entry, config: ApplicationConfiguration) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process log_file"""
         messages: List[Message] = []
@@ -114,13 +122,17 @@ class ApplicationPostProcessor:
         return messages, errors
 
     @_post_processor
-    def osc4(self, entry, config) -> Tuple[List[Message], List[str]]:
+    def osc4(
+        self, entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
         """Post process osc4"""
         return self._true_or_false(entry, config)
 
     @staticmethod
     @_post_processor
-    def pass_environment_variable(entry, config) -> Tuple[List[Message], List[str]]:
+    def pass_environment_variable(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process pass_environment_variable"""
         messages: List[Message] = []
@@ -133,7 +145,7 @@ class ApplicationPostProcessor:
 
     @staticmethod
     @_post_processor
-    def playbook(entry, config) -> Tuple[List[Message], List[str]]:
+    def playbook(entry: Entry, config: ApplicationConfiguration) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process pass_environment_variable"""
         messages: List[Message] = []
@@ -144,14 +156,19 @@ class ApplicationPostProcessor:
 
     @staticmethod
     @_post_processor
-    def set_environment_variable(entry, config) -> Tuple[List[Message], List[str]]:
+    def set_environment_variable(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
         # pylint: disable=unused-argument
         """Post process set_environment_variable"""
         messages: List[Message] = []
         errors: List[str] = []
         if entry.value.current is Sentinel:
             entry.value.current = {}
-        elif entry.value.source.name in ["ENVIRONMENT_VARIABLE", "USER_CLI"]:
+        elif isinstance(entry.value.source, EntrySource) and entry.value.source.name in [
+            "ENVIRONMENT_VARIABLE",
+            "USER_CLI",
+        ]:
             flattened = flatten_list(entry.value.current)
             set_envs = {}
             for env_var_pair in flattened:
