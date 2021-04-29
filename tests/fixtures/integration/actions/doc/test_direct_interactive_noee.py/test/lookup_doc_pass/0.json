@@ -36,7 +36,7 @@
         "30│    _raw:",
         "31│      description:",
         "32│      - One or more zero-based indices of the matching list items.",
-        "33│warnings: []",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

@@ -164,7 +164,7 @@ class TmuxSession:
         session_name="ansible-navigator-integration-test",
         setup_commands=None,
         pane_height=20,
-        pane_width=200
+        pane_width=200,
     ) -> None:
         self._window_name = window_name
         self._config_path = config_path

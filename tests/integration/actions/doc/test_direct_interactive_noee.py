@@ -64,4 +64,5 @@ class TestLookUpDoc(BaseClass):
 )
 class TestModuleDocNotExist(BaseClass):
     """run the tests"""
+
     pass

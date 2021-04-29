@@ -45,7 +45,7 @@
         "39│      - a",
         "40│      - b",
         "41│      type: list",
-        "42│warnings: []",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

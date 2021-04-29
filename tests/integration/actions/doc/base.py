@@ -12,7 +12,7 @@ from ..._common import TmuxSession
 
 from ....defaults import FIXTURES_COLLECTION_DIR
 
-from pprint import pprint
+
 class BaseClass:
     """base class for interactive config tests"""
 
@@ -34,7 +34,7 @@ class BaseClass:
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
             "pane_height": "2000",
-            "pane_width": "200"
+            "pane_width": "200",
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -51,15 +51,16 @@ class BaseClass:
         # mask out some config that is subject to change each run
         if expected_in_output:
             received_output = "\n".join(received_output)
-            pprint(f"---------out----------:\n{out}")
-            pprint(f"---------expected_in_output----------:\n{expected_in_output}")
+
+            print(f"received_output is:\n{received_output}")
+            print(f"expected_in_output is:\n{expected_in_output}")
             for out in expected_in_output:
                 assert out in received_output
         else:
             updated_received_output = []
             for line in received_output:
                 mask = "X" * 50
-                if "filename" in line:
+                if "filename" in line or "│warnings:" in line:
                     updated_received_output.append(mask)
                 else:
                     for value in ["time=", "skipping entry", "failed:", "permission denied"]:
@@ -71,8 +72,9 @@ class BaseClass:
             if self.UPDATE_FIXTURES:
                 update_fixtures(request, index, updated_received_output, comment, testname=testname)
             dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
-            with open(f"{dir_path}/{file_name}") as infile:
+            with open(f"{dir_path}/{file_name}", encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
-            pprint(f"---------expected_output----------:\n{expected_output}")
-            pprint(f"---------updated_received_output----------:\n{updated_received_output}")
+
+            print(f"expected_output is:\n{expected_output}")
+            print(f"updated_received_output is:\n{updated_received_output}")
             assert expected_output == updated_received_output
