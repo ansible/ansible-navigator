@@ -490,7 +490,7 @@ class Action(App):
         form_field = {
             "name": "cmdline",
             "pre_populate": " ".join(self.args.cmdline),
-            "prompt": "Additional command line paramters",
+            "prompt": "Additional command line parameters",
             "type": "text_input",
             "validator": {"name": "none"},
         }
