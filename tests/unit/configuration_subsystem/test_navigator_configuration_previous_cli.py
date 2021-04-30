@@ -7,10 +7,15 @@ import os
 from copy import deepcopy
 from unittest import mock
 
-from ansible_navigator.configuration_subsystem.definitions import EntrySource
-from ansible_navigator.configuration_subsystem.definitions import Subset
 from ansible_navigator.configuration_subsystem.configurator import Configurator
+
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.configuration_subsystem.definitions import CliParameters
+from ansible_navigator.configuration_subsystem.definitions import Entry
+from ansible_navigator.configuration_subsystem.definitions import EntrySource
+from ansible_navigator.configuration_subsystem.definitions import EntryValue
+from ansible_navigator.configuration_subsystem.definitions import SubCommand
+from ansible_navigator.configuration_subsystem.definitions import Subset
 
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
@@ -239,3 +244,57 @@ def test_apply_previous_cli_none():
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
         assert application_configuration.entry(expect[0]).value.source is expect[2]
+
+
+def test_apply_cli_subset_none():
+    """Ensure subset none works for apply cli"""
+    test_config = ApplicationConfiguration(
+        application_name="test_application",
+        post_processor=None,
+        subcommands=[
+            SubCommand(name="list", description="list"),
+            SubCommand(name="run", description="run"),
+        ],
+        entries=[
+            Entry(
+                name="subcommand",
+                short_description="Subcommands",
+                subcommand_value=True,
+                value=EntryValue(default="run"),
+            ),
+            Entry(
+                name="z",
+                apply_to_subsequent_cli=Subset.NONE,
+                cli_parameters=CliParameters(short="-z"),
+                short_description="the z paramter",
+                value=EntryValue(),
+            ),
+        ],
+    )
+    configurator = Configurator(
+        params=["list", "-z", "zebra"], application_configuration=test_config, save_as_intitial=True
+    )
+    configurator.configure()
+
+    assert isinstance(test_config.initial, ApplicationConfiguration)
+
+    expected = [
+        ("subcommand", "list"),
+        ("z", "zebra"),
+    ]
+    for expect in expected:
+        assert test_config.entry(expect[0]).value.current == expect[1]
+        assert test_config.entry(expect[0]).value.source is EntrySource.USER_CLI
+
+    configurator = Configurator(
+        params=["run"], application_configuration=test_config, apply_previous_cli_entries=Subset.ALL
+    )
+    configurator.configure()
+
+    expected = [
+        ("subcommand", "run", EntrySource.USER_CLI),
+        ("z", Sentinel, EntrySource.DEFAULT_CFG),
+    ]
+    for expect in expected:
+        assert test_config.entry(expect[0]).value.current == expect[1]
+        assert test_config.entry(expect[0]).value.source is expect[2]

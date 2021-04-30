@@ -77,7 +77,6 @@ class Parser:
     def _configure_base(self) -> None:
         for entry in self._config.entries:
             if entry.subcommands is Subset.ALL:
-                # if not entry.subcommands:
                 self._add_parser(self._base_parser, entry)
 
     def _configure_subparsers(self) -> None:
