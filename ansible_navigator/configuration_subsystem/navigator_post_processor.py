@@ -3,15 +3,14 @@
 from typing import List
 from typing import Tuple
 
+from .definitions import Constants as C
 from .definitions import Entry
-from .definitions import EntrySource
 from .definitions import ApplicationConfiguration
 from .definitions import Message
 
 from ..utils import abs_user_path
 from ..utils import flatten_list
 from ..utils import str2bool
-from ..utils import Sentinel
 
 
 def _post_processor(func):
@@ -50,7 +49,7 @@ class NavigatorPostProcessor:
         """Post process cmdline"""
         messages: List[Message] = []
         errors: List[str] = []
-        if isinstance(entry.value.source, EntrySource):
+        if isinstance(entry.value.source, C):
             if entry.value.source.name == "ENVIRONMENT_VARIABLE":
                 entry.value.current = entry.value.current.split()
         return messages, errors
@@ -75,13 +74,11 @@ class NavigatorPostProcessor:
         """Post process inventory"""
         messages: List[Message] = []
         errors: List[str] = []
-        if config.app == "inventory" and entry.value.current is Sentinel:
+        if config.app == "inventory" and entry.value.current is C.NOT_SET:
             msg = "An inventory is required when using the inventory subcommand"
             errors.append(msg)
             return messages, errors
-        if entry.value.current is Sentinel:
-            entry.value.current = []
-        else:
+        if entry.value.current is not C.NOT_SET:
             flattened = flatten_list(entry.value.current)
             entry.value.current = []
             for inv_entry in flattened:
@@ -102,9 +99,7 @@ class NavigatorPostProcessor:
         """Post process inventory_columns"""
         messages: List[Message] = []
         errors: List[str] = []
-        if entry.value.current is Sentinel:
-            entry.value.current = []
-        else:
+        if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
             messages.append(
                 Message(log_level="debug", message="Completed inventory-column post processing")
@@ -137,9 +132,7 @@ class NavigatorPostProcessor:
         """Post process pass_environment_variable"""
         messages: List[Message] = []
         errors: List[str] = []
-        if entry.value.current is Sentinel:
-            entry.value.current = []
-        else:
+        if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
         return messages, errors
 
@@ -163,11 +156,9 @@ class NavigatorPostProcessor:
         """Post process set_environment_variable"""
         messages: List[Message] = []
         errors: List[str] = []
-        if entry.value.current is Sentinel:
-            entry.value.current = {}
-        elif isinstance(entry.value.source, EntrySource) and entry.value.source.name in [
-            "ENVIRONMENT_VARIABLE",
-            "USER_CLI",
+        if entry.value.source in [
+            C.ENVIRONMENT_VARIABLE,
+            C.USER_CLI,
         ]:
             flattened = flatten_list(entry.value.current)
             set_envs = {}

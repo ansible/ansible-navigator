@@ -8,9 +8,8 @@ from typing import Tuple
 from typing import Union
 
 from .definitions import ApplicationConfiguration
-from .definitions import EntrySource
+from .definitions import Constants as C
 from .definitions import Message
-from .definitions import Subset
 from .parser import Parser
 
 from ..yaml import SafeLoader
@@ -26,7 +25,7 @@ class Configurator:
         self,
         params: List[str],
         application_configuration: ApplicationConfiguration,
-        apply_previous_cli_entries: Union[List, Subset] = Subset.NONE,
+        apply_previous_cli_entries: Union[List, C] = C.NONE,
         save_as_intitial: bool = False,
         settings_file_path: str = None,
     ):
@@ -50,7 +49,7 @@ class Configurator:
         self._sanity_check()
 
     def _sanity_check(self) -> None:
-        if self._apply_previous_cli_entries is not Subset.NONE:
+        if self._apply_previous_cli_entries is not C.NONE:
             if self._save_as_intitial is True:
                 raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
             if self._config.initial is None:
@@ -58,6 +57,7 @@ class Configurator:
 
     def configure(self) -> Tuple[List[Message], List[str]]:
         """Perform the configuration"""
+        self._restore_original()
         self._apply_defaults()
         self._apply_settings_file()
         self._apply_environment_variables()
@@ -88,10 +88,19 @@ class Configurator:
         """
         self._errors.append(message)
 
+    def _restore_original(self) -> None:
+        """Since we always oeprate on the same object
+        restore the current values back to NOT_SET
+        """
+        for entry in self._config.entries:
+            entry.value.current = C.NOT_SET
+            entry.value.source = C.NOT_SET
+
     def _apply_defaults(self) -> None:
         for entry in self._config.entries:
-            entry.value.current = entry.value.default
-            entry.value.source = EntrySource.DEFAULT_CFG
+            if entry.value.default is not C.NOT_SET:
+                entry.value.current = entry.value.default
+                entry.value.source = C.DEFAULT_CFG
 
     def _apply_settings_file(self) -> None:
         if self._settings_file_path:
@@ -110,7 +119,7 @@ class Configurator:
                     for key in path_parts:
                         data = data[key]
                     entry.value.current = data
-                    entry.value.source = EntrySource.USER_CFG
+                    entry.value.source = C.USER_CFG
                 except TypeError:
                     msg = f"{self._settings_file_path} empty"
                     self._errors.append(msg)
@@ -127,7 +136,7 @@ class Configurator:
                     entry.value.current = set_envvar.split(",")
                 else:
                     entry.value.current = set_envvar
-                entry.value.source = EntrySource.ENVIRONMENT_VARIABLE
+                entry.value.source = C.ENVIRONMENT_VARIABLE
 
     def _apply_cli_params(self) -> None:
         parser = Parser(self._config).parser
@@ -138,12 +147,12 @@ class Configurator:
         args, cmdline = parser_response
         if cmdline:
             self._config.entry("cmdline").value.current = cmdline
-            self._config.entry("cmdline").value.source = EntrySource.USER_CLI
+            self._config.entry("cmdline").value.source = C.USER_CLI
         for param, value in vars(args).items():
             if self._config.entry(param).subcommand_value is True and value is None:
                 continue
             self._config.entry(param).value.current = value
-            self._config.entry(param).value.source = EntrySource.USER_CLI
+            self._config.entry(param).value.source = C.USER_CLI
 
     def _post_process(self) -> None:
         for entry in self._config.entries:
@@ -164,7 +173,7 @@ class Configurator:
         """Apply eligible previous cli values to current not set by the cli"""
 
         # _apply_previous_cli_entries must be ALL or a list of entries
-        if self._apply_previous_cli_entries is not Subset.ALL and not isinstance(
+        if self._apply_previous_cli_entries is not C.ALL and not isinstance(
             self._apply_previous_cli_entries, list
         ):
             return
@@ -183,7 +192,7 @@ class Configurator:
             previous_entry = self._config.initial.entry(current_entry.name)
 
             # skip if currently set from the cli
-            if current_entry.value.source is EntrySource.USER_CLI:
+            if current_entry.value.source is C.USER_CLI:
                 continue
 
             # skip if _apply_previous_cli_entries is a list and the entry isn't in it
@@ -194,17 +203,17 @@ class Configurator:
                 continue
 
             # skip if the previous entry not eligible for reapplication
-            if previous_entry.apply_to_subsequent_cli not in [Subset.ALL, Subset.SAME_SUBCOMMAND]:
+            if previous_entry.apply_to_subsequent_cli not in [C.ALL, C.SAME_SUBCOMMAND]:
                 continue
 
             # skip if the same subcommand is required for reapplication
-            if current_entry.apply_to_subsequent_cli is Subset.SAME_SUBCOMMAND:
+            if current_entry.apply_to_subsequent_cli is C.SAME_SUBCOMMAND:
                 if current_subcommand != previous_subcommand:
                     continue
 
             # skip if the previous entry was not set by the cli
-            if previous_entry.value.source is not EntrySource.USER_CLI:
+            if previous_entry.value.source is not C.USER_CLI:
                 continue
 
             current_entry.value.current = previous_entry.value.current
-            current_entry.value.source = EntrySource.PREVIOUS_CLI
+            current_entry.value.source = C.PREVIOUS_CLI

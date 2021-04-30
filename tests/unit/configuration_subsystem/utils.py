@@ -1,6 +1,7 @@
 """ utility func used by adjacent tests
 """
 import os
+from copy import deepcopy
 
 from typing import Dict
 from typing import List
@@ -50,7 +51,8 @@ def _generate_config(params=None, setting_file_name=None) -> GenerateConfigRespo
         settings_file_path = ""
         settings_contents = {}
 
-    application_configuration = NavigatorConfiguration
+    # deepcopy here to ensure we do not modify the original
+    application_configuration = deepcopy(NavigatorConfiguration)
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params,

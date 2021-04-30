@@ -9,10 +9,8 @@ from typing import Callable
 from typing import Dict
 from typing import List
 from typing import NamedTuple
-from typing import Type
 from typing import Union
 
-from ..utils import Sentinel
 from ..utils import oxfordcomma
 
 
@@ -27,28 +25,21 @@ class CliParameters(SimpleNamespace):
     short: Union[None, str] = None
 
 
-class Subset(Enum):
-    """General purpose subset enum to avoid
-    comparsing strings in lists etc, unique use case are noted
-    if this is used outside of the configuration subsystem
-    please move to utils
-    """
+class Constants(Enum):
+    """Mapping some enums to friendly text"""
 
-    ALL = "everything"
-    NONE = "nothing"
+    ALL = "All the things"
+    DEFAULT_CFG = "default configuration value"
+    ENVIRONMENT_VARIABLE = "environemnt variable"
+    NONE = "None of the things"
+    NOT_SET = "indicates a value has not been set"
+    PREVIOUS_CLI = "previous cli command"
     SAME_SUBCOMMAND = (
         "used to determine if an entry should be used when"
         " applying previous cli comman entries, this indicates"
         " that it will only be used if the subcommand is the same"
     )
-
-
-class EntrySource(Enum):
-    """Mapping some enums to log friendly text"""
-
-    DEFAULT_CFG = "default configuration value"
-    ENVIRONMENT_VARIABLE = "environemnt variable"
-    PREVIOUS_CLI = "previous cli command"
+    SENTINEL = "indicates a nonvalue"
     USER_CFG = "user provided configuration file"
     USER_CLI = "cli parameters"
 
@@ -57,9 +48,9 @@ class EntryValue(SimpleNamespace):
     # pylint: disable=too-few-public-methods
     """An object to store a value"""
 
-    default: Any = Sentinel
-    current: Any = Sentinel
-    source: Union[EntrySource, Type[Sentinel]] = Sentinel
+    default: Any = Constants.NOT_SET
+    current: Any = Constants.NOT_SET
+    source: Constants = Constants.NOT_SET
 
 
 class Entry(SimpleNamespace):
@@ -81,12 +72,12 @@ class Entry(SimpleNamespace):
     short_description: str
     value: EntryValue
 
-    apply_to_subsequent_cli: Subset = Subset.ALL
+    apply_to_subsequent_cli: Constants = Constants.ALL
     choices: List = []
     cli_parameters: Union[None, CliParameters] = None
     environment_variable_override: Union[None, str] = None
     settings_file_path_override: Union[None, str] = None
-    subcommands: Union[List[str], Subset] = Subset.ALL
+    subcommands: Union[List[str], Constants] = Constants.ALL
     subcommand_value: bool = False
 
     def environment_variable(self, prefix: str) -> str:
@@ -102,7 +93,7 @@ class Entry(SimpleNamespace):
     def invalid_choice(self) -> str:
         """Generate an invalid choice message for this entry"""
         name = self.name.replace("_", "-")
-        if isinstance(self.value.source, EntrySource):
+        if self.value.source is not Constants.NOT_SET:
             msg = (
                 f"{name} must be one of "
                 + oxfordcomma(self.choices, "or")

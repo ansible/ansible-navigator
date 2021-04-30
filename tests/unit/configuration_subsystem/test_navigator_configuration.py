@@ -1,15 +1,14 @@
 """ tests for configuration subsystem
 """
 import os
-from collections import Counter
+
 from unittest import mock
 
 import pytest
 
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 
-from ansible_navigator.configuration_subsystem.definitions import EntrySource
-from ansible_navigator.configuration_subsystem.definitions import Subset
+from ansible_navigator.configuration_subsystem.definitions import Constants as C
 
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     generate_editor_command,
@@ -34,62 +33,11 @@ from .utils import id_for_settings
 # pylint: disable=too-many-arguments
 
 
-def test_no_duplicate_names():
-    """Ensure no name is duplicated"""
-    values = Counter([entry.name for entry in NavigatorConfiguration.entries])
-    assert not any(k for (k, v) in values.items() if v > 1)
-
-
-def test_no_duplicate_shorts():
-    """Ensure no short is duplicated"""
-    values = Counter(
-        [
-            entry.cli_parameters.short
-            for entry in NavigatorConfiguration.entries
-            if entry.cli_parameters is not None
-        ]
-    )
-    assert not any(k for (k, v) in values.items() if v > 1)
-
-
-def test_no_missing_envvar_data():
+def test_data_no_missing_envvar_data():
     """Ensure the ENVVAR_DATA covers all entries"""
     entry_names = [entry.name for entry in NavigatorConfiguration.entries]
     data_names = [entry[0] for entry in ENVVAR_DATA]
     assert entry_names == data_names
-
-
-def test_entries_are_alphbetical():
-    """Ensure entries are alphabetical"""
-    values = [entry.name for entry in NavigatorConfiguration.entries]
-    assert values == sorted(values)
-
-
-@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_no_dash_in_name(entry):
-    """Ensure no names contain a -"""
-    assert "-" not in entry.name
-
-
-@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_no_dash_in_environment_variable(entry):
-    """Ensure no environment variable has a dash"""
-    assert "-" not in entry.environment_variable("ansible_navigator")
-
-
-@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_no_short_long_if_postional(entry):
-    """Ensure no postional argument has a short or long set"""
-    if hasattr(entry, "cli_arguments") and entry.cli_parameters.positional:
-        assert entry.short is None
-        assert entry.long_override is None
-
-
-@pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_no_underscore_in_path(entry):
-    """Ensure no long override has an _"""
-    if entry.settings_file_path_override is not None:
-        assert "_" not in entry.settings_file_path_override
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
@@ -97,13 +45,10 @@ def test_all_entries_reflect_default(generate_config, entry):
     """Ensure all entries are set to a default value"""
     response = generate_config()
     configured_entry = response.application_configuration.entry(entry.name)
-    assert configured_entry.value.source is EntrySource.DEFAULT_CFG, entry
-
-    if entry.name in ["inventory", "inventory_column", "pass_environment_variable"]:
-        assert configured_entry.value.current == [], entry
-    elif entry.name in ["set_environment_variable"]:
-        assert configured_entry.value.current == {}, entry
+    if configured_entry.value.default is C.NOT_SET:
+        assert configured_entry.value.source is C.NOT_SET, entry
     else:
+        assert configured_entry.value.source is C.DEFAULT_CFG, entry
         assert configured_entry.value.current == entry.value.default, entry
 
 
@@ -129,19 +74,17 @@ def test_all_entries_reflect_cli_given_envvars(generate_config, base, cli_entry,
         response = generate_config(params=params)
         for key, value in expected.items():
             assert response.application_configuration.entry(key).value.current == value
-            assert (
-                response.application_configuration.entry(key).value.source is EntrySource.USER_CLI
-            )
+            assert response.application_configuration.entry(key).value.source is C.USER_CLI
         for entry in response.application_configuration.entries:
             if entry.name not in expected:
-                assert entry.value.source is EntrySource.ENVIRONMENT_VARIABLE, entry
+                assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry
 
 
-@pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
+@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings(
-    generate_config, settings, source_other, base, cli_entry, expected
+    generate_config, settings, settings_file_type, base, cli_entry, expected
 ):
     """Ensure all entries are set by the cli
     based on the settings file, the non cli parametes will be
@@ -155,13 +98,19 @@ def test_all_entries_reflect_cli_given_settings(
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     response = generate_config(params=params, setting_file_name=settings)
-    for key, value in expected.items():
-        configured_entry = response.application_configuration.entry(key)
-        assert configured_entry.value.current == value, configured_entry
-        assert configured_entry.value.source is EntrySource.USER_CLI, configured_entry
+
     for entry in response.application_configuration.entries:
-        if entry.name not in expected:
-            assert entry.value.source is source_other, entry
+        if entry.name in expected:
+            assert entry.value.current == expected[entry.name], entry
+            assert entry.value.source is C.USER_CLI, entry
+        else:
+            if settings_file_type == "empty":
+                if entry.value.default is C.NOT_SET:
+                    assert entry.value.source is C.NOT_SET, entry
+                else:
+                    assert entry.value.source is C.DEFAULT_CFG, entry
+            elif settings_file_type == "full":
+                assert entry.value.source is C.USER_CFG, entry
 
 
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
@@ -194,16 +143,16 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
         for key, value in expected.items():
             configured_entry = response.application_configuration.entry(key)
             assert configured_entry.value.current == value, configured_entry
-            assert configured_entry.value.source is EntrySource.USER_CLI, configured_entry
+            assert configured_entry.value.source is C.USER_CLI, configured_entry
         for entry in response.application_configuration.entries:
             if entry.name not in expected:
-                assert entry.value.source is EntrySource.ENVIRONMENT_VARIABLE, entry
+                assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry
 
 
-@pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
+@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("entry, value, expected", ENVVAR_DATA)
 def test_all_entries_reflect_envvar_given_settings(
-    generate_config, settings, source_other, entry, value, expected
+    generate_config, settings, settings_file_type, entry, value, expected
 ):
     # pylint: disable=unused-argument
     """Ensure each entry is are set by an environment variables
@@ -216,11 +165,18 @@ def test_all_entries_reflect_envvar_given_settings(
     with mock.patch.dict(os.environ, {environment_variable: str(value)}):
         response = generate_config(setting_file_name=settings)
         configured_entry = response.application_configuration.entry(entry)
-        assert configured_entry.value.source is EntrySource.ENVIRONMENT_VARIABLE
-        assert configured_entry.value.current == expected
+    assert configured_entry.value.source is C.ENVIRONMENT_VARIABLE
+    assert configured_entry.value.current == expected
+
     for other_entry in response.application_configuration.entries:
         if other_entry.name != entry:
-            assert other_entry.value.source is source_other, other_entry
+            if settings_file_type == "empty":
+                if other_entry.value.default is C.NOT_SET:
+                    assert other_entry.value.source is C.NOT_SET, entry
+                else:
+                    assert other_entry.value.source is C.DEFAULT_CFG, entry
+            elif settings_file_type == "full":
+                assert other_entry.value.source is C.USER_CFG, entry
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
@@ -229,7 +185,7 @@ def test_all_entries_reflect_settings_given_settings(generate_config, entry):
     response = generate_config(setting_file_name="ansible-navigator.yml")
     configured_entry = response.application_configuration.entry(entry.name)
     if entry.cli_parameters is not None:
-        assert configured_entry.value.source is EntrySource.USER_CFG, entry
+        assert configured_entry.value.source is C.USER_CFG, entry
         path = entry.settings_file_path("ansible-navigator")
         expected = response.settings_contents
         for key in path.split("."):
@@ -303,7 +259,7 @@ def test_mutual_exclusivity_for_configuration_init():
             params=None,
             application_configuration=None,
             save_as_intitial=True,
-            apply_previous_cli_entries=Subset.ALL,
+            apply_previous_cli_entries=C.ALL,
         )
 
 
@@ -313,7 +269,7 @@ def test_apply_before_initial_saved():
         Configurator(
             params=None,
             application_configuration=NavigatorConfiguration,
-            apply_previous_cli_entries=Subset.ALL,
+            apply_previous_cli_entries=C.ALL,
         ).configure()
 
 

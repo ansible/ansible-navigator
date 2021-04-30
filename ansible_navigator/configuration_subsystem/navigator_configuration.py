@@ -4,10 +4,10 @@ import os
 
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
+from .definitions import Constants as C
 from .definitions import Entry
 from .definitions import EntryValue
 from .definitions import SubCommand
-from .definitions import Subset
 
 from .navigator_post_processor import NavigatorPostProcessor
 
@@ -54,16 +54,16 @@ NavigatorConfiguration = ApplicationConfiguration(
     entries=[
         Entry(
             name="app",
-            apply_to_subsequent_cli=Subset.NONE,
+            apply_to_subsequent_cli=C.NONE,
             short_description="Subcommands",
             subcommand_value=True,
             value=EntryValue(default="welcome"),
         ),
         Entry(
             name="cmdline",
-            apply_to_subsequent_cli=Subset.SAME_SUBCOMMAND,
+            apply_to_subsequent_cli=C.SAME_SUBCOMMAND,
             short_description="Placeholder for argparse remainder",
-            value=EntryValue(default=[]),
+            value=EntryValue(),
         ),
         Entry(
             name="container_engine",
