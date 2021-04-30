@@ -32,10 +32,10 @@ class ActionRunner(App):
         """
         self._ui = UserInterface(
             screen_miny=3,
-            no_osc4=self.args.no_osc4,
+            osc4=self.args.osc4,
             kegexes=kegexes,
             refresh=refresh,
-            share_dir=self.args.share_dir,
+            share_directory=self.args.internals.share_directory,
         )
 
     def run(self, _screen) -> None:

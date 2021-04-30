@@ -327,16 +327,24 @@ def set_ansible_envar() -> None:
         logger.debug("ANSIBLE_CONFIG set to %s", ansible_config_path)
 
 
-def get_and_check_collection_doc_cache(args, collection_doc_cache_fname: str) -> Tuple[List, Dict]:
+def get_and_check_collection_doc_cache(
+    share_directory: str, collection_doc_cache_path: str
+) -> Tuple[List, Dict]:
     """ensure the collection doc cache
     has the current version of the application
     as a safeguard, always delete and rebuild if not
     """
     messages = []
-    os.makedirs(args.cache_dir, exist_ok=True)
-    collection_doc_cache_path = f"{args.cache_dir}/{collection_doc_cache_fname}"
+    try:
+        os.makedirs(os.path.dirname(collection_doc_cache_path), exist_ok=True)
+    except OSError as exc:
+        messages.append("Problem creating directory strurcture for collection doc cache.")
+        messages.append(f" Error was: {str(exc)}")
+        messages.append(f"Attempted to create {os.path.dirname(collection_doc_cache_path)}")
+        error_and_exit_early(messages)
+
     messages.append(f"Collection doc cache: 'path' is '{collection_doc_cache_path}'")
-    collection_cache = _get_kvs(args, collection_doc_cache_path)
+    collection_cache = _get_kvs(share_directory, collection_doc_cache_path)
     if "version" in collection_cache:
         cache_version = collection_cache["version"]
     else:
@@ -354,13 +362,13 @@ def get_and_check_collection_doc_cache(args, collection_doc_cache_fname: str) ->
     return messages, collection_cache
 
 
-def _get_kvs(args, collection_doc_cache_path):
-    spec = importlib.util.spec_from_file_location(
-        "kvs", f"{args.share_dir}/utils/key_value_store.py"
-    )
+def _get_kvs(share_directory, path):
+    """Retrieve a key value store given a path"""
+    spec_path = os.path.join(share_directory, "utils", "key_value_store.py")
+    spec = importlib.util.spec_from_file_location("kvs", spec_path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    return mod.KeyValueStore(collection_doc_cache_path)
+    return mod.KeyValueStore(path)
 
 
 def error_and_exit_early(msg=None, errors=None) -> NoReturn:
@@ -403,3 +411,46 @@ def str2bool(value: Any) -> bool:
         if value.lower() in ("no", "false"):
             return False
     raise ValueError
+
+
+# pylint: disable=inconsistent-return-statements
+def get_share_directory(app_name) -> str:
+    """
+    returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
+    ansible-launcher data files. First found wins.
+    """
+
+    # Development path
+    # We want the share directory to resolve adjacent to the directory the code lives in
+    # as that's the layout in the source.
+    path = os.path.join(os.path.dirname(__file__), "..", "share", app_name)
+    if os.path.exists(path):
+        return path
+
+    # ~/.local/share/APP_NAME
+    userbase = sysconfig.get_config_var("userbase")
+    if userbase is not None:
+        path = os.path.join(userbase, "share", app_name)
+        if os.path.exists(path):
+            return path
+
+    # /usr/share/APP_NAME  (or the venv equivalent)
+    path = os.path.join(sys.prefix, "share", app_name)
+    if os.path.exists(path):
+        return path
+
+    # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
+    datarootdir = sysconfig.get_config_var("datarootdir")
+    if datarootdir is not None:
+        path = os.path.join(datarootdir, app_name)
+        if os.path.exists(path):
+            return path
+
+    # /usr/local/share/APP_NAME
+    prefix = sysconfig.get_config_var("prefix")
+    if prefix is not None:
+        path = os.path.join(prefix, "local", "share", app_name)
+        if os.path.exists(path):
+            return path
+
+    error_and_exit_early("Problem finding share dir")

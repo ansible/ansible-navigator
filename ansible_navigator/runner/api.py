@@ -20,6 +20,8 @@ from ansible_runner import get_plugin_docs
 from ansible_runner import run_command
 from ansible_runner import run_command_async
 
+from ansible_navigator.configuration_subsystem import Constants as C
+
 
 class BaseRunner:
     """BaseRunner class"""
@@ -126,9 +128,9 @@ class BaseRunner:
         self._runner_args["envvars"] = {
             k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")
         }
-        if self._set_environment_variable:
+        if self._set_environment_variable is not C.NOT_SET:
             self._runner_args["envvars"].update(self._set_environment_variable)
-        if self._pass_environment_variable:
+        if self._pass_environment_variable is not C.NOT_SET:
             for env_var in self._pass_environment_variable:
                 value = os.environ.get(env_var)
                 if value is None:
@@ -162,7 +164,11 @@ class CommandBaseRunner(BaseRunner):
             inventory ([list], optional): List of path to the inventory files. Defaults to None.
         """
         self._executable_cmd = executable_cmd
-        self._cmdline = cmdline if cmdline else []
+        self._cmdline = cmdline
+        if self._cmdline in [None, C.NOT_SET]:
+            self._cmdline = []
+        else:
+            self._cmdline = cmdline
         self._playbook = playbook
         self._inventory = inventory
         super().__init__(**kwargs)
@@ -173,7 +179,7 @@ class CommandBaseRunner(BaseRunner):
             self._cmdline.append(self._playbook)
             self._runner_args.update({"cwd": os.path.dirname(os.path.abspath(self._playbook))})
 
-        if self._inventory:
+        if self._inventory is not C.NOT_SET:
             for inv in self._inventory:
                 self._cmdline.extend(["-i", inv])
 

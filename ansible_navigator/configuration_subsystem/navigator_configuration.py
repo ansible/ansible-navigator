@@ -2,6 +2,10 @@
 """
 import os
 
+from types import SimpleNamespace
+from typing import Dict
+from typing import Union
+
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
@@ -12,7 +16,12 @@ from .definitions import SubCommand
 from .navigator_post_processor import NavigatorPostProcessor
 
 from ..utils import abs_user_path
+from ..utils import get_share_directory
 from ..utils import oxfordcomma
+
+from .._version import __version__ as VERSION
+
+APP_NAME = "ansible_navigator"
 
 
 def generate_editor_command() -> str:
@@ -22,6 +31,14 @@ def generate_editor_command() -> str:
     else:
         command = "vi +{line_number} {filename}"
     return command
+
+
+def generate_cache_path():
+    """Generate a path for the collection cache"""
+    file_name = "collection_doc_cache.db"
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    cache_path = os.path.join(cache_home, APP_NAME, file_name)
+    return cache_path
 
 
 PLUGIN_TYPES = (
@@ -40,8 +57,20 @@ PLUGIN_TYPES = (
     "vars",
 )
 
+
+class Internals(SimpleNamespace):
+    """a place to hold object that need to be carried
+    from apllication initiation to the rest of the app
+    """
+
+    share_directory: str = get_share_directory(app_name=APP_NAME)
+    collection_doc_cache: Union[C, Dict] = C.NOT_SET
+
+
 NavigatorConfiguration = ApplicationConfiguration(
-    application_name="ansible-navigator",
+    application_name=APP_NAME,
+    application_version=VERSION,
+    internals=Internals(),
     post_processor=NavigatorPostProcessor(),
     subcommands=[
         SubCommand(name="collections", description="Explore available collections"),
@@ -64,6 +93,12 @@ NavigatorConfiguration = ApplicationConfiguration(
             apply_to_subsequent_cli=C.SAME_SUBCOMMAND,
             short_description="Placeholder for argparse remainder",
             value=EntryValue(),
+        ),
+        Entry(
+            name="collection_doc_cache_path",
+            short_description="The path to collection doc cache",
+            subcommands=C.NONE,
+            value=EntryValue(default=generate_cache_path()),
         ),
         Entry(
             name="container_engine",
@@ -102,7 +137,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             description="The name of the execution environment image",
             settings_file_path_override="execution-environment.image",
             short_description="Enable the use of an execution environment",
-            value=EntryValue(default="image_here"),
+            value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
         ),
         Entry(
             name="inventory",

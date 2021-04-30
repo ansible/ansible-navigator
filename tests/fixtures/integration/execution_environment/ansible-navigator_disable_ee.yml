@@ -1,3 +1,4 @@
 ---
 ansible-navigator:
-  execution-environment: False
+  execution-environment: 
+    enabled: False

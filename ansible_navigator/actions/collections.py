@@ -294,7 +294,10 @@ class Action(App):
 
         cmd = [self._args.container_engine, "run", "-i", "-t"]
 
-        cmd += ["-v", f"{self._args.share_dir}/utils:{self._args.share_dir}/utils:z"]
+        cmd += [
+            "-v",
+            f"{self._args.internals.share_directory}/utils:{self._args.internals.share_directory}/utils:z",
+        ]
 
         if os.path.exists(self._adjacent_collection_dir):
             cmd += ["-v", f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"]
@@ -302,7 +305,7 @@ class Action(App):
         cmd += ["-v", f"{self._collection_cache_path}:{self._collection_cache_path}:z"]
 
         cmd += [self._args.execution_environment_image]
-        cmd += ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]
+        cmd += ["python3", f"{self._args.internals.share_directory}/utils/catalog_collections.py"]
         cmd += ["-a", self._adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
 
@@ -318,7 +321,7 @@ class Action(App):
 
         adjacent_collection_dir = playbook_dir + "/collections"
 
-        cmd = ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]
+        cmd = ["python3", f"{self._args.internals.share_directory}/utils/catalog_collections.py"]
         cmd += ["-a", adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
         self._logger.debug("local command: %s", " ".join(cmd))

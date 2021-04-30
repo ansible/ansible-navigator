@@ -113,8 +113,8 @@ class Entry(SimpleNamespace):
         if self.settings_file_path_override is not None:
             sfp = f"{prefix}.{self.settings_file_path_override}"
         else:
-            sfp = f"{prefix}.{self.name.replace('_', '-')}"
-        return sfp
+            sfp = f"{prefix}.{self.name}"
+        return sfp.replace("_", "-")
 
 
 class SubCommand(SimpleNamespace):
@@ -130,10 +130,12 @@ class ApplicationConfiguration(SimpleNamespace):
 
     application_name: str
     entries: List[Entry]
+    internals: SimpleNamespace
     subcommands: List[SubCommand]
     post_processor = Callable
 
     initial: Any = None
+    original_command: Union[Constants, str] = Constants.NOT_SET
 
     def __getattribute__(self, attr: str) -> Any:
         """Returns a matching entry or the default bwo super"""

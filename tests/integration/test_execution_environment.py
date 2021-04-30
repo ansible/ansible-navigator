@@ -17,7 +17,7 @@ test_data = [
     ("set in config file", "", "ansible-navigator_disable_ee.yml", None),
     (
         "set command line and config file, command line wins",
-        "--execution-environment y",
+        "--execution-environment true",
         "ansible-navigator_disable_ee.yml",
         {"process_isolation": True},
     ),

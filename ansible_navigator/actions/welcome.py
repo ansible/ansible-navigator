@@ -31,7 +31,9 @@ class Action:
         :param app: The app instance
         :type app: App
         """
-        with open(os.path.join(app.args.share_dir, "markdown", "welcome.md")) as fhand:
+        with open(
+            os.path.join(app.args.internals.share_directory, "markdown", "welcome.md")
+        ) as fhand:
             welcome_md = fhand.read()
 
         self._logger.debug("welcome requested")

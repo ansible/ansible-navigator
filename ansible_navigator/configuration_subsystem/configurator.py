@@ -57,6 +57,7 @@ class Configurator:
 
     def configure(self) -> Tuple[List[Message], List[str]]:
         """Perform the configuration"""
+        self._config.original_command = self._params
         self._restore_original()
         self._apply_defaults()
         self._apply_settings_file()

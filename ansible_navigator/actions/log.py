@@ -30,7 +30,7 @@ class Action:
         interaction.ui.scroll(0)
         auto_scroll = True
         while True:
-            with open(app.args.logfile) as fhand:
+            with open(app.args.log_file) as fhand:
                 dalog = fhand.read()
 
             new_scroll = len(dalog.splitlines())

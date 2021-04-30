@@ -1,6 +1,7 @@
 ---
 ansible-navigator:
   app: run
+  collection-doc-cache-path: /tmp/cache.db
   cmdline: "--forks 15"
   editor:
     command: vim_from_setting

@@ -27,7 +27,7 @@ class Action:
         :type app: App
         """
         self._logger.debug("help requested")
-        with open(os.path.join(app.args.share_dir, "markdown", "help.md")) as fhand:
+        with open(os.path.join(app.args.internals.share_directory, "markdown", "help.md")) as fhand:
             help_md = fhand.read()
         previous_scroll = interaction.ui.scroll()
         interaction.ui.scroll(0)

@@ -4,8 +4,6 @@ Note: Some of these are defined as dictionaries for ease but all should be froze
 before use so they are immutable within the tests
 """
 
-from ansible_navigator.configuration_subsystem.definitions import Constants as C
-
 
 def d2t(dyct):
     """turn the data dictionary into a frozenset
@@ -175,6 +173,7 @@ CLI_DATA = cli_data()
 ENVVAR_DATA = [
     ("app", "doc", "doc"),
     ("cmdline", "--forks 15", ["--forks", "15"]),
+    ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),
     ("container_engine", "docker", "docker"),
     ("editor_command", "nano_envvar", "nano_envvar"),
     ("editor_console", "false", False),

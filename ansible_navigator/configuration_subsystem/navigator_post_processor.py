@@ -19,8 +19,11 @@ def _post_processor(func):
         before = str(kwargs["entry"].value.current)
         messages, errors = func(*args, **kwargs)
         after = str(kwargs["entry"].value.current)
-        msg = f"Completed post processing for {name} before: '{before}' after: '{after}'"
-        messages.append(("debug", msg))
+        changed = before != after
+        messages.append(("debug", f"Completed post processing for {name}. (changed={changed})"))
+        if changed:
+            messages.append(("debug", f" before: '{before}'"))
+            messages.append(("debug", f" after: '{after}'"))
         return messages, errors
 
     return wrapper
@@ -40,6 +43,18 @@ class NavigatorPostProcessor:
             entry.value.current = str2bool(entry.value.current)
         except ValueError:
             errors.append(entry.invalid_choice)
+        return messages, errors
+
+    @staticmethod
+    @_post_processor
+    def collection_doc_cache_path(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> Tuple[List[Message], List[str]]:
+        # pylint: disable=unused-argument
+        """Post process collection doc cache path"""
+        messages: List[Message] = []
+        errors: List[str] = []
+        entry.value.current = abs_user_path(entry.value.current)
         return messages, errors
 
     @staticmethod
@@ -100,9 +115,6 @@ class NavigatorPostProcessor:
         errors: List[str] = []
         if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
-            messages.append(
-                Message(log_level="debug", message="Completed inventory-column post processing")
-            )
         return messages, errors
 
     @staticmethod

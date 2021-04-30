@@ -29,15 +29,7 @@ from .utils import id_for_cli
 from .utils import id_for_name
 from .utils import id_for_settings
 
-
 # pylint: disable=too-many-arguments
-
-
-def test_data_no_missing_envvar_data():
-    """Ensure the ENVVAR_DATA covers all entries"""
-    entry_names = [entry.name for entry in NavigatorConfiguration.entries]
-    data_names = [entry[0] for entry in ENVVAR_DATA]
-    assert entry_names == data_names
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)

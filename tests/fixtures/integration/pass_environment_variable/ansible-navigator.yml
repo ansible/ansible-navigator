@@ -1,6 +1,8 @@
 ---
 ansible-navigator:
-  set-environment-variable:
-    TEST_ENV0: te0
-    TEST_ENV1: te1
-    TEST_ENV2: te2
+  execution-environment:
+    environment-variables:
+      set:
+        TEST_ENV0: te0
+        TEST_ENV1: te1
+        TEST_ENV2: te2

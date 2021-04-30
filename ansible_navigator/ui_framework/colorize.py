@@ -69,11 +69,11 @@ class Colorize:
     """Functionality for coloring"""
 
     # pylint: disable=too-few-public-methods
-    def __init__(self, share_dir):
+    def __init__(self, share_directory):
         self._logger = logging.getLogger(__name__)
         self._schema = None
-        self._theme_dir = os.path.join(share_dir, "themes")
-        self._grammar_dir = os.path.join(share_dir, "grammar")
+        self._theme_dir = os.path.join(share_directory, "themes")
+        self._grammar_dir = os.path.join(share_directory, "grammar")
         self._grammars = Grammars(self._grammar_dir)
         self._load()
 

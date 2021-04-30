@@ -59,7 +59,7 @@ class CursesWindow:
         self.win: Window
         self._screen_miny = 3
         self._prefix_color = 8
-        self._no_osc4: bool
+        self._osc4: bool
         self._theme_dir: str
         self._number_colors = 0
         self._custom_colors_enabled = False
@@ -140,9 +140,9 @@ class CursesWindow:
 
         self._logger.debug("curses.COLORS: %s", curses.COLORS)
         self._logger.debug("curses.can_change_color: %s", curses.can_change_color())
-        self._logger.debug("self._no_osc4: %s", self._no_osc4)
+        self._logger.debug("self._osc4: %s", self._osc4)
         if curses.COLORS > 16:
-            if self._no_osc4 is True:
+            if self._osc4 is False:
                 self._custom_colors_enabled = False
             else:
                 self._custom_colors_enabled = curses.can_change_color()

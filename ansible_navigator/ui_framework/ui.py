@@ -99,10 +99,10 @@ class UserInterface(CursesWindow):
     def __init__(
         self,
         screen_miny: int,
-        no_osc4: bool,
+        osc4: bool,
         kegexes: Callable[..., Any],
         refresh: int,
-        share_dir: str,
+        share_directory: str,
         pbar_width: int = 11,
     ) -> None:
         """init
@@ -118,7 +118,7 @@ class UserInterface(CursesWindow):
         """
         super().__init__()
         self._color_menu_item: Callable[[int, str, Dict[str, Any]], int]
-        self._colorizer = Colorize(share_dir=share_dir)
+        self._colorizer = Colorize(share_directory=share_directory)
         self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
         self._default_colors = None
         self._default_pairs = None
@@ -129,7 +129,7 @@ class UserInterface(CursesWindow):
         self._logger = logging.getLogger(__name__)
         self._menu_filter: Union[Pattern, None] = None
         self._menu_indicies: Tuple[int, ...] = tuple()
-        self._no_osc4 = no_osc4
+        self._osc4 = osc4
 
         self._pbar_width = pbar_width
         self._prefix_color = 8
@@ -137,7 +137,7 @@ class UserInterface(CursesWindow):
         self._rgb_to_curses_color_idx: Dict[str, int] = {}
         self._screen_miny = screen_miny
         self._scroll = 0
-        self._theme_dir = os.path.join(share_dir, "themes")
+        self._theme_dir = os.path.join(share_directory, "themes")
         self._xform = self._default_obj_serialization
         self._status = ""
         self._status_color = 0
