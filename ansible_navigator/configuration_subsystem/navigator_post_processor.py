@@ -49,9 +49,8 @@ class NavigatorPostProcessor:
         """Post process cmdline"""
         messages: List[Message] = []
         errors: List[str] = []
-        if isinstance(entry.value.source, C):
-            if entry.value.source.name == "ENVIRONMENT_VARIABLE":
-                entry.value.current = entry.value.current.split()
+        if entry.value.source is C.ENVIRONMENT_VARIABLE:
+            entry.value.current = entry.value.current.split()
         return messages, errors
 
     @_post_processor
