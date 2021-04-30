@@ -1,5 +1,5 @@
 """ configuration subsystem
 """
 from .configurator import Configurator
-from .definitions import Subset
+from .definitions import Constants
 from .navigator_configuration import NavigatorConfiguration

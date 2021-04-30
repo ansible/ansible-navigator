@@ -11,15 +11,12 @@ from ansible_navigator.configuration_subsystem.configurator import Configurator
 
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import CliParameters
+from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.definitions import Entry
-from ansible_navigator.configuration_subsystem.definitions import EntrySource
 from ansible_navigator.configuration_subsystem.definitions import EntryValue
 from ansible_navigator.configuration_subsystem.definitions import SubCommand
-from ansible_navigator.configuration_subsystem.definitions import Subset
 
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
-
-from ansible_navigator.utils import Sentinel
 
 
 def test_apply_previous_cli_all():
@@ -44,22 +41,22 @@ def test_apply_previous_cli_all():
 
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
-        assert application_configuration.entry(expect[0]).value.source is EntrySource.USER_CLI
+        assert application_configuration.entry(expect[0]).value.source is C.USER_CLI
 
     params = "doc"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        apply_previous_cli_entries=Subset.ALL,
+        apply_previous_cli_entries=C.ALL,
     )
     configurator.configure()
 
     expected = [
-        ("app", "doc", EntrySource.USER_CLI),
-        ("cmdline", ["--forks", "15"], EntrySource.PREVIOUS_CLI),
-        ("execution_environment", False, EntrySource.PREVIOUS_CLI),
-        ("execution_environment_image", "test_image", EntrySource.PREVIOUS_CLI),
-        ("plugin_name", "shell", EntrySource.PREVIOUS_CLI),
+        ("app", "doc", C.USER_CLI),
+        ("cmdline", ["--forks", "15"], C.PREVIOUS_CLI),
+        ("execution_environment", False, C.PREVIOUS_CLI),
+        ("execution_environment_image", "test_image", C.PREVIOUS_CLI),
+        ("plugin_name", "shell", C.PREVIOUS_CLI),
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
@@ -87,7 +84,7 @@ def test_apply_previous_cli_specified():
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
-        assert application_configuration.entry(expect[0]).value.source is EntrySource.USER_CLI
+        assert application_configuration.entry(expect[0]).value.source is C.USER_CLI
 
     params = "doc"
     configurator = Configurator(
@@ -98,10 +95,10 @@ def test_apply_previous_cli_specified():
     configurator.configure()
 
     expected = [
-        ("app", "doc", EntrySource.USER_CLI),
-        ("cmdline", [], EntrySource.DEFAULT_CFG),
-        ("execution_environment", False, EntrySource.PREVIOUS_CLI),
-        ("execution_environment_image", "test_image", EntrySource.PREVIOUS_CLI),
+        ("app", "doc", C.USER_CLI),
+        ("cmdline", C.NOT_SET, C.NOT_SET),
+        ("execution_environment", False, C.PREVIOUS_CLI),
+        ("execution_environment_image", "test_image", C.PREVIOUS_CLI),
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
@@ -125,11 +122,11 @@ def test_apply_previous_cli_mixed():
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     expected = [
-        ("app", "doc", EntrySource.USER_CLI),
-        ("cmdline", ["--forks", "15"], EntrySource.USER_CLI),
-        ("execution_environment", False, EntrySource.USER_CLI),
-        ("execution_environment_image", "test_image", EntrySource.USER_CLI),
-        ("pass_environment_variable", ["ENV1", "ENV2"], EntrySource.ENVIRONMENT_VARIABLE),
+        ("app", "doc", C.USER_CLI),
+        ("cmdline", ["--forks", "15"], C.USER_CLI),
+        ("execution_environment", False, C.USER_CLI),
+        ("execution_environment_image", "test_image", C.USER_CLI),
+        ("pass_environment_variable", ["ENV1", "ENV2"], C.ENVIRONMENT_VARIABLE),
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
@@ -139,18 +136,18 @@ def test_apply_previous_cli_mixed():
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        apply_previous_cli_entries=Subset.ALL,
+        apply_previous_cli_entries=C.ALL,
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES": "ENV1=VAL1"}):
         configurator.configure()
 
     expected = [
-        ("app", "doc", EntrySource.USER_CLI),
-        ("cmdline", ["--forks", "15"], EntrySource.PREVIOUS_CLI),
-        ("execution_environment", False, EntrySource.PREVIOUS_CLI),
-        ("execution_environment_image", "different_image", EntrySource.USER_CLI),
-        ("pass_environment_variable", [], EntrySource.DEFAULT_CFG),
-        ("set_environment_variable", {"ENV1": "VAL1"}, EntrySource.ENVIRONMENT_VARIABLE),
+        ("app", "doc", C.USER_CLI),
+        ("cmdline", ["--forks", "15"], C.PREVIOUS_CLI),
+        ("execution_environment", False, C.PREVIOUS_CLI),
+        ("execution_environment_image", "different_image", C.USER_CLI),
+        ("pass_environment_variable", C.NOT_SET, C.NOT_SET),
+        ("set_environment_variable", {"ENV1": "VAL1"}, C.ENVIRONMENT_VARIABLE),
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
@@ -180,21 +177,21 @@ def test_apply_previous_cli_cmdline_not_applied():
 
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
-        assert application_configuration.entry(expect[0]).value.source is EntrySource.USER_CLI
+        assert application_configuration.entry(expect[0]).value.source is C.USER_CLI
 
     params = "doc"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        apply_previous_cli_entries=Subset.ALL,
+        apply_previous_cli_entries=C.ALL,
     )
     configurator.configure()
 
     expected = [
-        ("app", "doc", EntrySource.USER_CLI),
-        ("cmdline", [], EntrySource.DEFAULT_CFG),
-        ("execution_environment", False, EntrySource.PREVIOUS_CLI),
-        ("playbook", "/tmp/site.yml", EntrySource.PREVIOUS_CLI),
+        ("app", "doc", C.USER_CLI),
+        ("cmdline", C.NOT_SET, C.NOT_SET),
+        ("execution_environment", False, C.PREVIOUS_CLI),
+        ("playbook", "/tmp/site.yml", C.PREVIOUS_CLI),
     ]
 
     for expect in expected:
@@ -224,21 +221,21 @@ def test_apply_previous_cli_none():
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
-        assert application_configuration.entry(expect[0]).value.source is EntrySource.USER_CLI
+        assert application_configuration.entry(expect[0]).value.source is C.USER_CLI
 
     params = "doc"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        apply_previous_cli_entries=Subset.NONE,
+        apply_previous_cli_entries=C.NONE,
     )
     configurator.configure()
 
     expected = [
-        ("app", "doc", EntrySource.USER_CLI),
-        ("cmdline", [], EntrySource.DEFAULT_CFG),
-        ("playbook", Sentinel, EntrySource.DEFAULT_CFG),
-        ("execution_environment", True, EntrySource.DEFAULT_CFG),
+        ("app", "doc", C.USER_CLI),
+        ("cmdline", C.NOT_SET, C.NOT_SET),
+        ("playbook", C.NOT_SET, C.NOT_SET),
+        ("execution_environment", True, C.DEFAULT_CFG),
     ]
 
     for expect in expected:
@@ -264,7 +261,7 @@ def test_apply_cli_subset_none():
             ),
             Entry(
                 name="z",
-                apply_to_subsequent_cli=Subset.NONE,
+                apply_to_subsequent_cli=C.NONE,
                 cli_parameters=CliParameters(short="-z"),
                 short_description="the z paramter",
                 value=EntryValue(),
@@ -284,16 +281,16 @@ def test_apply_cli_subset_none():
     ]
     for expect in expected:
         assert test_config.entry(expect[0]).value.current == expect[1]
-        assert test_config.entry(expect[0]).value.source is EntrySource.USER_CLI
+        assert test_config.entry(expect[0]).value.source is C.USER_CLI
 
     configurator = Configurator(
-        params=["run"], application_configuration=test_config, apply_previous_cli_entries=Subset.ALL
+        params=["run"], application_configuration=test_config, apply_previous_cli_entries=C.ALL
     )
     configurator.configure()
 
     expected = [
-        ("subcommand", "run", EntrySource.USER_CLI),
-        ("z", Sentinel, EntrySource.DEFAULT_CFG),
+        ("subcommand", "run", C.USER_CLI),
+        ("z", C.NOT_SET, C.NOT_SET),
     ]
     for expect in expected:
         assert test_config.entry(expect[0]).value.current == expect[1]

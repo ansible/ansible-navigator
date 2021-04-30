@@ -4,7 +4,7 @@ Note: Some of these are defined as dictionaries for ease but all should be froze
 before use so they are immutable within the tests
 """
 
-from ansible_navigator.configuration_subsystem.definitions import EntrySource
+from ansible_navigator.configuration_subsystem.definitions import Constants as C
 
 
 def d2t(dyct):
@@ -195,6 +195,6 @@ ENVVAR_DATA = [
 ]
 
 SETTINGS = [
-    ("ansible-navigator_empty.yml", EntrySource.DEFAULT_CFG),
-    ("ansible-navigator.yml", EntrySource.USER_CFG),
+    ("ansible-navigator_empty.yml", "empty"),
+    ("ansible-navigator.yml", "full"),
 ]

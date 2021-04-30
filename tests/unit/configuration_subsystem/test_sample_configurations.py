@@ -85,7 +85,7 @@ def test_many_subcommand():
 
 
 def test_invalid_choice_not_set():
-    """Ensure a Config without a subparse entry fails"""
+    """Ensure an error is raised for no choice"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,

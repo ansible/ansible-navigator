@@ -11,9 +11,7 @@ from typing import Tuple
 from typing import Union
 
 from .definitions import ApplicationConfiguration
-from .definitions import Subset
-
-from ..utils import Sentinel
+from .definitions import Constants as C
 
 
 class Parser:
@@ -33,7 +31,7 @@ class Parser:
         """Generate an argparse argument"""
         kwargs = {}
         kwargs["help"] = entry.short_description
-        if entry.value.default is not Sentinel:
+        if entry.value.default is not C.NOT_SET:
             kwargs["help"] += f" (default: {entry.value.default})"
         kwargs["default"] = SUPPRESS
         kwargs["metavar"] = ""
@@ -76,7 +74,7 @@ class Parser:
 
     def _configure_base(self) -> None:
         for entry in self._config.entries:
-            if entry.subcommands is Subset.ALL:
+            if entry.subcommands is C.ALL:
                 self._add_parser(self._base_parser, entry)
 
     def _configure_subparsers(self) -> None:
