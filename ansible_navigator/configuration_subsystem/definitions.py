@@ -27,6 +27,22 @@ class CliParameters(SimpleNamespace):
     short: Union[None, str] = None
 
 
+class Subset(Enum):
+    """General purpose subset enum to avoid
+    comparsing strings in lists etc, unique use case are noted
+    if this is used outside of the configuration subsystem
+    please move to utils
+    """
+
+    ALL = "everything"
+    NONE = "nothing"
+    SAME_SUBCOMMAND = (
+        "used to determine if an entry should be used when"
+        " applying previous cli comman entries, this indicates"
+        " that it will only be used if the subcommand is the same"
+    )
+
+
 class EntrySource(Enum):
     """Mapping some enums to log friendly text"""
 
@@ -48,18 +64,29 @@ class EntryValue(SimpleNamespace):
 
 class Entry(SimpleNamespace):
     # pylint: disable=too-few-public-methods
-    """One entry in the configuration"""
+    """One entry in the configuration
 
+    apply_to_subsequent_cli: Should this be applied to future clis parsed
+    choice: valid choices for this entry
+    cli_parameters: argparse specific params
+    environment_variable_override: override the defaultenvironment variable
+    name: the reference name for the entry
+    settings_file_path_override: over the defualt settings file path
+    short_description: A short description used for the argparse help
+    subcommand_value: Does the hold the names of the subcommand
+    subcommands: which subcommand should this be used for
+    value: the EntryValue for the entry
+    """
     name: str
     short_description: str
     value: EntryValue
 
+    apply_to_subsequent_cli: Subset = Subset.ALL
     choices: List = []
     cli_parameters: Union[None, CliParameters] = None
     environment_variable_override: Union[None, str] = None
-    internal: bool = False
     settings_file_path_override: Union[None, str] = None
-    subcommands: List[str] = []
+    subcommands: Union[List[str], Subset] = Subset.ALL
     subcommand_value: bool = False
 
     def environment_variable(self, prefix: str) -> str:

@@ -1,7 +1,6 @@
 """ utility func used by adjacent tests
 """
 import os
-from copy import deepcopy
 
 from typing import Dict
 from typing import List
@@ -15,6 +14,7 @@ from ansible_navigator.configuration_subsystem.definitions import ApplicationCon
 from ansible_navigator.configuration_subsystem.definitions import Entry
 from ansible_navigator.configuration_subsystem.definitions import Message
 
+from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
 from ansible_navigator.yaml import yaml
 from ansible_navigator.yaml import Loader
@@ -25,6 +25,8 @@ TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
 
 
 class GenerateConfigResponse(NamedTuple):
+    """obj for generate_config_response"""
+
     messages: List[Message]
     errors: List[str]
     application_configuration: ApplicationConfiguration
@@ -48,10 +50,6 @@ def _generate_config(params=None, setting_file_name=None) -> GenerateConfigRespo
         settings_file_path = ""
         settings_contents = {}
 
-    from ansible_navigator.configuration_subsystem.navigator_configuration import (
-        NavigatorConfiguration,
-    )
-
     application_configuration = NavigatorConfiguration
     configurator = Configurator(
         application_configuration=application_configuration,
@@ -69,6 +67,7 @@ def _generate_config(params=None, setting_file_name=None) -> GenerateConfigRespo
 
 @pytest.fixture(name="generate_config")
 def fixture_generate_config():
+    """generate a config"""
     return _generate_config
 
 

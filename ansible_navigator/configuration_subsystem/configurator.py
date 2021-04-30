@@ -10,6 +10,7 @@ from typing import Union
 from .definitions import ApplicationConfiguration
 from .definitions import EntrySource
 from .definitions import Message
+from .definitions import Subset
 from .parser import Parser
 
 from ..yaml import SafeLoader
@@ -25,7 +26,7 @@ class Configurator:
         self,
         params: List[str],
         application_configuration: ApplicationConfiguration,
-        apply_previous_cli_entries: Union[List, None] = None,
+        apply_previous_cli_entries: Union[List, Subset] = Subset.NONE,
         save_as_intitial: bool = False,
         settings_file_path: str = None,
     ):
@@ -49,7 +50,7 @@ class Configurator:
         self._sanity_check()
 
     def _sanity_check(self) -> None:
-        if self._apply_previous_cli_entries is not None:
+        if self._apply_previous_cli_entries is not Subset.NONE:
             if self._save_as_intitial is True:
                 raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
             if self._config.initial is None:
@@ -160,24 +161,50 @@ class Configurator:
 
     def _apply_previous_cli_to_current(self) -> None:
         # pylint: disable=too-many-nested-blocks
-        """
-        1) for each current entry
-        2) that isn't the subcommand holder
-        3) and the source is an EntrySource
-        4) and wasn't set by the current cli (USER_CLI)
-        5) get the previous entry
-        6) if it was set by the previous cli (USER_CLI)
-        7) replace the current with the previous
-        """
-        if self._apply_previous_cli_entries is not None:
-            for current_entry in self._config.entries:
-                if current_entry.subcommand_value is not True:
-                    if isinstance(current_entry.value.source, EntrySource):
-                        if current_entry.value.source.name != "USER_CLI":
-                            if self._apply_previous_cli_entries == ["all"] or (
-                                current_entry.name in self._apply_previous_cli_entries
-                            ):
-                                previous_entry = self._config.initial.entry(current_entry.name)
-                                if previous_entry.value.source.name == "USER_CLI":
-                                    current_entry.value.current = previous_entry.value.current
-                                    current_entry.value.source = EntrySource.PREVIOUS_CLI
+        """Apply eligible previous cli values to current not set by the cli"""
+
+        # _apply_previous_cli_entries must be ALL or a list of entries
+        if self._apply_previous_cli_entries is not Subset.ALL and not isinstance(
+            self._apply_previous_cli_entries, list
+        ):
+            return
+
+        current_subcommand = [
+            entry.value.current for entry in self._config.entries if entry.subcommand_value is True
+        ][0]
+        previous_subcommand = [
+            entry.value.current
+            for entry in self._config.initial.entries
+            if entry.subcommand_value is True
+        ][0]
+
+        for current_entry in self._config.entries:
+            # retrieve the correspoding previous entry
+            previous_entry = self._config.initial.entry(current_entry.name)
+
+            # skip if currently set from the cli
+            if current_entry.value.source is EntrySource.USER_CLI:
+                continue
+
+            # skip if _apply_previous_cli_entries is a list and the entry isn't in it
+            if (
+                isinstance(self._apply_previous_cli_entries, list)
+                and current_entry.name not in self._apply_previous_cli_entries
+            ):
+                continue
+
+            # skip if the previous entry not eligible for reapplication
+            if previous_entry.apply_to_subsequent_cli not in [Subset.ALL, Subset.SAME_SUBCOMMAND]:
+                continue
+
+            # skip if the same subcommand is required for reapplication
+            if current_entry.apply_to_subsequent_cli is Subset.SAME_SUBCOMMAND:
+                if current_subcommand != previous_subcommand:
+                    continue
+
+            # skip if the previous entry was not set by the cli
+            if previous_entry.value.source is not EntrySource.USER_CLI:
+                continue
+
+            current_entry.value.current = previous_entry.value.current
+            current_entry.value.source = EntrySource.PREVIOUS_CLI

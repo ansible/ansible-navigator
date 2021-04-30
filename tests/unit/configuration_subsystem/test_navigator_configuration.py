@@ -2,13 +2,14 @@
 """
 import os
 from collections import Counter
-from copy import deepcopy
 from unittest import mock
 
 import pytest
 
 from ansible_navigator.configuration_subsystem.configurator import Configurator
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+
+from ansible_navigator.configuration_subsystem.definitions import EntrySource
+from ansible_navigator.configuration_subsystem.definitions import Subset
 
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     generate_editor_command,
@@ -23,13 +24,14 @@ from .data import CLI_DATA
 from .data import ENVVAR_DATA
 from .data import SETTINGS
 
-from .utils import fixture_generate_config
+from .utils import fixture_generate_config  # pylint: disable=unused-import
 from .utils import id_for_base
 from .utils import id_for_cli
 from .utils import id_for_name
 from .utils import id_for_settings
 
-from ...defaults import FIXTURES_DIR
+
+# pylint: disable=too-many-arguments
 
 
 def test_no_duplicate_names():
@@ -95,7 +97,7 @@ def test_all_entries_reflect_default(generate_config, entry):
     """Ensure all entries are set to a default value"""
     response = generate_config()
     configured_entry = response.application_configuration.entry(entry.name)
-    assert configured_entry.value.source.name == "DEFAULT_CFG", entry
+    assert configured_entry.value.source is EntrySource.DEFAULT_CFG, entry
 
     if entry.name in ["inventory", "inventory_column", "pass_environment_variable"]:
         assert configured_entry.value.current == [], entry
@@ -127,10 +129,12 @@ def test_all_entries_reflect_cli_given_envvars(generate_config, base, cli_entry,
         response = generate_config(params=params)
         for key, value in expected.items():
             assert response.application_configuration.entry(key).value.current == value
-            assert response.application_configuration.entry(key).value.source.name == "USER_CLI"
+            assert (
+                response.application_configuration.entry(key).value.source is EntrySource.USER_CLI
+            )
         for entry in response.application_configuration.entries:
             if entry.name not in expected:
-                assert entry.value.source.name == "ENVIRONMENT_VARIABLE", entry
+                assert entry.value.source is EntrySource.ENVIRONMENT_VARIABLE, entry
 
 
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
@@ -154,10 +158,10 @@ def test_all_entries_reflect_cli_given_settings(
     for key, value in expected.items():
         configured_entry = response.application_configuration.entry(key)
         assert configured_entry.value.current == value, configured_entry
-        assert configured_entry.value.source.name == "USER_CLI", configured_entry
+        assert configured_entry.value.source is EntrySource.USER_CLI, configured_entry
     for entry in response.application_configuration.entries:
         if entry.name not in expected:
-            assert entry.value.source.name == source_other, entry
+            assert entry.value.source is source_other, entry
 
 
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
@@ -166,6 +170,7 @@ def test_all_entries_reflect_cli_given_settings(
 def test_all_entries_reflect_cli_given_settings_and_envars(
     generate_config, settings, source_other, base, cli_entry, expected
 ):
+    # pylint: disable=unused-argument
     """Ensure all entries are set by the cli
     the non cli parametes will be all be ENVIRONMENT_VARIABLE
     even though an empty or full settings file was provided
@@ -189,10 +194,10 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
         for key, value in expected.items():
             configured_entry = response.application_configuration.entry(key)
             assert configured_entry.value.current == value, configured_entry
-            assert configured_entry.value.source.name == "USER_CLI", configured_entry
+            assert configured_entry.value.source is EntrySource.USER_CLI, configured_entry
         for entry in response.application_configuration.entries:
             if entry.name not in expected:
-                assert entry.value.source.name == "ENVIRONMENT_VARIABLE", entry
+                assert entry.value.source is EntrySource.ENVIRONMENT_VARIABLE, entry
 
 
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
@@ -211,11 +216,11 @@ def test_all_entries_reflect_envvar_given_settings(
     with mock.patch.dict(os.environ, {environment_variable: str(value)}):
         response = generate_config(setting_file_name=settings)
         configured_entry = response.application_configuration.entry(entry)
-        assert configured_entry.value.source.name == "ENVIRONMENT_VARIABLE"
+        assert configured_entry.value.source is EntrySource.ENVIRONMENT_VARIABLE
         assert configured_entry.value.current == expected
     for other_entry in response.application_configuration.entries:
         if other_entry.name != entry:
-            assert other_entry.value.source.name == source_other, other_entry
+            assert other_entry.value.source is source_other, other_entry
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
@@ -224,164 +229,12 @@ def test_all_entries_reflect_settings_given_settings(generate_config, entry):
     response = generate_config(setting_file_name="ansible-navigator.yml")
     configured_entry = response.application_configuration.entry(entry.name)
     if entry.cli_parameters is not None:
-        assert configured_entry.value.source.name == "USER_CFG", entry
+        assert configured_entry.value.source is EntrySource.USER_CFG, entry
         path = entry.settings_file_path("ansible-navigator")
         expected = response.settings_contents
         for key in path.split("."):
             expected = expected[key]
         assert configured_entry.value.current == expected, entry
-
-
-def test_apply_previous_cli_all():
-    """Ensure all previous cli parameter are applied when requested"""
-    params = "doc shell --ee False --eei test_image --forks 15"
-    expected = {
-        "app": "doc",
-        "cmdline": ["--forks", "15"],
-        "execution_environment": False,
-        "execution_environment_image": "test_image",
-    }
-
-    application_configuration = deepcopy(NavigatorConfiguration)
-    configurator = Configurator(
-        application_configuration=application_configuration,
-        params=params.split(),
-        save_as_intitial=True,
-    )
-    configurator.configure()
-    for key, value in expected.items():
-        assert application_configuration.entry(key).value.current == value
-        assert application_configuration.entry(key).value.source.name == "USER_CLI"
-
-    assert isinstance(application_configuration.initial, ApplicationConfiguration)
-
-    params = "doc"
-    configurator = Configurator(
-        application_configuration=application_configuration,
-        params=params.split(),
-        apply_previous_cli_entries=["all"],
-    )
-    configurator.configure()
-    for key, value in expected.items():
-        if key != "app":
-            assert application_configuration.entry(key).value.current == value
-            assert application_configuration.entry(key).value.source.name == "PREVIOUS_CLI"
-
-
-def test_apply_previous_cli_some():
-    """Ensure only some of the previous cli parameters are applied when requested"""
-    params = "doc shell --ee False --eei test_image --forks 15"
-    application_configuration = deepcopy(NavigatorConfiguration)
-    configurator = Configurator(
-        application_configuration=application_configuration,
-        params=params.split(),
-        save_as_intitial=True,
-    )
-
-    configurator.configure()
-
-    expected = {
-        "app": "doc",
-        "cmdline": ["--forks", "15"],
-        "execution_environment": False,
-        "execution_environment_image": "test_image",
-    }
-    for key, value in expected.items():
-        assert application_configuration.entry(key).value.current == value
-        assert application_configuration.entry(key).value.source.name == "USER_CLI"
-
-    assert isinstance(application_configuration.initial, ApplicationConfiguration)
-
-    params = "doc"
-    configurator = Configurator(
-        application_configuration=application_configuration,
-        params=params.split(),
-        apply_previous_cli_entries=["execution_environment", "execution_environment_image"],
-    )
-    configurator.configure()
-
-    expected = {
-        "app": "doc",
-        "execution_environment": False,
-        "execution_environment_image": "test_image",
-    }
-    for key, value in expected.items():
-        if key != "app":
-            assert application_configuration.entry(key).value.current == value
-            assert application_configuration.entry(key).value.source.name == "PREVIOUS_CLI"
-    assert application_configuration.cmdline == []
-    assert application_configuration.entry("cmdline").value.source.name == "DEFAULT_CFG"
-
-
-def test_apply_previous_cli_mixed():
-    """Ensure a mixed config tests pass"""
-
-    params = "doc shell --ee False --eei test_image --forks 15"
-    application_configuration = deepcopy(NavigatorConfiguration)
-
-    configurator = Configurator(
-        application_configuration=application_configuration,
-        params=params.split(),
-        save_as_intitial=True,
-    )
-    with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
-        configurator.configure()
-
-    expected = {
-        "app": "doc",
-        "cmdline": ["--forks", "15"],
-        "execution_environment": False,
-        "execution_environment_image": "test_image",
-    }
-    # all expected set at command line
-    for key, value in expected.items():
-        assert application_configuration.entry(key).value.current == value
-        assert application_configuration.entry(key).value.source.name == "USER_CLI"
-
-    # penv set as environment variable
-    assert application_configuration.pass_environment_variable == ["ENV1", "ENV2"]
-    assert (
-        application_configuration.entry("pass_environment_variable").value.source.name
-        == "ENVIRONMENT_VARIABLE"
-    )
-
-    assert isinstance(application_configuration.initial, ApplicationConfiguration)
-
-    params = "doc --eei different_image"
-    configurator = Configurator(
-        application_configuration=application_configuration,
-        params=params.split(),
-        apply_previous_cli_entries=["all"],
-    )
-    with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES": "ENV1=VAL1"}):
-        configurator.configure()
-
-    # ee is carried forward because it was not in the command
-    assert application_configuration.execution_environment is False
-    assert (
-        application_configuration.entry("execution_environment").value.source.name == "PREVIOUS_CLI"
-    )
-
-    # eei is pulled from the current command
-    assert application_configuration.execution_environment_image == "different_image"
-    assert (
-        application_configuration.entry("execution_environment_image").value.source.name
-        == "USER_CLI"
-    )
-
-    # penv is default because it is no longer set
-    assert application_configuration.pass_environment_variable == []
-    assert (
-        application_configuration.entry("pass_environment_variable").value.source.name
-        == "DEFAULT_CFG"
-    )
-
-    # senv is set because it is a new envvar
-    assert application_configuration.set_environment_variable == {"ENV1": "VAL1"}
-    assert (
-        application_configuration.entry("set_environment_variable").value.source.name
-        == "ENVIRONMENT_VARIABLE"
-    )
 
 
 def test_editor_command_from_editor(generate_config):
@@ -396,7 +249,6 @@ def test_editor_command_from_editor(generate_config):
 def test_not_a_bool(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure errors generated for wrong type of value"""
-    import ansible_navigator.configuration_subsystem.configurator
 
     response = generate_config(setting_file_name="ansible-navigator_not_bool.yml")
     errors = [
@@ -443,7 +295,7 @@ def test_inventory_no_inventory(generate_config):
     assert response.errors == errors
 
 
-def test_mutual_exclusivity_for_configuration_init(generate_config):
+def test_mutual_exclusivity_for_configuration_init():
     """Ensure the configuration cannot be intited with both
     apply_previous_cli_entries and save_as_intitial"""
     with pytest.raises(ValueError, match="cannot be used with"):
@@ -451,17 +303,17 @@ def test_mutual_exclusivity_for_configuration_init(generate_config):
             params=None,
             application_configuration=None,
             save_as_intitial=True,
-            apply_previous_cli_entries=["all"],
+            apply_previous_cli_entries=Subset.ALL,
         )
 
 
-def test_apply_before_initial_saved(generate_config):
+def test_apply_before_initial_saved():
     """Ensure the apply_previous_cli_entries cant' be used before save_as_intitial"""
     with pytest.raises(ValueError, match="enabled prior to"):
         Configurator(
             params=None,
             application_configuration=NavigatorConfiguration,
-            apply_previous_cli_entries=["all"],
+            apply_previous_cli_entries=Subset.ALL,
         ).configure()
 
 
@@ -471,12 +323,11 @@ def test_apply_before_initial_saved(generate_config):
 def test_poor_choices(generate_config, entry):
     # pylint: disable=import-outside-toplevel
     """Ensure errors generated for poor choices"""
-    import ansible_navigator.configuration_subsystem.configurator
 
     def test(param):
         response = generate_config(params=[param, "Sentinel"])
         assert len(response.errors) == 1
-        error = "must be one of"
+        error = "must be one"
         assert error in response.errors[0]
 
     test(entry.cli_parameters.short)

@@ -18,10 +18,12 @@ from ansible_navigator.configuration_subsystem.definitions import SubCommand
 
 from ansible_navigator.configuration_subsystem.parser import Parser
 
+# pylint: disable=protected-access
+
 
 def test_cmdline_source_not_set():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = ApplicationConfiguration(
+    test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=NavigatorPostProcessor(),
         subcommands=[
@@ -35,7 +37,7 @@ def test_cmdline_source_not_set():
             ),
         ],
     )
-    configurator = Configurator(params=[], application_configuration=TestConfig)
+    configurator = Configurator(params=[], application_configuration=test_config)
     configurator._post_process()
     assert "Completed post processing for cmdline" in configurator._messages[0][1]
     assert configurator._errors == []
@@ -43,7 +45,7 @@ def test_cmdline_source_not_set():
 
 def test_no_subcommand():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = ApplicationConfiguration(
+    test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -52,12 +54,12 @@ def test_no_subcommand():
         entries=[],
     )
     with pytest.raises(ValueError, match="No entry with subparser value defined"):
-        Configurator(params=[], application_configuration=TestConfig).configure()
+        Configurator(params=[], application_configuration=test_config).configure()
 
 
 def test_many_subcommand():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = ApplicationConfiguration(
+    test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -79,12 +81,12 @@ def test_many_subcommand():
         ],
     )
     with pytest.raises(ValueError, match="Multiple entries with subparser value defined"):
-        Configurator(params=[], application_configuration=TestConfig).configure()
+        Configurator(params=[], application_configuration=test_config).configure()
 
 
 def test_invalid_choice_not_set():
     """Ensure a Config without a subparse entry fails"""
-    TestConfig = ApplicationConfiguration(
+    test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -105,12 +107,12 @@ def test_invalid_choice_not_set():
         ],
     )
     with pytest.raises(ValueError, match="Current source not set for e1"):
-        TestConfig.entry("e1").invalid_choice
+        test_config.entry("e1").invalid_choice  # pylint: disable=expression-not-assigned
 
 
 def test_cutom_nargs_for_postional():
     """Ensure a nargs for a positional are carried forward"""
-    TestConfig = ApplicationConfiguration(
+    test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
         subcommands=[
@@ -128,40 +130,9 @@ def test_cutom_nargs_for_postional():
                 cli_parameters=CliParameters(positional=True, nargs=3),
                 short_description="ex1",
                 value=EntryValue(),
+                subcommands=["subcommand1"],
             ),
         ],
     )
-    parser = Parser(TestConfig)
-    entry = [action for action in parser.parser._actions if action.dest == "e1"]
-    assert entry[0].nargs == 3
-
-
-def test_apply_cli_source_not_set():
-    """Ensure a Config iterates correctly"""
-    TestConfig = ApplicationConfiguration(
-        application_name="test_config1",
-        post_processor=NavigatorPostProcessor(),
-        subcommands=[
-            SubCommand(name="subcommand1", description="subcommand1"),
-        ],
-        entries=[
-            Entry(
-                name="e1",
-                short_description="e1",
-                value=EntryValue(),
-            ),
-            Entry(
-                name="e2",
-                short_description="e2",
-                value=EntryValue(),
-            ),
-        ],
-        initial=True,
-    )
-
-    configurator = Configurator(
-        params=[], application_configuration=TestConfig, apply_previous_cli_entries=["all"]
-    )
-    configurator._apply_previous_cli_to_current()
-    assert configurator._messages == []
-    assert configurator._errors == []
+    parser = Parser(test_config)
+    assert parser.parser._actions[1].choices["subcommand1"]._actions[1].nargs == 3

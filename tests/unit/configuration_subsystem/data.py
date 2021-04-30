@@ -4,12 +4,14 @@ Note: Some of these are defined as dictionaries for ease but all should be froze
 before use so they are immutable within the tests
 """
 
+from ansible_navigator.configuration_subsystem.definitions import EntrySource
 
-def d2f(dict):
+
+def d2t(dyct):
     """turn the data dictionary into a frozenset
     so they are immutable
     """
-    return tuple(dict.items())
+    return tuple(dyct.items())
 
 
 BASE_SHORT_CLI = """
@@ -42,7 +44,7 @@ BASE_LONG_CLI = """
 --set-environment-variable E2=V2
 """
 
-BASE_EXPECTED = d2f(
+BASE_EXPECTED = d2t(
     {
         "editor_command": "vim_base",
         "editor_console": True,
@@ -154,6 +156,7 @@ CLI_DATA_RUN = [
 
 
 def cli_data():
+    """turn them all into tuples"""
     aggregated = (
         CLI_DATA_COLLECTIONS  # type: ignore
         + CLI_DATA_CONFIG  # type: ignore
@@ -163,7 +166,7 @@ def cli_data():
         + CLI_DATA_LOAD  # type: ignore
         + CLI_DATA_RUN  # type: ignore
     )
-    frozen = [(cmd, d2f(expected)) for cmd, expected in aggregated]
+    frozen = [(cmd, d2t(expected)) for cmd, expected in aggregated]
     return frozen
 
 
@@ -192,6 +195,6 @@ ENVVAR_DATA = [
 ]
 
 SETTINGS = [
-    ("ansible-navigator_empty.yml", "DEFAULT_CFG"),
-    ("ansible-navigator.yml", "USER_CFG"),
+    ("ansible-navigator_empty.yml", EntrySource.DEFAULT_CFG),
+    ("ansible-navigator.yml", EntrySource.USER_CFG),
 ]
