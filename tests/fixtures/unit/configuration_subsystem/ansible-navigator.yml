@@ -35,4 +35,7 @@ ansible-navigator:
   mode: stdout
   osc4: False
   playbook: /tmp/test_playbook.yml
-  playbook-artifact: test_artifact.json
+  playbook-artifact: 
+    enable: True
+    load: test_artifact.json
+    save-as: test_artifact.json

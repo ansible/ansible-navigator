@@ -9,11 +9,10 @@ from typing import Union
 from ansible_navigator.actions import kegexes
 
 from .app_public import AppPublic
+from .configuration_subsystem import Constants as C
+from .initialization import parse_and_update
 
 from .steps import Steps
-
-from .utils import check_for_ansible
-from .utils import set_ansible_envar
 
 from .ui_framework.ui import Action
 
@@ -87,28 +86,15 @@ class App:
         provide an error callback so the app doesn't sys.exit if the aprsing fails
         """
 
-        try:
-            msgs, new_args = self._calling_app.args.parse_and_update(
-                params=params, error_cb=self.parser_error
-            )
-        except TypeError:
-            self._logger.error("While attempting to parse %s:", " ".join(params))
-            self._logger.error(self._parser_error)
-            return None
-
-        for msg in msgs:
-            self._logger.debug(msg)
-
-        if not hasattr(new_args, "requires_ansible") or new_args.requires_ansible:
-            if not new_args.execution_environment:
-                success, msg = check_for_ansible()
-                if success:
-                    self._logger.debug(msg)
-                else:
-                    self._logger.critical(msg)
-                    return None
-            set_ansible_envar()
-        return new_args
+        messages, errors = parse_and_update(
+            params=params, args=self.args, apply_previous_cli_entries=C.ALL
+        )
+        
+        for entry in messages:
+            self._logger.log(level=entry.level, msg=entry.message)
+        
+        for error in errors:
+            self._logger.error(error)
 
     def write_artifact(self, filename: str) -> None:
         """per app write_artifact

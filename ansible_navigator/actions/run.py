@@ -198,11 +198,10 @@ class Action(App):
     KEGEX = r"""(?x)
             ^
             (?P<run>r(?:un)?
-            (\s(?P<playbook>\S+))?
-            (\s(?P<params>.*))?)
+            (\s(?P<params_run>.*))?)
             |
             (?P<load>l(?:oad)?
-            \s(?P<artifact>\S+))
+            (\s(?P<params_load>\S+))?)
             $"""
 
     def __init__(self, args):
@@ -266,16 +265,13 @@ class Action(App):
         if interaction.action.match.groupdict()["run"]:
             self._subaction_type = "run"
             self._logger.debug("subaction type is %s", self._subaction_type)
+            self._update_args(["run"] + (interaction.action.match.groupdict()['params_run'] or "").split())
             initialized = self._init_run()
         elif interaction.action.match.groupdict()["load"]:
             self._subaction_type = "load"
             self._logger.debug("subaction type is %s", self._subaction_type)
-            artifact_file = os.path.abspath(
-                os.path.expanduser(interaction.action.match.groupdict()["artifact"])
-            )
-            initialized = self._init_load(artifact_file)
-        else:
-            return None
+            self._update_args(["run"] + (interaction.action.match.groupdict()['params_load'] or "").split())
+            initialized = self._init_load()
 
         if not initialized:
             return None
@@ -321,42 +317,7 @@ class Action(App):
 
     # pylint: disable=too-many-branches
     def _init_run(self) -> bool:
-        """in the case of :run, parse the user input"""
-
-        # Use the provided playbook, or the previously specified playbook
-        p_from_int = self._interaction.action.match.groupdict().get("playbook")
-        if p_from_int:
-            self._logger.debug("Using playbook provided by user")
-            playbook = p_from_int
-        elif getattr(self._calling_app.args, "playbook", None):
-            self._logger.debug("Using playbook from calling app")
-            playbook = self._calling_app.args.playbook
-        else:
-            playbook = ""
-
-        new_cmd = [self._name_at_cli]
-        # if we have a playbook, use params, inventory, etc
-        if playbook:
-            # Use the provided params, or inventory and cmdline previously provided
-            user_provided_params = self._interaction.action.match.groupdict().get("params")
-            if user_provided_params:
-                self._logger.debug("Using params provided by user")
-                new_cmd += [playbook] + user_provided_params.split()
-            elif self._calling_app.args.app == "run":
-                self._logger.debug("Calling app was run, reusing all from calling app")
-                new_cmd = self._calling_app.args.original_command
-            else:
-                self._logger.debug("Params set to [], params not provided, or calling app not run")
-                new_cmd += [playbook]
-
-        self._logger.debug("Parsing: %s", " ".join(new_cmd))
-
-        # Parse as if provided from the cmdline
-        # this will pull in any default or config settings
-        new_args = self._update_args(new_cmd)
-        if new_args is None:
-            return False
-        self.args = new_args
+        """in the case of :run, check the user input"""
 
         # Ensure the playbook and inventory are valid
         playbook_valid = os.path.exists(self.args.playbook)
@@ -386,13 +347,15 @@ class Action(App):
         self._logger.info("Run initialized and playbook started.")
         return True
 
-    def _init_load(self, artifact_file: str) -> bool:
+    def _init_load(self) -> bool:
         """in the case of :load, load the artifact
         check for a version, to be safe
         copy the calling app args as our our so the can be updated safely
         with a uuid attached to the name
         """
         self._logger.debug("Starting load artifact request")
+
+        artifact_file = self.args.artifact_file
 
         if not os.path.exists(artifact_file):
             populated_form = self._prompt_for_artifact(artifact_file=artifact_file)
@@ -776,16 +739,14 @@ class Action(App):
         :param filename: The file to write to
         :type filename: str
         """
-
-        if self.args.playbook_artifact or filename is not None:
+        if filename or self.args.playbook_artifact_enable:
+            filename = filename or self.args.playbook_artifact_save_as
+            filename = filename.format(
+                        playbook_dir=os.path.dirname(self.args.playbook),
+                        playbook_name=os.path.splitext(os.path.basename(self.args.playbook))[0],
+                        ts_utc=datetime.datetime.now(tz=datetime.timezone.utc),
+                    )
             status, status_color = self._get_status()
-            ts_utc = datetime.datetime.now(tz=datetime.timezone.utc)
-            if filename is None:
-                filename = self.args.playbook_artifact.format(
-                    playbook_dir=os.path.dirname(self.args.playbook),
-                    playbook_name=os.path.splitext(os.path.basename(self.args.playbook))[0],
-                    ts_utc=ts_utc,
-                )
 
             with open(filename, "w") as outfile:
                 artifact = {

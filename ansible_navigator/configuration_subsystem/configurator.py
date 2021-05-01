@@ -1,5 +1,6 @@
 """ The configuration object
 """
+import logging
 import os
 
 from copy import deepcopy
@@ -9,9 +10,9 @@ from typing import Union
 
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
-from .definitions import Message
 from .parser import Parser
 
+from ..utils import LogMessage
 from ..yaml import SafeLoader
 from ..yaml import yaml
 
@@ -42,7 +43,7 @@ class Configurator:
         self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
         self._errors: List[str] = []
-        self._messages: List[Message] = []
+        self._messages: List[LogMessage] = []
         self._params = params
         self._save_as_intitial = save_as_intitial
         self._settings_file_path = settings_file_path
@@ -55,26 +56,37 @@ class Configurator:
             if self._config.initial is None:
                 raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
 
-    def configure(self) -> Tuple[List[Message], List[str]]:
-        """Perform the configuration"""
+    def configure(self) -> Tuple[List[LogMessage], List[str]]:
+        """Perform the configuration
+
+        save the original entries, if an error is encountered
+        restore them
+        """
         self._config.original_command = self._params
+        message = f"Params provided: {self._config.original_command}"
+        self._messages.append(LogMessage(level=logging.DEBUG, message=message))
+        unaltered_entries = deepcopy(self._config.entries)
+
         self._restore_original()
         self._apply_defaults()
         self._apply_settings_file()
         self._apply_environment_variables()
         self._apply_cli_params()
         if self._errors:
+            self._config.entries = unaltered_entries
             return self._messages, self._errors
+        
+        self._apply_previous_cli_to_current()
 
         self._post_process()
         if self._errors:
+            self._config.entries = unaltered_entries
             return self._messages, self._errors
 
         self._check_choices()
         if self._errors:
+            self._config.entries = unaltered_entries
             return self._messages, self._errors
-
-        self._apply_previous_cli_to_current()
 
         if self._save_as_intitial:
             self._config.initial = deepcopy(self._config)
@@ -109,8 +121,10 @@ class Configurator:
                 try:
                     config = yaml.load(config_fh, Loader=SafeLoader)
                 except (yaml.scanner.ScannerError, yaml.parser.ParserError):
-                    msg = f"Settings file found {self._settings_file_path}, but failed to load it."
-                    self._errors.append(msg)
+                    error = (
+                        f"Settings file found {self._settings_file_path}, but failed to load it."
+                    )
+                    self._errors.append(error)
                     return
             for entry in self._config.entries:
                 settings_file_path = entry.settings_file_path(self._config.application_name)
@@ -122,12 +136,12 @@ class Configurator:
                     entry.value.current = data
                     entry.value.source = C.USER_CFG
                 except TypeError:
-                    msg = f"{self._settings_file_path} empty"
-                    self._errors.append(msg)
+                    error = f"{self._settings_file_path} empty"
+                    self._errors.append(error)
                     return
                 except KeyError:
-                    msg = f"{settings_file_path} not found in settings file"
-                    self._messages.append(Message(log_level="debug", message=msg))
+                    message = f"{settings_file_path} not found in settings file"
+                    self._messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     def _apply_environment_variables(self) -> None:
         for entry in self._config.entries:

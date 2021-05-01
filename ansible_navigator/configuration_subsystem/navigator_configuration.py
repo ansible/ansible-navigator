@@ -1,5 +1,6 @@
 """ the ansible-navigator configuration
 """
+import logging
 import os
 
 from types import SimpleNamespace
@@ -15,31 +16,17 @@ from .definitions import SubCommand
 
 from .navigator_post_processor import NavigatorPostProcessor
 
+from ..initialization import get_share_directory
 from ..utils import abs_user_path
-from ..utils import get_share_directory
 from ..utils import oxfordcomma
+from ..utils import LogMessage
 
 from .._version import __version__ as VERSION
 
 APP_NAME = "ansible_navigator"
 
-
-def generate_editor_command() -> str:
-    """Generate a default for editor_command if EDITOR is set"""
-    if "EDITOR" in os.environ:
-        command = "%s {filename}" % os.environ.get("EDITOR")
-    else:
-        command = "vi +{line_number} {filename}"
-    return command
-
-
-def generate_cache_path():
-    """Generate a path for the collection cache"""
-    file_name = "collection_doc_cache.db"
-    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
-    cache_path = os.path.join(cache_home, APP_NAME, file_name)
-    return cache_path
-
+initialization_messages = []
+initialization_errors = []
 
 PLUGIN_TYPES = (
     "become",
@@ -58,13 +45,50 @@ PLUGIN_TYPES = (
 )
 
 
+def generate_editor_command() -> str:
+    """Generate a default for editor_command if EDITOR is set"""
+    editor = os.environ.get("EDITOR")
+    if editor is None:
+        message = "EDITOR environment variable not set"
+        initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+        command = "vi +{line_number} {filename}"
+    else:
+        message = "EDITOR environment variable set as '{editor}'"
+        initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+        command = "%s {filename}" % os.environ.get("EDITOR")
+    message = f"Default editor_command set to: {command}"
+    initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+    return command
+
+
+def generate_cache_path():
+    """Generate a path for the collection cache"""
+    file_name = "collection_doc_cache.db"
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    cache_path = os.path.join(cache_home, APP_NAME.replace("_", "-"), file_name)
+    message = f"Default collection_doc_cache_path set to: {cache_path}"
+    initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+    return cache_path
+
+
+def generate_share_directory():
+    """Generate a share director"""
+    messages, errors, share_directory = get_share_directory(APP_NAME)
+    initialization_messages.extend(messages)
+    initialization_errors.extend(errors)
+    return share_directory
+
+
 class Internals(SimpleNamespace):
+    # pylint: disable=too-few-public-methods
     """a place to hold object that need to be carried
     from apllication initiation to the rest of the app
     """
 
-    share_directory: str = get_share_directory(app_name=APP_NAME)
     collection_doc_cache: Union[C, Dict] = C.NOT_SET
+    initialization_errors = initialization_errors
+    initialization_messages = initialization_messages
+    share_directory: str = generate_share_directory()
 
 
 NavigatorConfiguration = ApplicationConfiguration(
@@ -205,11 +229,29 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(),
         ),
         Entry(
-            name="playbook_artifact",
+            name="playbook_artifact_enable",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--pae"),
+            settings_file_path_override="playbook-artifact.enable",
+            short_description="Enable the creation of artifacts for completed playbooks",
+            subcommands=["run"],
+            value=EntryValue(default=True),
+        ),
+        Entry(
+            name="playbook_artifact_load",
             cli_parameters=CliParameters(positional=True),
-            short_description="Specify the path to a playbook artifact",
+            settings_file_path_override="playbook-artifact.load",
+            short_description="Specify the path for the playbook artifact to load",
             subcommands=["load"],
             value=EntryValue(),
+        ),
+        Entry(
+            name="playbook_artifact_save_as",
+            cli_parameters=CliParameters(short="--pas"),
+            settings_file_path_override="playbook-artifact.save-as",
+            short_description="Specify the file name for artifacts created from completed playbooks",
+            subcommands=["run"],
+            value=EntryValue(default="{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"),
         ),
         Entry(
             name="plugin_name",

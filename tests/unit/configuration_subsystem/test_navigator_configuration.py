@@ -3,6 +3,7 @@
 import os
 
 from unittest import mock
+from unittest.mock import patch
 
 import pytest
 
@@ -29,13 +30,17 @@ from .utils import id_for_cli
 from .utils import id_for_name
 from .utils import id_for_settings
 
+from ...integration._common import container_runtime_or_fail
+
 # pylint: disable=too-many-arguments
 
-
+@patch('ansible_navigator.configuration_subsystem.navigator_post_processor.find_executable', return_value="/path/test_engine")
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_all_entries_reflect_default(generate_config, entry):
+def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
     """Ensure all entries are set to a default value"""
     response = generate_config()
+    @ add asertions for errors
+    @ clean up assert output
     configured_entry = response.application_configuration.entry(entry.name)
     if configured_entry.value.default is C.NOT_SET:
         assert configured_entry.value.source is C.NOT_SET, entry
@@ -43,10 +48,10 @@ def test_all_entries_reflect_default(generate_config, entry):
         assert configured_entry.value.source is C.DEFAULT_CFG, entry
         assert configured_entry.value.current == entry.value.default, entry
 
-
+@patch('ansible_navigator.configuration_subsystem.navigator_post_processor.find_executable', return_value="/path/test_engine")
 @pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
-def test_all_entries_reflect_cli_given_envvars(generate_config, base, cli_entry, expected):
+def test_all_entries_reflect_cli_given_envvars(_mocked_func, generate_config, base, cli_entry, expected):
     """Ensure all entries are set by the cli even with envvars set"""
     if base is None:
         params = cli_entry.split()
@@ -71,12 +76,12 @@ def test_all_entries_reflect_cli_given_envvars(generate_config, base, cli_entry,
             if entry.name not in expected:
                 assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry
 
-
+@patch('ansible_navigator.configuration_subsystem.navigator_post_processor.find_executable', return_value="/path/test_engine")
 @pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings(
-    generate_config, settings, settings_file_type, base, cli_entry, expected
+    _mock_func, generate_config, settings, settings_file_type, base, cli_entry, expected
 ):
     """Ensure all entries are set by the cli
     based on the settings file, the non cli parametes will be
@@ -104,12 +109,12 @@ def test_all_entries_reflect_cli_given_settings(
             elif settings_file_type == "full":
                 assert entry.value.source is C.USER_CFG, entry
 
-
+@patch('ansible_navigator.configuration_subsystem.navigator_post_processor.find_executable', return_value="/path/test_engine")
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings_and_envars(
-    generate_config, settings, source_other, base, cli_entry, expected
+    _mocked_func, generate_config, settings, source_other, base, cli_entry, expected
 ):
     # pylint: disable=unused-argument
     """Ensure all entries are set by the cli
@@ -185,7 +190,8 @@ def test_all_entries_reflect_settings_given_settings(generate_config, entry):
         assert configured_entry.value.current == expected, entry
 
 
-def test_editor_command_from_editor(generate_config):
+@patch('ansible_navigator.configuration_subsystem.navigator_post_processor.find_executable', return_value="/path/to_container_engine")
+def test_editor_command_from_editor(_mocked_func, generate_config):
     """Ensure the editor_command defaults to EDITOR if set"""
     with mock.patch.dict(os.environ, {"EDITOR": "nano"}):
         # since this was already loaded, force it
@@ -213,8 +219,8 @@ def test_badly_formatted_envar(generate_config):
     """Ensure errors generated for badly formatted set env var"""
     params = "run site.yml --senv TK1:TV1"
     response = generate_config(params=params.split())
-    errors = ["The following set-environment-variable entry could not be parsed: TK1:TV1"]
-    assert response.errors == errors
+    error = "The following set-environment-variable entry could not be parsed: TK1:TV1"
+    assert error in response.errors, response.errors
 
 
 def test_broken_settings_file(generate_config):
@@ -239,8 +245,8 @@ def test_inventory_no_inventory(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure errors generated for an inventory without an inventory specified"""
     response = generate_config(params=["inventory"])
-    errors = ["An inventory is required when using the inventory subcommand"]
-    assert response.errors == errors
+    error = "An inventory is required when using the inventory subcommand"
+    assert error in response.errors
 
 
 def test_mutual_exclusivity_for_configuration_init():

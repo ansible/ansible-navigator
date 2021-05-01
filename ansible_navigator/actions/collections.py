@@ -294,9 +294,10 @@ class Action(App):
 
         cmd = [self._args.container_engine, "run", "-i", "-t"]
 
+        share_directory = self._args.internals.share_directory
         cmd += [
             "-v",
-            f"{self._args.internals.share_directory}/utils:{self._args.internals.share_directory}/utils:z",
+            f"{share_directory}/utils:{share_directory}/utils:z",
         ]
 
         if os.path.exists(self._adjacent_collection_dir):

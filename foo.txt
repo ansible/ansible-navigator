@@ -1,0 +1,92 @@
+{
+    "version": "1.0.0",
+    "plays": [
+        {
+            "playbook": "/Users/bthornto/github/nav_demo/simple.yaml",
+            "playbook_uuid": "698e63fa-065e-4c5e-96ea-a50bf7815614",
+            "play": "localhost",
+            "play_uuid": "0242ac11-001c-ef09-fdf7-000000000015",
+            "play_pattern": "localhost",
+            "name": "localhost",
+            "pattern": "localhost",
+            "uuid": "0242ac11-001c-ef09-fdf7-000000000015",
+            "__play_name": "localhost",
+            "tasks": [
+                {
+                    "playbook": "/Users/bthornto/github/nav_demo/simple.yaml",
+                    "playbook_uuid": "698e63fa-065e-4c5e-96ea-a50bf7815614",
+                    "play": "localhost",
+                    "play_uuid": "0242ac11-001c-ef09-fdf7-000000000015",
+                    "play_pattern": "localhost",
+                    "task": "Gathering Facts",
+                    "task_uuid": "0242ac11-001c-ef09-fdf7-00000000001e",
+                    "task_action": "gather_facts",
+                    "task_args": "",
+                    "task_path": "/Users/bthornto/github/nav_demo/simple.yaml:1",
+                    "host": "localhost",
+                    "uuid": "dc91fb52-c99d-4d01-a158-08237846d71f",
+                    "__host": "localhost",
+                    "__result": "FAILED",
+                    "__changed": false,
+                    "__duration": "0s",
+                    "__number": 0,
+                    "__task": "Gathering Facts",
+                    "__task_action": "gather_facts",
+                    "remote_addr": "127.0.0.1",
+                    "res": {
+                        "ansible_facts": {},
+                        "msg": "The following modules failed to execute: ansible.legacy.setup\n",
+                        "failed_modules": {
+                            "ansible.legacy.setup": {
+                                "failed": true,
+                                "module_stdout": "",
+                                "module_stderr": "/bin/sh: sudo: command not found\n",
+                                "msg": "MODULE FAILURE\nSee stdout/stderr for the exact error",
+                                "rc": 127
+                            }
+                        },
+                        "_ansible_verbose_override": true,
+                        "_ansible_no_log": false,
+                        "changed": false
+                    },
+                    "start": "2021-05-01T18:13:13.030582",
+                    "end": "2021-05-01T18:13:13.377281",
+                    "duration": 0.346699,
+                    "ignore_errors": null,
+                    "event_loop": null
+                }
+            ],
+            "__ok": 0,
+            "__skipped": 0,
+            "__failed": 1,
+            "__unreachable": 0,
+            "__ignored": 0,
+            "__in_progress": 0,
+            "__changed": 0,
+            "__task_count": 1,
+            "__% completed": "100% \u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587",
+            "___% completed": "100%",
+            "__pcomplete": 100
+        }
+    ],
+    "stdout": [
+        "[WARNING]: You are running the development version of Ansible. You should only",
+        "run Ansible from \"devel\" if you are modifying the Ansible engine, or trying out",
+        "features under development. This is a rapidly changing source of code and can",
+        "become unstable at any point.",
+        "\u001b[1;35m[WARNING]: You are running the development version of Ansible. You should only\u001b[0m",
+        "\u001b[1;35mrun Ansible from \"devel\" if you are modifying the Ansible engine, or trying out\u001b[0m",
+        "\u001b[1;35mfeatures under development. This is a rapidly changing source of code and can\u001b[0m",
+        "\u001b[1;35mbecome unstable at any point.\u001b[0m",
+        "",
+        "PLAY [localhost] ***************************************************************",
+        "",
+        "TASK [Gathering Facts] *********************************************************",
+        "\u001b[0;31mfatal: [localhost]: FAILED! => {\"ansible_facts\": {}, \"changed\": false, \"failed_modules\": {\"ansible.legacy.setup\": {\"failed\": true, \"module_stderr\": \"/bin/sh: sudo: command not found\\n\", \"module_stdout\": \"\", \"msg\": \"MODULE FAILURE\\nSee stdout/stderr for the exact error\", \"rc\": 127}}, \"msg\": \"The following modules failed to execute: ansible.legacy.setup\\n\"}\u001b[0m",
+        "",
+        "PLAY RECAP *********************************************************************",
+        "\u001b[0;31mlocalhost\u001b[0m                  : ok=0    changed=0    unreachable=0    \u001b[0;31mfailed=1   \u001b[0m skipped=0    rescued=0    ignored=0   "
+    ],
+    "status": "failed",
+    "status_color": 9
+}

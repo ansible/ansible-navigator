@@ -20,8 +20,6 @@ from ansible_runner import get_plugin_docs
 from ansible_runner import run_command
 from ansible_runner import run_command_async
 
-from ansible_navigator.configuration_subsystem import Constants as C
-
 
 class BaseRunner:
     """BaseRunner class"""
@@ -74,8 +72,12 @@ class BaseRunner:
         self._ee = execution_environment
         self._eei = execution_environment_image
         self._navigator_mode = navigator_mode
-        self._set_environment_variable = set_environment_variable
-        self._pass_environment_variable = pass_environment_variable
+        self._set_environment_variable: Dict[str, Any] = (
+            set_environment_variable if isinstance(set_environment_variable, dict) else {}
+        )
+        self._pass_environment_variable: List[str] = (
+            pass_environment_variable if isinstance(pass_environment_variable, list) else []
+        )
         self._cwd = cwd
         self.cancelled: bool = False
         self.finished: bool = False
@@ -128,18 +130,16 @@ class BaseRunner:
         self._runner_args["envvars"] = {
             k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")
         }
-        if self._set_environment_variable is not C.NOT_SET:
-            self._runner_args["envvars"].update(self._set_environment_variable)
-        if self._pass_environment_variable is not C.NOT_SET:
-            for env_var in self._pass_environment_variable:
-                value = os.environ.get(env_var)
-                if value is None:
-                    self._logger.warning(
-                        "Pass through environment variable `%s`" " not currently set, discarded",
-                        env_var,
-                    )
-                else:
-                    self._runner_args["envvars"][env_var] = value
+        self._runner_args["envvars"].update(self._set_environment_variable)
+        for env_var in self._pass_environment_variable:
+            value = os.environ.get(env_var)
+            if value is None:
+                self._logger.warning(
+                    "Pass through environment variable `%s`" " not currently set, discarded",
+                    env_var,
+                )
+            else:
+                self._runner_args["envvars"][env_var] = value
 
 
 class CommandBaseRunner(BaseRunner):
@@ -164,13 +164,9 @@ class CommandBaseRunner(BaseRunner):
             inventory ([list], optional): List of path to the inventory files. Defaults to None.
         """
         self._executable_cmd = executable_cmd
-        self._cmdline = cmdline
-        if self._cmdline in [None, C.NOT_SET]:
-            self._cmdline = []
-        else:
-            self._cmdline = cmdline
+        self._cmdline: List[str] = cmdline if isinstance(cmdline, list) else []
         self._playbook = playbook
-        self._inventory = inventory
+        self._inventory: List[str] = inventory if isinstance(inventory, list) else []
         super().__init__(**kwargs)
 
     def generate_run_command_args(self) -> None:
@@ -179,9 +175,8 @@ class CommandBaseRunner(BaseRunner):
             self._cmdline.append(self._playbook)
             self._runner_args.update({"cwd": os.path.dirname(os.path.abspath(self._playbook))})
 
-        if self._inventory is not C.NOT_SET:
-            for inv in self._inventory:
-                self._cmdline.extend(["-i", inv])
+        for inv in self._inventory:
+            self._cmdline.extend(["-i", inv])
 
         self._runner_args.update(
             {"executable_cmd": self._executable_cmd, "cmdline_args": self._cmdline}

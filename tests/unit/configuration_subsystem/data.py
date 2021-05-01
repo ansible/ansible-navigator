@@ -13,6 +13,7 @@ def d2t(dyct):
 
 
 BASE_SHORT_CLI = """
+--ce docker
 --ecmd vim_base
 --econ True
 --ee False
@@ -28,6 +29,7 @@ BASE_SHORT_CLI = """
 """
 
 BASE_LONG_CLI = """
+--container-engine docker
 --editor-command vim_base
 --editor-console True
 --execution-environment False
@@ -44,6 +46,7 @@ BASE_LONG_CLI = """
 
 BASE_EXPECTED = d2t(
     {
+        "container_engine": "docker",
         "editor_command": "vim_base",
         "editor_console": True,
         "execution_environment": False,
@@ -115,7 +118,7 @@ CLI_DATA_INVENTORY_COLUMNS = [
         },
     ),
 ]
-CLI_DATA_LOAD = [("load /tmp/part.json", {"app": "load", "playbook_artifact": "/tmp/part.json"})]
+CLI_DATA_LOAD = [("load /tmp/part.json", {"app": "load", "playbook_artifact_load": "/tmp/part.json"})]
 CLI_DATA_RUN = [
     ("run /tmp/site.yml", {"app": "run", "playbook": "/tmp/site.yml"}),
     (
@@ -187,7 +190,9 @@ ENVVAR_DATA = [
     ("osc4", "false", False),
     ("pass_environment_variable", "a,b,c", ["a", "b", "c"]),
     ("playbook", "/tmp/site.yaml", "/tmp/site.yaml"),
-    ("playbook_artifact", "/tmp/play.json", "/tmp/play.json"),
+    ("playbook_artifact_enable", "false", False),
+    ("playbook_artifact_load", "/tmp/load.json", "/tmp/load.json"),
+    ("playbook_artifact_save_as", "/tmp/save.json", "/tmp/save.json"),
     ("plugin_name", "shell", "shell"),
     ("plugin_type", "become", "become"),
     ("set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}),
