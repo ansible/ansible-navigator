@@ -251,7 +251,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="playbook-artifact.save-as",
             short_description="Specify the name for artifacts created from completed playbooks",
             subcommands=["run"],
-            value=EntryValue(default="{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"),
+            value=EntryValue(default="./{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"),
         ),
         Entry(
             name="plugin_name",

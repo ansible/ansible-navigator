@@ -216,19 +216,6 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def playbook_artifact_save_as(
-        entry: Entry, config: ApplicationConfiguration
-    ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
-        """Post process playbook_artifact_load"""
-        messages: List[LogMessage] = []
-        errors: List[str] = []
-        if isinstance(entry.value.current, str):
-            entry.value.current = abs_user_path(entry.value.current)
-        return messages, errors
-
-    @staticmethod
-    @_post_processor
     def set_environment_variable(
         entry: Entry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
