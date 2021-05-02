@@ -316,10 +316,7 @@ def test_poor_choices(_mocked_func, generate_config, entry):
             response = generate_config(params=[param, "Sentinel"])
         else:
             response = generate_config(params=[subcommand, param, "Sentinel"])
-
-        assert len(response.errors) == 1
-        error = "must be one"
-        assert error in response.errors[0]
+        assert any("must be one of" in err for err in response.errors)
 
     if isinstance(entry.subcommands, list):
         subcommand = entry.subcommands[0]
