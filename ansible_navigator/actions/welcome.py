@@ -32,7 +32,7 @@ class Action:
         :type app: App
         """
         with open(
-            os.path.join(app.args.internals.share_directory, "markdown", "welcome.md")
+            os.path.join(self._args.internals.share_directory, "markdown", "welcome.md")
         ) as fhand:
             welcome_md = fhand.read()
 

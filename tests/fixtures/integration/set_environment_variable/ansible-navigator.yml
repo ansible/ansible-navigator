@@ -1,7 +1,7 @@
 ---
 ansible-navigator:
-  execution-enviroment:
-    environment-variable:
+  execution-environment:
+    environment-variables:
       set:
         TEST_STR: "navigator"
         TEST_BOOL: "true"

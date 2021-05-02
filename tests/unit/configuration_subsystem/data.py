@@ -70,9 +70,9 @@ CLI_DATA_CONFIG = [
 ]
 CLI_DATA_DOC = [
     ("doc shell", {"app": "doc", "plugin_name": "shell"}),
-    ("doc shell --pt become", {"app": "doc", "plugin_name": "shell", "plugin_type": "become"}),
+    ("doc shell -t become", {"app": "doc", "plugin_name": "shell", "plugin_type": "become"}),
     (
-        "doc shell --plugin-type become",
+        "doc shell --type become",
         {"app": "doc", "plugin_name": "shell", "plugin_type": "become"},
     ),
 ]
@@ -118,7 +118,9 @@ CLI_DATA_INVENTORY_COLUMNS = [
         },
     ),
 ]
-CLI_DATA_LOAD = [("load /tmp/part.json", {"app": "load", "playbook_artifact_load": "/tmp/part.json"})]
+CLI_DATA_LOAD = [
+    ("load /tmp/part.json", {"app": "load", "playbook_artifact_load": "/tmp/part.json"})
+]
 CLI_DATA_RUN = [
     ("run /tmp/site.yml", {"app": "run", "playbook": "/tmp/site.yml"}),
     (

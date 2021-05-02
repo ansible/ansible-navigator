@@ -37,5 +37,5 @@ ansible-navigator:
   playbook: /tmp/test_playbook.yml
   playbook-artifact: 
     enable: True
-    load: test_artifact.json
-    save-as: test_artifact.json
+    load: /tmp/test_artifact.json
+    save-as: /tmp/test_artifact.json

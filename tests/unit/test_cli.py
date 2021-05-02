@@ -1,8 +1,14 @@
 """ tests for cli
 """
+from copy import deepcopy
+from unittest.mock import patch
+
 import pytest
 
-import ansible_navigator.cli as cli
+from ansible_navigator.cli import parse_and_update
+from ansible_navigator.cli import NavigatorConfiguration
+
+from ansible_navigator.configuration_subsystem import Constants as C
 
 from ..defaults import FIXTURES_DIR
 
@@ -12,17 +18,17 @@ from ..defaults import FIXTURES_DIR
     [
         (
             ["doc", "-t", "callback", "oneline"],
-            "type",
+            "plugin_type",
             "callback",
         ),
         (
             ["doc", "sudo"],
-            "type",
-            "become",
+            "plugin_name",
+            "sudo",
         ),
         (
             ["doc", "-t", "become", "sudo"],
-            "type",
+            "plugin_type",
             "become",
         ),
         (
@@ -32,12 +38,12 @@ from ..defaults import FIXTURES_DIR
         ),
         (
             ["config"],
-            "loglevel",
+            "log_level",
             "critical",
         ),
         (
-            ["config", "--loglevel", "debug"],
-            "loglevel",
+            ["config", "--log-level", "debug"],
+            "log_level",
             "debug",
         ),
         ([], "editor_command", "emacs -nw +{line_number} {filename}"),
@@ -83,19 +89,25 @@ from ..defaults import FIXTURES_DIR
     ],
 )
 # pylint:disable=redefined-outer-name
-def test_update_args_general(monkeypatch, given, argname, expected):
+@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     """test the parse and update function"""
 
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
-    _pre_logger_msgs, args = cli.parse_and_update(given)
-    result = vars(args)[argname]
-    assert result == expected
+    args = deepcopy(NavigatorConfiguration)
+    _messages, errors = parse_and_update(params=given, args=args)
+    assert errors == []
+    result = args.entry(argname)
+    assert result.value.current == expected, result
 
 
-def test_editor_command_default(monkeypatch):
+@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+def test_editor_command_default(_mf1, monkeypatch):
     """test editor with default"""
     monkeypatch.setenv(
         "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
     )
-    _pre_logger_msgs, args = cli.parse_and_update([])
+    args = deepcopy(NavigatorConfiguration)
+    _messages, errors = parse_and_update(params=[], args=args)
+    assert errors == []
     assert args.editor_command == "vi +{line_number} {filename}"

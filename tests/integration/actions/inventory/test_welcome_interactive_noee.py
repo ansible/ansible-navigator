@@ -6,17 +6,12 @@ from .base import BaseClass
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
 
 from ..._common import get_executable_path
-from ..._common import container_runtime_or_fail
 
-CLI = get_executable_path("python") + " -m ansible_navigator"
+CLI = get_executable_path("python") + " -m ansible_navigator --ee false"
 
 testdata = [
     (0, CLI, "ansible-navigator inventory command top window"),
-    (
-        1,
-        f":i -i {ANSIBLE_INVENTORY_FIXTURE_DIR} --ee false",
-        ":inventory from welcome",
-    ),
+    (1, f":i -i {ANSIBLE_INVENTORY_FIXTURE_DIR}", ":inventory from welcome"),
     (2, ":0", "Browse hosts/ungrouped window"),
     (3, ":0", "Group list window"),
     (4, ":0", "group01 hosts detail window"),

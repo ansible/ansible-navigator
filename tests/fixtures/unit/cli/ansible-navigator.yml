@@ -1,16 +1,17 @@
 ---
 ansible-navigator:
-  container-engine: podman
   editor:
     command: emacs -nw +{line_number} {filename}
     console: False
   doc-plugin-type: become
-  execution-environment-image: quay.io/ansible/ansible-runner:devel
-  execution-environment: False
+  execution-environment:
+    container-engine: podman
+    enable: False
+    image: quay.io/ansible/ansible-runner:devel
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type
     - ansible_connection
-  log:
+  osc4: True
+  logging:
     level: critical
-  no-osc4: True

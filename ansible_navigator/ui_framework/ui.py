@@ -171,7 +171,7 @@ class UserInterface(CursesWindow):
         self._status = status
         self._status_color = status_color
 
-    def menu_filter(self, value: Union[str, None] = "") -> object:
+    def menu_filter(self, value: Union[str, None] = "") -> Union[Pattern, None]:
         """Set or return the menu filter
 
         :param args[0]: None or the menu_filter to set

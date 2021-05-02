@@ -6,8 +6,10 @@ import logging
 import html
 import os
 import stat
+import sys
 import sysconfig
 
+from distutils.spawn import find_executable
 
 from typing import Any
 from typing import List
@@ -41,6 +43,26 @@ class LogMessage(NamedTuple):
 def abs_user_path(fpath: str) -> str:
     """Resolve a path"""
     return os.path.abspath(os.path.expanduser(fpath))
+
+
+def check_for_ansible() -> Tuple[bool, str]:
+    """check for the ansible-playbook command, runner will need it"""
+    ansible_location = find_executable("ansible-playbook")
+    if not ansible_location:
+        msg_parts = [
+            "The 'ansible-playbook' command could not be found or was not executable,",
+            "ansible is required when running without an Ansible Execution Environment.",
+            "Try one of",
+            "     'pip install ansible-base'",
+            "     'pip install ansible-core'",
+            "     'pip install ansible'",
+            "or simply",
+            "     '-ee' or '--execution-environment'",
+            "to use an Ansible Execution Enviroment",
+        ]
+        return False, "\n".join(msg_parts)
+    msg = f"ansible-playbook found at {ansible_location}"
+    return True, msg
 
 
 def dispatch(obj, replacements):
@@ -103,7 +125,7 @@ def environment_variable_is_file_path(
 
 def find_configuration_file_in_directory(
     path: str, filename: str, allowed_extensions: List
-) -> Tuple[List[str], List[str], Optional[str]]:
+) -> Tuple[List[LogMessage], List[str], Optional[str]]:
     """check if filename is present in given path with allowed
     extensions. If multiple files are present it throws an error
     as only a single valid config file can be present in the
@@ -142,7 +164,7 @@ def find_configuration_file_in_directory(
 
 def find_configuration_directory_or_file_path(
     filename: Optional[str] = None, allowed_extensions: Optional[List] = None
-) -> Tuple[List[str], List[str], Optional[str]]:
+) -> Tuple[List[LogMessage], List[str], Optional[str]]:
     """
     returns config dir (e.g. /etc/ansible-navigator) if filename is None and
     config file path if filename provided. First found wins.
@@ -151,7 +173,7 @@ def find_configuration_directory_or_file_path(
     TODO: This is a pretty expensive function (lots of statting things on disk).
           We should probably cache the potential paths somewhere, eventually.
     """
-    messages: List[str] = []
+    messages: List[LogMessage] = []
     errors: List[str] = []
 
     config_path: Union[None, str] = None
@@ -219,6 +241,69 @@ def flatten_list(lyst) -> List:
     if isinstance(lyst, list):
         return [a for i in lyst for a in flatten_list(i)]
     return [lyst]
+
+
+def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[None, str]]:
+    """
+    returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
+    ansible-launcher data files. First found wins.
+    """
+    messages: List[LogMessage] = []
+    errors: List[str] = []
+    share_directory = None
+
+    # Development path
+    # We want the share directory to resolve adjacent to the directory the code lives in
+    # as that's the layout in the source.
+    share_directory = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "share", app_name)
+    )
+    message = "Share directory {0} (development path)"
+    if os.path.exists(share_directory):
+        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # ~/.local/share/APP_NAME
+    userbase = sysconfig.get_config_var("userbase")
+    message = "Share directory {0} (userbase)"
+    if userbase is not None:
+        share_directory = os.path.join(userbase, "share", app_name)
+        if os.path.exists(share_directory):
+            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # /usr/share/APP_NAME  (or the venv equivalent)
+    share_directory = os.path.join(sys.prefix, "share", app_name)
+    message = "Share directory {0} (sys.prefix)"
+    if os.path.exists(share_directory):
+        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
+    datarootdir = sysconfig.get_config_var("datarootdir")
+    message = "Share directory {0} (datarootdir)"
+    if datarootdir is not None:
+        share_directory = os.path.join(datarootdir, app_name)
+        if os.path.exists(share_directory):
+            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # /usr/local/share/APP_NAME
+    prefix = sysconfig.get_config_var("prefix")
+    message = "Share directory {0} (prefix)"
+    if prefix is not None:
+        share_directory = os.path.join(prefix, "local", "share", app_name)
+        if os.path.exists(share_directory):
+            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    errors.append("Unable to find a viable share directory")
+    return messages, errors, None
 
 
 def human_time(seconds: int) -> str:

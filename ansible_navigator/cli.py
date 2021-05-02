@@ -39,7 +39,7 @@ def setup_logger(args: ApplicationConfiguration) -> None:
         fmt="%(asctime)s.%(msecs)03d %(levelname)s '%(name)s.%(funcName)s' %(message)s",
         datefmt="%y%m%d%H%M%S",
     )
-    formatter.converter = time.gmtime
+    setattr(formatter, "converter", time.gmtime)
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
     logger.setLevel(getattr(logging, args.log_level.upper()))

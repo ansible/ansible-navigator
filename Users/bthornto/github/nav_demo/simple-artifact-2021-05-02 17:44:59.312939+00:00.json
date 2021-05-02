@@ -1,0 +1,84 @@
+{
+    "version": "1.0.0",
+    "plays": [
+        {
+            "playbook": "/Users/bthornto/github/nav_demo/simple.yaml",
+            "playbook_uuid": "675ff308-c39e-4905-9fba-fbda3da2e4c1",
+            "play": "localhost",
+            "play_uuid": "0242ac11-001c-3e65-e906-000000000015",
+            "play_pattern": "localhost",
+            "name": "localhost",
+            "pattern": "localhost",
+            "uuid": "0242ac11-001c-3e65-e906-000000000015",
+            "__play_name": "localhost",
+            "tasks": [
+                {
+                    "playbook": "/Users/bthornto/github/nav_demo/simple.yaml",
+                    "playbook_uuid": "675ff308-c39e-4905-9fba-fbda3da2e4c1",
+                    "play": "localhost",
+                    "play_uuid": "0242ac11-001c-3e65-e906-000000000015",
+                    "play_pattern": "localhost",
+                    "task": "Gathering Facts",
+                    "task_uuid": "0242ac11-001c-3e65-e906-00000000001e",
+                    "task_action": "gather_facts",
+                    "task_args": "",
+                    "task_path": "/Users/bthornto/github/nav_demo/simple.yaml:1",
+                    "host": "localhost",
+                    "uuid": "48bd89b5-bb2a-405b-ad2c-545f36876061",
+                    "__host": "localhost",
+                    "__result": "FAILED",
+                    "__changed": false,
+                    "__duration": "0s",
+                    "__number": 0,
+                    "__task": "Gathering Facts",
+                    "__task_action": "gather_facts",
+                    "remote_addr": "127.0.0.1",
+                    "res": {
+                        "ansible_facts": {},
+                        "msg": "The following modules failed to execute: ansible.legacy.setup\n",
+                        "failed_modules": {
+                            "ansible.legacy.setup": {
+                                "failed": true,
+                                "module_stdout": "",
+                                "module_stderr": "/bin/sh: sudo: command not found\n",
+                                "msg": "MODULE FAILURE\nSee stdout/stderr for the exact error",
+                                "rc": 127
+                            }
+                        },
+                        "_ansible_verbose_override": true,
+                        "_ansible_no_log": false,
+                        "changed": false
+                    },
+                    "start": "2021-05-02T17:44:58.543365",
+                    "end": "2021-05-02T17:44:58.918826",
+                    "duration": 0.375461,
+                    "ignore_errors": null,
+                    "event_loop": null
+                }
+            ],
+            "__ok": 0,
+            "__skipped": 0,
+            "__failed": 1,
+            "__unreachable": 0,
+            "__ignored": 0,
+            "__in_progress": 0,
+            "__changed": 0,
+            "__task_count": 1,
+            "__% completed": "100% \u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587\u2587",
+            "___% completed": "100%",
+            "__pcomplete": 100
+        }
+    ],
+    "stdout": [
+        "",
+        "PLAY [localhost] ***************************************************************",
+        "",
+        "TASK [Gathering Facts] *********************************************************",
+        "\u001b[0;31mfatal: [localhost]: FAILED! => {\"ansible_facts\": {}, \"changed\": false, \"failed_modules\": {\"ansible.legacy.setup\": {\"failed\": true, \"module_stderr\": \"/bin/sh: sudo: command not found\\n\", \"module_stdout\": \"\", \"msg\": \"MODULE FAILURE\\nSee stdout/stderr for the exact error\", \"rc\": 127}}, \"msg\": \"The following modules failed to execute: ansible.legacy.setup\\n\"}\u001b[0m",
+        "",
+        "PLAY RECAP *********************************************************************",
+        "\u001b[0;31mlocalhost\u001b[0m                  : ok=0    changed=0    unreachable=0    \u001b[0;31mfailed=1   \u001b[0m skipped=0    rescued=0    ignored=0   "
+    ],
+    "status": "failed",
+    "status_color": 9
+}

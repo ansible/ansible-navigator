@@ -75,6 +75,7 @@ class BaseClass:
             with open(f"{dir_path}/{file_name}", encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
 
-            print(f"expected_output is:\n{expected_output}")
-            print(f"updated_received_output is:\n{updated_received_output}")
-            assert expected_output == updated_received_output
+            assert expected_output == updated_received_output, (
+                expected_output,
+                updated_received_output,
+            )

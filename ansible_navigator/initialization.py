@@ -5,9 +5,6 @@ import importlib.util
 import logging
 import os
 import sys
-import sysconfig
-
-from distutils.spawn import find_executable
 
 from typing import Dict
 from typing import List
@@ -25,26 +22,6 @@ from .utils import LogMessage
 from ._version import __version__ as VERSION
 
 
-def check_for_ansible() -> Tuple[bool, str]:
-    """check for the ansible-playbook command, runner will need it"""
-    ansible_location = find_executable("ansible-playbook")
-    if not ansible_location:
-        msg_parts = [
-            "The 'ansible-playbook' command could not be found or was not executable,",
-            "ansible is required when running without an Ansible Execution Environment.",
-            "Try one of",
-            "     'pip install ansible-base'",
-            "     'pip install ansible-core'",
-            "     'pip install ansible'",
-            "or simply",
-            "     '-ee' or '--execution-environment'",
-            "to use an Ansible Execution Enviroment",
-        ]
-        return False, "\n".join(msg_parts)
-    msg = f"ansible-playbook found at {ansible_location}"
-    return True, msg
-
-
 def error_and_exit_early(errors) -> NoReturn:
     """get out of here fast"""
     template = "\x1b[31m[ERROR]: {msg}\x1b[0m"
@@ -53,15 +30,15 @@ def error_and_exit_early(errors) -> NoReturn:
     sys.exit(1)
 
 
-def find_config() -> Tuple[List[str], List[str], Union[None, str]]:
+def find_config() -> Tuple[List[LogMessage], List[str], Union[None, str]]:
     """
     Find a configuration file, logging each step.
     Return (log messages, path).
     If the config can't be found/loaded, use default settings.
     If it's found but empty or not well formed, bail out.
     """
-    messages = []
-    errors = []
+    messages: List[LogMessage] = []
+    errors: List[str] = []
     config_path = None
 
     # Check if the conf path is set via an env var
@@ -107,7 +84,7 @@ def get_and_check_collection_doc_cache(
     """
     messages: List[LogMessage] = []
     errors: List[str] = []
-    collecion_cache = {}
+    collecion_cache: Dict[str, Dict] = {}
 
     try:
         os.makedirs(os.path.dirname(collection_doc_cache_path), exist_ok=True)
@@ -149,76 +126,14 @@ def _get_kvs(share_directory, path):
     return mod.KeyValueStore(path)
 
 
-# pylint: disable=inconsistent-return-statements
-def get_share_directory(app_name) -> Tuple[List[str], List[str], str]:
-    """
-    returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
-    ansible-launcher data files. First found wins.
-    """
-    messages: List[LogMessage] = []
-    errors: List[str] = []
-    share_directory = None
-
-    # Development path
-    # We want the share directory to resolve adjacent to the directory the code lives in
-    # as that's the layout in the source.
-    share_directory = os.path.join(os.path.dirname(__file__), "..", "share", app_name)
-    message = "Share directory {0} (development path)"
-    if os.path.exists(share_directory):
-        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-        return messages, errors, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
-
-    # ~/.local/share/APP_NAME
-    userbase = sysconfig.get_config_var("userbase")
-    message = "Share directory {0} (userbase)"
-    if userbase is not None:
-        share_directory = os.path.join(userbase, "share", app_name)
-        if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-            return messages, errors, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
-
-    # /usr/share/APP_NAME  (or the venv equivalent)
-    share_directory = os.path.join(sys.prefix, "share", app_name)
-    message = "Share directory {0} (sys.prefix)"
-    if os.path.exists(share_directory):
-        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-        return messages, errors, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
-
-    # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
-    datarootdir = sysconfig.get_config_var("datarootdir")
-    message = "Share directory {0} (datarootdir)"
-    if datarootdir is not None:
-        share_directory = os.path.join(datarootdir, app_name)
-        if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-            return messages, errors, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
-
-    # /usr/local/share/APP_NAME
-    prefix = sysconfig.get_config_var("prefix")
-    message = "Share directory {0} (prefix)"
-    if prefix is not None:
-        share_directory = os.path.join(prefix, "local", "share", app_name)
-        if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-            return messages, errors, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
-
-    errors.append("Unable to find a viable share directory")
-    return messages, errors, None
-
-
 def parse_and_update(
     params: List,
     args: ApplicationConfiguration,
     apply_previous_cli_entries: Union[C, List[str]] = C.NONE,
     save_as_initial: bool = False,
-) -> Tuple[List[str], List[str]]:
+) -> Tuple[List[LogMessage], List[str]]:
     """Build a configuration"""
-    messages: List[str] = []
+    messages: List[LogMessage] = []
     errors: List[str] = []
 
     new_messages, new_errors, config_path = find_config()
@@ -242,6 +157,17 @@ def parse_and_update(
         return messages, errors
 
     if args.internals.collection_doc_cache is C.NOT_SET:
+        mount_collection_cache = True
+        message = "Collection doc cache not mounted"
+        messages.append(LogMessage(level=logging.DEBUG, message=message))
+    elif args.initial.collection_doc_cache_path != args.collection_doc_cache_path:
+        mount_collection_cache = True
+        message = "Collection doc cache path changed"
+        messages.append(LogMessage(level=logging.DEBUG, message=message))
+    else:
+        mount_collection_cache = False
+
+    if mount_collection_cache:
         new_messages, new_errors, cache = get_and_check_collection_doc_cache(
             args.internals.share_directory, args.collection_doc_cache_path
         )

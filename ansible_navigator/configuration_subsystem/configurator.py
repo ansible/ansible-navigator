@@ -75,7 +75,7 @@ class Configurator:
         if self._errors:
             self._config.entries = unaltered_entries
             return self._messages, self._errors
-        
+
         self._apply_previous_cli_to_current()
 
         self._post_process()
@@ -135,8 +135,13 @@ class Configurator:
                         data = data[key]
                     entry.value.current = data
                     entry.value.source = C.USER_CFG
-                except TypeError:
-                    error = f"{self._settings_file_path} empty"
+                except TypeError as exc:
+                    error = (
+                        "Errors encountered when loading settings file:"
+                        f" {self._settings_file_path}"
+                        f" while loading entry {entry.name}, attempted: {settings_file_path}."
+                        f"The resulting error was {str(exc)}"
+                    )
                     self._errors.append(error)
                     return
                 except KeyError:

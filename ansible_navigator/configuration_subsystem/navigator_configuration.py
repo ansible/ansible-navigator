@@ -16,7 +16,7 @@ from .definitions import SubCommand
 
 from .navigator_post_processor import NavigatorPostProcessor
 
-from ..initialization import get_share_directory
+from ..utils import get_share_directory
 from ..utils import abs_user_path
 from ..utils import oxfordcomma
 from ..utils import LogMessage
@@ -249,7 +249,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="playbook_artifact_save_as",
             cli_parameters=CliParameters(short="--pas"),
             settings_file_path_override="playbook-artifact.save-as",
-            short_description="Specify the file name for artifacts created from completed playbooks",
+            short_description="Specify the name for artifacts created from completed playbooks",
             subcommands=["run"],
             value=EntryValue(default="{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"),
         ),
@@ -263,7 +263,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="plugin_type",
-            cli_parameters=CliParameters(short="--pt"),
+            cli_parameters=CliParameters(short="-t", long_override="--type"),
             settings_file_path_override="documentation.plugin.type",
             short_description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
             subcommands=["doc"],

@@ -1,12 +1,12 @@
 """ :doc """
 import curses
-import logging
 import os
 import re
 
 from distutils.spawn import find_executable
 from typing import Any
 from typing import Dict
+from typing import List
 from typing import Union
 
 from . import run_action
@@ -14,6 +14,7 @@ from . import _actions as actions
 
 from ..app import App
 from ..app_public import AppPublic
+from ..configuration_subsystem import ApplicationConfiguration
 from ..runner.api import AnsibleCfgRunner
 from ..runner.api import CommandRunner
 from ..steps import Step
@@ -85,14 +86,12 @@ class Action(App):
 
     KEGEX = r"^config$"
 
-    def __init__(self, args):
-        super().__init__(args=args)
-        self._args = args
-        self._interaction: Interaction
-        self._logger = logging.getLogger(__name__)
-        self._app = None
-        self._config = None
-        self._runner = None
+    def __init__(self, args: ApplicationConfiguration):
+        super().__init__(args=args, logger_name=__name__)
+
+        self._config: Union[List[Any], None] = None
+        self._name = "config"
+        self._runner: Union[AnsibleCfgRunner, CommandRunner]
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
@@ -104,20 +103,17 @@ class Action(App):
         :type app: App
         """
         self._logger.debug("config requested in interactive mode")
-        self._app = app
-        self._interaction = interaction
+        self._prepare_to_run(app, interaction)
 
         self._run_runner()
         if self._config is None:
+            self._prepare_to_exit(interaction)
             return None
 
         self.steps.append(self._build_main_menu())
-        previous_scroll = interaction.ui.scroll()
-        previous_filter = interaction.ui.menu_filter()
-        interaction.ui.scroll(0)
 
         while True:
-            self._app.update()
+            self._calling_app.update()
             self._take_step()
 
             if not self.steps:
@@ -126,8 +122,7 @@ class Action(App):
             if self.steps.current.name == "quit":
                 return self.steps.current
 
-        interaction.ui.scroll(previous_scroll)
-        interaction.ui.menu_filter(previous_filter)
+        self._prepare_to_exit(interaction)
         return None
 
     def run_stdout(self) -> None:
@@ -187,15 +182,15 @@ class Action(App):
     def _run_runner(self) -> None:
         """spin up runner"""
         kwargs = {
-            "container_engine": self.args.container_engine,
+            "container_engine": self._args.container_engine,
             "cwd": os.getcwd(),
-            "execution_environment_image": self.args.execution_environment_image,
-            "execution_environment": self.args.execution_environment,
-            "navigator_mode": self.args.mode,
-            "pass_environment_variable": self.args.pass_environment_variable,
-            "set_environment_variable": self.args.set_environment_variable,
+            "execution_environment_image": self._args.execution_environment_image,
+            "execution_environment": self._args.execution_environment,
+            "navigator_mode": self._args.mode,
+            "pass_environment_variable": self._args.pass_environment_variable,
+            "set_environment_variable": self._args.set_environment_variable,
         }
-        if self.args.mode == "interactive":
+        if self._args.mode == "interactive":
             self._runner = AnsibleCfgRunner(**kwargs)
             list_output, list_output_err = self._runner.fetch_ansible_config("list")
             dump_output, dump_output_err = self._runner.fetch_ansible_config("dump")
@@ -208,7 +203,7 @@ class Action(App):
 
             self._parse_and_merge(list_output, dump_output)
         else:
-            if self.args.execution_environment:
+            if self._args.execution_environment:
                 ansible_config_path = "ansible-config"
             else:
                 exec_path = find_executable("ansible-config")
@@ -217,7 +212,7 @@ class Action(App):
                     return
                 ansible_config_path = exec_path
 
-            kwargs.update({"cmdline": self.args.cmdline})
+            kwargs.update({"cmdline": self._args.cmdline})
 
             self._runner = CommandRunner(executable_cmd=ansible_config_path, **kwargs)
             self._runner.run()

@@ -1,36 +1,48 @@
 """ simple base class for apps
 """
 import logging
-from argparse import Namespace
+
+from copy import deepcopy
 from typing import List
+from typing import Pattern
 from typing import Tuple
 from typing import Union
 
 from ansible_navigator.actions import kegexes
 
 from .app_public import AppPublic
+
+from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants as C
+from .configuration_subsystem import Entry
+
 from .initialization import parse_and_update
 
 from .steps import Steps
 
 from .ui_framework.ui import Action
+from .ui_framework import Interaction
 
 
 class App:
     # pylint: disable=too-few-public-methods
+    # pylint: disable=too-many-instance-attributes
     """simple base class for apps"""
 
-    def __init__(self, args: Namespace):
+    def __init__(self, args: ApplicationConfiguration, logger_name=__name__):
 
         # allow args to be set after __init__
-        self.args: Namespace = args
+        self._args: ApplicationConfiguration = args
         self._calling_app: AppPublic
-        self.name = "app_base_class"
+        self._interaction: Interaction
+        self._logger = logging.getLogger(logger_name)
         self._parser_error: str = ""
+        self._previous_configuration_entries: List[Entry] = deepcopy(self._args.entries)
+        self._previous_scroll: int
+        self._previous_filter: Union[Pattern, None]
+        self._name = "app_base_class"
         self.stdout: List = []
         self.steps = Steps()
-        self._logger = logging.getLogger(__name__)
 
     @staticmethod
     def _action_match(entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
@@ -53,10 +65,10 @@ class App:
         """this will be passed to other actions to limit the scope of
         what can be mutated internally
         """
-        if self.args:
+        if self._args:
             return AppPublic(
-                args=self.args,
-                name=self.name,
+                args=self._args,
+                name=self._name,
                 rerun=self.rerun,
                 stdout=self.stdout,
                 steps=self.steps,
@@ -64,6 +76,20 @@ class App:
                 write_artifact=self.write_artifact,
             )
         raise AttributeError("app passed without args initialized")
+
+    def _prepare_to_run(self, app: AppPublic, interaction: Interaction) -> None:
+        self._calling_app = app
+        self._interaction = interaction
+        self._interaction.ui.scroll(0)
+        self._previous_scroll = interaction.ui.scroll()
+        self._previous_filter = interaction.ui.menu_filter()
+
+    def _prepare_to_exit(self, interaction) -> None:
+        """Prior to exiting an app can call this to clean up"""
+        interaction.ui.scroll(self._previous_scroll)
+        interaction.ui.menu_filter(self._previous_filter)
+        interaction.ui.scroll(0)
+        self._args.entries = self._previous_configuration_entries
 
     def parser_error(self, message: str) -> Tuple[None, None]:
         """callback for parser error
@@ -80,19 +106,19 @@ class App:
     def update(self) -> None:
         """update, define in child if necessary"""
 
-    def _update_args(self, params: List) -> Union[Namespace, None]:
+    def _update_args(self, params: List, apply_previous_cli_entries: C = C.ALL) -> None:
         """pass the params through the original cli parser
         as if run was invoked from the command line
         provide an error callback so the app doesn't sys.exit if the aprsing fails
         """
 
         messages, errors = parse_and_update(
-            params=params, args=self.args, apply_previous_cli_entries=C.ALL
+            params=params, args=self._args, apply_previous_cli_entries=apply_previous_cli_entries
         )
-        
+
         for entry in messages:
             self._logger.log(level=entry.level, msg=entry.message)
-        
+
         for error in errors:
             self._logger.error(error)
 

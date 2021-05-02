@@ -6,6 +6,8 @@ import os
 
 from copy import deepcopy
 from unittest import mock
+from unittest.mock import patch
+
 
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 
@@ -36,7 +38,8 @@ def test_apply_previous_cli_all():
         params=params.split(),
         save_as_intitial=True,
     )
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     for expect in expected:
@@ -49,7 +52,8 @@ def test_apply_previous_cli_all():
         params=params.split(),
         apply_previous_cli_entries=C.ALL,
     )
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -73,7 +77,8 @@ def test_apply_previous_cli_specified():
         save_as_intitial=True,
     )
 
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     expected = [
@@ -92,7 +97,8 @@ def test_apply_previous_cli_specified():
         params=params.split(),
         apply_previous_cli_entries=["execution_environment", "execution_environment_image"],
     )
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -117,7 +123,8 @@ def test_apply_previous_cli_mixed():
         save_as_intitial=True,
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
-        configurator.configure()
+        _messages, errors = configurator.configure()
+        assert errors == []
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
@@ -139,7 +146,8 @@ def test_apply_previous_cli_mixed():
         apply_previous_cli_entries=C.ALL,
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES": "ENV1=VAL1"}):
-        configurator.configure()
+        _messages, errors = configurator.configure()
+        assert errors == []
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -164,7 +172,8 @@ def test_apply_previous_cli_cmdline_not_applied():
         save_as_intitial=True,
     )
 
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
@@ -185,7 +194,8 @@ def test_apply_previous_cli_cmdline_not_applied():
         params=params.split(),
         apply_previous_cli_entries=C.ALL,
     )
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -199,7 +209,8 @@ def test_apply_previous_cli_cmdline_not_applied():
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-def test_apply_previous_cli_none():
+@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+def test_apply_previous_cli_none(_mf1):
     """Ensure nothing is carried forward"""
     params = "run /tmp/site.yml --ee False --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
@@ -209,7 +220,8 @@ def test_apply_previous_cli_none():
         save_as_intitial=True,
     )
 
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
@@ -229,7 +241,8 @@ def test_apply_previous_cli_none():
         params=params.split(),
         apply_previous_cli_entries=C.NONE,
     )
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -271,7 +284,8 @@ def test_apply_cli_subset_none():
     configurator = Configurator(
         params=["list", "-z", "zebra"], application_configuration=test_config, save_as_intitial=True
     )
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     assert isinstance(test_config.initial, ApplicationConfiguration)
 
@@ -286,7 +300,8 @@ def test_apply_cli_subset_none():
     configurator = Configurator(
         params=["run"], application_configuration=test_config, apply_previous_cli_entries=C.ALL
     )
-    configurator.configure()
+    _messages, errors = configurator.configure()
+    assert errors == []
 
     expected = [
         ("subcommand", "run", C.USER_CLI),

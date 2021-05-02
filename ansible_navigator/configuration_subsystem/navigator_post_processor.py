@@ -1,8 +1,8 @@
 """ post processing of ansible-navigator configuration
 """
+import distutils
 import logging
-
-from distutils.spawn import find_executable
+import os
 
 from typing import List
 from typing import Tuple
@@ -11,9 +11,9 @@ from .definitions import Constants as C
 from .definitions import Entry
 from .definitions import ApplicationConfiguration
 
-from ..initialization import check_for_ansible
 
 from ..utils import abs_user_path
+from ..utils import check_for_ansible
 from ..utils import flatten_list
 from ..utils import str2bool
 from ..utils import LogMessage
@@ -89,18 +89,17 @@ class NavigatorPostProcessor:
     def execution_environment(self, entry, config) -> PostProcessorReturn:
         """Post process execution_environment"""
         messages, errors = self._true_or_false(entry, config)
-        if errors:
-            return messages, errors
         if entry.value.current is False:
-            success, msg = check_for_ansible()
+            success, message = check_for_ansible()
             if success:
-                messages.append(("debug", msg))
+                messages.append(LogMessage(level=logging.DEBUG, message=message))
             else:
-                errors.append(msg)
+                errors.append(message)
         else:
-            container_engine_location = find_executable(config.container_engine)
+            container_engine_location = distutils.spawn.find_executable(config.container_engine)
             if container_engine_location is None:
-                error = f"The specified container engine could not be found: '{config.container_engine}',"
+                error = "The specified container engine could not be found:"
+                error += f"'{config.container_engine}',"
                 error += f" set by '{config.entry('container_engine').value.source.value}'"
                 errors.append(error)
         return messages, errors
@@ -146,6 +145,13 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         errors: List[str] = []
         entry.value.current = abs_user_path(entry.value.current)
+        try:
+            os.makedirs(os.path.dirname(entry.value.current), exist_ok=True)
+        except (IOError, OSError) as exc:
+            error = f"Failed to create parent directory for log file {entry.value.current}"
+            error += f" specified in '{entry.value.source.value}'"
+            error += f" The error was: {str(exc)}"
+            errors.append(error)
         return messages, errors
 
     @_post_processor
@@ -173,17 +179,26 @@ class NavigatorPostProcessor:
         """Post process pass_environment_variable"""
         messages: List[LogMessage] = []
         errors: List[str] = []
+        if config.app == "run" and entry.value.current is C.NOT_SET:
+            error = "A playbook is required when using the run subcommand"
+            errors.append(error)
+            return messages, errors
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
         return messages, errors
-    
+
     @_post_processor
-    def playbook_artifact_enable(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def playbook_artifact_enable(
+        self, entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         """Post process playbook_artifact_enable"""
         return self._true_or_false(entry, config)
-    
+
+    @staticmethod
     @_post_processor
-    def playbook_artifact_load(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def playbook_artifact_load(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         """Post process playbook_artifact_load"""
         messages: List[LogMessage] = []
         errors: List[str] = []
@@ -191,6 +206,23 @@ class NavigatorPostProcessor:
             error = "An playbook artifact file is required when using the load subcommand"
             errors.append(error)
             return messages, errors
+        if isinstance(entry.value.current, str):
+            entry.value.current = abs_user_path(entry.value.current)
+            if not os.path.isfile(entry.value.current):
+                error = f"The specified playbook artifact could not be found: {entry.value.current}"
+                errors.append(error)
+                return messages, errors
+        return messages, errors
+
+    @staticmethod
+    @_post_processor
+    def playbook_artifact_save_as(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process playbook_artifact_load"""
+        messages: List[LogMessage] = []
+        errors: List[str] = []
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
         return messages, errors

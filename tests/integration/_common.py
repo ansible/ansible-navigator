@@ -7,7 +7,7 @@ import tempfile
 import time
 import json
 
-from argparse import Namespace
+from copy import deepcopy
 from distutils.spawn import find_executable
 from typing import Any
 from typing import Dict
@@ -21,6 +21,8 @@ import libtmux  # type: ignore
 import pytest
 
 from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem import Constants as C
+from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
 from ansible_navigator.ui_framework.ui import Ui
@@ -53,7 +55,6 @@ class ActionRunTest:
             "execution_environment_image": self._execution_environment_image,
             "set_environment_variable": self._set_environment_variable,
             "pass_environment_variable": self._pass_environment_variable,
-            "cwd": self._cwd,
         }
         self._app_action = __import__(
             f"ansible_navigator.actions.{self._action_name}", globals(), fromlist=["Action"]
@@ -72,7 +73,11 @@ class ActionRunTest:
         will be using the action internals for asserts
         """
         self._app_args.update({"mode": "interactive"})
-        args = Namespace(**self._app_args)
+        args = deepcopy(NavigatorConfiguration)
+        for argument, value in self._app_args.items():
+            args.entry(argument).value.current = value
+            args.entry(argument).value.source = C.USER_CFG
+
         action = self._app_action.Action(args=args)
         steps = Steps()
         app = AppPublic(
@@ -108,7 +113,11 @@ class ActionRunTest:
     def run_action_stdout(self, cmdline: List) -> Tuple[str, str]:
         """run the action"""
         self._app_args.update({"mode": "stdout", "cmdline": cmdline})
-        args = Namespace(**self._app_args)
+        args = deepcopy(NavigatorConfiguration)
+        for argument, value in self._app_args.items():
+            args.entry(argument).value.current = value
+            args.entry(argument).value.source = C.USER_CFG
+
         action = self._app_action.Action(args=args)
 
         # get a tty, runner/docker requires it
@@ -282,7 +291,7 @@ class Cli2Runner:
 
     @pytest.fixture(autouse=True)
     def _setup(self):
-        self.cli_entry = "ansible-navigator {0} {1} -m {2}"
+        self.cli_entry = "ansible-navigator {0} {1} -m {2} --ce " + container_runtime_or_fail()
 
     @mock.patch("ansible_navigator.runner.api.get_ansible_config")
     def test_config_interactive(

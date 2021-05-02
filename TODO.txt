@@ -1,0 +1,4 @@
+add asertions for errors
+clean up assert output
+check log file viabilbity
+log sys.exit message to log file
