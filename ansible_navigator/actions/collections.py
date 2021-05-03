@@ -1,23 +1,21 @@
 """ :doc """
 import curses
 import json
-import logging
 import os
 import subprocess
 
-from argparse import Namespace
 from json.decoder import JSONDecodeError
 
 from typing import Any
 from typing import Dict
 from typing import List
-from typing import Tuple
 from typing import Union
 
 from . import run_action
 from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
+from ..configuration_subsystem import ApplicationConfiguration
 from ..steps import Step
 
 from ..ui_framework import CursesLinePart
@@ -80,27 +78,13 @@ class Action(App):
 
     KEGEX = r"^collections(\s(?P<params>.*))?$"
 
-    def __init__(self, args):
-        super().__init__(args=args)
-        self._args: Namespace
-        self._interaction: Interaction
-        self._logger = logging.getLogger(__name__)
-        self._calling_app: AppPublic
+    def __init__(self, args: ApplicationConfiguration):
+        super().__init__(args=args, logger_name=__name__, name="collections")
+        self._adjacent_collection_dir: str
+        self._collection_cache = args.internals.collection_doc_cache
+        self._collection_cache_path = args.collection_doc_cache_path
         self._collections: List = []
         self._stats: Dict = {}
-        self._collection_cache = args.collection_doc_cache
-        self._collection_cache_path = args.collection_doc_cache.path
-        self._adjacent_collection_dir: str
-        self._parser_error: str = ""
-
-    def parser_error(self, message: str) -> Tuple[None, None]:
-        """callback for parser error
-
-        :param message: A message from the parser
-        :type message: str
-        """
-        self._parser_error = message
-        return None, None
 
     def update(self):
         self._calling_app.update()
@@ -115,36 +99,18 @@ class Action(App):
         :type app: App
         """
         self._logger.debug("collections requested")
-        self._calling_app = app
-        self._interaction = interaction
+        self._prepare_to_run(app, interaction)
         self.stdout = self._calling_app.stdout
 
-        previous_scroll = interaction.ui.scroll()
-        interaction.ui.scroll(0)
         interaction.ui.show(
             obj="Collecting collection content, this may take a minute the first time...",
             xform="text",
             await_input=False,
         )
 
-        provided_params = interaction.action.match.groupdict()["params"]
-        if provided_params:
-            params = f"collections {provided_params}"
-            self._logger.debug("Parsing params: %s", params)
-            messages, self._args = self._calling_app.args.parse_and_update(
-                params=params.split(), error_cb=self.parser_error
-            )
-            # assume this is a provided param
-            self._args.execution_environment = True
-            for message in messages:
-                self._logger.debug(message)
-            for key, value in vars(self._args).items():
-                self._logger.debug("Running with %s=%s %s", key, value, type(value))
-            if self._parser_error:
-                self._logger.error(self._parser_error)
-                return None
-        else:
-            self._args = self._calling_app.args
+        self._update_args(
+            [self._name] + (self._interaction.action.match.groupdict()["params"] or "").split()
+        )
 
         if self._args.execution_environment:
             self._logger.debug("running execution environment")
@@ -154,12 +120,10 @@ class Action(App):
             self._try_local()
 
         if not self._collections:
-            interaction.ui.scroll(previous_scroll)
+            self._prepare_to_exit(interaction)
             return None
 
         self.steps.append(self._build_main_menu())
-        previous_filter = interaction.ui.menu_filter()
-        interaction.ui.scroll(0)
 
         while True:
             self.update()
@@ -171,8 +135,7 @@ class Action(App):
             if self.steps.current.name == "quit":
                 return self.steps.current
 
-        interaction.ui.scroll(previous_scroll)
-        interaction.ui.menu_filter(previous_filter)
+        self._prepare_to_exit(interaction)
         return None
 
     def _take_step(self) -> None:
@@ -285,7 +248,7 @@ class Action(App):
 
     def _try_ee(self) -> None:
         """run collection catalog in ee"""
-        if "playbook" in self._args:
+        if isinstance(self._args.playbook, str):
             playbook_dir = os.path.dirname(self._args.playbook)
         else:
             playbook_dir = os.getcwd()
@@ -294,7 +257,11 @@ class Action(App):
 
         cmd = [self._args.container_engine, "run", "-i", "-t"]
 
-        cmd += ["-v", f"{self._args.share_dir}/utils:{self._args.share_dir}/utils:z"]
+        share_directory = self._args.internals.share_directory
+        cmd += [
+            "-v",
+            f"{share_directory}/utils:{share_directory}/utils:z",
+        ]
 
         if os.path.exists(self._adjacent_collection_dir):
             cmd += ["-v", f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"]
@@ -302,7 +269,7 @@ class Action(App):
         cmd += ["-v", f"{self._collection_cache_path}:{self._collection_cache_path}:z"]
 
         cmd += [self._args.execution_environment_image]
-        cmd += ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]
+        cmd += ["python3", f"{self._args.internals.share_directory}/utils/catalog_collections.py"]
         cmd += ["-a", self._adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
 
@@ -311,14 +278,14 @@ class Action(App):
 
     def _try_local(self) -> None:
         """run config locally"""
-        if "playbook" in self._args:
+        if isinstance(self._args.playbook, str):
             playbook_dir = os.path.dirname(self._args.playbook)
         else:
             playbook_dir = os.getcwd()
 
         adjacent_collection_dir = playbook_dir + "/collections"
 
-        cmd = ["python3", f"{self._args.share_dir}/utils/catalog_collections.py"]
+        cmd = ["python3", f"{self._args.internals.share_directory}/utils/catalog_collections.py"]
         cmd += ["-a", adjacent_collection_dir]
         cmd += ["-c", self._collection_cache_path]
         self._logger.debug("local command: %s", " ".join(cmd))

@@ -19,8 +19,7 @@ class ActionRunner(App):
     """the playbook ui"""
 
     def __init__(self, args):
-        super().__init__(args)
-        self.name = "action_runner"
+        super().__init__(args, name="action_runner")
         self._ui = None
         self.steps: Steps = Steps()
 
@@ -32,17 +31,17 @@ class ActionRunner(App):
         """
         self._ui = UserInterface(
             screen_miny=3,
-            no_osc4=self.args.no_osc4,
+            osc4=self._args.osc4,
             kegexes=kegexes,
             refresh=refresh,
-            share_dir=self.args.share_dir,
+            share_directory=self._args.internals.share_directory,
         )
 
     def run(self, _screen) -> None:
         # pylint: disable=protected-access
         """Run with the interface and runner"""
         self.initialize_ui(DEFAULT_REFRESH)
-        requested = " ".join(filter(None, (self.args.app, vars(self.args).get("value", ""))))
+        requested = " ".join(filter(None, (self._args.app, vars(self._args).get("value", ""))))
         name, action = self._action_match(requested)
         if name and action:
             interaction = Interaction(

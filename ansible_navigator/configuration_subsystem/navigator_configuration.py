@@ -1,6 +1,11 @@
 """ the ansible-navigator configuration
 """
+import logging
 import os
+
+from types import SimpleNamespace
+from typing import Dict
+from typing import Union
 
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
@@ -11,18 +16,17 @@ from .definitions import SubCommand
 
 from .navigator_post_processor import NavigatorPostProcessor
 
+from ..utils import get_share_directory
 from ..utils import abs_user_path
 from ..utils import oxfordcomma
+from ..utils import LogMessage
 
+from .._version import __version__ as VERSION
 
-def generate_editor_command() -> str:
-    """Generate a default for editor_command if EDITOR is set"""
-    if "EDITOR" in os.environ:
-        command = "%s {filename}" % os.environ.get("EDITOR")
-    else:
-        command = "vi +{line_number} {filename}"
-    return command
+APP_NAME = "ansible_navigator"
 
+initialization_messages = []
+initialization_errors = []
 
 PLUGIN_TYPES = (
     "become",
@@ -40,8 +44,57 @@ PLUGIN_TYPES = (
     "vars",
 )
 
+
+def generate_editor_command() -> str:
+    """Generate a default for editor_command if EDITOR is set"""
+    editor = os.environ.get("EDITOR")
+    if editor is None:
+        message = "EDITOR environment variable not set"
+        initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+        command = "vi +{line_number} {filename}"
+    else:
+        message = "EDITOR environment variable set as '{editor}'"
+        initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+        command = "%s {filename}" % os.environ.get("EDITOR")
+    message = f"Default editor_command set to: {command}"
+    initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+    return command
+
+
+def generate_cache_path():
+    """Generate a path for the collection cache"""
+    file_name = "collection_doc_cache.db"
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    cache_path = os.path.join(cache_home, APP_NAME.replace("_", "-"), file_name)
+    message = f"Default collection_doc_cache_path set to: {cache_path}"
+    initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
+    return cache_path
+
+
+def generate_share_directory():
+    """Generate a share director"""
+    messages, errors, share_directory = get_share_directory(APP_NAME)
+    initialization_messages.extend(messages)
+    initialization_errors.extend(errors)
+    return share_directory
+
+
+class Internals(SimpleNamespace):
+    # pylint: disable=too-few-public-methods
+    """a place to hold object that need to be carried
+    from apllication initiation to the rest of the app
+    """
+
+    collection_doc_cache: Union[C, Dict] = C.NOT_SET
+    initialization_errors = initialization_errors
+    initialization_messages = initialization_messages
+    share_directory: str = generate_share_directory()
+
+
 NavigatorConfiguration = ApplicationConfiguration(
-    application_name="ansible-navigator",
+    application_name=APP_NAME,
+    application_version=VERSION,
+    internals=Internals(),
     post_processor=NavigatorPostProcessor(),
     subcommands=[
         SubCommand(name="collections", description="Explore available collections"),
@@ -64,6 +117,12 @@ NavigatorConfiguration = ApplicationConfiguration(
             apply_to_subsequent_cli=C.SAME_SUBCOMMAND,
             short_description="Placeholder for argparse remainder",
             value=EntryValue(),
+        ),
+        Entry(
+            name="collection_doc_cache_path",
+            short_description="The path to collection doc cache",
+            subcommands=C.NONE,
+            value=EntryValue(default=generate_cache_path()),
         ),
         Entry(
             name="container_engine",
@@ -102,7 +161,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             description="The name of the execution environment image",
             settings_file_path_override="execution-environment.image",
             short_description="Enable the use of an execution environment",
-            value=EntryValue(default="image_here"),
+            value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
         ),
         Entry(
             name="inventory",
@@ -170,11 +229,29 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(),
         ),
         Entry(
-            name="playbook_artifact",
+            name="playbook_artifact_enable",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--pae"),
+            settings_file_path_override="playbook-artifact.enable",
+            short_description="Enable the creation of artifacts for completed playbooks",
+            subcommands=["run"],
+            value=EntryValue(default=True),
+        ),
+        Entry(
+            name="playbook_artifact_load",
             cli_parameters=CliParameters(positional=True),
-            short_description="Specify the path to a playbook artifact",
+            settings_file_path_override="playbook-artifact.load",
+            short_description="Specify the path for the playbook artifact to load",
             subcommands=["load"],
             value=EntryValue(),
+        ),
+        Entry(
+            name="playbook_artifact_save_as",
+            cli_parameters=CliParameters(short="--pas"),
+            settings_file_path_override="playbook-artifact.save-as",
+            short_description="Specify the name for artifacts created from completed playbooks",
+            subcommands=["run"],
+            value=EntryValue(default="./{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"),
         ),
         Entry(
             name="plugin_name",
@@ -186,7 +263,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="plugin_type",
-            cli_parameters=CliParameters(short="--pt"),
+            cli_parameters=CliParameters(short="-t", long_override="--type"),
             settings_file_path_override="documentation.plugin.type",
             short_description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
             subcommands=["doc"],

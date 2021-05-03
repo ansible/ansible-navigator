@@ -1,9 +1,8 @@
-""" some utilities that didn't fit elsewhere
+""" some utilities that are specific to ansible_navigator
 """
 import ast
 
 import logging
-import importlib.util
 import html
 import os
 import stat
@@ -13,17 +12,15 @@ import sysconfig
 from distutils.spawn import find_executable
 
 from typing import Any
-from typing import Dict
 from typing import List
 from typing import Mapping
+from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
 from typing import Union
-from typing import NoReturn
 
 from jinja2 import Environment, TemplateError
 
-from ._version import __version__ as VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -36,17 +33,277 @@ except ImportError:
     HAS_ANSIBLE = False
 
 
-class Sentinel:  # pylint: disable=too-few-public-methods
-    """
-    Used as a sentinel value when None won't suffice.
-    Same usage as ansible.utils.sentinel.Sentinel.
-    Usually the class itself is what we use as the value, not an instance of it.
-    foo = Sentinel
-    if foo is Sentinel: ...
-    """
+class LogMessage(NamedTuple):
+    """An object ot hold a message destin for the logger"""
 
-    def __new__(cls):
-        return cls
+    level: int
+    message: str
+
+
+def abs_user_path(fpath: str) -> str:
+    """Resolve a path"""
+    return os.path.abspath(os.path.expanduser(fpath))
+
+
+def check_for_ansible() -> Tuple[bool, str]:
+    """check for the ansible-playbook command, runner will need it"""
+    ansible_location = find_executable("ansible-playbook")
+    if not ansible_location:
+        msg_parts = [
+            "The 'ansible-playbook' command could not be found or was not executable,",
+            "ansible is required when running without an Ansible Execution Environment.",
+            "Try one of",
+            "     'pip install ansible-base'",
+            "     'pip install ansible-core'",
+            "     'pip install ansible'",
+            "or simply",
+            "     '-ee' or '--execution-environment'",
+            "to use an Ansible Execution Enviroment",
+        ]
+        return False, "\n".join(msg_parts)
+    msg = f"ansible-playbook found at {ansible_location}"
+    return True, msg
+
+
+def dispatch(obj, replacements):
+    """make the replacement based on type
+
+    :param obj: an obj in which replacements will be made
+    :type obj: any
+    :param replacements: the things to replace
+    :type replacements: tuple of tuples
+    """
+    if isinstance(obj, dict):
+        obj = {k: dispatch(v, replacements) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        obj = [dispatch(l, replacements) for l in obj]  # noqa: E741
+    elif isinstance(obj, str):
+        for replacement in replacements:
+            obj = obj.replace(replacement[0], replacement[1])
+    return obj
+
+
+def escape_moustaches(obj):
+    """escape moustaches
+
+    :param obj: something
+    :type obj: any
+    :return: the obj with replacements made
+    :rtype: any
+    """
+    replacements = (("{", "U+007B"), ("}", "U+007D"))
+    return dispatch(obj, replacements)
+
+
+def environment_variable_is_file_path(
+    env_var: str, kind: str
+) -> Tuple[List[LogMessage], List[str], Optional[str]]:
+    """check if a given env var is a vialbe file path, if so return that path"""
+    messages: List[LogMessage] = []
+    errors: List[str] = []
+    file_path = None
+    candidate_path = os.environ.get(env_var)
+    if candidate_path is None:
+        messages.append(LogMessage(level=logging.DEBUG, message=f"No {kind} file set by {env_var}"))
+    else:
+        message = f"Found a {kind} file at {candidate_path} set by {env_var}"
+        messages.append(LogMessage(level=logging.DEBUG, message=message))
+        if os.path.isfile(candidate_path) and os.path.exists(candidate_path):
+            file_path = candidate_path
+            message = f"{kind.capitalize()} file at {file_path} set by {env_var} is viable"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
+            exp_path = os.path.abspath(os.path.expanduser(file_path))
+            if exp_path != file_path:
+                message = f"{kind.capitalize()} resolves to {exp_path}"
+                messages.append(LogMessage(level=logging.DEBUG, message=message))
+                file_path = exp_path
+        else:
+            message = f"{env_var} set as {candidate_path} but not valid"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
+    return messages, errors, file_path
+
+
+def find_configuration_file_in_directory(
+    path: str, filename: str, allowed_extensions: List
+) -> Tuple[List[LogMessage], List[str], Optional[str]]:
+    """check if filename is present in given path with allowed
+    extensions. If multiple files are present it throws an error
+    as only a single valid config file can be present in the
+    given path.
+    """
+    messages: List[LogMessage] = []
+    errors: List[str] = []
+    config_files_found = []
+    config_file = None
+    valid_file_names = [
+        f"{filename}.{allowed_extension}" for allowed_extension in allowed_extensions
+    ]
+    for name in valid_file_names:
+        candidate_config_path = os.path.join(path, name)
+        if not os.path.exists(candidate_config_path):
+            message = f"Skipping {path}/{name} because it does not exist"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
+            continue
+        config_files_found.append(candidate_config_path)
+
+    if len(config_files_found) > 1:
+        error = "only one file among '{0}' should be present under" " directory '{1}'".format(
+            ", ".join(valid_file_names), path
+        )
+        error += " instead multiple config files" " found '{0}'".format(
+            ", ".join(config_files_found)
+        )
+        errors.append(error)
+        return messages, errors, config_file
+
+    if len(config_files_found) == 1:
+        config_file = config_files_found[0]
+
+    return messages, errors, config_file
+
+
+def find_configuration_directory_or_file_path(
+    filename: Optional[str] = None, allowed_extensions: Optional[List] = None
+) -> Tuple[List[LogMessage], List[str], Optional[str]]:
+    """
+    returns config dir (e.g. /etc/ansible-navigator) if filename is None and
+    config file path if filename provided. First found wins.
+    If a filename is given, ensures the file exists in the directory.
+
+    TODO: This is a pretty expensive function (lots of statting things on disk).
+          We should probably cache the potential paths somewhere, eventually.
+    """
+    messages: List[LogMessage] = []
+    errors: List[str] = []
+
+    config_path: Union[None, str] = None
+    potential_paths: List[str] = []
+
+    # .ansible-navigator of current direcotry
+    potential_paths.append(".ansible-navigator")
+
+    # Development path
+    path = os.path.join(os.path.dirname(__file__), "..", "etc", "ansible-navigator")
+    potential_paths.append(path)
+
+    # ~/.config/ansible-navigator
+    path = os.path.join(os.path.expanduser("~"), ".config", "ansible-navigator")
+    potential_paths.append(path)
+
+    # /etc/ansible-navigator
+    path = os.path.join("/", "etc", "ansible-navigator")
+    potential_paths.append(path)
+
+    # /usr/local/etc/ansible-navigator
+    prefix = sysconfig.get_config_var("prefix")
+    if prefix:
+        path = os.path.join(prefix, "local", "etc", "ansible-navigator")
+        potential_paths.append(path)
+
+    for path in potential_paths:
+        if allowed_extensions:
+            if not filename:
+                error = f"allowed_extensions '{allowed_extensions}' requires filename to be set"
+                errors.append(error)
+                return messages, errors, config_path
+
+            new_messages, new_errors, config_path = find_configuration_file_in_directory(
+                path, filename, allowed_extensions
+            )
+            messages.extend(new_messages)
+            errors.extend(new_errors)
+            if errors:
+                return messages, errors, config_path
+
+            if config_path is None:
+                continue
+        else:
+            config_path = os.path.join(path, filename) if filename is not None else path
+            if not os.path.exists(config_path):
+                message = f"Skipping {path} because required file {filename} does not exist"
+                messages.append(LogMessage(level=logging.DEBUG, message=message))
+                continue
+
+        try:
+            perms = os.stat(path)
+            if perms.st_mode & stat.S_IWOTH:
+                message = f"Ignoring configuration directory {path} because it is world-writable."
+                messages.append(LogMessage(level=logging.DEBUG, message=message))
+                continue
+            return messages, errors, config_path
+        except OSError:
+            continue
+    return messages, errors, config_path
+
+
+def flatten_list(lyst) -> List:
+    """flatten a list of lists"""
+    if isinstance(lyst, list):
+        return [a for i in lyst for a in flatten_list(i)]
+    return [lyst]
+
+
+def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[None, str]]:
+    """
+    returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
+    ansible-launcher data files. First found wins.
+    """
+    messages: List[LogMessage] = []
+    errors: List[str] = []
+    share_directory = None
+
+    # Development path
+    # We want the share directory to resolve adjacent to the directory the code lives in
+    # as that's the layout in the source.
+    share_directory = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "share", app_name)
+    )
+    message = "Share directory {0} (development path)"
+    if os.path.exists(share_directory):
+        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # ~/.local/share/APP_NAME
+    userbase = sysconfig.get_config_var("userbase")
+    message = "Share directory {0} (userbase)"
+    if userbase is not None:
+        share_directory = os.path.join(userbase, "share", app_name)
+        if os.path.exists(share_directory):
+            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # /usr/share/APP_NAME  (or the venv equivalent)
+    share_directory = os.path.join(sys.prefix, "share", app_name)
+    message = "Share directory {0} (sys.prefix)"
+    if os.path.exists(share_directory):
+        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
+    datarootdir = sysconfig.get_config_var("datarootdir")
+    message = "Share directory {0} (datarootdir)"
+    if datarootdir is not None:
+        share_directory = os.path.join(datarootdir, app_name)
+        if os.path.exists(share_directory):
+            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    # /usr/local/share/APP_NAME
+    prefix = sysconfig.get_config_var("prefix")
+    message = "Share directory {0} (prefix)"
+    if prefix is not None:
+        share_directory = os.path.join(prefix, "local", "share", app_name)
+        if os.path.exists(share_directory):
+            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            return messages, errors, share_directory
+    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+
+    errors.append("Unable to find a viable share directory")
+    return messages, errors, None
 
 
 def human_time(seconds: int) -> str:
@@ -66,18 +323,30 @@ def human_time(seconds: int) -> str:
     return "%s%ds" % (sign_string, seconds)
 
 
-def to_list(thing: Union[str, List]) -> List:
-    """convert something to a list if necessary"""
-    if not isinstance(thing, list):
-        return [thing]
-    return thing
+def oxfordcomma(listed, condition):
+    """Format a list into a sentance"""
+    listed = [f"'{str(entry)}'" for entry in listed]
+    if len(listed) == 0:
+        return ""
+    if len(listed) == 1:
+        return listed[0]
+    if len(listed) == 2:
+        return f"{listed[0]} {condition} {listed[1]}"
+    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
 
 
-def flatten_list(lyst) -> List:
-    """flatten a list of lists"""
-    if isinstance(lyst, list):
-        return [a for i in lyst for a in flatten_list(i)]
-    return [lyst]
+def str2bool(value: Any) -> bool:
+    """Convert some commonly used values
+    to a boolean
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        if value.lower() in ("yes", "true"):
+            return True
+        if value.lower() in ("no", "false"):
+            return False
+    raise ValueError
 
 
 def templar(string: str, template_vars: Mapping) -> Any:
@@ -128,16 +397,11 @@ def templar(string: str, template_vars: Mapping) -> Any:
     return result
 
 
-def escape_moustaches(obj):
-    """escape moustaches
-
-    :param obj: something
-    :type obj: any
-    :return: the obj with replacements made
-    :rtype: any
-    """
-    replacements = (("{", "U+007B"), ("}", "U+007D"))
-    return dispatch(obj, replacements)
+def to_list(thing: Union[str, List]) -> List:
+    """convert something to a list if necessary"""
+    if not isinstance(thing, list):
+        return [thing]
+    return thing
 
 
 def unescape_moustaches(obj):
@@ -150,256 +414,3 @@ def unescape_moustaches(obj):
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)
-
-
-def dispatch(obj, replacements):
-    """make the replacement based on type
-
-    :param obj: an obj in which replacements will be made
-    :type obj: any
-    :param replacements: the things to replace
-    :type replacements: tuple of tuples
-    """
-    if isinstance(obj, dict):
-        obj = {k: dispatch(v, replacements) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        obj = [dispatch(l, replacements) for l in obj]  # noqa: E741
-    elif isinstance(obj, str):
-        for replacement in replacements:
-            obj = obj.replace(replacement[0], replacement[1])
-    return obj
-
-
-def check_for_ansible() -> Tuple[bool, str]:
-    """check for the ansible-playbook command, runner will need it"""
-    ansible_location = find_executable("ansible-playbook")
-    if not ansible_location:
-        msg_parts = [
-            "The 'ansible-playbook' command could not be found or was not executable,",
-            "ansible is required when running without an Ansible Execution Environment.",
-            "Try one of",
-            "     'pip install ansible-base'",
-            "     'pip install ansible-core'",
-            "     'pip install ansible'",
-            "or simply",
-            "     '-ee' or '--execution-environment'",
-            "to use an Ansible Execution Enviroment",
-        ]
-        return False, "\n".join(msg_parts)
-    msg = f"ansible-playbook found at {ansible_location}"
-    return True, msg
-
-
-def env_var_is_file_path(env_var: str, kind: str) -> Tuple[Optional[str], List[str]]:
-    """check if a given env var is a vialbe file path, if so return that path"""
-    file_path = None
-    msgs = []
-    candidate_path = os.environ.get(env_var)
-    if candidate_path is None:
-        msgs.append(f"No {kind} file set by {env_var}")
-    else:
-        msgs.append(f"Found a {kind} file at {candidate_path} set by {env_var}")
-        if os.path.isfile(candidate_path) and os.path.exists(candidate_path):
-            file_path = candidate_path
-            msgs.append(f"{kind.capitalize()} file at {file_path} set by {env_var} is viable")
-            exp_path = os.path.abspath(os.path.expanduser(file_path))
-            if exp_path != file_path:
-                msgs.append(f"{kind.capitalize()} resolves to {exp_path}")
-                file_path = exp_path
-        else:
-            msgs.append(f"{env_var} set as {candidate_path} but not valid")
-    return file_path, msgs
-
-
-def _get_config_file(
-    path: str, filename: str, allowed_extensions: List, msgs: List
-) -> Optional[str]:
-    """check if filename is present in given path with allowed
-    extensions. If multiple files are present it throws an error
-    as only a single valid config file can be present in the
-    given path.
-    """
-    config_files_found = []
-    config_file = None
-    valid_file_names = [
-        f"{filename}.{allowed_extension}" for allowed_extension in allowed_extensions
-    ]
-    for name in valid_file_names:
-        candidate_config_path = os.path.join(path, name)
-        if not os.path.exists(candidate_config_path):
-            msgs.append(f"Skipping {path}/{name} because it does not exist")
-            continue
-        config_files_found.append(candidate_config_path)
-
-    if len(config_files_found) > 1:
-        error_msg = "only one file among '{0}' should be present under" " directory '{1}'".format(
-            ", ".join(valid_file_names), path
-        )
-        error_msg += " instead multiple config files" " found '{0}'".format(
-            ", ".join(config_files_found)
-        )
-        error_and_exit_early(error_msg)
-
-    if len(config_files_found) == 1:
-        config_file = config_files_found[0]
-
-    return config_file
-
-
-def get_conf_path(
-    filename: Optional[str] = None, allowed_extensions: Optional[List] = None
-) -> Tuple[Optional[str], List[str]]:
-    """
-    returns config dir (e.g. /etc/ansible-navigator) if filename is None and
-    config file path if filename provided. First found wins.
-    If a filename is given, ensures the file exists in the directory.
-
-    TODO: This is a pretty expensive function (lots of statting things on disk).
-          We should probably cache the potential paths somewhere, eventually.
-    """
-
-    potential_paths: List[str] = []
-    msgs: List[str] = []
-
-    # .ansible-navigator of current direcotry
-    potential_paths.append(".ansible-navigator")
-
-    # Development path
-    path = os.path.join(os.path.dirname(__file__), "..", "etc", "ansible-navigator")
-    potential_paths.append(path)
-
-    # ~/.config/ansible-navigator
-    path = os.path.join(os.path.expanduser("~"), ".config", "ansible-navigator")
-    potential_paths.append(path)
-
-    # /etc/ansible-navigator
-    path = os.path.join("/", "etc", "ansible-navigator")
-    potential_paths.append(path)
-
-    # /usr/local/etc/ansible-navigator
-    prefix = sysconfig.get_config_var("prefix")
-    if prefix:
-        path = os.path.join(prefix, "local", "etc", "ansible-navigator")
-        potential_paths.append(path)
-
-    for path in potential_paths:
-        if allowed_extensions:
-            if not filename:
-                msg = f"allowed_extensions '{allowed_extensions}' requires filename to be set"
-                error_and_exit_early(msg)
-
-            config_path = _get_config_file(path, filename, allowed_extensions, msgs)
-            if config_path is None:
-                continue
-        else:
-            config_path = os.path.join(path, filename) if filename is not None else path
-            if not os.path.exists(config_path):
-                msgs.append(
-                    "Skipping {0} because required file {1} does not exist".format(path, filename)
-                )
-                continue
-
-        try:
-            perms = os.stat(path)
-            if perms.st_mode & stat.S_IWOTH:
-                msgs.append(
-                    "Ignoring potential configuration directory {0} because it "
-                    "is world-writable.".format(path)
-                )
-                continue
-            return (config_path, msgs)
-        except OSError:
-            continue
-
-    return (None, msgs)
-
-
-def set_ansible_envar() -> None:
-    """Set an envar if not set, runner will need this"""
-    ansible_config_path, msgs = get_conf_path("ansible.cfg")
-
-    for msg in msgs:
-        logger.debug(msg)
-
-    # set as env var, since we hand env vars over to runner
-    if ansible_config_path and not os.getenv("ANSIBLE_CONFIG"):
-        os.environ.setdefault("ANSIBLE_CONFIG", ansible_config_path)
-        logger.debug("ANSIBLE_CONFIG set to %s", ansible_config_path)
-
-
-def get_and_check_collection_doc_cache(args, collection_doc_cache_fname: str) -> Tuple[List, Dict]:
-    """ensure the collection doc cache
-    has the current version of the application
-    as a safeguard, always delete and rebuild if not
-    """
-    messages = []
-    os.makedirs(args.cache_dir, exist_ok=True)
-    collection_doc_cache_path = f"{args.cache_dir}/{collection_doc_cache_fname}"
-    messages.append(f"Collection doc cache: 'path' is '{collection_doc_cache_path}'")
-    collection_cache = _get_kvs(args, collection_doc_cache_path)
-    if "version" in collection_cache:
-        cache_version = collection_cache["version"]
-    else:
-        cache_version = None
-    messages.append(f"Collection doc cache: 'current version' is '{cache_version}'")
-    if cache_version is None or cache_version != VERSION:
-        messages.append("Collection doc cache: version was empty or incorrect, rebuilding")
-        collection_cache.close()
-        os.remove(collection_doc_cache_path)
-        collection_cache.__init__(collection_doc_cache_path)
-        collection_cache["version"] = VERSION
-        cache_version = collection_cache["version"]
-        messages.append(f"Collection doc cache: 'current version' is '{cache_version}'")
-    collection_cache.close()
-    return messages, collection_cache
-
-
-def _get_kvs(args, collection_doc_cache_path):
-    spec = importlib.util.spec_from_file_location(
-        "kvs", f"{args.share_dir}/utils/key_value_store.py"
-    )
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod.KeyValueStore(collection_doc_cache_path)
-
-
-def error_and_exit_early(msg=None, errors=None) -> NoReturn:
-    """get out of here fast"""
-    template = "\x1b[31m[ERROR]: {msg}\x1b[0m"
-    if msg:
-        print(template.format(msg=msg))
-    if errors:
-        for error in errors:
-            print(template.format(msg=error))
-    sys.exit(1)
-
-
-def oxfordcomma(listed, condition):
-    """Format a list into a sentance"""
-    listed = [f"'{str(entry)}'" for entry in listed]
-    if len(listed) == 0:
-        return ""
-    if len(listed) == 1:
-        return listed[0]
-    if len(listed) == 2:
-        return f"{listed[0]} {condition} {listed[1]}"
-    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
-
-
-def abs_user_path(fpath):
-    """Resolve a path"""
-    return os.path.abspath(os.path.expanduser(fpath))
-
-
-def str2bool(value: Any) -> bool:
-    """Convert some commonly used values
-    to a boolean
-    """
-    if isinstance(value, bool):
-        return value
-    if isinstance(value, str):
-        if value.lower() in ("yes", "true"):
-            return True
-        if value.lower() in ("no", "false"):
-            return False
-    raise ValueError

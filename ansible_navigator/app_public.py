@@ -4,8 +4,9 @@ shared with other actions, immutable
 from typing import Callable
 from typing import List
 from typing import NamedTuple
-from argparse import Namespace
 
+
+from .configuration_subsystem import ApplicationConfiguration
 from .steps import Steps
 
 
@@ -16,8 +17,7 @@ class AppPublic(NamedTuple):
     """A carrier for app internals that will be
     shared with other actions, immutable
     """
-
-    args: Namespace
+    args: ApplicationConfiguration
     name: str
     rerun: Callable
     stdout: List[str]

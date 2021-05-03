@@ -1,6 +1,7 @@
 ---
 ansible-navigator:
   app: run
+  collection-doc-cache-path: /tmp/cache.db
   cmdline: "--forks 15"
   editor:
     command: vim_from_setting
@@ -34,4 +35,7 @@ ansible-navigator:
   mode: stdout
   osc4: False
   playbook: /tmp/test_playbook.yml
-  playbook-artifact: test_artifact.json
+  playbook-artifact: 
+    enable: True
+    load: /tmp/test_artifact.json
+    save-as: /tmp/test_artifact.json

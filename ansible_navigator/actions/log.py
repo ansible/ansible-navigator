@@ -1,21 +1,21 @@
 """ :log """
-import logging
 from . import _actions as actions
+from ..app import App
 from ..app_public import AppPublic
+from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 
 
 @actions.register
-class Action:
+class Action(App):
     """:log"""
 
     # pylint: disable=too-few-public-methods
 
     KEGEX = r"^l(?:og)?$"
 
-    def __init__(self, args):
-        self._args = args
-        self._logger = logging.getLogger(__name__)
+    def __init__(self, args: ApplicationConfiguration):
+        super().__init__(args=args, logger_name=__name__, name="log")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle :log
@@ -26,11 +26,12 @@ class Action:
         :type app: App
         """
         self._logger.debug("log requested")
-        previous_scroll = interaction.ui.scroll()
-        interaction.ui.scroll(0)
+        self._prepare_to_run(app, interaction)
+
         auto_scroll = True
         while True:
-            with open(app.args.logfile) as fhand:
+            self._calling_app.update()
+            with open(self._args.log_file) as fhand:
                 dalog = fhand.read()
 
             new_scroll = len(dalog.splitlines())
@@ -38,7 +39,6 @@ class Action:
                 interaction.ui.scroll(new_scroll)
 
             interaction = interaction.ui.show(obj=dalog, xform="text.log")
-            app.update()
             if interaction.name != "refresh":
                 break
 
@@ -49,5 +49,5 @@ class Action:
                 self._logger.debug("autoscroll enabled")
                 auto_scroll = True
 
-        interaction.ui.scroll(previous_scroll)
+        self._prepare_to_exit(interaction)
         return interaction

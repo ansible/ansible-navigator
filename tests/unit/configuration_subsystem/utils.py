@@ -13,9 +13,10 @@ from ansible_navigator.configuration_subsystem.configurator import Configurator
 
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import Entry
-from ansible_navigator.configuration_subsystem.definitions import Message
 
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
+
+from ansible_navigator.utils import LogMessage
 
 from ansible_navigator.yaml import yaml
 from ansible_navigator.yaml import Loader
@@ -28,7 +29,7 @@ TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
 class GenerateConfigResponse(NamedTuple):
     """obj for generate_config_response"""
 
-    messages: List[Message]
+    messages: List[LogMessage]
     errors: List[str]
     application_configuration: ApplicationConfiguration
     settings_contents: Dict

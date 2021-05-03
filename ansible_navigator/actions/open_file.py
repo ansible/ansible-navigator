@@ -111,6 +111,8 @@ class Action:
 
     # pylint: disable=too-many-branches
     def run(self, interaction: Interaction, app: AppPublic) -> None:
+        # pylint: disable=too-many-branches
+        # pylint: disable=unused-argument
         """Handle :open
 
         :param interaction: The interaction from the user
@@ -155,8 +157,8 @@ class Action:
                 with open(filename, "w") as outfile:
                     outfile.write(obj)
 
-        command = app.args.editor_command.format(filename=filename, line_number=line_number)
-        is_console = app.args.editor_console
+        command = self._args.editor_command.format(filename=filename, line_number=line_number)
+        is_console = self._args.editor_console
 
         self._logger.debug("Command: %s", command)
         if isinstance(command, str):

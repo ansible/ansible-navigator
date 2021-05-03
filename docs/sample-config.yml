@@ -25,7 +25,7 @@ ansible-navigator:
     # emacs/emacsclient:
     # command: emacs +{line_number} {filename}
     # console: false
-  log:
+  logging:
     level: debug
     file: /tmp/ansible-navigator.log
     

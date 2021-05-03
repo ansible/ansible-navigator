@@ -1,6 +1,5 @@
 """ :inventory """
 import curses
-import logging
 import glob
 import json
 import os
@@ -16,11 +15,9 @@ from . import _actions as actions
 
 from ..app import App
 from ..app_public import AppPublic
-
+from ..configuration_subsystem import ApplicationConfiguration
 from ..runner.api import CommandRunner, InventoryRunner
-
 from ..steps import Step
-
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -101,18 +98,15 @@ class Action(App):
 
     KEGEX = r"^i(?:nventory)?(\s(?P<params>.*))?$"
 
-    def __init__(self, args):
-        super().__init__(args=args)
-        self._calling_app: AppPublic
-        self._logger = logging.getLogger(__name__)
+    def __init__(self, args: ApplicationConfiguration):
+        super().__init__(args=args, logger_name=__name__, name="inventory")
+
         self.__inventory: Dict[Any, Any] = {}
-        self._inventory_error: str = ""
         self._host_vars: Dict[str, Dict[Any, Any]]
-        self.name = "inventory"
-        self._interaction: Interaction
-        self._inventories: List[str] = []
         self._inventories_mtime: float
-        self._runner = None
+        self._inventories: List[str] = []
+        self._inventory_error: str = ""
+        self._runner: Union[CommandRunner, InventoryRunner]
 
     @property
     def _inventory(self) -> Dict[Any, Any]:
@@ -132,7 +126,9 @@ class Action(App):
 
     @property
     def _show_columns(self) -> List:
-        return self.args.inventory_columns
+        if isinstance(self._args.inventory_column, list):
+            return self._args.inventory_column
+        return []
 
     def _set_inventories_mtime(self) -> None:
         mtimes = []
@@ -153,27 +149,27 @@ class Action(App):
     def update(self):
         self._calling_app.update()
 
-    def run(self, interaction: Interaction, app: AppPublic) -> None:
+    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
         """Handle :inventory
 
         :param interaction: The interaction from the user
         :type interaction: Interaction
-        :param app: The app instance
-        :type app: App
+        :param calling_app: The calling_app instance
+        :type calling_app: App
         """
         self._logger.debug("inventory requested in interactive mode")
-        self._calling_app = app
-        self.args = app.args
-        self.stdout = app.stdout
-        self._interaction = interaction
+        self._prepare_to_run(app, interaction)
+        self.stdout = self._calling_app.stdout
 
         self._build_inventory_list()
         if not self._inventories:
+            self._prepare_to_exit(interaction)
             return None
 
         self._collect_inventory_details()
         if not self._inventory:
+            self._prepare_to_exit(interaction)
             return None
 
         if self._inventory_error:
@@ -181,21 +177,16 @@ class Action(App):
                 interaction = self._interaction.ui.show(self._inventory_error, xform="source.ansi")
                 if interaction.name != "refresh":
                     break
+            self._prepare_to_exit(interaction)
             return None
 
         self.steps.append(self._build_main_menu())
-        previous_scroll = interaction.ui.scroll()
-        previous_filter = interaction.ui.menu_filter()
-        self._interaction.ui.scroll(0)
 
         while True:
             self.update()
             self._take_step()
             if not self.steps:
-                if self.args.app == self.name:
-                    self.steps.append(self._build_main_menu())
-                else:
-                    break
+                break
 
             current_mtime = self._inventories_mtime
             self._set_inventories_mtime()
@@ -217,15 +208,14 @@ class Action(App):
             if self.steps.current.name == "quit":
                 return self.steps.current
 
-        interaction.ui.scroll(previous_scroll)
-        interaction.ui.menu_filter(previous_filter)
+        self._prepare_to_exit(interaction)
         return None
 
     def run_stdout(self) -> None:
         """Run in oldschool mode, just stdout"""
         self._logger.debug("inventory requested in stdout mode")
-        if hasattr(self.args, "inventory") and self.args.inventory:
-            self._inventories = self.args.inventory
+        if hasattr(self._args, "inventory") and self._args.inventory:
+            self._inventories = self._args.inventory
         self._collect_inventory_details()
 
     def _take_step(self) -> None:
@@ -380,21 +370,18 @@ class Action(App):
 
     def _build_inventory_list(self) -> None:
 
-        params = [self.name]
-        user_provided = self._interaction.action.match.groupdict()["params"]
+        self._update_args(
+            [self._name] + (self._interaction.action.match.groupdict()["params"] or "").split()
+        )
 
-        # either the user provided new inventories or none previously set:
-        if user_provided is not None or not hasattr(self.args, "inventory"):
-            params.extend(user_provided.split())
-            # Parse as if provided from the cmdline
-            new_args = self._update_args(params)
-            if new_args is None:
-                return
-            self.args = new_args
+        if isinstance(self._args.inventory, list):
+            inventories = self._args.inventory
+            inventories_valid = all((os.path.exists(inv) for inv in inventories))
+        else:
+            inventories = ["", "", ""]
+            inventories_valid = False
 
-        inventories = self.args.inventory
-
-        if not inventories or not all((os.path.exists(inv) for inv in inventories)):
+        if not inventories_valid:
             FType = Dict[str, Any]
             form_dict: FType = {
                 "title": "One or more inventory sources could not be found",
@@ -440,15 +427,15 @@ class Action(App):
     def _collect_inventory_details(self) -> None:
 
         kwargs = {
-            "container_engine": self.args.container_engine,
+            "container_engine": self._args.container_engine,
             "cwd": os.getcwd(),
-            "execution_environment_image": self.args.execution_environment_image,
-            "execution_environment": self.args.execution_environment,
-            "navigator_mode": self.args.mode,
-            "pass_environment_variable": self.args.pass_environment_variable,
-            "set_environment_variable": self.args.set_environment_variable,
+            "execution_environment_image": self._args.execution_environment_image,
+            "execution_environment": self._args.execution_environment,
+            "navigator_mode": self._args.mode,
+            "pass_environment_variable": self._args.pass_environment_variable,
+            "set_environment_variable": self._args.set_environment_variable,
         }
-        if self.args.mode == "interactive":
+        if self._args.mode == "interactive":
             self._runner = InventoryRunner(**kwargs)
             inventory_output, inventory_err = self._runner.fetch_inventory(
                 "list", self._inventories
@@ -470,7 +457,7 @@ class Action(App):
 
             self._extract_inventory(inventory_output, inventory_err)
         else:
-            if self.args.execution_environment:
+            if self._args.execution_environment:
                 ansible_inventory_path = "ansible-inventory"
             else:
                 exec_path = find_executable("ansible-inventory")
@@ -479,7 +466,7 @@ class Action(App):
                     return
                 ansible_inventory_path = exec_path
 
-            kwargs.update({"cmdline": self.args.cmdline, "inventory": self._inventories})
+            kwargs.update({"cmdline": self._args.cmdline, "inventory": self._inventories})
 
             self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
             self._runner.run()

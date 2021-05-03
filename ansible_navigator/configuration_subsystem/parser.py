@@ -23,7 +23,7 @@ class Parser:
         self._base_parser = ArgumentParser(add_help=False)
         self._configure_base()
         self.parser = ArgumentParser(parents=[self._base_parser])
-        self._subparsers = self._add_subparsers()
+        self._subparsers = self._add_subcommand_holder()
         self._configure_subparsers()
 
     @staticmethod
@@ -61,7 +61,7 @@ class Parser:
             else:
                 parser.add_argument(short, long, **kwargs)
 
-    def _add_subparsers(self) -> _SubParsersAction:
+    def _add_subcommand_holder(self) -> _SubParsersAction:
         subcommand_value = [
             entry for entry in self._config.entries if entry.subcommand_value is True
         ]
@@ -70,7 +70,11 @@ class Parser:
         if len(subcommand_value) > 1:
             raise ValueError("Multiple entries with subparser value defined")
         entry = subcommand_value[0]
-        return self.parser.add_subparsers(title=entry.short_description, dest=entry.name)
+        return self.parser.add_subparsers(
+            title=entry.short_description,
+            dest=entry.name,
+            metavar="{subcommand} --help",
+        )
 
     def _configure_base(self) -> None:
         for entry in self._config.entries:

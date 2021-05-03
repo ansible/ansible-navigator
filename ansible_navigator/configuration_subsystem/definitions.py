@@ -8,7 +8,6 @@ from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
-from typing import NamedTuple
 from typing import Union
 
 from ..utils import oxfordcomma
@@ -32,7 +31,7 @@ class Constants(Enum):
     DEFAULT_CFG = "default configuration value"
     ENVIRONMENT_VARIABLE = "environemnt variable"
     NONE = "None of the things"
-    NOT_SET = "indicates a value has not been set"
+    NOT_SET = "value has not been set"
     PREVIOUS_CLI = "previous cli command"
     SAME_SUBCOMMAND = (
         "used to determine if an entry should be used when"
@@ -113,8 +112,8 @@ class Entry(SimpleNamespace):
         if self.settings_file_path_override is not None:
             sfp = f"{prefix}.{self.settings_file_path_override}"
         else:
-            sfp = f"{prefix}.{self.name.replace('_', '-')}"
-        return sfp
+            sfp = f"{prefix}.{self.name}"
+        return sfp.replace("_", "-")
 
 
 class SubCommand(SimpleNamespace):
@@ -130,10 +129,12 @@ class ApplicationConfiguration(SimpleNamespace):
 
     application_name: str
     entries: List[Entry]
+    internals: SimpleNamespace
     subcommands: List[SubCommand]
     post_processor = Callable
 
     initial: Any = None
+    original_command: List[str]
 
     def __getattribute__(self, attr: str) -> Any:
         """Returns a matching entry or the default bwo super"""
@@ -151,10 +152,3 @@ class ApplicationConfiguration(SimpleNamespace):
         """Retrieve a configuration entry by name"""
         found_entry = [entry for entry in self.entries if entry.name == name]
         return found_entry[0]
-
-
-class Message(NamedTuple):
-    """An object ot hold a message"""
-
-    log_level: str
-    message: str

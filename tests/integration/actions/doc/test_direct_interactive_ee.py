@@ -1,8 +1,9 @@
 """ doc direct from cli interactive w/ ee
 """
+from typing import List
+
 import pytest
 
-from typing import List
 from .base import BaseClass
 
 from ..._common import container_runtime_or_fail
@@ -68,5 +69,3 @@ class TestLookUpDoc(BaseClass):
 )
 class TestModuleDocNotExist(BaseClass):
     """run the tests"""
-
-    pass
