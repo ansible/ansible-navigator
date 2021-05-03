@@ -32,7 +32,7 @@ class FormHandlerButton(CursesWindow):
             color = self._form_field.color
 
         clp_button = CursesLinePart(
-            0, self._form_field.text, curses.color_pair(color), curses.A_UNDERLINE
+            0, self._form_field.text, curses.color_pair(color), curses.A_STANDOUT
         )
         self._add_line(self.win, 0, ([clp_button]))
 

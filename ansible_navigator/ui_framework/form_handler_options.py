@@ -30,7 +30,7 @@ class FormHandlerOptions(CursesWindow):
         for idx, option in enumerate(form_field.options):
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
-            decoration = curses.A_UNDERLINE if idx == active else 0
+            decoration = curses.A_STANDOUT if idx == active else 0
             clp_option_code = CursesLinePart(0, option_code, curses.color_pair(color), 0)
             clp_text = CursesLinePart(
                 len(option_code) + 1, option.text, curses.color_pair(color), decoration
