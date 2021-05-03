@@ -176,7 +176,7 @@ def cli_data():
 CLI_DATA = cli_data()
 
 ENVVAR_DATA = [
-    ("app", "doc", "doc"),
+    ("app", "config", "config"),
     ("cmdline", "--forks 15", ["--forks", "15"]),
     ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),
     ("container_engine", "docker", "docker"),

@@ -91,7 +91,7 @@ def test_apply_previous_cli_specified():
         assert application_configuration.entry(expect[0]).value.current == expect[1]
         assert application_configuration.entry(expect[0]).value.source is C.USER_CLI
 
-    params = "doc"
+    params = "doc shell"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
@@ -105,6 +105,7 @@ def test_apply_previous_cli_specified():
         ("cmdline", C.NOT_SET, C.NOT_SET),
         ("execution_environment", False, C.PREVIOUS_CLI),
         ("execution_environment_image", "test_image", C.PREVIOUS_CLI),
+        ("plugin_name", "shell", C.USER_CLI),
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
@@ -134,12 +135,13 @@ def test_apply_previous_cli_mixed():
         ("execution_environment", False, C.USER_CLI),
         ("execution_environment_image", "test_image", C.USER_CLI),
         ("pass_environment_variable", ["ENV1", "ENV2"], C.ENVIRONMENT_VARIABLE),
+        ("plugin_name", "shell", C.USER_CLI),
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
-    params = "doc --eei different_image"
+    params = "doc shell --eei different_image"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
@@ -155,6 +157,7 @@ def test_apply_previous_cli_mixed():
         ("execution_environment", False, C.PREVIOUS_CLI),
         ("execution_environment_image", "different_image", C.USER_CLI),
         ("pass_environment_variable", C.NOT_SET, C.NOT_SET),
+        ("plugin_name", "shell", C.USER_CLI),
         ("set_environment_variable", {"ENV1": "VAL1"}, C.ENVIRONMENT_VARIABLE),
     ]
     for expect in expected:
@@ -188,7 +191,7 @@ def test_apply_previous_cli_cmdline_not_applied():
         assert application_configuration.entry(expect[0]).value.current == expect[1]
         assert application_configuration.entry(expect[0]).value.source is C.USER_CLI
 
-    params = "doc"
+    params = "doc shell"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
@@ -202,6 +205,7 @@ def test_apply_previous_cli_cmdline_not_applied():
         ("cmdline", C.NOT_SET, C.NOT_SET),
         ("execution_environment", False, C.PREVIOUS_CLI),
         ("playbook", "/tmp/site.yml", C.PREVIOUS_CLI),
+        ("plugin_name", "shell", C.USER_CLI),
     ]
 
     for expect in expected:
@@ -235,7 +239,7 @@ def test_apply_previous_cli_none(_mf1):
         assert application_configuration.entry(expect[0]).value.current == expect[1]
         assert application_configuration.entry(expect[0]).value.source is C.USER_CLI
 
-    params = "doc"
+    params = "doc shell"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
@@ -249,6 +253,7 @@ def test_apply_previous_cli_none(_mf1):
         ("cmdline", C.NOT_SET, C.NOT_SET),
         ("playbook", C.NOT_SET, C.NOT_SET),
         ("execution_environment", True, C.DEFAULT_CFG),
+        ("plugin_name", "shell", C.USER_CLI),
     ]
 
     for expect in expected:

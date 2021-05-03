@@ -87,10 +87,9 @@ class Action(App):
     KEGEX = r"^config$"
 
     def __init__(self, args: ApplicationConfiguration):
-        super().__init__(args=args, logger_name=__name__)
+        super().__init__(args=args, logger_name=__name__, name="config")
 
         self._config: Union[List[Any], None] = None
-        self._name = "config"
         self._runner: Union[AnsibleCfgRunner, CommandRunner]
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:

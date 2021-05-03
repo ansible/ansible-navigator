@@ -31,6 +31,7 @@ from ..ui_framework import dict_to_form
 from ..ui_framework.form_utils import form_to_dict
 
 
+from ..utils import abs_user_path
 from ..utils import human_time
 
 
@@ -202,7 +203,7 @@ class Action(App):
 
     def __init__(self, args: ApplicationConfiguration):
         # for display purposes use the 4: of the uuid
-        super().__init__(args=args, logger_name=__name__)
+        super().__init__(args=args, logger_name=__name__, name="run")
 
         self._subaction_type: str
         self._msg_from_plays: Tuple[Optional[str], Optional[int]] = (None, None)
@@ -226,9 +227,9 @@ class Action(App):
         :param args: The parsed args from the cli
         :type args: Namespace
         """
+        self._logger.debug("playbook requested in interactive mode")
         self._subaction_type = "playbook"
         self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
-        self._logger.debug("subaction type is %s", self._subaction_type)
         self._run_runner()
         while True:
             self._dequeue()
@@ -251,17 +252,17 @@ class Action(App):
         self._prepare_to_run(app, interaction)
 
         if interaction.action.match.groupdict()["run"]:
+            self._logger.debug("run requested in interactive mode")
             self._subaction_type = "run"
             str_uuid = str(uuid.uuid4())
             self._logger = logging.getLogger(f"{__name__}_{str_uuid[-4:]}")
-            self._name = f"{self._subaction_type}_{str_uuid[-4:]}"
-            self._logger.debug("run requested in interactive mode")
+            self._name = f"run_{str_uuid[-4:]}"
             initialized = self._init_run()
         elif interaction.action.match.groupdict()["load"]:
-            self._subaction_type = "load"
-            self._logger = logging.getLogger("load")
-            self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
             self._logger.debug("load requested in interactive mode")
+            self._subaction_type = "load"
+            self._name = "load"
+            self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
             initialized = self._init_load()
 
         if not initialized:
@@ -280,7 +281,9 @@ class Action(App):
                     self._logger.error("Can not step back while playbook in progress, :q! to exit")
                     self.steps.append(self._plays)
                 else:
-                    self._logger.debug("No steps remaining for returning to calling app")
+                    self._logger.debug(
+                        "No steps remaining for '%s' returning to calling app", self._name
+                    )
                     break
 
             if self.steps.current.name == "quit":
@@ -393,6 +396,10 @@ class Action(App):
 
     def _prompt_for_artifact(self, artifact_file: str) -> Dict[Any, Any]:
         """prompt for a valid artifact file"""
+
+        if not isinstance(artifact_file, str):
+            artifact_file = ""
+
         FType = Dict[str, Any]
         form_dict: FType = {
             "title": "Artifact file not found, please confirm the following",
@@ -684,7 +691,7 @@ class Action(App):
         # let the calling app update as well
         self._calling_app.update()
 
-        if self.runner:
+        if hasattr(self, "runner"):
             self._dequeue()
             self._set_status()
 
@@ -737,6 +744,10 @@ class Action(App):
                 playbook_name=os.path.splitext(os.path.basename(self._args.playbook))[0],
                 ts_utc=datetime.datetime.now(tz=datetime.timezone.utc),
             )
+            self._logger.debug("Formatted artifact file name set to %s", filename)
+            filename = abs_user_path(filename)
+            self._logger.debug("Resolved artifact file name set to %s", filename)
+
             status, status_color = self._get_status()
 
             try:
@@ -750,12 +761,13 @@ class Action(App):
                         "status_color": status_color,
                     }
                     json.dump(artifact, outfile, indent=4)
+                    self._logger.info("Saved artifact as %s", filename)
+
             except (IOError, OSError) as exc:
                 error = (
                     f"Saving the artifact file failed, resulted in the following error: f{str(exc)}"
                 )
                 self._logger.error(error)
-            self._logger.info("Saved artifact as %s", filename)
 
     def rerun(self) -> None:
         """rerun the current playbook

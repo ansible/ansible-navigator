@@ -19,8 +19,7 @@ class ActionRunner(App):
     """the playbook ui"""
 
     def __init__(self, args):
-        super().__init__(args)
-        self._name = "action_runner"
+        super().__init__(args, name="action_runner")
         self._ui = None
         self.steps: Steps = Steps()
 

@@ -1,13 +1,13 @@
 """ :stream """
-import logging
 
 from . import _actions as actions
+from ..app import App
 from ..app_public import AppPublic
 from ..ui_framework import Interaction
 
 
 @actions.register
-class Action:
+class Action(App):
     """:stream"""
 
     # pylint: disable=too-few-public-methods
@@ -15,8 +15,7 @@ class Action:
     KEGEX = r"^st(?:ream)?$"
 
     def __init__(self, args):
-        self._args = args
-        self._logger = logging.getLogger(__name__)
+        super().__init__(args=args, logger_name=__name__, name="stream")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle :stream
@@ -27,14 +26,13 @@ class Action:
         :type app: App
         """
         self._logger.debug("stream requested")
+        self._prepare_to_run(app, interaction)
 
-        previous_scroll = interaction.ui.scroll()
-        interaction.ui.scroll(0)
         auto_scroll = True
         while True:
-            app.update()
+            self._calling_app.update()
 
-            new_scroll = len(app.stdout)
+            new_scroll = len(self._calling_app.stdout)
             if auto_scroll:
                 interaction.ui.scroll(new_scroll)
             obj = "\n".join(app.stdout)
@@ -49,5 +47,5 @@ class Action:
                 self._logger.debug("autoscroll enabled")
                 auto_scroll = True
 
-        interaction.ui.scroll(previous_scroll)
+        self._prepare_to_exit(interaction)
         return next_interaction

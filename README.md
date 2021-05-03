@@ -78,20 +78,41 @@ ansible-navigator run -m stdout site.yaml -i inventory.yaml
 
 ```yaml
 ansible-navigator:
-  container-engine: docker
+  app: run
+  cmdline: --forks 15
+  documentation:
+    plugin:
+      type: become
+      name: enable
   editor:
     command: code -g {filename}:{line_number}
-    console: False
-  execution-environment-image: quay.io/ansible/network-ee
-  inventory:
+    console: True
+  execution-environment:
+    container-engine: docker
+    image: quay.io/ansible/network-ee
+    environment-variables:
+      pass:
+      - TEST_ENV0
+      - TEST_ENV1
+      - TEST_ENV2
+      set:
+        TEST_STR: navigator
+        TEST_BOOL: True
+        TEST_INT: 42
+  inventories:
     - ../nav_demo/inventory.yaml
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type
     - ansible_connection
-  log:
+  logging:
+    file: /tmp/log.txt
     level: debug
-  no-osc4: True
+  mode: stdout
+  osc4: True
+  playbook: ../nav_demo/simple.yaml
+  playbook-artifact:
+    enable: True
 ```
 
 ## in app key bindings

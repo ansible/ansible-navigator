@@ -29,7 +29,7 @@ class App:
     # pylint: disable=too-many-instance-attributes
     """simple base class for apps"""
 
-    def __init__(self, args: ApplicationConfiguration, logger_name=__name__):
+    def __init__(self, args: ApplicationConfiguration, name, logger_name=__name__):
 
         # allow args to be set after __init__
         self._args: ApplicationConfiguration = args
@@ -40,7 +40,7 @@ class App:
         self._previous_configuration_entries: List[Entry] = deepcopy(self._args.entries)
         self._previous_scroll: int
         self._previous_filter: Union[Pattern, None]
-        self._name = "app_base_class"
+        self._name = name
         self.stdout: List = []
         self.steps = Steps()
 

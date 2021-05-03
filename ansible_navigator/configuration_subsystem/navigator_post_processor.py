@@ -173,6 +173,18 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
+    def plugin_name(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        """Post process plugin_name"""
+        messages: List[LogMessage] = []
+        errors: List[str] = []
+        if config.app == "doc" and entry.value.current is C.NOT_SET:
+            error = "An plugin name is required when using the doc subcommand"
+            errors.append(error)
+            return messages, errors
+        return messages, errors
+
+    @staticmethod
+    @_post_processor
     def pass_environment_variable(
         entry: Entry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
@@ -218,8 +230,11 @@ class NavigatorPostProcessor:
             error = "An playbook artifact file is required when using the load subcommand"
             errors.append(error)
             return messages, errors
+
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
+
+        if config.app == "load":
             if not os.path.isfile(entry.value.current):
                 error = f"The specified playbook artifact could not be found: {entry.value.current}"
                 errors.append(error)

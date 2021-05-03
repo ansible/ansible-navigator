@@ -79,12 +79,11 @@ class Action(App):
     KEGEX = r"^collections(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        super().__init__(args=args, logger_name=__name__)
+        super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
         self._collection_cache = args.internals.collection_doc_cache
         self._collection_cache_path = args.collection_doc_cache_path
         self._collections: List = []
-        self._name = "collections"
         self._stats: Dict = {}
 
     def update(self):

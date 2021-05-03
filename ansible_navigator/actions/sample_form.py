@@ -1,7 +1,7 @@
 """ :quit
 """
-import logging
 from . import _actions as actions
+from ..app import App
 from ..app_public import AppPublic
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
@@ -83,7 +83,7 @@ form:
 
 
 @actions.register
-class Action:
+class Action(App):
     """handle :sample_form"""
 
     # pylint: disable=too-few-public-methods
@@ -91,8 +91,7 @@ class Action:
     KEGEX = r"^sample_form$"
 
     def __init__(self, args):
-        self._args = args
-        self._logger = logging.getLogger(__name__)
+        super().__init__(args=args, logger_name=__name__, name="sample_form")
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
@@ -104,18 +103,19 @@ class Action:
         :type app: App
         """
         self._logger.debug("sample form requested")
+        self._prepare_to_run(app, interaction)
+
         form_data = yaml.safe_load(FORM)
         form = dict_to_form(form_data["form"])
         interaction.ui.show(form)
         as_dict = form_to_dict(form)
         self._logger.debug("form response: %s", as_dict)
 
-        previous_scroll = interaction.ui.scroll()
-        interaction.ui.scroll(0)
         while True:
-            app.update()
+            self._calling_app.update()
             next_interaction: Interaction = interaction.ui.show(obj=as_dict)
             if next_interaction.name != "refresh":
                 break
-        interaction.ui.scroll(previous_scroll)
+
+        self._prepare_to_exit(interaction)
         return next_interaction

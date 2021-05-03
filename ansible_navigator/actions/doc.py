@@ -29,9 +29,8 @@ class Action(App):
     KEGEX = r"^d(?:oc)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        super().__init__(args=args, logger_name=__name__)
+        super().__init__(args=args, logger_name=__name__, name="doc")
 
-        self._name = "doc"
         self._plugin_name: Optional[str]
         self._plugin_type: Optional[str]
         self._runner: Union[CommandRunner, DocRunner]
@@ -53,6 +52,7 @@ class Action(App):
         )
 
         plugin_name_source = self._args.entry("plugin_name").value.source
+
         if plugin_name_source is C.USER_CLI:
             self._plugin_name = self._args.plugin_name
             self._plugin_type = self._args.plugin_type

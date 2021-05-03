@@ -15,9 +15,7 @@ class Action(App):
     KEGEX = r"^l(?:og)?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        super().__init__(args=args, logger_name=__name__)
-
-        self._name = "log"
+        super().__init__(args=args, logger_name=__name__, name="log")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle :log
@@ -32,6 +30,7 @@ class Action(App):
 
         auto_scroll = True
         while True:
+            self._calling_app.update()
             with open(self._args.log_file) as fhand:
                 dalog = fhand.read()
 
@@ -40,7 +39,6 @@ class Action(App):
                 interaction.ui.scroll(new_scroll)
 
             interaction = interaction.ui.show(obj=dalog, xform="text.log")
-            self._calling_app.update()
             if interaction.name != "refresh":
                 break
 

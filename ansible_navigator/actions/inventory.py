@@ -99,14 +99,13 @@ class Action(App):
     KEGEX = r"^i(?:nventory)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        super().__init__(args=args, logger_name=__name__)
+        super().__init__(args=args, logger_name=__name__, name="inventory")
 
         self.__inventory: Dict[Any, Any] = {}
         self._host_vars: Dict[str, Dict[Any, Any]]
         self._inventories_mtime: float
         self._inventories: List[str] = []
         self._inventory_error: str = ""
-        self._name = "inventory"
         self._runner: Union[CommandRunner, InventoryRunner]
 
     @property
