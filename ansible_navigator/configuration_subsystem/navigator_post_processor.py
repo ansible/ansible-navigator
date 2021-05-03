@@ -4,6 +4,7 @@ import distutils
 import logging
 import os
 
+from pathlib import Path
 from typing import List
 from typing import Tuple
 
@@ -54,7 +55,9 @@ class NavigatorPostProcessor:
         try:
             entry.value.current = str2bool(entry.value.current)
         except ValueError:
-            errors.append(entry.invalid_choice)
+            error = f"{entry.name} could not be converted to a boolean value,"
+            error += f" value was '{entry.value.current}' ({type(entry.value.current).__name__})"
+            errors.append(error)
         return messages, errors
 
     @staticmethod
@@ -141,16 +144,25 @@ class NavigatorPostProcessor:
     @_post_processor
     def log_file(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process log_file"""
+        """Post process log_file
+
+        If the parent directory for the log file cannot be created adn is writable.
+        If not restore to default, this will allow the writing of log messages
+        even if application initialization results in a sys.exit condition
+        """
         messages: List[LogMessage] = []
         errors: List[str] = []
         entry.value.current = abs_user_path(entry.value.current)
         try:
             os.makedirs(os.path.dirname(entry.value.current), exist_ok=True)
-        except (IOError, OSError) as exc:
-            error = f"Failed to create parent directory for log file {entry.value.current}"
+            Path(entry.value.current).touch()
+        except (IOError, OSError, FileNotFoundError) as exc:
+            entry.value.current = entry.value.default
+            entry.value.source = C.DEFAULT_CFG
+            error = f"Failed to create log file {entry.value.current}"
             error += f" specified in '{entry.value.source.value}'"
             error += f" The error was: {str(exc)}"
+            error += f" Log file set to default: {entry.value.current}."
             errors.append(error)
         return messages, errors
 

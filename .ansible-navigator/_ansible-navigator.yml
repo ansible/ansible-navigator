@@ -1,5 +1,4 @@
 ansible-navigator:
-  container-engine: docker
   # documentation:
   #   plugin:
   #     type: strategy
@@ -7,7 +6,7 @@ ansible-navigator:
   editor:
     command: code -g {filename}:{line_number}
     console: True
-  execution-environment: 
+  execution-environment:
     container-engine: docker
     image: quay.io/ansible/network-ee
     environment-variables:

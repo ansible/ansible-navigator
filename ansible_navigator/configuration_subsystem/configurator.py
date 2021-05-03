@@ -20,6 +20,7 @@ from ..yaml import yaml
 class Configurator:
     # pylint: disable=too-many-arguments
     # pylint: disable=too-few-public-methods
+    # pylint: disable=too-many-instance-attributes
     """the configuration class"""
 
     def __init__(
@@ -48,6 +49,7 @@ class Configurator:
         self._save_as_intitial = save_as_intitial
         self._settings_file_path = settings_file_path
         self._sanity_check()
+        self._unaltered_entries = deepcopy(self._config.entries)
 
     def _sanity_check(self) -> None:
         if self._apply_previous_cli_entries is not C.NONE:
@@ -55,6 +57,24 @@ class Configurator:
                 raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
             if self._config.initial is None:
                 raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
+
+    def _roll_back(self) -> None:
+        """In the case of a rollback, log the configuration state
+        prior to roll back
+        """
+        message = "Configuration errors encountered, rolling back to previous configuration."
+        self._messages.append(LogMessage(level=logging.ERROR, message=message))
+        for entry in self._config.entries:
+            message = f"Prior to rollback: {entry.name} = '{entry.value.current}'"
+            message += f" ({type(entry.value.current).__name__}/{entry.value.source.value})"
+            self._messages.append(LogMessage(level=logging.DEBUG, message=message))
+        self._config.entries = self._unaltered_entries
+        for entry in self._config.entries:
+            message = f"After rollback: {entry.name} = '{entry.value.current}'"
+            message += f" ({type(entry.value.current).__name__}/{entry.value.source.value})"
+            self._messages.append(LogMessage(level=logging.DEBUG, message=message))
+        message = "Configuration rollback complete."
+        self._messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     def configure(self) -> Tuple[List[LogMessage], List[str]]:
         """Perform the configuration
@@ -65,7 +85,6 @@ class Configurator:
         self._config.original_command = self._params
         message = f"Params provided: {self._config.original_command}"
         self._messages.append(LogMessage(level=logging.DEBUG, message=message))
-        unaltered_entries = deepcopy(self._config.entries)
 
         self._restore_original()
         self._apply_defaults()
@@ -73,19 +92,15 @@ class Configurator:
         self._apply_environment_variables()
         self._apply_cli_params()
         if self._errors:
-            self._config.entries = unaltered_entries
+            self._roll_back()
             return self._messages, self._errors
 
         self._apply_previous_cli_to_current()
 
         self._post_process()
-        if self._errors:
-            self._config.entries = unaltered_entries
-            return self._messages, self._errors
-
         self._check_choices()
         if self._errors:
-            self._config.entries = unaltered_entries
+            self._roll_back()
             return self._messages, self._errors
 
         if self._save_as_intitial:
@@ -120,11 +135,12 @@ class Configurator:
             with open(self._settings_file_path, "r") as config_fh:
                 try:
                     config = yaml.load(config_fh, Loader=SafeLoader)
-                except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+                except (yaml.scanner.ScannerError, yaml.parser.ParserError) as exc:
                     error = (
                         f"Settings file found {self._settings_file_path}, but failed to load it."
                     )
                     self._errors.append(error)
+                    self._errors.append(f"  error was: '{' '.join(str(exc).splitlines())}'")
                     return
             for entry in self._config.entries:
                 settings_file_path = entry.settings_file_path(self._config.application_name)

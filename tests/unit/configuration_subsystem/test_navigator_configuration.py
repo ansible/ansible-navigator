@@ -235,13 +235,8 @@ def test_not_a_bool(_mocked_func, generate_config):
     """Ensure errors generated for wrong type of value"""
 
     response = generate_config(setting_file_name="ansible-navigator_not_bool.yml")
-    errors = [
-        (
-            "execution-environment must be one of 'True' or 'False',"
-            " but set as '5' in user provided configuration file"
-        )
-    ]
-    assert errors == response.errors
+    error = "execution_environment could not be converted to a boolean value, value was '5' (int)"
+    assert response.errors[0] == error
 
 
 @patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
@@ -267,9 +262,8 @@ def test_garbage_settings_file(generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure errors generated for garbage settings file"""
     response = generate_config(setting_file_name=os.path.abspath(__file__))
-    assert len(response.errors) == 1
     error = "but failed to load it."
-    assert response.errors[0].endswith(error)
+    assert response.errors[0].endswith(error), response.errors
 
 
 @patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
