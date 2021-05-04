@@ -1,5 +1,6 @@
 """ base class for config interactive tests
 """
+import difflib
 import json
 
 import pytest
@@ -75,7 +76,6 @@ class BaseClass:
             with open(f"{dir_path}/{file_name}", encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
 
-            assert expected_output == updated_received_output, (
-                expected_output,
-                updated_received_output,
+            assert expected_output == updated_received_output, "\n" + "\n".join(
+                difflib.ndiff(expected_output, updated_received_output)
             )

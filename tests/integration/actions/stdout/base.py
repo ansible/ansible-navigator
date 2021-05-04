@@ -1,4 +1,4 @@
-""" base class for inventory interactive tests
+""" base class for stdout interactive tests
 """
 import difflib
 import json
@@ -11,34 +11,44 @@ from ..._common import update_fixtures
 from ..._common import TmuxSession
 from ....defaults import FIXTURES_DIR
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/inventory")
-ANSIBLE_INVENTORY_FIXTURE_DIR = os.path.join(TEST_FIXTURE_DIR, "ansible_inventory/inventory.yml")
+TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/stdout")
+ANSIBLE_PLAYBOOK = os.path.join(TEST_FIXTURE_DIR, "site.yml")
 TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
 
 
 class BaseClass:
-    """base class for interactive inventory tests"""
+    """base class for interactive stdout tests"""
 
     UPDATE_FIXTURES = False
 
     @staticmethod
-    @pytest.fixture(scope="module", name="tmux_inventory_session")
-    def fixture_tmux_inventory_session(request):
+    @pytest.fixture(scope="module", name="tmux_session")
+    def fixture_tmux_session(request):
         """tmux fixture for this module"""
-        params = {"window_name": request.node.name, "config_path": TEST_CONFIG_FILE}
+        params = {
+            "window_name": request.node.name,
+            "setup_commands": [
+                "export ANSIBLE_DEVEL_WARNING=False",
+                "export ANSIBLE_DEPRECATION_WARNINGS=False",
+            ],
+            "config_path": TEST_CONFIG_FILE,
+            "pane_height": "100",
+        }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_inventory_session, index, user_input, comment):
+    def test(self, request, tmux_session, index, user_input, comment, playbook_status):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
 
-        """test interactive inventory"""
-        assert os.path.exists(ANSIBLE_INVENTORY_FIXTURE_DIR)
+        """test"""
+        assert os.path.exists(ANSIBLE_PLAYBOOK)
         assert os.path.exists(TEST_CONFIG_FILE)
 
-        received_output = tmux_inventory_session.interaction(user_input)
+        received_output = tmux_session.interaction(
+            user_input, wait_on_playbook_status=playbook_status
+        )
         if self.UPDATE_FIXTURES:
             update_fixtures(request, index, received_output, comment)
         dir_path, file_name = fixture_path_from_request(request, index)

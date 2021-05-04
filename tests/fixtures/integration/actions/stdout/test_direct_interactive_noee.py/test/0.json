@@ -1,0 +1,10 @@
+{
+    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator run /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/stdout/site.yml --execution-environment false-run top window-SUCCESSFUL]",
+    "index": 0,
+    "comment": "run top window",
+    "output": [
+        "  PLAY NAME            OK    CHANGED         UNREACHABLE              FAILED        SKIPPED         IGNORED         IN PROGRESS              TASK COUNT                                     % COMPLETED",
+        "0│localhost             2          0                   0                   0              0               0                   0                       2                                100% ▇▇▇▇▇▇▇▇▇▇▇",
+        "^f/PgUp page up                    ^b/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                     SUCCESSFUL"
+    ]
+}
