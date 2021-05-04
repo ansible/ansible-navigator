@@ -1,0 +1,48 @@
+"""Some tests directoly for Configurator
+"""
+import os
+
+from unittest import mock
+from unittest.mock import patch
+
+import pytest
+
+from ansible_navigator.configuration_subsystem import Configurator
+from ansible_navigator.configuration_subsystem import Constants as C
+from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem.navigator_configuration import (
+    generate_editor_command,
+)
+
+
+def test_mutual_exclusivity_for_configuration_init():
+    """Ensure the configuration cannot be intited with both
+    apply_previous_cli_entries and save_as_intitial"""
+    with pytest.raises(ValueError, match="cannot be used with"):
+        Configurator(
+            params=None,
+            application_configuration=None,
+            save_as_intitial=True,
+            apply_previous_cli_entries=C.ALL,
+        )
+
+
+def test_apply_before_initial_saved():
+    """Ensure the apply_previous_cli_entries cant' be used before save_as_intitial"""
+    with pytest.raises(ValueError, match="enabled prior to"):
+        Configurator(
+            params=None,
+            application_configuration=NavigatorConfiguration,
+            apply_previous_cli_entries=C.ALL,
+        ).configure()
+
+
+@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+def test_editor_command_from_editor(_mocked_func, generate_config):
+    """Ensure the editor_command defaults to EDITOR if set"""
+    with mock.patch.dict(os.environ, {"EDITOR": "nano"}):
+        # since this was already loaded, force it
+        NavigatorConfiguration.entry("editor_command").value.default = generate_editor_command()
+        response = generate_config()
+        assert response.errors == []
+        assert response.application_configuration.editor_command == "nano {filename}"

@@ -9,7 +9,7 @@ from ansible_navigator.yaml import Loader
 
 from .data import ENVVAR_DATA
 
-from .utils import TEST_FIXTURE_DIR
+from .defaults import TEST_FIXTURE_DIR
 
 
 def test_data_no_missing_envvar_data():
@@ -20,6 +20,7 @@ def test_data_no_missing_envvar_data():
 
 
 def test_full_settings_file():
+    """Test using a full settings file"""
     settings_file_path = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
     with open(settings_file_path) as file:
         settings_contents = yaml.load(file, Loader=Loader)

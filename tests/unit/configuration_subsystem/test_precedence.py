@@ -16,15 +16,8 @@ from unittest.mock import patch
 
 import pytest
 
-from ansible_navigator.configuration_subsystem.configurator import Configurator
-
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
-
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    generate_editor_command,
-)
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
-
 
 from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
@@ -33,7 +26,6 @@ from .data import CLI_DATA
 from .data import ENVVAR_DATA
 from .data import SETTINGS
 
-from .utils import fixture_generate_config  # pylint: disable=unused-import
 from .utils import id_for_base
 from .utils import id_for_cli
 from .utils import id_for_name
@@ -216,115 +208,3 @@ def test_all_entries_reflect_settings_given_settings(_mf1, _mf2, generate_config
         for key in path.split("."):
             expected = expected[key]
         assert configured_entry.value.current == expected, configured_entry
-
-
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-def test_editor_command_from_editor(_mocked_func, generate_config):
-    """Ensure the editor_command defaults to EDITOR if set"""
-    with mock.patch.dict(os.environ, {"EDITOR": "nano"}):
-        # since this was already loaded, force it
-        NavigatorConfiguration.entry("editor_command").value.default = generate_editor_command()
-        response = generate_config()
-        assert response.errors == []
-        assert response.application_configuration.editor_command == "nano {filename}"
-
-
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-def test_not_a_bool(_mocked_func, generate_config):
-    # pylint: disable=import-outside-toplevel
-    """Ensure errors generated for wrong type of value"""
-
-    response = generate_config(setting_file_name="ansible-navigator_not_bool.yml")
-    error = "execution_environment could not be converted to a boolean value, value was '5' (int)"
-    assert response.errors[0] == error
-
-
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-def test_badly_formatted_envar(_mocked_func, generate_config):
-    # pylint: disable=import-outside-toplevel
-    """Ensure errors generated for badly formatted set env var"""
-    params = "run site.yml --senv TK1:TV1"
-    response = generate_config(params=params.split())
-    errors = ["The following set-environment-variable entry could not be parsed: TK1:TV1"]
-    assert errors == response.errors
-
-
-def test_broken_settings_file(generate_config):
-    # pylint: disable=import-outside-toplevel
-    """Ensure errors generated for broken settings file"""
-    response = generate_config(setting_file_name="ansible-navigator_broken.yml")
-    assert len(response.errors) == 1
-    error = "Errors encountered when loading settings file:"
-    assert response.errors[0].startswith(error)
-
-
-def test_garbage_settings_file(generate_config):
-    # pylint: disable=import-outside-toplevel
-    """Ensure errors generated for garbage settings file"""
-    response = generate_config(setting_file_name=os.path.abspath(__file__))
-    error = "but failed to load it."
-    assert response.errors[0].endswith(error), response.errors
-
-
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-def test_inventory_no_inventory(_mocked_func, generate_config):
-    # pylint: disable=import-outside-toplevel
-    """Ensure errors generated for an inventory without an inventory specified"""
-    response = generate_config(params=["inventory"])
-    errors = ["An inventory is required when using the inventory subcommand"]
-    assert errors == response.errors
-
-
-def test_mutual_exclusivity_for_configuration_init():
-    """Ensure the configuration cannot be intited with both
-    apply_previous_cli_entries and save_as_intitial"""
-    with pytest.raises(ValueError, match="cannot be used with"):
-        Configurator(
-            params=None,
-            application_configuration=None,
-            save_as_intitial=True,
-            apply_previous_cli_entries=C.ALL,
-        )
-
-
-def test_apply_before_initial_saved():
-    """Ensure the apply_previous_cli_entries cant' be used before save_as_intitial"""
-    with pytest.raises(ValueError, match="enabled prior to"):
-        Configurator(
-            params=None,
-            application_configuration=NavigatorConfiguration,
-            apply_previous_cli_entries=C.ALL,
-        ).configure()
-
-
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-@pytest.mark.parametrize(
-    "entry", [entry for entry in NavigatorConfiguration.entries if entry.choices], ids=id_for_name
-)
-def test_poor_choices(_mocked_func, generate_config, entry):
-    # pylint: disable=import-outside-toplevel
-    """Ensure errors generated for poor choices"""
-
-    def test(subcommand, param):
-        if subcommand is None:
-            response = generate_config(params=[param, "Sentinel"])
-        else:
-            response = generate_config(params=[subcommand, param, "Sentinel"])
-        assert any("must be one of" in err for err in response.errors)
-
-    if isinstance(entry.subcommands, list):
-        subcommand = entry.subcommands[0]
-    else:
-        subcommand = None
-
-    test(subcommand, entry.cli_parameters.short)
-    test(subcommand, entry.cli_parameters.long_override or f"--{entry.name_dashed}")
-
-
-def test_generate_argparse_error(generate_config):
-    """Ensure errors generated by argparse are caught"""
-    params = "Sentinel"
-    response = generate_config(params=params.split())
-    assert len(response.errors) == 1
-    error = "invalid choice: 'Sentinel'"
-    assert error in response.errors[0]

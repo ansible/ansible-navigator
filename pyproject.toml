@@ -12,16 +12,3 @@ line-length = 100
     [tool.pylint.format]
     max-line-length = 100
 
-[tool.pytest.ini_options]
-addopts = """
- -vvvv
---durations=100
---cov {[base]pkg_name}
---cov share
---cov-report term-missing
---cov-branch
-"""
-testpaths = [
-    "tests"
-]
-
