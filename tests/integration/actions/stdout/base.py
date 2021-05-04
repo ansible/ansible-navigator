@@ -21,23 +21,23 @@ class BaseClass:
     UPDATE_FIXTURES = False
 
     @staticmethod
-    @pytest.fixture(scope="module", name="tmux_stdout_session")
-    def fixture_tmux_inventory_session(request):
+    @pytest.fixture(scope="module", name="tmux_session")
+    def fixture_tmux_session(request):
         """tmux fixture for this module"""
         params = {"window_name": request.node.name, "config_path": TEST_CONFIG_FILE}
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_stdout_session, index, user_input, comment, playbook_status):
+    def test(self, request, tmux_session, index, user_input, comment, playbook_status):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
 
-        """test interactive inventory"""
+        """test stdout inventory"""
         assert os.path.exists(ANSIBLE_PLAYBOOK)
         assert os.path.exists(TEST_CONFIG_FILE)
 
-        received_output = tmux_stdout_session.interaction(
+        received_output = tmux_session.interaction(
             user_input, wait_on_playbook_status=playbook_status
         )
         if self.UPDATE_FIXTURES:
