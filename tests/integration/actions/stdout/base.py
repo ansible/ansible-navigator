@@ -27,9 +27,12 @@ class BaseClass:
         """tmux fixture for this module"""
         params = {
             "window_name": request.node.name,
+            "setup_commands": [
+                "export ANSIBLE_DEVEL_WARNING=False",
+                "export ANSIBLE_DEPRECATION_WARNINGS=False",
+            ],
             "config_path": TEST_CONFIG_FILE,
-            "pane_height": "2000",
-            "pane_width": "200",
+            "pane_height": "100",
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session

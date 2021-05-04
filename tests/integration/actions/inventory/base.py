@@ -1,5 +1,6 @@
 """ base class for inventory interactive tests
 """
+import difflib
 import json
 import os
 
@@ -43,4 +44,6 @@ class BaseClass:
         dir_path, file_name = fixture_path_from_request(request, index)
         with open(f"{dir_path}/{file_name}") as infile:
             expected_output = json.load(infile)["output"]
-        assert expected_output == received_output
+        assert expected_output == received_output, "\n" + "\n".join(
+            difflib.ndiff(expected_output, received_output)
+        )
