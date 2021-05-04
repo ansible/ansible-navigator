@@ -1,5 +1,6 @@
 """ base class for stdout interactive tests
 """
+import difflib
 import json
 import os
 
@@ -33,7 +34,7 @@ class BaseClass:
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
 
-        """test stdout inventory"""
+        """test"""
         assert os.path.exists(ANSIBLE_PLAYBOOK)
         assert os.path.exists(TEST_CONFIG_FILE)
 
@@ -45,4 +46,6 @@ class BaseClass:
         dir_path, file_name = fixture_path_from_request(request, index)
         with open(f"{dir_path}/{file_name}") as infile:
             expected_output = json.load(infile)["output"]
-        assert expected_output == received_output
+        assert expected_output == received_output, "\n" + "\n".join(
+            difflib.ndiff(expected_output, received_output)
+        )
