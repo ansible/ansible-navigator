@@ -25,7 +25,12 @@ class BaseClass:
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(request):
         """tmux fixture for this module"""
-        params = {"window_name": request.node.name, "config_path": TEST_CONFIG_FILE}
+        params = {
+            "window_name": request.node.name,
+            "config_path": TEST_CONFIG_FILE,
+            "pane_height": "2000",
+            "pane_width": "200",
+        }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
