@@ -1,0 +1,27 @@
+{
+    "name": "test[3-:stdout-Check stdout]",
+    "index": 3,
+    "comment": "Check stdout",
+    "output": [
+        "16│    \"msg\": \"message 1\"",
+        "17│}",
+        "18│",
+        "19│TASK [debug] *******************************************************************",
+        "20│ok: [localhost] => (item=1) => {",
+        "21│    \"ansible_loop_var\": \"item\",",
+        "22│    \"item\": 1",
+        "23│}",
+        "24│ok: [localhost] => (item=2) => {                                                                                                                                                                    ▒",
+        "25│    \"ansible_loop_var\": \"item\",                                                                                                                                                                     ▒",
+        "26│    \"item\": 2                                                                                                                                                                                       ▒",
+        "27│}                                                                                                                                                                                                   ▒",
+        "28│ok: [localhost] => (item=3) => {                                                                                                                                                                    ▒",
+        "29│    \"ansible_loop_var\": \"item\",                                                                                                                                                                     ▒",
+        "30│    \"item\": 3                                                                                                                                                                                       ▒",
+        "31│}                                                                                                                                                                                                   ▒",
+        "32│                                                                                                                                                                                                    ▒",
+        "33│PLAY RECAP *********************************************************************                                                                                                                    ▒",
+        "34│localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0                                                                                  ▒",
+        "^f/PgUp page up                          ^b/PgDn page down                          ↑↓ scroll                          esc back                          :help help                           SUCCESSFUL"
+    ]
+}

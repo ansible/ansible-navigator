@@ -1,4 +1,4 @@
-""" :stream """
+""" :stdout """
 
 from . import _actions as actions
 from ..app import App
@@ -8,24 +8,24 @@ from ..ui_framework import Interaction
 
 @actions.register
 class Action(App):
-    """:stream"""
+    """:stdout"""
 
     # pylint: disable=too-few-public-methods
 
-    KEGEX = r"^st(?:ream)?$"
+    KEGEX = r"^st(?:dout)?$"
 
     def __init__(self, args):
-        super().__init__(args=args, logger_name=__name__, name="stream")
+        super().__init__(args=args, logger_name=__name__, name="stdout")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :stream
+        """Handle :stdout
 
         :param interaction: The interaction from the user
         :type interaction: Interaction
         :param app: The app instance
         :type app: App
         """
-        self._logger.debug("stream requested")
+        self._logger.debug("stdout requested")
         self._prepare_to_run(app, interaction)
 
         auto_scroll = True

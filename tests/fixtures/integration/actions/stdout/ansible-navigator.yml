@@ -1,0 +1,6 @@
+---
+ansible-navigator:
+  inventory-columns:
+    - ansible_network_os
+    - ansible_network_cli_ssh_type
+    - ansible_connection

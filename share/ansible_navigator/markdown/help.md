@@ -19,7 +19,7 @@ arrow up, arrow down                                  Scroll up/down
 :q!, :quit!, ^c                                       Force quit while a playbook is running
 :rr, :rerun                                           Rerun the playbook
 :s, :save <file>                                      Save current plays as an artifact
-:st, :stream                                          Watch playbook results real time
+:st, :stdout                                          Watch playbook results real time
 :w, :write <file>                                     Write current page to a new file
 :w!, :write! <file>                                   Write current page to an existing or new file
 :w>>, :write>> <file>                                 Append current page to an existing file

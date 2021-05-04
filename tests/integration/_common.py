@@ -213,16 +213,20 @@ class TmuxSession:
         if self._server.has_session(self._session_name):
             self._session.kill_session()
 
-    def interaction(self, value):
+    def interaction(self, value, wait_on_help=True, wait_on_playbook_status=None):
         """interact with the tmux session"""
         self._pane.send_keys(value, suppress_history=False)
-        help_not_on_screen = True
-        while help_not_on_screen:
+        ok_to_return = [False]
+        while not all(ok_to_return):
+            ok_to_return = []
             showing = []
             while not showing:
                 time.sleep(0.1)
                 showing = self._pane.capture_pane()
-            help_not_on_screen = not any(":help help" in line for line in showing)
+            if wait_on_help:
+                ok_to_return.append(any(":help help" in line for line in showing))
+            if wait_on_playbook_status is not None:
+                ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
         return showing
 
 
