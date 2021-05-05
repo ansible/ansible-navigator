@@ -2,6 +2,7 @@
 """
 import logging
 import os
+import shlex
 
 from copy import deepcopy
 from typing import List
@@ -83,7 +84,7 @@ class Configurator:
         restore them
         """
         self._config.original_command = self._params
-        cmd_message = f"Command provided: '{' '.join(self._config.original_command)}'"
+        cmd_message = f"Command provided: '{shlex.join(self._config.original_command)}'"
         self._messages.append(LogMessage(level=logging.DEBUG, message=cmd_message))
 
         self._restore_original()
