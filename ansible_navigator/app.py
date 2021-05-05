@@ -120,7 +120,7 @@ class App:
             self._logger.log(level=entry.level, msg=entry.message)
 
         for error in errors:
-            self._logger.error(error)
+            self._logger.warning(error)
 
     def write_artifact(self, filename: str) -> None:
         """per app write_artifact

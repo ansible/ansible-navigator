@@ -2,6 +2,7 @@
 """
 import logging
 import os
+import shlex
 
 from copy import deepcopy
 from typing import List
@@ -63,7 +64,7 @@ class Configurator:
         prior to roll back
         """
         message = "Configuration errors encountered, rolling back to previous configuration."
-        self._messages.append(LogMessage(level=logging.ERROR, message=message))
+        self._messages.append(LogMessage(level=logging.WARNING, message=message))
         for entry in self._config.entries:
             message = f"Prior to rollback: {entry.name} = '{entry.value.current}'"
             message += f" ({type(entry.value.current).__name__}/{entry.value.source.value})"
@@ -83,8 +84,9 @@ class Configurator:
         restore them
         """
         self._config.original_command = self._params
-        message = f"Params provided: {self._config.original_command}"
-        self._messages.append(LogMessage(level=logging.DEBUG, message=message))
+        shlex_joined = " ".join(shlex.quote(arg) for arg in self._config.original_command)
+        cmd_message = f"Command provided: '{shlex_joined}'"
+        self._messages.append(LogMessage(level=logging.DEBUG, message=cmd_message))
 
         self._restore_original()
         self._apply_defaults()
@@ -92,6 +94,7 @@ class Configurator:
         self._apply_environment_variables()
         self._apply_cli_params()
         if self._errors:
+            self._errors.insert(0, cmd_message)
             self._roll_back()
             return self._messages, self._errors
 
@@ -100,6 +103,7 @@ class Configurator:
         self._post_process()
         self._check_choices()
         if self._errors:
+            self._errors.insert(0, cmd_message)
             self._roll_back()
             return self._messages, self._errors
 

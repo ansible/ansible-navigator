@@ -90,7 +90,7 @@ def main():
     if errors:
         args.entry("log_file").value.current = args.entry("log_file").value.default
         args.entry("log_level").value.current = "debug"
-        error = f"Configuration failed, using default logfile location: {args.log_file}."
+        error = f"Configuration failed, using default log file location: {args.log_file}."
         error += f" Log level set to {args.log_level}"
         errors.append(error)
 
