@@ -71,5 +71,5 @@ def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog
     run = action(args=args)
     run.write_artifact(filename=data.filename)
 
-    open_filename = mocked_open.call_args_list[0].args[0]
+    open_filename = mocked_open.call_args[0][0]
     assert open_filename.startswith(data.expected), caplog.text
