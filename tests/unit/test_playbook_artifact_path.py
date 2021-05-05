@@ -50,9 +50,9 @@ test_data = [
 @patch.dict("os.environ", {"HOME": "/home/test_user"})
 @patch("os.makedirs", return_value=True)
 @patch("builtins.open", new_callable=mock_open)
-@patch("ansible_navigator.actions.run.Action._get_status", return_value="/path/to/container_engine")
+@patch("ansible_navigator.actions.run.Action._get_status", return_value=(0, 0))
 @pytest.mark.parametrize("data", test_data, ids=id_from_data)
-def test_artifact_path(mocked_get_status, mocked_open, _mocked_makedirs, caplog, data):
+def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog, data):
     """Test the building of the artifact filename given a filename or playbook"""
     caplog.set_level(logging.DEBUG)
 
@@ -67,8 +67,6 @@ def test_artifact_path(mocked_get_status, mocked_open, _mocked_makedirs, caplog,
             "playbook_artifact_save_as"
         ).value.current = playbook_artifact_save_as.value.default
     args.entry("playbook_artifact_enable").value.current = True
-
-    mocked_get_status.return_value = (0, 0)
 
     run = action(args=args)
     run.write_artifact(filename=data.filename)
