@@ -3,6 +3,7 @@ import curses
 import glob
 import json
 import os
+import shlex
 
 from distutils.spawn import find_executable
 from typing import Any
@@ -371,7 +372,7 @@ class Action(App):
     def _build_inventory_list(self) -> None:
 
         self._update_args(
-            [self._name] + (self._interaction.action.match.groupdict()["params"] or "").split()
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
         )
 
         if isinstance(self._args.inventory, list):
