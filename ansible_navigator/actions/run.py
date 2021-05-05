@@ -737,7 +737,7 @@ class Action(App):
         :param filename: The file to write to
         :type filename: str
         """
-        if filename or self._args.playbook_artifact_enable:
+        if filename or self._args.playbook_artifact_enable is True:
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
                 playbook_dir=os.path.dirname(self._args.playbook),

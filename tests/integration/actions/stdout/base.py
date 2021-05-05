@@ -30,6 +30,7 @@ class BaseClass:
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
+                "export ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_ENABLE=False",
             ],
             "config_path": TEST_CONFIG_FILE,
             "pane_height": "100",
