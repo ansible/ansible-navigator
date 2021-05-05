@@ -72,6 +72,7 @@ class Entry(SimpleNamespace):
     value: EntryValue
 
     apply_to_subsequent_cli: Constants = Constants.ALL
+    change_after_initial: bool = True
     choices: List = []
     cli_parameters: Union[None, CliParameters] = None
     environment_variable_override: Union[None, str] = None
@@ -122,6 +123,7 @@ class SubCommand(SimpleNamespace):
 
     name: str
     description: str
+    modes: List = ["stdout", "interactive"]
 
 
 class ApplicationConfiguration(SimpleNamespace):
@@ -152,3 +154,10 @@ class ApplicationConfiguration(SimpleNamespace):
         """Retrieve a configuration entry by name"""
         found_entry = [entry for entry in self.entries if entry.name == name]
         return found_entry[0]
+
+    def subcommand(self, name) -> SubCommand:
+        """Retrieve a configuration subcommand by name"""
+        found_subcommand = [
+            subcommand for subcommand in self.subcommands if subcommand.name == name
+        ]
+        return found_subcommand[0]

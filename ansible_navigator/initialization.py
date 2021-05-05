@@ -130,7 +130,7 @@ def parse_and_update(
     params: List,
     args: ApplicationConfiguration,
     apply_previous_cli_entries: Union[C, List[str]] = C.NONE,
-    save_as_initial: bool = False,
+    initial: bool = False,
 ) -> Tuple[List[LogMessage], List[str]]:
     """Build a configuration"""
     messages: List[LogMessage] = []
@@ -147,7 +147,7 @@ def parse_and_update(
         settings_file_path=config_path,
         application_configuration=args,
         apply_previous_cli_entries=apply_previous_cli_entries,
-        save_as_intitial=save_as_initial,
+        initial=initial,
     )
 
     new_messages, new_errors = configurator.configure()

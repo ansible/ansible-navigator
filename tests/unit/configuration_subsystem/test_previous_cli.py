@@ -36,7 +36,7 @@ def test_apply_previous_cli_all():
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        save_as_intitial=True,
+        initial=True,
     )
     _messages, errors = configurator.configure()
     assert errors == []
@@ -74,7 +74,7 @@ def test_apply_previous_cli_specified():
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        save_as_intitial=True,
+        initial=True,
     )
 
     _messages, errors = configurator.configure()
@@ -121,7 +121,7 @@ def test_apply_previous_cli_mixed():
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        save_as_intitial=True,
+        initial=True,
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
         _messages, errors = configurator.configure()
@@ -172,7 +172,7 @@ def test_apply_previous_cli_cmdline_not_applied():
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        save_as_intitial=True,
+        initial=True,
     )
 
     _messages, errors = configurator.configure()
@@ -221,7 +221,7 @@ def test_apply_previous_cli_none(_mf1):
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        save_as_intitial=True,
+        initial=True,
     )
 
     _messages, errors = configurator.configure()
@@ -287,7 +287,7 @@ def test_apply_cli_subset_none():
         ],
     )
     configurator = Configurator(
-        params=["list", "-z", "zebra"], application_configuration=test_config, save_as_intitial=True
+        params=["list", "-z", "zebra"], application_configuration=test_config, initial=True
     )
     _messages, errors = configurator.configure()
     assert errors == []

@@ -16,6 +16,7 @@ from .definitions import ApplicationConfiguration
 from ..utils import abs_user_path
 from ..utils import check_for_ansible
 from ..utils import flatten_list
+from ..utils import oxfordcomma
 from ..utils import str2bool
 from ..utils import LogMessage
 
@@ -163,6 +164,19 @@ class NavigatorPostProcessor:
             error += f" specified in '{entry.value.source.value}'"
             error += f" The error was: {str(exc)}"
             error += f" Log file set to default: {entry.value.current}."
+            errors.append(error)
+        return messages, errors
+
+    @staticmethod
+    @_post_processor
+    def mode(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        """Post process mode"""
+        messages: List[LogMessage] = []
+        errors: List[str] = []
+        subcommand = config.subcommand(config.app)
+        if entry.value.current not in subcommand.modes:
+            error = f"Subcommand '{config.app}' does not support mode '{entry.value.current}'."
+            error += f" Supported modes: {oxfordcomma(subcommand.modes, 'and')}."
             errors.append(error)
         return messages, errors
 
