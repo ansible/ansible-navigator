@@ -84,7 +84,8 @@ class Configurator:
         restore them
         """
         self._config.original_command = self._params
-        cmd_message = f"Command provided: '{shlex.join(self._config.original_command)}'"
+        shlex_joined = " ".join(shlex.quote(arg) for arg in self._config.original_command)
+        cmd_message = f"Command provided: '{shlex_joined}'"
         self._messages.append(LogMessage(level=logging.DEBUG, message=cmd_message))
 
         self._restore_original()
