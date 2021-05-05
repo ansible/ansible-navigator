@@ -34,7 +34,7 @@ class GenerateConfigResponse(NamedTuple):
     settings_contents: Dict
 
 
-def _generate_config(params=None, setting_file_name=None) -> GenerateConfigResponse:
+def _generate_config(params=None, setting_file_name=None, initial=True) -> GenerateConfigResponse:
     """Generate a configuration given a settings file"""
     if params is None:
         params = []
@@ -57,6 +57,7 @@ def _generate_config(params=None, setting_file_name=None) -> GenerateConfigRespo
         application_configuration=application_configuration,
         params=params,
         settings_file_path=settings_file_path or None,
+        initial=initial,
     )
     messages, errors = configurator.configure()
     return GenerateConfigResponse(

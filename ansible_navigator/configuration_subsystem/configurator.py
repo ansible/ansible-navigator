@@ -29,7 +29,7 @@ class Configurator:
         params: List[str],
         application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: Union[List, C] = C.NONE,
-        save_as_intitial: bool = False,
+        initial: bool = False,
         settings_file_path: str = None,
     ):
         """
@@ -38,8 +38,8 @@ class Configurator:
         :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
                                            is not a USER_CLI sourced value, a list of entry names
                                            ['all'] will apply all previous
-        :param save_as_initial: Save the resulting configuration as the 'initial' configuration
-                                The 'initial' will be used as a source for apply_previous_cli
+        :param initial: Save the resulting configuration as the 'initial' configuration
+                        The 'initial' will be used as a source for apply_previous_cli
         :param settings_file_path: The full path to a settings file
         """
         self._apply_previous_cli_entries = apply_previous_cli_entries
@@ -47,17 +47,17 @@ class Configurator:
         self._errors: List[str] = []
         self._messages: List[LogMessage] = []
         self._params = params
-        self._save_as_intitial = save_as_intitial
+        self._initial = initial
         self._settings_file_path = settings_file_path
         self._sanity_check()
         self._unaltered_entries = deepcopy(self._config.entries)
 
     def _sanity_check(self) -> None:
         if self._apply_previous_cli_entries is not C.NONE:
-            if self._save_as_intitial is True:
-                raise ValueError("'apply_previous_cli' cannot be used with 'save_as_initial'")
+            if self._initial is True:
+                raise ValueError("'apply_previous_cli' cannot be used with 'initial'")
             if self._config.initial is None:
-                raise ValueError("'apply_previous_cli' enabled prior to 'save_as_initial'")
+                raise ValueError("'apply_previous_cli' enabled prior to 'initial'")
 
     def _roll_back(self) -> None:
         """In the case of a rollback, log the configuration state
@@ -107,7 +107,7 @@ class Configurator:
             self._roll_back()
             return self._messages, self._errors
 
-        if self._save_as_intitial:
+        if self._initial:
             self._config.initial = deepcopy(self._config)
 
         return self._messages, self._errors
@@ -125,14 +125,22 @@ class Configurator:
         restore the current values back to NOT_SET
         """
         for entry in self._config.entries:
-            entry.value.current = C.NOT_SET
-            entry.value.source = C.NOT_SET
+            if self._initial or entry.change_after_initial:
+                entry.value.current = C.NOT_SET
+                entry.value.source = C.NOT_SET
+            else:
+                message = f"'{entry.name}' cannot be reconfigured. (restore original)"
+                self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_defaults(self) -> None:
         for entry in self._config.entries:
-            if entry.value.default is not C.NOT_SET:
-                entry.value.current = entry.value.default
-                entry.value.source = C.DEFAULT_CFG
+            if self._initial or entry.change_after_initial:
+                if entry.value.default is not C.NOT_SET:
+                    entry.value.current = entry.value.default
+                    entry.value.source = C.DEFAULT_CFG
+            else:
+                message = f"'{entry.name}' cannot be reconfigured. (apply defaults)"
+                self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_settings_file(self) -> None:
         if self._settings_file_path:
@@ -153,8 +161,12 @@ class Configurator:
                 try:
                     for key in path_parts:
                         data = data[key]
-                    entry.value.current = data
-                    entry.value.source = C.USER_CFG
+                    if self._initial or entry.change_after_initial:
+                        entry.value.current = data
+                        entry.value.source = C.USER_CFG
+                    else:
+                        message = f"'{entry.name}' cannot be reconfigured. (settings file)"
+                        self._messages.append(LogMessage(level=logging.INFO, message=message))
                 except TypeError as exc:
                     error = (
                         "Errors encountered when loading settings file:"
@@ -172,11 +184,15 @@ class Configurator:
         for entry in self._config.entries:
             set_envvar = os.environ.get(entry.environment_variable(self._config.application_name))
             if set_envvar is not None:
-                if entry.cli_parameters is not None and entry.cli_parameters.nargs == "+":
-                    entry.value.current = set_envvar.split(",")
+                if self._initial or entry.change_after_initial:
+                    if entry.cli_parameters is not None and entry.cli_parameters.nargs == "+":
+                        entry.value.current = set_envvar.split(",")
+                    else:
+                        entry.value.current = set_envvar
+                    entry.value.source = C.ENVIRONMENT_VARIABLE
                 else:
-                    entry.value.current = set_envvar
-                entry.value.source = C.ENVIRONMENT_VARIABLE
+                    message = f"'{entry.name}' cannot be reconfigured. (environment variables)"
+                    self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_cli_params(self) -> None:
         parser = Parser(self._config).parser
@@ -191,16 +207,25 @@ class Configurator:
         for param, value in vars(args).items():
             if self._config.entry(param).subcommand_value is True and value is None:
                 continue
-            self._config.entry(param).value.current = value
-            self._config.entry(param).value.source = C.USER_CLI
+            entry = self._config.entry(param)
+            if self._initial or entry.change_after_initial:
+                entry.value.current = value
+                entry.value.source = C.USER_CLI
+            else:
+                message = f"'{entry.name}' cannot be reconfigured. (cli params)"
+                self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _post_process(self) -> None:
         for entry in self._config.entries:
-            processor = getattr(self._config.post_processor, entry.name, None)
-            if callable(processor):
-                messages, errors = processor(entry=entry, config=self._config)
-                self._messages.extend(messages)
-                self._errors.extend(errors)
+            if self._initial or entry.change_after_initial:
+                processor = getattr(self._config.post_processor, entry.name, None)
+                if callable(processor):
+                    messages, errors = processor(entry=entry, config=self._config)
+                    self._messages.extend(messages)
+                    self._errors.extend(errors)
+            else:
+                message = f"'{entry.name}' cannot be reconfigured. (post process)"
+                self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _check_choices(self) -> None:
         for entry in self._config.entries:
@@ -230,6 +255,12 @@ class Configurator:
         for current_entry in self._config.entries:
             # retrieve the correspoding previous entry
             previous_entry = self._config.initial.entry(current_entry.name)
+
+            # skip if not initial and not able to be changed
+            if not any((self._initial, current_entry.change_after_initial)):
+                message = f"'{current_entry.name}' cannot be reconfigured (apply previous cli)"
+                self._messages.append(LogMessage(level=logging.INFO, message=message))
+                continue
 
             # skip if currently set from the cli
             if current_entry.value.source is C.USER_CLI:
