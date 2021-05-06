@@ -1,40 +1,44 @@
-""" doc direct from cli interactive w/o ee
+""" from welcome interactive w/o ee
 """
+from typing import List
+
 import pytest
 
-from typing import List
 from .base import BaseClass
 
 from ..._common import get_executable_path
 
 # module doc
 CLI_MODULE_DOC = (
-    get_executable_path("python")
-    + " -m ansible_navigator doc testorg.coll_1.mod_1 --execution-environment false"
+    get_executable_path("python") + " -m ansible_navigator" " --execution-environment false"
 )
+
 testdata_module_doc: List = [
-    (0, CLI_MODULE_DOC, "ansible-navigator doc module plugin display", "module_doc_pass", []),
-    (1, ":{{ examples }}", "load examples", "module_doc_pass", []),
+    (0, CLI_MODULE_DOC, "welcome", "module_doc_pass", []),
+    (1, ":doc testorg.coll_1.mod_1", "load doc", "module_doc_pass", []),
+    (2, ":{{ examples }}", "load examples", "module_doc_pass", []),
 ]
 
 # lookup plugin doc
 CLI_LOOKUP_DOC = (
-    get_executable_path("python")
-    + " -m ansible_navigator doc testorg.coll_1.lookup_1 -t lookup --execution-environment false"
+    get_executable_path("python") + " -m ansible_navigator" " --execution-environment false"
 )
+
 testdata_lookup_doc: List = [
-    (0, CLI_LOOKUP_DOC, "ansible-navigator doc lookup plugin display", "lookup_doc_pass", []),
+    (0, CLI_LOOKUP_DOC, "welcome", "lookup_doc_pass", []),
+    (1, ":doc testorg.coll_1.lookup_1 -t lookup", "load doc", "lookup_doc_pass", []),
 ]
 
 # plugin does not exist
 CLI_WRONG_MODULE_NOT_EXIST = (
-    get_executable_path("python")
-    + " -m ansible_navigator doc testorg.coll_1.doesnotexist --execution-environment false"
+    get_executable_path("python") + " -m ansible_navigator" " --execution-environment false"
 )
+
 testdata_module_doc_not_exist = [
+    (0, CLI_WRONG_MODULE_NOT_EXIST, "welcome", "module_doc_fail", []),
     (
-        0,
-        CLI_WRONG_MODULE_NOT_EXIST,
+        1,
+        ":doc testorg.coll_1.doesnotexist",
         "ansible-navigator doc wrong plugin name",
         "module_doc_fail",
         ["module testorg.coll_1.doesnotexist not found in", "local_errors"],

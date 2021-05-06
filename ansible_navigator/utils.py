@@ -24,14 +24,6 @@ from jinja2 import Environment, TemplateError
 
 logger = logging.getLogger(__name__)
 
-try:
-    from ansible.errors import AnsibleError  # type: ignore
-    from ansible.template import Templar  # type: ignore
-
-    HAS_ANSIBLE = True
-except ImportError:
-    HAS_ANSIBLE = False
-
 
 class LogMessage(NamedTuple):
     """An object ot hold a message destin for the logger"""
@@ -361,37 +353,25 @@ def templar(string: str, template_vars: Mapping) -> Any:
     # hide the jinja that may be in the template_vars
     template_vars = escape_moustaches(template_vars)
 
-    if HAS_ANSIBLE:
-        logger.info("Ansible installed, Ansible's plugins will be available")
+    env = Environment(autoescape=True)
+    try:
+        template = env.from_string(string)
+        result = template.render(template_vars)
+    except TemplateError as exc:
+        result = str(exc)
+        logging.debug(str(exc))
 
-        ansible_templar = Templar(loader=None)
-        ansible_templar.available_variables = template_vars
-        try:
-            result = ansible_templar.template(string)
-        except AnsibleError as exc:
-            result = str(exc)
-
-    else:
-        logger.info("Ansible not installed, only jinja plugins will be availble")
-        env = Environment(autoescape=True)
-        try:
-            template = env.from_string(string)
-            result = template.render(template_vars)
-        except TemplateError as exc:
-            result = str(exc)
-            logging.debug(str(exc))
-
-        # We may have gotten the __repr__ of a python object
-        # so let's try and turn it back
-        try:
-            logging.debug("original templated string: %s", result)
-            escaped = html.unescape(result)
-            logging.debug("html escaped temaplted str: %s", escaped)
-            result = ast.literal_eval(escaped)
-        except SyntaxError as exc:
-            logging.debug("Could not ast parse templated string")
-            logging.debug("error was: %s", str(exc))
-            logging.debug("attempted on %s", result)
+    # We may have gotten the __repr__ of a python object
+    # so let's try and turn it back
+    try:
+        logging.debug("original templated string: %s", result)
+        escaped = html.unescape(result)
+        logging.debug("html escaped temaplted str: %s", escaped)
+        result = ast.literal_eval(escaped)
+    except (ValueError, SyntaxError) as exc:
+        logging.debug("Could not ast parse templated string")
+        logging.debug("error was: %s", str(exc))
+        logging.debug("attempted on %s", result)
 
     result = unescape_moustaches(result)
     return result

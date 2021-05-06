@@ -1,7 +1,7 @@
 {
-    "name": "test[0-/home/osboxes/ansible-navigator/.env/bin/python -m ansible_navigator-ansible-navigator welcome screen-module_doc_pass-expected_in_output0]",
+    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator --execution-environment false-welcome-module_doc_pass-expected_in_output0]",
     "index": 0,
-    "comment": "ansible-navigator welcome screen",
+    "comment": "welcome",
     "output": [
         " 0│## Welcome",
         " 1│---------------------------------------------------------------------------------------------------",

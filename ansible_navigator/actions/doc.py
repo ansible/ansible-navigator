@@ -1,5 +1,6 @@
 """ :doc """
 
+import curses
 import json
 import os
 import shlex
@@ -18,6 +19,9 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants as C
 from ..runner.api import CommandRunner
 from ..runner.api import DocRunner
+
+from ..ui_framework import CursesLinePart
+from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 
 
@@ -35,6 +39,25 @@ class Action(App):
         self._plugin_name: Optional[str]
         self._plugin_type: Optional[str]
         self._runner: Union[CommandRunner, DocRunner]
+
+    def generate_content_heading(self, _obj: Dict, screen_w: int) -> CursesLines:
+        """Generate a heading string for the doc"""
+        plugin_str = f"{self._plugin_name} ({self._plugin_type})"
+        empty_str = " " * (screen_w - len(plugin_str) + 1)
+        heading_str = (plugin_str + empty_str).upper()
+
+        heading = (
+            (
+                CursesLinePart(
+                    column=0,
+                    string=heading_str,
+                    color=curses.color_pair(0),
+                    decoration=curses.A_UNDERLINE | curses.A_BOLD,
+                ),
+            ),
+        )
+
+        return heading
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
@@ -87,7 +110,9 @@ class Action(App):
 
         while True:
             app.update()
-            next_interaction: Interaction = interaction.ui.show(obj=plugin_doc)
+            next_interaction: Interaction = interaction.ui.show(
+                content_heading=self.generate_content_heading, obj=plugin_doc
+            )
             if next_interaction.name != "refresh":
                 break
 
@@ -163,6 +188,7 @@ class Action(App):
     def _extract_plugin_doc(
         self, out: Union[Dict[Any, Any], str], err: Union[Dict[Any, Any], str]
     ) -> Optional[Dict[Any, Any]]:
+        # pylint: disable=too-many-branches
         plugin_doc = {}
         if self._args.execution_environment:
             error_key_name = "execution_environment_errors"
@@ -171,10 +197,10 @@ class Action(App):
 
         if out:
             if isinstance(out, dict):
-                plugin_doc = out
+                plugin_doc = out[self._plugin_name]
             else:
                 try:
-                    plugin_doc = json.loads(out)
+                    json_loaded = json.loads(out)
                 except json.JSONDecodeError as exc:
                     if self._args.mode == "interactive":
                         self._logger.info(
@@ -183,6 +209,8 @@ class Action(App):
                     self._logger.debug("json decode error: %s", str(exc))
                     self._logger.debug("tried: %s", out)
                     plugin_doc[error_key_name] = out
+                else:
+                    plugin_doc = json_loaded[self._plugin_name]
 
             if isinstance(err, dict):
                 plugin_doc["warnings"] = err
