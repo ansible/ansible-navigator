@@ -1,5 +1,5 @@
 {
-    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator inventory --execution-environment true --ce docker -i /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
+    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator inventory --execution-environment true --ce docker -i /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
     "index": 0,
     "comment": "ansible-navigator inventory command top window",
     "output": [

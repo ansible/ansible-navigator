@@ -1,5 +1,5 @@
 {
-    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator run /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/stdout/site.yml --execution-environment true --ll debug --ce docker-run top window-SUCCESSFUL]",
+    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator run /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/stdout/site.yml --execution-environment true --ll debug --ce docker-run top window-SUCCESSFUL]",
     "index": 0,
     "comment": "run top window",
     "output": [
