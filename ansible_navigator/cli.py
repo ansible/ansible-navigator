@@ -6,13 +6,12 @@ import sys
 import signal
 import time
 
-from argparse import Namespace
 from copy import deepcopy
 from curses import wrapper
-from functools import partial
 from typing import List
 from pathlib import Path
 
+from .actions import run_action_stdout
 from .action_runner import ActionRunner
 
 from .configuration_subsystem import ApplicationConfiguration
@@ -46,24 +45,11 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     logger.setLevel(getattr(logging, args.log_level.upper()))
 
 
-def run(args: Namespace) -> None:
+def run(args: ApplicationConfiguration) -> None:
     """run the appropriate app"""
     try:
-        if args.app in ["run", "config", "inventory", "doc"] and args.mode == "stdout":
-            try:
-                app_action = __import__(
-                    f"actions.{args.app}", globals(), fromlist=["Action"], level=1
-                )
-            except ImportError as exc:
-                msg = (
-                    f"either action '{args.app}' is invalid or does not support"
-                    f" mode '{args.mode}'. Failed with error {exc}"
-                )
-                logger.error(msg)
-                error_and_exit_early(str(msg))
-
-            non_ui_app = partial(app_action.Action(args).run_stdout)
-            non_ui_app()
+        if args.mode == "stdout":
+            run_action_stdout(args.app, args)
         else:
             wrapper(ActionRunner(args=args).run)
     except KeyboardInterrupt:
@@ -80,7 +66,7 @@ def main():
     messages.extend(args.internals.initialization_messages)
     errors.extend(args.internals.initialization_errors)
 
-    new_messages, new_errors = parse_and_update(sys.argv[1:], args=args, save_as_initial=True)
+    new_messages, new_errors = parse_and_update(sys.argv[1:], args=args, initial=True)
     messages.extend(new_messages)
     errors.extend(new_errors)
 
@@ -90,7 +76,7 @@ def main():
     if errors:
         args.entry("log_file").value.current = args.entry("log_file").value.default
         args.entry("log_level").value.current = "debug"
-        error = f"Configuration failed, using default logfile location: {args.log_file}."
+        error = f"Configuration failed, using default log file location: {args.log_file}."
         error += f" Log level set to {args.log_level}"
         errors.append(error)
 

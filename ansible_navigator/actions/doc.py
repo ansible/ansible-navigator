@@ -2,6 +2,7 @@
 
 import json
 import os
+import shlex
 
 from copy import deepcopy
 from distutils.spawn import find_executable
@@ -48,7 +49,7 @@ class Action(App):
         self._prepare_to_run(app, interaction)
 
         self._update_args(
-            [self._name] + (self._interaction.action.match.groupdict()["params"] or "").split()
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
         )
 
         plugin_name_source = self._args.entry("plugin_name").value.source

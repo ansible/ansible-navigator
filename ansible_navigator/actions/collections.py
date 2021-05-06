@@ -2,6 +2,7 @@
 import curses
 import json
 import os
+import shlex
 import subprocess
 
 from json.decoder import JSONDecodeError
@@ -109,7 +110,7 @@ class Action(App):
         )
 
         self._update_args(
-            [self._name] + (self._interaction.action.match.groupdict()["params"] or "").split()
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
         )
 
         if self._args.execution_environment:

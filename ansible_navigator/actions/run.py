@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+import shlex
 import uuid
 
 from distutils.spawn import find_executable
@@ -306,7 +307,7 @@ class Action(App):
         # Ensure the playbook and inventory are valid
 
         self._update_args(
-            ["run"] + (self._interaction.action.match.groupdict()["params_run"] or "").split()
+            ["run"] + shlex.split(self._interaction.action.match.groupdict()["params_run"] or "")
         )
 
         if isinstance(self._args.playbook, str):
@@ -332,7 +333,7 @@ class Action(App):
                 if field["name"].startswith("inv_") and field["value"] != "":
                     new_cmd.extend(["-i", field["value"]])
             if populated_form["fields"]["cmdline"]["value"]:
-                new_cmd.extend(populated_form["fields"]["cmdline"]["value"].split())
+                new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
 
             # Parse as if provided from the cmdline
             self._update_args(new_cmd)
@@ -350,7 +351,7 @@ class Action(App):
         self._logger.debug("Starting load artifact request")
 
         self._update_args(
-            ["load"] + (self._interaction.action.match.groupdict()["params_load"] or "").split()
+            ["load"] + shlex.split(self._interaction.action.match.groupdict()["params_load"] or "")
         )
 
         artifact_file = self._args.playbook_artifact_load

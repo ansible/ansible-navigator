@@ -20,7 +20,6 @@ BASE_SHORT_CLI = """
 --eei test_image
 --lf /tmp/app.log
 --ll warning
--m stdout
 --osc4 false
 --penv FOO
 --penv BAR
@@ -36,7 +35,6 @@ BASE_LONG_CLI = """
 --execution-environment-image test_image
 --log-file /tmp/app.log
 --log-level warning
---mode stdout
 --osc4 false
 --pass-environment-variable FOO
 --pass-environment-variable BAR
@@ -53,7 +51,6 @@ BASE_EXPECTED = d2t(
         "execution_environment_image": "test_image",
         "log_file": "/tmp/app.log",
         "log_level": "warning",
-        "mode": "stdout",
         "osc4": False,
         "pass_environment_variable": ["FOO", "BAR"],
         "set_environment_variable": {"E1": "V1", "E2": "V2"},
@@ -62,7 +59,7 @@ BASE_EXPECTED = d2t(
 
 
 CLI_DATA_COLLECTIONS = [
-    ("collections", {"app": "collections"}),
+    ("collections -m interactive", {"app": "collections", "mode": "interactive"}),
 ]
 CLI_DATA_CONFIG = [
     ("config", {"app": "config"}),
@@ -70,6 +67,7 @@ CLI_DATA_CONFIG = [
 ]
 CLI_DATA_DOC = [
     ("doc shell", {"app": "doc", "plugin_name": "shell"}),
+    ("doc shell --mode stdout", {"app": "doc", "mode": "stdout", "plugin_name": "shell"}),
     ("doc shell -t become", {"app": "doc", "plugin_name": "shell", "plugin_type": "become"}),
     (
         "doc shell --type become",
@@ -78,6 +76,10 @@ CLI_DATA_DOC = [
 ]
 CLI_DATA_INVENTORY = [
     ("inventory -i /tmp/inv1.yml", {"app": "inventory", "inventory": ["/tmp/inv1.yml"]}),
+    (
+        "inventory -i /tmp/inv1.yml -m stdout",
+        {"app": "inventory", "inventory": ["/tmp/inv1.yml"], "mode": "stdout"},
+    ),
     ("inventory -i host1,host2", {"app": "inventory", "inventory": ["host1,host2"]}),
     (
         "inventory -i /tmp/inv1.yml -i /tmp/inv2.yml",
@@ -119,10 +121,14 @@ CLI_DATA_INVENTORY_COLUMNS = [
     ),
 ]
 CLI_DATA_LOAD = [
-    ("load /tmp/part.json", {"app": "load", "playbook_artifact_load": "/tmp/part.json"})
+    (
+        "load /tmp/part.json -m interactive",
+        {"app": "load", "mode": "interactive", "playbook_artifact_load": "/tmp/part.json"},
+    )
 ]
 CLI_DATA_RUN = [
     ("run /tmp/site.yml", {"app": "run", "playbook": "/tmp/site.yml"}),
+    ("run /tmp/site.yml -m stdout", {"app": "run", "mode": "stdout", "playbook": "/tmp/site.yml"}),
     (
         "run /tmp/site.yml --check --diff --forks 50",
         {

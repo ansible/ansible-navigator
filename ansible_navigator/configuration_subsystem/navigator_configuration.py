@@ -97,12 +97,15 @@ NavigatorConfiguration = ApplicationConfiguration(
     internals=Internals(),
     post_processor=NavigatorPostProcessor(),
     subcommands=[
-        SubCommand(name="collections", description="Explore available collections"),
+        SubCommand(
+            name="collections", description="Explore available collections", modes=["interactive"]
+        ),
         SubCommand(name="config", description="Explore the current ansible configuration"),
         SubCommand(name="doc", description="Review documentation for a module or plugin"),
         SubCommand(name="inventory", description="Explore an inventory"),
-        SubCommand(name="load", description="Explore a playbook artifact"),
+        SubCommand(name="load", description="Explore a playbook artifact", modes=["interactive"]),
         SubCommand(name="run", description="Run a playbook"),
+        SubCommand(name="welcome", description="Start at the welcome page"),
     ],
     entries=[
         Entry(
@@ -198,6 +201,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="mode",
+            change_after_initial=False,
             choices=["stdout", "interactive"],
             cli_parameters=CliParameters(short="-m"),
             short_description="Specify the user-interface mode",
