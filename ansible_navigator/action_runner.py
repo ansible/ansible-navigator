@@ -9,7 +9,7 @@ from .steps import Steps
 from .ui_framework import Interaction
 from .ui_framework import UserInterface
 
-DEFAULT_REFRESH = 5000
+DEFAULT_REFRESH = 100
 
 
 class ActionRunner(App):
