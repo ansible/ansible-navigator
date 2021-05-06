@@ -197,9 +197,6 @@ class Action(App):
             ^
             (?P<run>r(?:un)?
             (\s(?P<params_run>.*))?)
-            |
-            (?P<load>l(?:oad)?
-            (\s(?P<params_load>\S+))?)
             $"""
 
     def __init__(self, args: ApplicationConfiguration):
@@ -252,14 +249,14 @@ class Action(App):
 
         self._prepare_to_run(app, interaction)
 
-        if interaction.action.match.groupdict()["run"]:
+        if interaction.action.match.groupdict().get("run"):
             self._logger.debug("run requested in interactive mode")
             self._subaction_type = "run"
             str_uuid = str(uuid.uuid4())
             self._logger = logging.getLogger(f"{__name__}_{str_uuid[-4:]}")
             self._name = f"run_{str_uuid[-4:]}"
             initialized = self._init_run()
-        elif interaction.action.match.groupdict()["load"]:
+        elif interaction.action.match.groupdict().get("load"):
             self._logger.debug("load requested in interactive mode")
             self._subaction_type = "load"
             self._name = "load"

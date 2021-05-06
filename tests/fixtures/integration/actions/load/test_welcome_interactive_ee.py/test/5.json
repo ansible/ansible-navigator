@@ -1,0 +1,30 @@
+{
+    "name": "test[5-:back-Return to task 1-None]",
+    "index": 5,
+    "comment": "Return to task 1",
+    "output": [
+        "PLAY [localhost:0] *************************************************************************************************************************************************************************************",
+        "TASK [debug] *******************************************************************************************************************************************************************************************",
+        "OK: [localhost] msg",
+        " 0│---",
+        " 1│duration: 0.028047",
+        " 2│end: '2021-05-06T11:20:46.473050'",
+        " 3│event_loop: null",
+        " 4│host: localhost",
+        " 5│play: localhost",
+        " 6│play_pattern: localhost",
+        " 7│playbook: site.yml",
+        " 8│remote_addr: 127.0.0.1",
+        " 9│res:",
+        "10│  _ansible_no_log: false",
+        "11│  _ansible_verbose_always: true",
+        "12│  changed: false",
+        "13│  msg: msg",
+        "14│start: '2021-05-06T11:20:46.445003'",
+        "15│task: debug",
+        "16│task_action: debug",
+        "17│task_args: ''",
+        "18│task_path: site.yml:4",
+        "^f/PgUp page up             ^b/PgDn page down             ↑↓ scroll             esc back             + previous             - next             [0-9] goto             :help help              SUCCESSFUL"
+    ]
+}

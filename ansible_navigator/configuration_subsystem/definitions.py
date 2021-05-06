@@ -123,7 +123,6 @@ class SubCommand(SimpleNamespace):
 
     name: str
     description: str
-    modes: List = ["stdout", "interactive"]
 
 
 class ApplicationConfiguration(SimpleNamespace):

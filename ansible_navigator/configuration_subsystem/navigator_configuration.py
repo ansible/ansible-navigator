@@ -5,6 +5,7 @@ import os
 
 from types import SimpleNamespace
 from typing import Dict
+from typing import Tuple
 from typing import Union
 
 from .definitions import ApplicationConfiguration
@@ -85,6 +86,7 @@ class Internals(SimpleNamespace):
     from apllication initiation to the rest of the app
     """
 
+    action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, Dict] = C.NOT_SET
     initialization_errors = initialization_errors
     initialization_messages = initialization_messages
@@ -97,13 +99,11 @@ NavigatorConfiguration = ApplicationConfiguration(
     internals=Internals(),
     post_processor=NavigatorPostProcessor(),
     subcommands=[
-        SubCommand(
-            name="collections", description="Explore available collections", modes=["interactive"]
-        ),
+        SubCommand(name="collections", description="Explore available collections"),
         SubCommand(name="config", description="Explore the current ansible configuration"),
         SubCommand(name="doc", description="Review documentation for a module or plugin"),
         SubCommand(name="inventory", description="Explore an inventory"),
-        SubCommand(name="load", description="Explore a playbook artifact", modes=["interactive"]),
+        SubCommand(name="load", description="Explore a playbook artifact"),
         SubCommand(name="run", description="Run a playbook"),
         SubCommand(name="welcome", description="Start at the welcome page"),
     ],

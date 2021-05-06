@@ -194,7 +194,7 @@ ENVVAR_DATA = [
     ("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"]),
     ("log_file", "/tmp/app.log", "/tmp/app.log"),
     ("log_level", "info", "info"),
-    ("mode", "stdout", "stdout"),
+    ("mode", "interactive", "interactive"),
     ("osc4", "false", False),
     ("pass_environment_variable", "a,b,c", ["a", "b", "c"]),
     ("playbook", "/tmp/site.yaml", "/tmp/site.yaml"),
