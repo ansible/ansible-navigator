@@ -12,9 +12,10 @@ mkdir ansible-navigator_demo
 cd ansible-navigator_demo
 python3 -m venv venv
 source venv/bin/activate
+cd ..
 pip install -U setuptools
 pip install -U ansible
-pip install ../ansible_navigator
+pip install .
 ```
 
 RHEL8/Centos8 prerequisites:
