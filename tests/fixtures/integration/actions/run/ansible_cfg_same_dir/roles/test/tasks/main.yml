@@ -1,0 +1,9 @@
+- debug:
+    msg: ran with bye tag
+  tags:
+    - bye
+
+- debug:
+    msg: ran with hi tag
+  tags:
+    - hi
