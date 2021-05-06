@@ -7,6 +7,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 
+get: Callable[[str], None] = actions.get_factory(__package__)
 
 names = actions.names_factory(__package__)
 

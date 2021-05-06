@@ -128,12 +128,12 @@ def test_poor_choices(_mocked_func, generate_config, entry):
     test(subcommand, entry.cli_parameters.long_override or f"--{entry.name_dashed}")
 
 
-@pytest.mark.parametrize("subcommand", ["load", "collections"])
+@pytest.mark.parametrize("subcommand, params", [("load", __file__), ("collections", "")])
 @patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-def test_interactive_only_subcommand(_mocked_func, generate_config, subcommand):
+def test_interactive_only_subcommand(_mocked_func, generate_config, subcommand, params):
     # pylint: disable=import-outside-toplevel
     """Ensure errors generated for badly formatted set env var"""
-    params = f"{subcommand} -m stdout"
+    params = f"{subcommand} {params} -m stdout"
     response = generate_config(params=params.split())
     error = (
         f"Subcommand '{subcommand}' does not support mode 'stdout'. Supported modes: 'interactive'."

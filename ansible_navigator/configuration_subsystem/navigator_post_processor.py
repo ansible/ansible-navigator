@@ -1,6 +1,7 @@
 """ post processing of ansible-navigator configuration
 """
 import distutils
+import importlib
 import logging
 import os
 
@@ -173,10 +174,50 @@ class NavigatorPostProcessor:
         """Post process mode"""
         messages: List[LogMessage] = []
         errors: List[str] = []
-        subcommand = config.subcommand(config.app)
-        if entry.value.current not in subcommand.modes:
+        subcommand_action = None
+        subcommand_name = config.subcommand(config.app).name
+
+        for action_package_name in config.internals.action_packages:
+            try:
+                action_package = importlib.import_module(action_package_name)
+            except ImportError as exc:
+                message = f"Unable to load action package: '{action_package_name}': {str(exc)}"
+                messages.append(LogMessage(level=logging.ERROR, message=message))
+                continue
+            try:
+                if hasattr(action_package, "get"):
+                    subcommand_action = action_package.get(subcommand_name)  # type: ignore
+                break
+            except (AttributeError, ModuleNotFoundError) as exc:
+                message = f"Unable to load subcommand '{subcommand_name}' from"
+                message += f" action package: '{action_package_name}': {str(exc)}"
+                messages.append(LogMessage(level=logging.DEBUG, message=message))
+
+        if subcommand_action is None:
+            error = f"Unable to find an action for '{subcommand_name}', tried: "
+            error += oxfordcomma(config.internals.action_packages, "and")
+            errors.append(error)
+            return messages, errors
+
+        subcommand_modes = []
+
+        try:
+            getattr(subcommand_action, "run_stdout")
+        except AttributeError:
+            pass
+        else:
+            subcommand_modes.append("stdout")
+
+        try:
+            getattr(subcommand_action, "run")
+        except AttributeError:
+            pass
+        else:
+            subcommand_modes.append("interactive")
+
+        if entry.value.current not in subcommand_modes:
             error = f"Subcommand '{config.app}' does not support mode '{entry.value.current}'."
-            error += f" Supported modes: {oxfordcomma(subcommand.modes, 'and')}."
+            error += f" Supported modes: {oxfordcomma(subcommand_modes, 'and')}."
             errors.append(error)
         return messages, errors
 
