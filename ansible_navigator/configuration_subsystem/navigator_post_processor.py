@@ -203,15 +203,17 @@ class NavigatorPostProcessor:
 
         try:
             getattr(subcommand_action, "run_stdout")
-            subcommand_modes.append("stdout")
         except AttributeError:
             pass
+        else:
+            subcommand_modes.append("stdout")
 
         try:
             getattr(subcommand_action, "run")
-            subcommand_modes.append("interactive")
         except AttributeError:
             pass
+        else:
+            subcommand_modes.append("interactive")
 
         if entry.value.current not in subcommand_modes:
             error = f"Subcommand '{config.app}' does not support mode '{entry.value.current}'."
