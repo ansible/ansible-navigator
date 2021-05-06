@@ -32,7 +32,7 @@ except ImportError:
 from key_value_store import KeyValueStore  # type: ignore
 
 
-PROCESSES = multiprocessing.cpu_count() - 1
+PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
 class CollectionCatalog:
@@ -43,6 +43,7 @@ class CollectionCatalog:
         self._directories = directories
         self._collections: OrderedDict[str, Dict] = OrderedDict()
         self._errors: List[Dict[str, str]] = []
+        self._messages: List[str] = []
 
     def _catalog_plugins(self, collection: Dict) -> None:
         """catalog the plugins within a collection"""
@@ -150,6 +151,12 @@ class CollectionCatalog:
                             self._errors.append({"path": runtime_file, "error": str(exc)})
 
                 self._collections[collection["path"]] = collection
+            else:
+                msg = (
+                    f"collection path '{directory_path}' is ignored as it does not"
+                    " have 'MANIFEST.json' and/or 'galaxy.yml' file(s)."
+                )
+                self._messages.append(msg)
 
     def _find_shadows(self) -> None:
         """for each collection, determin which other collections are hiding it"""
@@ -339,7 +346,8 @@ def main() -> Dict:
     stats["cache_added_success"] = 0
     stats["cache_added_errors"] = 0
 
-    collections, errors = CollectionCatalog(directories=parent_directories).process_directories()
+    cc_obj = CollectionCatalog(directories=parent_directories)
+    collections, errors = cc_obj.process_directories()
     stats["collection_count"] = len(collections)
 
     collection_cache_path = os.path.abspath(os.path.expanduser(args.collection_cache_path))
@@ -361,7 +369,12 @@ def main() -> Dict:
             del collection["plugin_chksums"][no_doc]
 
     collection_cache.close()
-    return {"collections": collections, "errors": errors, "stats": stats}
+    return {
+        "collections": collections,
+        "errors": errors,
+        "stats": stats,
+        "messages": cc_obj._messages,
+    }
 
 
 if __name__ == "__main__":
@@ -375,8 +388,10 @@ if __name__ == "__main__":
 
     args, parent_directories = parse_args()
 
-    os.environ["ANSIBLE_COLLECTIONS_PATHS"] = ":".join(parent_directories)
+    collection_scan_paths = ":".join(parent_directories)
+    os.environ["ANSIBLE_COLLECTIONS_PATHS"] = collection_scan_paths
 
     result = main()
     result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
+    result["collection_scan_paths"] = collection_scan_paths
     print(json.dumps(result, default=str))

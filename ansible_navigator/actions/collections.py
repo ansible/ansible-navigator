@@ -3,8 +3,9 @@ import curses
 import json
 import os
 import shlex
-import subprocess
+import sys
 
+from copy import deepcopy
 from json.decoder import JSONDecodeError
 
 from typing import Any
@@ -17,6 +18,7 @@ from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..runner.api import CommandRunner
 from ..steps import Step
 
 from ..ui_framework import CursesLinePart
@@ -113,12 +115,7 @@ class Action(App):
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
         )
 
-        if self._args.execution_environment:
-            self._logger.debug("running execution environment")
-            self._try_ee()
-        else:
-            self._logger.debug("running local")
-            self._try_local()
+        self._run_runner()
 
         if not self._collections:
             self._prepare_to_exit(interaction)
@@ -247,78 +244,74 @@ class Action(App):
             index=self.steps.current.index,
         )
 
-    def _try_ee(self) -> None:
-        """run collection catalog in ee"""
+    def _run_runner(self) -> None:
+        """spin up runner"""
+
+        if isinstance(self._args.set_environment_variable, dict):
+            set_environment_variable = deepcopy(self._args.set_environment_variable)
+        else:
+            set_environment_variable = {}
+        set_environment_variable.update({"ANSIBLE_NOCOLOR": "True"})
+
+        kwargs = {
+            "container_engine": self._args.container_engine,
+            "execution_environment_image": self._args.execution_environment_image,
+            "execution_environment": self._args.execution_environment,
+            "navigator_mode": "interactive",
+            "pass_environment_variable": self._args.pass_environment_variable,
+            "set_environment_variable": set_environment_variable,
+        }
+
         if isinstance(self._args.playbook, str):
             playbook_dir = os.path.dirname(self._args.playbook)
         else:
             playbook_dir = os.getcwd()
 
-        self._adjacent_collection_dir = playbook_dir + "/collections"
+        kwargs.update({"cwd": playbook_dir})
 
-        cmd = [self._args.container_engine, "run", "-i", "-t"]
-
+        self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")
         share_directory = self._args.internals.share_directory
-        cmd += [
-            "-v",
-            f"{share_directory}/utils:{share_directory}/utils:z",
+
+        pass_through_arg = [
+            f"{share_directory}/utils/catalog_collections.py",
+            "-a",
+            self._adjacent_collection_dir,
+            "-c",
+            self._collection_cache_path,
         ]
 
-        if os.path.exists(self._adjacent_collection_dir):
-            cmd += ["-v", f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"]
+        kwargs.update({"cmdline": pass_through_arg})
 
-        cmd += ["-v", f"{self._collection_cache_path}:{self._collection_cache_path}:z"]
+        if self._args.execution_environment:
+            self._logger.debug("running collections command with execution environment enabled")
+            python_exec_path = "python3"
 
-        cmd += [self._args.execution_environment_image]
-        cmd += ["python3", f"{self._args.internals.share_directory}/utils/catalog_collections.py"]
-        cmd += ["-a", self._adjacent_collection_dir]
-        cmd += ["-c", self._collection_cache_path]
+            container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils:z"]
+            if os.path.exists(self._adjacent_collection_dir):
+                container_volume_mounts.append(
+                    f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"
+                )
 
-        self._logger.debug("ee command: %s", " ".join(cmd))
-        self._dispatch(cmd)
-
-    def _try_local(self) -> None:
-        """run config locally"""
-        if isinstance(self._args.playbook, str):
-            playbook_dir = os.path.dirname(self._args.playbook)
-        else:
-            playbook_dir = os.getcwd()
-
-        adjacent_collection_dir = playbook_dir + "/collections"
-
-        cmd = ["python3", f"{self._args.internals.share_directory}/utils/catalog_collections.py"]
-        cmd += ["-a", adjacent_collection_dir]
-        cmd += ["-c", self._collection_cache_path]
-        self._logger.debug("local command: %s", " ".join(cmd))
-        self._dispatch(cmd)
-
-    def _dispatch(self, cmd: List[str]) -> None:
-        """run the individual config commands and parse"""
-        output = self._run_command(cmd)
-        if output is None:
-            return None
-        self._parse(output)
-        return None
-
-    def _run_command(self, cmd) -> Union[None, subprocess.CompletedProcess]:
-        """run a command"""
-        try:
-            proc_out = subprocess.run(
-                " ".join(cmd),
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                check=True,
-                universal_newlines=True,
-                shell=True,
+            container_volume_mounts.append(
+                f"{self._collection_cache_path}:{self._collection_cache_path}:z"
             )
-            self._logger.debug("cmd output %s", proc_out.stdout[0:100].replace("\n", " ") + "<...>")
-            return proc_out
+            kwargs.update({"container_volume_mounts": container_volume_mounts})
 
-        except subprocess.CalledProcessError as exc:
-            self._logger.debug("command execution failed: '%s'", str(exc))
-            self._logger.debug("command execution failed: '%s'", exc.output)
-            self._logger.debug("command execution failed: '%s'", exc.stderr)
-            return None
+        else:
+            self._logger.debug("running collections command locally")
+            python_exec_path = sys.executable
+
+        self._logger.debug(
+            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}"
+        )
+        _runner = CommandRunner(executable_cmd=python_exec_path, **kwargs)
+        output, error = _runner.run()
+
+        if error:
+            msg = f"Error while running catalog collection script: {error}"
+            self._logger.error(msg)
+        if output:
+            self._parse(output)
 
     def _parse(self, output) -> None:
         """yaml load the list, and parse the dump
@@ -326,17 +319,17 @@ class Action(App):
         """
         # pylint: disable=too-many-branches
         try:
-            if not output.stdout.startswith("{"):
-                _warnings, json_str = output.stdout.split("{", 1)
+            if not output.startswith("{"):
+                _warnings, json_str = output.split("{", 1)
                 json_str = "{" + json_str
             else:
-                json_str = output.stdout
+                json_str = output
             parsed = json.loads(json_str)
             self._logger.debug("json loading output succeeded")
         except (JSONDecodeError, ValueError) as exc:
             self._logger.error("Unable to extract collection json from stdout")
             self._logger.debug("error json loading output: '%s'", str(exc))
-            self._logger.debug(output.stdout)
+            self._logger.debug(output)
             return None
 
         for error in parsed["errors"]:
@@ -357,6 +350,11 @@ class Action(App):
 
         self._stats = parsed["stats"]
 
+        if parsed.get("messages"):
+            for msg in parsed["messages"]:
+                self._logger.info("[catalog_collections]: %s", msg)
+
+        self._logger.debug("catalog collections scan path: %s", parsed["collection_scan_paths"])
         for stat, value in self._stats.items():
             self._logger.debug("%s: %s", stat, value)
         return None

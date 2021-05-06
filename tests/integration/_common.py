@@ -213,7 +213,13 @@ class TmuxSession:
         if self._server.has_session(self._session_name):
             self._session.kill_session()
 
-    def interaction(self, value, wait_on_help=True, wait_on_playbook_status=False):
+    def interaction(
+        self,
+        value,
+        wait_on_help=True,
+        wait_on_playbook_status=False,
+        wait_on_collection_fetch_prompt=None,
+    ):
         """interact with the tmux session"""
         self._pane.send_keys(value, suppress_history=False)
         ok_to_return = [False]
@@ -227,6 +233,8 @@ class TmuxSession:
                 ok_to_return.append(any(":help help" in line for line in showing))
             if wait_on_playbook_status:
                 ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
+            if wait_on_collection_fetch_prompt:
+                ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
         return showing
 
 
