@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:run /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/stdout/site.yml-Play list-SUCCESSFUL]",
+    "name": "test[1-:run /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/stdout/site.yml-Play list-SUCCESSFUL]",
     "index": 1,
     "comment": "Play list",
     "output": [

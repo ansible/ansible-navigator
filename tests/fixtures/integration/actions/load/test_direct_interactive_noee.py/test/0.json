@@ -1,5 +1,5 @@
 {
-    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator load /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/load/playbook-artifact.json --execution-environment false-run top window-SUCCESSFUL]",
+    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator load /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/load/playbook-artifact.json --execution-environment false-run top window-SUCCESSFUL]",
     "index": 0,
     "comment": "run top window",
     "output": [
