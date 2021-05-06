@@ -14,7 +14,7 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -U setuptools
 pip install -U ansible
-pip install ../ansible-navigator
+pip install ../ansible_navigator
 ```
 
 RHEL8/Centos8 prerequisites:
