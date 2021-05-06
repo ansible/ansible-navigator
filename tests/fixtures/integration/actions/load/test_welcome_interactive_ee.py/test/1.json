@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:load /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/load/playbook-artifact.json-Play list-SUCCESSFUL]",
+    "name": "test[1-:load /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/load/playbook-artifact.json-Play list-SUCCESSFUL]",
     "index": 1,
     "comment": "Play list",
     "output": [

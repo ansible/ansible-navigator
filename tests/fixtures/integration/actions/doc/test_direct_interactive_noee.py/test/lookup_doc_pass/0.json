@@ -1,5 +1,5 @@
 {
-    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator doc testorg.coll_1.lookup_1 -t lookup --execution-environment false-ansible-navigator doc lookup plugin display-lookup_doc_pass-expected_in_output0]",
+    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator doc testorg.coll_1.lookup_1 -t lookup --execution-environment false-ansible-navigator doc lookup plugin display-lookup_doc_pass-expected_in_output0]",
     "index": 0,
     "comment": "ansible-navigator doc lookup plugin display",
     "output": [
