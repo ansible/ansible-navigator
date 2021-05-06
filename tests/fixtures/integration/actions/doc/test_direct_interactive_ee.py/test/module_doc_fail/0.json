@@ -1,5 +1,5 @@
 {
-    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator doc testorg.coll_1.doesnotexist --execution-environment true --ce docker-ansible-navigator doc wrong plugin name-module_doc_fail-expected_in_output0]",
+    "name": "test[0-/Users/bthornto/github/ansible-navigator/venv/bin/python -m ansible_navigator doc testorg.coll_1.doesnotexist --execution-environment true --ce docker-ansible-navigator doc wrong plugin name-module_doc_fail-expected_in_output0]",
     "index": 0,
     "comment": "ansible-navigator doc wrong plugin name",
     "output": [
