@@ -82,15 +82,6 @@ You can copy the example configuration file below into one of those paths to sta
 
 
 The following table describes all available configuration options.
-Note that all options here must be specified under the ``ansible-navigator``
-outer key and that options with ``.`` in them specify suboptions. Thus,
-``logging.level`` below could be configured like this:
-
-.. code-block:: yaml
-
-    ansible-navigator:
-      logging:
-        level: debug
 
 ..
   start-parameters-tables
