@@ -76,7 +76,7 @@ def _params_generate_tables(param_details: Dict) -> List:
     """generate tables for paramters"""
     tables = []
     table = copy(RST_TABLE_HEADER)
-    table[0] = table[0].format("General parameters")
+    table[0] = table[0].format("**General parameters**")
     table.append("")
     table.extend(_rst_generate_row(PARAM_HEADER))
 
