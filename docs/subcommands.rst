@@ -11,8 +11,9 @@ ansible-navigator subcommand overview
 ========================================
 
 ..
-  start-subcommands-tables
+  start-subcommands-table
 .. list-table:: Available subcommands
+  :widths: 10 10 35 10 35
   :header-rows: 1
 
   * - Name
@@ -49,4 +50,4 @@ ansible-navigator subcommand overview
     - ansible-navigator welcome --help
     - :welcome
 ..
-  end-subcommands-tables
+  end-subcommands-table

@@ -30,21 +30,16 @@ logger = logging.getLogger()
 
 APP = "ansible-navigator"
 
-PARAM_HEADER = (
-    "Name",
-    "Description",
-    "Default",
-    "Choices",
-    "CLI paramters",
-    "Environment variable",
-    "Settings file (ansible-navigator.)",
-)
+PARAM_HEADER = ("Name", "Description", "Settings", "Choices", "Default")
 RST_TABLE_HEADER = [
     ".. list-table:: {}",
+    "  :widths: 10 10 35 10 35",
     "  :header-rows: 1",
 ]
 RST_FIRST_ROW_ENTRY = "  * - {}"
 RST_ADDITONAL_ROW_ENTRY = "    - {}"
+RST_NL_CELL_FIRST = "    - | {}"
+RST_NL_IN_CELL = "      | {}"
 
 
 def _file_diff(current: str, should_be: str):
@@ -65,7 +60,15 @@ def _rst_generate_row(row: Tuple) -> List:
     data = []
     data.append(RST_FIRST_ROW_ENTRY.format(row[0]))
     for row_part in row[1:]:
-        data.append(RST_ADDITONAL_ROW_ENTRY.format(row_part))
+        if isinstance(row_part, str):
+            data.append(RST_ADDITONAL_ROW_ENTRY.format(row_part))
+        elif isinstance(row_part, tuple):
+            data.append(RST_NL_CELL_FIRST.format(row_part[0]))
+            for nl_cell in row_part[1:]:
+                if isinstance(nl_cell, str):
+                    data.append(RST_NL_IN_CELL.format(nl_cell))
+                elif isinstance(nl_cell, list):
+                    data.extend(nl_cell)
     return data
 
 
@@ -128,12 +131,24 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
     else:
         if entry.cli_parameters.short:
             cli_parameters = (
-                f"{entry.cli_parameters.short} or"
-                f" --{entry.cli_parameters.long_override or entry.name_dashed}"
+                f"`{entry.cli_parameters.short}` or"
+                f" `--{entry.cli_parameters.long_override or entry.name_dashed}`"
             )
         else:
             cli_parameters = "positional"
 
+    path = entry.settings_file_path("ansible-navigator")
+    yaml_like = ["", "      .. code-block:: yaml", ""]
+    for idx, path_part in enumerate(path.split(".")):
+        yaml_like.append(f"{(2*idx+12) * ' '}{path_part}:")
+    yaml_like.append("")
+
+    settings = (
+        f"CLI: {cli_parameters}",
+        f"ENV: {entry.environment_variable(APP.replace('-', '_'))}",
+        "Setting file:",
+        yaml_like,
+    )
     path = entry.settings_file_path(APP) + ".default-value-override"
     default_override = _params_get_param_file_entry(param_details=param_details, path=path)
     logging.debug("%s: default_value_override: %s", entry.name, default_override)
@@ -146,15 +161,7 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
             default = "No default value set"
 
     choices = oxfordcomma(entry.choices, "or")
-    row = (
-        entry.name_dashed,
-        entry.short_description,
-        default,
-        choices,
-        cli_parameters,
-        entry.environment_variable(APP.replace("-", "_")),
-        entry.settings_file_path("")[1:],
-    )
+    row = (entry.name_dashed, entry.short_description, settings, choices, default)
     return row
 
 
@@ -186,8 +193,8 @@ def _update_file(content: List, filename: str, marker: str) -> None:
         logging.error("%s not found", filename)
         sys.exit(1)
     try:
-        start = current.index(f"  start-{marker}-tables")
-        end = current.index(f"  end-{marker}-tables")
+        start = current.index(f"  start-{marker}")
+        end = current.index(f"  end-{marker}")
     except ValueError:
         logging.error("Content anchors not found in %s", filename)
         sys.exit(1)
@@ -203,14 +210,28 @@ def _update_params_tables(args: Namespace, filename: str):
     """update the tables of parameters"""
     param_details = _params_retrieve_details(args.pd)
     tables = _params_generate_tables(param_details)
-    _update_file(tables, filename, "parameters")
+    _update_file(tables, filename, "parameters-tables")
+
+
+def _update_sample_settings(args: Namespace, filename: str):
+    """update the settings sample"""
+    with open(args.ss) as fhand:
+        settings = fhand.read().splitlines()
+    not_commented = ["ansible-navigator:", "logging:", "level:"]
+    for idx, line in enumerate(settings):
+        if not any(nc in line for nc in not_commented):
+            settings[idx] = "    # " + line
+        else:
+            settings[idx] = "    " + line
+    settings = [".. code-block:: yaml", ""] + settings
+    _update_file(settings, filename, "settings-sample")
 
 
 def _update_subcommands_tables(args: Namespace, filename: str):
     """update the table of subcommands"""
     # pylint: disable=unused-argument
     tables = _subcommands_generate_tables()
-    _update_file(tables, filename, "subcommands")
+    _update_file(tables, filename, "subcommands-table")
 
 
 def main():
@@ -221,22 +242,38 @@ def main():
 
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument(
-        "--pt",
-        "--param_table_file",
-        help="The path to the file containing the parameter table",
+        "--pts",
+        "--param-table-settings-file",
+        help="The path to the file containing the parameter table and setting example",
         default=os.path.join(doc_dir, "configuration.rst"),
     )
     parser.add_argument(
         "--pd",
-        "--param_details_file",
+        "--param-details-file",
         help="The path to the file containing the parameter details",
         default=os.path.join(doc_dir, "param_details.yml"),
     )
     parser.add_argument(
         "--sf",
-        "--subcommand_file",
+        "--subcommand-file",
         help="The path to the file containing the subcommand table",
         default=os.path.join(doc_dir, "subcommands.rst"),
+    )
+    parser.add_argument(
+        "--ss",
+        "--settings_source",
+        help="The path to the settings source",
+        default=os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "tests",
+                "fixtures",
+                "unit",
+                "configuration_subsystem",
+                "ansible-navigator.yml",
+            )
+        ),
     )
     parser.add_argument(
         "--diff", dest="diff", help="Only check for differences", action="store_true"
@@ -256,15 +293,20 @@ def main():
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
 
-    args.pd = os.path.abspath(os.path.expanduser(args.pd))
-    args.pt = os.path.abspath(os.path.expanduser(args.pt))
-    args.sf = os.path.abspath(os.path.expanduser(args.sf))
+    for arg in (args.pd, args.pts, args.sf):
+        arg = os.path.abspath(os.path.expanduser(arg))
 
-    if args.diff:
-        errors = []
-        for entry in ((args.pt, _update_params_tables), (args.sf, _update_subcommands_tables)):
-            current = entry[0]
-            update_func = entry[1]
+    updates = (
+        (args.pts, _update_params_tables),
+        (args.pts, _update_sample_settings),
+        (args.sf, _update_subcommands_tables),
+    )
+
+    errors = []
+    for entry in updates:
+        current = entry[0]
+        update_func = entry[1]
+        if args.diff:
             temp_dir = tempfile.gettempdir()
             temp_file = os.path.join(temp_dir, os.path.basename(current))
             copyfile(current, temp_file)
@@ -272,12 +314,12 @@ def main():
             different = _file_diff(current, temp_file)
             if different:
                 errors.extend([current] + different)
-        if errors:
-            errors.insert(0, "Documentation update required, run the doc updater")
-            sys.exit("\n".join(errors))
-    else:
-        _update_params_tables(args, args.pt)
-        _update_subcommands_tables(args, args.sf)
+        else:
+            entry[1](args, entry[0])
+
+    if errors:
+        errors.insert(0, "Documentation update required, run the doc updater")
+        sys.exit("\n".join(errors))
 
 
 if __name__ == "__main__":
