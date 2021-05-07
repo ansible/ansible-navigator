@@ -110,7 +110,7 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
       | Setting file:
 
       .. code-block:: yaml
-      
+
             ansible-navigator:
               app:
 
