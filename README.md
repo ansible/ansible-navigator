@@ -7,14 +7,14 @@ A TUI for the Red Hat Ansible Automation Platform
 ## Quick start
 
 ```
+mkdir project_directory
 git clone https://github.com/ansible/ansible-navigator.git
-mkdir ansible-navigator_demo
-cd ansible-navigator_demo
 python3 -m venv venv
 source venv/bin/activate
 pip install -U setuptools
 pip install -U ansible
-pip install ../ansible-navigator
+pip install ./ansible-navigator
+ansible-navigator --help
 ```
 
 RHEL8/Centos8 prerequisites:
@@ -26,7 +26,7 @@ sudo dnf install gcc python3-devel
 
 
 ### Welcome
-Start at the welcome page, from the welcome page you can run playbooks, explore inventories, and review docs
+Start at the welcome page, from the welcome page you can run playbooks, browse collections, explore inventories, review docs and more.
 ```
 ansible-navigator
 ```
@@ -38,9 +38,9 @@ Review the help
 ansible-navigator --help
 ```
 
-Review current configuration (default mode)
+Review current ansible configuration (default mode)
 ```
-ansible-navigator config -m interactive
+ansible-navigator config
 ```
 
 Review current configuration in classic mode
@@ -60,7 +60,7 @@ ansible-navigator doc ansible.netcommon.cli_command
 
 Run and explore a playbook
 ```
-ansible-navigator run -m interactive site.yaml -i inventory.yaml
+ansible-navigator run site.yaml -i inventory.yaml
 ```
 
 Review and explore and inventory
@@ -73,49 +73,28 @@ Run a playbook with classic output (default mode)
 ansible-navigator run -m stdout site.yaml -i inventory.yaml
 ```
 
+### Available subcommands
 
-## ansible-navigator.yml example
+For the full list of available subcomamnds, see the [subcommand guide](docs/subcommands.rst)
 
-```yaml
-ansible-navigator:
-  app: run
-  cmdline: --forks 15
-  documentation:
-    plugin:
-      type: become
-      name: enable
-  editor:
-    command: code -g {filename}:{line_number}
-    console: True
-  execution-environment:
-    container-engine: docker
-    image: quay.io/ansible/network-ee
-    environment-variables:
-      pass:
-      - TEST_ENV0
-      - TEST_ENV1
-      - TEST_ENV2
-      set:
-        TEST_STR: navigator
-        TEST_BOOL: True
-        TEST_INT: 42
-  inventories:
-    - ../nav_demo/inventory.yaml
-  inventory-columns:
-    - ansible_network_os
-    - ansible_network_cli_ssh_type
-    - ansible_connection
-  logging:
-    file: /tmp/log.txt
-    level: debug
-  mode: stdout
-  osc4: True
-  playbook: ../nav_demo/simple.yaml
-  playbook-artifact:
-    enable: True
-```
+### Configuring ansible-navigator:
 
-## in app key bindings
+ansible-navigator can be configured:
+
+1) using default values
+2) with a settings file
+3) with environment variables
+4) at the command line
+5) while issueing `:` comamnd with the application
+
+Setting are applied in that order. For an overview of these methods, see the [configuration guide](docs/configuration.rst)
+
+
+### Key bindings and colon commands
+
+While using the terminal user interface keys and commands are avilable, the following 
+is also available within the application by typing `:help`:
+
 
 ```
 ## GENERAL

@@ -32,7 +32,7 @@ Currently the following paths are checked and the first match is used:
 
 You can copy the example configuration file below into one of those paths to start your ``ansible-navigator`` config file.
 
-.. literalinclude:: sample-config.yml
+.. literalinclude:: ansible-navigator.yml
    :language: yaml
 
 
