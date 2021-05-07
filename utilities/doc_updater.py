@@ -30,10 +30,10 @@ logger = logging.getLogger()
 
 APP = "ansible-navigator"
 
-PARAM_HEADER = ("Name", "Description", "Settings", "Choices", "Default")
+PARAM_HEADER = ("Name", "Description", "Settings")
 RST_TABLE_HEADER = [
     ".. list-table:: {}",
-    "  :widths: 10 10 35 10 35",
+    "  :widths: 2 3 5",
     "  :header-rows: 1",
 ]
 RST_FIRST_ROW_ENTRY = "  * - {}"
@@ -143,12 +143,6 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
         yaml_like.append(f"{(2*idx+12) * ' '}{path_part}:")
     yaml_like.append("")
 
-    settings = (
-        f"CLI: {cli_parameters}",
-        f"ENV: {entry.environment_variable(APP.replace('-', '_'))}",
-        "Setting file:",
-        yaml_like,
-    )
     path = entry.settings_file_path(APP) + ".default-value-override"
     default_override = _params_get_param_file_entry(param_details=param_details, path=path)
     logging.debug("%s: default_value_override: %s", entry.name, default_override)
@@ -161,7 +155,16 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
             default = "No default value set"
 
     choices = oxfordcomma(entry.choices, "or")
-    row = (entry.name_dashed, entry.short_description, settings, choices, default)
+
+    settings = (
+        f"**Choices:** {choices}",
+        f"**Default:** {default}",
+        f"**CLI:** {cli_parameters}",
+        f"**ENV:** {entry.environment_variable(APP.replace('-', '_'))}",
+        "**Setting file:**",
+        yaml_like,
+    )
+    row = (entry.name_dashed, entry.short_description, settings)
     return row
 
 

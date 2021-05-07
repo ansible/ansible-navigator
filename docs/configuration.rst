@@ -95,58 +95,58 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
 ..
   start-parameters-tables
 .. list-table:: General parameters
-  :widths: 10 10 35 10 35
+  :widths: 2 3 5
   :header-rows: 1
 
   * - Name
     - Description
     - Settings
-    - Choices
-    - Default
   * - app
     - Subcommands
-    - | CLI: positional
-      | ENV: ANSIBLE_NAVIGATOR_APP
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** welcome
+      | **CLI:** positional
+      | **ENV:** ANSIBLE_NAVIGATOR_APP
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               app:
 
-    - 
-    - welcome
   * - cmdline
     - Extra parameters passed to the cooresponding command
-    - | CLI: positional
-      | ENV: ANSIBLE_NAVIGATOR_CMDLINE
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** positional
+      | **ENV:** ANSIBLE_NAVIGATOR_CMDLINE
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               cmdline:
 
-    - 
-    - No default value set
   * - collection-doc-cache-path
     - The path to collection doc cache
-    - | CLI: positional
-      | ENV: ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** $HOME/.cache/ansible-navigator/collection_doc_cache.db
+      | **CLI:** positional
+      | **ENV:** ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               collection-doc-cache-path:
 
-    - 
-    - $HOME/.cache/ansible-navigator/collection_doc_cache.db
   * - container-engine
     - Specify the container engine
-    - | CLI: `--ce` or `--container-engine`
-      | ENV: ANSIBLE_NAVIGATOR_CONTAINER_ENGINE
-      | Setting file:
+    - | **Choices:** 'podman' or 'docker'
+      | **Default:** podman
+      | **CLI:** `--ce` or `--container-engine`
+      | **ENV:** ANSIBLE_NAVIGATOR_CONTAINER_ENGINE
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -154,13 +154,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               execution-environment:
                 container-engine:
 
-    - 'podman' or 'docker'
-    - podman
   * - editor-command
     - Specify the editor comamnd
-    - | CLI: `--ecmd` or `--editor-command`
-      | ENV: ANSIBLE_NAVIGATOR_EDITOR_COMMAND
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** vi +{line_number} {filename}
+      | **CLI:** `--ecmd` or `--editor-command`
+      | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_COMMAND
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -168,13 +168,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               editor:
                 command:
 
-    - 
-    - vi +{line_number} {filename}
   * - editor-console
     - Specify if the editor is console based
-    - | CLI: `--econ` or `--editor-console`
-      | ENV: ANSIBLE_NAVIGATOR_EDITOR_CONSOLE
-      | Setting file:
+    - | **Choices:** 'True' or 'False'
+      | **Default:** No default value set
+      | **CLI:** `--econ` or `--editor-console`
+      | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_CONSOLE
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -182,13 +182,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               editor:
                 console:
 
-    - 'True' or 'False'
-    - No default value set
   * - execution-environment
     - Enable or disable the use of an execution environment
-    - | CLI: `--ee` or `--execution-environment`
-      | ENV: ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT
-      | Setting file:
+    - | **Choices:** 'True' or 'False'
+      | **Default:** No default value set
+      | **CLI:** `--ee` or `--execution-environment`
+      | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -196,13 +196,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               execution-environment:
                 enabled:
 
-    - 'True' or 'False'
-    - No default value set
   * - execution-environment-image
     - Specify the name of the execution environment image
-    - | CLI: `--eei` or `--execution-environment-image`
-      | ENV: ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** quay.io/ansible/ansible-runner:devel
+      | **CLI:** `--eei` or `--execution-environment-image`
+      | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -210,13 +210,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               execution-environment:
                 image:
 
-    - 
-    - quay.io/ansible/ansible-runner:devel
   * - log-file
     - Specify the full path for the ansible-navigator log file
-    - | CLI: `--lf` or `--log-file`
-      | ENV: ANSIBLE_NAVIGATOR_LOG_FILE
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** $PWD/ansible-navigator.log
+      | **CLI:** `--lf` or `--log-file`
+      | **ENV:** ANSIBLE_NAVIGATOR_LOG_FILE
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -224,13 +224,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               logging:
                 file:
 
-    - 
-    - $PWD/ansible-navigator.log
   * - log-level
     - Specify the ansible-navigator log level
-    - | CLI: `--ll` or `--log-level`
-      | ENV: ANSIBLE_NAVIGATOR_LOG_LEVEL
-      | Setting file:
+    - | **Choices:** 'debug', 'info', 'warning', 'error' or 'critical'
+      | **Default:** warning
+      | **CLI:** `--ll` or `--log-level`
+      | **ENV:** ANSIBLE_NAVIGATOR_LOG_LEVEL
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -238,39 +238,39 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               logging:
                 level:
 
-    - 'debug', 'info', 'warning', 'error' or 'critical'
-    - warning
   * - mode
     - Specify the user-interface mode
-    - | CLI: `-m` or `--mode`
-      | ENV: ANSIBLE_NAVIGATOR_MODE
-      | Setting file:
+    - | **Choices:** 'stdout' or 'interactive'
+      | **Default:** interactive
+      | **CLI:** `-m` or `--mode`
+      | **ENV:** ANSIBLE_NAVIGATOR_MODE
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               mode:
 
-    - 'stdout' or 'interactive'
-    - interactive
   * - osc4
     - Enable or disable terminal color changing support with OSC 4
-    - | CLI: `--osc4` or `--osc4`
-      | ENV: ANSIBLE_NAVIGATOR_OSC4
-      | Setting file:
+    - | **Choices:** 'True' or 'False'
+      | **Default:** Current terminal capabilities
+      | **CLI:** `--osc4` or `--osc4`
+      | **ENV:** ANSIBLE_NAVIGATOR_OSC4
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               osc4:
 
-    - 'True' or 'False'
-    - Current terminal capabilities
   * - pass-environment-variable
     - Specify an exiting environment variable to be passed through to and set within the execution enviroment (--penv MY_VAR)
-    - | CLI: `--penv` or `--pass-environment-variable`
-      | ENV: ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** `--penv` or `--pass-environment-variable`
+      | **ENV:** ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -279,13 +279,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
                 environment-variables:
                   pass:
 
-    - 
-    - No default value set
   * - set-environment-variable
     - Specify an environment variable and a value to be set within the execution enviroment (--senv MY_VAR=42)
-    - | CLI: `--senv` or `--set-environment-variable`
-      | ENV: ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** `--senv` or `--set-environment-variable`
+      | **ENV:** ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -294,26 +294,24 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
                 environment-variables:
                   set:
 
-    - 
-    - No default value set
 
 |
 |
 
 .. list-table:: Subcommand: doc
-  :widths: 10 10 35 10 35
+  :widths: 2 3 5
   :header-rows: 1
 
   * - Name
     - Description
     - Settings
-    - Choices
-    - Default
   * - plugin-name
     - Specify the plugin name
-    - | CLI: positional
-      | ENV: ANSIBLE_NAVIGATOR_PLUGIN_NAME
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** positional
+      | **ENV:** ANSIBLE_NAVIGATOR_PLUGIN_NAME
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -322,13 +320,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
                 plugin:
                   name:
 
-    - 
-    - No default value set
   * - plugin-type
     - Specify the plugin type, 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
-    - | CLI: `-t` or `----type`
-      | ENV: ANSIBLE_NAVIGATOR_PLUGIN_TYPE
-      | Setting file:
+    - | **Choices:** 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
+      | **Default:** module
+      | **CLI:** `-t` or `----type`
+      | **ENV:** ANSIBLE_NAVIGATOR_PLUGIN_TYPE
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -337,63 +335,59 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
                 plugin:
                   type:
 
-    - 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
-    - module
 
 |
 
 .. list-table:: Subcommand: inventory
-  :widths: 10 10 35 10 35
+  :widths: 2 3 5
   :header-rows: 1
 
   * - Name
     - Description
     - Settings
-    - Choices
-    - Default
   * - inventory
     - Specify an inventory file path or comma separated host list
-    - | CLI: `-i` or `--inventory`
-      | ENV: ANSIBLE_NAVIGATOR_INVENTORIES
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** `-i` or `--inventory`
+      | **ENV:** ANSIBLE_NAVIGATOR_INVENTORIES
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               inventories:
 
-    - 
-    - No default value set
   * - inventory-column
     - Specify a host attribute to show in the inventory view
-    - | CLI: `--ic` or `--inventory-column`
-      | ENV: ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** `--ic` or `--inventory-column`
+      | **ENV:** ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               inventory-columns:
 
-    - 
-    - No default value set
 
 |
 
 .. list-table:: Subcommand: load
-  :widths: 10 10 35 10 35
+  :widths: 2 3 5
   :header-rows: 1
 
   * - Name
     - Description
     - Settings
-    - Choices
-    - Default
   * - playbook-artifact-load
     - Specify the path for the playbook artifact to load
-    - | CLI: positional
-      | ENV: ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_LOAD
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** positional
+      | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_LOAD
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -401,64 +395,62 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               playbook-artifact:
                 load:
 
-    - 
-    - No default value set
 
 |
 
 .. list-table:: Subcommand: run
-  :widths: 10 10 35 10 35
+  :widths: 2 3 5
   :header-rows: 1
 
   * - Name
     - Description
     - Settings
-    - Choices
-    - Default
   * - inventory
     - Specify an inventory file path or comma separated host list
-    - | CLI: `-i` or `--inventory`
-      | ENV: ANSIBLE_NAVIGATOR_INVENTORIES
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** `-i` or `--inventory`
+      | **ENV:** ANSIBLE_NAVIGATOR_INVENTORIES
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               inventories:
 
-    - 
-    - No default value set
   * - inventory-column
     - Specify a host attribute to show in the inventory view
-    - | CLI: `--ic` or `--inventory-column`
-      | ENV: ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** `--ic` or `--inventory-column`
+      | **ENV:** ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               inventory-columns:
 
-    - 
-    - No default value set
   * - playbook
     - Specify the playbook name
-    - | CLI: positional
-      | ENV: ANSIBLE_NAVIGATOR_PLAYBOOK
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** No default value set
+      | **CLI:** positional
+      | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK
+      | **Setting file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               playbook:
 
-    - 
-    - No default value set
   * - playbook-artifact-enable
     - Enable or disable the creation of artifacts for completed playbooks
-    - | CLI: `--pae` or `--playbook-artifact-enable`
-      | ENV: ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_ENABLE
-      | Setting file:
+    - | **Choices:** 'True' or 'False'
+      | **Default:** No default value set
+      | **CLI:** `--pae` or `--playbook-artifact-enable`
+      | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_ENABLE
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -466,13 +458,13 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               playbook-artifact:
                 enable:
 
-    - 'True' or 'False'
-    - No default value set
   * - playbook-artifact-save-as
     - Specify the name for artifacts created from completed playbooks
-    - | CLI: `--pas` or `--playbook-artifact-save-as`
-      | ENV: ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS
-      | Setting file:
+    - | **Choices:** 
+      | **Default:** {playbook_dir}/{playbook_name}-artifact-{ts_utc}.json
+      | **CLI:** `--pas` or `--playbook-artifact-save-as`
+      | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS
+      | **Setting file:**
 
       .. code-block:: yaml
 
@@ -480,8 +472,6 @@ outer key and that options with ``.`` in them specify suboptions. Thus,
               playbook-artifact:
                 save-as:
 
-    - 
-    - {playbook_dir}/{playbook_name}-artifact-{ts_utc}.json
 
 |
 
