@@ -85,7 +85,7 @@ The following table describes all available configuration options.
 
 ..
   start-parameters-tables
-.. list-table:: General parameters
+.. list-table:: **General parameters**
   :widths: 2 3 5
   :header-rows: 1
 
