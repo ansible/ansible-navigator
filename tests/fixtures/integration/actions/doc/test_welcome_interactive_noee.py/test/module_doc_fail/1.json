@@ -1,0 +1,14 @@
+{
+    "name": "test[1-:doc testorg.coll_1.doesnotexist-ansible-navigator doc wrong plugin name-module_doc_fail-expected_in_output1]",
+    "index": 1,
+    "comment": "ansible-navigator doc wrong plugin name",
+    "output": [
+        "TESTORG.COLL_1.DOESNOTEXIST (MODULE)",
+        "0│---",
+        "1│local_errors:",
+        "2│- '[WARNING]: module testorg.coll_1.doesnotexist not found in: /Users/user/.an'",
+        "3│- sible/plugins/modules:/usr/share/ansible/plugins/modules:/Users/user/Librar",
+        "4│- y/Python/3.8/lib/python/site-packages/ansible/modules",
+        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+    ]
+}

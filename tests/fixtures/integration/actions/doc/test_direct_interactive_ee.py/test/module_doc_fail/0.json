@@ -1,0 +1,14 @@
+{
+    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator doc testorg.coll_1.doesnotexist --execution-environment true --ce docker-ansible-navigator doc wrong plugin name-module_doc_fail-expected_in_output0]",
+    "index": 0,
+    "comment": "ansible-navigator doc wrong plugin name",
+    "output": [
+        "TESTORG.COLL_1.DOESNOTEXIST (MODULE)",
+        "0│---",
+        "1│execution_environment_errors:",
+        "2│- '[WARNING]: module testorg.coll_1.doesnotexist not found in: /home/runner/.ansib'",
+        "3│- le/plugins/modules:/usr/share/ansible/plugins/modules:/usr/local/lib/python3.8/",
+        "4│- site-packages/ansible/modules",
+        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+    ]
+}

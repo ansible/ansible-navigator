@@ -21,7 +21,7 @@ from ..ui_framework import Interaction
 from ..ui_framework import Menu
 
 from ..utils import templar
-from ..yaml import yaml, Dumper
+from ..yaml import human_dump
 
 
 class SuspendCurses:
@@ -139,15 +139,7 @@ class Action:
                     outfile.write(obj)
             elif interaction.ui.xform() == "source.yaml":
                 filename = tempfile.NamedTemporaryFile(suffix=".yaml").name
-                with open(filename, "w") as outfile:
-                    yaml.dump(
-                        obj,
-                        outfile,
-                        default_flow_style=False,
-                        Dumper=Dumper,
-                        explicit_start=True,
-                        sort_keys=True,
-                    )
+                human_dump(obj=obj, filename=filename)
             elif interaction.ui.xform() == "source.json":
                 filename = tempfile.NamedTemporaryFile(suffix=".json").name
                 with open(filename, "w") as outfile:

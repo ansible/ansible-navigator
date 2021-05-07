@@ -39,7 +39,7 @@ from .field_text import FieldText
 from .form_handler_text import FormHandlerText
 from .menu_builder import MenuBuilder
 
-from ..yaml import yaml, Dumper
+from ..yaml import human_dump
 
 STND_KEYS = {"^f/PgUp": "page up", "^b/PgDn": "page down", "\u2191\u2193": "scroll", "esc": "back"}
 END_KEYS = {":help": "help"}
@@ -472,9 +472,7 @@ class UserInterface(CursesWindow):
         if self.xform() == "source.ansi":
             return self._colorizer.render(doc=obj, scope=self.xform())
         if self.xform() == "source.yaml":
-            string = yaml.dump(
-                obj, default_flow_style=False, Dumper=Dumper, explicit_start=True, sort_keys=True
-            )
+            string = human_dump(obj)
         elif self.xform() == "source.json":
             string = json.dumps(obj, indent=4, sort_keys=True)
         else:

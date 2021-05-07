@@ -1,7 +1,7 @@
 {
-    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator-ansible-navigator inventory command top window]",
+    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator --execution-environment true --ce docker-welcome-lookup_doc_pass-expected_in_output0]",
     "index": 0,
-    "comment": "ansible-navigator inventory command top window",
+    "comment": "welcome",
     "output": [
         " 0│## Welcome",
         " 1│---------------------------------------------------------------------------------------------------",

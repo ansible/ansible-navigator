@@ -7,7 +7,7 @@ import re
 from . import _actions as actions
 from ..app_public import AppPublic
 from ..ui_framework import Interaction
-from ..yaml import yaml, Dumper
+from ..yaml import human_dump
 
 
 @actions.register
@@ -84,15 +84,7 @@ class Action:
             with open(os.path.abspath(filename), fmode) as outfile:
                 outfile.write(obj)
         elif write_as == "yaml":
-            with open(os.path.abspath(filename), fmode) as outfile:
-                yaml.dump(
-                    obj,
-                    outfile,
-                    default_flow_style=False,
-                    Dumper=Dumper,
-                    explicit_start=True,
-                    sort_keys=True,
-                )
+            human_dump(obj=obj, filename=filename, fmode=fmode)
         elif write_as == "json":
             with open(os.path.abspath(filename), fmode) as outfile:
                 json.dump(obj, outfile, indent=4, sort_keys=True)
