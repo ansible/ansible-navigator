@@ -98,7 +98,7 @@ The following table describes all available configuration options.
       | **Default:** welcome
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_APP
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -111,7 +111,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_CMDLINE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -124,7 +124,7 @@ The following table describes all available configuration options.
       | **Default:** $HOME/.cache/ansible-navigator/collection_doc_cache.db
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -137,7 +137,7 @@ The following table describes all available configuration options.
       | **Default:** podman
       | **CLI:** `--ce` or `--container-engine`
       | **ENV:** ANSIBLE_NAVIGATOR_CONTAINER_ENGINE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -151,7 +151,7 @@ The following table describes all available configuration options.
       | **Default:** vi +{line_number} {filename}
       | **CLI:** `--ecmd` or `--editor-command`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_COMMAND
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -165,7 +165,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `--econ` or `--editor-console`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_CONSOLE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -179,7 +179,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `--ee` or `--execution-environment`
       | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -193,7 +193,7 @@ The following table describes all available configuration options.
       | **Default:** quay.io/ansible/ansible-runner:devel
       | **CLI:** `--eei` or `--execution-environment-image`
       | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -207,7 +207,7 @@ The following table describes all available configuration options.
       | **Default:** $PWD/ansible-navigator.log
       | **CLI:** `--lf` or `--log-file`
       | **ENV:** ANSIBLE_NAVIGATOR_LOG_FILE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -221,7 +221,7 @@ The following table describes all available configuration options.
       | **Default:** warning
       | **CLI:** `--ll` or `--log-level`
       | **ENV:** ANSIBLE_NAVIGATOR_LOG_LEVEL
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -235,7 +235,7 @@ The following table describes all available configuration options.
       | **Default:** interactive
       | **CLI:** `-m` or `--mode`
       | **ENV:** ANSIBLE_NAVIGATOR_MODE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -248,7 +248,7 @@ The following table describes all available configuration options.
       | **Default:** Current terminal capabilities
       | **CLI:** `--osc4` or `--osc4`
       | **ENV:** ANSIBLE_NAVIGATOR_OSC4
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -261,7 +261,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `--penv` or `--pass-environment-variable`
       | **ENV:** ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -276,7 +276,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `--senv` or `--set-environment-variable`
       | **ENV:** ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -302,7 +302,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_PLUGIN_NAME
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -317,7 +317,7 @@ The following table describes all available configuration options.
       | **Default:** module
       | **CLI:** `-t` or `----type`
       | **ENV:** ANSIBLE_NAVIGATOR_PLUGIN_TYPE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -342,7 +342,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `-i` or `--inventory`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORIES
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -355,7 +355,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `--ic` or `--inventory-column`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -378,7 +378,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_LOAD
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -402,7 +402,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `-i` or `--inventory`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORIES
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -415,7 +415,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `--ic` or `--inventory-column`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -428,7 +428,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -441,7 +441,7 @@ The following table describes all available configuration options.
       | **Default:** No default value set
       | **CLI:** `--pae` or `--playbook-artifact-enable`
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_ENABLE
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 
@@ -455,7 +455,7 @@ The following table describes all available configuration options.
       | **Default:** {playbook_dir}/{playbook_name}-artifact-{ts_utc}.json
       | **CLI:** `--pas` or `--playbook-artifact-save-as`
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS
-      | **Setting file:**
+      | **Settings file:**
 
       .. code-block:: yaml
 

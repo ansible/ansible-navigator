@@ -161,7 +161,7 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
         f"**Default:** {default}",
         f"**CLI:** {cli_parameters}",
         f"**ENV:** {entry.environment_variable(APP.replace('-', '_'))}",
-        "**Setting file:**",
+        "**Settings file:**",
         yaml_like,
     )
     row = (entry.name_dashed, entry.short_description, settings)
