@@ -39,71 +39,249 @@ You can copy the example configuration file below into one of those paths to sta
 The following table describes all available configuration options.
 Note that all options here must be specified under the ``ansible-navigator``
 outer key and that options with ``.`` in them specify suboptions. Thus,
-``log.level`` below could be configured like this:
+``logging.level`` below could be configured like this:
 
 .. code-block:: yaml
 
     ansible-navigator:
-      log:
+      logging:
         level: debug
 
+..
+  start-parameters-tables
+.. list-table:: General parameters
+  :header-rows: 1
 
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| Option                          | Default                                          | Description                                | CLI argument                   |
-+=================================+==================================================+============================================+================================+
-| ``container-engine``            | ``podman``                                       | How containers get run when execution      | ``--container-engine``         |
-|                                 |                                                  | environments are used. Valid options are:  |                                |
-|                                 |                                                  | ``podman``, ``docker``.                    |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``doc-plugin-type``             | ``modoule``                                      | Specifies which kind of Ansible plugin is  | ``--type`` (or ``-t``)         |
-|                                 |                                                  | referenced by default when running         |                                |
-|                                 |                                                  | ``ansible-navigator doc [some plugin]``.   |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``editor.command``              | ``vi +{line_number} {filename}``                 | Which editor to use when opening           | N/A                            |
-|                                 |                                                  | files with the ``:open`` command.          |                                |
-|                                 |                                                  |                                            |                                |
-|                                 |                                                  | ``{line_number}`` and ``{filename}`` both  |                                |
-|                                 |                                                  | get interpolated accordingly.              |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``editor.console``              | ``True``                                         | Specifies if the editor is a console       | N/A                            |
-|                                 |                                                  | based editor or not. If it is, curses      |                                |
-|                                 |                                                  | is suspended until the editor exits.       |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``execution-environment``       | ``False``                                        | Specifies whether or not to run            | ``--execution-environment``    |
-|                                 |                                                  | playbooks in an execution environment      |                                |
-|                                 |                                                  | when using ``:run``.                       |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``execution-environment-image`` | ``quay.io/ansible/ansible-runner:devel``         | If using execution environments, specifies | ``--ee-image``                 |
-|                                 |                                                  | the default image to use.                  |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``inventory``                   | ``[]``                                           | The inventory, or inventories, to use      | ``--inventory``                |
-|                                 |                                                  | when running playbooks.                    |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``inventory-columns``           |                                                  | Additional (comma-separated) columns to    | ``--inventory-columns``        |
-|                                 |                                                  | show in inventory views.                   |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``log.file``                    | ``./ansible-navigator.log``                      | Where to write ansible-navigator logs.     | ``--logfile``                  |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``log.level``                   | ``info``                                         | The log level to use.                      | ``--loglevel``                 |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``mode``                        | ``interactive``                                  | Whether to run in interactive or stdout    | ``--mode``                     |
-|                                 |                                                  | mode.                                      |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``no-osc4``                     | ``False``                                        | Disable terminal color changing            | ``--no-osc4``                  |
-|                                 |                                                  |                                            |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``pass-environment-variable``   | ``[]``                                           | A list of enviroment variables to          | ``--pass-environment-variable``|
-|                                 |                                                  | pass through to the execution environemtn  | ``  variable``                 |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``playbook-artifact``           | ``{playbook_dir}/{playbook_name}_artifact.json`` | The artifact path and filename for         |                                |
-|                                 |                                                  | playbook results.                          |                                |
-|                                 |                                                  |                                            |                                |
-|                                 |                                                  | ``{playbook_dir}`` and ``{playbook_name}`` |                                |
-|                                 |                                                  | both get interpolated accordingly. The     |                                |
-|                                 |                                                  | playbook name is determined from the       |                                |
-|                                 |                                                  | basename of the path to the playbook, sans |                                |
-|                                 |                                                  | its extension.                             |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
-| ``set-envrionment-variable``    | ``{}``                                           | A dictionary of environment variables to   | ``--set-environment-variable`` |
-|                                 |                                                  | set in the execution environment           |                                |
-+---------------------------------+--------------------------------------------------+--------------------------------------------+--------------------------------+
+  * - Name
+    - Description
+    - Default
+    - Choices
+    - CLI paramters
+    - Environment variable
+    - Settings file (ansible-navigator.)
+  * - app
+    - Subcommands
+    - welcome
+    - 
+    - positional
+    - ANSIBLE_NAVIGATOR_APP
+    - app
+  * - cmdline
+    - Extra parameters passed to the cooresponding command
+    - No default value set
+    - 
+    - positional
+    - ANSIBLE_NAVIGATOR_CMDLINE
+    - cmdline
+  * - collection-doc-cache-path
+    - The path to collection doc cache
+    - $HOME/.cache/ansible-navigator/collection_doc_cache.db
+    - 
+    - positional
+    - ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH
+    - collection-doc-cache-path
+  * - container-engine
+    - Specify the container engine
+    - podman
+    - 'podman' or 'docker'
+    - --ce or --container-engine
+    - ANSIBLE_NAVIGATOR_CONTAINER_ENGINE
+    - execution-environment.container-engine
+  * - editor-command
+    - Specify the editor comamnd
+    - vi +{line_number} {filename}
+    - 
+    - --ecmd or --editor-command
+    - ANSIBLE_NAVIGATOR_EDITOR_COMMAND
+    - editor.command
+  * - editor-console
+    - Specify if the editor is console based
+    - No default value set
+    - 'True' or 'False'
+    - --econ or --editor-console
+    - ANSIBLE_NAVIGATOR_EDITOR_CONSOLE
+    - editor.console
+  * - execution-environment
+    - Enable or disable the use of an execution environment
+    - No default value set
+    - 'True' or 'False'
+    - --ee or --execution-environment
+    - ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT
+    - execution-environment.enabled
+  * - execution-environment-image
+    - Specify the name of the execution environment image
+    - quay.io/ansible/ansible-runner:devel
+    - 
+    - --eei or --execution-environment-image
+    - ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE
+    - execution-environment.image
+  * - log-file
+    - Specify the full path for the ansible-navigator log file
+    - $PWD/ansible-navigator.log
+    - 
+    - --lf or --log-file
+    - ANSIBLE_NAVIGATOR_LOG_FILE
+    - logging.file
+  * - log-level
+    - Specify the ansible-navigator log level
+    - warning
+    - 'debug', 'info', 'warning', 'error' or 'critical'
+    - --ll or --log-level
+    - ANSIBLE_NAVIGATOR_LOG_LEVEL
+    - logging.level
+  * - mode
+    - Specify the user-interface mode
+    - interactive
+    - 'stdout' or 'interactive'
+    - -m or --mode
+    - ANSIBLE_NAVIGATOR_MODE
+    - mode
+  * - osc4
+    - Enable or disable terminal color changing support with OSC 4
+    - Current terminal capabilities
+    - 'True' or 'False'
+    - --osc4 or --osc4
+    - ANSIBLE_NAVIGATOR_OSC4
+    - osc4
+  * - pass-environment-variable
+    - Specify an exiting environment variable to be passed through to and set within the execution enviroment (--penv MY_VAR)
+    - No default value set
+    - 
+    - --penv or --pass-environment-variable
+    - ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES
+    - execution-environment.environment-variables.pass
+  * - set-environment-variable
+    - Specify an environment variable and a value to be set within the execution enviroment (--senv MY_VAR=42)
+    - No default value set
+    - 
+    - --senv or --set-environment-variable
+    - ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES
+    - execution-environment.environment-variables.set
+
+|
+|
+
+.. list-table:: Subcommand: doc
+  :header-rows: 1
+
+  * - Name
+    - Description
+    - Default
+    - Choices
+    - CLI paramters
+    - Environment variable
+    - Settings file (ansible-navigator.)
+  * - plugin-name
+    - Specify the plugin name
+    - No default value set
+    - 
+    - positional
+    - ANSIBLE_NAVIGATOR_PLUGIN_NAME
+    - documentation.plugin.name
+  * - plugin-type
+    - Specify the plugin type, 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
+    - module
+    - 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
+    - -t or ----type
+    - ANSIBLE_NAVIGATOR_PLUGIN_TYPE
+    - documentation.plugin.type
+
+|
+
+.. list-table:: Subcommand: inventory
+  :header-rows: 1
+
+  * - Name
+    - Description
+    - Default
+    - Choices
+    - CLI paramters
+    - Environment variable
+    - Settings file (ansible-navigator.)
+  * - inventory
+    - Specify an inventory file path or comma separated host list
+    - No default value set
+    - 
+    - -i or --inventory
+    - ANSIBLE_NAVIGATOR_INVENTORIES
+    - inventories
+  * - inventory-column
+    - Specify a host attribute to show in the inventory view
+    - No default value set
+    - 
+    - --ic or --inventory-column
+    - ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
+    - inventory-columns
+
+|
+
+.. list-table:: Subcommand: load
+  :header-rows: 1
+
+  * - Name
+    - Description
+    - Default
+    - Choices
+    - CLI paramters
+    - Environment variable
+    - Settings file (ansible-navigator.)
+  * - playbook-artifact-load
+    - Specify the path for the playbook artifact to load
+    - No default value set
+    - 
+    - positional
+    - ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_LOAD
+    - playbook-artifact.load
+
+|
+
+.. list-table:: Subcommand: run
+  :header-rows: 1
+
+  * - Name
+    - Description
+    - Default
+    - Choices
+    - CLI paramters
+    - Environment variable
+    - Settings file (ansible-navigator.)
+  * - inventory
+    - Specify an inventory file path or comma separated host list
+    - No default value set
+    - 
+    - -i or --inventory
+    - ANSIBLE_NAVIGATOR_INVENTORIES
+    - inventories
+  * - inventory-column
+    - Specify a host attribute to show in the inventory view
+    - No default value set
+    - 
+    - --ic or --inventory-column
+    - ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
+    - inventory-columns
+  * - playbook
+    - Specify the playbook name
+    - No default value set
+    - 
+    - positional
+    - ANSIBLE_NAVIGATOR_PLAYBOOK
+    - playbook
+  * - playbook-artifact-enable
+    - Enable or disable the creation of artifacts for completed playbooks
+    - No default value set
+    - 'True' or 'False'
+    - --pae or --playbook-artifact-enable
+    - ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_ENABLE
+    - playbook-artifact.enable
+  * - playbook-artifact-save-as
+    - Specify the name for artifacts created from completed playbooks
+    - {playbook_dir}/{playbook_name}-artifact-{ts_utc}.json
+    - 
+    - --pas or --playbook-artifact-save-as
+    - ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS
+    - playbook-artifact.save-as
+
+|
+
+..
+  end-parameters-tables

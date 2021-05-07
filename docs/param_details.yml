@@ -1,0 +1,8 @@
+ansible-navigator:
+  collection-doc-cache-path:
+    default-value-override: $HOME/.cache/ansible-navigator/collection_doc_cache.db
+  logging:
+    file:
+      default-value-override: $PWD/ansible-navigator.log
+  osc4:
+    default-value-override: Current terminal capabilities
