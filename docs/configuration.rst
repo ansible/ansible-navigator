@@ -289,7 +289,7 @@ The following table describes all available configuration options.
 |
 |
 
-.. list-table:: Subcommand: doc
+.. list-table:: **Subcommand: doc**
   :widths: 2 3 5
   :header-rows: 1
 
@@ -329,7 +329,7 @@ The following table describes all available configuration options.
 
 |
 
-.. list-table:: Subcommand: inventory
+.. list-table:: **Subcommand: inventory**
   :widths: 2 3 5
   :header-rows: 1
 
@@ -365,7 +365,7 @@ The following table describes all available configuration options.
 
 |
 
-.. list-table:: Subcommand: load
+.. list-table:: **Subcommand: load**
   :widths: 2 3 5
   :header-rows: 1
 
@@ -389,7 +389,7 @@ The following table describes all available configuration options.
 
 |
 
-.. list-table:: Subcommand: run
+.. list-table:: **Subcommand: run**
   :widths: 2 3 5
   :header-rows: 1
 

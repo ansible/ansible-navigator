@@ -94,7 +94,7 @@ def _params_generate_tables(param_details: Dict) -> List:
         ]
         if entries:
             table = copy(RST_TABLE_HEADER)
-            table[0] = table[0].format(f"Subcommand: {subcommand.name}")
+            table[0] = table[0].format(f"**Subcommand: {subcommand.name}**")
             table.append("")
             table.extend(_rst_generate_row(PARAM_HEADER))
             for entry in entries:
