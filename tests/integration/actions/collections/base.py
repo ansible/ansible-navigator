@@ -26,7 +26,7 @@ class BaseClass:
     def _fixture_tmux_config_session(request, os_indendent_tmp):
         """tmux fixture for this module"""
 
-        tmp_coll_dir = os.path.join(os_indendent_tmp, "collection_test", "")
+        tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
         try:
             shutil.rmtree(tmp_coll_dir)
         except FileNotFoundError:
