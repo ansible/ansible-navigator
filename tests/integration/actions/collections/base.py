@@ -3,8 +3,9 @@
 import difflib
 import json
 import os
-import pytest
 import shutil
+
+import pytest
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
@@ -22,17 +23,10 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_collections_session")
-    def _fixture_tmux_config_session(request):
+    def _fixture_tmux_config_session(request, os_indendent_tmp):
         """tmux fixture for this module"""
 
-        # this ensure the length of the colelction path
-        # is the same between MacOS and Linux
-        # otherwise ansible-navigator column widths can vary
-        tmp_real = os.path.realpath("/tmp")
-        if tmp_real != "/private/tmp":
-            tmp_real = "/tmp/private"
-
-        tmp_coll_dir = os.path.join(tmp_real, request.node.name, "")
+        tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
         try:
             shutil.rmtree(tmp_coll_dir)
         except FileNotFoundError:
@@ -50,14 +44,18 @@ class BaseClass:
             "pane_height": "2000",
             "pane_width": "200",
         }
-        try:
-            with TmuxSession(**params) as tmux_session:
-                yield tmux_session
-        finally:
-            shutil.rmtree(tmp_coll_dir)
+        with TmuxSession(**params) as tmux_session:
+            yield tmux_session
 
     def test(
-        self, request, tmux_collections_session, index, user_input, comment, collection_fetch_prompt
+        self,
+        request,
+        os_indendent_tmp,
+        tmux_collections_session,
+        index,
+        user_input,
+        comment,
+        collection_fetch_prompt,
     ):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
@@ -67,13 +65,8 @@ class BaseClass:
             user_input, wait_on_collection_fetch_prompt=collection_fetch_prompt
         )
 
-        # mask out collection tmp directory
-        tmp_real = os.path.realpath("/tmp")
-        if tmp_real != "/private/tmp":
-            tmp_real = "/tmp/private"
-
         received_output = [
-            line.replace(tmp_real, "FIXTURES_COLLECTION_DIR") for line in received_output
+            line.replace(os_indendent_tmp, "FIXTURES_COLLECTION_DIR") for line in received_output
         ]
 
         if self.UPDATE_FIXTURES:
