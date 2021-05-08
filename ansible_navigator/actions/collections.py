@@ -343,8 +343,15 @@ class Action(App):
             collection["__version"] = collection["collection_info"]["version"]
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
+                collection_path_envvar = os.environ.get("ANSIBLE_COLLECTIONS_PATH")
                 if collection["path"].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
+                elif collection_path_envvar:
+                    if any(
+                        collection["path"].startswith(cpath)
+                        for cpath in collection_path_envvar.split()
+                    ):
+                        collection["__type"] = "bind_mount"
                 else:
                     collection["__type"] = "contained"
 

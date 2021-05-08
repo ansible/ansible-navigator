@@ -4,6 +4,7 @@ import difflib
 import json
 import os
 import pytest
+import shutil
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
@@ -13,6 +14,7 @@ from ....defaults import FIXTURES_COLLECTION_DIR
 
 
 class BaseClass:
+    # pylint: disable=attribute-defined-outside-init
     """base class for interactive collections tests"""
 
     UPDATE_FIXTURES = False
@@ -22,20 +24,37 @@ class BaseClass:
     @pytest.fixture(scope="module", name="tmux_collections_session")
     def _fixture_tmux_config_session(request):
         """tmux fixture for this module"""
+
+        # this ensure the length of the colelction path
+        # is the same between MacOS and Linux
+        # otherwise ansible-navigator column widths can vary
+        tmp_real = os.path.realpath("/tmp")
+        if tmp_real != "/private/tmp":
+            tmp_real = "/tmp/private"
+
+        tmp_coll_dir = os.path.join(tmp_real, request.node.name, "")
+        try:
+            shutil.rmtree(tmp_coll_dir)
+        except FileNotFoundError:
+            pass
+        os.makedirs(tmp_coll_dir)
+        shutil.copytree(FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"))
         params = {
             "window_name": request.node.name,
             "setup_commands": [
-                "cd tests/fixtures/common",
-                f"export ANSIBLE_COLLECTIONS_PATH={FIXTURES_COLLECTION_DIR}",
+                f"cd {tmp_coll_dir}",
+                f"export ANSIBLE_COLLECTIONS_PATH={tmp_coll_dir}",
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
             "pane_height": "2000",
-            # try to make this long enough to cover big paths
-            "pane_width": "2000",
+            "pane_width": "200",
         }
-        with TmuxSession(**params) as tmux_session:
-            yield tmux_session
+        try:
+            with TmuxSession(**params) as tmux_session:
+                yield tmux_session
+        finally:
+            shutil.rmtree(tmp_coll_dir)
 
     def test(
         self, request, tmux_collections_session, index, user_input, comment, collection_fetch_prompt
@@ -47,20 +66,15 @@ class BaseClass:
         received_output = tmux_collections_session.interaction(
             user_input, wait_on_collection_fetch_prompt=collection_fetch_prompt
         )
-        mask = "X" * 5
-        # mask out some config that is subject to change each run
-        for idx, line in enumerate(received_output):
-            if "path:" in line:
-                received_output[idx] = mask
 
-            contents = line.split()
-            # mask path in the first collection window
-            if self.EXECUTION_ENVIRONMENT_TEST:
-                path_index = 4
-            else:
-                path_index = 3
-            if len(contents) == (path_index + 1) and os.path.isdir(contents[-1].strip()):
-                received_output[idx] = line.replace(contents[-1], mask)
+        # mask out collection tmp directory
+        tmp_real = os.path.realpath("/tmp")
+        if tmp_real != "/private/tmp":
+            tmp_real = "/tmp/private"
+
+        received_output = [
+            line.replace(tmp_real, "FIXTURES_COLLECTION_DIR") for line in received_output
+        ]
 
         if self.UPDATE_FIXTURES:
             update_fixtures(request, index, received_output, comment)
