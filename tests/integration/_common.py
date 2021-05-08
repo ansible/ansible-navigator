@@ -201,19 +201,27 @@ class TmuxSession:
         # attached to upper left
         self._pane.set_height(self._pane_height)
         self._pane.set_width(self._pane_width)
-        # do this here so it goes away with the tmux shell session
-        self._pane.send_keys(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
 
-        # send any other commands needed for setup
-        for command in self._setup_commands:
-            self._pane.send_keys(command)
+        # send the config envvar + other set up commands
+        venv = "source $VIRTUAL_ENV/bin/activate"
+        navigator_config = f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}"
+        set_up_commands = [venv, navigator_config] + self._setup_commands
+        set_up_command = " && ".join(set_up_commands)
+        self._pane.send_keys(set_up_command)
+
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if self._server.has_session(self._session_name):
             self._session.kill_session()
 
-    def interaction(self, value, wait_on_help=True, wait_on_playbook_status=False):
+    def interaction(
+        self,
+        value,
+        wait_on_help=True,
+        wait_on_playbook_status=False,
+        wait_on_collection_fetch_prompt=None,
+    ):
         """interact with the tmux session"""
         self._pane.send_keys(value, suppress_history=False)
         ok_to_return = [False]
@@ -227,6 +235,8 @@ class TmuxSession:
                 ok_to_return.append(any(":help help" in line for line in showing))
             if wait_on_playbook_status:
                 ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
+            if wait_on_collection_fetch_prompt:
+                ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
         return showing
 
 
