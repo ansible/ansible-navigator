@@ -1,6 +1,6 @@
 ## ansible-navigator
 
-A TUI for the Red Hat Ansible Automation Platform
+A text-based user interface (TUI) for the Red Hat Ansible Automation Platform
 
 [![asciicast](https://asciinema.org/a/gl7uVblC23dxGGTkVOEigDHCl.svg)](https://asciinema.org/a/gl7uVblC23dxGGTkVOEigDHCl)
 
@@ -12,10 +12,18 @@ git clone https://github.com/ansible/ansible-navigator.git
 python3 -m venv venv
 source venv/bin/activate
 pip install -U setuptools
-pip install -U ansible
 pip install ./ansible-navigator
 ansible-navigator --help
 ```
+
+By default, ansible-navigator uses execution environments, to use ansible-navigator without an execution enviroment,
+ansible is required
+
+```
+pip install ansible
+ansible-navigator --execution-environment false
+```
+
 
 RHEL8/Centos8 prerequisites:
 
@@ -33,29 +41,26 @@ ansible-navigator
 
 ### Other things to try direct from the command line
 
-Review the help
-```
-ansible-navigator --help
-```
+#### Using interactive mode, which is the default
 
-Review current ansible configuration (default mode)
-```
-ansible-navigator config
-```
-
-Review current configuration in classic mode
-```
-ansible-navigator config -m stdout dump
-```
-
-Explore available collections
+Review and explore available collections
 ```
 ansible-navigator collections
 ```
 
-Review documentation
+Review and explore current ansible configuration
+```
+ansible-navigator config
+```
+
+Review and explore documentation (default mode is interactive)
 ```
 ansible-navigator doc ansible.netcommon.cli_command
+```
+
+Review and explore an inventory
+```
+ansible-navigator inventory -i inventory.yaml
 ```
 
 Run and explore a playbook
@@ -63,19 +68,31 @@ Run and explore a playbook
 ansible-navigator run site.yaml -i inventory.yaml
 ```
 
-Review and explore and inventory
+#### Using stdout mode, which returns ansible's familiar command-line interface (CLI) output
+
+Show the current ansible configuration
 ```
-ansible-navigator inventory -i inventory.yaml
+ansible-navigator config dump -m stdout
 ```
 
-Run a playbook with classic output (default mode)
+Show documentation
 ```
-ansible-navigator run -m stdout site.yaml -i inventory.yaml
+ansible-navigator doc sudo -t become  -m stdout
+```
+
+Show an inventory
+```
+ansible-navigator inventory --list -i inventory.yaml -m stdout
+```
+
+Run a playbook
+```
+ansible-navigator run site.yaml -i inventory.yaml -m stdout
 ```
 
 ### Available subcommands
 
-For the full list of available subcomamnds, see the [subcommand guide](docs/subcommands.rst)
+For the full list of available subcomamnds and their mapping to ansible comamnds, see the [subcommand guide](docs/subcommands.rst)
 
 ### Configuring ansible-navigator:
 
@@ -85,9 +102,9 @@ ansible-navigator can be configured:
 2) with a settings file
 3) with environment variables
 4) at the command line
-5) while issueing `:` comamnd with the application
+5) while issuing `:` comamnds within the text-based user interface (TUI)
 
-Setting are applied in that order. For an overview of these methods, see the [configuration guide](docs/configuration.rst)
+Setting are applied in that order. For an overview of these approaches, see the [settings guide](docs/settings.rst)
 
 
 ### Key bindings and colon commands

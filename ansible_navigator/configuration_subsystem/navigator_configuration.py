@@ -93,24 +93,27 @@ class Internals(SimpleNamespace):
     share_directory: str = generate_share_directory()
 
 
+navigator_subcommds = [
+    SubCommand(name="collections", description="Explore available collections"),
+    SubCommand(name="config", description="Explore the current ansible configuration"),
+    SubCommand(name="doc", description="Review documentation for a module or plugin"),
+    SubCommand(name="inventory", description="Explore an inventory"),
+    SubCommand(name="load", description="Explore a playbook artifact"),
+    SubCommand(name="run", description="Run a playbook"),
+    SubCommand(name="welcome", description="Start at the welcome page"),
+]
+
 NavigatorConfiguration = ApplicationConfiguration(
     application_name=APP_NAME,
     application_version=VERSION,
     internals=Internals(),
     post_processor=NavigatorPostProcessor(),
-    subcommands=[
-        SubCommand(name="collections", description="Explore available collections"),
-        SubCommand(name="config", description="Explore the current ansible configuration"),
-        SubCommand(name="doc", description="Review documentation for a module or plugin"),
-        SubCommand(name="inventory", description="Explore an inventory"),
-        SubCommand(name="load", description="Explore a playbook artifact"),
-        SubCommand(name="run", description="Run a playbook"),
-        SubCommand(name="welcome", description="Start at the welcome page"),
-    ],
+    subcommands=navigator_subcommds,
     entries=[
         Entry(
             name="app",
             apply_to_subsequent_cli=C.NONE,
+            choices=[subcommand.name for subcommand in navigator_subcommds],
             short_description="Subcommands",
             subcommand_value=True,
             value=EntryValue(default="welcome"),
@@ -118,7 +121,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         Entry(
             name="cmdline",
             apply_to_subsequent_cli=C.SAME_SUBCOMMAND,
-            short_description="Extra parameters passed to the cooresponding command",
+            short_description="Extra parameters passed to the corresponding command",
             value=EntryValue(),
         ),
         Entry(

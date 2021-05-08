@@ -1,20 +1,20 @@
 .. _configuring_ansible_navigator:
 
 *****************************
-Configuring ansible-navigator
+ansible-navigator settings
 *****************************
 
 .. contents::
    :local:
 
-The ansible-navigator configuration file
+The ansible-navigator settings file
 ========================================
 
 Several options in ``ansible-navigator`` can be configured by making use of a
-configuration file. The configuration file can live in one of several places.
+settings file. The settings file can live in one of several places.
 Currently the following paths are checked and the first match is used:
 
-- ``ANSIBLE_NAVIGATOR_CONFIG`` (configuration file path environment variable if set)
+- ``ANSIBLE_NAVIGATOR_CONFIG`` (settings file path environment variable if set)
 - ``./.ansible-navigator/<ansible-navigator-filename>`` (project-specific directory)
 - ``[ansible-navigator source code root]/etc/ansible-navigator/<ansible-navigator-filename>``
 - ``~/.config/ansible-navigator/<ansible-navigator-filename>``
@@ -22,15 +22,15 @@ Currently the following paths are checked and the first match is used:
 - ``[prefix]/etc/ansible-navigator/<ansible-navigator-filename>`` (e.g., ``/usr/local/etc/...``)
 
 .. note::
-    - The configuration file can either be in ``JSON`` or ``YAML`` format.
-    - For configuration in ``JSON`` format the file name should be ``ansible-navigator.json``
-    - For configuration in ``YAML`` format the file name can be either ``ansible-navigator.yml``
+    - The settings file can either be in ``JSON`` or ``YAML`` format.
+    - For settings in ``JSON`` format the file name should be ``ansible-navigator.json``
+    - For settings in ``YAML`` format the file name can be either ``ansible-navigator.yml``
       or ``ansible-navigator.yaml``.
     - The first found matched directory path (based on order mentioned above) can have only one
-      valid configuration file. If in case more than one configuration files (with different
+      valid settings file. If in case more than one settings files (with different
       supported extensions) are found it will result in an error to avoid conflict.
 
-You can copy the example configuration file below into one of those paths to start your ``ansible-navigator`` config file.
+You can copy the example settings file below into one of those paths to start your ``ansible-navigator`` settings file.
 
 ..
   start-settings-sample
@@ -81,7 +81,7 @@ You can copy the example configuration file below into one of those paths to sta
   end-settings-sample
 
 
-The following table describes all available configuration options.
+The following table describes all available settings.
 
 ..
   start-parameters-tables
@@ -94,7 +94,7 @@ The following table describes all available configuration options.
     - Settings
   * - app
     - Subcommands
-    - | **Choices:** 
+    - | **Choices:** 'collections', 'config', 'doc', 'inventory', 'load', 'run' or 'welcome'
       | **Default:** welcome
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_APP
@@ -106,9 +106,8 @@ The following table describes all available configuration options.
               app:
 
   * - cmdline
-    - Extra parameters passed to the cooresponding command
-    - | **Choices:** 
-      | **Default:** No default value set
+    - Extra parameters passed to the corresponding command
+    - | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_CMDLINE
       | **Settings file:**
@@ -120,8 +119,7 @@ The following table describes all available configuration options.
 
   * - collection-doc-cache-path
     - The path to collection doc cache
-    - | **Choices:** 
-      | **Default:** $HOME/.cache/ansible-navigator/collection_doc_cache.db
+    - | **Default:** $HOME/.cache/ansible-navigator/collection_doc_cache.db
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH
       | **Settings file:**
@@ -147,8 +145,7 @@ The following table describes all available configuration options.
 
   * - editor-command
     - Specify the editor comamnd
-    - | **Choices:** 
-      | **Default:** vi +{line_number} {filename}
+    - | **Default:** vi +{line_number} {filename}
       | **CLI:** `--ecmd` or `--editor-command`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_COMMAND
       | **Settings file:**
@@ -189,8 +186,7 @@ The following table describes all available configuration options.
 
   * - execution-environment-image
     - Specify the name of the execution environment image
-    - | **Choices:** 
-      | **Default:** quay.io/ansible/ansible-runner:devel
+    - | **Default:** quay.io/ansible/ansible-runner:devel
       | **CLI:** `--eei` or `--execution-environment-image`
       | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE
       | **Settings file:**
@@ -203,8 +199,7 @@ The following table describes all available configuration options.
 
   * - log-file
     - Specify the full path for the ansible-navigator log file
-    - | **Choices:** 
-      | **Default:** $PWD/ansible-navigator.log
+    - | **Default:** $PWD/ansible-navigator.log
       | **CLI:** `--lf` or `--log-file`
       | **ENV:** ANSIBLE_NAVIGATOR_LOG_FILE
       | **Settings file:**
@@ -257,8 +252,7 @@ The following table describes all available configuration options.
 
   * - pass-environment-variable
     - Specify an exiting environment variable to be passed through to and set within the execution enviroment (--penv MY_VAR)
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** `--penv` or `--pass-environment-variable`
       | **ENV:** ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES
       | **Settings file:**
@@ -272,8 +266,7 @@ The following table describes all available configuration options.
 
   * - set-environment-variable
     - Specify an environment variable and a value to be set within the execution enviroment (--senv MY_VAR=42)
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** `--senv` or `--set-environment-variable`
       | **ENV:** ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES
       | **Settings file:**
@@ -298,8 +291,7 @@ The following table describes all available configuration options.
     - Settings
   * - plugin-name
     - Specify the plugin name
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_PLUGIN_NAME
       | **Settings file:**
@@ -338,8 +330,7 @@ The following table describes all available configuration options.
     - Settings
   * - inventory
     - Specify an inventory file path or comma separated host list
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** `-i` or `--inventory`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORIES
       | **Settings file:**
@@ -351,8 +342,7 @@ The following table describes all available configuration options.
 
   * - inventory-column
     - Specify a host attribute to show in the inventory view
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** `--ic` or `--inventory-column`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
       | **Settings file:**
@@ -374,8 +364,7 @@ The following table describes all available configuration options.
     - Settings
   * - playbook-artifact-load
     - Specify the path for the playbook artifact to load
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_LOAD
       | **Settings file:**
@@ -398,8 +387,7 @@ The following table describes all available configuration options.
     - Settings
   * - inventory
     - Specify an inventory file path or comma separated host list
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** `-i` or `--inventory`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORIES
       | **Settings file:**
@@ -411,8 +399,7 @@ The following table describes all available configuration options.
 
   * - inventory-column
     - Specify a host attribute to show in the inventory view
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** `--ic` or `--inventory-column`
       | **ENV:** ANSIBLE_NAVIGATOR_INVENTORY_COLUMNS
       | **Settings file:**
@@ -424,8 +411,7 @@ The following table describes all available configuration options.
 
   * - playbook
     - Specify the playbook name
-    - | **Choices:** 
-      | **Default:** No default value set
+    - | **Default:** No default value set
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK
       | **Settings file:**
@@ -451,8 +437,7 @@ The following table describes all available configuration options.
 
   * - playbook-artifact-save-as
     - Specify the name for artifacts created from completed playbooks
-    - | **Choices:** 
-      | **Default:** {playbook_dir}/{playbook_name}-artifact-{ts_utc}.json
+    - | **Default:** {playbook_dir}/{playbook_name}-artifact-{ts_utc}.json
       | **CLI:** `--pas` or `--playbook-artifact-save-as`
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS
       | **Settings file:**

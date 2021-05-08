@@ -13,14 +13,13 @@ ansible-navigator subcommand overview
 ..
   start-subcommands-table
 .. list-table:: Available subcommands
-  :widths: 2 3 5
+  :widths: 1 3 3 1
   :header-rows: 1
 
   * - Name
     - Description
     - CLI Example
     - Colon command
-    - Description
   * - collections
     - Explore available collections
     - ansible-navigator collections --help
@@ -51,3 +50,28 @@ ansible-navigator subcommand overview
     - :welcome
 ..
   end-subcommands-table
+
+
+Mapping ansible-navigator comamnds to ansible commands
+======================================================
+
+Some ansible-navigator commands map to ansible comamnds. The table below provides some examples.
+
+.. list-table:: Mapping to ansible commands
+  :header-rows: 1
+
+  * - ansible command
+    - ansible-navigator command
+    - ansible-navigator colon command
+  * - `ansible-config`
+    - `ansible-navigator config`
+    - `:config`
+  * - `ansible-doc`
+    - `ansible-navigator doc`
+    - `:doc`
+  * - `ansible-inventory`
+    - `ansible-navigator inventory`
+    - `:inventory`
+  * - `ansible-playbook`
+    - `ansible-navigator run`
+    - `:run`

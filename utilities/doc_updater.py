@@ -31,7 +31,7 @@ logger = logging.getLogger()
 APP = "ansible-navigator"
 
 PARAM_HEADER = ("Name", "Description", "Settings")
-RST_TABLE_HEADER = [
+PARAM_TABLE_HEADER = [
     ".. list-table:: {}",
     "  :widths: 2 3 5",
     "  :header-rows: 1",
@@ -40,6 +40,11 @@ RST_FIRST_ROW_ENTRY = "  * - {}"
 RST_ADDITONAL_ROW_ENTRY = "    - {}"
 RST_NL_CELL_FIRST = "    - | {}"
 RST_NL_IN_CELL = "      | {}"
+SUBCOMMAND_TABLE_HEADER = [
+    ".. list-table:: {}",
+    "  :widths: 1 3 3 1",
+    "  :header-rows: 1",
+]
 
 
 def _file_diff(current: str, should_be: str):
@@ -75,7 +80,7 @@ def _rst_generate_row(row: Tuple) -> List:
 def _params_generate_tables(param_details: Dict) -> List:
     """generate tables for paramters"""
     tables = []
-    table = copy(RST_TABLE_HEADER)
+    table = copy(PARAM_TABLE_HEADER)
     table[0] = table[0].format("**General parameters**")
     table.append("")
     table.extend(_rst_generate_row(PARAM_HEADER))
@@ -93,7 +98,7 @@ def _params_generate_tables(param_details: Dict) -> List:
             if isinstance(entry.subcommands, list) and subcommand.name in entry.subcommands
         ]
         if entries:
-            table = copy(RST_TABLE_HEADER)
+            table = copy(PARAM_TABLE_HEADER)
             table[0] = table[0].format(f"**Subcommand: {subcommand.name}**")
             table.append("")
             table.extend(_rst_generate_row(PARAM_HEADER))
@@ -155,27 +160,30 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
             default = "No default value set"
 
     choices = oxfordcomma(entry.choices, "or")
+    envvar = entry.environment_variable(APP.replace("-", "_"))
 
-    settings = (
-        f"**Choices:** {choices}",
-        f"**Default:** {default}",
-        f"**CLI:** {cli_parameters}",
-        f"**ENV:** {entry.environment_variable(APP.replace('-', '_'))}",
-        "**Settings file:**",
-        yaml_like,
-    )
-    row = (entry.name_dashed, entry.short_description, settings)
+    settings = []
+    if choices:
+        settings.append(f"**Choices:** {choices}")
+    if default is not None:
+        settings.append(f"**Default:** {default}")
+    if cli_parameters is not None:
+        settings.append(f"**CLI:** {cli_parameters}")
+    if envvar is not None:
+        settings.append(f"**ENV:** {envvar}")
+    if yaml_like is not None:
+        settings.extend(["**Settings file:**", yaml_like])
+
+    row = (entry.name_dashed, entry.short_description, tuple(settings))
     return row
 
 
 def _subcommands_generate_tables() -> List:
     """generate the subcommand table"""
-    table = RST_TABLE_HEADER
+    table = SUBCOMMAND_TABLE_HEADER
     table[0] = table[0].format("Available subcommands")
     table.append("")
-    table.extend(
-        _rst_generate_row(("Name", "Description", "CLI Example", "Colon command", "Description"))
-    )
+    table.extend(_rst_generate_row(("Name", "Description", "CLI Example", "Colon command")))
     for subcommand in NavigatorConfiguration.subcommands:
         subcommand_details = (
             subcommand.name,
@@ -248,7 +256,7 @@ def main():
         "--pts",
         "--param-table-settings-file",
         help="The path to the file containing the parameter table and setting example",
-        default=os.path.join(doc_dir, "configuration.rst"),
+        default=os.path.join(doc_dir, "settings.rst"),
     )
     parser.add_argument(
         "--pd",

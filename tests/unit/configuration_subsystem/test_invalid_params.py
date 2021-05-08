@@ -112,20 +112,29 @@ def test_poor_choices(_mocked_func, generate_config, entry):
     # pylint: disable=import-outside-toplevel
     """Ensure errors generated for poor choices"""
 
-    def test(subcommand, param):
+    def test(subcommand, param, look_for):
         if subcommand is None:
             response = generate_config(params=[param, "Sentinel"])
         else:
             response = generate_config(params=[subcommand, param, "Sentinel"])
-        assert any("must be one of" in err for err in response.errors)
+        assert any(look_for in err for err in response.errors), response.errors
 
     if isinstance(entry.subcommands, list):
         subcommand = entry.subcommands[0]
     else:
         subcommand = None
 
-    test(subcommand, entry.cli_parameters.short)
-    test(subcommand, entry.cli_parameters.long_override or f"--{entry.name_dashed}")
+    if entry.cli_parameters:
+        # ansible-navigator choice error
+        test(subcommand, entry.cli_parameters.short, "must be one of")
+        test(
+            subcommand,
+            entry.cli_parameters.long_override or f"--{entry.name_dashed}",
+            "must be one of",
+        )
+    else:
+        # argparse choice error
+        test(subcommand, "", "choose from")
 
 
 @pytest.mark.parametrize("subcommand, params", [("load", __file__), ("collections", "")])
