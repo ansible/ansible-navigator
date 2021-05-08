@@ -1,5 +1,6 @@
 """ base class for config interactive tests
 """
+import difflib
 import json
 import os
 import pytest
@@ -30,7 +31,6 @@ class BaseClass:
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
             "pane_height": "2000",
-            "pane_width": "1000",
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -45,9 +45,8 @@ class BaseClass:
         received_output = tmux_collections_session.interaction(
             user_input, wait_on_collection_fetch_prompt=collection_fetch_prompt
         )
-
+        mask = "X" * 5
         # mask out some config that is subject to change each run
-        mask = "X" * 50
         for idx, line in enumerate(received_output):
             if "path:" in line:
                 received_output[idx] = mask
@@ -59,11 +58,13 @@ class BaseClass:
             else:
                 path_index = 3
             if len(contents) == (path_index + 1) and os.path.isdir(contents[-1].strip()):
-                received_output[idx] = line.replace(contents[-1], "X" * len(contents[-1]))
+                received_output[idx] = line.replace(contents[-1], mask)
 
         if self.UPDATE_FIXTURES:
             update_fixtures(request, index, received_output, comment)
         dir_path, file_name = fixture_path_from_request(request, index)
         with open(f"{dir_path}/{file_name}") as infile:
             expected_output = json.load(infile)["output"]
-        assert expected_output == received_output
+        assert expected_output == received_output, "\n" + "\n".join(
+            difflib.ndiff(expected_output, received_output)
+        )

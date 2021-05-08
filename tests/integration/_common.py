@@ -201,12 +201,14 @@ class TmuxSession:
         # attached to upper left
         self._pane.set_height(self._pane_height)
         self._pane.set_width(self._pane_width)
-        # do this here so it goes away with the tmux shell session
-        self._pane.send_keys(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
 
-        # send any other commands needed for setup
-        for command in self._setup_commands:
-            self._pane.send_keys(command)
+        # send the config envvar + other set up commands
+        venv = "source $VIRTUAL_ENV/bin/activate"
+        navigator_config = f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}"
+        set_up_commands = [venv, navigator_config] + self._setup_commands
+        set_up_command = " && ".join(set_up_commands)
+        self._pane.send_keys(set_up_command)
+
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):

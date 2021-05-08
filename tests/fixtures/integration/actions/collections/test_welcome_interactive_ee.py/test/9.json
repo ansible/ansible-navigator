@@ -12,7 +12,7 @@
         " 5│  license_file: LICENSE",
         " 6│  name: testorg.coll_2",
         " 7│  namespace: testorg",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXX",
         " 9│  readme: README.md",
         "10│  shadowed_by: []",
         "11│  version: 2.0.0",
@@ -46,6 +46,6 @@
         "39│  _raw:",
         "40│    description:",
         "41│    - One or more zero-based indices of the matching list items.",
-        "^f/PgUp page up                                                                                         ^b/PgDn page down                                                                                         ↑↓ scroll                                                                                         esc back                                                                                         + previous                                                                                         - next                                                                                         [0-9] goto                                                                                         :help help"
+        "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              + previous              - next              [0-9] goto              :help help"
     ]
 }
