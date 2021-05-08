@@ -9,7 +9,7 @@
       register: fileres
 
     - copy:
-        src: "{{ playbook_dir }}/../../../docs/sample-config.yml"
+        src: "{{ playbook_dir }}/smoke-config.yml"
         dest: "{{ fileres.path }}/ansible-navigator.yml"
 
     - include_role:

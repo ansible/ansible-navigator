@@ -93,24 +93,27 @@ class Internals(SimpleNamespace):
     share_directory: str = generate_share_directory()
 
 
+navigator_subcommds = [
+    SubCommand(name="collections", description="Explore available collections"),
+    SubCommand(name="config", description="Explore the current ansible configuration"),
+    SubCommand(name="doc", description="Review documentation for a module or plugin"),
+    SubCommand(name="inventory", description="Explore an inventory"),
+    SubCommand(name="load", description="Explore a playbook artifact"),
+    SubCommand(name="run", description="Run a playbook"),
+    SubCommand(name="welcome", description="Start at the welcome page"),
+]
+
 NavigatorConfiguration = ApplicationConfiguration(
     application_name=APP_NAME,
     application_version=VERSION,
     internals=Internals(),
     post_processor=NavigatorPostProcessor(),
-    subcommands=[
-        SubCommand(name="collections", description="Explore available collections"),
-        SubCommand(name="config", description="Explore the current ansible configuration"),
-        SubCommand(name="doc", description="Review documentation for a module or plugin"),
-        SubCommand(name="inventory", description="Explore an inventory"),
-        SubCommand(name="load", description="Explore a playbook artifact"),
-        SubCommand(name="run", description="Run a playbook"),
-        SubCommand(name="welcome", description="Start at the welcome page"),
-    ],
+    subcommands=navigator_subcommds,
     entries=[
         Entry(
             name="app",
             apply_to_subsequent_cli=C.NONE,
+            choices=[subcommand.name for subcommand in navigator_subcommds],
             short_description="Subcommands",
             subcommand_value=True,
             value=EntryValue(default="welcome"),
@@ -118,7 +121,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         Entry(
             name="cmdline",
             apply_to_subsequent_cli=C.SAME_SUBCOMMAND,
-            short_description="Placeholder for argparse remainder",
+            short_description="Extra parameters passed to the corresponding command",
             value=EntryValue(),
         ),
         Entry(
@@ -155,15 +158,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=[True, False],
             cli_parameters=CliParameters(short="--ee"),
             settings_file_path_override="execution-environment.enabled",
-            short_description="Enable the use of an execution environment",
+            short_description="Enable or disable the use of an execution environment",
             value=EntryValue(default=True),
         ),
         Entry(
             name="execution_environment_image",
             cli_parameters=CliParameters(short="--eei"),
-            description="The name of the execution environment image",
             settings_file_path_override="execution-environment.image",
-            short_description="Enable the use of an execution environment",
+            short_description="Specify the name of the execution environment image",
             value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
         ),
         Entry(
@@ -171,7 +173,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
             environment_variable_override="inventories",
             settings_file_path_override="inventories",
-            short_description="Specify inventory file path or comma separated host list",
+            short_description="Specify an inventory file path or comma separated host list",
             subcommands=["inventory", "run"],
             value=EntryValue(),
         ),
@@ -211,7 +213,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="osc4",
             choices=[True, False],
             cli_parameters=CliParameters(short="--osc4"),
-            short_description="Enable terminal color changing support with OSC4",
+            short_description="Enable or disable terminal color changing support with OSC 4",
             value=EntryValue(default=True),
         ),
         Entry(
@@ -237,7 +239,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=[True, False],
             cli_parameters=CliParameters(short="--pae"),
             settings_file_path_override="playbook-artifact.enable",
-            short_description="Enable the creation of artifacts for completed playbooks",
+            short_description="Enable or disable the creation of artifacts for completed playbooks",
             subcommands=["run"],
             value=EntryValue(default=True),
         ),
@@ -267,6 +269,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="plugin_type",
+            choices=PLUGIN_TYPES,
             cli_parameters=CliParameters(short="-t", long_override="--type"),
             settings_file_path_override="documentation.plugin.type",
             short_description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
@@ -278,8 +281,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(action="append", nargs="+", short="--senv"),
             environment_variable_override="set_environment_variables",
             settings_file_path_override="execution-environment.environment-variables.set",
-            short_description="Specify an environment variable and a value to be set within the \
-                execution enviroment (--senv MY_VAR=42)",
+            short_description=(
+                "Specify an environment variable and a value to be set within the"
+                " execution enviroment (--senv MY_VAR=42)"
+            ),
             value=EntryValue(),
         ),
     ],
