@@ -3,9 +3,9 @@
     "index": 12,
     "comment": "Back to ansible-navigator collections browse window",
     "output": [
-        "  NAME                 VERSION    SHADOWED    PATH",
-        "0│testorg.coll_1       1.0.0         False    XXXXX",
-        "1│testorg.coll_2       2.0.0         False    XXXXX",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "  NAME                                                                               VERSION                                     SHADOWED                                          PATH",
+        "0│testorg.coll_1                                                                     1.0.0                                          False                                          XXXXX",
+        "1│testorg.coll_2                                                                     2.0.0                                          False                                          XXXXX",
+        "^f/PgUp page up                                                                                                                         ^b/PgDn page down                                                                                                                         ↑↓ scroll                                                                                                                         esc back                                                                                                                         [0-9] goto                                                                                                                         :help help"
     ]
 }

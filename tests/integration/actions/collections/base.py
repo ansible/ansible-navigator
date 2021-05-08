@@ -20,7 +20,7 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_collections_session")
-    def fixture_tmux_config_session(request):
+    def _fixture_tmux_config_session(request):
         """tmux fixture for this module"""
         params = {
             "window_name": request.node.name,
@@ -31,7 +31,8 @@ class BaseClass:
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
             "pane_height": "2000",
-            "pane_width": "200",
+            # try to make this long enough to cover big paths
+            "pane_width": "2000",
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
