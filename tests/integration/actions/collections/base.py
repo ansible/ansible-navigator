@@ -31,6 +31,7 @@ class BaseClass:
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
             "pane_height": "2000",
+            "pane_width": "200",
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -66,5 +67,5 @@ class BaseClass:
         with open(f"{dir_path}/{file_name}") as infile:
             expected_output = json.load(infile)["output"]
         assert expected_output == received_output, "\n" + "\n".join(
-            difflib.ndiff(expected_output, received_output)
+            difflib.unified_diff(expected_output, received_output, "expected", "received")
         )
