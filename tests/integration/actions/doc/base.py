@@ -50,8 +50,8 @@ class BaseClass:
         received_output = tmux_config_session.interaction(user_input)
 
         updated_received_output = []
+        mask = "X" * 50
         for line in received_output:
-            mask = "X" * 50
             if "filename" in line or "│warnings:" in line:
                 updated_received_output.append(mask)
             else:
