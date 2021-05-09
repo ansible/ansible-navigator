@@ -92,7 +92,7 @@ ansible-navigator run site.yaml -i inventory.yaml -m stdout
 
 ### Available subcommands
 
-For the full list of available subcomamnds and their mapping to ansible comamnds, see the [subcommand guide](docs/subcommands.rst)
+For the full list of available subcommands and their mapping to ansible commands, see the [subcommand guide](docs/subcommands.rst)
 
 ### Configuring ansible-navigator:
 
