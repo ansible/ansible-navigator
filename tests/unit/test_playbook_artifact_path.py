@@ -15,7 +15,7 @@ from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.actions.run import Action as action
 
 
-class TestData(NamedTuple):
+class TstData(NamedTuple):
     """the test data object"""
 
     name: str
@@ -30,20 +30,20 @@ def id_from_data(value):
 
 
 test_data = [
-    TestData("Filename absolute", "/tmp/artifact.json", "site.yml", "/tmp/artifact.json"),
-    TestData(
+    TstData("Filename absolute", "/tmp/artifact.json", "site.yml", "/tmp/artifact.json"),
+    TstData(
         "Filename with .", "./artifact.json", "site.yml", f"{os.path.abspath('.')}/artifact.json"
     ),
-    TestData(
+    TstData(
         "Filename with ..", "../artifact.json", "site.yml", f"{os.path.abspath('..')}/artifact.json"
     ),
-    TestData(
+    TstData(
         "Filename with ~", "~/artifact.json", "/tmp/site.yaml", "/home/test_user/artifact.json"
     ),
-    TestData("Playbook absolute", None, "/tmp/site.yaml", "/tmp/site-artifact"),
-    TestData("Playbook with .", None, "./site.yaml", f"{os.path.abspath('.')}/site-artifact"),
-    TestData("Playbook with ..", None, "../site.yaml", f"{os.path.abspath('..')}/site-artifact"),
-    TestData("Playbook with ~", None, "~/site.yaml", "/home/test_user/site-artifact"),
+    TstData("Playbook absolute", None, "/tmp/site.yaml", "/tmp/site-artifact"),
+    TstData("Playbook with .", None, "./site.yaml", f"{os.path.abspath('.')}/site-artifact"),
+    TstData("Playbook with ..", None, "../site.yaml", f"{os.path.abspath('..')}/site-artifact"),
+    TstData("Playbook with ~", None, "~/site.yaml", "/home/test_user/site-artifact"),
 ]
 
 
