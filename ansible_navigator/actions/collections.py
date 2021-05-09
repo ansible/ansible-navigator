@@ -343,15 +343,17 @@ class Action(App):
             collection["__version"] = collection["collection_info"]["version"]
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
-                collection_path_envvar = os.environ.get("ANSIBLE_COLLECTIONS_PATH")
                 if collection["path"].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
-                elif collection_path_envvar:
-                    if any(
-                        collection["path"].startswith(cpath)
-                        for cpath in collection_path_envvar.split()
-                    ):
-                        collection["__type"] = "bind_mount"
+                elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
+                    collection["__type"] = "bind_mount"
+                    error = (
+                        f"{collection['known_as']} was mounted and catalogued in the"
+                        " execution environment but was outside the adjacent 'collections'"
+                        " directory. This may cause issues outside the local development"
+                        " environment."
+                    )
+                    self._logger.error(error)
                 else:
                     collection["__type"] = "contained"
 
@@ -364,4 +366,11 @@ class Action(App):
         self._logger.debug("catalog collections scan path: %s", parsed["collection_scan_paths"])
         for stat, value in self._stats.items():
             self._logger.debug("%s: %s", stat, value)
+
+        if not parsed["collections"]:
+            env = "execution" if self._args.execution_environment else "local"
+            error = f"No collections found in {env} environment, searched in "
+            error += parsed["collection_scan_paths"]
+            self._logger.warning(error)
+
         return None
