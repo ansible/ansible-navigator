@@ -107,9 +107,8 @@ class App:
         """update, define in child if necessary"""
 
     def _update_args(self, params: List, apply_previous_cli_entries: C = C.ALL) -> None:
-        """pass the params through the original cli parser
-        as if run was invoked from the command line
-        provide an error callback so the app doesn't sys.exit if the aprsing fails
+        """pass the params through the configuration subsystem
+        log messages and errors as warnings since most will result in a form
         """
 
         messages, errors = parse_and_update(
