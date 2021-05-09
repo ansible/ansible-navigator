@@ -72,5 +72,7 @@ class BaseClass:
                 assert any(out in line for line in received_output), (out, received_output)
         else:
             assert expected_output == updated_received_output, "\n" + "\n".join(
-                difflib.ndiff(expected_output, updated_received_output)
+                difflib.unified_diff(
+                    expected_output, updated_received_output, "expected", "received"
+                )
             )
