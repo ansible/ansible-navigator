@@ -318,6 +318,18 @@ The following table describes all available settings.
                 plugin:
                   type:
 
+  * - help-doc
+    - Help options for ansible-doc command in stdout mode
+    - | **Default:** No default value set
+      | **CLI:** `--hd` or `----help-doc`
+      | **ENV:** ANSIBLE_NAVIGATOR_HELP_DOC
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              help-doc:
+
 
 |
 

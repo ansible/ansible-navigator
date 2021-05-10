@@ -75,7 +75,7 @@ class Action(App):
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
         )
 
-        plugin_name_source = self._args.entry("plugin_name").value.source
+        source = plugin_name_source = self._args.entry("plugin_name").value.source
 
         if plugin_name_source is C.USER_CLI:
             self._plugin_name = self._args.plugin_name
@@ -90,6 +90,8 @@ class Action(App):
                 except (KeyError, AttributeError, TypeError):
                     self._logger.info("No plugin name found in current content")
                     return None
+            else:
+                return None
         elif plugin_name_source is not C.NOT_SET:
             self._plugin_name = self._args.plugin_name
             self._plugin_type = self._args.plugin_type
@@ -127,6 +129,7 @@ class Action(App):
         self._run_runner()
 
     def _run_runner(self) -> Union[dict, None]:
+        # pylint: disable=too-many-branches
         """spin up runner"""
 
         plugin_doc_response: Optional[Dict[Any, Any]] = None
@@ -174,7 +177,16 @@ class Action(App):
                     return None
                 ansible_doc_path = exec_path
 
-            pass_through_arg = [self._plugin_name, "-t", self._plugin_type]
+            pass_through_arg = []
+            if self._plugin_name is not C.NOT_SET:
+                pass_through_arg.append(self._plugin_name)
+
+            if self._plugin_type is not C.NOT_SET:
+                pass_through_arg.extend(["-t", self._plugin_type])
+
+            if self._args.help_doc is not C.NOT_SET:
+                pass_through_arg.append("--help")
+
             if isinstance(self._args.cmdline, list):
                 pass_through_arg.extend(self._args.cmdline)
 

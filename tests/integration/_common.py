@@ -209,6 +209,8 @@ class TmuxSession:
         set_up_command = " && ".join(set_up_commands)
         self._pane.send_keys(set_up_command)
 
+        # get the cli prompt from pane
+        self._cli_prompt = self._get_cli_prompt()
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
@@ -221,6 +223,7 @@ class TmuxSession:
         wait_on_help=True,
         wait_on_playbook_status=False,
         wait_on_collection_fetch_prompt=None,
+        wait_on_cli_prompt=False,
     ):
         """interact with the tmux session"""
         self._pane.send_keys(value, suppress_history=False)
@@ -231,13 +234,30 @@ class TmuxSession:
             while not showing:
                 time.sleep(0.1)
                 showing = self._pane.capture_pane()
-            if wait_on_help:
-                ok_to_return.append(any(":help help" in line for line in showing))
-            if wait_on_playbook_status:
-                ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
-            if wait_on_collection_fetch_prompt:
-                ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
+            if wait_on_cli_prompt:
+                # handle command sent but pane not updated
+                if len(showing) > 1:
+                    ok_to_return.append(self._cli_prompt in showing[-1])
+                else:
+                    ok_to_return.append(False)
+            else:
+                if wait_on_help:
+                    ok_to_return.append(any(":help help" in line for line in showing))
+                if wait_on_playbook_status:
+                    ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
+                if wait_on_collection_fetch_prompt:
+                    ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
         return showing
+
+    def _get_cli_prompt(self):
+        """get cli prompt"""
+        self._pane.send_keys("clear")
+        showing = []
+        while len(showing) != 1:
+            showing = self._pane.capture_pane()
+            time.sleep(0.1)
+
+        return showing[0]
 
 
 def update_fixtures(request, index, received_output, comment, testname=None):

@@ -34,7 +34,6 @@ class Parser:
         if entry.value.default is not C.NOT_SET:
             kwargs["help"] += f" (default: {entry.value.default})"
         kwargs["default"] = SUPPRESS
-        kwargs["metavar"] = ""
 
         if entry.cli_parameters.positional:
             long = None
@@ -45,8 +44,11 @@ class Parser:
         else:
             long = entry.cli_parameters.long_override or f"--{entry.name_dashed}"
             kwargs["dest"] = entry.name
-            if entry.cli_parameters.nargs is None:
+            if entry.cli_parameters.nargs is not None:
                 kwargs["nargs"] = entry.cli_parameters.nargs
+
+        if entry.cli_parameters.metavar is not None:
+            kwargs["metavar"] = entry.cli_parameters.metavar
 
         if entry.cli_parameters.action is not None:
             kwargs["action"] = entry.cli_parameters.action

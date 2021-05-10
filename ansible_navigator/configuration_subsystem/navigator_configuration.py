@@ -239,7 +239,8 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=[True, False],
             cli_parameters=CliParameters(short="--pae"),
             settings_file_path_override="playbook-artifact.enable",
-            short_description="Enable or disable the creation of artifacts for completed playbooks",
+            short_description="Enable or disable the creation of artifacts for"
+            " completed playbooks",
             subcommands=["run"],
             value=EntryValue(default=True),
         ),
@@ -275,6 +276,15 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
             subcommands=["doc"],
             value=EntryValue(default="module"),
+        ),
+        Entry(
+            name="help_doc",
+            cli_parameters=CliParameters(
+                short="--hd", long_override="--help-doc", action="store_true"
+            ),
+            short_description="Help options for ansible-doc command in stdout mode",
+            subcommands=["doc"],
+            value=EntryValue(),
         ),
         Entry(
             name="set_environment_variable",
