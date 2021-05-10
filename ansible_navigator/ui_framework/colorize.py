@@ -120,17 +120,18 @@ class Colorize:
                         "  Err: '%s', Scope: '%s', Line follows....", str(exc), scope
                     )
                     self._logger.critical("  '%s'", line)
-                    self._logger.critical(
-                        (
-                            "  Please try again, or disable the text-based user"
-                            " interface with '-m stdout' at the command line."
-                        )
-                    )
-                    continue
+                    self._logger.critical("  The current content will be rendered without color")
+                    # return the entire doc uncolored, since state cannont be maintained
+                    # when a single line errors
+                    res = [
+                        [{"column": 0, "chars": doc_line, "color": None}]
+                        for doc_line in doc.splitlines()
+                    ]
+                    return res
 
                 lines.append((regions, line))
             return columns_and_colors(lines, self._schema)
-        res = [[{"column": 0, "chars": l, "color": None}] for l in doc.splitlines()]  # noqa: E741
+        res = [[{"column": 0, "chars": doc_line, "color": None}] for doc_line in doc.splitlines()]
         return res
 
 
