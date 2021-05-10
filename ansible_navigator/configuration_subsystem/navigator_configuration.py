@@ -169,6 +169,15 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
         ),
         Entry(
+            name="help_doc",
+            cli_parameters=CliParameters(
+                short="--hd", long_override="--help-doc", action="store_true"
+            ),
+            short_description="Help options for ansible-doc command in stdout mode",
+            subcommands=["doc"],
+            value=EntryValue(),
+        ),
+        Entry(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
             environment_variable_override="inventories",
@@ -276,15 +285,6 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
             subcommands=["doc"],
             value=EntryValue(default="module"),
-        ),
-        Entry(
-            name="help_doc",
-            cli_parameters=CliParameters(
-                short="--hd", long_override="--help-doc", action="store_true"
-            ),
-            short_description="Help options for ansible-doc command in stdout mode",
-            subcommands=["doc"],
-            value=EntryValue(),
         ),
         Entry(
             name="set_environment_variable",
