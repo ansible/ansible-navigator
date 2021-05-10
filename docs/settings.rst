@@ -292,7 +292,8 @@ The following table describes all available settings.
     - Settings
   * - help-doc
     - Help options for ansible-doc command in stdout mode
-    - | **Default:** No default value set
+    - | **Choices:** 'True' or 'False'
+      | **Default:** No default value set
       | **CLI:** `--hd` or `--help-doc`
       | **ENV:** ANSIBLE_NAVIGATOR_HELP_DOC
       | **Settings file:**

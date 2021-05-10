@@ -109,14 +109,11 @@ class NavigatorPostProcessor:
                 errors.append(error)
         return messages, errors
 
-    @staticmethod
     @_post_processor
-    def help_doc(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def help_doc(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process help_doc"""
-        messages: List[LogMessage] = []
-        errors: List[str] = []
-
+        messages, errors = self._true_or_false(entry, config)
         if all((entry.value.current is True, config.app == "doc", config.mode == "interactive")):
             error = "--help-doc or --hd is valid only when 'mode' argument is set to 'stdout'"
             errors.append(error)
@@ -249,7 +246,7 @@ class NavigatorPostProcessor:
         if (
             config.app == "doc"
             and entry.value.current is C.NOT_SET
-            and not config.entry("help_doc") is True
+            and config.entry("help_doc") is False
         ):
             error = "An plugin name is required when using the doc subcommand"
             errors.append(error)

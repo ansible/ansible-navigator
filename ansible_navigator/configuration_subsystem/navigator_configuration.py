@@ -170,10 +170,11 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="help_doc",
+            choices=[True, False],
             cli_parameters=CliParameters(short="--hd", action="store_true"),
             short_description="Help options for ansible-doc command in stdout mode",
             subcommands=["doc"],
-            value=EntryValue(),
+            value=EntryValue(default=False),
         ),
         Entry(
             name="inventory",
