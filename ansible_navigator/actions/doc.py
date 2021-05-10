@@ -184,7 +184,7 @@ class Action(App):
             if self._plugin_type is not C.NOT_SET:
                 pass_through_arg.extend(["-t", self._plugin_type])
 
-            if self._args.help_doc is not C.NOT_SET:
+            if self._args.help_doc is True:
                 pass_through_arg.append("--help")
 
             if isinstance(self._args.cmdline, list):
