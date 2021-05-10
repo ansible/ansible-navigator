@@ -1,4 +1,6 @@
+""" fixtures """
 import os
+import shutil
 import pytest
 
 from ._common import TmuxSession
@@ -27,3 +29,22 @@ def patch_curses(monkeypatch):
     monkeypatch.setattr(curses, "cbreak", lambda: None)
     monkeypatch.setattr(curses, "nocbreak", lambda: None)
     monkeypatch.setattr(curses, "endwin", lambda: None)
+
+
+@pytest.fixture(scope="session")
+def os_indendent_tmp():
+    """
+    this attempts to ensure the length of the /tmp
+    is the same between MacOS and Linux
+    otherwise ansible-navigator column widths can vary
+    """
+    tmp_real = os.path.realpath("/tmp")
+    if tmp_real == "/private/tmp":
+        an_tmp = os.path.join(tmp_real, "an")
+    else:
+        an_tmp = os.path.join("/tmp", "private", "an")
+    os.makedirs(an_tmp)
+    try:
+        yield an_tmp
+    finally:
+        shutil.rmtree(an_tmp)
