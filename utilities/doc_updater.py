@@ -22,6 +22,7 @@ import yaml
 
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem.definitions import Entry
 
 from ansible_navigator.utils import oxfordcomma
@@ -156,10 +157,10 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
     if isinstance(default_override, str):
         default = default_override
     else:
-        if isinstance(entry.value.default, str):
-            default = entry.value.default
-        else:
+        if entry.value.default is C.NOT_SET:
             default = "No default value set"
+        else:
+            default = entry.value.default
 
     choices = oxfordcomma(entry.choices, "or")
     envvar = entry.environment_variable(APP.replace("-", "_"))
