@@ -11,10 +11,13 @@ import curses
 import functools
 
 from itertools import chain
-from ..tm_tokenize.grammars import Grammars
-from ..tm_tokenize.tokenize import tokenize
+
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
+
+from ..tm_tokenize.grammars import Grammars
+from ..tm_tokenize.tokenize import tokenize
+
 
 CURSES_STYLES = {
     0: None,
@@ -104,10 +107,27 @@ class Colorize:
             lines = []
             for line_idx, line in enumerate(doc.splitlines()):
                 first_line = line_idx == 0
-                state, regions = tokenize(compiler, state, line, first_line)
-                lines.append((regions, line))
-            return columns_and_colors(lines, self._schema)
-        res = [[{"column": 0, "chars": l, "color": None}] for l in doc.splitlines()]  # noqa: E741
+                try:
+                    state, regions = tokenize(compiler, state, line, first_line)
+                except Exception as exc:  # pylint: disable=broad-except
+                    self._logger.critical(
+                        (
+                            "An unexpected error occured within the tokenization"
+                            " subsystem.  Please log an issue with the following:"
+                        )
+                    )
+                    self._logger.critical(
+                        "  Err: '%s', Scope: '%s', Line follows....", str(exc), scope
+                    )
+                    self._logger.critical("  '%s'", line)
+                    self._logger.critical("  The current content will be rendered without color")
+                    break
+                else:
+                    lines.append((regions, line))
+            else:
+                return columns_and_colors(lines, self._schema)
+
+        res = [[{"column": 0, "chars": doc_line, "color": None}] for doc_line in doc.splitlines()]
         return res
 
 
