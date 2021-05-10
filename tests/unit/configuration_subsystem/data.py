@@ -190,6 +190,7 @@ ENVVAR_DATA = [
     ("editor_console", "false", False),
     ("execution_environment", "false", False),
     ("execution_environment_image", "test_image", "test_image"),
+    ("help_doc", "true", True),
     ("inventory", "/tmp/test1.yaml,/tmp/test2.yml", ["/tmp/test1.yaml", "/tmp/test2.yml"]),
     ("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"]),
     ("log_file", "/tmp/app.log", "/tmp/app.log"),

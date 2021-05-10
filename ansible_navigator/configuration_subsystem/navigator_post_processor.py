@@ -249,7 +249,7 @@ class NavigatorPostProcessor:
         if (
             config.app == "doc"
             and entry.value.current is C.NOT_SET
-            and not config.entry("help_doc").value.current
+            and not config.entry("help_doc") is True
         ):
             error = "An plugin name is required when using the doc subcommand"
             errors.append(error)
