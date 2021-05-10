@@ -15,7 +15,7 @@ CLI_DOC_HELP_WITH_EE = (
     " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
-testdata: List = [
+testdata_1: List = [
     (
         0,
         CLI_DOC_HELP_WITH_EE,
@@ -26,7 +26,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_1)
 class TestDocHelpWithEE(BaseClass):
     """run the tests"""
 
@@ -38,7 +38,7 @@ CLI_DOC_HELP_WITH_EE = (
     "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m stdout --execution-environment false"
 )
 
-testdata: List = [
+testdata_2: List = [
     (
         0,
         CLI_DOC_HELP_WITH_EE,
@@ -49,7 +49,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_2)
 class TestDocHelpWithoutEE(BaseClass):
     """run the tests"""
 
@@ -62,7 +62,7 @@ CLI_DOC_HELP_WITH_EE_WRONG_MODE = (
     " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
-testdata: List = [
+testdata_3: List = [
     (
         0,
         CLI_DOC_HELP_WITH_EE_WRONG_MODE,
@@ -73,7 +73,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_3)
 class TestDocHelpWithEEWrongMode(BaseClass):
     """run the tests"""
 
@@ -86,7 +86,7 @@ CLI_DOC_HELP_WITHOUT_EE_WRONG_MODE = (
     " --execution-environment false"
 )
 
-testdata: List = [
+testdata_4: List = [
     (
         0,
         CLI_DOC_HELP_WITHOUT_EE_WRONG_MODE,
@@ -97,7 +97,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_4)
 class TestDocHelpWithoutEEWrongMode(BaseClass):
     """run the tests"""
 
@@ -109,7 +109,7 @@ CLI_MODULE_DOC_WITHOUT_EE = (
     "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j" " --execution-environment false"
 )
 
-testdata: List = [
+testdata_5: List = [
     (
         0,
         CLI_MODULE_DOC_WITHOUT_EE,
@@ -120,7 +120,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_5)
 class TestModuleDocWithoutEE(BaseClass):
     """run the tests"""
 
@@ -134,7 +134,7 @@ CLI_MODULE_DOC_WITH_EE = (
     " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
-testdata: List = [
+testdata_6: List = [
     (
         0,
         CLI_MODULE_DOC_WITH_EE,
@@ -145,7 +145,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_6)
 class TestModuleDocWithEE(BaseClass):
     """run the tests"""
 
@@ -159,7 +159,7 @@ CLI_LOOKUP_DOC_WITHOUT_EE = (
     " --execution-environment false"
 )
 
-testdata: List = [
+testdata_7: List = [
     (
         0,
         CLI_LOOKUP_DOC_WITHOUT_EE,
@@ -170,7 +170,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_7)
 class TestLookUpDocWithoutEE(BaseClass):
     """run the tests"""
 
@@ -184,7 +184,7 @@ CLI_LOOKUP_DOC_WITH_EE = (
     " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
-testdata: List = [
+testdata_8: List = [
     (
         0,
         CLI_LOOKUP_DOC_WITH_EE,
@@ -195,7 +195,7 @@ testdata: List = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_8)
 class TestLookUpDocWithEE(BaseClass):
     """run the tests"""
 

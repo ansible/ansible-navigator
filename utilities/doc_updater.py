@@ -92,11 +92,13 @@ def _params_generate_tables(param_details: Dict) -> List:
     tables.extend(table)
     tables.extend(["", "|", "|", ""])
     for subcommand in NavigatorConfiguration.subcommands:
+        logger.debug("Processing subcommand: %s", subcommand.name)
         entries = [
             entry
             for entry in NavigatorConfiguration.entries
             if isinstance(entry.subcommands, list) and subcommand.name in entry.subcommands
         ]
+        logger.debug("  params %s", tuple(entry.name for entry in entries))
         if entries:
             table = copy(PARAM_TABLE_HEADER)
             table[0] = table[0].format(f"**Subcommand: {subcommand.name}**")

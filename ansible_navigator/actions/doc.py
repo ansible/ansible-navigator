@@ -75,7 +75,7 @@ class Action(App):
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
         )
 
-        source = plugin_name_source = self._args.entry("plugin_name").value.source
+        plugin_name_source = self._args.entry("plugin_name").value.source
 
         if plugin_name_source is C.USER_CLI:
             self._plugin_name = self._args.plugin_name

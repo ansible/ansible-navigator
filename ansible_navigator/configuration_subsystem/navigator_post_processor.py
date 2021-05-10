@@ -116,7 +116,8 @@ class NavigatorPostProcessor:
         """Post process help_doc"""
         messages: List[LogMessage] = []
         errors: List[str] = []
-        if config.app == "doc" and config.entry("mode").value.current == "interactive":
+
+        if all((entry.value.current is True, config.app == "doc", config.mode == "interactive")):
             error = "--help-doc or --hd is valid only when 'mode' argument is set to 'stdout'"
             errors.append(error)
             return messages, errors
