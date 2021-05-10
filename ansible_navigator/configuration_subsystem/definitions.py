@@ -140,23 +140,24 @@ class ApplicationConfiguration(SimpleNamespace):
     def __getattribute__(self, attr: str) -> Any:
         """Returns a matching entry or the default bwo super"""
         try:
-            found_entry = [
-                entry for entry in super().__getattribute__("entries") if entry.name == attr
-            ]
-            if found_entry:
-                return found_entry[0].value.current
+            for entry in super().__getattribute__("entries"):
+                if entry.name == attr:
+                    return entry.value.current
+            raise KeyError(attr)
         except AttributeError:
             pass
         return super().__getattribute__(attr)
 
     def entry(self, name) -> Entry:
         """Retrieve a configuration entry by name"""
-        found_entry = [entry for entry in self.entries if entry.name == name]
-        return found_entry[0]
+        for entry in self.entries:
+            if entry.name == name:
+                return entry
+        raise KeyError(name)
 
     def subcommand(self, name) -> SubCommand:
         """Retrieve a configuration subcommand by name"""
-        found_subcommand = [
-            subcommand for subcommand in self.subcommands if subcommand.name == name
-        ]
-        return found_subcommand[0]
+        for subcommand in self.subcommands:
+            if subcommand.name == name:
+                return subcommand
+        raise KeyError(name)
