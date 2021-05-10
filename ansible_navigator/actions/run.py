@@ -553,60 +553,65 @@ class Action(App):
 
     def _handle_message(self, message: dict) -> None:
         # pylint: disable=too-many-branches
+        # pylint: disable=too-many-nested-blocks
         """Handle a runner message
 
         :param message: The message from runner
         :type message: dict
         """
-        event = message["event"]
+        try:
+            event = message["event"]
+        except KeyError:
+            error = f"Unhandled message from runner queue, discarded: {message}"
+            self._logger.critical(error)
+        else:
+            if "stdout" in message and message["stdout"]:
+                self.stdout.extend(message["stdout"].splitlines())
 
-        if "stdout" in message and message["stdout"]:
-            self.stdout.extend(message["stdout"].splitlines())
+            if event in ["verbose", "error"]:
+                if "ERROR!" in message["stdout"]:
+                    self._msg_from_plays = ("ERROR", 9)
+                elif "WARNING" in message["stdout"]:
+                    self._msg_from_plays = ("WARNINGS", 13)
 
-        if event in ["verbose", "error"]:
-            if "ERROR!" in message["stdout"]:
-                self._msg_from_plays = ("ERROR", 9)
-            elif "WARNING" in message["stdout"]:
-                self._msg_from_plays = ("WARNINGS", 13)
+            if event == "playbook_on_play_start":
+                play = message["event_data"]
+                play["__play_name"] = play["name"]
+                play["tasks"] = []
+                self._plays.value.append(play)
 
-        if event == "playbook_on_play_start":
-            play = message["event_data"]
-            play["__play_name"] = play["name"]
-            play["tasks"] = []
-            self._plays.value.append(play)
+            if event.startswith("runner_on_"):
+                runner_event = event.split("_")[2]
+                task = message["event_data"]
+                play_id = next(
+                    idx for idx, p in enumerate(self._plays.value) if p["uuid"] == task["play_uuid"]
+                )
+                if runner_event in ["ok", "skipped", "unreachable", "failed"]:
+                    if runner_event == "failed" and task["ignore_errors"]:
+                        result = "ignored"
+                    else:
+                        result = runner_event
+                    task["__result"] = result.upper()
+                    task["__changed"] = task.get("res", {}).get("changed", False)
+                    task["__duration"] = human_time(seconds=round(task["duration"], 2))
+                    task_id = None
+                    for idx, play_task in enumerate(self._plays.value[play_id]["tasks"]):
+                        if task["task_uuid"] == play_task["task_uuid"]:
+                            if task["host"] == play_task["host"]:
+                                task_id = idx
+                                break
+                    if task_id is not None:
+                        self._plays.value[play_id]["tasks"][task_id].update(task)
 
-        if event.startswith("runner_on_"):
-            runner_event = event.split("_")[2]
-            task = message["event_data"]
-            play_id = next(
-                idx for idx, p in enumerate(self._plays.value) if p["uuid"] == task["play_uuid"]
-            )
-            if runner_event in ["ok", "skipped", "unreachable", "failed"]:
-                if runner_event == "failed" and task["ignore_errors"]:
-                    result = "ignored"
-                else:
-                    result = runner_event
-                task["__result"] = result.upper()
-                task["__changed"] = task.get("res", {}).get("changed", False)
-                task["__duration"] = human_time(seconds=round(task["duration"], 2))
-                task_id = None
-                for idx, play_task in enumerate(self._plays.value[play_id]["tasks"]):
-                    if task["task_uuid"] == play_task["task_uuid"]:
-                        if task["host"] == play_task["host"]:
-                            task_id = idx
-                            break
-                if task_id is not None:
-                    self._plays.value[play_id]["tasks"][task_id].update(task)
-
-            elif runner_event == "start":
-                task["__host"] = task["host"]
-                task["__result"] = "IN_PROGRESS"
-                task["__changed"] = "unknown"
-                task["__duration"] = None
-                task["__number"] = len(self._plays.value[play_id]["tasks"])
-                task["__task"] = task["task"]
-                task["__task_action"] = task["task_action"]
-                self._plays.value[play_id]["tasks"].append(task)
+                elif runner_event == "start":
+                    task["__host"] = task["host"]
+                    task["__result"] = "IN_PROGRESS"
+                    task["__changed"] = "unknown"
+                    task["__duration"] = None
+                    task["__number"] = len(self._plays.value[play_id]["tasks"])
+                    task["__task"] = task["task"]
+                    task["__task_action"] = task["task_action"]
+                    self._plays.value[play_id]["tasks"].append(task)
 
     def _play_stats(self) -> None:
         """Calculate the play's stats based
