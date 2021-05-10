@@ -745,7 +745,7 @@ class Action(App):
             filename = filename.format(
                 playbook_dir=os.path.dirname(self._args.playbook),
                 playbook_name=os.path.splitext(os.path.basename(self._args.playbook))[0],
-                ts_utc=datetime.datetime.now(tz=datetime.timezone.utc),
+                ts_utc=datetime.datetime.now(tz=datetime.timezone.utc).isoformat(),
             )
             self._logger.debug("Formatted artifact file name set to %s", filename)
             filename = abs_user_path(filename)
