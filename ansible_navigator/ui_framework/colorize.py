@@ -121,16 +121,12 @@ class Colorize:
                     )
                     self._logger.critical("  '%s'", line)
                     self._logger.critical("  The current content will be rendered without color")
-                    # return the entire doc uncolored, since state cannont be maintained
-                    # when a single line errors
-                    res = [
-                        [{"column": 0, "chars": doc_line, "color": None}]
-                        for doc_line in doc.splitlines()
-                    ]
-                    return res
+                    break
+                else:
+                    lines.append((regions, line))
+            else:
+                return columns_and_colors(lines, self._schema)
 
-                lines.append((regions, line))
-            return columns_and_colors(lines, self._schema)
         res = [[{"column": 0, "chars": doc_line, "color": None}] for doc_line in doc.splitlines()]
         return res
 
