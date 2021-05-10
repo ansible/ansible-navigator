@@ -243,11 +243,7 @@ class NavigatorPostProcessor:
         """Post process plugin_name"""
         messages: List[LogMessage] = []
         errors: List[str] = []
-        if (
-            config.app == "doc"
-            and entry.value.current is C.NOT_SET
-            and config.entry("help_doc") is False
-        ):
+        if all((config.app == "doc", entry.value.current is C.NOT_SET, config.help_doc is False)):
             error = "An plugin name is required when using the doc subcommand"
             errors.append(error)
             return messages, errors
