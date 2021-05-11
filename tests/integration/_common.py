@@ -2,6 +2,7 @@
 """
 import os
 import re
+import shlex
 import sys
 import tempfile
 import time
@@ -202,8 +203,17 @@ class TmuxSession:
         self._pane.set_height(self._pane_height)
         self._pane.set_width(self._pane_width)
 
+        # Figure out where the tox-initiated venv is. In environments where a
+        # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
+        # expect inside of tmux, so we can't depend on it. We *must* determine
+        # it before we enter tmux.
+        venv_path = os.environ.get('VIRTUAL_ENV')
+        if venv_path is None or '.tox' not in venv_path:
+            raise AssertionError('VIRTUAL_ENV environment variable was not set but tox should have set it.')
+        venv = os.path.join(shlex.quote(venv_path), 'bin', 'activate')
+
         # send the config envvar + other set up commands
-        venv = "source $VIRTUAL_ENV/bin/activate"
+        venv = f"source {venv}"
         navigator_config = f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}"
         set_up_commands = [venv, navigator_config] + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
