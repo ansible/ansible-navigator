@@ -207,10 +207,12 @@ class TmuxSession:
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
         # expect inside of tmux, so we can't depend on it. We *must* determine
         # it before we enter tmux.
-        venv_path = os.environ.get('VIRTUAL_ENV')
-        if venv_path is None or '.tox' not in venv_path:
-            raise AssertionError('VIRTUAL_ENV environment variable was not set but tox should have set it.')
-        venv = os.path.join(shlex.quote(venv_path), 'bin', 'activate')
+        venv_path = os.environ.get("VIRTUAL_ENV")
+        if venv_path is None or ".tox" not in venv_path:
+            raise AssertionError(
+                "VIRTUAL_ENV environment variable was not set but tox should have set it."
+            )
+        venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
 
         # send the config envvar + other set up commands
         venv = f"source {venv}"
