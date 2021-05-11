@@ -169,6 +169,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
         ),
         Entry(
+            name="help_doc",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--hd", action="store_true"),
+            short_description="Help options for ansible-doc command in stdout mode",
+            subcommands=["doc"],
+            value=EntryValue(default=False),
+        ),
+        Entry(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
             environment_variable_override="inventories",
@@ -239,7 +247,8 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=[True, False],
             cli_parameters=CliParameters(short="--pae"),
             settings_file_path_override="playbook-artifact.enable",
-            short_description="Enable or disable the creation of artifacts for completed playbooks",
+            short_description="Enable or disable the creation of artifacts for"
+            " completed playbooks",
             subcommands=["run"],
             value=EntryValue(default=True),
         ),

@@ -22,6 +22,7 @@ class CliParameters(SimpleNamespace):
     nargs: Union[None, Dict] = None
     positional: bool = False
     short: Union[None, str] = None
+    metavar: Union[None, str] = None
 
 
 class Constants(Enum):
