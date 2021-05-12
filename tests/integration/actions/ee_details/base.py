@@ -30,6 +30,7 @@ class Command(NamedTuple):
     execution_environment: bool
     container_engine: str = container_runtime_or_fail()
     command: str = "ansible-navigator"
+    mode: str = "interactive"
     subcommand: Union[None, str] = None
 
     def join(self):
@@ -40,6 +41,7 @@ class Command(NamedTuple):
             args.append(self.subcommand)
         args.extend(["--ee", self.execution_environment])
         args.extend(["--ce", self.container_engine])
+        args.extend(["--mode", self.mode])
         return " ".join(shlex.quote(str(arg)) for arg in args)
 
 
@@ -52,6 +54,7 @@ class Step(NamedTuple):
     look_fors: List[str] = []
     playbook_status: Union[None, str] = None
     step_index: int = 0
+    wait_on_cli_prompt: bool = False
 
 
 def add_indicies(steps):
@@ -90,7 +93,7 @@ class BaseClass:
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
             "config_path": TEST_CONFIG_FILE,
-            "pane_height": "100",
+            "pane_height": "1000",
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -104,9 +107,11 @@ class BaseClass:
         assert os.path.exists(TEST_CONFIG_FILE)
 
         received_output = tmux_session.interaction(
-            step.user_input, wait_on_playbook_status=step.playbook_status
+            value=step.user_input,
+            wait_on_cli_prompt=step.wait_on_cli_prompt,
+            wait_on_playbook_status=step.playbook_status,
         )
-        if True:  # self.UPDATE_FIXTURES:
+        if self.UPDATE_FIXTURES:
             update_fixtures(request, step.step_index, received_output, step.comment)
         dir_path, file_name = fixture_path_from_request(request, step.step_index)
         with open(f"{dir_path}/{file_name}") as infile:

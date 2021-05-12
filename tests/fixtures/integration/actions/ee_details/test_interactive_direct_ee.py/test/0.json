@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator ee-details --ee True --ce docker-Initial play list]",
+    "name": "test[0-ansible-navigator ee-details --ee True --ce docker --mode interactive-Initial play list]",
     "index": 0,
     "comment": "Initial play list",
     "output": [

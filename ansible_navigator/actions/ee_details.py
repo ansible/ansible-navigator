@@ -53,7 +53,7 @@ class Action(App):
         self._share_directory = self._args.internals.share_directory
         self._run_action = get_action("run")
 
-    def _generate_command(self) -> Tuple[str, List[str]]:
+    def _generate_command(self) -> Tuple[List[str], str]:
         playbook_path = os.path.join(self._share_directory, self._name, "site.yml")
         inventory_path = os.path.join(self._share_directory, self._name, "inventory.yml")
 
