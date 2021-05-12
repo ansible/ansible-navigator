@@ -1,10 +1,13 @@
-## ansible-navigator
+# Ansible Navigator
 
-A text-based user interface (TUI) for the Red Hat Ansible Automation Platform
+A text-based user interface (TUI) for the Red Hat Ansible Automation Platform.
+
+## Quick demo
 
 [![asciicast](https://asciinema.org/a/gl7uVblC23dxGGTkVOEigDHCl.svg)](https://asciinema.org/a/gl7uVblC23dxGGTkVOEigDHCl)
 
-## Quick start
+## Installation
+
 
 ### Using a virtual environment and pip
 ```
@@ -16,102 +19,122 @@ pip install ansible-navigator
 ansible-navigator --help
 ```
 
-By default, ansible-navigator uses execution environments, to use ansible-navigator without an execution enviroment,
-ansible is required
-
-```
-pip install ansible
-ansible-navigator --execution-environment false
-```
-
-
-RHEL8/Centos8 prerequisites:
+#### RHEL 8 / CentOS 8 prerequisites
 
 ```
 sudo dnf install python3
 sudo dnf install gcc python3-devel
 ```
 
+By default, `ansible-navigator` uses execution environments. Execution environments requires container runtimes like [podman](https://github.com/containers/podman). To install container runtimes, please refer respective installation guides.
 
-### Welcome
-Start at the welcome page, from the welcome page you can run playbooks, browse collections, explore inventories, review docs and more.
+
+To use `ansible-navigator` without an execution enviroment, Ansible is required.
+
+```
+pip install ansible
+```
+
+You can disable Execution environment for all subsequent commands by using
+
+```
+ansible-navigator --execution-environment false <command>
+```
+
+You can also disable Execution Environment using configuration file. Please refer [settings](docs/settings.rst) for more details.
+
+
+### Welcome Page
+
+Start at the welcome page, using -
+
 ```
 ansible-navigator
 ```
 
+From the welcome page you can run playbooks, browse collections, explore inventories, review docs, and do a lot more things.
+
+
 ### Other things to try direct from the command line
 
-#### Using interactive mode, which is the default
+#### Using interactive mode (the default UI mode)
 
-Review and explore available collections
-```
-ansible-navigator collections
-```
+* Review and explore available collections
 
-Review and explore current ansible configuration
-```
-ansible-navigator config
-```
+    ```
+    ansible-navigator collections
+    ```
 
-Review and explore documentation (default mode is interactive)
-```
-ansible-navigator doc ansible.netcommon.cli_command
-```
+* Review and explore current ansible configuration
 
-Review and explore an inventory
-```
-ansible-navigator inventory -i inventory.yaml
-```
+    ```
+    ansible-navigator config
+    ```
 
-Run and explore a playbook
-```
-ansible-navigator run site.yaml -i inventory.yaml
-```
+* Review and explore documentation
 
-#### Using stdout mode, which returns ansible's familiar command-line interface (CLI) output
+    ```
+    ansible-navigator doc ansible.netcommon.cli_command
+    ```
 
-Show the current ansible configuration
-```
-ansible-navigator config dump -m stdout
-```
+* Review and explore an inventory
 
-Show documentation
-```
-ansible-navigator doc sudo -t become  -m stdout
-```
+    ```
+    ansible-navigator inventory -i inventory.yaml
+    ```
 
-Show an inventory
-```
-ansible-navigator inventory --list -i inventory.yaml -m stdout
-```
+* Run and explore a playbook
 
-Run a playbook
-```
-ansible-navigator run site.yaml -i inventory.yaml -m stdout
-```
+    ```
+    ansible-navigator run site.yaml -i inventory.yaml
+    ```
+
+#### Using stdout mode (Ansible CLI like)
+
+* Show the current Ansible configuration
+
+    ```
+    ansible-navigator config dump -m stdout
+    ```
+
+* Show documentation
+
+    ```
+    ansible-navigator doc sudo -t become -m stdout
+    ```
+
+* List inventory
+
+    ```
+    ansible-navigator inventory --list -i inventory.yaml -m stdout
+    ```
+
+* Run a playbook
+
+    ```
+    ansible-navigator run site.yaml -i inventory.yaml -m stdout
+    ```
 
 ### Available subcommands
 
-For the full list of available subcommands and their mapping to ansible commands, see the [subcommand guide](docs/subcommands.rst)
+For the full list of available subcommands and their mapping to Ansible commands, see the [subcommand guide](docs/subcommands.rst)
 
-### Configuring ansible-navigator:
+### Configuring `ansible-navigator`
 
-ansible-navigator can be configured:
+`ansible-navigator` can be configured:
 
-1) using default values
-2) with a settings file
-3) with environment variables
-4) at the command line
-5) while issuing `:` comamnds within the text-based user interface (TUI)
+* Using default values
+* With a settings file
+* With environment variables
+* By passing parameters at the command line
+* While issuing `:` commands within the text-based user interface (TUI)
 
-Setting are applied in that order. For an overview of these approaches, see the [settings guide](docs/settings.rst)
+Settings are applied in that order. For an overview of these approaches, see the [settings guide](docs/settings.rst)
 
 
 ### Key bindings and colon commands
 
-While using the terminal user interface keys and commands are avilable, the following 
-is also available within the application by typing `:help`:
-
+While using the text-based user interface (TUI) keys and commands are available. The following is also available within the application by typing `:help:`.
 
 ```
 ## GENERAL
@@ -165,3 +188,14 @@ esc                                     Exit line input
 insert                                  Enable/disable insert mode
 arrow up, arrow down                    Previous/next command in history
 ```
+
+## More Information
+
+For more information about Ansible Navigator, join the `#ansible-devel` channel on Freenode IRC.
+
+
+## License
+
+ Apache License Version 2.0
+
+See [LICENSE](LICENSE) to see the full text.
