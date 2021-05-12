@@ -250,7 +250,7 @@ class Action(App):
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
-        """run :run or :load
+        """run :run or :replay
 
         :param interaction: The interaction from the user
         :type interaction: Interaction
@@ -267,12 +267,12 @@ class Action(App):
             self._logger = logging.getLogger(f"{__name__}_{str_uuid[-4:]}")
             self._name = f"run_{str_uuid[-4:]}"
             initialized = self._init_run()
-        elif interaction.action.match.groupdict().get("load"):
-            self._logger.debug("load requested in interactive mode")
-            self._subaction_type = "load"
-            self._name = "load"
+        elif interaction.action.match.groupdict().get("replay"):
+            self._logger.debug("replay requested in interactive mode")
+            self._subaction_type = "replay"
+            self._name = "replay"
             self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
-            initialized = self._init_load()
+            initialized = self._init_replay()
 
         if not initialized:
             self._prepare_to_exit(interaction)
@@ -296,7 +296,7 @@ class Action(App):
                     break
 
             if self.steps.current.name == "quit":
-                if self._args.app == "load":
+                if self._args.app == "replay":
                     self._prepare_to_exit(interaction)
                     return self.steps.current
                 done = self._prepare_to_quit(self.steps.current)
@@ -350,22 +350,22 @@ class Action(App):
         self._logger.info("Run initialized and playbook started.")
         return True
 
-    def _init_load(self) -> bool:
-        """in the case of :load, load the artifact
+    def _init_replay(self) -> bool:
+        """in the case of :replay, replay the artifact
         check for a version, to be safe
         copy the calling app args as our our so the can be updated safely
         with a uuid attached to the name
         """
-        self._logger.debug("Starting load artifact request")
+        self._logger.debug("Starting replay artifact request")
 
         self._update_args(
-            ["load"] + shlex.split(self._interaction.action.match.groupdict()["params_load"] or "")
+            ["replay"] + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or "")
         )
 
-        artifact_file = self._args.playbook_artifact_load
+        artifact_file = self._args.playbook_artifact_replay
 
-        if isinstance(self._args.playbook_artifact_load, str):
-            artifact_valid = os.path.exists(self._args.playbook_artifact_load)
+        if isinstance(self._args.playbook_artifact_replay, str):
+            artifact_valid = os.path.exists(self._args.playbook_artifact_replay)
         else:
             artifact_valid = False
 
@@ -400,7 +400,7 @@ class Action(App):
             return False
 
         self._runner_finished = True
-        self._logger.debug("Completed load artifact request")
+        self._logger.debug("Completed replay artifact request")
         return True
 
     def _prompt_for_artifact(self, artifact_file: str) -> Dict[Any, Any]:
@@ -801,7 +801,7 @@ class Action(App):
                 self._logger.debug("Playbook rerun triggered")
             else:
                 self._logger.warning("Playbook rerun ignored, current playbook not complete")
-        elif self._subaction_type == "load":
+        elif self._subaction_type == "replay":
             self._logger.error("No rerun available when artifact is loaded")
         else:
             self._logger.error("sub-action type '%s' is invalid", self._subaction_type)

@@ -1,4 +1,4 @@
-"""stub action for load
+"""stub action for replay
 """
 
 from . import _actions as actions
@@ -17,12 +17,12 @@ class MissingAttribute:
 class Action(MissingAttribute, BaseAction):
 
     # pylint: disable=too-many-instance-attributes
-    """:load"""
+    """:replay"""
 
     KEGEX = r"""(?x)
             ^
-            (?P<load>l(?:oad)?
-            (\s(?P<params_load>\S+))?)
+            (?P<replay>rep(?:lay)?
+            (\s(?P<params_replay>\S+))?)
             $"""
 
     run_stdout = MissingAttribute()  # type: ignore
