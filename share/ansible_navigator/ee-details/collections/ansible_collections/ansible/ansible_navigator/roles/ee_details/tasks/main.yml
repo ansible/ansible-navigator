@@ -9,7 +9,7 @@
     gather_subset: min
 
 - name: Gather python package details
-  ansible.builtin.shell: pip freeze
+  ansible.builtin.shell: python3 -m pip freeze
   register: pip_freeze
   changed_when: False
 

@@ -96,9 +96,12 @@ class Action(App):
         new_command += " --playbook-artifact-enable False"
         new_command += f" -e ee_image={self._args.execution_environment_image}"
 
-        action = self._interaction.action._replace(
-            match=re.match(run_action.KEGEX, new_command), value=new_command
-        )
+        match = re.match(run_action.KEGEX, new_command)
+        if not match:
+            self._logger.error("Run action KEGEX failure, match was: %s", match)
+            return None
+
+        action = self._interaction.action._replace(match=match, value=new_command)
         interaction = self._interaction._replace(action=action)
 
         run_result = run_action(

@@ -13,7 +13,6 @@ from .definitions import Constants as C
 from .definitions import Entry
 from .definitions import ApplicationConfiguration
 
-
 from ..utils import abs_user_path
 from ..utils import check_for_ansible
 from ..utils import flatten_list
@@ -186,7 +185,8 @@ class NavigatorPostProcessor:
                 continue
             try:
                 if hasattr(action_package, "get"):
-                    subcommand_action = action_package.get(subcommand_name.replace("-", "_"))  # type: ignore
+                    valid_pkg_name = subcommand_name.replace("-", "_")
+                    subcommand_action = action_package.get(valid_pkg_name)  # type: ignore
                 break
             except (AttributeError, ModuleNotFoundError) as exc:
                 message = f"Unable to load subcommand '{subcommand_name}' from"
