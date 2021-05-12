@@ -97,6 +97,7 @@ navigator_subcommds = [
     SubCommand(name="collections", description="Explore available collections"),
     SubCommand(name="config", description="Explore the current ansible configuration"),
     SubCommand(name="doc", description="Review documentation for a module or plugin"),
+    SubCommand(name="ee-details", description="Explore execution environment details"),
     SubCommand(name="inventory", description="Explore an inventory"),
     SubCommand(name="load", description="Explore a playbook artifact"),
     SubCommand(name="run", description="Run a playbook"),

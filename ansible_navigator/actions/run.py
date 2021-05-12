@@ -12,7 +12,9 @@ import uuid
 from distutils.spawn import find_executable
 from queue import Queue
 from typing import Any
+from typing import Callable
 from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
@@ -199,7 +201,14 @@ class Action(App):
             (\s(?P<params_run>.*))?)
             $"""
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(
+        self,
+        args: ApplicationConfiguration,
+        play_columns: List = PLAY_COLUMNS,
+        task_list_columns: List = TASK_LIST_COLUMNS,
+        content_key_filter: Callable = filter_content_keys,
+    ):
+        # pylint: disable=dangerous-default-value
         # for display purposes use the 4: of the uuid
         super().__init__(args=args, logger_name=__name__, name="run")
 
@@ -213,11 +222,13 @@ class Action(App):
         self._plays = Step(
             name="plays",
             tipe="menu",
-            columns=PLAY_COLUMNS,
+            columns=play_columns,
             value=[],
             show_func=self._play_stats,
             select_func=self._task_list_for_play,
         )
+        self._task_list_columns = task_list_columns
+        self._content_key_filter = content_key_filter
 
     def run_stdout(self) -> None:
         """Run in oldschool mode, just stdout
@@ -507,7 +518,7 @@ class Action(App):
                     obj=self.steps.current.value,
                     index=self.steps.current.index,
                     content_heading=content_heading,
-                    filter_content_keys=filter_content_keys,
+                    filter_content_keys=self._content_key_filter,
                 )
         if result is None:
             self.steps.back_one()
@@ -671,7 +682,7 @@ class Action(App):
         step = Step(
             name="task_list",
             tipe="menu",
-            columns=TASK_LIST_COLUMNS,
+            columns=self._task_list_columns,
             select_func=self._task_from_task_list,
             value=value,
         )

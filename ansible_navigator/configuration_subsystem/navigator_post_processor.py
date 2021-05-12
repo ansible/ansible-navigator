@@ -186,7 +186,7 @@ class NavigatorPostProcessor:
                 continue
             try:
                 if hasattr(action_package, "get"):
-                    subcommand_action = action_package.get(subcommand_name)  # type: ignore
+                    subcommand_action = action_package.get(subcommand_name.replace("-", "_"))  # type: ignore
                 break
             except (AttributeError, ModuleNotFoundError) as exc:
                 message = f"Unable to load subcommand '{subcommand_name}' from"

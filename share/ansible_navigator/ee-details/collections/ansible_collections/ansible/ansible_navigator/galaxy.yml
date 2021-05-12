@@ -1,0 +1,15 @@
+namespace: ansible
+name: ansible_navigator
+version: 1.0.0
+readme: README.md
+authors:
+description: ansible-navigator
+license_file: LICENSE
+tags: []
+dependencies: {}
+repository: http://github.com/ansible/ansible-navigator
+documentation: http://github.com/ansible/ansible-navigator
+homepage: http://github.com/ansible/ansible-navigator
+issues: http://github.com/ansible/ansible-navigator/issues
+build_ignore: []
+
