@@ -18,10 +18,7 @@ class BaseClass:
     """base class for interactive config tests"""
 
     UPDATE_FIXTURES = False
-
-    def setup_class(self):
-        self.expected_in_output: List = []
-        self.assert_operator = "=="
+    WAIT_ON_CLI_PROMPT = False
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_config_session")
@@ -47,12 +44,16 @@ class BaseClass:
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
         """test interactive config"""
-        received_output = tmux_config_session.interaction(user_input)
+        received_output = tmux_config_session.interaction(
+            user_input, wait_on_cli_prompt=self.WAIT_ON_CLI_PROMPT
+        )
 
         updated_received_output = []
         mask = "X" * 50
         for line in received_output:
-            if "filename" in line or "│warnings:" in line:
+            if tmux_config_session._cli_prompt in line:
+                updated_received_output.append(mask)
+            elif "filename" in line or "│warnings:" in line:
                 updated_received_output.append(mask)
             else:
                 for value in ["time=", "skipping entry", "failed:", "permission denied"]:
@@ -61,16 +62,16 @@ class BaseClass:
                 else:
                     updated_received_output.append(line)
 
-        if self.UPDATE_FIXTURES:
-            update_fixtures(request, index, updated_received_output, comment, testname=testname)
-        dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
-        with open(f"{dir_path}/{file_name}", encoding="utf-8") as infile:
-            expected_output = json.load(infile)["output"]
-
         if expected_in_output:
             for out in expected_in_output:
                 assert any(out in line for line in received_output), (out, received_output)
         else:
+            if self.UPDATE_FIXTURES:
+                update_fixtures(request, index, updated_received_output, comment, testname=testname)
+
+            dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
+            with open(f"{dir_path}/{file_name}", encoding="utf-8") as infile:
+                expected_output = json.load(infile)["output"]
             assert expected_output == updated_received_output, "\n" + "\n".join(
                 difflib.unified_diff(
                     expected_output, updated_received_output, "expected", "received"

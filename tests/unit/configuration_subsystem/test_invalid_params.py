@@ -124,13 +124,16 @@ def test_poor_choices(_mocked_func, generate_config, entry):
     else:
         subcommand = None
 
-    if entry.cli_parameters:
+    if entry.cli_parameters and entry.cli_parameters.action == "store_true":
+        pass
+    elif entry.cli_parameters:
+        look_for = "must be one of"
         # ansible-navigator choice error
-        test(subcommand, entry.cli_parameters.short, "must be one of")
+        test(subcommand, entry.cli_parameters.short, look_for)
         test(
             subcommand,
             entry.cli_parameters.long_override or f"--{entry.name_dashed}",
-            "must be one of",
+            look_for,
         )
     else:
         # argparse choice error

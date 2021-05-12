@@ -61,6 +61,7 @@ You can copy the example settings file below into one of those paths to start yo
     #         KEY2: VALUE2
     #         KEY3: VALUE3
     #     image: test_image
+    #   help-doc: True
     #   inventories:
     #     - /tmp/test_inventory.yml
     #   inventory-columns:
@@ -159,7 +160,7 @@ The following table describes all available settings.
   * - editor-console
     - Specify if the editor is console based
     - | **Choices:** 'True' or 'False'
-      | **Default:** No default value set
+      | **Default:** True
       | **CLI:** `--econ` or `--editor-console`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_CONSOLE
       | **Settings file:**
@@ -173,7 +174,7 @@ The following table describes all available settings.
   * - execution-environment
     - Enable or disable the use of an execution environment
     - | **Choices:** 'True' or 'False'
-      | **Default:** No default value set
+      | **Default:** True
       | **CLI:** `--ee` or `--execution-environment`
       | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT
       | **Settings file:**
@@ -289,6 +290,19 @@ The following table describes all available settings.
   * - Name
     - Description
     - Settings
+  * - help-doc
+    - Help options for ansible-doc command in stdout mode
+    - | **Choices:** 'True' or 'False'
+      | **Default:** False
+      | **CLI:** `--hd` or `--help-doc`
+      | **ENV:** ANSIBLE_NAVIGATOR_HELP_DOC
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              help-doc:
+
   * - plugin-name
     - Specify the plugin name
     - | **Default:** No default value set
@@ -424,7 +438,7 @@ The following table describes all available settings.
   * - playbook-artifact-enable
     - Enable or disable the creation of artifacts for completed playbooks
     - | **Choices:** 'True' or 'False'
-      | **Default:** No default value set
+      | **Default:** True
       | **CLI:** `--pae` or `--playbook-artifact-enable`
       | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_ENABLE
       | **Settings file:**

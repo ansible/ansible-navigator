@@ -2,6 +2,7 @@
 """
 import os
 import re
+import shlex
 import sys
 import tempfile
 import time
@@ -202,13 +203,26 @@ class TmuxSession:
         self._pane.set_height(self._pane_height)
         self._pane.set_width(self._pane_width)
 
+        # Figure out where the tox-initiated venv is. In environments where a
+        # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
+        # expect inside of tmux, so we can't depend on it. We *must* determine
+        # it before we enter tmux.
+        venv_path = os.environ.get("VIRTUAL_ENV")
+        if venv_path is None or ".tox" not in venv_path:
+            raise AssertionError(
+                "VIRTUAL_ENV environment variable was not set but tox should have set it."
+            )
+        venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
+
         # send the config envvar + other set up commands
-        venv = "source $VIRTUAL_ENV/bin/activate"
+        venv = f"source {venv}"
         navigator_config = f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}"
         set_up_commands = [venv, navigator_config] + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
         self._pane.send_keys(set_up_command)
 
+        # get the cli prompt from pane
+        self._cli_prompt = self._get_cli_prompt()
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
@@ -221,6 +235,7 @@ class TmuxSession:
         wait_on_help=True,
         wait_on_playbook_status=False,
         wait_on_collection_fetch_prompt=None,
+        wait_on_cli_prompt=False,
     ):
         """interact with the tmux session"""
         self._pane.send_keys(value, suppress_history=False)
@@ -231,13 +246,30 @@ class TmuxSession:
             while not showing:
                 time.sleep(0.1)
                 showing = self._pane.capture_pane()
-            if wait_on_help:
-                ok_to_return.append(any(":help help" in line for line in showing))
-            if wait_on_playbook_status:
-                ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
-            if wait_on_collection_fetch_prompt:
-                ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
+            if wait_on_cli_prompt:
+                # handle command sent but pane not updated
+                if len(showing) > 1:
+                    ok_to_return.append(self._cli_prompt in showing[-1])
+                else:
+                    ok_to_return.append(False)
+            else:
+                if wait_on_help:
+                    ok_to_return.append(any(":help help" in line for line in showing))
+                if wait_on_playbook_status:
+                    ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
+                if wait_on_collection_fetch_prompt:
+                    ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
         return showing
+
+    def _get_cli_prompt(self):
+        """get cli prompt"""
+        self._pane.send_keys("clear")
+        showing = []
+        while len(showing) != 1:
+            showing = self._pane.capture_pane()
+            time.sleep(0.1)
+
+        return showing[0]
 
 
 def update_fixtures(request, index, received_output, comment, testname=None):
