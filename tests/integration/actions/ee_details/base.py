@@ -43,41 +43,34 @@ class Command(NamedTuple):
         return " ".join(shlex.quote(str(arg)) for arg in args)
 
 
-class Step(SimpleNamespace):
+class Step(NamedTuple):
     # pylint: disable=too-few-public-methods
     """test data object"""
     user_input: str
     comment: str
 
-    index: int = 0
     look_fors: List[str] = []
     playbook_status: Union[None, str] = None
+    step_index: int = 0
 
 
-class Steps(list):
-    """a list of test steps"""
-
-    def add_indicies(self):
-        """update the index of each"""
-        for idx, step in enumerate(self):
-            step.index = idx
-        return self
-
-    @staticmethod
-    def step_id(value):
-        """return the test id from the test step object"""
-        return f"{value.index}-{value.comment}"
+def add_indicies(steps):
+    """update the index of each"""
+    return (step._replace(step_index=idx) for idx, step in enumerate(steps))
 
 
-base_steps = Steps(
-    [
-        Step(user_input=":0", comment="Check gather"),
-        Step(user_input=":back", comment="Return to play list"),
-        Step(user_input=":1", comment="Check report"),
-        Step(user_input=":back", comment="Return to playlist"),
-        Step(user_input=":2", comment="Report tasks"),
-        Step(user_input=":0", comment="View report", look_fors=["ansible_version", "base_os"]),
-    ]
+def step_id(value):
+    """return the test id from the test step object"""
+    return f"{value.step_index}-{value.user_input}-{value.comment}"
+
+
+base_steps = (
+    Step(user_input=":0", comment="Check gather"),
+    Step(user_input=":back", comment="Return to play list"),
+    Step(user_input=":1", comment="Check report"),
+    Step(user_input=":back", comment="Return to playlist"),
+    Step(user_input=":2", comment="Report tasks"),
+    Step(user_input=":0", comment="View report", look_fors=["ansible_version", "base_os"]),
 )
 
 
@@ -113,9 +106,9 @@ class BaseClass:
         received_output = tmux_session.interaction(
             step.user_input, wait_on_playbook_status=step.playbook_status
         )
-        if self.UPDATE_FIXTURES:
-            update_fixtures(request, step.index, received_output, step.comment)
-        dir_path, file_name = fixture_path_from_request(request, step.index)
+        if True:  # self.UPDATE_FIXTURES:
+            update_fixtures(request, step.step_index, received_output, step.comment)
+        dir_path, file_name = fixture_path_from_request(request, step.step_index)
         with open(f"{dir_path}/{file_name}") as infile:
             expected_output = json.load(infile)["output"]
 

@@ -1,5 +1,5 @@
 {
-    "name": "test[1-Check gather]",
+    "name": "test[1-:0-Check gather]",
     "index": 1,
     "comment": "Check gather",
     "output": [

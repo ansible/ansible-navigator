@@ -1,26 +1,29 @@
  
 
-  - hosts: localhost
+  - hosts: execution-environment
     name: "Gather execution environment details for {{ ee_image }}"
+    connection: local
     gather_facts: False
     tasks:
     - name: Gather execution environment details
       include_role:
         name: ansible.ansible_navigator.ee_details
 
-  - hosts: localhost
+  - hosts: execution-environment
     name: "Extract execution environment details for {{ ee_image }}"
+    connection: local
     gather_facts: False
     tasks:
     - name: Extract execution environment details
       include_role:
         name: ansible.ansible_navigator.ee_report
 
-  - hosts: localhost
+  - hosts: execution-environment
     name: "Review execution environment details for {{ ee_image }}"
+    connection: local
     gather_facts: False
     tasks:
-    - name: "Press 0 for summary information"
+    - name: "Review execution environment details"
       debug: 
         var: summary
     

@@ -1,5 +1,5 @@
 {
-    "name": "test[0-Welcome screen]",
+    "name": "test[0-ansible-navigator --ee True --ce docker-Welcome screen]",
     "index": 0,
     "comment": "Welcome screen",
     "output": [

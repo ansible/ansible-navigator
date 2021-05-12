@@ -1,8 +1,7 @@
 - name: Gather collection details
-  ansible.builtin.shell: ansible-galaxy collection list
+  ansible.builtin.shell: ansible-galaxy collection list || true
   register: ansible_galaxy_collections
   changed_when: False
-  ignore_errors: True
 
 - name: Gather operating system details
   ansible.builtin.setup:

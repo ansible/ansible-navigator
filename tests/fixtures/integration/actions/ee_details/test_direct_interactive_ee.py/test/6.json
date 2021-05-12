@@ -1,11 +1,11 @@
 {
-    "name": "test[6-View report]",
+    "name": "test[6-:0-View report]",
     "index": 6,
     "comment": "View report",
     "output": [
         "PLAY [Review execution environment details for quay.io/ansible/ansible-runner:devel:0] *****************************************************************************************************************",
-        "TASK [Press 0 for summary information] *****************************************************************************************************************************************************************",
-        "OK: [localhost]",
+        "TASK [Review execution environment details] ************************************************************************************************************************************************************",
+        "OK: [execution-environment]",
         " 0│---",
         " 1│summary:",
         " 2│  ansible_version: 2.12.0.dev0",
@@ -58,7 +58,7 @@
         "49│    toml: 0.10.2",
         "50│    urllib3: 1.25.7",
         "51│    xmltodict: 0.12.0",
-        "52│  python_version: 3.8.3",
+        "52│  python_version: 3.6.8",
         "^f/PgUp page up                          ^b/PgDn page down                          ↑↓ scroll                          esc back                          :help help                           SUCCESSFUL"
     ]
 }
