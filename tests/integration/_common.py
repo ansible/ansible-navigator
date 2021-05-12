@@ -1,5 +1,6 @@
 """ some common funcs for the tests
 """
+import datetime
 import os
 import re
 import shlex
@@ -9,6 +10,7 @@ import time
 import json
 
 from copy import deepcopy
+from timeit import default_timer as timer
 from distutils.spawn import find_executable
 from typing import Any
 from typing import Dict
@@ -179,6 +181,7 @@ class TmuxSession:
         self._window_name = window_name
         self._config_path = config_path
         self._session_name = session_name
+        self._setup_screen: List
         self._cwd = cwd
         self._setup_commands = setup_commands or []
         self._pane_height = pane_height
@@ -220,6 +223,7 @@ class TmuxSession:
         set_up_commands = [venv, navigator_config] + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
         self._pane.send_keys(set_up_command)
+        self._setup_screen = self._pane.capture_pane()
 
         # get the cli prompt from pane
         self._cli_prompt = self._get_cli_prompt()
@@ -236,8 +240,10 @@ class TmuxSession:
         wait_on_playbook_status=False,
         wait_on_collection_fetch_prompt=None,
         wait_on_cli_prompt=False,
+        timeout=60,
     ):
         """interact with the tmux session"""
+        start_time = timer()
         self._pane.send_keys(value, suppress_history=False)
         ok_to_return = [False]
         while not all(ok_to_return):
@@ -246,6 +252,15 @@ class TmuxSession:
             while not showing:
                 time.sleep(0.1)
                 showing = self._pane.capture_pane()
+                elapsed = timer() - start_time
+                if elapsed > timeout:
+                    tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                    message = [f"******** ERROR: TMUX TIMEOUT @ {elapsed}s @ {tstamp} ********"]
+                    message += ["*********************** set up screen ***********************"]
+                    message += self._setup_screen
+                    message += ["*********************** showing *****************************"]
+                    message += showing
+                    return message
             if wait_on_cli_prompt:
                 # handle command sent but pane not updated
                 if len(showing) > 1:
