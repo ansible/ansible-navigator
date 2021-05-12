@@ -93,19 +93,19 @@ class NavigatorPostProcessor:
     def execution_environment(self, entry, config) -> PostProcessorReturn:
         """Post process execution_environment"""
         messages, errors = self._true_or_false(entry, config)
-        if entry.value.current is False:
-            success, message = check_for_ansible()
-            if success:
-                messages.append(LogMessage(level=logging.DEBUG, message=message))
-            else:
-                errors.append(message)
-        else:
+        if entry.value.current is True or config.app == "ee-details":
             container_engine_location = distutils.spawn.find_executable(config.container_engine)
             if container_engine_location is None:
                 error = "The specified container engine could not be found:"
                 error += f"'{config.container_engine}',"
                 error += f" set by '{config.entry('container_engine').value.source.value}'"
                 errors.append(error)
+        else:
+            success, message = check_for_ansible()
+            if success:
+                messages.append(LogMessage(level=logging.DEBUG, message=message))
+            else:
+                errors.append(message)
         return messages, errors
 
     @_post_processor

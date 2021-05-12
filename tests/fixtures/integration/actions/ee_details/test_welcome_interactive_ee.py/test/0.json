@@ -1,7 +1,7 @@
 {
-    "name": "test[0-/Users/user/github/ansible-navigator/venv/bin/python -m ansible_navigator --execution-environment true --ce docker-welcome-None]",
+    "name": "test[0-Welcome screen]",
     "index": 0,
-    "comment": "welcome",
+    "comment": "Welcome screen",
     "output": [
         " 0│## Welcome",
         " 1│---------------------------------------------------------------------------------------------------",

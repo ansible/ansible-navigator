@@ -1,0 +1,15 @@
+{
+    "name": "test[2-Check gather]",
+    "index": 2,
+    "comment": "Check gather",
+    "output": [
+        "  TASK",
+        "0│Gather execution environment details",
+        "1│Gather collection details",
+        "2│Gather operating system details",
+        "3│Gather python package details",
+        "4│Extract collections",
+        "5│Extract python packages",
+        "^f/PgUp page up                    ^b/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                     SUCCESSFUL"
+    ]
+}
