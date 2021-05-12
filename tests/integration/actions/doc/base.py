@@ -20,6 +20,7 @@ class BaseClass:
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
 
+
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_doc_session")
     def fixture_tmux_doc_session(request):
@@ -43,7 +44,7 @@ class BaseClass:
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
-        """test interactive config"""
+        """test interactive/stdout config"""
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":
@@ -58,7 +59,7 @@ class BaseClass:
         updated_received_output = []
         mask = "X" * 50
         for line in received_output:
-            if tmux_doc_session.cli_prompt in line:
+            if tmux_doc_session._cli_prompt in line:
                 updated_received_output.append(mask)
             elif "filename" in line or "│warnings:" in line:
                 updated_received_output.append(mask)

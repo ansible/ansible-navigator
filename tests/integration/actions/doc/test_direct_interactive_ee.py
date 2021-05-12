@@ -8,6 +8,7 @@ from .base import BaseClass
 
 from ..._common import container_runtime_or_fail
 
+
 # module doc
 CLI_MODULE_DOC = (
     "ansible-navigator doc testorg.coll_1.mod_1"

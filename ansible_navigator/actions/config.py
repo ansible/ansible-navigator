@@ -15,6 +15,7 @@ from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import Constants as C
 from ..runner.api import AnsibleCfgRunner
 from ..runner.api import CommandRunner
 from ..steps import Step
@@ -211,7 +212,15 @@ class Action(App):
                     return
                 ansible_config_path = exec_path
 
-            kwargs.update({"cmdline": self._args.cmdline})
+            if self._args.cmdline is not C.NOT_SET:
+                pass_through_arg = self._args.cmdline.copy()
+            else:
+                pass_through_arg = []
+
+            if self._args.help_config is True:
+                pass_through_arg.append("--help")
+
+            kwargs.update({"cmdline": pass_through_arg})
 
             self._runner = CommandRunner(executable_cmd=ansible_config_path, **kwargs)
             self._runner.run()

@@ -5,6 +5,7 @@ import pytest
 from .base import BaseClass
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
 
+
 CLI = "ansible-navigator --ee false"
 
 testdata = [

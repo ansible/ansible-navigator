@@ -132,6 +132,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default=generate_cache_path()),
         ),
         Entry(
+            name="help_config",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--hc", action="store_true"),
+            short_description="Help options for ansible-config command in stdout mode",
+            subcommands=["config"],
+            value=EntryValue(default=False),
+        ),
+        Entry(
             name="container_engine",
             choices=["podman", "docker"],
             cli_parameters=CliParameters(short="--ce"),

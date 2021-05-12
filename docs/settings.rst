@@ -283,6 +283,29 @@ The following table describes all available settings.
 |
 |
 
+.. list-table:: **Subcommand: config**
+  :widths: 2 3 5
+  :header-rows: 1
+
+  * - Name
+    - Description
+    - Settings
+  * - help-config
+    - Help options for ansible-config command in stdout mode
+    - | **Choices:** 'True' or 'False'
+      | **Default:** False
+      | **CLI:** `--hc` or `--help-config`
+      | **ENV:** ANSIBLE_NAVIGATOR_HELP_CONFIG
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              help-config:
+
+
+|
+
 .. list-table:: **Subcommand: doc**
   :widths: 2 3 5
   :header-rows: 1
