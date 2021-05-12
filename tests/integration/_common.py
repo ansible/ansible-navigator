@@ -224,6 +224,7 @@ class TmuxSession:
         set_up_command = " && ".join(set_up_commands)
         self._pane.send_keys(set_up_command)
         self._setup_screen = self._pane.capture_pane()
+        time.sleep(1)
 
         # get the cli prompt from pane
         self._cli_prompt = self._get_cli_prompt()
