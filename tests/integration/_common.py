@@ -185,6 +185,7 @@ class TmuxSession:
         self._pane_width = pane_width
         self._test_log_dir: Union[None, str]
         self._session_name = os.path.splitext(self._test_path)[0]
+        self._setup_capture: List
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -244,16 +245,14 @@ class TmuxSession:
         set_up_commands = tmux_common + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
         self._pane.send_keys(set_up_command)
-        time.sleep(1)
-
-        setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
-        with open(setup_capture_path, "w") as filehandle:
-            filehandle.writelines("\n".join(self._pane.capture_pane()))
 
         # wait for the prompt
         prompt_showing = True
         while not prompt_showing:
             prompt_showing = self._pane.capture_pane()[0] == self._cli_prompt
+            time.sleep(0.1)
+
+        self._setup_capture = self._pane.capture_pane()
 
         return self
 
@@ -282,9 +281,15 @@ class TmuxSession:
                 showing = self._pane.capture_pane()
                 elapsed = timer() - start_time
                 if elapsed > timeout:
+
+                    setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
+                    with open(setup_capture_path, "w") as filehandle:
+                        filehandle.writelines("\n".join(self._setup_capture))
+
                     timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
                     with open(timeout_capture_path, "w") as filehandle:
                         filehandle.writelines("\n".join(showing))
+
                     return showing
             if wait_on_cli_prompt:
                 # handle command sent but pane not updated

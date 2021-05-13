@@ -3,7 +3,8 @@
 import difflib
 import json
 import os
-import shutil
+
+from distutils.dir_util import copy_tree
 
 import pytest
 
@@ -28,9 +29,7 @@ class BaseClass:
 
         tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
         os.makedirs(tmp_coll_dir, exist_ok=True)
-        shutil.copytree(
-            FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"), dirs_exist_ok=True
-        )
+        copy_tree(FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"))
         params = {
             "test_path": request.node.nodeid,
             "setup_commands": [
