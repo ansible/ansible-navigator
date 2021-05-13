@@ -206,28 +206,32 @@ class TmuxSession:
         self._pane.set_height(self._pane_height)
         self._pane.set_width(self._pane_width)
 
-        # get the cli prompt from pane
-        self._cli_prompt = self._get_cli_prompt()
-
         # Figure out where the tox-initiated venv is. In environments where a
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
         # expect inside of tmux, so we can't depend on it. We *must* determine
-        # it before we enter tmux.
+        # it before we enter tmux. Do this before we switch to bash
         venv_path = os.environ.get("VIRTUAL_ENV")
         if venv_path is None or ".tox" not in venv_path:
             raise AssertionError(
                 "VIRTUAL_ENV environment variable was not set but tox should have set it."
             )
         venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
+        # get the USER before we start a clean shell
+        user = os.environ.get("USER")
+        home = os.environ.get("HOME")
 
-        # send the config envvar + other set up commands
+        # get a clean shell and predicatble prompt
+        self._cli_prompt = self._get_cli_prompt()
+
+        # set envars for this session
         tmux_common = [f"source {venv}"]
+        tmux_common.append(f"export HOME={home}")
+        tmux_common.append(f"export USER={user}")
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
         tmux_common.append("export ANSIBLE_NAVIGATOR_LOG_LEVEL=debug")
 
-        ci_running = os.environ.get("USER") == "zuul"
         self._test_log_dir = None
-        if ci_running:
+        if user == "zuul":
             self._test_log_dir = os.path.join(
                 "/home/zuul", "zuul-output", "anible-navigator", self._test_path
             )
@@ -248,15 +252,25 @@ class TmuxSession:
 
         set_up_commands = tmux_common + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
+
+        # send the setup commands
         self._pane.send_keys(set_up_command)
 
-        # wait for the prompt
+        # wait for the prompt after setup
+        prompt_showing = True
+        while not prompt_showing:
+            prompt_showing = self._pane.capture_pane()[-1] == self._cli_prompt
+            time.sleep(0.1)
+
+        # capture the setup screen
+        self._setup_capture = self._pane.capture_pane()
+
+        # clear the screen, wait for prompt
+        self._pane.send_keys("clear")
         prompt_showing = True
         while not prompt_showing:
             prompt_showing = self._pane.capture_pane()[0] == self._cli_prompt
             time.sleep(0.1)
-
-        self._setup_capture = self._pane.capture_pane()
 
         return self
 
@@ -312,13 +326,18 @@ class TmuxSession:
 
     def _get_cli_prompt(self):
         """get cli prompt"""
+        # give tmux a second to start
+        time.sleep(1)
+        # start a fresh clean shell, set TERM
+        self._pane.send_keys("env -i bash --noprofile --norc")
+        self._pane.send_keys("export TERM=xterm")
         self._pane.send_keys("clear")
+        bash_prompt_visible = False
         showing = []
-        while len(showing) != 1:
+        while not bash_prompt_visible and len(showing) != 1:
             showing = self._pane.capture_pane()
-            time.sleep(0.1)
-
-        return showing[0]
+            bash_prompt_visible = showing[0].startswith("bash")
+        return showing[-1]
 
 
 def update_fixtures(request, index, received_output, comment, testname=None):
