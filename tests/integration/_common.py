@@ -188,6 +188,7 @@ class TmuxSession:
         self._session_name = os.path.splitext(self._test_path)[0]
         self._setup_capture: List
         self._last_screen: List
+        self._fail_remaining: List = []
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -239,7 +240,8 @@ class TmuxSession:
             )
         else:
             self._test_log_dir = os.path.join("./", ".test_logs", self._test_path)
-            os.makedirs(self._test_log_dir, exist_ok=True)
+        
+        os.makedirs(self._test_log_dir, exist_ok=True)
 
         log_file = os.path.join(self._test_log_dir, "ansible-navigator.log")
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_LOG_FILE={log_file}")
@@ -291,6 +293,8 @@ class TmuxSession:
         timeout=60,
     ):
         """interact with the tmux session"""
+        if self._fail_remaining:
+            return self._fail_remaining
         start_time = timer()
         self._pane.send_keys(value)
 
@@ -338,6 +342,7 @@ class TmuxSession:
                 showing.insert(0, alert)
                 with open(timeout_capture_path, "w") as filehandle:
                     filehandle.writelines("\n".join(showing))
+                self._fail_remaining = ["******** Previous test failure ********"]
                 return showing
 
         self._last_screen = showing
