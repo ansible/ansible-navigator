@@ -132,14 +132,6 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default=generate_cache_path()),
         ),
         Entry(
-            name="help_config",
-            choices=[True, False],
-            cli_parameters=CliParameters(short="--hc", action="store_true"),
-            short_description="Help options for ansible-config command in stdout mode",
-            subcommands=["config"],
-            value=EntryValue(default=False),
-        ),
-        Entry(
             name="container_engine",
             choices=["podman", "docker"],
             cli_parameters=CliParameters(short="--ce"),
@@ -176,6 +168,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="execution-environment.image",
             short_description="Specify the name of the execution environment image",
             value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
+        ),
+        Entry(
+            name="help_config",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--hc", action="store_true"),
+            short_description="Help options for ansible-config command in stdout mode",
+            subcommands=["config"],
+            value=EntryValue(default=False),
         ),
         Entry(
             name="help_doc",
