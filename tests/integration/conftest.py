@@ -2,6 +2,8 @@
 import os
 import shutil
 import pytest
+import time
+import subprocess
 
 from ._common import TmuxSession
 from ._common import container_runtime_or_fail
@@ -47,4 +49,5 @@ def os_indendent_tmp():
     try:
         yield an_tmp
     finally:
+        subprocess.check_output(f"cp -r {an_tmp} ~/zuul-output/logs/an-tmp-{time.time()}", shell=True)
         shutil.rmtree(an_tmp)
