@@ -215,7 +215,7 @@ class TmuxSession:
         venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
 
         # send the config envvar + other set up commands
-        venv = f"source {venv}"
+        venv = f". {venv}"
         navigator_config = f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}"
         set_up_commands = [venv, navigator_config] + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
