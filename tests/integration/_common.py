@@ -264,8 +264,16 @@ class TmuxSession:
                     message += ["*********************** showing *****************************"]
                     message += showing
                     message.append(subprocess.check_output("ls ~", shell=True).decode("utf-8"))
-                    message.append(subprocess.check_output("cp ansible-navigator.log ~/zuul-output/", shell=True).decode("utf-8"))
-                    message.append(subprocess.check_output("cat ansible-navigator.log", shell=True).decode("utf-8"))
+                    message.append(
+                        subprocess.check_output(
+                            "cp ansible-navigator.log ~/zuul-output/", shell=True
+                        ).decode("utf-8")
+                    )
+                    message.append(
+                        subprocess.check_output("cat ansible-navigator.log", shell=True).decode(
+                            "utf-8"
+                        )
+                    )
                     return message
             if wait_on_cli_prompt:
                 # handle command sent but pane not updated
