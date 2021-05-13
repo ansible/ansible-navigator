@@ -18,6 +18,7 @@ from typing import Any
 from typing import Dict
 from typing import List
 from typing import Tuple
+from typing import Union
 from typing import Optional
 from unittest import mock
 
@@ -183,11 +184,12 @@ class TmuxSession:
         self._window_name = window_name
         self._config_path = config_path
         self._session_name = session_name
-        self._setup_screen: List
-        self._cwd = cwd
         self._setup_commands = setup_commands or []
+        self._cwd = cwd
         self._pane_height = pane_height
         self._pane_width = pane_width
+        self._ci_running: str
+        self._ci_test_dir: Union[None, str]
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -220,13 +222,28 @@ class TmuxSession:
         venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
 
         # send the config envvar + other set up commands
-        venv = f"source {venv}"
-        navigator_config = f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}"
-        set_up_commands = [venv, navigator_config] + self._setup_commands
+        tmux_common = [f"source {venv}"]
+        tmux_common.append(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
+        tmux_common.append("export ANSIBLE_NAVIGATOR_LOG_LEVEL=debug")
+
+        self._ci_running = os.environ.get("USER") == "zuul"
+        self._ci_test_dir = None
+        if self._ci_running:
+            self._ci_test_dir = os.path.join(
+                "/home/zuul", "zuul-output", "anible-navigator", self._window_name
+            )
+            ci_log_file = os.path.join(self._ci_test_dir, "ansible-navigator.log")
+            tmux_common.append(f"export ANSIBLE_NAVIGATOR_LOG_FILE={ci_log_file}")
+
+        set_up_commands = tmux_common + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
         self._pane.send_keys(set_up_command)
-        self._setup_screen = self._pane.capture_pane()
         time.sleep(1)
+
+        if self._ci_running:
+            ci_setup_capture_path = os.path.join(self._ci_test_dir, "showing_setup.txt")
+            with open(ci_setup_capture_path, "w") as filehandle:
+                filehandle.writelines("\n".join(self._pane.capture_pane()))
 
         # get the cli prompt from pane
         self._cli_prompt = self._get_cli_prompt()
@@ -257,24 +274,13 @@ class TmuxSession:
                 showing = self._pane.capture_pane()
                 elapsed = timer() - start_time
                 if elapsed > timeout:
-                    tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                    message = [f"******** ERROR: TMUX TIMEOUT @ {elapsed}s @ {tstamp} ********"]
-                    message += ["*********************** set up screen ***********************"]
-                    message += self._setup_screen
-                    message += ["*********************** showing *****************************"]
-                    message += showing
-                    message.append(subprocess.check_output("ls ~", shell=True).decode("utf-8"))
-                    message.append(
-                        subprocess.check_output(
-                            "cp ansible-navigator.log ~/zuul-output/", shell=True
-                        ).decode("utf-8")
-                    )
-                    message.append(
-                        subprocess.check_output("cat ansible-navigator.log", shell=True).decode(
-                            "utf-8"
+                    if self._ci_running:
+                        ci_timeout_capture_path = os.path.join(
+                            self._ci_test_dir, "showing_timeout.txt"
                         )
-                    )
-                    return message
+                        with open(ci_timeout_capture_path, "w") as filehandle:
+                            filehandle.writelines("\n".join(showing))
+                    return showing
             if wait_on_cli_prompt:
                 # handle command sent but pane not updated
                 if len(showing) > 1:
