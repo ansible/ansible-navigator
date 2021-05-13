@@ -20,7 +20,7 @@ class BaseClass:
     def fixture_tmux_config_session(request):
         """tmux fixture for this module"""
         params = {
-            "window_name": request.node.name,
+            "test_path": request.node.nodeid,
             "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42"],
         }
         with TmuxSession(**params) as tmux_session:

@@ -25,7 +25,7 @@ class BaseClass:
     @pytest.fixture(scope="module", name="tmux_inventory_session")
     def fixture_tmux_inventory_session(request):
         """tmux fixture for this module"""
-        params = {"window_name": request.node.name, "config_path": TEST_CONFIG_FILE}
+        params = {"test_path": request.node.nodeid, "config_path": TEST_CONFIG_FILE}
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 

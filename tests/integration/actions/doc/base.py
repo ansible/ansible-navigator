@@ -25,7 +25,7 @@ class BaseClass:
     def fixture_tmux_config_session(request):
         """tmux fixture for this module"""
         params = {
-            "window_name": request.node.name,
+            "test_path": request.node.nodeid,
             "setup_commands": [
                 f"export ANSIBLE_COLLECTIONS_PATH={FIXTURES_COLLECTION_DIR}",
                 "export ANSIBLE_DEVEL_WARNING=False",

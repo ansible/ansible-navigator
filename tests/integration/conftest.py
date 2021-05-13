@@ -43,8 +43,5 @@ def os_indendent_tmp():
         an_tmp = os.path.join(tmp_real, "an")
     else:
         an_tmp = os.path.join("/tmp", "private", "an")
-    os.makedirs(an_tmp)
-    try:
-        yield an_tmp
-    finally:
-        shutil.rmtree(an_tmp)
+    os.makedirs(an_tmp, exist_ok=True)
+    return an_tmp

@@ -1,11 +1,8 @@
 """ some common funcs for the tests
 """
-import datetime
 import os
 import re
 import shlex
-import shutil
-import subprocess
 import sys
 import tempfile
 import time
@@ -173,23 +170,21 @@ def get_executable_path(name):
 class TmuxSession:
     def __init__(
         self,
-        window_name,
+        test_path,
         config_path=None,
         cwd=None,
-        session_name="ansible-navigator-integration-test",
         setup_commands=None,
         pane_height=20,
         pane_width=200,
     ) -> None:
-        self._window_name = window_name
+        self._test_path = test_path
         self._config_path = config_path
-        self._session_name = session_name
         self._setup_commands = setup_commands or []
         self._cwd = cwd
         self._pane_height = pane_height
         self._pane_width = pane_width
-        self._ci_running: str
-        self._ci_test_dir: Union[None, str]
+        self._test_log_dir: Union[None, str]
+        self._session_name = os.path.splitext(self._test_path)[0]
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -201,7 +196,7 @@ class TmuxSession:
         self._session = self._server.new_session(
             session_name=self._session_name, start_directory=self._cwd, kill_session=True
         )
-        self._window = self._session.new_window(self._window_name)
+        self._window = self._session.new_window(self._session_name)
         self._pane = self._window.panes[0]
         self._pane.split_window(attach=False)
         # split vertical
@@ -209,6 +204,9 @@ class TmuxSession:
         # attached to upper left
         self._pane.set_height(self._pane_height)
         self._pane.set_width(self._pane_width)
+
+        # get the cli prompt from pane
+        self._cli_prompt = self._get_cli_prompt()
 
         # Figure out where the tox-initiated venv is. In environments where a
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
@@ -226,27 +224,37 @@ class TmuxSession:
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
         tmux_common.append("export ANSIBLE_NAVIGATOR_LOG_LEVEL=debug")
 
-        self._ci_running = os.environ.get("USER") == "zuul"
-        self._ci_test_dir = None
-        if self._ci_running:
-            self._ci_test_dir = os.path.join(
-                "/home/zuul", "zuul-output", "anible-navigator", self._window_name
+        ci_running = os.environ.get("USER") == "zuul"
+        self._test_log_dir = None
+        if ci_running:
+            self._test_log_dir = os.path.join(
+                "/home/zuul", "zuul-output", "anible-navigator", self._test_path
             )
-            ci_log_file = os.path.join(self._ci_test_dir, "ansible-navigator.log")
-            tmux_common.append(f"export ANSIBLE_NAVIGATOR_LOG_FILE={ci_log_file}")
+        else:
+            self._test_log_dir = os.path.join("./", ".test_logs", self._test_path)
+            os.makedirs(self._test_log_dir, exist_ok=True)
+
+        log_file = os.path.join(self._test_log_dir, "ansible-navigator.log")
+        tmux_common.append(f"export ANSIBLE_NAVIGATOR_LOG_FILE={log_file}")
+        playbook_artifact = os.path.join(self._test_log_dir, "playbook-artifact.log")
+        tmux_common.append(
+            f"export ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS={playbook_artifact}"
+        )
 
         set_up_commands = tmux_common + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
         self._pane.send_keys(set_up_command)
         time.sleep(1)
 
-        if self._ci_running:
-            ci_setup_capture_path = os.path.join(self._ci_test_dir, "showing_setup.txt")
-            with open(ci_setup_capture_path, "w") as filehandle:
-                filehandle.writelines("\n".join(self._pane.capture_pane()))
+        setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
+        with open(setup_capture_path, "w") as filehandle:
+            filehandle.writelines("\n".join(self._pane.capture_pane()))
 
-        # get the cli prompt from pane
-        self._cli_prompt = self._get_cli_prompt()
+        # wait for the prompt
+        prompt_showing = True
+        while not prompt_showing:
+            prompt_showing = self._pane.capture_pane()[0] == self._cli_prompt
+
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
@@ -274,12 +282,9 @@ class TmuxSession:
                 showing = self._pane.capture_pane()
                 elapsed = timer() - start_time
                 if elapsed > timeout:
-                    if self._ci_running:
-                        ci_timeout_capture_path = os.path.join(
-                            self._ci_test_dir, "showing_timeout.txt"
-                        )
-                        with open(ci_timeout_capture_path, "w") as filehandle:
-                            filehandle.writelines("\n".join(showing))
+                    timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
+                    with open(timeout_capture_path, "w") as filehandle:
+                        filehandle.writelines("\n".join(showing))
                     return showing
             if wait_on_cli_prompt:
                 # handle command sent but pane not updated

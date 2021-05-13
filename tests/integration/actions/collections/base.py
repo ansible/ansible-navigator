@@ -27,14 +27,12 @@ class BaseClass:
         """tmux fixture for this module"""
 
         tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
-        try:
-            shutil.rmtree(tmp_coll_dir)
-        except FileNotFoundError:
-            pass
-        os.makedirs(tmp_coll_dir)
-        shutil.copytree(FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"))
+        os.makedirs(tmp_coll_dir, exist_ok=True)
+        shutil.copytree(
+            FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"), dirs_exist_ok=True
+        )
         params = {
-            "window_name": request.node.name,
+            "test_path": request.node.nodeid,
             "setup_commands": [
                 f"cd {tmp_coll_dir}",
                 f"export ANSIBLE_COLLECTIONS_PATH={tmp_coll_dir}",
