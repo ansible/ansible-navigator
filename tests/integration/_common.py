@@ -188,7 +188,6 @@ class TmuxSession:
         self._session_name = os.path.splitext(self._test_path)[0]
         self._setup_capture: List
         self._last_screen: List
-        self._fail_remaining_tests: List = []
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -292,10 +291,6 @@ class TmuxSession:
         timeout=60,
     ):
         """interact with the tmux session"""
-        # if a previous test failed, get out fast
-        if self._fail_remaining_tests:
-            return self._fail_remaining_tests
-
         start_time = timer()
         self._pane.send_keys(value)
 
@@ -343,7 +338,6 @@ class TmuxSession:
                 showing.insert(0, alert)
                 with open(timeout_capture_path, "w") as filehandle:
                     filehandle.writelines("\n".join(showing))
-                self._fail_remaining_tests = ["******** Previous test failure, not run ********"]
                 return showing
 
         self._last_screen = showing
