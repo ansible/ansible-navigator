@@ -187,6 +187,8 @@ class TmuxSession:
         self._test_log_dir: Union[None, str]
         self._session_name = os.path.splitext(self._test_path)[0]
         self._setup_capture: List
+        self._last_screen: List
+        self._fail_remaining_tests: List = []
 
         if self._cwd is None:
             # ensure CWD is top folder of library
@@ -234,7 +236,7 @@ class TmuxSession:
         self._test_log_dir = None
         if user == "zuul":
             self._test_log_dir = os.path.join(
-                "/home/zuul", "zuul-output", "anible-navigator", self._test_path
+                "/home/zuul", "zuul-output", "logs", "anible-navigator", self._test_path
             )
         else:
             self._test_log_dir = os.path.join("./", ".test_logs", self._test_path)
@@ -254,24 +256,26 @@ class TmuxSession:
         set_up_commands = tmux_common + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
 
-        # send the setup commands
+        # send setup, wait for the prompt in last line
         self._pane.send_keys(set_up_command)
-
-        # wait for the prompt after setup
-        prompt_showing = True
-        while not prompt_showing:
-            prompt_showing = self._pane.capture_pane()[-1] != self._cli_prompt
+        while True:
+            prompt_showing = self._cli_prompt in self._pane.capture_pane()[-1]
+            if prompt_showing:
+                break
             time.sleep(0.1)
 
         # capture the setup screen
         self._setup_capture = self._pane.capture_pane()
 
-        # clear the screen, wait for prompt
+        # clear the screen, wait for prompt in line 0
         self._pane.send_keys("clear")
-        prompt_showing = True
-        while not prompt_showing:
-            prompt_showing = self._pane.capture_pane()[0] == self._cli_prompt
+        while True:
+            prompt_showing = self._cli_prompt in self._pane.capture_pane()[0]
+            if prompt_showing:
+                break
             time.sleep(0.1)
+
+        self._last_screen = self._pane.capture_pane()
 
         return self
 
@@ -282,51 +286,67 @@ class TmuxSession:
     def interaction(
         self,
         value,
-        wait_on_help=True,
         wait_on_playbook_status=False,
         wait_on_collection_fetch_prompt=None,
         wait_on_cli_prompt=False,
         timeout=60,
     ):
         """interact with the tmux session"""
+        # if a previous test failed, get out fast
+        if self._fail_remaining_tests:
+            return self._fail_remaining_tests
+
         start_time = timer()
-        self._pane.send_keys(value, suppress_history=False)
-        ok_to_return = [False]
-        while not all(ok_to_return):
+        self._pane.send_keys(value)
+
+        setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
+        timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
+
+        while True:
             ok_to_return = []
-            showing = []
-            while not showing:
-                time.sleep(0.1)
-                showing = self._pane.capture_pane()
-                elapsed = timer() - start_time
-                if elapsed > timeout:
 
-                    setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
-                    with open(setup_capture_path, "w") as filehandle:
-                        filehandle.writelines("\n".join(self._setup_capture))
+            showing = self._pane.capture_pane()
 
-                    tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                    alert = [f"******** ERROR: TMUX TIMEOUT @ {elapsed}s @ {tstamp} ********"]
-                    showing.insert(0, alert)
-
-                    timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
-                    with open(timeout_capture_path, "w") as filehandle:
-                        filehandle.writelines("\n".join(showing))
-
-                    return showing
-            if wait_on_cli_prompt:
-                # handle command sent but pane not updated
-                if len(showing) > 1:
-                    ok_to_return.append(self._cli_prompt in showing[-1])
+            if showing:
+                if wait_on_cli_prompt:
+                    # Wait for the cli prompt at the end, a stdout test
+                    if len(showing) > 1:
+                        ok_to_return.append(self._cli_prompt in showing[-1])
+                    else:
+                        ok_to_return.append(False)
                 else:
-                    ok_to_return.append(False)
+                    # Guarantee that the screen has changed
+                    ok_to_return.append(showing != self._last_screen)
+                    if showing:
+                        # Guarantee navigator is up and running
+                        ok_to_return.append(":help help" in showing[-1])
+                        # Wait for a specific playbook status
+                        if wait_on_playbook_status:
+                            ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
+                        # Wait for the lack of "Collecting collection content"
+                        if wait_on_collection_fetch_prompt:
+                            ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
             else:
-                if wait_on_help:
-                    ok_to_return.append(any(":help help" in line for line in showing))
-                if wait_on_playbook_status:
-                    ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
-                if wait_on_collection_fetch_prompt:
-                    ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
+                ok_to_return.append(False)
+
+            if all(ok_to_return):
+                break
+
+            elapsed = timer() - start_time
+            if elapsed > timeout:
+                with open(setup_capture_path, "w") as filehandle:
+                    filehandle.writelines("\n".join(self._setup_capture))
+
+                tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                # taint the screen output w/ timestamp so it's never a valid fixture
+                alert = f"******** ERROR: TMUX TIMEOUT @ {elapsed}s @ {tstamp} ********"
+                showing.insert(0, alert)
+                with open(timeout_capture_path, "w") as filehandle:
+                    filehandle.writelines("\n".join(showing))
+                self._fail_remaining_tests = ["******** Previous test failure, not run ********"]
+                return showing
+
+        self._last_screen = showing
         return showing
 
     def _get_cli_prompt(self):
@@ -338,10 +358,13 @@ class TmuxSession:
         self._pane.send_keys("clear")
         bash_prompt_visible = False
         showing = []
-        while not bash_prompt_visible and len(showing) != 1:
+        while True:
             showing = self._pane.capture_pane()
             if showing:
                 bash_prompt_visible = showing[0].startswith("bash")
+            if bash_prompt_visible and len(showing) == 1:
+                break
+            time.sleep(0.1)
         return showing[-1]
 
 

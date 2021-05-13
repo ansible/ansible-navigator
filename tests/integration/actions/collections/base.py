@@ -58,6 +58,9 @@ class BaseClass:
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
         """test interactive config"""
+
+        # wait on help here to ensure we get the welcome screen and subsequent screens
+        # after entering a : command
         received_output = tmux_collections_session.interaction(
             user_input, wait_on_collection_fetch_prompt=collection_fetch_prompt
         )
