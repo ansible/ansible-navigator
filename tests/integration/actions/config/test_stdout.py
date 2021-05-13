@@ -47,30 +47,6 @@ def test_run_stdout_dump_container() -> None:
     # assert err == ""
 
 
-# ansible-config list with EE
-CLI_CONFIG_LIST_WITH_EE = (
-    "ansible-navigator config list -m stdout"
-    " --execution-environment true --ce " + container_runtime_or_fail()
-)
-
-testdata_1: List = [
-    (
-        0,
-        CLI_CONFIG_LIST_WITH_EE,
-        "ansible-navigator config list with ee",
-        "config_list_with_ee",
-        ["ANSIBLE_YAML_FILENAME_EXT"],
-    ),
-]
-
-
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_1)
-class TestConfigListWithEE(BaseClass):
-    """run the tests"""
-
-    TEST_FOR_MODE = "stdout"
-
-
 # ansible-config list without EE
 CLI_CONFIG_LIST_WITHOUT_EE = (
     "ansible-navigator config list -m stdout" " --execution-environment false"
