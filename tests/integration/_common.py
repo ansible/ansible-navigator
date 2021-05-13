@@ -260,7 +260,7 @@ class TmuxSession:
         # wait for the prompt after setup
         prompt_showing = True
         while not prompt_showing:
-            prompt_showing = self._pane.capture_pane()[-1] == self._cli_prompt
+            prompt_showing = self._pane.capture_pane()[-1] != self._cli_prompt
             time.sleep(0.1)
 
         # capture the setup screen
@@ -304,16 +304,16 @@ class TmuxSession:
                     setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
                     with open(setup_capture_path, "w") as filehandle:
                         filehandle.writelines("\n".join(self._setup_capture))
-                    
+
                     tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
                     alert = [f"******** ERROR: TMUX TIMEOUT @ {elapsed}s @ {tstamp} ********"]
-                    alerted_showing = [alert] + showing
+                    showing.insert(0, alert)
 
                     timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
                     with open(timeout_capture_path, "w") as filehandle:
-                        filehandle.writelines("\n".join(alerted_showing))
-                           
-                    return alerted_showing
+                        filehandle.writelines("\n".join(showing))
+
+                    return showing
             if wait_on_cli_prompt:
                 # handle command sent but pane not updated
                 if len(showing) > 1:
