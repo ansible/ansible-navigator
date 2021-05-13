@@ -1,5 +1,6 @@
 """ some common funcs for the tests
 """
+import datetime
 import os
 import re
 import shlex
@@ -224,7 +225,7 @@ class TmuxSession:
         self._cli_prompt = self._get_cli_prompt()
 
         # set envars for this session
-        tmux_common = [f"source {venv}"]
+        tmux_common = [f". {venv}"]
         tmux_common.append(f"export HOME={home}")
         tmux_common.append(f"export USER={user}")
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_CONFIG={self._config_path}")
@@ -285,7 +286,7 @@ class TmuxSession:
         wait_on_playbook_status=False,
         wait_on_collection_fetch_prompt=None,
         wait_on_cli_prompt=False,
-        timeout=30,
+        timeout=60,
     ):
         """interact with the tmux session"""
         start_time = timer()
@@ -303,12 +304,16 @@ class TmuxSession:
                     setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
                     with open(setup_capture_path, "w") as filehandle:
                         filehandle.writelines("\n".join(self._setup_capture))
+                    
+                    tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                    alert = [f"******** ERROR: TMUX TIMEOUT @ {elapsed}s @ {tstamp} ********"]
+                    alerted_showing = [alert] + showing
 
                     timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
                     with open(timeout_capture_path, "w") as filehandle:
-                        filehandle.writelines("\n".join(showing))
-
-                    return showing
+                        filehandle.writelines("\n".join(alerted_showing))
+                           
+                    return alerted_showing
             if wait_on_cli_prompt:
                 # handle command sent but pane not updated
                 if len(showing) > 1:
