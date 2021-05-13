@@ -240,7 +240,7 @@ class TmuxSession:
             )
         else:
             self._test_log_dir = os.path.join("./", ".test_logs", self._test_path)
-        
+
         os.makedirs(self._test_log_dir, exist_ok=True)
 
         log_file = os.path.join(self._test_log_dir, "ansible-navigator.log")
@@ -353,7 +353,7 @@ class TmuxSession:
         # give tmux a second to start
         # start a fresh clean shell, set TERM
         self._pane.send_keys("env -i bash --noprofile --norc")
-        self._pane.send_keys("export TERM=xterm")
+        self._pane.send_keys("export TERM=xterm-256color")
         self._pane.send_keys("clear")
         bash_prompt_visible = False
         showing = []
