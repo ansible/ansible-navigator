@@ -5,10 +5,9 @@ import pytest
 from .base import BaseClass
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
 
-from ..._common import get_executable_path
 
 CLI = (
-    get_executable_path("python") + " -m ansible_navigator inventory"
+    "ansible-navigator inventory"
     " --execution-environment false" + f" -i {ANSIBLE_INVENTORY_FIXTURE_DIR}"
 )
 
@@ -43,4 +42,5 @@ testdata = [
 class Test(BaseClass):
     """run the tests"""
 
+    TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False

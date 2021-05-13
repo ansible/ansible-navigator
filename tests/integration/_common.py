@@ -219,6 +219,7 @@ class TmuxSession:
                 "VIRTUAL_ENV environment variable was not set but tox should have set it."
             )
         venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
+
         # get the USER before we start a clean shell
         user = os.environ.get("USER")
         home = os.environ.get("HOME")
@@ -287,48 +288,50 @@ class TmuxSession:
     def interaction(
         self,
         value,
-        wait_on_playbook_status=False,
-        wait_on_collection_fetch_prompt=None,
-        wait_on_cli_prompt=False,
+        search_within_response,
+        ignore_within_response=None,
         timeout=60,
     ):
         """interact with the tmux session"""
+        showing = None
         if self._fail_remaining:
             return self._fail_remaining
         start_time = timer()
+
+        # Added sleep to emulate delay between user interactions
+        # and allow time for screen to refresh.
+        # Note: If this delay is not added test might fail intermittently
+        # on slower sys.
+        time.sleep(1)
         self._pane.send_keys(value)
 
         setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
         timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
 
-        while True:
-            ok_to_return = []
+        ok_to_return = False
+        while not ok_to_return:
+
+            capture = True
+            while capture:
+                showing = self._pane.capture_pane()
+                # recapture if pane is not updated after executing initial command
+                # in which case len of caputred output will be 1.
+                if len(showing) > 1:
+                    capture = False
+                time.sleep(0.1)
 
             showing = self._pane.capture_pane()
-
             if showing:
-                if wait_on_cli_prompt:
-                    # Wait for the cli prompt at the end, a stdout test
-                    if len(showing) > 1:
-                        ok_to_return.append(self._cli_prompt in showing[-1])
-                    else:
-                        ok_to_return.append(False)
-                else:
-                    # Guarantee that the screen has changed
-                    ok_to_return.append(showing != self._last_screen)
-                    if showing:
-                        # Guarantee navigator is up and running
-                        ok_to_return.append(":help help" in showing[-1])
-                        # Wait for a specific playbook status
-                        if wait_on_playbook_status:
-                            ok_to_return.append(showing[-1].endswith(wait_on_playbook_status))
-                        # Wait for the lack of "Collecting collection content"
-                        if wait_on_collection_fetch_prompt:
-                            ok_to_return.append(wait_on_collection_fetch_prompt not in showing[0])
-            else:
-                ok_to_return.append(False)
+                if search_within_response in showing[-1]:
+                    ok_to_return = True
 
-            if all(ok_to_return):
+                if ignore_within_response:
+                    for line in showing:
+                        if ignore_within_response in line:
+                            ok_to_return = False
+                            break
+
+            if ok_to_return:
                 break
 
             elapsed = timer() - start_time

@@ -1,4 +1,4 @@
-""" doc direct from cli interactive w/ ee
+""" doc direct from cli stdout tests
 """
 from typing import List
 
@@ -7,7 +7,7 @@ import pytest
 from .base import BaseClass
 
 from ..._common import container_runtime_or_fail
-from ..._common import get_executable_path
+
 
 # ansible-doc help with EE
 CLI_DOC_HELP_WITH_EE = (
@@ -30,7 +30,7 @@ testdata_1: List = [
 class TestDocHelpWithEE(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
 
 
 # ansible-doc help without EE
@@ -53,7 +53,7 @@ testdata_2: List = [
 class TestDocHelpWithoutEE(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
 
 
 # ansible-doc help failed check in interactive mode
@@ -77,7 +77,7 @@ testdata_3: List = [
 class TestDocHelpWithEEWrongMode(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
 
 
 # ansible-doc help failed check in interactive mode
@@ -101,7 +101,7 @@ testdata_4: List = [
 class TestDocHelpWithoutEEWrongMode(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
 
 
 # doc command run in stdout mode without EE
@@ -124,7 +124,7 @@ testdata_5: List = [
 class TestModuleDocWithoutEE(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
 
 
@@ -149,7 +149,7 @@ testdata_6: List = [
 class TestModuleDocWithEE(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
 
 
@@ -174,7 +174,7 @@ testdata_7: List = [
 class TestLookUpDocWithoutEE(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
 
 
@@ -199,5 +199,5 @@ testdata_8: List = [
 class TestLookUpDocWithEE(BaseClass):
     """run the tests"""
 
-    WAIT_ON_CLI_PROMPT = True
+    TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False

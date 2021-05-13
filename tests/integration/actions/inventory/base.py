@@ -38,7 +38,18 @@ class BaseClass:
         assert os.path.exists(ANSIBLE_INVENTORY_FIXTURE_DIR)
         assert os.path.exists(TEST_CONFIG_FILE)
 
-        received_output = tmux_inventory_session.interaction(user_input)
+        if self.TEST_FOR_MODE == "interactive":
+            search_within_response = ":help help"
+        elif self.TEST_FOR_MODE == "stdout":
+            search_within_response = tmux_inventory_session._cli_prompt
+        else:
+            raise ValueError(
+                "Value of 'TEST_FOR_MODE' is not set."
+                " Valid value is either 'interactive' or 'stdout'"
+            )
+
+        received_output = tmux_inventory_session.interaction(user_input, search_within_response)
+
         if self.UPDATE_FIXTURES:
             update_fixtures(request, index, received_output, comment)
         dir_path, file_name = fixture_path_from_request(request, index)

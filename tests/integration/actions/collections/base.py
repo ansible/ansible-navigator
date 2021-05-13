@@ -3,10 +3,10 @@
 import difflib
 import json
 import os
+import pytest
 
 from distutils.dir_util import copy_tree
-
-import pytest
+from typing import Optional
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
@@ -21,6 +21,7 @@ class BaseClass:
 
     UPDATE_FIXTURES = False
     EXECUTION_ENVIRONMENT_TEST = False
+    TEST_FOR_MODE: Optional[str] = None
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_collections_session")
@@ -52,7 +53,6 @@ class BaseClass:
         index,
         user_input,
         comment,
-        collection_fetch_prompt,
     ):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
@@ -61,8 +61,18 @@ class BaseClass:
 
         # wait on help here to ensure we get the welcome screen and subsequent screens
         # after entering a : command
+
+        ignore_within_response = "Collecting collection content"
+        if self.TEST_FOR_MODE == "interactive":
+            search_within_response = ":help help"
+        else:
+            raise ValueError(
+                "Value of 'TEST_FOR_MODE' is not set."
+                " Valid value is either 'interactive' or 'stdout'"
+            )
+
         received_output = tmux_collections_session.interaction(
-            user_input, wait_on_collection_fetch_prompt=collection_fetch_prompt
+            user_input, search_within_response, ignore_within_response=ignore_within_response
         )
 
         received_output = [
