@@ -285,7 +285,7 @@ class TmuxSession:
         wait_on_playbook_status=False,
         wait_on_collection_fetch_prompt=None,
         wait_on_cli_prompt=False,
-        timeout=60,
+        timeout=30,
     ):
         """interact with the tmux session"""
         start_time = timer()
@@ -327,7 +327,6 @@ class TmuxSession:
     def _get_cli_prompt(self):
         """get cli prompt"""
         # give tmux a second to start
-        time.sleep(1)
         # start a fresh clean shell, set TERM
         self._pane.send_keys("env -i bash --noprofile --norc")
         self._pane.send_keys("export TERM=xterm")
@@ -336,7 +335,8 @@ class TmuxSession:
         showing = []
         while not bash_prompt_visible and len(showing) != 1:
             showing = self._pane.capture_pane()
-            bash_prompt_visible = showing[0].startswith("bash")
+            if showing:
+                bash_prompt_visible = showing[0].startswith("bash")
         return showing[-1]
 
 
