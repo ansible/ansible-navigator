@@ -241,6 +241,10 @@ class TmuxSession:
         tmux_common.append(
             f"export ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS={playbook_artifact}"
         )
+        collection_doc_cache = os.path.join(self._test_log_dir, "collection_doc_cache.db")
+        tmux_common.append(
+            f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH={collection_doc_cache}"
+        )
 
         set_up_commands = tmux_common + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
