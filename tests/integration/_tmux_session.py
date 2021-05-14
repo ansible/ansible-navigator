@@ -79,7 +79,7 @@ class TmuxSession:
         # set envars for this session
         tmux_common = [f". {venv}"]
         tmux_common.append("export TERM=xterm")
-        tmux_common.append("export LANG=en_US.utf8")
+        tmux_common.append("export LANG=en_US.UTF-8")
         tmux_common.append(f"export HOME='{home}'")
         tmux_common.append(f"export USER='{user}'")
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_CONFIG='{self._config_path}'")
