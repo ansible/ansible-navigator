@@ -10,7 +10,7 @@ from typing import Optional
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._common import TmuxSession
+from ..._tmux_session import TmuxSession
 
 from ....defaults import FIXTURES_COLLECTION_DIR
 
@@ -32,7 +32,6 @@ class BaseClass:
         os.makedirs(tmp_coll_dir, exist_ok=True)
         copy_tree(FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"))
         params = {
-            "test_path": request.node.nodeid,
             "setup_commands": [
                 f"cd {tmp_coll_dir}",
                 f"export ANSIBLE_COLLECTIONS_PATH={tmp_coll_dir}",
@@ -41,6 +40,7 @@ class BaseClass:
             ],
             "pane_height": "2000",
             "pane_width": "200",
+            "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session

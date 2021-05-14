@@ -8,7 +8,7 @@ import pytest
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._common import TmuxSession
+from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/load")
@@ -26,13 +26,13 @@ class BaseClass:
     def fixture_tmux_session(request):
         """tmux fixture for this module"""
         params = {
-            "test_path": request.node.nodeid,
+            "config_path": TEST_CONFIG_FILE,
+            "pane_height": "100",
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
-            "config_path": TEST_CONFIG_FILE,
-            "pane_height": "100",
+            "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session

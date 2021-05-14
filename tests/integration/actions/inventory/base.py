@@ -4,11 +4,13 @@ import difflib
 import json
 import os
 
+from typing import Optional
+
 import pytest
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._common import TmuxSession
+from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/inventory")
@@ -20,12 +22,13 @@ class BaseClass:
     """base class for interactive inventory tests"""
 
     UPDATE_FIXTURES = False
+    TEST_FOR_MODE: Optional[str] = None
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_inventory_session")
     def fixture_tmux_inventory_session(request):
         """tmux fixture for this module"""
-        params = {"test_path": request.node.nodeid, "config_path": TEST_CONFIG_FILE}
+        params = {"config_path": TEST_CONFIG_FILE, "unique_test_id": request.node.nodeid}
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
@@ -41,7 +44,7 @@ class BaseClass:
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":
-            search_within_response = tmux_inventory_session._cli_prompt
+            search_within_response = tmux_inventory_session.cli_prompt
         else:
             raise ValueError(
                 "Value of 'TEST_FOR_MODE' is not set."

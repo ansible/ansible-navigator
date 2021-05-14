@@ -7,7 +7,7 @@ import pytest
 from typing import Optional
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._common import TmuxSession
+from ..._tmux_session import TmuxSession
 
 
 class BaseClass:
@@ -21,8 +21,8 @@ class BaseClass:
     def fixture_tmux_config_session(request):
         """tmux fixture for this module"""
         params = {
-            "test_path": request.node.nodeid,
             "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42"],
+            "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -38,7 +38,7 @@ class BaseClass:
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":
-            search_within_response = tmux_config_session._cli_prompt
+            search_within_response = tmux_config_session.cli_prompt
         else:
             raise ValueError(
                 "Value of 'TEST_FOR_MODE' is not set."
@@ -54,7 +54,7 @@ class BaseClass:
             # mask out some config that is subject to change each run
             for idx, line in enumerate(received_output):
                 mask = "X" * 50
-                if tmux_config_session._cli_prompt in line:
+                if tmux_config_session.cli_prompt in line:
                     received_output[idx] = mask
                 else:
                     if "13│BECOME_PLUGIN_PATH" in line:

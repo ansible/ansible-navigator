@@ -1,9 +1,7 @@
 """ fixtures """
 import os
-import shutil
 import pytest
 
-from ._common import TmuxSession
 from ._common import container_runtime_or_fail
 
 EXECUTION_MODES = ["interactive", "stdout"]
@@ -11,6 +9,7 @@ EXECUTION_MODES = ["interactive", "stdout"]
 
 @pytest.fixture(scope="session")
 def test_fixtures_dir():
+    """the test fixture directory"""
     return os.path.join(os.path.dirname(__file__), "..", "fixtures")
 
 

@@ -9,7 +9,7 @@ from typing import Optional
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._common import TmuxSession
+from ..._tmux_session import TmuxSession
 
 from ....defaults import FIXTURES_COLLECTION_DIR
 
@@ -25,14 +25,14 @@ class BaseClass:
     def fixture_tmux_doc_session(request):
         """tmux fixture for this module"""
         params = {
-            "test_path": request.node.nodeid,
+            "pane_height": "2000",
+            "pane_width": "200",
             "setup_commands": [
                 f"export ANSIBLE_COLLECTIONS_PATH={FIXTURES_COLLECTION_DIR}",
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
-            "pane_height": "2000",
-            "pane_width": "200",
+            "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -47,7 +47,7 @@ class BaseClass:
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":
-            search_within_response = tmux_doc_session._cli_prompt
+            search_within_response = tmux_doc_session.cli_prompt
         else:
             raise ValueError(
                 "Value of 'TEST_FOR_MODE' is not set."
@@ -58,7 +58,7 @@ class BaseClass:
         updated_received_output = []
         mask = "X" * 50
         for line in received_output:
-            if tmux_doc_session._cli_prompt in line:
+            if tmux_doc_session.cli_prompt in line:
                 updated_received_output.append(mask)
             elif "filename" in line or "│warnings:" in line:
                 updated_received_output.append(mask)
