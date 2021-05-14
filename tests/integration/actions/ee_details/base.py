@@ -24,12 +24,11 @@ TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/ee_details")
 TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
 
 
-class Mode(Enum):
+class SearchFor(Enum):
     """set the test mode"""
 
-    STDOUT = "test runs in stdout mode"
-    INTERACTIVE = "test run in interactive mode"
-    UNKNOWN = "mode not set"
+    HELP = "search for help"
+    PROMPT = "cmd prompt"
 
 
 class Command(NamedTuple):
@@ -62,7 +61,7 @@ class Step(NamedTuple):
     look_fors: List[str] = []
     playbook_status: Union[None, str] = None
     step_index: int = 0
-    wait_on_cli_prompt: bool = False
+    search_within_response: Union[SearchFor, str] = SearchFor.HELP
 
 
 def add_indicies(steps):
@@ -88,7 +87,6 @@ base_steps = (
 class BaseClass:
     """base class for interactive stdout tests"""
 
-    TEST_MODE = Mode.UNKNOWN
     UPDATE_FIXTURES = False
 
     @staticmethod
@@ -107,7 +105,7 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_session, step):
+    def test(self, request, tmux_session, step: Step):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
@@ -115,10 +113,12 @@ class BaseClass:
         """test"""
         assert os.path.exists(TEST_CONFIG_FILE)
 
-        if self.TEST_MODE is Mode.INTERACTIVE:
+        if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
-        elif self.TEST_MODE is Mode.STDOUT:
+        elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
+        elif isinstance(step.search_within_response, str):
+            search_within_response = step.search_within_response
         else:
             raise ValueError("test mode not set")
 
