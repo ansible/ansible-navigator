@@ -103,14 +103,16 @@ class TmuxSession:
         # send setup, wait for the prompt in last line
         start_time = timer()
         self._pane.send_keys(set_up_command)
+        prompt_showing = False
         while True:
             showing = self._pane.capture_pane()
             # find the prompt in the last line of a full screen
             # or at least a screen as big as the list of envars
             # because the envars were dumped
-            prompt_showing = self.cli_prompt in showing[-1] and len(showing) > min(
-                len(tmux_common), int(self._pane_height) - 1
-            )
+            if showing:
+                prompt_showing = self.cli_prompt in showing[-1] and len(showing) > min(
+                    len(tmux_common), int(self._pane_height) - 1
+                )
             if prompt_showing:
                 break
             elapsed = timer() - start_time
@@ -127,8 +129,12 @@ class TmuxSession:
         # clear the screen, wait for prompt in line 0
         start_time = timer()
         self._pane.send_keys("clear")
+        prompt_showing = False
         while True:
-            prompt_showing = self.cli_prompt in self._pane.capture_pane()[0]
+            showing = self._pane.capture_pane()
+            # the scrren has been cleared, wait for prompt in first line
+            if showing:
+                prompt_showing = self.cli_prompt in showing[0]
             if prompt_showing:
                 break
             elapsed = timer() - start_time
