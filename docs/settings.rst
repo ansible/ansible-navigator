@@ -321,7 +321,7 @@ The following table describes all available settings.
     - Specify the plugin type, 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
     - | **Choices:** 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
       | **Default:** module
-      | **CLI:** `-t` or `----type`
+      | **CLI:** `-t` or `--type`
       | **ENV:** ANSIBLE_NAVIGATOR_PLUGIN_TYPE
       | **Settings file:**
 
