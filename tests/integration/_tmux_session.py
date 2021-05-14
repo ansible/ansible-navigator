@@ -6,6 +6,7 @@ import time
 
 from timeit import default_timer as timer
 from typing import List
+from typing import Union
 
 import libtmux  # type: ignore
 
@@ -153,11 +154,15 @@ class TmuxSession:
     def interaction(
         self,
         value,
-        search_within_response,
+        search_within_response: Union[None, List, str] = None,
         ignore_within_response=None,
         timeout=60,
     ):
-        """interact with the tmux session"""
+        """interact with the tmux session
+        :param value: send to screen
+        :param search_within_response: a list of strs or str to find
+        :param ignore_within_reponse: ignore screen if this there
+        """
         showing = None
         if self._fail_remaining:
             return self._fail_remaining
@@ -221,11 +226,14 @@ class TmuxSession:
             showing = self._pane.capture_pane()
 
             if showing:
-                if search_within_response:
+                if isinstance(search_within_response, str):
                     for line in showing:
                         if search_within_response in line:
                             ok_to_return = True
                             break
+                elif isinstance(search_within_response, list):
+                    page = " ".join(showing)
+                    ok_to_return = all(srch in page for srch in search_within_response)
 
                 if ignore_within_response:
                     for line in showing:

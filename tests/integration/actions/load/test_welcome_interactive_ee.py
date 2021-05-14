@@ -12,7 +12,7 @@ CLI = "ansible-navigator --execution-environment true --ce " + container_runtime
 
 testdata = [
     (0, CLI, "welcome", ":help help"),
-    (1, f":load {PLAYBOOK_ARTIFACT}", "Play list", "100%"),
+    (1, f":load {PLAYBOOK_ARTIFACT}", "Play list", ["100%", "SUCCESSFUL"]),
     (2, ":0", "Task list", ":help help"),
     (3, ":0", "Task 1", ":help help"),
     (4, ":stdout", "Check stdout", ":help help"),
