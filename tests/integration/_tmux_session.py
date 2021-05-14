@@ -245,7 +245,8 @@ class TmuxSession:
         bash_prompt_visible = False
         while True:
             showing = self._pane.capture_pane()
-            bash_prompt_visible = showing[-1].startswith("bash")
+            if showing:
+                bash_prompt_visible = showing[-1].startswith("bash")
             if bash_prompt_visible:
                 break
 
