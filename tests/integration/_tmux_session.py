@@ -208,8 +208,11 @@ class TmuxSession:
             showing = self._pane.capture_pane()
 
             if showing:
-                if search_within_response in showing[-1]:
-                    ok_to_return = True
+                if search_within_response:
+                    for line in showing:
+                        if search_within_response in line:
+                            ok_to_return = True
+                            break
 
                 if ignore_within_response:
                     for line in showing:

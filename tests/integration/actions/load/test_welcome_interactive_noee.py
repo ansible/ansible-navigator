@@ -5,13 +5,11 @@ import pytest
 from .base import BaseClass
 from .base import PLAYBOOK_ARTIFACT
 
-from ..._common import get_executable_path
-
 CLI = "ansible-navigator --execution-environment false"
 
 testdata = [
     (0, CLI, "welcome", ":help help"),
-    (1, f":load {PLAYBOOK_ARTIFACT}", "Play list", "SUCCESSFUL"),
+    (1, f":load {PLAYBOOK_ARTIFACT}", "Play list", "100%"),
     (2, ":0", "Task list", ":help help"),
     (3, ":0", "Task 1", ":help help"),
     (4, ":stdout", "Check stdout", ":help help"),

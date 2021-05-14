@@ -8,7 +8,6 @@ from .base import BaseClass
 
 from ..._common import container_runtime_or_fail
 
-
 # module doc
 CLI_MODULE_DOC = (
     "ansible-navigator" " --execution-environment true --ce " + container_runtime_or_fail()

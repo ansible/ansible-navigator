@@ -5,8 +5,6 @@ import pytest
 from typing import List
 from .base import BaseClass
 
-from ..._common import get_executable_path
-
 # module doc
 CLI_MODULE_DOC = "ansible-navigator doc testorg.coll_1.mod_1 --execution-environment false"
 testdata_module_doc: List = [

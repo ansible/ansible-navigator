@@ -5,7 +5,6 @@ import pytest
 from .base import BaseClass
 from .base import ANSIBLE_PLAYBOOK
 
-
 CLI = "ansible-navigator" f" run {ANSIBLE_PLAYBOOK}" " --execution-environment false"
 
 testdata = [
