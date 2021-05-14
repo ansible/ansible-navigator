@@ -65,7 +65,7 @@ def generate_test_log_dir(unique_test_id):
     user = os.environ.get("USER")
     if user == "zuul":
         directory = os.path.join(
-            "/home/zuul", "zuul-output", "logs", "anible-navigator", unique_test_id
+            "/", "home", "zuul", "zuul-output", "logs", "anible-navigator", unique_test_id
         )
     else:
         directory = os.path.join("./", ".test_logs", unique_test_id)
