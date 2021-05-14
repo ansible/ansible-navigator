@@ -129,35 +129,31 @@ class SubCommand(SimpleNamespace):
 class ApplicationConfiguration(SimpleNamespace):
     """The main object for storing an application config"""
 
-    application_name: str
-    entries: List[Entry]
+    application_name: str = ""
+    entries: List[Entry] = []
     internals: SimpleNamespace
     subcommands: List[SubCommand]
     post_processor = Callable
-
     initial: Any = None
     original_command: List[str]
+
+    def _get_by_name(self, name, kind):
+        try:
+            return next(entry for entry in super().__getattribute__(kind) if entry.name == name)
+        except StopIteration as exc:
+            raise KeyError(name) from exc
 
     def __getattribute__(self, attr: str) -> Any:
         """Returns a matching entry or the default bwo super"""
         try:
-            found_entry = [
-                entry for entry in super().__getattribute__("entries") if entry.name == attr
-            ]
-            if found_entry:
-                return found_entry[0].value.current
-        except AttributeError:
-            pass
-        return super().__getattribute__(attr)
+            return super().__getattribute__("_get_by_name")(attr, "entries").value.current
+        except KeyError:
+            return super().__getattribute__(attr)
 
     def entry(self, name) -> Entry:
         """Retrieve a configuration entry by name"""
-        found_entry = [entry for entry in self.entries if entry.name == name]
-        return found_entry[0]
+        return self._get_by_name(name, "entries")
 
     def subcommand(self, name) -> SubCommand:
         """Retrieve a configuration subcommand by name"""
-        found_subcommand = [
-            subcommand for subcommand in self.subcommands if subcommand.name == name
-        ]
-        return found_subcommand[0]
+        return self._get_by_name(name, "subcommands")
