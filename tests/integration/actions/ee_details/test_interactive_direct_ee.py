@@ -7,6 +7,7 @@ from .base import base_steps
 from .base import step_id
 from .base import BaseClass
 from .base import Command
+from .base import Mode
 from .base import Step
 
 CLI = Command(subcommand="ee-details", execution_environment=True).join()
@@ -20,4 +21,5 @@ steps = add_indicies(initial_steps + base_steps)
 class Test(BaseClass):
     """run the tests"""
 
+    TEST_MODE = Mode.INTERACTIVE
     UPDATE_FIXTURES = False

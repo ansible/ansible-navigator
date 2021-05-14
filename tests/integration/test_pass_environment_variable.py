@@ -8,7 +8,7 @@ import pytest
 
 import ansible_navigator.cli as cli
 
-from ._common import Cli2Runner
+from ._cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
 
 test_data = [
@@ -63,7 +63,7 @@ class Test(Cli2Runner):
         "run": f"run {TEST_FIXTURE_DIR}/site.yml",
     }
 
-    def run_test(self, mocked_runner, cli_entry, config_fixture, expected):
+    def run_test(self, mocked_runner, tmpdir, cli_entry, config_fixture, expected):
         """mock the runner call so it raises an exception
         mock the command line with sys.argv
         set the ANSIBLE_NAVIGATOR_CONFIG envvar
@@ -71,13 +71,19 @@ class Test(Cli2Runner):
         call cli.main(), check the kwarg envvars passed to the runner func
         """
         mocked_runner.side_effect = Exception("called")
+        cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
+        coll_cache_path = os.path.join(tmpdir, "collection_doc_cache.db")
+
+        assert os.path.exists(cfg_path)
+
         with mock.patch("sys.argv", cli_entry.split()):
-            cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
-            assert os.path.exists(cfg_path)
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
-                with mock.patch.dict(os.environ, expected):
-                    with pytest.raises(Exception, match="called"):
-                        cli.main()
+                with mock.patch.dict(
+                    os.environ, {"ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH": coll_cache_path}
+                ):
+                    with mock.patch.dict(os.environ, expected):
+                        with pytest.raises(Exception, match="called"):
+                            cli.main()
 
         _args, kwargs = mocked_runner.call_args
 

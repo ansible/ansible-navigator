@@ -5,21 +5,20 @@ import pytest
 from .base import BaseClass
 from .base import ANSIBLE_PLAYBOOK
 
-from ..._common import get_executable_path
 
-CLI = get_executable_path("python") + " -m ansible_navigator" " --execution-environment false"
+CLI = "ansible-navigator --execution-environment false"
 
 testdata = [
-    (0, CLI, "welcome", None),
+    (0, CLI, "welcome", ":help help"),
     (1, f":run {ANSIBLE_PLAYBOOK}", "Play list", "SUCCESSFUL"),
-    (2, ":st", "Check stdout", None),
-    (3, ":back", "Return to play list", None),
-    (4, ":stdout", "Check stdout", None),
-    (5, ":back", "Return to playlist", None),
+    (2, ":st", "Check stdout", ":help help"),
+    (3, ":back", "Return to play list", ":help help"),
+    (4, ":stdout", "Check stdout", ":help help"),
+    (5, ":back", "Return to playlist", ":help help"),
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, playbook_status", testdata)
+@pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
 class Test(BaseClass):
     """run the tests"""
 

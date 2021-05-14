@@ -3,13 +3,14 @@
 import difflib
 import json
 import os
-import shutil
-
 import pytest
+
+from distutils.dir_util import copy_tree
+from typing import Optional
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._common import TmuxSession
+from ..._tmux_session import TmuxSession
 
 from ....defaults import FIXTURES_COLLECTION_DIR
 
@@ -20,6 +21,7 @@ class BaseClass:
 
     UPDATE_FIXTURES = False
     EXECUTION_ENVIRONMENT_TEST = False
+    TEST_FOR_MODE: Optional[str] = None
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_collections_session")
@@ -27,14 +29,9 @@ class BaseClass:
         """tmux fixture for this module"""
 
         tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
-        try:
-            shutil.rmtree(tmp_coll_dir)
-        except FileNotFoundError:
-            pass
-        os.makedirs(tmp_coll_dir)
-        shutil.copytree(FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"))
+        os.makedirs(tmp_coll_dir, exist_ok=True)
+        copy_tree(FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"))
         params = {
-            "window_name": request.node.name,
             "setup_commands": [
                 f"cd {tmp_coll_dir}",
                 f"export ANSIBLE_COLLECTIONS_PATH={tmp_coll_dir}",
@@ -43,6 +40,7 @@ class BaseClass:
             ],
             "pane_height": "2000",
             "pane_width": "200",
+            "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -55,14 +53,26 @@ class BaseClass:
         index,
         user_input,
         comment,
-        collection_fetch_prompt,
     ):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
         """test interactive config"""
+
+        # wait on help here to ensure we get the welcome screen and subsequent screens
+        # after entering a : command
+
+        ignore_within_response = "Collecting collection content"
+        if self.TEST_FOR_MODE == "interactive":
+            search_within_response = ":help help"
+        else:
+            raise ValueError(
+                "Value of 'TEST_FOR_MODE' is not set."
+                " Valid value is either 'interactive' or 'stdout'"
+            )
+
         received_output = tmux_collections_session.interaction(
-            user_input, wait_on_collection_fetch_prompt=collection_fetch_prompt
+            user_input, search_within_response, ignore_within_response=ignore_within_response
         )
 
         received_output = [

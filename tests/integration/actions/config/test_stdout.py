@@ -4,7 +4,8 @@ import os
 
 from tests import defaults
 
-from ..._common import ActionRunTest
+from ..._action_run_test import ActionRunTest
+from ..._common import container_runtime_or_fail
 
 
 def test_run_config_stdout_list() -> None:
@@ -37,11 +38,11 @@ def test_run_stdout_dump_custom_config(test_fixtures_dir) -> None:
     # assert err == ""
 
 
-def test_run_stdout_dump_container(container_runtime_or_fail) -> None:
+def test_run_stdout_dump_container() -> None:
     """test config dump to stdout within execution environment"""
     kwargs = {
         "set_environment_variable": {"PAGER": "cat"},
-        "container_engine": container_runtime_or_fail,
+        "container_engine": container_runtime_or_fail(),
         "execution_environment": True,
         "execution_environment_image": defaults.DEFAULT_CONTAINER_IMAGE,
     }

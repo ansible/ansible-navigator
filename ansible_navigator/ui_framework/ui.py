@@ -357,6 +357,7 @@ class UserInterface(CursesWindow):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
+        # pylint: disable=too-many-nested-blocks
         """show something on the screen
 
         :param lines: The lines to show
@@ -387,10 +388,12 @@ class UserInterface(CursesWindow):
         while True:
             self._screen.erase()
             prefix = " " * (index_width + len("|")) if indent_heading else None
+
+            # Add the heading
             for idx, line in enumerate(heading):
                 self._add_line(window=self._screen, lineno=idx, line=line, prefix=prefix)
-            self._add_line(window=self._screen, lineno=footer_at, line=footer)
 
+            # Add the content
             for idx, line in enumerate(lines):
                 line_index = line_numbers[idx]
                 prefix = "{idx}\u2502".format(idx=str(line_index).rjust(index_width))
@@ -398,6 +401,7 @@ class UserInterface(CursesWindow):
                     window=self._screen, lineno=idx + len(heading), line=line, prefix=prefix
                 )
 
+            # Add the scroll bar
             if count > viewport_h:
                 self._scroll_bar(
                     viewport_h=viewport_h,
@@ -406,6 +410,9 @@ class UserInterface(CursesWindow):
                     body_start=self._scroll - viewport_h,
                     body_stop=self._scroll,
                 )
+
+            # Add the footer after the rest of the screen has been drawn
+            self._add_line(window=self._screen, lineno=footer_at, line=footer)
 
             self._screen.refresh()
 

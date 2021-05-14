@@ -5,7 +5,7 @@ import json
 import os
 import shlex
 
-from types import SimpleNamespace
+from enum import Enum
 
 from typing import List
 from typing import NamedTuple
@@ -16,12 +16,20 @@ import pytest
 from ..._common import container_runtime_or_fail
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._common import TmuxSession
+from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/ee_details")
 TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
+
+
+class Mode(Enum):
+    """set the test mode"""
+
+    STDOUT = "test runs in stdout mode"
+    INTERACTIVE = "test run in interactive mode"
+    UNKNOWN = "mode not set"
 
 
 class Command(NamedTuple):
@@ -80,6 +88,7 @@ base_steps = (
 class BaseClass:
     """base class for interactive stdout tests"""
 
+    TEST_MODE = Mode.UNKNOWN
     UPDATE_FIXTURES = False
 
     @staticmethod
@@ -87,13 +96,13 @@ class BaseClass:
     def fixture_tmux_session(request):
         """tmux fixture for this module"""
         params = {
-            "window_name": request.node.name,
+            "config_path": TEST_CONFIG_FILE,
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
-            "config_path": TEST_CONFIG_FILE,
             "pane_height": "1000",
+            "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -106,10 +115,16 @@ class BaseClass:
         """test"""
         assert os.path.exists(TEST_CONFIG_FILE)
 
+        if self.TEST_MODE is Mode.INTERACTIVE:
+            search_within_response = ":help help"
+        elif self.TEST_MODE is Mode.STDOUT:
+            search_within_response = tmux_session.cli_prompt
+        else:
+            raise ValueError("test mode not set")
+
         received_output = tmux_session.interaction(
             value=step.user_input,
-            wait_on_cli_prompt=step.wait_on_cli_prompt,
-            wait_on_playbook_status=step.playbook_status,
+            search_within_response=search_within_response,
         )
         if self.UPDATE_FIXTURES:
             update_fixtures(request, step.step_index, received_output, step.comment)

@@ -1,6 +1,8 @@
 /tests/output/
 /changelogs/.plugin-cache.yaml
 
+# tmux integration test logs
+.test_logs
 
 
 # Byte-compiled / optimized / DLL files
