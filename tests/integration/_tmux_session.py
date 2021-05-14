@@ -95,6 +95,7 @@ class TmuxSession:
         tmux_common.append(
             f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH='{collection_doc_cache}'"
         )
+        tmux_common.append("env")
 
         set_up_commands = tmux_common + self._setup_commands
         set_up_command = " && ".join(set_up_commands)
@@ -103,7 +104,13 @@ class TmuxSession:
         start_time = timer()
         self._pane.send_keys(set_up_command)
         while True:
-            prompt_showing = self.cli_prompt in self._pane.capture_pane()[-1]
+            showing = self._pane.capture_pane()
+            # find the prompt in the last line of a full screen
+            # or at least a screen as big as the list of envars
+            # because the envars were dumped
+            prompt_showing = self.cli_prompt in showing[-1] and len(showing) > min(
+                len(tmux_common), int(self._pane_height) - 1
+            )
             if prompt_showing:
                 break
             elapsed = timer() - start_time
