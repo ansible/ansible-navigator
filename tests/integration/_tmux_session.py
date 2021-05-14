@@ -78,6 +78,8 @@ class TmuxSession:
 
         # set envars for this session
         tmux_common = [f". {venv}"]
+        tmux_common.append("export TERM=xterm")
+        tmux_common.append("export LANG=en_US.utf8")
         tmux_common.append(f"export HOME='{home}'")
         tmux_common.append(f"export USER='{user}'")
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_CONFIG='{self._config_path}'")
@@ -204,6 +206,7 @@ class TmuxSession:
         while True:
 
             showing = self._pane.capture_pane()
+
             if showing:
                 if search_within_response in showing[-1]:
                     ok_to_return = True
@@ -228,7 +231,7 @@ class TmuxSession:
                 showing.insert(0, alert)
                 with open(timeout_capture_path, "w") as filehandle:
                     filehandle.writelines("\n".join(showing))
-                self._fail_remaining = ["******** Previous test failure ********"]
+                self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
                 return showing
 
         return showing
@@ -237,14 +240,11 @@ class TmuxSession:
         """get cli prompt"""
         # start a fresh clean shell, set TERM
         start_time = timer()
-        self._pane.send_keys("env -i bash --noprofile --norc")
-        self._pane.send_keys("export TERM=xterm-256color")
-        self._pane.send_keys("clear")
+        self._pane.send_keys("clear && env -i bash --noprofile --norc")
         bash_prompt_visible = False
         while True:
             showing = self._pane.capture_pane()
-            if showing and len(showing) == 1:
-                bash_prompt_visible = showing[0].startswith("bash")
+            bash_prompt_visible = showing[-1].startswith("bash")
             if bash_prompt_visible:
                 break
 
