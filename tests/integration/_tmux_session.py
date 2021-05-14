@@ -227,9 +227,9 @@ class TmuxSession:
 
                 tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
                 # taint the screen output w/ timestamp so it's never a valid fixture
-                alert = f"******** ERROR: TMUX RESPONSE TIMEOUT @ {elapsed}s @ {tstamp} ********"
-                showing.insert(0, alert)
-                showing.insert(1, "******** Captured to: {timeout_capture_path}")
+                alerts = [f"******** ERROR: TMUX RESPONSE TIMEOUT @ {elapsed}s @ {tstamp} ********"]
+                alerts.append(f"******** Captured to: {timeout_capture_path}")
+                showing = alerts + showing
                 with open(timeout_capture_path, "w") as filehandle:
                     filehandle.writelines("\n".join(showing))
                 self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
