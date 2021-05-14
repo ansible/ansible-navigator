@@ -3,10 +3,10 @@
 import difflib
 import json
 import os
-import pytest
 
-from distutils.dir_util import copy_tree
 from typing import Optional
+
+import pytest
 
 from ..._common import copytree
 from ..._common import fixture_path_from_request
@@ -31,7 +31,9 @@ class BaseClass:
 
         tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
         os.makedirs(tmp_coll_dir, exist_ok=True)
-        copytree(FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"))
+        copytree(
+            FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"), dirs_exist_ok=True
+        )
         params = {
             "setup_commands": [
                 f"cd {tmp_coll_dir}",

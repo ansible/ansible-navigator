@@ -8,7 +8,7 @@ from .base import PLAYBOOK_ARTIFACT
 CLI = f"ansible-navigator load {PLAYBOOK_ARTIFACT} --execution-environment false"
 
 testdata = [
-    (0, CLI, "run top window", "100%"),
+    (0, CLI, "run top window", ["100%", "SUCCESSFUL"]),
     (1, ":0", "Task list", ":help help"),
     (2, ":0", "Task 1", ":help help"),
     (3, ":stdout", "Check stdout", ":help help"),

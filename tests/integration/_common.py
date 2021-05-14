@@ -2,7 +2,6 @@
 """
 import os
 import shutil
-import stat
 import sys
 import json
 
@@ -75,33 +74,64 @@ def generate_test_log_dir(unique_test_id):
     return directory
 
 
-def copytree(src, dst, symlinks=False, ignore=None):
-    """Copy a dir without failing if it exists
-    distutils is beign deprecated
-    shutil.copytree exist in 3.8 only
-    https://stackoverflow.com/questions/1868714
+class Error(EnvironmentError):
+    """pass through err"""
+
+
+def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
+    """Recursively copy a directory tree using copy2().
+
+    The destination directory must not already exist.
+    If exception(s) occur, an Error is raised with a list of reasons.
+
+    If the optional symlinks flag is true, symbolic links in the
+    source tree result in symbolic links in the destination tree; if
+    it is false, the contents of the files pointed to by symbolic
+    links are copied.
+
+    The optional ignore argument is a callable. If given, it
+    is called with the `src` parameter, which is the directory
+    being visited by copytree(), and `names` which is the list of
+    `src` contents, as returned by os.listdir():
+
+        callable(src, names) -> ignored_names
+
+    Since copytree() is called recursively, the callable will be
+    called once for each directory that is copied. It returns a
+    list of names relative to the `src` directory that should
+    not be copied.
     """
-    if not os.path.exists(dst):
-        os.makedirs(dst)
+    names = os.listdir(src)
+    if ignore is not None:
+        ignored_names = ignore(src, names)
+    else:
+        ignored_names = set()
+
+    os.makedirs(dst, exist_ok=dirs_exist_ok)
+    errors = []
+    for name in names:
+        if name in ignored_names:
+            continue
+        srcname = os.path.join(src, name)
+        dstname = os.path.join(dst, name)
+        try:
+            if symlinks and os.path.islink(srcname):
+                linkto = os.readlink(srcname)
+                os.symlink(linkto, dstname)
+            elif os.path.isdir(srcname):
+                copytree(srcname, dstname, symlinks, ignore, dirs_exist_ok=dirs_exist_ok)
+            else:
+                # Will raise a SpecialFileError for unsupported file types
+                shutil.copy(srcname, dstname)
+        # catch the Error from the recursive copytree so that we can
+        # continue with other files
+        except Error as err:
+            errors.extend(err.args[0])
+        except EnvironmentError as why:
+            errors.append((srcname, dstname, str(why)))
+    try:
         shutil.copystat(src, dst)
-    lst = os.listdir(src)
-    if ignore:
-        excl = ignore(src, lst)
-        lst = [x for x in lst if x not in excl]
-    for item in lst:
-        src = os.path.join(src, item)
-        dst = os.path.join(dst, item)
-        if symlinks and os.path.islink(s):
-            if os.path.lexists(dst):
-                os.remove(dst)
-            os.symlink(os.readlink(src), dst)
-            try:
-                stt = os.lstat(src)
-                mode = stat.S_IMODE(stt.st_mode)
-                os.lchmod(dst, mode)
-            except Exception:  # pylint: disable=broad-except
-                pass  # lchmod not available
-        elif os.path.isdir(src):
-            copytree(src, dst, symlinks, ignore)
-        else:
-            shutil.copy2(src, dst)
+    except OSError as why:
+        errors.append((src, dst, str(why)))
+    if errors:
+        raise Error(errors)
