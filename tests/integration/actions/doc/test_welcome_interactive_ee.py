@@ -7,12 +7,10 @@ import pytest
 from .base import BaseClass
 
 from ..._common import container_runtime_or_fail
-from ..._common import get_executable_path
 
 # module doc
 CLI_MODULE_DOC = (
-    get_executable_path("python") + " -m ansible_navigator"
-    " --execution-environment true --ce " + container_runtime_or_fail()
+    "ansible-navigator" " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
 testdata_module_doc: List = [
@@ -23,8 +21,7 @@ testdata_module_doc: List = [
 
 # lookup plugin doc
 CLI_LOOKUP_DOC = (
-    get_executable_path("python") + " -m ansible_navigator"
-    " --execution-environment true --ce " + container_runtime_or_fail()
+    "ansible-navigator" " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
 testdata_lookup_doc: List = [
@@ -34,8 +31,7 @@ testdata_lookup_doc: List = [
 
 # plugin does not exist
 CLI_WRONG_MODULE_NOT_EXIST = (
-    get_executable_path("python") + " -m ansible_navigator"
-    " --execution-environment true --ce " + container_runtime_or_fail()
+    "ansible-navigator" " --execution-environment true --ce " + container_runtime_or_fail()
 )
 
 testdata_module_doc_not_exist = [
@@ -56,6 +52,7 @@ testdata_module_doc_not_exist = [
 class TestModuleDoc(BaseClass):
     """run the tests"""
 
+    TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
 
 
@@ -65,6 +62,7 @@ class TestModuleDoc(BaseClass):
 class TestLookUpDoc(BaseClass):
     """run the tests"""
 
+    TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
 
 
@@ -74,4 +72,5 @@ class TestLookUpDoc(BaseClass):
 class TestModuleDocNotExist(BaseClass):
     """run the tests"""
 
+    TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
