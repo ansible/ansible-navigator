@@ -6,6 +6,7 @@ esc                                                   Go back
 arrow up, arrow down                                  Scroll up/down
 :collections                                          Explore installed collections
 :config                                               Explore the current Ansible configuration
+:eed, :ee-details -eei <image>                        Explore execution environment details
 :d, :doc <plugin>                                     Show a plugin doc
 :r, :run <playbook> -i <inventory>                    Run a playbook in interactive mode
 :f, :filter <re>                                      Filter page lines using a regex

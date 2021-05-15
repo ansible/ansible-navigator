@@ -1,0 +1,23 @@
+- name: Gather collection details
+  ansible.builtin.shell: ansible-galaxy collection list || true
+  register: ansible_galaxy_collections
+  changed_when: False
+
+- name: Gather operating system details
+  ansible.builtin.setup:
+    gather_subset: min
+
+- name: Gather python package details
+  ansible.builtin.shell: python3 -m pip freeze
+  register: pip_freeze
+  changed_when: False
+
+- name: Extract collections
+  ansible.builtin.set_fact:
+    collections: "{{ ansible_galaxy_collections.stdout_lines|ansible.ansible_navigator.parse_galaxy }}"
+  
+- name: Extract python packages
+  ansible.builtin.set_fact:
+    python_packages: "{{ pip_freeze.stdout_lines|ansible.ansible_navigator.parse_pip }}"
+  
+

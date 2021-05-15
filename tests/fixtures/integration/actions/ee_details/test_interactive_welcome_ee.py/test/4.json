@@ -1,0 +1,11 @@
+{
+    "name": "test[4-:1-Check report]",
+    "index": 4,
+    "comment": "Check report",
+    "output": [
+        "  TASK",
+        "0│Extract execution environment details",
+        "1│Summarize the execution environment details",
+        "^f/PgUp page up                    ^b/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                     SUCCESSFUL"
+    ]
+}

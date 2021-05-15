@@ -95,7 +95,7 @@ The following table describes all available settings.
     - Settings
   * - app
     - Subcommands
-    - | **Choices:** 'collections', 'config', 'doc', 'inventory', 'load', 'run' or 'welcome'
+    - | **Choices:** 'collections', 'config', 'doc', 'ee-details', 'inventory', 'load', 'run' or 'welcome'
       | **Default:** welcome
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_APP

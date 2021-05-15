@@ -49,7 +49,7 @@ def run(args: ApplicationConfiguration) -> None:
     """run the appropriate app"""
     try:
         if args.mode == "stdout":
-            run_action_stdout(args.app, args)
+            run_action_stdout(args.app.replace("-", "_"), args)
         else:
             wrapper(ActionRunner(args=args).run)
     except KeyboardInterrupt:

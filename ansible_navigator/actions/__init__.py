@@ -1,4 +1,5 @@
 """ actions for Explorer """
+from typing import Any
 from typing import Callable
 from typing import Union
 from . import _actions as actions
@@ -7,7 +8,8 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 
-get: Callable[[str], None] = actions.get_factory(__package__)
+
+get: Callable[[str], Any] = actions.get_factory(__package__)
 
 names = actions.names_factory(__package__)
 
@@ -22,4 +24,4 @@ run_action: Callable[
 ] = actions.run_interactive_factory(__package__)
 
 
-__all__ = ["kegexes", "names", "run_action", "run_action_stdout"]
+__all__ = ["get", "kegexes", "names", "run_action", "run_action_stdout"]
