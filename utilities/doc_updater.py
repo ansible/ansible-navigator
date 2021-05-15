@@ -231,7 +231,7 @@ def _update_sample_settings(args: Namespace, filename: str):
     """update the settings sample"""
     with open(args.ss) as fhand:
         settings = fhand.read().splitlines()
-    not_commented = ["ansible-navigator:", "logging:", "level:"]
+    not_commented = ["---", "ansible-navigator:", "logging:", "level:"]
     for idx, line in enumerate(settings):
         if not any(nc in line for nc in not_commented):
             settings[idx] = "    # " + line

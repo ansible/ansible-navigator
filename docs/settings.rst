@@ -36,7 +36,7 @@ You can copy the example settings file below into one of those paths to start yo
   start-settings-sample
 .. code-block:: yaml
 
-    # ---
+    ---
     ansible-navigator:
     #   app: run
     #   collection-doc-cache-path: /tmp/cache.db
