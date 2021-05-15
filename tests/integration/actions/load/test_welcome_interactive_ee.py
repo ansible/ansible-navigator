@@ -9,6 +9,7 @@ from ..._common import container_runtime_or_fail
 
 CLI = "ansible-navigator --execution-environment true --ce " + container_runtime_or_fail()
 
+
 testdata = [
     (0, CLI, "welcome", ":help help"),
     (1, f":load {PLAYBOOK_ARTIFACT}", "Play list", ["100%", "SUCCESSFUL"]),

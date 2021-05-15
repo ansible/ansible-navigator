@@ -11,6 +11,15 @@ from ..._common import container_runtime_or_fail
 from .base import BaseClass
 
 
+def test_run_config_stdout_list() -> None:
+    """test config list to stdout"""
+    actionruntest = ActionRunTest("config")
+    out, _err = actionruntest.run_action_stdout(["list"])
+    assert "ACTION_WARNING" in out
+    # TODO: handle DEPRECATION WARNINGS
+    # assert err == ""
+
+
 def test_run_stdout_dump() -> None:
     """test config dump to stdout"""
     actionruntest = ActionRunTest("config")

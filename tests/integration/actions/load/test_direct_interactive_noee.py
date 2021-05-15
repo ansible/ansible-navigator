@@ -5,7 +5,6 @@ import pytest
 from .base import BaseClass
 from .base import PLAYBOOK_ARTIFACT
 
-
 CLI = f"ansible-navigator load {PLAYBOOK_ARTIFACT} --execution-environment false"
 
 testdata = [

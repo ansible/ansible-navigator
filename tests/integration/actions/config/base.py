@@ -16,7 +16,6 @@ class BaseClass:
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
 
-
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_config_session")
     def fixture_tmux_config_session(request):

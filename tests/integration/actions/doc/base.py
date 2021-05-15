@@ -20,7 +20,6 @@ class BaseClass:
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
 
-
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_doc_session")
     def fixture_tmux_doc_session(request):
@@ -59,7 +58,7 @@ class BaseClass:
         updated_received_output = []
         mask = "X" * 50
         for line in received_output:
-            if tmux_doc_session._cli_prompt in line:
+            if tmux_doc_session.cli_prompt in line:
                 updated_received_output.append(mask)
             elif "filename" in line or "│warnings:" in line:
                 updated_received_output.append(mask)

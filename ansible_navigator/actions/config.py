@@ -15,7 +15,6 @@ from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..configuration_subsystem.definitions import Constants as C
 from ..runner.api import AnsibleCfgRunner
 from ..runner.api import CommandRunner
 from ..steps import Step
@@ -212,7 +211,7 @@ class Action(App):
                     return
                 ansible_config_path = exec_path
 
-            if self._args.cmdline is not C.NOT_SET:
+            if isinstance(self._args.cmdline, list):
                 pass_through_arg = self._args.cmdline.copy()
             else:
                 pass_through_arg = []
