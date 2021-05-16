@@ -73,7 +73,9 @@ class CollectionCatalog:
                 if plugin_type == "modules":
                     plugin_type = "module"
                 for (dirpath, _dirnames, filenames) in os.walk(path):
-                    self._process_plugin_dir(plugin_type, filenames, file_chksums, dirpath, collection)
+                    self._process_plugin_dir(
+                        plugin_type, filenames, file_chksums, dirpath, collection
+                    )
 
     @staticmethod
     def _generate_chksum(file_path: str, relative_path: str) -> Dict:
