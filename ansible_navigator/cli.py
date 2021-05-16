@@ -100,7 +100,9 @@ def main():
         error_and_exit_early(errors)
 
     os.environ.setdefault("ESCDELAY", "25")
-    os.system("clear")
+    # clear if the TERM is set
+    if os.environ.get("TERM"):
+        os.system("clear")
 
     run(args)
 

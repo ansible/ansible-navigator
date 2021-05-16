@@ -198,7 +198,10 @@ NavigatorConfiguration = ApplicationConfiguration(
         Entry(
             name="log_append",
             cli_parameters=CliParameters(short="--la"),
-            short_description="Specify if log messages should be appended to an exisiting log file",
+            short_description=(
+                "Specify if log messages should be appended to an existing log file,"
+                " otherwise a new log file will be created per session"
+            ),
             settings_file_path_override="logging.append",
             value=EntryValue(default=True),
         ),
