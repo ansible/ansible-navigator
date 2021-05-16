@@ -138,6 +138,3 @@ mypy_tmp_dir/
 
 # IntelliJ
 .idea/
-
-# VScode
-.vscode/
