@@ -62,16 +62,18 @@ class CollectionCatalog:
                         self._errors.append({"path": fpath, "error": str(exc)})
 
         exempt = ["action", "module_utils", "doc_fragments"]
-        plugin_dirs = [
-            (f.name, f.path)
-            for f in os.scandir(path + "plugins")
-            if f.is_dir() and f.name not in exempt
-        ]
-        for plugin_type, path in plugin_dirs:
-            if plugin_type == "modules":
-                plugin_type = "module"
-            for (dirpath, _dirnames, filenames) in os.walk(path):
-                self._process_plugin_dir(plugin_type, filenames, file_chksums, dirpath, collection)
+        plugin_directory = os.path.join(path, "plugins")
+        if os.path.isdir(plugin_directory):
+            plugin_dirs = [
+                (f.name, f.path)
+                for f in os.scandir(plugin_directory)
+                if f.is_dir() and f.name not in exempt
+            ]
+            for plugin_type, path in plugin_dirs:
+                if plugin_type == "modules":
+                    plugin_type = "module"
+                for (dirpath, _dirnames, filenames) in os.walk(path):
+                    self._process_plugin_dir(plugin_type, filenames, file_chksums, dirpath, collection)
 
     @staticmethod
     def _generate_chksum(file_path: str, relative_path: str) -> Dict:
