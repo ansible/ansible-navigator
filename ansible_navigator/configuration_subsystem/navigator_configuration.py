@@ -196,6 +196,13 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(),
         ),
         Entry(
+            name="log_append",
+            cli_parameters=CliParameters(short="--la"),
+            short_description="Specify if log messages should be appended to an exisiting log file",
+            settings_file_path_override="logging.append",
+            value=EntryValue(default=True),
+        ),
+        Entry(
             name="log_file",
             cli_parameters=CliParameters(short="--lf"),
             short_description="Specify the full path for the ansible-navigator log file",

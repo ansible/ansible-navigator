@@ -152,6 +152,11 @@ class NavigatorPostProcessor:
             entry.value.current = flatten_list(entry.value.current)
         return messages, errors
 
+    @_post_processor
+    def log_append(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        """Post process log_append"""
+        return self._true_or_false(entry, config)
+
     @staticmethod
     @_post_processor
     def log_file(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
