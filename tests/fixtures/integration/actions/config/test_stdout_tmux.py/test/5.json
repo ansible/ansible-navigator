@@ -1,0 +1,26 @@
+{
+    "name": "test[config helpconfig without ee  clear && ansible-navigator config --help-config --ee False --ce docker --ll debug --mode stdout]",
+    "index": 5,
+    "comment": "config helpconfig without ee",
+    "additional_information": {
+        "look_fors": [
+            "usage: ansible-config [-h]"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "usage: ansible-config [-h] [--version] [-v] {list,dump,view} ...",
+        "View ansible configuration.",
+        "positional arguments:",
+        "  {list,dump,view}",
+        "    list            Print all config options",
+        "    dump            Dump configuration",
+        "    view            View configuration file",
+        "optional arguments:",
+        "  --version         show program's version number, config file location, configured module search path, module location, executable location and exit",
+        "  -h, --help        show this help message and exit",
+        "  -v, --verbose     verbose mode (-vvv for more, -vvvv to enable connection debugging)",
+        "(py38) bash-3.2$"
+    ]
+}

@@ -2,6 +2,11 @@
     "name": "test[7-:back-return to filtered list]",
     "index": 7,
     "comment": "return to filtered list",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "  OPTION                               DEFAULT     SOURCE      VIA         CURRENT VALUE",
         "0│INVENTORY_ENABLED                       True     default     default     ['host_list', 'script', 'auto', 'yaml', 'ini', 'toml']",
