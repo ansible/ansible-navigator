@@ -18,6 +18,7 @@ BASE_SHORT_CLI = """
 --econ True
 --ee False
 --eei test_image
+--la false
 --lf /tmp/app.log
 --ll warning
 --osc4 false
@@ -33,6 +34,7 @@ BASE_LONG_CLI = """
 --editor-console True
 --execution-environment False
 --execution-environment-image test_image
+--log-append false
 --log-file /tmp/app.log
 --log-level warning
 --osc4 false
@@ -49,6 +51,7 @@ BASE_EXPECTED = d2t(
         "editor_console": True,
         "execution_environment": False,
         "execution_environment_image": "test_image",
+        "log_append": False,
         "log_file": "/tmp/app.log",
         "log_level": "warning",
         "osc4": False,
@@ -193,6 +196,7 @@ ENVVAR_DATA = [
     ("help_doc", "false", False),
     ("inventory", "/tmp/test1.yaml,/tmp/test2.yml", ["/tmp/test1.yaml", "/tmp/test2.yml"]),
     ("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"]),
+    ("log_append", "false", False),
     ("log_file", "/tmp/app.log", "/tmp/app.log"),
     ("log_level", "info", "info"),
     ("mode", "interactive", "interactive"),

@@ -20,9 +20,10 @@ from .configuration_subsystem import NavigatorConfiguration
 from .initialization import parse_and_update
 from .initialization import error_and_exit_early
 
-APP_NAME = "ansible_navigator"
+APP_NAME = "ansible-navigator"
+PKG_NAME = "ansible_navigator"
 
-logger = logging.getLogger(APP_NAME)
+logger = logging.getLogger(PKG_NAME)
 
 
 def setup_logger(args: ApplicationConfiguration) -> None:
@@ -31,9 +32,8 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     :param args: The cli args
     :type args: argparse namespace
     """
-    if os.path.exists(args.log_file):
-        with open(args.log_file, "w"):
-            pass
+    if os.path.exists(args.log_file) and args.log_append is False:
+        os.remove(args.log_file)
     hdlr = logging.FileHandler(args.log_file)
     formatter = logging.Formatter(
         fmt="%(asctime)s.%(msecs)03d %(levelname)s '%(name)s.%(funcName)s' %(message)s",
@@ -43,6 +43,7 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
     logger.setLevel(getattr(logging, args.log_level.upper()))
+    logger.info("New %s instance, logging initialized", APP_NAME)
 
 
 def run(args: ApplicationConfiguration) -> None:
@@ -99,7 +100,9 @@ def main():
         error_and_exit_early(errors)
 
     os.environ.setdefault("ESCDELAY", "25")
-    os.system("clear")
+    # clear if the TERM is set
+    if os.environ.get("TERM"):
+        os.system("clear")
 
     run(args)
 
