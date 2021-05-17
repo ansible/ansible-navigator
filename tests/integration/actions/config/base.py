@@ -137,7 +137,7 @@ class BaseClass:
         if (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-        ):            
+        ):
             update_fixtures(
                 request,
                 step.step_index,
