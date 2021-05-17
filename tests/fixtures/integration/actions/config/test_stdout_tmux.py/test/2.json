@@ -1,0 +1,34 @@
+{
+    "name": "test[config list with ee  clear && ansible-navigator config list --senv PAGER=cat --ee True --ce docker --ll debug --mode stdout]",
+    "index": 2,
+    "comment": "config list with ee",
+    "additional_information": {
+        "look_fors": [
+            "YAML_FILENAME_EXTENSIONS"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  name: Worker Shutdown Poll Delay",
+        "  type: float",
+        "  version_added: '2.10'",
+        "YAML_FILENAME_EXTENSIONS:",
+        "  default:",
+        "  - .yml",
+        "  - .yaml",
+        "  - .json",
+        "  description:",
+        "  - Check all of these extensions when looking for 'variable' files which should be",
+        "    YAML or JSON or vaulted versions of these.",
+        "  - This affects vars_files, include_vars, inventory and vars plugins among others.",
+        "  env:",
+        "  - name: ANSIBLE_YAML_FILENAME_EXT",
+        "  ini:",
+        "  - key: yaml_valid_extensions",
+        "    section: defaults",
+        "  name: Valid YAML extensions",
+        "  type: list",
+        "(py38) bash-3.2$"
+    ]
+}

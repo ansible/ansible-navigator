@@ -1,0 +1,34 @@
+{
+    "name": "test[config dump with ee  clear && ansible-navigator config dump --senv PAGER=cat --ee True --ce docker --ll debug --mode stdout]",
+    "index": 0,
+    "comment": "config dump with ee",
+    "additional_information": {
+        "look_fors": [
+            "YAML_FILENAME_EXTENSIONS"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "RETRY_FILES_ENABLED(env: ANSIBLE_RETRY_FILES_ENABLED) = False",
+        "RETRY_FILES_SAVE_PATH(default) = None",
+        "RUN_VARS_PLUGINS(default) = demand",
+        "SHOW_CUSTOM_STATS(default) = False",
+        "STRING_CONVERSION_ACTION(default) = warn",
+        "STRING_TYPE_FILTERS(default) = ['string', 'to_json', 'to_nice_json', 'to_yaml', 'to_nice_yaml', 'ppretty', 'json']",
+        "SYSTEM_WARNINGS(default) = True",
+        "TAGS_RUN(default) = []",
+        "TAGS_SKIP(default) = []",
+        "TASK_DEBUGGER_IGNORE_ERRORS(default) = True",
+        "TASK_TIMEOUT(default) = 0",
+        "TRANSFORM_INVALID_GROUP_CHARS(default) = never",
+        "USE_PERSISTENT_CONNECTIONS(default) = False",
+        "VARIABLE_PLUGINS_ENABLED(default) = ['host_group_vars']",
+        "VARIABLE_PRECEDENCE(default) = ['all_inventory', 'groups_inventory', 'all_plugins_inventory', 'all_plugins_play', 'groups_plugins_inventory', 'groups_plugins_play']",
+        "VERBOSE_TO_STDERR(default) = False",
+        "WIN_ASYNC_STARTUP_TIMEOUT(default) = 5",
+        "WORKER_SHUTDOWN_POLL_COUNT(default) = 0",
+        "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
+        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json'](py38) bash-3.2$"
+    ]
+}

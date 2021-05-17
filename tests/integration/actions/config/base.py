@@ -2,7 +2,6 @@
 """
 import difflib
 import json
-import logging
 import shlex
 
 from enum import Enum
@@ -22,6 +21,7 @@ class SearchFor(Enum):
     """set the test mode"""
 
     HELP = "search for help"
+    PROMPT = "search for the shell prompt"
 
 
 class Command(NamedTuple):
@@ -30,21 +30,28 @@ class Command(NamedTuple):
     execution_environment: bool
     container_engine: str = container_runtime_or_fail()
     command: str = "ansible-navigator"
+    cmdline: Union[None, str] = None
     log_level: str = "debug"
     mode: str = "interactive"
+    preclear: bool = False
     subcommand: Union[None, str] = None
 
     def join(self):
         """create cli command"""
-        args = []
-        args.append(self.command)
+        args = [self.command]
         if self.subcommand is not None:
             args.append(self.subcommand)
+        if self.cmdline is not None:
+            args.extend(shlex.split(self.cmdline))
         args.extend(["--ee", self.execution_environment])
         args.extend(["--ce", self.container_engine])
         args.extend(["--ll", self.log_level])
         args.extend(["--mode", self.mode])
-        return " ".join(shlex.quote(str(arg)) for arg in args)
+        cmd = " ".join(shlex.quote(str(arg)) for arg in args)
+        if self.preclear:
+            return "clear && " + cmd
+        else:
+            return cmd
 
 
 class Step(NamedTuple):
@@ -93,7 +100,7 @@ class BaseClass:
     def fixture_tmux_session(request):
         """tmux fixture for this module"""
         params = {
-            "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42"],
+            "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42", "export PAGER=cat"],
             "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
@@ -107,6 +114,8 @@ class BaseClass:
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
+        elif step.search_within_response is SearchFor.PROMPT:
+            search_within_response = tmux_session.cli_prompt
         else:
             raise ValueError("test mode not set")
 
