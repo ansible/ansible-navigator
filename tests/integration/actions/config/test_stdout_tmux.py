@@ -10,12 +10,15 @@ from .base import add_indicies
 
 
 class StdoutCommand(Command):
-    """ stdout command """
+    """stdout command"""
+
     subcommand = "config"
     preclear = True
 
+
 class ShellCommand(Step):
-    """ a shell command """
+    """a shell command"""
+
     search_within_response = SearchFor.PROMPT
 
 
