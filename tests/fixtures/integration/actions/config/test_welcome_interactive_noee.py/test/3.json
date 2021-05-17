@@ -2,7 +2,7 @@
     "name": "test[3-:0-cache plugin details]",
     "index": 3,
     "comment": "cache plugin details",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true

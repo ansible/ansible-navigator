@@ -2,7 +2,7 @@
     "name": "test[9-:f-clear filter, full list]",
     "index": 9,
     "comment": "clear filter, full list",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true

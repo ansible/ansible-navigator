@@ -2,7 +2,7 @@
     "name": "test[5-:f yaml-filter off screen value]",
     "index": 5,
     "comment": "filter off screen value",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true

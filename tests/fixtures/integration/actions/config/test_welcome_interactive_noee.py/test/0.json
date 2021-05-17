@@ -2,7 +2,7 @@
     "name": "test[0-ansible-navigator --ee False --ce docker --ll debug --mode interactive-welcome screen]",
     "index": 0,
     "comment": "welcome screen",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true

@@ -2,7 +2,7 @@
     "name": "test[0-ansible-navigator config --ee True --ce docker --ll debug --mode interactive-ansible-navigator config command top window]",
     "index": 0,
     "comment": "ansible-navigator config command top window",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true

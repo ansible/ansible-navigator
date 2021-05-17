@@ -2,7 +2,7 @@
     "name": "test[1-:config-enter config from welcome screen]",
     "index": 1,
     "comment": "enter config from welcome screen",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true

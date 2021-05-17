@@ -31,7 +31,7 @@ def update_fixtures(
         "name": request.node.name,
         "index": index,
         "comment": comment,
-        "addition_information": additional_information,
+        "additional_information": additional_information,
         "output": received_output,
     }
     with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:

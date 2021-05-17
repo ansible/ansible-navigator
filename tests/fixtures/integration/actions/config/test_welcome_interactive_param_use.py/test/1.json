@@ -2,7 +2,7 @@
     "name": "test[1-:config-enter config from welcome screen]",
     "index": 1,
     "comment": "enter config from welcome screen",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [
             "/home/runner"
@@ -26,7 +26,7 @@
         " 12│BECOME_ALLOW_SAME_USER           True default default                         False",
         " 13│BECOME_PLUGIN_PATH               True default default                         ['/Users/bthornto/.ansible/plugins/become', '/usr/share/ansible/plugins/become']",
         " 14│CACHE_PLUGIN                    False env     ANSIBLE_CACHE_PLUGIN            jsonfile",
-        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /Users/bthornto/.ansible-runner/artifacts/da5a95a8-fc62-4698-8691-cd6e78952955/fact_cache",
+        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /Users/bthornto/.ansible-runner/artifacts/9cb3551b-8a88-419d-bd7e-c9456dce6a8f/fact_cache",
         " 16│CACHE_PLUGIN_PREFIX              True default default                         ansible_facts",
         " 17│CACHE_PLUGIN_TIMEOUT            False env     ANSIBLE_CACHE_PLUGIN_TIMEOUT    42",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"

@@ -2,7 +2,7 @@
     "name": "test[4-:back-return to filtered list]",
     "index": 4,
     "comment": "return to filtered list",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true

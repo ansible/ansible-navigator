@@ -2,7 +2,7 @@
     "name": "test[1-:f CACHE_PLUGIN_TIMEOUT-filter for cache plugin timeout]",
     "index": 1,
     "comment": "filter for cache plugin timeout",
-    "addition_information": {
+    "additional_information": {
         "look_fors": [],
         "look_nots": [],
         "compared_fixture": true
