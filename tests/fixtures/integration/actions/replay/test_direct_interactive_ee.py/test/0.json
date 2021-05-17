@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator replay /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/replay/playbook-artifact.json --execution-environment true --ll debug --ce docker-run top window-search_within_response0]",
+    "name": "test[0-ansible-navigator replay /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/replay/playbook-artifact.json --execution-environment true --ll debug --ce docker-run top window-search_within_response0]",
     "index": 0,
     "comment": "run top window",
     "output": [
