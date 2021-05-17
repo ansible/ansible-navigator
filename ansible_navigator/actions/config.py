@@ -211,7 +211,15 @@ class Action(App):
                     return
                 ansible_config_path = exec_path
 
-            kwargs.update({"cmdline": self._args.cmdline})
+            if isinstance(self._args.cmdline, list):
+                pass_through_arg = self._args.cmdline.copy()
+            else:
+                pass_through_arg = []
+
+            if self._args.help_config is True:
+                pass_through_arg.append("--help")
+
+            kwargs.update({"cmdline": pass_through_arg})
 
             self._runner = CommandRunner(executable_cmd=ansible_config_path, **kwargs)
             self._runner.run()
