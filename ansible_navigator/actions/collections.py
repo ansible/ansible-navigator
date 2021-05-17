@@ -340,7 +340,7 @@ class Action(App):
         )
         for collection in self._collections:
             collection["__name"] = collection["known_as"]
-            collection["__version"] = collection["collection_info"]["version"]
+            collection["__version"] = collection["collection_info"].get("version", "missing")
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
                 if collection["path"].startswith(self._adjacent_collection_dir):
