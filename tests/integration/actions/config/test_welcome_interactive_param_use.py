@@ -3,7 +3,6 @@
 import pytest
 
 from .base import add_indicies
-from .base import base_steps
 from .base import step_id
 from .base import BaseClass
 from .base import Command
@@ -19,6 +18,7 @@ steps = (
         comment="enter config from welcome screen",
         mask=False,
         look_nots=["/home/runner"],
+        look_fors=["ANSIBLE_CACHE_PLUGIN_TIMEOUT", "42"],
     ),
     Step(user_input=":back", comment="return to welcome screen"),
     Step(

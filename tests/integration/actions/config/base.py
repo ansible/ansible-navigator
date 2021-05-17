@@ -138,11 +138,14 @@ class BaseClass:
             )
 
         page = " ".join(received_output)
+
         if step.look_fors:
             assert all(look_for in page for look_for in step.look_fors)
-        elif step.look_nots:
+
+        if step.look_nots:
             assert not any(look_not in page for look_not in step.look_nots)
-        else:
+
+        if not any((step.look_fors, step.look_nots)):
             dir_path, file_name = fixture_path_from_request(request, step.step_index)
             with open(f"{dir_path}/{file_name}") as infile:
                 expected_output = json.load(infile)["output"]
