@@ -5,7 +5,7 @@ import pytest
 from .base import BaseClass
 from .base import PLAYBOOK_ARTIFACT
 
-CLI = f"ansible-navigator load {PLAYBOOK_ARTIFACT} --execution-environment false"
+CLI = f"ansible-navigator replay {PLAYBOOK_ARTIFACT} --execution-environment false"
 
 testdata = [
     (0, CLI, "run top window", ["100%", "SUCCESSFUL"]),

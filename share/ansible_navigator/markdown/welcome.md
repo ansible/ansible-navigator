@@ -10,6 +10,7 @@ Some things you can try from here:
 - `:help`                                                 Show the main help page
 - `:inventory -i <inventory>`                             Explore an inventory
 - `:log`                                                  Review the application log
+- `:replay`                                               Load a playbook artifact
 - `:open`                                                 Open current page in the IDE
 - `:quit`                                                 Quit the application
 

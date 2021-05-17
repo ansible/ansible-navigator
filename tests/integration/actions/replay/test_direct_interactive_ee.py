@@ -9,7 +9,7 @@ from ..._common import container_runtime_or_fail
 
 CLI = (
     "ansible-navigator"
-    f" load {PLAYBOOK_ARTIFACT}"
+    f" replay {PLAYBOOK_ARTIFACT}"
     " --execution-environment true --ll debug --ce " + container_runtime_or_fail()
 )
 

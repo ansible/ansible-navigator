@@ -99,7 +99,7 @@ navigator_subcommds = [
     SubCommand(name="doc", description="Review documentation for a module or plugin"),
     SubCommand(name="ee-details", description="Explore execution environment details"),
     SubCommand(name="inventory", description="Explore an inventory"),
-    SubCommand(name="load", description="Explore a playbook artifact"),
+    SubCommand(name="replay", description="Explore a playbook artifact"),
     SubCommand(name="run", description="Run a playbook"),
     SubCommand(name="welcome", description="Start at the welcome page"),
 ]
@@ -272,11 +272,11 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default=True),
         ),
         Entry(
-            name="playbook_artifact_load",
+            name="playbook_artifact_replay",
             cli_parameters=CliParameters(positional=True),
-            settings_file_path_override="playbook-artifact.load",
-            short_description="Specify the path for the playbook artifact to load",
-            subcommands=["load"],
+            settings_file_path_override="playbook-artifact.replay",
+            short_description="Specify the path for the playbook artifact to replay",
+            subcommands=["replay"],
             value=EntryValue(),
         ),
         Entry(
