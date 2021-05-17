@@ -12,7 +12,7 @@
     "output": [
         "[ERROR]: Command provided: 'config --help-config --ee False --ce docker --ll debug --mode interactive'",
         "[ERROR]: --help-config or --hc is valid only when 'mode' argument is set to 'stdout'",
-        "[ERROR]: Configuration failed, using default log file location: /Users/bthornto/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
+        "[ERROR]: Configuration failed, using default log file location: /Users/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
         "(py38) bash-3.2$"
     ]
 }

@@ -127,7 +127,10 @@ class BaseClass:
             value=step.user_input,
             search_within_response=search_within_response,
         )
-        if self.UPDATE_FIXTURES:
+        if (
+            self.UPDATE_FIXTURES
+            or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
+        ):
             update_fixtures(request, step.step_index, received_output, step.comment)
         dir_path, file_name = fixture_path_from_request(request, step.step_index)
         with open(f"{dir_path}/{file_name}") as infile:

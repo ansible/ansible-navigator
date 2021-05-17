@@ -82,7 +82,10 @@ class BaseClass:
             line.replace(os_indendent_tmp, "FIXTURES_COLLECTION_DIR") for line in received_output
         ]
 
-        if self.UPDATE_FIXTURES:
+        if (
+            self.UPDATE_FIXTURES
+            or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
+        ):
             update_fixtures(request, index, received_output, comment)
         dir_path, file_name = fixture_path_from_request(request, index)
         with open(f"{dir_path}/{file_name}") as infile:

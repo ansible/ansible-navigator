@@ -13,11 +13,11 @@ arrow up, arrow down                                  Scroll up/down
 :h, :help                                             This page
 :i -i <inventory>, :inventory -i <inventory>          Explore the current or alternate inventory
 :l, :log                                              Review current log file
-:load  <file>                                         Load a playbook artifact
 :o, :open                                             Open current page in the editor
 :o, :open {{ some_key }}                              Open file path in a key's value
 :q, :quit                                             Quit the application
 :q!, :quit!, ^c                                       Force quit while a playbook is running
+:rep, :replay                                         Replay a playbook artifact
 :rr, :rerun                                           Rerun the playbook
 :s, :save <file>                                      Save current plays as an artifact
 :st, :stdout                                          Watch playbook results real time
