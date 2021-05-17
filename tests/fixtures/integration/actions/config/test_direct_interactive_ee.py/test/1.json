@@ -2,6 +2,11 @@
     "name": "test[1-:f CACHE_PLUGIN_TIMEOUT-filter for cache plugin timeout]",
     "index": 1,
     "comment": "filter for cache plugin timeout",
+    "addition_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "  OPTION                                              DEFAULT             SOURCE           VIA                                                                    CURRENT VALUE",
         "0│CACHE_PLUGIN_TIMEOUT                                  False             env              ANSIBLE_CACHE_PLUGIN_TIMEOUT                                           42",

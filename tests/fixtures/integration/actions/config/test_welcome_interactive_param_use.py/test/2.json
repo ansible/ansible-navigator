@@ -1,7 +1,7 @@
 {
-    "name": "test[0-ansible-navigator --ee False --ce docker --ll debug --mode interactive-welcome screen]",
-    "index": 0,
-    "comment": "welcome screen",
+    "name": "test[2-:back-return to welcome screen]",
+    "index": 2,
+    "comment": "return to welcome screen",
     "addition_information": {
         "look_fors": [],
         "look_nots": [],

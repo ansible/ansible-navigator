@@ -1,11 +1,13 @@
 {
-    "name": "test[0-ansible-navigator config --ee True --ce docker --ll debug --mode interactive-ansible-navigator config command top window]",
-    "index": 0,
-    "comment": "ansible-navigator config command top window",
+    "name": "test[3-:config --ee True-enter config from welcome screen]",
+    "index": 3,
+    "comment": "enter config from welcome screen",
     "addition_information": {
-        "look_fors": [],
+        "look_fors": [
+            "/home/runner"
+        ],
         "look_nots": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
         "    OPTION                        DEFAULT SOURCE  VIA                             CURRENT VALUE",
@@ -22,9 +24,9 @@
         " 10│ANSIBLE_PIPELINING               True default default                         False",
         " 11│ANY_ERRORS_FATAL                 True default default                         False",
         " 12│BECOME_ALLOW_SAME_USER           True default default                         False",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 13│BECOME_PLUGIN_PATH               True default default                         ['/home/runner/.ansible/plugins/become', '/usr/share/ansible/plugins/become']",
         " 14│CACHE_PLUGIN                    False env     ANSIBLE_CACHE_PLUGIN            jsonfile",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /runner/artifacts/7c70fcbe-8278-47fa-9c31-840d10da33c0/fact_cache",
         " 16│CACHE_PLUGIN_PREFIX              True default default                         ansible_facts",
         " 17│CACHE_PLUGIN_TIMEOUT            False env     ANSIBLE_CACHE_PLUGIN_TIMEOUT    42",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"

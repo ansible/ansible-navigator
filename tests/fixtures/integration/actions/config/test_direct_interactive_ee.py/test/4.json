@@ -2,6 +2,11 @@
     "name": "test[4-:f-clear filter, full list]",
     "index": 4,
     "comment": "clear filter, full list",
+    "addition_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "    OPTION                        DEFAULT SOURCE  VIA                             CURRENT VALUE",
         "  0│ACTION_WARNINGS                  True default default                         True                                                                                                                 ▒",
