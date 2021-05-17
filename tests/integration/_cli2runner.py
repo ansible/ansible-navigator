@@ -4,7 +4,7 @@ from unittest import mock
 
 import pytest
 
-from ._common import container_runtime_or_fail
+from .._common import container_runtime_or_fail
 
 
 class Cli2Runner:

@@ -46,21 +46,6 @@ def fixture_path_from_request(request, index, testname=None):
     return dir_path, file_name
 
 
-def container_runtime_or_fail():
-    """find a container runtime, prefer podman
-    fail if neither available"""
-    # pylint: disable=import-outside-toplevel
-    import subprocess
-
-    for runtime in ("podman", "docker"):
-        try:
-            subprocess.run([runtime, "-v"], check=False)
-            return runtime
-        except FileNotFoundError:
-            pass
-    raise Exception("container runtime required")
-
-
 def generate_test_log_dir(unique_test_id):
     """Generate a log directory for a test given it's request"""
     user = os.environ.get("USER")

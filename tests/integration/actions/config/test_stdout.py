@@ -5,7 +5,8 @@ import os
 from tests import defaults
 
 from ..._action_run_test import ActionRunTest
-from ..._common import container_runtime_or_fail
+
+from ...._common import container_runtime_or_fail
 
 
 def test_run_config_stdout_list() -> None:

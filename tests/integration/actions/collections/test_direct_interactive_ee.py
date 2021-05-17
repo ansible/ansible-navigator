@@ -4,7 +4,7 @@ import pytest
 
 from .base import BaseClass
 
-from ..._common import container_runtime_or_fail
+from ...._common import container_runtime_or_fail
 
 CLI = (
     "ansible-navigator collections --execution-environment true --ce " + container_runtime_or_fail()
