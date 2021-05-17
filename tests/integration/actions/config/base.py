@@ -2,6 +2,7 @@
 """
 import difflib
 import json
+import os
 import shlex
 
 from enum import Enum
@@ -133,7 +134,10 @@ class BaseClass:
                 if "15│CACHE_PLUGIN_CONNECTION" in line:
                     received_output[idx] = mask
 
-        if self.UPDATE_FIXTURES:
+        if (
+            self.UPDATE_FIXTURES
+            or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
+        ):
             update_fixtures(
                 request,
                 step.step_index,

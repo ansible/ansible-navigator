@@ -302,21 +302,21 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def playbook_artifact_load(
+    def playbook_artifact_replay(
         entry: Entry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
-        """Post process playbook_artifact_load"""
+        """Post process playbook_artifact_replay"""
         messages: List[LogMessage] = []
         errors: List[str] = []
-        if config.app == "load" and entry.value.current is C.NOT_SET:
-            error = "An playbook artifact file is required when using the load subcommand"
+        if config.app == "replay" and entry.value.current is C.NOT_SET:
+            error = "An playbook artifact file is required when using the replay subcommand"
             errors.append(error)
             return messages, errors
 
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
 
-        if config.app == "load":
+        if config.app == "replay":
             if not os.path.isfile(entry.value.current):
                 error = f"The specified playbook artifact could not be found: {entry.value.current}"
                 errors.append(error)

@@ -78,7 +78,7 @@ You can copy the example settings file below into one of those paths to start yo
     #   playbook: /tmp/test_playbook.yml
     #   playbook-artifact: 
     #     enable: True
-    #     load: /tmp/test_artifact.json
+    #     replay: /tmp/test_artifact.json
     #     save-as: /tmp/test_artifact.json
 ..
   end-settings-sample
@@ -97,7 +97,7 @@ The following table describes all available settings.
     - Settings
   * - app
     - Subcommands
-    - | **Choices:** 'collections', 'config', 'doc', 'ee-details', 'inventory', 'load', 'run' or 'welcome'
+    - | **Choices:** 'collections', 'config', 'doc', 'ee-details', 'inventory', 'replay', 'run' or 'welcome'
       | **Default:** welcome
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_APP
@@ -407,25 +407,25 @@ The following table describes all available settings.
 
 |
 
-.. list-table:: **Subcommand: load**
+.. list-table:: **Subcommand: replay**
   :widths: 2 3 5
   :header-rows: 1
 
   * - Name
     - Description
     - Settings
-  * - playbook-artifact-load
-    - Specify the path for the playbook artifact to load
+  * - playbook-artifact-replay
+    - Specify the path for the playbook artifact to replay
     - | **Default:** No default value set
       | **CLI:** positional
-      | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_LOAD
+      | **ENV:** ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_REPLAY
       | **Settings file:**
 
       .. code-block:: yaml
 
             ansible-navigator:
               playbook-artifact:
-                load:
+                replay:
 
 
 |
