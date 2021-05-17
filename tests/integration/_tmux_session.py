@@ -242,6 +242,13 @@ class TmuxSession:
                             break
 
             if ok_to_return:
+                screens = [showing]
+                while True:
+                    screens.append(self._pane.capture_pane())
+                    if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
+                        showing = screens[-1]
+                        break
+                    time.sleep(0.1)
                 break
 
             elapsed = timer() - start_time
