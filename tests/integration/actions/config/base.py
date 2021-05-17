@@ -2,6 +2,7 @@
 """
 import difflib
 import json
+import os
 import pytest
 
 from typing import Optional
@@ -62,7 +63,10 @@ class BaseClass:
                     if "15│CACHE_PLUGIN_CONNECTION" in line:
                         received_output[idx] = mask
 
-            if self.UPDATE_FIXTURES:
+            if (
+                self.UPDATE_FIXTURES
+                or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
+            ):
                 update_fixtures(request, index, received_output, comment, testname=testname)
             dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
             with open(f"{dir_path}/{file_name}") as infile:

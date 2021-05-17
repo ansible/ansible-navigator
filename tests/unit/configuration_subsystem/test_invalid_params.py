@@ -68,17 +68,17 @@ def test_doc_no_plugin_name(_mocked_func, generate_config):
 
 
 @patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-def test_load_no_artifact(_mocked_func, generate_config):
-    """Ensure an error is created load is used without playbook artifact"""
-    response = generate_config(params=["load"])
-    error = "An playbook artifact file is required when using the load subcommand"
+def test_replay_no_artifact(_mocked_func, generate_config):
+    """Ensure an error is created replay is used without playbook artifact"""
+    response = generate_config(params=["replay"])
+    error = "An playbook artifact file is required when using the replay subcommand"
     assert error in response.errors
 
 
 @patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
-def test_load_missing_artifact(_mocked_func, generate_config):
+def test_replay_missing_artifact(_mocked_func, generate_config):
     """Ensure an error is created load is used with a missing playbook artifact"""
-    response = generate_config(params=["load", tempfile.NamedTemporaryFile().name])
+    response = generate_config(params=["replay", tempfile.NamedTemporaryFile().name])
     error = "The specified playbook artifact could not be found:"
     assert response.errors[1].startswith(error)
 
@@ -140,7 +140,7 @@ def test_poor_choices(_mocked_func, generate_config, entry):
         test(subcommand, "", "choose from")
 
 
-@pytest.mark.parametrize("subcommand, params", [("load", __file__), ("collections", "")])
+@pytest.mark.parametrize("subcommand, params", [("replay", __file__), ("collections", "")])
 @patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
 def test_interactive_only_subcommand(_mocked_func, generate_config, subcommand, params):
     # pylint: disable=import-outside-toplevel

@@ -99,7 +99,7 @@ navigator_subcommds = [
     SubCommand(name="doc", description="Review documentation for a module or plugin"),
     SubCommand(name="ee-details", description="Explore execution environment details"),
     SubCommand(name="inventory", description="Explore an inventory"),
-    SubCommand(name="replay", description="Explore a playbook artifact"),
+    SubCommand(name="replay", description="Explore a previous run using a playbook artifact"),
     SubCommand(name="run", description="Run a playbook"),
     SubCommand(name="welcome", description="Start at the welcome page"),
 ]

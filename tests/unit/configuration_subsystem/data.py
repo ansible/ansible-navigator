@@ -123,10 +123,10 @@ CLI_DATA_INVENTORY_COLUMNS = [
         },
     ),
 ]
-CLI_DATA_LOAD = [
+CLI_DATA_REPLAY = [
     (
-        "load /tmp/part.json -m interactive",
-        {"app": "load", "mode": "interactive", "playbook_artifact_load": "/tmp/part.json"},
+        "replay /tmp/part.json -m interactive",
+        {"app": "replay", "mode": "interactive", "playbook_artifact_replay": "/tmp/part.json"},
     )
 ]
 CLI_DATA_RUN = [
@@ -175,7 +175,7 @@ def cli_data():
         + CLI_DATA_DOC  # type: ignore
         + CLI_DATA_INVENTORY  # type: ignore
         + CLI_DATA_INVENTORY_COLUMNS  # type: ignore
-        + CLI_DATA_LOAD  # type: ignore
+        + CLI_DATA_REPLAY  # type: ignore
         + CLI_DATA_RUN  # type: ignore
     )
     frozen = [(cmd, d2t(expected)) for cmd, expected in aggregated]
@@ -205,7 +205,7 @@ ENVVAR_DATA = [
     ("pass_environment_variable", "a,b,c", ["a", "b", "c"]),
     ("playbook", "/tmp/site.yaml", "/tmp/site.yaml"),
     ("playbook_artifact_enable", "false", False),
-    ("playbook_artifact_load", "/tmp/load.json", "/tmp/load.json"),
+    ("playbook_artifact_replay", "/tmp/load.json", "/tmp/load.json"),
     ("playbook_artifact_save_as", "/tmp/save.json", "/tmp/save.json"),
     ("plugin_name", "shell", "shell"),
     ("plugin_type", "become", "become"),

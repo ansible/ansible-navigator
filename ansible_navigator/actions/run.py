@@ -359,7 +359,8 @@ class Action(App):
         self._logger.debug("Starting replay artifact request")
 
         self._update_args(
-            ["replay"] + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or "")
+            ["replay"]
+            + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or "")
         )
 
         artifact_file = self._args.playbook_artifact_replay

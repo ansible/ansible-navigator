@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:i -i /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml --ee True --ce docker-:inventory from welcome]",
+    "name": "test[1-:i -i /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-:inventory from welcome]",
     "index": 1,
     "comment": ":inventory from welcome",
     "output": [

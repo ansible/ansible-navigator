@@ -1,5 +1,5 @@
 {
-    "name": "test[3-:stdout-Check stdout-None]",
+    "name": "test[3-:stdout-Check stdout-:help help]",
     "index": 3,
     "comment": "Check stdout",
     "output": [

@@ -40,10 +40,10 @@ ansible-navigator subcommand overview
     - Explore an inventory
     - ansible-navigator inventory --help
     - :inventory
-  * - load
-    - Explore a playbook artifact
-    - ansible-navigator load --help
-    - :load
+  * - replay
+    - Explore a previous run using a playbook artifact
+    - ansible-navigator replay --help
+    - :replay
   * - run
     - Run a playbook
     - ansible-navigator run --help
