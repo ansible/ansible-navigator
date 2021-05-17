@@ -1,7 +1,12 @@
 {
-    "name": "test[3-:0-cache plugin details-None-None]",
+    "name": "test[3-:0-cache plugin details]",
     "index": 3,
     "comment": "cache plugin details",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "CACHE PLUGIN TIMEOUT (current: 42)  (default: 86400)",
         " 0│---",

@@ -1,7 +1,12 @@
 {
-    "name": "test[6-:f yaml-filter off screen value-None-None]",
+    "name": "test[6-:f yaml-filter off screen value]",
     "index": 6,
     "comment": "filter off screen value",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "  OPTION                               DEFAULT     SOURCE      VIA         CURRENT VALUE",
         "0│INVENTORY_ENABLED                       True     default     default     ['host_list', 'script', 'auto', 'yaml', 'ini', 'toml']",

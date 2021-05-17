@@ -1,7 +1,12 @@
 {
-    "name": "test[0-ansible-navigator config --execution-environment true --ce docker-ansible-navigator config command top window-None-None]",
+    "name": "test[0-ansible-navigator config --ee True --ce docker --ll debug --mode interactive-ansible-navigator config command top window]",
     "index": 0,
     "comment": "ansible-navigator config command top window",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "    OPTION                        DEFAULT SOURCE  VIA                             CURRENT VALUE",
         "  0│ACTION_WARNINGS                  True default default                         True                                                                                                                 ▒",

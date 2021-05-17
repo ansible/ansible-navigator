@@ -2,6 +2,7 @@
 import curses
 import os
 import re
+import shlex
 
 from distutils.spawn import find_executable
 from typing import Any
@@ -84,7 +85,7 @@ class Action(App):
 
     # pylint:disable=too-few-public-methods
 
-    KEGEX = r"^config$"
+    KEGEX = r"^config(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
         super().__init__(args=args, logger_name=__name__, name="config")
@@ -103,6 +104,10 @@ class Action(App):
         """
         self._logger.debug("config requested in interactive mode")
         self._prepare_to_run(app, interaction)
+
+        self._update_args(
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
+        )
 
         self._run_runner()
         if self._config is None:

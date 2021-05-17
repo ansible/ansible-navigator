@@ -1,7 +1,12 @@
 {
-    "name": "test[0-ansible-navigator --execution-environment true --ce docker-ansible-navigator config command top window-None-None]",
+    "name": "test[0-ansible-navigator --ee True --ce docker --ll debug --mode interactive-welcome screen]",
     "index": 0,
-    "comment": "ansible-navigator config command top window",
+    "comment": "welcome screen",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         " 0│## Welcome",
         " 1│----------------------------------------------------------------------------------------------------------",

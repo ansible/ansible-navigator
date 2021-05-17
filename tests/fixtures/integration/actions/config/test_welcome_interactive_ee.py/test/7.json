@@ -1,7 +1,12 @@
 {
-    "name": "test[7-:3-YAML_FILENAME_EXTENSIONS details-None-None]",
+    "name": "test[7-:3-YAML_FILENAME_EXTENSIONS details]",
     "index": 7,
     "comment": "YAML_FILENAME_EXTENSIONS details",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "YAML FILENAME EXTENSIONS (current/default: ['.yml', '.yaml', '.json'])",
         " 0│---                                                                                                                                                                                                 ▒",
