@@ -21,7 +21,9 @@ def get_executable_path(name):
     return exec_path
 
 
-def update_fixtures(request, index, received_output, comment, testname=None):
+def update_fixtures(
+    request, index, received_output, comment, testname=None, additional_information=None
+):
     """Used by action plugins to generate the fixtures"""
     dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
     os.makedirs(dir_path, exist_ok=True)
@@ -29,6 +31,7 @@ def update_fixtures(request, index, received_output, comment, testname=None):
         "name": request.node.name,
         "index": index,
         "comment": comment,
+        "additional_information": additional_information,
         "output": received_output,
     }
     with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:

@@ -170,6 +170,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
         ),
         Entry(
+            name="help_config",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--hc", action="store_true"),
+            short_description="Help options for ansible-config command in stdout mode",
+            subcommands=["config"],
+            value=EntryValue(default=False),
+        ),
+        Entry(
             name="help_doc",
             choices=[True, False],
             cli_parameters=CliParameters(short="--hd", action="store_true"),

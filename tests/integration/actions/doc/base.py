@@ -43,7 +43,7 @@ class BaseClass:
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
-        """test interactive config"""
+        """test interactive/stdout config"""
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":

@@ -2,26 +2,23 @@
 """
 import pytest
 
+from .base import add_indicies
+from .base import base_steps
+from .base import step_id
 from .base import BaseClass
-
-CLI = "ansible-navigator config --execution-environment false"
-
-testdata = [
-    (0, CLI, "ansible-navigator config command top window", None, None),
-    (1, ":f CACHE_PLUGIN_TIMEOUT", "filter for cache plugin timeout", None, None),
-    (2, ":0", "cache plugin details", None, None),
-    (3, ":back", "return to filtered list", None, None),
-    (4, ":f", "clear filter, full list", None, None),
-    (5, ":f yaml", "filter off screen value", None, None),
-    (6, ":3", "YAML_FILENAME_EXTENSIONS details", None, None),
-    (7, ":back", "return to filtered list", None, None),
-    (8, ":f", "clear filter, full list", None, None),
-]
+from .base import Command
+from .base import Step
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata)
+CLI = Command(subcommand="config", execution_environment=False).join()
+
+initial_steps = (Step(user_input=CLI, comment="ansible-navigator config command top window"),)
+
+steps = add_indicies(initial_steps + base_steps)
+
+
+@pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
     """run the tests"""
 
-    TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False

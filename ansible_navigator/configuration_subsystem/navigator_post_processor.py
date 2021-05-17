@@ -109,6 +109,17 @@ class NavigatorPostProcessor:
         return messages, errors
 
     @_post_processor
+    def help_config(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process help_config"""
+        messages, errors = self._true_or_false(entry, config)
+        if all((entry.value.current is True, config.app == "config", config.mode == "interactive")):
+            error = "--help-config or --hc is valid only when 'mode' argument is set to 'stdout'"
+            errors.append(error)
+            return messages, errors
+        return messages, errors
+
+    @_post_processor
     def help_doc(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process help_doc"""
