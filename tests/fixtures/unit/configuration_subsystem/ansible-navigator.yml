@@ -1,5 +1,7 @@
 ---
 ansible-navigator:
+  ansible:
+    config: /tmp/ansible.cfg
   app: run
   collection-doc-cache-path: /tmp/cache.db
   cmdline: "--forks 15"
