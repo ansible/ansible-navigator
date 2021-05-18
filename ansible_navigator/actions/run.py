@@ -19,6 +19,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
+
 from . import run_action
 from . import _actions as actions
 
@@ -247,7 +248,7 @@ class Action(App):
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break
-        return 1 if self.runner.status == "failed" else 0
+        return self.runner.ansible_runner_instance.rc
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
