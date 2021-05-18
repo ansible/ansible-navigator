@@ -2,8 +2,6 @@
 import os
 import pytest
 
-from ._common import container_runtime_or_fail
-
 EXECUTION_MODES = ["interactive", "stdout"]
 
 
@@ -11,12 +9,6 @@ EXECUTION_MODES = ["interactive", "stdout"]
 def test_fixtures_dir():
     """the test fixture directory"""
     return os.path.join(os.path.dirname(__file__), "..", "fixtures")
-
-
-@pytest.fixture(scope="session", name="container_runtime_or_fail")
-def fixture_container_runtime_or_fail():
-    """check if container runtime is available"""
-    yield container_runtime_or_fail
 
 
 @pytest.fixture

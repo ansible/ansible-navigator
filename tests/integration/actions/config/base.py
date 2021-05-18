@@ -12,10 +12,11 @@ from typing import Union
 
 import pytest
 
-from ..._common import container_runtime_or_fail
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
 from ..._tmux_session import TmuxSession
+
+from ...._common import container_runtime_or_fail
 
 
 class SearchFor(Enum):

@@ -5,7 +5,7 @@ import pytest
 from .base import BaseClass
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
 
-from ..._common import container_runtime_or_fail
+from ...._common import container_runtime_or_fail
 
 CLI = (
     "ansible-navigator inventory"
