@@ -133,7 +133,7 @@ class TmuxSession:
         prompt_showing = False
         while True:
             showing = self._pane.capture_pane()
-            # the scrren has been cleared, wait for prompt in first line
+            # the screen has been cleared, wait for prompt in first line
             if showing:
                 prompt_showing = self.cli_prompt in showing[0]
             if prompt_showing:
@@ -202,7 +202,7 @@ class TmuxSession:
             showing = self._pane.capture_pane()
             if showing and showing != pre_send:
                 if mode == "shell":
-                    command_executed = value not in showing[-1]
+                    command_executed = value not in "".join(showing)
                 elif mode == "app":
                     command_executed = True
 
