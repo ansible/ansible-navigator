@@ -7,6 +7,7 @@ from .base import Command
 from .base import SearchFor
 from .base import Step
 from .base import add_indicies
+from .base import CONFIG_FIXTURE
 
 
 class StdoutCommand(Command):
@@ -94,6 +95,28 @@ stdout_tests = (
             execution_environment=False,
         ).join(),
         look_fors=["--help-config or --hc is valid only when 'mode' argument is set to 'stdout'"],
+    ),
+    ShellCommand(
+        comment="config specified configuration file with ee",
+        # pass the PAGER into the EE so the full contents return
+        user_input=StdoutCommand(
+            cmdline="dump",
+            config_file=CONFIG_FIXTURE,
+            mode="stdout",
+            execution_environment=True,
+            pass_environment_variables=["PAGER"],
+        ).join(),
+        look_fors=[".yahmool"],
+    ),
+    ShellCommand(
+        comment="config specified configuration file without ee",
+        user_input=StdoutCommand(
+            cmdline="dump",
+            config_file=CONFIG_FIXTURE,
+            mode="stdout",
+            execution_environment=False,
+        ).join(),
+        look_fors=[".yahmool"],
     ),
 )
 

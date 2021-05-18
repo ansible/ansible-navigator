@@ -305,6 +305,19 @@ The following table describes all available settings.
   * - Name
     - Description
     - Settings
+  * - config
+    - Specify the path to the ansible configuration file
+    - | **Default:** No default value set
+      | **CLI:** `-c` or `--config`
+      | **ENV:** ANSIBLE_CONFIG
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              ansible:
+                config:
+
   * - help-config
     - Help options for ansible-config command in stdout mode
     - | **Choices:** 'True' or 'False'

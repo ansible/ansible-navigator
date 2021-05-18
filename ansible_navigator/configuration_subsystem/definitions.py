@@ -81,7 +81,7 @@ class Entry(SimpleNamespace):
     subcommands: Union[List[str], Constants] = Constants.ALL
     subcommand_value: bool = False
 
-    def environment_variable(self, prefix: str) -> str:
+    def environment_variable(self, prefix: str = "") -> str:
         """Generate an effective environment variable for this entry"""
         if self.environment_variable_override is not None:
             envvar = self.environment_variable_override

@@ -136,7 +136,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="-c", metavar="CONFIG_FILE"),
             environment_variable_override="ansible_config",
             settings_file_path_override="ansible.config",
-            short_description="Specify the path to the ansible configuration file, defaults to first file found in precedence",
+            short_description="Specify the path to the ansible configuration file",
             subcommands=["config"],
             value=EntryValue(),
         ),

@@ -18,6 +18,10 @@ from ..._tmux_session import TmuxSession
 
 from ...._common import container_runtime_or_fail
 
+from ....defaults import FIXTURES_DIR
+
+CONFIG_FIXTURE = os.path.join(FIXTURES_DIR, "integration", "actions", "config", "ansible.cfg")
+
 
 class SearchFor(Enum):
     """set the test mode"""
@@ -30,25 +34,32 @@ class Command(NamedTuple):
     """command details"""
 
     execution_environment: bool
+    config_file: Union[None, str] = None
     container_engine: str = container_runtime_or_fail()
     command: str = "ansible-navigator"
     cmdline: Union[None, str] = None
     log_level: str = "debug"
     mode: str = "interactive"
+    pass_environment_variables: List = []
     preclear: bool = False
     subcommand: Union[None, str] = None
 
     def join(self):
         """create cli command"""
         args = [self.command]
-        if self.subcommand is not None:
+        if isinstance(self.subcommand, str):
             args.append(self.subcommand)
-        if self.cmdline is not None:
+        if isinstance(self.cmdline, str):
             args.extend(shlex.split(self.cmdline))
+        if isinstance(self.config_file, str):
+            args.extend(["-c", self.config_file])
         args.extend(["--ee", self.execution_environment])
         args.extend(["--ce", self.container_engine])
         args.extend(["--ll", self.log_level])
         args.extend(["--mode", self.mode])
+        if self.pass_environment_variables:
+            for envvar in self.pass_environment_variables:
+                args.extend(["--penv", envvar])
         cmd = " ".join(shlex.quote(str(arg)) for arg in args)
         if self.preclear:
             return "clear && " + cmd
@@ -96,14 +107,15 @@ class BaseClass:
     """base class for interactive/stdout config tests"""
 
     UPDATE_FIXTURES = False
+    PANE_HEIGHT = 20
 
-    @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request):
+    def fixture_tmux_session(self, request):
         """tmux fixture for this module"""
         params = {
             "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42", "export PAGER=cat"],
             "unique_test_id": request.node.nodeid,
+            "pane_height": self.PANE_HEIGHT,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session

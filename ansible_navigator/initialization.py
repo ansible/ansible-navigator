@@ -177,25 +177,9 @@ def parse_and_update(
             return messages, errors
         args.internals.collection_doc_cache = cache
 
-    set_ansible_envar()
-
     for entry in args.entries:
         message = f"Running with {entry.name} as '{entry.value.current}'"
         message += f" ({type(entry.value.current).__name__}/{entry.value.source.value})"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-    return messages, errors
-
-
-def set_ansible_envar() -> Tuple[List[LogMessage], List[str]]:
-    """Set an envar if not set, runner will need this"""
-    messages, errors, ansible_config_path = find_configuration_directory_or_file_path("ansible.cfg")
-    if errors:
-        return messages, errors
-
-    # set as env var, since we hand env vars over to runner
-    if ansible_config_path and not os.getenv("ANSIBLE_CONFIG"):
-        os.environ.setdefault("ANSIBLE_CONFIG", ansible_config_path)
-        message = f"ANSIBLE_CONFIG set to '{ansible_config_path}'"
-        messages.append(LogMessage(level=logging.DEBUG, message=message))
     return messages, errors
