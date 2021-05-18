@@ -263,7 +263,9 @@ class TmuxSession:
 
                 tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
                 # taint the screen output w/ timestamp so it's never a valid fixture
-                alerts = [f"******** ERROR: TMUX '{err_message}' TIMEOUT @ {elapsed}s @ {tstamp} ********"]
+                alerts = [
+                    f"******** ERROR: TMUX '{err_message}' TIMEOUT @ {elapsed}s @ {tstamp} ********"
+                ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
                 with open(timeout_capture_path, "w") as filehandle:
