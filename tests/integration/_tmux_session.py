@@ -156,7 +156,7 @@ class TmuxSession:
         value,
         search_within_response: Union[None, List, str] = None,
         ignore_within_response=None,
-        timeout=60,
+        timeout=120,
     ):
         """interact with the tmux session
         :param value: send to screen
