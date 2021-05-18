@@ -249,6 +249,7 @@ class TmuxSession:
                     if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
                         showing = screens[-1]
                         break
+                    elapsed = timer() - start_time
                     if elapsed > timeout:
                         err_message = "5 LIKE SCREENS"
                         break
