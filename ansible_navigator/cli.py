@@ -46,16 +46,18 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     logger.info("New %s instance, logging initialized", APP_NAME)
 
 
-def run(args: ApplicationConfiguration) -> None:
+def run(args: ApplicationConfiguration) -> int:
     """run the appropriate app"""
     try:
         if args.mode == "stdout":
-            run_action_stdout(args.app.replace("-", "_"), args)
-        else:
-            wrapper(ActionRunner(args=args).run)
+            return_code = run_action_stdout(args.app.replace("-", "_"), args)
+            return return_code
+        wrapper(ActionRunner(args=args).run)
+        return 0
     except KeyboardInterrupt:
         logger.warning("Dirty exit, killing the pid")
         os.kill(os.getpid(), signal.SIGTERM)
+        return 1
 
 
 def main():
@@ -104,7 +106,9 @@ def main():
     if os.environ.get("TERM"):
         os.system("clear")
 
-    run(args)
+    return_code = run(args)
+    if return_code:
+        sys.exit(return_code)
 
 
 if __name__ == "__main__":

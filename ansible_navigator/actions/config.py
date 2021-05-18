@@ -129,10 +129,11 @@ class Action(App):
         self._prepare_to_exit(interaction)
         return None
 
-    def run_stdout(self) -> None:
+    def run_stdout(self) -> int:
         """Run in oldschool mode, just stdout"""
         self._logger.debug("config requested in stdout mode")
         self._run_runner()
+        return 1 if self._runner.status == "failed" else 0
 
     def _take_step(self) -> None:
         """take one step"""

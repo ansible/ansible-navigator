@@ -79,6 +79,7 @@ class BaseRunner:
             pass_environment_variable if isinstance(pass_environment_variable, list) else []
         )
         self._cwd = cwd
+        self.ansible_runner_instance: Runner
         self.cancelled: bool = False
         self.finished: bool = False
         self.status: Optional[str] = None
@@ -215,7 +216,7 @@ class CommandRunnerAsync(CommandBaseRunner):
         """run"""
         self.generate_run_command_args()
         self._runner_args.update({"event_handler": self._event_handler})
-        thread, _runner = run_command_async(**self._runner_args)
+        thread, self.ansible_runner_instance = run_command_async(**self._runner_args)
         self.status = "running"
         return thread
 

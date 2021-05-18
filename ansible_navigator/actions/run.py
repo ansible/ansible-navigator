@@ -230,7 +230,7 @@ class Action(App):
         self._task_list_columns = task_list_columns
         self._content_key_filter = content_key_filter
 
-    def run_stdout(self) -> None:
+    def run_stdout(self) -> int:
         """Run in oldschool mode, just stdout
 
         :param args: The parsed args from the cli
@@ -247,6 +247,7 @@ class Action(App):
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break
+        return self.runner.ansible_runner_instance.rc
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
