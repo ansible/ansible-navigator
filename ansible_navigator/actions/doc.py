@@ -121,12 +121,13 @@ class Action(App):
         self._prepare_to_exit(interaction)
         return next_interaction
 
-    def run_stdout(self) -> None:
+    def run_stdout(self) -> int:
         """Run in oldschool mode, just stdout"""
         self._plugin_name = self._args.plugin_name
         self._plugin_type = self._args.plugin_type
         self._logger.debug("doc requested in stdout mode")
         self._run_runner()
+        return 1 if self._runner.status == "failed" else 0
 
     def _run_runner(self) -> Union[dict, None]:
         # pylint: disable=too-many-branches

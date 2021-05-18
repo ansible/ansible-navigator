@@ -15,7 +15,7 @@ names = actions.names_factory(__package__)
 
 kegexes: Callable = actions.kegexes_factory(__package__)
 
-run_action_stdout: Callable[[str, ApplicationConfiguration], None] = actions.run_stdout_factory(
+run_action_stdout: Callable[[str, ApplicationConfiguration], int] = actions.run_stdout_factory(
     __package__
 )
 

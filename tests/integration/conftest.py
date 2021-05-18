@@ -2,7 +2,15 @@
 import os
 import pytest
 
+from ._action_run_test import ActionRunTest
+
 EXECUTION_MODES = ["interactive", "stdout"]
+
+
+@pytest.fixture(scope="function")
+def action_run_stdout():
+    """fixturize the ActionRunTest"""
+    yield ActionRunTest
 
 
 @pytest.fixture(scope="session")

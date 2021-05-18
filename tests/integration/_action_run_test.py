@@ -102,9 +102,10 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, cmdline: List) -> Tuple[str, str]:
+    def run_action_stdout(self, **kwargs) -> Tuple[int, str, str]:
         """run the action"""
-        self._app_args.update({"mode": "stdout", "cmdline": cmdline})
+        self._app_args.update({"mode": "stdout"})
+        self._app_args.update(kwargs)
         args = deepcopy(NavigatorConfiguration)
         for argument, value in self._app_args.items():
             args.entry(argument).value.current = value
@@ -128,7 +129,7 @@ class ActionRunTest:
         sys.stderr = tempfile.TemporaryFile()  # type: ignore
 
         # run the action
-        action.run_stdout()
+        return_code = action.run_stdout()
 
         # restore stdin
         sys.stdin = __stdin__
@@ -143,4 +144,4 @@ class ActionRunTest:
         stderr = sys.stderr.read().decode()  # type: ignore
         sys.stderr = __stderr__
 
-        return stdout, stderr
+        return return_code, stdout, stderr
