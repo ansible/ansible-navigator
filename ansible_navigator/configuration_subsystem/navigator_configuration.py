@@ -132,6 +132,15 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default=generate_cache_path()),
         ),
         Entry(
+            name="config",
+            cli_parameters=CliParameters(short="-c", metavar="CONFIG_FILE"),
+            environment_variable_override="ansible_config",
+            settings_file_path_override="ansible.config",
+            short_description="Specify the path to the ansible configuration file, defaults to first file found in precedence",
+            subcommands=["config"],
+            value=EntryValue(),
+        ),
+        Entry(
             name="container_engine",
             choices=["podman", "docker"],
             cli_parameters=CliParameters(short="--ce"),
@@ -188,7 +197,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         Entry(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
-            environment_variable_override="inventories",
+            environment_variable_override="ansible_navigator_inventories",
             settings_file_path_override="inventories",
             short_description="Specify an inventory file path or comma separated host list",
             subcommands=["inventory", "run"],
@@ -197,7 +206,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         Entry(
             name="inventory_column",
             cli_parameters=CliParameters(action="append", nargs="+", short="--ic"),
-            environment_variable_override="inventory_columns",
+            environment_variable_override="ansible_navigator_inventory_columns",
             settings_file_path_override="inventory-columns",
             short_description="Specify a host attribute to show in the inventory view",
             subcommands=["inventory", "run"],
@@ -246,7 +255,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         Entry(
             name="pass_environment_variable",
             cli_parameters=CliParameters(action="append", nargs="+", short="--penv"),
-            environment_variable_override="pass_environment_variables",
+            environment_variable_override="ansible_navigator_pass_environment_variables",
             settings_file_path_override="execution-environment.environment-variables.pass",
             short_description=(
                 "Specify an exiting environment variable to be passed through"
@@ -307,7 +316,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         Entry(
             name="set_environment_variable",
             cli_parameters=CliParameters(action="append", nargs="+", short="--senv"),
-            environment_variable_override="set_environment_variables",
+            environment_variable_override="ansible_navigator_set_environment_variables",
             settings_file_path_override="execution-environment.environment-variables.set",
             short_description=(
                 "Specify an environment variable and a value to be set within the"

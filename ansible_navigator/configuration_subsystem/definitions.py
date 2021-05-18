@@ -84,7 +84,7 @@ class Entry(SimpleNamespace):
     def environment_variable(self, prefix: str) -> str:
         """Generate an effective environment variable for this entry"""
         if self.environment_variable_override is not None:
-            envvar = f"{prefix}_{self.environment_variable_override}"
+            envvar = self.environment_variable_override
         else:
             envvar = f"{prefix}_{self.name.replace('--', '')}"
         envvar = envvar.replace("-", "_").upper()
