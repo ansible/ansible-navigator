@@ -3,6 +3,7 @@
 
 from enum import Enum
 
+
 class FormType(Enum):
     """used indicate the form type"""
 
