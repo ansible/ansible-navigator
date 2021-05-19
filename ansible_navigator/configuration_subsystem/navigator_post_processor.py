@@ -14,7 +14,6 @@ from .definitions import Entry
 from .definitions import ApplicationConfiguration
 
 from ..utils import abs_user_path
-from ..utils import find_ansible_config_file
 from ..utils import check_for_ansible
 from ..utils import flatten_list
 from ..utils import oxfordcomma
@@ -83,37 +82,6 @@ class NavigatorPostProcessor:
         errors: List[str] = []
         if entry.value.source is C.ENVIRONMENT_VARIABLE:
             entry.value.current = entry.value.current.split()
-        return messages, errors
-
-    @staticmethod
-    @_post_processor
-    def config(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        """Set the ansible config envvar for non-ee sessions, so runner can find it
-        ee session will require it be explicitly set and volume mounted if not in
-        the cwd. execution-environment is needed early here since params are processed
-        in order
-        """
-        messages: List[LogMessage] = []
-        errors: List[str] = []
-        environment_variable = entry.environment_variable()
-        try:
-            execution_enviroment = str2bool(config.execution_environment)
-        except ValueError:
-            message = "execution_enviroment could not be converted to a boolean value"
-            messages.append(LogMessage(level=logging.DEBUG, message=message))
-            message = f"{environment_variable} environment variable will not be set"
-            messages.append(LogMessage(level=logging.DEBUG, message=message))
-            return messages, errors
-
-        if execution_enviroment is False:
-            if not os.environ.get(environment_variable):
-                new_messages, new_errors, path = find_ansible_config_file()
-                messages.extend(new_messages)
-                errors.extend(new_errors)
-                if isinstance(path, str):
-                    os.environ[environment_variable] = path
-                    message = f"{environment_variable} set to {path}"
-                    messages.append(LogMessage(level=logging.INFO, message=message))
         return messages, errors
 
     @_post_processor

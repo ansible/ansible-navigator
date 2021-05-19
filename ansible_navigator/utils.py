@@ -115,34 +115,6 @@ def environment_variable_is_file_path(
     return messages, errors, file_path
 
 
-def find_ansible_config_file() -> Tuple[List[LogMessage], List[str], Optional[str]]:
-    """Load config file(first found is used): CWD, HOME, /etc/..."""
-
-    messages: List[LogMessage] = []
-    errors: List[str] = []
-    path = None
-    filename = "ansible.cfg"
-
-    # Current working directory
-    potential_paths = [abs_user_path(os.path.join(os.getcwd(), filename))]
-    # Home directory
-    potential_paths.append(abs_user_path(os.path.join("~", f".{filename}")))
-    # /etc/ansible/ansible.cfg
-    potential_paths.append(abs_user_path(os.path.join("/", "etc", "ansible", filename)))
-
-    path = None
-    for candidate in potential_paths:
-        if os.path.exists(candidate):
-            message = "ansible.cfg file found: {path}"
-            messages.append(LogMessage(level=logging.DEBUG, message=message))
-            path = candidate
-            break
-        message = "ansible.cfg file not found: {path}"
-        messages.append(LogMessage(level=logging.DEBUG, message=message))
-
-    return messages, errors, path
-
-
 def find_configuration_file_in_directory(
     path: str, filename: str, allowed_extensions: List
 ) -> Tuple[List[LogMessage], List[str], Optional[str]]:

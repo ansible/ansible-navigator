@@ -226,7 +226,8 @@ class Action(App):
 
             if self._args.help_config is True:
                 pass_through_arg.append("--help")
-            elif isinstance(self._args.config, str):
+
+            if isinstance(self._args.config, str):
                 pass_through_arg.extend(["--config", self._args.config])
 
             kwargs.update({"cmdline": pass_through_arg})
