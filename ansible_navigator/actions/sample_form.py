@@ -23,7 +23,7 @@ form:
       - role
       - plugin
   - name: ansible_fest
-    prompt: In 2019, AnsibleFest was held in what city?:sample_form
+    prompt: In 2019, AnsibleFest was held in what city?
     default: Atlanta
     type: text_input
     validator:
