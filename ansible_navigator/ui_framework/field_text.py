@@ -7,11 +7,11 @@ from typing import Callable
 from typing import Union
 
 from .curses_window import Window
-from .field_validators import FieldValidators
 from .form_handler_text import FormHandlerText
 from .sentinals import nonexistent
 from .sentinals import unknown
 from .sentinals import Unknown
+from .validators import FieldValidators
 
 
 @dataclass

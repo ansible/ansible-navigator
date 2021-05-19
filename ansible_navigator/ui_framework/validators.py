@@ -27,19 +27,7 @@ class Validation(NamedTuple):
 
 
 class FieldValidators:
-    """a box in which validators are put"""
-
-    @staticmethod
-    def all_true(response: List = [], hint: bool = False) -> Union[Validation, str]:
-        # pylint: disable=dangerous-default-value
-        """validate all in list are true"""
-        msg = "Please ensure all values are true"
-        if hint:
-            return msg
-        value = response
-        if all(v is True for v in value):
-            msg = ""
-        return Validation(value=value, error_msg=msg)
+    """a box in which field validators are put"""
 
     @staticmethod
     def http(text: str = "", hint: bool = False) -> Union[Validation, str]:
@@ -70,6 +58,13 @@ class FieldValidators:
         """no validation"""
         if hint:
             return "Please provide a value (optional)"
+        return Validation(value=text, error_msg="")
+
+    @staticmethod
+    def null(text="", hint: bool = False) -> Union[Validation, str]:
+        """no validation, no message"""
+        if hint:
+            return ""
         return Validation(value=text, error_msg="")
 
     @staticmethod
@@ -208,3 +203,28 @@ class FieldValidators:
                 value = "no"
                 msg = ""
         return Validation(value=value, error_msg=msg)
+
+
+class FormValidators:
+    """Validators for a form"""
+
+    @staticmethod
+    def all_true(response: Union[List, None] = None, hint: bool = False) -> Union[Validation, str]:
+        """validate all in list are true"""
+        msg = "Please ensure all values are true"
+        if hint:
+            return msg
+        response = response or []
+        if all(v is True for v in response):
+            msg = ""
+        return Validation(value=response, error_msg=msg)
+
+    @staticmethod
+    def no_validation(
+        response: Union[List, None] = None, hint: bool = False
+    ) -> Union[Validation, str]:
+        """no validation"""
+        msg = ""
+        if hint:
+            return msg
+        return Validation(value=response, error_msg=msg)

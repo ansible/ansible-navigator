@@ -6,21 +6,31 @@ from typing import Dict
 
 
 from .field_checks import FieldChecks
+from .field_information import FieldInformation
 from .field_option import FieldOption
 from .field_radio import FieldRadio
 from .field_text import FieldText
-from .field_validators import FieldValidators
+from .validators import FieldValidators
 from .form import Form
+from .form import FormType
 
 
 def dict_to_form(form_data: Dict) -> Form:
+    # pylint: disable=too-many-branches
     """convert a python dict to a form"""
-    form = Form()
+    if form_data.get("type") == "notification":
+        form = Form(type=FormType.NOTIFICATION)
+    else:
+        form = Form(type=FormType.FORM)
+
     form._dict = form_data  # pylint: disable=protected-access
     form.title = form_data["title"]
+    form.title_color = form_data.get("title_color", 0)
+
     for field in form_data["fields"]:
-        field_params = {"name": field["name"], "prompt": field["prompt"]}
+        field_params = {"name": field["name"]}
         if field["type"] == "text_input":
+            field_params["prompt"] = field["prompt"]
             field_params["validator"] = getattr(FieldValidators, field["validator"]["name"])
 
             choices = field["validator"].get("choices")
@@ -40,6 +50,7 @@ def dict_to_form(form_data: Dict) -> Form:
             form.fields.append(frm_field_text)
 
         elif field["type"] in ["checkbox", "radio"]:
+            field_params["prompt"] = field["prompt"]
             field_params["options"] = [FieldOption(**option) for option in field["options"]]
             if field["type"] == "checkbox":
                 max_selected = field.get("max_selected")
@@ -55,6 +66,11 @@ def dict_to_form(form_data: Dict) -> Form:
             elif field["type"] == "radio":
                 frm_field_radio = FieldRadio(**field_params)
                 form.fields.append(frm_field_radio)
+
+        elif field["type"] == "information":
+            frm_field_info = FieldInformation(name=field["name"], information=field["information"])
+            form.fields.append(frm_field_info)
+
     return form
 
 

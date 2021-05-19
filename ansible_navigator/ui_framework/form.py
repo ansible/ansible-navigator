@@ -5,8 +5,9 @@ from typing import Dict
 from typing import List
 
 from .field_button import FieldButton
-from .field_validators import FieldValidators
 from .form_presenter import FromPresenter
+from .form_defs import FormType
+from .validators import FormValidators
 
 
 @dataclass
@@ -15,19 +16,38 @@ class Form:
     and a convenience method to present it
     """
 
+    type: FormType
+    cancelled: bool = False
     fields: List = field(default_factory=list)
     submitted: bool = False
-    cancelled: bool = False
     title = ""
+    title_color: int = 0
+
     _dict: Dict = field(default_factory=dict)
 
     def present(self, screen):
         """present the form the to user and return the results"""
-        self.fields.append(
-            FieldButton(name="submit", text="Submit", validator=FieldValidators.all_true, color=10)
-        )
-        self.fields.append(FieldButton(name="cancel", text="Cancel", color=9))
+        if self.type is FormType.FORM:
+            self.fields.append(
+                FieldButton(
+                    name="submit", text="Submit", validator=FormValidators.all_true, color=10
+                )
+            )
+            self.fields.append(FieldButton(name="cancel", text="Cancel", color=9))
+        elif self.type is FormType.NOTIFICATION:
+            self.fields.append(
+                FieldButton(
+                    name="submit", text="Dismiss", validator=FormValidators.no_validation, color=10
+                )
+            )
+
         FromPresenter(form=self, screen=screen).present()
-        self.submitted = self.fields[-2].pressed
-        self.cancelled = self.fields[-1].pressed
+        try:
+            self.submitted = next(field for field in self.fields if field.name == "submit").pressed
+        except StopIteration:
+            self.submitted = False
+        try:
+            self.cancelled = next(field for field in self.fields if field.name == "cancel").pressed
+        except StopIteration:
+            self.cancelled = False
         return self
