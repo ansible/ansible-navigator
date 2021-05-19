@@ -13,6 +13,8 @@ from typing import Union
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 
+from ..utils import oxfordcomma
+
 
 class Parser:
     """Build the args"""
@@ -30,9 +32,14 @@ class Parser:
     def generate_argument(entry) -> Tuple[Any, Union[Any, str, None], Dict[str, Any]]:
         """Generate an argparse argument"""
         kwargs = {}
-        kwargs["help"] = entry.short_description
+        help_strings = [entry.short_description]
+        if entry.choices:
+            lower_choices = (str(choice).lower() for choice in entry.choices)
+            help_strings.append(f"(choices: {oxfordcomma(lower_choices, 'or')})")
         if entry.value.default is not C.NOT_SET:
-            kwargs["help"] += f" (default: {entry.value.default})"
+            help_strings.append(f"(default: '{str(entry.value.default).lower()}')")
+        kwargs["help"] = " ".join(help_strings)
+
         kwargs["default"] = SUPPRESS
 
         if entry.cli_parameters.positional:
