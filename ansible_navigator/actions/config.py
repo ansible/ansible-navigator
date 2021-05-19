@@ -197,8 +197,11 @@ class Action(App):
         }
         if self._args.mode == "interactive":
             self._runner = AnsibleCfgRunner(**kwargs)
-            list_output, list_output_err = self._runner.fetch_ansible_config("list")
-            dump_output, dump_output_err = self._runner.fetch_ansible_config("dump")
+            kwargs = {}
+            if isinstance(self._args.config, str):
+                kwargs["config_file"] = self._args.config
+            list_output, list_output_err = self._runner.fetch_ansible_config("list", **kwargs)
+            dump_output, dump_output_err = self._runner.fetch_ansible_config("dump", **kwargs)
             output_error = list_output_err or dump_output_err
             if output_error:
                 msg = f"Error occurred while fetching ansible config: '{output_error}'"
@@ -224,6 +227,9 @@ class Action(App):
 
             if self._args.help_config is True:
                 pass_through_arg.append("--help")
+
+            if isinstance(self._args.config, str):
+                pass_through_arg.extend(["--config", self._args.config])
 
             kwargs.update({"cmdline": pass_through_arg})
 

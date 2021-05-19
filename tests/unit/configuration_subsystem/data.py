@@ -67,6 +67,10 @@ CLI_DATA_COLLECTIONS = [
 CLI_DATA_CONFIG = [
     ("config", {"app": "config"}),
     ("config dump", {"app": "config", "cmdline": ["dump"]}),
+    (
+        "config dump -c /tmp/ansible.cfg",
+        {"app": "config", "cmdline": ["dump"], "config": "/tmp/ansible.cfg"},
+    ),
 ]
 CLI_DATA_DOC = [
     ("doc shell", {"app": "doc", "plugin_name": "shell"}),
@@ -188,6 +192,7 @@ ENVVAR_DATA = [
     ("app", "config", "config"),
     ("cmdline", "--forks 15", ["--forks", "15"]),
     ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),
+    ("config", "/tmp/ansible.cfg", "/tmp/ansible.cfg"),
     ("container_engine", "docker", "docker"),
     ("editor_command", "nano_envvar", "nano_envvar"),
     ("editor_console", "false", False),
