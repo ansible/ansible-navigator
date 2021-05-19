@@ -24,8 +24,7 @@ from typing import Tuple
 from typing import Union
 
 from .colorize import Colorize
-from .colorize import rgb_to_ansi  # , hex_to_rgb_curses
-
+from .colorize import rgb_to_ansi
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -38,6 +37,8 @@ from .form import Form
 from .field_text import FieldText
 from .form_handler_text import FormHandlerText
 from .menu_builder import MenuBuilder
+
+from .ui_config import UIConfig
 
 from ..yaml import human_dump
 
@@ -99,12 +100,12 @@ class UserInterface(CursesWindow):
     def __init__(
         self,
         screen_miny: int,
-        osc4: bool,
         kegexes: Callable[..., Any],
         refresh: int,
         share_directory: str,
-        pbar_width: int = 8,
+        pbar_width: int = 11,
         status_width=12,
+        ui_config: UIConfig = UIConfig(),
     ) -> None:
         """init
 
@@ -114,10 +115,8 @@ class UserInterface(CursesWindow):
         :type pbar_width: int
         :param words_to_color: Words that get colored (regex, color_int)
         :type words_to_color: list
-        :param no_osc4: enable/disable osc4 terminal color change support
-        :type no_osc4: str (enabled/disabled)
         """
-        super().__init__()
+        super().__init__(ui_config=ui_config)
         self._color_menu_item: Callable[[int, str, Dict[str, Any]], Tuple[int, int]]
         self._colorizer = Colorize(share_directory=share_directory)
         self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
@@ -130,7 +129,6 @@ class UserInterface(CursesWindow):
         self._logger = logging.getLogger(__name__)
         self._menu_filter: Union[Pattern, None] = None
         self._menu_indicies: Tuple[int, ...] = tuple()
-        self._osc4 = osc4
 
         self._pbar_width = pbar_width
         self._status_width = status_width
@@ -148,7 +146,7 @@ class UserInterface(CursesWindow):
         self._set_colors()
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
-        self._one_line_input = FormHandlerText(screen=self._screen)
+        self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
 
     def clear(self) -> None:
         """clear the screen"""
@@ -290,7 +288,7 @@ class UserInterface(CursesWindow):
                 CursesLinePart(
                     column=self._screen_w - self._status_width - 1,
                     string=status,
-                    color=curses.color_pair(self._status_color % self._number_colors),
+                    color=self.color_pair_or_0(self._status_color, mod=True),
                     decoration=curses.A_REVERSE,
                 )
             )
@@ -315,7 +313,7 @@ class UserInterface(CursesWindow):
         start_scroll_bar = body_start / menu_size * viewport_h
         stop_scroll_bar = body_stop / menu_size * viewport_h
         len_scroll_bar = ceil(stop_scroll_bar - start_scroll_bar)
-        color = curses.color_pair(self._prefix_color % self._number_colors)
+        color = self.color_pair_or_0(self._prefix_color)
         for idx in range(int(start_scroll_bar), int(start_scroll_bar + len_scroll_bar)):
             lineno = idx + len_heading
             line_part = CursesLinePart(
@@ -486,16 +484,24 @@ class UserInterface(CursesWindow):
         :rtype: CursesLines
         """
         if self.xform() == "source.ansi":
-            return self._colorizer.render(doc=obj, scope=self.xform())
+            if self._ui_config.color:
+                return self._colorizer.render(doc=obj, scope=self.xform())
+            string = obj
         if self.xform() == "source.yaml":
             string = human_dump(obj)
         elif self.xform() == "source.json":
             string = json.dumps(obj, indent=4, sort_keys=True)
         else:
             string = obj
-        colorized = self._colorizer.render(doc=string, scope=self.xform())
-        lines = self._color_lines_for_term(colorized)
-        return lines
+        if self._ui_config:
+            rendered = self._colorizer.render(doc=string, scope=self.xform())
+        else:
+            # TODO: dedupe this from colorize.py
+            rendered = [
+                [{"column": 0, "chars": doc_line, "color": None}]
+                for doc_line in string.splitlines()
+            ]
+        return self._color_lines_for_term(rendered)
 
     def _color_lines_for_term(self, lines: List) -> CursesLines:
         """Give a list of dicts from tokenized lines
@@ -577,7 +583,7 @@ class UserInterface(CursesWindow):
         return CursesLinePart(
             column=lp_dict["column"],
             string=lp_dict["chars"],
-            color=curses.color_pair(color),
+            color=self.color_pair_or_0(color),
             decoration=0,
         )
 
@@ -597,7 +603,7 @@ class UserInterface(CursesWindow):
         return heading, lines
 
     def _show_form(self, obj: Form) -> Form:
-        res = obj.present(screen=self._screen)
+        res = obj.present(screen=self._screen, ui_config=self._ui_config)
         return res
 
     def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:
@@ -746,6 +752,7 @@ class UserInterface(CursesWindow):
             screen_w=self._screen_w,
             number_colors=self._number_colors,
             color_menu_item=self._color_menu_item,
+            ui_config=self._ui_config,
         )
         menu_heading, menu_items = menu_builder.build(current, columns, indicies)
         return menu_heading, menu_items

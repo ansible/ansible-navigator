@@ -17,8 +17,8 @@ class FormHandlerInformation(CursesWindow):
     # pylint: disable=too-few-public-methods
     """handle form button"""
 
-    def __init__(self, screen):
-        super().__init__()
+    def __init__(self, screen, ui_config):
+        super().__init__(ui_config=ui_config)
         self._screen = screen
 
     @staticmethod

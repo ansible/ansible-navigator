@@ -37,13 +37,13 @@ BUTTON_SPACE = 10
 
 
 # pylint: disable=no-member
-class FromPresenter(CursesWindow):
+class FormPresenter(CursesWindow):
     """present the form to the user"""
 
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-few-public-methods
-    def __init__(self, form, screen):
-        super().__init__()
+    def __init__(self, form, screen, ui_config):
+        super().__init__(ui_config=ui_config)
         self._form = form
         self._screen = screen
         self._line_number: int = 0
@@ -166,7 +166,7 @@ class FromPresenter(CursesWindow):
                 color = 8
             else:
                 color = form_field.color
-            clp = CursesLinePart(far_right, string, curses.color_pair(color), 0)
+            clp = CursesLinePart(far_right, string, self.color_pair_or_0(color), 0)
             line_parts.append(clp)
             far_right -= 1
         return tuple(line_parts)
@@ -174,7 +174,7 @@ class FromPresenter(CursesWindow):
     def _generate_error(self, form_field) -> Union[CursesLine, None]:
         if form_field.current_error:
             clp = CursesLinePart(
-                self._input_start, form_field.current_error, curses.color_pair(9), 0
+                self._input_start, form_field.current_error, self.color_pair_or_0(9), 0
             )
             return (clp,)
         return None
@@ -190,7 +190,7 @@ class FromPresenter(CursesWindow):
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
             text = f"{option_code} {str(option.text)}"
-            clp = CursesLinePart(self._input_start, text, curses.color_pair(color), 0)
+            clp = CursesLinePart(self._input_start, text, self.color_pair_or_0(color), 0)
             lines.append((clp))
         return tuple(lines)
 
@@ -205,17 +205,18 @@ class FromPresenter(CursesWindow):
         else:
             text = str(form_field.value)
             color = 0
-        clp = CursesLinePart(self._input_start, text, curses.color_pair(color), 0)
+        clp = CursesLinePart(self._input_start, text, self.color_pair_or_0(color), 0)
         return (clp,)
 
     def _generate_hline(self) -> CursesLine:
-        clp = CursesLinePart(0, "\u2500" * self._form_width, curses.color_pair(8), 0)
+        clp = CursesLinePart(0, "\u2500" * self._form_width, self.color_pair_or_0(8), 0)
         return (clp,)
 
     @staticmethod
     def _generate_information(form_field) -> CursesLines:
         lines = tuple(
-            (CursesLinePart(0, line, curses.color_pair(0), 0),) for line in form_field.information
+            (CursesLinePart(0, line, self.color_pair_or_0(0), 0),)
+            for line in form_field.information
         )
         return lines
 
@@ -233,22 +234,22 @@ class FromPresenter(CursesWindow):
         else:
             color = 0
 
-        cl_prompt = CursesLinePart(prompt_start, form_field.prompt, curses.color_pair(color), 0)
+        cl_prompt = CursesLinePart(prompt_start, form_field.prompt, self.color_pair_or_0(color), 0)
         cl_default = CursesLinePart(
             prompt_start + len(form_field.prompt),
             str(form_field.formatted_default),
-            curses.color_pair(4),
+            self.color_pair_or_0(4),
             0,
         )
         cl_seperator = CursesLinePart(
-            self._prompt_end, self._seperator, curses.color_pair(color), 0
+            self._prompt_end, self._seperator, self.color_pair_or_0(color), 0
         )
         line_parts = (cl_prompt, cl_default, cl_seperator)
         return line_parts
 
     def _generate_title(self) -> CursesLine:
         clp = CursesLinePart(
-            0, self._form.title.upper(), curses.color_pair(self._form.title_color), 0
+            0, self._form.title.upper(), self.color_pair_or_0(self._form.title_color), 0
         )
         return (clp,)
 
@@ -260,7 +261,9 @@ class FromPresenter(CursesWindow):
         pad = curses.newpad(MAX_FORM_H, MAX_FORM_W)
         shared_input_line_cache: List[str] = []
         for form_field in self._form.fields:
-            form_field.window_handler = form_field.window_handler(screen=self._screen)
+            form_field.window_handler = form_field.window_handler(
+                screen=self._screen, ui_config=self._ui_config
+            )
             if isinstance(form_field.window_handler, FormHandlerText):
                 form_field.window_handler.input_line_cache = shared_input_line_cache
 

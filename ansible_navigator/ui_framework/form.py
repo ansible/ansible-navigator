@@ -6,7 +6,7 @@ from typing import List
 
 from .field_button import FieldButton
 from .form_defs import FormType
-from .form_presenter import FromPresenter
+from .form_presenter import FormPresenter
 from .validators import FormValidators
 
 
@@ -25,7 +25,7 @@ class Form:
 
     _dict: Dict = field(default_factory=dict)
 
-    def present(self, screen):
+    def present(self, screen, ui_config):
         """present the form the to user and return the results"""
         if self.type is FormType.FORM:
             self.fields.append(
@@ -43,7 +43,7 @@ class Form:
         elif self.type is FormType.WORKING:
             pass
 
-        FromPresenter(form=self, screen=screen).present()
+        FormPresenter(form=self, screen=screen, ui_config=ui_config).present()
         try:
             self.submitted = next(field for field in self.fields if field.name == "submit").pressed
         except StopIteration:

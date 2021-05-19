@@ -7,6 +7,7 @@ from ansible_navigator.actions import run_action
 from .app import App
 from .steps import Steps
 from .ui_framework import Interaction
+from .ui_framework import UIConfig
 from .ui_framework import UserInterface
 
 DEFAULT_REFRESH = 100
@@ -29,12 +30,18 @@ class ActionRunner(App):
         :param refresh: The refresh for the ui
         :type refresh: int
         """
+
+        config = UIConfig(
+            color=self._args.display_color,
+            osc4=self._args.osc4,
+        )
+
         self._ui = UserInterface(
             screen_miny=3,
-            osc4=self._args.osc4,
             kegexes=kegexes,
             refresh=refresh,
             share_directory=self._args.internals.share_directory,
+            ui_config=config,
         )
 
     def run(self, _screen) -> None:

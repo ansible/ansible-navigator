@@ -7,13 +7,12 @@ import os
 from typing import TYPE_CHECKING
 from typing import Union
 
-
-# from .colorize import Colorize
 from .colorize import hex_to_rgb_curses
 
-# from .colorize import rgb_to_ansi
-
 from .curses_defs import CursesLine
+
+from .ui_config import UIConfig
+
 
 if TYPE_CHECKING:
     # pylint: disable= no-name-in-module
@@ -52,17 +51,18 @@ class CursesWindow:
     # pylint: disable=too-many-instance-attributes
     """abstration for a curses window"""
 
-    def __init__(self):
+    def __init__(self, ui_config: UIConfig):
         self._logger = logging.getLogger(__name__)
 
         self._screen: Window
         self.win: Window
         self._screen_miny = 3
         self._prefix_color = 8
-        self._osc4: bool
         self._theme_dir: str
         self._number_colors = 0
         self._custom_colors_enabled = False
+        self._ui_config = ui_config
+        self._logger.debug("self._ui_config: %s", self._ui_config)
 
     @property
     def _screen_w(self) -> int:
@@ -87,6 +87,18 @@ class CursesWindow:
             curses.beep()
             self._screen.refresh()
 
+    def color_pair_or_0(self, color, mod: bool = False):
+        """
+        Returns 0 if colors are disabled.
+        Otherwise returns the curses color pair either by passing the color
+        argument directly (if mod is false), or taking mod (available colors)
+        and passing that (if mod is true).
+        """
+        if not self._ui_config.color:
+            return 0
+        color_arg = color % self._number_colors if mod else color
+        return curses.color_pair(color_arg)
+
     def _add_line(
         self, window: Window, lineno: int, line: CursesLine, prefix: Union[str, None] = None
     ) -> None:
@@ -103,9 +115,7 @@ class CursesWindow:
         """
         win = window
         if prefix:
-            win.addstr(
-                lineno, 0, prefix, curses.color_pair(self._prefix_color % self._number_colors)
-            )
+            win.addstr(lineno, 0, prefix, self.color_pair_or_0(self._prefix_color, mod=True))
         if line:
             win.move(lineno, 0)
             for line_part in line:
@@ -113,7 +123,10 @@ class CursesWindow:
                 if column <= self._screen_w:
                     text = line_part.string[0 : self._screen_w - column + 1]
                     try:
-                        win.addstr(lineno, column, text, line_part.color | line_part.decoration)
+                        color = 0
+                        if self._ui_config.color:
+                            color = line_part.color
+                        win.addstr(lineno, column, text, color | line_part.decoration)
                     except curses.error:
                         # curses error at last column & row but I don't care
                         # because it still draws it
@@ -140,9 +153,8 @@ class CursesWindow:
 
         self._logger.debug("curses.COLORS: %s", curses.COLORS)
         self._logger.debug("curses.can_change_color: %s", curses.can_change_color())
-        self._logger.debug("self._osc4: %s", self._osc4)
         if curses.COLORS > 16:
-            if self._osc4 is False:
+            if self._ui_config.osc4 is False:
                 self._custom_colors_enabled = False
             else:
                 self._custom_colors_enabled = curses.can_change_color()

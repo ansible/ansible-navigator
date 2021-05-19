@@ -15,4 +15,5 @@ from .ui import Action
 from .ui import Content
 from .ui import Interaction
 from .ui import Menu
+from .ui import UIConfig
 from .ui import UserInterface

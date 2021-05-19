@@ -217,7 +217,7 @@ def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
 def columns_and_colors(lines, schema):
     """Convert to colors and columns
 
-    :param lines: A list of regiosn (line parts) and the line
+    :param lines: A list of regions (line parts) and the line
     :type lines: list of lines, each a ([regions], line)
     :param scheam: An instance of the ColorSchema
     :type schema: ColorSchema

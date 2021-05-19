@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 class FormHandlerButton(CursesWindow):
     """handle form button"""
 
-    def __init__(self, screen):
-        super().__init__()
+    def __init__(self, screen, ui_config):
+        super().__init__(ui_config=ui_config)
         self._form_field = None
         self._form_fields = None
         self._screen = screen
@@ -32,7 +32,7 @@ class FormHandlerButton(CursesWindow):
             color = self._form_field.color
 
         clp_button = CursesLinePart(
-            0, self._form_field.text, curses.color_pair(color), curses.A_STANDOUT
+            0, self._form_field.text, self.color_pair_or_0(color), curses.A_STANDOUT
         )
         self._add_line(self.win, 0, ([clp_button]))
 

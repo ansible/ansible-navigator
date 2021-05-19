@@ -12,6 +12,7 @@ from typing import Tuple
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
+from .ui_config import UIConfig
 from .utils import convert_percentage
 from .utils import distribute
 
@@ -21,13 +22,19 @@ class MenuBuilder:
     """build a menu from list of dicts"""
 
     def __init__(
-        self, pbar_width: int, screen_w: int, number_colors: int, color_menu_item: Callable
+        self,
+        pbar_width: int,
+        screen_w: int,
+        number_colors: int,
+        color_menu_item: Callable,
+        ui_config: UIConfig,
     ):
         # pylint: disable=too-many-arguments
         self._number_colors = number_colors
         self._pbar_width = pbar_width
         self._screen_w = screen_w
         self._color_menu_item = color_menu_item
+        self._ui_config = ui_config
 
     def build(self, dicts: List, cols: List, indicies) -> Tuple[CursesLines, CursesLines]:
         """main entry point for menu builer"""

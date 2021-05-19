@@ -409,5 +409,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             ),
             value=EntryValue(),
         ),
+        Entry(
+            name="display_color",
+            short_description="Display colors using ANSI color codes",
+            value=EntryValue(default="NO_COLOR" not in os.environ),
+        ),
     ],
 )
