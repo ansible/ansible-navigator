@@ -5,8 +5,8 @@ from typing import Dict
 from typing import List
 
 from .field_button import FieldButton
-from .form_presenter import FromPresenter
 from .form_defs import FormType
+from .form_presenter import FromPresenter
 from .validators import FormValidators
 
 
