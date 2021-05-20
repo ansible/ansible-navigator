@@ -5,6 +5,7 @@ import os
 
 from types import SimpleNamespace
 from typing import Dict
+from typing import List
 from typing import Tuple
 from typing import Union
 
@@ -17,7 +18,7 @@ from .definitions import SubCommand
 
 from .navigator_post_processor import NavigatorPostProcessor
 
-from ..utils import get_share_directory
+from ..utils import ExitMessage, get_share_directory
 from ..utils import abs_user_path
 from ..utils import oxfordcomma
 from ..utils import LogMessage
@@ -26,8 +27,8 @@ from .._version import __version__ as VERSION
 
 APP_NAME = "ansible_navigator"
 
-initialization_messages = []
-initialization_errors = []
+initialization_messages: List[LogMessage] = []
+initialization_exit_messages: List[ExitMessage] = []
 
 PLUGIN_TYPES = (
     "become",
@@ -74,9 +75,9 @@ def generate_cache_path():
 
 def generate_share_directory():
     """Generate a share director"""
-    messages, errors, share_directory = get_share_directory(APP_NAME)
+    messages, exit_messages, share_directory = get_share_directory(APP_NAME)
     initialization_messages.extend(messages)
-    initialization_errors.extend(errors)
+    initialization_exit_messages.extend(exit_messages)
     return share_directory
 
 
@@ -88,7 +89,7 @@ class Internals(SimpleNamespace):
 
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, Dict] = C.NOT_SET
-    initialization_errors = initialization_errors
+    initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
     share_directory: str = generate_share_directory()
 
@@ -127,8 +128,8 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="collection_doc_cache_path",
+            cli_parameters=CliParameters(short="--cdcp"),
             short_description="The path to collection doc cache",
-            subcommands=C.NONE,
             value=EntryValue(default=generate_cache_path()),
         ),
         Entry(
@@ -214,6 +215,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="log_append",
+            choices=[True, False],
             cli_parameters=CliParameters(short="--la"),
             short_description=(
                 "Specify if log messages should be appended to an existing log file,"

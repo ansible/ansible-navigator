@@ -4,15 +4,17 @@
     "comment": "config helpconfig fail with interactive with ee",
     "additional_information": {
         "look_fors": [
-            "--help-config or --hc is valid only when 'mode' argument is set to 'stdout'"
+            "--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"
         ],
         "look_nots": [],
         "compared_fixture": false
     },
     "output": [
         "[ERROR]: Command provided: 'config --help-config --ee True --ce docker --ll debug --mode interactive'",
-        "[ERROR]: --help-config or --hc is valid only when 'mode' argument is set to 'stdout'",
-        "[ERROR]: Configuration failed, using default log file location: /Users/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
+        "[ERROR]: --hc or --help-config is valid only when 'mode' argument is set to 'stdout'",
+        " [HINT]: Try again with '-m stdout'",
+        "[ERROR]: Configuration failed, using default log file location: /Users/bthornto/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
+        " [HINT]: Review the hints and log file to see what went wrong: /Users/bthornto/github/ansible-navigator/ansible-navigator.log",
         "(py38) bash-3.2$"
     ]
 }

@@ -68,7 +68,7 @@ testdata_3: List = [
         CLI_DOC_HELP_WITH_EE_WRONG_MODE,
         "ansible-navigator doc help with ee in wrong mode",
         "doc_help_with_ee_wrong_mode",
-        ["--help-doc or --hd is valid only when 'mode' argument is set to 'stdout'"],
+        ["--hd or --help-doc is valid only when 'mode' argument is set to 'stdout'"],
     ),
 ]
 
@@ -92,7 +92,7 @@ testdata_4: List = [
         CLI_DOC_HELP_WITHOUT_EE_WRONG_MODE,
         "ansible-navigator doc help without ee in wrong mode",
         "doc_help_with_ee_wrong_mode",
-        ["--help-doc or --hd is valid only when 'mode' argument is set to 'stdout'"],
+        ["--hd or --help-doc is valid only when 'mode' argument is set to 'stdout'"],
     ),
 ]
 

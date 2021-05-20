@@ -40,7 +40,7 @@ def test_cmdline_source_not_set():
     configurator = Configurator(params=[], application_configuration=test_config)
     configurator._post_process()
     assert "Completed post processing for cmdline" in configurator._messages[0][1]
-    assert configurator._errors == []
+    assert configurator._exit_messages == []
 
 
 def test_no_subcommand():

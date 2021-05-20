@@ -125,7 +125,7 @@ The following table describes all available settings.
   * - collection-doc-cache-path
     - The path to collection doc cache
     - | **Default:** $HOME/.cache/ansible-navigator/collection_doc_cache.db
-      | **CLI:** positional
+      | **CLI:** `--cdcp` or `--collection-doc-cache-path`
       | **ENV:** ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH
       | **Settings file:**
 
@@ -204,7 +204,8 @@ The following table describes all available settings.
 
   * - log-append
     - Specify if log messages should be appended to an existing log file, otherwise a new log file will be created per session
-    - | **Default:** True
+    - | **Choices:** 'True' or 'False'
+      | **Default:** True
       | **CLI:** `--la` or `--log-append`
       | **ENV:** ANSIBLE_NAVIGATOR_LOG_APPEND
       | **Settings file:**

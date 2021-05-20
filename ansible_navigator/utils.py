@@ -11,6 +11,8 @@ import sysconfig
 
 from distutils.spawn import find_executable
 
+from enum import Enum
+from types import SimpleNamespace
 from typing import Any
 from typing import List
 from typing import Mapping
@@ -25,6 +27,57 @@ from jinja2 import Environment, TemplateError
 logger = logging.getLogger(__name__)
 
 
+class Colors(Enum):
+    """ANSI color codes"""
+
+    RED = "\033[0;31m"
+    YELLOW = "\033[33m"
+    END = "\033[0m"
+
+
+class ExitPrefix(Enum):
+    """An exit message prefix"""
+
+    ERROR = "ERROR"
+    HINT = "HINT"
+
+    @classmethod
+    def _longest(cls):
+        return max(len(member) for member in cls.__members__)
+
+    def __str__(self):
+        return f"{' ' * (self._longest() - len(self.name))}[{self.name}]: "
+
+
+class ExitMessage(SimpleNamespace):
+    # pylint: disable=too-few-public-methods
+    """An object ot hold a message destin for the logger"""
+
+    message: str
+    prefix: ExitPrefix = ExitPrefix.ERROR
+
+    @property
+    def color(self):
+        """return a color for the prefix"""
+        if self.prefix is ExitPrefix.ERROR:
+            return Colors.RED.value
+        if self.prefix is ExitPrefix.HINT:
+            return Colors.YELLOW.value
+        raise ValueError("Missing color mapping")
+
+    @property
+    def level(self):
+        """return a log level"""
+        if self.prefix is ExitPrefix.ERROR:
+            return logging.ERROR
+        if self.prefix is ExitPrefix.HINT:
+            return logging.INFO
+        raise ValueError("Missing logging level mapping")
+
+    def __str__(self):
+        return f"{self.color}{self.prefix}{self.message}{Colors.END.value}"
+
+
 class LogMessage(NamedTuple):
     """An object ot hold a message destin for the logger"""
 
@@ -37,8 +90,12 @@ def abs_user_path(fpath: str) -> str:
     return os.path.abspath(os.path.expanduser(os.path.expandvars(fpath)))
 
 
-def check_for_ansible() -> Tuple[bool, str]:
-    """check for the ansible-playbook command, runner will need it"""
+def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
+    """check for the ansible-playbook command, runner will need it
+    returns exit messages if not found, messages if found
+    """
+    messages: List[LogMessage] = []
+    exit_messages: List[ExitMessage] = []
     ansible_location = find_executable("ansible-playbook")
     if not ansible_location:
         msg_parts = [
@@ -52,9 +109,11 @@ def check_for_ansible() -> Tuple[bool, str]:
             "     '-ee' or '--execution-environment'",
             "to use an Ansible Execution Enviroment",
         ]
-        return False, "\n".join(msg_parts)
-    msg = f"ansible-playbook found at {ansible_location}"
-    return True, msg
+        exit_messages.append(ExitMessage(message="\n".join(msg_parts)))
+        return messages, exit_messages
+    message = f"ansible-playbook found at {ansible_location}"
+    messages.append(LogMessage(level=logging.INFO, message=message))
+    return messages, exit_messages
 
 
 def dispatch(obj, replacements):
@@ -89,10 +148,10 @@ def escape_moustaches(obj):
 
 def environment_variable_is_file_path(
     env_var: str, kind: str
-) -> Tuple[List[LogMessage], List[str], Optional[str]]:
+) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     """check if a given env var is a vialbe file path, if so return that path"""
     messages: List[LogMessage] = []
-    errors: List[str] = []
+    exit_messages: List[ExitMessage] = []
     file_path = None
     candidate_path = os.environ.get(env_var)
     if candidate_path is None:
@@ -112,19 +171,19 @@ def environment_variable_is_file_path(
         else:
             message = f"{env_var} set as {candidate_path} but not valid"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
-    return messages, errors, file_path
+    return messages, exit_messages, file_path
 
 
 def find_configuration_file_in_directory(
     path: str, filename: str, allowed_extensions: List
-) -> Tuple[List[LogMessage], List[str], Optional[str]]:
+) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     """check if filename is present in given path with allowed
     extensions. If multiple files are present it throws an error
     as only a single valid config file can be present in the
     given path.
     """
     messages: List[LogMessage] = []
-    errors: List[str] = []
+    exit_messages: List[ExitMessage] = []
     config_files_found = []
     config_file = None
     valid_file_names = [
@@ -139,24 +198,24 @@ def find_configuration_file_in_directory(
         config_files_found.append(candidate_config_path)
 
     if len(config_files_found) > 1:
-        error = "only one file among '{0}' should be present under" " directory '{1}'".format(
+        exit_msg = "only one file among '{0}' should be present under" " directory '{1}'".format(
             ", ".join(valid_file_names), path
         )
-        error += " instead multiple config files" " found '{0}'".format(
+        exit_msg += " instead multiple config files" " found '{0}'".format(
             ", ".join(config_files_found)
         )
-        errors.append(error)
-        return messages, errors, config_file
+        exit_messages.append(ExitMessage(message=exit_msg))
+        return messages, exit_messages, config_file
 
     if len(config_files_found) == 1:
         config_file = config_files_found[0]
 
-    return messages, errors, config_file
+    return messages, exit_messages, config_file
 
 
 def find_configuration_directory_or_file_path(
     filename: Optional[str] = None, allowed_extensions: Optional[List] = None
-) -> Tuple[List[LogMessage], List[str], Optional[str]]:
+) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     """
     returns config dir (e.g. /etc/ansible-navigator) if filename is None and
     config file path if filename provided. First found wins.
@@ -166,7 +225,7 @@ def find_configuration_directory_or_file_path(
           We should probably cache the potential paths somewhere, eventually.
     """
     messages: List[LogMessage] = []
-    errors: List[str] = []
+    exit_messages: List[ExitMessage] = []
 
     config_path: Union[None, str] = None
     potential_paths: List[str] = []
@@ -195,17 +254,17 @@ def find_configuration_directory_or_file_path(
     for path in potential_paths:
         if allowed_extensions:
             if not filename:
-                error = f"allowed_extensions '{allowed_extensions}' requires filename to be set"
-                errors.append(error)
-                return messages, errors, config_path
+                exit_msg = f"allowed_extensions '{allowed_extensions}' requires filename to be set"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                return messages, exit_messages, config_path
 
-            new_messages, new_errors, config_path = find_configuration_file_in_directory(
+            new_messages, new_exit_messages, config_path = find_configuration_file_in_directory(
                 path, filename, allowed_extensions
             )
             messages.extend(new_messages)
-            errors.extend(new_errors)
-            if errors:
-                return messages, errors, config_path
+            exit_messages.extend(new_exit_messages)
+            if exit_messages:
+                return messages, exit_messages, config_path
 
             if config_path is None:
                 continue
@@ -222,10 +281,10 @@ def find_configuration_directory_or_file_path(
                 message = f"Ignoring configuration directory {path} because it is world-writable."
                 messages.append(LogMessage(level=logging.DEBUG, message=message))
                 continue
-            return messages, errors, config_path
+            return messages, exit_messages, config_path
         except OSError:
             continue
-    return messages, errors, config_path
+    return messages, exit_messages, config_path
 
 
 def flatten_list(lyst) -> List:
@@ -235,13 +294,13 @@ def flatten_list(lyst) -> List:
     return [lyst]
 
 
-def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[None, str]]:
+def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
     """
     returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
     ansible-launcher data files. First found wins.
     """
     messages: List[LogMessage] = []
-    errors: List[str] = []
+    exit_messages: List[ExitMessage] = []
     share_directory = None
 
     # Development path
@@ -253,7 +312,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[No
     message = "Share directory {0} (development path)"
     if os.path.exists(share_directory):
         messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-        return messages, errors, share_directory
+        return messages, exit_messages, share_directory
     messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
 
     # ~/.local/share/APP_NAME
@@ -263,7 +322,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[No
         share_directory = os.path.join(userbase, "share", app_name)
         if os.path.exists(share_directory):
             messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-            return messages, errors, share_directory
+            return messages, exit_messages, share_directory
     messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
 
     # /usr/share/APP_NAME  (or the venv equivalent)
@@ -271,7 +330,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[No
     message = "Share directory {0} (sys.prefix)"
     if os.path.exists(share_directory):
         messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-        return messages, errors, share_directory
+        return messages, exit_messages, share_directory
     messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
 
     # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
@@ -281,7 +340,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[No
         share_directory = os.path.join(datarootdir, app_name)
         if os.path.exists(share_directory):
             messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-            return messages, errors, share_directory
+            return messages, exit_messages, share_directory
     messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
 
     # /usr/local/share/APP_NAME
@@ -291,11 +350,12 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[str], Union[No
         share_directory = os.path.join(prefix, "local", "share", app_name)
         if os.path.exists(share_directory):
             messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
-            return messages, errors, share_directory
+            return messages, exit_messages, share_directory
     messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
 
-    errors.append("Unable to find a viable share directory")
-    return messages, errors, None
+    exit_msg = "Unable to find a viable share directory"
+    exit_messages.append(ExitMessage(message=exit_msg))
+    return messages, exit_messages, None
 
 
 def human_time(seconds: int) -> str:

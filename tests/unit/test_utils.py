@@ -36,10 +36,10 @@ def test_find_conf_dir_many_files(monkeypatch) -> None:
         " /etc/ansible-navigator/ansible-navigator.yml'"
     )
 
-    _messages, errors, _config_path = utils.find_configuration_directory_or_file_path(
+    _messages, exit_messages, _config_path = utils.find_configuration_directory_or_file_path(
         "ansible-navigator", allowed_extensions=["json", "yaml", "yml"]
     )
-    assert errors[0] == error_msg
+    assert exit_messages[0].message == error_msg
 
 
 def test_find_conf_dir_pass(monkeypatch) -> None:
@@ -62,10 +62,10 @@ def test_find_conf_dir_pass(monkeypatch) -> None:
     monkeypatch.setattr(os.path, "exists", check_path_exists)
     monkeypatch.setattr(os, "stat", get_dir_permission)
 
-    messages, errors, config_path = utils.find_configuration_directory_or_file_path(
+    messages, exit_messages, config_path = utils.find_configuration_directory_or_file_path(
         "ansible-navigator", allowed_extensions=["json", "yaml", "yml"]
     )
-    assert errors == []
+    assert exit_messages == []
 
     assert config_path == expected_config_file_path
     log_msg = "Skipping .ansible-navigator/ansible-navigator.json because it does not exist"
@@ -92,7 +92,7 @@ def test_env_var_is_file_path(
     envvar = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
         monkeypatch.setenv(envvar, file_path)
-    _messages, _errors, result = utils.environment_variable_is_file_path(envvar, "config")
+    _messages, _exit_messages, result = utils.environment_variable_is_file_path(envvar, "config")
     assert result == anticpated_result
 
 

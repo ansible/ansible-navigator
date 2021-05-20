@@ -85,7 +85,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=True,
         ).join(),
-        look_fors=["--help-config or --hc is valid only when 'mode' argument is set to 'stdout'"],
+        look_fors=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
     ),
     ShellCommand(
         comment="config helpconfig fail with interactive without ee",
@@ -94,7 +94,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=False,
         ).join(),
-        look_fors=["--help-config or --hc is valid only when 'mode' argument is set to 'stdout'"],
+        look_fors=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
     ),
     ShellCommand(
         comment="config specified configuration file with ee",

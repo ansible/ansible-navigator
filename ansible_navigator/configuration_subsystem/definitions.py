@@ -95,9 +95,10 @@ class Entry(SimpleNamespace):
         """Generate an invalid choice message for this entry"""
         name = self.name.replace("_", "-")
         if self.value.source is not Constants.NOT_SET:
+            choices = [str(choice).lower() for choice in self.choices]
             msg = (
                 f"{name} must be one of "
-                + oxfordcomma(self.choices, "or")
+                + oxfordcomma(choices, "or")
                 + f", but set as '{self.value.current}' in "
                 + self.value.source.value
             )
