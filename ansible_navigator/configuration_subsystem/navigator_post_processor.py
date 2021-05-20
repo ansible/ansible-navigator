@@ -149,7 +149,7 @@ class NavigatorPostProcessor:
                     entry.value.current.append(inv_entry)
                 else:
                     # file path
-                    entry.value.current.append(abs_user_path(inv_entry))
+                    entry.value.current.append(abs_user_path(os.path.expandvars(inv_entry)))
         return messages, errors
 
     @staticmethod
