@@ -31,9 +31,11 @@ def update_fixtures(
         "name": request.node.name,
         "index": index,
         "comment": comment,
-        "additional_information": additional_information,
         "output": received_output,
     }
+    if additional_information is not None:
+        fixture["additional_information"] = additional_information
+
     with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:
         json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
 

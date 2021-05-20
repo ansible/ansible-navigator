@@ -621,7 +621,7 @@ class UserInterface(CursesWindow):
             first_line_idx = max(0, last_line_idx - (self._screen_h - 1 - heading_len - footer_len))
 
             if len(objs) > 1:
-                key_dict = {"+": "previous", "-": "next", "[0-9]": "goto"}
+                key_dict = {"-": "previous", "+": "next", "[0-9]": "goto"}
             else:
                 key_dict = {}
 
