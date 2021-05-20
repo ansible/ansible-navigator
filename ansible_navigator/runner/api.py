@@ -85,7 +85,6 @@ class BaseRunner:
         self.status: Optional[str] = None
         self._logger = logging.getLogger(__name__)
         self._runner_args: Dict = {}
-        self._runner_artifact_dir: Optional[str] = None
         if self._ee:
             self._runner_args.update(
                 {
