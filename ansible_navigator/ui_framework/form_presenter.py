@@ -11,12 +11,15 @@ from typing import Union
 
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLine
+from .curses_defs import CursesLines
 from .curses_window import CursesWindow
 
 from .field_button import FieldButton
 from .field_checks import FieldChecks
+from .field_information import FieldInformation
 from .field_radio import FieldRadio
 from .field_text import FieldText
+from .form_defs import FormType
 from .form_handler_text import FormHandlerText
 from .sentinals import unknown
 
@@ -70,11 +73,17 @@ class FromPresenter(CursesWindow):
             if hasattr(field, "options"):
                 widths.extend((len(option.text) + self._input_start for option in field.options))
             widths.append(len(field.validator(hint=True)) + self._input_start)
-        self._form_width = max(widths) + BUTTON_SPACE
+
+        if self._form.type is FormType.FORM:
+            self._form_width = max(widths) + BUTTON_SPACE
+        elif self._form.type is FormType.NOTIFICATION:
+            self._form_width = max(widths)
 
         height = 2  # title, hline
         for field in self._form.fields:
-            if isinstance(field, FieldText):
+            if isinstance(field, FieldInformation):
+                height += len(field.information)
+            elif isinstance(field, FieldText):
                 height += 1
             elif isinstance(field, (FieldChecks, FieldRadio)):
                 height += len(field.options)
@@ -91,15 +100,24 @@ class FromPresenter(CursesWindow):
         lines.append((self._line_number, self._generate_hline()))
         self._line_number += 1
 
-        for form_field in self._form.fields[:-2]:
+        body_fields = [
+            field for field in self._form.fields if field.name not in ["submit", "cancel"]
+        ]
+        for form_field in body_fields:
 
-            prompt = self._generate_prompt(form_field)
+            if isinstance(form_field, FieldInformation):
+                information_lines = self._generate_information(form_field)
+                for line in information_lines:
+                    lines.append((self._line_number, line))
+                    self._line_number += 1
 
-            if isinstance(form_field, FieldText):
+            elif isinstance(form_field, FieldText):
+                prompt = self._generate_prompt(form_field)
                 lines.append((self._line_number, prompt + self._generate_field_text(form_field)))
                 self._line_number += 1
 
             elif isinstance(form_field, (FieldChecks, FieldRadio)):
+                prompt = self._generate_prompt(form_field)
                 option_lines = self._generate_field_options(form_field)
                 lines.append((self._line_number, prompt + tuple([option_lines[0]])))
                 self._line_number += 1
@@ -121,7 +139,8 @@ class FromPresenter(CursesWindow):
     def _generate_buttons(self) -> CursesLine:
         line_parts = []
         far_right = self._form_width
-        for form_field in reversed(self._form.fields[-2:]):
+        footer_fields = [field for field in self._form.fields if field.name in ["submit", "cancel"]]
+        for form_field in reversed(footer_fields):
             string = form_field.text
             far_right -= len(string)
             window = curses.newwin(1, len(string), self._line_number, far_right + self._pad_left)
@@ -180,6 +199,13 @@ class FromPresenter(CursesWindow):
         clp = CursesLinePart(0, "\u2500" * self._form_width, curses.color_pair(8), 0)
         return (clp,)
 
+    @staticmethod
+    def _generate_information(form_field) -> CursesLines:
+        lines = tuple(
+            (CursesLinePart(0, line, curses.color_pair(0), 0),) for line in form_field.information
+        )
+        return lines
+
     def _generate_prompt(self, form_field) -> CursesLine:
         prompt_start = self._prompt_end - len(form_field.full_prompt)
         if form_field.valid is True:
@@ -201,7 +227,9 @@ class FromPresenter(CursesWindow):
         return line_parts
 
     def _generate_title(self) -> CursesLine:
-        clp = CursesLinePart(0, self._form.title.upper(), curses.color_pair(0), 0)
+        clp = CursesLinePart(
+            0, self._form.title.upper(), curses.color_pair(self._form.title_color), 0
+        )
         return (clp,)
 
     def present(self) -> "Form":

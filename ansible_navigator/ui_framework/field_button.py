@@ -6,8 +6,8 @@ from typing import Callable
 from typing import Union
 
 from .curses_window import Window
-from .field_validators import FieldValidators
 from .form_handler_button import FormHandlerButton
+from .validators import FieldValidators
 
 
 @dataclass
