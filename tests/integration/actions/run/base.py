@@ -30,7 +30,7 @@ class BaseClass:
         """tmux fixture for this module"""
         params = {
             "pane_height": "2000",
-            "pane_width": "200",
+            "pane_width": "600",
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",

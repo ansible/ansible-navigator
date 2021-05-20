@@ -202,7 +202,7 @@ class TmuxSession:
             showing = self._pane.capture_pane()
             if showing and showing != pre_send:
                 if mode == "shell":
-                    command_executed = value not in "".join(showing)
+                    command_executed = value not in showing[-1]
                 elif mode == "app":
                     command_executed = True
 

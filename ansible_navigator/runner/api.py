@@ -114,7 +114,7 @@ class BaseRunner:
                 "quiet": True,
                 "cancel_callback": self.runner_cancelled_callback,
                 "finished_callback": self.runner_finished_callback,
-                "artifacts_handler": self.cleanup_artifacts_handler,
+                "artifacts_handler": self.runner_artifacts_handler,
             }
         )
         self._add_env_vars_to_args()
@@ -127,16 +127,25 @@ class BaseRunner:
                 {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr}
             )
 
-    def cleanup_artifacts_handler(self, artifact_dir):
+    def __del__(self):
+        """
+        class destructor, handle runner artifact file deletion
+        """
+        if os.path.exists(self._runner_artifact_dir):
+            self._logger.debug(
+                "delete ansible-runner artifact directory at path %s", self._runner_artifact_dir
+            )
+            shutil.rmtree(self._runner_artifact_dir, ignore_errors=True)
+
+    def runner_artifacts_handler(self, artifact_dir):
         """
         ansible-runner callback to handle artifacts after each runner innvocation
         Args:
             artifact_dir ([str]): The directory path of artifact directory for current
                                   runner invocation.
         """
-        if os.path.exists(artifact_dir):
-            self._logger.debug("Delete ansible-runner artifact directory at path %s", artifact_dir)
-            shutil.rmtree(artifact_dir, ignore_errors=True)
+        self._logger.debug("ansible-runner artifact_dir set to: '%s'", artifact_dir)
+        self._runner_artifact_dir = artifact_dir
 
     def runner_cancelled_callback(self):
         """check by runner to see if it should cancel"""
