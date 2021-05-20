@@ -1,6 +1,8 @@
 """ tests for cli
 """
+import shlex
 from copy import deepcopy
+from typing import NamedTuple
 from unittest.mock import patch
 
 import pytest
@@ -93,8 +95,8 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
 
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     args = deepcopy(NavigatorConfiguration)
-    _messages, errors = parse_and_update(params=given, args=args, initial=True)
-    assert errors == []
+    _messages, exit_msgs = parse_and_update(params=given, args=args, initial=True)
+    assert exit_msgs == []
     result = args.entry(argname)
     assert result.value.current == expected, result
 
@@ -106,6 +108,62 @@ def test_editor_command_default(_mf1, monkeypatch):
         "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
     )
     args = deepcopy(NavigatorConfiguration)
-    _messages, errors = parse_and_update(params=[], args=args, initial=True)
-    assert errors == []
+    _messages, exit_msgs = parse_and_update(params=[], args=args, initial=True)
+    assert exit_msgs == []
     assert args.editor_command == "vi +{line_number} {filename}"
+
+
+def id_for_hint_test(value):
+    """generate an id for the hint test
+    the spaces here help with zsh
+    https://github.com/microsoft/vscode-python/issues/10398
+    """
+    return f" {value.command} "
+
+
+class TstHint(NamedTuple):
+    """obj for hint test data"""
+
+    command: str
+    expected: str
+    prefix: str = "Try again"
+    set_ce: bool = False
+
+
+tst_hint_data = [
+    TstHint(command=r"--cdcp {locked_directory}/foo.db", expected="without '--cdcp'", set_ce=True),
+    TstHint(command="--econ troo", expected="with '--econ true'"),
+    TstHint(command="--ee troo", expected="with '--ee true'"),
+    TstHint(command="config --help-config --mode interactive", expected="with '-m stdout'"),
+    TstHint(command="doc --help-doc --mode interactive", expected="with '-m stdout'"),
+    TstHint(command="inventory", expected="with '-i <path to inventory>'"),
+    TstHint(command="--la fallss", expected="with '--la true'"),
+    TstHint(
+        command="--lf {locked_directory}/test.log", expected="with '--lf ~/ansible-navigator.log'"
+    ),
+    TstHint(command="-m stderr", expected="with '-m stdout'"),
+    TstHint(command="--osc4 troo", expected="with '--osc4 true'"),
+    TstHint(command="doc", expected="with 'doc <plugin_name>"),
+    TstHint(command="run", expected="with 'run <playbook name>"),
+    TstHint(command="run --pae troo", expected="with '--pae true"),
+    TstHint(command="replay", expected="with 'replay <path to playbook artifact>'"),
+    TstHint(command="--senv FOO:BAR", expected="with '--senv MYVAR=myvalue'"),
+]
+
+
+@pytest.mark.parametrize("data", tst_hint_data, ids=id_for_hint_test)
+def test_hints(monkeypatch, locked_directory, container_runtime_or_fail, data):
+    """test the hints don't generate a traceboack"""
+    monkeypatch.setenv(
+        "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
+    )
+    args = deepcopy(NavigatorConfiguration)
+    command = data.command.format(locked_directory=locked_directory)
+    params = shlex.split(command)
+    if data.set_ce:
+        params += ["--ce", container_runtime_or_fail()]
+
+    _messages, exit_msgs = parse_and_update(params=params, args=args, initial=True)
+    expected = f"{data.prefix} {data.expected}"
+    exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
+    assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)

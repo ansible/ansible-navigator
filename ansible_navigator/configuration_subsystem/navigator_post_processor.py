@@ -133,7 +133,7 @@ class NavigatorPostProcessor:
             if entry.cli_parameters:
                 long_hc = entry.cli_parameters.long_override or entry.name_dashed
                 exit_msg = (
-                    f"{entry.cli_parameters.short} or {long_hc}"
+                    f"{entry.cli_parameters.short} or --{long_hc}"
                     " is valid only when 'mode' argument is set to 'stdout'"
                 )
                 exit_messages.append(ExitMessage(message=exit_msg))
@@ -155,7 +155,7 @@ class NavigatorPostProcessor:
             if entry.cli_parameters:
                 long_hd = entry.cli_parameters.long_override or entry.name_dashed
                 exit_msg = (
-                    f"{entry.cli_parameters.short} or {long_hd}"
+                    f"{entry.cli_parameters.short} or --{long_hd}"
                     " is valid only when 'mode' argument is set to 'stdout'"
                 )
                 exit_messages.append(ExitMessage(message=exit_msg))
