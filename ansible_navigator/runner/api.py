@@ -1,10 +1,12 @@
 """ ansible_runner API's interface
 """
+import shutil
 import sys
 import logging
 import os
 
 from queue import Queue
+from tempfile import gettempdir
 from typing import Any
 from typing import Dict
 from typing import List
@@ -19,8 +21,6 @@ from ansible_runner import get_plugin_docs
 from ansible_runner import run_command
 from ansible_runner import run_command_async
 
-from .defaults import PRIVATE_DATA_DIR
-
 
 class BaseRunner:
     """BaseRunner class"""
@@ -30,7 +30,7 @@ class BaseRunner:
     # pylint: disable=too-many-arguments
     def __init__(
         self,
-        private_data_dir: Optional[str] = PRIVATE_DATA_DIR,
+        private_data_dir: Optional[str] = None,
         container_engine: Optional[str] = None,
         execution_environment: Optional[bool] = False,
         execution_environment_image: Optional[str] = None,
@@ -41,7 +41,6 @@ class BaseRunner:
         set_environment_variable: Optional[Dict] = None,
         pass_environment_variable: Optional[List] = None,
         cwd: Optional[str] = None,
-        rotate_artifacts: Optional[int] = None,
     ) -> None:
         """BaseRunner class handle common argument for ansible-runner interface class
 
@@ -74,10 +73,12 @@ class BaseRunner:
             cwd ([str], optional): The current local working directory. Defaults to None.
             set_environment_variable([dict], optional): Dict of user requested envvars to set
             pass_environment_variable([list], optional): List of user requested envvars to pass
-            rotate_artifacts([int], optional): Keep at most n ansible-runner artifact directories,
-                                               disable with a value of 0 which is the default
         """
-        self._private_data_dir = private_data_dir
+        if private_data_dir:
+            self._private_data_dir = private_data_dir
+        else:
+            self._private_data_dir = os.path.join(gettempdir(), "ansible-navigator")
+
         self._ce = container_engine
         self._ee = execution_environment
         self._eei = execution_environment_image
@@ -93,7 +94,6 @@ class BaseRunner:
         self.cancelled: bool = False
         self.finished: bool = False
         self.status: Optional[str] = None
-        self._rotate_artifacts = rotate_artifacts
         self._logger = logging.getLogger(__name__)
         self._runner_args: Dict = {}
         if self._ee:
@@ -109,16 +109,15 @@ class BaseRunner:
             )
         self._runner_args.update(
             {
+                "private_data_dir": self._private_data_dir,
                 "json_mode": True,
                 "quiet": True,
                 "cancel_callback": self.runner_cancelled_callback,
                 "finished_callback": self.runner_finished_callback,
+                "artifacts_handler": self.cleanup_artifacts_handler,
             }
         )
         self._add_env_vars_to_args()
-
-        self._runner_args.update({"private_data_dir": self._private_data_dir})
-        self._runner_args.update({"rotate_artifacts": self._rotate_artifacts})
 
         if self._cwd:
             self._runner_args.update({"cwd": self._cwd})
@@ -127,6 +126,17 @@ class BaseRunner:
             self._runner_args.update(
                 {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr}
             )
+
+    def cleanup_artifacts_handler(self, artifact_dir):
+        """
+        ansible-runner callback to handle artifacts after each runner innvocation
+        Args:
+            artifact_dir ([str]): The directory path of artifact directory for current
+                                  runner invocation.
+        """
+        if os.path.exists(artifact_dir):
+            self._logger.debug("Delete ansible-runner artifact directory at path %s", artifact_dir)
+            shutil.rmtree(artifact_dir, ignore_errors=True)
 
     def runner_cancelled_callback(self):
         """check by runner to see if it should cancel"""

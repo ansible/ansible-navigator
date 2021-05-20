@@ -6,7 +6,6 @@ import os
 import pytest
 
 from typing import Optional
-from ....defaults import FIXTURES_COLLECTION_DIR
 from ....defaults import FIXTURES_DIR
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
@@ -14,7 +13,7 @@ from ..._tmux_session import TmuxSession
 
 
 # run playbook
-run_fixture_dir = os.path.join(f"{FIXTURES_DIR}", "integration", "actions", "run")
+run_fixture_dir = os.path.join(FIXTURES_DIR, "integration", "actions", "run")
 inventory_path = os.path.join(run_fixture_dir, "inventory")
 playbook_path = os.path.join(run_fixture_dir, "site.yaml")
 
@@ -37,7 +36,6 @@ class BaseClass:
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
             "unique_test_id": request.node.nodeid,
-            "shell_prompt_timeout": 10,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
@@ -53,9 +51,9 @@ class BaseClass:
 
         received_output = tmux_run_session.interaction(user_input, search_within_response)
 
-        # mask out some config that is subject to change each run
+        # mask out some lines that is subject to change each run
+        mask = "X" * 50
         for idx, line in enumerate(received_output):
-            mask = "X" * 50
             if tmux_run_session.cli_prompt in line:
                 received_output[idx] = mask
             else:
@@ -63,11 +61,11 @@ class BaseClass:
                     if out in line:
                         received_output[idx] = mask
 
-            if self.UPDATE_FIXTURES:
-                update_fixtures(request, index, received_output, comment)
-            dir_path, file_name = fixture_path_from_request(request, index)
-            with open(f"{dir_path}/{file_name}") as infile:
-                expected_output = json.load(infile)["output"]
-            assert expected_output == received_output, "\n" + "\n".join(
-                difflib.unified_diff(expected_output, received_output, "expected", "received")
-            )
+        if self.UPDATE_FIXTURES:
+            update_fixtures(request, index, received_output, comment)
+        dir_path, file_name = fixture_path_from_request(request, index)
+        with open(os.path.join(dir_path, file_name)) as infile:
+            expected_output = json.load(infile)["output"]
+        assert expected_output == received_output, "\n" + "\n".join(
+            difflib.unified_diff(expected_output, received_output, "expected", "received")
+        )

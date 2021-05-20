@@ -540,7 +540,6 @@ class Action(App):
             "pass_environment_variable": self._args.pass_environment_variable,
             "playbook": self._args.playbook,
             "set_environment_variable": self._args.set_environment_variable,
-            "rotate_artifacts": 1,
         }
         if self._args.execution_environment:
             executable_cmd = "ansible-playbook"

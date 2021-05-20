@@ -27,4 +27,4 @@ class TestStdoutNoee(BaseClass):
     """run the tests"""
 
     TEST_FOR_MODE = "stdout"
-    UPDATE_FIXTURES = True
+    UPDATE_FIXTURES = False
