@@ -2,6 +2,7 @@
     "name": "test[7-:back-all play details-:help help]",
     "index": 7,
     "comment": "all play details",
+    "additional_information": null,
     "output": [
         "  PLAY NAME                                       OK   CHANGED       UNREACHABLE          FAILED      SKIPPED       IGNORED       IN PROGRESS          TASK COUNT                           % COMPLETED",
         "0│run integration test play-1                      2         0                 0               0            0             0                 0                   2                      100% ▇▇▇▇▇▇▇▇▇▇▇",

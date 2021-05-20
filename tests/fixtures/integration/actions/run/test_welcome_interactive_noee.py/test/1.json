@@ -2,6 +2,7 @@
     "name": "test[1-:run /home/ganeshrn/ansible-navigator/tests/fixtures/integration/actions/run/site.yaml -i /home/ganeshrn/ansible-navigator/tests/fixtures/integration/actions/run/inventory-enter run from welcome screen-search_within_response1]",
     "index": 1,
     "comment": "enter run from welcome screen",
+    "additional_information": null,
     "output": [
         "  PLAY NAME                                       OK   CHANGED       UNREACHABLE          FAILED      SKIPPED       IGNORED       IN PROGRESS          TASK COUNT                           % COMPLETED",
         "0│run integration test play-1                      2         0                 0               0            0             0                 0                   2                      100% ▇▇▇▇▇▇▇▇▇▇▇",

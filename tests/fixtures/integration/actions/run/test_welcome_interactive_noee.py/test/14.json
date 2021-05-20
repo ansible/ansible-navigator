@@ -2,6 +2,7 @@
     "name": "test[14-:st-display stream-:help help]",
     "index": 14,
     "comment": "display stream",
+    "additional_information": null,
     "output": [
         " 0│",
         " 1│PLAY [run integration test play-1] *********************************************",

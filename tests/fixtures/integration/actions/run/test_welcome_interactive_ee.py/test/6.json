@@ -2,6 +2,7 @@
     "name": "test[6-:back-play-1 details-:help help]",
     "index": 6,
     "comment": "play-1 details",
+    "additional_information": null,
     "output": [
         "  RESULT           HOST                     NUMBER            CHANGED             TASK                                                             TASK ACTION                   DURATION",
         "0│OK               localhost                     0              False             debug print play-1 task-1                                        debug                               0s",
