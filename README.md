@@ -6,13 +6,13 @@ A text-based user interface (TUI) for the Red Hat Ansible Automation Platform
 
 ## Quick start
 
+### Using a virtual environment and pip
 ```
 mkdir project_directory
-git clone https://github.com/ansible/ansible-navigator.git
+cd project_directory
 python3 -m venv venv
 source venv/bin/activate
-pip install -U setuptools
-pip install ./ansible-navigator
+pip install ansible-navigator
 ansible-navigator --help
 ```
 
