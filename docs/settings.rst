@@ -204,7 +204,8 @@ The following table describes all available settings.
 
   * - log-append
     - Specify if log messages should be appended to an existing log file, otherwise a new log file will be created per session
-    - | **Default:** True
+    - | **Choices:** 'True' or 'False'
+      | **Default:** True
       | **CLI:** `--la` or `--log-append`
       | **ENV:** ANSIBLE_NAVIGATOR_LOG_APPEND
       | **Settings file:**
