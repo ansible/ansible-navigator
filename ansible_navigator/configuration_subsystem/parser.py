@@ -94,6 +94,7 @@ class Parser:
         for subcommand in self._config.subcommands:
             parser = self._subparsers.add_parser(
                 subcommand.name,
+                epilog=subcommand.epilog,
                 help=subcommand.description,
                 description=f"{subcommand.name}: {subcommand.description}",
                 parents=[self._base_parser],

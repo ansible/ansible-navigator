@@ -95,12 +95,48 @@ class Internals(SimpleNamespace):
 
 navigator_subcommds = [
     SubCommand(name="collections", description="Explore available collections"),
-    SubCommand(name="config", description="Explore the current ansible configuration"),
-    SubCommand(name="doc", description="Review documentation for a module or plugin"),
+    SubCommand(
+        name="config",
+        description="Explore the current ansible configuration",
+        epilog=(
+            "Note: With '--mode stdout', 'ansible-navigator config' additionally supports"
+            " the same parameters as the 'ansible-config' command."
+            " For more information about these, try "
+            " 'ansible-navigator config --help-config --mode stdout'"
+        ),
+    ),
+    SubCommand(
+        name="doc",
+        description="Review documentation for a module or plugin",
+        epilog=(
+            "Note: With '--mode stdout', 'ansible-navigator doc' additionally supports"
+            " the same parameters as the 'ansible-doc' command."
+            " For more information about these, try "
+            " 'ansible-navigator doc --help-doc --mode stdout'"
+        ),
+    ),
     SubCommand(name="ee-details", description="Explore execution environment details"),
-    SubCommand(name="inventory", description="Explore an inventory"),
+    SubCommand(
+        name="inventory",
+        description="Explore an inventory",
+        epilog=(
+            "Note: With '--mode stdout', 'ansible-navigator inventory' additionally supports"
+            " the same parameters as the 'ansible-inventory' command."
+            " For more information about these, try "
+            " 'ansible-navigator inventory --help-inventory --mode stdout'"
+        ),
+    ),
     SubCommand(name="replay", description="Explore a previous run using a playbook artifact"),
-    SubCommand(name="run", description="Run a playbook"),
+    SubCommand(
+        name="run",
+        description="Run a playbook",
+        epilog=(
+            "Note: 'ansible-navigator run' additionally supports"
+            " the same parameters as the 'ansible-playbook' command."
+            " For more information about these, try "
+            " 'ansible-navigator run --help-playbook --mode stdout'"
+        ),
+    ),
     SubCommand(name="welcome", description="Start at the welcome page"),
 ]
 

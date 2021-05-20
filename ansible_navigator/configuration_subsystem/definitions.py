@@ -124,6 +124,7 @@ class SubCommand(SimpleNamespace):
 
     name: str
     description: str
+    epilog: Union[None, str] = None
 
 
 class ApplicationConfiguration(SimpleNamespace):
