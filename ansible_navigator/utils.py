@@ -34,7 +34,7 @@ class LogMessage(NamedTuple):
 
 def abs_user_path(fpath: str) -> str:
     """Resolve a path"""
-    return os.path.abspath(os.path.expanduser(fpath))
+    return os.path.abspath(os.path.expanduser(os.path.expandvars(fpath)))
 
 
 def check_for_ansible() -> Tuple[bool, str]:
