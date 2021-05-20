@@ -64,7 +64,7 @@ class TmuxSession:
         # expect inside of tmux, so we can't depend on it. We *must* determine
         # it before we enter tmux. Do this before we switch to bash
         venv_path = os.environ.get("VIRTUAL_ENV")
-        if venv_path is None or ".tox" not in venv_path:
+        if venv_path is None:
             raise AssertionError(
                 "VIRTUAL_ENV environment variable was not set but tox should have set it."
             )
