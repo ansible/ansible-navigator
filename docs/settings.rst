@@ -125,7 +125,7 @@ The following table describes all available settings.
   * - collection-doc-cache-path
     - The path to collection doc cache
     - | **Default:** $HOME/.cache/ansible-navigator/collection_doc_cache.db
-      | **CLI:** positional
+      | **CLI:** `--cdcp` or `--collection-doc-cache-path`
       | **ENV:** ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH
       | **Settings file:**
 

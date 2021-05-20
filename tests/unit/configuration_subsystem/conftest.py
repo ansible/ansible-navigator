@@ -15,6 +15,7 @@ from ansible_navigator.configuration_subsystem.definitions import ApplicationCon
 
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
+from ansible_navigator.utils import ExitMessage
 from ansible_navigator.utils import LogMessage
 
 from ansible_navigator.yaml import yaml
@@ -29,7 +30,7 @@ class GenerateConfigResponse(NamedTuple):
     """obj for generate_config_response"""
 
     messages: List[LogMessage]
-    errors: List[str]
+    exit_messages: List[ExitMessage]
     application_configuration: ApplicationConfiguration
     settings_contents: Dict
 
@@ -59,10 +60,10 @@ def _generate_config(params=None, setting_file_name=None, initial=True) -> Gener
         settings_file_path=settings_file_path or None,
         initial=initial,
     )
-    messages, errors = configurator.configure()
+    messages, exit_messages = configurator.configure()
     return GenerateConfigResponse(
         messages=messages,
-        errors=errors,
+        exit_messages=exit_messages,
         application_configuration=application_configuration,
         settings_contents=settings_contents,
     )

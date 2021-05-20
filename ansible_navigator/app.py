@@ -23,6 +23,9 @@ from .steps import Steps
 from .ui_framework.ui import Action
 from .ui_framework import Interaction
 
+from .utils import LogMessage
+from .utils import ExitMessage
+
 
 class App:
     # pylint: disable=too-few-public-methods
@@ -108,18 +111,25 @@ class App:
 
     def _update_args(self, params: List, apply_previous_cli_entries: C = C.ALL) -> None:
         """pass the params through the configuration subsystem
-        log messages and errors as warnings since most will result in a form
+        log messages and exit_messages as warnings since most will result in a form
+        while the exit_messages would have cause a sys.exit(1) from the CLI
+        each action should handle them in a manner that does not exit the TUI
         """
+        messages: List[LogMessage]
+        exit_messages: List[ExitMessage]
 
-        messages, errors = parse_and_update(
+        messages, exit_messages = parse_and_update(
             params=params, args=self._args, apply_previous_cli_entries=apply_previous_cli_entries
         )
 
-        for entry in messages:
-            self._logger.log(level=entry.level, msg=entry.message)
+        for message in messages:
+            self._logger.log(level=message.level, msg=message.message)
 
-        for error in errors:
-            self._logger.warning(error)
+        for exit_msg in exit_messages:
+            if exit_msg.level == logging.ERROR:
+                self._logger.warning(msg=exit_msg.message)
+            else:
+                self._logger.log(level=exit_msg.level, msg=exit_msg.message)
 
     def write_artifact(self, filename: str) -> None:
         """per app write_artifact

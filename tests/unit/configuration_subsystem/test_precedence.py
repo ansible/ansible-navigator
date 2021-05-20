@@ -19,6 +19,7 @@ import pytest
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
+from .conftest import GenerateConfigResponse
 from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
 from .data import BASE_SHORT_CLI
@@ -59,7 +60,7 @@ def test_all_entries_reflect_cli_given_envvars(
 
     with mock.patch.dict(os.environ, envvars):
         response = generate_config(params=params)
-        assert response.errors == []
+        assert response.exit_messages == []
         for key, value in expected.items():
             assert response.application_configuration.entry(key).value.current == value, key
             assert response.application_configuration.entry(key).value.source is C.USER_CLI, key
@@ -88,7 +89,7 @@ def test_all_entries_reflect_cli_given_settings(
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     response = generate_config(params=params, setting_file_name=settings)
-    assert response.errors == []
+    assert response.exit_messages == []
     for entry in response.application_configuration.entries:
         if entry.name in expected:
             assert entry.value.current == expected[entry.name], entry.name
@@ -132,7 +133,7 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
 
     with mock.patch.dict(os.environ, envvars):
         response = generate_config(params=params, setting_file_name=settings)
-        assert response.errors == []
+        assert response.exit_messages == []
         for key, value in expected.items():
             configured_entry = response.application_configuration.entry(key)
             assert configured_entry.value.current == value, configured_entry.name
@@ -147,7 +148,7 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
 def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
     """Ensure all entries are set to a default value"""
     response = generate_config()
-    assert response.errors == []
+    assert response.exit_messages == []
     configured_entry = response.application_configuration.entry(entry.name)
     if configured_entry.value.default is C.NOT_SET:
         assert configured_entry.value.source is C.NOT_SET, configured_entry
@@ -177,7 +178,7 @@ def test_all_entries_reflect_envvar_given_settings(
     )
     with mock.patch.dict(os.environ, {environment_variable: str(value)}):
         response = generate_config(setting_file_name=settings)
-        assert response.errors == []
+        assert response.exit_messages == []
         configured_entry = response.application_configuration.entry(entry)
     assert configured_entry.value.source is C.ENVIRONMENT_VARIABLE
     assert configured_entry.value.current == expected
@@ -199,7 +200,7 @@ def test_all_entries_reflect_envvar_given_settings(
 def test_all_entries_reflect_settings_given_settings(_mf1, _mf2, generate_config, entry):
     """Ensure all entries are set to an entry in a settings file"""
     response = generate_config(setting_file_name="ansible-navigator.yml")
-    assert response.errors == []
+    assert response.exit_messages == []
     configured_entry = response.application_configuration.entry(entry.name)
     if entry.cli_parameters is not None:
         assert configured_entry.value.source is C.USER_CFG, configured_entry

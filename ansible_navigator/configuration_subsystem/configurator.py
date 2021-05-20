@@ -13,7 +13,10 @@ from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 from .parser import Parser
 
+from ..utils import ExitMessage
+from ..utils import ExitPrefix
 from ..utils import LogMessage
+from ..utils import oxfordcomma
 from ..yaml import SafeLoader
 from ..yaml import yaml
 
@@ -44,7 +47,7 @@ class Configurator:
         """
         self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
-        self._errors: List[str] = []
+        self._exit_messages: List[ExitMessage] = []
         self._messages: List[LogMessage] = []
         self._params = params
         self._initial = initial
@@ -77,7 +80,7 @@ class Configurator:
         message = "Configuration rollback complete."
         self._messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-    def configure(self) -> Tuple[List[LogMessage], List[str]]:
+    def configure(self) -> Tuple[List[LogMessage], List[ExitMessage]]:
         """Perform the configuration
 
         save the original entries, if an error is encountered
@@ -93,24 +96,24 @@ class Configurator:
         self._apply_settings_file()
         self._apply_environment_variables()
         self._apply_cli_params()
-        if self._errors:
-            self._errors.insert(0, cmd_message)
+        if self._exit_messages:
+            self._exit_messages.insert(0, ExitMessage(message=cmd_message))
             self._roll_back()
-            return self._messages, self._errors
+            return self._messages, self._exit_messages
 
         self._apply_previous_cli_to_current()
 
         self._post_process()
         self._check_choices()
-        if self._errors:
-            self._errors.insert(0, cmd_message)
+        if self._exit_messages:
+            self._exit_messages.insert(0, ExitMessage(message=cmd_message))
             self._roll_back()
-            return self._messages, self._errors
+            return self._messages, self._exit_messages
 
         if self._initial:
             self._config.initial = deepcopy(self._config)
 
-        return self._messages, self._errors
+        return self._messages, self._exit_messages
 
     def _argparse_error_handler(self, message: str):
         """callback for argparse error handling to prevent sys.exit
@@ -118,7 +121,7 @@ class Configurator:
         :param message: A message from the parser
         :type message: str
         """
-        self._errors.append(message)
+        self._exit_messages.append(ExitMessage(message=message))
 
     def _restore_original(self) -> None:
         """Since we always oeprate on the same object
@@ -148,11 +151,19 @@ class Configurator:
                 try:
                     config = yaml.load(config_fh, Loader=SafeLoader)
                 except (yaml.scanner.ScannerError, yaml.parser.ParserError) as exc:
-                    error = (
+                    exit_msg = (
                         f"Settings file found {self._settings_file_path}, but failed to load it."
                     )
-                    self._errors.append(error)
-                    self._errors.append(f"  error was: '{' '.join(str(exc).splitlines())}'")
+                    self._exit_messages.append(ExitMessage(message=exit_msg))
+                    exit_msg = f"  error was: '{' '.join(str(exc).splitlines())}'"
+                    self._exit_messages.append(ExitMessage(message=exit_msg))
+                    exit_msg = (
+                        f"Try checking the settings file '{self._settings_file_path}'"
+                        "and ensure it is properly formatted"
+                    )
+                    self._exit_messages.append(
+                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT)
+                    )
                     return
             for entry in self._config.entries:
                 settings_file_path = entry.settings_file_path(self._config.application_name)
@@ -168,13 +179,20 @@ class Configurator:
                         message = f"'{entry.name}' cannot be reconfigured. (settings file)"
                         self._messages.append(LogMessage(level=logging.INFO, message=message))
                 except TypeError as exc:
-                    error = (
+                    exit_msg = (
                         "Errors encountered when loading settings file:"
                         f" {self._settings_file_path}"
                         f" while loading entry {entry.name}, attempted: {settings_file_path}."
                         f"The resulting error was {str(exc)}"
                     )
-                    self._errors.append(error)
+                    self._exit_messages.append(ExitMessage(message=exit_msg))
+                    exit_msg = (
+                        f"Try checking the settings file '{self._settings_file_path}'"
+                        "and ensure it is properly formatted"
+                    )
+                    self._exit_messages.append(
+                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT)
+                    )
                     return
                 except KeyError:
                     message = f"{settings_file_path} not found in settings file"
@@ -222,7 +240,7 @@ class Configurator:
                 if callable(processor):
                     messages, errors = processor(entry=entry, config=self._config)
                     self._messages.extend(messages)
-                    self._errors.extend(errors)
+                    self._exit_messages.extend(errors)
             else:
                 message = f"'{entry.name}' cannot be reconfigured. (post process)"
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
@@ -231,7 +249,15 @@ class Configurator:
         for entry in self._config.entries:
             if entry.cli_parameters and entry.choices:
                 if entry.value.current not in entry.choices:
-                    self._errors.append(entry.invalid_choice)
+                    self._exit_messages.append(ExitMessage(message=entry.invalid_choice))
+                    choices = [
+                        f"{entry.cli_parameters.short} {str(choice).lower()}"
+                        for choice in entry.choices
+                    ]
+                    exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
+                    self._exit_messages.append(
+                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT)
+                    )
 
     def _apply_previous_cli_to_current(self) -> None:
         # pylint: disable=too-many-nested-blocks

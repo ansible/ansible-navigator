@@ -44,5 +44,5 @@ def test_editor_command_from_editor(_mocked_func, generate_config):
         # since this was already loaded, force it
         NavigatorConfiguration.entry("editor_command").value.default = generate_editor_command()
         response = generate_config()
-        assert response.errors == []
+        assert response.exit_messages == []
         assert response.application_configuration.editor_command == "nano {filename}"

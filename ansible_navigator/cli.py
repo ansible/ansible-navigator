@@ -13,12 +13,13 @@ from pathlib import Path
 
 from .actions import run_action_stdout
 from .action_runner import ActionRunner
-
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import NavigatorConfiguration
-
 from .initialization import parse_and_update
 from .initialization import error_and_exit_early
+from .utils import ExitMessage
+from .utils import ExitPrefix
+from .utils import LogMessage
 
 APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
@@ -62,44 +63,46 @@ def run(args: ApplicationConfiguration) -> int:
 
 def main():
     """start here"""
-    messages: List[str] = []
-    errors: List[str] = []
+    messages: List[LogMessage] = []
+    exit_messages: List[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
     messages.extend(args.internals.initialization_messages)
-    errors.extend(args.internals.initialization_errors)
+    exit_messages.extend(args.internals.initialization_exit_messages)
 
-    new_messages, new_errors = parse_and_update(sys.argv[1:], args=args, initial=True)
+    new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args, initial=True)
     messages.extend(new_messages)
-    errors.extend(new_errors)
+    exit_messages.extend(new_exit_messages)
 
     # In case of errors, the configuration will have rolled back
     # but a viable log file is still needed, set to default since
     # it cannot be determined if the error is log file location related
-    if errors:
+    if exit_messages:
         args.entry("log_file").value.current = args.entry("log_file").value.default
         args.entry("log_level").value.current = "debug"
-        error = f"Configuration failed, using default log file location: {args.log_file}."
-        error += f" Log level set to {args.log_level}"
-        errors.append(error)
+        exit_msg = f"Configuration failed, using default log file location: {args.log_file}."
+        exit_msg += f" Log level set to {args.log_level}"
+        exit_messages.append(ExitMessage(message=exit_msg))
+        exit_msg = f"Review the hints and log file to see what went wrong: {args.log_file}"
+        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
     try:
         Path(args.log_file).touch()
         setup_logger(args)
     except Exception as exc:  # pylint: disable=broad-except
-        error = "The log file path or logging engine could not be setup."
-        error += " No log file will be available, please check the log file"
-        error += f" path setting. The error was {str(exc)}"
-        errors.append(error)
-        error_and_exit_early(errors)
+        exit_msg = "The log file path or logging engine could not be setup."
+        exit_msg += " No log file will be available, please check the log file"
+        exit_msg += f" path setting. The error was {str(exc)}"
+        exit_messages.append(ExitMessage(message=exit_msg))
+        error_and_exit_early(exit_messages=exit_messages)
 
     for entry in messages:
         logger.log(level=entry.level, msg=entry.message)
 
-    if errors:
-        for error in errors:
-            logger.error(msg=error)
-        error_and_exit_early(errors)
+    if exit_messages:
+        for exit_msg in exit_messages:
+            logger.log(level=exit_msg.level, msg=exit_msg.message)
+        error_and_exit_early(exit_messages=exit_messages)
 
     os.environ.setdefault("ESCDELAY", "25")
     # clear if the TERM is set

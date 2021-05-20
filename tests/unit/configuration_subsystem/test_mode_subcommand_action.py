@@ -48,7 +48,7 @@ def test_import_error():
     message += " No module named '__ansible_navigator'"
     assert message in (entry.message for entry in configurator._messages)
     error = "Unable to find an action for 'subcommand1', tried: '__ansible_navigator.__actions'"
-    assert error in configurator._errors
+    assert error in configurator._exit_messages
 
 
 def test_subcommand_not_found():
@@ -76,4 +76,4 @@ def test_subcommand_not_found():
     configurator = Configurator(params=[], application_configuration=test_config)
     configurator._post_process()
     error = "Unable to find an action for '__test_action', tried: 'ansible_navigator.actions'"
-    assert error in configurator._errors
+    assert error in configurator._exit_messages
