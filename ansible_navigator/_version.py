@@ -1,6 +1,6 @@
 """ version
 
-Note: 
+Note:
 
 __version__:
 
