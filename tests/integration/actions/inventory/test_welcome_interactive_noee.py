@@ -2,42 +2,30 @@
 """
 import pytest
 
-from .base import BaseClass
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
-
-CLI = "ansible-navigator --ee false"
-
-testdata = [
-    (0, CLI, "ansible-navigator inventory command top window"),
-    (1, f":i -i {ANSIBLE_INVENTORY_FIXTURE_DIR}", ":inventory from welcome"),
-    (2, ":0", "Browse hosts/ungrouped window"),
-    (3, ":0", "Group list window"),
-    (4, ":0", "group01 hosts detail window"),
-    (5, ":0", "host0101 detail window"),
-    (6, ":back", "Previous window (group01 hosts detail window)"),
-    (7, ":back", "Previous window (Group list window)"),
-    (8, ":1", "group02 hosts detail window"),
-    (9, ":0", "host0201 detail window"),
-    (10, ":back", "Previous window (group02 hosts detail window)"),
-    (11, ":back", "Previous window (Group list window)"),
-    (12, ":2", "group03 hosts detail window"),
-    (13, ":0", "host0301 detail window"),
-    (14, ":back", "Previous window (group03 hosts detail window)"),
-    (15, ":back", "Previous window (Group list window)"),
-    (16, ":back", "Previous window (Browse hosts/ungrouped window)"),
-    (17, ":back", "Previous window (top window)"),
-    (18, ":1", "Inventory hostname window"),
-    (19, ":0", "host0101 detail window"),
-    (20, ":back", "Previous window after host0101 (Inventory hostname window)"),
-    (21, ":1", "host0201 detail window"),
-    (22, ":back", "Previous window after host0201 (Inventory hostname window)"),
-    (23, ":2", "host0301 detail window"),
-]
+from .base import base_steps
+from .base import BaseClass
 
 
-@pytest.mark.parametrize("index, user_input, comment", testdata)
+from ..._interactions import add_indicies
+from ..._interactions import Command
+from ..._interactions import Step
+from ..._interactions import step_id
+
+
+CLI = Command(execution_environment=False).join()
+cmdline = f":inventory -i {ANSIBLE_INVENTORY_FIXTURE_DIR}"
+
+initial_steps = (
+    Step(user_input=CLI, comment="welcome screen"),
+    Step(user_input=cmdline, comment="ansible-navigator inventory command top window"),
+)
+
+steps = add_indicies(initial_steps + base_steps)
+
+
+@pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
     """run the tests"""
 
-    TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
