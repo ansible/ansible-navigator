@@ -1,6 +1,7 @@
 """ test the use of set_environment_variable throguh to runner
 """
 import os
+import shlex
 
 from unittest import mock
 
@@ -75,7 +76,9 @@ class Test(Cli2Runner):
 
         assert os.path.exists(cfg_path)
 
-        with mock.patch("sys.argv", cli_entry.split()):
+        params = shlex.split(cli_entry) + ["--pp", "never"]
+
+        with mock.patch("sys.argv", params):
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
                 with mock.patch.dict(
                     os.environ, {"ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH": coll_cache_path}

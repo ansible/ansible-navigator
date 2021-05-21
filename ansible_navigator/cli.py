@@ -15,6 +15,7 @@ from .actions import run_action_stdout
 from .action_runner import ActionRunner
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import NavigatorConfiguration
+from .image_manager import ImagePuller
 from .initialization import parse_and_update
 from .initialization import error_and_exit_early
 from .utils import ExitMessage
@@ -25,6 +26,21 @@ APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
 
 logger = logging.getLogger(PKG_NAME)
+
+
+def pull_image(args):
+    """pull the image if required"""
+    image_puller = ImagePuller(
+        container_engine=args.container_engine,
+        image=args.execution_environment_image,
+        pull_policy=args.pull_policy,
+    )
+    image_puller.assess()
+    if image_puller.assessment.pull_required:
+        image_puller.prologue_stdout()
+        image_puller.pull_stdout()
+    if image_puller.assessment.exit_messages:
+        error_and_exit_early(image_puller.assessment.exit_messages)
 
 
 def setup_logger(args: ApplicationConfiguration) -> None:
@@ -108,6 +124,9 @@ def main():
     # clear if the TERM is set
     if os.environ.get("TERM"):
         os.system("clear")
+
+    if args.execution_environment:
+        pull_image(args)
 
     return_code = run(args)
     if return_code:

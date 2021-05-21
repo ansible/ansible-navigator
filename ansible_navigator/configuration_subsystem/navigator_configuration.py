@@ -352,6 +352,21 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="module"),
         ),
         Entry(
+            name="pull_policy",
+            choices=["always", "missing", "never", "tag"],
+            cli_parameters=CliParameters(short="--pp"),
+            settings_file_path_override="execution-environment.pull-policy",
+            short_description=(
+                "Specify the image pull policy."
+                " always:Always pull the image,"
+                " missing:Pull if not locally available,"
+                " never:Never pull the image,"
+                " tag:if the image tag is 'latest', always pull the image,"
+                " otherwise pull if not locally available"
+            ),
+            value=EntryValue(default="tag"),
+        ),
+        Entry(
             name="set_environment_variable",
             cli_parameters=CliParameters(action="append", nargs="+", short="--senv"),
             environment_variable_override="ansible_navigator_set_environment_variables",

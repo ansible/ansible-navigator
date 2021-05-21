@@ -283,6 +283,20 @@ The following table describes all available settings.
                 environment-variables:
                   pass:
 
+  * - pull-policy
+    - Specify the image pull policy. always:Always pull the image, missing:Pull if not locally available, never:Never pull the image, tag:if the image tag is 'latest', always pull the image, otherwise pull if not locally available
+    - | **Choices:** 'always', 'missing', 'never' or 'tag'
+      | **Default:** tag
+      | **CLI:** `--pp` or `--pull-policy`
+      | **ENV:** ANSIBLE_NAVIGATOR_PULL_POLICY
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              execution-environment:
+                pull-policy:
+
   * - set-environment-variable
     - Specify an environment variable and a value to be set within the execution enviroment (--senv MY_VAR=42)
     - | **Default:** No default value set
