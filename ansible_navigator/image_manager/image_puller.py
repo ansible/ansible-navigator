@@ -40,6 +40,17 @@ class ImagePuller:
         self._extract_tag()
         self._check_for_image()
         self._determine_pull()
+        if self._pull_policy == "never" and self._pull_required is True:
+            exit_msg = (
+                "Pull policy is set to 'never' and execution enviroment"
+                " image was not found locally"
+            )
+            self._log_message(message=exit_msg, level=logging.ERROR)
+            exit_msg = (
+                "Try again with '--pp missing' or manually pull the execution-environment image"
+            )
+            self._log_message(level=logging.INFO, message=exit_msg, hint=True)
+
         self._assessment = ImageAssessment(
             messages=self._messages,
             exit_messages=self._exit_messages,
