@@ -36,6 +36,8 @@ def pull_image(args):
         pull_policy=args.pull_policy,
     )
     image_puller.assess()
+    if image_puller.assessment.exit_messages:
+        error_and_exit_early(image_puller.assessment.exit_messages)
     if image_puller.assessment.pull_required:
         image_puller.prologue_stdout()
         image_puller.pull_stdout()
