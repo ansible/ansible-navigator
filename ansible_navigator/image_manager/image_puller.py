@@ -92,7 +92,6 @@ class ImagePuller:
         self._pull_required = pull
         self._assessment.pull_required = pull
 
-
     def _extract_tag(self):
         _image, _, image_tag = self._image.partition(":")
         self._image_tag = image_tag or "latest"
