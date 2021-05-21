@@ -90,6 +90,8 @@ class ImagePuller:
         else:
             pull = False
         self._pull_required = pull
+        self._assessment.pull_required = pull
+
 
     def _extract_tag(self):
         _image, _, image_tag = self._image.partition(":")
@@ -145,6 +147,7 @@ class ImagePuller:
 
             self._log_message(level=logging.INFO, message="Execution environment updated")
             self._pull_required = False
+            self._assessment.pull_required = False
         except subprocess.CalledProcessError as exc:
             self._log_message(level=logging.ERROR, message="Execution environment pull failed")
             if exc.stderr is not None:
