@@ -65,6 +65,7 @@ You can copy the example settings file below into one of those paths to start yo
     #     image: test_image
     #   help-config: True
     #   help-doc: True
+    #   help-inventory: True
     #   inventories:
     #     - /tmp/test_inventory.yml
     #   inventory-columns:
@@ -396,6 +397,19 @@ The following table describes all available settings.
   * - Name
     - Description
     - Settings
+  * - help-inventory
+    - Help options for ansible-inventory command in stdout mode
+    - | **Choices:** 'True' or 'False'
+      | **Default:** False
+      | **CLI:** `--hi` or `--help-inventory`
+      | **ENV:** ANSIBLE_NAVIGATOR_HELP_INVENTORY
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              help-inventory:
+
   * - inventory
     - Specify an inventory file path or comma separated host list
     - | **Default:** No default value set

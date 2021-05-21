@@ -1,7 +1,12 @@
 {
-    "name": "test[0-ansible-navigator --ee false-ansible-navigator inventory command top window]",
+    "name": "test[0-ansible-navigator --ee False --ce docker --ll debug --mode interactive-welcome screen]",
     "index": 0,
-    "comment": "ansible-navigator inventory command top window",
+    "comment": "welcome screen",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         " 0│## Welcome",
         " 1│----------------------------------------------------------------------------------------------------------",
@@ -22,6 +27,6 @@
         "16│happy automating,",
         "17│",
         "18│-winston",
-        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+        "^f/PgUp page up                                                                                        ^b/PgDn page down                                                                                        ↑↓ scroll                                                                                        esc back                                                                                        :help help"
     ]
 }

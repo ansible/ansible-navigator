@@ -27,6 +27,7 @@ ansible-navigator:
     image: test_image
   help-config: True
   help-doc: True
+  help-inventory: True
   inventories:
     - /tmp/test_inventory.yml
   inventory-columns:

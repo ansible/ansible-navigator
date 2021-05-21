@@ -428,6 +428,8 @@ class Action(App):
 
     def _collect_inventory_details(self) -> None:
 
+        # pylint:disable=too-many-branches
+
         kwargs = {
             "container_engine": self._args.container_engine,
             "cwd": os.getcwd(),
@@ -468,7 +470,14 @@ class Action(App):
                     return
                 ansible_inventory_path = exec_path
 
-            kwargs.update({"cmdline": self._args.cmdline, "inventory": self._inventories})
+            pass_through_arg = []
+            if self._args.help_inventory is True:
+                pass_through_arg.append("--help")
+
+            if isinstance(self._args.cmdline, list):
+                pass_through_arg.extend(self._args.cmdline)
+
+            kwargs.update({"cmdline": pass_through_arg, "inventory": self._inventories})
 
             self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
             self._runner.run()
