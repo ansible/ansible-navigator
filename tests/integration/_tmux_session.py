@@ -156,7 +156,7 @@ class TmuxSession:
         value,
         search_within_response: Union[None, List, str] = None,
         ignore_within_response=None,
-        timeout=60,
+        timeout=300,
     ):
         """interact with the tmux session
         :param value: send to screen
@@ -221,6 +221,7 @@ class TmuxSession:
         timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
 
         ok_to_return = False
+        err_message = "RESPONSE"
         while True:
 
             showing = self._pane.capture_pane()
@@ -242,6 +243,17 @@ class TmuxSession:
                             break
 
             if ok_to_return:
+                screens = [showing]
+                while True:
+                    screens.append(self._pane.capture_pane())
+                    if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
+                        showing = screens[-1]
+                        break
+                    elapsed = timer() - start_time
+                    if elapsed > timeout:
+                        err_message = "5 LIKE SCREENS"
+                        break
+                    time.sleep(0.1)
                 break
 
             elapsed = timer() - start_time
@@ -251,7 +263,9 @@ class TmuxSession:
 
                 tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
                 # taint the screen output w/ timestamp so it's never a valid fixture
-                alerts = [f"******** ERROR: TMUX RESPONSE TIMEOUT @ {elapsed}s @ {tstamp} ********"]
+                alerts = [
+                    f"******** ERROR: TMUX '{err_message}' TIMEOUT @ {elapsed}s @ {tstamp} ********"
+                ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
                 with open(timeout_capture_path, "w") as filehandle:
