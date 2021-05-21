@@ -115,14 +115,14 @@ class ImagePuller:
         messages.append(("Execution environment pull needed:", self._pull_required))
         width = max((len(m[0]) + len(str(m[1])) + 2 for m in messages))
         print("\u002d" * width)
-        print("OVERVIEW")
+        print("Execution environment image and pull policy overview")
         print("\u002d" * width)
         column_width = max((len(m[0]) for m in messages))
         for msg, value in messages:
             print(f"{msg.ljust(column_width)} {value}")
             self._log_message(message=f"{msg}: {value}", level=logging.INFO)
         print("\u002d" * width)
-        print("UPDATING")
+        print("Updating the execution enviroment")
         print("\u002d" * width)
 
     def pull_stdout(self):
