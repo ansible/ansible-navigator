@@ -135,7 +135,8 @@ class ImagePuller:
             self._pull_required = False
         except subprocess.CalledProcessError as exc:
             self._log_message(level=logging.ERROR, message="Execution environment pull failed")
-            self._log_message(level=logging.ERROR, message=exc.stderr.decode().strip())
+            if exc.stderr is not None:
+                self._log_message(level=logging.ERROR, message=exc.stderr.decode().strip())
             exit_msg = (
                 "Check the execution environment image name, connectivity to and permissions"
                 " for the registry, and try again"
