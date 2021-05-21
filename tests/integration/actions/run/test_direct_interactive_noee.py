@@ -1,36 +1,35 @@
 """ run direct from cli interactive w/o ee
 """
-import os
 import pytest
 
-from typing import List
 from .base import BaseClass
+from .base import base_steps
 from .base import inventory_path
 from .base import playbook_path
 
 
-CLI_RUN = f"ansible-navigator run {playbook_path} -i {inventory_path}"
-testdata_run: List = [
-    (0, CLI_RUN, "ansible-navigator run playbook", ["100%", "SUCCESSFUL"]),
-    (1, ":0", "play-1 details", ":help help"),
-    (2, ":0", "task-1 details", ":help help"),
-    (3, ":back", "play-1 details", ":help help"),
-    (4, ":1", "play-1 task-2 details", ":help help"),
-    (5, ":back", "play-1 details", ":help help"),
-    (6, ":back", "all play details", ":help help"),
-    (7, ":1", "play-2 details", ":help help"),
-    (8, ":0", "play-2 task-1 details", ":help help"),
-    (9, ":back", "play-2 details", ":help help"),
-    (10, ":1", "play-2 task-2 details", ":help help"),
-    (11, ":back", "play-2 details", ":help help"),
-    (12, ":back", "all play details", ":help help"),
-    (13, ":st", "display stream", ":help help"),
-]
+from ..._interactions import add_indicies
+from ..._interactions import Command
+from ..._interactions import Step
+from ..._interactions import step_id
 
 
-@pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata_run)
-class TestDirectRunNoee(BaseClass):
+cmdline = f"{playbook_path} -i {inventory_path}"
+CLI = Command(subcommand="run", cmdline=cmdline, execution_environment=False).join()
+
+initial_steps = (
+    Step(
+        user_input=CLI,
+        comment="ansible-navigator run playbook",
+        search_within_response=["100%", "SUCCESSFUL"],
+    ),
+)
+
+steps = add_indicies(initial_steps + base_steps)
+
+
+@pytest.mark.parametrize("step", steps, ids=step_id)
+class Test(BaseClass):
     """run the tests"""
 
-    TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False

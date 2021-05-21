@@ -22,6 +22,7 @@ class TstData(NamedTuple):
     filename: Union[None, str]
     playbook: str
     expected: str
+    help_playbook: bool = False
 
 
 def id_from_data(value):
@@ -44,6 +45,7 @@ test_data = [
     TstData("Playbook with .", None, "./site.yaml", f"{os.path.abspath('.')}/site-artifact"),
     TstData("Playbook with ..", None, "../site.yaml", f"{os.path.abspath('..')}/site-artifact"),
     TstData("Playbook with ~", None, "~/site.yaml", "/home/test_user/site-artifact"),
+    TstData("help_plabook enabled", None, "~/site.yaml", "/home/test_user/site-artifact", True),
 ]
 
 
@@ -58,6 +60,7 @@ def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog
 
     args = deepcopy(NavigatorConfiguration)
     args.entry("playbook").value.current = data.playbook
+    args.entry("help_playbook").value.current = data.help_playbook
     args.post_processor.playbook(entry=args.entry("playbook"), config=args)
     playbook_artifact_save_as = args.entry("playbook_artifact_save_as")
     if data.filename:
@@ -71,5 +74,8 @@ def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog
     run = action(args=args)
     run.write_artifact(filename=data.filename)
 
-    open_filename = mocked_open.call_args[0][0]
-    assert open_filename.startswith(data.expected), caplog.text
+    if data.help_playbook is not True:
+        open_filename = mocked_open.call_args[0][0]
+        assert open_filename.startswith(data.expected), caplog.text
+    else:
+        mocked_open.assert_not_called()

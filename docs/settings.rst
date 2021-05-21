@@ -467,6 +467,19 @@ The following table describes all available settings.
   * - Name
     - Description
     - Settings
+  * - help-playbook
+    - Help options for ansible-playbook command in stdout mode
+    - | **Choices:** 'True' or 'False'
+      | **Default:** False
+      | **CLI:** `--hp` or `--help-playbook`
+      | **ENV:** ANSIBLE_NAVIGATOR_HELP_PLAYBOOK
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              help-playbook:
+
   * - inventory
     - Specify an inventory file path or comma separated host list
     - | **Default:** No default value set

@@ -192,6 +192,28 @@ class NavigatorPostProcessor:
             return messages, exit_messages
         return messages, exit_messages
 
+    @_post_processor
+    def help_playbook(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process help_playbook"""
+        messages, exit_messages = self._true_or_false(entry, config)
+        if all((entry.value.current is True, config.app == "run", config.mode == "interactive")):
+            if entry.cli_parameters:
+                long_hd = entry.cli_parameters.long_override or entry.name_dashed
+                exit_msg = (
+                    f"{entry.cli_parameters.short} or --{long_hd}"
+                    " is valid only when 'mode' argument is set to 'stdout'"
+                )
+                exit_messages.append(ExitMessage(message=exit_msg))
+                mode_cli = config.entry("mode").cli_parameters
+                if mode_cli:
+                    m_short = mode_cli.short
+                    if m_short:
+                        exit_msg = f"Try again with '{m_short} stdout'"
+                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
+        return messages, exit_messages
+
     @staticmethod
     @_post_processor
     def inventory(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
@@ -377,11 +399,15 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:
-            exit_msg = "A playbook is required when using the run subcommand"
-            exit_messages.append(ExitMessage(message=exit_msg))
-            exit_msg = "Try again with 'run <playbook name>'"
-            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
+            if not (
+                config.entry("help_playbook").value.current
+                and config.entry("mode").value.current == "stdout"
+            ):
+                exit_msg = "A playbook is required when using the run subcommand"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = "Try again with 'run <playbook name>'"
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                return messages, exit_messages
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages
