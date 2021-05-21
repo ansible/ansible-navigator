@@ -133,7 +133,7 @@ class TmuxSession:
         prompt_showing = False
         while True:
             showing = self._pane.capture_pane()
-            # the scrren has been cleared, wait for prompt in first line
+            # the screen has been cleared, wait for prompt in first line
             if showing:
                 prompt_showing = self.cli_prompt in showing[0]
             if prompt_showing:
