@@ -199,7 +199,10 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "inventory" and entry.value.current is C.NOT_SET:
-            if not (config.entry("help_inventory") and config.entry("mode") == "stdout"):
+            if not (
+                config.entry("help_inventory").value.current
+                and config.entry("mode").value.current == "stdout"
+            ):
                 exit_msg = "An inventory is required when using the inventory subcommand"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 if entry.cli_parameters:
