@@ -2,7 +2,6 @@
     "name": "test[0-ansible-navigator --execution-environment false-ansible-navigator run command top window-:help help]",
     "index": 0,
     "comment": "ansible-navigator run command top window",
-    "additional_information": null,
     "output": [
         " 0│## Welcome",
         " 1│----------------------------------------------------------------------------------------------------------",
@@ -23,6 +22,6 @@
         "16│happy automating,",
         "17│",
         "18│-winston",
-        "^f/PgUp page up                                                                                        ^b/PgDn page down                                                                                        ↑↓ scroll                                                                                        esc back                                                                                        :help help"
+        "^f/PgUp page up                                                                                                                                ^b/PgDn page down                                                                                                                                ↑↓ scroll                                                                                                                                esc back                                                                                                                                :help help"
     ]
 }

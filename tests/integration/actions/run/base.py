@@ -30,7 +30,7 @@ class BaseClass:
         """tmux fixture for this module"""
         params = {
             "pane_height": "2000",
-            "pane_width": "500",
+            "pane_width": "700",
             "setup_commands": [
                 "export PAGER=cat",
                 "export ANSIBLE_DEVEL_WARNING=False",
