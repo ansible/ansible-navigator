@@ -17,21 +17,21 @@ test_data = [
     ("defaults", "", "ansible-navigator_empty.yml", {"container_image": DEFAULT_CONTAINER_IMAGE}),
     (
         "set at command line",
-        "--execution-environment-image test_image_cli",
+        "--execution-environment-image quay.io/ansible/python-base",
         "ansible-navigator_empty.yml",
-        {"container_image": "test_image_cli"},
+        {"container_image": "quay.io/ansible/python-base"},
     ),
     (
         "set in config file",
         "",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "test_image_config"},
+        {"container_image": "quay.io/ansible/python-base"},
     ),
     (
         "set command line and config file, command line wins",
-        "--execution-environment True --execution-environment-image test_image_cli",
+        "--execution-environment True --execution-environment-image quay.io/ansible/python-base",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "test_image_cli"},
+        {"container_image": "quay.io/ansible/python-base"},
     ),
 ]
 
