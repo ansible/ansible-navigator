@@ -30,7 +30,7 @@ class BaseClass:
         """tmux fixture for this module"""
         params = {
             "pane_height": "2000",
-            "pane_width": "700",
+            "pane_width": "500",
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
@@ -50,10 +50,6 @@ class BaseClass:
             search_within_response = tmux_run_session.cli_prompt
 
         received_output = tmux_run_session.interaction(user_input, search_within_response)
-
-        # ignore welcome screen
-        if received_output and "0│## Welcome" in received_output[0]:
-            return
 
         # mask out some lines that is subject to change each run
         mask = "X" * 50
