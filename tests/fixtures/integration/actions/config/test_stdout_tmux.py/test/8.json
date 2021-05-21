@@ -1,5 +1,5 @@
 {
-    "name": "test[config specified configuration file with ee  clear && ansible-navigator config dump -c /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/config/ansible.cfg --ee True --ce docker --ll debug --mode stdout --penv PAGER]",
+    "name": "test[config specified configuration file with ee  clear && ansible-navigator config dump -c /tests/fixtures/integration/actions/config/ansible.cfg --ee True --ce docker --ll debug --mode stdout --penv PAGER]",
     "index": 8,
     "comment": "config specified configuration file with ee",
     "additional_information": {
