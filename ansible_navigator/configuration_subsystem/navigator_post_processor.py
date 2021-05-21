@@ -198,17 +198,14 @@ class NavigatorPostProcessor:
         """Post process inventory"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if (
-            config.app == "inventory"
-            and entry.value.current is C.NOT_SET
-            and not config.entry("help_inventory")
-        ):
-            exit_msg = "An inventory is required when using the inventory subcommand"
-            exit_messages.append(ExitMessage(message=exit_msg))
-            if entry.cli_parameters:
-                exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
+        if config.app == "inventory" and entry.value.current is C.NOT_SET:
+            if not (config.entry("help_inventory") and config.entry("mode") == "stdout"):
+                exit_msg = "An inventory is required when using the inventory subcommand"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                if entry.cli_parameters:
+                    exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
+                    exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                return messages, exit_messages
         if entry.value.current is not C.NOT_SET:
             flattened = flatten_list(entry.value.current)
             entry.value.current = []
