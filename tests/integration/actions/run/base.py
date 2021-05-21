@@ -32,6 +32,7 @@ class BaseClass:
             "pane_height": "2000",
             "pane_width": "500",
             "setup_commands": [
+                "export PAGER=cat",
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
