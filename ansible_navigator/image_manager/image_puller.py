@@ -114,11 +114,23 @@ class ImagePuller:
         print("\u002d" * width)
 
     def pull_stdout(self):
-        """pull the image, print to stdout"""
+        """pull the image, print to stdout
+
+        podman writes to stderr
+        docker writes to stdout
+        """
         try:
-            subprocess.run(
-                [self._container_engine, "pull", self._image], check=True, stderr=subprocess.PIPE
-            )
+            if self._container_engine == "podman":
+                subprocess.run([self._container_engine, "pull", self._image], check=True)
+            elif self._container_engine == "docker":
+                subprocess.run(
+                    [self._container_engine, "pull", self._image],
+                    check=True,
+                    stderr=subprocess.PIPE,
+                )
+            else:
+                raise ValueError("Unknown container engine")
+
             self._log_message(level=logging.INFO, message="Execution environment updated")
             self._pull_required = False
         except subprocess.CalledProcessError as exc:
