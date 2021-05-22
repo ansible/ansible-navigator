@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator run /Users/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/run/site.yaml -i /tests/fixtures/integration/actions/run/inventory -m stdout --ee true --ce docker-ansible-navigator run playbook-None]",
+    "name": "test[0-ansible-navigator run /tests/fixtures/integration/actions/run/site.yaml -i /tests/fixtures/integration/actions/run/inventory -m stdout --ee true --ce docker-ansible-navigator run playbook-None]",
     "index": 0,
     "comment": "ansible-navigator run playbook",
     "output": [

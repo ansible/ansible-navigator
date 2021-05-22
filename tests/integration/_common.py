@@ -28,8 +28,10 @@ def update_fixtures(
     """Used by action plugins to generate the fixtures"""
     dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
     os.makedirs(dir_path, exist_ok=True)
+    regex = "(/Users|/home).*?/tests/fixtures"
+    name = re.sub(regex, "/tests/fixtures", request.node.name)
     fixture = {
-        "name": re.sub("(.*)(/Users|/home).*(/tests/fixtures)", r"\1\3", request.node.name),
+        "name": name,
         "index": index,
         "comment": comment,
     }
