@@ -277,6 +277,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def mode(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=too-many-statements
         """Post process mode"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
