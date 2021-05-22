@@ -232,6 +232,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default=False),
         ),
         Entry(
+            name="help_inventory",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--hi", action="store_true"),
+            short_description="Help options for ansible-inventory command in stdout mode",
+            subcommands=["inventory"],
+            value=EntryValue(default=False),
+        ),
+        Entry(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
             environment_variable_override="ansible_navigator_inventories",

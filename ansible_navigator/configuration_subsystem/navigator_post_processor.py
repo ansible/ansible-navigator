@@ -168,6 +168,30 @@ class NavigatorPostProcessor:
             return messages, exit_messages
         return messages, exit_messages
 
+    @_post_processor
+    def help_inventory(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process help_inventory"""
+        messages, exit_messages = self._true_or_false(entry, config)
+        if all(
+            (entry.value.current is True, config.app == "inventory", config.mode == "interactive")
+        ):
+            if entry.cli_parameters:
+                long_hd = entry.cli_parameters.long_override or entry.name_dashed
+                exit_msg = (
+                    f"{entry.cli_parameters.short} or --{long_hd}"
+                    " is valid only when 'mode' argument is set to 'stdout'"
+                )
+                exit_messages.append(ExitMessage(message=exit_msg))
+                mode_cli = config.entry("mode").cli_parameters
+                if mode_cli:
+                    m_short = mode_cli.short
+                    if m_short:
+                        exit_msg = f"Try again with '{m_short} stdout'"
+                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
+        return messages, exit_messages
+
     @staticmethod
     @_post_processor
     def inventory(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
@@ -175,12 +199,16 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "inventory" and entry.value.current is C.NOT_SET:
-            exit_msg = "An inventory is required when using the inventory subcommand"
-            exit_messages.append(ExitMessage(message=exit_msg))
-            if entry.cli_parameters:
-                exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
+            if not (
+                config.entry("help_inventory").value.current
+                and config.entry("mode").value.current == "stdout"
+            ):
+                exit_msg = "An inventory is required when using the inventory subcommand"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                if entry.cli_parameters:
+                    exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
+                    exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                return messages, exit_messages
         if entry.value.current is not C.NOT_SET:
             flattened = flatten_list(entry.value.current)
             entry.value.current = []

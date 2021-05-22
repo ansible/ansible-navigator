@@ -1,11 +1,12 @@
-""" ansible_runner sync and async with
-event handler
+""" ansible_runner API's interface
 """
+import shutil
 import sys
 import logging
 import os
 
 from queue import Queue
+from tempfile import gettempdir
 from typing import Any
 from typing import Dict
 from typing import List
@@ -29,6 +30,7 @@ class BaseRunner:
     # pylint: disable=too-many-arguments
     def __init__(
         self,
+        private_data_dir: Optional[str] = None,
         container_engine: Optional[str] = None,
         execution_environment: Optional[bool] = False,
         execution_environment_image: Optional[str] = None,
@@ -43,6 +45,10 @@ class BaseRunner:
         """BaseRunner class handle common argument for ansible-runner interface class
 
         Args:
+            private_data_dir ([str], optional): The directory containing all runner metadata
+                                                needed to invoke the runner module. Output
+                                                artifacts will also be stored here for later
+                                                consumption.
             container_engine ([str], optional): container engine used to isolate execution.
                                                 Defaults to podman. # noqa: E501
             execution_environment ([bool], optional): Boolean argument controls execution
@@ -68,6 +74,11 @@ class BaseRunner:
             set_environment_variable([dict], optional): Dict of user requested envvars to set
             pass_environment_variable([list], optional): List of user requested envvars to pass
         """
+        if private_data_dir:
+            self._private_data_dir = private_data_dir
+        else:
+            self._private_data_dir = os.path.join(gettempdir(), "ansible-navigator")
+
         self._ce = container_engine
         self._ee = execution_environment
         self._eei = execution_environment_image
@@ -85,6 +96,7 @@ class BaseRunner:
         self.status: Optional[str] = None
         self._logger = logging.getLogger(__name__)
         self._runner_args: Dict = {}
+        self._runner_artifact_dir: Optional[str] = None
         if self._ee:
             self._runner_args.update(
                 {
@@ -98,10 +110,12 @@ class BaseRunner:
             )
         self._runner_args.update(
             {
+                "private_data_dir": self._private_data_dir,
                 "json_mode": True,
                 "quiet": True,
                 "cancel_callback": self.runner_cancelled_callback,
                 "finished_callback": self.runner_finished_callback,
+                "artifacts_handler": self.runner_artifacts_handler,
             }
         )
         self._add_env_vars_to_args()
@@ -113,6 +127,26 @@ class BaseRunner:
             self._runner_args.update(
                 {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr}
             )
+
+    def __del__(self):
+        """
+        class destructor, handle runner artifact file deletion
+        """
+        if self._runner_artifact_dir and os.path.exists(self._runner_artifact_dir):
+            self._logger.debug(
+                "delete ansible-runner artifact directory at path %s", self._runner_artifact_dir
+            )
+            shutil.rmtree(self._runner_artifact_dir, ignore_errors=True)
+
+    def runner_artifacts_handler(self, artifact_dir):
+        """
+        ansible-runner callback to handle artifacts after each runner innvocation
+        Args:
+            artifact_dir ([str]): The directory path of artifact directory for current
+                                  runner invocation.
+        """
+        self._logger.debug("ansible-runner artifact_dir set to: '%s'", artifact_dir)
+        self._runner_artifact_dir = artifact_dir
 
     def runner_cancelled_callback(self):
         """check by runner to see if it should cancel"""

@@ -2,11 +2,16 @@
     "name": "test[2-:0-Group list window]",
     "index": 2,
     "comment": "Group list window",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
-        "  NAME                                                              TAXONOMY                                                                          TYPE",
-        "0│group01                                                           all▸hosts                                                                         group",
-        "1│group02                                                           all▸hosts                                                                         group",
-        "2│group03                                                           all▸hosts                                                                         group",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "  NAME                                                                                                                                                                  TAXONOMY                                                                                                                                                                                                       TYPE",
+        "0│group01                                                                                                                                                               all▸hosts                                                                                                                                                                                                      group",
+        "1│group02                                                                                                                                                               all▸hosts                                                                                                                                                                                                      group",
+        "2│group03                                                                                                                                                               all▸hosts                                                                                                                                                                                                      group",
+        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

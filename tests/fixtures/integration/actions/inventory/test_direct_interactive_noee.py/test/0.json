@@ -1,11 +1,16 @@
 {
-    "name": "test[0-ansible-navigator inventory --execution-environment false -i /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
+    "name": "test[0-ansible-navigator inventory -i /home/ganeshrn/ansible-navigator/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml --ee False --ce podman --ll debug --mode interactive-ansible-navigator inventory command top window]",
     "index": 0,
     "comment": "ansible-navigator inventory command top window",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
-        "  TITLE                                   DESCRIPTION",
-        "0│Browse groups                           Explore each inventory group and group members members",
-        "1│Browse hosts                            Explore the inventory with a list of all hosts",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "  TITLE                                                                                                DESCRIPTION",
+        "0│Browse groups                                                                                        Explore each inventory group and group members members",
+        "1│Browse hosts                                                                                         Explore the inventory with a list of all hosts",
+        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }
