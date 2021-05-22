@@ -135,4 +135,4 @@ def test_cutom_nargs_for_postional():
         ],
     )
     parser = Parser(test_config)
-    assert parser.parser._actions[1].choices["subcommand1"]._actions[1].nargs == 3
+    assert parser.parser._actions[2].choices["subcommand1"]._actions[2].nargs == 3

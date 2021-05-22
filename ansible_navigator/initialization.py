@@ -21,7 +21,7 @@ from .utils import find_configuration_directory_or_file_path
 from .utils import ExitMessage
 from .utils import ExitPrefix
 from .utils import LogMessage
-from ._version import __version__ as VERSION
+from ._version import __version_collection_doc_cache__ as VERSION_CDC
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
@@ -118,13 +118,13 @@ def get_and_check_collection_doc_cache(
         cache_version = None
     message = f"Collection doc cache: 'current version' is '{cache_version}'"
     messages.append(LogMessage(level=logging.DEBUG, message=message))
-    if cache_version is None or cache_version != VERSION:
+    if cache_version is None or cache_version != VERSION_CDC:
         message = "Collection doc cache: version was empty or incorrect, rebuilding"
         messages.append(LogMessage(level=logging.INFO, message=message))
         collection_cache.close()
         os.remove(collection_doc_cache_path)
         collection_cache.__init__(collection_doc_cache_path)
-        collection_cache["version"] = VERSION
+        collection_cache["version"] = VERSION_CDC
         cache_version = collection_cache["version"]
         message = f"Collection doc cache: 'current version' is '{cache_version}'"
         messages.append(LogMessage(level=logging.INFO, message=message))

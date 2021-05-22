@@ -14,6 +14,7 @@ from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 
 from ..utils import oxfordcomma
+from .._version import __version__
 
 
 class Parser:
@@ -86,6 +87,10 @@ class Parser:
         )
 
     def _configure_base(self) -> None:
+        self._base_parser.add_argument(
+            "-v", "--version", action="version", version="%(prog)s " + __version__
+        )
+
         for entry in self._config.entries:
             if entry.subcommands is C.ALL:
                 self._add_parser(self._base_parser, entry)
