@@ -63,7 +63,7 @@ class BaseClass:
                     if out in line:
                         received_output[idx] = mask
 
-        if self.UPDATE_FIXTURES:
+        if True: #self.UPDATE_FIXTURES:
             update_fixtures(request, index, received_output, comment)
         dir_path, file_name = fixture_path_from_request(request, index)
         with open(os.path.join(dir_path, file_name)) as infile:
