@@ -167,3 +167,16 @@ def test_hints(monkeypatch, locked_directory, container_runtime_or_fail, data):
     expected = f"{data.prefix} {data.expected}"
     exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
+
+
+def test_no_term(monkeypatch):
+    """test for err and hint w/o TERM"""
+    monkeypatch.delenv("TERM")
+    args = deepcopy(NavigatorConfiguration)
+    params = []
+    _messages, exit_msgs = parse_and_update(params=params, args=args, initial=True)
+    exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
+    expected = "TERM environment variable must be set"
+    assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
+    expected = "Try again after setting the TERM environment variable"
+    assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
