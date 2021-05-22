@@ -2,7 +2,6 @@
     "name": "test[0-ansible-navigator doc testorg.coll_1.lookup_1 -t lookup -m stdout -j --execution-environment false-ansible-navigator lookup doc in stdout mode without EE-lookup_doc_without_ee-None]",
     "index": 0,
     "comment": "ansible-navigator lookup doc in stdout mode without EE",
-    "additional_information": null,
     "output": [
         "{",
         "    \"testorg.coll_1.lookup_1\": {",

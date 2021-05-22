@@ -1,6 +1,7 @@
 """ some common funcs for the tests
 """
 import os
+import re
 import shutil
 import sys
 import json
@@ -28,7 +29,7 @@ def update_fixtures(
     dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
     os.makedirs(dir_path, exist_ok=True)
     fixture = {
-        "name": request.node.name,
+        "name": re.sub("(.*)(/Users|/home).*(/tests/fixtures)", r"\1\3", request.node.name),
         "index": index,
         "comment": comment,
     }

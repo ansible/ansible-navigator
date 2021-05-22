@@ -1,5 +1,5 @@
 {
-    "name": "test[3-:config -c /Users/user/github/ansible-navigator/tests/fixtures/integration/actions/config/ansible.cfg-enter config from welcome screen, custom config, (no ee)]",
+    "name": "test[3-:config -c /tests/fixtures/integration/actions/config/ansible.cfg-enter config from welcome screen, custom config, (no ee)]",
     "index": 3,
     "comment": "enter config from welcome screen, custom config, (no ee)",
     "additional_information": {
@@ -29,7 +29,7 @@
         " 12│BECOME_ALLOW_SAME_USER                     True default                                          default                                          False",
         " 13│BECOME_PLUGIN_PATH                         True default                                          default                                          ['/Users/user/.ansible/plugins/become', '/usr",
         " 14│CACHE_PLUGIN                              False env                                              ANSIBLE_CACHE_PLUGIN                             jsonfile",
-        " 15│CACHE_PLUGIN_CONNECTION                   False env                                              ANSIBLE_CACHE_PLUGIN_CONNECTION                  /Users/user/.ansible-runner/artifacts/c67a31d",
+        " 15│CACHE_PLUGIN_CONNECTION                   False env                                              ANSIBLE_CACHE_PLUGIN_CONNECTION                  /Users/user/.ansible-runner/artifacts/6409f0c",
         " 16│CACHE_PLUGIN_PREFIX                        True default                                          default                                          ansible_facts",
         " 17│CACHE_PLUGIN_TIMEOUT                      False env                                              ANSIBLE_CACHE_PLUGIN_TIMEOUT                     42",
         " 18│CALLABLE_ACCEPT_LIST                       True default                                          default                                          []",
@@ -91,7 +91,7 @@
         " 74│DEFAULT_KEEP_REMOTE_FILES                  True default                                          default                                          False",
         " 75│DEFAULT_LIBVIRT_LXC_NOSECLABEL             True default                                          default                                          False",
         " 76│DEFAULT_LOAD_CALLBACK_PLUGINS              True default                                          default                                          False",
-        " 77│DEFAULT_LOCAL_TMP                          True default                                          default                                          /Users/user/.ansible/tmp/ansible-local-6408mu",
+        " 77│DEFAULT_LOCAL_TMP                          True default                                          default                                          /Users/user/.ansible/tmp/ansible-local-502251",
         " 78│DEFAULT_LOG_FILTER                         True default                                          default                                          []",
         " 79│DEFAULT_LOG_PATH                           True default                                          default                                          None",
         " 80│DEFAULT_LOOKUP_PLUGIN_PATH                 True default                                          default                                          ['/Users/user/.ansible/plugins/lookup', '/usr",
