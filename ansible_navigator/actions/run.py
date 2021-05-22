@@ -7,9 +7,9 @@ import logging
 import os
 import re
 import shlex
+import shutil
 import uuid
 
-from distutils.spawn import find_executable
 from queue import Queue
 from typing import Any
 from typing import Callable
@@ -544,7 +544,7 @@ class Action(App):
         if self._args.execution_environment:
             executable_cmd = "ansible-playbook"
         else:
-            executable_cmd = find_executable("ansible-playbook")
+            executable_cmd = shutil.which("ansible-playbook")
             if not executable_cmd:
                 self._logger.error("'ansible-playbook' executable not found")
                 return

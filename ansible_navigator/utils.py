@@ -5,11 +5,11 @@ import ast
 import logging
 import html
 import os
+import shutil
 import stat
 import sys
 import sysconfig
 
-from distutils.spawn import find_executable
 
 from enum import Enum
 from types import SimpleNamespace
@@ -96,7 +96,7 @@ def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
-    ansible_location = find_executable("ansible-playbook")
+    ansible_location = shutil.which("ansible-playbook")
     if not ansible_location:
         msg_parts = [
             "The 'ansible-playbook' command could not be found or was not executable,",

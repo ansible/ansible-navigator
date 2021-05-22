@@ -20,7 +20,7 @@ def test_generate_argparse_error(generate_config):
     assert exit_msg in response.exit_messages[1].message
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_inventory_no_inventory(_mocked_func, generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit_messages generated for an inventory without an inventory specified"""
@@ -39,7 +39,7 @@ def test_ee_false_no_ansible(_mocked_func, generate_config):
     assert "no_ansible" in [exit_msg.message for exit_msg in response.exit_messages]
 
 
-@patch("distutils.spawn.find_executable", return_value=None)
+@patch("shutil.which", return_value=None)
 def test_no_container_engine(_mocked_func, generate_config):
     """Ensure an error is created if EE is false and ansible not present"""
     response = generate_config()
@@ -51,7 +51,7 @@ def test_no_container_engine(_mocked_func, generate_config):
 
 
 @patch("os.makedirs", side_effect=OSError)
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_fail_log_file_dir(_mf1, _mf2, generate_config):
     """Ensure an error is created if log file cannot be created"""
     response = generate_config()
@@ -59,7 +59,7 @@ def test_fail_log_file_dir(_mf1, _mf2, generate_config):
     assert exit_msg in " ".join([exit_msg.message for exit_msg in response.exit_messages])
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_doc_no_plugin_name(_mocked_func, generate_config):
     """Ensure an error is created doc is used without plugin_name"""
     response = generate_config(params=["doc"])
@@ -67,7 +67,7 @@ def test_doc_no_plugin_name(_mocked_func, generate_config):
     assert exit_msg in [exit_msg.message for exit_msg in response.exit_messages]
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_replay_no_artifact(_mocked_func, generate_config):
     """Ensure an error is created replay is used without playbook artifact"""
     response = generate_config(params=["replay"])
@@ -75,7 +75,7 @@ def test_replay_no_artifact(_mocked_func, generate_config):
     assert exit_msg in [exit_msg.message for exit_msg in response.exit_messages]
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_replay_missing_artifact(_mocked_func, generate_config):
     """Ensure an error is created load is used with a missing playbook artifact"""
     response = generate_config(params=["replay", tempfile.NamedTemporaryFile().name])
@@ -83,7 +83,7 @@ def test_replay_missing_artifact(_mocked_func, generate_config):
     assert exit_msg in " ".join([exit_msg.message for exit_msg in response.exit_messages])
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_badly_formatted_envar(_mocked_func, generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit_messages generated for badly formatted set env var"""
@@ -93,7 +93,7 @@ def test_badly_formatted_envar(_mocked_func, generate_config):
     assert exit_msg in [exit_msg.message for exit_msg in response.exit_messages]
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_not_a_bool(_mocked_func, generate_config):
     # pylint: disable=import-outside-toplevel
     """Ensure exit_messages generated for wrong type of value"""
@@ -108,7 +108,7 @@ def test_not_a_bool(_mocked_func, generate_config):
 choices = [entry for entry in NavigatorConfiguration.entries if entry.choices]
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 @pytest.mark.parametrize("entry", choices, ids=id_for_name)
 def test_poor_choices(_mocked_func, generate_config, entry):
     # pylint: disable=import-outside-toplevel
