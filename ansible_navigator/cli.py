@@ -105,9 +105,6 @@ def main():
         error_and_exit_early(exit_messages=exit_messages)
 
     os.environ.setdefault("ESCDELAY", "25")
-    # clear if the TERM is set
-    if os.environ.get("TERM"):
-        os.system("clear")
 
     return_code = run(args)
     if return_code:
