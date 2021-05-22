@@ -10,7 +10,7 @@ from .base import playbook_path
 
 
 # run without EE
-CLI_RUN = f"ansible-navigator run {playbook_path} -i {inventory_path} -m stdout"
+CLI_RUN = f"ansible-navigator run {playbook_path} -i {inventory_path} -m stdout --ee false"
 
 testdata_run: List = [
     (0, CLI_RUN, "ansible-navigator run playbook", None),

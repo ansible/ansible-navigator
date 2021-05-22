@@ -116,15 +116,19 @@ class BaseClass:
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
+            user_input = step.user_input
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
+            # clear the screen so only stdout is received
+            user_input = f"clear && {step.user_input}"
         elif isinstance(step.search_within_response, str):
             search_within_response = step.search_within_response
+            user_input = step.user_input
         else:
             raise ValueError("test mode not set")
 
         received_output = tmux_session.interaction(
-            value=step.user_input,
+            value=user_input,
             search_within_response=search_within_response,
         )
         if (

@@ -48,6 +48,8 @@ class BaseClass:
 
         if self.TEST_FOR_MODE == "stdout":
             search_within_response = tmux_run_session.cli_prompt
+            # clear the screen so it starts with stdout
+            user_input = f"clear && {user_input}"
 
         received_output = tmux_run_session.interaction(user_input, search_within_response)
 
