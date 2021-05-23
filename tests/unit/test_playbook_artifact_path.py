@@ -26,7 +26,7 @@ class TstData(NamedTuple):
 
 def id_from_data(value):
     """return the name from the test data object"""
-    return value.name
+    return f" {value.name} "
 
 
 test_data = [

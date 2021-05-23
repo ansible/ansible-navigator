@@ -23,6 +23,7 @@ class TmuxSession:
         cwd=None,
         pane_height=20,
         pane_width=200,
+        pull_policy: str = "never",
         setup_commands=None,
         shell_prompt_timeout=10,
     ) -> None:
@@ -32,6 +33,7 @@ class TmuxSession:
         self._fail_remaining: List = []
         self._pane_height = pane_height
         self._pane_width = pane_width
+        self._pull_policy = pull_policy
         self._session_name = os.path.splitext(unique_test_id)[0]
         self._setup_capture: List
         self._setup_commands = setup_commands or []
@@ -96,6 +98,7 @@ class TmuxSession:
         tmux_common.append(
             f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH='{collection_doc_cache}'"
         )
+        tmux_common.append(f"export ANSIBLE_NAVIGATOR_PULL_POLICY='{self._pull_policy}'")
         tmux_common.append("env")
 
         set_up_commands = tmux_common + self._setup_commands

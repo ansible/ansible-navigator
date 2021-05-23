@@ -1,6 +1,7 @@
 """ test the use of execution-environment-image throguh to runner
 """
 import os
+import shlex
 
 from unittest import mock
 
@@ -16,21 +17,21 @@ test_data = [
     ("defaults", "", "ansible-navigator_empty.yml", {"container_image": DEFAULT_CONTAINER_IMAGE}),
     (
         "set at command line",
-        "--execution-environment-image test_image_cli",
+        "--execution-environment-image quay.io/ansible/python-base",
         "ansible-navigator_empty.yml",
-        {"container_image": "test_image_cli"},
+        {"container_image": "quay.io/ansible/python-base"},
     ),
     (
         "set in config file",
         "",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "test_image_config"},
+        {"container_image": "quay.io/ansible/python-base"},
     ),
     (
         "set command line and config file, command line wins",
-        "--execution-environment True --execution-environment-image test_image_cli",
+        "--execution-environment True --execution-environment-image quay.io/ansible/python-base",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "test_image_cli"},
+        {"container_image": "quay.io/ansible/python-base"},
     ),
 ]
 
@@ -72,7 +73,9 @@ class Test(Cli2Runner):
 
         assert os.path.exists(cfg_path)
 
-        with mock.patch("sys.argv", cli_entry.split()):
+        params = shlex.split(cli_entry) + ["--pp", "never"]
+
+        with mock.patch("sys.argv", params):
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
                 with mock.patch.dict(
                     os.environ, {"ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH": coll_cache_path}

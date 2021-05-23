@@ -1,4 +1,4 @@
 ---
 ansible-navigator:
   execution-environment:
-    image: test_image_config
+    image: quay.io/ansible/python-base

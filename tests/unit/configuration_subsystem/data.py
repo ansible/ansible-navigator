@@ -24,6 +24,7 @@ BASE_SHORT_CLI = """
 --osc4 false
 --penv FOO
 --penv BAR
+--pp never
 --senv E1=V1
 --senv E2=V2
 """
@@ -40,6 +41,7 @@ BASE_LONG_CLI = """
 --osc4 false
 --pass-environment-variable FOO
 --pass-environment-variable BAR
+--pull-policy never
 --set-environment-variable E1=V1
 --set-environment-variable E2=V2
 """
@@ -56,6 +58,7 @@ BASE_EXPECTED = d2t(
         "log_level": "warning",
         "osc4": False,
         "pass_environment_variable": ["FOO", "BAR"],
+        "pull_policy": "never",
         "set_environment_variable": {"E1": "V1", "E2": "V2"},
     }
 )
@@ -215,6 +218,7 @@ ENVVAR_DATA = [
     ("playbook_artifact_save_as", "/tmp/save.json", "/tmp/save.json"),
     ("plugin_name", "shell", "shell"),
     ("plugin_type", "become", "become"),
+    ("pull_policy", "never", "never"),
     ("set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}),
 ]
 
