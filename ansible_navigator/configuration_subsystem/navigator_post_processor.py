@@ -199,9 +199,9 @@ class NavigatorPostProcessor:
         messages, exit_messages = self._true_or_false(entry, config)
         if all((entry.value.current is True, config.app == "run", config.mode == "interactive")):
             if entry.cli_parameters:
-                long_hd = entry.cli_parameters.long_override or entry.name_dashed
+                long_hp = entry.cli_parameters.long_override or entry.name_dashed
                 exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hd}"
+                    f"{entry.cli_parameters.short} or --{long_hp}"
                     " is valid only when 'mode' argument is set to 'stdout'"
                 )
                 exit_messages.append(ExitMessage(message=exit_msg))
