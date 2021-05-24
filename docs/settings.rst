@@ -272,7 +272,7 @@ The following table describes all available settings.
               osc4:
 
   * - pass-environment-variable
-    - Specify an exiting environment variable to be passed through to and set within the execution enviroment (--penv MY_VAR)
+    - Specify an exiting environment variable to be passed through to and set within the execution environment (--penv MY_VAR)
     - | **Default:** No default value set
       | **CLI:** `--penv` or `--pass-environment-variable`
       | **ENV:** ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES
@@ -300,7 +300,7 @@ The following table describes all available settings.
                 pull-policy:
 
   * - set-environment-variable
-    - Specify an environment variable and a value to be set within the execution enviroment (--senv MY_VAR=42)
+    - Specify an environment variable and a value to be set within the execution environment (--senv MY_VAR=42)
     - | **Default:** No default value set
       | **CLI:** `--senv` or `--set-environment-variable`
       | **ENV:** ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES

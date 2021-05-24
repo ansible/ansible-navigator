@@ -29,7 +29,7 @@ form:
     validator:
       name: none
   - name: what_is
-    prompt: In Rocannon's World, an "ansible" is an instanious communication device
+    prompt: In Rocannon's World, an "ansible" is an instantaneous communication device
     type: text_input
     validator:
       name: yes_no

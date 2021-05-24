@@ -42,7 +42,7 @@ class ImagePuller:
         self._determine_pull()
         if self._pull_policy == "never" and self._image_present is False:
             exit_msg = (
-                "Pull policy is set to 'never' and execution enviroment"
+                "Pull policy is set to 'never' and execution environment"
                 " image was not found locally"
             )
             self._log_message(message=exit_msg, level=logging.ERROR)
@@ -123,7 +123,7 @@ class ImagePuller:
             print(f"{msg.ljust(column_width)} {value}")
             self._log_message(message=f"{msg}: {value}", level=logging.INFO)
         print("\u002d" * width)
-        print("Updating the execution enviroment")
+        print("Updating the execution environment")
         print("\u002d" * width)
 
     def pull_stdout(self):
