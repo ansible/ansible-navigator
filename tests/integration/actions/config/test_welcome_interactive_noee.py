@@ -2,13 +2,13 @@
 """
 import pytest
 
-from .base import add_indicies
 from .base import base_steps
-from .base import step_id
 from .base import BaseClass
-from .base import Command
-from .base import Step
 
+from ..._interactions import add_indicies
+from ..._interactions import Command
+from ..._interactions import Step
+from ..._interactions import step_id
 
 CLI = Command(execution_environment=False).join()
 
