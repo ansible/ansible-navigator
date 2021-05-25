@@ -551,6 +551,7 @@ class Action(App):
 
         kwargs = {
             "container_engine": self._args.container_engine,
+            "cwd": os.getcwd(),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "inventory": self._args.inventory,
