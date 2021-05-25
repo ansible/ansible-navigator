@@ -36,7 +36,7 @@ def id_from_data(value):
     return f" {value.name} "
 
 
-test_data = [
+artifact_test_data = [
     ArtifactTstData("Filename absolute", "/tmp/artifact.json", "site.yml", "/tmp/artifact.json"),
     ArtifactTstData(
         "Filename with .", "./artifact.json", "site.yml", f"{os.path.abspath('.')}/artifact.json"
@@ -65,7 +65,7 @@ test_data = [
 @patch("os.makedirs", return_value=True)
 @patch("builtins.open", new_callable=mock_open)
 @patch("ansible_navigator.actions.run.Action._get_status", return_value=(0, 0))
-@pytest.mark.parametrize("data", test_data, ids=id_from_data)
+@pytest.mark.parametrize("data", artifact_test_data, ids=id_from_data)
 def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog, data):
     """Test the building of the artifact filename given a filename or playbook"""
     caplog.set_level(logging.DEBUG)
@@ -111,13 +111,7 @@ class RunRunnerTstData(NamedTuple):
     cmdline: Optional[List]
     expected: Dict
 
-
-def id_from_data(value):
-    """return the name from the test data object"""
-    return f" {value.name} "
-
-
-test_data = [
+runner_test_data = [
     RunRunnerTstData(
         "Validate args passed to runner API",
         "docker",
@@ -154,7 +148,7 @@ test_data = [
 
 
 @patch("ansible_navigator.actions.run.CommandRunnerAsync")
-@pytest.mark.parametrize("data", test_data, ids=id_from_data)
+@pytest.mark.parametrize("data", runner_test_data, ids=id_from_data)
 def test_runner_args(_mocked_command_runner, caplog, data):
     """Test the arguments passed to runner API"""
     caplog.set_level(logging.DEBUG)
