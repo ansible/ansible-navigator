@@ -29,6 +29,10 @@ ansible-navigator:
         KEY3: VALUE3
     image: test_image:latest
     pull-policy: never
+    volume-mounts:
+    - src: "/test1"
+      dest: "/test1"
+      label: "Z"
   help-config: True
   help-doc: True
   help-inventory: True

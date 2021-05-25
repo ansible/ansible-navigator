@@ -18,6 +18,7 @@ from typing import List
 from typing import Mapping
 from typing import NamedTuple
 from typing import Optional
+from typing import Set
 from typing import Tuple
 from typing import Union
 
@@ -388,11 +389,15 @@ def templar(string: str, template_vars: Mapping) -> Any:
     return result
 
 
-def to_list(thing: Union[str, List]) -> List:
+def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
     """convert something to a list if necessary"""
-    if not isinstance(thing, list):
-        return [thing]
-    return thing
+    if isinstance(thing, (list, tuple, set)):
+        converted_value = list(thing)
+    elif thing is not None:
+        converted_value = [thing]
+    else:
+        converted_value = list()
+    return converted_value
 
 
 def unescape_moustaches(obj):

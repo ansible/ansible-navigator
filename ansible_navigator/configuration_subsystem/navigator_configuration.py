@@ -220,6 +220,16 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="quay.io/ansible/ansible-runner:devel"),
         ),
         Entry(
+            name="execution_environment_volume_mounts",
+            cli_parameters=CliParameters(action="append", nargs="+", short="--eev"),
+            settings_file_path_override="execution-environment.volume-mounts",
+            short_description=(
+                "Specify volume to be bind mounted within an execution environment"
+                " (--eev /home/user/test:/home/user/test:Z)"
+            ),
+            value=EntryValue(),
+        ),
+        Entry(
             name="help_config",
             choices=[True, False],
             cli_parameters=CliParameters(short="--hc", action="store_true"),
