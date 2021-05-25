@@ -1,4 +1,4 @@
-""" cofiguration definitions
+""" configuration definitions
 """
 from enum import Enum
 
@@ -30,7 +30,7 @@ class Constants(Enum):
 
     ALL = "All the things"
     DEFAULT_CFG = "default configuration value"
-    ENVIRONMENT_VARIABLE = "environemnt variable"
+    ENVIRONMENT_VARIABLE = "environment variable"
     NONE = "None of the things"
     NOT_SET = "value has not been set"
     PREVIOUS_CLI = "previous cli command"
@@ -62,7 +62,7 @@ class Entry(SimpleNamespace):
     cli_parameters: argparse specific params
     environment_variable_override: override the defaultenvironment variable
     name: the reference name for the entry
-    settings_file_path_override: over the defualt settings file path
+    settings_file_path_override: over the default settings file path
     short_description: A short description used for the argparse help
     subcommand_value: Does the hold the names of the subcommand
     subcommands: which subcommand should this be used for

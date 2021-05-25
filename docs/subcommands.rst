@@ -56,10 +56,10 @@ ansible-navigator subcommand overview
   end-subcommands-table
 
 
-Mapping ansible-navigator comamnds to ansible commands
+Mapping ansible-navigator commands to ansible commands
 ======================================================
 
-Some ansible-navigator commands map to ansible comamnds. The table below provides some examples.
+Some ansible-navigator commands map to ansible commands. The table below provides some examples.
 
 .. list-table:: Mapping to ansible commands
   :header-rows: 1

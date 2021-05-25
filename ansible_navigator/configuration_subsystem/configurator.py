@@ -124,7 +124,7 @@ class Configurator:
         self._exit_messages.append(ExitMessage(message=message))
 
     def _restore_original(self) -> None:
-        """Since we always oeprate on the same object
+        """Since we always operate on the same object
         restore the current values back to NOT_SET
         """
         for entry in self._config.entries:

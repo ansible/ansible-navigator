@@ -237,7 +237,7 @@ class CommandRunnerAsync(CommandBaseRunner):
 
         Args:
             executable_cmd ([str]): The command to be invoked.
-            queue ([Queue]): The queue to post events from ``anisble-runner``
+            queue ([Queue]): The queue to post events from ``ansible-runner``
         """
         self._eventq = None
         self._queue = queue

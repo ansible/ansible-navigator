@@ -107,7 +107,7 @@ def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
             "     'pip install ansible'",
             "or simply",
             "     '-ee' or '--execution-environment'",
-            "to use an Ansible Execution Enviroment",
+            "to use an Ansible Execution Environment",
         ]
         exit_messages.append(ExitMessage(message="\n".join(msg_parts)))
         return messages, exit_messages
@@ -376,7 +376,7 @@ def human_time(seconds: int) -> str:
 
 
 def oxfordcomma(listed, condition):
-    """Format a list into a sentance"""
+    """Format a list into a sentence"""
     listed = [f"'{str(entry)}'" for entry in listed]
     if len(listed) == 0:
         return ""
@@ -426,7 +426,7 @@ def templar(string: str, template_vars: Mapping) -> Any:
     try:
         logging.debug("original templated string: %s", result)
         escaped = html.unescape(result)
-        logging.debug("html escaped temaplted str: %s", escaped)
+        logging.debug("html escaped templated str: %s", escaped)
         result = ast.literal_eval(escaped)
     except (ValueError, SyntaxError) as exc:
         logging.debug("Could not ast parse templated string")

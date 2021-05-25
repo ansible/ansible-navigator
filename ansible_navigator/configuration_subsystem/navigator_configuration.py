@@ -84,7 +84,7 @@ def generate_share_directory():
 class Internals(SimpleNamespace):
     # pylint: disable=too-few-public-methods
     """a place to hold object that need to be carried
-    from apllication initiation to the rest of the app
+    from application initiation to the rest of the app
     """
 
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
@@ -189,7 +189,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="editor_command",
             cli_parameters=CliParameters(short="--ecmd"),
             settings_file_path_override="editor.command",
-            short_description="Specify the editor comamnd",
+            short_description="Specify the editor command",
             value=EntryValue(default=generate_editor_command()),
         ),
         Entry(
@@ -313,7 +313,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="execution-environment.environment-variables.pass",
             short_description=(
                 "Specify an exiting environment variable to be passed through"
-                " to and set within the execution enviroment (--penv MY_VAR)"
+                " to and set within the execution environment (--penv MY_VAR)"
             ),
             value=EntryValue(),
         ),
@@ -389,7 +389,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="execution-environment.environment-variables.set",
             short_description=(
                 "Specify an environment variable and a value to be set within the"
-                " execution enviroment (--senv MY_VAR=42)"
+                " execution environment (--senv MY_VAR=42)"
             ),
             value=EntryValue(),
         ),
