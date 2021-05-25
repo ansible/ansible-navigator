@@ -27,25 +27,15 @@
         " 10│ANSIBLE_PIPELINING                         True default                                          default                                          False",
         " 11│ANY_ERRORS_FATAL                           True default                                          default                                          False",
         " 12│BECOME_ALLOW_SAME_USER                     True default                                          default                                          False",
-<<<<<<< HEAD
-        " 13│BECOME_PLUGIN_PATH                         True default                                          default                                          ['/home/user/.ansible/plugins/become', '/usr/",
-        " 14│CACHE_PLUGIN                              False env                                              ANSIBLE_CACHE_PLUGIN                             jsonfile",
-        " 15│CACHE_PLUGIN_CONNECTION                   False env                                              ANSIBLE_CACHE_PLUGIN_CONNECTION                  /tmp/ansible-navigator/artifacts/ace2e639-a328-40",
-=======
         " 13│BECOME_PLUGIN_PATH                         True default                                          default                                          ['/home/bthornto/.ansible/plugins/become', '/usr/",
         " 14│CACHE_PLUGIN                              False env                                              ANSIBLE_CACHE_PLUGIN                             jsonfile",
-        " 15│CACHE_PLUGIN_CONNECTION                   False env                                              ANSIBLE_CACHE_PLUGIN_CONNECTION                  /tmp/ansible-navigator/artifacts/5440241e-243c-41",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
+        " 15│CACHE_PLUGIN_CONNECTION                   False env                                              ANSIBLE_CACHE_PLUGIN_CONNECTION                  /tmp/ansible-navigator/artifacts/077a8b6c-dc96-40",
         " 16│CACHE_PLUGIN_PREFIX                        True default                                          default                                          ansible_facts",
         " 17│CACHE_PLUGIN_TIMEOUT                      False env                                              ANSIBLE_CACHE_PLUGIN_TIMEOUT                     42",
         " 18│CALLABLE_ACCEPT_LIST                       True default                                          default                                          []",
         " 19│CALLBACKS_ENABLED                          True default                                          default                                          []",
         " 20│COLLECTIONS_ON_ANSIBLE_VERSION_MISMATCH    True default                                          default                                          warning",
-<<<<<<< HEAD
-        " 21│COLLECTIONS_PATHS                          True default                                          default                                          ['/home/user/.ansible/collections', '/usr/sha",
-=======
         " 21│COLLECTIONS_PATHS                          True default                                          default                                          ['/home/bthornto/.ansible/collections', '/usr/sha",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         " 22│COLLECTIONS_SCAN_SYS_PATH                  True default                                          default                                          True",
         " 23│COLOR_CHANGED                              True default                                          default                                          yellow",
         " 24│COLOR_CONSOLE_PROMPT                       True default                                          default                                          white",
@@ -67,11 +57,7 @@
         " 40│CONTROLLER_PYTHON_WARNING                  True default                                          default                                          True",
         " 41│COVERAGE_REMOTE_OUTPUT                     True default                                          default                                          None",
         " 42│COVERAGE_REMOTE_PATHS                      True default                                          default                                          *",
-<<<<<<< HEAD
-        " 43│DEFAULT_ACTION_PLUGIN_PATH                 True default                                          default                                          ['/home/user/.ansible/plugins/action', '/usr/",
-=======
         " 43│DEFAULT_ACTION_PLUGIN_PATH                 True default                                          default                                          ['/home/bthornto/.ansible/plugins/action', '/usr/",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         " 44│DEFAULT_ALLOW_UNSAFE_LOOKUPS               True default                                          default                                          False",
         " 45│DEFAULT_ASK_PASS                           True default                                          default                                          False",
         " 46│DEFAULT_ASK_VAULT_PASS                     True default                                          default                                          False",
@@ -81,16 +67,6 @@
         " 50│DEFAULT_BECOME_FLAGS                       True default                                          default",
         " 51│DEFAULT_BECOME_METHOD                      True default                                          default                                          sudo",
         " 52│DEFAULT_BECOME_USER                        True default                                          default                                          root",
-<<<<<<< HEAD
-        " 53│DEFAULT_CACHE_PLUGIN_PATH                  True default                                          default                                          ['/home/user/.ansible/plugins/cache', '/usr/s",
-        " 54│DEFAULT_CALLBACK_PLUGIN_PATH              False env                                              ANSIBLE_CALLBACK_PLUGINS                         ['/home/user/github/ansible-navigator/venv/li",
-        " 55│DEFAULT_CLICONF_PLUGIN_PATH                True default                                          default                                          ['/home/user/.ansible/plugins/cliconf', '/usr",
-        " 56│DEFAULT_CONNECTION_PLUGIN_PATH             True default                                          default                                          ['/home/user/.ansible/plugins/connection', '/",
-        " 57│DEFAULT_DEBUG                              True default                                          default                                          False",
-        " 58│DEFAULT_EXECUTABLE                         True default                                          default                                          /bin/sh",
-        " 59│DEFAULT_FACT_PATH                          True default                                          default                                          None",
-        " 60│DEFAULT_FILTER_PLUGIN_PATH                 True default                                          default                                          ['/home/user/.ansible/plugins/filter', '/usr/",
-=======
         " 53│DEFAULT_CACHE_PLUGIN_PATH                  True default                                          default                                          ['/home/bthornto/.ansible/plugins/cache', '/usr/s",
         " 54│DEFAULT_CALLBACK_PLUGIN_PATH              False env                                              ANSIBLE_CALLBACK_PLUGINS                         ['/home/bthornto/github/ansible-navigator/venv/li",
         " 55│DEFAULT_CLICONF_PLUGIN_PATH                True default                                          default                                          ['/home/bthornto/.ansible/plugins/cliconf', '/usr",
@@ -99,7 +75,6 @@
         " 58│DEFAULT_EXECUTABLE                         True default                                          default                                          /bin/sh",
         " 59│DEFAULT_FACT_PATH                          True default                                          default                                          None",
         " 60│DEFAULT_FILTER_PLUGIN_PATH                 True default                                          default                                          ['/home/bthornto/.ansible/plugins/filter', '/usr/",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         " 61│DEFAULT_FORCE_HANDLERS                     True default                                          default                                          False",
         " 62│DEFAULT_FORKS                              True default                                          default                                          5",
         " 63│DEFAULT_GATHERING                          True default                                          default                                          implicit",
@@ -108,44 +83,25 @@
         " 66│DEFAULT_HANDLER_INCLUDES_STATIC            True default                                          default                                          False",
         " 67│DEFAULT_HASH_BEHAVIOUR                     True default                                          default                                          replace",
         " 68│DEFAULT_HOST_LIST                          True default                                          default                                          ['/etc/ansible/hosts']",
-<<<<<<< HEAD
-        " 69│DEFAULT_HTTPAPI_PLUGIN_PATH                True default                                          default                                          ['/home/user/.ansible/plugins/httpapi', '/usr",
-        " 70│DEFAULT_INTERNAL_POLL_INTERVAL             True default                                          default                                          0.001",
-        " 71│DEFAULT_INVENTORY_PLUGIN_PATH              True default                                          default                                          ['/home/user/.ansible/plugins/inventory', '/u",
-=======
         " 69│DEFAULT_HTTPAPI_PLUGIN_PATH                True default                                          default                                          ['/home/bthornto/.ansible/plugins/httpapi', '/usr",
         " 70│DEFAULT_INTERNAL_POLL_INTERVAL             True default                                          default                                          0.001",
         " 71│DEFAULT_INVENTORY_PLUGIN_PATH              True default                                          default                                          ['/home/bthornto/.ansible/plugins/inventory', '/u",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         " 72│DEFAULT_JINJA2_EXTENSIONS                  True default                                          default                                          []",
         " 73│DEFAULT_JINJA2_NATIVE                      True default                                          default                                          False",
         " 74│DEFAULT_KEEP_REMOTE_FILES                  True default                                          default                                          False",
         " 75│DEFAULT_LIBVIRT_LXC_NOSECLABEL             True default                                          default                                          False",
         " 76│DEFAULT_LOAD_CALLBACK_PLUGINS              True default                                          default                                          False",
-<<<<<<< HEAD
-        " 77│DEFAULT_LOCAL_TMP                          True default                                          default                                          /home/user/.ansible/tmp/ansible-local-904814p",
-        " 78│DEFAULT_LOG_FILTER                         True default                                          default                                          []",
-        " 79│DEFAULT_LOG_PATH                           True default                                          default                                          None",
-        " 80│DEFAULT_LOOKUP_PLUGIN_PATH                 True default                                          default                                          ['/home/user/.ansible/plugins/lookup', '/usr/",
-=======
-        " 77│DEFAULT_LOCAL_TMP                          True default                                          default                                          /home/bthornto/.ansible/tmp/ansible-local-7266687",
+        " 77│DEFAULT_LOCAL_TMP                          True default                                          default                                          /home/bthornto/.ansible/tmp/ansible-local-937840e",
         " 78│DEFAULT_LOG_FILTER                         True default                                          default                                          []",
         " 79│DEFAULT_LOG_PATH                           True default                                          default                                          None",
         " 80│DEFAULT_LOOKUP_PLUGIN_PATH                 True default                                          default                                          ['/home/bthornto/.ansible/plugins/lookup', '/usr/",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         " 81│DEFAULT_MANAGED_STR                        True default                                          default                                          Ansible managed",
         " 82│DEFAULT_MODULE_ARGS                        True default                                          default",
         " 83│DEFAULT_MODULE_COMPRESSION                 True default                                          default                                          ZIP_DEFLATED",
         " 84│DEFAULT_MODULE_NAME                        True default                                          default                                          command",
-<<<<<<< HEAD
-        " 85│DEFAULT_MODULE_PATH                        True default                                          default                                          ['/home/user/.ansible/plugins/modules', '/usr",
-        " 86│DEFAULT_MODULE_UTILS_PATH                  True default                                          default                                          ['/home/user/.ansible/plugins/module_utils',",
-        " 87│DEFAULT_NETCONF_PLUGIN_PATH                True default                                          default                                          ['/home/user/.ansible/plugins/netconf', '/usr",
-=======
         " 85│DEFAULT_MODULE_PATH                        True default                                          default                                          ['/home/bthornto/.ansible/plugins/modules', '/usr",
         " 86│DEFAULT_MODULE_UTILS_PATH                  True default                                          default                                          ['/home/bthornto/.ansible/plugins/module_utils',",
         " 87│DEFAULT_NETCONF_PLUGIN_PATH                True default                                          default                                          ['/home/bthornto/.ansible/plugins/netconf', '/usr",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         " 88│DEFAULT_NO_LOG                             True default                                          default                                          False",
         " 89│DEFAULT_NO_TARGET_SYSLOG                   True default                                          default                                          False",
         " 90│DEFAULT_NULL_REPRESENTATION                True default                                          default                                          None",
@@ -154,22 +110,6 @@
         " 93│DEFAULT_PRIVATE_ROLE_VARS                  True default                                          default                                          False",
         " 94│DEFAULT_REMOTE_PORT                        True default                                          default                                          None",
         " 95│DEFAULT_REMOTE_USER                        True default                                          default                                          None",
-<<<<<<< HEAD
-        " 96│DEFAULT_ROLES_PATH                         True default                                          default                                          ['/home/user/.ansible/roles', '/usr/share/ans",
-        " 97│DEFAULT_SELINUX_SPECIAL_FS                 True default                                          default                                          ['fuse', 'nfs', 'vboxsf', 'ramfs', '9p', 'vfat']",
-        " 98│DEFAULT_STDOUT_CALLBACK                   False env                                              ANSIBLE_STDOUT_CALLBACK                          awx_display",
-        " 99│DEFAULT_STRATEGY                           True default                                          default                                          linear",
-        "100│DEFAULT_STRATEGY_PLUGIN_PATH               True default                                          default                                          ['/home/user/.ansible/plugins/strategy', '/us",
-        "101│DEFAULT_SU                                 True default                                          default                                          False",
-        "102│DEFAULT_SYSLOG_FACILITY                    True default                                          default                                          LOG_USER",
-        "103│DEFAULT_TASK_INCLUDES_STATIC               True default                                          default                                          False",
-        "104│DEFAULT_TERMINAL_PLUGIN_PATH               True default                                          default                                          ['/home/user/.ansible/plugins/terminal', '/us",
-        "105│DEFAULT_TEST_PLUGIN_PATH                   True default                                          default                                          ['/home/user/.ansible/plugins/test', '/usr/sh",
-        "106│DEFAULT_TIMEOUT                            True default                                          default                                          10",
-        "107│DEFAULT_TRANSPORT                          True default                                          default                                          smart",
-        "108│DEFAULT_UNDEFINED_VAR_BEHAVIOR             True default                                          default                                          True",
-        "109│DEFAULT_VARS_PLUGIN_PATH                   True default                                          default                                          ['/home/user/.ansible/plugins/vars', '/usr/sh",
-=======
         " 96│DEFAULT_ROLES_PATH                         True default                                          default                                          ['/home/bthornto/.ansible/roles', '/usr/share/ans",
         " 97│DEFAULT_SELINUX_SPECIAL_FS                 True default                                          default                                          ['fuse', 'nfs', 'vboxsf', 'ramfs', '9p', 'vfat']",
         " 98│DEFAULT_STDOUT_CALLBACK                   False env                                              ANSIBLE_STDOUT_CALLBACK                          awx_display",
@@ -184,7 +124,6 @@
         "107│DEFAULT_TRANSPORT                          True default                                          default                                          smart",
         "108│DEFAULT_UNDEFINED_VAR_BEHAVIOR             True default                                          default                                          True",
         "109│DEFAULT_VARS_PLUGIN_PATH                   True default                                          default                                          ['/home/bthornto/.ansible/plugins/vars', '/usr/sh",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         "110│DEFAULT_VAULT_ENCRYPT_IDENTITY             True default                                          default                                          None",
         "111│DEFAULT_VAULT_IDENTITY                     True default                                          default                                          default",
         "112│DEFAULT_VAULT_IDENTITY_LIST                True default                                          default                                          []",
@@ -198,31 +137,19 @@
         "120│DISPLAY_ARGS_TO_STDOUT                     True default                                          default                                          False",
         "121│DISPLAY_SKIPPED_HOSTS                      True default                                          default                                          True",
         "122│DOCSITE_ROOT_URL                           True default                                          default                                          https://docs.ansible.com/ansible/",
-<<<<<<< HEAD
-        "123│DOC_FRAGMENT_PLUGIN_PATH                   True default                                          default                                          ['/home/user/.ansible/plugins/doc_fragments',",
-=======
         "123│DOC_FRAGMENT_PLUGIN_PATH                   True default                                          default                                          ['/home/bthornto/.ansible/plugins/doc_fragments',",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         "124│DUPLICATE_YAML_DICT_KEY                    True default                                          default                                          warn",
         "125│ENABLE_TASK_DEBUGGER                       True default                                          default                                          False",
         "126│ERROR_ON_MISSING_HANDLER                   True default                                          default                                          True",
         "127│FACTS_MODULES                              True default                                          default                                          ['smart']",
-<<<<<<< HEAD
-        "128│GALAXY_CACHE_DIR                           True default                                          default                                          /home/user/.ansible/galaxy_cache",
-=======
         "128│GALAXY_CACHE_DIR                           True default                                          default                                          /home/bthornto/.ansible/galaxy_cache",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         "129│GALAXY_DISPLAY_PROGRESS                    True default                                          default                                          None",
         "130│GALAXY_IGNORE_CERTS                        True default                                          default                                          False",
         "131│GALAXY_ROLE_SKELETON                       True default                                          default                                          None",
         "132│GALAXY_ROLE_SKELETON_IGNORE                True default                                          default                                          ['^.git$', '^.*/.git_keep$']",
         "133│GALAXY_SERVER                              True default                                          default                                          https://galaxy.ansible.com",
         "134│GALAXY_SERVER_LIST                         True default                                          default                                          None",
-<<<<<<< HEAD
-        "135│GALAXY_TOKEN_PATH                          True default                                          default                                          /home/user/.ansible/galaxy_token",
-=======
         "135│GALAXY_TOKEN_PATH                          True default                                          default                                          /home/bthornto/.ansible/galaxy_token",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         "136│HOST_KEY_CHECKING                         False env                                              ANSIBLE_HOST_KEY_CHECKING                        False",
         "137│HOST_PATTERN_MISMATCH                      True default                                          default                                          warning",
         "138│INJECT_FACTS_AS_VARS                       True default                                          default                                          True",
@@ -252,11 +179,7 @@
         "162│PERSISTENT_COMMAND_TIMEOUT                 True default                                          default                                          30",
         "163│PERSISTENT_CONNECT_RETRY_TIMEOUT           True default                                          default                                          15",
         "164│PERSISTENT_CONNECT_TIMEOUT                 True default                                          default                                          30",
-<<<<<<< HEAD
-        "165│PERSISTENT_CONTROL_PATH_DIR                True default                                          default                                          /home/user/.ansible/pc",
-=======
         "165│PERSISTENT_CONTROL_PATH_DIR                True default                                          default                                          /home/bthornto/.ansible/pc",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         "166│PLAYBOOK_DIR                               True default                                          default                                          None",
         "167│PLAYBOOK_VARS_ROOT                         True default                                          default                                          top",
         "168│PLUGIN_FILTERS_CFG                         True default                                          default                                          None",
@@ -280,11 +203,7 @@
         "186│WIN_ASYNC_STARTUP_TIMEOUT                  True default                                          default                                          5",
         "187│WORKER_SHUTDOWN_POLL_COUNT                 True default                                          default                                          0",
         "188│WORKER_SHUTDOWN_POLL_DELAY                 True default                                          default                                          0.1",
-<<<<<<< HEAD
-        "189│YAML_FILENAME_EXTENSIONS                  False /home/user/github/ansible-navigator/tests/fix/home/user/github/ansible-navigator/tests/fix['.yahmool']",
-=======
         "189│YAML_FILENAME_EXTENSIONS                  False /home/bthornto/github/ansible-navigator/tests/fix/home/bthornto/github/ansible-navigator/tests/fix['.yahmool']",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

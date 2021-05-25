@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
     "name": "test[1-:run /tests/fixtures/integration/actions/run/site.yaml -i /tests/fixtures/integration/actions/run/inventory-ansible-navigator run playbook]",
-=======
-    "name": "test[1-:run /home/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/run/site.yaml -i /tests/fixtures/integration/actions/run/inventory-ansible-navigator run playbook]",
->>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
     "index": 1,
     "comment": "ansible-navigator run playbook",
     "additional_information": {
