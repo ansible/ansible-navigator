@@ -33,6 +33,7 @@ class BaseClass:
 
     UPDATE_FIXTURES = False
     PANE_HEIGHT = 20
+    PANE_WIDTH = 300
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(self, request):
@@ -41,6 +42,7 @@ class BaseClass:
             "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42", "export PAGER=cat"],
             "unique_test_id": request.node.nodeid,
             "pane_height": self.PANE_HEIGHT,
+            "pane_width": self.PANE_WIDTH,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
