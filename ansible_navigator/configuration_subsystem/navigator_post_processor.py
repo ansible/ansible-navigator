@@ -48,6 +48,7 @@ PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
 
 
 class NavigatorPostProcessor:
+    # pylint:disable=too-many-public-methods
     """application post processor"""
 
     @staticmethod
