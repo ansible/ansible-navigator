@@ -161,6 +161,7 @@ class NavigatorPostProcessor:
         exit_messages: List[ExitMessage] = []
         if ":" not in entry.value.current:
             entry.value.current = f"{entry.value.current}:latest"
+        return messages, exit_messages
 
     @staticmethod
     @_post_processor
