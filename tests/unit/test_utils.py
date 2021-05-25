@@ -11,65 +11,51 @@ import pytest
 
 import ansible_navigator.utils as utils
 
-
-def test_find_conf_dir_many_files(monkeypatch) -> None:
-    """test get_conf_path"""
-
-    def check_path_exists(arg):
-        if arg in [
-            "/etc/ansible-navigator/ansible-navigator.yaml",
-            "/etc/ansible-navigator/ansible-navigator.yml",
-            "/etc/ansible-navigator/ansible-navigator.json",
-        ]:
-            return True
-        else:
-            return False
-
-    monkeypatch.setattr(os.path, "exists", check_path_exists)
-
-    error_msg = (
-        "only one file among 'ansible-navigator.json, ansible-navigator.yaml,"
-        " ansible-navigator.yml' should be present under directory"
-        " '/etc/ansible-navigator' instead multiple config files found"
-        " '/etc/ansible-navigator/ansible-navigator.json,"
-        " /etc/ansible-navigator/ansible-navigator.yaml,"
-        " /etc/ansible-navigator/ansible-navigator.yml'"
-    )
-
-    _messages, exit_messages, _config_path = utils.find_configuration_directory_or_file_path(
-        "ansible-navigator", allowed_extensions=["json", "yaml", "yml"]
-    )
-    assert exit_messages[0].message == error_msg
+EXTENTIONS = [".yml", ".yaml", ".json"]
 
 
-def test_find_conf_dir_pass(monkeypatch) -> None:
-    """test get_conf_path"""
+def test_find_many_settings_home(monkeypatch) -> None:
+    """test more than one in home"""
 
-    expected_config_file_path = os.path.expanduser(
-        "~/.config/ansible-navigator/ansible-navigator.yaml"
-    )
+    paths = [
+        os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENTIONS
+    ]
 
     def check_path_exists(arg):
-        if arg == expected_config_file_path:
-            return True
-        else:
-            return False
-
-    def get_dir_permission(arg):
-        if arg == os.path.dirname(expected_config_file_path):
-            return SimpleNamespace(**{"st_mode": stat.S_IROTH})
+        return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    monkeypatch.setattr(os, "stat", get_dir_permission)
+    messages, exit_messages, found = utils.find_settings_file()
+    expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
+    assert any([expected in exit_msg.message for exit_msg in exit_messages])
 
-    messages, exit_messages, config_path = utils.find_configuration_directory_or_file_path(
-        "ansible-navigator", allowed_extensions=["json", "yaml", "yml"]
-    )
-    assert exit_messages == []
 
-    assert config_path == expected_config_file_path
-    log_msg = "Skipping .ansible-navigator/ansible-navigator.json because it does not exist"
-    assert log_msg == messages[0].message
+def test_find_many_settings_cwd(monkeypatch) -> None:
+    """test more than one in cwd"""
+
+    paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENTIONS]
+
+    def check_path_exists(arg):
+        return arg in paths
+
+    monkeypatch.setattr(os.path, "exists", check_path_exists)
+    messages, exit_messages, found = utils.find_settings_file()
+    expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
+    assert any([expected in exit_msg.message for exit_msg in exit_messages])
+
+
+def test_find_many_settings_precedence(monkeypatch) -> None:
+    """test more than one in cwd"""
+
+    expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
+    paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
+
+    def check_path_exists(arg):
+        return arg in paths
+
+    monkeypatch.setattr(os.path, "exists", check_path_exists)
+    messages, exit_messages, found = utils.find_settings_file()
+    assert expected == found
 
 
 @pytest.mark.parametrize(

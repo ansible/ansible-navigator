@@ -6,7 +6,6 @@ import logging
 import html
 import os
 import shutil
-import stat
 import sys
 import sysconfig
 
@@ -83,6 +82,18 @@ class LogMessage(NamedTuple):
 
     level: int
     message: str
+
+
+def oxfordcomma(listed, condition):
+    """Format a list into a sentence"""
+    listed = [f"'{str(entry)}'" for entry in listed]
+    if len(listed) == 0:
+        return ""
+    if len(listed) == 1:
+        return listed[0]
+    if len(listed) == 2:
+        return f"{listed[0]} {condition} {listed[1]}"
+    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
 
 
 def abs_user_path(fpath: str) -> str:
@@ -174,117 +185,49 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_configuration_file_in_directory(
-    path: str, filename: str, allowed_extensions: List
-) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
-    """check if filename is present in given path with allowed
-    extensions. If multiple files are present it throws an error
-    as only a single valid config file can be present in the
-    given path.
+def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+    """find the settings file as
+    ./ansible-navigator.(.yml,.yaml,.json)
+    ~/.ansible-navigator.(.yml,.yaml,.json)
     """
+
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
-    config_files_found = []
-    config_file = None
-    valid_file_names = [
-        f"{filename}.{allowed_extension}" for allowed_extension in allowed_extensions
-    ]
-    for name in valid_file_names:
-        candidate_config_path = os.path.join(path, name)
-        if not os.path.exists(candidate_config_path):
-            message = f"Skipping {path}/{name} because it does not exist"
-            messages.append(LogMessage(level=logging.DEBUG, message=message))
-            continue
-        config_files_found.append(candidate_config_path)
+    allowed_extensions = ["yml", "yaml", "json"]
+    potential_paths: List[List[str]] = []
+    found_files: List[str] = []
 
-    if len(config_files_found) > 1:
-        exit_msg = "only one file among '{0}' should be present under" " directory '{1}'".format(
-            ", ".join(valid_file_names), path
-        )
-        exit_msg += " instead multiple config files" " found '{0}'".format(
-            ", ".join(config_files_found)
-        )
-        exit_messages.append(ExitMessage(message=exit_msg))
-        return messages, exit_messages, config_file
-
-    if len(config_files_found) == 1:
-        config_file = config_files_found[0]
-
-    return messages, exit_messages, config_file
-
-
-def find_configuration_directory_or_file_path(
-    filename: Optional[str] = None, allowed_extensions: Optional[List] = None
-) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
-    """
-    returns config dir (e.g. /etc/ansible-navigator) if filename is None and
-    config file path if filename provided. First found wins.
-    If a filename is given, ensures the file exists in the directory.
-
-    TODO: This is a pretty expensive function (lots of statting things on disk).
-          We should probably cache the potential paths somewhere, eventually.
-    """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
-
-    config_path: Union[None, str] = None
-    potential_paths: List[str] = []
-
-    # .ansible-navigator of current direcotry
-    potential_paths.append(".ansible-navigator")
-
-    # Development path
-    path = os.path.join(os.path.dirname(__file__), "..", "etc", "ansible-navigator")
-    potential_paths.append(path)
-
-    # ~/.config/ansible-navigator
-    path = os.path.join(os.path.expanduser("~"), ".config", "ansible-navigator")
-    potential_paths.append(path)
-
-    # /etc/ansible-navigator
-    path = os.path.join("/", "etc", "ansible-navigator")
-    potential_paths.append(path)
-
-    # /usr/local/etc/ansible-navigator
-    prefix = sysconfig.get_config_var("prefix")
-    if prefix:
-        path = os.path.join(prefix, "local", "etc", "ansible-navigator")
-        potential_paths.append(path)
+    potential_paths.append([os.path.expanduser("~"), ".ansible-navigator"])
+    potential_paths.append([os.getcwd(), "ansible-navigator"])
 
     for path in potential_paths:
-        if allowed_extensions:
-            if not filename:
-                exit_msg = f"allowed_extensions '{allowed_extensions}' requires filename to be set"
-                exit_messages.append(ExitMessage(message=exit_msg))
-                return messages, exit_messages, config_path
+        message = f"Looking in {path[0]}"
+        messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-            new_messages, new_exit_messages, config_path = find_configuration_file_in_directory(
-                path, filename, allowed_extensions
-            )
-            messages.extend(new_messages)
-            exit_messages.extend(new_exit_messages)
-            if exit_messages:
-                return messages, exit_messages, config_path
+        candidates = [os.path.join(path[0], f"{path[1]}.{ext}") for ext in allowed_extensions]
+        message = f"Looking for {oxfordcomma(candidates, 'and')}"
+        messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-            if config_path is None:
-                continue
-        else:
-            config_path = os.path.join(path, filename) if filename is not None else path
-            if not os.path.exists(config_path):
-                message = f"Skipping {path} because required file {filename} does not exist"
-                messages.append(LogMessage(level=logging.DEBUG, message=message))
-                continue
+        found = [file for file in candidates if os.path.exists(file)]
+        message = f"Found {len(found)}: {oxfordcomma(found, 'and')}"
+        messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        try:
-            perms = os.stat(path)
-            if perms.st_mode & stat.S_IWOTH:
-                message = f"Ignoring configuration directory {path} because it is world-writable."
-                messages.append(LogMessage(level=logging.DEBUG, message=message))
-                continue
-            return messages, exit_messages, config_path
-        except OSError:
-            continue
-    return messages, exit_messages, config_path
+        if len(found) > 1:
+            exit_msg = f"Only one file among {oxfordcomma(candidates, 'and')}"
+            exit_msg += f" should be present in {path[0]}"
+            exit_msg += f" Found: {oxfordcomma(found, 'and')}"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            return messages, exit_messages, None
+        found_files.extend(found)
+
+    message = f"All found {len(found_files)}: {oxfordcomma(found_files, 'and')}"
+    messages.append(LogMessage(level=logging.DEBUG, message=message))
+
+    use = found_files[-1] if found_files else None
+    message = f"Using: {use}"
+    messages.append(LogMessage(level=logging.DEBUG, message=message))
+
+    return messages, exit_messages, use
 
 
 def flatten_list(lyst) -> List:
@@ -373,18 +316,6 @@ def human_time(seconds: int) -> str:
     if minutes > 0:
         return "%s%dm%ds" % (sign_string, minutes, seconds)
     return "%s%ds" % (sign_string, seconds)
-
-
-def oxfordcomma(listed, condition):
-    """Format a list into a sentence"""
-    listed = [f"'{str(entry)}'" for entry in listed]
-    if len(listed) == 0:
-        return ""
-    if len(listed) == 1:
-        return listed[0]
-    if len(listed) == 2:
-        return f"{listed[0]} {condition} {listed[1]}"
-    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
 
 
 def str2bool(value: Any) -> bool:

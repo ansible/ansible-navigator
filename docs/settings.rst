@@ -11,24 +11,19 @@ The ansible-navigator settings file
 ========================================
 
 Several options in ``ansible-navigator`` can be configured by making use of a
-settings file. The settings file can live in one of several places.
-Currently the following paths are checked and the first match is used:
+settings file. The settings file can live in one of two places.
+Currently the following are checked and the first match is used:
 
 - ``ANSIBLE_NAVIGATOR_CONFIG`` (settings file path environment variable if set)
-- ``./.ansible-navigator/<ansible-navigator-filename>`` (project-specific directory)
-- ``[ansible-navigator source code root]/etc/ansible-navigator/<ansible-navigator-filename>``
-- ``~/.config/ansible-navigator/<ansible-navigator-filename>``
-- ``/etc/ansible-navigator/<ansible-navigator-filename>``
-- ``[prefix]/etc/ansible-navigator/<ansible-navigator-filename>`` (e.g., ``/usr/local/etc/...``)
+- ``./ansible-navigator.<ext>`` (project directory)
+- ``~/.ansible-navigator.<ext>``(home directory)
 
 .. note::
-    - The settings file can either be in ``JSON`` or ``YAML`` format.
-    - For settings in ``JSON`` format the file name should be ``ansible-navigator.json``
-    - For settings in ``YAML`` format the file name can be either ``ansible-navigator.yml``
-      or ``ansible-navigator.yaml``.
-    - The first found matched directory path (based on order mentioned above) can have only one
-      valid settings file. If in case more than one settings files (with different
-      supported extensions) are found it will result in an error to avoid conflict.
+    - The settings file can be in ``JSON`` or ``YAML`` format.
+    - For settings in ``JSON`` format the extention must be ``.json``
+    - For settings in ``YAML`` format the extention must be ``.yml`` or ``.yaml``.
+    - The project and home directories can only contain one settings file each.
+      If more than one settings file is found in either directory, it will result in an error.
 
 You can copy the example settings file below into one of those paths to start your ``ansible-navigator`` settings file.
 
