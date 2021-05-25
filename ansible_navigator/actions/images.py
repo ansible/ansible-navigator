@@ -225,7 +225,9 @@ class Action(App):
                 name="python_package_list",
                 tipe="menu",
                 select_func=self._build_python_content,
-                value=sorted(self._images.selected["python"]["details"], key=lambda i: i["name"]),
+                value=sorted(
+                    self._images.selected["python"]["details"], key=lambda i: i["name"].lower()
+                ),
             )
 
         elif self.steps.current.index == 4:
@@ -234,7 +236,9 @@ class Action(App):
                 name="system_package_list",
                 tipe="menu",
                 select_func=self._build_system_content,
-                value=sorted(self._images.selected["system"]["details"], key=lambda i: i["name"]),
+                value=sorted(
+                    self._images.selected["system"]["details"], key=lambda i: i["name"].lower()
+                ),
             )
 
         elif self.steps.current.index == 5:

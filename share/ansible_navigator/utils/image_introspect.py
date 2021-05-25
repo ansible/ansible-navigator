@@ -9,6 +9,8 @@ from types import SimpleNamespace
 from typing import Any
 from typing import Callable, List
 from typing import Dict
+from typing import Union
+from queue import Queue
 
 # pylint: disable=broad-except
 
@@ -23,11 +25,11 @@ class Command(SimpleNamespace):
     parse: Callable
     stdout: str = ""
     stderr: str = ""
-    details: List = []
+    details: Union[List, Dict, str] = ""
     errors: List = []
 
 
-def run_command(command: Command) -> Dict:
+def run_command(command: Command) -> None:
     """run a command"""
     try:
         proc_out = subprocess.run(
@@ -219,8 +221,11 @@ class PythonPackages(CmdParser):
         """parse"""
         parsed = self.splitter(command.stdout.splitlines(), ":")
         for pkg in parsed:
-            pkg["required-by"] = [p.strip() for p in pkg["required-by"].split(",")]
-            pkg["requires"] = [p.strip() for p in pkg["requires"].split(",")]
+            for entry in ["required-by", "requires"]:
+                if pkg[entry]:
+                    pkg[entry] = [p.strip() for p in pkg[entry].split(",")]
+                else:
+                    pkg[entry] = []
         command.details = parsed
 
     def parse_freeze(self, command):
