@@ -168,6 +168,7 @@ def test_hints(monkeypatch, locked_directory, container_runtime_or_fail, data):
     exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
 
+
 def test_no_term(monkeypatch):
     """test for err and hint w/o TERM"""
     monkeypatch.delenv("TERM")
