@@ -7,9 +7,9 @@ import logging
 import os
 import re
 import shlex
+import shutil
 import uuid
 
-from distutils.spawn import find_executable
 from queue import Queue
 from typing import Any
 from typing import Callable
@@ -531,23 +531,31 @@ class Action(App):
         """spin up runner"""
         executable_cmd: Optional[str]
         kwargs = {
-            "cmdline": self._args.cmdline,
             "container_engine": self._args.container_engine,
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "inventory": self._args.inventory,
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "playbook": self._args.playbook,
             "set_environment_variable": self._args.set_environment_variable,
         }
+        if isinstance(self._args.playbook, str):
+            kwargs.update({"playbook": self._args.playbook})
+
         if self._args.execution_environment:
             executable_cmd = "ansible-playbook"
         else:
-            executable_cmd = find_executable("ansible-playbook")
+            executable_cmd = shutil.which("ansible-playbook")
             if not executable_cmd:
                 self._logger.error("'ansible-playbook' executable not found")
                 return
+
+        pass_through_arg = []
+        if self._args.help_playbook is True:
+            pass_through_arg.append("--help")
+        if isinstance(self._args.cmdline, list):
+            pass_through_arg.extend(self._args.cmdline)
+        kwargs.update({"cmdline": pass_through_arg})
 
         self.runner = CommandRunnerAsync(executable_cmd=executable_cmd, queue=self._queue, **kwargs)
         self.runner.run()
@@ -753,7 +761,11 @@ class Action(App):
         :param filename: The file to write to
         :type filename: str
         """
-        if filename or self._args.playbook_artifact_enable is True:
+        if (
+            filename
+            or self._args.playbook_artifact_enable is True
+            and self._args.help_playbook is not True
+        ):
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
                 playbook_dir=os.path.dirname(self._args.playbook),

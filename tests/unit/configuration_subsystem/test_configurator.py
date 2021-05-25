@@ -37,7 +37,7 @@ def test_apply_before_initial_saved():
         ).configure()
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_editor_command_from_editor(_mocked_func, generate_config):
     """Ensure the editor_command defaults to EDITOR if set"""
     with mock.patch.dict(os.environ, {"EDITOR": "nano"}):

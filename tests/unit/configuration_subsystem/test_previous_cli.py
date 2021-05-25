@@ -213,7 +213,7 @@ def test_apply_previous_cli_cmdline_not_applied():
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_apply_previous_cli_none(_mf1):
     """Ensure nothing is carried forward"""
     params = "run /tmp/site.yml --ee False --forks 15"

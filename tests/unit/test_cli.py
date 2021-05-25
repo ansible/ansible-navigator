@@ -89,7 +89,7 @@ from ..defaults import FIXTURES_DIR
     ],
 )
 # pylint:disable=redefined-outer-name
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     """test the parse and update function"""
 
@@ -101,7 +101,7 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     assert result.value.current == expected, result
 
 
-@patch("distutils.spawn.find_executable", return_value="/path/to/container_engine")
+@patch("shutil.which", return_value="/path/to/container_engine")
 def test_editor_command_default(_mf1, monkeypatch):
     """test editor with default"""
     monkeypatch.setenv(
