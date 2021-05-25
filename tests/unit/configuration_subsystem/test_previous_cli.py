@@ -23,12 +23,12 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import Na
 
 def test_apply_previous_cli_all():
     """Ensure all previous cli parameter are applied when requested"""
-    params = "doc shell --ee False --eei test_image --forks 15"
+    params = "doc shell --ee False --eei test_image:latest --forks 15"
     expected = [
         ("app", "doc"),
         ("cmdline", ["--forks", "15"]),
         ("execution_environment", False),
-        ("execution_environment_image", "test_image"),
+        ("execution_environment_image", "test_image:latest"),
         ("plugin_name", "shell"),
     ]
 
@@ -59,7 +59,7 @@ def test_apply_previous_cli_all():
         ("app", "doc", C.USER_CLI),
         ("cmdline", ["--forks", "15"], C.PREVIOUS_CLI),
         ("execution_environment", False, C.PREVIOUS_CLI),
-        ("execution_environment_image", "test_image", C.PREVIOUS_CLI),
+        ("execution_environment_image", "test_image:latest", C.PREVIOUS_CLI),
         ("plugin_name", "shell", C.PREVIOUS_CLI),
     ]
     for expect in expected:
@@ -69,7 +69,7 @@ def test_apply_previous_cli_all():
 
 def test_apply_previous_cli_specified():
     """Ensure only some of the previous cli parameters are applied when requested"""
-    params = "doc shell --ee False --eei test_image --forks 15"
+    params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     configurator = Configurator(
         application_configuration=application_configuration,
@@ -85,7 +85,7 @@ def test_apply_previous_cli_specified():
         ("app", "doc"),
         ("cmdline", ["--forks", "15"]),
         ("execution_environment", False),
-        ("execution_environment_image", "test_image"),
+        ("execution_environment_image", "test_image:latest"),
     ]
     for expect in expected:
         assert application_configuration.entry(expect[0]).value.current == expect[1]
@@ -104,7 +104,7 @@ def test_apply_previous_cli_specified():
         ("app", "doc", C.USER_CLI),
         ("cmdline", C.NOT_SET, C.NOT_SET),
         ("execution_environment", False, C.PREVIOUS_CLI),
-        ("execution_environment_image", "test_image", C.PREVIOUS_CLI),
+        ("execution_environment_image", "test_image:latest", C.PREVIOUS_CLI),
         ("plugin_name", "shell", C.USER_CLI),
     ]
     for expect in expected:
@@ -115,7 +115,7 @@ def test_apply_previous_cli_specified():
 def test_apply_previous_cli_mixed():
     """Ensure a mixed config tests pass"""
 
-    params = "doc shell --ee False --eei test_image --forks 15"
+    params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
 
     configurator = Configurator(
@@ -133,7 +133,7 @@ def test_apply_previous_cli_mixed():
         ("app", "doc", C.USER_CLI),
         ("cmdline", ["--forks", "15"], C.USER_CLI),
         ("execution_environment", False, C.USER_CLI),
-        ("execution_environment_image", "test_image", C.USER_CLI),
+        ("execution_environment_image", "test_image:latest", C.USER_CLI),
         ("pass_environment_variable", ["ENV1", "ENV2"], C.ENVIRONMENT_VARIABLE),
         ("plugin_name", "shell", C.USER_CLI),
     ]
