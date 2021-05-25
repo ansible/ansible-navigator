@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator --ee False --ce docker --ll debug --mode interactive-welcome screen]",
+    "name": "test[0-ansible-navigator --ee False --ce podman --ll debug --mode interactive-welcome screen]",
     "index": 0,
     "comment": "welcome screen",
     "additional_information": {
@@ -15,18 +15,17 @@
         " 4│- `:collections`                                          Explore available collections",
         " 5│- `:config`                                               Explore the current ansible configuration",
         " 6│- `:doc <plugin>`                                         Review documentation for a module or plugin",
-        " 7│- `:ee-details --eei <image>`                             Explore execution environment details",
-        " 8│- `:help`                                                 Show the main help page",
-        " 9│- `:inventory -i <inventory>`                             Explore an inventory",
-        "10│- `:log`                                                  Review the application log",
-        "11│- `:open`                                                 Open current page in the editor",
-        "12│- `:replay`                                               Explore a previous run using a playbook artifact",
-        "13│- `:run <playbook> -i <inventory>`                        Run a playbook in interactive mode",
-        "14│- `:quit`                                                 Quit the application",
-        "15│",
-        "16│happy automating,",
-        "17│",
-        "18│-winston",
+        " 7│- `:help`                                                 Show the main help page",
+        " 8│- `:inventory -i <inventory>`                             Explore an inventory",
+        " 9│- `:log`                                                  Review the application log",
+        "10│- `:open`                                                 Open current page in the editor",
+        "11│- `:replay`                                               Explore a previous run using a playbook artifact",
+        "12│- `:run <playbook> -i <inventory>`                        Run a playbook in interactive mode",
+        "13│- `:quit`                                                 Quit the application",
+        "14│",
+        "15│happy automating,",
+        "16│",
+        "17│-winston",
         "^f/PgUp page up                                                                                        ^b/PgDn page down                                                                                        ↑↓ scroll                                                                                        esc back                                                                                        :help help"
     ]
 }

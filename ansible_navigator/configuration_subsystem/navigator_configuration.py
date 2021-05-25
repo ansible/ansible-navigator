@@ -116,7 +116,6 @@ navigator_subcommds = [
             " 'ansible-navigator doc --help-doc --mode stdout'"
         ),
     ),
-    SubCommand(name="ee-details", description="Explore execution environment details"),
     SubCommand(
         name="inventory",
         description="Explore an inventory",
