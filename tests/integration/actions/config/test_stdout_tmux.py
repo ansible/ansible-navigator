@@ -3,11 +3,12 @@ import pytest
 
 
 from .base import BaseClass
-from .base import Command
-from .base import SearchFor
-from .base import Step
-from .base import add_indicies
 from .base import CONFIG_FIXTURE
+
+from ..._interactions import Command
+from ..._interactions import SearchFor
+from ..._interactions import Step
+from ..._interactions import add_indicies
 
 
 class StdoutCommand(Command):
@@ -100,8 +101,7 @@ stdout_tests = (
         comment="config specified configuration file with ee",
         # pass the PAGER into the EE so the full contents return
         user_input=StdoutCommand(
-            cmdline="dump",
-            config_file=CONFIG_FIXTURE,
+            cmdline=f"dump -c {CONFIG_FIXTURE}",
             mode="stdout",
             execution_environment=True,
             pass_environment_variables=["PAGER"],
@@ -111,8 +111,7 @@ stdout_tests = (
     ShellCommand(
         comment="config specified configuration file without ee",
         user_input=StdoutCommand(
-            cmdline="dump",
-            config_file=CONFIG_FIXTURE,
+            cmdline=f"dump -c {CONFIG_FIXTURE}",
             mode="stdout",
             execution_environment=False,
         ).join(),

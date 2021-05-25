@@ -21,7 +21,6 @@ class Command(NamedTuple):
     """command details"""
 
     execution_environment: bool
-    config_file: Union[None, str] = None
     container_engine: str = container_runtime_or_fail()
     command: str = "ansible-navigator"
     cmdline: Union[None, str] = None
@@ -38,8 +37,6 @@ class Command(NamedTuple):
             args.append(self.subcommand)
         if isinstance(self.cmdline, str):
             args.extend(shlex.split(self.cmdline))
-        if isinstance(self.config_file, str):
-            args.extend(["-c", self.config_file])
         args.extend(["--ee", self.execution_environment])
         args.extend(["--ce", self.container_engine])
         args.extend(["--ll", self.log_level])
