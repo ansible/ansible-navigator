@@ -34,6 +34,8 @@ def update_fixtures(
     }
     if additional_information is not None:
         fixture["additional_information"] = additional_information
+        if additional_information['look_fors']:
+            received_output = sanitize_output(received_output)
     fixture["output"] = received_output
     with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:
         json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
@@ -66,6 +68,18 @@ def generate_test_log_dir(unique_test_id):
 class Error(EnvironmentError):
     """pass through err"""
 
+def sanitize_output(output):
+    re_uuid =  re.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.IGNORECASE)
+    re_home = re.compile("(/Users|/home)/(?!runner)[a-z,0-9]*/")
+    for idx, line in enumerate(output):
+        new_line = re.sub(re_uuid, "00000000-0000-0000-0000-000000000000", line)
+
+        new_line = re.sub(re_home, "/home/user/", new_line)
+        output[idx] = new_line
+    return output
+
+        
+        
 
 def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
     """Recursively copy a directory tree using copy2().

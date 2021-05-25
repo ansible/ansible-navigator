@@ -27,9 +27,9 @@
         " 10│ANSIBLE_PIPELINING               True default default                         False",
         " 11│ANY_ERRORS_FATAL                 True default default                         False",
         " 12│BECOME_ALLOW_SAME_USER           True default default                         False",
-        " 13│BECOME_PLUGIN_PATH               True default default                         ['/Users/user/.ansible/plugins/become', '/usr/share/ansible/plugins/become']",
+        " 13│BECOME_PLUGIN_PATH               True default default                         ['/home/user/.ansible/plugins/become', '/usr/share/ansible/plugins/become']",
         " 14│CACHE_PLUGIN                    False env     ANSIBLE_CACHE_PLUGIN            jsonfile",
-        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /Users/user/.ansible-runner/artifacts/fb2822a2-9ec9-41ef-b494-afb15e640e60/fact_cache",
+        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /tmp/ansible-navigator/artifacts/00000000-0000-0000-0000-000000000000/fact_cache",
         " 16│CACHE_PLUGIN_PREFIX              True default default                         ansible_facts",
         " 17│CACHE_PLUGIN_TIMEOUT            False env     ANSIBLE_CACHE_PLUGIN_TIMEOUT    42",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
