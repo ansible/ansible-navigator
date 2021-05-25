@@ -113,7 +113,6 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
     return res
 
 
-
 def nonblocking_notification(messages: List[str]) -> Form:
     """generate a std nonblocking notification"""
     form = {
@@ -124,7 +123,7 @@ def nonblocking_notification(messages: List[str]) -> Form:
     }
     return dict_to_form(form)
 
-    
+
 def warning_notification(messages: List[str]) -> Form:
     """generate a std warning notification"""
     form = {
@@ -132,7 +131,5 @@ def warning_notification(messages: List[str]) -> Form:
         "title_color": 3,
         "fields": [{"name": "info", "information": messages, "type": "information"}],
         "type": "notification",
-     }
+    }
     return dict_to_form(form)
-
-
