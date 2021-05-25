@@ -200,11 +200,11 @@ class NavigatorPostProcessor:
         elif entry.value.current is not C.NOT_SET:
             parsed_volume_mounts = []
             volume_mounts = to_list(entry.value.current)
-            for mount_path in volume_mounts:
-                if not isinstance(mount_path, dict):
+            for mount_obj in volume_mounts:
+                if not isinstance(mount_obj, dict):
                     exit_msg = (
                         "The following execution-environment.volume-mounts"
-                        f" entry could not be parsed: {mount_path}"
+                        f" entry could not be parsed: {mount_obj}"
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
                     if entry.cli_parameters:
@@ -217,14 +217,14 @@ class NavigatorPostProcessor:
                     return messages, exit_messages
 
                 try:
-                    mount_path = f"{mount_path['src']}:{mount_path['dest']}"
-                    if mount_path.get("label"):
-                        mount_path += f":{mount_path['label']}"
+                    mount_path = f"{mount_obj['src']}:{mount_obj['dest']}"
+                    if mount_obj.get("label"):
+                        mount_path += f":{mount_obj['label']}"
                     parsed_volume_mounts.append(mount_path)
                 except KeyError as exc:
                     exit_msg = (
                         f"Failed to parse following execution-environment.volume-mounts"
-                        f" entry: '{mount_path}'. Value of '{str(exc)}' key not provided."
+                        f" entry: '{mount_obj}'. Value of '{str(exc)}' key not provided."
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
                     exit_hint_msg = (
