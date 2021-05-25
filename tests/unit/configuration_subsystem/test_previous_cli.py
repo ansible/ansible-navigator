@@ -141,7 +141,7 @@ def test_apply_previous_cli_mixed():
         assert application_configuration.entry(expect[0]).value.current == expect[1]
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
-    params = "doc shell --eei different_image"
+    params = "doc shell --eei different_image:latest"
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
@@ -155,7 +155,7 @@ def test_apply_previous_cli_mixed():
         ("app", "doc", C.USER_CLI),
         ("cmdline", ["--forks", "15"], C.PREVIOUS_CLI),
         ("execution_environment", False, C.PREVIOUS_CLI),
-        ("execution_environment_image", "different_image", C.USER_CLI),
+        ("execution_environment_image", "different_image:latest", C.USER_CLI),
         ("pass_environment_variable", C.NOT_SET, C.NOT_SET),
         ("plugin_name", "shell", C.USER_CLI),
         ("set_environment_variable", {"ENV1": "VAL1"}, C.ENVIRONMENT_VARIABLE),
