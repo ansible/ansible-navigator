@@ -62,7 +62,7 @@ You can copy the example settings file below into one of those paths to start yo
     #         KEY1: VALUE1
     #         KEY2: VALUE2
     #         KEY3: VALUE3
-    #     image: test_image
+    #     image: test_image:latest
     #     pull-policy: never
     #   help-config: True
     #   help-doc: True
