@@ -20,7 +20,7 @@ Currently the following are checked and the first match is used:
 
 .. note::
     - The settings file can be in ``JSON`` or ``YAML`` format.
-    - For settings in ``JSON`` format the extention must be ``.json``
+    - For settings in ``JSON`` format the extention must be ``.json``.
     - For settings in ``YAML`` format the extention must be ``.yml`` or ``.yaml``.
     - The project and home directories can only contain one settings file each.
       If more than one settings file is found in either directory, it will result in an error.
