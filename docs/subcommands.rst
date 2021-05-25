@@ -32,10 +32,6 @@ ansible-navigator subcommand overview
     - Review documentation for a module or plugin
     - ansible-navigator doc --help
     - :doc
-  * - ee-details
-    - Explore execution environment details
-    - ansible-navigator ee-details --help
-    - :ee-details
   * - inventory
     - Explore an inventory
     - ansible-navigator inventory --help
@@ -56,10 +52,10 @@ ansible-navigator subcommand overview
   end-subcommands-table
 
 
-Mapping ansible-navigator comamnds to ansible commands
+Mapping ansible-navigator commands to ansible commands
 ======================================================
 
-Some ansible-navigator commands map to ansible comamnds. The table below provides some examples.
+Some ansible-navigator commands map to ansible commands. The table below provides some examples.
 
 .. list-table:: Mapping to ansible commands
   :header-rows: 1

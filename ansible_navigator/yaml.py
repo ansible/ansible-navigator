@@ -46,7 +46,7 @@ def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, N
 
 class HumanDumper(Dumper):
     # pylint: disable=too-many-ancestors
-    """for block scalar for mutliline"""
+    """for block scalar for multiline"""
 
     def represent_scalar(self, tag, value, style=None):
         """Uses a block scalar for a nicer human representation of multiline strings."""

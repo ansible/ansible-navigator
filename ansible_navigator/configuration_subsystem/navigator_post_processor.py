@@ -96,7 +96,7 @@ class NavigatorPostProcessor:
     def execution_environment(self, entry, config) -> PostProcessorReturn:
         """Post process execution_environment"""
         messages, exit_messages = self._true_or_false(entry, config)
-        if entry.value.current is True or config.app == "ee-details":
+        if entry.value.current is True:
             container_engine_location = shutil.which(config.container_engine)
             if container_engine_location is None:
                 exit_msg = "The specified container engine could not be found:"

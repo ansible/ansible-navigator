@@ -16,7 +16,7 @@ pip install ansible-navigator
 ansible-navigator --help
 ```
 
-By default, ansible-navigator uses execution environments, to use ansible-navigator without an execution enviroment,
+By default, ansible-navigator uses execution environments, to use ansible-navigator without an execution environment,
 ansible is required
 
 ```
@@ -68,7 +68,7 @@ Run and explore a playbook
 ansible-navigator run site.yaml -i inventory.yaml
 ```
 
-#### Using stdout mode, which returns ansible's familiar command-line interface (CLI) output
+#### Using stdout mode, which returns Ansible's familiar command-line interface (CLI) output
 
 Show the current ansible configuration
 ```
@@ -102,14 +102,14 @@ ansible-navigator can be configured:
 2) with a settings file
 3) with environment variables
 4) at the command line
-5) while issuing `:` comamnds within the text-based user interface (TUI)
+5) while issuing `:` commands within the text-based user interface (TUI)
 
 Setting are applied in that order. For an overview of these approaches, see the [settings guide](docs/settings.rst)
 
 
 ### Key bindings and colon commands
 
-While using the terminal user interface keys and commands are avilable, the following 
+While using the terminal user interface keys and commands are available, the following 
 is also available within the application by typing `:help`:
 
 
