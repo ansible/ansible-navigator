@@ -49,6 +49,8 @@ class BaseClass:
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":
             search_within_response = tmux_doc_session.cli_prompt
+            # clear the screen so it starts with stdout
+            user_input = f"clear && {user_input}"
         else:
             raise ValueError(
                 "Value of 'TEST_FOR_MODE' is not set."

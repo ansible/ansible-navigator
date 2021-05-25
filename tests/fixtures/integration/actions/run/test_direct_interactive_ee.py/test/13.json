@@ -1,7 +1,12 @@
 {
-    "name": "test[13-:st-display stream-:help help]",
+    "name": "test[13-:st-display stream]",
     "index": 13,
     "comment": "display stream",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         " 0│",
         " 1│PLAY [run integration test play-1] *********************************************",

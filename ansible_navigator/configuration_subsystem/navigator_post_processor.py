@@ -313,6 +313,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def mode(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=too-many-statements
         """Post process mode"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -341,6 +342,15 @@ class NavigatorPostProcessor:
             exit_msg += oxfordcomma(config.internals.action_packages, "and")
             exit_messages.append(ExitMessage(message=exit_msg))
             return messages, exit_messages
+
+        if entry.value.current == "interactive" and os.environ.get("TERM") is None:
+            exit_msg = "The TERM environment variable must be set for mode 'interactive'"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = (
+                "Try again after setting the TERM environment variable"
+                " (e.g., 'export TERM=xterm256color') from the command line"
+            )
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
         subcommand_modes = []
 
