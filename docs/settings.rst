@@ -16,7 +16,7 @@ Currently the following are checked and the first match is used:
 
 - ``ANSIBLE_NAVIGATOR_CONFIG`` (settings file path environment variable if set)
 - ``./ansible-navigator.<ext>`` (project directory)
-- ``~/.ansible-navigator.<ext>``(home directory)
+- ``~/.ansible-navigator.<ext>`` (home directory)
 
 .. note::
     - The settings file can be in ``JSON`` or ``YAML`` format.
