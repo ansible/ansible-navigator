@@ -32,10 +32,6 @@ ansible-navigator subcommand overview
     - Review documentation for a module or plugin
     - ansible-navigator doc --help
     - :doc
-  * - ee-details
-    - Explore execution environment details
-    - ansible-navigator ee-details --help
-    - :ee-details
   * - inventory
     - Explore an inventory
     - ansible-navigator inventory --help
