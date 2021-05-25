@@ -4,8 +4,8 @@ import glob
 import json
 import os
 import shlex
+import shutil
 
-from distutils.spawn import find_executable
 from typing import Any
 from typing import Dict
 from typing import List
@@ -464,7 +464,7 @@ class Action(App):
             if self._args.execution_environment:
                 ansible_inventory_path = "ansible-inventory"
             else:
-                exec_path = find_executable("ansible-inventory")
+                exec_path = shutil.which("ansible-inventory")
                 if exec_path is None:
                     self._logger.error("no ansible-inventory command found in path")
                     return

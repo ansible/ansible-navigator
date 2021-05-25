@@ -3,8 +3,8 @@ import curses
 import os
 import re
 import shlex
+import shutil
 
-from distutils.spawn import find_executable
 from typing import Any
 from typing import Dict
 from typing import List
@@ -214,7 +214,7 @@ class Action(App):
             if self._args.execution_environment:
                 ansible_config_path = "ansible-config"
             else:
-                exec_path = find_executable("ansible-config")
+                exec_path = shutil.which("ansible-config")
                 if exec_path is None:
                     self._logger.error("no ansible-config command found in path")
                     return

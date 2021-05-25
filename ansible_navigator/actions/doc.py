@@ -4,9 +4,9 @@ import curses
 import json
 import os
 import shlex
+import shutil
 
 from copy import deepcopy
-from distutils.spawn import find_executable
 from typing import Any
 from typing import Dict
 from typing import Optional
@@ -172,7 +172,7 @@ class Action(App):
             if self._args.execution_environment:
                 ansible_doc_path = "ansible-doc"
             else:
-                exec_path = find_executable("ansible-doc")
+                exec_path = shutil.which("ansible-doc")
                 if exec_path is None:
                     self._logger.error("no ansible-doc command found in path")
                     return None

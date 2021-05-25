@@ -1,9 +1,9 @@
 """ post processing of ansible-navigator configuration
 """
-import distutils
 import importlib
 import logging
 import os
+import shutil
 
 from pathlib import Path
 from typing import List
@@ -96,7 +96,7 @@ class NavigatorPostProcessor:
         """Post process execution_environment"""
         messages, exit_messages = self._true_or_false(entry, config)
         if entry.value.current is True or config.app == "ee-details":
-            container_engine_location = distutils.spawn.find_executable(config.container_engine)
+            container_engine_location = shutil.which(config.container_engine)
             if container_engine_location is None:
                 exit_msg = "The specified container engine could not be found:"
                 exit_msg += f"'{config.container_engine}',"

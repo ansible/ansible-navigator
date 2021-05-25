@@ -6,7 +6,6 @@ import shutil
 import sys
 import json
 
-from distutils.spawn import find_executable
 
 from .. import defaults
 
@@ -16,7 +15,7 @@ def get_executable_path(name):
     if name == "python":
         exec_path = sys.executable
     else:
-        exec_path = find_executable(name)
+        exec_path = shutil.which(name)
     if not exec_path:
         raise ValueError(f"{name} executable not found")
     return exec_path
