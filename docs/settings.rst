@@ -62,6 +62,10 @@ You can copy the example settings file below into one of those paths to start yo
     #         KEY3: VALUE3
     #     image: test_image:latest
     #     pull-policy: never
+    #     volume-mounts:
+    #     - src: "/test1"
+    #       dest: "/test1"
+    #       label: "Z"
     #   help-config: True
     #   help-doc: True
     #   help-inventory: True
@@ -200,6 +204,19 @@ The following table describes all available settings.
             ansible-navigator:
               execution-environment:
                 image:
+
+  * - execution-environment-volume-mounts
+    - Specify volume to be bind mounted within an execution environment (--eev /home/user/test:/home/user/test:Z)
+    - | **Default:** No default value set
+      | **CLI:** `--eev` or `--execution-environment-volume-mounts`
+      | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_VOLUME_MOUNTS
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              execution-environment:
+                volume-mounts:
 
   * - log-append
     - Specify if log messages should be appended to an existing log file, otherwise a new log file will be created per session
