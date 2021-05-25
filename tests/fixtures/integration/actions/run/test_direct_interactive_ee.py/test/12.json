@@ -1,7 +1,12 @@
 {
-    "name": "test[12-:back-all play details-:help help]",
+    "name": "test[12-:back-all play details]",
     "index": 12,
     "comment": "all play details",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "  PLAY NAME                                                                                                                 OK           CHANGED                            UNREACHABLE                                         FAILED                         SKIPPED                            IGNORED                            IN PROGRESS                                         TASK COUNT                                                                                                     % COMPLETED",
         "0│run integration test play-1                                                                                                2                 0                                      0                                              0                               0                                  0                                      0                                                  2                                                                                                100% ▇▇▇▇▇▇▇▇▇▇▇",
