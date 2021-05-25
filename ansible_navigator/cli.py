@@ -72,7 +72,6 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     logger.info("New ansible-runner instance, logging initialized")
 
 
-
 def run(args: ApplicationConfiguration) -> int:
     """run the appropriate app"""
     try:
