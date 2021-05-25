@@ -102,7 +102,7 @@ The following table describes all available settings.
     - Settings
   * - app
     - Subcommands
-    - | **Choices:** 'collections', 'config', 'doc', 'ee-details', 'inventory', 'replay', 'run' or 'welcome'
+    - | **Choices:** 'collections', 'config', 'doc', 'inventory', 'replay', 'run' or 'welcome'
       | **Default:** welcome
       | **CLI:** positional
       | **ENV:** ANSIBLE_NAVIGATOR_APP
@@ -153,7 +153,7 @@ The following table describes all available settings.
 
   * - editor-command
     - Specify the editor command
-    - | **Default:** vi +{line_number} {filename}
+    - | **Default:** /usr/bin/nano {filename}
       | **CLI:** `--ecmd` or `--editor-command`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_COMMAND
       | **Settings file:**

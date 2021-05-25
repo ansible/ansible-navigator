@@ -1,7 +1,12 @@
 {
-    "name": "test[4-:back-play-1 details-:help help]",
+    "name": "test[4-:back-play-1 details]",
     "index": 4,
     "comment": "play-1 details",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
     "output": [
         "  RESULT                                      HOST                                                           NUMBER                                      CHANGED                                           TASK                                                                                                                                                                TASK ACTION                                                                DURATION",
         "0│OK                                          localhost                                                           0                                        False                                           debug print play-1 task-1                                                                                                                                           debug                                                                            0s",
