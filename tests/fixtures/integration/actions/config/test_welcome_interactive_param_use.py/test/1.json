@@ -29,7 +29,7 @@
         " 12│BECOME_ALLOW_SAME_USER           True default default                         False",
         " 13│BECOME_PLUGIN_PATH               True default default                         ['/home/bthornto/.ansible/plugins/become', '/usr/share/ansible/plugins/become']",
         " 14│CACHE_PLUGIN                    False env     ANSIBLE_CACHE_PLUGIN            jsonfile",
-        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /tmp/ansible-navigator/artifacts/ef6ec422-4b0d-4edc-8da6-0171124c6c25/fact_cache",
+        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /tmp/ansible-navigator/artifacts/56f157d2-7276-4957-802d-69d70292322f/fact_cache",
         " 16│CACHE_PLUGIN_PREFIX              True default default                         ansible_facts",
         " 17│CACHE_PLUGIN_TIMEOUT            False env     ANSIBLE_CACHE_PLUGIN_TIMEOUT    42",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"

@@ -1,5 +1,5 @@
 {
-    "name": "test[config helpconfig without ee  clear && ansible-navigator config --help-config --ee False --ce docker --ll debug --mode stdout]",
+    "name": "test[config helpconfig without ee  clear && ansible-navigator config --help-config --ee False --ce podman --ll debug --mode stdout]",
     "index": 5,
     "comment": "config helpconfig without ee",
     "additional_information": {
@@ -21,6 +21,6 @@
         "  --version         show program's version number, config file location, configured module search path, module location, executable location and exit",
         "  -h, --help        show this help message and exit",
         "  -v, --verbose     verbose mode (-vvv for more, -vvvv to enable connection debugging)",
-        "(py38) bash-3.2$"
+        "(venv) bash-5.0$"
     ]
 }

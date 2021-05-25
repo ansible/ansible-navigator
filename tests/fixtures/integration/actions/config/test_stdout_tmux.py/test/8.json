@@ -1,5 +1,5 @@
 {
-    "name": "test[config specified configuration file with ee  clear && ansible-navigator config dump -c /tests/fixtures/integration/actions/config/ansible.cfg --ee True --ce docker --ll debug --mode stdout --penv PAGER]",
+    "name": "test[config specified configuration file with ee  clear && ansible-navigator config dump -c /tests/fixtures/integration/actions/config/ansible.cfg --ee True --ce podman --ll debug --mode stdout --penv PAGER]",
     "index": 8,
     "comment": "config specified configuration file with ee",
     "additional_information": {
@@ -29,6 +29,6 @@
         "WIN_ASYNC_STARTUP_TIMEOUT(default) = 5",
         "WORKER_SHUTDOWN_POLL_COUNT(default) = 0",
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
-        "YAML_FILENAME_EXTENSIONS(/Users/user/github/ansible-navigator/tests/fixtures/integration/actions/config/ansible.cfg) = ['.yahmool'](py38) bash-3.2$"
+        "YAML_FILENAME_EXTENSIONS(/home/user/github/ansible-navigator/tests/fixtures/integration/actions/config/ansible.cfg) = ['.yahmool'](venv) bash-5.0$"
     ]
 }
