@@ -24,6 +24,7 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import warning_notification
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
@@ -86,6 +87,7 @@ class Action(App):
         self._adjacent_collection_dir: str
         self._collection_cache = args.internals.collection_doc_cache
         self._collection_cache_path = args.collection_doc_cache_path
+        self._collection_scanned_paths: List = []
         self._collections: List = []
         self._stats: Dict = {}
 
@@ -119,6 +121,7 @@ class Action(App):
 
         if not self._collections:
             self._prepare_to_exit(interaction)
+            self.notify_none()
             return None
 
         self.steps.append(self._build_main_menu())
@@ -364,6 +367,7 @@ class Action(App):
                 self._logger.info("[catalog_collections]: %s", msg)
 
         self._logger.debug("catalog collections scan path: %s", parsed["collection_scan_paths"])
+        self._collection_scanned_paths = sorted(parsed["collection_scan_paths"].split(":"))
         for stat, value in self._stats.items():
             self._logger.debug("%s: %s", stat, value)
 
@@ -374,3 +378,21 @@ class Action(App):
             self._logger.warning(error)
 
         return None
+
+    def notify_none(self):
+        """notify no collections were found"""
+        msgs = ["humph. no collections were found in the following paths:"]
+        paths = []
+        for path in self._collection_scanned_paths:
+            if path.startswith(self._args.internals.share_directory):
+                continue
+            if self._args.execution_environment:
+                if path.startswith(self._adjacent_collection_dir):
+                    paths.append(f"- {path} (bind_mount)")
+                else:
+                    paths.append(f"- {path} (contained)")
+            else:
+                paths.append(f"- {path}")
+        closing = ["[HINT] Try installing some or try a different execution enviroment"]
+        warning = warning_notification(messages=msgs + paths + closing)
+        self._interaction.ui.show(warning)

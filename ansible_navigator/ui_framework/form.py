@@ -37,7 +37,7 @@ class Form:
         elif self.type is FormType.NOTIFICATION:
             self.fields.append(
                 FieldButton(
-                    name="submit", text="Dismiss", validator=FormValidators.no_validation, color=10
+                    name="submit", text=" Ok ", validator=FormValidators.no_validation, color=10
                 )
             )
 

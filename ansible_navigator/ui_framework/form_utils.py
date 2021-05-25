@@ -3,6 +3,7 @@
 import copy
 from functools import partial
 from typing import Dict
+from typing import List
 
 
 from .field_checks import FieldChecks
@@ -103,3 +104,14 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
                 fields[field["name"]]["options"] = options
         res["fields"] = fields
     return res
+
+
+def warning_notification(messages: List[str]) -> Form:
+    """generate a std warning notification"""
+    form = {
+        "title": "WARNING",
+        "title_color": 3,
+        "fields": [{"name": "info", "information": messages, "type": "information"}],
+        "type": "notification",
+    }
+    return dict_to_form(form)
