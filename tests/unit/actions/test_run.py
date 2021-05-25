@@ -101,6 +101,7 @@ class RunRunnerTstData(NamedTuple):
     execution_environment_image: Optional[str]
     execution_environment: Optional[bool]
     inventory: Optional[List]
+    playbook_artifact_enable: bool
     mode: Optional[str]
     pass_environment_variable: Optional[List]
     set_environment_variable: Optional[Dict]
@@ -123,6 +124,7 @@ test_data = [
         "quay.io/ansible/network-ee:latest",
         True,
         ["/test1/inv1", "/test2/inv2"],
+        False,
         "stdout",
         ["passenv1", "passenv2"],
         {"setvar1": "env1", "setvar2": "env2"},
@@ -162,6 +164,7 @@ def test_runner_args(_mocked_command_runner, caplog, data):
     args.entry("execution_environment_image").value.current = data.execution_environment_image
     args.entry("execution_environment").value.current = data.execution_environment
     args.entry("inventory").value.current = data.inventory
+    args.entry("playbook_artifact_enable").value.current = data.playbook_artifact_enable
     args.entry("mode").value.current = data.mode
     args.entry("pass_environment_variable").value.current = data.pass_environment_variable
     args.entry("set_environment_variable").value.current = data.set_environment_variable
