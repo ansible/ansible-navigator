@@ -1,0 +1,22 @@
+{
+    "name": "test[run help-playbook fail with interactive without ee  clear && ansible-navigator run --help-playbook --ee False --ce podman --ll debug --mode interactive]",
+    "index": 5,
+    "comment": "run help-playbook fail with interactive without ee",
+    "additional_information": {
+        "look_fors": [
+            "--hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "[ERROR]: Command provided: 'run --help-playbook --ee False --ce podman --ll debug --mode interactive'",
+        "[ERROR]: --hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'",
+        " [HINT]: Try again with '-m stdout'",
+        "[ERROR]: A playbook is required when using the run subcommand",
+        " [HINT]: Try again with 'run <playbook name>'",
+        "[ERROR]: Configuration failed, using default log file location: /home/ganeshrn/ansible-navigator/ansible-navigator.log. Log level set to debug",
+        " [HINT]: Review the hints and log file to see what went wrong: /home/ganeshrn/ansible-navigator/ansible-navigator.log",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
+}

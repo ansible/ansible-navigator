@@ -204,6 +204,7 @@ ENVVAR_DATA = [
     ("help_config", "false", False),
     ("help_doc", "false", False),
     ("help_inventory", "false", False),
+    ("help_playbook", "false", False),
     ("inventory", "/tmp/test1.yaml,/tmp/test2.yml", ["/tmp/test1.yaml", "/tmp/test2.yml"]),
     ("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"]),
     ("log_append", "false", False),

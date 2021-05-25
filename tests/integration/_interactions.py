@@ -62,7 +62,7 @@ class Step(NamedTuple):
     mask: bool = True
     playbook_status: Union[None, str] = None
     step_index: int = 0
-    search_within_response: Union[SearchFor, str] = SearchFor.HELP
+    search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
 
 
 def add_indicies(steps):

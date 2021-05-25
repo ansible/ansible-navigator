@@ -29,6 +29,7 @@ ansible-navigator:
   help-config: True
   help-doc: True
   help-inventory: True
+  help-playbook: False
   inventories:
     - /tmp/test_inventory.yml
   inventory-columns:
