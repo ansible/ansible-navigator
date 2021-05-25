@@ -2,9 +2,11 @@
 import json
 import re
 import subprocess
+import sys
 import multiprocessing
 from types import SimpleNamespace
 
+from typing import Any
 from typing import Callable, List
 from typing import Dict
 
@@ -61,11 +63,29 @@ class CommandRunner:
     """runs commands"""
 
     def __init__(self):
-        self._pending_queue = multiprocessing.Manager().Queue()
-        self._completed_queue = multiprocessing.Manager().Queue()
+        self._completed_queue: Union[Queue, None] = None
+        self._pending_queue: Union[Queue, None] = None
 
-    def run(self, cmd_clss):
+    @staticmethod
+    def run_sproc(cmd_clss: Any):
+        """run with a sinlge proc"""
+        all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
+        results = []
+        for command in all_commands:
+            run_command(command)
+            try:
+                command.parse(command)
+            except Exception as exc:
+                command.errors = command.errors + [str(exc)]
+            results.append(command)
+        return results
+
+    def run_mproc(self, cmd_clss):
         """start the workers, unload the completed queue"""
+        if self._completed_queue is None:
+            self._completed_queue = multiprocessing.Manager().Queue()
+        if self._pending_queue is None:
+            self._pending_queue = multiprocessing.Manager().Queue()
         results = {}
         all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
         self.start_workers(all_commands)
@@ -173,7 +193,7 @@ class OsRelease(CmdParser):
     @property
     def commands(self) -> List[Command]:
         """generate the command"""
-        return [Command(id="os_release", command=f"cat /etc/os-release", parse=self.parse)]
+        return [Command(id="os_release", command="cat /etc/os-release", parse=self.parse)]
 
     def parse(self, command) -> None:
         """parse"""
@@ -187,7 +207,7 @@ class PythonPackages(CmdParser):
     @property
     def commands(self) -> List[Command]:
         """generate the command"""
-        pre = Command(id="pip_freeze", command=f"python3 -m pip freeze", parse=self.parse_freeze)
+        pre = Command(id="pip_freeze", command="python3 -m pip freeze", parse=self.parse_freeze)
         run_command(pre)
         pre.parse(pre)
         pkgs = " ".join(pkg for pkg in pre.details[0])
@@ -221,7 +241,7 @@ class RedhatRelease(CmdParser):
 
     def parse(self, command):
         """parse"""
-        parsed = command.stdout.split()[-1]
+        parsed = command.stdout
         command.details = parsed
 
 
@@ -235,13 +255,14 @@ class SystemPackages(CmdParser):
 
     def parse(self, command):
         """parse"""
-        parsed = self.splitter(command.stdout.splitlines(), "\:")
+        parsed = self.splitter(command.stdout.splitlines(), ":")
         command.details = parsed
 
 
 def main():
     """start here"""
     response = {"errors": []}
+    response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}
     try:
         command_runner = CommandRunner()
         commands = [
@@ -252,7 +273,7 @@ def main():
             PythonPackages(),
             SystemPackages(),
         ]
-        results = command_runner.run(commands)
+        results = command_runner.run_mproc(commands)
         for result in results:
             dicted = vars(result)
             dicted.pop("parse")

@@ -124,6 +124,19 @@ class NavigatorPostProcessor:
             exit_messages.extend(new_exit_messages)
         return messages, exit_messages
 
+    @staticmethod
+    @_post_processor
+    def execution_environment_image(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process execution_environment_image"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if ":" not in entry.value.current:
+            entry.value.current = f"{entry.value.current}:latest"
+        return messages, exit_messages
+
     @_post_processor
     def help_config(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument

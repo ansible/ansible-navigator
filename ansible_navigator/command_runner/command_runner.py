@@ -1,10 +1,12 @@
+""" command runner """
 import multiprocessing
+from queue import Queue
 import subprocess
 
 from typing import Any
 from typing import Callable
-from typing import Dict
 from typing import List
+from typing import Union
 
 from types import SimpleNamespace
 
@@ -12,6 +14,9 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
 class Command(SimpleNamespace):
+    # pylint: disable=too-few-public-methods
+    """command obj"""
+
     id: str
     command: str
     post_process: Callable
@@ -21,7 +26,7 @@ class Command(SimpleNamespace):
     errors: str = ""
 
 
-def run_command(command: Command) -> Dict:
+def run_command(command: Command) -> None:
     """run a command"""
     try:
         proc_out = subprocess.run(
@@ -38,6 +43,7 @@ def run_command(command: Command) -> Dict:
 
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
+    """read pending, run, post process, place in completed"""
     while True:
         command = pending_queue.get()
         if command is None:
@@ -48,11 +54,15 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
 
 class CommandRunner:
-    def __init__(self):
-        self._completed_queue = multiprocessing.Manager().Queue()
-        self._pending_queue = multiprocessing.Manager().Queue()
+    """I run commands"""
 
-    def run_sproc(self, cmd_clss: Any):
+    def __init__(self):
+        self._completed_queue: Union[Queue, None] = None
+        self._pending_queue: Union[Queue, None] = None
+
+    @staticmethod
+    def run_sproc(cmd_clss: Any):
+        """run with a sinlge proc"""
         all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
         results = []
         for command in all_commands:
@@ -62,14 +72,20 @@ class CommandRunner:
         return results
 
     def run_mproc(self, cmd_clss: Any):
+        """run multiple proc"""
+        if self._completed_queue is None:
+            self._completed_queue = multiprocessing.Manager().Queue()
+        if self._pending_queue is None:
+            self._pending_queue = multiprocessing.Manager().Queue()
         all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
         self.start_workers(all_commands)
-        results = []
+        results: List[Command] = []
         while len(results) != len(all_commands):
             results.append(self._completed_queue.get())
         return results
 
     def start_workers(self, jobs):
+        """start the workers"""
         worker_count = min(len(jobs), PROCESSES)
         processes = []
         for _proc in range(worker_count):

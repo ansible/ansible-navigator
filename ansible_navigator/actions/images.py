@@ -7,7 +7,7 @@ from functools import partial
 from typing import Any
 from typing import Dict
 from typing import List
-
+from typing import Union
 
 from . import run_action
 from . import _actions as actions
@@ -22,6 +22,7 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import warning_notification
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
@@ -52,7 +53,7 @@ class Action(App):
         self._images = Step(
             name="images",
             tipe="menu",
-            columns=["name", "tag", "ee", "created", "size"],
+            columns=["__name", "tag", "execution_environment", "created", "size"],
             value=[],
             select_func=self._build_image_menu,
         )
@@ -62,14 +63,22 @@ class Action(App):
 
         """color the menu"""
         # images list menu
-        if "repository" in entry and "tag" in entry and "ee" in entry:
-            if entry.get("ee") is False:
+        if "__full_name" in entry:
+            if entry.get("execution_environment") is False:
                 return 8
-            if f"{entry['repository']}:{entry['tag']}" == self._args.execution_environment_image:
-                return 3
+            if entry["__full_name"] == self._args.execution_environment_image:
+                return 4
+            return 2
+
+        if self._images.selected:
+            if self._images.selected["__full_name"] == self._args.execution_environment_image:
+                return 4
+            if self._images.selected["execution_environment"] is False:
+                return 8
         return 2
 
     def generate_content_heading(self, obj: Dict, screen_w: int, name: str = "") -> CursesLines:
+        """generate the content heading"""
         if name == "image_menu":
             text = (
                 self.steps.previous.selected["image_name"]
@@ -78,6 +87,13 @@ class Action(App):
         elif name in ["python_package_list", "system_package_list"]:
             text = f"{obj['name']} ({obj['version']})"
 
+        color = 2
+        if self._images.selected:
+            if self._images.selected["__full_name"] == self._args.execution_environment_image:
+                color = 4
+            elif self._images.selected["execution_environment"] is False:
+                color = 8
+
         empty_str = " " * (screen_w - len(text) + 1)
         heading_str = (text + empty_str).upper()
         heading = (
@@ -85,14 +101,14 @@ class Action(App):
                 CursesLinePart(
                     column=0,
                     string=heading_str,
-                    color=curses.color_pair(0),
+                    color=curses.color_pair(color),
                     decoration=curses.A_UNDERLINE | curses.A_BOLD,
                 ),
             ),
         )
         return heading
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
+    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Handle :images
 
         :param interaction: The interaction from the user
@@ -103,8 +119,21 @@ class Action(App):
         self._logger.debug("images requested")
         self._prepare_to_run(app, interaction)
 
+        interaction.ui.show(
+            obj="Collecting available images, this may take a minute...",
+            xform="text",
+            await_input=False,
+        )
+
         self._collect_image_list()
         if not self._images.value:
+            messages = [
+                "No images were found, or the configured container engine was not available."
+            ]
+            messages.append("Please check the log (:log) for errors.")
+            warning = warning_notification(messages=messages)
+            interaction.ui.show(warning)
+            self._logger.error(messages[0])
             return None
 
         self.steps.append(self._images)
@@ -156,6 +185,10 @@ class Action(App):
             self.steps.append(result)
 
     def _build_image_content(self) -> Step:
+        if self._images.selected is None:
+            # an image should always be selected by now
+            return self.steps.previous
+
         if self.steps.current.index == 0:
             step = Step(
                 name="image_inspection",
@@ -165,6 +198,11 @@ class Action(App):
             return step
 
         if not self._images.selected["__introspected"]:
+            self._interaction.ui.show(
+                obj="Collecting image details, this may take a minute...",
+                xform="text",
+                await_input=False,
+            )
             self._introspect_image()
 
         if self.steps.current.index == 1:
@@ -208,14 +246,18 @@ class Action(App):
         return step
 
     def _build_image_menu(self) -> Step:
-        image_name = f"{self.steps.current.selected['name']}:{self.steps.current.selected['tag']}"
+        if self._images.selected is None:
+            # an image should always be selected by now
+            return self.steps.previous
+
+        image_name = f"{self._images.selected['__name_tag']}"
         menu = [
             {
                 image_name: "Image information",
                 "description": "Information collected from image inspection",
             }
         ]
-        if self.steps.current.selected["ee"]:
+        if self.steps.current.selected["execution_environment"]:
             menu.append(
                 {
                     image_name: "General information",
@@ -271,20 +313,28 @@ class Action(App):
         )
 
     def _collect_image_list(self):
-        images = inspect_all(container_engine=self._args.container_engine)
+        images, error = inspect_all(container_engine=self._args.container_engine)
+        self._logger.error(error)
         for image in images:
             image["__introspected"] = False
+
             image["name"] = image["repository"].split("/")[-1]
+            image["__name_tag"] = f"{image['name']}:{image['tag']}"
+            image["__full_name"] = f"{image['repository']}:{image['tag']}"
+            image["__name"] = image["name"]
+            if image["__full_name"] == self._args.execution_environment_image:
+                image["__name"] += " (primary)"
+                image["__name_tag"] += " (primary)"
+
             try:
-                image["ee"] = image["inspect"]["details"]["config"]["cmd"] == [
+                image["execution_environment"] = image["inspect"]["details"]["config"]["cmd"] == [
                     "ansible-runner",
                     "run",
                     "/runner",
                 ]
             except KeyError:
-                image["ee"] = False
+                image["execution_environment"] = False
         self._images.value = sorted(images, key=lambda i: i["name"])
-        self._interaction.ui.update_status()
 
     def _introspect_image(self):
 
@@ -297,8 +347,8 @@ class Action(App):
             "cmdline": [f"{share_directory}/utils/image_introspect.py"],
             "container_engine": self._args.container_engine,
             "container_volume_mounts": container_volume_mounts,
-            "execution_environment_image": f"{self._images.selected['repository']}:{self._images.selected['tag']}",
-            "execution_environment": self._args.execution_environment,
+            "execution_environment_image": self._images.selected["__full_name"],
+            "execution_environment": True,
             "navigator_mode": "interactive",
         }
         self._logger.debug(
@@ -310,11 +360,14 @@ class Action(App):
             parsed = self._parse(output)
             self._images.selected["general"] = {
                 "os": parsed["os_release"],
-                "redhat": parsed["redhat_release"],
+                "friendly": parsed["redhat_release"],
+                "python": parsed["python_version"],
             }
             self._images.selected["ansible"] = {
-                "collections": parsed["ansible_collections"],
-                "version": parsed["ansible_version"],
+                "ansible": {
+                    "collections": parsed["ansible_collections"],
+                    "version": parsed["ansible_version"],
+                }
             }
             self._images.selected["python"] = parsed["python_packages"]
             self._images.selected["system"] = parsed["system_packages"]
