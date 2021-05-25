@@ -26,7 +26,11 @@
         " 12│BECOME_ALLOW_SAME_USER           True default default                         False",
         " 13│BECOME_PLUGIN_PATH               True default default                         ['/home/runner/.ansible/plugins/become', '/usr/share/ansible/plugins/become']",
         " 14│CACHE_PLUGIN                    False env     ANSIBLE_CACHE_PLUGIN            jsonfile",
+<<<<<<< HEAD
         " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /runner/artifacts/e5e89506-5b9f-4b41-92b9-6fbbb14fdd9e/fact_cache",
+=======
+        " 15│CACHE_PLUGIN_CONNECTION         False env     ANSIBLE_CACHE_PLUGIN_CONNECTION /runner/artifacts/03a5c7ba-7dae-477b-8bdb-1aa4014e9814/fact_cache",
+>>>>>>> 55005fdc38fa437e62d493d7cf8ca30874efd636
         " 16│CACHE_PLUGIN_PREFIX              True default default                         ansible_facts",
         " 17│CACHE_PLUGIN_TIMEOUT            False env     ANSIBLE_CACHE_PLUGIN_TIMEOUT    42",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"

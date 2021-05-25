@@ -5,7 +5,6 @@ Some things you can try from here:
 - `:collections`                                          Explore available collections
 - `:config`                                               Explore the current ansible configuration
 - `:doc <plugin>`                                         Review documentation for a module or plugin
-- `:ee-details --eei <image>`                             Explore execution environment details
 - `:help`                                                 Show the main help page
 - `:inventory -i <inventory>`                             Explore an inventory
 - `:log`                                                  Review the application log
