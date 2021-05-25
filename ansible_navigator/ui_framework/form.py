@@ -40,6 +40,8 @@ class Form:
                     name="submit", text="Dismiss", validator=FormValidators.no_validation, color=10
                 )
             )
+        elif self.type is FormType.WORKING:
+            pass
 
         FromPresenter(form=self, screen=screen).present()
         try:
