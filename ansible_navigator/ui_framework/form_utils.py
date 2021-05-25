@@ -11,6 +11,7 @@ from .field_information import FieldInformation
 from .field_option import FieldOption
 from .field_radio import FieldRadio
 from .field_text import FieldText
+from .field_working import FieldWorking
 from .validators import FieldValidators
 from .form import Form
 from .form import FormType
@@ -21,6 +22,8 @@ def dict_to_form(form_data: Dict) -> Form:
     """convert a python dict to a form"""
     if form_data.get("type") == "notification":
         form = Form(type=FormType.NOTIFICATION)
+    elif form_data.get("type") == "working":
+        form = Form(type=FormType.WORKING)
     else:
         form = Form(type=FormType.FORM)
 
@@ -72,6 +75,10 @@ def dict_to_form(form_data: Dict) -> Form:
             frm_field_info = FieldInformation(name=field["name"], information=field["information"])
             form.fields.append(frm_field_info)
 
+        elif field["type"] == "working":
+            frm_field_working = FieldWorking(name=field["name"], messages=field["messages"])
+            form.fields.append(frm_field_working)
+
     return form
 
 
@@ -106,6 +113,18 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
     return res
 
 
+
+def nonblocking_notification(messages: List[str]) -> Form:
+    """generate a std nonblocking notification"""
+    form = {
+        "title": "Working on it...",
+        "title_color": 2,
+        "fields": [{"name": "message", "messages": messages, "type": "working"}],
+        "type": "working",
+    }
+    return dict_to_form(form)
+
+    
 def warning_notification(messages: List[str]) -> Form:
     """generate a std warning notification"""
     form = {
@@ -113,5 +132,7 @@ def warning_notification(messages: List[str]) -> Form:
         "title_color": 3,
         "fields": [{"name": "info", "information": messages, "type": "information"}],
         "type": "notification",
-    }
+     }
     return dict_to_form(form)
+
+

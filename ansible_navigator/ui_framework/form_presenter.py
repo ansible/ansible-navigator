@@ -19,6 +19,7 @@ from .field_checks import FieldChecks
 from .field_information import FieldInformation
 from .field_radio import FieldRadio
 from .field_text import FieldText
+from .field_working import FieldWorking
 from .form_defs import FormType
 from .form_handler_text import FormHandlerText
 from .sentinals import unknown
@@ -74,17 +75,21 @@ class FromPresenter(CursesWindow):
                 widths.extend((len(option.text) + self._input_start for option in field.options))
             if hasattr(field, "information"):
                 widths.append(max([len(info) for info in field.information]))
+            if hasattr(field, "messages"):
+                widths.append(max([len(msg) for msg in field.messages]))
             widths.append(len(field.validator(hint=True)) + self._input_start)
 
         if self._form.type is FormType.FORM:
             self._form_width = max(widths) + BUTTON_SPACE
-        elif self._form.type is FormType.NOTIFICATION:
+        elif self._form.type in (FormType.NOTIFICATION, FormType.WORKING):
             self._form_width = max(widths)
 
         height = 2  # title, hline
         for field in self._form.fields:
             if isinstance(field, FieldInformation):
                 height += len(field.information)
+            if isinstance(field, (FieldWorking)):
+                height += len(field.messages)
             elif isinstance(field, FieldText):
                 height += 1
             elif isinstance(field, (FieldChecks, FieldRadio)):
@@ -110,6 +115,12 @@ class FromPresenter(CursesWindow):
             if isinstance(form_field, FieldInformation):
                 information_lines = self._generate_information(form_field)
                 for line in information_lines:
+                    lines.append((self._line_number, line))
+                    self._line_number += 1
+
+            elif isinstance(form_field, FieldWorking):
+                message_lines = self._generate_messages(form_field)
+                for line in message_lines:
                     lines.append((self._line_number, line))
                     self._line_number += 1
 
@@ -208,6 +219,13 @@ class FromPresenter(CursesWindow):
         )
         return lines
 
+    @staticmethod
+    def _generate_messages(form_field) -> CursesLines:
+        lines = tuple(
+            (CursesLinePart(0, line, curses.color_pair(0), 0),) for line in form_field.messages
+        )
+        return lines
+
     def _generate_prompt(self, form_field) -> CursesLine:
         prompt_start = self._prompt_end - len(form_field.full_prompt)
         if form_field.valid is True:
@@ -266,6 +284,10 @@ class FromPresenter(CursesWindow):
             if char == curses.KEY_RESIZE:
                 self._screen.clear()
                 self._screen.refresh()
+
+            elif char == 112065:
+                # non-blocking form
+                break
 
             elif isinstance(form_field, FieldButton):
                 if form_field.pressed:

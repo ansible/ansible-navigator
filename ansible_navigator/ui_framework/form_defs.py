@@ -9,3 +9,4 @@ class FormType(Enum):
 
     FORM = "A full input form"
     NOTIFICATION = "A text box with a dismiss button"
+    WORKING = "Used when something might take a bit, no buttons"
