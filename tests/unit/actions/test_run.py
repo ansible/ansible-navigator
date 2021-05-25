@@ -111,6 +111,7 @@ class RunRunnerTstData(NamedTuple):
     cmdline: Optional[List]
     expected: Dict
 
+
 runner_test_data = [
     RunRunnerTstData(
         "Validate args passed to runner API",
