@@ -122,3 +122,14 @@ def nonblocking_notification(messages: List[str]) -> Form:
         "type": "working",
     }
     return dict_to_form(form)
+
+
+def warning_notification(messages: List[str]) -> Form:
+    """generate a std warning notification"""
+    form = {
+        "title": "WARNING",
+        "title_color": 3,
+        "fields": [{"name": "info", "information": messages, "type": "information"}],
+        "type": "notification",
+    }
+    return dict_to_form(form)

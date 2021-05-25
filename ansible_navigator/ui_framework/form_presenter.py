@@ -73,6 +73,8 @@ class FromPresenter(CursesWindow):
                 widths.append(len(str(field.value)) + self._input_start)
             if hasattr(field, "options"):
                 widths.extend((len(option.text) + self._input_start for option in field.options))
+            if hasattr(field, "information"):
+                widths.append(max([len(info) for info in field.information]))
             if hasattr(field, "messages"):
                 widths.append(max([len(msg) for msg in field.messages]))
             widths.append(len(field.validator(hint=True)) + self._input_start)
