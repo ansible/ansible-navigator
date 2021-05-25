@@ -151,7 +151,7 @@ The following table describes all available settings.
                 container-engine:
 
   * - editor-command
-    - Specify the editor comamnd
+    - Specify the editor command
     - | **Default:** vi +{line_number} {filename}
       | **CLI:** `--ecmd` or `--editor-command`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_COMMAND
