@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator --ee False --ce docker --ll debug --mode interactive-welcome screen]",
+    "name": "test[0-ansible-navigator --ee False --ce podman --ll debug --mode interactive-welcome screen]",
     "index": 0,
     "comment": "welcome screen",
     "additional_information": {

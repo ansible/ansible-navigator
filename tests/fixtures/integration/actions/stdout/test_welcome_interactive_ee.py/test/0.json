@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator --execution-environment true --ce docker-welcome-:help help]",
+    "name": "test[0-ansible-navigator --execution-environment true --ce podman-welcome-:help help]",
     "index": 0,
     "comment": "welcome",
     "output": [
