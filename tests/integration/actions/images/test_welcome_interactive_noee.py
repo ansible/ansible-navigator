@@ -28,4 +28,4 @@ steps = add_indicies(initial_steps + base_steps)
 class Test(BaseClass):
     """run the tests"""
 
-    UPDATE_FIXTURES = True
+    UPDATE_FIXTURES = False
