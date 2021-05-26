@@ -296,6 +296,7 @@ class Action(App):
             value=menu,
             select_func=self._build_image_content,
         )
+        self._interaction.ui.menu_filter(value=None)
         return step
 
     def _build_python_content(self) -> Step:
