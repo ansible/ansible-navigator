@@ -37,7 +37,7 @@ class StdoutTest(NamedTuple):
     """define the stdout test"""
 
     action_name: str
-    action_params: Tuple[Tuple,...]
+    action_params: Tuple[Tuple, ...]
     message: str
     return_code: int
 
