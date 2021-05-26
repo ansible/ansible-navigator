@@ -22,8 +22,8 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
-from ..ui_framework import warning_notification
 from ..ui_framework import nonblocking_notification
+from ..ui_framework import warning_notification
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
