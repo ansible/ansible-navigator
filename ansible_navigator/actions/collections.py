@@ -24,6 +24,7 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 
 
@@ -107,11 +108,10 @@ class Action(App):
         self._prepare_to_run(app, interaction)
         self.stdout = self._calling_app.stdout
 
-        interaction.ui.show(
-            obj="Collecting collection content, this may take a minute the first time...",
-            xform="text",
-            await_input=False,
+        notification = nonblocking_notification(
+            messages=["", "Collecting collection content, this may take a minute the first time...", ""]
         )
+        interaction.ui.show(notification)
 
         self._update_args(
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
