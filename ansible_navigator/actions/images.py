@@ -198,11 +198,9 @@ class Action(App):
             return step
 
         if not self._images.selected["__introspected"]:
-            self._interaction.ui.show(
-                obj="Collecting image details, this may take a minute...",
-                xform="text",
-                await_input=False,
-            )
+            message = "Collecting image details, this may take a minute..."
+            notification = nonblocking_notification(messages=["", message, ""])
+            self._interaction.ui.show(notification)
             self._introspect_image()
 
         if self.steps.current.index == 1:
