@@ -22,6 +22,7 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 
 
@@ -119,11 +120,10 @@ class Action(App):
         self._logger.debug("images requested")
         self._prepare_to_run(app, interaction)
 
-        interaction.ui.show(
-            obj="Collecting available images, this may take a minute...",
-            xform="text",
-            await_input=False,
+        notification = nonblocking_notification(
+            messages=["", "Collecting available images, this may take a minute...", ""]
         )
+        interaction.ui.show(notification)
 
         self._collect_image_list()
         if not self._images.value:
