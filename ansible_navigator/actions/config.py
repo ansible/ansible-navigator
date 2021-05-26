@@ -213,12 +213,12 @@ class Action(App):
 
             err_msg = "\n".join(set((list_output_err, dump_output_err)))
             if "ERROR!" in err_msg or not list_output or not dump_output:
-                msg = ["Errors were encountered while gathering the configuration:"]
+                warn_msg = ["Errors were encountered while gathering the configuration:"]
                 if err_msg:
-                    msg += err_msg.splitlines()
+                    warn_msg += err_msg.splitlines()
                 if not list_output or not dump_output:
-                    msg.append("The configuration could not be gathered.")
-                warning = warning_notification(msg)
+                    warn_msg.append("The configuration could not be gathered.")
+                warning = warning_notification(warn_msg)
                 self._interaction.ui.show(warning)
                 return
 
