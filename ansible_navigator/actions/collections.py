@@ -371,7 +371,7 @@ class Action(App):
                 self._logger.info("[catalog_collections]: %s", msg)
 
         self._logger.debug("catalog collections scan path: %s", parsed["collection_scan_paths"])
-        self._collection_scanned_paths = sorted(parsed["collection_scan_paths"].split(":"))
+        self._collection_scanned_paths = parsed["collection_scan_paths"].split(":")
         for stat, value in self._stats.items():
             self._logger.debug("%s: %s", stat, value)
 
