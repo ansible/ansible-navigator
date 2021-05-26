@@ -121,7 +121,7 @@ class Action(App):
         self._prepare_to_run(app, interaction)
 
         notification = nonblocking_notification(
-            messages=["", "Collecting available images, this may take a minute...", ""]
+            messages=["Collecting available images, this may take a minute..."]
         )
         interaction.ui.show(notification)
 
@@ -199,7 +199,7 @@ class Action(App):
 
         if not self._images.selected["__introspected"]:
             message = "Collecting image details, this may take a minute..."
-            notification = nonblocking_notification(messages=["", message, ""])
+            notification = nonblocking_notification(messages=[message])
             self._interaction.ui.show(notification)
             self._introspect_image()
 

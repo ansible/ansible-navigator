@@ -110,9 +110,7 @@ class Action(App):
 
         notification = nonblocking_notification(
             messages=[
-                "",
                 "Collecting collection content, this may take a minute the first time...",
-                "",
             ]
         )
         interaction.ui.show(notification)
