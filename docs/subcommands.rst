@@ -32,6 +32,10 @@ ansible-navigator subcommand overview
     - Review documentation for a module or plugin
     - ansible-navigator doc --help
     - :doc
+  * - images
+    - Explore execution environment images
+    - ansible-navigator images --help
+    - :images
   * - inventory
     - Explore an inventory
     - ansible-navigator inventory --help

@@ -117,6 +117,10 @@ navigator_subcommds = [
         ),
     ),
     SubCommand(
+        name="images",
+        description="Explore execution environment images",
+    ),
+    SubCommand(
         name="inventory",
         description="Explore an inventory",
         epilog=(
