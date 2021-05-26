@@ -1,0 +1,22 @@
+{
+    "name": "test[3-:0-goto info menu]",
+    "index": 3,
+    "comment": "goto info menu",
+    "additional_information": {
+        "look_fors": [
+            "Everything"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  ANSIBLE-RUNNER:DEVEL (PRIMARY)                                               DESCRIPTION",
+        "0│Image information                                                            Information collected from image inspection",
+        "1│General information                                                          OS and python version information",
+        "2│Ansible version and collections                                              Information about ansible and ansible collections",
+        "3│Python packages                                                              Information about python and python packages",
+        "4│Operating system packages                                                    Information about operating system packages",
+        "5│Everything                                                                   All image information",
+        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+    ]
+}

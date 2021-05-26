@@ -1,0 +1,34 @@
+{
+    "name": "test[10-:3-goto Python information]",
+    "index": 10,
+    "comment": "goto Python information",
+    "additional_information": {
+        "look_fors": [
+            "ansible-runner"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "   NAME           VERSION     SUMMARY",
+        " 0│ansible-core   2.12.0.dev0 Radically simple IT automation                                                                                                                                           ▒",
+        " 1│ansible-runner 2.0.0a2     UNKNOWN                                                                                                                                                                  ▒",
+        " 2│asn1crypto     1.2.0       Fast ASN.1 parser and serializer with definitions for private keys, public keys, certificates, CRL, OCSP, CMS, PKCS#3, PKCS#7, PKCS#8, PKCS#12, PKCS#5, X.509 and TSP    ▒",
+        " 3│Babel          2.7.0       Internationalization utilities                                                                                                                                           ▒",
+        " 4│bcrypt         3.2.0       Modern password hashing for your software and your servers                                                                                                               ▒",
+        " 5│cffi           1.13.2      Foreign Function Interface for Python calling C code.                                                                                                                    ▒",
+        " 6│chardet        3.0.4       Universal encoding detector for Python 2 and 3                                                                                                                           ▒",
+        " 7│cryptography   2.8         cryptography is a package which provides cryptographic recipes and primitives to Python developers.                                                                      ▒",
+        " 8│decorator      5.0.9       Decorators for Humans",
+        " 9│docutils       0.17.1      Docutils -- Python Documentation Utilities",
+        "10│dumb-init      1.2.5       Simple wrapper script which proxies signals to a child",
+        "11│gssapi         1.6.12      Python GSSAPI Wrapper",
+        "12│idna           2.8         Internationalized Domain Names in Applications (IDNA)",
+        "13│Jinja2         2.10.3      A very fast and expressive template engine.",
+        "14│lockfile       0.12.2      Platform-independent file locking module",
+        "15│lxml           4.4.1       Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.",
+        "16│MarkupSafe     1.1.1       Safely add untrusted strings to HTML/XML markup.",
+        "17│ncclient       0.6.10      Python library for NETCONF clients",
+        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+    ]
+}
