@@ -210,12 +210,12 @@ class Action(App):
             if dump_output_err:
                 msg = f"Error occurred while fetching ansible config (dump): '{dump_output_err}'"
                 self._logger.error(msg)
-            err_msg = "\n".join(set((list_output_err, dump_output_err))).splitlines()
 
-            if err_msg or not list_output or not dump_output:
-                msg = ["Error were encountered while gathering the configuration:"]
+            err_msg = "\n".join(set((list_output_err, dump_output_err)))
+            if "ERROR!" in err_msg or not list_output or not dump_output:
+                msg = ["Errors were encountered while gathering the configuration:"]
                 if err_msg:
-                    msg += err_msg
+                    msg += err_msg.splitlines()
                 if not list_output or not dump_output:
                     msg.append("The configuration could not be gathered.")
                 warning = warning_notification(msg)
