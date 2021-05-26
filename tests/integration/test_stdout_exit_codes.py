@@ -37,7 +37,7 @@ class StdoutTest(NamedTuple):
     """define the stdout test"""
 
     action_name: str
-    action_params: Tuple[Tuple]
+    action_params: Tuple[Tuple, ...]
     message: str
     return_code: int
 
@@ -80,11 +80,14 @@ test_datas = (
         return_code=1,
     ),
     StdoutTest(
-        action_name="run", action_params=(("playbook", PLAYBOOK),), message="success", return_code=0
+        action_name="run",
+        action_params=(("playbook", PLAYBOOK), ("playbook_artifact_enable", False)),
+        message="success",
+        return_code=0,
     ),
     StdoutTest(
         action_name="run",
-        action_params=(("playbook", "foo"),),
+        action_params=(("playbook", "foo"), ("playbook_artifact_enable", False)),
         message="foo could not be found",
         return_code=1,
     ),

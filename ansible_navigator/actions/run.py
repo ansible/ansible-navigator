@@ -230,6 +230,14 @@ class Action(App):
         self._task_list_columns = task_list_columns
         self._content_key_filter = content_key_filter
 
+    @property
+    def mode(self):
+        """if mode == stdout and playbook artifact creation is enabled
+        run in interactive mode, but print stdout"""
+        if self._args.mode == "stdout" and self._args.playbook_artifact_enable:
+            return "stdout_w_artifact"
+        return self._args.mode
+
     def run_stdout(self) -> int:
         """Run in oldschool mode, just stdout
 
@@ -530,12 +538,18 @@ class Action(App):
     def _run_runner(self) -> None:
         """spin up runner"""
         executable_cmd: Optional[str]
+
+        if self.mode == "stdout_w_artifact":
+            mode = "interactive"
+        else:
+            mode = self.mode
+
         kwargs = {
             "container_engine": self._args.container_engine,
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "inventory": self._args.inventory,
-            "navigator_mode": self._args.mode,
+            "navigator_mode": mode,
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": self._args.set_environment_variable,
         }
@@ -588,6 +602,8 @@ class Action(App):
         else:
             if "stdout" in message and message["stdout"]:
                 self.stdout.extend(message["stdout"].splitlines())
+                if self.mode == "stdout_w_artifact":
+                    print(message["stdout"])
 
             if event in ["verbose", "error"]:
                 if "ERROR!" in message["stdout"]:

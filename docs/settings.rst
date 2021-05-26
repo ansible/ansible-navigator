@@ -528,7 +528,7 @@ The following table describes all available settings.
               playbook:
 
   * - playbook-artifact-enable
-    - Enable or disable the creation of artifacts for completed playbooks
+    - Enable or disable the creation of artifacts for completed playbooks. Note: not compatible with '--mode stdout' when playbooks require user input
     - | **Choices:** 'True' or 'False'
       | **Default:** True
       | **CLI:** `--pae` or `--playbook-artifact-enable`

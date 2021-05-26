@@ -27,7 +27,7 @@ stdout_tests = (
     ShellCommand(
         comment="run playbook with ee",
         user_input=StdoutCommand(
-            cmdline=f"{playbook_path} -i {inventory_path}",
+            cmdline=f"{playbook_path} -i {inventory_path} --pae false",
             mode="stdout",
             execution_environment=True,
         ).join(),
@@ -35,7 +35,7 @@ stdout_tests = (
     ShellCommand(
         comment="run playbook without ee",
         user_input=StdoutCommand(
-            cmdline=f"{playbook_path} -i {inventory_path}",
+            cmdline=f"{playbook_path} -i {inventory_path} --pae false",
             mode="stdout",
             execution_environment=False,
         ).join(),
