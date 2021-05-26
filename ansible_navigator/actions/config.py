@@ -23,6 +23,7 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import warning_notification
 
 from ..yaml import yaml
 from ..yaml import Loader
@@ -185,6 +186,7 @@ class Action(App):
         )
 
     def _run_runner(self) -> None:
+        # pylint: disable=too-many-branches
         """spin up runner"""
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -202,11 +204,22 @@ class Action(App):
                 kwargs["config_file"] = self._args.config
             list_output, list_output_err = self._runner.fetch_ansible_config("list", **kwargs)
             dump_output, dump_output_err = self._runner.fetch_ansible_config("dump", **kwargs)
-            output_error = list_output_err or dump_output_err
-            if output_error:
-                msg = f"Error occurred while fetching ansible config: '{output_error}'"
+            if list_output_err:
+                msg = f"Error occurred while fetching ansible config (list): '{list_output_err}'"
                 self._logger.error(msg)
-            if list_output is None or dump_output is None:
+            if dump_output_err:
+                msg = f"Error occurred while fetching ansible config (dump): '{dump_output_err}'"
+                self._logger.error(msg)
+            err_msg = "\n".join(set((list_output_err, dump_output_err))).splitlines()
+
+            if err_msg or not list_output or not dump_output:
+                msg = ["Error were encountered while gathering the configuration:"]
+                if err_msg:
+                    msg += err_msg
+                if not list_output or not dump_output:
+                    msg.append("The configuration could not be gathered.")
+                warning = warning_notification(msg)
+                self._interaction.ui.show(warning)
                 return
 
             self._parse_and_merge(list_output, dump_output)

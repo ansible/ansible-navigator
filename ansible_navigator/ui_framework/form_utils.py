@@ -1,6 +1,9 @@
 """ simple utils for working with forms
 """
 import copy
+import os
+import textwrap
+
 from functools import partial
 from typing import Dict
 from typing import List
@@ -113,8 +116,19 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
     return res
 
 
+def break_long_lines(messages):
+    """break lines such that the form widt !> 80%"""
+    width = int(os.get_terminal_size().columns * 0.8)
+    result = []
+    for message in messages:
+        lns = textwrap.wrap(message, width, break_long_words=False)
+        result.extend(lns)
+    return result
+
+
 def nonblocking_notification(messages: List[str]) -> Form:
     """generate a std nonblocking notification"""
+    messages = break_long_lines(messages)
     form = {
         "title": "Working on it...",
         "title_color": 2,
@@ -126,6 +140,7 @@ def nonblocking_notification(messages: List[str]) -> Form:
 
 def warning_notification(messages: List[str]) -> Form:
     """generate a std warning notification"""
+    messages = break_long_lines(messages)
     form = {
         "title": "WARNING",
         "title_color": 3,
