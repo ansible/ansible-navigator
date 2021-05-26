@@ -48,6 +48,7 @@ PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
 
 
 class NavigatorPostProcessor:
+    # pylint:disable=too-many-public-methods
     """application post processor"""
 
     @staticmethod
@@ -122,6 +123,19 @@ class NavigatorPostProcessor:
             new_messages, new_exit_messages = check_for_ansible()
             messages.extend(new_messages)
             exit_messages.extend(new_exit_messages)
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
+    def execution_environment_image(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process execution_environment_image"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if ":" not in entry.value.current:
+            entry.value.current = f"{entry.value.current}:latest"
         return messages, exit_messages
 
     @_post_processor

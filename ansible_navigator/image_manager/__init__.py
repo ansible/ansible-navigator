@@ -1,3 +1,4 @@
 """ image manager """
 
-from .image_puller import ImagePuller
+from .puller import ImagePuller
+from .inspector import inspect_all

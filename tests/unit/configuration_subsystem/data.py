@@ -17,7 +17,7 @@ BASE_SHORT_CLI = """
 --ecmd vim_base
 --econ True
 --ee False
---eei test_image
+--eei test_image:latest
 --la false
 --lf /tmp/app.log
 --ll warning
@@ -34,7 +34,7 @@ BASE_LONG_CLI = """
 --editor-command vim_base
 --editor-console True
 --execution-environment False
---execution-environment-image test_image
+--execution-environment-image test_image:latest
 --log-append false
 --log-file /tmp/app.log
 --log-level warning
@@ -52,7 +52,7 @@ BASE_EXPECTED = d2t(
         "editor_command": "vim_base",
         "editor_console": True,
         "execution_environment": False,
-        "execution_environment_image": "test_image",
+        "execution_environment_image": "test_image:latest",
         "log_append": False,
         "log_file": "/tmp/app.log",
         "log_level": "warning",
@@ -200,7 +200,7 @@ ENVVAR_DATA = [
     ("editor_command", "nano_envvar", "nano_envvar"),
     ("editor_console", "false", False),
     ("execution_environment", "false", False),
-    ("execution_environment_image", "test_image", "test_image"),
+    ("execution_environment_image", "test_image:latest", "test_image:latest"),
     ("help_config", "false", False),
     ("help_doc", "false", False),
     ("help_inventory", "false", False),

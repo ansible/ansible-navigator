@@ -19,19 +19,19 @@ test_data = [
         "set at command line",
         "--execution-environment-image quay.io/ansible/python-base",
         "ansible-navigator_empty.yml",
-        {"container_image": "quay.io/ansible/python-base"},
+        {"container_image": "quay.io/ansible/python-base:latest"},
     ),
     (
         "set in config file",
         "",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "quay.io/ansible/python-base"},
+        {"container_image": "quay.io/ansible/python-base:latest"},
     ),
     (
         "set command line and config file, command line wins",
         "--execution-environment True --execution-environment-image quay.io/ansible/python-base",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "quay.io/ansible/python-base"},
+        {"container_image": "quay.io/ansible/python-base:latest"},
     ),
 ]
 

@@ -5,6 +5,7 @@ import ast
 import logging
 import html
 import os
+import re
 import shutil
 import sys
 import sysconfig
@@ -316,6 +317,25 @@ def human_time(seconds: int) -> str:
     if minutes > 0:
         return "%s%dm%ds" % (sign_string, minutes, seconds)
     return "%s%ds" % (sign_string, seconds)
+
+
+PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
+
+
+def pascal_to_snake(obj):
+    """convert a pascal cased object
+    into a snake cased object recursively
+    """
+    if isinstance(obj, list):
+        working = [pascal_to_snake(x) for x in obj]
+        return working
+    if isinstance(obj, dict):
+        working = {}
+        for k, val in obj.items():
+            new_key = PASCAL_REGEX.sub(r"_\1", k).lower()
+            working[new_key] = pascal_to_snake(val)
+        return working
+    return obj
 
 
 def str2bool(value: Any) -> bool:
