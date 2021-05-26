@@ -109,7 +109,11 @@ class Action(App):
         self.stdout = self._calling_app.stdout
 
         notification = nonblocking_notification(
-            messages=["", "Collecting collection content, this may take a minute the first time...", ""]
+            messages=[
+                "",
+                "Collecting collection content, this may take a minute the first time...",
+                "",
+            ]
         )
         interaction.ui.show(notification)
 
