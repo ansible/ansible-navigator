@@ -329,7 +329,8 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--pae"),
             settings_file_path_override="playbook-artifact.enable",
             short_description="Enable or disable the creation of artifacts for"
-            " completed playbooks",
+            " completed playbooks. Note: not compatible with '--mode stdout' when playbooks"
+            " require user input",
             subcommands=["run"],
             value=EntryValue(default=True),
         ),
