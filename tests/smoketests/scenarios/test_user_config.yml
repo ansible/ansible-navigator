@@ -2,15 +2,10 @@
 - name: Ensure config file gets picked up from ~/.config
   hosts: localhost
   pre_tasks:
-    - name: Create ~/.config/ansible-navigator
-      file:
-        path: ~/.config/ansible-navigator
-        state: directory
-      register: fileres
 
     - copy:
         src: "{{ playbook_dir }}/smoke-config.yml"
-        dest: "{{ fileres.path }}/ansible-navigator.yml"
+        dest: "~/.ansible-navigator.yml"
 
     - include_role:
         name: tmux/setup
@@ -68,5 +63,5 @@
 
     - name: Remove config file
       file:
-        path: ~/.config/ansible-navigator
+        path: ~/.ansible-navigator.yml
         state: absent

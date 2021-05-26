@@ -17,7 +17,7 @@ from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
 
 from .utils import environment_variable_is_file_path
-from .utils import find_configuration_directory_or_file_path
+from .utils import find_settings_file
 from .utils import ExitMessage
 from .utils import ExitPrefix
 from .utils import LogMessage
@@ -52,10 +52,9 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     if exit_messages:
         return messages, exit_messages, config_path
 
-    # Check well know locations
-    new_messages, new_exit_messages, found_config_path = find_configuration_directory_or_file_path(
-        "ansible-navigator", allowed_extensions=["yml", "yaml", "json"]
-    )
+    # Find the setting file
+    new_messages, new_exit_messages, found_config_path = find_settings_file()
+
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
     if exit_messages:
@@ -64,14 +63,14 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     # Pick the envar set first, followed by found, followed by leave as none
     if env_config_path is not None:
         config_path = env_config_path
-        message = f"Using config file at {config_path} set by {cfg_env_var}"
+        message = f"Using settings file at {config_path} set by {cfg_env_var}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
     elif found_config_path is not None:
         config_path = found_config_path
-        message = f"Using config file at {config_path} in search path"
+        message = f"Using settings file at {config_path} in search path"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
     else:
-        message = "No valid config file found, using all default values for configuration."
+        message = "No valid settings file found, using all default values for settings."
         messages.append(LogMessage(level=logging.DEBUG, message=message))
     return messages, exit_messages, config_path
 
