@@ -6,6 +6,7 @@ Some things you can try from here:
 - `:config`                                               Explore the current ansible configuration
 - `:doc <plugin>`                                         Review documentation for a module or plugin
 - `:help`                                                 Show the main help page
+- `:images`                                               Explore execution environment images
 - `:inventory -i <inventory>`                             Explore an inventory
 - `:log`                                                  Review the application log
 - `:open`                                                 Open current page in the editor
