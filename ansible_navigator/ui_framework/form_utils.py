@@ -121,7 +121,7 @@ def break_long_lines(messages):
     width = int(os.get_terminal_size().columns * 0.8)
     result = []
     for message in messages:
-        lns = textwrap.wrap(message, width, break_long_words=False)
+        lns = textwrap.wrap(message, width)
         result.extend(lns)
     return result
 
