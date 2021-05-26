@@ -209,7 +209,7 @@ class Action(App):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "cwd": os.getcwd(),
+            "host_cwd": os.getcwd(),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
