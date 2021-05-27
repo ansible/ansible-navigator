@@ -43,11 +43,10 @@ def test_ee_false_no_ansible(_mocked_func, generate_config):
 def test_no_container_engine(_mocked_func, generate_config):
     """Ensure an error is created if EE is false and ansible not present"""
     response = generate_config()
-    exit_msg = (
-        "The specified container engine could not be found:'podman',"
-        " set by 'default configuration value'"
-    )
-    assert exit_msg in [exit_msg.message for exit_msg in response.exit_messages]
+    expected = "No container engine could be found"
+    assert any(
+        expected in exit_msg.message for exit_msg in response.exit_messages
+    ), response.exit_messages
 
 
 @patch("os.makedirs", side_effect=OSError)
