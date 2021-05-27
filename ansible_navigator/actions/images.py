@@ -1,6 +1,7 @@
 """ :images """
 import curses
 import json
+import shlex
 
 from functools import partial
 
@@ -46,7 +47,7 @@ class Action(App):
 
     # pylint: disable=too-few-public-methods
 
-    KEGEX = r"^images$"
+    KEGEX = r"^im(?:ages)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
         super().__init__(args=args, logger_name=__name__, name="images")
@@ -68,12 +69,12 @@ class Action(App):
             if entry.get("execution_environment") is False:
                 return 8
             if entry["__full_name"] == self._args.execution_environment_image:
-                return 4
+                return 12
             return 2
 
         if self._images.selected:
             if self._images.selected["__full_name"] == self._args.execution_environment_image:
-                return 4
+                return 12
             if self._images.selected["execution_environment"] is False:
                 return 8
         return 2
@@ -119,6 +120,10 @@ class Action(App):
         """
         self._logger.debug("images requested")
         self._prepare_to_run(app, interaction)
+
+        self._update_args(
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
+        )
 
         notification = nonblocking_notification(
             messages=["Collecting available images, this may take a minute..."]
@@ -317,10 +322,12 @@ class Action(App):
 
     def _collect_image_list(self):
         images, error = inspect_all(container_engine=self._args.container_engine)
-        self._logger.error(error)
+        if error or not images:
+            self._logger.error(error)
+            return
+
         for image in images:
             image["__introspected"] = False
-
             image["name"] = image["repository"].split("/")[-1]
             image["__name_tag"] = f"{image['name']}:{image['tag']}"
             image["__full_name"] = f"{image['repository']}:{image['tag']}"

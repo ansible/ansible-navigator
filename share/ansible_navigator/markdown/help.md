@@ -11,7 +11,7 @@ arrow up, arrow down                                  Scroll up/down
 :r, :run <playbook> -i <inventory>                    Run a playbook in interactive mode
 :f, :filter <re>                                      Filter page lines using a regex
 :h, :help                                             This page
-:images                                               Explore execution environment images
+:im, images                                           Explore execution environment images
 :i -i <inventory>, :inventory -i <inventory>          Explore the current or alternate inventory
 :l, :log                                              Review current log file
 :o, :open                                             Open current page in the editor
