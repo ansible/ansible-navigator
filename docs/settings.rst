@@ -35,9 +35,12 @@ You can copy the example settings file below into one of those paths to start yo
     ansible-navigator:
     #   ansible:
     #     config: /tmp/ansible.cfg
+    #     cmdline: "--forks 15"
+    #     inventories:
+    #     - /tmp/test_inventory.yml
+    #     playbook: /tmp/test_playbook.yml
     #   app: run
     #   collection-doc-cache-path: /tmp/cache.db
-    #   cmdline: "--forks 15"
     #   editor:
     #     command: vim_from_setting
     #     console: False
@@ -63,8 +66,6 @@ You can copy the example settings file below into one of those paths to start yo
     #   help-doc: True
     #   help-inventory: True
     #   help-playbook: False
-    #   inventories:
-    #     - /tmp/test_inventory.yml
     #   inventory-columns:
     #     - ansible_network_os
     #     - ansible_network_cli_ssh_type
@@ -75,7 +76,6 @@ You can copy the example settings file below into one of those paths to start yo
     #     file: /tmp/log.txt
     #   mode: stdout
     #   osc4: False
-    #   playbook: /tmp/test_playbook.yml
     #   playbook-artifact: 
     #     enable: True
     #     replay: /tmp/test_artifact.json
@@ -118,7 +118,8 @@ The following table describes all available settings.
       .. code-block:: yaml
 
             ansible-navigator:
-              cmdline:
+              ansible:
+                cmdline:
 
   * - collection-doc-cache-path
     - The path to collection doc cache
@@ -431,7 +432,8 @@ The following table describes all available settings.
       .. code-block:: yaml
 
             ansible-navigator:
-              inventories:
+              ansible:
+                inventories:
 
   * - inventory-column
     - Specify a host attribute to show in the inventory view
@@ -501,7 +503,8 @@ The following table describes all available settings.
       .. code-block:: yaml
 
             ansible-navigator:
-              inventories:
+              ansible:
+                inventories:
 
   * - inventory-column
     - Specify a host attribute to show in the inventory view
@@ -525,7 +528,8 @@ The following table describes all available settings.
       .. code-block:: yaml
 
             ansible-navigator:
-              playbook:
+              ansible:
+                playbook:
 
   * - playbook-artifact-enable
     - Enable or disable the creation of artifacts for completed playbooks. Note: not compatible with '--mode stdout' when playbooks require user input
