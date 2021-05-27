@@ -115,7 +115,7 @@ class NavigatorPostProcessor:
         if entry.value.current is True:
             exit_msg = ""
             if config.container_engine == "auto":
-                exit_msg = "No container engine could not be found:"
+                exit_msg = "No container engine could be found:"
             else:
                 container_engine_location = shutil.which(config.container_engine)
                 if container_engine_location is None:
