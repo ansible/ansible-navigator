@@ -6,19 +6,18 @@ esc                                                   Go back
 arrow up, arrow down                                  Scroll up/down
 :collections                                          Explore installed collections
 :config                                               Explore the current Ansible configuration
-:eed, :ee-details -eei <image>                        Explore execution environment details
 :d, :doc <plugin>                                     Show a plugin doc
-:r, :run <playbook> -i <inventory>                    Run a playbook in interactive mode
 :f, :filter <re>                                      Filter page lines using a regex
 :h, :help                                             This page
 :images                                               Explore execution environment images
-:i -i <inventory>, :inventory -i <inventory>          Explore the current or alternate inventory
+:i, :inventory -i <inventory>                         Explore the current or alternate inventory
 :l, :log                                              Review current log file
 :o, :open                                             Open current page in the editor
 :o, :open {{ some_key }}                              Open file path in a key's value
 :q, :quit                                             Quit the application
 :q!, :quit!, ^c                                       Force quit while a playbook is running
 :rep, :replay                                         Replay a playbook artifact
+:r, :run <playbook> -i <inventory>                    Run a playbook in interactive mode
 :rr, :rerun                                           Rerun the playbook
 :s, :save <file>                                      Save current plays as an artifact
 :st, :stdout                                          Watch playbook results real time
