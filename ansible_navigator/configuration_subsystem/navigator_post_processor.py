@@ -394,8 +394,15 @@ class NavigatorPostProcessor:
         """Post process plugin_name"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if all((config.app == "doc", entry.value.current is C.NOT_SET, config.help_doc is False)):
-            exit_msg = "An plugin name is required when using the doc subcommand"
+        if all(
+            (
+                config.app == "doc",
+                entry.value.current is C.NOT_SET,
+                config.help_doc is False,
+                config.mode != "stdout",
+            )
+        ):
+            exit_msg = "A plugin name is required when using the doc subcommand"
             exit_messages.append(ExitMessage(message=exit_msg))
             exit_msg = "Try again with 'doc <plugin_name>'"
             exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
