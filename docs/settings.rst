@@ -133,9 +133,9 @@ The following table describes all available settings.
               collection-doc-cache-path:
 
   * - container-engine
-    - Specify the container engine
-    - | **Choices:** 'podman' or 'docker'
-      | **Default:** podman
+    - Specify the container engine (auto=podman then docker)
+    - | **Choices:** 'auto', 'podman' or 'docker'
+      | **Default:** auto
       | **CLI:** `--ce` or `--container-engine`
       | **ENV:** ANSIBLE_NAVIGATOR_CONTAINER_ENGINE
       | **Settings file:**

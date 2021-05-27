@@ -182,11 +182,11 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="container_engine",
-            choices=["podman", "docker"],
+            choices=["auto", "podman", "docker"],
             cli_parameters=CliParameters(short="--ce"),
             settings_file_path_override="execution-environment.container-engine",
-            short_description="Specify the container engine",
-            value=EntryValue(default="podman"),
+            short_description="Specify the container engine (auto=podman then docker)",
+            value=EntryValue(default="auto"),
         ),
         Entry(
             name="editor_command",
