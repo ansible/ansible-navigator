@@ -10,6 +10,7 @@ import shlex
 import shutil
 import uuid
 
+from math import floor
 from queue import Queue
 from typing import Any
 from typing import Callable
@@ -51,7 +52,7 @@ get_color = lambda word: next(  # noqa: E731
 )
 
 
-def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> int:
+def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=too-many-branches
     """Find matching color for word
 
@@ -61,10 +62,11 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> int:
 
     colval = entry[colname]
     color = 0
+    decoration = 0
     if "__play_name" in entry:
         if not colval:
             color = 8
-        elif colname in ["__% completed", "__task_count", "__play_name"]:
+        elif colname in ["__task_count", "__play_name", "__progress"]:
             failures = entry["__failed"] + entry["__unreachable"]
             if failures:
                 color = 9
@@ -76,6 +78,9 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> int:
             color = 11
         else:
             color = get_color(colname[2:])
+
+        if colname == "__progress" and entry["__progress"].strip().lower() == "complete":
+            decoration = curses.A_REVERSE
 
     elif "task" in entry:
         if entry["__result"].lower() == "__in_progress":
@@ -90,7 +95,7 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> int:
         elif colname == "__duration":
             color = 12
 
-    return color
+    return color, decoration
 
 
 def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
@@ -175,7 +180,7 @@ PLAY_COLUMNS = [
     "__ignored",
     "__in_progress",
     "__task_count",
-    "__% completed",
+    "__progress",
 ]
 
 TASK_LIST_COLUMNS = [
@@ -669,12 +674,12 @@ class Action(App):
             self._plays.value[idx]["__task_count"] = task_count
             completed = task_count - self._plays.value[idx]["__in_progress"]
             if completed:
-                new = round((completed / task_count * 100))
+                new = floor((completed / task_count * 100))
                 current = self._plays.value[idx].get("__pcomplete", 0)
                 self._plays.value[idx]["__pcomplete"] = max(new, current)
-                self._plays.value[idx]["__% completed"] = str(max(new, current)) + "%"
+                self._plays.value[idx]["__progress"] = str(max(new, current)) + "%"
             else:
-                self._plays.value[idx]["__% completed"] = "0%"
+                self._plays.value[idx]["__progress"] = "0%"
 
     def _prepare_to_quit(self, interaction: Interaction) -> bool:
         """Looks like we're headed out of here

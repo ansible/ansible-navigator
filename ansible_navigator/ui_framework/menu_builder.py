@@ -1,7 +1,6 @@
 """ build a menu
 """
 import curses
-import functools
 import re
 
 from typing import Any
@@ -111,8 +110,8 @@ class MenuBuilder:
         coltext = re.sub("^__", "", cols[colno])
         coltext = re.sub("_", " ", coltext)
         adj_entry = coltext[0 : adj_colws[colno]].upper()
-        # right justifyheader if %
-        if coltext.startswith("% "):
+        # right justifyheader if progress
+        if cols[colno] == "__progress":
             return CursesLinePart(
                 column=col_starts[colno] + adj_colws[colno] - len(adj_entry),
                 string=adj_entry,
@@ -196,22 +195,17 @@ class MenuBuilder:
         """
         col_starts, cols, adj_colws, header = menu_layout
 
-        color = self._color_menu_item(colno, cols[colno], dyct)
+        color, decoration = self._color_menu_item(colno, cols[colno], dyct)
         color = curses.color_pair(color % self._number_colors)
 
         text = str(coltext)[0 : adj_colws[colno]]
         if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "__duration":
             # right jusitfy on header if int, bool, float or "duration"
             print_at = col_starts[colno] + len(header[colno][1]) - len(text)
-        elif _is_progress(str(coltext)):
-            # right justify in column if %
+        elif cols[colno].lower() == "__progress":
+            # right justify in column if progress indicator
             print_at = col_starts[colno] + adj_colws[colno] - len(text)
         else:
             # left justify
             print_at = col_starts[colno]
-        return CursesLinePart(column=print_at, string=str(text), color=color, decoration=0)
-
-
-@functools.lru_cache(maxsize=None)
-def _is_progress(string):
-    return bool(re.match(r"^[\s0-9]{3}%\s[\u2587|\s]", string))
+        return CursesLinePart(column=print_at, string=str(text), color=color, decoration=decoration)

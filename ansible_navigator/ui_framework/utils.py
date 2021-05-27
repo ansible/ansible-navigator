@@ -22,11 +22,12 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
     for key in keys:
         value = dyct.get(key)
         if value and is_percent(str(value)):
-            numx = floor(pbar_width / 100 * int(value[0:-1]))
-            dyct["_" + key] = value
-            dyct[key] = "{value} {numx}".format(
-                value=value.rjust(4), numx=("\u2587" * numx).ljust(pbar_width)
-            )
+            if value == "100%":
+                dyct[key] = "COMPLETE".center(pbar_width, " ")
+            else:
+                numx = floor(pbar_width / 100 * int(value[0:-1]))
+                dyct["_" + key] = value
+                dyct[key] = ("\u2588" * numx).ljust(pbar_width)
 
 
 @functools.lru_cache(maxsize=None)
