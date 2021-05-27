@@ -154,11 +154,12 @@ def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
         assert configured_entry.value.source is C.NOT_SET, configured_entry
     else:
         assert configured_entry.value.source is C.DEFAULT_CFG, configured_entry
-        try:
-            assert configured_entry.value.current == entry.value.default, configured_entry
-        except AssertionError:
-            # playbook_artificat_save_as default fully resolved
+        if configured_entry.name == "playbook_save_as":
             assert configured_entry.value.current.endswith(entry.value.default), configured_entry
+        elif configured_entry.name == "container_engine":
+            assert configured_entry.value.current == "podman"
+        else:
+            assert configured_entry.value.current == entry.value.default, configured_entry
 
 
 @patch("shutil.which", return_value="/path/to/container_engine")
