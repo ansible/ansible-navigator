@@ -144,6 +144,22 @@ body:
 
 - type: textarea
   attributes:
+    label: Ansible navigator logs
+    description: >-
+      Paste verbatim relevant logs from the ansible-navigator
+      log file preferably after setting the log-level to `debug`,
+       under the prompt line.
+      **HINT:** You can paste https://gist.github.com links for larger files.
+    render: console
+    value: |
+      $ cat ./ansible-navigator.log
+    placeholder: |
+      210526122359.508 INFO 'ansible_navigator.setup_logger' New ansible-navigator instance, logging initialized
+      210526122359.509 INFO 'ansible_navigator.setup_logger' New ansible-runner instance, logging initialized
+      210526122359.509 DEBUG 'ansible_navigator.main' Share directory found (development path) 
+
+- type: textarea
+  attributes:
     label: Execution environment details
     description: >-
       If using Ansible execution-environment with ansible-navigator
