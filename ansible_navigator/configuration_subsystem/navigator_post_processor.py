@@ -87,6 +87,21 @@ class NavigatorPostProcessor:
             entry.value.current = entry.value.current.split()
         return messages, exit_messages
 
+    @staticmethod
+    @_post_processor
+    def container_engine(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process container_engine"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.current == "auto":
+            choices = filter(lambda x: x != "auto", entry.choices)
+            for choice in choices:
+                if shutil.which(choice):
+                    entry.value.current = choice
+                    break
+        return messages, exit_messages
+
     @_post_processor
     def editor_console(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process editor_console"""
@@ -94,31 +109,40 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def execution_environment(self, entry, config) -> PostProcessorReturn:
+        # pylint: disable=too-many-locals
         """Post process execution_environment"""
         messages, exit_messages = self._true_or_false(entry, config)
         if entry.value.current is True:
-            container_engine_location = shutil.which(config.container_engine)
-            if container_engine_location is None:
-                exit_msg = "The specified container engine could not be found:"
-                exit_msg += f"'{config.container_engine}',"
+            exit_msg = ""
+            if config.container_engine == "auto":
+                exit_msg = "No container engine could be found:"
+            else:
+                container_engine_location = shutil.which(config.container_engine)
+                if container_engine_location is None:
+                    exit_msg = "The specified container engine could not be found:"
+            if exit_msg:
+                exit_msg += f" '{config.container_engine}',"
                 exit_msg += f" set by '{config.entry('container_engine').value.source.value}'"
                 exit_messages.append(ExitMessage(message=exit_msg))
-                if config.container_engine in config.entry("container_engine").choices:
-                    ce_short = config.entry("container_engine").cli_parameters.short
-                    entry_short = entry.cli_parameters.short
-                    if ce_short and entry_short:
-                        other = [
-                            f"{ce_short} {choice}"
-                            for choice in config.entry("container_engine").choices
-                            if choice != config.container_engine
-                        ]
-                        exit_msg = f"Try installing '{config.container_engine}'"
-                        exit_msg += f", try again with {oxfordcomma(other, 'or')}"
-                        exit_msg += (
+                ce_short = config.entry("container_engine").cli_parameters.short
+                entry_short = entry.cli_parameters.short
+                choices = config.entry("container_engine").choices
+                if ce_short and entry_short:
+                    hint = ""
+                    if config.container_engine == "auto":
+                        ce_choices = filter(lambda x: x != "auto", choices)
+                        hint = f"Try installing {oxfordcomma(ce_choices, 'or')}"
+                    elif config.container_engine in choices:
+                        alternatives = filter(lambda x: x != config.container_engine, choices)
+                        other = [f"{ce_short} {alt}" for alt in alternatives]
+                        hint = f"Try installing '{config.container_engine}'"
+                        hint += f", try again with {oxfordcomma(other, 'or')}"
+                        hint += (
                             f" or even '{entry_short}"
                             " false' to disable the use of an execution environment"
                         )
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                    if hint:
+                        exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
         else:
             new_messages, new_exit_messages = check_for_ansible()
             messages.extend(new_messages)
