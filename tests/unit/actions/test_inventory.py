@@ -11,12 +11,12 @@ from ansible_navigator.ui_framework.curses_defs import CursesLinePart
 
 def test_color_menu_true():
     """test color menu for a val set to the default"""
-    assert color_menu(0, "__name", {}) == 10
-    assert color_menu(0, "__taxonomy", {}) == 11
-    assert color_menu(0, "description", {}) == 12
-    assert color_menu(0, "__type", {"__type": ""}) == 12
-    assert color_menu(0, "__type", {"__type": "group"}) == 11
-    assert color_menu(0, "", {"__name": True}) == 14
+    assert color_menu(0, "__name", {}) == (10, 0)
+    assert color_menu(0, "__taxonomy", {}) == (11, 0)
+    assert color_menu(0, "description", {}) == (12, 0)
+    assert color_menu(0, "__type", {"__type": ""}) == (12, 0)
+    assert color_menu(0, "__type", {"__type": "group"}) == (11, 0)
+    assert color_menu(0, "", {"__name": True}) == (14, 0)
 
 
 def test_content_heading_true():
