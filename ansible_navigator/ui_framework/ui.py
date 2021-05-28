@@ -103,7 +103,8 @@ class UserInterface(CursesWindow):
         kegexes: Callable[..., Any],
         refresh: int,
         share_directory: str,
-        pbar_width: int = 11,
+        pbar_width: int = 8,
+        status_width=12,
     ) -> None:
         """init
 
@@ -132,6 +133,7 @@ class UserInterface(CursesWindow):
         self._osc4 = osc4
 
         self._pbar_width = pbar_width
+        self._status_width = status_width
         self._prefix_color = 8
         self._refresh = [refresh]
         self._rgb_to_curses_color_idx: Dict[str, int] = {}
@@ -277,10 +279,17 @@ class UserInterface(CursesWindow):
                 )
             )
         if self._status:
+            # place the status to the far right -1 for the scrollbar
+            # center place the uneven extra on the right, so flip it twice
+            status = self._status[0 : self._status_width - 1]  # max
+            status = status[::-1]  # reverse
+            status = status.center(self._status_width)  # pad
+            status = status[::-1]  # reverse
+            status = status.upper()  # upper
             footer.append(
                 CursesLinePart(
-                    column=self._screen_w - self._pbar_width,
-                    string=self._status[0 : self._pbar_width + 1].upper().center(self._pbar_width),
+                    column=self._screen_w - self._status_width - 1,
+                    string=status,
                     color=curses.color_pair(self._status_color % self._number_colors),
                     decoration=curses.A_REVERSE,
                 )

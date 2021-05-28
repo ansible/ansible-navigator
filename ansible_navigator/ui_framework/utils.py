@@ -27,7 +27,7 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
             else:
                 numx = floor(pbar_width / 100 * int(value[0:-1]))
                 dyct["_" + key] = value
-                dyct[key] = ("\u2588" * numx).ljust(pbar_width)
+                dyct[key] = ("\u2587" * numx).ljust(pbar_width)
 
 
 @functools.lru_cache(maxsize=None)
