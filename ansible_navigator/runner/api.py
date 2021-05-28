@@ -71,6 +71,8 @@ class BaseRunner:
             container_workdir ([str], optional): The working directory within the container.
                                                  Defaults to None.
             cwd ([str], optional): The current local working directory. Defaults to None.
+                                   If value of execution_environment is set to True this
+                                   path will be volume mounted within the execution enviornment
             set_environment_variable([dict], optional): Dict of user requested envvars to set
             pass_environment_variable([list], optional): List of user requested envvars to pass
         """
@@ -208,7 +210,6 @@ class CommandBaseRunner(BaseRunner):
         """generate arguments required to be passed to ansible-runner"""
         if self._playbook:
             self._cmdline.append(self._playbook)
-            self._runner_args.update({"cwd": os.path.dirname(os.path.abspath(self._playbook))})
 
         for inv in self._inventory:
             self._cmdline.extend(["-i", inv])
