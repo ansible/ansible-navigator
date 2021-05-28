@@ -1,5 +1,5 @@
 {
-    "name": "test[config helpconfig with ee  clear && ansible-navigator config --help-config --ee True --ce podman --ll debug --mode stdout]",
+    "name": "test[config helpconfig with ee  clear && ansible-navigator config --help-config --ee True --ll debug --mode stdout]",
     "index": 4,
     "comment": "config helpconfig with ee",
     "additional_information": {
