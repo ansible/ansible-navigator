@@ -32,11 +32,13 @@ from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
-from ..ui_framework.form_utils import form_to_dict
+from ..ui_framework import form_to_dict
+from ..ui_framework import warning_notification
 
 
 from ..utils import abs_user_path
 from ..utils import human_time
+from ..utils import remove_ansi
 
 
 RESULT_TO_COLOR = [
@@ -635,6 +637,7 @@ class Action(App):
             if event in ["verbose", "error"]:
                 if "ERROR!" in message["stdout"]:
                     self._msg_from_plays = ("ERROR", 9)
+                    self._notify_error(message["stdout"])
                 elif "WARNING" in message["stdout"]:
                     self._msg_from_plays = ("WARNINGS", 13)
 
@@ -862,3 +865,14 @@ class Action(App):
             self._logger.error("No rerun available when artifact is loaded")
         else:
             self._logger.error("sub-action type '%s' is invalid", self._subaction_type)
+
+    def _notify_error(self, message: str):
+        """show a blocking warning"""
+        warn_msg = ["Errors were encountered while running the playbook:"]
+        messages = remove_ansi(message).splitlines()
+        messages[-1] += "..."
+        warn_msg.extend(messages)
+        warn_msg += ["[HINT] To see the full error message try ':stdout'"]
+        warn_msg += ["[HINT] After it's fixed, try to ':rerun' the playbook"]
+        warning = warning_notification(warn_msg)
+        self._interaction.ui.show(warning)

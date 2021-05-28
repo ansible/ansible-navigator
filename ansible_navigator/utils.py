@@ -339,6 +339,25 @@ def pascal_to_snake(obj):
     return obj
 
 
+def remove_ansi(string):
+    """strip ansi code from a str"""
+    ansi_escape = re.compile(
+        r"""
+            \x1B  # ESC
+            (?:   # 7-bit C1 Fe (except CSI)
+                [@-Z\\-_]
+            |     # or [ for CSI, followed by a control sequence
+                \[
+                [0-?]*  # Parameter bytes
+                [ -/]*  # Intermediate bytes
+                [@-~]   # Final byte
+            )
+        """,
+        re.VERBOSE,
+    )
+    return ansi_escape.sub("", string)
+
+
 def str2bool(value: Any) -> bool:
     """Convert some commonly used values
     to a boolean
