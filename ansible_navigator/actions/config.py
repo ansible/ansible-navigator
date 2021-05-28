@@ -24,6 +24,7 @@ from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 
 from ..yaml import yaml
@@ -106,6 +107,13 @@ class Action(App):
         """
         self._logger.debug("config requested in interactive mode")
         self._prepare_to_run(app, interaction)
+
+        notification = nonblocking_notification(
+            messages=[
+                "Collecting the ansible configuration, this may take a minute...",
+            ]
+        )
+        interaction.ui.show(notification)
 
         self._update_args(
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
