@@ -164,8 +164,13 @@ class Action(App):
             kwargs.update({"cwd": playbook_dir})
 
             self._runner = DocRunner(**kwargs)
+
+            # set the playbook directory so playbook
+            # adjacent collection docs can be found
+            self._logger.debug("doc playbook dir set to: %s", playbook_dir)
+
             plugin_doc, plugin_doc_err = self._runner.fetch_plugin_doc(
-                [self._plugin_name], plugin_type=self._plugin_type
+                [self._plugin_name], plugin_type=self._plugin_type, playbook_dir=playbook_dir
             )
             if plugin_doc_err:
                 msg = "Error occurred while fetching doc for" " plugin {0}: '{1}'".format(
