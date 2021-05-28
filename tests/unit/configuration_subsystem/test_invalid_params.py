@@ -141,3 +141,15 @@ def test_poor_choices(_mocked_func, generate_config, entry):
     else:
         # argparse choice error
         test(subcommand, "", "choose from")
+
+
+@pytest.mark.parametrize("subcommand, params", [("images", __file__), ("collections", "")])
+def test_interactive_only_subcommand(generate_config, subcommand, params):
+    # pylint: disable=import-outside-toplevel
+    """Ensure exit_messages generated for badly formatted set env var"""
+    params = [subcommand, params, "-m", "stdout"]
+    response = generate_config(params=params)
+    exit_msg = (
+        f"Subcommand '{subcommand}' does not support mode 'stdout'. Supported modes: 'interactive'."
+    )
+    assert exit_msg in [exit_msg.message for exit_msg in response.exit_messages]
