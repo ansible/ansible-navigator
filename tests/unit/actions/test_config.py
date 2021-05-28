@@ -13,13 +13,13 @@ from ansible_navigator.ui_framework.curses_defs import CursesLinePart
 def test_color_menu_true():
     """test color menu for a val set to the default"""
     entry = {"__default": True}
-    assert color_menu(0, "", entry) == 2
+    assert color_menu(0, "", entry) == (2,0)
 
 
 def test_color_menu_false():
     """test color menu for a val not set to default"""
     entry = {"__default": False}
-    assert color_menu(0, "", entry) == 3
+    assert color_menu(0, "", entry) == (3,0)
 
 
 def test_content_heading_true():
