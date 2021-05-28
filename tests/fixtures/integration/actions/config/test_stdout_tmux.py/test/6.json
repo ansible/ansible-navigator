@@ -1,5 +1,5 @@
 {
-    "name": "test[config helpconfig fail with interactive with ee  clear && ansible-navigator config --help-config --ee True --ce podman --ll debug --mode interactive]",
+    "name": "test[config helpconfig fail with interactive with ee  clear && ansible-navigator config --help-config --ee True --ll debug --mode interactive]",
     "index": 6,
     "comment": "config helpconfig fail with interactive with ee",
     "additional_information": {
@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "[ERROR]: Command provided: 'config --help-config --ee True --ce podman --ll debug --mode interactive'",
+        "[ERROR]: Command provided: 'config --help-config --ee True --ll debug --mode interactive'",
         "[ERROR]: --hc or --help-config is valid only when 'mode' argument is set to 'stdout'",
         " [HINT]: Try again with '-m stdout'",
         "[ERROR]: Configuration failed, using default log file location: /home/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",

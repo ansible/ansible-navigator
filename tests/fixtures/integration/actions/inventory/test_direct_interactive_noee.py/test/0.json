@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator inventory -i /tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml --ee False --ce podman --ll debug --mode interactive-ansible-navigator inventory command top window]",
+    "name": "test[0-ansible-navigator inventory -i /tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml --ee False --ll debug --mode interactive-ansible-navigator inventory command top window]",
     "index": 0,
     "comment": "ansible-navigator inventory command top window",
     "additional_information": {

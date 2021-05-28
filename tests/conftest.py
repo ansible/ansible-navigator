@@ -1,16 +1,20 @@
 """ fixtures for all tests """
 import os
-import pytest
+import shutil
 import subprocess
 
-from ._common import container_runtime_or_fail
+import pytest
+
 from .defaults import PULLABLE_IMAGE
 
 
-@pytest.fixture(scope="session", name="container_runtime_or_fail")
-def fixture_container_runtime_or_fail():
-    """check if container runtime is available"""
-    yield container_runtime_or_fail
+@pytest.fixture(scope="session", name="valid_container_engine")
+def fixture_valid_container_image():
+    """returns an available container engine"""
+    for engine in ("podman", "docker"):
+        if shutil.which(engine):
+            return engine
+    raise Exception("container engine required")
 
 
 @pytest.fixture(scope="function")
@@ -22,6 +26,7 @@ def locked_directory(tmpdir):
 
 
 @pytest.fixture(scope="session")
-def pullable_image(container_runtime_or_fail):
+def pullable_image(valid_container_engine):
+    """pullable container"""
     yield PULLABLE_IMAGE
-    subprocess.run([container_runtime_or_fail(), "image", "rm", PULLABLE_IMAGE], check=True)
+    subprocess.run([valid_container_engine, "image", "rm", PULLABLE_IMAGE], check=True)

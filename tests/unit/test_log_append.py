@@ -5,7 +5,7 @@ from unittest import mock
 import ansible_navigator.cli as cli
 
 
-def test_log_append_true(tmp_path, container_runtime_or_fail):
+def test_log_append_true(tmp_path):
     """run 5 times, append to log each time"""
 
     def side_effect(*_args, **_kwargs):
@@ -16,8 +16,6 @@ def test_log_append_true(tmp_path, container_runtime_or_fail):
     log_file = tmp_path / "ansible-navigator.log"
     cli_args = [
         "ansible-navigator",
-        "--ce",
-        container_runtime_or_fail(),
         "--la",
         "true",
         "--lf",
@@ -35,7 +33,7 @@ def test_log_append_true(tmp_path, container_runtime_or_fail):
     assert log_file.read_text().count(new_session_msg) == repeat
 
 
-def test_log_append_false(tmp_path, container_runtime_or_fail):
+def test_log_append_false(tmp_path):
     """run 5 times, never append to log each time"""
 
     def side_effect(*_args, **_kwargs):
@@ -46,8 +44,6 @@ def test_log_append_false(tmp_path, container_runtime_or_fail):
     log_file = tmp_path / "ansible-navigator.log"
     cli_args = [
         "ansible-navigator",
-        "--ce",
-        container_runtime_or_fail(),
         "--la",
         "false",
         "--lf",

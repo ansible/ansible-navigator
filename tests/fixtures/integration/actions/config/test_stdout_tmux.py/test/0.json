@@ -1,5 +1,5 @@
 {
-    "name": "test[config dump with ee  clear && ansible-navigator config dump --senv PAGER=cat --ee True --ce podman --ll debug --mode stdout]",
+    "name": "test[config dump with ee  clear && ansible-navigator config dump --senv PAGER=cat --ee True --ll debug --mode stdout]",
     "index": 0,
     "comment": "config dump with ee",
     "additional_information": {

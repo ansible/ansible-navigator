@@ -6,13 +6,11 @@ import pytest
 
 from .base import BaseClass
 
-from ...._common import container_runtime_or_fail
-
 
 # ansible-doc help with EE
 CLI_DOC_HELP_WITH_EE = (
     "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m stdout"
-    " --execution-environment true --ce " + container_runtime_or_fail()
+    " --execution-environment true"
 )
 
 testdata_1: List = [
@@ -59,7 +57,7 @@ class TestDocHelpWithoutEE(BaseClass):
 # ansible-doc help failed check in interactive mode
 CLI_DOC_HELP_WITH_EE_WRONG_MODE = (
     "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m interactive"
-    " --execution-environment true --ce " + container_runtime_or_fail()
+    " --execution-environment true"
 )
 
 testdata_3: List = [
@@ -130,8 +128,7 @@ class TestModuleDocWithoutEE(BaseClass):
 
 # doc command run in stdout mode with EE
 CLI_MODULE_DOC_WITH_EE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j"
-    " --execution-environment true --ce " + container_runtime_or_fail()
+    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j" " --execution-environment true"
 )
 
 testdata_6: List = [
@@ -181,7 +178,7 @@ class TestLookUpDocWithoutEE(BaseClass):
 # doc command run in stdout mode with EE
 CLI_LOOKUP_DOC_WITH_EE = (
     "ansible-navigator doc testorg.coll_1.lookup_1 -t lookup -m stdout -j"
-    " --execution-environment true --ce " + container_runtime_or_fail()
+    " --execution-environment true"
 )
 
 testdata_8: List = [

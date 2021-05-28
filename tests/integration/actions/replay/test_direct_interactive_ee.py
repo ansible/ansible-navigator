@@ -5,13 +5,8 @@ import pytest
 from .base import BaseClass
 from .base import PLAYBOOK_ARTIFACT
 
-from ...._common import container_runtime_or_fail
 
-CLI = (
-    "ansible-navigator"
-    f" replay {PLAYBOOK_ARTIFACT}"
-    " --execution-environment true --ll debug --ce " + container_runtime_or_fail()
-)
+CLI = "ansible-navigator" f" replay {PLAYBOOK_ARTIFACT}" " --execution-environment true --ll debug"
 
 testdata = [
     (0, CLI, "run top window", ["COMPLETE", "SUCCESSFUL"]),

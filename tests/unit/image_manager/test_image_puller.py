@@ -33,10 +33,10 @@ data_do_have = [
 
 
 @pytest.mark.parametrize("data", data_do_have, ids=id_from_data)
-def test_do_have(container_runtime_or_fail, data):
+def test_do_have(valid_container_engine, data):
     """test using an image local"""
     image_puller = ImagePuller(
-        container_engine=container_runtime_or_fail(),
+        container_engine=valid_container_engine,
         image=DEFAULT_CONTAINER_IMAGE,
         pull_policy=data.pull_policy,
     )
@@ -54,10 +54,10 @@ data_do_have_but_latest = [
 
 
 @pytest.mark.parametrize("data", data_do_have_but_latest, ids=id_from_data)
-def test_do_have_but_latest(container_runtime_or_fail, data):
+def test_do_have_but_latest(valid_container_engine, data):
     """test using an image local"""
     image_puller = ImagePuller(
-        container_engine=container_runtime_or_fail(),
+        container_engine=valid_container_engine,
         image=SMALL_TEST_IMAGE,
         pull_policy=data.pull_policy,
     )
@@ -74,11 +74,11 @@ data_dont_have = [
 
 
 @pytest.mark.parametrize("data", data_dont_have, ids=id_from_data)
-def test_dont_have(container_runtime_or_fail, data):
+def test_dont_have(valid_container_engine, data):
     """test using an image not local"""
     uuid_str = str(uuid.uuid4())
     image_puller = ImagePuller(
-        container_engine=container_runtime_or_fail(), image=uuid_str, pull_policy=data.pull_policy
+        container_engine=valid_container_engine, image=uuid_str, pull_policy=data.pull_policy
     )
     image_puller.assess()
     assert image_puller.assessment.pull_required == data.pull_required
@@ -95,10 +95,10 @@ data_will_have = [
 
 
 @pytest.mark.parametrize("data", data_will_have, ids=id_from_data)
-def test_will_have(container_runtime_or_fail, pullable_image, data):
+def test_will_have(valid_container_engine, pullable_image, data):
     """test using an image not local"""
     image_puller = ImagePuller(
-        container_engine=container_runtime_or_fail(),
+        container_engine=valid_container_engine,
         image=pullable_image,
         pull_policy=data.pull_policy,
     )

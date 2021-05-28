@@ -1,5 +1,5 @@
 {
-    "name": "test[inventory list without ee  clear && ansible-navigator inventory --list -i /tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml --ee False --ce podman --ll debug --mode stdout]",
+    "name": "test[inventory list without ee  clear && ansible-navigator inventory --list -i /tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml --ee False --ll debug --mode stdout]",
     "index": 1,
     "comment": "inventory list without ee",
     "additional_information": {

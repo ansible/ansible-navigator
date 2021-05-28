@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator collections --execution-environment true --ce podman-ansible-navigator collections browse window]",
+    "name": "test[0-ansible-navigator collections --execution-environment true-ansible-navigator collections browse window]",
     "index": 0,
     "comment": "ansible-navigator collections browse window",
     "output": [
