@@ -189,6 +189,7 @@ class Action(App):
     def _run_runner(self) -> None:
         # pylint: disable=too-many-branches
         """spin up runner"""
+
         kwargs = {
             "container_engine": self._args.container_engine,
             "cwd": os.getcwd(),
@@ -198,6 +199,12 @@ class Action(App):
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": self._args.set_environment_variable,
         }
+
+        if isinstance(self._args.execution_environment_volume_mounts, list):
+            kwargs.update(
+                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
+            )
+
         if self._args.mode == "interactive":
             self._runner = AnsibleCfgRunner(**kwargs)
             kwargs = {}

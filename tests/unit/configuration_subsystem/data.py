@@ -201,6 +201,7 @@ ENVVAR_DATA = [
     ("editor_console", "false", False),
     ("execution_environment", "false", False),
     ("execution_environment_image", "test_image:latest", "test_image:latest"),
+    ("execution_environment_volume_mounts", "/test1:/test1:Z", ["/test1:/test1:Z"]),
     ("help_config", "false", False),
     ("help_doc", "false", False),
     ("help_inventory", "false", False),

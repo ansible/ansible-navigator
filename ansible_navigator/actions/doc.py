@@ -149,6 +149,12 @@ class Action(App):
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": set_environment_variable,
         }
+
+        if isinstance(self._args.execution_environment_volume_mounts, list):
+            kwargs.update(
+                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
+            )
+
         if self._args.mode == "interactive":
             if isinstance(self._args.playbook, str):
                 playbook_dir = os.path.dirname(self._args.playbook)

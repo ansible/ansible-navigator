@@ -18,6 +18,7 @@ from ..utils import check_for_ansible
 from ..utils import flatten_list
 from ..utils import oxfordcomma
 from ..utils import str2bool
+from ..utils import to_list
 from ..utils import LogMessage
 from ..utils import ExitMessage
 from ..utils import ExitPrefix
@@ -160,6 +161,80 @@ class NavigatorPostProcessor:
         exit_messages: List[ExitMessage] = []
         if ":" not in entry.value.current:
             entry.value.current = f"{entry.value.current}:latest"
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
+    def execution_environment_volume_mounts(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process set_environment_variable"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.source in [
+            C.ENVIRONMENT_VARIABLE,
+            C.USER_CLI,
+        ]:
+            volume_mounts = flatten_list(entry.value.current)
+            for mount_path in volume_mounts:
+                parts = mount_path.split(":")
+                if len(parts) > 3:
+                    exit_msg = (
+                        "The following execution-environment-volume-mounts"
+                        f" entry could not be parsed: {mount_path}"
+                    )
+                    exit_messages.append(ExitMessage(message=exit_msg))
+                    if entry.cli_parameters:
+                        exit_msg = (
+                            "Try again with format "
+                            + f"'{entry.cli_parameters.short}"
+                            + " <source-path>:<destination-path>:<label(Z or z)>'."
+                            + " Note: label is optional."
+                        )
+                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                    return messages, exit_messages
+
+            entry.value.current = volume_mounts
+
+        elif entry.value.current is not C.NOT_SET:
+            parsed_volume_mounts = []
+            volume_mounts = to_list(entry.value.current)
+            for mount_obj in volume_mounts:
+                if not isinstance(mount_obj, dict):
+                    exit_msg = (
+                        "The following execution-environment.volume-mounts"
+                        f" entry could not be parsed: {mount_obj}"
+                    )
+                    exit_messages.append(ExitMessage(message=exit_msg))
+                    if entry.cli_parameters:
+                        exit_msg = (
+                            "The value of execution-environment.volume-mounts"
+                            + "should be list of dictionaries"
+                            + " and valid keys are 'src', 'dest' and 'label'."
+                        )
+                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                    return messages, exit_messages
+
+                try:
+                    mount_path = f"{mount_obj['src']}:{mount_obj['dest']}"
+                    if mount_obj.get("label"):
+                        mount_path += f":{mount_obj['label']}"
+                    parsed_volume_mounts.append(mount_path)
+                except KeyError as exc:
+                    exit_msg = (
+                        f"Failed to parse following execution-environment.volume-mounts"
+                        f" entry: '{mount_obj}'. Value of '{str(exc)}' key not provided."
+                    )
+                    exit_messages.append(ExitMessage(message=exit_msg))
+                    exit_hint_msg = (
+                        " Valid keys are 'src', 'dest' and 'label'. Note: label key is optional."
+                    )
+                    exit_messages.append(ExitMessage(message=exit_hint_msg, prefix=ExitPrefix.HINT))
+
+                    return messages, exit_messages
+
+            entry.value.current = parsed_volume_mounts
         return messages, exit_messages
 
     @_post_processor

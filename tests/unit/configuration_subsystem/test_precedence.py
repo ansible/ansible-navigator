@@ -31,6 +31,7 @@ from .utils import id_for_base
 from .utils import id_for_cli
 from .utils import id_for_name
 from .utils import id_for_settings
+from .utils import config_post_process
 
 
 # pylint: disable=too-many-arguments
@@ -206,7 +207,8 @@ def test_all_entries_reflect_settings_given_settings(_mf1, _mf2, generate_config
     if entry.cli_parameters is not None:
         assert configured_entry.value.source is C.USER_CFG, configured_entry
         path = entry.settings_file_path("ansible-navigator")
-        expected = response.settings_contents
+        expected = config_post_process(response.settings_contents, path)
+
         for key in path.split("."):
             expected = expected[key]
         assert configured_entry.value.current == expected, configured_entry

@@ -561,6 +561,11 @@ class Action(App):
         if isinstance(self._args.playbook, str):
             kwargs.update({"playbook": self._args.playbook})
 
+        if isinstance(self._args.execution_environment_volume_mounts, list):
+            kwargs.update(
+                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
+            )
+
         if self._args.execution_environment:
             executable_cmd = "ansible-playbook"
         else:
