@@ -152,7 +152,7 @@ tst_hint_data = [
 
 
 @pytest.mark.parametrize("data", tst_hint_data, ids=id_for_hint_test)
-def test_hints(monkeypatch, locked_directory, container_runtime_or_fail, data):
+def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
     """test the hints don't generate a traceboack"""
     monkeypatch.setenv(
         "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
@@ -161,7 +161,7 @@ def test_hints(monkeypatch, locked_directory, container_runtime_or_fail, data):
     command = data.command.format(locked_directory=locked_directory)
     params = shlex.split(command)
     if data.set_ce:
-        params += ["--ce", container_runtime_or_fail()]
+        params += ["--ce", valid_container_engine]
 
     _messages, exit_msgs = parse_and_update(params=params, args=args, initial=True)
     expected = f"{data.prefix} {data.expected}"

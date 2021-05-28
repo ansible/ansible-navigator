@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator run /tests/fixtures/integration/actions/run/site.yaml -i /tests/fixtures/integration/actions/run/inventory --ee False --ce podman --ll debug --mode interactive-ansible-navigator run playbook]",
+    "name": "test[0-ansible-navigator run /tests/fixtures/integration/actions/run/site.yaml -i /tests/fixtures/integration/actions/run/inventory --ee False --ll debug --mode interactive-ansible-navigator run playbook]",
     "index": 0,
     "comment": "ansible-navigator run playbook",
     "additional_information": {

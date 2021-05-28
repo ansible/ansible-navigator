@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator --execution-environment true --ce podman-ansible-navigator welcome screen]",
+    "name": "test[0-ansible-navigator --execution-environment true-ansible-navigator welcome screen]",
     "index": 0,
     "comment": "ansible-navigator welcome screen",
     "output": [

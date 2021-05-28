@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator config --ee True --ce podman --ll debug --mode interactive-ansible-navigator config command top window]",
+    "name": "test[0-ansible-navigator config --ee True --ll debug --mode interactive-ansible-navigator config command top window]",
     "index": 0,
     "comment": "ansible-navigator config command top window",
     "additional_information": {

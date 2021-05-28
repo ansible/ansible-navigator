@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator --execution-environment true --ce podman-welcome-module_doc_fail-expected_in_output0]",
+    "name": "test[0-ansible-navigator --execution-environment true-welcome-module_doc_fail-expected_in_output0]",
     "index": 0,
     "comment": "welcome",
     "output": [

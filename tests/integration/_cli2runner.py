@@ -4,8 +4,6 @@ from unittest import mock
 
 import pytest
 
-from .._common import container_runtime_or_fail
-
 
 class Cli2Runner:
     # pylint: disable=attribute-defined-outside-init
@@ -32,7 +30,7 @@ class Cli2Runner:
 
     @pytest.fixture(autouse=True)
     def _setup(self):
-        self.cli_entry = "ansible-navigator {0} {1} -m {2} --ce " + container_runtime_or_fail()
+        self.cli_entry = "ansible-navigator {0} {1} -m {2}"
 
     @mock.patch("ansible_navigator.runner.api.get_ansible_config")
     def test_config_interactive(

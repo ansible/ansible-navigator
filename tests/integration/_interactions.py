@@ -7,8 +7,6 @@ from typing import List
 from typing import NamedTuple
 from typing import Union
 
-from .._common import container_runtime_or_fail
-
 
 class SearchFor(Enum):
     """set the test mode"""
@@ -21,7 +19,6 @@ class Command(NamedTuple):
     """command details"""
 
     execution_environment: bool
-    container_engine: str = container_runtime_or_fail()
     command: str = "ansible-navigator"
     cmdline: Union[None, str] = None
     log_level: str = "debug"
@@ -38,7 +35,6 @@ class Command(NamedTuple):
         if isinstance(self.cmdline, str):
             args.extend(shlex.split(self.cmdline))
         args.extend(["--ee", self.execution_environment])
-        args.extend(["--ce", self.container_engine])
         args.extend(["--ll", self.log_level])
         args.extend(["--mode", self.mode])
         if self.pass_environment_variables:

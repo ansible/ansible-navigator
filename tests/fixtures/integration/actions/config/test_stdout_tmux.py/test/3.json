@@ -1,5 +1,5 @@
 {
-    "name": "test[config list without ee  clear && ansible-navigator config dump --ee False --ce podman --ll debug --mode stdout]",
+    "name": "test[config list without ee  clear && ansible-navigator config dump --ee False --ll debug --mode stdout]",
     "index": 3,
     "comment": "config list without ee",
     "additional_information": {

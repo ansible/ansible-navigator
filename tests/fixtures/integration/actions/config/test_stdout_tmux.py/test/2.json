@@ -1,5 +1,5 @@
 {
-    "name": "test[config list with ee  clear && ansible-navigator config list --senv PAGER=cat --ee True --ce podman --ll debug --mode stdout]",
+    "name": "test[config list with ee  clear && ansible-navigator config list --senv PAGER=cat --ee True --ll debug --mode stdout]",
     "index": 2,
     "comment": "config list with ee",
     "additional_information": {
