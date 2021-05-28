@@ -143,7 +143,7 @@ def test_poor_choices(_mocked_func, generate_config, entry):
         test(subcommand, "", "choose from")
 
 
-@pytest.mark.parametrize("subcommand, params", [("replay", __file__), ("collections", "")])
+@pytest.mark.parametrize("subcommand, params", [("images", __file__), ("collections", "")])
 def test_interactive_only_subcommand(generate_config, subcommand, params):
     # pylint: disable=import-outside-toplevel
     """Ensure exit_messages generated for badly formatted set env var"""
