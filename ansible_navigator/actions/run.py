@@ -370,12 +370,13 @@ class Action(App):
         copy the calling app args as our our so the can be updated safely
         with a uuid attached to the name
         """
-        self._logger.debug("Starting replay artifact request")
+        self._logger.debug("Starting replay artifact request with mode %s", self.mode)
 
-        self._update_args(
-            ["replay"]
-            + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or "")
-        )
+        if self.mode == "interactive":
+            self._update_args(
+                ["replay"]
+                + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or "")
+            )
 
         artifact_file = self._args.playbook_artifact_replay
 
@@ -384,7 +385,7 @@ class Action(App):
         else:
             artifact_valid = False
 
-        if not artifact_valid:
+        if not artifact_valid and self.mode == "interactive":
             populated_form = self._prompt_for_artifact(artifact_file=artifact_file)
             if populated_form["cancelled"]:
                 return False
@@ -401,9 +402,14 @@ class Action(App):
         version = data.get("version", "")
         if version.startswith("1."):
             try:
-                self._plays.value = data["plays"]
-                self._interaction.ui.update_status(data["status"], data["status_color"])
-                self.stdout = data["stdout"]
+                stdout = data["stdout"]
+                if self.mode == "interactive":
+                    self._plays.value = data["plays"]
+                    self._interaction.ui.update_status(data["status"], data["status_color"])
+                    self.stdout = stdout
+                else:
+                    for item in data["stdout"]:
+                        print(item)
             except KeyError as exc:
                 self._logger.debug("missing keys from artifact file")
                 self._logger.debug("error was: %s", str(exc))
@@ -415,7 +421,7 @@ class Action(App):
             return False
 
         self._runner_finished = True
-        self._logger.debug("Completed replay artifact request")
+        self._logger.debug("Completed replay artifact request with mode %s", self.mode)
         return True
 
     def _prompt_for_artifact(self, artifact_file: str) -> Dict[Any, Any]:
