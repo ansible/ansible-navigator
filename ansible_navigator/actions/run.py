@@ -256,7 +256,8 @@ class Action(App):
         :type args: Namespace
         """
         if self._args.app == "replay":
-            return int(self._init_replay())
+            successful: bool = self._init_replay()
+            return 0 if successful else 1
 
         self._logger.debug("playbook requested in interactive mode")
         self._subaction_type = "playbook"
