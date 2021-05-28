@@ -80,7 +80,7 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, i
             color = get_color(colname[2:])
 
         if colname == "__progress" and entry["__progress"].strip().lower() == "complete":
-            decoration = curses.A_REVERSE
+            decoration = curses.A_BOLD
 
     elif "task" in entry:
         if entry["__result"].lower() == "__in_progress":
