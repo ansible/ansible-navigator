@@ -1,3 +1,0 @@
-ansible-navigator:
-  ansible:
-    cmdline: --forks 15
