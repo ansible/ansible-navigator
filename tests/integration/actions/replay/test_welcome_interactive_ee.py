@@ -5,9 +5,8 @@ import pytest
 from .base import BaseClass
 from .base import PLAYBOOK_ARTIFACT
 
-from ...._common import container_runtime_or_fail
 
-CLI = "ansible-navigator --execution-environment true --ce " + container_runtime_or_fail()
+CLI = "ansible-navigator --execution-environment true"
 
 
 testdata = [

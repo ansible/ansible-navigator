@@ -14,11 +14,10 @@ PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.
 
 
 @pytest.fixture(name="params")
-def fixture_params(container_runtime_or_fail, request):
+def fixture_params(request):
     """generate params"""
     return {
         "execution_environment": request.param,
-        "container_engine": container_runtime_or_fail(),
         "execution_environment_image": DEFAULT_CONTAINER_IMAGE,
     }
 

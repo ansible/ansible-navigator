@@ -6,13 +6,9 @@ import pytest
 
 from .base import BaseClass
 
-from ...._common import container_runtime_or_fail
-
 
 # module doc
-CLI_MODULE_DOC = (
-    "ansible-navigator --execution-environment true --ce " + container_runtime_or_fail()
-)
+CLI_MODULE_DOC = "ansible-navigator --execution-environment true"
 
 testdata_module_doc: List = [
     (0, CLI_MODULE_DOC, "welcome", "module_doc_pass", []),
@@ -21,9 +17,7 @@ testdata_module_doc: List = [
 ]
 
 # lookup plugin doc
-CLI_LOOKUP_DOC = (
-    "ansible-navigator" " --execution-environment true --ce " + container_runtime_or_fail()
-)
+CLI_LOOKUP_DOC = "ansible-navigator" " --execution-environment true"
 
 testdata_lookup_doc: List = [
     (0, CLI_LOOKUP_DOC, "welcome", "lookup_doc_pass", []),
@@ -31,9 +25,7 @@ testdata_lookup_doc: List = [
 ]
 
 # plugin does not exist
-CLI_WRONG_MODULE_NOT_EXIST = (
-    "ansible-navigator" " --execution-environment true --ce " + container_runtime_or_fail()
-)
+CLI_WRONG_MODULE_NOT_EXIST = "ansible-navigator" " --execution-environment true"
 
 testdata_module_doc_not_exist = [
     (0, CLI_WRONG_MODULE_NOT_EXIST, "welcome", "module_doc_fail", []),
