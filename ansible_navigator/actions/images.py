@@ -8,6 +8,7 @@ from functools import partial
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Tuple
 from typing import Union
 
 from . import run_action
@@ -60,24 +61,24 @@ class Action(App):
             select_func=self._build_image_menu,
         )
 
-    def color_menu(self, colno: int, colname: str, entry: Dict[str, Any]) -> int:
+    def color_menu(self, colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
         # pylint: disable=unused-argument
 
         """color the menu"""
         # images list menu
         if "__full_name" in entry:
             if entry.get("execution_environment") is False:
-                return 8
+                return 8, 0
             if entry["__full_name"] == self._args.execution_environment_image:
-                return 12
-            return 2
+                return 12, 0
+            return 2, 0
 
         if self._images.selected:
-            if self._images.selected["__full_name"] == self._args.execution_environment_image:
-                return 12
             if self._images.selected["execution_environment"] is False:
-                return 8
-        return 2
+                return 8, 0
+            if self._images.selected["__full_name"] == self._args.execution_environment_image:
+                return 12, 0
+        return 2, 0
 
     def generate_content_heading(self, obj: Dict, screen_w: int, name: str = "") -> CursesLines:
         """generate the content heading"""

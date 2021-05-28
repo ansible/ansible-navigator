@@ -22,7 +22,7 @@ initial_steps = (
     Step(
         user_input=cmdline,
         comment="ansible-navigator run playbook",
-        search_within_response=["100%", "SUCCESSFUL"],
+        search_within_response=["COMPLETE", "SUCCESSFUL"],
     ),
 )
 

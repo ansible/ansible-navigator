@@ -9,6 +9,7 @@ import shutil
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Tuple
 from typing import Union
 
 from . import run_action
@@ -26,24 +27,24 @@ from ..ui_framework import dict_to_form
 from ..ui_framework import warning_notification
 
 
-def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
+def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     """Find matching color for word
 
     :param word: A word to match
     :type word: str(able)
     """
     if colname in ["__name", "title", "inventory_hostname"]:
-        return 10
+        return 10, 0
     if colname == "__taxonomy":
-        return 11
+        return 11, 0
     if colname == "description":
-        return 12
+        return 12, 0
     if colname == "__type":
         if entry["__type"] == "group":
-            return 11
-        return 12
+            return 11, 0
+        return 12, 0
     colors = [14, 13, 6, 5, 4, 3, 2]
-    return colors[colno % len(colors)]
+    return colors[colno % len(colors)], 0
 
 
 def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:

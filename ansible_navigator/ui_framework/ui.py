@@ -117,7 +117,7 @@ class UserInterface(CursesWindow):
         :type no_osc4: str (enabled/disabled)
         """
         super().__init__()
-        self._color_menu_item: Callable[[int, str, Dict[str, Any]], int]
+        self._color_menu_item: Callable[[int, str, Dict[str, Any]], Tuple[int, int]]
         self._colorizer = Colorize(share_directory=share_directory)
         self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
         self._default_colors = None
@@ -808,7 +808,7 @@ class UserInterface(CursesWindow):
         columns: List = None,
         await_input: bool = True,
         filter_content_keys: Callable = lambda x: x,
-        color_menu_item: Callable = lambda *args, **kwargs: 0,
+        color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
     ) -> Union[Interaction, Form]:
         """Show something on the screen

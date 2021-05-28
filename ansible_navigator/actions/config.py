@@ -8,6 +8,7 @@ import shutil
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Tuple
 from typing import Union
 
 from . import run_action
@@ -29,13 +30,13 @@ from ..yaml import yaml
 from ..yaml import Loader
 
 
-def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> int:
+def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=unused-argument
 
     """color the menu"""
     if entry["__default"] is False:
-        return 3
-    return 2
+        return 3, 0
+    return 2, 0
 
 
 def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
