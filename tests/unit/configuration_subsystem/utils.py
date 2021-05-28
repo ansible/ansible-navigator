@@ -25,7 +25,7 @@ def id_for_cli(val):
 def id_for_name(val):
     """Return an id based on entry name"""
     if isinstance(val, Entry):
-        return val.name
+        return f" {val.name} "
     return ""
 
 

@@ -331,11 +331,9 @@ class Action(App):
                 image["__name_tag"] += " (primary)"
 
             try:
-                image["execution_environment"] = image["inspect"]["details"]["config"]["cmd"] == [
-                    "ansible-runner",
-                    "run",
-                    "/runner",
-                ]
+                image["execution_environment"] = (
+                    image["inspect"]["details"]["config"]["working_dir"] == "/runner"
+                )
             except KeyError:
                 image["execution_environment"] = False
         self._images.value = sorted(images, key=lambda i: i["name"])
