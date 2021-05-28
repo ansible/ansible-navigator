@@ -24,6 +24,7 @@ from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
+from ..ui_framework import warning_notification
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
@@ -456,9 +457,13 @@ class Action(App):
                     inventory_output = "{" + parts[1]
                 else:
                     inventory_output = ""
-            if inventory_err:
-                msg = f"Error occurred while fetching ansible inventory: '{inventory_err}'"
-                self._logger.error(msg)
+            warn_msg = ["Errors were encountered while gathering the inventory:"]
+            warn_msg += inventory_err.splitlines()
+            self._logger.error(" ".join(warn_msg))
+            if "Error" in inventory_err:
+                warning = warning_notification(warn_msg)
+                self._interaction.ui.show(warning)
+                return
 
             self._extract_inventory(inventory_output, inventory_err)
         else:
