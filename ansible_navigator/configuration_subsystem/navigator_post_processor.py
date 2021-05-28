@@ -3,6 +3,7 @@
 import importlib
 import logging
 import os
+import shlex
 import shutil
 
 from pathlib import Path
@@ -84,8 +85,8 @@ class NavigatorPostProcessor:
         """Post process cmdline"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if entry.value.source is C.ENVIRONMENT_VARIABLE:
-            entry.value.current = entry.value.current.split()
+        if isinstance(entry.value.current, str):
+            entry.value.current = shlex.split(entry.value.current)
         return messages, exit_messages
 
     @staticmethod
