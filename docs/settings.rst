@@ -15,8 +15,8 @@ settings file. The settings file can live in one of two places.
 Currently the following are checked and the first match is used:
 
 - ``ANSIBLE_NAVIGATOR_CONFIG`` (settings file path environment variable if set)
-- ``./ansible-navigator.<ext>`` (project directory)
-- ``~/.ansible-navigator.<ext>`` (home directory)
+- ``./ansible-navigator.<ext>`` (project directory) (**NOTE:** no dot in the file name)
+- ``~/.ansible-navigator.<ext>`` (home directory) (**NOTE:** note the dot in the file name)
 
 .. note::
     - The settings file can be in ``JSON`` or ``YAML`` format.
