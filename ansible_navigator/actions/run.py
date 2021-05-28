@@ -239,7 +239,13 @@ class Action(App):
     def mode(self):
         """if mode == stdout and playbook artifact creation is enabled
         run in interactive mode, but print stdout"""
-        if self._args.mode == "stdout" and self._args.playbook_artifact_enable:
+        if all(
+            (
+                self._args.mode == "stdout",
+                self._args.playbook_artifact_enable,
+                self._args.app != "replay",
+            )
+        ):
             return "stdout_w_artifact"
         return self._args.mode
 
@@ -249,6 +255,9 @@ class Action(App):
         :param args: The parsed args from the cli
         :type args: Namespace
         """
+        if self._args.app == "replay":
+            return int(self._init_replay())
+
         self._logger.debug("playbook requested in interactive mode")
         self._subaction_type = "playbook"
         self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
