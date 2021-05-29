@@ -122,7 +122,7 @@ class MenuBuilder:
             return CursesLinePart(
                 column=col_starts[colno] + adj_colws[colno] - len(adj_entry),
                 string=adj_entry,
-                color=curses.color_pair(0),
+                color=0,
                 decoration=curses.A_UNDERLINE,
             )
         return CursesLinePart(
@@ -203,7 +203,6 @@ class MenuBuilder:
         col_starts, cols, adj_colws, header = menu_layout
 
         color, decoration = self._color_menu_item(colno, cols[colno], dyct)
-        color = curses.color_pair(color % self._number_colors)
 
         text = str(coltext)[0 : adj_colws[colno]]
         if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "__duration":

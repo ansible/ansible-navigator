@@ -190,6 +190,15 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="auto"),
         ),
         Entry(
+            name="display_color",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--dc"),
+            environment_variable_override="no_color",
+            settings_file_path_override="color.enable",
+            short_description="Enable the use of color in the display",
+            value=EntryValue(default=True),
+        ),
+        Entry(
             name="editor_command",
             cli_parameters=CliParameters(short="--ecmd"),
             settings_file_path_override="editor.command",
@@ -317,6 +326,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="osc4",
             choices=[True, False],
             cli_parameters=CliParameters(short="--osc4"),
+            settings_file_path_override="color.osc4",
             short_description="Enable or disable terminal color changing support with OSC 4",
             value=EntryValue(default=True),
         ),
@@ -408,11 +418,6 @@ NavigatorConfiguration = ApplicationConfiguration(
                 " execution environment (--senv MY_VAR=42)"
             ),
             value=EntryValue(),
-        ),
-        Entry(
-            name="display_color",
-            short_description="Display colors using ANSI color codes",
-            value=EntryValue(default="NO_COLOR" not in os.environ),
         ),
     ],
 )

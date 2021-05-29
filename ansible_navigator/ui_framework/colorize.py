@@ -31,8 +31,6 @@ CURSES_STYLES = {
     8: getattr(curses, "A_INVIS", None),
 }
 
-THEME = "dark_vs.json"
-
 
 class ColorSchema:
     """Simple holer for the schema (theme)"""
@@ -72,16 +70,15 @@ class Colorize:
     """Functionality for coloring"""
 
     # pylint: disable=too-few-public-methods
-    def __init__(self, share_directory):
+    def __init__(self, grammar_dir: str, theme_path: str):
         self._logger = logging.getLogger(__name__)
         self._schema = None
-        self._theme_dir = os.path.join(share_directory, "themes")
-        self._grammar_dir = os.path.join(share_directory, "grammar")
-        self._grammars = Grammars(self._grammar_dir)
+        self._grammars = Grammars(grammar_dir)
+        self._theme_path = theme_path
         self._load()
 
     def _load(self):
-        with open(os.path.join(self._theme_dir, THEME)) as data_file:
+        with open(os.path.join(self._theme_path)) as data_file:
             self._schema = ColorSchema(json.load(data_file))
 
     @functools.lru_cache(maxsize=100)
@@ -102,7 +99,7 @@ class Colorize:
         except KeyError:
             compiler = None
 
-        if compiler and scope != 'no_color':
+        if compiler and scope != "no_color":
             state = compiler.root_state
             lines = []
             for line_idx, line in enumerate(doc.splitlines()):
@@ -295,17 +292,15 @@ def ansi_to_curses(line: str) -> CursesLine:
                 elif one == "0" and two is None:
                     pass  # default color
                 elif cap["fg_action"] == "38;5;":
-                    color = curses.color_pair(int(one) % curses.COLORS)
+                    color = int(one)
                     if two:
                         style = CURSES_STYLES.get(int(two), None) or 0
                 elif not cap["fg_action"]:
                     ansi_16 = list(chain(range(30, 38), range(90, 98)))
                     if two is None:
                         color = ansi_16.index(int(one)) if int(one) in ansi_16 else int(one)
-                        color = curses.color_pair(color % curses.COLORS)
                     else:
                         color = ansi_16.index(int(two)) if int(two) in ansi_16 else int(two)
-                        color = curses.color_pair(color % curses.COLORS)
                         style = CURSES_STYLES.get(int(one), None) or 0
             else:
                 curses_line = CursesLinePart(

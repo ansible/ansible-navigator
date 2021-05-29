@@ -104,7 +104,7 @@ class Action(App):
                 CursesLinePart(
                     column=0,
                     string=heading_str,
-                    color=curses.color_pair(color),
+                    color=color,
                     decoration=curses.A_UNDERLINE | curses.A_BOLD,
                 ),
             ),

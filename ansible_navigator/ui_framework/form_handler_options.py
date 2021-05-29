@@ -31,10 +31,8 @@ class FormHandlerOptions(CursesWindow):
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
             decoration = curses.A_STANDOUT if idx == active else 0
-            clp_option_code = CursesLinePart(0, option_code, self.color_pair_or_0(color), 0)
-            clp_text = CursesLinePart(
-                len(option_code) + 1, option.text, self.color_pair_or_0(color), decoration
-            )
+            clp_option_code = CursesLinePart(0, option_code, color, 0)
+            clp_text = CursesLinePart(len(option_code) + 1, option.text, color, decoration)
             self._add_line(self.win, idx, ([clp_option_code, clp_text]))
 
     def handle(self, idx, form_fields: List) -> Tuple[Union["FieldChecks", "FieldRadio"], int]:

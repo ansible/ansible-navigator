@@ -6,13 +6,13 @@ import curses
 import json
 import logging
 
-import os
 import re
 
 from curses import ascii as curses_ascii
 
 from functools import lru_cache
-from math import ceil, floor
+from math import ceil
+from math import floor
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -102,9 +102,8 @@ class UserInterface(CursesWindow):
         screen_miny: int,
         kegexes: Callable[..., Any],
         refresh: int,
-        share_directory: str,
         ui_config: UIConfig,
-        pbar_width: int = 11,
+        pbar_width: int = 8,
         status_width=12,
     ) -> None:
         """init
@@ -118,7 +117,9 @@ class UserInterface(CursesWindow):
         """
         super().__init__(ui_config=ui_config)
         self._color_menu_item: Callable[[int, str, Dict[str, Any]], Tuple[int, int]]
-        self._colorizer = Colorize(share_directory=share_directory)
+        self._colorizer = Colorize(
+            grammar_dir=self._ui_config.grammar_dir, theme_path=self._ui_config.theme_path
+        )
         self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
         self._default_colors = None
         self._default_pairs = None
@@ -137,13 +138,12 @@ class UserInterface(CursesWindow):
         self._rgb_to_curses_color_idx: Dict[str, int] = {}
         self._screen_miny = screen_miny
         self._scroll = 0
-        self._theme_dir = os.path.join(share_directory, "themes")
         self._xform = self._default_obj_serialization
         self._status = ""
         self._status_color = 0
 
-        curses.curs_set(0)
-        self._set_colors()
+        # curses.curs_set(0)
+        # self._set_colors()
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
@@ -264,7 +264,7 @@ class UserInterface(CursesWindow):
                 CursesLinePart(
                     column=col_starts[idx],
                     string=left,
-                    color=curses.color_pair(0),
+                    color=0,
                     decoration=curses.A_REVERSE,
                 )
             )
@@ -272,7 +272,7 @@ class UserInterface(CursesWindow):
                 CursesLinePart(
                     column=col_starts[idx] + len(left),
                     string=right,
-                    color=curses.color_pair(0),
+                    color=0,
                     decoration=0,
                 )
             )
@@ -288,7 +288,7 @@ class UserInterface(CursesWindow):
                 CursesLinePart(
                     column=self._screen_w - self._status_width - 1,
                     string=status,
-                    color=self.color_pair_or_0(self._status_color, mod=True),
+                    color=self._status_color,
                     decoration=curses.A_REVERSE,
                 )
             )
@@ -313,7 +313,7 @@ class UserInterface(CursesWindow):
         start_scroll_bar = body_start / menu_size * viewport_h
         stop_scroll_bar = body_stop / menu_size * viewport_h
         len_scroll_bar = ceil(stop_scroll_bar - start_scroll_bar)
-        color = self.color_pair_or_0(self._prefix_color)
+        color = self._prefix_color
         for idx in range(int(start_scroll_bar), int(start_scroll_bar + len_scroll_bar)):
             lineno = idx + len_heading
             line_part = CursesLinePart(
@@ -333,7 +333,7 @@ class UserInterface(CursesWindow):
         """
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
-        clp = CursesLinePart(column=0, string=":", color=curses.color_pair(0), decoration=0)
+        clp = CursesLinePart(column=0, string=":", color=0, decoration=0)
         input_at = self._screen_h - 1  # screen y is zero based
         self._add_line(window=self._screen, lineno=input_at, line=tuple([clp]))
         self._screen.refresh()
@@ -493,7 +493,7 @@ class UserInterface(CursesWindow):
         else:
             string = obj
 
-        scope = 'no_color'
+        scope = "no_color"
         if self._ui_config.color:
             scope = self.xform()
 
@@ -512,7 +512,7 @@ class UserInterface(CursesWindow):
         :return: the lines ready for curses
         :type: CursesLines
         """
-        if self._custom_colors_enabled:
+        if curses.COLORS > 16 and self._term_osc4_supprt:
             unique_colors = list(
                 set(chars["color"] for line in lines for chars in line if chars["color"])
             )
@@ -570,17 +570,17 @@ class UserInterface(CursesWindow):
         :rtype: CursesLinePart
         """
         if lp_dict["color"]:
-            if self._custom_colors_enabled:
+            if self._term_osc4_supprt and curses.COLORS > 16:
                 color = self._rgb_to_curses_color_idx[lp_dict["color"]]
             else:
                 red, green, blue = lp_dict["color"]
-                color = rgb_to_ansi(red, green, blue, self._number_colors)
+                color = rgb_to_ansi(red, green, blue, curses.COLORS)
         else:
             color = 0
         return CursesLinePart(
             column=lp_dict["column"],
             string=lp_dict["chars"],
-            color=self.color_pair_or_0(color),
+            color=color,
             decoration=0,
         )
 
@@ -747,7 +747,7 @@ class UserInterface(CursesWindow):
         menu_builder = MenuBuilder(
             pbar_width=self._pbar_width,
             screen_w=self._screen_w,
-            number_colors=self._number_colors,
+            number_colors=curses.COLORS,
             color_menu_item=self._color_menu_item,
             ui_config=self._ui_config,
         )

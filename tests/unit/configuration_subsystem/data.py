@@ -14,6 +14,7 @@ def d2t(dyct):
 
 BASE_SHORT_CLI = """
 --ce docker
+--dc false
 --ecmd vim_base
 --econ True
 --ee False
@@ -31,6 +32,7 @@ BASE_SHORT_CLI = """
 
 BASE_LONG_CLI = """
 --container-engine docker
+--display-color false
 --editor-command vim_base
 --editor-console True
 --execution-environment False
@@ -49,6 +51,7 @@ BASE_LONG_CLI = """
 BASE_EXPECTED = d2t(
     {
         "container_engine": "docker",
+        "display_color": False,
         "editor_command": "vim_base",
         "editor_console": True,
         "execution_environment": False,
@@ -197,6 +200,7 @@ ENVVAR_DATA = [
     ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),
     ("config", "/tmp/ansible.cfg", "/tmp/ansible.cfg"),
     ("container_engine", "docker", "docker"),
+    ("display_color", "yellow is the color of a banana", False),
     ("editor_command", "nano_envvar", "nano_envvar"),
     ("editor_console", "false", False),
     ("execution_environment", "false", False),

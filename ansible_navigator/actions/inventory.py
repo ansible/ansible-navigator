@@ -70,7 +70,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
                 CursesLinePart(
                     column=0,
                     string=string,
-                    color=curses.color_pair(0),
+                    color=0,
                     decoration=curses.A_UNDERLINE,
                 )
             ]
@@ -432,6 +432,14 @@ class Action(App):
 
         # pylint:disable=too-many-branches
 
+        if isinstance(self._args.set_environment_variable, dict):
+            set_envvars = {**self._args.set_environment_variable}
+        else:
+            set_envvars = {}
+
+        if self._args.display_color is False:
+            set_envvars["ANSIBLE_NOCOLOR"] = "1"
+
         kwargs = {
             "container_engine": self._args.container_engine,
             "cwd": os.getcwd(),
@@ -439,7 +447,7 @@ class Action(App):
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "set_environment_variable": self._args.set_environment_variable,
+            "set_environment_variable": set_envvars,
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):

@@ -3,7 +3,6 @@
 import curses
 import json
 import logging
-import os
 from typing import TYPE_CHECKING
 from typing import Union
 
@@ -43,7 +42,6 @@ COLOR_MAP = {
     "terminal.ansiBrightCyan": 14,
     "terminal.ansiBrightWhite": 15,
 }
-DEFAULT_COLORS = "terminal_colors.json"
 
 
 class CursesWindow:
@@ -59,10 +57,10 @@ class CursesWindow:
         self._screen_miny = 3
         self._prefix_color = 8
         self._theme_dir: str
-        self._number_colors = 0
-        self._custom_colors_enabled = False
+        self._term_osc4_supprt: bool
         self._ui_config = ui_config
         self._logger.debug("self._ui_config: %s", self._ui_config)
+        self._set_colors()
 
     @property
     def _screen_w(self) -> int:
@@ -87,16 +85,16 @@ class CursesWindow:
             curses.beep()
             self._screen.refresh()
 
-    def color_pair_or_0(self, color, mod: bool = False):
+    def _color_pair_or_none(self, color: int) -> Union[None, int]:
         """
         Returns 0 if colors are disabled.
-        Otherwise returns the curses color pair either by passing the color
-        argument directly (if mod is false), or taking mod (available colors)
-        and passing that (if mod is true).
+        Otherwise returns the curses color pair by
+        taking mod (available colors)
+        and passing that.
         """
         if not self._ui_config.color:
-            return 0
-        color_arg = color % self._number_colors if mod else color
+            return None
+        color_arg = color % curses.COLORS  # self._number_colors
         return curses.color_pair(color_arg)
 
     def _add_line(
@@ -115,7 +113,11 @@ class CursesWindow:
         """
         win = window
         if prefix:
-            win.addstr(lineno, 0, prefix, self.color_pair_or_0(self._prefix_color, mod=True))
+            color = self._color_pair_or_none(self._prefix_color)
+            if color is None:
+                win.addstr(lineno, 0, prefix)
+            else:
+                win.addstr(lineno, 0, prefix, color)
         if line:
             win.move(lineno, 0)
             for line_part in line:
@@ -123,10 +125,11 @@ class CursesWindow:
                 if column <= self._screen_w:
                     text = line_part.string[0 : self._screen_w - column + 1]
                     try:
-                        color = 0
-                        if self._ui_config.color:
-                            color = line_part.color
-                        win.addstr(lineno, column, text, color | line_part.decoration)
+                        color = self._color_pair_or_none(line_part.color)
+                        if color is None:
+                            win.addstr(lineno, column, text)
+                        else:
+                            win.addstr(lineno, column, text, color | line_part.decoration)
                     except curses.error:
                         # curses error at last column & row but I don't care
                         # because it still draws it
@@ -149,21 +152,25 @@ class CursesWindow:
 
     def _set_colors(self) -> None:
         """Set the colors for curses"""
+
+        # curses colors may have already been initialized
+        # with another instance of curses window
+        if self._ui_config.colors_initialized is True:
+            return
+
+        curses.curs_set(0)
         curses.use_default_colors()
 
         self._logger.debug("curses.COLORS: %s", curses.COLORS)
         self._logger.debug("curses.can_change_color: %s", curses.can_change_color())
-        if curses.COLORS > 16:
-            if self._ui_config.osc4 is False:
-                self._custom_colors_enabled = False
-            else:
-                self._custom_colors_enabled = curses.can_change_color()
-        else:
-            self._custom_colors_enabled = False
-        self._logger.debug("_custom_colors_enabled: %s", self._custom_colors_enabled)
 
-        if self._custom_colors_enabled:
-            with open(os.path.join(self._theme_dir, DEFAULT_COLORS)) as data_file:
+        self._term_osc4_supprt = curses.can_change_color()
+        if self._ui_config.osc4 is False:
+            self._term_osc4_supprt = False
+        self._logger.debug("term_osc4_supprt: %s", self._term_osc4_supprt)
+
+        if self._term_osc4_supprt:
+            with open(self._ui_config.terminal_colors_path) as data_file:
                 colors = json.load(data_file)
 
             for color_name, color_hex in colors.items():
@@ -174,12 +181,6 @@ class CursesWindow:
         else:
             self._logger.debug("Using terminal defaults")
 
-        if self._custom_colors_enabled:
-            # set to 16, since 17+ are used on demand for RGBs
-            self._number_colors = 16
-        else:
-            # Stick to the define terminal colors, RGB will be mapped to these
-            self._number_colors = curses.COLORS
-
-        for i in range(0, self._number_colors):
+        for i in range(0, curses.COLORS):
             curses.init_pair(i, i, -1)
+        self._ui_config.colors_initialized = True
