@@ -141,9 +141,6 @@ class UserInterface(CursesWindow):
         self._xform = self._default_obj_serialization
         self._status = ""
         self._status_color = 0
-
-        # curses.curs_set(0)
-        # self._set_colors()
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
