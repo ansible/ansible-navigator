@@ -6,7 +6,6 @@ import os
 import shlex
 import shutil
 
-from copy import deepcopy
 from typing import Any
 from typing import Dict
 from typing import Optional
@@ -51,7 +50,7 @@ class Action(App):
                 CursesLinePart(
                     column=0,
                     string=heading_str,
-                    color=curses.color_pair(0),
+                    color=0,
                     decoration=curses.A_UNDERLINE | curses.A_BOLD,
                 ),
             ),
@@ -136,10 +135,12 @@ class Action(App):
         plugin_doc_response: Optional[Dict[Any, Any]] = None
 
         if isinstance(self._args.set_environment_variable, dict):
-            set_environment_variable = deepcopy(self._args.set_environment_variable)
+            set_envvars = {**self._args.set_environment_variable}
         else:
-            set_environment_variable = {}
-        set_environment_variable.update({"ANSIBLE_NOCOLOR": "True"})
+            set_envvars = {}
+
+        if self._args.display_color is False or self._args.mode == "interactive":
+            set_envvars["ANSIBLE_NOCOLOR"] = "1"
 
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -148,7 +149,7 @@ class Action(App):
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "set_environment_variable": set_environment_variable,
+            "set_environment_variable": set_envvars,
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):

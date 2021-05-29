@@ -116,25 +116,13 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
         detail = "PLAY [{play}:{tnum}] ".format(play=obj["play"], tnum=obj["__number"])
         stars = "*" * (screen_w - len(detail))
         heading.append(
-            tuple(
-                [
-                    CursesLinePart(
-                        column=0, string=detail + stars, color=curses.color_pair(0), decoration=0
-                    )
-                ]
-            )
+            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)])
         )
 
         detail = "TASK [{task}] ".format(task=obj["task"])
         stars = "*" * (screen_w - len(detail))
         heading.append(
-            tuple(
-                [
-                    CursesLinePart(
-                        column=0, string=detail + stars, color=curses.color_pair(0), decoration=0
-                    )
-                ]
-            )
+            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)])
         )
 
         if obj["__changed"] is True:
@@ -157,7 +145,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
                     CursesLinePart(
                         column=0,
                         string=string,
-                        color=curses.color_pair(color),
+                        color=color,
                         decoration=curses.A_UNDERLINE,
                     )
                 ]
@@ -420,8 +408,11 @@ class Action(App):
                     self._interaction.ui.update_status(data["status"], data["status_color"])
                     self.stdout = stdout
                 else:
-                    for item in data["stdout"]:
-                        print(item)
+                    for line in data["stdout"]:
+                        if self._args.display_color is True:
+                            print(line)
+                        else:
+                            print(remove_ansi(line))
             except KeyError as exc:
                 self._logger.debug("missing keys from artifact file")
                 self._logger.debug("error was: %s", str(exc))
@@ -567,6 +558,14 @@ class Action(App):
         else:
             mode = self.mode
 
+        if isinstance(self._args.set_environment_variable, dict):
+            set_envvars = {**self._args.set_environment_variable}
+        else:
+            set_envvars = {}
+
+        if self._args.display_color is False:
+            set_envvars["ANSIBLE_NOCOLOR"] = "1"
+
         kwargs = {
             "container_engine": self._args.container_engine,
             "cwd": os.getcwd(),
@@ -575,8 +574,9 @@ class Action(App):
             "inventory": self._args.inventory,
             "navigator_mode": mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "set_environment_variable": self._args.set_environment_variable,
+            "set_environment_variable": set_envvars,
         }
+
         if isinstance(self._args.playbook, str):
             kwargs.update({"playbook": self._args.playbook})
 

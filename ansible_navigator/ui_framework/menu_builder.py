@@ -12,6 +12,7 @@ from typing import Tuple
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
+from .ui_config import UIConfig
 from .utils import convert_percentage
 from .utils import distribute
 
@@ -21,13 +22,19 @@ class MenuBuilder:
     """build a menu from list of dicts"""
 
     def __init__(
-        self, pbar_width: int, screen_w: int, number_colors: int, color_menu_item: Callable
+        self,
+        pbar_width: int,
+        screen_w: int,
+        number_colors: int,
+        color_menu_item: Callable,
+        ui_config: UIConfig,
     ):
         # pylint: disable=too-many-arguments
         self._number_colors = number_colors
         self._pbar_width = pbar_width
         self._screen_w = screen_w
         self._color_menu_item = color_menu_item
+        self._ui_config = ui_config
 
     def build(self, dicts: List, cols: List, indicies) -> Tuple[CursesLines, CursesLines]:
         """main entry point for menu builer"""
@@ -115,7 +122,7 @@ class MenuBuilder:
             return CursesLinePart(
                 column=col_starts[colno] + adj_colws[colno] - len(adj_entry),
                 string=adj_entry,
-                color=curses.color_pair(0),
+                color=0,
                 decoration=curses.A_UNDERLINE,
             )
         return CursesLinePart(
@@ -196,7 +203,6 @@ class MenuBuilder:
         col_starts, cols, adj_colws, header = menu_layout
 
         color, decoration = self._color_menu_item(colno, cols[colno], dyct)
-        color = curses.color_pair(color % self._number_colors)
 
         text = str(coltext)[0 : adj_colws[colno]]
         if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "__duration":

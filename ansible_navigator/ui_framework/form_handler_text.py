@@ -15,8 +15,8 @@ from .sentinals import unknown
 class FormHandlerText(CursesWindow, Textbox):
     """Get one line of text input"""
 
-    def __init__(self, screen):
-        super().__init__()
+    def __init__(self, screen, ui_config):
+        super().__init__(ui_config=ui_config)
         self.input_line_cache = []
         self.input_line_pointer = 0
         self._arrowing = False
@@ -81,7 +81,7 @@ class FormHandlerText(CursesWindow, Textbox):
         form_field = form_fields[idx]
 
         if form_field.response is not unknown:
-            clp = CursesLinePart(0, form_field.response, curses.color_pair(0), 0)
+            clp = CursesLinePart(0, form_field.response, 0, 0)
             self._add_line(self.win, 0, tuple([clp]))
         else:
             self.win.move(0, 0)

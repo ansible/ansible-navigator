@@ -1,5 +1,6 @@
 """ jump to one action
 """
+import os
 
 from ansible_navigator.actions import kegexes
 from ansible_navigator.actions import run_action
@@ -7,9 +8,12 @@ from ansible_navigator.actions import run_action
 from .app import App
 from .steps import Steps
 from .ui_framework import Interaction
+from .ui_framework import UIConfig
 from .ui_framework import UserInterface
 
 DEFAULT_REFRESH = 100
+DEFAULT_COLORS = "terminal_colors.json"
+THEME = "dark_vs.json"
 
 
 class ActionRunner(App):
@@ -29,12 +33,23 @@ class ActionRunner(App):
         :param refresh: The refresh for the ui
         :type refresh: int
         """
+        share_directory = self._args.internals.share_directory
+        theme_dir = os.path.join(share_directory, "themes")
+
+        config = UIConfig(
+            color=self._args.display_color,
+            colors_initialized=False,
+            grammar_dir=os.path.join(share_directory, "grammar"),
+            osc4=self._args.osc4,
+            terminal_colors_path=os.path.join(theme_dir, DEFAULT_COLORS),
+            theme_path=os.path.join(theme_dir, THEME),
+        )
+
         self._ui = UserInterface(
             screen_miny=3,
-            osc4=self._args.osc4,
             kegexes=kegexes,
             refresh=refresh,
-            share_directory=self._args.internals.share_directory,
+            ui_config=config,
         )
 
     def run(self, _screen) -> None:

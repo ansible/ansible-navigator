@@ -76,6 +76,8 @@ class ExitMessage(SimpleNamespace):
         raise ValueError("Missing logging level mapping")
 
     def __str__(self):
+        if "NO_COLOR" in os.environ:
+            return f"{self.prefix}{self.message}"
         return f"{self.color}{self.prefix}{self.message}{Colors.END.value}"
 
 

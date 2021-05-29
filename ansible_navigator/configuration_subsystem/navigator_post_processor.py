@@ -105,6 +105,18 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
+    def display_color(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        """Post process displacy_color"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.source == C.ENVIRONMENT_VARIABLE:
+            entry.value.current = False
+            message = f"{entry.environment_variable()} was set, set to {entry.value.current}"
+            messages.append(LogMessage(level=logging.INFO, message=message))
+            return messages, exit_messages
+        return self._true_or_false(entry, config)
+
+    @_post_processor
     def editor_console(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process editor_console"""
         return self._true_or_false(entry, config)

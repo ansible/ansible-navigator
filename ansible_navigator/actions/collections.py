@@ -61,7 +61,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
                 CursesLinePart(
                     column=0,
                     string=string,
-                    color=curses.color_pair(2),
+                    color=2,
                     decoration=curses.A_UNDERLINE,
                 )
             ]

@@ -60,7 +60,7 @@ class Entry(SimpleNamespace):
     apply_to_subsequent_cli: Should this be applied to future clis parsed
     choice: valid choices for this entry
     cli_parameters: argparse specific params
-    environment_variable_override: override the defaultenvironment variable
+    environment_variable_override: override the default environment variable
     name: the reference name for the entry
     settings_file_path_override: over the default settings file path
     short_description: A short description used for the argparse help

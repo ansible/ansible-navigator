@@ -41,6 +41,9 @@ You can copy the example settings file below into one of those paths to start yo
     #     playbook: /tmp/test_playbook.yml
     #   app: run
     #   collection-doc-cache-path: /tmp/cache.db
+    #   color:
+    #     enable: False
+    #     osc4: False
     #   editor:
     #     command: vim_from_setting
     #     console: False
@@ -79,7 +82,6 @@ You can copy the example settings file below into one of those paths to start yo
         level: critical
     #     file: /tmp/log.txt
     #   mode: stdout
-    #   osc4: False
     #   playbook-artifact: 
     #     enable: True
     #     replay: /tmp/test_artifact.json
@@ -150,6 +152,20 @@ The following table describes all available settings.
             ansible-navigator:
               execution-environment:
                 container-engine:
+
+  * - display-color
+    - Enable the use of color in the display
+    - | **Choices:** 'True' or 'False'
+      | **Default:** True
+      | **CLI:** `--dc` or `--display-color`
+      | **ENV:** NO_COLOR
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              color:
+                enable:
 
   * - editor-command
     - Specify the editor command
@@ -275,7 +291,7 @@ The following table describes all available settings.
   * - osc4
     - Enable or disable terminal color changing support with OSC 4
     - | **Choices:** 'True' or 'False'
-      | **Default:** Current terminal capabilities
+      | **Default:** True
       | **CLI:** `--osc4` or `--osc4`
       | **ENV:** ANSIBLE_NAVIGATOR_OSC4
       | **Settings file:**
@@ -283,7 +299,8 @@ The following table describes all available settings.
       .. code-block:: yaml
 
             ansible-navigator:
-              osc4:
+              color:
+                osc4:
 
   * - pass-environment-variable
     - Specify an exiting environment variable to be passed through to and set within the execution environment (--penv MY_VAR)
