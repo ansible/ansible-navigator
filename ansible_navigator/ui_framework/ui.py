@@ -103,9 +103,9 @@ class UserInterface(CursesWindow):
         kegexes: Callable[..., Any],
         refresh: int,
         share_directory: str,
+        ui_config: UIConfig,
         pbar_width: int = 11,
         status_width=12,
-        ui_config: UIConfig = UIConfig(),
     ) -> None:
         """init
 
@@ -483,24 +483,21 @@ class UserInterface(CursesWindow):
         :return: The generated lines
         :rtype: CursesLines
         """
+
         if self.xform() == "source.ansi":
-            if self._ui_config.color:
-                return self._colorizer.render(doc=obj, scope=self.xform())
-            string = obj
+            return self._colorizer.render(doc=obj, scope=self.xform())
         if self.xform() == "source.yaml":
             string = human_dump(obj)
         elif self.xform() == "source.json":
             string = json.dumps(obj, indent=4, sort_keys=True)
         else:
             string = obj
-        if self._ui_config:
-            rendered = self._colorizer.render(doc=string, scope=self.xform())
-        else:
-            # TODO: dedupe this from colorize.py
-            rendered = [
-                [{"column": 0, "chars": doc_line, "color": None}]
-                for doc_line in string.splitlines()
-            ]
+
+        scope = 'no_color'
+        if self._ui_config.color:
+            scope = self.xform()
+
+        rendered = self._colorizer.render(doc=string, scope=scope)
         return self._color_lines_for_term(rendered)
 
     def _color_lines_for_term(self, lines: List) -> CursesLines:

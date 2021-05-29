@@ -102,7 +102,7 @@ class Colorize:
         except KeyError:
             compiler = None
 
-        if compiler:
+        if compiler and scope != 'no_color':
             state = compiler.root_state
             lines = []
             for line_idx, line in enumerate(doc.splitlines()):
