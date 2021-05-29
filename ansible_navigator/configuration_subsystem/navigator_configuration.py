@@ -191,6 +191,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="display_color",
+            change_after_initial=False,
             choices=[True, False],
             cli_parameters=CliParameters(short="--dc"),
             environment_variable_override="no_color",
