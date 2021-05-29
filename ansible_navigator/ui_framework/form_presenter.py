@@ -154,7 +154,7 @@ class FormPresenter(CursesWindow):
         far_right = self._form_width
         footer_fields = [field for field in self._form.fields if field.name in ["submit", "cancel"]]
         for form_field in reversed(footer_fields):
-            string = form_field.text
+            string = f" {form_field.text} "  # room for []
             far_right -= len(string)
             window = curses.newwin(1, len(string), self._line_number, far_right + self._pad_left)
             window.keypad(True)

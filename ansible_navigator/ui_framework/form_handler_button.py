@@ -31,7 +31,12 @@ class FormHandlerButton(CursesWindow):
         else:
             color = self._form_field.color
 
-        clp_button = CursesLinePart(0, self._form_field.text, color, curses.A_STANDOUT)
+        if self._ui_config.color is False:
+            text = f"[{self._form_field.text.upper()}]"
+        else:
+            text = self._form_field.text
+
+        clp_button = CursesLinePart(0, text, color, curses.A_STANDOUT)
         self._add_line(self.win, 0, ([clp_button]))
 
     def handle(self, idx, form_fields: List) -> Tuple["FieldButton", int]:

@@ -32,7 +32,14 @@ class FormHandlerOptions(CursesWindow):
             color = 8 if option.disabled else 0
             decoration = curses.A_STANDOUT if idx == active else 0
             clp_option_code = CursesLinePart(0, option_code, color, 0)
-            clp_text = CursesLinePart(len(option_code) + 1, option.text, color, decoration)
+            if self._ui_config.color is False:
+                if idx == active:
+                    text = f"[{option.text.upper()}]"
+                else:
+                    text = option.text + "  "  # clear the []
+            else:
+                text = option.text
+            clp_text = CursesLinePart(len(option_code) + 1, text, color, decoration)
             self._add_line(self.win, idx, ([clp_option_code, clp_text]))
 
     def handle(self, idx, form_fields: List) -> Tuple[Union["FieldChecks", "FieldRadio"], int]:
