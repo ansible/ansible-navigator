@@ -22,7 +22,9 @@ from typing import Set
 from typing import Tuple
 from typing import Union
 
-from jinja2 import Environment, TemplateError
+from jinja2 import Environment
+from jinja2 import StrictUndefined
+from jinja2 import TemplateError
 
 
 logger = logging.getLogger(__name__)
@@ -374,7 +376,7 @@ def str2bool(value: Any) -> bool:
     raise ValueError
 
 
-def templar(string: str, template_vars: Mapping) -> Any:
+def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     """template some string with jinja2
     always to and from json so we return an object if it is
 
@@ -383,31 +385,35 @@ def templar(string: str, template_vars: Mapping) -> Any:
     :param template_vars: The vars used to render the template
     :type template_vars: dict
     """
+    errors = []
     # hide the jinja that may be in the template_vars
     template_vars = escape_moustaches(template_vars)
 
-    env = Environment(autoescape=True)
+    env = Environment(autoescape=True, undefined=StrictUndefined)
     try:
         template = env.from_string(string)
         result = template.render(template_vars)
-    except TemplateError as exc:
-        result = str(exc)
-        logging.debug(str(exc))
+    except (ValueError, TemplateError) as exc:
+        errors.append(f"Error while templating string: '{string}'")
+        errors.append(f"The error was: {str(exc)}")
+        for error in errors:
+            logger.error(error)
+        return errors, string
 
     # We may have gotten the __repr__ of a python object
     # so let's try and turn it back
     try:
-        logging.debug("original templated string: %s", result)
+        logger.debug("original templated string: %s", result)
         escaped = html.unescape(result)
-        logging.debug("html escaped templated str: %s", escaped)
+        logger.debug("html escaped templated str: %s", escaped)
         result = ast.literal_eval(escaped)
     except (ValueError, SyntaxError) as exc:
-        logging.debug("Could not ast parse templated string")
-        logging.debug("error was: %s", str(exc))
-        logging.debug("attempted on %s", result)
+        logger.debug("Could not ast parse templated string")
+        logger.debug("error was: %s", str(exc))
+        logger.debug("attempted on %s", result)
 
     result = unescape_moustaches(result)
-    return result
+    return errors, result
 
 
 def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
