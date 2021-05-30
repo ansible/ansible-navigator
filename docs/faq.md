@@ -8,6 +8,15 @@ A: The easiest place to have the `ansible.cfg` is in the project directory adjac
 
 A: ansible will look for the `ansible.cfg` in the typical locations when not using an execution-environment.  (See the ansible docs for the possibilities)
 
+**Q: Where should ansible collections be placed when using an execution environment?**
+
+A: The easiest place to have ansible collections is in the project directory, in a playbook adjacent collections directory. (eg `ansible-galaxy collections install ansible.utils -p ./collections`).  The playbook directory is automatically mounted in the execution environment and the collections should be found. Another option is to build the collections into an execution environment using [ansible builder](https://ansible-builder.readthedocs.io/en/latest/). This was done to help playbook developers author playbooks that are production ready, as both ansible controller and awx support playbook adjacent collection directories. If the collections are in another directory, the `ANSIBLE_COLLECTIONS_PATHS` variable needs to be set and the directory specified as a custom volume mount. (See the [settings guide](docs/settings.rst) for `execution-environment-volume-mounts`)
+
+**Q: Where should ansible collections be placed when not using an execution environment?**
+
+A: When not using an execution enviroment, ansible will look in the default locations for collections.  For more information about these, check out the [collections guide](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html).
+
+
 **Q: Why does the playbook hang when `vars_prompt` or `pause/prompt` is used?**
 
 A: By default `ansible-navigator` runs the playbook in the same manner that ansible controller and AWX would run the playbook. This was done to help playbook developers author playbooks that would be ready for production. If the use of `vars_prompt` or `pause\prompt` can not be avoided, disabling `playbook-artifact` creation causes `ansible-navigator` to run the playbook in a manner that is compatible with `ansible-playbook` and allows for user interaction.
