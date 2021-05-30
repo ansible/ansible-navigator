@@ -10,8 +10,12 @@ ansible-navigator settings
 The ansible-navigator settings file
 ========================================
 
-Several options in ``ansible-navigator`` can be configured by making use of a
-settings file. The settings file can live in one of two places.
+Settings for ``ansible-navigator`` can provided at the command line,
+set using an environment variable or specified in a settings file.
+
+The settings file name and path can be specified with an environment variable
+or it can be placed in one of two default directories.
+
 Currently the following are checked and the first match is used:
 
 - ``ANSIBLE_NAVIGATOR_CONFIG`` (settings file path environment variable if set)
@@ -20,10 +24,10 @@ Currently the following are checked and the first match is used:
 
 .. note::
     - The settings file can be in ``JSON`` or ``YAML`` format.
-    - For settings in ``JSON`` format the extention must be ``.json``.
-    - For settings in ``YAML`` format the extention must be ``.yml`` or ``.yaml``.
+    - For settings in ``JSON`` format, the extention must be ``.json``.
+    - For settings in ``YAML`` format, the extention must be ``.yml`` or ``.yaml``.
     - The project and home directories can only contain one settings file each.
-      If more than one settings file is found in either directory, it will result in an error.
+    - If more than one settings file is found in either directory, it will result in an error.
 
 You can copy the example settings file below into one of those paths to start your ``ansible-navigator`` settings file.
 
