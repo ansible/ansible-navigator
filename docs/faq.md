@@ -19,7 +19,7 @@ A: `ansible-navigator` queries the terminal for its OSC4 compatibility. OSC4, 10
 
 **Q: How can I change the colors used by `ansible-navigator`?**
 
-A: Full theme support should come in a later release, for now try `--osc4 false`. This will cause `ansible-navigaor` to use the terminal's defined colors. (See the [settings guide](docs/settings.rst) for how to handle this with an enviroment variable or in the settings file)
+A: Full theme support should come in a later release, for now, try `--osc4 false`. This will cause `ansible-navigaor` to use the terminal's defined colors. (See the [settings guide](docs/settings.rst) for how to handle this with an enviroment variable or in the settings file)
 
 **Q: Something didn't work, how can I troubleshoot it?**
 
