@@ -35,8 +35,8 @@ base_steps = (
     Step(
         user_input=":open {{ task_path }}",
         comment="goto vi",
-        search_within_response="hosts: localhost",
-        look_fors=["hosts: localhost"],
+        search_within_response="---",
+        look_fors=["---"],
     ),
 )
 
