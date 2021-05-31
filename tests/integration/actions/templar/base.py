@@ -96,7 +96,6 @@ class BaseClass:
         if (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-            and not any((step.look_fors, step.look_nots))
         ):
             update_fixtures(
                 request,
