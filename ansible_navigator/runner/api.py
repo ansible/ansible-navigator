@@ -245,6 +245,7 @@ class CommandRunnerAsync(CommandBaseRunner):
         super().__init__(executable_cmd, **kwargs)
 
     def _event_handler(self, event):
+        self._logger.debug("ansible-runner event handle: %s", event)
         self._queue.put(event)
 
     def run(self):
