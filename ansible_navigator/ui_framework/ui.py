@@ -8,6 +8,8 @@ import logging
 
 import re
 
+from collections.abc import Mapping
+
 from curses import ascii as curses_ascii
 
 from functools import lru_cache
@@ -33,12 +35,15 @@ from .curses_defs import CursesLines
 from .curses_window import CursesWindow
 from .curses_window import Window
 
-from .form import Form
 from .field_text import FieldText
+from .form import Form
 from .form_handler_text import FormHandlerText
+from .form_utils import warning_notification
 from .menu_builder import MenuBuilder
 
 from .ui_config import UIConfig
+from ..utils import templar
+
 
 from ..yaml import human_dump
 
@@ -457,19 +462,40 @@ class UserInterface(CursesWindow):
             if return_value is not None:
                 return return_value
 
-    def _action_match(self, entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
-        """attempt to match the user input against the regexes
+    def _template_match_action(
+        self, entry: str, current: Any
+    ) -> Union[Tuple[str, Action], Tuple[None, None]]:
+        """attempt to template & match the user input against the regexes
         provided by each action
 
         :param entry: the user input
-        :type entry: str
+        :param current: the content on the screen
         :return: The name and matching action or not
         :rtype: str, Action or None, None
         """
+        if not entry.startswith("{{"):  # don't match pure template
+            if "{{" in entry and "}}" in entry:
+                if isinstance(current, Mapping):
+                    template_vars = current
+                    type_msgs = []
+                else:
+                    template_vars = {"this": current}
+                    type_msgs = ["Current content passed for templating is not a dictionary."]
+                    type_msgs.append("[HINT] Use 'this' to reference it (e.g. {{ this[0] }}")
+                errors, entry = templar(entry, template_vars)
+                if errors:
+                    msgs = ["Errors encountered while templating input"] + errors
+                    msgs.extend(type_msgs)
+                    self._show_form(warning_notification(msgs))
+                    return None, None
         for kegex in self._kegexes():
             match = kegex.kegex.match(entry)
             if match:
                 return kegex.name, Action(match=match, value=entry)
+
+        msgs = [f"Could not find a match for ':{entry}'"]
+        msgs.append("[HINT] Try ':help' for a list of available commands.")
+        self._show_form(warning_notification(msgs))
         return None, None
 
     def _serialize_color(self, obj: Any) -> CursesLines:
@@ -651,13 +677,15 @@ class UserInterface(CursesWindow):
             if entry == "KEY_RESIZE":
                 # only the heading knows about the screen_w and screen_h
                 heading = self._content_heading(objs[index], self._screen_w)
+                continue
 
             if entry == "_":
                 self._hide_keys = not self._hide_keys
                 heading, lines = self._filter_and_serialize(objs[index])
+                continue
 
             # get the less or more, wrap, incase we jumped out of the menu indices
-            elif entry == "-":
+            if entry == "-":
                 less = list(reversed([i for i in self._menu_indicies if i - index < 0]))
                 more = list(reversed([i for i in self._menu_indicies if i - index > 0]))
 
@@ -666,8 +694,9 @@ class UserInterface(CursesWindow):
                     index = ordered_indicies[0]
                     self.scroll(0)
                     entry = "KEY_F(5)"
+                continue
 
-            elif entry == "+":
+            if entry == "+":
                 more = [i for i in self._menu_indicies if i - index > 0]
                 less = [i for i in self._menu_indicies if i - index < 0]
 
@@ -676,24 +705,26 @@ class UserInterface(CursesWindow):
                     index = ordered_indicies[0]
                     self.scroll(0)
                     entry = "KEY_F(5)"
+                continue
 
-            elif entry.isnumeric():
+            if entry.isnumeric():
                 index = int(entry) % len(objs)
                 self.scroll(0)
                 entry = "KEY_F(5)"
+                continue
 
-            name, action = self._action_match(entry)
+            current = objs[index % len(objs)]
+
+            name, action = self._template_match_action(entry, current)
             if name and action:
                 if name == "refresh":
                     action = action._replace(value=index)
 
-                current = objs[index % len(objs)]
                 filtered = (
                     self._filter_content_keys(current)
                     if self._hide_keys and isinstance(current, dict)
                     else current
                 )
-
                 content = Content(showing=filtered)
                 return Interaction(name=name, action=action, content=content, ui=self._ui)
 
@@ -799,7 +830,7 @@ class UserInterface(CursesWindow):
             if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
                 continue
 
-            name, action = self._action_match(entry)
+            name, action = self._template_match_action(entry, current)
             if name and action:
                 if name == "select":
                     if current:

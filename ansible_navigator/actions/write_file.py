@@ -7,6 +7,9 @@ import re
 from . import _actions as actions
 from ..app_public import AppPublic
 from ..ui_framework import Interaction
+
+from ..utils import remove_dbl_un
+
 from ..yaml import human_dump
 
 
@@ -21,12 +24,6 @@ class Action:
     def __init__(self, args):
         self._args = args
         self._logger = logging.getLogger(__name__)
-
-    @staticmethod
-    def _remove_dbl_un(string):
-        if string.startswith("__"):
-            return string.replace("__", "", 1)
-        return string
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
@@ -60,7 +57,7 @@ class Action:
             obj = interaction.content.showing
         elif interaction.menu:
             obj = [
-                {self._remove_dbl_un(k): v for k, v in c.items() if k in interaction.menu.columns}
+                {remove_dbl_un(k): v for k, v in c.items() if k in interaction.menu.columns}
                 for c in interaction.menu.current
             ]
             if interaction.ui.menu_filter():

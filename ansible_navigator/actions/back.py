@@ -29,6 +29,7 @@ class Action:
         """
         self._logger.debug("back requested")
         interaction.ui.scroll(0)
+        interaction.ui.clear()
         this = app.steps.back_one()  # pop this
         step = app.steps.back_one()  # pop current
 

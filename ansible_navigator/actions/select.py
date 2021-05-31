@@ -31,6 +31,7 @@ class Action:
         """
         self._logger.debug("selection made")
         interaction.ui.scroll(0)
+        interaction.ui.clear()
         this = app.steps.back_one()  # remove this
         app.steps.current.index = interaction.action.value  # update index
         app.steps.append(app.steps.current.select_func())  # add next
