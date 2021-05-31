@@ -61,8 +61,15 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     setattr(formatter, "converter", time.gmtime)
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
-    logger.setLevel(getattr(logging, args.log_level.upper()))
+    log_level = getattr(logging, args.log_level.upper())
+    logger.setLevel(log_level)
     logger.info("New %s instance, logging initialized", APP_NAME)
+
+    # set ansible-runner logs
+    runner_logger = logging.getLogger("ansible-runner")
+    runner_logger.setLevel(log_level)
+    runner_logger.addHandler(hdlr)
+    logger.info("New ansible-runner instance, logging initialized")
 
 
 def run(args: ApplicationConfiguration) -> int:
