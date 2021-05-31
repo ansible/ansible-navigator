@@ -1,18 +1,21 @@
 """ {{ }} """
 import html
-import logging
 
 from collections.abc import Mapping
 from typing import Union
 
 from . import _actions as actions
 from ..utils import templar
+
+from ..app import App
 from ..app_public import AppPublic
+
+from ..ui_framework import warning_notification
 from ..ui_framework import Interaction
 
 
 @actions.register
-class Action:
+class Action(App):
     """{{ }}"""
 
     # pylint: disable=too-few-public-methods
@@ -20,8 +23,13 @@ class Action:
     KEGEX = r"^{{.*}}$"
 
     def __init__(self, args):
-        self._args = args
-        self._logger = logging.getLogger(__name__)
+        super().__init__(args=args, logger_name=__name__, name="template")
+
+    @staticmethod
+    def _remove_dbl_un(string):
+        if string.startswith("__"):
+            return string.replace("__", "", 1)
+        return string
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Handle :{{ }}
@@ -32,20 +40,21 @@ class Action:
         :type app: App
         """
         self._logger.debug("template requested '%s'", interaction.action.value)
+        self._prepare_to_run(app, interaction)
+
+        type_msgs = ["Current content passed for templating is not a dictionary."]
+        type_msgs.append("[HINT] Use 'this' to reference it (e.g. {{ this[0] }}")
 
         if interaction.content:
             if isinstance(interaction.content.showing, Mapping):
                 template_vars = interaction.content.showing
+                type_msgs = []
             else:
                 template_vars = {"this": interaction.content.showing}
-                self._logger.info(
-                    "Object passed for templating not a dictionary, " "use 'this' to access it"
-                )
-            templated = templar(string=str(interaction.action.value), template_vars=template_vars)
 
         elif interaction.menu:
             obj = [
-                {k: v for k, v in c.items() if k in interaction.menu.columns}
+                {self._remove_dbl_un(k): v for k, v in c.items() if k in interaction.menu.columns}
                 for c in interaction.menu.current
             ]
             if interaction.ui.menu_filter():
@@ -54,8 +63,8 @@ class Action:
                     for e in obj
                     if interaction.ui.menu_filter().search(" ".join(str(v) for v in e.values()))
                 ]
+
             template_vars = {"this": obj}
-            self._logger.info("a menu is a list of dictionaries. use 'this' to access it")
         else:
             self._logger.error("No menu or content found")
             return None
@@ -63,7 +72,15 @@ class Action:
         previous_scroll = interaction.ui.scroll()
         interaction.ui.scroll(0)
 
-        templated = templar(string=str(interaction.action.value), template_vars=template_vars)
+        errors, templated = templar(
+            string=str(interaction.action.value), template_vars=template_vars
+        )
+        if errors:
+            msgs = ["Errors encountered while templating input"] + errors
+            msgs.extend(type_msgs)
+            interaction.ui.show(warning_notification(msgs))
+            return None
+
         if isinstance(templated, str):
             templated = html.unescape(templated)
 
@@ -75,4 +92,5 @@ class Action:
                 break
 
         interaction.ui.scroll(previous_scroll)
+        self._prepare_to_exit(interaction)
         return next_interaction
