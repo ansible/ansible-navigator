@@ -10,7 +10,7 @@ ansible-navigator settings
 The ansible-navigator settings file
 ========================================
 
-Settings for ``ansible-navigator`` can provided at the command line,
+Settings for ``ansible-navigator`` can be provided on the command line,
 set using an environment variable or specified in a settings file.
 
 The settings file name and path can be specified with an environment variable
