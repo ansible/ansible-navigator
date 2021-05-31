@@ -13,6 +13,8 @@ from ..app_public import AppPublic
 from ..ui_framework import warning_notification
 from ..ui_framework import Interaction
 
+from ..utils import remove_dbl_un
+
 
 @actions.register
 class Action(App):
@@ -24,12 +26,6 @@ class Action(App):
 
     def __init__(self, args):
         super().__init__(args=args, logger_name=__name__, name="template")
-
-    @staticmethod
-    def _remove_dbl_un(string):
-        if string.startswith("__"):
-            return string.replace("__", "", 1)
-        return string
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Handle :{{ }}
@@ -54,7 +50,7 @@ class Action(App):
 
         elif interaction.menu:
             obj = [
-                {self._remove_dbl_un(k): v for k, v in c.items() if k in interaction.menu.columns}
+                {remove_dbl_un(k): v for k, v in c.items() if k in interaction.menu.columns}
                 for c in interaction.menu.current
             ]
             if interaction.ui.menu_filter():

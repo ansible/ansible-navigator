@@ -16,6 +16,8 @@ from ..app_public import AppPublic
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 
+from ..utils import remove_dbl_un
+
 from ..yaml import human_dump
 
 
@@ -43,17 +45,10 @@ class Action:
         self._args = args
         self._logger = logging.getLogger(__name__)
 
-    @staticmethod
-    def _remove_dbl_un(string):
-        if string.startswith("__"):
-            return string.replace("__", "", 1)
-        return string
-
     def _menu(self, menu: Menu, menu_filter: Callable) -> List[Dict[Any, Any]]:
         self._logger.debug("menu is showing, open that")
         obj = [
-            {self._remove_dbl_un(k): v for k, v in c.items() if k in menu.columns}
-            for c in menu.current
+            {remove_dbl_un(k): v for k, v in c.items() if k in menu.columns} for c in menu.current
         ]
         if menu_filter():
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
