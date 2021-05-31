@@ -361,11 +361,13 @@ def remove_ansi(string):
     )
     return ansi_escape.sub("", string)
 
+
 def remove_dbl_un(string):
-    """ remove a __ from the beginning of a string """
+    """remove a __ from the beginning of a string"""
     if string.startswith("__"):
         return string.replace("__", "", 1)
     return string
+
 
 def str2bool(value: Any) -> bool:
     """Convert some commonly used values
