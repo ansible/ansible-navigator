@@ -618,6 +618,7 @@ class Action(App):
     def _handle_message(self, message: dict) -> None:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-nested-blocks
+        # pylint: disable=too-many-statements
         """Handle a runner message
 
         :param message: The message from runner
@@ -637,7 +638,8 @@ class Action(App):
             if event in ["verbose", "error"]:
                 if "ERROR!" in message["stdout"]:
                     self._msg_from_plays = ("ERROR", 9)
-                    self._notify_error(message["stdout"])
+                    if self.mode == "interactive":
+                        self._notify_error(message["stdout"])
                 elif "WARNING" in message["stdout"]:
                     self._msg_from_plays = ("WARNINGS", 13)
 
