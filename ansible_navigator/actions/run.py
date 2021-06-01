@@ -618,6 +618,7 @@ class Action(App):
     def _handle_message(self, message: dict) -> None:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-nested-blocks
+        # pylint: disable=too-many-statements
         """Handle a runner message
 
         :param message: The message from runner
