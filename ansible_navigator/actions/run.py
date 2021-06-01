@@ -637,7 +637,8 @@ class Action(App):
             if event in ["verbose", "error"]:
                 if "ERROR!" in message["stdout"]:
                     self._msg_from_plays = ("ERROR", 9)
-                    self._notify_error(message["stdout"])
+                    if self.mode == "interactive":
+                        self._notify_error(message["stdout"])
                 elif "WARNING" in message["stdout"]:
                     self._msg_from_plays = ("WARNINGS", 13)
 
