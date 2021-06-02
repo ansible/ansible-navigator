@@ -97,7 +97,6 @@ class App:
         self._args = constructor(
             **{entry.name: entry.value.current for entry in self._global_args.entries}
         )
-        pass
 
     def _prepare_to_run(self, app: AppPublic, interaction: Interaction) -> None:
         self._calling_app = app
