@@ -33,7 +33,7 @@ class ActionRunner(App):
         :param refresh: The refresh for the ui
         :type refresh: int
         """
-        share_directory = self._args.internals.share_directory
+        share_directory = self._global_args.internals.share_directory
         theme_dir = os.path.join(share_directory, "themes")
 
         config = UIConfig(
@@ -56,7 +56,7 @@ class ActionRunner(App):
         # pylint: disable=protected-access
         """Run with the interface and runner"""
         self.initialize_ui(DEFAULT_REFRESH)
-        requested = " ".join(filter(None, (self._args.app, vars(self._args).get("value", ""))))
+        requested = self._args.app
         name, action = self._action_match(requested)
         if name and action:
             interaction = Interaction(

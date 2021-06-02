@@ -348,7 +348,7 @@ class Action(App):
     def _introspect_image(self):
 
         self._images.selected["__introspected"] = True
-        share_directory = self._args.internals.share_directory
+        share_directory = self._global_args.internals.share_directory
         container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils:z"]
         python_exec_path = "python3"
 

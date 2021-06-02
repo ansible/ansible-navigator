@@ -2,6 +2,7 @@
 """
 import logging
 
+from collections import namedtuple
 from copy import deepcopy
 from typing import List
 from typing import Pattern
@@ -34,13 +35,17 @@ class App:
 
     def __init__(self, args: ApplicationConfiguration, name, logger_name=__name__):
 
-        # allow args to be set after __init__
-        self._args: ApplicationConfiguration = args
+        self._global_args: ApplicationConfiguration = args
+        self._args: ApplicationConfiguration  # really a namedtuple
+        self._freeze_entries()
+
         self._calling_app: AppPublic
         self._interaction: Interaction
         self._logger = logging.getLogger(logger_name)
         self._parser_error: str = ""
-        self._previous_configuration_entries: List[Entry] = deepcopy(self._args.entries)
+        # do not modify this, as it is used to restore the args upon exit
+        self._previous_configuration_entries: List[Entry] = deepcopy(self._global_args.entries)
+
         self._previous_scroll: int
         self._previous_filter: Union[Pattern, None]
         self._name = name
@@ -70,7 +75,7 @@ class App:
         """
         if self._args:
             return AppPublic(
-                args=self._args,
+                args=self._global_args,
                 name=self._name,
                 rerun=self.rerun,
                 stdout=self.stdout,
@@ -79,6 +84,20 @@ class App:
                 write_artifact=self.write_artifact,
             )
         raise AttributeError("app passed without args initialized")
+
+    def _freeze_entries(self):
+        """create a namedtuple of entries for reference
+        within the action, because args could be modified by another action
+        while this one is still running. This will behave like
+        a attribute acessible ApplicationConfiguration but will not allow updates
+        """
+        constructor = namedtuple(
+            "entries", " ".join(entry.name for entry in self._global_args.entries)
+        )
+        self._args = constructor(
+            **{entry.name: entry.value.current for entry in self._global_args.entries}
+        )
+        pass
 
     def _prepare_to_run(self, app: AppPublic, interaction: Interaction) -> None:
         self._calling_app = app
@@ -92,7 +111,7 @@ class App:
         interaction.ui.scroll(self._previous_scroll)
         interaction.ui.menu_filter(self._previous_filter)
         interaction.ui.scroll(0)
-        self._args.entries = self._previous_configuration_entries
+        self._global_args.entries = self._previous_configuration_entries
 
     def parser_error(self, message: str) -> Tuple[None, None]:
         """callback for parser error
@@ -119,8 +138,12 @@ class App:
         exit_messages: List[ExitMessage]
 
         messages, exit_messages = parse_and_update(
-            params=params, args=self._args, apply_previous_cli_entries=apply_previous_cli_entries
+            params=params,
+            args=self._global_args,
+            apply_previous_cli_entries=apply_previous_cli_entries,
         )
+
+        self._freeze_entries()
 
         for message in messages:
             self._logger.log(level=message.level, msg=message.message)
