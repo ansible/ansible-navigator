@@ -34,6 +34,34 @@ A: Full theme support should come in a later release, for now, try `--osc4 false
 
 A: `ansible-navigator` creates a playbook artifact for every playbook run.  These can be helpful for reviewing the outcome of automation after it is complete, sharing and troubleshooting with a colleague, or keeping for compliance or change-control purposes.  The playbook artifact file contains the detailed information about every play and task, as well as the stdout from the playbook run. Playbook artifacts can be review with `ansible-navigator replay <filename>` or `:replay <filename>` while in an ansible-navigator session. All playbook artifacts can be reviewed with both `--mode stdout` and `--mode interactive`, depending on the desired view. Playbook artifacts writing can be disabled and the default file naming convention changed as well.(See the [settings guide](docs/settings.rst) for additional information)
 
+**Q: Why does `vi` open when I use `:open`?**
+
+A: `ansible-navigator` will open anything showing in the terminal in the default editor.  The default is set to either `vi +{line_number} {filename}` or the current value of the `EDITOR` environment variable. Related to this is the `editor-console` setting which indicates if the editor is console/terminal based. Here are examples of alternate settings that may be useful:
+
+```yaml
+# emacs
+ansible-navigator:
+  editor:
+    command: emacs -nw +{line_number} {filename}
+    console: true
+```
+
+```yaml
+# vscode
+ansible-navigator:
+  editor:
+    command: code -g {filename}:{line_number}
+    console: false
+```
+
+```yaml
+#pycharm
+ansible-navigator:
+  editor:
+    command: charm --line {line_number} {filename}
+    console: false
+```
+
 **Q: Something didn't work, how can I troubleshoot it?**
 
 A: `ansible-navigator` has reasonable logging messages, debug logging can be enabled with `--log-level debug`. If you think you might have found a bug, please log an issue and include the details from the log file.
