@@ -133,7 +133,7 @@ class Configurator:
                 entry.value.source = C.NOT_SET
             else:
                 message = f"'{entry.name}' cannot be reconfigured. (restore original)"
-                self._messages.append(LogMessage(level=logging.DEBUG, message=message))
+                self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_defaults(self) -> None:
         for entry in self._config.entries:
