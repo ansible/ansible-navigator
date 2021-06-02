@@ -30,6 +30,10 @@ A: `ansible-navigator` queries the terminal for its OSC4 compatibility. OSC4, 10
 
 A: Full theme support should come in a later release, for now, try `--osc4 false`. This will cause `ansible-navigaor` to use the terminal's defined colors. (See the [settings guide](docs/settings.rst) for how to handle this with an enviroment variable or in the settings file)
 
+**Q: What's with all these `site-artifact-2021-06-02T16:02:33.911259+00:00.json` files in the playbook directory?**
+
+A: `ansible-navigator` creates a playbook artifact for every playbook run.  These can be helpful for reviewing the outcome of automation after it is complete, sharing and troubleshooting with a colleague, or keeping for compliance or change-control purposes.  The playbook artifact file contains the detailed information about every play and task, as well as the stdout from the playbook run. Playbook artifacts can be review with `ansible-navigator replay <filename>` or `:replay <filename>` while in an ansible-navigator session. All playbook artifacts can be reviewed with both `--mode stdout` and `--mode interactive`, depending on the desired view. Playbook artifacts writing can be disabled and the default file naming convention changed as well.(See the [settings guide](docs/settings.rst) for additional information)
+
 **Q: Something didn't work, how can I troubleshoot it?**
 
 A: `ansible-navigator` has reasonable logging messages, debug logging can be enabled with `--log-level debug`. If you think you might have found a bug, please log an issue and include the details from the log file.
