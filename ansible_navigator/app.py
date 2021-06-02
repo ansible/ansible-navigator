@@ -2,7 +2,6 @@
 """
 import logging
 
-from collections import namedtuple
 from copy import deepcopy
 from typing import List
 from typing import Pattern
@@ -15,7 +14,6 @@ from .app_public import AppPublic
 
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants as C
-from .configuration_subsystem import Entry
 
 from .initialization import parse_and_update
 
@@ -34,21 +32,16 @@ class App:
     """simple base class for apps"""
 
     def __init__(self, args: ApplicationConfiguration, name, logger_name=__name__):
+        self._logger = logging.getLogger(logger_name)
 
-        self._global_args: ApplicationConfiguration = args
-        self._args: ApplicationConfiguration  # really a namedtuple
-        self._freeze_entries()
+        self._args: ApplicationConfiguration = deepcopy(args)
 
         self._calling_app: AppPublic
         self._interaction: Interaction
-        self._logger = logging.getLogger(logger_name)
-        self._parser_error: str = ""
-        # do not modify this, as it is used to restore the args upon exit
-        self._previous_configuration_entries: List[Entry] = deepcopy(self._global_args.entries)
-
-        self._previous_scroll: int
-        self._previous_filter: Union[Pattern, None]
         self._name = name
+        self._parser_error: str = ""
+        self._previous_filter: Union[Pattern, None]
+        self._previous_scroll: int
         self.stdout: List = []
         self.steps = Steps()
 
@@ -75,7 +68,7 @@ class App:
         """
         if self._args:
             return AppPublic(
-                args=self._global_args,
+                args=self._args,
                 name=self._name,
                 rerun=self.rerun,
                 stdout=self.stdout,
@@ -84,19 +77,6 @@ class App:
                 write_artifact=self.write_artifact,
             )
         raise AttributeError("app passed without args initialized")
-
-    def _freeze_entries(self):
-        """create a namedtuple of entries for reference
-        within the action, because args could be modified by another action
-        while this one is still running. This will behave like
-        a attribute acessible ApplicationConfiguration but will not allow updates
-        """
-        constructor = namedtuple(
-            "entries", " ".join(entry.name for entry in self._global_args.entries)
-        )
-        self._args = constructor(
-            **{entry.name: entry.value.current for entry in self._global_args.entries}
-        )
 
     def _prepare_to_run(self, app: AppPublic, interaction: Interaction) -> None:
         self._calling_app = app
@@ -110,7 +90,6 @@ class App:
         interaction.ui.scroll(self._previous_scroll)
         interaction.ui.menu_filter(self._previous_filter)
         interaction.ui.scroll(0)
-        self._global_args.entries = self._previous_configuration_entries
 
     def parser_error(self, message: str) -> Tuple[None, None]:
         """callback for parser error
@@ -127,22 +106,27 @@ class App:
     def update(self) -> None:
         """update, define in child if necessary"""
 
-    def _update_args(self, params: List, apply_previous_cli_entries: C = C.ALL) -> None:
+    def _update_args(
+        self, params: List, apply_previous_cli_entries: C = C.ALL, attach_cdc: bool = False
+    ) -> None:
         """pass the params through the configuration subsystem
         log messages and exit_messages as warnings since most will result in a form
         while the exit_messages would have cause a sys.exit(1) from the CLI
         each action should handle them in a manner that does not exit the TUI
+
+        :param params: a sys.argv.like list of parameters
+        :param apply_previous_cli_entries: Should previous params from the cli be applied
+        :param attach_cdc: Should the collection doc cache be attached to the args.internals
         """
         messages: List[LogMessage]
         exit_messages: List[ExitMessage]
 
         messages, exit_messages = parse_and_update(
             params=params,
-            args=self._global_args,
             apply_previous_cli_entries=apply_previous_cli_entries,
+            args=self._args,
+            attach_cdc=attach_cdc,
         )
-
-        self._freeze_entries()
 
         for message in messages:
             self._logger.log(level=message.level, msg=message.message)

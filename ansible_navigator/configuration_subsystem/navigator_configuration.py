@@ -291,6 +291,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="log_append",
+            change_after_initial=False,
             choices=[True, False],
             cli_parameters=CliParameters(short="--la"),
             short_description=(
@@ -302,6 +303,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="log_file",
+            change_after_initial=False,
             cli_parameters=CliParameters(short="--lf"),
             short_description="Specify the full path for the ansible-navigator log file",
             settings_file_path_override="logging.file",
@@ -309,6 +311,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="log_level",
+            change_after_initial=False,
             choices=["debug", "info", "warning", "error", "critical"],
             cli_parameters=CliParameters(short="--ll"),
             short_description="Specify the ansible-navigator log level",
@@ -325,6 +328,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="osc4",
+            change_after_initial=False,
             choices=[True, False],
             cli_parameters=CliParameters(short="--osc4"),
             settings_file_path_override="color.osc4",
@@ -396,6 +400,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="pull_policy",
+            change_after_initial=False,
             choices=["always", "missing", "never", "tag"],
             cli_parameters=CliParameters(short="--pp"),
             settings_file_path_override="execution-environment.pull-policy",

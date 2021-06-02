@@ -33,7 +33,7 @@ class ActionRunner(App):
         :param refresh: The refresh for the ui
         :type refresh: int
         """
-        share_directory = self._global_args.internals.share_directory
+        share_directory = self._args.internals.share_directory
         theme_dir = os.path.join(share_directory, "themes")
 
         config = UIConfig(

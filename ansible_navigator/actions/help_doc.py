@@ -29,7 +29,7 @@ class Action(App):
         self._prepare_to_run(app, interaction)
 
         with open(
-            os.path.join(self._global_args.internals.share_directory, "markdown", "help.md")
+            os.path.join(self._args.internals.share_directory, "markdown", "help.md")
         ) as fhand:
             help_md = fhand.read()
 

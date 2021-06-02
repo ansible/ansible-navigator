@@ -87,8 +87,8 @@ class Action(App):
     def __init__(self, args: ApplicationConfiguration):
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
-        self._collection_cache = self._global_args.internals.collection_doc_cache
-        self._collection_cache_path = self._args.collection_doc_cache_path
+        self._collection_cache: Dict
+        self._collection_cache_path: str
         self._collection_scanned_paths: List = []
         self._collections: List = []
         self._stats: Dict = {}
@@ -116,9 +116,13 @@ class Action(App):
         )
         interaction.ui.show(notification)
 
-        self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
+        params = [self._name] + shlex.split(
+            self._interaction.action.match.groupdict()["params"] or ""
         )
+
+        self._update_args(params=params, attach_cdc=True)
+        self._collection_cache = self._args.internals.collection_doc_cache
+        self._collection_cache_path = self._args.collection_doc_cache_path
 
         self._run_runner()
 
@@ -281,7 +285,7 @@ class Action(App):
         kwargs.update({"cwd": playbook_dir})
 
         self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")
-        share_directory = self._global_args.internals.share_directory
+        share_directory = self._args.internals.share_directory
 
         pass_through_arg = [
             f"{share_directory}/utils/catalog_collections.py",
@@ -392,7 +396,7 @@ class Action(App):
         msgs = ["humph. no collections were found in the following paths:"]
         paths = []
         for path in self._collection_scanned_paths:
-            if path.startswith(self._global_args.internals.share_directory):
+            if path.startswith(self._args.internals.share_directory):
                 continue
             if self._args.execution_environment:
                 if path.startswith(self._adjacent_collection_dir):
