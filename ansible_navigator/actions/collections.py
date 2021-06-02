@@ -87,8 +87,8 @@ class Action(App):
     def __init__(self, args: ApplicationConfiguration):
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
-        self._collection_cache = args.internals.collection_doc_cache
-        self._collection_cache_path = args.collection_doc_cache_path
+        self._collection_cache: Dict
+        self._collection_cache_path: str
         self._collection_scanned_paths: List = []
         self._collections: List = []
         self._stats: Dict = {}
@@ -116,9 +116,13 @@ class Action(App):
         )
         interaction.ui.show(notification)
 
-        self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
+        params = [self._name] + shlex.split(
+            self._interaction.action.match.groupdict()["params"] or ""
         )
+
+        self._update_args(params=params, attach_cdc=True)
+        self._collection_cache = self._args.internals.collection_doc_cache
+        self._collection_cache_path = self._args.collection_doc_cache_path
 
         self._run_runner()
 

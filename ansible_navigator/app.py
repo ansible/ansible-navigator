@@ -14,7 +14,6 @@ from .app_public import AppPublic
 
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants as C
-from .configuration_subsystem import Entry
 
 from .initialization import parse_and_update
 
@@ -33,17 +32,16 @@ class App:
     """simple base class for apps"""
 
     def __init__(self, args: ApplicationConfiguration, name, logger_name=__name__):
+        self._logger = logging.getLogger(logger_name)
 
-        # allow args to be set after __init__
-        self._args: ApplicationConfiguration = args
+        self._args: ApplicationConfiguration = deepcopy(args)
+
         self._calling_app: AppPublic
         self._interaction: Interaction
-        self._logger = logging.getLogger(logger_name)
-        self._parser_error: str = ""
-        self._previous_configuration_entries: List[Entry] = deepcopy(self._args.entries)
-        self._previous_scroll: int
-        self._previous_filter: Union[Pattern, None]
         self._name = name
+        self._parser_error: str = ""
+        self._previous_filter: Union[Pattern, None]
+        self._previous_scroll: int
         self.stdout: List = []
         self.steps = Steps()
 
@@ -92,7 +90,6 @@ class App:
         interaction.ui.scroll(self._previous_scroll)
         interaction.ui.menu_filter(self._previous_filter)
         interaction.ui.scroll(0)
-        self._args.entries = self._previous_configuration_entries
 
     def parser_error(self, message: str) -> Tuple[None, None]:
         """callback for parser error
@@ -109,17 +106,26 @@ class App:
     def update(self) -> None:
         """update, define in child if necessary"""
 
-    def _update_args(self, params: List, apply_previous_cli_entries: C = C.ALL) -> None:
+    def _update_args(
+        self, params: List, apply_previous_cli_entries: C = C.ALL, attach_cdc: bool = False
+    ) -> None:
         """pass the params through the configuration subsystem
         log messages and exit_messages as warnings since most will result in a form
         while the exit_messages would have cause a sys.exit(1) from the CLI
         each action should handle them in a manner that does not exit the TUI
+
+        :param params: a sys.argv.like list of parameters
+        :param apply_previous_cli_entries: Should previous params from the cli be applied
+        :param attach_cdc: Should the collection doc cache be attached to the args.internals
         """
         messages: List[LogMessage]
         exit_messages: List[ExitMessage]
 
         messages, exit_messages = parse_and_update(
-            params=params, args=self._args, apply_previous_cli_entries=apply_previous_cli_entries
+            params=params,
+            apply_previous_cli_entries=apply_previous_cli_entries,
+            args=self._args,
+            attach_cdc=attach_cdc,
         )
 
         for message in messages:
