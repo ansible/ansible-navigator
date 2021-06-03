@@ -244,6 +244,7 @@ def flatten_list(lyst) -> List:
 
 
 def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+    # pylint: disable=too-many-return-statements
     """
     returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
     ansible-launcher data files. First found wins.
