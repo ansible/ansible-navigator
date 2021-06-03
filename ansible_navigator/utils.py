@@ -293,7 +293,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
 
     # /Library/Python/x.y/share/APP_NAME  (common on macOS)
-    datadir = sysconfig.get_paths().get('data')
+    datadir = sysconfig.get_paths().get("data")
     message = "Share directory {0} (datadir)"
     if datadir is not None:
         share_directory = os.path.join(datadir, "share", app_name)
