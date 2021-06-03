@@ -95,6 +95,10 @@ Run a playbook
 ansible-navigator run site.yaml -i inventory.yaml -m stdout
 ```
 
+### What about ________?
+
+This might be covered in the growing list of frequently asked questions here: [FAQ](doc/faq.md).  If it's not there, please log an issue or better yet a pull-request to have it added.
+
 ### Available subcommands
 
 For the full list of available subcommands and their mapping to ansible commands, see the [subcommand guide](docs/subcommands.rst)
