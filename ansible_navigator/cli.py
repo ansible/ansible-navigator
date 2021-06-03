@@ -95,9 +95,12 @@ def main():
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
 
-    new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args, initial=True)
-    messages.extend(new_messages)
-    exit_messages.extend(new_exit_messages)
+    # may have exit messages eg, share directory
+    # from instantiation of NavigatorConfiguration
+    if not exit_messages:
+        new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args, initial=True)
+        messages.extend(new_messages)
+        exit_messages.extend(new_exit_messages)
 
     # In case of errors, the configuration will have rolled back
     # but a viable log file is still needed, set to default since
