@@ -74,6 +74,7 @@ body:
       Paste verbatim output from `ansible-navigator.yaml` file or
       any other custom setting file defined by `ANSIBLE_NAVIGATOR_CONFIG`
       enviornment variable below (if present), under the prompt line.
+      Leave blank if not relevant to the issue.
     render: console
     value: |
       $ cat ansible-navigator.yaml
@@ -86,22 +87,11 @@ body:
 
 - type: textarea
   attributes:
-    label: Ansible Version
-    description: >-
-      If running ansible on host machine (without execution environment) 
-      paste verbatim output from `ansible --version` below, under
-      the prompt line.
-    render: console
-    value: |
-      $ ansible --version
-
-- type: textarea
-  attributes:
     label: Ansible navigator logs
     description: >-
       Paste verbatim relevant logs from the ansible-navigator
       log file preferably after setting the log-level to `debug`,
-       under the prompt line.
+       under the prompt line. Leave blank if not relevant to the issue.
       **HINT:** You can paste https://gist.github.com links for larger files.
     render: console
     value: |
@@ -109,13 +99,24 @@ body:
 
 - type: textarea
   attributes:
-    label: Execution environment details (only when running with execution environment)
+    label: Ansible Version (if running without execution environment)
+    description: >-
+      If running ansible on host machine (without execution environment)
+      paste verbatim output from `ansible --version` below, under
+      the prompt line.  Leave blank if not relevant to the issue.
+    render: console
+    value: |
+      $ ansible --version
+
+- type: textarea
+  attributes:
+    label: Execution environment details (if running with execution environment enabled)
     description: >-
       If using execution-environment with ansible-navigator
       paste the details about execution-environment that can help
       in debugging the issue. You can use command
       `ansible-navigator images <name-of-container-image>` to introspect
-      execution environment.
+      execution environment.  Leave blank if not relevant to the issue.
     render: console
  
 - type: textarea
@@ -123,5 +124,5 @@ body:
     label: OS / Environment
     description: >-
       Provide all relevant information below, e.g. target OS versions,
-      network device firmware, etc.
+      network device firmware, etc. Leave blank if not relevant to the issue.
     placeholder: RHEL 8, CentOS Stream etc.
