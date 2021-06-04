@@ -134,13 +134,26 @@ body:
 
 - type: textarea
   attributes:
-    label: OS / Environment
+    label: Ansible Version
     description: >-
-      Provide all relevant information below, e.g. target OS versions,
-      network device firmware, etc.
-    placeholder: RHEL 8, CentOS Stream etc.
-  validations:
-    required: true
+      If running ansible on host machine (without execution environment) 
+      paste verbatim output from `ansible --version` below, under
+      the prompt line. Please don't wrap it with tripple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    value: |
+      $ ansible --version
+    placeholder: |
+      $ ansible --version
+      ansible [core 2.11.0b4.post0]  (detached HEAD ref: refs/) last updated 2021/04/02 00:33:35 (GMT +200)
+        config file = None
+        configured module search path = ['~/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+        ansible python module location = ~/src/github/ansible/ansible/lib/ansible
+        ansible collection location = ~/.ansible/collections:/usr/share/ansible/collections
+        executable location = bin/ansible
+        python version = 3.9.0 (default, Oct 26 2020, 13:08:59) [GCC 10.2.0]
+        jinja version = 2.11.3
+        libyaml = True
 
 - type: textarea
   attributes:
@@ -165,8 +178,8 @@ body:
       If using Ansible execution-environment with ansible-navigator
       paste verbatim relevant output from 
       `ansible-navigator images <name-of-container-image>` like
-      `Image information`, `General information, `Ansible version`
-      and any other information that might help in debuggin, 
+      `Image information`, `General information`, `Ansible version` 
+      and any other information that might help in debugging, 
       under the prompt line. Please don't wrap it with tripple backticks — your
       whole input will be turned into a code snippet automatically.
     render: console
@@ -180,7 +193,53 @@ body:
       3│    details: {}
       4│  version:
       5│    details: core 2.12.0.dev0
-  
+
+- type: textarea
+  attributes:
+    label: Container enginer details
+    description: >-
+      If using Ansible execution-environment with ansible-navigator
+      paste verbatim relevant output from  `podman info` or `docker info`
+      command output based on the container engine used under the prompt line.
+      Please don't wrap it with tripple backticks — your whole input will be
+      turned into a code snippet automatically.
+    render: console
+    value: |
+      $ podman info
+    placeholder: |
+      version:
+        APIVersion: "2"
+        GoVersion: go1.14.12
+        OsArch: linux/amd64
+        Version: 2.2.1
+
+- type: textarea
+  attributes:
+    label: Ansible Configuration
+    description: >-
+      Paste verbatim output from `ansible-navigator config dump --only-changed -m stdout`
+      below, under the prompt line.
+      Please don't wrap it with tripple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    value: |
+      $ ansible-navigator config dump --only-changed -m stdout
+    placeholder: |
+      $ ansible-navigator config dump --only-changed -m stdout
+      DEFAULT_GATHERING(~/src/github/ansible/ansible/ansible.cfg) = smart
+      DEFAULT_HOST_LIST(~/src/github/ansible/ansible/ansible.cfg) = ['~/src/github/ansible/ansible/hosts']
+      DEFAULT_VAULT_PASSWORD_FILE(~/src/github/ansible/ansible/ansible.cfg) = ~/src/github/ansible/ansible/vault/print-password.sh
+
+- type: textarea
+  attributes:
+    label: OS / Environment
+    description: >-
+      Provide all relevant information below, e.g. target OS versions,
+      network device firmware, etc.
+    placeholder: RHEL 8, CentOS Stream etc.
+  validations:
+    required: true
+
 - type: textarea
   attributes:
     label: Steps to Reproduce
@@ -253,8 +312,7 @@ body:
       *One last thing...*
 
 
-      *Please, complete **all** sections as described, this form
-      is [processed automatically by a robot][ansibot help].*
+      *Please, complete **all** sections as described.*
 
 
       Thank you for your collaboration!
