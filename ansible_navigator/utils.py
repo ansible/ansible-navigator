@@ -253,65 +253,75 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     exit_messages: List[ExitMessage] = []
     share_directory = None
 
+    def debug_log(directory: str, found: bool, description: str):
+        template = "Share directory '{directory}' {status} ({description})"
+        formatted = template.format(
+            directory=directory,
+            status="found" if found else "not found",
+            description=description,
+        )
+        msg = LogMessage(level=logging.DEBUG, message=formatted)
+        messages.append(msg)
+
     # Development path
     # We want the share directory to resolve adjacent to the directory the code lives in
     # as that's the layout in the source.
     share_directory = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "..", "share", app_name)
     )
-    message = "Share directory {0} (development path)"
+    description = "development path"
     if os.path.exists(share_directory):
-        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        debug_log(share_directory, True, description)
         return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # ~/.local/share/APP_NAME
     userbase = sysconfig.get_config_var("userbase")
-    message = "Share directory {0} (userbase)"
+    description = "userbase"
     if userbase is not None:
         share_directory = os.path.join(userbase, "share", app_name)
         if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # /usr/share/APP_NAME  (or the venv equivalent)
     share_directory = os.path.join(sys.prefix, "share", app_name)
-    message = "Share directory {0} (sys.prefix)"
+    description = "sys.prefix"
     if os.path.exists(share_directory):
-        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        debug_log(share_directory, True, description)
         return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
     datarootdir = sysconfig.get_config_var("datarootdir")
-    message = "Share directory {0} (datarootdir)"
+    description = "datarootdir"
     if datarootdir is not None:
         share_directory = os.path.join(datarootdir, app_name)
         if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # /Library/Python/x.y/share/APP_NAME  (common on macOS)
     datadir = sysconfig.get_paths().get("data")
-    message = "Share directory {0} (datadir)"
+    description = "datadir"
     if datadir is not None:
         share_directory = os.path.join(datadir, "share", app_name)
         if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # /usr/local/share/APP_NAME
     prefix = sysconfig.get_config_var("prefix")
-    message = "Share directory {0} (prefix)"
+    description = "prefix"
     if prefix is not None:
         share_directory = os.path.join(prefix, "local", "share", app_name)
         if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     exit_msg = "Unable to find a viable share directory"
     exit_messages.append(ExitMessage(message=exit_msg))
