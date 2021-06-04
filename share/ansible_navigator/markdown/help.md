@@ -21,6 +21,7 @@ arrow up, arrow down                                  Scroll up/down
 :rr, :rerun                                           Rerun the playbook
 :s, :save <file>                                      Save current plays as an artifact
 :st, :stdout                                          Watch playbook results real time
+:welcome                                              Revisit the welcome page
 :w, :write <file>                                     Write current page to a new file
 :w!, :write! <file>                                   Write current page to an existing or new file
 :w>>, :write>> <file>                                 Append current page to an existing file

@@ -61,8 +61,15 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     setattr(formatter, "converter", time.gmtime)
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
-    logger.setLevel(getattr(logging, args.log_level.upper()))
+    log_level = getattr(logging, args.log_level.upper())
+    logger.setLevel(log_level)
     logger.info("New %s instance, logging initialized", APP_NAME)
+
+    # set ansible-runner logs
+    runner_logger = logging.getLogger("ansible-runner")
+    runner_logger.setLevel(log_level)
+    runner_logger.addHandler(hdlr)
+    logger.info("New ansible-runner instance, logging initialized")
 
 
 def run(args: ApplicationConfiguration) -> int:
@@ -88,9 +95,12 @@ def main():
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
 
-    new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args, initial=True)
-    messages.extend(new_messages)
-    exit_messages.extend(new_exit_messages)
+    # may have exit messages eg, share directory
+    # from instantiation of NavigatorConfiguration
+    if not exit_messages:
+        new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args, initial=True)
+        messages.extend(new_messages)
+        exit_messages.extend(new_exit_messages)
 
     # In case of errors, the configuration will have rolled back
     # but a viable log file is still needed, set to default since

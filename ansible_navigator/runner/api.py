@@ -209,7 +209,7 @@ class CommandBaseRunner(BaseRunner):
     def generate_run_command_args(self) -> None:
         """generate arguments required to be passed to ansible-runner"""
         if self._playbook:
-            self._cmdline.append(self._playbook)
+            self._cmdline.insert(0, self._playbook)
 
         for inv in self._inventory:
             self._cmdline.extend(["-i", inv])
@@ -245,6 +245,7 @@ class CommandRunnerAsync(CommandBaseRunner):
         super().__init__(executable_cmd, **kwargs)
 
     def _event_handler(self, event):
+        self._logger.debug("ansible-runner event handle: %s", event)
         self._queue.put(event)
 
     def run(self):

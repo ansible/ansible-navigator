@@ -22,7 +22,9 @@ from typing import Set
 from typing import Tuple
 from typing import Union
 
-from jinja2 import Environment, TemplateError
+from jinja2 import Environment
+from jinja2 import StrictUndefined
+from jinja2 import TemplateError
 
 
 logger = logging.getLogger(__name__)
@@ -242,6 +244,7 @@ def flatten_list(lyst) -> List:
 
 
 def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+    # pylint: disable=too-many-return-statements
     """
     returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
     ansible-launcher data files. First found wins.
@@ -250,55 +253,75 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     exit_messages: List[ExitMessage] = []
     share_directory = None
 
+    def debug_log(directory: str, found: bool, description: str):
+        template = "Share directory '{directory}' {status} ({description})"
+        formatted = template.format(
+            directory=directory,
+            status="found" if found else "not found",
+            description=description,
+        )
+        msg = LogMessage(level=logging.DEBUG, message=formatted)
+        messages.append(msg)
+
     # Development path
     # We want the share directory to resolve adjacent to the directory the code lives in
     # as that's the layout in the source.
     share_directory = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "..", "share", app_name)
     )
-    message = "Share directory {0} (development path)"
+    description = "development path"
     if os.path.exists(share_directory):
-        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        debug_log(share_directory, True, description)
         return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # ~/.local/share/APP_NAME
     userbase = sysconfig.get_config_var("userbase")
-    message = "Share directory {0} (userbase)"
+    description = "userbase"
     if userbase is not None:
         share_directory = os.path.join(userbase, "share", app_name)
         if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # /usr/share/APP_NAME  (or the venv equivalent)
     share_directory = os.path.join(sys.prefix, "share", app_name)
-    message = "Share directory {0} (sys.prefix)"
+    description = "sys.prefix"
     if os.path.exists(share_directory):
-        messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+        debug_log(share_directory, True, description)
         return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
     datarootdir = sysconfig.get_config_var("datarootdir")
-    message = "Share directory {0} (datarootdir)"
+    description = "datarootdir"
     if datarootdir is not None:
         share_directory = os.path.join(datarootdir, app_name)
         if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
+
+    # /Library/Python/x.y/share/APP_NAME  (common on macOS)
+    datadir = sysconfig.get_paths().get("data")
+    description = "datadir"
+    if datadir is not None:
+        share_directory = os.path.join(datadir, "share", app_name)
+        if os.path.exists(share_directory):
+            debug_log(share_directory, True, description)
+            return messages, exit_messages, share_directory
+    debug_log(share_directory, False, description)
 
     # /usr/local/share/APP_NAME
     prefix = sysconfig.get_config_var("prefix")
-    message = "Share directory {0} (prefix)"
+    description = "prefix"
     if prefix is not None:
         share_directory = os.path.join(prefix, "local", "share", app_name)
         if os.path.exists(share_directory):
-            messages.append(LogMessage(level=logging.DEBUG, message=message.format("found")))
+            debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
-    messages.append(LogMessage(level=logging.DEBUG, message=message.format("not found")))
+    debug_log(share_directory, False, description)
 
     exit_msg = "Unable to find a viable share directory"
     exit_messages.append(ExitMessage(message=exit_msg))
@@ -360,6 +383,13 @@ def remove_ansi(string):
     return ansi_escape.sub("", string)
 
 
+def remove_dbl_un(string):
+    """remove a __ from the beginning of a string"""
+    if string.startswith("__"):
+        return string.replace("__", "", 1)
+    return string
+
+
 def str2bool(value: Any) -> bool:
     """Convert some commonly used values
     to a boolean
@@ -374,7 +404,7 @@ def str2bool(value: Any) -> bool:
     raise ValueError
 
 
-def templar(string: str, template_vars: Mapping) -> Any:
+def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     """template some string with jinja2
     always to and from json so we return an object if it is
 
@@ -383,31 +413,35 @@ def templar(string: str, template_vars: Mapping) -> Any:
     :param template_vars: The vars used to render the template
     :type template_vars: dict
     """
+    errors = []
     # hide the jinja that may be in the template_vars
     template_vars = escape_moustaches(template_vars)
 
-    env = Environment(autoescape=True)
+    env = Environment(autoescape=True, undefined=StrictUndefined)
     try:
         template = env.from_string(string)
         result = template.render(template_vars)
-    except TemplateError as exc:
-        result = str(exc)
-        logging.debug(str(exc))
+    except (ValueError, TemplateError) as exc:
+        errors.append(f"Error while templating string: '{string}'")
+        errors.append(f"The error was: {str(exc)}")
+        for error in errors:
+            logger.error(error)
+        return errors, string
 
     # We may have gotten the __repr__ of a python object
     # so let's try and turn it back
     try:
-        logging.debug("original templated string: %s", result)
+        logger.debug("original templated string: %s", result)
         escaped = html.unescape(result)
-        logging.debug("html escaped templated str: %s", escaped)
+        logger.debug("html escaped templated str: %s", escaped)
         result = ast.literal_eval(escaped)
     except (ValueError, SyntaxError) as exc:
-        logging.debug("Could not ast parse templated string")
-        logging.debug("error was: %s", str(exc))
-        logging.debug("attempted on %s", result)
+        logger.debug("Could not ast parse templated string")
+        logger.debug("error was: %s", str(exc))
+        logger.debug("attempted on %s", result)
 
     result = unescape_moustaches(result)
-    return result
+    return errors, result
 
 
 def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:

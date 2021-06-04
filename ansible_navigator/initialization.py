@@ -145,8 +145,17 @@ def parse_and_update(
     args: ApplicationConfiguration,
     apply_previous_cli_entries: Union[C, List[str]] = C.NONE,
     initial: bool = False,
+    attach_cdc=False,
 ) -> Tuple[List[LogMessage], List[ExitMessage]]:
-    """Build a configuration"""
+    """Build a configuration
+
+    :param args: The application args
+    :param apply_previous_cli_entries: Should previous params from the cli be applied
+    :param initial: Is this the initial (first) configuration
+    :param attach_cdc: Should the collection doc cache be attached to the args.internals
+
+    """
+
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
 
@@ -189,7 +198,13 @@ def parse_and_update(
         exit_messages.extend(new_exit_messages)
         if exit_messages:
             return messages, exit_messages
-        args.internals.collection_doc_cache = cache
+        if attach_cdc:
+            args.internals.collection_doc_cache = cache
+            message = "Collection doc cache attached to args.internals"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
+        else:
+            message = "Collection doc cache not attached to args.internals"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     for entry in args.entries:
         message = f"Running with {entry.name} as '{entry.value.current}'"
