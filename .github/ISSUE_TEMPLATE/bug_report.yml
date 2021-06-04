@@ -196,6 +196,25 @@ body:
 
 - type: textarea
   attributes:
+    label: Container enginer details
+    description: >-
+      If using Ansible execution-environment with ansible-navigator
+      paste verbatim relevant output from  `podman info` or `docker info`
+      command output based on the container engine used under the prompt line.
+      Please don't wrap it with tripple backticks — your whole input will be
+      turned into a code snippet automatically.
+    render: console
+    value: |
+      $ podman info
+    placeholder: |
+      version:
+        APIVersion: "2"
+        GoVersion: go1.14.12
+        OsArch: linux/amd64
+        Version: 2.2.1
+
+- type: textarea
+  attributes:
     label: Ansible Configuration
     description: >-
       Paste verbatim output from `ansible-navigator config dump --only-changed -m stdout`
