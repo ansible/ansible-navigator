@@ -36,20 +36,21 @@ body:
 
 - type: textarea
   attributes:
-    label: Steps to Reproduce. Leave blank if not relevant to the issue.
+    label: Steps to Reproduce.
     description: |
       Describe exactly how to reproduce the problem, using a minimal test-case.
       It would *really* help us understand your problem if you could also pased any playbooks,
       configs and commands you used. Also paste command and the output used to run
-      ansible-navigator, under the prompt line.
+      ansible-navigator, under the prompt line. Leave blank if not relevant to the issue.
 
       **HINT:** You can paste https://gist.github.com links for larger files.
 
 - type: textarea
   attributes:
-    label: Expected Results. Leave blank if not relevant to the issue.
+    label: Expected Results.
     description: >-
       Describe what you expected to happen when running the steps above.
+      Leave blank if not relevant to the issue.
     placeholder: >-
       I expected X to happen because I assumed Y and was shocked
       that it did not.
@@ -59,6 +60,7 @@ body:
     label: Actual Results
     description: |
       Describe what actually happened. Leave blank if not relevant to the issue.
+      Leave blank if not relevant to the issue.
     render: console
   
 - type: textarea
