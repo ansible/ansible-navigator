@@ -1,0 +1,272 @@
+---
+name: 🐛 Bug report
+description: Create a report to help us improve
+
+body:
+- type: markdown
+  attributes:
+    value: >
+      **Thank you for wanting to report a bug in ansible-navigator!**
+
+
+      ⚠
+      Verify first that your issue is not [already reported on
+      GitHub][issue search].
+
+      Also test if the latest release and main branch are affected too.
+
+
+      **Tip:** If you are seeking community support, please consider
+      [starting a mailing list thread or chatting in IRC][ML||IRC].
+
+
+
+      [ML||IRC]:
+      https://docs.ansible.com/ansible-core/devel/community/communication.html?utm_medium=github&utm_source=issue_form--bug_report.yml#mailing-list-information
+
+      [issue search]: ../search?q=is%3Aissue&type=issues
+
+      [XKCD 1172]: https://xkcd.com/1172/
+
+
+- type: textarea
+  attributes:
+    label: Summary
+    description: Explain the problem briefly below.
+    placeholder: >-
+      When I try to do X with ansible-navigator from the main branch on GitHub, Y
+      breaks in a way Z under the env E. Here are all the details I know
+      about this problem...
+  validations:
+    required: true
+
+- type: dropdown
+  attributes:
+    label: Issue Type
+    description: >
+      Please select the single available option in the drop-down.
+
+      <details>
+        <summary>
+          <em>Why?</em>
+        </summary>
+
+        We would do it by ourselves but unfortunately, the curent
+        edition of GitHub Issue Forms Alpha does not support this yet 🤷
+
+
+        _We will make it easier in the future, once GitHub
+        supports dropdown defaults. Promise!_
+
+      </details>
+    # FIXME: Once GitHub allows defining the default choice, update this
+    options:
+    - Bug Report
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Ansible-navigator Version
+    description: >-
+      Paste verbatim output from `ansible-navigator --version` below, under
+      the prompt line. Please don't wrap it with triple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    value: |
+      $ ansible-navigator --version
+    placeholder: |
+      $ ansible-navigator --version
+      ansible-navigator 0.7.0
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Ansible-runner Version
+    description: >-
+      Paste verbatim output from `ansible-runner --version` below, under
+      the prompt line. Please don't wrap it with triple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    value: |
+      $ ansible-runner --version
+    placeholder: |
+      $ ansible-runner --version
+      2.0.0
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Settings
+    description: >-
+      Paste verbatim output from `ansible-navigator.yaml` file or
+      any other custom setting file defined by `ANSIBLE_NAVIGATOR_CONFIG`
+      enviornment variable below (if present), under the prompt line.
+      Please don't wrap it with tripple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    value: |
+      $ cat ansible-navigator.yaml
+    placeholder: |
+      $ cat ansible-navigator.yaml
+      ansible-navigator:
+        logging:
+          level: debug
+          file: ansible-navigator.log  
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Command
+    description: >-
+      Paste verbatim output of the command used to run
+      ansible-navigator, under the prompt line.
+      Please don't wrap it with tripple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    value: |
+      $ ansible-navigator run site.yaml
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: OS / Environment
+    description: >-
+      Provide all relevant information below, e.g. target OS versions,
+      network device firmware, etc.
+    placeholder: RHEL 8, CentOS Stream etc.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Ansible navigator logs
+    description: >-
+      Paste verbatim relevant logs from the ansible-navigator
+      log file preferably after setting the log-level to `debug`,
+       under the prompt line.
+      **HINT:** You can paste https://gist.github.com links for larger files.
+    render: console
+    value: |
+      $ cat ./ansible-navigator.log
+    placeholder: |
+      210526122359.508 INFO 'ansible_navigator.setup_logger' New ansible-navigator instance, logging initialized
+      210526122359.509 INFO 'ansible_navigator.setup_logger' New ansible-runner instance, logging initialized
+      210526122359.509 DEBUG 'ansible_navigator.main' Share directory found (development path) 
+
+- type: textarea
+  attributes:
+    label: Execution environment details
+    description: >-
+      If using Ansible execution-environment with ansible-navigator
+      paste verbatim relevant output from 
+      `ansible-navigator images <name-of-container-image>` like
+      `Image information`, `General information, `Ansible version`
+      and any other information that might help in debuggin, 
+      under the prompt line. Please don't wrap it with tripple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    value: |
+      $ ansible-navigator images quay.io/ansible/ansible-runner:devel
+    placeholder: |
+      ANSIBLE-RUNNER:DEVEL (PRIMARY) (INFORMATION ABOUT ANSIBLE AND ANSIBLE COLLECTIONS)                                                              
+      0│---
+      1│ansible:
+      2│  collections:
+      3│    details: {}
+      4│  version:
+      5│    details: core 2.12.0.dev0
+  
+- type: textarea
+  attributes:
+    label: Steps to Reproduce
+    description: |
+      Describe exactly how to reproduce the problem, using a minimal test-case. It would *really* help us understand your problem if you could also pased any playbooks, configs and commands you used.
+
+      **HINT:** You can paste https://gist.github.com links for larger files.
+    value: |
+      <!--- Paste example playbooks or commands between quotes below -->
+      ```yaml (paste below)
+
+      ```
+    placeholder: |
+      1. Implement the following playbook:
+
+         ```yaml
+         ---
+         # ping.yml
+         - hosts: all
+           gather_facts: false
+           tasks:
+           - ping:
+         ...
+         ```
+      2. Then run `ansible-navigator run ping.yml --log-level debug --log-file ./ansible-navigator.log`
+      3. An error occurs.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Expected Results
+    description: >-
+      Describe what you expected to happen when running the steps above.
+    placeholder: >-
+      I expected X to happen because I assumed Y and was shocked
+      that it did not.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Actual Results
+    description: |
+      Describe what actually happened.
+
+      Paste verbatim command output and don't wrap it with tripple backticks — your
+      whole input will be turned into a code snippet automatically.
+    render: console
+    placeholder: >-
+      ansible-navigator run /User/home/site.yaml -i inventory -m stdout -vvvv 
+      ansible-playbook [core 2.11.0.post0] 
+        config file = /User/home/ansible-navigator/ansible.cfg
+        configured module search path = ['/home/runner/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+        ansible python module location = /usr/local/lib/python3.8/site-packages/ansible
+        ansible collection location = /home/runner/.ansible/collections:/usr/share/ansible/collections
+        executable location = /usr/local/bin/ansible-playbook
+        python version = 3.8.3 (default, Aug 31 2020, 16:03:14) [GCC 8.3.1 20191121 (Red Hat 8.3.1-5)]
+        jinja version = 2.10.3
+        libyaml = True
+      Using /User/home/ansible-navigator/ansible.cfg as config file
+      ERROR! the playbook: /User/home/site.yaml could not be found
+  validations:
+    required: true
+
+
+- type: markdown
+  attributes:
+    value: >
+      *One last thing...*
+
+
+      *Please, complete **all** sections as described, this form
+      is [processed automatically by a robot][ansibot help].*
+
+
+      Thank you for your collaboration!
+
+- type: checkboxes
+  attributes:
+    label: Code of Conduct
+    description: |
+      Read the [Ansible Code of Conduct][CoC] first.
+
+      [CoC]: https://docs.ansible.com/ansible/latest/community/code_of_conduct.html?utm_medium=github&utm_source=issue_form--bug_report.yml
+    options:
+    - label: I agree to follow the Ansible Code of Conduct
+      required: true
+...
