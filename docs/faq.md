@@ -16,11 +16,9 @@ A: The easiest place to have ansible collections is in the project directory, in
 
 A: When not using an execution enviroment, ansible will look in the default locations for collections.  For more information about these, check out the [collections guide](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html).
 
-
 **Q: Why does the playbook hang when `vars_prompt` or `pause/prompt` is used?**
 
 A: By default `ansible-navigator` runs the playbook in the same manner that ansible controller and AWX would run the playbook. This was done to help playbook developers author playbooks that would be ready for production. If the use of `vars_prompt` or `pause\prompt` can not be avoided, disabling `playbook-artifact` creation causes `ansible-navigator` to run the playbook in a manner that is compatible with `ansible-playbook` and allows for user interaction.
-
 
 **Q: Why does `ansible-navigator` change the terminal colors or look terrible?**
 
@@ -61,6 +59,16 @@ ansible-navigator:
     command: charm --line {line_number} {filename}
     console: false
 ```
+
+**Q: What is the order in which configuration settings are aplied?**
+
+The configuration system of ansible-navigator pulls in settings from various sources and applies them hierarchically in the following order (where the last applied changes are the most prevalent):
+
+1. Default internal values
+2. Values from a [settings file](settings.rst)
+3. Values from environment variables
+4. Flags and arguments specified on the command line
+5. While issuing `:` commands within the text-based user interface (TUI)
 
 **Q: Something didn't work, how can I troubleshoot it?**
 
