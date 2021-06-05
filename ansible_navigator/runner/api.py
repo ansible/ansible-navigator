@@ -128,10 +128,12 @@ class BaseRunner:
                 "cancel_callback": self.runner_cancelled_callback,
                 "finished_callback": self.runner_finished_callback,
                 "artifacts_handler": self.runner_artifacts_handler,
-                "rotate_artifacts": self._rotate_artifacts,
                 "timeout": self._timeout,
             }
         )
+        if self._rotate_artifacts is not None:
+            self._runner_args.update({"rotate_artifacts": self._rotate_artifacts})
+
         self._add_env_vars_to_args()
 
         if self._host_cwd:

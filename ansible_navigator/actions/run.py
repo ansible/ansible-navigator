@@ -593,8 +593,9 @@ class Action(App):
         else:
             executable_cmd = shutil.which("ansible-playbook")
             if not executable_cmd:
-                self._logger.error("'ansible-playbook' executable not found")
-                return
+                msg = "'ansible-playbook' executable not found"
+                self._logger.error(msg)
+                raise RuntimeError(msg)
 
         pass_through_arg = []
         if self._args.help_playbook is True:
