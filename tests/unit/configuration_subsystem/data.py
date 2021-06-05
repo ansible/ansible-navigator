@@ -57,8 +57,8 @@ BASE_LONG_CLI = """
 BASE_EXPECTED = d2t(
     {
         "ansible_runner_artifact_dir": "/tmp/test1",
-        "ansible_runner_rotate_artifacts_count": "10",
-        "ansible_runner_timeout": "300",
+        "ansible_runner_rotate_artifacts_count": 10,
+        "ansible_runner_timeout": 300,
         "container_engine": "docker",
         "display_color": False,
         "editor_command": "vim_base",
@@ -205,8 +205,8 @@ CLI_DATA = cli_data()
 
 ENVVAR_DATA = [
     ("ansible_runner_artifact_dir", "/tmp/test1", "/tmp/test1"),
-    ("ansible_runner_rotate_artifacts_count", "10", "10"),
-    ("ansible_runner_timeout", "300", "300"),
+    ("ansible_runner_rotate_artifacts_count", "10", 10),
+    ("ansible_runner_timeout", "300", 300),
     ("app", "config", "config"),
     ("cmdline", "--forks 15", ["--forks", "15"]),
     ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),
