@@ -41,6 +41,8 @@ class BaseRunner:
         set_environment_variable: Optional[Dict] = None,
         pass_environment_variable: Optional[List] = None,
         host_cwd: Optional[str] = None,
+        rotate_artifacts: Optional[int] = None,
+        timeout: Optional[int] = None,
     ) -> None:
         """BaseRunner class handle common argument for ansible-runner interface class
 
@@ -75,8 +77,14 @@ class BaseRunner:
                                    path will be volume mounted within the execution enviornment
             set_environment_variable([dict], optional): Dict of user requested envvars to set
             pass_environment_variable([list], optional): List of user requested envvars to pass
+            rotate_artifacts ([int], optional): Keep at most n artifact directories
+            timeout ([int], optional): The timeout value in seconds that will be passed to either
+                                       ``pexpect`` of ``subprocess`` invocation
+                                       (based on ``runner_mode`` selected) while executing command.
+                                       It the timeout is triggered it will force cancel the
+                                       execution.
         """
-        if private_data_dir:
+        if isinstance(private_data_dir, str):
             self._private_data_dir = private_data_dir
         else:
             self._private_data_dir = os.path.join(gettempdir(), "ansible-navigator")
@@ -92,6 +100,8 @@ class BaseRunner:
             pass_environment_variable if isinstance(pass_environment_variable, list) else []
         )
         self._host_cwd = host_cwd
+        self._rotate_artifacts = rotate_artifacts if isinstance(rotate_artifacts, int) else None
+        self._timeout = timeout if isinstance(timeout, int) else None
         self.ansible_runner_instance: Runner
         self.cancelled: bool = False
         self.finished: bool = False
@@ -118,6 +128,8 @@ class BaseRunner:
                 "cancel_callback": self.runner_cancelled_callback,
                 "finished_callback": self.runner_finished_callback,
                 "artifacts_handler": self.runner_artifacts_handler,
+                "rotate_artifacts": self._rotate_artifacts,
+                "timeout": self._timeout,
             }
         )
         self._add_env_vars_to_args()
@@ -132,9 +144,15 @@ class BaseRunner:
 
     def __del__(self):
         """
-        class destructor, handle runner artifact file deletion
+        class destructor, handle runner artifact file deletion is rotate_artifacts
+        vlaue is not set
         """
-        if self._runner_artifact_dir and os.path.exists(self._runner_artifact_dir):
+        if (
+            self._rotate_artifacts is not None
+            and self._runner_artifact_dir
+            and os.path.exists(self._runner_artifact_dir)
+        ):
+
             self._logger.debug(
                 "delete ansible-runner artifact directory at path %s", self._runner_artifact_dir
             )
