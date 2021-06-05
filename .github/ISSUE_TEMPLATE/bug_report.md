@@ -20,6 +20,12 @@ about: Create a report to help us improve
       any other custom setting file defined by `ANSIBLE_NAVIGATOR_CONFIG`
       enviornment variable below (if present).-->
 
+##### LOG FILE
+<!--- Paste relevant logs from the ansible-navigator
+      log file preferably after setting the log-level to `debug`,
+      under the prompt line.
+      **HINT:** You can paste https://gist.github.com links for larger files..-->
+
 ##### STEPS TO REPRODUCE
 
 <!-- Please describe exactly how to reproduce the problem. -->
@@ -35,7 +41,7 @@ about: Create a report to help us improve
 ##### ADDITIONAL INFORMATION
 
 <!-- Include any links screenshots or other
-information like execution-envirnment details
+additional information like execution-envirnment details
 if enabled. You can use command
 "ansible-navigator images <name-of-container-image>"
 to introspect execution environment -->
