@@ -92,10 +92,18 @@ class CursesWindow:
         taking mod (available colors)
         and passing that.
         """
-        if not self._ui_config.color:
+        if not self._ui_config.color or curses.COLORS == 0:
             return None
         color_arg = color % curses.COLORS  # self._number_colors
         return curses.color_pair(color_arg)
+
+    def _curs_set(self, value: int):
+        """in the case of a TERM with limited capabilities
+        log an error"""
+        try:
+            curses.curs_set(value)
+        except curses.error:
+            self._logger.error("Errors setting up terminal, check TERM value")
 
     def _add_line(
         self, window: Window, lineno: int, line: CursesLine, prefix: Union[str, None] = None
@@ -158,8 +166,16 @@ class CursesWindow:
         if self._ui_config.colors_initialized is True:
             return
 
-        curses.curs_set(0)
-        curses.use_default_colors()
+        self._curs_set(0)
+        # in the case of a TERM with limited capabilities
+        # disable color and get out fast
+        try:
+            curses.use_default_colors()
+        except curses.error:
+            self._logger.error("Errors setting up terminal, no color support")
+            self._term_osc4_supprt = False
+            self._ui_config.colors_initialized = True
+            return
 
         self._logger.debug("curses.COLORS: %s", curses.COLORS)
         self._logger.debug("curses.can_change_color: %s", curses.can_change_color())

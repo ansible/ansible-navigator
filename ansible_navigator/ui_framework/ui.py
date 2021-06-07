@@ -350,7 +350,7 @@ class UserInterface(CursesWindow):
             if char == curses.KEY_RESIZE:
                 break
         self.restore_refresh()
-        curses.curs_set(0)
+        self._curs_set(0)
         return user_input
 
     def _display(
