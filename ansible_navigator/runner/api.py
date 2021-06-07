@@ -40,7 +40,7 @@ class BaseRunner:
         container_workdir: Optional[str] = None,
         set_environment_variable: Optional[Dict] = None,
         pass_environment_variable: Optional[List] = None,
-        cwd: Optional[str] = None,
+        host_cwd: Optional[str] = None,
     ) -> None:
         """BaseRunner class handle common argument for ansible-runner interface class
 
@@ -70,7 +70,7 @@ class BaseRunner:
                                                  engine. Defaults to None.
             container_workdir ([str], optional): The working directory within the container.
                                                  Defaults to None.
-            cwd ([str], optional): The current local working directory. Defaults to None.
+            host_cwd ([str], optional): The current local working directory. Defaults to None.
                                    If value of execution_environment is set to True this
                                    path will be volume mounted within the execution enviornment
             set_environment_variable([dict], optional): Dict of user requested envvars to set
@@ -91,7 +91,7 @@ class BaseRunner:
         self._pass_environment_variable: List[str] = (
             pass_environment_variable if isinstance(pass_environment_variable, list) else []
         )
-        self._cwd = cwd
+        self._host_cwd = host_cwd
         self.ansible_runner_instance: Runner
         self.cancelled: bool = False
         self.finished: bool = False
@@ -122,8 +122,8 @@ class BaseRunner:
         )
         self._add_env_vars_to_args()
 
-        if self._cwd:
-            self._runner_args.update({"cwd": self._cwd})
+        if self._host_cwd:
+            self._runner_args.update({"host_cwd": self._host_cwd})
 
         if self._navigator_mode == "stdout":
             self._runner_args.update(
