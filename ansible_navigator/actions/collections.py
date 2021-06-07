@@ -282,7 +282,7 @@ class Action(App):
                 {"container_volume_mounts": self._args.execution_environment_volume_mounts}
             )
 
-        kwargs.update({"cwd": playbook_dir})
+        kwargs.update({"host_cwd": playbook_dir})
 
         self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")
         share_directory = self._args.internals.share_directory

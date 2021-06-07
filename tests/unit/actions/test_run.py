@@ -143,7 +143,7 @@ runner_test_data = [
                 "~/vol2:/home/user/vol2",
             ],
             "cmdline": ["--help", "--tags", "test"],
-            "cwd": os.getcwd(),
+            "host_cwd": os.getcwd(),
         },
     ),
 ]
