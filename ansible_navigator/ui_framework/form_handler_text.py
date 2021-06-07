@@ -86,7 +86,7 @@ class FormHandlerText(CursesWindow, Textbox):
         else:
             self.win.move(0, 0)
 
-        curses.curs_set(1)
+        self._curs_set(1)
         while True:
             char = self.win.getch()
 
@@ -98,7 +98,7 @@ class FormHandlerText(CursesWindow, Textbox):
             if cmd_res == -1:
                 return "", char
             self.win.refresh()
-        curses.curs_set(0)
+        self._curs_set(0)
         line = self.gather().strip()
         if line:
             self.input_line_cache.append(line)
