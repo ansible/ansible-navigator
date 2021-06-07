@@ -34,8 +34,7 @@ class App:
     def __init__(self, args: ApplicationConfiguration, name, logger_name=__name__):
         self._logger = logging.getLogger(logger_name)
 
-        self._args: ApplicationConfiguration = deepcopy(args)
-
+        self._args: ApplicationConfiguration = self._copy_args(args)
         self._calling_app: AppPublic
         self._interaction: Interaction
         self._name = name
@@ -77,6 +76,15 @@ class App:
                 write_artifact=self.write_artifact,
             )
         raise AttributeError("app passed without args initialized")
+
+    @staticmethod
+    def _copy_args(args):
+        """deepcopy the args, but un mount the cache first
+        the cdc will get mounted if the child needs it
+        in parse and update
+        """
+        args.internals.collection_doc_cache = C.NOT_SET
+        return deepcopy(args)
 
     def _prepare_to_run(self, app: AppPublic, interaction: Interaction) -> None:
         self._calling_app = app
