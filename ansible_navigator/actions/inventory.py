@@ -106,7 +106,7 @@ class Action(App):
 
         self.__inventory: Dict[Any, Any] = {}
         self._host_vars: Dict[str, Dict[Any, Any]]
-        self._inventories_mtime: float
+        self._inventories_mtime: Union[float, None]
         self._inventories: List[str] = []
         self._inventory_error: str = ""
         self._runner: Union[CommandRunner, InventoryRunner]
