@@ -38,7 +38,7 @@ class DemoMode(CursesWindow):
             right_trim = min(
                 len(getattr(re.search(r"\s+$", line), "group", lambda: "")()) for line in lines
             )
-            # find the leanst numbe rof left spaces in all lines
+            # find the least number of left spaces in all lines
             left_trim = min(
                 len(getattr(re.search(r"^\s+", line), "group", lambda: "")()) for line in lines
             )
