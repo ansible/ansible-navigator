@@ -151,15 +151,17 @@ class NavigatorPostProcessor:
                     break
         return messages, exit_messages
 
-    @staticmethod
     @_post_processor
-    def demonstration(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def demonstration(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         # pylint: disable=import-outside-toplevel
         # pylint: disable=unused-import
         """Post process demonstration"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
+        new_messages, new_exit_messages = self._true_or_false(entry, config)
+        messages.extend(new_messages)
+        exit_messages.extend(new_exit_messages)
         if entry.value.current is True:
             try:
                 import pyfiglet

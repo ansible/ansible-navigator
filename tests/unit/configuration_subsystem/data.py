@@ -212,6 +212,7 @@ ENVVAR_DATA = [
     ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),
     ("config", "/tmp/ansible.cfg", "/tmp/ansible.cfg"),
     ("container_engine", "docker", "docker"),
+    ("demonstration", "true", True),
     ("display_color", "yellow is the color of a banana", False),
     ("editor_command", "nano_envvar", "nano_envvar"),
     ("editor_console", "false", False),
