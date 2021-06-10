@@ -215,6 +215,19 @@ The following table describes all available settings.
               execution-environment:
                 container-engine:
 
+  * - demonstration
+    - Show single key presses as an overlay on the screen
+    - | **Choices:** 'True' or 'False'
+      | **Default:** False
+      | **CLI:** `--demo` or `--demonstration`
+      | **ENV:** ANSIBLE_NAVIGATOR_DEMONSTRATION
+      | **Settings file:**
+
+      .. code-block:: yaml
+
+            ansible-navigator:
+              demonstration:
+
   * - display-color
     - Enable the use of color in the display
     - | **Choices:** 'True' or 'False'
@@ -231,7 +244,7 @@ The following table describes all available settings.
 
   * - editor-command
     - Specify the editor command
-    - | **Default:** vi +{line_number} {filename}
+    - | **Default:** /usr/bin/nano {filename}
       | **CLI:** `--ecmd` or `--editor-command`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_COMMAND
       | **Settings file:**

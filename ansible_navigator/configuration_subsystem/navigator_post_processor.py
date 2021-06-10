@@ -151,6 +151,25 @@ class NavigatorPostProcessor:
                     break
         return messages, exit_messages
 
+    @staticmethod
+    @_post_processor
+    def demonstration(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=unused-import
+        """Post process demonstration"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.current is True:
+            try:
+                import pyfiglet
+            except ImportError:
+                exit_msg = "The python package 'pyfiglet' must be install from demo mode"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                hint = "Try installing 'pyfiglet': 'pip install pyfiglet'"
+                exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+        return messages, exit_messages
+
     @_post_processor
     def display_color(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process displacy_color"""

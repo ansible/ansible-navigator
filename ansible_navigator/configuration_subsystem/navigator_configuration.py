@@ -214,6 +214,13 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="auto"),
         ),
         Entry(
+            name="demonstration",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--demo", action="store_true"),
+            short_description="Show single key presses as an overlay on the screen",
+            value=EntryValue(default=False),
+        ),
+        Entry(
             name="display_color",
             change_after_initial=False,
             choices=[True, False],

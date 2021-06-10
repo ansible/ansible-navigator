@@ -35,6 +35,8 @@ from .curses_defs import CursesLines
 from .curses_window import CursesWindow
 from .curses_window import Window
 
+from .demo_mode import DemoMode
+
 from .field_text import FieldText
 from .form import Form
 from .form_handler_text import FormHandlerText
@@ -110,6 +112,7 @@ class UserInterface(CursesWindow):
         ui_config: UIConfig,
         pbar_width: int = 8,
         status_width=12,
+        demo_mode=False,
     ) -> None:
         """init
 
@@ -148,6 +151,7 @@ class UserInterface(CursesWindow):
         self._status_color = 0
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
+        self._demo_mode = demo_mode
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
 
     def clear(self) -> None:
@@ -460,6 +464,8 @@ class UserInterface(CursesWindow):
                 return_value = colon_entry
 
             if return_value is not None:
+                if self._demo_mode:
+                    DemoMode(screen=self._screen, ui_config=self._ui_config).show_key(return_value)
                 return return_value
 
     def _template_match_action(

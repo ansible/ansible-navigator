@@ -50,6 +50,7 @@ class ActionRunner(App):
             kegexes=kegexes,
             refresh=refresh,
             ui_config=config,
+            demo_mode=self._args.demonstration,
         )
 
     def run(self, _screen) -> None:
