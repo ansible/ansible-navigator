@@ -244,7 +244,7 @@ The following table describes all available settings.
 
   * - editor-command
     - Specify the editor command
-    - | **Default:** /usr/bin/nano {filename}
+    - | **Default:** vi +{line_number} {filename}
       | **CLI:** `--ecmd` or `--editor-command`
       | **ENV:** ANSIBLE_NAVIGATOR_EDITOR_COMMAND
       | **Settings file:**
