@@ -28,7 +28,7 @@ class DemoMode(CursesWindow):
 
         if len(string) == 1 or string in ["^[", "KEY_NPAGE", "KEY_PPAGE"]:
             if string == "^[":
-                string = "ESC"
+                string = "Esc"
             elif string == "KEY_NPAGE":
                 string = "PgDn"
             elif string == "KEY_PPAGE":
