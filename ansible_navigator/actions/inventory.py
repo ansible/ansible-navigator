@@ -9,6 +9,7 @@ import shutil
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -428,9 +429,10 @@ class Action(App):
         self._set_inventories_mtime()
         return
 
-    def _collect_inventory_details(self) -> None:
+    def _collect_inventory_details(self) -> Optional[Tuple]:
 
         # pylint:disable=too-many-branches
+        stdout_return = (None, None, None)
 
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
@@ -480,17 +482,18 @@ class Action(App):
             if "Error" in inventory_err:
                 warning = warning_notification(warn_msg)
                 self._interaction.ui.show(warning)
-                return
-
-            self._extract_inventory(inventory_output, inventory_err)
+            else:
+                self._extract_inventory(inventory_output, inventory_err)
         else:
             if self._args.execution_environment:
                 ansible_inventory_path = "ansible-inventory"
             else:
                 exec_path = shutil.which("ansible-inventory")
                 if exec_path is None:
-                    self._logger.error("no ansible-inventory command found in path")
-                    return
+                    msg = "'ansible-inventory' executable not found"
+                    self._logger.error(msg)
+                    raise RuntimeError(msg)
+
                 ansible_inventory_path = exec_path
 
             pass_through_arg = []
@@ -503,7 +506,9 @@ class Action(App):
             kwargs.update({"cmdline": pass_through_arg, "inventory": self._inventories})
 
             self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
-            self._runner.run()
+            stdout_return = self._runner.run()
+
+        return stdout_return
 
     def _extract_inventory(self, stdout: str, stderr: str) -> None:
         try:

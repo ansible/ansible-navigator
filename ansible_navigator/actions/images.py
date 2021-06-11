@@ -364,7 +364,7 @@ class Action(App):
             f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}"
         )
         _runner = CommandRunner(executable_cmd=python_exec_path, **kwargs)
-        output, error = _runner.run()
+        output, error, _ = _runner.run()
         if not error:
             parsed = self._parse(output)
             self._images.selected["general"] = {
