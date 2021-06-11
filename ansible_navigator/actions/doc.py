@@ -144,7 +144,6 @@ class Action(App):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "cwd": os.getcwd(),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
@@ -162,7 +161,7 @@ class Action(App):
                 playbook_dir = os.path.dirname(self._args.playbook)
             else:
                 playbook_dir = os.getcwd()
-            kwargs.update({"cwd": playbook_dir})
+            kwargs.update({"host_cwd": playbook_dir})
 
             self._runner = DocRunner(**kwargs)
 
@@ -181,7 +180,7 @@ class Action(App):
 
             plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
         else:
-            kwargs.update({"cwd": os.getcwd()})
+            kwargs.update({"host_cwd": os.getcwd()})
             if self._args.execution_environment:
                 ansible_doc_path = "ansible-doc"
             else:
