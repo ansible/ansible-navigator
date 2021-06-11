@@ -162,14 +162,6 @@ class NavigatorPostProcessor:
         new_messages, new_exit_messages = self._true_or_false(entry, config)
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
-        if entry.value.current is True:
-            try:
-                import pyfiglet
-            except ImportError:
-                exit_msg = "The python package 'pyfiglet' must be install from demo mode"
-                exit_messages.append(ExitMessage(message=exit_msg))
-                hint = "Try installing 'pyfiglet': 'pip install pyfiglet'"
-                exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
     @_post_processor
