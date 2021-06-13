@@ -36,60 +36,60 @@ You can copy the example settings file below into one of those paths to start yo
 .. code-block:: yaml
 
     ---
-    ansible-navigator:
-    #   ansible:
-    #     config: /tmp/ansible.cfg
-    #     cmdline: "--forks 15"
-    #     inventories:
-    #     - /tmp/test_inventory.yml
-    #     playbook: /tmp/test_playbook.yml
-    #   app: run
-    #   collection-doc-cache-path: /tmp/cache.db
-    #   color:
-    #     enable: False
-    #     osc4: False
-    #   editor:
-    #     command: vim_from_setting
-    #     console: False
-    #   documentation:
-    #     plugin:
-    #       name: shell
-    #       type: become
-    #   execution-environment:
-    #     container-engine: podman
-    #     enabled: False
-    #     environment-variables:
-    #       pass:
-    #         - ONE
-    #         - TWO
-    #         - THREE
-    #       set:
-    #         KEY1: VALUE1
-    #         KEY2: VALUE2
-    #         KEY3: VALUE3
-    #     image: test_image:latest
-    #     pull-policy: never
-    #     volume-mounts:
-    #     - src: "/test1"
-    #       dest: "/test1"
-    #       label: "Z"
-    #   help-config: True
-    #   help-doc: True
-    #   help-inventory: True
-    #   help-playbook: False
-    #   inventory-columns:
-    #     - ansible_network_os
-    #     - ansible_network_cli_ssh_type
-    #     - ansible_connection
-      logging:
-    #     append: False
-        level: critical
-    #     file: /tmp/log.txt
-    #   mode: stdout
-    #   playbook-artifact: 
-    #     enable: True
-    #     replay: /tmp/test_artifact.json
-    #     save-as: /tmp/test_artifact.json
+    #ansible-navigator:
+    #  ansible:
+    #    config: /tmp/ansible.cfg
+    #    cmdline: "--forks 15"
+    #    inventories:
+    #      - /tmp/test_inventory.yml
+    #  playbook: /tmp/test_playbook.yml
+    #  app: run
+    #  collection-doc-cache-path: /tmp/cache.db
+    #  color:
+    #    enable: False
+    #    osc4: False
+    #  editor:
+    #    command: vim_from_setting
+    #    console: False
+    #  documentation:
+    #    plugin:
+    #      name: shell
+    #      type: become
+    #  execution-environment:
+    #    container-engine: podman
+    #    enabled: False
+    #    environment-variables:
+    #      pass:
+    #        - ONE
+    #        - TWO
+    #        - THREE
+    #      set:
+    #        KEY1: VALUE1
+    #        KEY2: VALUE2
+    #        KEY3: VALUE3
+    #    image: test_image:latest
+    #    pull-policy: never
+    #    volume-mounts:
+    #      - src: "/test1"
+    #        dest: "/test1"
+    #        label: "Z"
+    #  help-config: True
+    #  help-doc: True
+    #  help-inventory: True
+    #  help-playbook: False
+    #  inventory-columns:
+    #    - ansible_network_os
+    #    - ansible_network_cli_ssh_type
+    #    - ansible_connection
+    #  logging:
+    #    append: False
+    #    level: critical
+    #    file: /tmp/log.txt
+    #  mode: stdout
+    #  playbook-artifact: 
+    #    enable: True
+    #    replay: /tmp/test_artifact.json
+    #    save-as: /tmp/test_artifact.json
 ..
   end-settings-sample
 
