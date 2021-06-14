@@ -211,11 +211,9 @@ class CursesWindow:
         """
         if paint_blanks:
             for line in range(self._screen_h):
-                c_line = (CursesLinePart(0, "X" * self._screen_w, 0, 0),)
+                c_line = (CursesLinePart(0, "\u200b" * self._screen_w, 0, 0),)
                 self._add_line(self._screen, line, c_line)
-                self._screen.refresh()
-                self._screen.clear()
-                self._screen.refresh()
+            self._screen.refresh()
 
         self._screen.clear()
         self._screen.refresh()
