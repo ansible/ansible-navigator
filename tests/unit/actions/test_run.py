@@ -109,6 +109,9 @@ class RunRunnerTstData(NamedTuple):
     container_volume_mounts: Optional[List]
     help_playbook: bool
     cmdline: Optional[List]
+    private_data_dir: Optional[str]
+    rotate_artifacts: Optional[int]
+    timeout: Optional[int]
     expected: Dict
 
 
@@ -127,6 +130,9 @@ runner_test_data = [
         ["/home/onhost/vol1:/home/oncontainer/vol1:Z", "~/vol2:/home/user/vol2"],
         True,
         ["--tags", "test"],
+        "/tmp/test1",
+        10,
+        200,
         {
             "executable_cmd": "ansible-playbook",
             "queue": TEST_QUEUE,
@@ -144,6 +150,9 @@ runner_test_data = [
             ],
             "cmdline": ["--help", "--tags", "test"],
             "host_cwd": os.getcwd(),
+            "private_data_dir": "/tmp/test1",
+            "rotate_artifacts": 10,
+            "timeout": 200,
         },
     ),
 ]
@@ -168,6 +177,9 @@ def test_runner_args(_mocked_command_runner, caplog, data):
     args.entry("execution_environment_volume_mounts").value.current = data.container_volume_mounts
     args.entry("help_playbook").value.current = data.help_playbook
     args.entry("cmdline").value.current = data.cmdline
+    args.entry("ansible_runner_artifact_dir").value.current = data.private_data_dir
+    args.entry("ansible_runner_rotate_artifacts_count").value.current = data.rotate_artifacts
+    args.entry("ansible_runner_timeout").value.current = data.timeout
 
     run = action(args=args)
     run._queue = TEST_QUEUE

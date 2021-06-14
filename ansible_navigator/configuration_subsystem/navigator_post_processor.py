@@ -68,6 +68,53 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
+    def ansible_runner_artifact_dir(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process ansible_runner_artifact_dir path"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.current is not C.NOT_SET:
+            entry.value.current = abs_user_path(entry.value.current)
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
+    def ansible_runner_rotate_artifacts_count(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process ansible_runner_rotate_artifacts_count"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.current is not C.NOT_SET:
+            try:
+                entry.value.current = int(entry.value.current)
+            except ValueError as exc:
+                exit_msg = f"Value should be valid integer. Failed with error {str(exc)}"
+                exit_messages.append(ExitMessage(message=exit_msg))
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
+    def ansible_runner_timeout(
+        entry: Entry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process ansible_runner_timeout"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.current is not C.NOT_SET:
+            try:
+                entry.value.current = int(entry.value.current)
+            except ValueError as exc:
+                exit_msg = f"Value should be valid integer. Failed with error {str(exc)}"
+                exit_messages.append(ExitMessage(message=exit_msg))
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
     def collection_doc_cache_path(
         entry: Entry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
