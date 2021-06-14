@@ -213,6 +213,7 @@ class CursesWindow:
             for line in range(self._screen_h):
                 c_line = (CursesLinePart(0, " " * self._screen_w, 0, 0),)
                 self._add_line(self._screen, line, c_line)
+            self._screen.refresh()
 
         self._screen.clear()
         self._screen.refresh()
