@@ -215,6 +215,9 @@ class Action(App):
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": set_envvars,
+            "private_data_dir": self._args.ansible_runner_artifact_dir,
+            "rotate_artifacts": self._args.ansible_runner_rotate_artifacts_count,
+            "timeout": self._args.ansible_runner_timeout,
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):

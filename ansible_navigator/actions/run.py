@@ -575,6 +575,9 @@ class Action(App):
             "navigator_mode": mode,
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": set_envvars,
+            "private_data_dir": self._args.ansible_runner_artifact_dir,
+            "rotate_artifacts": self._args.ansible_runner_rotate_artifacts_count,
+            "timeout": self._args.ansible_runner_timeout,
         }
 
         if isinstance(self._args.playbook, str):
@@ -590,8 +593,9 @@ class Action(App):
         else:
             executable_cmd = shutil.which("ansible-playbook")
             if not executable_cmd:
-                self._logger.error("'ansible-playbook' executable not found")
-                return
+                msg = "'ansible-playbook' executable not found"
+                self._logger.error(msg)
+                raise RuntimeError(msg)
 
         pass_through_arg = []
         if self._args.help_playbook is True:
