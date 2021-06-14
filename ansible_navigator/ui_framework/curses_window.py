@@ -9,6 +9,8 @@ from typing import Union
 from .colorize import hex_to_rgb_curses
 
 from .curses_defs import CursesLine
+from .curses_defs import CursesLinePart
+
 
 from .ui_config import UIConfig
 
@@ -200,3 +202,18 @@ class CursesWindow:
         for i in range(0, curses.COLORS):
             curses.init_pair(i, i, -1)
         self._ui_config.colors_initialized = True
+
+    def clear(self, paint_blanks: bool = False) -> None:
+        """clear the screen
+
+        :param paint_blanks: force paint every cell with a space
+
+        """
+        if paint_blanks:
+            for line in range(self._screen_h):
+                c_line = (CursesLinePart(0, "\u200b" * self._screen_w, 0, 0),)
+                self._add_line(self._screen, line, c_line)
+            self._screen.refresh()
+
+        self._screen.clear()
+        self._screen.refresh()
