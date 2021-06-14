@@ -52,7 +52,6 @@ class ActionRunner(App):
             ui_config=config,
         )
 
-
     def run(self, _screen) -> None:
         # pylint: disable=protected-access
         """Run with the interface and runner"""
