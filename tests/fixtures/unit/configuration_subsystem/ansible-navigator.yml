@@ -49,8 +49,8 @@ ansible-navigator:
     - ansible_network_cli_ssh_type
     - ansible_connection
   logging:
-    append: False
     level: critical
+    append: False
     file: /tmp/log.txt
   mode: stdout
   playbook-artifact: 

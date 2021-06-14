@@ -99,8 +99,8 @@ You can copy the example settings file below into one of those paths to start yo
     #     - ansible_connection
     #
       logging:
-    #     append: False
         level: critical
+    #     append: False
     #     file: /tmp/log.txt
     #
     #   mode: stdout
@@ -484,7 +484,7 @@ The following table describes all available settings.
     - Specify the plugin type, 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
     - | **Choices:** 'become', 'cache', 'callback', 'cliconf', 'connection', 'httpapi', 'inventory', 'lookup', 'module', 'netconf', 'shell', 'strategy' or 'vars'
       | **Default:** module
-      | **CLI:** `-t` or `----type`
+      | **CLI:** `-t` or `--type`
       | **ENV:** ANSIBLE_NAVIGATOR_PLUGIN_TYPE
       | **Settings file:**
 
