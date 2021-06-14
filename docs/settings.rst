@@ -43,22 +43,29 @@ You can copy the example settings file below into one of those paths to start yo
     #     inventories:
     #     - /tmp/test_inventory.yml
     #     playbook: /tmp/test_playbook.yml
+    #
     #   ansible-runner:
     #     artifact-dir: /tmp/test1
     #     rotate-artifacts-count: 10
     #     timeout: 300
+    #
     #   app: run
+    #
     #   collection-doc-cache-path: /tmp/cache.db
+    #
     #   color:
     #     enable: False
     #     osc4: False
+    #
     #   editor:
     #     command: vim_from_setting
     #     console: False
+    #
     #   documentation:
     #     plugin:
     #       name: shell
     #       type: become
+    #
     #   execution-environment:
     #     container-engine: podman
     #     enabled: False
@@ -77,19 +84,27 @@ You can copy the example settings file below into one of those paths to start yo
     #     - src: "/test1"
     #       dest: "/test1"
     #       label: "Z"
+    #
     #   help-config: True
+    #
     #   help-doc: True
+    #
     #   help-inventory: True
+    #
     #   help-playbook: False
+    #
     #   inventory-columns:
     #     - ansible_network_os
     #     - ansible_network_cli_ssh_type
     #     - ansible_connection
+    #
       logging:
     #     append: False
         level: critical
     #     file: /tmp/log.txt
+    #
     #   mode: stdout
+    #
     #   playbook-artifact: 
     #     enable: True
     #     replay: /tmp/test_artifact.json

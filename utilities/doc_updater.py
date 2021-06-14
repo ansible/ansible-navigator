@@ -3,6 +3,7 @@
 import difflib
 import logging
 import os
+import re
 import sys
 import tempfile
 
@@ -229,16 +230,18 @@ def _update_params_tables(args: Namespace, filename: str):
 
 def _update_sample_settings(args: Namespace, filename: str):
     """update the settings sample"""
+    sample_settings = [".. code-block:: yaml", ""]
     with open(args.ss) as fhand:
         settings = fhand.read().splitlines()
     not_commented = ["---", "ansible-navigator:", "logging:", "level:"]
     for idx, line in enumerate(settings):
+        if idx != 2 and re.match(r'\s{2}\S', line):
+            sample_settings.append("    #")
         if not any(nc in line for nc in not_commented):
-            settings[idx] = "    # " + line
+            sample_settings.append("    # " + line)
         else:
-            settings[idx] = "    " + line
-    settings = [".. code-block:: yaml", ""] + settings
-    _update_file(settings, filename, "settings-sample")
+            sample_settings.append("    " + line)      
+    _update_file(sample_settings, filename, "settings-sample")
 
 
 def _update_subcommands_tables(args: Namespace, filename: str):
