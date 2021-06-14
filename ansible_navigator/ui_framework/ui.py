@@ -150,11 +150,6 @@ class UserInterface(CursesWindow):
         self._screen.timeout(refresh)
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
 
-    def clear(self) -> None:
-        """clear the screen"""
-        self._screen.clear()
-        self._screen.refresh()
-
     def disable_refresh(self) -> None:
         """Disable the screen refresh"""
         self._refresh.append(self._refresh[-1])
