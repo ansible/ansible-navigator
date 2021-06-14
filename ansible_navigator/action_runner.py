@@ -52,7 +52,6 @@ class ActionRunner(App):
             ui_config=config,
         )
 
-        self._ui.clear(paint_blanks=True)
 
     def run(self, _screen) -> None:
         # pylint: disable=protected-access

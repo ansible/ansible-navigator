@@ -132,6 +132,19 @@ def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
     messages.append(LogMessage(level=logging.INFO, message=message))
     return messages, exit_messages
 
+def clear_screen() -> None:
+    """ print blank lines on the screen, preserving scrollback
+
+    Note: In certain cases, xterm.js based terminals show stdout
+    under the initial curses output, this was found with vscode
+
+    Rather than issueing "clear" print blank lines to preserve
+    the users' scrollback buffer
+    """
+    affected_terminals = ["vscode"]
+    if os.environ.get("TERM_PROGRAM") in affected_terminals:
+        for _line in range(shutil.get_terminal_size().lines):
+            print()
 
 def dispatch(obj, replacements):
     """make the replacement based on type
