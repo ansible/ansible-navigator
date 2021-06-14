@@ -140,6 +140,7 @@ class CursesWindow:
                             win.addstr(lineno, column, text)
                         else:
                             win.addstr(lineno, column, text, color | line_part.decoration)
+                        window.clrtoeol()
                     except curses.error:
                         # curses error at last column & row but I don't care
                         # because it still draws it
