@@ -1,0 +1,10 @@
+{
+    "version": "1.0.0",
+    "plays": [],
+    "stdout": [
+        "docker: Error response from daemon: Duplicate mount point: /Users/bthornto/github/ansible-navigator.",
+        "See 'docker run --help'."
+    ],
+    "status": "failed",
+    "status_color": 9
+}

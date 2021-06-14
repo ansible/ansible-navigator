@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "plays": [],
+    "stdout": [
+        "\u001b[1;35m[WARNING]: You are running the development version of Ansible. You should only\u001b[0m",
+        "\u001b[1;35mrun Ansible from \"devel\" if you are modifying the Ansible engine, or trying out\u001b[0m",
+        "\u001b[1;35mfeatures under development. This is a rapidly changing source of code and can\u001b[0m",
+        "\u001b[1;35mbecome unstable at any point.\u001b[0m",
+        "\u001b[1;35m[WARNING]: No inventory was parsed, only implicit localhost is available\u001b[0m",
+        "\u001b[1;35m[WARNING]: provided hosts list is empty, only localhost is available. Note that\u001b[0m",
+        "\u001b[1;35mthe implicit localhost does not match 'all'\u001b[0m"
+    ],
+    "status": "successful",
+    "status_color": 13
+}
