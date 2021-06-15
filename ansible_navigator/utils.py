@@ -139,8 +139,8 @@ def clear_screen() -> None:
     Note: In certain cases, xterm.js based terminals show stdout
     under the initial curses output, this was found with vscode
 
-    Rather than issueing "clear" print blank lines to preserve
-    the users' scrollback buffer
+    Rather than issueing `clear`, print blank lines to preserve
+    the user's scrollback buffer
     """
     affected_terminals = ["vscode"]
     if os.environ.get("TERM_PROGRAM") in affected_terminals:
