@@ -137,7 +137,9 @@ class BaseRunner:
         self._add_env_vars_to_args()
 
         if self._host_cwd:
-            self._runner_args.update({"host_cwd": self._host_cwd})
+            # ensure the cwd ends with a trailing slash
+            host_cwd = os.path.join(self._host_cwd, "")
+            self._runner_args.update({"host_cwd": host_cwd})
 
         if self._navigator_mode == "stdout":
             self._runner_args.update(
