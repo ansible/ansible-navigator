@@ -429,10 +429,11 @@ class Action(App):
         self._set_inventories_mtime()
         return
 
-    def _collect_inventory_details(self) -> Optional[Tuple]:
+    def _collect_inventory_details(
+        self,
+    ) -> Tuple[Union[None, str], Union[None, str], Union[None, int]]:
 
         # pylint:disable=too-many-branches
-        stdout_return = (None, None, None)
 
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
@@ -507,8 +508,9 @@ class Action(App):
 
             self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
             stdout_return = self._runner.run()
+            return stdout_return
 
-        return stdout_return
+        return (None, None, None)
 
     def _extract_inventory(self, stdout: str, stderr: str) -> None:
         try:

@@ -121,21 +121,21 @@ class Action(App):
         self._prepare_to_exit(interaction)
         return next_interaction
 
-    def run_stdout(self) -> int:
+    def run_stdout(self) -> Union[None, int]:
         """Run in oldschool mode, just stdout"""
         self._plugin_name = self._args.plugin_name
         self._plugin_type = self._args.plugin_type
         self._logger.debug("doc requested in stdout mode")
-        _, _, ret_code = self._run_runner()
-        return ret_code
+        response = self._run_runner()
+        if response:
+            _, _, ret_code = response
+            return ret_code
+        return None
 
-    def _run_runner(self) -> Union[dict, Tuple[str, str, int]]:
+    def _run_runner(self) -> Union[None, dict, Tuple[str, str, int]]:
         # pylint: disable=too-many-branches
         # pylint: disable=no-else-return
         """spin up runner"""
-
-        plugin_doc_response: Optional[Dict[Any, Any]] = None
-        stdout_return = (None, None, None)
 
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}

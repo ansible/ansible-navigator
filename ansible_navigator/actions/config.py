@@ -140,11 +140,14 @@ class Action(App):
         self._prepare_to_exit(interaction)
         return None
 
-    def run_stdout(self) -> int:
+    def run_stdout(self) -> Union[None, int]:
         """Run in oldschool mode, just stdout"""
         self._logger.debug("config requested in stdout mode")
-        _, _, ret_code = self._run_runner()
-        return ret_code
+        response = self._run_runner()
+        if response:
+            _, _, ret_code = response
+            return ret_code
+        return None
 
     def _take_step(self) -> None:
         """take one step"""
@@ -199,7 +202,6 @@ class Action(App):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
         """spin up runner"""
-        stdout_return = (None, None, None)
 
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
@@ -278,8 +280,8 @@ class Action(App):
 
             self._runner = CommandRunner(executable_cmd=ansible_config_path, **kwargs)
             stdout_return = self._runner.run()
-
-        return stdout_return
+            return stdout_return
+        return (None, None, None)
 
     def _parse_and_merge(self, list_output, dump_output) -> None:
         """yaml load the list, and parse the dump
