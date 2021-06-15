@@ -21,6 +21,7 @@ from .initialization import error_and_exit_early
 from .utils import ExitMessage
 from .utils import ExitPrefix
 from .utils import LogMessage
+from .utils import clear_screen
 
 APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
@@ -78,6 +79,7 @@ def run(args: ApplicationConfiguration) -> int:
         if args.mode == "stdout":
             return_code = run_action_stdout(args.app.replace("-", "_"), args)
             return return_code
+        clear_screen()
         wrapper(ActionRunner(args=args).run)
         return 0
     except KeyboardInterrupt:
