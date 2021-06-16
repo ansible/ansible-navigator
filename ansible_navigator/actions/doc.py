@@ -8,6 +8,7 @@ import shutil
 
 from typing import Any
 from typing import Dict
+from typing import Tuple
 from typing import Optional
 from typing import Union
 from . import _actions as actions
@@ -120,19 +121,21 @@ class Action(App):
         self._prepare_to_exit(interaction)
         return next_interaction
 
-    def run_stdout(self) -> int:
+    def run_stdout(self) -> Union[None, int]:
         """Run in oldschool mode, just stdout"""
         self._plugin_name = self._args.plugin_name
         self._plugin_type = self._args.plugin_type
         self._logger.debug("doc requested in stdout mode")
-        self._run_runner()
-        return 1 if self._runner.status == "failed" else 0
+        response = self._run_runner()
+        if response:
+            _, _, ret_code = response
+            return ret_code
+        return None
 
-    def _run_runner(self) -> Union[dict, None]:
+    def _run_runner(self) -> Union[None, dict, Tuple[str, str, int]]:
         # pylint: disable=too-many-branches
+        # pylint: disable=no-else-return
         """spin up runner"""
-
-        plugin_doc_response: Optional[Dict[Any, Any]] = None
 
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
@@ -182,6 +185,7 @@ class Action(App):
                 self._logger.error(msg)
 
             plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
+            return plugin_doc_response
         else:
             kwargs.update({"host_cwd": os.getcwd()})
             if self._args.execution_environment:
@@ -189,8 +193,9 @@ class Action(App):
             else:
                 exec_path = shutil.which("ansible-doc")
                 if exec_path is None:
-                    self._logger.error("no ansible-doc command found in path")
-                    return None
+                    msg = "'ansible-doc' executable not found"
+                    self._logger.error(msg)
+                    raise RuntimeError(msg)
                 ansible_doc_path = exec_path
 
             pass_through_arg = []
@@ -209,9 +214,8 @@ class Action(App):
             kwargs.update({"cmdline": pass_through_arg})
 
             self._runner = CommandRunner(executable_cmd=ansible_doc_path, **kwargs)
-            self._runner.run()
-
-        return plugin_doc_response
+            stdout_return = self._runner.run()
+            return stdout_return
 
     def _extract_plugin_doc(
         self, out: Union[Dict[Any, Any], str], err: Union[Dict[Any, Any], str]

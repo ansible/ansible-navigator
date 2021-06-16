@@ -284,12 +284,12 @@ class CommandRunner(CommandBaseRunner):
     # pylint: disable=too-many-instance-attributes
     """a runner wrapper"""
 
-    def run(self) -> Tuple[str, str]:
+    def run(self) -> Tuple[str, str, int]:
         """run"""
 
         self.generate_run_command_args()
-        out, err = run_command(**self._runner_args)
-        return out, err
+        out, err, ret_code = run_command(**self._runner_args)
+        return out, err, ret_code
 
 
 class AnsibleCfgRunner(BaseRunner):
