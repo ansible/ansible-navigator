@@ -56,11 +56,9 @@ You can copy the example settings file below into one of those paths to start yo
     #   color:
     #     enable: False
     #     osc4: False
-<<<<<<< HEAD
     #
-=======
     #   demonstration: True
->>>>>>> 2a13bbc (trim and pad overlay)
+    #
     #   editor:
     #     command: vim_from_setting
     #     console: False
