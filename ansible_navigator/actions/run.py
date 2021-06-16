@@ -491,7 +491,7 @@ class Action(App):
                 "pre_populate": inv,
                 "prompt": "Inventory source",
                 "type": "text_input",
-                "validator": {"name": "valid_path_or_none"},
+                "validator": {"name": "none"},
             }
             form_dict["fields"].append(form_field)
 

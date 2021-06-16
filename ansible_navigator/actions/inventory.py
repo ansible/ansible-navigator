@@ -106,7 +106,7 @@ class Action(App):
 
         self.__inventory: Dict[Any, Any] = {}
         self._host_vars: Dict[str, Dict[Any, Any]]
-        self._inventories_mtime: float
+        self._inventories_mtime: Union[float, None]
         self._inventories: List[str] = []
         self._inventory_error: str = ""
         self._runner: Union[CommandRunner, InventoryRunner]
@@ -126,6 +126,11 @@ class Action(App):
             k: {**v, "inventory_hostname": k}
             for k, v in value.get("_meta", {}).get("hostvars", {}).items()
         }
+        for group in self._inventory.keys():
+            for host in self._inventory[group].get("hosts", []):
+                if host in self._host_vars:
+                    continue
+                self._host_vars[host] = {"inventory_hostname": host}
 
     @property
     def _show_columns(self) -> List:
@@ -147,7 +152,10 @@ class Action(App):
                 )
             elif os.path.isfile(inventory):
                 mtimes.append(os.path.getmtime(inventory))
-        self._inventories_mtime = max(mtimes)
+        if mtimes:
+            self._inventories_mtime = max(mtimes)
+        else:
+            self._inventories_mtime = None
 
     def update(self):
         self._calling_app.update()
@@ -380,7 +388,7 @@ class Action(App):
 
         if isinstance(self._args.inventory, list):
             inventories = self._args.inventory
-            inventories_valid = all((os.path.exists(inv) for inv in inventories))
+            inventories_valid = not self._inventory_error
         else:
             inventories = ["", "", ""]
             inventories_valid = False
@@ -398,7 +406,7 @@ class Action(App):
                         "pre_populate": inv,
                         "prompt": f"{idx}. Inventory source",
                         "type": "text_input",
-                        "validator": {"name": "valid_path_or_none"},
+                        "validator": {"name": "none"},
                     }
                     form_dict["fields"].append(form_field)
             else:
@@ -406,7 +414,7 @@ class Action(App):
                     "name": "inv_0",
                     "prompt": "0. Inventory source",
                     "type": "text_input",
-                    "validator": {"name": "valid_path_or_none"},
+                    "validator": {"name": "none"},
                 }
                 form_dict["fields"].append(form_field)
 
@@ -479,11 +487,11 @@ class Action(App):
             warn_msg = ["Errors were encountered while gathering the inventory:"]
             warn_msg += inventory_err.splitlines()
             self._logger.error(" ".join(warn_msg))
-            if "Error" in inventory_err:
+            if "ERROR!" in inventory_err or "Error" in inventory_err:
                 warning = warning_notification(warn_msg)
                 self._interaction.ui.show(warning)
             else:
-                self._extract_inventory(inventory_output, inventory_err)
+                self._extract_inventory(inventory_output)
         else:
             if self._args.execution_environment:
                 ansible_inventory_path = "ansible-inventory"
@@ -511,12 +519,9 @@ class Action(App):
 
         return (None, None, None)
 
-    def _extract_inventory(self, stdout: str, stderr: str) -> None:
+    def _extract_inventory(self, stdout: str) -> None:
         try:
             self._inventory = json.loads(stdout)
-            if not self._host_vars:
-                self._inventory_error = stderr
-
         except json.JSONDecodeError as exc:
             self._logger.debug("json decode error: %s", str(exc))
             self._logger.debug("tried: %s", stdout)
