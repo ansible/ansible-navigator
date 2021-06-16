@@ -52,7 +52,7 @@ test_datas = (
         action_name="config",
         action_params=(("cmdline", ["foo"]),),
         message="invalid choice: 'foo'",
-        return_code=1,
+        return_code=2,
     ),
     StdoutTest(
         action_name="doc",
@@ -64,7 +64,7 @@ test_datas = (
         action_name="doc",
         action_params=(("cmdline", ["--json"]),),
         message="Incorrect options passed",
-        return_code=1,
+        return_code=5,
     ),
     StdoutTest(
         action_name="inventory",
