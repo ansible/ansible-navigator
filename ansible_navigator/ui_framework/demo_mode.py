@@ -13,6 +13,8 @@ from .curses_window import CursesWindow
 # https://pypi.org/project/pyfiglet/0.7.4/
 # See the license directory for the cooresponding license
 
+# pylint: disable=too-many-lines
+
 CHARS = {
     "33": ["    ", "88  ", "88  ", "88  ", "88  ", "88  ", '""  ', "aa  ", "88  ", "    ", "    "],
     "34": [
@@ -1179,6 +1181,7 @@ CHARS = {
 }
 
 # end scope MIT license
+
 
 class DemoMode(CursesWindow):
     # pylint: disable=too-few-public-methods
