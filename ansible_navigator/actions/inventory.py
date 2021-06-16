@@ -491,7 +491,7 @@ class Action(App):
                 warning = warning_notification(warn_msg)
                 self._interaction.ui.show(warning)
             else:
-                self._extract_inventory(inventory_output, inventory_err)
+                self._extract_inventory(inventory_output)
         else:
             if self._args.execution_environment:
                 ansible_inventory_path = "ansible-inventory"
