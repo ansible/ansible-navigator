@@ -34,7 +34,7 @@ from ..defaults import FIXTURES_DIR
         (
             ["config"],
             "execution_environment_image",
-            "quay.io/ansible/ansible-runner:devel",
+            "quay.io/ansible/ansible-navigator-demo-ee:0.4.0",
         ),
         (
             ["config"],
