@@ -30,9 +30,12 @@ class ActionRunTest:
         container_engine: Optional[str] = None,
         execution_environment: Optional[str] = None,
         execution_environment_image: Optional[str] = None,
-        cwd: Optional[List] = None,
+        host_cwd: Optional[List] = None,
         set_environment_variable: Optional[Dict] = None,
         pass_environment_variable: Optional[List] = None,
+        private_data_dir: Optional[str] = None,
+        rotate_artifacts: Optional[int] = None,
+        timeout: Optional[int] = None,
     ) -> None:
         self._action_name = action_name
         self._container_engine = container_engine
@@ -40,13 +43,19 @@ class ActionRunTest:
         self._execution_environment_image = execution_environment_image
         self._set_environment_variable = set_environment_variable
         self._pass_environment_variable = pass_environment_variable
-        self._cwd = cwd
+        self._host_cwd = host_cwd
+        self._private_data_dir = private_data_dir
+        self._rotate_artifacts = rotate_artifacts
+        self._timeout = timeout
         self._app_args = {
             "container_engine": self._container_engine,
             "execution_environment": self._execution_environment,
             "execution_environment_image": self._execution_environment_image,
             "set_environment_variable": self._set_environment_variable,
             "pass_environment_variable": self._pass_environment_variable,
+            "ansible_runner_artifact_dir": self._private_data_dir,
+            "ansible_runner_rotate_artifacts_count": self._rotate_artifacts,
+            "ansible_runner_timeout": self._timeout,
         }
         self._app_action = __import__(
             f"ansible_navigator.actions.{self._action_name}", globals(), fromlist=["Action"]

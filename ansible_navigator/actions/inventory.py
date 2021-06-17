@@ -106,7 +106,7 @@ class Action(App):
 
         self.__inventory: Dict[Any, Any] = {}
         self._host_vars: Dict[str, Dict[Any, Any]]
-        self._inventories_mtime: float
+        self._inventories_mtime: Union[float, None]
         self._inventories: List[str] = []
         self._inventory_error: str = ""
         self._runner: Union[CommandRunner, InventoryRunner]
@@ -126,6 +126,11 @@ class Action(App):
             k: {**v, "inventory_hostname": k}
             for k, v in value.get("_meta", {}).get("hostvars", {}).items()
         }
+        for group in self._inventory.keys():
+            for host in self._inventory[group].get("hosts", []):
+                if host in self._host_vars:
+                    continue
+                self._host_vars[host] = {"inventory_hostname": host}
 
     @property
     def _show_columns(self) -> List:
@@ -147,7 +152,10 @@ class Action(App):
                 )
             elif os.path.isfile(inventory):
                 mtimes.append(os.path.getmtime(inventory))
-        self._inventories_mtime = max(mtimes)
+        if mtimes:
+            self._inventories_mtime = max(mtimes)
+        else:
+            self._inventories_mtime = None
 
     def update(self):
         self._calling_app.update()
@@ -380,7 +388,7 @@ class Action(App):
 
         if isinstance(self._args.inventory, list):
             inventories = self._args.inventory
-            inventories_valid = all((os.path.exists(inv) for inv in inventories))
+            inventories_valid = not self._inventory_error
         else:
             inventories = ["", "", ""]
             inventories_valid = False
@@ -398,7 +406,7 @@ class Action(App):
                         "pre_populate": inv,
                         "prompt": f"{idx}. Inventory source",
                         "type": "text_input",
-                        "validator": {"name": "valid_path_or_none"},
+                        "validator": {"name": "none"},
                     }
                     form_dict["fields"].append(form_field)
             else:
@@ -406,7 +414,7 @@ class Action(App):
                     "name": "inv_0",
                     "prompt": "0. Inventory source",
                     "type": "text_input",
-                    "validator": {"name": "valid_path_or_none"},
+                    "validator": {"name": "none"},
                 }
                 form_dict["fields"].append(form_field)
 
@@ -428,7 +436,9 @@ class Action(App):
         self._set_inventories_mtime()
         return
 
-    def _collect_inventory_details(self) -> None:
+    def _collect_inventory_details(
+        self,
+    ) -> Tuple[Union[None, str], Union[None, str], Union[None, int]]:
 
         # pylint:disable=too-many-branches
 
@@ -448,6 +458,9 @@ class Action(App):
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": set_envvars,
+            "private_data_dir": self._args.ansible_runner_artifact_dir,
+            "rotate_artifacts": self._args.ansible_runner_rotate_artifacts_count,
+            "timeout": self._args.ansible_runner_timeout,
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
@@ -474,20 +487,21 @@ class Action(App):
             warn_msg = ["Errors were encountered while gathering the inventory:"]
             warn_msg += inventory_err.splitlines()
             self._logger.error(" ".join(warn_msg))
-            if "Error" in inventory_err:
+            if "ERROR!" in inventory_err or "Error" in inventory_err:
                 warning = warning_notification(warn_msg)
                 self._interaction.ui.show(warning)
-                return
-
-            self._extract_inventory(inventory_output, inventory_err)
+            else:
+                self._extract_inventory(inventory_output)
         else:
             if self._args.execution_environment:
                 ansible_inventory_path = "ansible-inventory"
             else:
                 exec_path = shutil.which("ansible-inventory")
                 if exec_path is None:
-                    self._logger.error("no ansible-inventory command found in path")
-                    return
+                    msg = "'ansible-inventory' executable not found"
+                    self._logger.error(msg)
+                    raise RuntimeError(msg)
+
                 ansible_inventory_path = exec_path
 
             pass_through_arg = []
@@ -500,14 +514,14 @@ class Action(App):
             kwargs.update({"cmdline": pass_through_arg, "inventory": self._inventories})
 
             self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
-            self._runner.run()
+            stdout_return = self._runner.run()
+            return stdout_return
 
-    def _extract_inventory(self, stdout: str, stderr: str) -> None:
+        return (None, None, None)
+
+    def _extract_inventory(self, stdout: str) -> None:
         try:
             self._inventory = json.loads(stdout)
-            if not self._host_vars:
-                self._inventory_error = stderr
-
         except json.JSONDecodeError as exc:
             self._logger.debug("json decode error: %s", str(exc))
             self._logger.debug("tried: %s", stdout)

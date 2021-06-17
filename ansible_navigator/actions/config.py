@@ -8,6 +8,7 @@ import shutil
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -139,11 +140,14 @@ class Action(App):
         self._prepare_to_exit(interaction)
         return None
 
-    def run_stdout(self) -> int:
+    def run_stdout(self) -> Union[None, int]:
         """Run in oldschool mode, just stdout"""
         self._logger.debug("config requested in stdout mode")
-        self._run_runner()
-        return 1 if self._runner.status == "failed" else 0
+        response = self._run_runner()
+        if response:
+            _, _, ret_code = response
+            return ret_code
+        return None
 
     def _take_step(self) -> None:
         """take one step"""
@@ -194,7 +198,7 @@ class Action(App):
             index=self.steps.current.index,
         )
 
-    def _run_runner(self) -> None:
+    def _run_runner(self) -> Optional[Tuple]:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
         """spin up runner"""
@@ -215,6 +219,9 @@ class Action(App):
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": set_envvars,
+            "private_data_dir": self._args.ansible_runner_artifact_dir,
+            "rotate_artifacts": self._args.ansible_runner_rotate_artifacts_count,
+            "timeout": self._args.ansible_runner_timeout,
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
@@ -245,17 +252,17 @@ class Action(App):
                     warn_msg.append("The configuration could not be gathered.")
                 warning = warning_notification(warn_msg)
                 self._interaction.ui.show(warning)
-                return
-
-            self._parse_and_merge(list_output, dump_output)
+            else:
+                self._parse_and_merge(list_output, dump_output)
         else:
             if self._args.execution_environment:
                 ansible_config_path = "ansible-config"
             else:
                 exec_path = shutil.which("ansible-config")
                 if exec_path is None:
-                    self._logger.error("no ansible-config command found in path")
-                    return
+                    msg = "'ansible-config' executable not found"
+                    self._logger.error(msg)
+                    raise RuntimeError(msg)
                 ansible_config_path = exec_path
 
             if isinstance(self._args.cmdline, list):
@@ -272,7 +279,9 @@ class Action(App):
             kwargs.update({"cmdline": pass_through_arg})
 
             self._runner = CommandRunner(executable_cmd=ansible_config_path, **kwargs)
-            self._runner.run()
+            stdout_return = self._runner.run()
+            return stdout_return
+        return (None, None, None)
 
     def _parse_and_merge(self, list_output, dump_output) -> None:
         """yaml load the list, and parse the dump

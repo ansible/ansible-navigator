@@ -6,6 +6,10 @@ ansible-navigator:
     inventories:
     - /tmp/test_inventory.yml
     playbook: /tmp/test_playbook.yml
+  ansible-runner:
+    artifact-dir: /tmp/test1
+    rotate-artifacts-count: 10
+    timeout: 300
   app: run
   collection-doc-cache-path: /tmp/cache.db
   color:
@@ -45,8 +49,8 @@ ansible-navigator:
     - ansible_network_cli_ssh_type
     - ansible_connection
   logging:
-    append: False
     level: critical
+    append: False
     file: /tmp/log.txt
   mode: stdout
   playbook-artifact: 
