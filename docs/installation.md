@@ -6,7 +6,7 @@
 
 - Docker desktop for Mac
 - macOS command line developer tools
-- Internet Access (during initial installation)
+- Internet access (during initial installation)
 
 ### Installation
 
@@ -24,7 +24,7 @@
 
 - Windows Subsystem for Linux 2
 - Docker Desktop for Windows
-- Internet Access (during initial installation)
+- Internet access (during initial installation)
 
 ### Installation
 
