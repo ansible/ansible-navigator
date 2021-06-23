@@ -34,7 +34,7 @@
 - Install [Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
 - Launch the Ubuntu virtual machine from the Windows menu and complete the initial Ubuntu set-up
 - From the Ubuntu terminal:
-   - Complete the "Manage Docker as a non-root user" steps https://docs.docker.com/engine/install/linux-postinstall/
+   - Complete the [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/) steps
    - Update the ubuntu package index: `sudo apt update`
    - Install the python package manager: `sudo apt install python3-pip`
    - Install ansible-navigator: `pip install ansible-navigator`
