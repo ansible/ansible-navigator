@@ -1,4 +1,4 @@
-# Getting setup with exectution environment support on:
+# Getting setup with execution environment support on:
 
 ## macOS
 
