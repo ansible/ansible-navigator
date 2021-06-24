@@ -1,9 +1,11 @@
 """ ansible_runner API's interface
 """
+import getpass
 import shutil
 import sys
 import logging
 import os
+import uuid
 
 from queue import Queue
 from tempfile import gettempdir
@@ -84,11 +86,9 @@ class BaseRunner:
                                        It the timeout is triggered it will force cancel the
                                        execution.
         """
-        if isinstance(private_data_dir, str):
-            self._private_data_dir = private_data_dir
-        else:
-            self._private_data_dir = os.path.join(gettempdir(), "ansible-navigator")
+        self._logger = logging.getLogger(__name__)
 
+        self._set_private_data_directory(private_data_dir)
         self._ce = container_engine
         self._ee = execution_environment
         self._eei = execution_environment_image
@@ -106,7 +106,6 @@ class BaseRunner:
         self.cancelled: bool = False
         self.finished: bool = False
         self.status: Optional[str] = None
-        self._logger = logging.getLogger(__name__)
         self._runner_args: Dict = {}
         self._runner_artifact_dir: Optional[str] = None
         if self._ee:
@@ -161,6 +160,28 @@ class BaseRunner:
                 "delete ansible-runner artifact directory at path %s", self._runner_artifact_dir
             )
             shutil.rmtree(self._runner_artifact_dir, ignore_errors=True)
+
+    def _set_private_data_directory(self, provided: Union[str, None]) -> None:
+        """Set the private data directory to the provided, the username, or a uuid"""
+        if isinstance(provided, str):
+            candidate = provided
+            source = "specified"
+        else:
+            try:
+                username = getpass.getuser()
+                source = "from username"
+            except Exception:  # pylint: disable=broad-except
+                username = str(uuid.uuid4())
+                source = "from uuid (no username)"
+            candidate = os.path.join(gettempdir(), username, "ansible-navigator")
+        if os.access(candidate, os.W_OK | os.R_OK | os.X_OK):
+            self._private_data_dir = candidate
+        else:
+            self._private_data_dir = os.path.join(
+                gettempdir(), str(uuid.uuid4()), "ansible-navigator"
+            )
+            source = "from uuid (permissions issue)"
+        self._logger.debug("private data dir %s: %s", source, self._private_data_dir)
 
     def runner_artifacts_handler(self, artifact_dir):
         """
