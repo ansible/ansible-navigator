@@ -1,6 +1,5 @@
 """ ansible_runner API's interface
 """
-import getpass
 import logging
 import os
 import shutil
@@ -161,26 +160,27 @@ class BaseRunner:
             )
             shutil.rmtree(self._runner_artifact_dir, ignore_errors=True)
 
+    @staticmethod
+    def _generate_tmp_directory():
+        """generate a tmp directory for artifacts"""
+        return os.path.join(gettempdir(), "ansible-navigator_" + str(uuid.uuid4()))
+
     def _set_private_data_directory(self, provided: Union[str, None]) -> None:
         """Set the private data directory to the provided, the username, or a uuid"""
+
         if isinstance(provided, str):
-            candidate = provided
-            source = "specified"
+            if os.access(provided, os.W_OK | os.R_OK | os.X_OK):
+                private_data_directory = provided
+                source = "user provided"
+            else:
+                self._logger.debug("Provided private data dir `%s` was not user writable")
+                private_data_directory = self._generate_tmp_directory()
+                source = "user provided, but changed to tmp location due to permissions"
         else:
-            try:
-                username = getpass.getuser()
-                source = "from username"
-            except Exception:  # pylint: disable=broad-except
-                username = str(uuid.uuid4())
-                source = "from uuid (no username)"
-            candidate = os.path.join(gettempdir(), username, "ansible-navigator")
-        if os.access(candidate, os.W_OK | os.R_OK | os.X_OK):
-            self._private_data_dir = candidate
-        else:
-            self._private_data_dir = os.path.join(
-                gettempdir(), str(uuid.uuid4()), "ansible-navigator"
-            )
-            source = "from uuid (permissions issue)"
+            private_data_directory = self._generate_tmp_directory()
+            source = "not user provided, used tmp location"
+
+        self._private_data_dir = private_data_directory
         self._logger.debug("private data dir %s: %s", source, self._private_data_dir)
 
     def runner_artifacts_handler(self, artifact_dir):
