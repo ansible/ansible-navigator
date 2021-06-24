@@ -1,10 +1,10 @@
 """ ansible_runner API's interface
 """
 import getpass
-import shutil
-import sys
 import logging
 import os
+import shutil
+import sys
 import uuid
 
 from queue import Queue
