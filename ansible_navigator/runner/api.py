@@ -3,11 +3,10 @@
 import logging
 import os
 import shutil
+import tempfile
 import sys
-import uuid
 
 from queue import Queue
-from tempfile import gettempdir
 from typing import Any
 from typing import Dict
 from typing import List
@@ -163,7 +162,7 @@ class BaseRunner:
     @staticmethod
     def _generate_tmp_directory():
         """generate a tmp directory for artifacts"""
-        return os.path.join(gettempdir(), "ansible-navigator_" + str(uuid.uuid4()))
+        return tempfile.mkdtemp(prefix="ansible-navigator_")
 
     def _set_private_data_directory(self, provided: Union[str, None]) -> None:
         """Set the private data directory to the provided, the username, or a uuid"""
