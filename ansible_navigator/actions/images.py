@@ -207,7 +207,9 @@ class Action(App):
             message = "Collecting image details, this may take a minute..."
             notification = nonblocking_notification(messages=[message])
             self._interaction.ui.show(notification)
-            self._introspect_image()
+            introspection_success = self._introspect_image()
+            if introspection_success is False:
+                return self.steps.previous
 
         if self.steps.current.index == 1:
             step = Step(
@@ -345,11 +347,15 @@ class Action(App):
                 image["execution_environment"] = False
         self._images.value = sorted(images, key=lambda i: i["name"])
 
-    def _introspect_image(self):
+    def _introspect_image(self) -> bool:
+
+        if self._images.selected is None:
+            # an image should always be selected by now
+            return False
 
         self._images.selected["__introspected"] = True
         share_directory = self._args.internals.share_directory
-        container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils:z"]
+        container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
         python_exec_path = "python3"
 
         kwargs = {
@@ -365,8 +371,21 @@ class Action(App):
         )
         _runner = CommandRunner(executable_cmd=python_exec_path, **kwargs)
         output, error, _ = _runner.run()
-        if not error:
-            parsed = self._parse(output)
+        if error:
+            self._logger.error(
+                "Image introspection failed (runner), the return value was: %s", error
+            )
+            self.notify_failed()
+            return False
+        parsed = self._parse(output)
+        if parsed is None:
+            self._logger.error(
+                "Image introspection failed (parsed), the return value was: %s", output[0:1000]
+            )
+            self.notify_failed()
+            return False
+
+        try:
             self._images.selected["general"] = {
                 "os": parsed["os_release"],
                 "friendly": parsed["redhat_release"],
@@ -380,8 +399,15 @@ class Action(App):
             }
             self._images.selected["python"] = parsed["python_packages"]
             self._images.selected["system"] = parsed["system_packages"]
+        except KeyError:
+            self._logger.exception(
+                "Image introspection failed (keys), the return value was: %s", output[0:1000]
+            )
+            self.notify_failed()
+            return False
+        return True
 
-    def _parse(self, output) -> None:
+    def _parse(self, output) -> Union[Dict, None]:
         """parse the introspection output"""
         # pylint: disable=too-many-branches
         try:
@@ -401,3 +427,11 @@ class Action(App):
         for error in parsed["errors"]:
             self._logger.error("%s %s", error["path"], error["error"])
         return parsed
+
+    def notify_failed(self):
+        """notify introspection failed"""
+        msgs = ["humph. Something went really wrong while introspecting the image."]
+        msgs.append("Details have been added to the log file")
+        closing = ["[HINT] Please log an issue about this one, it shouldn't have happened"]
+        warning = warning_notification(messages=msgs + closing)
+        self._interaction.ui.show(warning)
