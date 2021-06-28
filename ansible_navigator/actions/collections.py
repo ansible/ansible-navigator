@@ -304,7 +304,7 @@ class Action(App):
             self._logger.debug("running collections command with execution environment enabled")
             python_exec_path = "python3"
 
-            container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils:z"]
+            container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
             if os.path.exists(self._adjacent_collection_dir):
                 container_volume_mounts.append(
                     f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"

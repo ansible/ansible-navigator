@@ -1,12 +1,12 @@
 """ ansible_runner API's interface
 """
-import shutil
-import sys
 import logging
 import os
+import shutil
+import tempfile
+import sys
 
 from queue import Queue
-from tempfile import gettempdir
 from typing import Any
 from typing import Dict
 from typing import List
@@ -84,11 +84,9 @@ class BaseRunner:
                                        It the timeout is triggered it will force cancel the
                                        execution.
         """
-        if isinstance(private_data_dir, str):
-            self._private_data_dir = private_data_dir
-        else:
-            self._private_data_dir = os.path.join(gettempdir(), "ansible-navigator")
+        self._logger = logging.getLogger(__name__)
 
+        self._set_private_data_directory(private_data_dir)
         self._ce = container_engine
         self._ee = execution_environment
         self._eei = execution_environment_image
@@ -106,7 +104,6 @@ class BaseRunner:
         self.cancelled: bool = False
         self.finished: bool = False
         self.status: Optional[str] = None
-        self._logger = logging.getLogger(__name__)
         self._runner_args: Dict = {}
         self._runner_artifact_dir: Optional[str] = None
         if self._ee:
@@ -161,6 +158,29 @@ class BaseRunner:
                 "delete ansible-runner artifact directory at path %s", self._runner_artifact_dir
             )
             shutil.rmtree(self._runner_artifact_dir, ignore_errors=True)
+
+    @staticmethod
+    def _generate_tmp_directory():
+        """generate a tmp directory for artifacts"""
+        return tempfile.mkdtemp(prefix="ansible-navigator_")
+
+    def _set_private_data_directory(self, provided: Union[str, None]) -> None:
+        """Set the private data directory to the provided, the username, or a uuid"""
+
+        if isinstance(provided, str):
+            if os.access(provided, os.W_OK | os.R_OK | os.X_OK):
+                private_data_directory = provided
+                source = "user provided"
+            else:
+                self._logger.debug("Provided private data dir `%s` was not user writable")
+                private_data_directory = self._generate_tmp_directory()
+                source = "user provided, but changed to tmp location due to permissions"
+        else:
+            private_data_directory = self._generate_tmp_directory()
+            source = "not user provided, used tmp location"
+
+        self._private_data_dir = private_data_directory
+        self._logger.debug("private data dir %s: %s", source, self._private_data_dir)
 
     def runner_artifacts_handler(self, artifact_dir):
         """
