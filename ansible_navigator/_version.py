@@ -15,5 +15,5 @@ incremented when the schema changes and need not correspond to the
 application version, although keeping the major in sync is probably
 not a bad idea to minimize the amount of stale docs in the user's cache
 """
-__version__ = "1.0.0"
+__version__ = "1.1.0a1"
 __version_collection_doc_cache__ = "1.0"
