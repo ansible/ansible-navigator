@@ -98,6 +98,7 @@ class RunRunnerTstData(NamedTuple):
 
     name: str
     container_engine: Optional[str]
+    container_options: Optional[List]
     execution_environment_image: Optional[str]
     execution_environment: Optional[bool]
     inventory: Optional[List]
@@ -119,6 +120,7 @@ runner_test_data = [
     RunRunnerTstData(
         "Validate args passed to runner API",
         "docker",
+        ["--net=host"],
         "quay.io/ansible/network-ee:latest",
         True,
         ["/test1/inv1", "/test2/inv2"],
@@ -137,6 +139,7 @@ runner_test_data = [
             "executable_cmd": "ansible-playbook",
             "queue": TEST_QUEUE,
             "container_engine": "docker",
+            "container_options": ["--net=host"],
             "execution_environment_image": "quay.io/ansible/network-ee:latest",
             "execution_environment": True,
             "inventory": ["/test1/inv1", "/test2/inv2"],
@@ -166,6 +169,7 @@ def test_runner_args(_mocked_command_runner, caplog, data):
 
     args = deepcopy(NavigatorConfiguration)
     args.entry("container_engine").value.current = data.container_engine
+    args.entry("container_options").value.current = data.container_options
     args.entry("execution_environment_image").value.current = data.execution_environment_image
     args.entry("execution_environment").value.current = data.execution_environment
     args.entry("inventory").value.current = data.inventory

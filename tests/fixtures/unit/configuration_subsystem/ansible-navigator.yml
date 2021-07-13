@@ -40,6 +40,8 @@ ansible-navigator:
     - src: "/test1"
       dest: "/test1"
       label: "Z"
+    container-options:
+    - "--net=host"
   help-config: True
   help-doc: True
   help-inventory: True

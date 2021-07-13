@@ -28,6 +28,7 @@ class ActionRunTest:
         self,
         action_name,
         container_engine: Optional[str] = None,
+        container_options: Optional[List] = None,
         execution_environment: Optional[str] = None,
         execution_environment_image: Optional[str] = None,
         host_cwd: Optional[List] = None,
@@ -39,6 +40,7 @@ class ActionRunTest:
     ) -> None:
         self._action_name = action_name
         self._container_engine = container_engine
+        self._container_options = container_options
         self._execution_environment = execution_environment
         self._execution_environment_image = execution_environment_image
         self._set_environment_variable = set_environment_variable
@@ -49,6 +51,7 @@ class ActionRunTest:
         self._timeout = timeout
         self._app_args = {
             "container_engine": self._container_engine,
+            "container_options": self._container_options,
             "execution_environment": self._execution_environment,
             "execution_environment_image": self._execution_environment_image,
             "set_environment_variable": self._set_environment_variable,
