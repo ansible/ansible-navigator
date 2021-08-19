@@ -1,5 +1,6 @@
 # ansible-navigator
 
+
 A text-based user interface (TUI) for the Red Hat Ansible Automation Platform.
 
 A demo of the interface can be found
