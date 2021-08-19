@@ -1,10 +1,14 @@
 # ansible-navigator
 
+[//]: # (DO-NOT-REMOVE-docs-intro-START)
+
 A text-based user interface (TUI) for the Red Hat Ansible Automation Platform.
 
 A demo of the interface can be found [on youtube][YT demo].
 
 [YT demo]: https://www.youtube.com/watch?v=J9PBKi8ydi4
+
+[//]: # (DO-NOT-REMOVE-docs-intro-END)
 
 ## Quick start
 
