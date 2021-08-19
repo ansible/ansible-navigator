@@ -272,7 +272,7 @@ The following table describes all available settings.
 
   * - execution-environment-image
     - Specify the name of the execution environment image
-    - | **Default:** quay.io/ansible/ansible-navigator-demo-ee:0.4.0
+    - | **Default:** quay.io/ansible/ansible-navigator-demo-ee:0.6.0
       | **CLI:** `--eei` or `--execution-environment-image`
       | **ENV:** ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE
       | **Settings file:**
