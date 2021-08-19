@@ -2,8 +2,9 @@
 
 A text-based user interface (TUI) for the Red Hat Ansible Automation Platform.
 
-A demo of the interface can be found
-[on youtube](https://www.youtube.com/watch?v=J9PBKi8ydi4).
+A demo of the interface can be found [on youtube][YT demo].
+
+[YT demo]: https://www.youtube.com/watch?v=J9PBKi8ydi4
 
 ## Quick start
 
@@ -17,17 +18,19 @@ ansible-navigator --help
 ```
 
 (Users wishing to install within a virtual environment might find the relevant
-[Python documentation](https://docs.python.org/3/library/venv.html) useful.)
+[Python documentation][Python venv doc] useful.)
 
 By default, ansible-navigator uses a container runtime (`podman` or `docker`,
 whichever it finds first) and runs Ansible within an execution environment
-(a pre-built container image which includes
-[ansible-core](https://github.com/ansible/ansible) along with a set of Ansible
-collections).
+(a pre-built container image which includes [ansible-core] along with a set
+of Ansible collections).
 
 This default behavior can be disabled by starting ansible-navigator with
 `--execution-environment false`. In this case, Ansible and any collections
 needed must be installed manually on the system.
+
+[ansible-core]: https://docs.ansible.com/ansible-core/devel
+[Python venv doc]: https://docs.python.org/3/library/venv.html
 
 ## Welcome
 
@@ -50,7 +53,9 @@ There are two modes in which ansible-navigator can be run:
 
 The **interactive** mode is the default and this default can be overwritten by
 passing `--mode stdout` (`-m stdout`) or setting `mode` in
-[configuration](docs/settings.rst).
+[configuration][settings documentation].
+
+[settings documentation]: https://ansible-navigator.rtfd.io/en/latest/settings
 
 ## Example commands
 
@@ -78,7 +83,10 @@ Or, using the **stdout** mode described above:
 * Show documentation: `ansible-navigator doc sudo -t become  -m stdout`
 
 ... and so on. A full list of subcommands and their relation to Ansible
-commands can be found in the [subcommand documentation](docs/subcommands.rst).
+commands can be found in the [subcommand documentation].
+
+[subcommand documentation]:
+https://ansible-navigator.rtfd.io/en/latest/subcommands
 
 ## Configuring ansible-navigator:
 
@@ -90,16 +98,19 @@ below.
 Of note, projects making use of ansible-navigator can include a project-wide
 configuration file with the project. If one is not found, ansible-navigator
 will look for a user-specific configuration file in the user's home directory.
-Details about this can be found in the
-[settings documentation](docs/settings.rst).
+Details about this can be found in the [settings documentation].
 
 ## Frequently Asked Questions (FAQ)
 
-We maintain a [list of common questions](docs/faq.md) which provides a good
+We maintain a [list of common questions][FAQ] which provides a good
 resource to check if something is tripping you up. We also encourage additions
 to this document for the greater community!
+
+[FAQ]: https://ansible-navigator.rtfd.io/en/latest/faq
 
 ## License
 
 ansible-navigator is released under the Apache License version 2. See the
-[LICENSE](LICENSE) file for more details.
+[LICENSE] file for more details.
+
+[LICENSE]: https://github.com/ansible/ansible-navigator/blob/main/LICENSE
