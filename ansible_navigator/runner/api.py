@@ -145,8 +145,8 @@ class BaseRunner:
 
     def __del__(self):
         """
-        class destructor, handle runner artifact file deletion is rotate_artifacts
-        vlaue is not set
+        class destructor, handle runner artifact file deletion is rotate_artifacts \
+        value is not set
         """
         if (
             self._rotate_artifacts is not None
@@ -185,8 +185,9 @@ class BaseRunner:
     def runner_artifacts_handler(self, artifact_dir):
         """
         ansible-runner callback to handle artifacts after each runner innvocation
+
         Args:
-            artifact_dir ([str]): The directory path of artifact directory for current
+            artifact_dir ([str]): The directory path of artifact directory for current \
                                   runner invocation.
         """
         self._logger.debug("ansible-runner artifact_dir set to: '%s'", artifact_dir)
@@ -319,20 +320,20 @@ class AnsibleCfgRunner(BaseRunner):
     def fetch_ansible_config(
         self, action: str, config_file: Optional[str] = None, only_changed: Optional[bool] = None
     ) -> Tuple[str, str]:
-        """Run ansible-config command and get the configuration related details
+        """Run ansible-config command and get the configuration related details.
 
         Args:
-            action (str): The configuration fetch action to perform. Valid values are
-                          one of ``list``, ``dump``, ``view``. The ``list`` action
-                          will fetch all the config options along with config description,
-                         ``dump`` action will fetch all the active config and ``view``
+            action (str): The configuration fetch action to perform. Valid values are \
+                          one of ``list``, ``dump``, ``view``. The ``list`` action \
+                          will fetch all the config options along with config description, \
+                         ``dump`` action will fetch all the active config and ``view`` \
                          action will return the active configuration file view.
-            config_file (Optional, optional): Path to configuration file, defaults to
-                                              first file found in precedence.. Defaults to None.
-            only_changed (Optional, optional): The boolean value when set to ``True`` returns only
-                                               the configurations that have changed from the
-                                               default. This parameter is applicable only when
-                                               ``action`` is set to ``dump``.. Defaults to None.
+            config_file (Optional, optional): Path to configuration file, defaults to \
+                                              first file found in precedence.. Defaults to ``None``.
+            only_changed (Optional, optional): The boolean value when set to ``True`` returns only \
+                                               the configurations that have changed from the \
+                                               default. This parameter is applicable only when \
+                                               ``action`` is set to ``dump``.. Defaults to `None`.
 
         Returns:
             Tuple[str, str]: Returns a tuple of response and error string (if any).
@@ -359,18 +360,19 @@ class InventoryRunner(BaseRunner):
         """Run ansible-inventory command and get the inventory related details
 
         Args:
-            action (str): Valid values are one of ``graph``, ``host``, ``list``
-                          ``graph`` create inventory graph, ``host`` returns specific
-                          host info and works as inventory script and ``list`` output
+            action (str): Valid values are one of ``graph``, ``host``, ``list`` \
+                          ``graph`` create inventory graph, ``host`` returns specific \
+                          host info and works as inventory script and ``list`` output \
                           all hosts info and also works as inventory script.
             inventories (List): List of inventory host path.
-            response_format (Optional[str], optional): The output format for response. Valid values
-                                                       can be one of ``json``, ``yaml``, ``toml``.
-                                                       If ``action`` is ``graph`` only allowed
+            response_format (Optional[str], optional): The output format for response. \
+                                                       Valid values can be one of ``json``, \
+                                                       ``yaml``, ``toml``. \
+                                                       If ``action`` is ``graph`` only allowed \
                                                        value is ``json``.
-            host (Optional[str], optional): When ``action`` is set to ``host`` this parameter is
+            host (Optional[str], optional): When ``action`` is set to ``host`` this parameter is \
                                             used to get the host specific information..
-            playbook_dir (Optional[str], optional): This parameter is used to sets the relative
+            playbook_dir (Optional[str], optional): This parameter is used to sets the relative \
                                                     path for the inventory.
             vault_ids (Optional[str], optional): The vault identity to use.
             vault_password_file (Optional[str], optional): The vault identity to use.
@@ -407,32 +409,33 @@ class DocRunner(BaseRunner):
 
         Args:
             plugin_names (List): The name of the plugins to get docs.
-            plugin_type (Optional[str], optional): The type of the plugin mentioned in
-                                                   plugins_names. Valid values are ``become``,
-                                                   ``cache``, ``callback``, ``cliconf``,
-                                                   ``connection``, ``httpapi``, ``inventory``,
-                                                   ``lookup``, ``netconf``, ``shell``, ``vars``,
-                                                   ``module``, ``strategy``. If the value is not
+            plugin_type (Optional[str], optional): The type of the plugin mentioned in \
+                                                   plugins_names. Valid values are ``become``, \
+                                                   ``cache``, ``callback``, ``cliconf``, \
+                                                   ``connection``, ``httpapi``, ``inventory``, \
+                                                   ``lookup``, ``netconf``, ``shell``, ``vars``, \
+                                                   ``module``, ``strategy``. If the value is not \
                                                    provided it defaults to ``module``.
-            response_format (Optional[str], optional):  The output format for response.
-                            Valid values can be one of ``json`` or ``human`` and the response
-                            is either json string or plain text in human readable foramt.
+            response_format (Optional[str], optional):  The output format for response. \
+                            Valid values can be one of ``json`` or ``human`` and the response \
+                            is either json string or plain text in human readable format. \
                             Defaults to ``json``.
-            snippet (Optional[bool], optional): Show playbook snippet for specified plugin(s).
-                                                Defaults to None.
-            playbook_dir (Optional[str], optional): This parameter is used to sets the relative
-                                                    path to handle playbook adjacent installed
-                                                    plugins. Defaults to None.
-            module_path (Optional[str], optional): This parameter is prepend colon-separated path(s)
-                                                   to module library
-                                                   (default=~/.ansible/plugins/modules:
+            snippet (Optional[bool], optional): Show playbook snippet for specified plugin(s). \
+                                                Defaults to ``None``.
+            playbook_dir (Optional[str], optional): This parameter is used to sets the relative \
+                                                    path to handle playbook adjacent installed \
+                                                    plugins. Defaults to ``None``.
+            module_path (Optional[str], optional): This parameter is prepend colon-separated \
+                                                   path(s) to module library \
+                                                   (default=~/.ansible/plugins/modules: \
                                                    /usr/share/ansible/plugins/modules).
 
         Returns:
-            Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]: Returns a tuple of
-                                                    response and error string. If the value of
-                                                    ``response_format`` is ``json`` it returns
+            Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]: Returns a tuple of \
+                                                    response and error string. If the value of \
+                                                    ``response_format`` is ``json`` it returns \
                                                     a python dictionary object.
+
         """
         return get_plugin_docs(
             plugin_names,

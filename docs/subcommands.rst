@@ -67,15 +67,15 @@ Some ansible-navigator commands map to ansible commands. The table below provide
   * - ansible command
     - ansible-navigator command
     - ansible-navigator colon command
-  * - `ansible-config`
-    - `ansible-navigator config`
-    - `:config`
-  * - `ansible-doc`
-    - `ansible-navigator doc`
-    - `:doc`
-  * - `ansible-inventory`
-    - `ansible-navigator inventory`
-    - `:inventory`
-  * - `ansible-playbook`
-    - `ansible-navigator run`
-    - `:run`
+  * - ``ansible-config``
+    - ``ansible-navigator config``
+    - ``:config``
+  * - ``ansible-doc``
+    - ``ansible-navigator doc``
+    - ``:doc``
+  * - ``ansible-inventory``
+    - ``ansible-navigator inventory``
+    - ``:inventory``
+  * - ``ansible-playbook``
+    - ``ansible-navigator run``
+    - ``:run``

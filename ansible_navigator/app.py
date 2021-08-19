@@ -19,8 +19,8 @@ from .initialization import parse_and_update
 
 from .steps import Steps
 
-from .ui_framework.ui import Action
 from .ui_framework import Interaction
+from .ui_framework import ui
 
 from .utils import LogMessage
 from .utils import ExitMessage
@@ -45,19 +45,19 @@ class App:
         self.steps = Steps()
 
     @staticmethod
-    def _action_match(entry: str) -> Union[Tuple[str, Action], Tuple[None, None]]:
+    def _action_match(entry: str) -> Union[Tuple[str, ui.Action], Tuple[None, None]]:
         """attempt to match the user input against the regexes
         provided by each action
 
         :param entry: the user input
         :type entry: str
         :return: The name and matching action or not
-        :rtype: str, Action or None, None
+        :rtype: str, ui.Action or None, None
         """
         for kegex in kegexes():
             match = kegex.kegex.match(entry)
             if match:
-                return kegex.name, Action(match=match, value=entry)
+                return kegex.name, ui.Action(match=match, value=entry)
         return None, None
 
     @property

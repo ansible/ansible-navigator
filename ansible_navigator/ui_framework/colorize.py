@@ -145,7 +145,7 @@ def hex_to_rgb(value):
     """Convert a hex value to RGB
 
     :param value: the hex color
-    :type value: string
+    :type value: str
     :returns: rgb tuple
     :rtype: tuple
     """
@@ -214,8 +214,9 @@ def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
 def columns_and_colors(lines, schema):
     """Convert to colors and columns
 
-    :param lines: A list of regions (line parts) and the line
-    :type lines: list of lines, each a ([regions], line)
+    :param lines: A list of regions (line parts) and the line, \
+                  each a ([regions], line)
+    :type lines: List[Tuple[List[str], str]]
     :param scheam: An instance of the ColorSchema
     :type schema: ColorSchema
     """
@@ -259,7 +260,7 @@ def ansi_to_curses(line: str) -> CursesLine:
     """Convert ansible color codes to curses colors
 
     :param line: A string with ansi colors
-    :type line: string
+    :type line: str
     :return: A list of str tuples [(x, s, c), (x, s, c)...]
     :rtype: list
     """

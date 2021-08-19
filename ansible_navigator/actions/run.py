@@ -58,8 +58,7 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, i
     # pylint: disable=too-many-branches
     """Find matching color for word
 
-    :param word: A word to match
-    :type word: str(able)
+    :param colname: A word to match
     """
 
     colval = entry[colname]
@@ -104,11 +103,8 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
     """create a heading for some piece fo content showing
 
     :param obj: The content going to be shown
-    :type obj: Any
     :param screen_w: The current screen width
-    :type screen_w: int
     :return: The heading
-    :rtype: Union[CursesLines, None]
     """
 
     if isinstance(obj, dict) and "task" in obj:
@@ -240,11 +236,7 @@ class Action(App):
         return self._args.mode
 
     def run_stdout(self) -> int:
-        """Run in oldschool mode, just stdout
-
-        :param args: The parsed args from the cli
-        :type args: Namespace
-        """
+        """Run in oldschool mode, just stdout."""
         if self._args.app == "replay":
             successful: bool = self._init_replay()
             return 0 if successful else 1
@@ -782,7 +774,6 @@ class Action(App):
         """Get the status and color
 
         :return: status string, status color
-        :rtype: tuple of str and int
         """
         status = ""
         status_color = 0
