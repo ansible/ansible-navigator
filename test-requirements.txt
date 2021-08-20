@@ -4,7 +4,7 @@ flake8
 libtmux
 lxml
 mypy
-pylint
+pylint < 2.9  # v2.9.0 introduced a check for `with` which is not yet fixed
 pytest-cov
 pytest-xdist
 types-dataclasses
