@@ -26,7 +26,6 @@ class YamlStyle(NamedTuple):
 
     default_flow_style: bool = False
     explicit_start: bool = True
-    sort_keys: bool = True
 
 
 def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, None]:
