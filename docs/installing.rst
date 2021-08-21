@@ -75,5 +75,5 @@ Currently the following paths are checked and the first match is used:
 
 Here is an example conifguration file which can be copied into one of those paths.
 
-.. literalinclude:: sample-config.yml
+.. literalinclude:: ../tests/smoketests/scenarios/smoke-config.yml
    :language: yaml

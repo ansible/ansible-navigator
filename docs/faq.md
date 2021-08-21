@@ -1,4 +1,4 @@
-## Some frequently asked questions:
+# Some frequently asked questions:
 
 **Q: Where should the `ansible.cfg` file go when using an execution environment?**
 

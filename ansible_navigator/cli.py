@@ -50,7 +50,6 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     """set up the logger
 
     :param args: The cli args
-    :type args: argparse namespace
     """
     if os.path.exists(args.log_file) and args.log_append is False:
         os.remove(args.log_file)

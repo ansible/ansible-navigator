@@ -30,8 +30,7 @@ from ..ui_framework import warning_notification
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     """Find matching color for word
 
-    :param word: A word to match
-    :type word: str(able)
+    :param colname: A word to match
     """
     if colname in ["__name", "title", "inventory_hostname"]:
         return 10, 0

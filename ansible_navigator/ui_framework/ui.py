@@ -174,12 +174,10 @@ class UserInterface(CursesWindow):
         self._status_color = status_color
 
     def menu_filter(self, value: Union[str, None] = "") -> Union[Pattern, None]:
-        """Set or return the menu filter
+        """Set or return the menu filter.
 
-        :param args[0]: None or the menu_filter to set
-        :type args[0]: None or str(regex)
+        :param args[0]: None or the menu_filter regex to set
         :return: the current menu filter
-        :rtype: None or Pattern
         """
         if value != "":
             if value is None:
@@ -576,21 +574,18 @@ class UserInterface(CursesWindow):
     def _colored_line(self, line: List[Dict]) -> CursesLine:
         """color one line
 
-        :param line: the line to transform
-        :type line: lists of dicts
-            LinePart[{"color": rgb, "chars": text, "column": n},...]
+        :param line: the line to transform (e.g. ``LinePart[{"color": \
+                     rgb, "chars": text, "column": n},...]``)
         :return one colored line:
-        :rtype: CursesLine
         """
         return tuple(self._colored_line_part(line_part) for line_part in line)
 
     def _colored_line_part(self, lp_dict: Dict) -> CursesLinePart:
         """color one linepart
 
-        :param lp_dict: a dict describing the line part
-        :type lp_dict: dict {"color": rgb, "chars": text, "column": n}
+        :param lp_dict: a dict describing the line part (e.g. \
+                        ``{"color": rgb, "chars": text, "column": n}``)
         :return: the colored line part
-        :rtype: CursesLinePart
         """
         if lp_dict["color"]:
             if self._term_osc4_supprt and curses.COLORS > 16:
@@ -634,9 +629,7 @@ class UserInterface(CursesWindow):
         """Show an object on the display
 
         :param objs: A list of one or more object
-        :type objs: A list of Any
         :param await_input: Should we wait for user input before returning
-        :type await_input: bool
         :return: interaction with the user
         :rtype: Interaction
         """
@@ -855,17 +848,11 @@ class UserInterface(CursesWindow):
         """Show something on the screen
 
         :param obj: The inbound object
-        :type obj: anything
         :param xform: Set the xform
-        :type xform: str
         :param index: When obj is a list, show this entry
-        :type index: int
         :param columns: When obj is a list of dicts, use these keys for menu columns
-        :type columns: list
-        :param wait_input: Should we wait for user input?
-        :type wait_input: bool
+        :param await_input: Should we wait for user input?
         :return: interaction with the user
-        :rtype: Interaction
         """
         self._color_menu_item = color_menu_item
         self._content_heading = content_heading

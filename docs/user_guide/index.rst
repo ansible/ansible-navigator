@@ -11,8 +11,7 @@ Ansible Navigator User Guide
    :maxdepth: 2
 
    overview
-   exploring_content
-   managing_inventories
-   running_playbooks
+   explore_content
+   manage_inventory
+   run_playbooks
    using_docs
-   
