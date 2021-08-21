@@ -15,7 +15,7 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
     :pararm dicts: a list fo dictionaries
     :type dicts: list of dictionaries
     :param keys: The keys to convert in each dictionary
-    :type keys: list of str
+    :type keys: List[str]
     :param pbar_width: The width of the progress bar
     :type pbar_width: int
     """
@@ -46,7 +46,7 @@ def distribute(available, weights):
     :param available: the total
     :type available: int
     :param weights: numbers
-    :type weights: list of int
+    :type weights: List[int]
     """
     total = sum(weights)
     if available < total:

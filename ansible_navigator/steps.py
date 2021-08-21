@@ -61,8 +61,8 @@ class Step:
     def index(self) -> Union[int, None]:
         """return the index
 
-        :return: index
-        :rtype: should be int
+        :return: index (should be ``int``)
+        :rtype: Optional[int]
         """
         return self._index
 
@@ -82,7 +82,7 @@ class Step:
         """return the selected item
 
         :return: the selected item
-        :rtype: obj
+        :rtype: Optional[Dict[str, Any]]
         """
         if self._index is None or not self._value:
             return None

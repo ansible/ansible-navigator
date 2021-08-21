@@ -139,8 +139,8 @@ def clear_screen() -> None:
     Note: In certain cases, xterm.js based terminals show stdout
     under the initial curses output, this was found with vscode
 
-    Rather than issueing `clear`, print blank lines to preserve
-    the user's scrollback buffer
+    Rather than issuing :command:`clear`, print blank lines to
+    preserve the user's scrollback buffer.
     """
     affected_terminals = ["vscode"]
     if os.environ.get("TERM_PROGRAM") in affected_terminals:
@@ -152,9 +152,9 @@ def dispatch(obj, replacements):
     """make the replacement based on type
 
     :param obj: an obj in which replacements will be made
-    :type obj: any
+    :type obj: Any
     :param replacements: the things to replace
-    :type replacements: tuple of tuples
+    :type replacements: Tuple[Tuple[Any]]
     """
     if isinstance(obj, dict):
         obj = {k: dispatch(v, replacements) for k, v in obj.items()}
@@ -170,9 +170,9 @@ def escape_moustaches(obj):
     """escape moustaches
 
     :param obj: something
-    :type obj: any
+    :type obj: Any
     :return: the obj with replacements made
-    :rtype: any
+    :rtype: Any
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     return dispatch(obj, replacements)
@@ -424,7 +424,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     always to and from json so we return an object if it is
 
     :param string: The template string
-    :type: string: str
+    :type string: str
     :param template_vars: The vars used to render the template
     :type template_vars: dict
     """
@@ -474,9 +474,9 @@ def unescape_moustaches(obj):
     """unescape moustaches
 
     :param obj: something
-    :type obj: any
+    :type obj: Any
     :return: the obj with replacements made
-    :rtype: any
+    :rtype: Any
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)
