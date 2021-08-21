@@ -143,7 +143,7 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
                 long = entry.cli_parameters.long_override
             else:
                 long = f"--{entry.name_dashed}"
-            cli_parameters = f"`{entry.cli_parameters.short}` or `{long}`"
+            cli_parameters = f"``{entry.cli_parameters.short}`` or ``{long}``"
         else:
             cli_parameters = "positional"
 
