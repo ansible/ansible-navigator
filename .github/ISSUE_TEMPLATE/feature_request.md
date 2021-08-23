@@ -1,6 +1,7 @@
 ---
 name: "✨ Feature request"
 about: Suggest an idea for this project
+labels: enhancement, new
 
 ---
 <!-- Issues are for **concrete, actionable bugs and feature requests** only - if you're just asking for debugging help or technical support, please use:
