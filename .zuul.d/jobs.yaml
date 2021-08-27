@@ -1,0 +1,20 @@
+---
+- job:
+    name: 1ansible-navigator-tox-py38
+    parent: ansible-buildset-registry-consumer
+    dependencies:
+      - ansible-buildset-registry
+    timeout: 5400
+    vars:
+      container_command: podman
+
+- job:
+    name: 1ansible-navigator-tox-py38
+    parent: ansible-tox-py38
+    requires:
+      - python-base-container-image
+    required-projects:
+      - github.com/ansible/ansible-runner
+    nodeset: centos-8-stream
+    vars:
+      tox_package_name: "{{ zuul.project.short_name }}"
