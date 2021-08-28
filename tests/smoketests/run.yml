@@ -1,11 +1,6 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Install ansible-navigator
-      pip:
-        chdir: "{{ playbook_dir }}/../../"
-        name: .
-
     - name: Run `ansible-navigator --help`
       command: ansible-navigator --help
       register: anh
