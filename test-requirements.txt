@@ -1,4 +1,3 @@
-ansible-core
 black
 flake8
 libtmux
