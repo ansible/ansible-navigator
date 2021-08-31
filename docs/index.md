@@ -11,17 +11,10 @@
 
 ```{toctree}
 :maxdepth: 2
-
-installing
-```
-
-```{toctree}
-:maxdepth: 2
 :caption: Usage
 
-user_guide/index
-cli_reference/index
 subcommands
+faq
 ```
 
 ```{toctree}
@@ -29,7 +22,6 @@ subcommands
 :caption: Configuring
 
 settings
-faq
 ```
 
 ```{toctree}
