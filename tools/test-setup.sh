@@ -11,4 +11,6 @@ if [ $LSBDISTCODENAME == 'bionic' ]; then
     sudo apt-get -y upgrade
     sudo apt-get -y install podman
     systemctl --user restart dbus
+
+    sudo pip3.8 install --upgrade tox
 fi
