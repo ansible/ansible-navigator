@@ -435,12 +435,63 @@ class Action(App):
         self._set_inventories_mtime()
         return
 
+    def _collect_inventory_details_interactive(
+        self,
+        kwargs: Dict[str, Any],
+    ) -> None:
+        self._runner = InventoryRunner(**kwargs)
+        inventory_output, inventory_err = self._runner.fetch_inventory("list", self._inventories)
+        if inventory_output:
+            parts = inventory_output.split("{", 1)
+            if inventory_err:
+                inventory_err = parts[0] + inventory_err
+            else:
+                inventory_err = parts[0]
+
+            if len(parts) == 2:
+                inventory_output = "{" + parts[1]
+            else:
+                inventory_output = ""
+        warn_msg = ["Errors were encountered while gathering the inventory:"]
+        warn_msg += inventory_err.splitlines()
+        self._logger.error(" ".join(warn_msg))
+        if "ERROR!" in inventory_err or "Error" in inventory_err:
+            warning = warning_notification(warn_msg)
+            self._interaction.ui.show(warning)
+        else:
+            self._extract_inventory(inventory_output)
+
+    def _collect_inventory_details_automated(
+        self,
+        kwargs: Dict[str, Any],
+    ) -> Tuple[Union[None, str], Union[None, str], Union[None, int]]:
+        if self._args.execution_environment:
+            ansible_inventory_path = "ansible-inventory"
+        else:
+            exec_path = shutil.which("ansible-inventory")
+            if exec_path is None:
+                msg = "'ansible-inventory' executable not found"
+                self._logger.error(msg)
+                raise RuntimeError(msg)
+
+            ansible_inventory_path = exec_path
+
+        pass_through_arg = []
+        if self._args.help_inventory is True:
+            pass_through_arg.append("--help")
+
+        if isinstance(self._args.cmdline, list):
+            pass_through_arg.extend(self._args.cmdline)
+
+        kwargs.update({"cmdline": pass_through_arg, "inventory": self._inventories})
+
+        self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
+        stdout_return = self._runner.run()
+        return stdout_return
+
     def _collect_inventory_details(
         self,
     ) -> Tuple[Union[None, str], Union[None, str], Union[None, int]]:
-
-        # pylint:disable=too-many-branches
-
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
         else:
@@ -468,53 +519,9 @@ class Action(App):
             )
 
         if self._args.mode == "interactive":
-            self._runner = InventoryRunner(**kwargs)
-            inventory_output, inventory_err = self._runner.fetch_inventory(
-                "list", self._inventories
-            )
-            if inventory_output:
-                parts = inventory_output.split("{", 1)
-                if inventory_err:
-                    inventory_err = parts[0] + inventory_err
-                else:
-                    inventory_err = parts[0]
-
-                if len(parts) == 2:
-                    inventory_output = "{" + parts[1]
-                else:
-                    inventory_output = ""
-            warn_msg = ["Errors were encountered while gathering the inventory:"]
-            warn_msg += inventory_err.splitlines()
-            self._logger.error(" ".join(warn_msg))
-            if "ERROR!" in inventory_err or "Error" in inventory_err:
-                warning = warning_notification(warn_msg)
-                self._interaction.ui.show(warning)
-            else:
-                self._extract_inventory(inventory_output)
+            self._collect_inventory_details_interactive(kwargs)
         else:
-            if self._args.execution_environment:
-                ansible_inventory_path = "ansible-inventory"
-            else:
-                exec_path = shutil.which("ansible-inventory")
-                if exec_path is None:
-                    msg = "'ansible-inventory' executable not found"
-                    self._logger.error(msg)
-                    raise RuntimeError(msg)
-
-                ansible_inventory_path = exec_path
-
-            pass_through_arg = []
-            if self._args.help_inventory is True:
-                pass_through_arg.append("--help")
-
-            if isinstance(self._args.cmdline, list):
-                pass_through_arg.extend(self._args.cmdline)
-
-            kwargs.update({"cmdline": pass_through_arg, "inventory": self._inventories})
-
-            self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
-            stdout_return = self._runner.run()
-            return stdout_return
+            return self._collect_inventory_details_automated(kwargs)
 
         return (None, None, None)
 
