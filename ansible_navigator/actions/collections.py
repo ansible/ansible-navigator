@@ -285,6 +285,9 @@ class Action(App):
                 {"container_volume_mounts": self._args.execution_environment_volume_mounts}
             )
 
+        if isinstance(self._args.container_options, list):
+            kwargs.update({"container_options": self._args.container_options})
+
         kwargs.update({"host_cwd": playbook_dir})
 
         self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")

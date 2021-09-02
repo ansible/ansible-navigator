@@ -297,6 +297,19 @@ class NavigatorPostProcessor:
             entry.value.current = parsed_volume_mounts
         return messages, exit_messages
 
+    @staticmethod
+    @_post_processor
+    def container_options(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process container_options"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.source == C.ENVIRONMENT_VARIABLE:
+            entry.value.current = to_list(entry.value.current)
+        if entry.value.current is not C.NOT_SET:
+            entry.value.current = flatten_list(entry.value.current)
+        return messages, exit_messages
+
     @_post_processor
     def help_config(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument

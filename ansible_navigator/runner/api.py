@@ -68,8 +68,8 @@ class BaseRunner:
             container_volume_mounts ([list], optional): List of bind mounts in the form
                                                         ``host_dir:/container_dir:labels``.
                                                         Defaults to None.
-            container_options ([str], optional): List of container options to pass to execution
-                                                 engine. Defaults to None.
+            container_options ([list], optional): List of container options to pass to execution
+                                                  engine. Defaults to None.
             container_workdir ([str], optional): The working directory within the container.
                                                  Defaults to None.
             host_cwd ([str], optional): The current local working directory. Defaults to None.

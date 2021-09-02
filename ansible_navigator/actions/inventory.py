@@ -518,6 +518,9 @@ class Action(App):
                 {"container_volume_mounts": self._args.execution_environment_volume_mounts}
             )
 
+        if isinstance(self._args.container_options, list):
+            kwargs.update({"container_options": self._args.container_options})
+
         if self._args.mode == "interactive":
             self._collect_inventory_details_interactive(kwargs)
         else:
