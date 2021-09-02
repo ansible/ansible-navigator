@@ -366,6 +366,10 @@ class Action(App):
             "execution_environment": True,
             "navigator_mode": "interactive",
         }
+
+        if isinstance(self._args.container_options, list):
+            kwargs.update({"container_options": self._args.container_options})
+
         self._logger.debug(
             f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}"
         )

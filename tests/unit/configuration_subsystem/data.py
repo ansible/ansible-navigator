@@ -17,6 +17,7 @@ BASE_SHORT_CLI = """
 --rac 10
 --rt 300
 --ce docker
+--co=--net=host
 --dc false
 --ecmd vim_base
 --econ True
@@ -38,6 +39,7 @@ BASE_LONG_CLI = """
 --ansible-runner-rotate-artifacts-count 10
 --ansible-runner-timeout 300
 --container-engine docker
+--container-options=--net=host
 --display-color false
 --editor-command vim_base
 --editor-console True
@@ -60,6 +62,7 @@ BASE_EXPECTED = d2t(
         "ansible_runner_rotate_artifacts_count": 10,
         "ansible_runner_timeout": 300,
         "container_engine": "docker",
+        "container_options": ["--net=host"],
         "display_color": False,
         "editor_command": "vim_base",
         "editor_console": True,
@@ -212,6 +215,7 @@ ENVVAR_DATA = [
     ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),
     ("config", "/tmp/ansible.cfg", "/tmp/ansible.cfg"),
     ("container_engine", "docker", "docker"),
+    ("container_options", "--net=host", ["--net=host"]),
     ("display_color", "yellow is the color of a banana", False),
     ("editor_command", "nano_envvar", "nano_envvar"),
     ("editor_console", "false", False),

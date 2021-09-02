@@ -214,6 +214,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=EntryValue(default="auto"),
         ),
         Entry(
+            name="container_options",
+            cli_parameters=CliParameters(action="append", nargs="+", short="--co"),
+            environment_variable_override="ansible_navigator_container_options",
+            settings_file_path_override="execution-environment.container-options",
+            short_description="Extra parameters passed to the container engine command",
+            value=EntryValue(),
+        ),
+        Entry(
             name="display_color",
             change_after_initial=False,
             choices=[True, False],
