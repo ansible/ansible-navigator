@@ -224,7 +224,7 @@ apidoc_extra_args = [
     "--implicit-namespaces",
     "--private",  # include “_private” modules
 ]
-apidoc_module_dir = "../ansible_navigator"
+apidoc_module_dir = "../src/ansible_navigator"
 apidoc_module_first = False
 apidoc_output_dir = "pkg"
 apidoc_separate_modules = True
