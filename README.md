@@ -17,7 +17,7 @@ A demo of the interface can be found [on youtube][YT demo].
 Getting started with ansible-navigator is as simple as:
 
 ```
-pip install ansible-navigator
+pip install ansible-navigator[ansible-core]
 ansible-navigator --help
 ```
 
