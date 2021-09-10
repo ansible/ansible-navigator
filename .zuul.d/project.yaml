@@ -1,0 +1,9 @@
+---
+- project:
+    check:
+      jobs: &id001
+        - ansible-buildset-registry
+        - ansible-navigator-tox-py38
+        - ansible-navigator-tox-smoke
+    gate:
+      jobs: *id001
