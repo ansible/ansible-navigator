@@ -1,4 +1,4 @@
-import ansible_navigator.yaml as yaml_import
+import ansible_navigator._yaml as yaml_import
 
 
 def test_check_yaml_imports():
