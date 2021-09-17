@@ -17,8 +17,8 @@ from ..utils import ExitMessage
 from ..utils import ExitPrefix
 from ..utils import LogMessage
 from ..utils import oxfordcomma
-from ..yaml import SafeLoader
-from ..yaml import yaml
+from .._yaml import SafeLoader
+from .._yaml import yaml
 
 
 class Configurator:

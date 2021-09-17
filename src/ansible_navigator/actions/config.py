@@ -28,8 +28,8 @@ from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 
-from ..yaml import yaml
-from ..yaml import Loader
+from .._yaml import yaml
+from .._yaml import Loader
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
