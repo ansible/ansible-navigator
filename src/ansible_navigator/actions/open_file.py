@@ -18,7 +18,7 @@ from ..ui_framework import Menu
 
 from ..utils import remove_dbl_un
 
-from ..yaml import human_dump
+from .._yaml import human_dump
 
 
 class SuspendCurses:
