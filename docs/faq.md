@@ -2,7 +2,7 @@
 
 **Q: Where should the `ansible.cfg` file go when using an execution environment?**
 
-A: The easiest place to have the `ansible.cfg` is in the project directory adjacent to the playbook. The playbook directory is automatically mounted in the execution enviroment and the `ansible.cfg` file will be found.  If the `ansible.cfg` file is in another directory, the `ANSIBLE_CONFIG` variable needs to be set and the directory specified as a custom volume mount. (See the [settings guide](settings.rst) for `execution-environment-volume-mounts`)
+A: The easiest place to have the `ansible.cfg` is in the project directory adjacent to the playbook. The playbook directory is automatically mounted in the execution environment and the `ansible.cfg` file will be found.  If the `ansible.cfg` file is in another directory, the `ANSIBLE_CONFIG` variable needs to be set and the directory specified as a custom volume mount. (See the [settings guide](settings.rst) for `execution-environment-volume-mounts`)
 
 **Q: Where should the `ansible.cfg` file go when not using an execution environment?**
 
@@ -14,19 +14,19 @@ A: The easiest place to have ansible collections is in the project directory, in
 
 **Q: Where should ansible collections be placed when not using an execution environment?**
 
-A: When not using an execution enviroment, ansible will look in the default locations for collections.  For more information about these, check out the [collections guide](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html).
+A: When not using an execution environment, ansible will look in the default locations for collections.  For more information about these, check out the [collections guide](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html).
 
 **Q: Why does the playbook hang when `vars_prompt` or `pause/prompt` is used?**
 
-A: By default `ansible-navigator` runs the playbook in the same manner that ansible controller and AWX would run the playbook. This was done to help playbook developers author playbooks that would be ready for production. If the use of `vars_prompt` or `pause\prompt` can not be avoided, disabling `playbook-artifact` creation causes `ansible-navigator` to run the playbook in a manner that is compatible with `ansible-playbook` and allows for user interaction.
+A: By default `ansible-navigator` runs the playbook in the same manner that ansible controller and AWX would run the playbook. This was done to help playbook developers author playbooks that would be ready for production. If the use of `vars_prompt` or `pause\prompt` can not be avoided, disabling `playbook-artifact` creation and using `--mode stdout` causes `ansible-navigator` to run the playbook in a manner that is compatible with `ansible-playbook` and allows for user interaction.
 
 **Q: Why does `ansible-navigator` change the terminal colors or look terrible?**
 
-A: `ansible-navigator` queries the terminal for its OSC4 compatibility. OSC4, 10, 11, 104, 110, 111 indicate the terminal supports color changing and reverting. It is possible that the terminal is misrepresenting its ability.  OSC4 detection can be disabled by setting `--osc4 false`. (See the [settings guide](settings.rst) for how to handle this with an enviroment variable or in the settings file)
+A: `ansible-navigator` queries the terminal for its OSC4 compatibility. OSC4, 10, 11, 104, 110, 111 indicate the terminal supports color changing and reverting. It is possible that the terminal is misrepresenting its ability.  OSC4 detection can be disabled by setting `--osc4 false`. (See the [settings guide](settings.rst) for how to handle this with an environment variable or in the settings file)
 
 **Q: How can I change the colors used by `ansible-navigator`?**
 
-A: Full theme support should come in a later release, for now, try `--osc4 false`. This will cause `ansible-navigator` to use the terminal's defined colors. (See the [settings guide](settings.rst) for how to handle this with an enviroment variable or in the settings file)
+A: Full theme support should come in a later release, for now, try `--osc4 false`. This will cause `ansible-navigator` to use the terminal's defined colors. (See the [settings guide](settings.rst) for how to handle this with an environment variable or in the settings file)
 
 **Q: What's with all these `site-artifact-2021-06-02T16:02:33.911259+00:00.json` files in the playbook directory?**
 
@@ -60,7 +60,7 @@ ansible-navigator:
     console: false
 ```
 
-**Q: What is the order in which configuration settings are aplied?**
+**Q: What is the order in which configuration settings are applied?**
 
 The configuration system of ansible-navigator pulls in settings from various sources and applies them hierarchically in the following order (where the last applied changes are the most prevalent):
 
