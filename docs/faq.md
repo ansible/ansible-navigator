@@ -88,6 +88,8 @@ Additionally, `ansible-navigator` will automatically volume mount the user's SSH
 
 `-v /home/current_user/.ssh/:/home/runner/.ssh/` (as seen in the `ansible-navigator` log file when using an execution environment and `--log-level debug`)
 
+Note: When using `ansible_ssh_private_key_file` with execution environments, the path to the key needs to reference it's location after being volume mounted to the execution environment. (eg `/home/runner/.ssh/key_name` or `/root/.ssh/key_name`).  It may be convenient to specify the path to the key as `~/.ssh/key_name` which will resolve to the user's home directory with or without the use of an execution environment.
+ 
 **Q: Something didn't work, how can I troubleshoot it?**
 
 A: `ansible-navigator` has reasonable logging messages, debug logging can be enabled with `--log-level debug`. If you think you might have found a bug, please log an issue and include the details from the log file.
