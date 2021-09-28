@@ -70,7 +70,7 @@ The configuration system of ansible-navigator pulls in settings from various sou
 4. Flags and arguments specified on the command line
 5. While issuing `:` commands within the text-based user interface (TUI)
 
-**Q: How do I use my SSH keys with an execution environment?
+**Q: How do I use my SSH keys with an execution environment?**
 
 A: The simplest way to use SSH keys with an execution environment is to use `ssh-agent` and use default key names. Register keys as needed if they do not use one of the default key names.  (`~/.ssh/id_rsa`, `~/.ssh/id_dsa`, `~/.ssh/id_ecdsa`, `~/.ssh/id_ed25519`, and `~/.ssh/identity`. (eg `ssh-add ~/.ssh/my_key`). `ansible-navigator` will automatically setup and enable the use of `ssh-agent` within the execution environment by volume mounting the SSH authentication socket path and setting the SSH_AUTH_SOCK environment variable. (eg 
 
