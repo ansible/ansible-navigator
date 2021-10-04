@@ -56,8 +56,7 @@ class ActionRunner(App):
         # pylint: disable=protected-access
         """Run with the interface and runner"""
         self.initialize_ui(DEFAULT_REFRESH)
-        requested = " ".join(filter(None, (self._args.app, vars(self._args).get("value", ""))))
-        name, action = self._action_match(requested)
+        name, action = self._action_match(self._args.app)
         if name and action:
             interaction = Interaction(
                 name=name, action=action, menu=None, content=None, ui=self._ui._ui
