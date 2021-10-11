@@ -8,6 +8,12 @@
 :end-before: (DO-NOT-REMOVE-docs-intro-END)
 ```
 
+```{toctree}
+:maxdepth: 2
+:caption: Installation
+
+installation
+```
 
 ```{toctree}
 :maxdepth: 2
