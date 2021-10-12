@@ -270,7 +270,7 @@ class CommandBaseRunner(BaseRunner):
             self._cmdline.insert(0, self._executable_cmd)
             self._runner_args["executable_cmd"] = "/bin/sh"
             cmd_args = " ".join(shlex.quote(s) for s in self._cmdline)
-            self._runner_args["cmdline_args"] = ["-c", "{0} 2>/dev/null".format(cmd_args)]
+            self._runner_args["cmdline_args"] = ["-c", "exec 2>/dev/null; {0}".format(cmd_args)]
         else:
             self._runner_args["executable_cmd"] = self._executable_cmd
             self._runner_args["cmdline_args"] = self._cmdline
