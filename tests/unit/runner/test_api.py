@@ -12,22 +12,22 @@ from ansible_navigator.runner import api
         (
             "ansible-lint",
             [],
-            "ansible-lint 2>/dev/null",
+            "exec 2>/dev/null; ansible-lint",
         ),
         (
             "ansible-lint",
             ["/tmp/myroles/supercool/tasks/main.yml"],
-            "ansible-lint /tmp/myroles/supercool/tasks/main.yml 2>/dev/null",
+            "exec 2>/dev/null; ansible-lint /tmp/myroles/supercool/tasks/main.yml",
         ),
         (
             "ansible-lint",
             ["lintable1", "lintable2", "lintable3"],
-            "ansible-lint lintable1 lintable2 lintable3 2>/dev/null",
+            "exec 2>/dev/null; ansible-lint lintable1 lintable2 lintable3",
         ),
         (
             "ansible-lint",
             ["lintable1", "lint\"able'2", "lint able3"],
-            "ansible-lint lintable1 'lint\"able'\"'\"'2' 'lint able3' 2>/dev/null",
+            "exec 2>/dev/null; ansible-lint lintable1 'lint\"able'\"'\"'2' 'lint able3'",
         ),
     ],
     ids=[
