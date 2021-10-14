@@ -129,7 +129,7 @@ class UserInterface(CursesWindow):
         self._default_colors = None
         self._default_pairs = None
         self._default_obj_serialization = "source.yaml"
-        self._filter_content_keys: Callable[[Dict[Any, Any]], Dict[Any, Any]]
+        self._filter_content_keys: Callable[[Any], Dict[Any, Any]]
         self._hide_keys = True
         self._kegexes = kegexes
         self._logger = logging.getLogger(__name__)
@@ -611,9 +611,7 @@ class UserInterface(CursesWindow):
         :rtype: CursesLines
         """
         heading = self._content_heading(obj, self._screen_w)
-        filtered_obj = (
-            self._filter_content_keys(obj) if self._hide_keys and isinstance(obj, dict) else obj
-        )
+        filtered_obj = self._filter_content_keys(obj) if self._hide_keys else obj
         lines = self._serialize_color(filtered_obj)
         return heading, lines
 
@@ -713,11 +711,7 @@ class UserInterface(CursesWindow):
                 if name == "refresh":
                     action = action._replace(value=index)
 
-                filtered = (
-                    self._filter_content_keys(current)
-                    if self._hide_keys and isinstance(current, dict)
-                    else current
-                )
+                filtered = self._filter_content_keys(current) if self._hide_keys else current
                 content = Content(showing=filtered)
                 return Interaction(name=name, action=action, content=content, ui=self._ui)
 

@@ -1,6 +1,7 @@
 """ build a menu
 """
 import curses
+import enum
 import re
 
 from typing import Any
@@ -190,7 +191,9 @@ class MenuBuilder:
         color, decoration = self._color_menu_item(colno, cols[colno], dyct)
 
         text = str(coltext)[0 : adj_colws[colno]]
-        if isinstance(coltext, (int, bool, float)) or cols[colno].lower() == "__duration":
+        if (isinstance(coltext, (int, bool, float)) and not isinstance(coltext, enum.Enum)) or cols[
+            colno
+        ].lower() == "__duration":
             # right jusitfy on header if int, bool, float or "duration"
             print_at = col_starts[colno] + len(header[colno][1]) - len(text)
         elif cols[colno].lower() == "__progress":
