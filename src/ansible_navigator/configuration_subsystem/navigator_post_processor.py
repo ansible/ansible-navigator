@@ -499,6 +499,17 @@ class NavigatorPostProcessor:
             entry.value.current = flatten_list(entry.value.current)
         return messages, exit_messages
 
+    @staticmethod
+    @_post_processor
+    def lintables(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process lintables"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if isinstance(entry.value.current, str):
+            entry.value.current = abs_user_path(entry.value.current)
+        return messages, exit_messages
+
     @_post_processor
     def log_append(
         self,
@@ -667,7 +678,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def playbook(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        """Post process pass_environment_variable"""
+        """Post process playbook"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:

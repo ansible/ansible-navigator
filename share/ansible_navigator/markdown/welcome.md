@@ -14,6 +14,13 @@ Some things you can try from here:
 - `:run <playbook> -i <inventory>`                        Run a playbook in interactive mode
 - `:quit`                                                 Quit the application
 
+----------------------------------------------------------------------------------------------------------
+
+The below commands are offered as a preview and currently in development.
+You can try them out, and if you experience any issues, please file a bug report!
+
+- `:lint <file or directory>`                             Lint Ansible/YAML files
+
 happy automating,
 
 -winston
