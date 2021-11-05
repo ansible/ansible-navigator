@@ -44,7 +44,7 @@ class BaseClass:
     PANE_WIDTH = 500
     PANE_HEIGHT = 1000
 
-    @pytest.fixture(scope="module", name="tmux_session")
+    @pytest.fixture(scope="class", name="tmux_session")
     def fixture_tmux_session(self, request):
         """tmux fixture for this module"""
         params = {
