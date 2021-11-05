@@ -41,15 +41,14 @@ class BaseClass:
 
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
-    PANE_WIDTH = 500
-    PANE_HEIGHT = 1000
 
-    @pytest.fixture(scope="class", name="tmux_session")
-    def fixture_tmux_session(self, request):
+    @staticmethod
+    @pytest.fixture(scope="module", name="tmux_session")
+    def fixture_tmux_session(request):
         """tmux fixture for this module"""
         params = {
-            "pane_height": self.PANE_HEIGHT,
-            "pane_width": self.PANE_WIDTH,
+            "pane_height": "1000",
+            "pane_width": "500",
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
