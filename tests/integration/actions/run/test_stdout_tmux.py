@@ -91,3 +91,4 @@ class Test(BaseClass):
     """run the tests"""
 
     UPDATE_FIXTURES = False
+    PANE_WIDTH = 200
