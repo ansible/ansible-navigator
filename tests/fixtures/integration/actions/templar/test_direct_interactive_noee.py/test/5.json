@@ -22,7 +22,7 @@
         " 8│    variables or expressions without necessarily halting the playbook.",
         " 9│  - Useful for debugging together with the 'when:' directive.",
         "10│  - This module is also supported for Windows targets.",
-        "11│  filename: /home/user/github/ansible-navigator/venv/lib64/python3.9/site-packages/ansible/modules/debug.py",
+        "11│  filename: /home/user/venvs/navigator-389/lib/python3.8/site-packages/ansible/modules/debug.py",
         "12│  has_action: true",
         "13│  module: debug",
         "14│  notes:",

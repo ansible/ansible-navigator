@@ -659,6 +659,7 @@ class Action(App):
                         result = "ignored"
                     else:
                         result = runner_event
+                    task["__task"] = task["task"]
                     task["__result"] = result.upper()
                     task["__changed"] = task.get("res", {}).get("changed", False)
                     task["__duration"] = human_time(seconds=round(task["duration"], 2))
