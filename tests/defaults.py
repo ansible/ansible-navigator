@@ -7,6 +7,6 @@ FIXTURES_COLLECTION_DIR = os.path.abspath(
 
 # every attempt should be made for these images to share as many layers as possible
 # or really small
-DEFAULT_CONTAINER_IMAGE = "quay.io/ansible/ansible-navigator-demo-ee:0.6.0"
+DEFAULT_CONTAINER_IMAGE = "quay.io/ansible/ansible-devtools-demo-ee:v0.1.0"
 SMALL_TEST_IMAGE = "quay.io/ansible/python-base:latest"
 PULLABLE_IMAGE = "registry.hub.docker.com/library/alpine:latest"
