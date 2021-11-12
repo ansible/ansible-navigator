@@ -8,10 +8,11 @@
 - macOS command line developer tools
 - Internet access (during initial installation)
 
-### Installation using podman as the container engine
+### Installation using `podman` as the container engine
 
 - Until native source mounts from macOS through the `podman` machine into the execution environment is available, there is not a convenient way to use `podman` on macOS with `ansible-navigator` [Related](https://github.com/containers/podman/issues/8016)
-### Installation using Docker Desktop for Mac as the container engine
+
+### Installation using `Docker Desktop for Mac` as the container engine
 
 - Install [Docker Desktop for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac)
 - Open a terminal and enter `xcode-select install`, proceed with the command line developer tools installation if prompted
@@ -29,7 +30,7 @@
 - Either `podman` or Docker Desktop for Windows
 - Internet access (during initial installation)
 
-### Install `podman` as the container engine
+### Installation using `podman` as the container engine
 - Install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 - Install the Ubuntu Linux distribution from the Microsoft store
 - Open PowerShell and run `wsl --set-default ubuntu` to set the default WSL 2 distribution
@@ -45,7 +46,7 @@
    - Create the `/dev/mqueue` directory: `sudo mkdir /dev/mqueue`
    - Continue to the `ansible-navigator` installation instructions below
 
-### Install Docker Desktop for Windows as the container engine
+### Installation using `Docker Desktop for Windows` as the container engine
 
 - Install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 - Install the Ubuntu Linux distribution from the Microsoft store
