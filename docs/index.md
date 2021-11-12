@@ -17,17 +17,17 @@ installation
 
 ```{toctree}
 :maxdepth: 2
-:caption: Usage
+:caption: Configuration
 
-subcommands
-faq
+settings
 ```
 
 ```{toctree}
 :maxdepth: 2
-:caption: Configuring
+:caption: Usage
 
-settings
+subcommands
+faq
 ```
 
 ```{toctree}
