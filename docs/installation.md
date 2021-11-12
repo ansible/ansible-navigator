@@ -63,7 +63,8 @@
    - A one-time download of the demo execution-environment image will happen
 
 ### Install `ansible-navigator`
-- From the Ubuntu terminal"
+
+From the Ubuntu terminal:
    - Install the python package manager: `sudo apt install python3-pip`
    - Install ansible-navigator: `python3 -m pip install ansible-navigator --user`
    - Add the installation path to the PATH: `source ~/.profile`
