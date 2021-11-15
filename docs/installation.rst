@@ -184,9 +184,9 @@ Install the desired container engine for execution environment support
 
    #. Add the `podman`_ repository:
 
-     .. code-block:: console
+      .. code-block:: console
 
-      sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
+       sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
 
    #. Download the GPG key:
 
