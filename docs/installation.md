@@ -8,7 +8,7 @@
 - macOS command line developer tools
 - Internet access (during initial installation)
 
-### Installation using `podman` as the container engine
+### Installing on macOS with `podman` 
 
 - Until native source mounts from macOS through the `podman` machine into the execution environment is available, there is not a convenient way to use `podman` on macOS with `ansible-navigator` [Related](https://github.com/containers/podman/issues/8016)
 
