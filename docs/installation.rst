@@ -42,7 +42,7 @@ Install ansible-navigator
 
     echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.zshrc
 
-#. Open a new shell or update the current path (e.g.)
+#. Open a new terminal or refresh the PATH (e.g.):
 
    .. code-block:: console
 
