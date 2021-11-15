@@ -36,7 +36,7 @@ needed must be installed manually on the system.
 [ansible-core]: https://docs.ansible.com/ansible-core/devel
 [Python venv doc]: https://docs.python.org/3/library/venv.html
 
-Additional `macOS` and `Windows with WSL2` installation instructions are available
+Additional `Linux`, `macOS` and `Windows with WSL2` installation instructions are available
  in the [Installation guide][detailed installation instructions].
 
 [detailed installation instructions]:
