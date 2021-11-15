@@ -55,7 +55,7 @@
 - Launch the Ubuntu virtual machine from the Windows menu and complete the initial Ubuntu set-up
 - From the Ubuntu terminal:
    - Complete the [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/) steps
-   - Update the ubuntu package index: `sudo apt update`
+   - Update the Ubuntu package index: `sudo apt update`
    - Install the python package manager: `sudo apt install python3-pip`
    - Install ansible-navigator: `python3 -m pip install ansible-navigator`
    - Add the installation path to the PATH: `source ~/.profile`
