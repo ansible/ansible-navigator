@@ -46,7 +46,7 @@
    - Create the `/dev/mqueue` directory: `sudo mkdir /dev/mqueue`
    - Continue to the `ansible-navigator` installation instructions below
 
-### Installation using `Docker Desktop for Windows` as the container engine
+### Installing on Windows with `Docker Desktop for Windows` 
 
 - Install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 - Install the Ubuntu Linux distribution from the Microsoft store
