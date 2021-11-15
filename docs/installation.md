@@ -20,7 +20,7 @@
 - Add the installation path to the PATH (e.g. `echo 'export PATH=$HOME/Library/Python/3.8/bin:$PATH' >> ~/.zshrc`)
 - Refresh the PATH (e.g. `source ~/.zshrc`)
 - Launch ansible-navigator: `ansible-navigator`
-- A one-time download of the demo execution-environment image will happen
+- `ansible-navigator` triggers a one-time download of the demo execution-environment image.
 
 ## Windows with WSL2
 
