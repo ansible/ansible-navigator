@@ -10,7 +10,7 @@
 
 ### Installing on macOS with `podman` 
 
-- Until native source mounts from macOS through the `podman` machine into the execution environment is available, there is not a convenient way to use `podman` on macOS with `ansible-navigator` [Related](https://github.com/containers/podman/issues/8016)
+- There is no convenient way to use `ansible-navigator` with `podman` on macOS.  Native source mounts from macOS through the `podman` machine into the execution environment are not currently available. See this [related issue] (https://github.com/containers/podman/issues/8016) for details.
 
 ### Installation using `Docker Desktop for Mac` as the container engine
 
