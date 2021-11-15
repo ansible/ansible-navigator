@@ -1,4 +1,4 @@
-# Getting setup with execution environment support on:
+# Installing `ansible-navigator`
 
 ## macOS
 
