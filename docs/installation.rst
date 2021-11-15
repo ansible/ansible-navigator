@@ -2,24 +2,27 @@
 
 Installing ansible-navigator with execution environment support
 ###############################################################
+.. _podman: https://podman.io/
 
 .. contents::
    :local:
 
 Linux
 *****
+.. _podman installation instructions: https://podman.io/getting-started/installation
+.. _docker for linux: https://docs.docker.com/engine/install/
 
 Requirements
 ============
 
-* Either ``podman`` or ``Docker for Linux``
+* Either `podman`_ or `Docker for Linux`_
 * Internet access (during initial installation)
 
 Install the desired container engine for execution environment support
 ======================================================================
 
-* Follow the ``podman`` installation instructions for the appropriate `Linux distribution <https://podman.io/getting-started/installation>`__.
-* Follow the ``Docker for Linux`` installation instructions for the appropriate `Linux distribution <https://docs.docker.com/engine/install/>`__.
+* Follow the `podman installation instructions`_ for the appropriate distribution.
+* Follow the `Docker for Linux`_ installation instructions for the appropriate distribution.
 
 Install ansible-navigator
 =============================
@@ -36,17 +39,17 @@ Install ansible-navigator
 
     python3 -m pip install ansible-navigator --user
 
-#. Add the installation path to the PATH (e.g.):
+#. Add the installation path to the user shell initialization file (e.g.):
 
    .. code-block:: console
 
-    echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.zshrc
+    echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.profile
 
-#. Open a new terminal or refresh the PATH (e.g.):
+#. Refresh the PATH (e.g.):
 
    .. code-block:: console
 
-    source ~/.zshrc
+    source ~/.profile
 
 #. Launch ansible-navigator:
 
@@ -58,24 +61,27 @@ Install ansible-navigator
 
 macOS
 *****
+.. _docker desktop for mac: https://hub.docker.com/editions/community/docker-ce-desktop-mac
+.. _related issue: https://github.com/containers/podman/issues/8016
 
 Requirements
 ============
 
-* Docker desktop for Mac
+* `Docker desktop for Mac`_
 * macOS command line developer tools
 * Internet access (during initial installation)
 
 Install the desired container engine for execution environment support
 ======================================================================
 
-* Follow the `Docker Desktop for Mac <https://hub.docker.com/editions/community/docker-ce-desktop-mac>`__ installation instructions
+* Follow the `Docker Desktop for Mac`_ installation instructions
 
 .. note::
 
-   There is no convenient way to use ``ansible-navigator`` with ``podman`` on macOS.  Native source mounts from macOS through the ``podman`` machine into the execution environment are not currently available.
+   There is no convenient way to use ``ansible-navigator`` with `podman`_ on macOS.  Native source mounts from macOS through the `podman`_ machine into the execution environment are not currently available.
 
-   See this `related issue <https://github.com/containers/podman/issues/8016>`__ for details.
+   See this `related issue`_ for details.
+
 
 Install ansible-navigator
 =========================
@@ -96,13 +102,13 @@ Install ansible-navigator
 
    .. code-block:: console
 
-    echo 'export PATH=$HOME/Library/Python/3.8/bin:$PATH' >> ~/.zshrc
+    echo 'export PATH=$HOME/Library/Python/3.8/bin:$PATH' >> ~/.zprofile
 
-#. Open a new terminal or refresh the PATH:
+#. Refresh the PATH:
 
    .. code-block:: console
 
-    source ~/.zshrc
+    source ~/.zprofile
 
 #. Launch ansible-navigator:
 
@@ -115,27 +121,32 @@ Install ansible-navigator
 
 Windows with WSL2
 *****************
+.. _docker desktop for windows: https://hub.docker.com/editions/community/docker-ce-desktop-windows
+.. _manage docker as a non-root user: https://docs.docker.com/engine/install/linux-postinstall/
+.. _kubic project: https://build.opensuse.org/package/show/devel:kubic:libcontainers:stable/podman
+.. _ubuntu: https://ubuntu.com/
+.. _windows subsystem for linux 2: https://docs.microsoft.com/en-us/windows/wsl/install-win10
 
 Requirements
 ============
 
-* Windows Subsystem for Linux 2
-* Either ``podman`` or ``Docker Desktop for Windows``
+* `Windows Subsystem for Linux 2`_
+* Either `podman`_ or `Docker Desktop for Windows`_
 * Internet access (during initial installation)
 
-Setup WSL2 for Windows with Ubuntu
-==================================
+Setup `Windows Subsystem for Linux 2`_ with Ubuntu
+==================================================
 
-#. Install `WSL 2 <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`__.
-#. Install the Ubuntu 20.04 LTS Linux distribution from the Microsoft store.
+#. Install `Windows Subsystem for Linux 2`_.
+#. Install the `Ubuntu`_ 20.04 LTS Linux distribution from the Microsoft store.
 #. Open PowerShell and set the default WSL 2 distribution:
 
    .. code-block:: console
 
     wsl --set-default ubuntu
 
-#. Launch the Ubuntu virtual machine from the Windows menu and complete the initial Ubuntu set-up.
-#. From the Ubuntu terminal, create the ``/dev/mqueue`` directory:
+#. Launch the `Ubuntu`_ virtual machine from the Windows menu and complete the initial `Ubuntu`_ set-up.
+#. From the `Ubuntu`_ terminal, create the ``/dev/mqueue`` directory:
 
    .. code-block:: console
 
@@ -145,13 +156,13 @@ Setup WSL2 for Windows with Ubuntu
 Install the desired container engine for execution environment support
 ======================================================================
 
-* Installation instructions for ``podman`` on Ubuntu 20.04 LTS.
+* Installation instructions for `podman`_ on Ubuntu 20.04 LTS.
 
    .. note::
 
       The podman package is available in the official repositories for Ubuntu 20.10 and newer.
       Since interim releases of Ubuntu are not available on the Microsoft Store for WSL the
-      `Kubic project <https://build.opensuse.org/package/show/devel:kubic:libcontainers:stable/podman>`__ package can be used.
+      `Kubic project`_ package can be used.
 
    #. Update the ubuntu package index:
 
@@ -159,7 +170,7 @@ Install the desired container engine for execution environment support
 
        sudo apt update
 
-   #. Install system dependencies for ``podman``:
+   #. Install system dependencies for `podman`_:
 
       .. code-block:: console
 
@@ -171,7 +182,7 @@ Install the desired container engine for execution environment support
 
        source /etc/os-release
 
-   #. Add the ``podman`` repository:
+   #. Add the `podman`_ repository:
 
      .. code-block:: console
 
@@ -179,9 +190,9 @@ Install the desired container engine for execution environment support
 
    #. Download the GPG key:
 
-     .. code-block:: console
+      .. code-block:: console
 
-      wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key -O- | sudo apt-key add -
+       wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key -O- | sudo apt-key add -
 
    #. Update using the new repository:
 
@@ -189,20 +200,20 @@ Install the desired container engine for execution environment support
 
        sudo apt-get update
 
-   #. Install ``podman``:
+   #. Install `podman`_:
 
       .. code-block:: console
 
        sudo apt-get install podman
 
-* Follow the `Docker Desktop for Windows <https://hub.docker.com/editions/community/docker-ce-desktop-windows>`__ installation instructions.
+* Follow the `Docker Desktop for Windows`_ installation instructions (if `podman`_ was not installed above)
 
-   * Be sure to complete the `Manage Docker as a non-root user <https://docs.docker.com/engine/install/linux-postinstall/>`__ steps.
+   * Be sure to complete the `Manage Docker as a non-root user`_ steps.
 
 Install ansible-navigator
 =========================
 
-From the Ubuntu terminal:
+From the `Ubuntu`_ terminal:
    #. Ensure the ``/dev/mqueue`` directory exists:
 
       .. code-block:: console
@@ -221,7 +232,13 @@ From the Ubuntu terminal:
 
        python3 -m pip install ansible-navigator --user
 
-   #. Add the installation path to the PATH:
+   #. Add the installation path to the user shell initialization file:
+
+      .. code-block:: console
+
+       echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.profile
+
+   #. Refresh the PATH:
 
       .. code-block:: console
 
