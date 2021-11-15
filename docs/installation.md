@@ -30,7 +30,7 @@
 - Either `podman` or Docker Desktop for Windows
 - Internet access (during initial installation)
 
-### Installation using `podman` as the container engine
+### Installing on Windows with `podman`
 - Install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 - Install the Ubuntu Linux distribution from the Microsoft store
 - Open PowerShell and run `wsl --set-default ubuntu` to set the default WSL 2 distribution
