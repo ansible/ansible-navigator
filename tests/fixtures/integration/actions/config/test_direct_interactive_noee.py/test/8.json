@@ -31,7 +31,7 @@
         " 19│CALLABLE_ACCEPT_LIST                       True default default                         []",
         " 20│CALLBACKS_ENABLED                          True default default                         []",
         " 21│COLLECTIONS_ON_ANSIBLE_VERSION_MISMATCH    True default default                         warning",
-        " 22│COLLECTIONS_PATHS                          True default default                         ['/home/bthornto/.ansible/collections', '/usr/share/ansible/collections']",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }

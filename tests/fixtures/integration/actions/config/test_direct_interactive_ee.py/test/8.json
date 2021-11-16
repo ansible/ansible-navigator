@@ -30,7 +30,7 @@
         " 18│CALLABLE_ACCEPT_LIST                       True default default                         []",
         " 19│CALLBACKS_ENABLED                          True default default                         []",
         " 20│COLLECTIONS_ON_ANSIBLE_VERSION_MISMATCH    True default default                         warning",
-        " 21│COLLECTIONS_PATHS                          True default default                         ['/home/runner/.ansible/collections', '/usr/share/ansible/collections']",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         " 22│COLLECTIONS_SCAN_SYS_PATH                  True default default                         True",
         "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]

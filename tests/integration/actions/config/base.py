@@ -68,10 +68,9 @@ class BaseClass:
         if step.mask:
             # mask out some config that is subject to change each run
             mask = "X" * 50
+            maskables = ["BECOME_PLUGIN_PATH", "CACHE_PLUGIN_CONNECTION", "COLLECTIONS_PATHS"]
             for idx, line in enumerate(received_output):
-                if "BECOME_PLUGIN_PATH" in line:
-                    received_output[idx] = mask
-                if "CACHE_PLUGIN_CONNECTION" in line:
+                if any(m in line for m in maskables):
                     received_output[idx] = mask
 
         if (
