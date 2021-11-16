@@ -32,7 +32,7 @@ class BaseClass:
     """base class for interactive/stdout config tests"""
 
     UPDATE_FIXTURES = False
-    PANE_HEIGHT = 20
+    PANE_HEIGHT = 25
     PANE_WIDTH = 300
 
     @pytest.fixture(scope="module", name="tmux_session")
@@ -69,9 +69,9 @@ class BaseClass:
             # mask out some config that is subject to change each run
             mask = "X" * 50
             for idx, line in enumerate(received_output):
-                if "13│BECOME_PLUGIN_PATH" in line:
+                if "BECOME_PLUGIN_PATH" in line:
                     received_output[idx] = mask
-                if "15│CACHE_PLUGIN_CONNECTION" in line:
+                if "CACHE_PLUGIN_CONNECTION" in line:
                     received_output[idx] = mask
 
         if (
