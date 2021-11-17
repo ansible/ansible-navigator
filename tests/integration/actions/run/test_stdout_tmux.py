@@ -31,6 +31,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
+        look_fors=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
     ),
     ShellCommand(
         comment="run playbook without ee",
@@ -39,6 +40,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
+        look_fors=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
     ),
     ShellCommand(
         comment="playbook help with ee",

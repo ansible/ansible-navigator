@@ -148,3 +148,15 @@ def warning_notification(messages: List[str]) -> Form:
         "type": "notification",
     }
     return dict_to_form(form)
+
+
+def error_notification(messages: List[str]) -> Form:
+    """generate a std error notification"""
+    messages = break_long_lines(messages)
+    form = {
+        "title": "ERROR",
+        "title_color": 1,
+        "fields": [{"name": "info", "information": messages, "type": "information"}],
+        "type": "notification",
+    }
+    return dict_to_form(form)

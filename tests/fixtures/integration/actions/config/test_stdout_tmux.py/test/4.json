@@ -10,11 +10,6 @@
         "compared_fixture": false
     },
     "output": [
-        "[WARNING]: You are running the development version of Ansible. You should only",
-        "run Ansible from \"devel\" if you are modifying the Ansible engine, or trying out",
-        "features under development. This is a rapidly changing source of code and can",
-        "become unstable at any point.",
-        "[WARNING]: You are running the development version of Ansible. You should only run Ansible from \"devel\" if you are modifying the Ansible engine, or trying out features under development. This is a rapidly changing source of code and can become unstable at any point.",
         "usage: ansible-config [-h] [--version] [-v] {list,dump,view} ...",
         "View ansible configuration.",
         "positional arguments:",
@@ -26,6 +21,6 @@
         "  --version         show program's version number, config file location, configured module search path, module location, executable location and exit",
         "  -h, --help        show this help message and exit",
         "  -v, --verbose     verbose mode (-vvv for more, -vvvv to enable connection debugging)",
-        "(venv) bash-5.0$"
+        "(venv) bash-5.1$"
     ]
 }
