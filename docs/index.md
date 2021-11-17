@@ -8,6 +8,7 @@
 :end-before: (DO-NOT-REMOVE-docs-intro-END)
 ```
 
+
 ```{toctree}
 :maxdepth: 2
 :caption: Installation
@@ -31,7 +32,7 @@ faq
 ```
 
 ```{toctree}
-:caption: Contributing
+:caption: Contributions
 :hidden:
 
 Private unsupported (dev) API autodoc <pkg/modules>

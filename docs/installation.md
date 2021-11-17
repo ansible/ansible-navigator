@@ -161,7 +161,7 @@ See this [related issue][mac_podman_issue_url] for details.
       sudo apt update
       ```
 
-   1. Install system dependencies for podman]:
+   1. Install system dependencies for [podman]:
 
       ```
       apt-get install curl wget gnupg2
