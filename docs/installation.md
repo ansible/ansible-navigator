@@ -127,7 +127,7 @@ See this [related issue][mac_podman_issue_url] for details.
 - Either [podman][podman_url] or [Docker Desktop for Windows][docker_desktop_for_windows_url]
 - Internet access (during initial installation)
 
-### Setup Windows Subsystem for Linux 2] with Ubuntu
+### Setup Windows Subsystem for Linux 2 with Ubuntu
 
 1. Install [Windows Subsystem for Linux 2][wsl_2_install_url].
 1. Install the [Ubuntu][ubuntu_url] 20.04 LTS Linux distribution from the Microsoft store.
