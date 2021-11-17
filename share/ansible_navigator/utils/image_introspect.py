@@ -116,6 +116,11 @@ class CommandRunner:
 
 class CmdParser:
     @staticmethod
+    def _strip(value: str) -> str:
+        """strip off spaces and quotes"""
+        return value.strip('"').strip("'").strip()
+
+    @staticmethod
     def re_partition(content, separator):
         """like partion, but uses an re"""
         separator_match = re.search(separator, content)
@@ -132,17 +137,12 @@ class CmdParser:
         while lines:
             line = lines.pop()
             left, delim, right = self.re_partition(line, delimiter)
-            right = right.strip('"').strip("'").strip()
+            right = self._strip(right)
             if not delim:
                 if result:
                     results.append(result)
                     result = {}
                 continue
-            while not left.strip():
-                line = lines.pop()
-                left, delim, more_right = self.re_partition(line, delimiter)
-                more_right = more_right.strip('"').strip("'").strip()
-                right = more_right + " " + right
             key = left.lower().replace("_", "-").strip()
             value = right
             result[key] = value
@@ -230,7 +230,7 @@ class PythonPackages(CmdParser):
 
     def parse_freeze(self, command):
         """parse pip freeze"""
-        # skip the editiables
+        # skip the editables
         lines = [line for line in command.stdout.splitlines() if not line.startswith("-e")]
         parsed = self.splitter(lines, "(==|@)")
         command.details = parsed
@@ -256,11 +256,44 @@ class SystemPackages(CmdParser):
     @property
     def commands(self) -> List[Command]:
         """generate the command"""
-        return [Command(id="system_packages", command="yum info installed", parse=self.parse)]
+        return [Command(id="system_packages", command="rpm -qai", parse=self.parse)]
 
     def parse(self, command):
         """parse"""
-        parsed = self.splitter(command.stdout.splitlines(), ":")
+        packages = []
+        package = []
+        for line in command.stdout.splitlines():
+            if line.startswith("Name") and package:
+                packages.append(package)
+                package = [line]
+            else:
+                package.append(line)
+
+        parsed = []
+        for package in packages:
+            entry = {}
+            while package:
+                line = package.pop(0)
+                left, _delim, right = self.re_partition(line, ":")
+                key = left.lower().replace("_", "-").strip()
+
+                # Description is at the end of the package section
+                # read until package is empty
+                if key == "description":
+                    description = []
+                    while package:
+                        description.append(package.pop(0))
+                    # Normalize the data, in the case description is totally empty
+                    if description:
+                        entry[key] = "\n".join(description)
+                    else:
+                        entry[key] = "No description available"
+                    parsed.append(entry)
+                # other package details are 1 line each
+                else:
+                    value = self._strip(right)
+                    entry[key] = value
+
         command.details = parsed
 
 
