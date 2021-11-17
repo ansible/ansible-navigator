@@ -11,6 +11,20 @@
 
 ```{toctree}
 :maxdepth: 2
+:caption: Installation
+
+installation
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Configuration
+
+settings
+```
+
+```{toctree}
+:maxdepth: 2
 :caption: Usage
 
 subcommands
@@ -18,14 +32,7 @@ faq
 ```
 
 ```{toctree}
-:maxdepth: 2
-:caption: Configuring
-
-settings
-```
-
-```{toctree}
-:caption: Contributing
+:caption: Contributions
 :hidden:
 
 Private unsupported (dev) API autodoc <pkg/modules>

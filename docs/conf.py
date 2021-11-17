@@ -130,6 +130,7 @@ extensions = [
     "myst_parser",
     "notfound.extension",
     "sphinxcontrib.apidoc",
+    "sphinx_copybutton",
     # Tree-local extensions:
     "single_sourced_data",  # in-tree extension
 ]

@@ -2,5 +2,7 @@ myst-parser >= 0.15.1
 setuptools-scm >= 6.0.1
 Sphinx >= 4.1.2
 sphinx-ansible-theme >= 0.8.0
+sphinx-copybutton >= 0.4.0
 sphinx-notfound-page >= 0.7.1
 sphinxcontrib-apidoc >= 0.3.0
+
