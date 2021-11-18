@@ -34,6 +34,8 @@ documentation, etc.
 Name
 Name:
 Name :
+summary: summary_string
+version: version_string
 
 You will probably also want to install the net-snmp-utils package,
 which contains NET-SNMP utilities.
@@ -61,6 +63,8 @@ def test_system_packages_parse_one(imported_ii):
     assert command.details[0]["name"] == "net-snmp"
     assert command.details[0]["description"].startswith("SNMP")
     assert command.details[0]["description"].endswith("utilities.")
+    assert "summary: summary_string" in command.details[0]["description"]
+    assert "version: version_string" in command.details[0]["description"]
 
 
 def test_system_packages_parse_many(imported_ii):
@@ -70,6 +74,9 @@ def test_system_packages_parse_many(imported_ii):
     command = imported_ii.Command(id="test", parse=lambda x: x, stdout=RPM_OUTPUT * count)
     imported_ii.SystemPackages().parse(command)
     assert len(command.details) == count
-    assert command.details[-1]["name"] == "net-snmp"
-    assert command.details[-1]["description"].startswith("SNMP")
-    assert command.details[-1]["description"].endswith("utilities.")
+    for entry in command.details:
+        assert entry["name"] == "net-snmp"
+        assert entry["description"].startswith("SNMP")
+        assert entry["description"].endswith("utilities.")
+        assert "summary: summary_string" in entry["description"]
+        assert "version: version_string" in entry["description"]
