@@ -356,7 +356,7 @@ class Action(App):
         self._images.selected["__introspected"] = True
         share_directory = self._args.internals.share_directory
         container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
-        python_exec_path = "python3"
+        python_exec_path = "/usr/libexec/platform-python"
 
         kwargs = {
             "cmdline": [f"{share_directory}/utils/image_introspect.py"],

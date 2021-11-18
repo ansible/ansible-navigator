@@ -12,6 +12,8 @@ from typing import Dict
 from typing import Union
 from queue import Queue
 
+import rpm
+
 # pylint: disable=broad-except
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
@@ -250,51 +252,68 @@ class RedhatRelease(CmdParser):
         command.details = parsed
 
 
-class SystemPackages(CmdParser):
+class SystemPackages:
     """collect system pkgs"""
 
     @property
     def commands(self) -> List[Command]:
         """generate the command"""
-        return [Command(id="system_packages", command="rpm -qai", parse=self.parse)]
+        # TODO: Probably just nuke this and not run it through CommandRunner at all.
+        #       This was a hack just for POC.
+        return [Command(id="system_packages", command="/bin/true", parse=self.parse)]
 
     def parse(self, command):
         """parse"""
-        packages = []
-        package = []
-        for line in command.stdout.splitlines():
-            if line.startswith("Name") and package:
-                packages.append(package)
-                package = [line]
-            else:
-                package.append(line)
 
-        parsed = []
-        for package in packages:
-            entry = {}
-            while package:
-                line = package.pop(0)
-                left, _delim, right = self.re_partition(line, ":")
-                key = left.lower().replace("_", "-").strip()
+        out = []
+        ts = rpm.TransactionSet()
+        pkgs = ts.dbMatch()
+        for pkg in pkgs:
+            info = {}
+            for key in pkg.keys():
+                name = rpm.tagnames[key].lower()
+                value = pkg[key]
 
-                # Description is at the end of the package section
-                # read until package is empty
-                if key == "description":
-                    description = []
-                    while package:
-                        description.append(package.pop(0))
-                    # Normalize the data, in the case description is totally empty
-                    if description:
-                        entry[key] = "\n".join(description)
-                    else:
-                        entry[key] = "No description available"
-                    parsed.append(entry)
-                # other package details are 1 line each
-                else:
-                    value = self._strip(right)
-                    entry[key] = value
+                # Remove some that are just annoying.
+                if isinstance(value, (bytes, bytearray)):
+                    continue
 
-        command.details = parsed
+                if (
+                    name
+                    in (
+                        "basenames",
+                        "dirindexes",
+                        "dirnames",
+                        "headeri18ntable",
+                        "installcolor",
+                        "provideversion",
+                        "requireversion",
+                    )
+                    or name.startswith(
+                        (
+                            "changelog",
+                            "file",
+                        )
+                    )
+                    or name.endswith(
+                        (
+                            "dict",
+                            "flags",
+                        )
+                    )
+                ):
+                    # TODO: Some of these could actually be useful if rendered nicely.
+                    # For example, we could combine the changelog lists into useful info and show
+                    # the changelog; and instead of hiding required/provided versions, append them
+                    # to the proper requires/provides lists.
+                    continue
+
+                # TODO: turn installtime and buildtime into meaningful timestamps.
+                # TODO: make archivesize a human-readable format instead of just bytes.
+                info[name] = value
+            out.append(info)
+
+        command.details = out
 
 
 def main():
