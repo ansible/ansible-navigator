@@ -78,6 +78,8 @@ def test_system_packages_parse_many(imported_ii):
     assert len(command.details) == count
     for entry in command.details:
         assert entry["name"] == "net-snmp"
+        assert entry["version"] == "5.9.1"
+        assert entry["summary"] == "A collection of SNMP protocol tools and libraries"
         assert entry["description"].startswith("SNMP")
         assert entry["description"].endswith("utilities.")
         assert "summary: summary_string" in entry["description"]
