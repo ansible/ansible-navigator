@@ -36,10 +36,10 @@ needed must be installed manually on the system.
 [ansible-core]: https://docs.ansible.com/ansible-core/devel
 [Python venv doc]: https://docs.python.org/3/library/venv.html
 
-Additional `Linux`, `macOS` and `Windows with WSL2` installation instructions are available
- in the [Installation guide][detailed installation instructions].
+Additional `Linux`, `macOS` and `Windows with WSL2` installation
+instructions are available in the [Installation guide].
 
-[detailed installation instructions]:
+[Installation guide]:
 https://ansible-navigator.rtfd.io/en/latest/installation
 
 ## Welcome
