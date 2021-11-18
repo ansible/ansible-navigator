@@ -61,6 +61,8 @@ def test_system_packages_parse_one(imported_ii):
     imported_ii.SystemPackages().parse(command)
     assert len(command.details) == 1
     assert command.details[0]["name"] == "net-snmp"
+    assert command.details[0]["version"] == "5.9.1"
+    assert command.details[0]["summary"] == "A collection of SNMP protocol tools and libraries"
     assert command.details[0]["description"].startswith("SNMP")
     assert command.details[0]["description"].endswith("utilities.")
     assert "summary: summary_string" in command.details[0]["description"]
