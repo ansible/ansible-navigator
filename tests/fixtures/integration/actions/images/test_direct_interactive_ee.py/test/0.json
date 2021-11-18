@@ -4,19 +4,19 @@
     "comment": "ansible-navigator images top window",
     "additional_information": {
         "look_fors": [
-            "ansible-runner"
+            "ansible-navigator-demo-ee"
         ],
         "look_nots": [],
         "compared_fixture": false
     },
     "output": [
-        "  NAME                                                             TAG               EXECUTION ENVIRONMENT                                    CREATED                             SIZE",
-        "0│ansible-runner (primary)                                         devel                              True                                    2 days ago                          573 MB",
-        "1│awx-ee                                                           devel                              True                                    40 hours ago                        1.19 GB",
-        "2│ee_libssh                                                        latest                             True                                    5 months ago                        490 MB",
-        "3│network-ee                                                       latest                             True                                    5 months ago                        588 MB",
-        "4│python-base                                                      latest                            False                                    2 days ago                          387 MB",
-        "5│rme                                                              latest                            False                                    19 months ago                       276 MB",
+        "  NAME                                                                                              TAG           EXECUTION ENVIRONMENT                      CREATED                   SIZE",
+        "0│ansible-automation-platform-20-ee-minimal-rhel8                                                   latest                         True                      4 months ago              288 MB",
+        "1│ansible-automation-platform-20-ee-supported-rhel8                                                 latest                         True                      4 months ago              919 MB",
+        "2│ansible-builder                                                                                   latest                        False                      3 weeks ago               538 MB",
+        "3│ansible-navigator-demo-ee (primary)                                                               0.6.0                          True                      3 months ago              1.35 GB",
+        "4│python-base                                                                                       latest                        False                      3 days ago                444 MB",
+        "5│webinar_ee                                                                                        latest                         True                      7 days ago                484 MB",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
