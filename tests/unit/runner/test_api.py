@@ -3,7 +3,7 @@
 
 import pytest
 
-from ansible_navigator.runner import api
+from ansible_navigator.runner import Command
 
 
 @pytest.mark.parametrize(
@@ -41,13 +41,13 @@ def test_command_base_runner_wrap_sh(orig_exec, orig_args, sh_c_arg):
     """test CommandBaseRunner properly wraps commands with sh -c when asked."""
 
     # default (no sh wrap)
-    cr = api.CommandRunner(orig_exec, cmdline=orig_args)
+    cr = Command(orig_exec, cmdline=orig_args)
     cr.generate_run_command_args()
     assert cr._runner_args.get("executable_cmd") == orig_exec
     assert cr._runner_args.get("cmdline_args") == orig_args
 
     # explicit sh wrap
-    cr = api.CommandRunner(orig_exec, cmdline=orig_args, wrap_sh=True)
+    cr = Command(orig_exec, cmdline=orig_args, wrap_sh=True)
     cr.generate_run_command_args()
     assert cr._runner_args.get("executable_cmd") == "/bin/sh"
     assert cr._runner_args.get("cmdline_args") == ["-c", sh_c_arg]
