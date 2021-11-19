@@ -18,7 +18,8 @@ from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..runner.api import CommandRunner, InventoryRunner
+from ..runner import AnsibleInventory
+from ..runner import Command
 from ..steps import Step
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
@@ -108,7 +109,7 @@ class Action(App):
         self._inventories_mtime: Union[float, None]
         self._inventories: List[str] = []
         self._inventory_error: str = ""
-        self._runner: Union[CommandRunner, InventoryRunner]
+        self._runner: Union[Command, AnsibleInventory]
 
     @property
     def _inventory(self) -> Dict[Any, Any]:
@@ -439,7 +440,7 @@ class Action(App):
         self,
         kwargs: Dict[str, Any],
     ) -> None:
-        self._runner = InventoryRunner(**kwargs)
+        self._runner = AnsibleInventory(**kwargs)
         inventory_output, inventory_err = self._runner.fetch_inventory("list", self._inventories)
         if inventory_output:
             parts = inventory_output.split("{", 1)
@@ -485,7 +486,7 @@ class Action(App):
 
         kwargs.update({"cmdline": pass_through_arg, "inventory": self._inventories})
 
-        self._runner = CommandRunner(executable_cmd=ansible_inventory_path, **kwargs)
+        self._runner = Command(executable_cmd=ansible_inventory_path, **kwargs)
         stdout_return = self._runner.run()
         return stdout_return
 

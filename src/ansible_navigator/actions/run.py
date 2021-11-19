@@ -23,7 +23,7 @@ from typing import Union
 from . import run_action
 from . import _actions as actions
 
-from ..runner.api import CommandRunnerAsync
+from ..runner import CommandAsync
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -206,7 +206,7 @@ class Action(App):
         self._subaction_type: str
         self._msg_from_plays: Tuple[Optional[str], Optional[int]] = (None, None)
         self._queue: Queue = Queue()
-        self.runner: CommandRunnerAsync
+        self.runner: CommandAsync
         self._runner_finished: bool
         self._auto_scroll = False
 
@@ -599,7 +599,7 @@ class Action(App):
             pass_through_arg.extend(self._args.cmdline)
         kwargs.update({"cmdline": pass_through_arg})
 
-        self.runner = CommandRunnerAsync(executable_cmd=executable_cmd, queue=self._queue, **kwargs)
+        self.runner = CommandAsync(executable_cmd=executable_cmd, queue=self._queue, **kwargs)
         self.runner.run()
         self._runner_finished = False
         self._logger.debug("runner requested to start")

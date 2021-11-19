@@ -18,7 +18,7 @@ from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..image_manager import inspect_all
-from ..runner.api import CommandRunner
+from ..runner import Command
 from ..steps import Step
 
 from ..ui_framework import CursesLinePart
@@ -373,7 +373,7 @@ class Action(App):
         self._logger.debug(
             f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}"
         )
-        _runner = CommandRunner(executable_cmd=python_exec_path, **kwargs)
+        _runner = Command(executable_cmd=python_exec_path, **kwargs)
         output, error, _ = _runner.run()
         if error:
             self._logger.error(
