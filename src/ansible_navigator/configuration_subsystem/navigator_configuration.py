@@ -266,6 +266,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         Entry(
             name="exec_shell",
+            choices=[True, False],
             cli_parameters=CliParameters(short="--exshell"),
             settings_file_path_override="exec.shell",
             short_description="Specify the exec command should be run in a shell. ('sh -c \"{exec_command}\"')",
