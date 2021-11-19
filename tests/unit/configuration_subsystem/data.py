@@ -99,16 +99,6 @@ CLI_DATA_DOC = [
         {"app": "doc", "plugin_name": "shell", "plugin_type": "become"},
     ),
 ]
-CLI_DATA_EXEC = [
-    (
-        "exec --mode stdout --excmd 'ls -l' --exshell False",
-        {"app": "exec", "exec_command": "ls -l", "exec_shell": False, "mode": "stdout"},
-    ),
-    (
-        "exec --mode stdout --exec-command 'ls -l' --exec-shell=False",
-        {"app": "exec", "exec_command": "ls -l", "exec_shell": False, "mode": "stdout"},
-    ),
-]
 CLI_DATA_INVENTORY = [
     ("inventory -i /tmp/inv1.yml", {"app": "inventory", "inventory": ["/tmp/inv1.yml"]}),
     (
@@ -205,7 +195,6 @@ def cli_data():
         CLI_DATA_COLLECTIONS  # type: ignore
         + CLI_DATA_CONFIG  # type: ignore
         + CLI_DATA_DOC  # type: ignore
-        + CLI_DATA_EXEC  # type: ignore
         + CLI_DATA_INVENTORY  # type: ignore
         + CLI_DATA_INVENTORY_COLUMNS  # type: ignore
         + CLI_DATA_REPLAY  # type: ignore
