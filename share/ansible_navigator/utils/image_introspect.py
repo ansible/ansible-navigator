@@ -263,11 +263,13 @@ class SystemPackages(CmdParser):
         packages = []
         package = []
         for line in command.stdout.splitlines():
-            if line.startswith("Name") and package:
+            if re.match(r"^Name\s{2,}:", line) and package:
                 packages.append(package)
                 package = [line]
             else:
                 package.append(line)
+        if package:
+            packages.append(package)
 
         parsed = []
         for package in packages:
