@@ -103,6 +103,7 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     logger.error("Subcommand '%s' does not support mode interactive", action)
     if hasattr(action_cls(app.args), "no_interactive_mode"):
         return action_cls(app.args).no_interactive_mode(app=app, interaction=interaction)
+    return None
 
 
 def run_interactive_factory(package: str) -> Callable:

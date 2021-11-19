@@ -208,6 +208,16 @@ class NavigatorPostProcessor:
             new_messages, new_exit_messages = check_for_ansible()
             messages.extend(new_messages)
             exit_messages.extend(new_exit_messages)
+
+            if config.app == "exec":
+                exit_msg = "The 'exec' subcommand requires execution environment support."
+                exit_messages.append(ExitMessage(message=exit_msg))
+                hint = (
+                    f"Try again with '{entry.cli_parameters.short} true'"
+                    " to enable the use of an execution environment."
+                )
+                exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+
         return messages, exit_messages
 
     @staticmethod

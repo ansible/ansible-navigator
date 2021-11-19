@@ -269,7 +269,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=[True, False],
             cli_parameters=CliParameters(short="--exshell"),
             settings_file_path_override="exec.shell",
-            short_description="Specify the exec command should be run in a shell. ('/bin/bash -c \"{exec_command}\"')",
+            short_description=(
+                "Specify the exec command should be run in a shell."
+                " ('/bin/bash -c \"{exec_command}\"')"
+            ),
             subcommands=["exec"],
             value=EntryValue(default=True),
         ),

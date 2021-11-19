@@ -31,7 +31,8 @@ class Action(App):
         warning = warning_notification(
             messages=[
                 "The 'exec' subcommand is not available while using interactive mode.",
-                "[HINT] Start an additional instance of ansible-navigator in a new terminal with mode 'stdout'.",
+                "[HINT] Start an additional instance of ansible-navigator"
+                " in a new terminal with mode 'stdout'.",
                 "       e.g. 'ansible-navigator exec --mode stdout",
             ]
         )
