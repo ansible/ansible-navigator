@@ -311,6 +311,13 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
+    def exec_shell(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process help_config"""
+        messages, exit_messages = self._true_or_false(entry, config)
+        return messages, exit_messages
+
+    @_post_processor
     def help_config(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process help_config"""

@@ -3,6 +3,7 @@
 
 import functools
 import importlib
+import logging
 import re
 from collections import namedtuple
 
@@ -18,6 +19,8 @@ try:
 except ImportError:
     import importlib_resources as resources  # type: ignore[import, no-redef]
 
+
+logger = logging.getLogger(__name__)
 
 # Basic structure for storing information about one action
 ActionT = namedtuple("ActionT", ("name", "cls", "kegex"))
@@ -95,7 +98,11 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     """Call the given action's run"""
     action_cls = get(package, action)
     app, interaction = args
-    return action_cls(app.args).run(app=app, interaction=interaction)
+    if hasattr(action_cls(app.args), "run"):
+        return action_cls(app.args).run(app=app, interaction=interaction)
+    logger.error("Subcommand '%s' does not support mode interactive", action)
+    if hasattr(action_cls(app.args), "no_interactive_mode"):
+        return action_cls(app.args).no_interactive_mode(app=app, interaction=interaction)
 
 
 def run_interactive_factory(package: str) -> Callable:

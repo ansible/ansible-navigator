@@ -117,6 +117,16 @@ navigator_subcommds = [
         ),
     ),
     SubCommand(
+        name="exec",
+        description="Run a command within an execution environment",
+        epilog=(
+            "Note: During development, it may become necessary to interact"
+            " directly with the execution environment to review and confirm"
+            " it's build and behavior. All navigator settings will be applied"
+            " when starting the execution environment."
+        ),
+    ),
+    SubCommand(
         name="images",
         description="Explore execution environment images",
     ),
@@ -244,6 +254,22 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--econ"),
             settings_file_path_override="editor.console",
             short_description="Specify if the editor is console based",
+            value=EntryValue(default=True),
+        ),
+        Entry(
+            name="exec_command",
+            cli_parameters=CliParameters(short="--excmd"),
+            settings_file_path_override="exec.command",
+            short_description="Specify the command to run within the execution environment",
+            subcommands=["exec"],
+            value=EntryValue(default="/bin/bash"),
+        ),
+        Entry(
+            name="exec_shell",
+            cli_parameters=CliParameters(short="--exshell"),
+            settings_file_path_override="exec.shell",
+            short_description="Specify the exec command should be run in a shell. ('sh -c \"{exec_command}\"')",
+            subcommands=["exec"],
             value=EntryValue(default=True),
         ),
         Entry(
