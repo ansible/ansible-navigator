@@ -25,7 +25,7 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="exec")
 
     @staticmethod
-    def no_interactive_mode(interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def no_interactive_mode(interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=unused-argument
         """Warm the user interactive mode is not supported"""
         warning = warning_notification(
