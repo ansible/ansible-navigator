@@ -17,8 +17,8 @@ from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants as C
-from ..runner.api import CommandRunner
-from ..runner.api import DocRunner
+from ..runner import Command
+from ..runner import AnsibleDoc
 
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
@@ -38,7 +38,7 @@ class Action(App):
 
         self._plugin_name: Optional[str]
         self._plugin_type: Optional[str]
-        self._runner: Union[CommandRunner, DocRunner]
+        self._runner: Union[Command, AnsibleDoc]
 
     def generate_content_heading(self, _obj: Dict, screen_w: int) -> CursesLines:
         """Generate a heading string for the doc"""
@@ -172,7 +172,7 @@ class Action(App):
                 playbook_dir = os.getcwd()
             kwargs.update({"host_cwd": playbook_dir})
 
-            self._runner = DocRunner(**kwargs)
+            self._runner = AnsibleDoc(**kwargs)
 
             # set the playbook directory so playbook
             # adjacent collection docs can be found
@@ -216,7 +216,7 @@ class Action(App):
 
             kwargs.update({"cmdline": pass_through_arg})
 
-            self._runner = CommandRunner(executable_cmd=ansible_doc_path, **kwargs)
+            self._runner = Command(executable_cmd=ansible_doc_path, **kwargs)
             stdout_return = self._runner.run()
             return stdout_return
 

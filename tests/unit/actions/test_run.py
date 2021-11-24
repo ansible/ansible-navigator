@@ -161,7 +161,7 @@ runner_test_data = [
 ]
 
 
-@patch("ansible_navigator.actions.run.CommandRunnerAsync")
+@patch("ansible_navigator.actions.run.CommandAsync")
 @pytest.mark.parametrize("data", runner_test_data, ids=id_from_data)
 def test_runner_args(_mocked_command_runner, caplog, data):
     """Test the arguments passed to runner API"""

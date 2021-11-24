@@ -12,14 +12,15 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
+
 from . import run_action
 from . import _actions as actions
 
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..runner.api import AnsibleCfgRunner
-from ..runner.api import CommandRunner
+from ..runner import AnsibleConfig
+from ..runner import Command
 from ..steps import Step
 
 from ..ui_framework import CursesLinePart
@@ -95,7 +96,7 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="config")
 
         self._config: Union[List[Any], None] = None
-        self._runner: Union[AnsibleCfgRunner, CommandRunner]
+        self._runner: Union[AnsibleConfig, Command]
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         # pylint: disable=too-many-branches
@@ -233,7 +234,7 @@ class Action(App):
             kwargs.update({"container_options": self._args.container_options})
 
         if self._args.mode == "interactive":
-            self._runner = AnsibleCfgRunner(**kwargs)
+            self._runner = AnsibleConfig(**kwargs)
             kwargs = {}
             if isinstance(self._args.config, str):
                 kwargs["config_file"] = self._args.config
@@ -281,7 +282,7 @@ class Action(App):
 
             kwargs.update({"cmdline": pass_through_arg})
 
-            self._runner = CommandRunner(executable_cmd=ansible_config_path, **kwargs)
+            self._runner = Command(executable_cmd=ansible_config_path, **kwargs)
             stdout_return = self._runner.run()
             return stdout_return
         return (None, None, None)
