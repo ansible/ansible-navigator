@@ -528,10 +528,6 @@ class UserInterface(CursesWindow):
         to curses colors in self._rgb_to_curses_color_idx
 
         :params lines: the lines to transform
-        :type lines: list of lists of dicts
-            Lines[LinePart[{"color": rgb, "chars": text, "column": n},...]]
-        :return: the lines ready for curses
-        :type: CursesLines
         """
         if curses.COLORS > 16 and self._term_osc4_supprt:
             unique_colors = list(

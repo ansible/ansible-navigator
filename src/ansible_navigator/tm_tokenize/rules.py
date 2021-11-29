@@ -58,7 +58,7 @@ class CompiledRule(Protocol):
         ...
 
 
-class Entry(NamedTuple):
+class TmRuleEntry(NamedTuple):
     scope: Tuple[str, ...]
     rule: CompiledRule
     start: Tuple[str, int]
@@ -151,7 +151,7 @@ class EndRule(NamedTuple):
         boundary = match.end() == len(match.string)
         reg = make_reg(expand_escaped(match, self.end))
         start = (match.string, match.start())
-        state = state.push(Entry(next_scope, self, start, reg, boundary))
+        state = state.push(TmRuleEntry(next_scope, self, start, reg, boundary))
         regions = _captures(compiler, scope, match, self.begin_captures)
         return state, True, regions
 
@@ -360,7 +360,7 @@ class WhileRule(NamedTuple):
         boundary = match.end() == len(match.string)
         reg = make_reg(expand_escaped(match, self.while_))
         start = (match.string, match.start())
-        entry = Entry(next_scope, self, start, reg, boundary)
+        entry = TmRuleEntry(next_scope, self, start, reg, boundary)
         state = state.push_while(self, entry)
         regions = _captures(compiler, scope, match, self.begin_captures)
         return state, True, regions
@@ -441,6 +441,6 @@ def _captures(
 def _inner_capture_parse(
     compiler: "Compiler", start: int, s: str, scope: "Scope", rule: "CompiledRule"
 ) -> "Regions":
-    state = State.root(Entry(scope + rule.name, rule, (s, 0)))
+    state = State.root(TmRuleEntry(scope + rule.name, rule, (s, 0)))
     _, regions = tokenize(compiler, state, s, first_line=False)
     return tuple(r._replace(start=r.start + start, end=r.end + start) for r in regions)

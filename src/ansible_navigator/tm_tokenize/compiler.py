@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 from .fchainmap import FChainMap
 from .reg import make_regset
 from .rules import EndRule
-from .rules import Entry
+from .rules import TmRuleEntry
 from .rules import MatchRule
 from .rules import PatternRule
 from .rules import WhileRule
@@ -30,7 +30,7 @@ class Compiler:
         self._rule_to_grammar: Dict["_Rule", "Grammar"] = {}
         self._c_rules: Dict["_Rule", "CompiledRule"] = {}
         root = self._compile_root(grammar)
-        self.root_state = State.root(Entry(root.name, root, ("", 0)))
+        self.root_state = State.root(TmRuleEntry(root.name, root, ("", 0)))
 
     def _visit_rule(self, grammar: "Grammar", rule: "_Rule") -> "_Rule":
         self._rule_to_grammar[rule] = grammar
