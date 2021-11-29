@@ -560,10 +560,6 @@ class UserInterface(CursesWindow):
         """color each of the lines
 
         :params lines: the lines to transform
-        :type lines: list of lists of dicts
-            Lines[LinePart[{"color": rgb, "chars": text, "column": n},...]]
-        :return: all the lines
-        :rtype: CursesLines
         """
         return tuple(self._colored_line(line) for line in lines)
 
