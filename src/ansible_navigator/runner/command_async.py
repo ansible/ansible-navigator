@@ -32,7 +32,7 @@ class CommandAsync(CommandBase):
         self._queue.put(event)
 
     def run(self):
-        """run"""
+        """Initiate the execution of the runner command in async mode"""
         self.generate_run_command_args()
         self._runner_args.update({"event_handler": self._event_handler})
         thread, self.ansible_runner_instance = run_command_async(**self._runner_args)
