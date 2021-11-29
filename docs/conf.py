@@ -232,6 +232,10 @@ apidoc_output_dir = "pkg"
 apidoc_separate_modules = True
 apidoc_toc_file = None
 
+# -- Options for sphinx_autodoc_typehints extension ------------------------------
+
+set_type_checking_flag = True
+
 # -- Options for linkcheck builder -------------------------------------------
 
 linkcheck_workers = 25
