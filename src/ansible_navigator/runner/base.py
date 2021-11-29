@@ -125,14 +125,14 @@ class Base:
             }
         )
         if self._rotate_artifacts is not None:
-            self._runner_args.update({"rotate_artifacts": self._rotate_artifacts})
+            self._runner_args["rotate_artifacts"] = self._rotate_artifacts
 
         self._add_env_vars_to_args()
 
         if self._host_cwd:
             # ensure the cwd ends with a trailing slash
             host_cwd = os.path.join(self._host_cwd, "")
-            self._runner_args.update({"host_cwd": host_cwd})
+            self._runner_args["host_cwd"] = host_cwd
 
         if self._navigator_mode == "stdout":
             self._runner_args.update(
@@ -140,10 +140,7 @@ class Base:
             )
 
     def __del__(self):
-        """
-        class destructor, handle runner artifact file deletion is rotate_artifacts \
-        value is not set
-        """
+        """Drop the artifact directory when the rotation is disabled."""
         if (
             self._rotate_artifacts is not None
             and self._runner_artifact_dir

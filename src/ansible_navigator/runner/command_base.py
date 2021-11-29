@@ -16,7 +16,7 @@ class CommandBase(Base):
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-instance-attributes
 
-    """base class for runner command interaction"""
+    """Base class for runner command interaction"""
 
     def __init__(
         self,
@@ -25,7 +25,7 @@ class CommandBase(Base):
         playbook: Optional[str] = None,
         inventory: Optional[List] = None,
         wrap_sh: Optional[bool] = False,
-        **kwargs
+        **kwargs,
     ):
         """Base class to handle common arguments of ``run_command`` interface for ``ansible-runner``
         Args:
@@ -49,7 +49,7 @@ class CommandBase(Base):
         super().__init__(**kwargs)
 
     def generate_run_command_args(self) -> None:
-        """generate arguments required to be passed to ansible-runner"""
+        """Generate arguments required to be passed to ansible-runner."""
         if self._playbook:
             self._cmdline.insert(0, self._playbook)
 
@@ -60,7 +60,7 @@ class CommandBase(Base):
             self._cmdline.insert(0, self._executable_cmd)
             self._runner_args["executable_cmd"] = "/bin/sh"
             cmd_args = " ".join(shlex.quote(s) for s in self._cmdline)
-            self._runner_args["cmdline_args"] = ["-c", "exec 2>/dev/null; {0}".format(cmd_args)]
+            self._runner_args["cmdline_args"] = ["-c", f"exec 2>/dev/null; {cmd_args}"]
         else:
             self._runner_args["executable_cmd"] = self._executable_cmd
             self._runner_args["cmdline_args"] = self._cmdline
