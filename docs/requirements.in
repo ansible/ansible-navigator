@@ -5,4 +5,3 @@ sphinx-ansible-theme >= 0.8.0
 sphinx-copybutton >= 0.4.0
 sphinx-notfound-page >= 0.7.1
 sphinxcontrib-apidoc >= 0.3.0
-sphinx-autodoc-typehints >= 1.12.0

@@ -130,7 +130,6 @@ extensions = [
     "myst_parser",
     "notfound.extension",
     "sphinxcontrib.apidoc",
-    "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     # Tree-local extensions:
     "single_sourced_data",  # in-tree extension
@@ -202,6 +201,10 @@ root_doc = master_doc = "index"  # Sphinx 4+ / 3-
 
 # -- Extension configuration -------------------------------------------------
 
+# -- Options for sphinx.ext.autodoc extention
+
+autodoc_typehints = "both"
+
 # -- Options for extlinks extension ---------------------------------------
 extlinks = {
     "issue": (f"{github_repo_url}/issues/%s", "#"),  # noqa: WPS323
@@ -231,10 +234,6 @@ apidoc_module_first = False
 apidoc_output_dir = "pkg"
 apidoc_separate_modules = True
 apidoc_toc_file = None
-
-# -- Options for sphinx_autodoc_typehints extension ------------------------------
-
-set_type_checking_flag = True
 
 # -- Options for linkcheck builder -------------------------------------------
 
