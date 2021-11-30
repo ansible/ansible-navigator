@@ -8,10 +8,7 @@ from typing import Union
 
 from . import _actions as actions
 from ..app import App
-from ..app_public import AppPublic
 from ..runner import Command
-from ..ui_framework import warning_notification
-from ..ui_framework import Interaction
 
 
 @actions.register
@@ -26,18 +23,18 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="exec")
 
     @staticmethod
-    def no_interactive_mode(interaction: Interaction, app: AppPublic) -> None:
-        # pylint: disable=unused-argument
-        """Warm the user interactive mode is not supported"""
-        warning = warning_notification(
-            messages=[
-                "The 'exec' subcommand is not available while using interactive mode.",
-                "[HINT] Start an additional instance of ansible-navigator"
-                " in a new terminal with mode 'stdout'.",
-                "       e.g. 'ansible-navigator exec --mode stdout",
-            ]
-        )
-        interaction.ui.show(warning)
+    def _generate_command(exec_command: str, exec_shell: bool) -> Tuple:
+        """Generate the command and args"""
+        pass_through_args = None
+        if exec_shell and exec_command:
+            command = "/bin/bash"
+            pass_through_args = ["-c", exec_command]
+        else:
+            parts = shlex.split(exec_command)
+            command = parts[0]
+            if len(parts) > 1:
+                pass_through_args = parts[1:]
+        return (command, pass_through_args)
 
     def run_stdout(self) -> Union[None, int]:
         """Run in mode stdout"""
@@ -78,16 +75,11 @@ class Action(App):
         if isinstance(self._args.container_options, list):
             kwargs["container_options"] = self._args.container_options
 
-        if self._args.exec_shell and self._args.exec_command:
-            command = "/bin/bash"
-            pass_through_args = ["-c", self._args.exec_command]
+        command, pass_through_args = self._generate_command(
+            exec_command=self._args.exec_command, exec_shell=self._args.exec_shell
+        )
+        if isinstance(pass_through_args, list):
             kwargs["cmdline"] = pass_through_args
-        else:
-            parts = shlex.split(self._args.exec_command)
-            command = parts[0]
-            if len(parts) > 1:
-                pass_through_args = parts[1:]
-                kwargs["cmdline"] = pass_through_args
 
         runner = Command(executable_cmd=command, **kwargs)
         runner_return = runner.run()

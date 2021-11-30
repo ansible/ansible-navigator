@@ -20,6 +20,8 @@ from .steps import Steps
 
 from .ui_framework import Interaction
 from .ui_framework import ui
+from .ui_framework import warning_notification
+
 
 from .utils import LogMessage
 from .utils import ExitMessage
@@ -82,6 +84,19 @@ class App:
                 write_artifact=self.write_artifact,
             )
         raise AttributeError("app passed without args initialized")
+
+    def no_interactive_mode(self, interaction: Interaction, app: AppPublic) -> None:
+        # pylint: disable=unused-argument
+        """Warm the user interactive mode is not supported"""
+        warning = warning_notification(
+            messages=[
+                f"The '{self._name}' subcommand is not available while using interactive mode.",
+                "[HINT] Start an additional instance of ansible-navigator"
+                " in a new terminal with mode 'stdout'.",
+                f"      e.g. 'ansible-navigator {self._name} --mode stdout",
+            ]
+        )
+        interaction.ui.show(warning)
 
     @staticmethod
     def _copy_args(args: ApplicationConfiguration) -> ApplicationConfiguration:
