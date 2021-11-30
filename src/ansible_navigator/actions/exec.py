@@ -9,7 +9,7 @@ from typing import Union
 from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
-from ..runner.api import CommandRunner
+from ..runner import Command
 from ..ui_framework import warning_notification
 from ..ui_framework import Interaction
 
@@ -89,6 +89,6 @@ class Action(App):
                 pass_through_args = parts[1:]
                 kwargs["cmdline"] = pass_through_args
 
-        runner = CommandRunner(executable_cmd=command, **kwargs)
+        runner = Command(executable_cmd=command, **kwargs)
         runner_return = runner.run()
         return runner_return
