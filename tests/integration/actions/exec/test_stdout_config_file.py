@@ -57,4 +57,4 @@ class Test(BaseClass):
     """run the tests"""
 
     CONFIG_FILE = TEST_CONFIG_FILE
-    UPDATE_FIXTURES = True
+    UPDATE_FIXTURES = False

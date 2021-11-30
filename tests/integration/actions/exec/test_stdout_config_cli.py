@@ -72,4 +72,4 @@ def step_id(value):
 class Test(BaseClass):
     """run the tests"""
 
-    UPDATE_FIXTURES = True
+    UPDATE_FIXTURES = False
