@@ -665,10 +665,13 @@ class Action(App):
                     if isinstance(task["duration"], (int, float)):
                         task["__duration"] = human_time(seconds=round(task["duration"], 2))
                     else:
-                        msg = f"Task duration for \'{task['task']}\' was type {type(task['duration'])}, set to 0"
+                        msg = (
+                            f"Task duration for '{task['task']}' was type {type(task['duration'])},"
+                            " set to 0"
+                        )
                         self._logger.debug(msg)
                         task["__duration"] = 0
-                                           
+
                     task_id = None
                     for idx, play_task in enumerate(self._plays.value[play_id]["tasks"]):
                         if task["task_uuid"] == play_task["task_uuid"]:
