@@ -1,5 +1,6 @@
 """ :exec """
 import os
+import shlex
 
 from typing import Optional
 from typing import Tuple
@@ -80,9 +81,13 @@ class Action(App):
         if self._args.exec_shell and self._args.exec_command:
             command = "/bin/bash"
             pass_through_args = ["-c", self._args.exec_command]
-            kwargs.update({"cmdline": pass_through_args})
+            kwargs["cmdline"] = pass_through_args
         else:
-            command = self._args.exec_command
+            parts = shlex.split(self._args.exec_command)
+            command = parts[0]
+            if len(parts) > 1:
+                pass_through_args = parts[1:]
+                kwargs["cmdline"] = pass_through_args
 
         runner = CommandRunner(executable_cmd=command, **kwargs)
         runner_return = runner.run()

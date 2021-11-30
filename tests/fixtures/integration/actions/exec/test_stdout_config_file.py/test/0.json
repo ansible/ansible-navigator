@@ -1,0 +1,19 @@
+{
+    "name": "test[exec echo with ee  clear && ansible-navigator exec --ee True --ll debug --mode stdout]",
+    "index": 0,
+    "comment": "exec echo with ee",
+    "additional_information": {
+        "look_fors": [
+            "bash",
+            "test_data_from_config"
+        ],
+        "look_nots": [
+            "ERROR"
+        ],
+        "compared_fixture": false
+    },
+    "output": [
+        "test_data_from_config",
+        "(venv) bash-5.1$"
+    ]
+}
