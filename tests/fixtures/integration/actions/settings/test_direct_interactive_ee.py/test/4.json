@@ -1,0 +1,40 @@
+{
+    "name": "test[4-:f-clear filter, full list]",
+    "index": 4,
+    "comment": "clear filter, full list",
+    "additional_information": {
+        "present": [
+            "Ansible runner artifact dir",
+            "Help playbook"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "   NAME                                                 DEFAULT    SOURCE                             CURRENT",
+        " 0│Ansible runner artifact dir                             True    Not set                            Not set                                                                                                                                                                                              ▒",
+        " 1│Ansible runner rotate artifacts count                   True    Not set                            Not set                                                                                                                                                                                              ▒",
+        " 2│Ansible runner timeout                                 False    Environment variable               42                                                                                                                                                                                                   ▒",
+        " 3│App                                                    False    Provided at command line           settings                                                                                                                                                                                             ▒",
+        " 4│Cmdline                                                 True    Not set                            Not set                                                                                                                                                                                              ▒",
+        " 5│Collection doc cache path                              False    Environment variable               /home/user/github/ansible-navigator/.test_logs/tests/integration/actions/settings/test_direct_interactive_ee.py/collection_doc_cache.db                                                          ▒",
+        " 6│Config                                                  True    Not set                            Not set                                                                                                                                                                                              ▒",
+        " 7│Container engine                                       False    Defaults                           podman                                                                                                                                                                                               ▒",
+        " 8│Container options                                       True    Not set                            Not set                                                                                                                                                                                              ▒",
+        " 9│Current settings file                                   True    None                               None                                                                                                                                                                                                 ▒",
+        "10│Display color                                           True    Defaults                           True                                                                                                                                                                                                 ▒",
+        "11│Editor command                                          True    Defaults                           vi +{line_number} {filename}                                                                                                                                                                         ▒",
+        "12│Editor console                                          True    Defaults                           True                                                                                                                                                                                                 ▒",
+        "13│Exec command                                            True    Defaults                           /bin/bash",
+        "14│Exec shell                                              True    Defaults                           True",
+        "15│Execution environment                                   True    Provided at command line           True",
+        "16│Execution environment image                             True    Defaults                           quay.io/ansible/creator-ee:v0.2.0",
+        "17│Execution environment volume mounts                     True    Not set                            Not set",
+        "18│Help builder                                            True    Defaults                           False",
+        "19│Help config                                             True    Defaults                           False",
+        "20│Help doc                                                True    Defaults                           False",
+        "21│Help inventory                                          True    Defaults                           False",
+        "22│Help playbook                                           True    Defaults                           False",
+        "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
+    ]
+}

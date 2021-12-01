@@ -1,0 +1,19 @@
+{
+    "name": "test[8-:back-return to filtered list]",
+    "index": 8,
+    "comment": "return to filtered list",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "  NAME                                                                                                   DEFAULT                SOURCE                                                                  CURRENT",
+        "0│Exec command                                                                                              True                Defaults                                                                /bin/bash",
+        "1│Exec shell                                                                                                True                Defaults                                                                True",
+        "2│Execution environment                                                                                    False                Provided at command line                                                False",
+        "3│Execution environment image                                                                               True                Defaults                                                                quay.io/ansible/creator-ee:v0.2.0",
+        "4│Execution environment volume mounts                                                                       True                Not set                                                                 Not set",
+        "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "name": "test[1-:f App-filter for app settings]",
+    "index": 1,
+    "comment": "filter for app settings",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "  NAME                           DEFAULT                                           SOURCE                                                                                                                                                        CURRENT",
+        "0│App                              False                                           Provided at command line                                                                                                                                      settings",
+        "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
+    ]
+}

@@ -57,10 +57,10 @@ class Constants(Enum):
         " applying previous cli common entries, this indicates"
         " that it will only be used if the subcommand is the same"
     )
-    SEARCH_PATH = "Found using search path"
+    SEARCH_PATH = "Search path"
     SENTINEL = "Indicates a nonvalue"
-    USER_CFG = "User-provided configuration file"
-    USER_CLI = "Provided at command line"
+    USER_CFG = "Settings file"
+    USER_CLI = "Command line"
 
 
 @dataclass

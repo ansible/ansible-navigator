@@ -1,0 +1,32 @@
+{
+    "name": "test[0-ansible-navigator --ee True --ll debug --mode interactive-welcome screen]",
+    "index": 0,
+    "comment": "welcome screen",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        " 0│## Welcome",
+        " 1│----------------------------------------------------------------------------------------------------------",
+        " 2│",
+        " 3│Some things you can try from here:",
+        " 4│- `:collections`                                          Explore available collections",
+        " 5│- `:config`                                               Explore the current ansible configuration",
+        " 6│- `:doc <plugin>`                                         Review documentation for a module or plugin",
+        " 7│- `:help`                                                 Show the main help page",
+        " 8│- `:images`                                               Explore execution environment images",
+        " 9│- `:inventory -i <inventory>`                             Explore an inventory",
+        "10│- `:log`                                                  Review the application log",
+        "11│- `:open`                                                 Open current page in the editor",
+        "12│- `:replay`                                               Explore a previous run using a playbook artifact",
+        "13│- `:run <playbook> -i <inventory>`                        Run a playbook in interactive mode",
+        "14│- `:quit`                                                 Quit the application",
+        "15│",
+        "16│happy automating,",
+        "17│",
+        "18│-winston",
+        "^f/PgUp page up                                                ^b/PgDn page down                                                ↑↓ scroll                                                esc back                                                :help help"
+    ]
+}

@@ -1,0 +1,38 @@
+{
+    "name": "test[print settings to stdout with ee  clear && ansible-navigator settings --ee True --ll debug --mode stdout]",
+    "index": 0,
+    "comment": "print settings to stdout with ee",
+    "additional_information": {
+        "present": [
+            "workdir"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  - inventory",
+        "  - replay",
+        "  - run",
+        "  - settings",
+        "  - welcome",
+        "- choices: []",
+        "  cli_parameters:",
+        "    long: --workdir",
+        "    short: --bwd",
+        "  current_settings_file: None",
+        "  current_value: /home/user/github/ansible-navigator",
+        "  default: true",
+        "  default_value: /home/user/github/ansible-navigator",
+        "  description: Specify the path that contains ansible-builder manifest files",
+        "  env_var: ANSIBLE_NAVIGATOR_WORKDIR",
+        "  name: Workdir",
+        "  settings_file_sample:",
+        "    ansible-navigator:",
+        "      ansible-builder:",
+        "        workdir: <------",
+        "  source: Defaults",
+        "  subcommands:",
+        "  - builder",
+        "(venv) bash-5.1$"
+    ]
+}

@@ -9,6 +9,7 @@ from typing import Dict
 from typing import Generic
 from typing import List
 from typing import Optional
+from typing import Sequence
 from typing import Tuple
 from typing import TypeVar
 from typing import Union
@@ -157,7 +158,7 @@ class TypedStep(Generic[T]):
     _index_changed: bool = False
     _index: Optional[int] = None
     _value_changed: bool = False
-    _value: List[T] = field(default_factory=list)
+    _value: Sequence[T] = field(default_factory=list)
     columns: Optional[List[str]] = None
     select_func: Optional[Callable[[], "TypedStep"]] = None
     show_func: Optional[Callable[[], None]] = None
@@ -207,7 +208,7 @@ class TypedStep(Generic[T]):
         return self._value[self._index % len(self._value)]
 
     @property
-    def value(self) -> List[T]:
+    def value(self) -> Sequence[T]:
         """Return the value.
 
         :returns: The value
@@ -215,7 +216,7 @@ class TypedStep(Generic[T]):
         return self._value
 
     @value.setter
-    def value(self, value: List[T]) -> None:
+    def value(self, value: Sequence[T]) -> None:
         """Set the value and value changed if needed.
 
         :param value: The value for this instance
