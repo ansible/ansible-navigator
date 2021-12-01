@@ -122,7 +122,7 @@ navigator_subcommds = [
         epilog=(
             "Note: During development, it may become necessary to interact"
             " directly with the execution environment to review and confirm"
-            " it's build and behavior. All navigator settings will be applied"
+            " its build and behavior. All navigator settings will be applied"
             " when starting the execution environment."
         ),
     ),
@@ -271,7 +271,6 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="exec.shell",
             short_description=(
                 "Specify the exec command should be run in a shell."
-                " ('/bin/bash -c \"{exec_command}\"')"
             ),
             subcommands=["exec"],
             value=EntryValue(default=True),
