@@ -101,11 +101,6 @@ def test_flatten_list(value: List, anticpated_result: List) -> None:
     assert list(actual_result) == anticpated_result
 
 
-def id_for_human_time_test(value):
-    """generate an id for the human time test"""
-    return f"{value.id}"
-
-
 class HumanTimeTestData(NamedTuple):
     """data for human time test"""
 
@@ -124,28 +119,28 @@ human_time_test_data = [
 ]
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_integer(data: List) -> None:
     """test for the utils.human_time function (integer passed)"""
     result = utils.human_time(data.value)
     assert result == data.expected
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_negative_integer(data: List) -> None:
     """test for the utils.human_time function (negative integer passed)"""
     result = utils.human_time(-data.value)
     assert result == f"-{data.expected}"
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_float(data: List) -> None:
     """test for the utils.human_time function (float passed)"""
     result = utils.human_time(float(data.value))
     assert result == data.expected
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_negative_float(data: List) -> None:
     """test for the utils.human_time function (negative float passed)"""
     result = utils.human_time(-float(data.value))
