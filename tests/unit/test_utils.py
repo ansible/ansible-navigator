@@ -103,7 +103,7 @@ def test_flatten_list(value: List, anticpated_result: List) -> None:
 @pytest.mark.parametrize(
     "value, anticpated_result",
     [(1, "1s"), (60 + 1, "1m1s"), (3600 + 60 + 1, "1h1m1s"), (86400 + 3600 + 60 + 1, "1d1h1m1s")],
-    ids=["seconds", "minutes seconds", "hours minutes seconds", "days minutes seconds"],
+    ids=["seconds", "minutes seconds", "hours minutes seconds", "days hours minutes seconds"],
 )
 def test_human_time(value: Union[int, float], anticpated_result: str) -> None:
     """test for human time"""
