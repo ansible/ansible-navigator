@@ -6,7 +6,7 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from ansible_runner import get_inventory  # type: ignore
+from ansible_runner import get_inventory  # type: ignore[import]
 
 from .base import Base
 

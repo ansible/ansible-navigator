@@ -9,7 +9,7 @@ from typing import Tuple
 from typing import Union
 
 
-from ansible_runner import get_plugin_docs  # type: ignore
+from ansible_runner import get_plugin_docs  # type: ignore[import]
 
 from .base import Base
 
