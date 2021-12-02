@@ -352,12 +352,12 @@ def human_time(seconds: Union[int, float]) -> str:
     hours, seconds = divmod(seconds, 3600)
     minutes, seconds = divmod(seconds, 60)
     if days > 0:
-        return "%s%dd%dh%dm%ds" % (sign_string, days, hours, minutes, seconds)
+        return f"{sign_string}{days}d{hours}h{minutes}m{seconds}s"
     if hours > 0:
-        return "%s%dh%dm%ds" % (sign_string, hours, minutes, seconds)
+        return f"{sign_string}{hours}h{minutes}m{seconds}s"
     if minutes > 0:
-        return "%s%dm%ds" % (sign_string, minutes, seconds)
-    return "%s%ds" % (sign_string, seconds)
+        return f"{sign_string}{minutes}m{seconds}s"
+    return f"{sign_string}{seconds}s"
 
 
 PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")

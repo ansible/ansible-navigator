@@ -245,7 +245,7 @@ class UserInterface(CursesWindow):
         :return: The footer line
         :rtype: CursesLine
         """
-        colws = [len("{k}: {v}".format(k=str(k), v=str(v))) for k, v in key_dict.items()]
+        colws = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
         if self._status:
             status_width = self._pbar_width
         else:
@@ -258,7 +258,7 @@ class UserInterface(CursesWindow):
         footer = []
         for idx, key in enumerate(key_dict):
             left = key[0 : adj_colws[idx]]
-            right = " {v}".format(v=key_dict[key])
+            right = f" {key_dict[key]}"
             right = right[0 : adj_colws[idx] - len(key)]
             footer.append(
                 CursesLinePart(
@@ -403,7 +403,8 @@ class UserInterface(CursesWindow):
             # Add the content
             for idx, line in enumerate(lines):
                 line_index = line_numbers[idx]
-                prefix = "{idx}\u2502".format(idx=str(line_index).rjust(index_width))
+                line_index_str = str(line_index).rjust(index_width)
+                prefix = f"{line_index_str}\u2502"
                 self._add_line(
                     window=self._screen, lineno=idx + len(heading), line=line, prefix=prefix
                 )

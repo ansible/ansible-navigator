@@ -109,13 +109,13 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
     if isinstance(obj, dict) and "task" in obj:
         heading = []
-        detail = "PLAY [{play}:{tnum}] ".format(play=obj["play"], tnum=obj["__number"])
+        detail = f"PLAY [{obj['play']}:{obj['__number']}] "
         stars = "*" * (screen_w - len(detail))
         heading.append(
             tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)])
         )
 
-        detail = "TASK [{task}] ".format(task=obj["task"])
+        detail = f"TASK [{obj['task']}] "
         stars = "*" * (screen_w - len(detail))
         heading.append(
             tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)])
@@ -133,7 +133,7 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
         else:
             msg = ""
 
-        string = "{res}: [{host}] {msg}".format(res=res, host=obj["__host"], msg=msg)
+        string = f"{res}: [{obj['__host']}] {msg}"
         string = string + (" " * (screen_w - len(string) + 1))
         heading.append(
             tuple(
