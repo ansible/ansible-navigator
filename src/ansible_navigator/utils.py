@@ -343,7 +343,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     return messages, exit_messages, None
 
 
-def human_time(seconds: int) -> str:
+def human_time(seconds: Union[int, float]) -> str:
     """convert seconds into human readable
     00d00h00m00s format"""
     sign_string = "-" if seconds < 0 else ""

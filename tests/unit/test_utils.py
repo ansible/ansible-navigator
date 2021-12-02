@@ -1,15 +1,14 @@
 """ tests for the utilities in utils
 """
 import os
-import stat
 
 from typing import List
 from typing import Optional
-from types import SimpleNamespace
+from typing import Union
 
 import pytest
 
-import ansible_navigator.utils as utils
+from ansible_navigator import utils
 
 EXTENTIONS = [".yml", ".yaml", ".json"]
 
@@ -25,9 +24,9 @@ def test_find_many_settings_home(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    messages, exit_messages, found = utils.find_settings_file()
+    _messages, exit_messages, _found = utils.find_settings_file()
     expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
-    assert any([expected in exit_msg.message for exit_msg in exit_messages])
+    assert any((expected in exit_msg.message for exit_msg in exit_messages))
 
 
 def test_find_many_settings_cwd(monkeypatch) -> None:
@@ -39,9 +38,9 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    messages, exit_messages, found = utils.find_settings_file()
+    _messages, exit_messages, _found = utils.find_settings_file()
     expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
-    assert any([expected in exit_msg.message for exit_msg in exit_messages])
+    assert any((expected in exit_msg.message for exit_msg in exit_messages))
 
 
 def test_find_many_settings_precedence(monkeypatch) -> None:
@@ -54,7 +53,7 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    messages, exit_messages, found = utils.find_settings_file()
+    _messages, _exit_messages, found = utils.find_settings_file()
     assert expected == found
 
 
@@ -99,3 +98,24 @@ def test_flatten_list(value: List, anticpated_result: List) -> None:
     """test for flatten list"""
     actual_result = utils.flatten_list(value)
     assert list(actual_result) == anticpated_result
+
+
+@pytest.mark.parametrize(
+    "value, anticpated_result",
+    [(1, "1s"), (60 + 1, "1m1s"), (3600 + 60 + 1, "1h1m1s"), (86400 + 3600 + 60 + 1, "1d1h1m1s")],
+    ids=["seconds", "minutes seconds", "hours minutes seconds", "days minutes seconds"],
+)
+def test_human_time(value: Union[int, float], anticpated_result: str) -> None:
+    """test for human time"""
+    # pass integer
+    int_result = utils.human_time(value)
+    assert int_result == anticpated_result
+    # pass negative integer
+    neg_int_result = utils.human_time(-value)
+    assert neg_int_result == f"-{anticpated_result}"
+    # pass float
+    float_result = utils.human_time(float(value))
+    assert float_result == anticpated_result
+    # pass negative float
+    neg_float_result = utils.human_time(-value)
+    assert neg_float_result == f"-{anticpated_result}"
