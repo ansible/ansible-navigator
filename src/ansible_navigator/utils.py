@@ -352,7 +352,7 @@ def human_time(seconds: Union[int, float]) -> str:
     hours, seconds = divmod(seconds, 3600)
     minutes, seconds = divmod(seconds, 60)
     if days > 0:
-        return f"{sign_string}{days}d{hours}h{minutes}m{seconds}s"
+        return f"{sign_string!s}{days:d}d{hours:d}h{minutes}m{seconds}s"
     if hours > 0:
         return f"{sign_string}{hours}h{minutes}m{seconds}s"
     if minutes > 0:
