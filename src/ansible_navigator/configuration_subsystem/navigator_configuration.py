@@ -57,7 +57,7 @@ def generate_editor_command() -> str:
     else:
         message = "EDITOR environment variable set as '{editor}'"
         initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
-        command = f"{os.environ.get('EDITOR')} {{filename}}"
+        command = f"{editor} {{filename}}"
     message = f"Default editor_command set to: {command}"
     initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
     return command
