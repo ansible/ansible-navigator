@@ -4,6 +4,7 @@ import os
 
 from typing import List
 from typing import Optional
+from typing import NamedTuple
 from typing import Union
 
 import pytest
@@ -26,7 +27,7 @@ def test_find_many_settings_home(monkeypatch) -> None:
     monkeypatch.setattr(os.path, "exists", check_path_exists)
     _messages, exit_messages, _found = utils.find_settings_file()
     expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
-    assert any((expected in exit_msg.message for exit_msg in exit_messages))
+    assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
 def test_find_many_settings_cwd(monkeypatch) -> None:
@@ -40,7 +41,7 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
     monkeypatch.setattr(os.path, "exists", check_path_exists)
     _messages, exit_messages, _found = utils.find_settings_file()
     expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
-    assert any((expected in exit_msg.message for exit_msg in exit_messages))
+    assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
 def test_find_many_settings_precedence(monkeypatch) -> None:
@@ -100,22 +101,52 @@ def test_flatten_list(value: List, anticpated_result: List) -> None:
     assert list(actual_result) == anticpated_result
 
 
-@pytest.mark.parametrize(
-    "value, anticpated_result",
-    [(1, "1s"), (60 + 1, "1m1s"), (3600 + 60 + 1, "1h1m1s"), (86400 + 3600 + 60 + 1, "1d1h1m1s")],
-    ids=["seconds", "minutes seconds", "hours minutes seconds", "days hours minutes seconds"],
-)
-def test_human_time(value: Union[int, float], anticpated_result: str) -> None:
-    """test for human time"""
-    # pass integer
-    int_result = utils.human_time(value)
-    assert int_result == anticpated_result
-    # pass negative integer
-    neg_int_result = utils.human_time(-value)
-    assert neg_int_result == f"-{anticpated_result}"
-    # pass float
-    float_result = utils.human_time(float(value))
-    assert float_result == anticpated_result
-    # pass negative float
-    neg_float_result = utils.human_time(-value)
-    assert neg_float_result == f"-{anticpated_result}"
+def id_for_human_time_test(value):
+    """generate an id for the human time test"""
+    return f"{value.id}"
+
+
+class HumanTimeTestData(NamedTuple):
+    """data for human time test"""
+
+    id: str
+    value: Union[int, float]
+    expected: str
+
+
+human_time_test_data = [
+    HumanTimeTestData(id="seconds", value=1, expected="1s"),
+    HumanTimeTestData(id="minutes seconds", value=60 + 1, expected="1m1s"),
+    HumanTimeTestData(id="hours minutes seconds", value=3600 + 60 + 1, expected="1h1m1s"),
+    HumanTimeTestData(
+        id="days hours minutes seconds", value=86400 + 3600 + 60 + 1, expected="1d1h1m1s"
+    ),
+]
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+def test_human_time_integer(data: List) -> None:
+    """test for the utils.human_time function (integer passed)"""
+    result = utils.human_time(data.value)
+    assert result == data.expected
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+def test_human_time_negative_integer(data: List) -> None:
+    """test for the utils.human_time function (negative integer passed)"""
+    result = utils.human_time(-data.value)
+    assert result == f"-{data.expected}"
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+def test_human_time_float(data: List) -> None:
+    """test for the utils.human_time function (float passed)"""
+    result = utils.human_time(float(data.value))
+    assert result == data.expected
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=id_for_human_time_test)
+def test_human_time_negative_float(data: List) -> None:
+    """test for the utils.human_time function (negative float passed)"""
+    result = utils.human_time(-float(data.value))
+    assert result == f"-{data.expected}"

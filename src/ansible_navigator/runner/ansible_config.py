@@ -5,7 +5,7 @@ to run the ansible-config command
 from typing import Optional
 from typing import Tuple
 
-from ansible_runner import get_ansible_config  # type: ignore
+from ansible_runner import get_ansible_config
 
 from .base import Base
 
