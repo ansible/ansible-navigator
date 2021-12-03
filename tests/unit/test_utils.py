@@ -102,7 +102,7 @@ def test_flatten_list(value: List, anticpated_result: List) -> None:
 
 
 class HumanTimeTestData(NamedTuple):
-    """data for human time test"""
+    """Data for human time test."""
 
     id: str
     value: Union[int, float]
@@ -120,28 +120,40 @@ human_time_test_data = [
 
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
-def test_human_time_integer(data: List) -> None:
-    """test for the utils.human_time function (integer passed)"""
+def test_human_time_integer(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (integer passed).
+
+    Ensure the integer passed is correctly transformed into a human readable time string.
+    """
     result = utils.human_time(data.value)
     assert result == data.expected
 
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
-def test_human_time_negative_integer(data: List) -> None:
-    """test for the utils.human_time function (negative integer passed)"""
+def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (negative integer passed).
+
+    Ensure the negative integer passed is correctly transformed into a human readable time string.
+    """
     result = utils.human_time(-data.value)
     assert result == f"-{data.expected}"
 
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
-def test_human_time_float(data: List) -> None:
-    """test for the utils.human_time function (float passed)"""
+def test_human_time_float(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (float passed).
+
+    Ensure the float passed is correctly transformed into a human readable time string.
+    """
     result = utils.human_time(float(data.value))
     assert result == data.expected
 
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
-def test_human_time_negative_float(data: List) -> None:
-    """test for the utils.human_time function (negative float passed)"""
+def test_human_time_negative_float(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (negative float passed).
+
+    Ensure the negative float passed is correctly transformed into a human readable time string.
+    """
     result = utils.human_time(-float(data.value))
     assert result == f"-{data.expected}"
