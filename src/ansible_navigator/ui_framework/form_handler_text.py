@@ -72,7 +72,7 @@ class FormHandlerText(CursesWindow, Textbox):
         elif char == curses_ascii.TAB:
             ret = 0
         else:
-            ret = bool(self.do_command(char))  # type: ignore
+            ret = bool(self.do_command(char))  # type: ignore[func-returns-value]
             self._arrowing = 0
         return ret
 

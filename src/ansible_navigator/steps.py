@@ -115,7 +115,7 @@ class Step:
             raise ValueError("wanted {want}, got {value}".format(want=want, value=type(value)))
 
 
-class Steps(deque):  # type: ignore
+class Steps(deque):
 
     """a custom deque"""
 

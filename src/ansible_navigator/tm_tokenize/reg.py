@@ -5,7 +5,7 @@ from typing import Optional
 from typing import Tuple
 from typing import TYPE_CHECKING
 
-import onigurumacffi  # type: ignore
+import onigurumacffi  # type: ignore[import]
 
 from .region import Region
 

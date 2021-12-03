@@ -16,7 +16,7 @@ from typing import Tuple
 try:
     from importlib import resources
 except ImportError:
-    import importlib_resources as resources  # type: ignore
+    import importlib_resources as resources  # type: ignore[import, no-redef]
 
 
 # Basic structure for storing information about one action
@@ -35,7 +35,7 @@ def _import(package: str, action: str) -> None:
 
 def _import_all(package: str) -> None:
     """Import all actions in a package"""
-    files = resources.contents(package)  # type: ignore
+    files = resources.contents(package)
     actions = [
         f[:-3] for f in files if f.endswith(".py") and f[0] != "_" and not f.startswith(".#")
     ]
