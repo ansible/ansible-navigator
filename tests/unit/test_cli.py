@@ -96,7 +96,7 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     args = deepcopy(NavigatorConfiguration)
     _messages, exit_msgs = parse_and_update(params=given, args=args, initial=True)
-    assert exit_msgs == []
+    assert not exit_msgs
     result = args.entry(argname)
     assert result.value.current == expected, result
 
@@ -109,7 +109,7 @@ def test_editor_command_default(_mf1, monkeypatch):
     )
     args = deepcopy(NavigatorConfiguration)
     _messages, exit_msgs = parse_and_update(params=[], args=args, initial=True)
-    assert exit_msgs == []
+    assert not exit_msgs
     assert args.editor_command == "vi +{line_number} {filename}"
 
 

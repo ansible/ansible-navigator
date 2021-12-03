@@ -1,8 +1,9 @@
-""" test appending to the log """
+"""Test appending to the log.
+"""
 
 from unittest import mock
 
-import ansible_navigator.cli as cli
+from ansible_navigator import cli
 
 
 def test_log_append_true(tmp_path):

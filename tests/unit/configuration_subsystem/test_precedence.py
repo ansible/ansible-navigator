@@ -19,7 +19,6 @@ import pytest
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
-from .conftest import GenerateConfigResponse
 from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
 from .data import BASE_SHORT_CLI

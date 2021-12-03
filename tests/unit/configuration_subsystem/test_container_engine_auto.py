@@ -1,8 +1,10 @@
+"""Tests related to the auto detection of the container engine.
+"""
 import shutil
 
 
 def test_ce_auto_podman(monkeypatch, generate_config):
-    """Ensure podman is the result"""
+    """Ensure podman is the result."""
 
     def which(arg):
         return arg == "podman"
@@ -14,7 +16,7 @@ def test_ce_auto_podman(monkeypatch, generate_config):
 
 
 def test_ce_auto_docker(monkeypatch, generate_config):
-    """Ensure docker is the result"""
+    """Ensure docker is the result."""
 
     def which(arg):
         return arg == "docker"
@@ -26,9 +28,9 @@ def test_ce_auto_docker(monkeypatch, generate_config):
 
 
 def test_ce_auto_none(monkeypatch, generate_config):
-    """Ensure error is the result"""
+    """Ensure error is the result."""
 
-    def which(arg):
+    def which(_arg):
         return False
 
     monkeypatch.setattr(shutil, "which", which)

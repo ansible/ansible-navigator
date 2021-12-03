@@ -1,7 +1,6 @@
-""" config unit tests
+"""Unit tests for the config action.
 """
 import curses
-import os
 
 from ansible_navigator.actions.config import color_menu
 from ansible_navigator.actions.config import content_heading
