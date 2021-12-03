@@ -1,7 +1,7 @@
 """ some utilities that are specific to ansible_navigator
 """
 import ast
-
+import decimal
 import logging
 import html
 import os
@@ -408,6 +408,12 @@ def remove_dbl_un(string):
     if string.startswith("__"):
         return string.replace("__", "", 1)
     return string
+
+
+def round_half_up(number: Union[float, int]) -> int:
+    """Round a number to the nearest integer with ties going away from zero."""
+    rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
+    return int(rounded)
 
 
 def str2bool(value: Any) -> bool:
