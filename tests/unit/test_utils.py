@@ -5,7 +5,6 @@ import os
 from typing import List
 from typing import NamedTuple
 from typing import Optional
-from typing import NamedTuple
 from typing import Union
 
 import pytest
@@ -182,7 +181,8 @@ round_half_up_test_data = [
 def test_round_half_up(data: RoundHalfUpTestData) -> None:
     """Test for the utils.round_half_up function.
 
-    Ensure the number passed is consistently rounded to the nearset integer with ties going away from zero.
+    Ensure the number passed is consistently rounded to the nearset
+    integer with ties going away from zero.
     """
     for _iteration in range(100):
         result = utils.round_half_up(data.value)
