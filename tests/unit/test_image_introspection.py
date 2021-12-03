@@ -2,7 +2,7 @@
 """
 import importlib
 import pytest
-import ansible_navigator.utils as utils
+from ansible_navigator import utils
 
 RPM_OUTPUT = """Name        : net-snmp
 Epoch       : 1

@@ -77,7 +77,9 @@ def test_replay_no_artifact(_mocked_func, generate_config):
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_replay_missing_artifact(_mocked_func, generate_config):
     """Ensure an error is created load is used with a missing playbook artifact"""
-    response = generate_config(params=["replay", tempfile.NamedTemporaryFile().name])
+    with tempfile.NamedTemporaryFile() as temp_file:
+        temp_file_name = temp_file.name
+    response = generate_config(params=["replay", temp_file_name])
     exit_msg = "The specified playbook artifact could not be found:"
     assert exit_msg in " ".join([exit_msg.message for exit_msg in response.exit_messages])
 

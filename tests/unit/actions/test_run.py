@@ -1,4 +1,4 @@
-"""Some simple test to confirm the artifact path is correctly set
+"""Unit tests for the run action.
 """
 import logging
 import os
@@ -22,7 +22,7 @@ TEST_QUEUE: Queue = Queue()
 
 
 class ArtifactTstData(NamedTuple):
-    """the artifact files test data object"""
+    """The artifact files test data object."""
 
     name: str
     filename: Union[None, str]
@@ -32,7 +32,7 @@ class ArtifactTstData(NamedTuple):
 
 
 def id_from_data(value):
-    """return the name from the test data object"""
+    """Return the name from the test data object."""
     return f" {value.name} "
 
 
@@ -186,8 +186,8 @@ def test_runner_args(_mocked_command_runner, caplog, data):
     args.entry("ansible_runner_timeout").value.current = data.timeout
 
     run = action(args=args)
-    run._queue = TEST_QUEUE
-    run._run_runner()
+    run._queue = TEST_QUEUE  # pylint: disable=protected-access
+    run._run_runner()  # pylint: disable=protected-access
 
     _runner_args_passed = _mocked_command_runner.call_args[1]
     assert _runner_args_passed == data.expected

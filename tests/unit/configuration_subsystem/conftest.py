@@ -42,7 +42,7 @@ def _generate_config(params=None, setting_file_name=None, initial=True) -> Gener
 
     if setting_file_name:
         settings_file_path = os.path.join(TEST_FIXTURE_DIR, setting_file_name)
-        with open(settings_file_path) as file:
+        with open(file=settings_file_path, encoding="utf-8") as file:
             try:
                 settings_contents = yaml.load(file, Loader=Loader)
             except yaml.parser.ParserError:

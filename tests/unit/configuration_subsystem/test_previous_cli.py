@@ -78,7 +78,7 @@ def test_apply_previous_cli_specified():
     )
 
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     expected = [
@@ -98,7 +98,7 @@ def test_apply_previous_cli_specified():
         apply_previous_cli_entries=["execution_environment", "execution_environment_image"],
     )
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -125,7 +125,7 @@ def test_apply_previous_cli_mixed():
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
         _messages, exit_messages = configurator.configure()
-        assert exit_messages == []
+        assert not exit_messages
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
@@ -149,7 +149,7 @@ def test_apply_previous_cli_mixed():
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES": "ENV1=VAL1"}):
         _messages, exit_messages = configurator.configure()
-        assert exit_messages == []
+        assert not exit_messages
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -176,7 +176,7 @@ def test_apply_previous_cli_cmdline_not_applied():
     )
 
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
@@ -198,7 +198,7 @@ def test_apply_previous_cli_cmdline_not_applied():
         apply_previous_cli_entries=C.ALL,
     )
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -225,7 +225,7 @@ def test_apply_previous_cli_none(_mf1):
     )
 
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
@@ -246,7 +246,7 @@ def test_apply_previous_cli_none(_mf1):
         apply_previous_cli_entries=C.NONE,
     )
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -290,7 +290,7 @@ def test_apply_cli_subset_none():
         params=["list", "-z", "zebra"], application_configuration=test_config, initial=True
     )
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     assert isinstance(test_config.initial, ApplicationConfiguration)
 
@@ -306,7 +306,7 @@ def test_apply_cli_subset_none():
         params=["run"], application_configuration=test_config, apply_previous_cli_entries=C.ALL
     )
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     expected = [
         ("subcommand", "run", C.USER_CLI),
