@@ -3,7 +3,7 @@ run a command in a synchronous manner
 """
 from typing import Tuple
 
-from ansible_runner import run_command
+from ansible_runner import run_command  # type: ignore[import]
 
 from .command_base import CommandBase
 

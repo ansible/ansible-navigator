@@ -1,15 +1,15 @@
 """ tests for the utilities in utils
 """
 import os
-import stat
 
 from typing import List
 from typing import Optional
-from types import SimpleNamespace
+from typing import NamedTuple
+from typing import Union
 
 import pytest
 
-import ansible_navigator.utils as utils
+from ansible_navigator import utils
 
 EXTENTIONS = [".yml", ".yaml", ".json"]
 
@@ -25,9 +25,9 @@ def test_find_many_settings_home(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    messages, exit_messages, found = utils.find_settings_file()
+    _messages, exit_messages, _found = utils.find_settings_file()
     expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
-    assert any([expected in exit_msg.message for exit_msg in exit_messages])
+    assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
 def test_find_many_settings_cwd(monkeypatch) -> None:
@@ -39,9 +39,9 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    messages, exit_messages, found = utils.find_settings_file()
+    _messages, exit_messages, _found = utils.find_settings_file()
     expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
-    assert any([expected in exit_msg.message for exit_msg in exit_messages])
+    assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
 def test_find_many_settings_precedence(monkeypatch) -> None:
@@ -54,7 +54,7 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    messages, exit_messages, found = utils.find_settings_file()
+    _messages, _exit_messages, found = utils.find_settings_file()
     assert expected == found
 
 
@@ -99,3 +99,61 @@ def test_flatten_list(value: List, anticpated_result: List) -> None:
     """test for flatten list"""
     actual_result = utils.flatten_list(value)
     assert list(actual_result) == anticpated_result
+
+
+class HumanTimeTestData(NamedTuple):
+    """Data for human time test."""
+
+    id: str
+    value: Union[int, float]
+    expected: str
+
+
+human_time_test_data = [
+    HumanTimeTestData(id="seconds", value=1, expected="1s"),
+    HumanTimeTestData(id="minutes seconds", value=60 + 1, expected="1m1s"),
+    HumanTimeTestData(id="hours minutes seconds", value=3600 + 60 + 1, expected="1h1m1s"),
+    HumanTimeTestData(
+        id="days hours minutes seconds", value=86400 + 3600 + 60 + 1, expected="1d1h1m1s"
+    ),
+]
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+def test_human_time_integer(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (integer passed).
+
+    Ensure the integer passed is correctly transformed into a human readable time string.
+    """
+    result = utils.human_time(data.value)
+    assert result == data.expected
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (negative integer passed).
+
+    Ensure the negative integer passed is correctly transformed into a human readable time string.
+    """
+    result = utils.human_time(-data.value)
+    assert result == f"-{data.expected}"
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+def test_human_time_float(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (float passed).
+
+    Ensure the float passed is correctly transformed into a human readable time string.
+    """
+    result = utils.human_time(float(data.value))
+    assert result == data.expected
+
+
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+def test_human_time_negative_float(data: HumanTimeTestData) -> None:
+    """Test for the utils.human_time function (negative float passed).
+
+    Ensure the negative float passed is correctly transformed into a human readable time string.
+    """
+    result = utils.human_time(-float(data.value))
+    assert result == f"-{data.expected}"
