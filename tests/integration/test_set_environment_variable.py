@@ -7,7 +7,7 @@ from unittest import mock
 
 import pytest
 
-import ansible_navigator.cli as cli
+from ansible_navigator import cli
 
 from ._cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
@@ -65,7 +65,9 @@ class Test(Cli2Runner):
     }
 
     def run_test(self, mocked_runner, tmpdir, cli_entry, config_fixture, expected):
-        """mock the runner call so it raises an exception
+        # pylint: disable=too-many-arguments
+        """Mock the runner call so it raises an exception.
+
         mock the command line with sys.argv
         set the ANSIBLE_NAVIGATOR_CONFIG envvar
         call cli.main(), check the kwarg envvars passed to the runner func

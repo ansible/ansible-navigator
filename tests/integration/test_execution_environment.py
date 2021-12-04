@@ -7,7 +7,7 @@ from unittest import mock
 
 import pytest
 
-import ansible_navigator.cli as cli
+from ansible_navigator import cli
 
 from ._cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR

@@ -1,4 +1,4 @@
-""" from welcome interactive w/ ee
+"""Tests for doc from welcome, interactive, with ee.
 """
 from typing import List
 
@@ -17,7 +17,7 @@ testdata_module_doc: List = [
 ]
 
 # lookup plugin doc
-CLI_LOOKUP_DOC = "ansible-navigator" " --execution-environment true"
+CLI_LOOKUP_DOC = "ansible-navigator --execution-environment true"
 
 testdata_lookup_doc: List = [
     (0, CLI_LOOKUP_DOC, "welcome", "lookup_doc_pass", []),
@@ -25,7 +25,7 @@ testdata_lookup_doc: List = [
 ]
 
 # plugin does not exist
-CLI_WRONG_MODULE_NOT_EXIST = "ansible-navigator" " --execution-environment true"
+CLI_WRONG_MODULE_NOT_EXIST = "ansible-navigator --execution-environment true"
 
 testdata_module_doc_not_exist = [
     (0, CLI_WRONG_MODULE_NOT_EXIST, "welcome", "module_doc_fail", []),
@@ -43,7 +43,7 @@ testdata_module_doc_not_exist = [
     "index, user_input, comment, testname, expected_in_output", testdata_module_doc
 )
 class TestModuleDoc(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from welcome, interactive, with ee, module doc."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
@@ -53,7 +53,7 @@ class TestModuleDoc(BaseClass):
     "index, user_input, comment, testname, expected_in_output", testdata_lookup_doc
 )
 class TestLookUpDoc(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from welcome, interactive, with ee, lookup doc."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
@@ -63,7 +63,7 @@ class TestLookUpDoc(BaseClass):
     "index, user_input, comment, testname, expected_in_output", testdata_module_doc_not_exist
 )
 class TestModuleDocNotExist(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from welcome, interactive, with ee, doc not found."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False

@@ -14,6 +14,9 @@ from ._common import generate_test_log_dir
 
 
 class TmuxSession:
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-locals
     """tmux session"""
 
     def __init__(
@@ -161,10 +164,14 @@ class TmuxSession:
         ignore_within_response=None,
         timeout=300,
     ):
-        """interact with the tmux session
+        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-statements
+        """Interact with the tmux session.
+
         :param value: send to screen
-        :param search_within_response: a list of strs or str to find
-        :param ignore_within_reponse: ignore screen if this there
+        :param search_within_response: a list of strings or string to find
+        :param ignore_within_response: ignore screen if this there
+        :param timeout: the amount of time is seconds to allow for completion
         """
         showing = None
         if self._fail_remaining:
@@ -261,7 +268,7 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                with open(setup_capture_path, "w") as filehandle:
+                with open(file=setup_capture_path, mode="w", encoding="utf-8") as filehandle:
                     filehandle.writelines("\n".join(self._setup_capture))
 
                 tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
@@ -271,7 +278,7 @@ class TmuxSession:
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
-                with open(timeout_capture_path, "w") as filehandle:
+                with open(file=timeout_capture_path, mode="w", encoding="utf-8") as filehandle:
                     filehandle.writelines("\n".join(showing))
                 self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
                 return showing

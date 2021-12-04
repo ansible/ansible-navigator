@@ -1,4 +1,4 @@
-""" test the use of execution-environment-image throguh to runner
+"""Test the use of execution-environment-image through to runner.
 """
 import os
 import shlex
@@ -7,7 +7,7 @@ from unittest import mock
 
 import pytest
 
-import ansible_navigator.cli as cli
+from ansible_navigator import cli
 
 from ._cli2runner import Cli2Runner
 from ..defaults import DEFAULT_CONTAINER_IMAGE

@@ -1,8 +1,10 @@
-""" doc direct from cli interactive w/o ee
+"""Tests for doc from cli, interactive, without ee.
 """
-import pytest
 
 from typing import List
+
+import pytest
+
 from .base import BaseClass
 
 # module doc
@@ -39,7 +41,7 @@ testdata_module_doc_not_exist = [
     "index, user_input, comment, testname, expected_in_output", testdata_module_doc
 )
 class TestModuleDoc(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from cli, interactive, without ee."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False

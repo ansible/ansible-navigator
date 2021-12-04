@@ -1,4 +1,4 @@
-""" base class for imagesß interactive tests
+"""Base class for images interactive tests.
 """
 import difflib
 import json
@@ -11,10 +11,9 @@ from ..._common import update_fixtures
 from ..._tmux_session import TmuxSession
 from ..._interactions import SearchFor
 from ..._interactions import Step
-from ....defaults import FIXTURES_DIR
 from ....defaults import DEFAULT_CONTAINER_IMAGE
 
-IMAGE_SHORT = DEFAULT_CONTAINER_IMAGE.split("/")[-1].split(":")[0]
+IMAGE_SHORT = DEFAULT_CONTAINER_IMAGE.rsplit("/", maxsplit=1)[-1].split(":")[0]
 
 
 step_back = Step(user_input=":back", comment="goto info menu", look_fors=["Everything"])
@@ -39,12 +38,13 @@ base_steps = (
 
 
 class BaseClass:
-    """base class for interactive/stdout config tests"""
+    """Base class for interactive images tests."""
 
     UPDATE_FIXTURES = False
 
+    @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(self, request):
+    def fixture_tmux_session(request):
         """tmux fixture for this module"""
         params = {
             "unique_test_id": request.node.nodeid,
@@ -53,10 +53,7 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
-        # pylint: disable=too-many-arguments
-        """test interactive/stdout config"""
+        """Run the tests for images, mode and ee set in child class."""
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
@@ -96,7 +93,7 @@ class BaseClass:
 
         if not any((step.look_fors, step.look_nots)):
             dir_path, file_name = fixture_path_from_request(request, step.step_index)
-            with open(f"{dir_path}/{file_name}") as infile:
+            with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(

@@ -22,7 +22,9 @@ from ansible_navigator.steps import Steps
 
 
 class ActionRunTest:
-    """directly run an action"""
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-arguments
+    """Directly run an action."""
 
     def __init__(
         self,
@@ -115,6 +117,7 @@ class ActionRunTest:
         return action
 
     def run_action_stdout(self, **kwargs) -> Tuple[int, str, str]:
+        # pylint: disable=too-many-locals
         """run the action"""
         self._app_args.update({"mode": "stdout"})
         self._app_args.update(kwargs)
@@ -137,23 +140,26 @@ class ActionRunTest:
         sys.stdin = stty  # type: ignore
 
         # set stderr and stdout to fds
-        sys.stdout = tempfile.TemporaryFile()  # type: ignore
-        sys.stderr = tempfile.TemporaryFile()  # type: ignore
+        with tempfile.TemporaryFile() as sys_stdout:
+            sys.stdout = sys_stdout  # type: ignore
 
-        # run the action
-        return_code = action.run_stdout()
+            with tempfile.TemporaryFile() as sys_stderr:
+                sys.stderr = sys_stderr  # type: ignore
 
-        # restore stdin
-        sys.stdin = __stdin__
+                # run the action
+                return_code = action.run_stdout()
 
-        # read and restore stdout
-        sys.stdout.seek(0)
-        stdout = sys.stdout.read().decode()  # type: ignore
-        sys.stdout = __stdout__
+                # restore stdin
+                sys.stdin = __stdin__
 
-        # read and restore stderr
-        sys.stderr.seek(0)
-        stderr = sys.stderr.read().decode()  # type: ignore
-        sys.stderr = __stderr__
+                # read and restore stdout
+                sys.stdout.seek(0)
+                stdout = sys.stdout.read().decode()  # type: ignore
+                sys.stdout = __stdout__
+
+                # read and restore stderr
+                sys.stderr.seek(0)
+                stderr = sys.stderr.read().decode()  # type: ignore
+                sys.stderr = __stderr__
 
         return return_code, stdout, stderr

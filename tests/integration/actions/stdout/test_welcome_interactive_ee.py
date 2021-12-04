@@ -1,4 +1,4 @@
-""" from welcome interactive w/ ee
+"""Tests for stdout from welcome, interactive, with ee.
 """
 import pytest
 
@@ -6,7 +6,7 @@ from .base import BaseClass
 from .base import ANSIBLE_PLAYBOOK
 
 
-CLI = "ansible-navigator" " --execution-environment true"
+CLI = "ansible-navigator --execution-environment true"
 
 testdata = [
     (0, CLI, "welcome", ":help help"),
@@ -20,6 +20,6 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for stdout from welcome, interactive, with ee."""
 
     UPDATE_FIXTURES = False

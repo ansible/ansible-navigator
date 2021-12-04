@@ -1,11 +1,13 @@
-""" base class for run interactive tests
+"""Base class for run interactive/stdout tests.
 """
 import difflib
 import json
 import os
-import pytest
 
 from typing import Optional
+
+import pytest
+
 from ..._interactions import SearchFor
 from ..._interactions import Step
 from ....defaults import FIXTURES_DIR
@@ -37,7 +39,7 @@ base_steps = (
 
 
 class BaseClass:
-    """base class for interactive/stdout run tests"""
+    """Base class for run interactive/stdout tests."""
 
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
@@ -59,10 +61,8 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
-        # pylint: disable=too-many-arguments
-        """test interactive/stdout config"""
+        # pylint: disable=too-many-branches
+        """Run the tests for run, mode and ee set in child class."""
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
@@ -113,7 +113,7 @@ class BaseClass:
 
         if not any((step.look_fors, step.look_nots)):
             dir_path, file_name = fixture_path_from_request(request, step.step_index)
-            with open(os.path.join(dir_path, file_name)) as infile:
+            with open(file=os.path.join(dir_path, file_name), encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(

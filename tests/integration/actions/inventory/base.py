@@ -1,4 +1,4 @@
-""" base class for inventory interactive tests
+"""Base class for inventory interactive/stdout tests.
 """
 import difflib
 import json
@@ -45,7 +45,7 @@ base_steps = (
 
 
 class BaseClass:
-    """base class for interactive inventory tests"""
+    """base class for inventory interactive/stdout tests"""
 
     UPDATE_FIXTURES = False
 
@@ -68,11 +68,7 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
-        # pylint: disable=too-many-arguments
-
-        """test interactive/stdout inventory"""
+        """Run the tests for inventory, mode and ee set in child class."""
         assert os.path.exists(ANSIBLE_INVENTORY_FIXTURE_DIR)
         assert os.path.exists(TEST_CONFIG_FILE)
 
@@ -120,7 +116,7 @@ class BaseClass:
 
         if not any((step.look_fors, step.look_nots)):
             dir_path, file_name = fixture_path_from_request(request, step.step_index)
-            with open(os.path.join(dir_path, file_name)) as infile:
+            with open(file=os.path.join(dir_path, file_name), encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(

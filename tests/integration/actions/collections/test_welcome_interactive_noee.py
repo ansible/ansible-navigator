@@ -1,4 +1,4 @@
-""" collections from welcome interactive w/0 ee
+"""Tests for collections from welcome, interactive, without ee.
 """
 import pytest
 
@@ -26,7 +26,8 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment", testdata)
 class Test(BaseClass):
-    """run the tests"""
+    # pylint: disable=too-few-public-methods
+    """Run the tests for collections from welcome, interactive, without ee."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False

@@ -1,6 +1,6 @@
-""" from welcome interactive w/o ee
+"""Tests for doc from welcome, interactive, without ee.
 """
-from typing import List, Optional
+from typing import List
 
 import pytest
 
@@ -43,7 +43,7 @@ testdata_module_doc_not_exist = [
     "index, user_input, comment, testname, expected_in_output", testdata_module_doc
 )
 class TestModuleDoc(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from welcome, interactive, without ee, module doc."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
@@ -53,7 +53,7 @@ class TestModuleDoc(BaseClass):
     "index, user_input, comment, testname, expected_in_output", testdata_lookup_doc
 )
 class TestLookUpDoc(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from welcome, interactive, without ee, lookup doc."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
@@ -63,7 +63,7 @@ class TestLookUpDoc(BaseClass):
     "index, user_input, comment, testname, expected_in_output", testdata_module_doc_not_exist
 )
 class TestModuleDocNotExist(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from welcome, interactive, without ee, doc not found."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False

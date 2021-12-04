@@ -43,8 +43,7 @@ class Command(NamedTuple):
         cmd = " ".join(shlex.quote(str(arg)) for arg in args)
         if self.preclear:
             return "clear && " + cmd
-        else:
-            return cmd
+        return cmd
 
 
 class Step(NamedTuple):
