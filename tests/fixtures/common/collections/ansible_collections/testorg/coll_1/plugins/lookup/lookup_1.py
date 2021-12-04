@@ -1,9 +1,10 @@
-"""
-The get_path lookup plugin
-"""
+"""An ansible test lookup plugin."""
+
 from __future__ import absolute_import, division, print_function
 
+# pylint: disable=invalid-name
 __metaclass__ = type
+# pylint: enable=invalid-name
 
 
 DOCUMENTATION = """
