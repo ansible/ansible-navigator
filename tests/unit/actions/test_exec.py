@@ -1,16 +1,15 @@
-"""Some simple tests for exec command and param generation
-"""
+"""Some simple tests for exec command and param generation."""
 
-
+from typing import List
 from typing import NamedTuple
 
 import pytest
 
-from ansible_navigator.actions.exec import Action as exec_action
+from ansible_navigator.actions.exec import Action as ExecAction
 
 
 class CommandTestData(NamedTuple):
-    """the artifact files test data object"""
+    """The artifact files test data object."""
 
     name: str
     command: str
@@ -20,7 +19,11 @@ class CommandTestData(NamedTuple):
 
 
 def id_from_data(value):
-    """return the name from the test data object"""
+    """Return the name from the test data object.
+
+    :param value: The value from which the test id will be extracted
+    :returns: The test id
+    """
     return f" {value.name} "
 
 
@@ -74,13 +77,13 @@ command_test_data = [
 
 
 @pytest.mark.parametrize("data", command_test_data, ids=id_from_data)
-def test_artifact_path(data):
-    """Test the generation of the command and params"""
+def test_artifact_path(data: CommandTestData):
+    """Test the generation of the command and params.
 
+    :param data: The test data
+    """
     # pylint: disable=protected-access
-    command, params = exec_action._generate_command(
-        exec_command=data.command, exec_shell=data.shell
-    )
+    command, params = ExecAction._generate_command(exec_command=data.command, exec_shell=data.shell)
     comment = data, command, params
     assert command == data.result_command, comment
     assert params == data.result_params, comment

@@ -1,4 +1,5 @@
-""" exec stdout tests using tmux """
+"""Tests for exec, mode stdout, parameters set using config file."""
+
 import pytest
 
 
@@ -12,7 +13,7 @@ from ..._interactions import add_indicies
 
 
 class StdoutCommand(Command):
-    """stdout command"""
+    """A stdout command."""
 
     mode = "stdout"
     subcommand = "exec"
@@ -20,7 +21,7 @@ class StdoutCommand(Command):
 
 
 class ShellCommand(Step):
-    """a shell command"""
+    """A shell command."""
 
     search_within_response = SearchFor.PROMPT
 
@@ -47,14 +48,18 @@ stdout_tests = (
 steps = add_indicies(stdout_tests)
 
 
-def step_id(value):
-    """return the test id from the test step object"""
+def step_id(value: ShellCommand) -> str:
+    """Return the test id from the test step object.
+
+    :param value: The data fro the test iteration
+    :returns: An id for the test
+    """
     return f"{value.comment}  {value.user_input}"
 
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for exec, mode stdout, parameters set using config file."""
 
     CONFIG_FILE = TEST_CONFIG_FILE
     UPDATE_FIXTURES = False

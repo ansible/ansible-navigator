@@ -349,7 +349,11 @@ def divmod_int(numerator: Union[int, float], denominator: Union[int, float]) -> 
     return int(quotient), int(remainder)
 
 
+<<<<<<< HEAD
 def human_time(seconds: Union[int, float]) -> str:
+=======
+def human_time(seconds: int) -> str:
+>>>>>>> 7eb4ca9 (Update docstrings)
     """Convert seconds into human readable 00d00h00m00s format."""
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))

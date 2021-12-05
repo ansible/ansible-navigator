@@ -1,8 +1,10 @@
-""" base class for exec interactive  and stdout tests
-"""
+"""The base class for exec interactive and stdout tests."""
+
 import difflib
 import json
 import os
+
+from typing import Generator
 
 import pytest
 
@@ -18,7 +20,7 @@ TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yaml")
 
 
 class BaseClass:
-    """base class for interactive/stdout exec tests"""
+    """The base class for interactive/stdout exec tests."""
 
     UPDATE_FIXTURES = False
     PANE_HEIGHT = 25
@@ -26,8 +28,14 @@ class BaseClass:
     CONFIG_FILE = None
 
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(self, request):
-        """tmux fixture for this module"""
+    def fixture_tmux_session(
+        self, request: pytest.FixtureRequest
+    ) -> Generator[TmuxSession, None, None]:
+        """Tmux fixture for this module.
+
+        :param request: The request for this fixture
+        :yields: A tmux session
+        """
         params = {
             "unique_test_id": request.node.nodeid,
             "pane_height": self.PANE_HEIGHT,
@@ -40,12 +48,17 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_session, step):
+    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: Step):
         # pylint:disable=unused-argument
         # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
-        """test interactive/stdout exec"""
+        """Test interactive/stdout exec.
 
+        :param request: The test request
+        :param tmux_session: The tmux session
+        :param step: A step within a series of tests
+        :raises ValueError: If test mode isn't set
+        """
         if step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         else:

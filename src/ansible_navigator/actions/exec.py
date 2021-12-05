@@ -1,30 +1,41 @@
-""" :exec """
+"""Run the :exec subcommand."""
 import os
 import shlex
 
+from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
 
 from . import _actions as actions
 from ..app import App
+from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import Command
 
 
 @actions.register
 class Action(App):
-    """:exec"""
+    """Run the :exec subcommand."""
 
     # pylint: disable=too-few-public-methods
 
     KEGEX = r"^e(?:xec)?$"
 
-    def __init__(self, args):
+    def __init__(self, args: ApplicationConfiguration):
+        """Initialize the action.
+
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="exec")
 
     @staticmethod
-    def _generate_command(exec_command: str, exec_shell: bool) -> Tuple:
-        """Generate the command and args"""
+    def _generate_command(exec_command: str, exec_shell: bool) -> Tuple[str, Optional[List[str]]]:
+        """Generate the command and args.
+
+        :param exec_command: The command to run
+        :param exec_shell: Should the command be wrapped in a shell
+        :returns: The command and any pass through arguments
+        """
         pass_through_args = None
         if exec_shell and exec_command:
             command = "/bin/bash"
@@ -37,7 +48,10 @@ class Action(App):
         return (command, pass_through_args)
 
     def run_stdout(self) -> Union[None, int]:
-        """Run in mode stdout"""
+        """Run in mode stdout.
+
+        :returns: The return code or None
+        """
         self._logger.debug("exec requested in stdout mode")
         response = self._run_runner()
         if response:
@@ -48,8 +62,10 @@ class Action(App):
     def _run_runner(self) -> Optional[Tuple]:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
-        """spin up runner"""
+        """Spin up runner.
 
+        :return: The stdout, stderr and return code from runner
+        """
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
         else:
