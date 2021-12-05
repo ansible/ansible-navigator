@@ -31,7 +31,7 @@ class ActionRunner(App):
 
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
-    """Run a single action."""
+    """A single action runner."""
 
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ActionRunner class.
@@ -69,7 +69,11 @@ class ActionRunner(App):
 
     def run(self, _screen: Window) -> None:
         # pylint: disable=protected-access
-        """Run with the interface and runner.
+        """Run the app.
+
+        Initialise the UI.
+        Create an interaction based on the app name from the current settings.
+        Run the action, passing the interaction.
 
         :param _screen: The screen instance from the curses wrapper call
         """

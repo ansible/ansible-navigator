@@ -1,3 +1,4 @@
 [MESSAGES CONTROL]
 
 disable=duplicate-code,unsubscriptable-object,fixme
+no-docstring-rgx=__.*__
