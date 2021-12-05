@@ -1,0 +1,192 @@
+name: tox
+
+on:
+  create:  # is used for publishing to PyPI and TestPyPI
+    tags:  # any tag regardless of its name, no branches
+    - "**"
+  push:  # only publishes pushes to the main branch to TestPyPI
+    branches:  # any integration branch but not tag
+    - "main"
+  pull_request:
+  release:
+    types:
+    - published  # It seems that you can publish directly without creating
+  workflow_call:
+
+jobs:
+  non-unit:
+    name: >-
+      ${{ matrix.env.TOXENV }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+        - 3.9
+        os:
+        - ubuntu-20.04
+        env:
+        - TOXENV: linters
+        - TOXENV: build-docs
+        - TOXENV: type
+    env:
+      TOX_PARALLEL_NO_SPINNER: 1
+      FORCE_COLOR: 1
+
+    steps:
+    - name: Dump context
+      uses: crazy-max/ghaction-dump-context@v1
+    - name: Check out src from Git
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # needed by setuptools-scm
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Pre-commit cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pre-commit
+        key: ${{ runner.os }}-${{ matrix.env.TOXENV }}-pre-commit-${{ hashFiles('setup.cfg', 'tox.ini', 'pyproject.toml', '.pre-commit-config.yaml') }}
+    - name: Pip cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-${{ matrix.env.TOXENV }}-pip-${{ hashFiles('setup.cfg', 'tox.ini', 'pyproject.toml', '.pre-commit-config.yaml') }}
+    - name: Install tox
+      run: |
+        python3 -m pip install --upgrade tox
+    - name: Log installed dists
+      run: >-
+        python -m pip freeze --all
+    - name: >-
+        Initialize tox envs
+      run: >-
+        python -m
+        tox
+        --parallel auto
+        --parallel-live
+        --notest
+        --skip-missing-interpreters false
+        -vv
+      env: ${{ matrix.env }}
+    - name: Test with tox
+      run: |
+        python -m tox --parallel auto --parallel-live
+      env: ${{ matrix.env }}
+    - name: Archive logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: logs.zip
+        path: .tox/**/log/
+
+  unit:
+    name: >-
+      ${{ matrix.tox_env }}@${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # fail-fast: false
+      # max-parallel: 5
+      # The matrix testing goal is to cover the *most likely* environments
+      # which are expected to be used by users in production. Avoid adding a
+      # combination unless there are good reasons to test it, like having
+      # proof that we failed to catch a bug by not running it. Using
+      # distribution should be prefferred instead of custom builds.
+      matrix:
+        python-version:
+        # keep list sorted as it determines UI order too
+        - 3.8
+        - 3.9
+        - "3.10"
+        # NOTE: Installing ansible under 3.10-dev is currently not
+        # NOTE: possible because compiling cffi explodes.
+        os:
+        # https://help.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners
+        - ubuntu-20.04
+        # - windows-latest
+        # - windows-2016
+        include:
+        - tox_env: py38
+          os: ubuntu-20.04
+          python-version: 3.8
+          devel: true
+        - tox_env: py39
+          os: ubuntu-20.04
+          python-version: 3.9
+          devel: true
+        - tox_env: py310
+          os: ubuntu-20.04
+          python-version: "3.10"
+          devel: true
+        - tox_env: py38
+          os: macOS-latest
+          python-version: 3.8
+        - tox_env: py310
+          os: macOS-latest
+          python-version: "3.10"
+          devel: true
+
+    env:
+      TOX_PARALLEL_NO_SPINNER: 1
+      FORCE_COLOR: 1
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # needed by setuptools-scm
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: >-
+        Log the currently selected Python
+        version info (${{ matrix.python-version }})
+      run: |
+        python --version --version
+        which python
+    - name: Pip cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-${{ matrix.tox_env }}-pip-${{ hashFiles('constraints.txt', 'setup.cfg', 'tox.ini', 'pyproject.toml', '.pre-commit-config.yaml', 'pytest.ini') }}
+    - name: Install tox
+      run: |
+        python3 -m pip install --upgrade tox 'coverage[toml]'
+    - name: Log installed dists
+      run: >-
+        python3 -m pip freeze --all
+    # sequential run improves browsing experience (almost no speed impact)
+    - name: "Test with tox: ${{ matrix.tox_env }}"
+      if: ${{ matrix.devel }}
+      run: |
+        python3 -m tox
+      env:
+        TOXENV: ${{ matrix.tox_env }}
+    - name: Combine coverage data
+      # produce a single .coverage file at repo root
+      run: coverage combine .tox/.coverage.*
+    - name: Upload coverage data
+      uses: codecov/codecov-action@v1
+      with:
+        name: ${{ matrix.tox_env }}
+        fail_ci_if_error: true  # optional (default = false)
+        verbose: true  # optional (default = false)
+    - name: Archive logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: logs.zip
+        path: .tox/**/log/
+      # https://github.com/actions/upload-artifact/issues/123
+      continue-on-error: true
+
+  check:
+    needs:
+      - non-unit
+      - unit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report success of the test matrix
+        run: >-
+          print("All's good")
+        shell: python
