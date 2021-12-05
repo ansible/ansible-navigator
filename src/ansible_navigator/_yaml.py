@@ -1,4 +1,4 @@
-""" load libyaml or pyyaml ldumper """
+"""A wrapper for pyyaml."""
 # pylint: disable=unused-import
 import re
 
@@ -22,14 +22,20 @@ except ImportError:
 
 
 class YamlStyle(NamedTuple):
-    """the params for yaml dump"""
+    """The parameters for yaml dump."""
 
     default_flow_style: bool = False
     explicit_start: bool = True
 
 
 def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, None]:
-    """Consistant dumping of object across the application"""
+    """Consistant dumping of object across the application.
+
+    :param obj: The object to serialize
+    :param filename: The filename of the file in which the obj should be written
+    :param fmode: The mode to use for file writing
+    :return: Either the serialized obj or None if written to a file
+    """
     dumper = HumanDumper
     if filename is not None:
         with open(filename, fmode) as outfile:
@@ -45,10 +51,16 @@ def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, N
 
 class HumanDumper(Dumper):
     # pylint: disable=too-many-ancestors
-    """for block scalar for multiline"""
+    """Dump a multiline in a human readable format."""
 
-    def represent_scalar(self, tag, value, style=None):
-        """Uses a block scalar for a nicer human representation of multiline strings."""
+    def represent_scalar(self, tag: str, value: str, style=Union[str, None]) -> yaml.ScalarNode:
+        """Use a block scalar for a nicer human representation of multiline strings.
+
+        :param tag: A custom tag
+        :param value: The value to represent
+        :param style: The style to use
+        :return: The serialized multiline string, result of the super scalar
+        """
         if style is None and _is_multiline_string(value):
             style = "|"
 
@@ -62,8 +74,15 @@ class HumanDumper(Dumper):
         return super().represent_scalar(tag, value, style)
 
 
-# from http://stackoverflow.com/a/15423007/115478
-def _is_multiline_string(value):
+def _is_multiline_string(value: str):
+    """Determine if a string is multiline.
+
+    Note:
+    from http://stackoverflow.com/a/15423007/115478
+
+    :param value: The value to check
+    :return: a boolean indicating is the string is multiline
+    """
     for character in "\u000a\u000d\u001c\u001d\u001e\u0085\u2028\u2029":
         if character in value:
             return True
