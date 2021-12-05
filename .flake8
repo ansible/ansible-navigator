@@ -1,3 +1,0 @@
-[flake8]
-strictness=full
-docstring_style=sphinx
