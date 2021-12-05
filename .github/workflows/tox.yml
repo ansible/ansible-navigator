@@ -1,0 +1,78 @@
+name: tox
+
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+on:
+  create:  # is used for publishing to PyPI and TestPyPI
+    tags:  # any tag regardless of its name, no branches
+      - "**"
+  push:  # only publishes pushes to the main branch to TestPyPI
+    branches:  # any integration branch but not tag
+      - "main"
+  pull_request:
+
+jobs:
+  tox:
+    name: ${{ matrix.tox_env }}
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        tox_env:
+          - lint
+          - build-docs
+        python-version:
+          - 3.8
+        include:
+          - tox_env: lint-vetting
+            devel: true
+          - tox_env: py36
+            python-version: 3.6
+          - tox_env: py37
+            python-version: 3.7
+          - tox_env: py38
+            python-version: 3.8
+          - tox_env: py39
+            python-version: 3.9
+          - tox_env: py310
+            python-version: "3.10"
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # needed by setuptools-scm
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: >-
+          Log the currently selected Python
+          version info (${{ matrix.python-version }})
+        run: |
+          python --version --version
+          which python
+      - name: Install tox
+        run: |
+          python3 -m pip install --upgrade tox
+      - name: Log installed dists
+        run: >-
+          python3 -m pip freeze --all
+      - name: "tox -e ${{ matrix.tox_env }}"
+        continue-on-error: ${{ matrix.devel || false }}
+        run: |
+          python3 -m tox
+        env:
+          TOXENV: ${{ matrix.tox_env }}
+
+  check:
+    if: always()
+
+    needs:
+      - tox
+    runs-on: ubuntu-latest
+    steps:
+      - name: Done!
+        run: echo "Done!"
