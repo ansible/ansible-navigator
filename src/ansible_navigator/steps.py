@@ -112,7 +112,7 @@ class Step:
     def _value_check(value: Any, want: Union[type, Tuple[type, ...]]) -> None:
         """check some expect type against a value"""
         if not isinstance(value, want):
-            raise ValueError("wanted {want}, got {value}".format(want=want, value=type(value)))
+            raise ValueError(f"wanted {want}, got {type(value)}")
 
 
 class Steps(deque):

@@ -182,11 +182,11 @@ class Action(App):
                 [self._plugin_name], plugin_type=self._plugin_type, playbook_dir=playbook_dir
             )
             if plugin_doc_err:
-                msg = "Error occurred while fetching doc for" " plugin {0}: '{1}'".format(
-                    self._plugin_name, plugin_doc_err
+                self._logger.error(
+                    "Error occurred while fetching doc for plugin %s: '%s'",
+                    self._plugin_name,
+                    plugin_doc_err,
                 )
-                self._logger.error(msg)
-
             plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
             return plugin_doc_response
         else:

@@ -59,10 +59,9 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
     """
 
     heading = []
-    string = "[{host}] {os}".format(
-        host=obj["inventory_hostname"],
-        os=obj.get("ansible_network_os", obj.get("ansible_platform", "")),
-    )
+    host = obj["inventory_hostname"]
+    operating_system = obj.get("ansible_network_os", obj.get("ansible_platform", ""))
+    string = f"[{host}] {operating_system}"
     string = string + (" " * (screen_w - len(string) + 1))
     heading.append(
         tuple(

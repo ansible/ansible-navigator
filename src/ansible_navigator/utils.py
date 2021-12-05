@@ -342,22 +342,25 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     exit_messages.append(ExitMessage(message=exit_msg))
     return messages, exit_messages, None
 
+def divmod_int(numerator: Union[int, float], denominator: Union[int, float]) -> Tuple[int, int]:
+    """Return the result of divmod, as a tuple of integers."""
+    quotient, remainder = divmod(numerator, denominator)
+    return int(quotient), int(remainder)
 
-def human_time(seconds: Union[int, float]) -> str:
-    """convert seconds into human readable
-    00d00h00m00s format"""
+def human_time(seconds: int) -> str:
+    """Convert seconds into human readable 00d00h00m00s format."""
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))
-    days, seconds = divmod(seconds, 86400)
-    hours, seconds = divmod(seconds, 3600)
-    minutes, seconds = divmod(seconds, 60)
+    days, seconds = divmod_int(seconds, 86400)
+    hours, seconds = divmod_int(seconds, 3600)
+    minutes, seconds = divmod_int(seconds, 60)
     if days > 0:
-        return "%s%dd%dh%dm%ds" % (sign_string, days, hours, minutes, seconds)
+        return f"{sign_string!s}{days:d}d{hours:d}h{minutes:d}m{seconds:d}s"
     if hours > 0:
-        return "%s%dh%dm%ds" % (sign_string, hours, minutes, seconds)
+        return f"{sign_string!s}{hours:d}h{minutes:d}m{seconds:d}s"
     if minutes > 0:
-        return "%s%dm%ds" % (sign_string, minutes, seconds)
-    return "%s%ds" % (sign_string, seconds)
+        return f"{sign_string!s}{minutes:d}m{seconds:d}s"
+    return f"{sign_string!s}{seconds:d}s"
 
 
 PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
