@@ -64,7 +64,7 @@ class App:
 
     @property
     def app(self) -> AppPublic:
-        """Limited the scope of what is carried between actions.
+        """Limit the scope of what is carried between actions.
 
         This will be passed to other actions to limit the scope of
         what can be mutated internally.
@@ -101,6 +101,10 @@ class App:
     def _prepare_to_run(self, app: AppPublic, interaction: Interaction) -> None:
         """Prepare for action run.
 
+        An action can call this to prior to running. This
+        will set the scroll to zero and store the state
+        of the UI so it can be restored later.
+
         :param app: The instance of the action
         :param interaction: The current interaction from the ui
         """
@@ -111,7 +115,11 @@ class App:
         self._previous_filter = interaction.ui.menu_filter()
 
     def _prepare_to_exit(self, interaction: Interaction) -> None:
-        """Prior to exiting. an action can call this to clean up.
+        """Prepare for action exit.
+
+        An action can call this after running to clean up and
+        restore the state of the UI prior to the action being
+        invoked.
 
         :param interaction: The current interaction from the ui
         """
@@ -131,7 +139,7 @@ class App:
         return None, None
 
     def rerun(self) -> None:
-        """Per app rerun if needed.
+        """Rerun the action.
 
         Defined in the child class if necessary.
         """
@@ -176,8 +184,9 @@ class App:
                 self._logger.log(level=exit_msg.level, msg=exit_msg.message)
 
     def write_artifact(self, filename: str) -> None:
-        """Per app write_artifact, likely run only.
+        """Write an artifact file.
 
+        This will likely only be used by the run action.
         Defined in child if necessary
 
         :param filename: The filename to write to
