@@ -51,9 +51,6 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: Step):
-        # pylint: disable=unused-argument
-        # pylint: disable=too-few-public-methods
-        # pylint: disable=too-many-arguments
         """Test interactive/stdout exec.
 
         :param request: The test request
