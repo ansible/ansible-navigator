@@ -29,7 +29,9 @@ class YamlStyle(NamedTuple):
 
 
 def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, None]:
-    """Consistant dumping of object across the application.
+    """Serialize an object to yaml.
+
+    This allows for the consistent representation across the application.
 
     :param obj: The object to serialize
     :param filename: The filename of the file in which the obj should be written
@@ -51,7 +53,10 @@ def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, N
 
 class HumanDumper(Dumper):
     # pylint: disable=too-many-ancestors
-    """Dump a multiline in a human readable format."""
+    """An instance of a pyyaml Dumper.
+
+    This deviates from the base to dump a multiline string in a human readable format.
+    """
 
     def represent_scalar(self, tag: str, value: str, style=Union[str, None]) -> yaml.ScalarNode:
         """Use a block scalar for a nicer human representation of multiline strings.
@@ -77,11 +82,12 @@ class HumanDumper(Dumper):
 def _is_multiline_string(value: str):
     """Determine if a string is multiline.
 
-    Note:
-    from http://stackoverflow.com/a/15423007/115478
+    .. note::
+
+       Inspired by http://stackoverflow.com/a/15423007/115478.
 
     :param value: The value to check
-    :return: a boolean indicating is the string is multiline
+    :return: A boolean indicating if the string is multiline
     """
     for character in "\u000a\u000d\u001c\u001d\u001e\u0085\u2028\u2029":
         if character in value:
