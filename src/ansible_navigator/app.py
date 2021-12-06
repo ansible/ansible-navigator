@@ -43,7 +43,6 @@ class App:
         self._calling_app: AppPublic
         self._interaction: Interaction
         self._name = name
-        self._parser_error: str = ""
         self._previous_filter: Union[Pattern, None]
         self._previous_scroll: int
         self.stdout: List = []
@@ -127,16 +126,6 @@ class App:
         interaction.ui.menu_filter(self._previous_filter)
         interaction.ui.scroll(0)
 
-    def parser_error(self, message: str) -> Tuple[None, None]:
-        """Store the argparse parser error.
-
-        This is used as a callback for argparse.
-
-        :param message: A message from the parser
-        :return: Nothing
-        """
-        self._parser_error = message
-        return None, None
 
     def rerun(self) -> None:
         """Rerun the action.
