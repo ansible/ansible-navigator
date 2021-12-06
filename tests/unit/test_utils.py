@@ -174,6 +174,8 @@ round_half_up_test_data = [
     RoundHalfUpTestData(id="up float", value=1.50000001, expected=2),
     RoundHalfUpTestData(id="negative down float", value=-1.49999999, expected=-1),
     RoundHalfUpTestData(id="negative up float", value=-1.50000001, expected=-2),
+    RoundHalfUpTestData(id="half_even", value=2.5, expected=3),
+    RoundHalfUpTestData(id="half_even", value=3.5, expected=4)
 ]
 
 
@@ -184,6 +186,5 @@ def test_round_half_up(data: RoundHalfUpTestData) -> None:
     Ensure the number passed is consistently rounded to the nearset
     integer with ties going away from zero.
     """
-    for _iteration in range(100):
-        result = utils.round_half_up(data.value)
-        assert result == data.expected
+    result = utils.round_half_up(data.value)
+    assert result == data.expected

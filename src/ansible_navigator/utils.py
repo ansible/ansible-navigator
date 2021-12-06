@@ -411,7 +411,16 @@ def remove_dbl_un(string):
 
 
 def round_half_up(number: Union[float, int]) -> int:
-    """Round a number to the nearest integer with ties going away from zero."""
+    """Round a number to the nearest integer with ties going away from zero.
+
+    This is different the round() where exact halfway cases are rounded to the nearest
+    even result instead of away from zero. (e.g. round(2.5) = 2, round(3.5) = 4).
+
+    This will always round based on distance from zero. (e.g round(2.5) = 3, round(3.5) = 4).
+
+    :param number: The number to round
+    :return: The rounded number as an it
+    """
     rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
 
