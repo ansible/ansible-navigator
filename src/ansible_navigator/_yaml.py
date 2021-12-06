@@ -58,7 +58,7 @@ class HumanDumper(Dumper):
     This deviates from the base to dump a multiline string in a human readable format.
     """
 
-    def represent_scalar(self, tag: str, value: str, style=Union[str, None]) -> yaml.ScalarNode:
+    def represent_scalar(self, tag: str, value: str, style=Union[str, None]) -> yaml.nodes.ScalarNode:
         """Use a block scalar for a nicer human representation of multiline strings.
 
         :param tag: A custom tag

@@ -114,6 +114,7 @@ nitpick_ignore = [
     ("py:class", "WhileRule"),
     ("py:class", "Window"),
     ("py:class", "yaml.cyaml.CDumper"),
+    ("py:class", "yaml.nodes.ScalarNode"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
 ]
