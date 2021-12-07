@@ -50,13 +50,17 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(request):
-        """tmux fixture for this module"""
+        """tmux fixture for this module
+
+        The EDITOR is set here such that vim will not create swap files
+        """
         params = {
             "pane_height": "1000",
             "pane_width": "500",
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
+                "export EDITOR='vim -n'"
             ],
             "unique_test_id": request.node.nodeid,
         }
