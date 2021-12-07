@@ -1,5 +1,9 @@
 ---
 
+ci:
+  skip:
+  - flake8
+
 repos:
 - repo: https://github.com/asottile/add-trailing-comma.git
   rev: v2.0.1
