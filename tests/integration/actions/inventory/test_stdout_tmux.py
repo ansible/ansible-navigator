@@ -24,19 +24,19 @@ class ShellCommand(Step):
 
 stdout_tests = (
     ShellCommand(
-        comment="inventory list with ee",
-        user_input=StdoutCommand(
-            cmdline=f"--list -i {ANSIBLE_INVENTORY_FIXTURE_DIR}",
-            mode="stdout",
-            execution_environment=True,
-        ).join(),
-    ),
-    ShellCommand(
         comment="inventory list without ee",
         user_input=StdoutCommand(
             cmdline=f"--list -i {ANSIBLE_INVENTORY_FIXTURE_DIR}",
             mode="stdout",
             execution_environment=False,
+        ).join(),
+    ),
+    ShellCommand(
+        comment="inventory list with ee",
+        user_input=StdoutCommand(
+            cmdline=f"--list -i {ANSIBLE_INVENTORY_FIXTURE_DIR}",
+            mode="stdout",
+            execution_environment=True,
         ).join(),
     ),
     ShellCommand(
