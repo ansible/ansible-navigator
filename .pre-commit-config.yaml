@@ -104,7 +104,12 @@ repos:
       (?x)^
         (
           \.github/ISSUE_TEMPLATE/\w+|
-          docs/(faq|index|installation)|
+          docs/(
+            changelog-fragments\.d/\d+\.\w+|
+            faq|
+            index|
+            installation
+          )|
           README|
           share/ansible_navigator/markdown/(help|welcome)
         )\.md
