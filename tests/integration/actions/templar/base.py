@@ -50,9 +50,9 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(request):
-        """tmux fixture for this module
+        """Return a new tmux session.
 
-        The EDITOR is set here such that vim will not create swap files
+        The EDITOR is set here such that vim will not create swap files.
         """
         params = {
             "pane_height": "1000",
