@@ -1,4 +1,4 @@
-""" doc direct from cli stdout tests
+"""Tests for doc from cli, stdout.
 """
 from typing import List
 
@@ -26,20 +26,20 @@ testdata_1: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_1)
 class TestDocHelpWithEE(BaseClass):
-    """run the tests"""
+    """Run the tests for doc help from cli, stdout, with ee."""
 
     TEST_FOR_MODE = "stdout"
 
 
 # ansible-doc help without EE
-CLI_DOC_HELP_WITH_EE = (
+CLI_DOC_HELP_WITHOUT_EE = (
     "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m stdout --execution-environment false"
 )
 
 testdata_2: List = [
     (
         0,
-        CLI_DOC_HELP_WITH_EE,
+        CLI_DOC_HELP_WITHOUT_EE,
         "ansible-navigator doc help without ee",
         "doc_help_without_ee",
         ["usage: ansible-doc [-h]"],
@@ -49,7 +49,7 @@ testdata_2: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_2)
 class TestDocHelpWithoutEE(BaseClass):
-    """run the tests"""
+    """Run the tests for doc help from cli, stdout, without ee."""
 
     TEST_FOR_MODE = "stdout"
 
@@ -73,7 +73,7 @@ testdata_3: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_3)
 class TestDocHelpWithEEWrongMode(BaseClass):
-    """run the tests"""
+    """Run the tests for doc help from cli, stdout, with ee, wrong mode."""
 
     TEST_FOR_MODE = "stdout"
 
@@ -97,14 +97,14 @@ testdata_4: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_4)
 class TestDocHelpWithoutEEWrongMode(BaseClass):
-    """run the tests"""
+    """Run the tests for doc help from cli, stdout, without ee, wrong mode."""
 
     TEST_FOR_MODE = "stdout"
 
 
 # doc command run in stdout mode without EE
 CLI_MODULE_DOC_WITHOUT_EE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j" " --execution-environment false"
+    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j --execution-environment false"
 )
 
 testdata_5: List = [
@@ -120,7 +120,7 @@ testdata_5: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_5)
 class TestModuleDocWithoutEE(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from cli, stdout, without ee, module doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
@@ -128,7 +128,7 @@ class TestModuleDocWithoutEE(BaseClass):
 
 # doc command run in stdout mode with EE
 CLI_MODULE_DOC_WITH_EE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j" " --execution-environment true"
+    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j --execution-environment true"
 )
 
 testdata_6: List = [
@@ -144,7 +144,7 @@ testdata_6: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_6)
 class TestModuleDocWithEE(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from cli, stdout, with ee, module doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
@@ -169,7 +169,7 @@ testdata_7: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_7)
 class TestLookUpDocWithoutEE(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from cli, stdout, without ee, lookup doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
@@ -194,7 +194,7 @@ testdata_8: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_8)
 class TestLookUpDocWithEE(BaseClass):
-    """run the tests"""
+    """Run the tests for doc from cli, stdout, with ee, lookup doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False

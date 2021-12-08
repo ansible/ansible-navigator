@@ -1,9 +1,8 @@
-""" collections direct from cli interactive with ee
+"""Tests for collections from cli, interactive, with ee.
 """
 import pytest
 
 from .base import BaseClass
-
 
 CLI = "ansible-navigator collections --execution-environment true"
 
@@ -26,7 +25,8 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment", testdata)
 class Test(BaseClass):
-    """run the tests"""
+    # pylint: disable=too-few-public-methods
+    """Run the tests for collections from cli, interactive, with ee."""
 
     TEST_FOR_MODE = "interactive"
     EXECUTION_ENVIRONMENT_TEST = True

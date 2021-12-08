@@ -1,4 +1,4 @@
-""" welcome interactive w/ ee
+"""Tests for images from welcome, interactive, with ee.
 """
 import pytest
 
@@ -26,6 +26,6 @@ steps = add_indicies(initial_steps + base_steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for images from welcome, interactive, with ee."""
 
     UPDATE_FIXTURES = False

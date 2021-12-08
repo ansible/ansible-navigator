@@ -1,4 +1,4 @@
-""" config stdout tests using tmux """
+"""Tests for config from cli, stdout."""
 import pytest
 
 
@@ -129,6 +129,6 @@ def step_id(value):
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for config from cli, mode stdout."""
 
     UPDATE_FIXTURES = False

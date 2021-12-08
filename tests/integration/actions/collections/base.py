@@ -1,4 +1,4 @@
-""" base class for config interactive tests
+"""Base class for collections interactive tests.
 """
 import difflib
 import json
@@ -17,8 +17,8 @@ from ....defaults import FIXTURES_COLLECTION_DIR
 
 
 class BaseClass:
-    # pylint: disable=attribute-defined-outside-init
-    """base class for interactive collections tests"""
+    # pylint: disable=too-few-public-methods
+    """Base class for interactive collections tests."""
 
     UPDATE_FIXTURES = False
     EXECUTION_ENVIRONMENT_TEST = False
@@ -27,7 +27,7 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_collections_session")
     def _fixture_tmux_config_session(request, os_indendent_tmp):
-        """tmux fixture for this module"""
+        """Tmux fixture for this module."""
 
         tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
         os.makedirs(tmp_coll_dir, exist_ok=True)
@@ -57,13 +57,12 @@ class BaseClass:
         user_input,
         comment,
     ):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
-        """test interactive config"""
+        """Run the tests for collections, mode and ee set in child class.
 
-        # wait on help here to ensure we get the welcome screen and subsequent screens
-        # after entering a : command
+        wait on help here to ensure we get the welcome screen and subsequent screens
+        after entering a : command
+        """
 
         ignore_within_response = "Collecting collection content"
         if self.TEST_FOR_MODE == "interactive":
@@ -88,7 +87,7 @@ class BaseClass:
         ):
             update_fixtures(request, index, received_output, comment)
         dir_path, file_name = fixture_path_from_request(request, index)
-        with open(f"{dir_path}/{file_name}") as infile:
+        with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as infile:
             expected_output = json.load(infile)["output"]
         assert expected_output == received_output, "\n" + "\n".join(
             difflib.unified_diff(expected_output, received_output, "expected", "received")

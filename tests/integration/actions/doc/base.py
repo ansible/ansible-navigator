@@ -1,12 +1,12 @@
-""" base class for doc tests
+"""Base class for doc interactive/stdout tests.
 """
 import difflib
 import json
 import os
 
-import pytest
-
 from typing import Optional
+
+import pytest
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
@@ -16,7 +16,7 @@ from ....defaults import FIXTURES_COLLECTION_DIR
 
 
 class BaseClass:
-    """base class for interactive doc tests"""
+    """Base class for interactive/stdout doc tests."""
 
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
@@ -24,7 +24,8 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_doc_session")
     def fixture_tmux_doc_session(request):
-        """tmux fixture for this module"""
+        # pylint: disable=too-many-locals
+        """Tmux fixture for this module."""
         params = {
             "pane_height": "2000",
             "pane_width": "200",
@@ -41,10 +42,10 @@ class BaseClass:
     def test(
         self, request, tmux_doc_session, index, user_input, comment, testname, expected_in_output
     ):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
         # pylint: disable=too-many-arguments
-        """test interactive/stdout config"""
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-branches
+        """Run the tests for collections, mode and ee set in child class."""
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":

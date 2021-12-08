@@ -1,4 +1,4 @@
-""" config from welcome interactive w ee and specified config
+"""Tests for config from welcome, interactive, specify config.
 """
 import pytest
 
@@ -36,7 +36,7 @@ steps = add_indicies(steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for config from welcome, interactive, specify config."""
 
     PANE_HEIGHT = 300
     UPDATE_FIXTURES = False

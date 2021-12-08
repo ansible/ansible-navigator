@@ -1,4 +1,4 @@
-""" base class for stdout interactive tests
+"""Base class for stdout interactive tests.
 """
 import difflib
 import json
@@ -17,7 +17,7 @@ TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
 
 
 class BaseClass:
-    """base class for interactive stdout tests"""
+    """Base class for stdout interactive stdout."""
 
     UPDATE_FIXTURES = False
 
@@ -38,11 +38,8 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, index, user_input, comment, search_within_response):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
-        # pylint: disable=too-many-arguments
-
-        """test"""
+        # pylint:disable=too-many-arguments
+        """Run the tests for stdout, mode and ee set in child class."""
         assert os.path.exists(ANSIBLE_PLAYBOOK)
         assert os.path.exists(TEST_CONFIG_FILE)
 
@@ -54,7 +51,7 @@ class BaseClass:
         ):
             update_fixtures(request, index, received_output, comment)
         dir_path, file_name = fixture_path_from_request(request, index)
-        with open(f"{dir_path}/{file_name}") as infile:
+        with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as infile:
             expected_output = json.load(infile)["output"]
         assert expected_output == received_output, "\n" + "\n".join(
             difflib.unified_diff(expected_output, received_output, "expected", "received")

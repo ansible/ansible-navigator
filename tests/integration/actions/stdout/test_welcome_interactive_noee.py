@@ -1,4 +1,4 @@
-""" from welcome interactive w/o ee
+"""Tests for stdout from welcome, interactive, without ee.
 """
 import pytest
 
@@ -20,6 +20,6 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for stdout from welcome, interactive, without ee."""
 
     UPDATE_FIXTURES = False

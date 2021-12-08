@@ -24,6 +24,7 @@ def get_executable_path(name):
 def update_fixtures(
     request, index, received_output, comment, testname=None, additional_information=None
 ):
+    # pylint: disable=too-many-arguments
     """Used by action plugins to generate the fixtures"""
     dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
     os.makedirs(dir_path, exist_ok=True)
@@ -73,6 +74,7 @@ class Error(EnvironmentError):
 
 
 def sanitize_output(output):
+    """Sanitize test output that may be env specific or unique per run."""
     re_uuid = re.compile(
         "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.IGNORECASE
     )

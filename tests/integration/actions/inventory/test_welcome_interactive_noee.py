@@ -1,4 +1,4 @@
-""" inventory from welcome interactive w/ ee
+"""Tests for inventory from welcome, interactive, without ee.
 """
 import pytest
 
@@ -26,6 +26,6 @@ steps = add_indicies(initial_steps + base_steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for inventory from cli, interactive, without ee."""
 
     UPDATE_FIXTURES = False

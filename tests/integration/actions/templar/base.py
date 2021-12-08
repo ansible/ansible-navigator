@@ -122,7 +122,7 @@ class BaseClass:
 
         if not any((step.look_fors, step.look_nots)):
             dir_path, file_name = fixture_path_from_request(request, step.step_index)
-            with open(os.path.join(dir_path, file_name)) as infile:
+            with open(file=os.path.join(dir_path, file_name), encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(

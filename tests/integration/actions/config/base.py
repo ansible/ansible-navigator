@@ -1,4 +1,4 @@
-""" base class for config interactive tests
+"""Base class for config interactive/stdout tests.
 """
 import difflib
 import json
@@ -29,7 +29,7 @@ base_steps = (
 
 
 class BaseClass:
-    """base class for interactive/stdout config tests"""
+    """Base class for interactive/stdout config tests."""
 
     UPDATE_FIXTURES = False
     PANE_HEIGHT = 25
@@ -48,10 +48,7 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
-        # pylint: disable=too-many-arguments
-        """test interactive/stdout config"""
+        """Run the tests for config, mode and ee set in child class."""
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
@@ -99,7 +96,7 @@ class BaseClass:
 
         if not any((step.look_fors, step.look_nots)):
             dir_path, file_name = fixture_path_from_request(request, step.step_index)
-            with open(f"{dir_path}/{file_name}") as infile:
+            with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as infile:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(

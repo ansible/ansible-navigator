@@ -1,4 +1,4 @@
-""" run stdout tests using tmux """
+"""Tests for run from cli, stdout."""
 import pytest
 
 from .base import BaseClass
@@ -90,6 +90,6 @@ def step_id(value):
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for run from cli, stdout."""
 
     UPDATE_FIXTURES = False

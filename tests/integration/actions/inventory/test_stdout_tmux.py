@@ -1,4 +1,4 @@
-""" inventory stdout tests using tmux """
+"""Tests for inventory from cli, stdout."""
 import pytest
 
 from .base import BaseClass
@@ -93,6 +93,6 @@ def step_id(value):
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for inventory from cli, stdout."""
 
     UPDATE_FIXTURES = False

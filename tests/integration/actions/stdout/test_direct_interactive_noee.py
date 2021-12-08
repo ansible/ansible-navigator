@@ -1,4 +1,4 @@
-""" direct from cli interactive w/o ee
+"""Tests for stdout from cli, interactive, without ee.
 """
 import pytest
 
@@ -18,6 +18,6 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
 class Test(BaseClass):
-    """run the tests"""
+    """Run the tests for stdout from cli, interactive, without ee."""
 
     UPDATE_FIXTURES = False

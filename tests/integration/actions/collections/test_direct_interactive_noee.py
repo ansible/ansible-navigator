@@ -1,4 +1,4 @@
-""" collections direct from cli interactive w/o ee
+"""Tests for collections from cli, interactive, without ee.
 """
 import pytest
 
@@ -25,7 +25,8 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment", testdata)
 class Test(BaseClass):
-    """run the tests"""
+    # pylint: disable=too-few-public-methods
+    """Run the tests for collections from cli, interactive, without ee."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
