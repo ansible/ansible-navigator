@@ -1,5 +1,4 @@
-"""Tests for config from cli, stdout
-"""
+"""Tests for config from cli, stdout."""
 import pytest
 
 

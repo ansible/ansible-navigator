@@ -46,7 +46,6 @@ class BaseClass:
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-branches
         """Run the tests for collections, mode and ee set in child class."""
-
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":

@@ -1,5 +1,4 @@
-"""Tests for run from cli, stdout.
-"""
+"""Tests for run from cli, stdout."""
 import pytest
 
 from .base import BaseClass

@@ -1,5 +1,4 @@
-"""Tests for inventory from cli, stdout.
-"""
+"""Tests for inventory from cli, stdout."""
 import pytest
 
 from .base import BaseClass
