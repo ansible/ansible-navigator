@@ -60,7 +60,7 @@ class BaseClass:
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
-                "export EDITOR='vim -n'"
+                "export EDITOR='vim -n'",
             ],
             "unique_test_id": request.node.nodeid,
         }
