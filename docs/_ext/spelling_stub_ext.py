@@ -1,3 +1,4 @@
+# fmt: off
 """Sphinx extension for making the spelling directive noop."""
 
 from typing import Dict, List, Union
