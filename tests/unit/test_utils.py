@@ -175,7 +175,7 @@ round_half_up_test_data = [
     RoundHalfUpTestData(id="negative down float", value=-1.49999999, expected=-1),
     RoundHalfUpTestData(id="negative up float", value=-1.50000001, expected=-2),
     RoundHalfUpTestData(id="half_even", value=2.5, expected=3),
-    RoundHalfUpTestData(id="half_even", value=3.5, expected=4)
+    RoundHalfUpTestData(id="half_even", value=3.5, expected=4),
 ]
 
 
