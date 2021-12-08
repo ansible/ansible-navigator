@@ -30,6 +30,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
+        look_fors=["_meta", "group03"],
     ),
     ShellCommand(
         comment="inventory list without ee",
@@ -38,6 +39,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
+        look_fors=["_meta", "group03"],
     ),
     ShellCommand(
         comment="inventory help with ee",

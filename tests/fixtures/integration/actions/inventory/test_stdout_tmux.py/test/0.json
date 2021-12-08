@@ -3,9 +3,12 @@
     "index": 0,
     "comment": "inventory list with ee",
     "additional_information": {
-        "look_fors": [],
+        "look_fors": [
+            "_meta",
+            "group03"
+        ],
         "look_nots": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
         "{",
