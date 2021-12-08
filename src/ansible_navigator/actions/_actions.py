@@ -35,7 +35,7 @@ def _import(package: str, action: str) -> None:
 
 def _import_all(package: str) -> None:
     """Import all actions in a package"""
-    files = resources.contents(package)
+    files = resources.contents(package)  # type: ignore[attr-defined]
     actions = [
         f[:-3] for f in files if f.endswith(".py") and f[0] != "_" and not f.startswith(".#")
     ]
