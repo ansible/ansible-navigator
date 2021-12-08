@@ -3,8 +3,8 @@
 import os
 
 from typing import List
-from typing import Optional
 from typing import NamedTuple
+from typing import Optional
 from typing import Union
 
 import pytest
@@ -157,3 +157,34 @@ def test_human_time_negative_float(data: HumanTimeTestData) -> None:
     """
     result = utils.human_time(-float(data.value))
     assert result == f"-{data.expected}"
+
+
+class RoundHalfUpTestData(NamedTuple):
+    """Data for round half up tests."""
+
+    id: str
+    value: Union[int, float]
+    expected: int
+
+
+round_half_up_test_data = [
+    RoundHalfUpTestData(id="integer", value=1, expected=1),
+    RoundHalfUpTestData(id="negative integer", value=-1, expected=-1),
+    RoundHalfUpTestData(id="down float", value=1.49999999, expected=1),
+    RoundHalfUpTestData(id="up float", value=1.50000001, expected=2),
+    RoundHalfUpTestData(id="negative down float", value=-1.49999999, expected=-1),
+    RoundHalfUpTestData(id="negative up float", value=-1.50000001, expected=-2),
+    RoundHalfUpTestData(id="half_even", value=2.5, expected=3),
+    RoundHalfUpTestData(id="half_even", value=3.5, expected=4),
+]
+
+
+@pytest.mark.parametrize("data", round_half_up_test_data, ids=lambda data: data.id)
+def test_round_half_up(data: RoundHalfUpTestData) -> None:
+    """Test for the utils.round_half_up function.
+
+    Ensure the number passed is consistently rounded to the nearset
+    integer with ties going away from zero.
+    """
+    result = utils.round_half_up(data.value)
+    assert result == data.expected

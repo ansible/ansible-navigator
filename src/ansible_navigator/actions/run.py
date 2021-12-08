@@ -39,6 +39,7 @@ from ..ui_framework import warning_notification
 from ..utils import abs_user_path
 from ..utils import human_time
 from ..utils import remove_ansi
+from ..utils import round_half_up
 
 
 RESULT_TO_COLOR = [
@@ -663,7 +664,7 @@ class Action(App):
                     task["__result"] = result.upper()
                     task["__changed"] = task.get("res", {}).get("changed", False)
                     if isinstance(task["duration"], (int, float)):
-                        task["__duration"] = human_time(seconds=round(task["duration"], 2))
+                        task["__duration"] = human_time(seconds=round_half_up(task["duration"]))
                     else:
                         msg = (
                             f"Task duration for '{task['task']}' was type {type(task['duration'])},"
