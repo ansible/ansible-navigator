@@ -212,8 +212,8 @@ def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
         settings.append(f"**CLI:** {cli_parameters}")
     if envvar is not None:
         settings.append(f"**ENV:** {envvar}")
-    if yaml_like is not None:
-        settings.extend(["**Settings file:**", yaml_like])
+
+    settings.extend(["**Settings file:**", *yaml_like])
 
     row = (entry.name_dashed, entry.short_description, tuple(settings))
     return row
