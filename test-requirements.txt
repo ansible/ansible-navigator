@@ -6,6 +6,7 @@ lxml
 mypy
 pylint < 2.9  # v2.9.0 introduced a check for `with` which is not yet fixed
 pytest-cov
+pytest-rerunfailures
 pytest-xdist
 types-dataclasses
 types-PyYAML

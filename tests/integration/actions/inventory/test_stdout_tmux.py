@@ -91,6 +91,7 @@ def step_id(value):
     return f"{value.comment}  {value.user_input}"
 
 
+@pytest.mark.flaky(reruns=5)  # type: ignore[misc]
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
     """run the tests"""

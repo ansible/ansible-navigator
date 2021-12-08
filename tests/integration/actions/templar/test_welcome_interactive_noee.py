@@ -29,6 +29,7 @@ initial_steps = (
 steps = add_indicies(initial_steps + base_steps)
 
 
+@pytest.mark.flaky(reruns=5)  # type: ignore[misc]
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
     """run the tests"""
