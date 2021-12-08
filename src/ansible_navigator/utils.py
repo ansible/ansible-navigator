@@ -347,7 +347,7 @@ def divmod_int(numerator: Union[int, float], denominator: Union[int, float]) -> 
     quotient, remainder = divmod(numerator, denominator)
     return int(quotient), int(remainder)
 
-def human_time(seconds: Union[int, float]) -> str:
+def human_time(seconds: int) -> str:
     """Convert seconds into human readable 00d00h00m00s format."""
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))
