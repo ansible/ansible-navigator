@@ -126,7 +126,6 @@ class App:
         interaction.ui.menu_filter(self._previous_filter)
         interaction.ui.scroll(0)
 
-
     def rerun(self) -> None:
         """Rerun the action.
 
