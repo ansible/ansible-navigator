@@ -342,12 +342,14 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     exit_messages.append(ExitMessage(message=exit_msg))
     return messages, exit_messages, None
 
+
 def divmod_int(numerator: Union[int, float], denominator: Union[int, float]) -> Tuple[int, int]:
     """Return the result of divmod, as a tuple of integers."""
     quotient, remainder = divmod(numerator, denominator)
     return int(quotient), int(remainder)
 
-def human_time(seconds: int) -> str:
+
+def human_time(seconds: Union[int, float]) -> str:
     """Convert seconds into human readable 00d00h00m00s format."""
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))
