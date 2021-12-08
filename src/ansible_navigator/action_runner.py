@@ -1,15 +1,26 @@
-""" jump to one action
-"""
+"""Jump to one action."""
 import os
+
+from typing import TYPE_CHECKING
 
 from ansible_navigator.actions import kegexes
 from ansible_navigator.actions import run_action
 
 from .app import App
+from .configuration_subsystem import ApplicationConfiguration
 from .steps import Steps
 from .ui_framework import Interaction
 from .ui_framework import UIConfig
 from .ui_framework import UserInterface
+
+if TYPE_CHECKING:
+    from _curses import _CursesWindow  # pylint: disable=no-name-in-module
+
+    Window = _CursesWindow
+else:
+    from typing import Any
+
+    Window = Any
 
 DEFAULT_REFRESH = 100
 DEFAULT_COLORS = "terminal_colors.json"
@@ -20,15 +31,19 @@ class ActionRunner(App):
 
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
-    """the playbook ui"""
+    """A single action runner."""
 
-    def __init__(self, args):
+    def __init__(self, args: ApplicationConfiguration) -> None:
+        """Initialize the ActionRunner class.
+
+        :param args: The current application configuration
+        """
         super().__init__(args, name="action_runner")
-        self._ui = None
+        self._ui: UserInterface
         self.steps: Steps = Steps()
 
     def initialize_ui(self, refresh: int) -> None:
-        """initialize the user interface
+        """Initialize the user interface.
 
         :param refresh: The refresh for the ui
         :type refresh: int
@@ -52,9 +67,16 @@ class ActionRunner(App):
             ui_config=config,
         )
 
-    def run(self, _screen) -> None:
+    def run(self, _screen: Window) -> None:
         # pylint: disable=protected-access
-        """Run with the interface and runner"""
+        """Run the app.
+
+        Initialise the UI.
+        Create an interaction based on the app name from the current settings.
+        Run the action, passing the interaction.
+
+        :param _screen: The screen instance from the curses wrapper call
+        """
         self.initialize_ui(DEFAULT_REFRESH)
         name, action = self._action_match(self._args.app)
         if name and action:
@@ -64,7 +86,10 @@ class ActionRunner(App):
             self._run_app(interaction)
 
     def _run_app(self, initial_interaction: Interaction) -> None:
-        """enter the endless loop"""
+        """Enter the endless app loop.
+
+        :param initial_interaction: The initial interaction for app start
+        """
         while True:
             if not self.steps:
                 self.steps.append(initial_interaction)
