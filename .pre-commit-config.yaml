@@ -1,9 +1,4 @@
 ---
-
-ci:
-  skip:
-  - flake8
-
 repos:
 - repo: https://github.com/asottile/add-trailing-comma.git
   rev: v2.0.1
@@ -230,6 +225,16 @@ repos:
   hooks:
   - id: flake8
     language_version: python3
+    additional_dependencies:
+    - flake8-2020 >= 1.6.0
+    - flake8-pytest-style >= 1.2.2
+
+- repo: https://github.com/PyCQA/flake8.git
+  rev: 3.9.2
+  hooks:
+  - id: flake8
+    language_version: python3
+    stages: ["manual"]
     additional_dependencies:
     - flake8-2020 >= 1.6.0
     - flake8-docstrings >= 1.5.0
