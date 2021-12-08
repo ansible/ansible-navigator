@@ -5,6 +5,7 @@ import json
 import os
 
 from typing import Generator
+from typing import Union
 
 import pytest
 
@@ -25,7 +26,7 @@ class BaseClass:
     UPDATE_FIXTURES = False
     PANE_HEIGHT = 25
     PANE_WIDTH = 300
-    CONFIG_FILE = None
+    CONFIG_FILE: Union[str, None] = None
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(
