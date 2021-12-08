@@ -51,7 +51,7 @@ steps = add_indicies(stdout_tests)
 def step_id(value: ShellCommand) -> str:
     """Return the test id from the test step object.
 
-    :param value: The data fro the test iteration
+    :param value: The data from the test iteration
     :returns: An id for the test
     """
     return f"{value.comment}  {value.user_input}"
