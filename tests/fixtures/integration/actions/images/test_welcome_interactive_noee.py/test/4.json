@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "ANSIBLE-NAVIGATOR-DEMO-EE:0.6.0 (PRIMARY) (INFORMATION COLLECTED FROM IMAGE INSPECTION)",
+        "CREATOR-EE:V0.2.0 (PRIMARY) (INFORMATION COLLECTED FROM IMAGE INSPECTION)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations: {}",
@@ -19,16 +19,16 @@
         "  5│  comment: ''",
         "  6│  config:",
         "  7│    cmd:",
-        "  8│    - /bin/sh",
-        "  9│    - -c",
-        " 10│    - /run.sh",
+        "  8│    - ansible-runner",
+        "  9│    - run",
+        " 10│    - /runner",
         " 11│    entrypoint:",
         " 12│    - entrypoint",
         " 13│    env:",
         " 14│    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
         " 15│    - HOME=/home/runner",
         " 16│    labels:",
-        " 17│      io.buildah.version: 1.19.4",
+        " 17│      io.buildah.version: 1.22.3",
         "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

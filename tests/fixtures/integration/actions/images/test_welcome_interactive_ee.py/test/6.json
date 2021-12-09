@@ -10,11 +10,11 @@
         "compared_fixture": false
     },
     "output": [
-        "ANSIBLE-NAVIGATOR-DEMO-EE:0.6.0 (PRIMARY) (OS AND PYTHON VERSION INFORMATION)",
+        "CREATOR-EE:V0.2.0 (PRIMARY) (OS AND PYTHON VERSION INFORMATION)",
         " 0│---                                                                                                                                                                                                 ▒",
         " 1│friendly:                                                                                                                                                                                           ▒",
         " 2│  details: |-                                                                                                                                                                                       ▒",
-        " 3│    CentOS Linux release 8.4.2105                                                                                                                                                                   ▒",
+        " 3│    CentOS Linux release 8.5.2111                                                                                                                                                                   ▒",
         " 4│os:                                                                                                                                                                                                 ▒",
         " 5│  details:                                                                                                                                                                                          ▒",
         " 6│  - ansi-color: 0;31                                                                                                                                                                                ▒",
