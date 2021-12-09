@@ -154,6 +154,7 @@ repos:
     exclude: >
       (?x)^
         (
+          tests/fixtures/.*\.json|
           .github/ISSUE_TEMPLATE/bug_report\.md|
           docs/_ext/single_sourced_data\.py|
           share/ansible_navigator/grammar/html.tmLanguage\.json|
