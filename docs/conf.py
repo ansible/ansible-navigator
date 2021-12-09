@@ -234,8 +234,10 @@ extlinks = {
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "ansible-runner": ("https://ansible-runner.rtfd.io/en/latest", None),
+    'myst': ('https://myst-parser.rtfd.io/en/latest', None),
     "python": ("https://docs.python.org/3", None),
     "python2": ("https://docs.python.org/2", None),
+    'tox': ('https://tox.wiki/en/latest', None),
 }
 
 # -- Options for sphinxcontrib.apidoc extension ------------------------------
