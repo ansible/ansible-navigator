@@ -85,6 +85,7 @@ class Action:
         elif write_as == "json":
             with open(os.path.abspath(filename), fmode) as outfile:
                 json.dump(obj, outfile, indent=4, sort_keys=True)
+                outfile.write("\n")
 
         self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, fmode, write_as)
         return None

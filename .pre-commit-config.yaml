@@ -48,11 +48,6 @@ repos:
         .*
       $
   - id: end-of-file-fixer
-    exclude: |
-      (?x)
-      ^
-        .*
-      $
   - id: requirements-txt-fixer
     exclude: >-
       ^requirements\.txt$

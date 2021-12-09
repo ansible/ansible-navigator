@@ -60,4 +60,3 @@ ansible-navigator:
   # - GCP_SERVICE_ACCOUNT_EMAIL
   # - GCP_SERVICE_ACCOUNT_FILE
   # - GCP_SCOPES
-
