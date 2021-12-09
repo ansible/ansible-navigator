@@ -1,6 +1,11 @@
 ---
 
 repos:
+- repo: https://github.com/tox-dev/tox-ini-fmt
+  rev: "0.5.1"
+  hooks:
+    - id: tox-ini-fmt
+      args: ["-p", "linters,type"]
 - repo: https://github.com/asottile/add-trailing-comma.git
   rev: v2.0.1
   hooks:
