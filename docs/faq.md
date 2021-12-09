@@ -72,9 +72,9 @@ The configuration system of ansible-navigator pulls in settings from various sou
 
 **Q: How do I use my SSH keys with an execution environment?**
 
-A: The simplest way to use SSH keys with an execution environment is to use `ssh-agent` and use default key names. Register keys as needed if they do not use one of the default key names.  (`~/.ssh/id_rsa`, `~/.ssh/id_dsa`, `~/.ssh/id_ecdsa`, `~/.ssh/id_ed25519`, and `~/.ssh/identity`. (eg `ssh-add ~/.ssh/my_key`). `ansible-navigator` will automatically setup and enable the use of `ssh-agent` within the execution environment by volume mounting the SSH authentication socket path and setting the SSH_AUTH_SOCK environment variable. (eg 
+A: The simplest way to use SSH keys with an execution environment is to use `ssh-agent` and use default key names. Register keys as needed if they do not use one of the default key names.  (`~/.ssh/id_rsa`, `~/.ssh/id_dsa`, `~/.ssh/id_ecdsa`, `~/.ssh/id_ed25519`, and `~/.ssh/identity`. (eg `ssh-add ~/.ssh/my_key`). `ansible-navigator` will automatically setup and enable the use of `ssh-agent` within the execution environment by volume mounting the SSH authentication socket path and setting the SSH_AUTH_SOCK environment variable. (eg
 
-`-v /run/user/1000/keyring/:/run/user/1000/keyring/ -e SSH_AUTH_SOCK=/run/user/1000/keyring/ssh` (as seen in the `ansible-navigator` log file when using an execution environment and `--log-level debug`) 
+`-v /run/user/1000/keyring/:/run/user/1000/keyring/ -e SSH_AUTH_SOCK=/run/user/1000/keyring/ssh` (as seen in the `ansible-navigator` log file when using an execution environment and `--log-level debug`)
 
 The use of `ssh-agent` results in the simplest configuration and eliminates issues with SSH key passphrases when using `ansible-navigator` with execution environments.
 
@@ -89,7 +89,7 @@ Additionally, `ansible-navigator` will automatically volume mount the user's SSH
 `-v /home/current_user/.ssh/:/home/runner/.ssh/` (as seen in the `ansible-navigator` log file when using an execution environment and `--log-level debug`)
 
 Note: When using `ansible_ssh_private_key_file` with execution environments, the path to the key needs to reference it's location after being volume mounted to the execution environment. (eg `/home/runner/.ssh/key_name` or `/root/.ssh/key_name`).  It may be convenient to specify the path to the key as `~/.ssh/key_name` which will resolve to the user's home directory with or without the use of an execution environment.
- 
+
 **Q: Something didn't work, how can I troubleshoot it?**
 
 A: `ansible-navigator` has reasonable logging messages, debug logging can be enabled with `--log-level debug`. If you think you might have found a bug, please log an issue and include the details from the log file.
