@@ -39,6 +39,7 @@ changelog
 :caption: Contributions
 :hidden:
 
+contributing/security
 contributing/guidelines
 Private unsupported (dev) API autodoc <pkg/modules>
 ```
