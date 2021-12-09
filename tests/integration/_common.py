@@ -43,6 +43,7 @@ def update_fixtures(
     fixture["output"] = received_output
     with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:
         json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
+        outfile.write("\n")
 
 
 def fixture_path_from_request(request, index, testname=None):
