@@ -2,7 +2,7 @@
 
 repos:
 - repo: https://github.com/asottile/add-trailing-comma.git
-  rev: v2.0.1
+  rev: v2.2.1
   hooks:
   - id: add-trailing-comma
     args:
@@ -14,7 +14,7 @@ repos:
       $
 
 - repo: https://github.com/timothycrosley/isort.git
-  rev: 5.4.2
+  rev: 5.10.1
   hooks:
   - id: isort
     args:
@@ -26,7 +26,7 @@ repos:
       $
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-  rev: v1.1.7
+  rev: v1.1.10
   hooks:
   - id: remove-tabs
     exclude: |
@@ -87,7 +87,7 @@ repos:
   - id: debug-statements
 
 - repo: https://github.com/igorshubovych/markdownlint-cli
-  rev: v0.29.0
+  rev: v0.30.0
   hooks:
   - id: markdownlint
     exclude: >
@@ -204,7 +204,7 @@ repos:
       $
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.26.2
+  rev: v1.26.3
   hooks:
   - id: yamllint
     args:
@@ -212,7 +212,7 @@ repos:
     types: [file, yaml]
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 3.9.2
+  rev: 4.0.1
   hooks:
   - id: flake8
     language_version: python3
@@ -235,7 +235,7 @@ repos:
     - manual
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v0.910
+  rev: v0.910-1
   hooks:
   - id: mypy
     additional_dependencies:
