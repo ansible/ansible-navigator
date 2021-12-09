@@ -40,16 +40,6 @@ repos:
   hooks:
   # Side-effects:
   - id: trailing-whitespace
-    exclude: |
-      (?x)
-      ^
-        tests/fixtures/unit/configuration_subsystem/ansible-navigator\.yml|
-        licenses/LICENSE\.source\.json\.json|
-        tests/smoketests/scenarios/smoke-config\.yml|
-        docs/faq\.md|
-        tests/fixtures/integration/execution_environment/ansible-navigator_disable_ee\.yml|
-        tox\.ini
-      $
   - id: check-merge-conflict
   - id: double-quote-string-fixer
     exclude: |

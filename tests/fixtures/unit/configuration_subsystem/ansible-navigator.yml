@@ -55,7 +55,7 @@ ansible-navigator:
     append: False
     file: /tmp/log.txt
   mode: stdout
-  playbook-artifact: 
+  playbook-artifact:
     enable: True
     replay: /tmp/test_artifact.json
     save-as: /tmp/test_artifact.json

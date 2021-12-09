@@ -28,7 +28,7 @@ ansible-navigator:
   logging:
     level: debug
     file: /tmp/ansible-navigator.log
-    
+
   # To directly set environment variables
   # within the execution environment
   # provide them and key, value pairs
