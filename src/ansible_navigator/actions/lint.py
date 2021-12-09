@@ -206,7 +206,6 @@ class Action(App):
             "rotate_artifacts": self._args.ansible_runner_rotate_artifacts_count,
             "timeout": self._args.ansible_runner_timeout,
             "host_cwd": os.getcwd(),
-            "wrap_sh": True,
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
