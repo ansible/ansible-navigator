@@ -1,3 +1,4 @@
+# fmt: off
 """Sphinx extension for making the spelling directive noop."""
 
 from typing import Dict, List, Union
@@ -19,9 +20,9 @@ class SpellingNoOpDirective(SphinxDirective):
 
 def setup(app: Sphinx) -> Dict[str, Union[bool, str]]:
     """Initialize the extension."""
-    app.add_directive("spelling", SpellingNoOpDirective)
+    app.add_directive('spelling', SpellingNoOpDirective)
 
     return {
-        "parallel_read_safe": True,
-        "version": "builtin",
+        'parallel_read_safe': True,
+        'version': 'builtin',
     }
