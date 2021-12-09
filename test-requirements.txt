@@ -1,12 +1,11 @@
 ansible-core
 black
-flake8
 libtmux
 lxml
 mypy
+pre-commit
 pylint < 2.9  # v2.9.0 introduced a check for `with` which is not yet fixed
 pytest-cov
 pytest-xdist
 types-dataclasses
 types-PyYAML
-yamllint
