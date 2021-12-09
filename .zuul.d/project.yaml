@@ -2,7 +2,6 @@
 - project:
     check:
       jobs: &id001
-        - ansible-buildset-registry
         - ansible-navigator-tox-lint
         - ansible-navigator-tox-py38
         - ansible-navigator-tox-smoke
