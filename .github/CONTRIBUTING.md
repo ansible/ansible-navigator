@@ -3,7 +3,7 @@
 Some background:
 
 The ansible-navigator code base is not just for it's users but current and
-future developers. Over time we have implemented a few tools that help us
+future developers. Over time we have adopted a few tools that help us
 maintain it and you contribute.
 
 1. mypy (Helps with type checking)
