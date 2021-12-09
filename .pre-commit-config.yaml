@@ -12,6 +12,7 @@ repos:
       ^
         .*
       $
+    stages: ["manual"]
 
 - repo: https://github.com/timothycrosley/isort.git
   rev: 5.10.1
@@ -24,6 +25,7 @@ repos:
       ^
         .*
       $
+    stages: ["manual"]
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git
   rev: v1.1.10
@@ -47,6 +49,7 @@ repos:
       ^
         .*
       $
+    stages: ["manual"]
   - id: end-of-file-fixer
   - id: requirements-txt-fixer
     exclude: >-
@@ -62,6 +65,7 @@ repos:
       $
     files: >-
       ^tests/[^_].*\.py$
+    stages: ["manual"]
   - id: check-added-large-files
   - id: check-byte-order-marker
   - id: check-case-conflict
@@ -141,6 +145,7 @@ repos:
       D412,
       D413,
       D415,
+    stages: ["manual"]
 
 - repo: https://github.com/codespell-project/codespell
   rev: v2.1.0
@@ -198,6 +203,7 @@ repos:
           tox\.ini
         )
       $
+    stages: ["manual"]
 
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.26.3
@@ -214,8 +220,6 @@ repos:
     language_version: python3
     additional_dependencies:
     - flake8-2020 >= 1.6.0
-    - flake8-docstrings >= 1.5.0
-    - flake8-pytest-style >= 1.2.2
 
 - repo: https://github.com/PyCQA/flake8.git
   rev: 3.9.2
