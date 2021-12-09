@@ -15,7 +15,6 @@ maintain it and you contribute.
 Details can be found below on how to run these manually, our CI will also
 check them for you.
 
-
 In order to contribute, you'll need to:
 
 1. Fork the repository.
