@@ -5,7 +5,6 @@ import json
 import os
 
 from pathlib import Path
-from pathlib import PosixPath
 from typing import Generator
 from typing import Union
 
@@ -28,7 +27,7 @@ class BaseClass:
     UPDATE_FIXTURES = False
     PANE_HEIGHT = 25
     PANE_WIDTH = 300
-    CONFIG_FILE: Union[PosixPath, None] = None
+    CONFIG_FILE: Union[Path, None] = None
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(
@@ -44,7 +43,7 @@ class BaseClass:
             "pane_height": self.PANE_HEIGHT,
             "pane_width": self.PANE_WIDTH,
         }
-        if isinstance(self.CONFIG_FILE, PosixPath):
+        if isinstance(self.CONFIG_FILE, Path):
             assert self.CONFIG_FILE.exists()
             params["config_path"] = self.CONFIG_FILE
 
