@@ -10,6 +10,8 @@ from typing import Union
 from . import _actions as actions
 from ..app import App
 from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import Constants
+
 from ..runner import Command
 
 
@@ -68,7 +70,11 @@ class Action(App):
         """
         if isinstance(self._args.set_environment_variable, dict):
             envvars_to_set = self._args.set_environment_variable.copy()
+        elif isinstance(self._args.set_environment_variable, Constants):
+            envvars_to_set = {}
         else:
+            self._logger.error("The setting 'set_environment_variable' was neither a dictionary"
+                " or Constants, please raise an issue. No environment variables will be set.")
             envvars_to_set = {}
 
         if self._args.display_color is False:
