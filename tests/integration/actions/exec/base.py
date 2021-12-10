@@ -4,6 +4,8 @@ import difflib
 import json
 import os
 
+from pathlib import Path
+from pathlib import PosixPath
 from typing import Generator
 from typing import Union
 
@@ -16,8 +18,8 @@ from ..._interactions import SearchFor
 from ..._interactions import Step
 from ....defaults import FIXTURES_DIR
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration", "actions", "exec")
-TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yaml")
+TEST_FIXTURE_DIR = Path(FIXTURES_DIR, "integration", "actions", "exec")
+TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR, "ansible-navigator.yaml")
 
 
 class BaseClass:
@@ -26,7 +28,7 @@ class BaseClass:
     UPDATE_FIXTURES = False
     PANE_HEIGHT = 25
     PANE_WIDTH = 300
-    CONFIG_FILE: Union[str, None] = None
+    CONFIG_FILE: Union[PosixPath, None] = None
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(
@@ -42,8 +44,8 @@ class BaseClass:
             "pane_height": self.PANE_HEIGHT,
             "pane_width": self.PANE_WIDTH,
         }
-        if isinstance(self.CONFIG_FILE, str):
-            assert os.path.exists(self.CONFIG_FILE)
+        if isinstance(self.CONFIG_FILE, PosixPath):
+            assert self.CONFIG_FILE.exists()
             params["config_path"] = self.CONFIG_FILE
 
         with TmuxSession(**params) as tmux_session:
