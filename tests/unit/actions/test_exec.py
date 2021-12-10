@@ -5,7 +5,7 @@ from typing import NamedTuple
 
 import pytest
 
-from ansible_navigator.actions.exec import Action as ExecAction
+from ansible_navigator.actions.exec import _generate_command
 
 
 class CommandTestData(NamedTuple):
@@ -15,16 +15,16 @@ class CommandTestData(NamedTuple):
     command: str
     shell: bool
     result_command: str
-    result_params: list
+    result_params: List
 
 
-def id_from_data(value):
+def id_from_data(test_value):
     """Return the name from the test data object.
 
-    :param value: The value from which the test id will be extracted
+    :param test_value: The value from which the test id will be extracted
     :returns: The test id
     """
-    return f" {value.name} "
+    return f" {test_value.name} "
 
 
 command_test_data = [
@@ -76,14 +76,16 @@ command_test_data = [
 ]
 
 
-@pytest.mark.parametrize("data", command_test_data, ids=id_from_data)
-def test_artifact_path(data: CommandTestData):
+@pytest.mark.parametrize("cmd_test_data", command_test_data, ids=id_from_data)
+def test_artifact_path(cmd_test_data: CommandTestData):
     """Test the generation of the command and params.
 
-    :param data: The test data
+    :param cmd_test_data: The test data
     """
     # pylint: disable=protected-access
-    command, params = ExecAction._generate_command(exec_command=data.command, exec_shell=data.shell)
-    comment = data, command, params
-    assert command == data.result_command, comment
-    assert params == data.result_params, comment
+    command, additional_params = _generate_command(
+        exec_command=cmd_test_data.command, exec_shell=cmd_test_data.shell
+    )
+    comment = command_test_data, command, additional_params
+    assert command == cmd_test_data.result_command, comment
+    assert additional_params == cmd_test_data.result_params, comment

@@ -61,5 +61,5 @@ def step_id(value: ShellCommand) -> str:
 class Test(BaseClass):
     """Run the tests for exec, mode stdout, parameters set using config file."""
 
-    CONFIG_FILE = TEST_CONFIG_FILE
-    UPDATE_FIXTURES = False
+    config_file = TEST_CONFIG_FILE
+    update_fixtures = False

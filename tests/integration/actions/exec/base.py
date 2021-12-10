@@ -24,10 +24,10 @@ TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR, "ansible-navigator.yaml")
 class BaseClass:
     """The base class for interactive/stdout exec tests."""
 
-    UPDATE_FIXTURES = False
-    PANE_HEIGHT = 25
-    PANE_WIDTH = 300
-    CONFIG_FILE: Union[Path, None] = None
+    update_fixtures = False
+    pane_height = 25
+    pane_width = 300
+    config_file: Union[Path, None] = None
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(
@@ -38,16 +38,16 @@ class BaseClass:
         :param request: The request for this fixture
         :yields: A tmux session
         """
-        params = {
+        tmux_params = {
             "unique_test_id": request.node.nodeid,
-            "pane_height": self.PANE_HEIGHT,
-            "pane_width": self.PANE_WIDTH,
+            "pane_height": self.pane_height,
+            "pane_width": self.pane_width,
         }
-        if isinstance(self.CONFIG_FILE, Path):
-            assert self.CONFIG_FILE.exists()
-            params["config_path"] = self.CONFIG_FILE
+        if isinstance(self.config_file, Path):
+            assert self.config_file.exists()
+            tmux_params["config_path"] = self.config_file
 
-        with TmuxSession(**params) as tmux_session:
+        with TmuxSession(**tmux_params) as tmux_session:
             yield tmux_session
 
     def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: Step):
@@ -72,7 +72,7 @@ class BaseClass:
         )
 
         fixtures_update_requested = (
-            self.UPDATE_FIXTURES
+            self.update_fixtures
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
         )
         if fixtures_update_requested:
@@ -101,6 +101,7 @@ class BaseClass:
             with open(f"{dir_path}/{file_name}") as infile:
                 expected_output = json.load(infile)["output"]
 
-            assert expected_output == received_output, "\n" + "\n".join(
+            diff = "\n".join(
                 difflib.unified_diff(expected_output, received_output, "expected", "received")
             )
+            assert expected_output == received_output, f"\n{diff}"

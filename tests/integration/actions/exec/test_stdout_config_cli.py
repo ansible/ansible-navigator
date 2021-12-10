@@ -76,4 +76,4 @@ def step_id(value: ShellCommand) -> str:
 class Test(BaseClass):
     """Run the tests for exec, mode stdout, parameters set using cli."""
 
-    UPDATE_FIXTURES = False
+    update_fixtures = False

@@ -329,8 +329,7 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :return: An instance of the standard post process return object
         """
-        messages, exit_messages = self._true_or_false(entry, config)
-        return messages, exit_messages
+        return self._true_or_false(entry, config)
 
     @_post_processor
     def help_config(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:

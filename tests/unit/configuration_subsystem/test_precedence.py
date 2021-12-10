@@ -49,7 +49,8 @@ def test_all_entries_reflect_cli_given_envvars(
         params = shlex.split(cli_entry)
         expected = dict(expected)
     else:
-        params = shlex.split(cli_entry) + " ".join(base.splitlines()).split()
+        cli_entry_split = shlex.split(cli_entry)
+        params = cli_entry_split + " ".join(base.splitlines()).split()
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     envvars = {}
@@ -86,7 +87,8 @@ def test_all_entries_reflect_cli_given_settings(
         params = shlex.split(cli_entry)
         expected = dict(expected)
     else:
-        params = shlex.split(cli_entry) + " ".join(base.splitlines()).split()
+        cli_entry_split = shlex.split(cli_entry)
+        params = cli_entry_split + " ".join(base.splitlines()).split()
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     response = generate_config(params=params, setting_file_name=settings)

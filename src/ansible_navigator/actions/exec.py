@@ -14,6 +14,27 @@ from ..configuration_subsystem.definitions import Constants
 
 from ..runner import Command
 
+GeneratedCommand = Tuple[str, Optional[List[str]]]
+
+
+def _generate_command(exec_command: str, exec_shell: bool) -> GeneratedCommand:
+    """Generate the command and args.
+
+    :param exec_command: The command to run
+    :param exec_shell: Should the command be wrapped in a shell
+    :returns: The command and any pass through arguments
+    """
+    pass_through_args = None
+    if exec_shell and exec_command:
+        command = "/bin/bash"
+        pass_through_args = ["-c", exec_command]
+    else:
+        parts = shlex.split(exec_command)
+        command = parts[0]
+        if len(parts) > 1:
+            pass_through_args = parts[1:]
+    return (command, pass_through_args)
+
 
 @actions.register
 class Action(App):
@@ -21,7 +42,7 @@ class Action(App):
 
     # pylint: disable=too-few-public-methods
 
-    KEGEX = r"^e(?:xec)?$"
+    KEGEX = "^e(?:xec)?$"
 
     def __init__(self, args: ApplicationConfiguration):
         """Initialize the action.
@@ -29,25 +50,6 @@ class Action(App):
         :param args: The current application configuration.
         """
         super().__init__(args=args, logger_name=__name__, name="exec")
-
-    @staticmethod
-    def _generate_command(exec_command: str, exec_shell: bool) -> Tuple[str, Optional[List[str]]]:
-        """Generate the command and args.
-
-        :param exec_command: The command to run
-        :param exec_shell: Should the command be wrapped in a shell
-        :returns: The command and any pass through arguments
-        """
-        pass_through_args = None
-        if exec_shell and exec_command:
-            command = "/bin/bash"
-            pass_through_args = ["-c", exec_command]
-        else:
-            parts = shlex.split(exec_command)
-            command = parts[0]
-            if len(parts) > 1:
-                pass_through_args = parts[1:]
-        return (command, pass_through_args)
 
     def run_stdout(self) -> Union[None, int]:
         """Run in mode stdout.
@@ -101,12 +103,11 @@ class Action(App):
         if isinstance(self._args.container_options, list):
             kwargs["container_options"] = self._args.container_options
 
-        command, pass_through_args = self._generate_command(
+        command, pass_through_args = _generate_command(
             exec_command=self._args.exec_command, exec_shell=self._args.exec_shell
         )
         if isinstance(pass_through_args, list):
             kwargs["cmdline"] = pass_through_args
 
         runner = Command(executable_cmd=command, **kwargs)
-        runner_return = runner.run()
-        return runner_return
+        return runner.run()
