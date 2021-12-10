@@ -51,12 +51,6 @@ repos:
       $
     stages: ["manual"]
   - id: end-of-file-fixer
-    exclude: |
-      (?x)
-      ^
-        .*
-      $
-    stages: ["manual"]
   - id: requirements-txt-fixer
     exclude: >-
       ^requirements\.txt$
