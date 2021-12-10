@@ -22,7 +22,6 @@ from .ui_framework import Interaction
 from .ui_framework import ui
 from .ui_framework import warning_notification
 
-
 from .utils import LogMessage
 from .utils import ExitMessage
 
