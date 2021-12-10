@@ -67,7 +67,7 @@ class Action(App):
         :return: The stdout, stderr and return code from runner
         """
         if isinstance(self._args.set_environment_variable, dict):
-            set_envvars = {**self._args.set_environment_variable}
+            set_envvars = self._args.set_environment_variable.copy()
         else:
             set_envvars = {}
 
