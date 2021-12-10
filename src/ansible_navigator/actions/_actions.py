@@ -98,10 +98,12 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     """Call the given action's run"""
     action_cls = get(package, action)
     app, interaction = args
-    if hasattr(action_cls(app.args), "run"):
-        return action_cls(app.args).run(app=app, interaction=interaction)
-    logger.error("Subcommand '%s' does not support mode interactive", action)
-    return action_cls(app.args).no_interactive_mode(app=app, interaction=interaction)
+    app_action = action_cls(app.args)
+    supports_interactive = hasattr(app_action, "run")
+    if not supports_interactive:
+        logger.error("Subcommand '%s' does not support mode interactive", action)
+    run_action = app_action.run if supports_interactive else app_action.no_interactive_mode
+    return run_action(app=app, interaction=interaction)
 
 
 def run_interactive_factory(package: str) -> Callable:
