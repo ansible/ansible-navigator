@@ -74,7 +74,8 @@ class Action(App):
             envvars_to_set = {}
         else:
             self._logger.error("The setting 'set_environment_variable' was neither a dictionary"
-                " or Constants, please raise an issue. No environment variables will be set.")
+                " or Constants, please raise an issue. No environment variables will be set."
+                " The current value was found to be '%s'", self._args.set_environment_variable)
             envvars_to_set = {}
 
         if self._args.display_color is False:
