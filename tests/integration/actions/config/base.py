@@ -48,6 +48,7 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
+        # pylint: disable=too-many-locals
         """Run the tests for config, mode and ee set in child class."""
 
         if step.search_within_response is SearchFor.HELP:
