@@ -1,1 +1,1 @@
-"""Integration tests for the exec subcommand."""
+"""Integration tests for the ``exec`` subcommand."""
