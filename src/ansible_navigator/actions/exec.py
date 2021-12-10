@@ -67,12 +67,12 @@ class Action(App):
         :return: The stdout, stderr and return code from runner
         """
         if isinstance(self._args.set_environment_variable, dict):
-            set_envvars = self._args.set_environment_variable.copy()
+            envvars_to_set = self._args.set_environment_variable.copy()
         else:
-            set_envvars = {}
+            envvars_to_set = {}
 
         if self._args.display_color is False:
-            set_envvars["ANSIBLE_NOCOLOR"] = "1"
+            envvars_to_set["ANSIBLE_NOCOLOR"] = "1"
 
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -81,7 +81,7 @@ class Action(App):
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "set_environment_variable": set_envvars,
+            "set_environment_variable": envvars_to_set,
             "timeout": self._args.ansible_runner_timeout,
         }
 
