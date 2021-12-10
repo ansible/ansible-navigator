@@ -70,10 +70,11 @@ class BaseClass:
             search_within_response=search_within_response,
         )
 
-        if (
+        fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-        ):
+        )
+        if fixtures_update_requested:
             update_fixtures(
                 request,
                 step.step_index,
