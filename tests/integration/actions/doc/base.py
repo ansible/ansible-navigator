@@ -78,7 +78,7 @@ class BaseClass:
                 assert any(out in line for line in received_output), (out, received_output)
         else:
             fixtures_update_requested = (
-               self.UPDATE_FIXTURES
+                self.UPDATE_FIXTURES
                 or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
             )
             if fixtures_update_requested:
