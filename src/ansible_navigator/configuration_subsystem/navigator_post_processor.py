@@ -323,7 +323,7 @@ class NavigatorPostProcessor:
     @_post_processor
     def exec_shell(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process exec_shell.
+        """Post process ``exec_shell``.
 
         :param entry: The current settings entry
         :param config: The full application configuration
