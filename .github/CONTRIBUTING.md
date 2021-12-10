@@ -10,11 +10,13 @@ maintain it and you contribute.
 
 2. pylint (lints all the things)
 
-.. note:: In early development cycles, a decision was made to use black as a formatter
-          which is why current pull-requests are required to pass a
-         `black --diff` check of the source tree. The decision to use `black` is
-         left to individual developers as the formatting changes it makes can be
-         achieved without it.
+```{note}
+In early development cycles, a decision was made to use black as a formatter
+which is why current pull-requests are required to pass a
+`black --diff` check of the source tree. The decision to use `black` is
+left to individual developers as the formatting changes it makes can be
+achieved without it.
+```
 
 Details can be found below on how to run these manually, our CI will also
 check them for you.
