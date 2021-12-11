@@ -1,4 +1,4 @@
-""" ui_framework
+"""ui_framework
 """
 
 from .curses_defs import CursesLine

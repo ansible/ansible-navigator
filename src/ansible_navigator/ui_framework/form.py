@@ -1,4 +1,4 @@
-""" for def
+"""for def
 """
 from dataclasses import dataclass, field
 from typing import Dict

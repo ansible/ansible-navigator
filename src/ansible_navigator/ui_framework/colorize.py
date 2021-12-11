@@ -1,4 +1,4 @@
-""" Tokenize and color text
+"""Tokenize and color text
 """
 
 import json

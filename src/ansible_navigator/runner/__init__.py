@@ -1,4 +1,4 @@
-""" Public entrypoints for the runner api
+"""Public entrypoints for the runner api
 """
 
 from .ansible_config import AnsibleConfig

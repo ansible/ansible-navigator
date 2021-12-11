@@ -1,4 +1,4 @@
-""" build a menu
+"""build a menu
 """
 import curses
 import enum

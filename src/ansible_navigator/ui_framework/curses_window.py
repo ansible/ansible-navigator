@@ -1,4 +1,4 @@
-""" type for curses window
+"""type for curses window
 """
 import curses
 import json

@@ -1,4 +1,4 @@
-""" some ui specific utils
+"""some ui specific utils
 """
 import functools
 import re

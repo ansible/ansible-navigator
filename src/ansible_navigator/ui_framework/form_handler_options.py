@@ -1,4 +1,4 @@
-""" Get one line of text input
+"""Get one line of text input
 """
 import curses
 

@@ -1,4 +1,4 @@
-""" information handler, instant enter
+"""information handler, instant enter
 """
 
 from curses import ascii as curses_ascii
