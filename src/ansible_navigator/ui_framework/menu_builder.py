@@ -37,25 +37,25 @@ class MenuBuilder:
         self._color_menu_item = color_menu_item
         self._ui_config = ui_config
 
-    def build(self, dicts: List, cols: List, indicies) -> Tuple[CursesLines, CursesLines]:
+    def build(self, dicts: List, cols: List, indices) -> Tuple[CursesLines, CursesLines]:
         """main entry point for menu builer"""
-        return self._menu(dicts, cols, indicies)
+        return self._menu(dicts, cols, indices)
 
-    def _menu(self, dicts: List, cols: List[str], indicies) -> Tuple[CursesLines, CursesLines]:
+    def _menu(self, dicts: List, cols: List[str], indices) -> Tuple[CursesLines, CursesLines]:
         """Build a text menu from a list of dicts given columns(root keys)
 
         :param dicts: A list of dicts
         :param cols: The columns (keys) to use in the dicts
-        :param indicies: A range of what's showing in the UI
+        :param indices: A range of what's showing in the UI
         :return: the heading and body of the menu
         :rtype: (CursesLines, CursesLines)
         """
         line_prefix_w = len(str(len(dicts))) + len("|")
 
-        for idx in indicies:
+        for idx in indices:
             convert_percentage(dicts[idx], cols, self._pbar_width)
 
-        lines = [[str(dicts[idx].get(c)) for c in cols] for idx in indicies]
+        lines = [[str(dicts[idx].get(c)) for c in cols] for idx in indices]
         colws = [
             max([len(str(v)) for v in c])
             for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]])
@@ -74,7 +74,7 @@ class MenuBuilder:
         header = self._menu_header_line(menu_layout)
 
         menu_layout = tuple([col_starts, cols, adj_colws, header])
-        menu_lines = self._menu_lines(dicts, menu_layout, indicies)
+        menu_lines = self._menu_lines(dicts, menu_layout, indices)
         return tuple([header]), menu_lines
 
     def _menu_header_line(self, menu_layout: Tuple[List, ...]) -> CursesLine:
@@ -124,9 +124,7 @@ class MenuBuilder:
             column=col_starts[colno], string=adj_entry, color=0, decoration=curses.A_UNDERLINE
         )
 
-    def _menu_lines(
-        self, dicts: List[Dict], menu_layout: Tuple[List, ...], indicies
-    ) -> CursesLines:
+    def _menu_lines(self, dicts: List[Dict], menu_layout: Tuple[List, ...], indices) -> CursesLines:
         """Generate all the menu lines
 
         :params dicts: A list of dicts from which the menu will be generated
@@ -141,7 +139,7 @@ class MenuBuilder:
         :type memu_layout[3]: CursesLine
         :return: the menu lines
         """
-        return tuple(self._menu_line(dicts[idx], menu_layout) for idx in indicies)
+        return tuple(self._menu_line(dicts[idx], menu_layout) for idx in indices)
 
     def _menu_line(self, dyct: dict, menu_layout: Tuple[List, ...]) -> CursesLine:
         """Generate one the menu line

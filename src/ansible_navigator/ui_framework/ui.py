@@ -747,7 +747,7 @@ class UserInterface(CursesWindow):
         return regex.search(str(value))
 
     def _get_heading_menu_items(
-        self, current: List, columns: List, indicies
+        self, current: List, columns: List, indices
     ) -> Tuple[CursesLines, CursesLines]:
         """build the menu
 
@@ -767,7 +767,7 @@ class UserInterface(CursesWindow):
             color_menu_item=self._color_menu_item,
             ui_config=self._ui_config,
         )
-        menu_heading, menu_items = menu_builder.build(current, columns, indicies)
+        menu_heading, menu_items = menu_builder.build(current, columns, indices)
         return menu_heading, menu_items
 
     def _show_menu(self, current: List, columns: List, await_input: bool) -> Interaction:
