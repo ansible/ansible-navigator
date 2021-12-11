@@ -75,7 +75,7 @@ class ActionRunTest:
     def run_action_interactive(self) -> Any:
         """run the action
         The return type is set to Any here since not all actions
-        have the same signature, the cooresponding integration test
+        have the same signature, the corresponding integration test
         will be using the action internals for asserts
         """
         self._app_args.update({"mode": "interactive"})
@@ -136,7 +136,7 @@ class ActionRunTest:
         __stdout__ = sys.stdout
         __stderr__ = sys.stderr
 
-        # pytest psuedo stdin doesn't fileno(), use original
+        # pytest pseudo stdin doesn't fileno(), use original
         sys.stdin = stty  # type: ignore
 
         # set stderr and stdout to fds

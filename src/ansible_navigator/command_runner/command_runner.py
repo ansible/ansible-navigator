@@ -62,7 +62,7 @@ class CommandRunner:
 
     @staticmethod
     def run_sproc(cmd_clss: Any):
-        """run with a sinlge proc"""
+        """run with a single proc"""
         all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
         results = []
         for command in all_commands:

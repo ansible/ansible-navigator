@@ -1,6 +1,6 @@
 """ Herewithin lies the base class for all interaction with
 ansible-runner. Attributes common to all ansible-runner calls
-are defined withing the base class
+are defined within the base class
 """
 
 import logging
@@ -70,7 +70,7 @@ class Base:
                                                  Defaults to None.
             host_cwd ([str], optional): The current local working directory. Defaults to None.
                                    If value of execution_environment is set to True this
-                                   path will be volume mounted within the execution enviornment
+                                   path will be volume mounted within the execution environment
             set_environment_variable([dict], optional): Dict of user requested envvars to set
             pass_environment_variable([list], optional): List of user requested envvars to pass
             rotate_artifacts ([int], optional): Keep at most n artifact directories

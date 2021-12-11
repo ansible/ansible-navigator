@@ -47,7 +47,7 @@ def run_command(command: Command) -> None:
 
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
-    """a worker, pulls from pending, runs & porcesses
+    """a worker, pulls from pending, runs & processes
     places in completed"""
     while True:
         command = pending_queue.get()
@@ -70,7 +70,7 @@ class CommandRunner:
 
     @staticmethod
     def run_sproc(cmd_clss: Any):
-        """run with a sinlge proc"""
+        """run with a single proc"""
         all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
         results = []
         for command in all_commands:
@@ -122,7 +122,7 @@ class CmdParser:
 
     @staticmethod
     def re_partition(content, separator):
-        """like partion, but uses an re"""
+        """like partition, but uses an re"""
         separator_match = re.search(separator, content)
         if not separator_match:
             return content, "", ""

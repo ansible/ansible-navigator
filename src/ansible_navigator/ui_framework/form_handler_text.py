@@ -32,7 +32,7 @@ class FormHandlerText(CursesWindow, Textbox):
         self.win.clrtoeol()
 
     def _adjust_line_pointer(self, amount: int) -> None:
-        """increase the curent postion in the
+        """increase the current position in the
         line cache
         """
         self.input_line_pointer = (self.input_line_pointer + amount) % len(self.input_line_cache)

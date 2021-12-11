@@ -498,7 +498,7 @@ class UserInterface(CursesWindow):
         return None, None
 
     def _serialize_color(self, obj: Any) -> CursesLines:
-        """Serialize, if neccesary and color an obj
+        """Serialize, if necessary and color an obj
 
         :param obj: the object to color
         :type obj: Any
@@ -676,7 +676,7 @@ class UserInterface(CursesWindow):
                 heading, lines = self._filter_and_serialize(objs[index])
                 continue
 
-            # get the less or more, wrap, incase we jumped out of the menu indices
+            # get the less or more, wrap, in case we jumped out of the menu indices
             if entry == "-":
                 less = list(reversed([i for i in self._menu_indicies if i - index < 0]))
                 more = list(reversed([i for i in self._menu_indicies if i - index > 0]))

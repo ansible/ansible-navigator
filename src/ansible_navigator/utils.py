@@ -54,7 +54,7 @@ class ExitPrefix(Enum):
 
 class ExitMessage(SimpleNamespace):
     # pylint: disable=too-few-public-methods
-    """An object ot hold a message destin for the logger"""
+    """An object to hold a message destin for the logger"""
 
     message: str
     prefix: ExitPrefix = ExitPrefix.ERROR
@@ -84,7 +84,7 @@ class ExitMessage(SimpleNamespace):
 
 
 class LogMessage(NamedTuple):
-    """An object ot hold a message destin for the logger"""
+    """An object to hold a message destin for the logger"""
 
     level: int
     message: str

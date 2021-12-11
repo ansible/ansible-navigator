@@ -47,7 +47,7 @@ COLOR_MAP = {
 class CursesWindow:
     # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
-    """abstration for a curses window"""
+    """abstraction for a curses window"""
 
     def __init__(self, ui_config: UIConfig):
         self._logger = logging.getLogger(__name__)

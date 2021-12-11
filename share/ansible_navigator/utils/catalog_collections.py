@@ -79,7 +79,7 @@ class CollectionCatalog:
 
     @staticmethod
     def _generate_chksum(file_path: str, relative_path: str) -> Dict:
-        """genrate a std checksum for a file"""
+        """generate a std checksum for a file"""
         sha256_hash = hashlib.sha256()
         with open(file_path, "rb") as fhand:
             for byte_block in iter(lambda: fhand.read(4096), b""):
@@ -101,8 +101,8 @@ class CollectionCatalog:
         for filename in filenames:
             file_path = f"{dirpath}/{filename}"
             relative_path = file_path.replace(collection["path"], "")
-            _basename, extention = os.path.splitext(filename)
-            if not filename.startswith("__") and extention == ".py":
+            _basename, extension = os.path.splitext(filename)
+            if not filename.startswith("__") and extension == ".py":
                 chksum_dict = file_chksums.get(relative_path)
                 if not chksum_dict:
                     chksum_dict = self._generate_chksum(file_path, relative_path)
@@ -163,7 +163,7 @@ class CollectionCatalog:
                 self._messages.append(msg)
 
     def _find_shadows(self) -> None:
-        """for each collection, determin which other collections are hiding it"""
+        """for each collection, determine which other collections are hiding it"""
         collection_list = list(self._collections.values())
         counts = Counter([collection["known_as"] for collection in collection_list])
         for idx, (cpath, o_collection) in reversed(list(enumerate(self._collections.items()))):
@@ -251,7 +251,7 @@ def parse_args():
         "-d",
         dest="dirs",
         nargs="+",
-        help="search withing the specified directories",
+        help="search within the specified directories",
         default=current_collection_paths,
     )
 
@@ -279,7 +279,7 @@ def parse_args():
 
 
 def retrieve_collections_paths() -> Dict:
-    """retrieve the currently ser collection paths"""
+    """retrieve the currently set collection paths"""
     cmd = ["ansible-config", "dump", "|", "grep", "COLLECTIONS_PATHS"]
     proc_out = run_command(cmd)
     if "error" in proc_out:

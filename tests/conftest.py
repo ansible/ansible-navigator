@@ -19,7 +19,7 @@ def fixture_valid_container_image():
 
 @pytest.fixture(scope="function")
 def locked_directory(tmpdir):
-    """diretory without rw for throwing errors"""
+    """directory without rw for throwing errors"""
     os.chmod(tmpdir, 0o000)
     yield tmpdir
     os.chmod(tmpdir, 0o777)

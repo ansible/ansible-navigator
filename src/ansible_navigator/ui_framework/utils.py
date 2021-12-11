@@ -12,7 +12,7 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
     not recursive
     80% = 80%|XXXXXXXX  |
 
-    :pararm dicts: a list fo dictionaries
+    :pararm dicts: a list of dictionaries
     :type dicts: list of dictionaries
     :param keys: The keys to convert in each dictionary
     :type keys: List[str]
@@ -40,7 +40,7 @@ def is_percent(string):
 
 
 def distribute(available, weights):
-    """distrubute some available fairly
+    """distribute some available fairly
     across a list of numbers
 
     :param available: the total

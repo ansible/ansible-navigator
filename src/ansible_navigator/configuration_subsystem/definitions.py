@@ -36,7 +36,7 @@ class Constants(Enum):
     PREVIOUS_CLI = "previous cli command"
     SAME_SUBCOMMAND = (
         "used to determine if an entry should be used when"
-        " applying previous cli comman entries, this indicates"
+        " applying previous cli common entries, this indicates"
         " that it will only be used if the subcommand is the same"
     )
     SENTINEL = "indicates a nonvalue"

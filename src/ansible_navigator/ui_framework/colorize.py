@@ -109,7 +109,7 @@ class Colorize:
                 except Exception as exc:  # pylint: disable=broad-except
                     self._logger.critical(
                         (
-                            "An unexpected error occured within the tokenization"
+                            "An unexpected error occurred within the tokenization"
                             " subsystem.  Please log an issue with the following:"
                         )
                     )

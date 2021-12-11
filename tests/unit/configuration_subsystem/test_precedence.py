@@ -78,7 +78,7 @@ def test_all_entries_reflect_cli_given_settings(
     _mf1, _mf2, generate_config, settings, settings_file_type, base, cli_entry, expected
 ):
     """Ensure all entries are set by the cli
-    based on the settings file, the non cli parametes will be
+    based on the settings file, the non cli parameters will be
     either DEFAULT_CFG or USER_CFG
     """
     if base is None:
@@ -114,7 +114,7 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
 ):
     # pylint: disable=unused-argument
     """Ensure all entries are set by the cli
-    the non cli parametes will be all be ENVIRONMENT_VARIABLE
+    the non cli parameters will be all be ENVIRONMENT_VARIABLE
     even though an empty or full settings file was provided
     """
     if base is None:

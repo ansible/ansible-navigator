@@ -1,4 +1,4 @@
-""" a text imput field
+""" a text input field
 """
 from dataclasses import dataclass
 
@@ -51,7 +51,7 @@ class FieldText:
         self.conditional_validation(str(value))
 
     def validate(self, response: str) -> None:
-        """validate the repsonse"""
+        """validate the repoonse"""
         if response == "" and self.default is not nonexistent:
             response = str(self.default)
 
@@ -70,7 +70,7 @@ class FieldText:
         """
         if response == "" and self.default is not nonexistent:
             response = str(self.default)
-        # no repsonse or validator is none
+        # no response or validator is none
         if response or getattr(self.validator, "__name__", "").endswith("none"):
             validation = self.validator(text=response)
             if not validation.error_msg:
