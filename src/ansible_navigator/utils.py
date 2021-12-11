@@ -1,4 +1,4 @@
-""" some utilities that are specific to ansible_navigator
+"""some utilities that are specific to ansible_navigator
 """
 import ast
 import decimal

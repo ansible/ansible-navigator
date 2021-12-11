@@ -1,4 +1,4 @@
-""" command runner """
+"""command runner"""
 import multiprocessing
 from queue import Queue
 import subprocess

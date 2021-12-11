@@ -1,4 +1,4 @@
-""" :rerun """
+""":rerun"""
 import copy
 import logging
 from . import _actions as actions

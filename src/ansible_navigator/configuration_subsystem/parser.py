@@ -1,4 +1,4 @@
-""" Build the argpaser
+"""Build the argpaser
 """
 
 from argparse import ArgumentParser

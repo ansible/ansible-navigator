@@ -1,4 +1,4 @@
-""" The configuration object
+"""The configuration object
 """
 import logging
 import os

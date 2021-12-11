@@ -1,4 +1,4 @@
-""" post processing of ansible-navigator configuration
+"""post processing of ansible-navigator configuration
 """
 import importlib
 import logging

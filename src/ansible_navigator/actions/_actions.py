@@ -1,4 +1,4 @@
-""" Some action stuff """
+"""Some action stuff"""
 
 
 import functools

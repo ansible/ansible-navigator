@@ -1,4 +1,4 @@
-""" refresh"""
+"""refresh"""
 import logging
 from . import _actions as actions
 from ..app_public import AppPublic

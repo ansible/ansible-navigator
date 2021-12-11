@@ -1,4 +1,4 @@
-""" :write """
+""":write"""
 import json
 import logging
 import os

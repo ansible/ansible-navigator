@@ -1,4 +1,4 @@
-""" :sample_notification, this is a blocking form
+""":sample_notification, this is a blocking form
 """
 from . import _actions as actions
 from ..app import App

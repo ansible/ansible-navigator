@@ -1,4 +1,4 @@
-""" initialization helpers that are used early in application
+"""initialization helpers that are used early in application
 initialization and are specific to ansible_navigator
 """
 import importlib.util

@@ -1,4 +1,4 @@
-""" :welcome """
+""":welcome"""
 import os
 from . import _actions as actions
 from ..app import App
