@@ -1,4 +1,4 @@
-""" some common funcs for the tests
+"""some common funcs for the tests
 """
 import os
 import re

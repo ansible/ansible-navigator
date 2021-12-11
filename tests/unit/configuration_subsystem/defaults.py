@@ -1,4 +1,4 @@
-""" defaults for adjacent tests
+"""defaults for adjacent tests
 """
 import os
 

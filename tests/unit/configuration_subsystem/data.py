@@ -1,4 +1,4 @@
-""" data used by the adjacent tests
+"""data used by the adjacent tests
 
 Note: Some of these are defined as dictionaries for ease but all should be frozen
 before use so they are immutable within the tests

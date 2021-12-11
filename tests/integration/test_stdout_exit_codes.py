@@ -1,4 +1,4 @@
-""" check return codes from mode stdout
+"""check return codes from mode stdout
 """
 import os
 from typing import NamedTuple

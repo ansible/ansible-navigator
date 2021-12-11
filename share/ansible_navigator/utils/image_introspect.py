@@ -1,4 +1,4 @@
-""" introspect an image """
+"""introspect an image"""
 import json
 import re
 import subprocess

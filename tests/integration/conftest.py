@@ -1,4 +1,4 @@
-""" fixtures """
+"""fixtures"""
 import os
 import pytest
 

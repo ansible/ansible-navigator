@@ -1,4 +1,4 @@
-""" test the use of execution-environment throguh to runner
+"""test the use of execution-environment throguh to runner
 """
 import os
 import shlex

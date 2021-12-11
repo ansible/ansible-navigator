@@ -1,4 +1,4 @@
-""" fixtures for all tests """
+"""fixtures for all tests"""
 import os
 import shutil
 import subprocess

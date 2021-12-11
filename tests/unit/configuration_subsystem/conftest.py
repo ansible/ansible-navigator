@@ -1,4 +1,4 @@
-""" fixtures for configuration subsystem tests
+"""fixtures for configuration subsystem tests
 """
 import os
 from copy import deepcopy

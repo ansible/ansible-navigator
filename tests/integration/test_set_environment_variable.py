@@ -1,4 +1,4 @@
-""" test the use of set_environment_variable throguh to runner
+"""test the use of set_environment_variable throguh to runner
 """
 import os
 import shlex
