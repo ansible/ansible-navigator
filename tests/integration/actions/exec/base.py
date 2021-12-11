@@ -105,6 +105,6 @@ class BaseClass:
                     received_output,
                     "expected",
                     "received",
-                )
+                ),
             )
             assert expected_output == received_output, f"\n{diff}"
