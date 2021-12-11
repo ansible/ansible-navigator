@@ -1,4 +1,4 @@
-""" unit tests for image introspection
+"""unit tests for image introspection
 """
 import importlib
 import pytest

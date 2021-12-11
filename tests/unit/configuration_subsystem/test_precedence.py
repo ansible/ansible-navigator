@@ -1,4 +1,4 @@
-""" tests for configuration subsystem
+"""tests for configuration subsystem
 
 Note about decorators:
 
