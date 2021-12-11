@@ -74,13 +74,16 @@ class Action(App):
         elif isinstance(self._args.set_environment_variable, Constants):
             envvars_to_set = {}
         else:
-            self._logger.error(
+            log_message = (
                 "The setting 'set_environment_variable' was neither a dictionary"
                 + " or Constants, please raise an issue. No environment variables will be set."
-                + " The current value was found to be '%s'",
+            )
+            self._logger.error(
+                "%s The current value was found to be '%s'",
+                log_message,
                 self._args.set_environment_variable,
             )
-            envvars_to_set = {}
+        envvars_to_set = {}
 
         if self._args.display_color is False:
             envvars_to_set["ANSIBLE_NOCOLOR"] = "1"
