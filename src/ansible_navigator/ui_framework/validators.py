@@ -13,8 +13,8 @@ from typing import NamedTuple
 from typing import Union
 from urllib.parse import urlparse
 
-from .sentinals import unknown
-from .sentinals import Unknown
+from .sentinels import unknown
+from .sentinels import Unknown
 
 
 class Validation(NamedTuple):

@@ -8,8 +8,8 @@ from typing import Union
 
 from .curses_window import Window
 from .form_handler_information import FormHandlerInformation
-from .sentinals import unknown
-from .sentinals import Unknown
+from .sentinels import unknown
+from .sentinels import Unknown
 from .validators import FieldValidators
 
 

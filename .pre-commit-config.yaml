@@ -185,7 +185,7 @@ repos:
           src/ansible_navigator/ui_framework/form_handler_text\.py|
           src/ansible_navigator/ui_framework/form_presenter\.py|
           src/ansible_navigator/ui_framework/menu_builder\.py|
-          src/ansible_navigator/ui_framework/sentinals\.py|
+          src/ansible_navigator/ui_framework/sentinels\.py|
           src/ansible_navigator/ui_framework/ui\.py|
           src/ansible_navigator/ui_framework/utils\.py|
           src/ansible_navigator/ui_framework/validators\.py|
