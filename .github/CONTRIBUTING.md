@@ -39,15 +39,15 @@ Prerequisites:
 
 2. Use {doc}`tox <tox:index>` to run the tests.
 
-3. Before sending a PR, make sure that the linters pass:
+3. Before sending a PR, make sure that `lint` passes:
 
    ```shell-session
-   $ tox -e linters
-   linters create: .tox/linters
-   linters installdeps: -rrequirements.txt, -rtest-requirements.txt
-   linters installed: ...
-   linters run-test-pre: PYTHONHASHSEED='4242713142'
-   linters run-test: commands[0] | pylint ansible_navigator tests ...
+   $ tox -e lint
+   lint create: .tox/linters
+   lint installdeps: -rrequirements.txt, -rtest-requirements.txt
+   lint installed: ...
+   lint run-test-pre: PYTHONHASHSEED='4242713142'
+   lint run-test: commands[0] | pylint ansible_navigator tests ...
    ...
    ```
 
@@ -56,12 +56,12 @@ Prerequisites:
    annoyingly slow):
 
    ```shell-session
-   $ tox -e lint
-   lint create: .tox/lint
-   lint installdeps: pre-commit, pylint ~= 2.8.0, pylint-pytest < 1.1.0
-   lint installed: ...
-   lint run-test-pre: PYTHONHASHSEED='2351399476'
-   lint run-test: commands[0] | python -m pre_commit run ... --all-files -v
+   $ tox -e lint-vetting
+   lint-vetting create: .tox/lint-vetting
+   lint-vetting installdeps: pre-commit, pylint ~= 2.8.0, pylint-pytest < 1.1.0
+   lint-vetting installed: ...
+   lint-vetting run-test-pre: PYTHONHASHSEED='2351399476'
+   lint-vetting run-test: commands[0] | python -m pre_commit run ... --all-files -v
    ...
    [INFO] Initializing environment for https://github.com/asottile/add-trailing-comma.git.
    ...
