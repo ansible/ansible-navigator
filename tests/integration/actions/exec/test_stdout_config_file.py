@@ -48,13 +48,13 @@ stdout_tests = (
 steps = add_indicies(stdout_tests)
 
 
-def step_id(value: ShellCommand) -> str:
+def step_id(test_value: ShellCommand) -> str:
     """Return the test id from the test step object.
 
-    :param value: The data from the test iteration
+    :param test_value: The data from the test iteration
     :returns: An id for the test
     """
-    return f"{value.comment}  {value.user_input}"
+    return f"{test_value.comment}  {test_value.user_input}"
 
 
 @pytest.mark.parametrize("step", steps, ids=step_id)

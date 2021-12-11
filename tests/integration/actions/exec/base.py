@@ -31,7 +31,8 @@ class BaseClass:
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(
-        self, request: pytest.FixtureRequest
+        self,
+        request: pytest.FixtureRequest,
     ) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
@@ -99,6 +100,11 @@ class BaseClass:
                 expected_output = json.load(infile)["output"]
 
             diff = "\n".join(
-                difflib.unified_diff(expected_output, received_output, "expected", "received")
+                difflib.unified_diff(
+                    expected_output,
+                    received_output,
+                    "expected",
+                    "received",
+                )
             )
             assert expected_output == received_output, f"\n{diff}"

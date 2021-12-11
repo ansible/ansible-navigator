@@ -11,7 +11,6 @@ from . import _actions as actions
 from ..app import App
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
-
 from ..runner import Command
 
 GeneratedCommand = Tuple[str, Optional[List[str]]]
@@ -77,8 +76,8 @@ class Action(App):
         else:
             self._logger.error(
                 "The setting 'set_environment_variable' was neither a dictionary"
-                " or Constants, please raise an issue. No environment variables will be set."
-                " The current value was found to be '%s'",
+                + " or Constants, please raise an issue. No environment variables will be set."
+                + " The current value was found to be '%s'",
                 self._args.set_environment_variable,
             )
             envvars_to_set = {}
@@ -104,7 +103,8 @@ class Action(App):
             kwargs["container_options"] = self._args.container_options
 
         command, pass_through_args = _generate_command(
-            exec_command=self._args.exec_command, exec_shell=self._args.exec_shell
+            exec_command=self._args.exec_command,
+            exec_shell=self._args.exec_shell,
         )
         if isinstance(pass_through_args, list):
             kwargs["cmdline"] = pass_through_args
