@@ -10,8 +10,8 @@ from typing import List
 from typing import Union
 
 from .form_handler_options import FormHandlerOptions
-from .sentinals import unknown
-from .sentinals import Unknown
+from .sentinels import unknown
+from .sentinels import Unknown
 from .validators import FieldValidators
 from .validators import Validation
 
