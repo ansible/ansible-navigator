@@ -25,6 +25,16 @@ class Step:
         select_func: Union[Callable[[], "Step"], None] = None,
         show_func: Union[Callable[[], None], None] = None,
     ) -> None:
+        """Initialize the Step class.
+        
+        :param name: The name of the step.
+        :param tipe: The type of step.
+        :param value: The value for the step.
+        :param columns: The columns to show in the UI.
+        :param index: The currently selected value in the UI.
+        :param select_func: A callback for when a selection is made in the UI.
+        :param show_func: A callback for when a value is shown in the UI.
+        """
         self._index = index
         self._index_changed = False
         self._value = value or []

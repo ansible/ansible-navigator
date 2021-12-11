@@ -25,6 +25,9 @@ class Action(App):
     KEGEX = r"^{{.*}}$"
 
     def __init__(self, args):
+        """Initialize the template action.
+        
+        :param args: """
         super().__init__(args=args, logger_name=__name__, name="template")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:

@@ -22,6 +22,10 @@ class Parser:
 
     # pylint: disable=too-few-public-methods
     def __init__(self, config: ApplicationConfiguration):
+        """Initialize the parser class.
+        
+        :param config: The current application configuration.
+        """
         self._config = config
         self._base_parser = ArgumentParser(add_help=False)
         self._configure_base()
