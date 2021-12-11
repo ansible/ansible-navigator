@@ -11,14 +11,14 @@ import pytest
 
 from ansible_navigator import utils
 
-EXTENTIONS = [".yml", ".yaml", ".json"]
+EXTENSIONS = [".yml", ".yaml", ".json"]
 
 
 def test_find_many_settings_home(monkeypatch) -> None:
     """test more than one in home"""
 
     paths = [
-        os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENTIONS
+        os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENSIONS
     ]
 
     def check_path_exists(arg):
@@ -33,7 +33,7 @@ def test_find_many_settings_home(monkeypatch) -> None:
 def test_find_many_settings_cwd(monkeypatch) -> None:
     """test more than one in cwd"""
 
-    paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENTIONS]
+    paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
     def check_path_exists(arg):
         return arg in paths
