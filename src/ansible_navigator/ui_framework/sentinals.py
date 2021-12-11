@@ -1,4 +1,4 @@
-""" a couple singleton sentinals for convenience to avoid
+""" a couple singleton sentinels for convenience to avoid
 use of None
 """
 

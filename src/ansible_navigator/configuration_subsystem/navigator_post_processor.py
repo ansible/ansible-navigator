@@ -451,7 +451,7 @@ class NavigatorPostProcessor:
         # pylint: disable=unused-argument
         """Post process log_file
 
-        If the parent directory for the log file cannot be created adn is writable.
+        If the parent directory for the log file cannot be created and is writable.
         If not restore to default, this will allow the writing of log messages
         even if application initialization results in a sys.exit condition
         """

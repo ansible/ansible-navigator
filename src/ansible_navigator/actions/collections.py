@@ -411,6 +411,6 @@ class Action(App):
                     paths.append(f"- {path} (contained)")
             else:
                 paths.append(f"- {path}")
-        closing = ["[HINT] Try installing some or try a different execution enviroment"]
+        closing = ["[HINT] Try installing some or try a different execution environment"]
         warning = warning_notification(messages=msgs + paths + closing)
         self._interaction.ui.show(warning)

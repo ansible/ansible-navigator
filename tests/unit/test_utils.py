@@ -183,7 +183,7 @@ round_half_up_test_data = [
 def test_round_half_up(data: RoundHalfUpTestData) -> None:
     """Test for the utils.round_half_up function.
 
-    Ensure the number passed is consistently rounded to the nearset
+    Ensure the number passed is consistently rounded to the nearest
     integer with ties going away from zero.
     """
     result = utils.round_half_up(data.value)

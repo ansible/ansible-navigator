@@ -101,7 +101,7 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, i
 
 
 def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
-    """create a heading for some piece fo content showing
+    """create a heading for some piece of content showing
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
@@ -759,7 +759,7 @@ class Action(App):
     def _task_from_task_list(self) -> Step:
         """generate task content for the selected task
 
-        :return: content whic show a task
+        :return: content which show a task
         :rtype: Step
         """
         value = self.steps.current.value

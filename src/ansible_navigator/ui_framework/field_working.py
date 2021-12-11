@@ -18,7 +18,7 @@ class FieldWorking:
 
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=unsubscriptable-object
-    """a text inout field"""
+    """a text input field"""
     name: str
     messages: List[str]
     current_error: str = ""

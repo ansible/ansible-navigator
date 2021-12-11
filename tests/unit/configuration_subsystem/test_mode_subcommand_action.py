@@ -1,5 +1,5 @@
 """ test the mode post processor
-usign invalid package and subcommand names
+using invalid package and subcommand names
 """
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 

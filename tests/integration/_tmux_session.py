@@ -178,7 +178,7 @@ class TmuxSession:
             return self._fail_remaining
         start_time = timer()
 
-        # before issueing commands, determine
+        # before issuing commands, determine
         # if presently at command prompt or in tui
         mode = None
         while True:

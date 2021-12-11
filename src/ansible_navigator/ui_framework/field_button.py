@@ -1,4 +1,4 @@
-""" a text imput field
+""" a text input field
 """
 from dataclasses import dataclass
 
@@ -14,7 +14,7 @@ from .validators import FieldValidators
 class FieldButton:
 
     # pylint: disable=too-many-instance-attributes
-    """a text inout field"""
+    """a text input field"""
 
     name: str
     text: str

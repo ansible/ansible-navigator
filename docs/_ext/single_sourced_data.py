@@ -101,7 +101,7 @@ def _rst_generate_row(row: Tuple) -> List:
 
 
 def _params_generate_tables(param_details: Dict) -> List:
-    """generate tables for paramters"""
+    """generate tables for parameters"""
     tables = []
     table = copy(PARAM_TABLE_HEADER)
     table[0] = table[0].format("**General parameters**")

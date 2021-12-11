@@ -1,4 +1,4 @@
-""" these test specificaly target variations of reapplying cli parameters
+""" these test specifically target variations of reapplying cli parameters
 to subsequent configuration subsystem calls with the same config
 grouped here because they are all similar
 """
@@ -281,7 +281,7 @@ def test_apply_cli_subset_none():
                 name="z",
                 apply_to_subsequent_cli=C.NONE,
                 cli_parameters=CliParameters(short="-z"),
-                short_description="the z paramter",
+                short_description="the z parameter",
                 value=EntryValue(),
             ),
         ],

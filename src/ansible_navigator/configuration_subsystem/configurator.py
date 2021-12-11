@@ -279,7 +279,7 @@ class Configurator:
         ][0]
 
         for current_entry in self._config.entries:
-            # retrieve the correspoding previous entry
+            # retrieve the corresponding previous entry
             previous_entry = self._config.initial.entry(current_entry.name)
 
             # skip if not initial and not able to be changed
