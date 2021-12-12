@@ -26,7 +26,7 @@ class Step:
         show_func: Union[Callable[[], None], None] = None,
     ) -> None:
         """Initialize the Step class.
-        
+
         :param name: The name of the step.
         :param tipe: The type of step.
         :param value: The value for the step.
