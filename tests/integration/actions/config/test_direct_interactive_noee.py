@@ -12,7 +12,13 @@ from ..._interactions import step_id
 
 CLI = Command(subcommand="config", execution_environment=False).join()
 
-initial_steps = (Step(user_input=CLI, comment="ansible-navigator config command top window"),)
+initial_steps = (
+    Step(
+        user_input=CLI,
+        comment="ansible-navigator config command top window",
+        look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+    ),
+)
 
 steps = add_indicies(initial_steps + base_steps)
 
