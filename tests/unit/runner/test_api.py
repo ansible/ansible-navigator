@@ -8,7 +8,7 @@ from ansible_navigator.runner import Command
 
 @pytest.mark.parametrize(
     "orig_exec, orig_args, sh_c_arg",
-    [
+    (
         (
             "ansible-lint",
             [],
@@ -29,7 +29,7 @@ from ansible_navigator.runner import Command
             ["lintable1", "lint\"able'2", "lint able3"],
             "exec 2>/dev/null; ansible-lint lintable1 'lint\"able'\"'\"'2' 'lint able3'",
         ),
-    ],
+    ),
     ids=[
         "only executable command",
         "executable command with one argument",

@@ -38,7 +38,7 @@ from .utils import config_post_process
 
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
-@pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
+@pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_envvars(
     _mf1, _mf2, generate_config, base, cli_entry, expected
@@ -72,7 +72,7 @@ def test_all_entries_reflect_cli_given_envvars(
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
-@pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
+@pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings(
     _mf1, _mf2, generate_config, settings, settings_file_type, base, cli_entry, expected
@@ -107,7 +107,7 @@ def test_all_entries_reflect_cli_given_settings(
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
-@pytest.mark.parametrize("base", [None, BASE_SHORT_CLI, BASE_LONG_CLI], ids=id_for_base)
+@pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings_and_envars(
     _mf1, _mf2, generate_config, settings, source_other, base, cli_entry, expected

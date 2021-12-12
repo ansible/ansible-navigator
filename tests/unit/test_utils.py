@@ -60,11 +60,11 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
 
 @pytest.mark.parametrize(
     "set_env, file_path, anticpated_result",
-    [
+    (
         (True, os.path.abspath(__file__), os.path.abspath(__file__)),
         (True, "", None),
         (False, None, None),
-    ],
+    ),
     ids=[
         "set and valid",
         "set and invalid",
@@ -84,11 +84,11 @@ def test_env_var_is_file_path(
 
 @pytest.mark.parametrize(
     "value, anticpated_result",
-    [
+    (
         ([1, 2, 3], [1, 2, 3]),
         ([1, 2, [3]], [1, 2, 3]),
         ([1, [2], [3, 4], 5, True, {6: False}], [1, 2, 3, 4, 5, True, {6: False}]),
-    ],
+    ),
     ids=[
         "simple",
         "list with one list",

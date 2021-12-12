@@ -93,7 +93,7 @@ test_datas = (
 )
 
 
-@pytest.mark.parametrize("params", [True, False], indirect=["params"], ids=id_ee)
+@pytest.mark.parametrize("params", (True, False), indirect=["params"], ids=id_ee)
 @pytest.mark.parametrize("test_data", test_datas, ids=id_test_data)
 def test(action_run_stdout, params, test_data):
     """test for a return code"""
