@@ -19,7 +19,7 @@ labels: bug, new
 ##### CONFIGURATION
 <!--- Paste verbatim output from `ansible-navigator.yaml` file or
       any other custom setting file defined by `ANSIBLE_NAVIGATOR_CONFIG`
-      enviornment variable below (if present).-->
+      environment variable below (if present).-->
 
 ##### LOG FILE
 <!--- Paste relevant logs from the ansible-navigator
