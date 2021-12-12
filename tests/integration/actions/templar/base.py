@@ -68,10 +68,8 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        # pylint:disable=unused-argument
-        # pylint: disable=too-few-public-methods
-        # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
         """test interactive/stdout config"""
 
         if step.search_within_response is SearchFor.HELP:
@@ -97,10 +95,11 @@ class BaseClass:
                         if out in line:
                             received_output[idx] = mask
 
-        if (
+        fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-        ):
+        )
+        if fixtures_update_requested:
             update_fixtures(
                 request,
                 step.step_index,

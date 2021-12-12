@@ -77,10 +77,11 @@ class BaseClass:
             for out in expected_in_output:
                 assert any(out in line for line in received_output), (out, received_output)
         else:
-            if (
+            fixtures_update_requested = (
                 self.UPDATE_FIXTURES
                 or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-            ):
+            )
+            if fixtures_update_requested:
                 update_fixtures(request, index, updated_received_output, comment, testname=testname)
 
             dir_path, file_name = fixture_path_from_request(request, index, testname=testname)

@@ -48,6 +48,7 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
+        # pylint: disable=too-many-locals
         """Run the tests for config, mode and ee set in child class."""
 
         if step.search_within_response is SearchFor.HELP:
@@ -70,10 +71,11 @@ class BaseClass:
                 if any(m in line for m in maskables):
                     received_output[idx] = mask
 
-        if (
+        fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-        ):
+        )
+        if fixtures_update_requested:
             update_fixtures(
                 request,
                 step.step_index,
