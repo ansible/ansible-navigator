@@ -1,4 +1,4 @@
-""" Herewithing lies the base class for running commands
+"""Herewithing lies the base class for running commands
 using ansible-runner. All attributes common to a
 subprocess or async command are defined here
 """

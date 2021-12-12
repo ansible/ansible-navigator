@@ -1,4 +1,4 @@
-""" simple utils for working with forms
+"""simple utils for working with forms
 """
 import copy
 import shutil

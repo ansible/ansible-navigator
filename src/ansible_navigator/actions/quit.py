@@ -1,4 +1,4 @@
-""" :quit
+""":quit
 """
 import logging
 from . import _actions as actions

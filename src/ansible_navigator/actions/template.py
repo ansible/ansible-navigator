@@ -1,4 +1,4 @@
-""" {{ }} """
+"""{{ }}"""
 import html
 
 from collections.abc import Mapping

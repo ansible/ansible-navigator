@@ -1,4 +1,4 @@
-""" :images """
+""":images"""
 import curses
 import json
 import shlex

@@ -1,4 +1,4 @@
-""" an information field
+"""an information field
 """
 from dataclasses import dataclass
 

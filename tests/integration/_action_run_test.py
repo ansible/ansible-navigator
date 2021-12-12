@@ -1,4 +1,4 @@
-""" directly run an action for testing """
+"""directly run an action for testing"""
 import os
 import re
 import sys

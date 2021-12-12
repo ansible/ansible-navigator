@@ -1,4 +1,4 @@
-""" Herewithin lies the ability to have ansible-runner
+"""Herewithin lies the ability to have ansible-runner
 run a command in a synchronous manner
 """
 from typing import Tuple

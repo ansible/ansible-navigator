@@ -1,4 +1,4 @@
-""" the main ui renderer
+"""the main ui renderer
 """
 
 # pylint: disable=too-many-lines

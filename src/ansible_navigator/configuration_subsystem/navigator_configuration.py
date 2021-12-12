@@ -1,4 +1,4 @@
-""" the ansible-navigator configuration
+"""the ansible-navigator configuration
 """
 import logging
 import os

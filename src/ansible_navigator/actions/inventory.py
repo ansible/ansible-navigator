@@ -1,4 +1,4 @@
-""" :inventory """
+""":inventory"""
 import curses
 import glob
 import json

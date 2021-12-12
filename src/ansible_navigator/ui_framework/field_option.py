@@ -1,4 +1,4 @@
-""" one option in either a check or radio field
+"""one option in either a check or radio field
 """
 from dataclasses import dataclass
 

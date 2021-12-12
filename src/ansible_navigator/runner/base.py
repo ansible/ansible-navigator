@@ -1,4 +1,4 @@
-""" Herewithin lies the base class for all interaction with
+"""Herewithin lies the base class for all interaction with
 ansible-runner. Attributes common to all ansible-runner calls
 are defined within the base class
 """

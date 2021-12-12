@@ -1,4 +1,4 @@
-""" catalog collections
+"""catalog collections
 """
 import argparse
 import hashlib

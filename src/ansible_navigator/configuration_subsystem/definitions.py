@@ -1,4 +1,4 @@
-""" configuration definitions
+"""configuration definitions
 """
 from enum import Enum
 

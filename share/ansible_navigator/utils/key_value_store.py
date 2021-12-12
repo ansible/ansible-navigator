@@ -1,4 +1,4 @@
-""" use sqlite as a k,v store
+"""use sqlite as a k,v store
 """
 import sqlite3
 

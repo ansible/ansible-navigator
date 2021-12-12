@@ -1,4 +1,4 @@
-""" an field with a 'working on it message'
+"""an field with a 'working on it message'
 """
 from dataclasses import dataclass
 

@@ -1,4 +1,4 @@
-""" unit tests for image puller """
+"""unit tests for image puller"""
 
 import uuid
 

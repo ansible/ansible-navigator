@@ -1,4 +1,4 @@
-""" commonly used defs
+"""commonly used defs
 """
 
 from typing import NamedTuple

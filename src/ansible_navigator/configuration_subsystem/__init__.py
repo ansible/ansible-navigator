@@ -1,4 +1,4 @@
-""" configuration subsystem
+"""configuration subsystem
 """
 from .configurator import Configurator
 from .definitions import ApplicationConfiguration

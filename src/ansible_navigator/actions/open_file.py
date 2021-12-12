@@ -1,4 +1,4 @@
-""" :open """
+""":open"""
 import curses
 import json
 import logging

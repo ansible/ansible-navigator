@@ -1,4 +1,4 @@
-""" base class for templar interactive tests
+"""base class for templar interactive tests
 """
 import difflib
 import json

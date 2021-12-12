@@ -1,4 +1,4 @@
-""" inspect all images """
+"""inspect all images"""
 import json
 import re
 

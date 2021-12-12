@@ -1,4 +1,4 @@
-"""  Some tests using a alternate test configurations
+"""Some tests using a alternate test configurations
 to prove code paths not covered by the ansible-navigator
 configuration
 """

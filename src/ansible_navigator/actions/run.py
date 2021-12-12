@@ -1,4 +1,4 @@
-""" :run
+""":run
 """
 import curses
 import datetime

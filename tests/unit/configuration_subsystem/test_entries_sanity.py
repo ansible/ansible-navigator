@@ -1,4 +1,4 @@
-""" perform some sanity and sytax checking of the navigator configuration
+"""perform some sanity and sytax checking of the navigator configuration
 """
 from collections import Counter
 

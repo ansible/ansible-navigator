@@ -1,4 +1,4 @@
-r""" :\d+[0-9] etc """
+r""":\d+[0-9] etc"""
 import logging
 
 from . import _actions as actions

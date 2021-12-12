@@ -1,4 +1,4 @@
-""" tests for cli
+"""tests for cli
 """
 import shlex
 from copy import deepcopy

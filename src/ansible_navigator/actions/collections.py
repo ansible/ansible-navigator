@@ -1,4 +1,4 @@
-""" :doc """
+""":doc"""
 import curses
 import json
 import os

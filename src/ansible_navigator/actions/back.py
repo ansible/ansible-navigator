@@ -1,4 +1,4 @@
-""" esc, ie back """
+"""esc, ie back"""
 import logging
 
 from . import _actions as actions

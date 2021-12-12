@@ -1,4 +1,4 @@
-""" the form and presenter of the form to the user
+"""the form and presenter of the form to the user
 """
 import curses
 

@@ -1,4 +1,4 @@
-""" these test specifically target variations of reapplying cli parameters
+"""these test specifically target variations of reapplying cli parameters
 to subsequent configuration subsystem calls with the same config
 grouped here because they are all similar
 """

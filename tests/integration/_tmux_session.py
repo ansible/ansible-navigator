@@ -1,4 +1,4 @@
-""" the tmux session """
+"""the tmux session"""
 import datetime
 import os
 import shlex

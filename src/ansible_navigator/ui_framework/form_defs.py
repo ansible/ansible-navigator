@@ -1,4 +1,4 @@
-""" common form definitions
+"""common form definitions
 """
 
 from enum import Enum

@@ -1,4 +1,4 @@
-""" test the mode post processor
+"""test the mode post processor
 using invalid package and subcommand names
 """
 from ansible_navigator.configuration_subsystem.configurator import Configurator

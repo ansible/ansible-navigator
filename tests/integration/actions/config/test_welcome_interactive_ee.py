@@ -1,4 +1,4 @@
-""" Tests for config from welcome, interactive, with ee.
+"""Tests for config from welcome, interactive, with ee.
 """
 import pytest
 

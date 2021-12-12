@@ -1,4 +1,4 @@
-""" image puller """
+"""image puller"""
 import logging
 import subprocess
 

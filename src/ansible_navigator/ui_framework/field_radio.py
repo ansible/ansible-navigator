@@ -1,4 +1,4 @@
-""" individual check and the form field checks and radio
+"""individual check and the form field checks and radio
 """
 
 from dataclasses import dataclass

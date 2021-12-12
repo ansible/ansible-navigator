@@ -1,4 +1,4 @@
-""" :quit
+""":quit
 """
 from . import _actions as actions
 from ..app import App

@@ -1,4 +1,4 @@
-""" Herewithin lies the ability for ansible-runner
+"""Herewithin lies the ability for ansible-runner
 to run the ansible-inventory command
 """
 
