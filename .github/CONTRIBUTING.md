@@ -10,6 +10,8 @@ maintain it and you contribute.
 
 2. pylint (lints all the things)
 
+3. code-spell (prevents typos in code)
+
 ```{note}
 In early development cycles, a decision was made to use black as a formatter
 which is why current pull-requests are required to pass a
