@@ -13,7 +13,7 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
     80% = 80%|XXXXXXXX  |
 
     :param dicts: a list of dictionaries
-    :type dicts: list of dictionaries
+    :type dicts: list[dict]
     :param keys: The keys to convert in each dictionary
     :type keys: List[str]
     :param pbar_width: The width of the progress bar
