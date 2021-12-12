@@ -122,7 +122,7 @@ class Action(App):
         return next_interaction
 
     def run_stdout(self) -> Union[None, int]:
-        """Run in oldschool mode, just stdout"""
+        """Run in old school mode, just stdout"""
         self._plugin_name = self._args.plugin_name
         self._plugin_type = self._args.plugin_type
         self._logger.debug("doc requested in stdout mode")

@@ -1,4 +1,4 @@
-"""esc, ie back"""
+"""ESC, (step back)"""
 import logging
 
 from . import _actions as actions
@@ -9,7 +9,7 @@ from ..ui_framework import Interaction
 
 @actions.register
 class Action:
-    """esc, ie back"""
+    """ESC, (step back)"""
 
     # pylint: disable=too-few-public-methods
 
@@ -20,7 +20,7 @@ class Action:
         self._logger = logging.getLogger(__name__)
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle <esc>
+        """Handle <ESC>
 
         :param interaction: The interaction from the user
         :type interaction: Interaction

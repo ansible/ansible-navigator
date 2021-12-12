@@ -222,7 +222,7 @@ class Action(App):
         return None
 
     def run_stdout(self) -> int:
-        """Run in oldschool mode, just stdout"""
+        """Run in old school mode, just stdout"""
         self._logger.debug("inventory requested in stdout mode")
         if hasattr(self._args, "inventory") and self._args.inventory:
             self._inventories = self._args.inventory

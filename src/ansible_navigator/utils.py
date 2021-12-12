@@ -54,7 +54,7 @@ class ExitPrefix(Enum):
 
 class ExitMessage(SimpleNamespace):
     # pylint: disable=too-few-public-methods
-    """An object to hold a message destin for the logger"""
+    """An object to hold a message destined for the logger"""
 
     message: str
     prefix: ExitPrefix = ExitPrefix.ERROR
@@ -84,7 +84,7 @@ class ExitMessage(SimpleNamespace):
 
 
 class LogMessage(NamedTuple):
-    """An object to hold a message destin for the logger"""
+    """An object to hold a message destined for the logger"""
 
     level: int
     message: str
@@ -181,7 +181,7 @@ def escape_moustaches(obj):
 def environment_variable_is_file_path(
     env_var: str, kind: str
 ) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
-    """check if a given env var is a vialbe file path, if so return that path"""
+    """check if a given environment var is a viable file path, if so return that path"""
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
     file_path = None

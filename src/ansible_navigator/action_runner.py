@@ -45,7 +45,7 @@ class ActionRunner(App):
     def initialize_ui(self, refresh: int) -> None:
         """Initialize the user interface.
 
-        :param refresh: The refresh for the ui
+        :param refresh: The refresh for the UI
         :type refresh: int
         """
         share_directory = self._args.internals.share_directory
@@ -71,7 +71,7 @@ class ActionRunner(App):
         # pylint: disable=protected-access
         """Run the app.
 
-        Initialise the UI.
+        Initialize the UI.
         Create an interaction based on the app name from the current settings.
         Run the action, passing the interaction.
 

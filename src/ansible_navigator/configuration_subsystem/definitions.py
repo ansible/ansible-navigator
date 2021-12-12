@@ -15,7 +15,7 @@ from ..utils import oxfordcomma
 
 class CliParameters(SimpleNamespace):
     # pylint: disable=too-few-public-methods
-    """An object to hold the cli parameters"""
+    """An object to hold the CLI parameters"""
 
     action: Union[None, str] = None
     long_override: Union[None, str] = None
@@ -26,7 +26,7 @@ class CliParameters(SimpleNamespace):
 
 
 class Constants(Enum):
-    """Mapping some enums to friendly text"""
+    """Mapping some constants to friendly text"""
 
     ALL = "All the things"
     DEFAULT_CFG = "default configuration value"
@@ -57,7 +57,7 @@ class Entry(SimpleNamespace):
     # pylint: disable=too-few-public-methods
     """One entry in the configuration
 
-    apply_to_subsequent_cli: Should this be applied to future clis parsed
+    apply_to_subsequent_cli: Should this be applied to future CLIs parsed
     choice: valid choices for this entry
     cli_parameters: argparse specific params
     environment_variable_override: override the default environment variable
@@ -146,7 +146,7 @@ class ApplicationConfiguration(SimpleNamespace):
             raise KeyError(name) from exc
 
     def __getattribute__(self, attr: str) -> Any:
-        """Returns a matching entry or the default bwo super"""
+        """Returns a matching entry or the default from super"""
         try:
             return super().__getattribute__("_get_by_name")(attr, "entries").value.current
         except KeyError:

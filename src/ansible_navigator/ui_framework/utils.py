@@ -1,4 +1,4 @@
-"""some ui specific utils
+"""some UI specific utils
 """
 import functools
 import re
@@ -12,7 +12,7 @@ def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
     not recursive
     80% = 80%|XXXXXXXX  |
 
-    :pararm dicts: a list of dictionaries
+    :param dicts: a list of dictionaries
     :type dicts: list of dictionaries
     :param keys: The keys to convert in each dictionary
     :type keys: List[str]

@@ -84,7 +84,7 @@ class FormPresenter(CursesWindow):
         elif self._form.type in (FormType.NOTIFICATION, FormType.WORKING):
             self._form_width = max(widths)
 
-        height = 2  # title, hline
+        height = 2  # title + horizontal line
         for field in self._form.fields:
             if isinstance(field, FieldInformation):
                 height += len(field.information)
@@ -94,7 +94,7 @@ class FormPresenter(CursesWindow):
                 height += 1
             elif isinstance(field, (FieldChecks, FieldRadio)):
                 height += len(field.options)
-        height += 2  # hline. buttons
+        height += 2  # horizontal line + buttons
         self._form_height = height
 
         self._pad_top = max(int((self._screen_h - self._form_height) * TPAD_RATIO), 0)

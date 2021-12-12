@@ -87,8 +87,8 @@ class App:
     def _copy_args(args: ApplicationConfiguration) -> ApplicationConfiguration:
         """Deepcopy the args.
 
-        Note: Unmount the collection doc cache (cdc) first
-        the cdc will get mounted if the child needs it
+        Note: Unmount the collection doc cache (CDC) first
+        the CDC will get mounted if the child needs it
         in parse and update
 
         :param args: the current application configuration
@@ -105,7 +105,7 @@ class App:
         of the UI so it can be restored later.
 
         :param app: The instance of the action
-        :param interaction: The current interaction from the ui
+        :param interaction: The current interaction from the UI
         """
         self._calling_app = app
         self._interaction = interaction
@@ -120,7 +120,7 @@ class App:
         restore the state of the UI prior to the action being
         invoked.
 
-        :param interaction: The current interaction from the ui
+        :param interaction: The current interaction from the UI
         """
         interaction.ui.scroll(self._previous_scroll)
         interaction.ui.menu_filter(self._previous_filter)
@@ -148,8 +148,8 @@ class App:
         while the exit_messages would have cause a sys.exit(1) from the CLI
         each action should handle them in a manner that does not exit the TUI
 
-        :param params: a sys.argv.like list of parameters
-        :param apply_previous_cli_entries: Should previous params from the cli be applied
+        :param params: a sys.argv like list of parameters
+        :param apply_previous_cli_entries: Should previous params from the CLI be applied
         :param attach_cdc: Should the collection doc cache be attached to the args.internals
         """
         messages: List[LogMessage]

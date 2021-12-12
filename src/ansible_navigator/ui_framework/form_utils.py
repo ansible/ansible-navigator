@@ -117,7 +117,7 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
 
 
 def break_long_lines(messages):
-    """break lines such that the form widt !> 80%"""
+    """break lines such that the form width !> 80%"""
     width = int(shutil.get_terminal_size().columns * 0.8)
     result = []
     for message in messages:

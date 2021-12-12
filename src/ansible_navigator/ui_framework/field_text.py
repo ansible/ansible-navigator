@@ -40,7 +40,7 @@ class FieldText:
 
     @property
     def full_prompt(self) -> str:
-        """the full rpompt includes the default"""
+        """the full prompt includes the default"""
         return self.prompt + self.formatted_default
 
     def pre_populate(self, value: str) -> None:
@@ -51,7 +51,7 @@ class FieldText:
         self.conditional_validation(str(value))
 
     def validate(self, response: str) -> None:
-        """validate the repoonse"""
+        """validate the response"""
         if response == "" and self.default is not nonexistent:
             response = str(self.default)
 
