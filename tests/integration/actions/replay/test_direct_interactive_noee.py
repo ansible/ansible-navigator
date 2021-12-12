@@ -1,4 +1,4 @@
-"""Tests for replay from cli, interactive, without ee.
+"""Tests for replay from CLI, interactive, without an EE.
 """
 import pytest
 
@@ -20,6 +20,6 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
 class Test(BaseClass):
-    """Run the tests for images from cli, interactive, without ee."""
+    """Run the tests for images from CLI, interactive, without an EE."""
 
     UPDATE_FIXTURES = False

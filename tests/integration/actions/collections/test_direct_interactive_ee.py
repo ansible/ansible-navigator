@@ -1,4 +1,4 @@
-"""Tests for collections from cli, interactive, with ee.
+"""Tests for collections from CLI, interactive, with an EE.
 """
 import pytest
 
@@ -26,7 +26,7 @@ testdata = [
 @pytest.mark.parametrize("index, user_input, comment", testdata)
 class Test(BaseClass):
     # pylint: disable=too-few-public-methods
-    """Run the tests for collections from cli, interactive, with ee."""
+    """Run the tests for collections from CLI, interactive, with an EE."""
 
     TEST_FOR_MODE = "interactive"
     EXECUTION_ENVIRONMENT_TEST = True

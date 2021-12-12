@@ -16,7 +16,7 @@ def id_for_base(val):
 
 
 def id_for_cli(val):
-    """Generate an id for a cli entry."""
+    """Generate an id for a CLI entry."""
     if isinstance(val, str):
         return val
     return ""

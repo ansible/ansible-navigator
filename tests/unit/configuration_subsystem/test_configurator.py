@@ -1,4 +1,4 @@
-"""Some tests directoly for Configurator
+"""Some tests directly for ``Configurator``
 """
 import os
 
@@ -16,7 +16,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import (
 
 
 def test_mutual_exclusivity_for_configuration_init():
-    """Ensure the configuration cannot be intited with both
+    """Ensure the configuration cannot be initiated with both
     apply_previous_cli_entries and initial"""
     with pytest.raises(ValueError, match="cannot be used with"):
         Configurator(

@@ -43,7 +43,7 @@ from .utils import config_post_process
 def test_all_entries_reflect_cli_given_envvars(
     _mf1, _mf2, generate_config, base, cli_entry, expected
 ):
-    """Ensure all entries are set by the cli even with envvars set"""
+    """Ensure all entries are set by the CLI, even with environment variables set."""
     if base is None:
         params = cli_entry.split()
         expected = dict(expected)
@@ -77,8 +77,8 @@ def test_all_entries_reflect_cli_given_envvars(
 def test_all_entries_reflect_cli_given_settings(
     _mf1, _mf2, generate_config, settings, settings_file_type, base, cli_entry, expected
 ):
-    """Ensure all entries are set by the cli
-    based on the settings file, the non cli parameters will be
+    """Ensure all entries are set by the CLI
+    based on the settings file, the non CLI parameters will be
     either DEFAULT_CFG or USER_CFG
     """
     if base is None:
@@ -113,8 +113,8 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
     _mf1, _mf2, generate_config, settings, source_other, base, cli_entry, expected
 ):
     # pylint: disable=unused-argument
-    """Ensure all entries are set by the cli
-    the non cli parameters will be all be ENVIRONMENT_VARIABLE
+    """Ensure all entries are set by the CLI
+    the non CLI parameters will be all be ENVIRONMENT_VARIABLE
     even though an empty or full settings file was provided
     """
     if base is None:
@@ -172,7 +172,7 @@ def test_all_entries_reflect_envvar_given_settings(
     # pylint: disable=unused-argument
     """Ensure each entry is are set by an environment variables
     even though settings file has been provided, the others
-    should by default or user cfg
+    should by default or settings file
     """
     environment_variable = NavigatorConfiguration.entry(entry).environment_variable(
         "ansible_navigator"

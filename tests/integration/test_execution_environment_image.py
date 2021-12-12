@@ -42,7 +42,7 @@ test_data = [
     ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
 )
 class Test(Cli2Runner):
-    """test the use of execution-environment-image throguh to runner"""
+    """test the use of execution-environment-image through to runner"""
 
     TEST_DIR_NAME = os.path.basename(__file__).replace("test_", "").replace(".py", "")
     TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/{TEST_DIR_NAME}"
@@ -62,10 +62,10 @@ class Test(Cli2Runner):
     def run_test(self, mocked_runner, tmpdir, cli_entry, config_fixture, expected):
         # pylint: disable=too-many-arguments
         """mock the runner call so it raises an exception
-        mock the command line with sys.argv
-        set the ANSIBLE_NAVIGATOR_CONFIG envvar
-        set the expected env vars
-        call cli.main(), check the kwargs passed to the runner func
+        mock the command line with ``sys.argv``
+        set the ANSIBLE_NAVIGATOR_CONFIG environment variable
+        set the expected environment variables
+        call ``cli.main()``, check the arguments passed to the runner function
         """
         mocked_runner.side_effect = Exception("called")
         cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"

@@ -1,5 +1,5 @@
-"""these test specifically target variations of reapplying cli parameters
-to subsequent configuration subsystem calls with the same config
+"""these test specifically target variations of reapplying CLI parameters
+to subsequent configuration subsystem calls with the same configuration
 grouped here because they are all similar
 """
 import os
@@ -22,7 +22,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import Na
 
 
 def test_apply_previous_cli_all():
-    """Ensure all previous cli parameter are applied when requested"""
+    """Ensure all previous CLI parameters are applied when requested"""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     expected = [
         ("app", "doc"),
@@ -68,7 +68,7 @@ def test_apply_previous_cli_all():
 
 
 def test_apply_previous_cli_specified():
-    """Ensure only some of the previous cli parameters are applied when requested"""
+    """Ensure only some of the previous CLI parameters are applied when requested"""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     configurator = Configurator(
@@ -113,7 +113,7 @@ def test_apply_previous_cli_specified():
 
 
 def test_apply_previous_cli_mixed():
-    """Ensure a mixed config tests pass"""
+    """Ensure a mixed configuration passes"""
 
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
@@ -166,7 +166,7 @@ def test_apply_previous_cli_mixed():
 
 
 def test_apply_previous_cli_cmdline_not_applied():
-    """Ensure cmdline is not carried forward"""
+    """Ensure the command line parameters are not carried forward"""
     params = "run /tmp/site.yml --ee False --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     configurator = Configurator(
@@ -262,7 +262,7 @@ def test_apply_previous_cli_none(_mf1):
 
 
 def test_apply_cli_subset_none():
-    """Ensure subset none works for apply cli"""
+    """Ensure subset none works for apply CLI"""
     test_config = ApplicationConfiguration(
         application_name="test_application",
         post_processor=None,

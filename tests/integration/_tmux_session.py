@@ -64,7 +64,7 @@ class TmuxSession:
         self._pane.set_height(self._pane_height)
         self._pane.set_width(self._pane_width)
 
-        # Figure out where the tox-initiated venv is. In environments where a
+        # Figure out where the tox initiated venv is. In environments where a
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
         # expect inside of tmux, so we can't depend on it. We *must* determine
         # it before we enter tmux. Do this before we switch to bash
@@ -82,7 +82,7 @@ class TmuxSession:
         # get a clean shell and predictable prompt
         self.cli_prompt = self._get_cli_prompt()
 
-        # set envars for this session
+        # set environment variables for this session
         tmux_common = [f". {venv}"]
         tmux_common.append("export TERM=xterm")
         tmux_common.append("export LANG=en_US.UTF-8")
@@ -114,8 +114,8 @@ class TmuxSession:
         while True:
             showing = self._pane.capture_pane()
             # find the prompt in the last line of a full screen
-            # or at least a screen as big as the list of envars
-            # because the envars were dumped
+            # or at least a screen as big as the list of environment variables
+            # because the environment variables were dumped
             if showing:
                 prompt_showing = self.cli_prompt in showing[-1] and len(showing) > min(
                     len(tmux_common), int(self._pane_height) - 1
@@ -179,7 +179,7 @@ class TmuxSession:
         start_time = timer()
 
         # before issuing commands, determine
-        # if presently at command prompt or in tui
+        # if presently at command prompt or in TUI
         mode = None
         while True:
             showing = self._pane.capture_pane()
@@ -286,7 +286,7 @@ class TmuxSession:
         return showing
 
     def _get_cli_prompt(self):
-        """get cli prompt"""
+        """get CLI prompt"""
         # start a fresh clean shell, set TERM
         start_time = timer()
         self._pane.send_keys("clear && env -i bash --noprofile --norc")

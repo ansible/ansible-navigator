@@ -1,4 +1,4 @@
-"""test the use of execution-environment throguh to runner
+"""test the use of execution-environment through to runner
 """
 import os
 import shlex
@@ -51,9 +51,9 @@ class Test(Cli2Runner):
     def run_test(self, mocked_runner, tmpdir, cli_entry, config_fixture, expected):
         # pylint: disable=too-many-arguments
         """mock the runner call so it raises an exception
-        mock the command line with sys.argv
-        set the ANSIBLE_NAVIGATOR_CONFIG envvar
-        call cli.main(), check the kwargs passed to the runner func
+        mock the command line with ``sys.argv``
+        set the ANSIBLE_NAVIGATOR_CONFIG environment variable
+        call ``cli.main()``, check the arguments passed to the runner function
         """
         mocked_runner.side_effect = Exception("called")
         cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"

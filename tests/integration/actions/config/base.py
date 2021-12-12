@@ -1,4 +1,4 @@
-"""Base class for config interactive/stdout tests.
+"""Base class for ``config`` interactive/stdout tests.
 """
 import difflib
 import json
@@ -29,7 +29,7 @@ base_steps = (
 
 
 class BaseClass:
-    """Base class for interactive/stdout config tests."""
+    """Base class for interactive/stdout ``config`` tests."""
 
     UPDATE_FIXTURES = False
     PANE_HEIGHT = 25
@@ -49,7 +49,7 @@ class BaseClass:
 
     def test(self, request, tmux_session, step):
         # pylint: disable=too-many-locals
-        """Run the tests for config, mode and ee set in child class."""
+        """Run the tests for ``config``, mode and ``ee`` set in child class."""
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
@@ -64,7 +64,7 @@ class BaseClass:
         )
 
         if step.mask:
-            # mask out some config that is subject to change each run
+            # mask out some configuration that is subject to change each run
             mask = "X" * 50
             maskables = ["BECOME_PLUGIN_PATH", "CACHE_PLUGIN_CONNECTION", "COLLECTIONS_PATHS"]
             for idx, line in enumerate(received_output):

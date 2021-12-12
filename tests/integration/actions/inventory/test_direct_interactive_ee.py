@@ -1,4 +1,4 @@
-"""Tests for inventory from cli, interactive, with ee.
+"""Tests for inventory from CLI, interactive, with an EE.
 """
 import pytest
 
@@ -23,6 +23,6 @@ steps = add_indicies(initial_steps + base_steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for inventory from cli, interactive, with ee."""
+    """Run the tests for inventory from CLI, interactive, with an EE."""
 
     UPDATE_FIXTURES = False

@@ -1,4 +1,4 @@
-"""Tests for images from cli, interactive, without ee.
+"""Tests for images from CLI, interactive, without an EE.
 """
 import pytest
 
@@ -12,7 +12,7 @@ from ..._interactions import Step
 from ..._interactions import step_id
 
 
-# this is misleadeing b/c images will use an ee, but not for automation
+# this is misleading b/c images will use an EE, but not for automation
 CLI = Command(subcommand="images", execution_environment=False).join()
 
 initial_steps = (
@@ -24,6 +24,6 @@ steps = add_indicies(initial_steps + base_steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for images from cli, interactive, without ee."""
+    """Run the tests for images from CLI, interactive, without an EE."""
 
     UPDATE_FIXTURES = False

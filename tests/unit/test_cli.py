@@ -1,4 +1,4 @@
-"""tests for cli
+"""tests for CLI
 """
 import shlex
 from copy import deepcopy
@@ -153,7 +153,7 @@ tst_hint_data = [
 
 @pytest.mark.parametrize("data", tst_hint_data, ids=id_for_hint_test)
 def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
-    """test the hints don't generate a traceboack"""
+    """test the hints don't generate a traceback"""
     monkeypatch.setenv(
         "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
     )

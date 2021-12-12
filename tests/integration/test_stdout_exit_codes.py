@@ -1,4 +1,4 @@
-"""check return codes from mode stdout
+"""check return codes from mode ``stdout``
 """
 import os
 from typing import NamedTuple
@@ -15,7 +15,7 @@ PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.
 
 @pytest.fixture(name="params")
 def fixture_params(request):
-    """generate params"""
+    """generate parameters"""
     return {
         "execution_environment": request.param,
         "execution_environment_image": DEFAULT_CONTAINER_IMAGE,

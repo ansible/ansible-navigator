@@ -1,4 +1,4 @@
-"""Tests for run from cli, interactive, without ee.
+"""Tests for run from CLI, interactive, without an EE.
 """
 import pytest
 
@@ -30,6 +30,6 @@ steps = add_indicies(initial_steps + base_steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for run from cli, interactive, without ee."""
+    """Run the tests for run from CLI, interactive, without an EE."""
 
     UPDATE_FIXTURES = False

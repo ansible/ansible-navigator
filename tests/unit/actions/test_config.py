@@ -1,4 +1,4 @@
-"""Unit tests for the config action.
+"""Unit tests for the ``config`` action.
 """
 import curses
 

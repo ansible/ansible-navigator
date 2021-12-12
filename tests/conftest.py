@@ -19,7 +19,7 @@ def fixture_valid_container_image():
 
 @pytest.fixture(scope="function")
 def locked_directory(tmpdir):
-    """directory without rw for throwing errors"""
+    """directory without read-write for throwing errors"""
     os.chmod(tmpdir, 0o000)
     yield tmpdir
     os.chmod(tmpdir, 0o777)
@@ -27,6 +27,6 @@ def locked_directory(tmpdir):
 
 @pytest.fixture(scope="session")
 def pullable_image(valid_container_engine):
-    """pullable container"""
+    """A container that can be pulled."""
     yield PULLABLE_IMAGE
     subprocess.run([valid_container_engine, "image", "rm", PULLABLE_IMAGE], check=True)
