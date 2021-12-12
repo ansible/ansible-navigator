@@ -15,7 +15,7 @@ from ..defaults import FIXTURES_DIR
 
 @pytest.mark.parametrize(
     "given, argname, expected",
-    [
+    (
         (
             ["doc", "-t", "callback", "oneline"],
             "plugin_type",
@@ -72,7 +72,7 @@ from ..defaults import FIXTURES_DIR
             "playbook",
             "/site.yaml",
         ),
-    ],
+    ),
     ids=[
         "commandline overrides config file value",
         "config file overrides internal default value",
