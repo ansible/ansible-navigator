@@ -106,7 +106,7 @@ def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
 
         callable(src, names) -> ignored_names
 
-    Since ``copytree``()`` is called recursively, the callable will be
+    Since ``copytree()`` is called recursively, the callable will be
     called once for each directory that is copied. It returns a
     list of names relative to the `src` directory that should
     not be copied.
