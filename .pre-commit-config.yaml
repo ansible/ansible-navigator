@@ -153,7 +153,7 @@ repos:
   - id: codespell
     # FIXME: Address remove current spelling exceptions:
     args: ["-L", "tipe,dout"]
-    # We exclude generated or external files as they are not directly under
+    # We exclude generated and external files as they are not directly under
     # our control, so we cannot fix spelling in them.
     exclude: >
       (?x)^
