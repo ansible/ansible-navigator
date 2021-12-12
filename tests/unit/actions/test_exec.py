@@ -78,7 +78,6 @@ def test_artifact_path(cmd_test_data: CommandTestData):
 
     :param cmd_test_data: The test data
     """
-    # pylint: disable=protected-access
     command, additional_params = _generate_command(
         exec_command=cmd_test_data.command,
         exec_shell=cmd_test_data.shell,
