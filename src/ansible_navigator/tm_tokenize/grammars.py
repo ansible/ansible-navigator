@@ -103,14 +103,6 @@ class Grammars:
         return self.compiler_for_scope("source.unknown")
 
     def compiler_for_file(self, filename: str, first_line: str) -> Compiler:
-        # No file support needed today
-        # for tag in tags_from_filename(filename) - {"text"}:
-        #     try:
-        #         # TODO: this doesn't always match even if we detect it
-        #         return self.compiler_for_scope(f"source.{tag}")
-        #     except KeyError:
-        #         pass
-
         # didn't find it in the fast path, need to read all the json
         for k in tuple(self._scope_to_files):
             self._raw_for_scope(k)

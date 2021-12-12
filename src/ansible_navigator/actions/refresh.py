@@ -26,9 +26,6 @@ class Action:
         :param app: The app instance
         :type app: App
         """
-        # this is noisy but helpful when needed
-        # self._logger.debug("refresh requested")
-
         # Just in case the user switched tasks with +,- etc
         # change previous, since this interaction is on the stack
         if interaction.content:

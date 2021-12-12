@@ -778,7 +778,6 @@ class Action(App):
             self._set_status()
 
             if self.runner.finished and not self._runner_finished:
-                # self._interaction.ui.disable_refresh()
                 self._logger.debug("runner finished")
                 self._logger.info("Playbook complete")
                 self.write_artifact()
