@@ -27,7 +27,8 @@ class Action(App):
     def __init__(self, args):
         """Initialize the template action.
 
-        :param args: """
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="template")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
