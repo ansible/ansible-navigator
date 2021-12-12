@@ -151,56 +151,15 @@ repos:
   rev: v2.1.0
   hooks:
   - id: codespell
+    # FIXME: Address remove current spelling exceptions:
+    args: ["-L", "tipe,dout"]
+    # We exclude generated or external files as they are not directly under
+    # our control, so we cannot fix spelling in them.
     exclude: >
       (?x)^
         (
-          tests/fixtures/.*\.json|
-          .github/ISSUE_TEMPLATE/bug_report\.md|
-          docs/_ext/single_sourced_data\.py|
-          share/ansible_navigator/grammar/html.tmLanguage\.json|
-          share/ansible_navigator/grammar/log.tmLanguage\.json|
-          share/ansible_navigator/utils/catalog_collections\.py|
-          share/ansible_navigator/utils/image_introspect\.py|
-          src/ansible_navigator/actions/collections\.py|
-          src/ansible_navigator/actions/config\.py|
-          src/ansible_navigator/actions/images\.py|
-          src/ansible_navigator/actions/inventory\.py|
-          src/ansible_navigator/actions/run\.py|
-          src/ansible_navigator/actions/stdout\.py|
-          src/ansible_navigator/command_runner/command_runner\.py|
-          src/ansible_navigator/configuration_subsystem/configurator\.py|
-          src/ansible_navigator/configuration_subsystem/definitions\.py|
-          src/ansible_navigator/configuration_subsystem/navigator_post_processor\.py|
-          src/ansible_navigator/runner/base\.py|
-          src/ansible_navigator/steps\.py|
-          src/ansible_navigator/ui_framework/colorize\.py|
-          src/ansible_navigator/ui_framework/curses_window\.py|
-          src/ansible_navigator/ui_framework/field_button\.py|
-          src/ansible_navigator/ui_framework/field_checks\.py|
-          src/ansible_navigator/ui_framework/field_information\.py|
-          src/ansible_navigator/ui_framework/field_radio\.py|
-          src/ansible_navigator/ui_framework/field_text\.py|
-          src/ansible_navigator/ui_framework/field_working\.py|
-          src/ansible_navigator/ui_framework/form_defs\.py|
-          src/ansible_navigator/ui_framework/form_handler_text\.py|
-          src/ansible_navigator/ui_framework/form_presenter\.py|
-          src/ansible_navigator/ui_framework/menu_builder\.py|
-          src/ansible_navigator/ui_framework/sentinels\.py|
-          src/ansible_navigator/ui_framework/ui\.py|
-          src/ansible_navigator/ui_framework/utils\.py|
-          src/ansible_navigator/ui_framework/validators\.py|
-          src/ansible_navigator/utils\.py|
-          src/ansible_navigator/_version\.py|
-          src/ansible_navigator/_yaml\.py|
-          tests/conftest\.py|
-          tests/integration/_action_run_test\.py|
-          tests/integration/_tmux_session\.py|
-          tests/unit/configuration_subsystem/test_configurator\.py|
-          tests/unit/configuration_subsystem/test_mode_subcommand_action\.py|
-          tests/unit/configuration_subsystem/test_precedence\.py|
-          tests/unit/configuration_subsystem/test_previous_cli\.py|
-          tests/unit/test_utils\.py|
-          tox\.ini
+          tests/fixtures/integration/actions/.*\.json|
+          share/ansible_navigator/grammar/.*\.json
         )
       $
     stages: ["manual"]
