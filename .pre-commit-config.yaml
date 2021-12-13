@@ -14,7 +14,7 @@ repos:
       $
     stages: ["manual"]
 
-- repo: https://github.com/timothycrosley/isort.git
+- repo: https://github.com/PyCQA/isort
   rev: 5.10.1
   hooks:
   - id: isort
@@ -181,7 +181,7 @@ repos:
     - flake8-2020 >= 1.6.0
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 3.9.2
+  rev: 4.0.1
   hooks:
   - id: flake8
     language_version: python3
