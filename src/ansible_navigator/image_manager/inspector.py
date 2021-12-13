@@ -16,7 +16,7 @@ class ImagesInspect:
 
     def __init__(self, container_engine, ids):
         """Initialize the image inspector.
-        
+
         :param container_engine: The container engine to use.
         :param ids: The id of the images to inspect.
         """
@@ -48,7 +48,7 @@ class ImagesList:
 
     def __init__(self, container_engine):
         """Initialize the image listing class.
-        
+
         :param container_engine: The container engine to use.
         """
         self._container_engine = container_engine
