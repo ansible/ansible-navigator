@@ -142,7 +142,7 @@ class Action(App):
         return None
 
     def run_stdout(self) -> Union[None, int]:
-        """Run in oldschool mode, just stdout"""
+        """Run in old school mode, just stdout"""
         self._logger.debug("config requested in stdout mode")
         response = self._run_runner()
         if response:

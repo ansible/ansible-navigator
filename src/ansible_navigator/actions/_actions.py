@@ -70,7 +70,7 @@ def kegex(package: str, action: str) -> Tuple:
 
 
 def kegexes(package: str) -> Generator:
-    """Return a tuple of tuples, anem, kegex"""
+    """Return a tuple of tuples, name, kegex"""
     _import_all(package)
     return (kegex(package, name) for name in names(package))
 

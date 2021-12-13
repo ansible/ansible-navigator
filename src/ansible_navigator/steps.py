@@ -51,7 +51,7 @@ class Step:
         """set the changed value
 
         :param value: The value to set
-        :type value: something that can be booled
+        :type value: bool
         """
         self._value_check(value, bool)
         self._index_changed = value
@@ -71,7 +71,7 @@ class Step:
         """set the index
 
         :param index: the index
-        :type index: intable index
+        :type index: int
         """
         self._value_check(index, (int, type(None)))
         self._index_changed = self._index != index

@@ -1,4 +1,4 @@
-"""A runpy entrypoint for ansible-navigator.
+"""A runpy entry point for ansible-navigator.
 
 This makes it possible to invoke CLI
 via :command:`python -m ansible_navigator`.

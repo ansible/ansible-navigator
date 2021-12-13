@@ -36,7 +36,7 @@ class Configurator:
         settings_file_path: str = None,
     ):
         """
-        :param params: A list of parameters ie ['-x', 'value']
+        :param params: A list of parameters e.g. ['-x', 'value']
         :param application_configuration: An application specific Config object
         :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
                                            is not a USER_CLI sourced value, a list of entry names
@@ -261,7 +261,7 @@ class Configurator:
 
     def _apply_previous_cli_to_current(self) -> None:
         # pylint: disable=too-many-nested-blocks
-        """Apply eligible previous cli values to current not set by the cli"""
+        """Apply eligible previous CLI values to current not set by the CLI"""
 
         # _apply_previous_cli_entries must be ALL or a list of entries
         if self._apply_previous_cli_entries is not C.ALL and not isinstance(
@@ -288,7 +288,7 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
                 continue
 
-            # skip if currently set from the cli
+            # skip if currently set from the CLI
             if current_entry.value.source is C.USER_CLI:
                 continue
 
@@ -308,7 +308,7 @@ class Configurator:
                 if current_subcommand != previous_subcommand:
                     continue
 
-            # skip if the previous entry was not set by the cli
+            # skip if the previous entry was not set by the CLI
             if previous_entry.value.source is not C.USER_CLI:
                 continue
 

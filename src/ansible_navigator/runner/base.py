@@ -57,10 +57,10 @@ class Base:
             navigator_mode ([str], optional): Valid value is either ``stdout`` or ``interactive``.
                                               If value is set to ``stdout`` passed the
                                               ``stdin`` of current running process is passed to
-                                              ``ansible-runner`` which enables receiving commandline
-                                              prompts after the executing the command. If value is
-                                              set to ``interactive`` the ``ansible-navigator`` will
-                                              run using text user interface (TUI).
+                                              ``ansible-runner`` which enables receiving command
+                                              line prompts after the executing the command. If value
+                                              is set to ``interactive`` the ``ansible-navigator``
+                                              will run using text user interface (TUI).
             container_volume_mounts ([list], optional): List of bind mounts in the form
                                                         ``host_dir:/container_dir:labels``.
                                                         Defaults to None.
@@ -71,8 +71,10 @@ class Base:
             host_cwd ([str], optional): The current local working directory. Defaults to None.
                                    If value of execution_environment is set to True this
                                    path will be volume mounted within the execution environment
-            set_environment_variable([dict], optional): Dict of user requested envvars to set
-            pass_environment_variable([list], optional): List of user requested envvars to pass
+            set_environment_variable([dict], optional): Dict of user requested environment
+                                                        variables to set
+            pass_environment_variable([list], optional): List of user requested environment
+                                                         variables to pass
             rotate_artifacts ([int], optional): Keep at most n artifact directories
             timeout ([int], optional): The timeout value in seconds that will be passed to either
                                        ``pexpect`` of ``subprocess`` invocation
@@ -130,7 +132,7 @@ class Base:
         self._add_env_vars_to_args()
 
         if self._host_cwd:
-            # ensure the cwd ends with a trailing slash
+            # ensure the CWD ends with a trailing slash
             host_cwd = os.path.join(self._host_cwd, "")
             self._runner_args["host_cwd"] = host_cwd
 
@@ -177,7 +179,7 @@ class Base:
 
     def runner_artifacts_handler(self, artifact_dir):
         """
-        ansible-runner callback to handle artifacts after each runner innvocation
+        ansible-runner callback to handle artifacts after each runner invocation
 
         Args:
             artifact_dir ([str]): The directory path of artifact directory for current \

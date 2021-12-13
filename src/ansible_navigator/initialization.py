@@ -42,7 +42,7 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     exit_messages: List[ExitMessage] = []
     config_path = None
 
-    # Check if the conf path is set via an env var
+    # Check if the configuration file path is set via an environment var
     cfg_env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     new_messages, new_exit_messages, env_config_path = environment_variable_is_file_path(
         env_var=cfg_env_var, kind="config"
@@ -60,7 +60,7 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     if exit_messages:
         return messages, exit_messages, config_path
 
-    # Pick the envar set first, followed by found, followed by leave as none
+    # Pick the environment variable set first, followed by found, followed by leave as none
     if env_config_path is not None:
         config_path = env_config_path
         message = f"Using settings file at {config_path} set by {cfg_env_var}"
@@ -150,7 +150,7 @@ def parse_and_update(
     """Build a configuration
 
     :param args: The application args
-    :param apply_previous_cli_entries: Should previous params from the cli be applied
+    :param apply_previous_cli_entries: Should previous params from the CLI be applied
     :param initial: Is this the initial (first) configuration
     :param attach_cdc: Should the collection doc cache be attached to the args.internals
 

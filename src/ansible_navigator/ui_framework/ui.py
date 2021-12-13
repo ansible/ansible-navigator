@@ -1,4 +1,4 @@
-"""the main ui renderer
+"""the main UI renderer
 """
 
 # pylint: disable=too-many-lines
@@ -86,7 +86,7 @@ class Ui(NamedTuple):
 
 
 class Interaction(NamedTuple):
-    """wrapper for what is sent bak to the calling app"""
+    """wrapper for what is sent back to the calling app"""
 
     name: str
     action: Action
@@ -111,7 +111,7 @@ class UserInterface(CursesWindow):
         pbar_width: int = 8,
         status_width=12,
     ) -> None:
-        """init
+        """initialize
 
         :param screen_miny: The minimum screen height
         :type screen_miny: int
@@ -223,7 +223,7 @@ class UserInterface(CursesWindow):
     def _ui(self) -> Ui:
         """Limit the callables the actions can access
 
-        :return: A tuple of avialble functions
+        :return: A tuple of available functions
         :rtype: Ui
         """
         res = Ui(
@@ -371,7 +371,7 @@ class UserInterface(CursesWindow):
         :type lines: CursesLines
         :param heading: the headers to show
         :type heading: CursesLines or None
-        :param key_dict: any suplimental key to show
+        :param key_dict: any supplemental key to show
         :type key_dict: dict
         :param await_input: Should we wait for a key
         :type await_input: bool
@@ -464,7 +464,7 @@ class UserInterface(CursesWindow):
     def _template_match_action(
         self, entry: str, current: Any
     ) -> Union[Tuple[str, Action], Tuple[None, None]]:
-        """attempt to template & match the user input against the regexes
+        """attempt to template & match the user input against the regexen
         provided by each action
 
         :param entry: the user input
@@ -525,12 +525,12 @@ class UserInterface(CursesWindow):
     def _color_lines_for_term(self, lines: List) -> CursesLines:
         """Give a list of dicts from tokenized lines
         transform them into lines for curses
-        add colors as needed, maintain a mapping of rgb colors
+        add colors as needed, maintain a mapping of RGB colors
         to curses colors in self._rgb_to_curses_color_idx
 
         :params lines: the lines to transform
         :type lines: list of lists of dicts
-            Lines[LinePart[{"color": rgb, "chars": text, "column": n},...]]
+            Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
         :return: the lines ready for curses
         :type: CursesLines
         """
@@ -566,7 +566,7 @@ class UserInterface(CursesWindow):
 
         :params lines: the lines to transform
         :type lines: list of lists of dicts
-            Lines[LinePart[{"color": rgb, "chars": text, "column": n},...]]
+            Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
         :return: all the lines
         :rtype: CursesLines
         """
@@ -717,13 +717,13 @@ class UserInterface(CursesWindow):
                 return Interaction(name=name, action=action, content=content, ui=self._ui)
 
     def _obj_match_filter(self, obj: Dict, columns: List) -> bool:
-        """Check a dict's columns against a regex
+        """Check columns in a dictionary against a regex
 
         :param obj: The dict to check
         :type obj: dict
         :param columns: The dicts keys to check
         :type columns: list
-        :return: True if a mtch else False
+        :return: True if a match else False
         :rtype: bool
         """
         for key in columns:
@@ -753,7 +753,7 @@ class UserInterface(CursesWindow):
 
         :param current: A dict
         :type current: dict
-        :param columns: The keys from the dic to use as columns
+        :param columns: The keys from the dictionary to use as columns
         :type columns: list
         :param distribute: method for width deficit
         :type distribute: str
@@ -775,7 +775,7 @@ class UserInterface(CursesWindow):
 
         :param current: A dict
         :type current: dict
-        :param columns: The keys from the dic to use as columns
+        :param columns: The keys from the dictionary to use as columns
         :type columns: list
         :param await_input: Should we wait for user input?
         :type await_input: bool

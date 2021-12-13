@@ -33,7 +33,7 @@ CURSES_STYLES = {
 
 
 class ColorSchema:
-    """Simple holer for the schema (theme)"""
+    """Simple holder for the schema (theme)"""
 
     # pylint: disable=too-few-public-methods
 
@@ -51,7 +51,7 @@ class ColorSchema:
 
         :param scope: The scope, aka format
         :type scope: str
-        :return: the color in rgb format or None
+        :return: the color in RGB format or None
         :rtype: tuple or None
         """
         for name in reversed(scope):
@@ -133,7 +133,7 @@ def to_list(thing):
 
     :param thing: Maybe a list?
     :type thing: str or list
-    :return: listified thing
+    :return: thing as list
     :rtype: list
     """
     if not isinstance(thing, list):
@@ -146,7 +146,7 @@ def hex_to_rgb(value):
 
     :param value: the hex color
     :type value: str
-    :returns: rgb tuple
+    :returns: RGB tuple
     :rtype: tuple
     """
     if value:
@@ -160,7 +160,7 @@ def hex_to_rgb_curses(value):
     """Convert a hex color to RGB scaled to 1000
     b/c that's what curses needs
 
-    :param value: a rgb color
+    :param value: an RGB color
     :type value: tuple
     :return: The colors scaled to 1000
     :rtype: tuple
@@ -179,7 +179,7 @@ def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
     :type green: int
     :param blue: the blue component
     :type blue: int
-    :param colors: The number of color supported by the termina
+    :param colors: The number of color supported by the terminal
     :type colors: int
     """
     # https://github.com/Qix-/color-convert/blob/master/conversions.js
@@ -217,7 +217,7 @@ def columns_and_colors(lines, schema):
     :param lines: A list of regions (line parts) and the line, \
                   each a ([regions], line)
     :type lines: List[Tuple[List[str], str]]
-    :param scheam: An instance of the ColorSchema
+    :param schema: An instance of the ColorSchema
     :type schema: ColorSchema
     """
     result = []

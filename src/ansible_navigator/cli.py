@@ -49,7 +49,7 @@ def pull_image(args):
 def setup_logger(args: ApplicationConfiguration) -> None:
     """set up the logger
 
-    :param args: The cli args
+    :param args: The CLI args
     """
     if os.path.exists(args.log_file) and args.log_append is False:
         os.remove(args.log_file)
@@ -96,7 +96,7 @@ def main():
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
 
-    # may have exit messages eg, share directory
+    # may have exit messages e.g., share directory
     # from instantiation of NavigatorConfiguration
     if not exit_messages:
         new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args, initial=True)

@@ -237,7 +237,7 @@ class Action(App):
         return self._args.mode
 
     def run_stdout(self) -> int:
-        """Run in oldschool mode, just stdout."""
+        """Run in old school mode, just stdout."""
         if self._args.app == "replay":
             successful: bool = self._init_replay()
             return 0 if successful else 1
@@ -807,7 +807,7 @@ class Action(App):
         return status, status_color
 
     def _set_status(self) -> None:
-        """Set the ui status"""
+        """Set the UI status"""
         status, status_color = self._get_status()
         self._interaction.ui.update_status(status, status_color)
 
@@ -855,7 +855,7 @@ class Action(App):
 
     def rerun(self) -> None:
         """rerun the current playbook
-        since we're not reinstantiating run,
+        since we're not reinstating run,
         drain the queue, clear the steps, reset the index, etc
         """
         if self._subaction_type == "run":

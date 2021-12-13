@@ -67,7 +67,7 @@ class Entry(NamedTuple):
 
 
 class _Rule(Protocol):
-    """hax for recursive types python/mypy#731"""
+    """hack for recursive types python/mypy#731"""
 
     @property
     def name(self) -> Tuple[str, ...]:

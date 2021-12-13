@@ -38,7 +38,7 @@ class MenuBuilder:
         self._ui_config = ui_config
 
     def build(self, dicts: List, cols: List, indices) -> Tuple[CursesLines, CursesLines]:
-        """main entry point for menu builer"""
+        """main entry point for menu builder"""
         return self._menu(dicts, cols, indices)
 
     def _menu(self, dicts: List, cols: List[str], indices) -> Tuple[CursesLines, CursesLines]:
@@ -112,7 +112,7 @@ class MenuBuilder:
         coltext = re.sub("^__", "", cols[colno])
         coltext = re.sub("_", " ", coltext)
         adj_entry = coltext[0 : adj_colws[colno]].upper()
-        # right justifyheader if progress
+        # right justify header if progress
         if cols[colno] == "__progress":
             return CursesLinePart(
                 column=col_starts[colno] + adj_colws[colno] - len(adj_entry),
@@ -192,7 +192,7 @@ class MenuBuilder:
         if (isinstance(coltext, (int, bool, float)) and not isinstance(coltext, enum.Enum)) or cols[
             colno
         ].lower() == "__duration":
-            # right jusitfy on header if int, bool, float or "duration"
+            # right justify on header if int, bool, float or "duration"
             print_at = col_starts[colno] + len(header[colno][1]) - len(text)
         elif cols[colno].lower() == "__progress":
             # right justify in column if progress indicator

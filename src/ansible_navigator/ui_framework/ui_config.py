@@ -1,4 +1,4 @@
-"""obj to hold basic ui settings"""
+"""obj to hold basic UI settings"""
 from types import SimpleNamespace
 
 
