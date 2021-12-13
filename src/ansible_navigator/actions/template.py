@@ -5,15 +5,14 @@ from collections.abc import Mapping
 from typing import Union
 
 from . import _actions as actions
-from ..utils import templar
 
 from ..app import App
 from ..app_public import AppPublic
-
+from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import warning_notification
 from ..ui_framework import Interaction
-
 from ..utils import remove_dbl_un
+from ..utils import templar
 
 
 @actions.register
@@ -24,7 +23,7 @@ class Action(App):
 
     KEGEX = r"^{{.*}}$"
 
-    def __init__(self, args):
+    def __init__(self, args: ApplicationConfiguration):
         super().__init__(args=args, logger_name=__name__, name="template")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:

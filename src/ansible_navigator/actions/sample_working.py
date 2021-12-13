@@ -4,6 +4,7 @@ import time
 from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
+from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 
@@ -16,7 +17,7 @@ class Action(App):
 
     KEGEX = r"^sample_working$"
 
-    def __init__(self, args):
+    def __init__(self, args: ApplicationConfiguration):
         super().__init__(args=args, logger_name=__name__, name="sample_working")
 
     # pylint: disable=unused-argument
