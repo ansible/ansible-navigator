@@ -46,13 +46,13 @@ def _generate_config(params=None, setting_file_name=None, initial=True) -> Gener
             try:
                 settings_contents = yaml.load(file, Loader=Loader)
             except yaml.parser.ParserError:
-                # let the config subsystem catch the invalid yaml file
+                # let the configuration subsystem catch the invalid yaml file
                 settings_contents = {}
     else:
         settings_file_path = ""
         settings_contents = {}
 
-    # deepcopy here to ensure we do not modify the original
+    # make a deep copy here to ensure we do not modify the original
     application_configuration = deepcopy(NavigatorConfiguration)
     configurator = Configurator(
         application_configuration=application_configuration,
@@ -71,5 +71,5 @@ def _generate_config(params=None, setting_file_name=None, initial=True) -> Gener
 
 @pytest.fixture(name="generate_config")
 def fixture_generate_config():
-    """generate a config"""
+    """generate a configuration"""
     return _generate_config

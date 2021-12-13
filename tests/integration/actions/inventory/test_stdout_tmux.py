@@ -1,4 +1,4 @@
-"""Tests for inventory from cli, stdout."""
+"""Tests for inventory from CLI, stdout."""
 import pytest
 
 from .base import BaseClass
@@ -93,6 +93,6 @@ def step_id(value):
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for inventory from cli, stdout."""
+    """Run the tests for inventory from CLI, stdout."""
 
     UPDATE_FIXTURES = False

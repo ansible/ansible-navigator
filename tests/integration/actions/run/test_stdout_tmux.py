@@ -1,4 +1,4 @@
-"""Tests for run from cli, stdout."""
+"""Tests for run from CLI, stdout."""
 import pytest
 
 from .base import BaseClass
@@ -90,6 +90,6 @@ def step_id(value):
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for run from cli, stdout."""
+    """Run the tests for run from CLI, stdout."""
 
     UPDATE_FIXTURES = False

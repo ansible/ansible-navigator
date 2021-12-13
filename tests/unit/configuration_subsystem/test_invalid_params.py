@@ -87,7 +87,7 @@ def test_replay_missing_artifact(_mocked_func, generate_config):
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_badly_formatted_envar(_mocked_func, generate_config):
     # pylint: disable=import-outside-toplevel
-    """Ensure exit_messages generated for badly formatted set env var"""
+    """Ensure exit_messages generated for badly formatted ``--senv``."""
     params = "run site.yml --senv TK1:TV1"
     response = generate_config(params=params.split())
     exit_msg = "The following set-environment-variable entry could not be parsed: TK1:TV1"
@@ -148,7 +148,7 @@ def test_poor_choices(_mocked_func, generate_config, entry):
 @pytest.mark.parametrize("subcommand, params", (("images", __file__), ("collections", "")))
 def test_interactive_only_subcommand(generate_config, subcommand, params):
     # pylint: disable=import-outside-toplevel
-    """Ensure exit_messages generated for badly formatted set env var"""
+    """Ensure exit_messages generated for interactive only subcommand."""
     params = [subcommand, params, "-m", "stdout"]
     response = generate_config(params=params)
     exit_msg = (

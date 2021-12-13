@@ -68,7 +68,7 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        """Run the tests for inventory, mode and ee set in child class."""
+        """Run the tests for inventory, mode and ``ee`` set in child class."""
         assert os.path.exists(ANSIBLE_INVENTORY_FIXTURE_DIR)
         assert os.path.exists(TEST_CONFIG_FILE)
 
@@ -84,7 +84,7 @@ class BaseClass:
             search_within_response=search_within_response,
         )
         if step.mask:
-            # mask out some config that is subject to change each run
+            # mask out some configuration that is subject to change each run
             mask = "X" * 50
             for idx, line in enumerate(received_output):
                 if tmux_session.cli_prompt in line:

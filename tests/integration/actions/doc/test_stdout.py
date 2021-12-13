@@ -1,4 +1,4 @@
-"""Tests for doc from cli, stdout.
+"""Tests for doc from CLI, stdout.
 """
 from typing import List
 
@@ -26,7 +26,7 @@ testdata_1: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_1)
 class TestDocHelpWithEE(BaseClass):
-    """Run the tests for doc help from cli, stdout, with ee."""
+    """Run the tests for doc help from CLI, stdout, with an EE."""
 
     TEST_FOR_MODE = "stdout"
 
@@ -49,7 +49,7 @@ testdata_2: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_2)
 class TestDocHelpWithoutEE(BaseClass):
-    """Run the tests for doc help from cli, stdout, without ee."""
+    """Run the tests for doc help from CLI, stdout, without an EE."""
 
     TEST_FOR_MODE = "stdout"
 
@@ -73,7 +73,7 @@ testdata_3: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_3)
 class TestDocHelpWithEEWrongMode(BaseClass):
-    """Run the tests for doc help from cli, stdout, with ee, wrong mode."""
+    """Run the tests for doc help from CLI, stdout, with an EE, wrong mode."""
 
     TEST_FOR_MODE = "stdout"
 
@@ -97,7 +97,7 @@ testdata_4: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_4)
 class TestDocHelpWithoutEEWrongMode(BaseClass):
-    """Run the tests for doc help from cli, stdout, without ee, wrong mode."""
+    """Run the tests for doc help from CLI, stdout, without an EE, wrong mode."""
 
     TEST_FOR_MODE = "stdout"
 
@@ -120,7 +120,7 @@ testdata_5: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_5)
 class TestModuleDocWithoutEE(BaseClass):
-    """Run the tests for doc from cli, stdout, without ee, module doc."""
+    """Run the tests for doc from CLI, stdout, without an EE, module doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
@@ -144,7 +144,7 @@ testdata_6: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_6)
 class TestModuleDocWithEE(BaseClass):
-    """Run the tests for doc from cli, stdout, with ee, module doc."""
+    """Run the tests for doc from CLI, stdout, with an EE, module doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
@@ -169,7 +169,7 @@ testdata_7: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_7)
 class TestLookUpDocWithoutEE(BaseClass):
-    """Run the tests for doc from cli, stdout, without ee, lookup doc."""
+    """Run the tests for doc from CLI, stdout, without an EE, lookup doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
@@ -194,7 +194,7 @@ testdata_8: List = [
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_8)
 class TestLookUpDocWithEE(BaseClass):
-    """Run the tests for doc from cli, stdout, with ee, lookup doc."""
+    """Run the tests for doc from CLI, stdout, with an EE, lookup doc."""
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False

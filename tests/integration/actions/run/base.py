@@ -63,7 +63,7 @@ class BaseClass:
     def test(self, request, tmux_session, step):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        """Run the tests for run, mode and ee set in child class."""
+        """Run the tests for run, mode and ``ee`` set in child class."""
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
@@ -78,7 +78,7 @@ class BaseClass:
         )
 
         if step.mask:
-            # mask out some config that is subject to change each run
+            # mask out some configuration that is subject to change each run
             mask = "X" * 50
             for idx, line in enumerate(received_output):
                 if tmux_session.cli_prompt in line:

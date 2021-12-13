@@ -1,4 +1,4 @@
-"""Tests for config from cli, stdout."""
+"""Tests for ``config`` from CLI, stdout."""
 import pytest
 
 
@@ -129,6 +129,6 @@ def step_id(value):
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for config from cli, mode stdout."""
+    """Run the tests for ``config`` from CLI, mode stdout."""
 
     UPDATE_FIXTURES = False

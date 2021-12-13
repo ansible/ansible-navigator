@@ -1,4 +1,4 @@
-"""test the use of set_environment_variable throguh to runner
+"""test the use of set_environment_variable through to runner
 """
 import os
 import shlex
@@ -47,7 +47,7 @@ test_data = [
     ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
 )
 class Test(Cli2Runner):
-    """test the use of set_environment_variable throguh to runner"""
+    """test the use of set_environment_variable through to runner"""
 
     TEST_DIR_NAME = os.path.basename(__file__).replace("test_", "").replace(".py", "")
     TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/{TEST_DIR_NAME}"
@@ -68,9 +68,9 @@ class Test(Cli2Runner):
         # pylint: disable=too-many-arguments
         """Mock the runner call so it raises an exception.
 
-        mock the command line with sys.argv
-        set the ANSIBLE_NAVIGATOR_CONFIG envvar
-        call cli.main(), check the kwarg envvars passed to the runner func
+        mock the command line with ``sys.argv``
+        set the ANSIBLE_NAVIGATOR_CONFIG environment variable
+        call ``cli.main()``, check the ``envvars`` argument passed to the runner function
         """
         mocked_runner.side_effect = Exception("called")
         cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"

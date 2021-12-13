@@ -1,4 +1,4 @@
-"""some common funcs for the tests
+"""some common functions for the tests
 """
 import os
 import re
@@ -47,7 +47,7 @@ def update_fixtures(
 
 
 def fixture_path_from_request(request, index, testname=None):
-    """build a dir and file path for a test"""
+    """build a directory and file path for a test"""
     path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
     dir_path = os.path.join(defaults.FIXTURES_DIR, path_in_fixture_dir, request.node.originalname)
     if testname:
@@ -75,7 +75,7 @@ class Error(EnvironmentError):
 
 
 def sanitize_output(output):
-    """Sanitize test output that may be env specific or unique per run."""
+    """Sanitize test output that may be environment specific or unique per run."""
     re_uuid = re.compile(
         "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.IGNORECASE
     )
@@ -94,19 +94,19 @@ def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
     The destination directory must not already exist.
     If exception(s) occur, an Error is raised with a list of reasons.
 
-    If the optional symlinks flag is true, symbolic links in the
+    If the optional ``symlinks`` flag is true, symbolic links in the
     source tree result in symbolic links in the destination tree; if
     it is false, the contents of the files pointed to by symbolic
     links are copied.
 
     The optional ignore argument is a callable. If given, it
     is called with the `src` parameter, which is the directory
-    being visited by copytree(), and `names` which is the list of
-    `src` contents, as returned by os.listdir():
+    being visited by ``copytree()``, and `names` which is the list of
+    `src` contents, as returned by ``os.listdir()``:
 
         callable(src, names) -> ignored_names
 
-    Since copytree() is called recursively, the callable will be
+    Since ``copytree()`` is called recursively, the callable will be
     called once for each directory that is copied. It returns a
     list of names relative to the `src` directory that should
     not be copied.
@@ -133,7 +133,7 @@ def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
             else:
                 # Will raise a SpecialFileError for unsupported file types
                 shutil.copy(srcname, dstname)
-        # catch the Error from the recursive copytree so that we can
+        # catch the Error from the recursive ``copytree`` so that we can
         # continue with other files
         except Error as err:
             errors.extend(err.args[0])

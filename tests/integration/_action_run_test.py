@@ -128,18 +128,18 @@ class ActionRunTest:
 
         action = self._app_action.Action(args=args)
 
-        # get a tty, runner/docker requires it
+        # get a TTY, runner/docker requires it
         _mtty, stty = os.openpty()
 
-        # preserve current stdin, stdout, stderr
+        # preserve current ``stdin``, ``stdout``, ``stderr``
         __stdin__ = sys.stdin
         __stdout__ = sys.stdout
         __stderr__ = sys.stderr
 
-        # pytest pseudo stdin doesn't fileno(), use original
+        # ``pytest`` pseudo ``stdin`` doesn't ``fileno()``, use original
         sys.stdin = stty  # type: ignore
 
-        # set stderr and stdout to fds
+        # set ``stderr`` and ``stdout`` to file descriptors
         with tempfile.TemporaryFile() as sys_stdout, tempfile.TemporaryFile() as sys_stderr:
             sys.stdout = sys_stdout  # type: ignore
             sys.stderr = sys_stderr  # type: ignore
@@ -147,15 +147,15 @@ class ActionRunTest:
             # run the action
             return_code = action.run_stdout()
 
-            # restore stdin
+            # restore ``stdin``
             sys.stdin = __stdin__
 
-            # read and restore stdout
+            # read and restore ``stdout``
             sys.stdout.seek(0)
             stdout = sys.stdout.read().decode()  # type: ignore
             sys.stdout = __stdout__
 
-            # read and restore stderr
+            # read and restore ``stderr``
             sys.stderr.seek(0)
             stderr = sys.stderr.read().decode()  # type: ignore
             sys.stderr = __stderr__

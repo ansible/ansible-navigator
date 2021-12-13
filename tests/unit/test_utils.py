@@ -31,7 +31,7 @@ def test_find_many_settings_home(monkeypatch) -> None:
 
 
 def test_find_many_settings_cwd(monkeypatch) -> None:
-    """test more than one in cwd"""
+    """test more than one in CWD"""
 
     paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
@@ -45,7 +45,7 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
 
 
 def test_find_many_settings_precedence(monkeypatch) -> None:
-    """test more than one in cwd"""
+    """test more than one in CWD"""
 
     expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
     paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
@@ -74,7 +74,7 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
 def test_env_var_is_file_path(
     monkeypatch, set_env: bool, file_path: str, anticpated_result: Optional[str]
 ) -> None:
-    """test env var is a file path"""
+    """test environment variable is a file path"""
     envvar = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
         monkeypatch.setenv(envvar, file_path)

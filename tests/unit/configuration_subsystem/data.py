@@ -6,7 +6,7 @@ before use so they are immutable within the tests
 
 
 def d2t(dyct):
-    """turn the data dictionary into a frozenset
+    """turn the data dictionary into a frozen set
     so they are immutable
     """
     return tuple(dyct.items())

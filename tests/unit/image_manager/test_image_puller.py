@@ -12,7 +12,7 @@ from ...defaults import SMALL_TEST_IMAGE
 
 
 class TstPullPolicy(NamedTuple):
-    """tst object"""
+    """test object"""
 
     pull_policy: str
     pull_required: bool

@@ -1,4 +1,4 @@
-"""Tests related to the yaml abstartion layer.
+"""Tests related to the yaml abstraction layer.
 """
 
 import ansible_navigator._yaml as yaml_import

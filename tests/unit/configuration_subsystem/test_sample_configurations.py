@@ -22,7 +22,7 @@ from ansible_navigator.configuration_subsystem.parser import Parser
 
 
 def test_cmdline_source_not_set():
-    """Ensure a Config without a subparse entry fails"""
+    """Ensure a configuration without a ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=NavigatorPostProcessor(),
@@ -44,7 +44,7 @@ def test_cmdline_source_not_set():
 
 
 def test_no_subcommand():
-    """Ensure a Config without a subparse entry fails"""
+    """Ensure a configuration without no ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
@@ -58,7 +58,7 @@ def test_no_subcommand():
 
 
 def test_many_subcommand():
-    """Ensure a Config without a subparse entry fails"""
+    """Ensure a configuration without a ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,
@@ -111,7 +111,7 @@ def test_invalid_choice_not_set():
 
 
 def test_cutom_nargs_for_postional():
-    """Ensure a nargs for a positional are carried forward"""
+    """Ensure a ``nargs`` for a positional are carried forward"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         post_processor=None,

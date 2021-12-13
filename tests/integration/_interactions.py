@@ -28,7 +28,7 @@ class Command(NamedTuple):
     subcommand: Union[None, str] = None
 
     def join(self):
-        """create cli command"""
+        """create CLI command"""
         args = [self.command]
         if isinstance(self.subcommand, str):
             args.append(self.subcommand)

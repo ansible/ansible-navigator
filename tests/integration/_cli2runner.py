@@ -1,4 +1,4 @@
-"""test form cli up ro runner
+"""test from CLI up to runner
 """
 from unittest import mock
 
@@ -25,7 +25,7 @@ class Cli2Runner:
 
     def run_test(self, mocked_runner, tmpdir, cli_entry, config_fixture, expected):
         # pylint: disable=no-self-use
-        """the func to run the test and assert"""
+        """the function to run the test and assert"""
         raise Exception("Override in subclass")
 
     @pytest.fixture(autouse=True)

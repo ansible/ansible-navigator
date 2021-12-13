@@ -1,4 +1,4 @@
-"""Tests for replay from welcome, interactive, with ee.
+"""Tests for replay from welcome, interactive, with an EE.
 """
 import pytest
 
@@ -23,6 +23,6 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
 class Test(BaseClass):
-    """Run the tests for images from welcome, interactive, with ee."""
+    """Run the tests for images from welcome, interactive, with an EE."""
 
     UPDATE_FIXTURES = False

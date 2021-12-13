@@ -9,7 +9,7 @@ EXECUTION_MODES = ["interactive", "stdout"]
 
 @pytest.fixture(scope="function")
 def action_run_stdout():
-    """fixturize the ActionRunTest"""
+    """Create a fixture for ActionRunTest."""
     yield ActionRunTest
 
 
@@ -21,7 +21,7 @@ def test_fixtures_dir():
 
 @pytest.fixture
 def patch_curses(monkeypatch):
-    """patch curses so it doesn't Traceback during tests"""
+    """patch curses so it doesn't traceback during tests"""
     # pylint: disable=import-outside-toplevel
     import curses
 
@@ -33,7 +33,7 @@ def patch_curses(monkeypatch):
 @pytest.fixture(scope="session")
 def os_indendent_tmp():
     """
-    this attempts to ensure the length of the /tmp
+    this attempts to ensure the length of the ``/tmp``
     is the same between MacOS and Linux
     otherwise ansible-navigator column widths can vary
     """

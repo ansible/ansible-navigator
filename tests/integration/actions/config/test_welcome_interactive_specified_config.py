@@ -1,4 +1,4 @@
-"""Tests for config from welcome, interactive, specify config.
+"""Tests for ``config`` from welcome, interactive, specify configuration.
 """
 import pytest
 
@@ -36,7 +36,7 @@ steps = add_indicies(steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for config from welcome, interactive, specify config."""
+    """Run the tests for ``config`` from welcome, interactive, specify configuration."""
 
     PANE_HEIGHT = 300
     UPDATE_FIXTURES = False

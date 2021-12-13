@@ -1,4 +1,4 @@
-"""perform some sanity and sytax checking of the navigator configuration
+"""perform some sanity and syntax checking of the navigator configuration
 """
 from collections import Counter
 
@@ -48,7 +48,7 @@ def test_entries_no_dash_in_environment_variable(entry):
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_entries_no_short_long_if_postional(entry):
-    """Ensure no postional argument has a short or long set"""
+    """Ensure no positional argument has a short or long set"""
     if hasattr(entry, "cli_arguments") and entry.cli_parameters.positional:
         assert entry.short is None
         assert entry.long_override is None
