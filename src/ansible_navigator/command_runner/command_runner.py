@@ -57,6 +57,7 @@ class CommandRunner:
     """I run commands"""
 
     def __init__(self):
+        """Initialize the command runner."""
         self._completed_queue: Union[Queue, None] = None
         self._pending_queue: Union[Queue, None] = None
 

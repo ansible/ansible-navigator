@@ -24,6 +24,12 @@ class ImagePuller:
     """Image puller"""
 
     def __init__(self, container_engine: str, image: str, pull_policy: str):
+        """Initialize the image puller class.
+
+        :param container_engine: The container engine to use.
+        :param image: The name of the image to pull.
+        :param pull_policy: The name of the pull policy in effect.
+        """
         self._assessment = ImageAssessment
         self._container_engine = container_engine
         self._exit_messages: List[ExitMessage] = []
