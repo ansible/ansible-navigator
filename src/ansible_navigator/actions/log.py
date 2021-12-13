@@ -15,6 +15,10 @@ class Action(App):
     KEGEX = r"^l(?:og)?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:log`` action.
+
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="log")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:

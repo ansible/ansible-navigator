@@ -15,6 +15,10 @@ class Action:
     KEGEX = r"^s(?:ave)?\s(?P<filename>.*)$"
 
     def __init__(self, args):
+        """Initialize the ``:save`` action.
+
+        :param args: The current application configuration.
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

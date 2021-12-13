@@ -14,6 +14,10 @@ class Action:
     KEGEX = r"^f(ilter)?(\s(?P<regex>.*))?$"
 
     def __init__(self, args):
+        """Initialize the ``:filter`` action.
+
+        :param args: The current application configuration.
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

@@ -18,6 +18,10 @@ class Action:
     KEGEX = r"^\d+$"
 
     def __init__(self, args):
+        """Initialize the select action.
+
+        :param args: The current application configuration.
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

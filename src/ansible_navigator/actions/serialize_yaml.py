@@ -14,6 +14,10 @@ class Action:
     KEGEX = r"^y(?:aml)?$"
 
     def __init__(self, args):
+        """Initialize the ``:yaml`` action.
+
+        :param args: The current application configuration.
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

@@ -15,6 +15,10 @@ class Action:
     KEGEX = r"q(?:uit)?(?P<exclamation>!)?$"
 
     def __init__(self, args):
+        """Initialize the ``:quit`` action.
+
+        :param args: The current application configuration.
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

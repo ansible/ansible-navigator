@@ -101,6 +101,10 @@ class Action(App):
     KEGEX = r"^i(?:nventory)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:inventory`` action.
+
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="inventory")
 
         self.__inventory: Dict[Any, Any] = {}

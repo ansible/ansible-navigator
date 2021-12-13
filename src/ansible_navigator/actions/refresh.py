@@ -14,6 +14,10 @@ class Action:
     KEGEX = r"^KEY_F\(5\)$"
 
     def __init__(self, args):
+        """Initialize the refresh action.
+
+        :param args: The current application configuration.
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

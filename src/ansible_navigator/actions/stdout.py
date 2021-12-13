@@ -15,6 +15,10 @@ class Action(App):
     KEGEX = r"^st(?:dout)?$"
 
     def __init__(self, args):
+        """Initialize the ``:stdout`` action.
+
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="stdout")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:

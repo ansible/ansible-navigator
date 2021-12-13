@@ -201,7 +201,10 @@ class Action(App):
         content_key_filter: Callable = filter_content_keys,
     ):
         # pylint: disable=dangerous-default-value
-        # for display purposes use the 4: of the uuid
+        """Initialize the ``:run`` action.
+
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="run")
 
         self._subaction_type: str

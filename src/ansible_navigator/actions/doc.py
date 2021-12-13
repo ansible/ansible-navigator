@@ -34,6 +34,10 @@ class Action(App):
     KEGEX = r"^d(?:oc)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:doc`` action.
+
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="doc")
 
         self._plugin_name: Optional[str]

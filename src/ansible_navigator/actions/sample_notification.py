@@ -34,6 +34,10 @@ class Action(App):
     KEGEX = r"^sample_notification$"
 
     def __init__(self, args):
+        """Initialize the ``:sample_notification`` action.
+
+        :param args: The current application configuration.
+        """
         super().__init__(args=args, logger_name=__name__, name="sample_form")
 
     # pylint: disable=unused-argument
