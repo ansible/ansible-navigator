@@ -20,11 +20,19 @@ base_steps = (
     Step(user_input=":f CACHE_PLUGIN_TIMEOUT", comment="filter for cache plugin timeout"),
     Step(user_input=":0", comment="cache plugin details"),
     Step(user_input=":back", comment="return to filtered list"),
-    Step(user_input=":f", comment="clear filter, full list"),
+    Step(
+        user_input=":f",
+        comment="clear filter, full list",
+        look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+    ),
     Step(user_input=":f yaml", comment="filter off screen value"),
     Step(user_input=":3", comment="YAML_FILENAME_EXTENSIONS details"),
     Step(user_input=":back", comment="return to filtered list"),
-    Step(user_input=":f", comment="clear filter, full list"),
+    Step(
+        user_input=":f",
+        comment="clear filter, full list",
+        look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+    ),
 )
 
 

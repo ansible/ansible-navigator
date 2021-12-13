@@ -3,9 +3,12 @@
     "index": 1,
     "comment": "enter config from welcome screen",
     "additional_information": {
-        "look_fors": [],
+        "look_fors": [
+            "ACTION_WARNINGS",
+            "CALLBACKS_ENABLED"
+        ],
         "look_nots": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
         "    OPTION                                  DEFAULT SOURCE  VIA                             CURRENT VALUE",

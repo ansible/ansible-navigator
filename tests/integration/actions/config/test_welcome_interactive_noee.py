@@ -14,7 +14,11 @@ CLI = Command(execution_environment=False).join()
 
 initial_steps = (
     Step(user_input=CLI, comment="welcome screen"),
-    Step(user_input=":config", comment="enter config from welcome screen"),
+    Step(
+        user_input=":config",
+        comment="enter config from welcome screen",
+        look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+    ),
 )
 
 steps = add_indicies(initial_steps + base_steps)
