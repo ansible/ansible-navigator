@@ -162,7 +162,6 @@ repos:
           share/ansible_navigator/grammar/.*\.json
         )
       $
-    stages: ["manual"]
 
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.26.3
