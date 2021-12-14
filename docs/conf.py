@@ -33,7 +33,7 @@ github_sponsors_url = f"{github_url}/sponsors"
 
 project = "Ansible Navigator"
 author = f"{project} project contributors"
-copyright = author
+copyright = author  # pylint:disable=redefined-builtin
 
 # fmt: off
 # The short X.Y version

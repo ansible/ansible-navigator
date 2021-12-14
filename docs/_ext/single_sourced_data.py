@@ -163,6 +163,7 @@ def _params_retrieve_details(filename: str) -> Dict:
 
 
 def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
+    # pylint: disable=too-many-branches
     """create a row entry for a param"""
     if entry.cli_parameters is None:
         cli_parameters = "positional"
