@@ -76,7 +76,7 @@ class Action(App):
         else:
             log_message = (
                 "The setting 'set_environment_variable' was neither a dictionary"
-                + " or Constants, please raise an issue. No environment variables will be set."
+                " or Constants, please raise an issue. No environment variables will be set."
             )
             self._logger.error(
                 "%s The current value was found to be '%s'",
