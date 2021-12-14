@@ -87,18 +87,18 @@ class Action:
         if not filename:
             if interaction.ui.xform() == "text.html.markdown":
                 filename = tempfile.NamedTemporaryFile(suffix=".md").name
-                with open(filename, "w") as outfile:
+                with open(filename, "w", encoding="utf-8") as outfile:
                     outfile.write(obj)
             elif interaction.ui.xform() == "source.yaml":
                 filename = tempfile.NamedTemporaryFile(suffix=".yaml").name
                 human_dump(obj=obj, filename=filename)
             elif interaction.ui.xform() == "source.json":
                 filename = tempfile.NamedTemporaryFile(suffix=".json").name
-                with open(filename, "w") as outfile:
+                with open(filename, "w", encoding="utf-8") as outfile:
                     json.dump(obj, outfile, indent=4, sort_keys=True)
             else:
                 filename = tempfile.NamedTemporaryFile(suffix=".txt").name
-                with open(filename, "w") as outfile:
+                with open(filename, "w", encoding="utf-8") as outfile:
                     outfile.write(obj)
 
         command = self._args.editor_command.format(filename=filename, line_number=line_number)

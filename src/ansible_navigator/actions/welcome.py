@@ -35,7 +35,8 @@ class Action(App):
         self._prepare_to_run(app, interaction)
 
         with open(
-            os.path.join(self._args.internals.share_directory, "markdown", "welcome.md")
+            os.path.join(self._args.internals.share_directory, "markdown", "welcome.md"),
+            encoding="utf-8",
         ) as fhand:
             welcome_md = fhand.read()
 

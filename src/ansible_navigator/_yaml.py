@@ -40,7 +40,7 @@ def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, N
     """
     dumper = HumanDumper
     if filename is not None:
-        with open(filename, fmode) as outfile:
+        with open(filename, fmode, encoding="utf-8") as outfile:
             yaml.dump(
                 obj,
                 outfile,

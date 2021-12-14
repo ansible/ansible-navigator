@@ -77,12 +77,12 @@ class Action:
                 write_as = interaction.ui.xform()
 
         if write_as == "text":
-            with open(os.path.abspath(filename), fmode) as outfile:
+            with open(os.path.abspath(filename), fmode, encoding="utf-8") as outfile:
                 outfile.write(obj)
         elif write_as == "yaml":
             human_dump(obj=obj, filename=filename, fmode=fmode)
         elif write_as == "json":
-            with open(os.path.abspath(filename), fmode) as outfile:
+            with open(os.path.abspath(filename), fmode, encoding="utf-8") as outfile:
                 json.dump(obj, outfile, indent=4, sort_keys=True)
                 outfile.write("\n")
 

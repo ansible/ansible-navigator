@@ -147,7 +147,7 @@ class Configurator:
 
     def _apply_settings_file(self) -> None:
         if self._settings_file_path:
-            with open(self._settings_file_path, "r") as config_fh:
+            with open(self._settings_file_path, "r", encoding="utf-8") as config_fh:
                 try:
                     config = yaml.load(config_fh, Loader=SafeLoader)
                 except (yaml.scanner.ScannerError, yaml.parser.ParserError) as exc:
