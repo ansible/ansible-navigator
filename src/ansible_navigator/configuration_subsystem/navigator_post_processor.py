@@ -499,15 +499,30 @@ class NavigatorPostProcessor:
             entry.value.current = flatten_list(entry.value.current)
         return messages, exit_messages
 
-    @staticmethod
-    @_post_processor
-    def lintables(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def lintables(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process lintables"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if isinstance(entry.value.current, str):
-            entry.value.current = abs_user_path(entry.value.current)
+
+        # If not using an EE, check for ansible-lint before we even pass off to
+        # the lint action.
+        if config.app == "lint" and not config.execution_environment:
+            ansible_lint_location = shutil.which("ansible-lint")
+            if ansible_lint_location is None:
+                exit_messages.append(
+                    ExitMessage(message="ansible-lint command could not be found.")
+                )
+                exit_messages.append(
+                    ExitMessage(
+                        message="Try 'pip install ansible-lint' or consider using an execution environment which provides ansible-lint.",
+                        prefix=ExitPrefix.HINT,
+                    )
+                )
+
+        if isinstance(entry.value.current, str) and config.app == "lint":
+            self.append_vol_mount(entry.value.current, entry.value.current)
+
         return messages, exit_messages
 
     @_post_processor
