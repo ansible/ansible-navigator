@@ -29,7 +29,7 @@ from . import run_action
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..runner.api import CommandRunner
+from ..runner.command import Command
 from ..steps import Step
 from ..ui_framework import (
     CursesLines,
@@ -216,17 +216,16 @@ class Action(App):
         if isinstance(self._args.container_options, list):
             kwargs.update({"container_options": self._args.container_options})
 
-        cmd_args = []
+        cmd_args = ["-qq", "--offline"]
 
         if self._args.mode == "interactive":
             cmd_args += [
+                "--nocolor",
                 "-f",
                 "codeclimate",
             ]
 
         if isinstance(self._args.lint_config, str):
-            # TODO: Can we check this for existence somehow? Or is it too config
-            #       dependent? The mountpoint could be anywhere, I suppose...
             cmd_args += [
                 "-c",
                 self._args.lint_config,
@@ -239,21 +238,12 @@ class Action(App):
                     "The given path `{0}` does not exist.".format(self._args.lintables)
                 )
             # lint acts weirdly if we're not in the right directory.
-            kwargs["container_workdir"] = self._args.lintables
+            #kwargs["container_workdir"] = self._args.lintables
             cmd_args.append(self._args.lintables)
-
-            # TODO: Is there a better way to do this auto-mounting? I bet there
-            # is! But in the 'ansible-playbook' case, ansible-runner weirdly
-            # hardcodes the auto-mount: https://git.io/JoQjT
-            volmount = "{0}:{1}:Z".format(self._args.lintables, self._args.lintables)
-            if "container_volume_mounts" in kwargs:
-                kwargs["container_volume_mounts"].append(volmount)
-            else:
-                kwargs["container_volume_mounts"] = [volmount]
 
         kwargs["cmdline"] = cmd_args
 
-        runner = CommandRunner(executable_cmd=ansible_lint_path, **kwargs)
+        runner = Command(executable_cmd=ansible_lint_path, **kwargs)
         return runner.run()
 
     def run_stdout(self) -> int:
