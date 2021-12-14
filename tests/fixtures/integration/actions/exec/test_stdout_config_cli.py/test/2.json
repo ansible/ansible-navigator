@@ -1,0 +1,16 @@
+{
+    "name": "test[exec echo check path via shell  clear && ansible-navigator exec --excmd 'echo $PATH' --ee True --ll debug --mode stdout]",
+    "index": 2,
+    "comment": "exec echo check path via shell",
+    "additional_information": {
+        "look_fors": [
+            "/sbin"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "(venv) bash-5.1$"
+    ]
+}

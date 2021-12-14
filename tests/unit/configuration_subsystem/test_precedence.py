@@ -10,6 +10,7 @@ Note about decorators:
 
 """
 import os
+import shlex
 
 from unittest import mock
 from unittest.mock import patch
@@ -45,10 +46,11 @@ def test_all_entries_reflect_cli_given_envvars(
 ):
     """Ensure all entries are set by the CLI, even with environment variables set."""
     if base is None:
-        params = cli_entry.split()
+        params = shlex.split(cli_entry)
         expected = dict(expected)
     else:
-        params = cli_entry.split() + " ".join(base.splitlines()).split()
+        cli_entry_split = shlex.split(cli_entry)
+        params = cli_entry_split + " ".join(base.splitlines()).split()
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     envvars = {}
@@ -82,10 +84,11 @@ def test_all_entries_reflect_cli_given_settings(
     either DEFAULT_CFG or USER_CFG
     """
     if base is None:
-        params = cli_entry.split()
+        params = shlex.split(cli_entry)
         expected = dict(expected)
     else:
-        params = cli_entry.split() + " ".join(base.splitlines()).split()
+        cli_entry_split = shlex.split(cli_entry)
+        params = cli_entry_split + " ".join(base.splitlines()).split()
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     response = generate_config(params=params, setting_file_name=settings)
@@ -118,10 +121,10 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
     even though an empty or full settings file was provided
     """
     if base is None:
-        params = cli_entry.split()
+        params = shlex.split(cli_entry)
         expected = dict(expected)
     else:
-        params = cli_entry.split() + " ".join(base.splitlines()).split()
+        params = shlex.split(cli_entry) + " ".join(base.splitlines()).split()
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
     envvars = {}

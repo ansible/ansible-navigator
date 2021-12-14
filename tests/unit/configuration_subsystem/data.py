@@ -219,6 +219,8 @@ ENVVAR_DATA = [
     ("display_color", "yellow is the color of a banana", False),
     ("editor_command", "nano_envvar", "nano_envvar"),
     ("editor_console", "false", False),
+    ("exec_command", "/bin/foo", "/bin/foo"),
+    ("exec_shell", "false", False),
     ("execution_environment", "false", False),
     ("execution_environment_image", "test_image:latest", "test_image:latest"),
     ("execution_environment_volume_mounts", "/test1:/test1:Z", ["/test1:/test1:Z"]),

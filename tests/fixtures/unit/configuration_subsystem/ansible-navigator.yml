@@ -15,13 +15,16 @@ ansible-navigator:
   color:
     enable: False
     osc4: False
-  editor:
-    command: vim_from_setting
-    console: False
   documentation:
     plugin:
       name: shell
       type: become
+  editor:
+    command: vim_from_setting
+    console: False
+  exec:
+    shell: False
+    command: /bin/foo
   execution-environment:
     container-engine: podman
     enabled: False

@@ -1,0 +1,4 @@
+ansible-navigator:
+  exec:
+    command: echo test_data_from_config
+    shell: False
