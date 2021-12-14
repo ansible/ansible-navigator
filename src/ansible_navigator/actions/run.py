@@ -385,7 +385,7 @@ class Action(App):
             artifact_file = populated_form["fields"]["artifact_file"]["value"]
 
         try:
-            with open(artifact_file) as json_file:
+            with open(artifact_file, encoding="utf-8") as json_file:
                 data = json.load(json_file)
         except json.JSONDecodeError as exc:
             self._logger.debug("json decode error: %s", str(exc))
@@ -836,7 +836,7 @@ class Action(App):
 
             try:
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
-                with open(filename, "w") as outfile:
+                with open(filename, "w", encoding="utf-8") as outfile:
                     artifact = {
                         "version": "1.0.0",
                         "plays": self._plays.value,

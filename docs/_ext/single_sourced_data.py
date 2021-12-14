@@ -158,7 +158,7 @@ def _params_get_param_file_entry(
 
 def _params_retrieve_details(filename: str) -> Dict:
     """load the param details file"""
-    with open(filename) as fhand:
+    with open(filename, encoding="utf-8") as fhand:
         return yaml.load(fhand, Loader=yaml.SafeLoader)
 
 

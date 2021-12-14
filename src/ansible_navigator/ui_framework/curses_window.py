@@ -186,7 +186,7 @@ class CursesWindow:
         self._logger.debug("term_osc4_supprt: %s", self._term_osc4_supprt)
 
         if self._term_osc4_supprt:
-            with open(self._ui_config.terminal_colors_path) as data_file:
+            with open(self._ui_config.terminal_colors_path, encoding="utf-8") as data_file:
                 colors = json.load(data_file)
 
             for color_name, color_hex in colors.items():
