@@ -46,6 +46,7 @@ class CollectionCatalog:
         self._messages: List[str] = []
 
     def _catalog_plugins(self, collection: Dict) -> None:
+        # pylint: disable=too-many-locals
         """catalog the plugins within a collection"""
         path = collection["path"]
         file_chksums = {}
@@ -345,6 +346,7 @@ def run_command(cmd: List) -> Dict:
 
 
 def main() -> Dict:
+    # pylint: disable=protected-access
     """main"""
     stats = {}
     stats["cache_added_success"] = 0
@@ -392,10 +394,10 @@ if __name__ == "__main__":
 
     args, parent_directories = parse_args()
 
-    collection_scan_paths = ":".join(parent_directories)
-    os.environ["ANSIBLE_COLLECTIONS_PATHS"] = collection_scan_paths
+    COLLECTION_SCAN_PATHS = ":".join(parent_directories)
+    os.environ["ANSIBLE_COLLECTIONS_PATHS"] = COLLECTION_SCAN_PATHS
 
     result = main()
     result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
-    result["collection_scan_paths"] = collection_scan_paths
+    result["collection_scan_paths"] = COLLECTION_SCAN_PATHS
     print(json.dumps(result, default=str))

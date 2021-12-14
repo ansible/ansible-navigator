@@ -18,6 +18,7 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
 class Command(SimpleNamespace):
+    # pylint: disable=too-few-public-methods
     """command obj holder"""
 
     id: str
@@ -115,6 +116,8 @@ class CommandRunner:
 
 
 class CmdParser:
+    """A base class for command parsers with common parsing functions."""
+
     @staticmethod
     def _strip(value: str) -> str:
         """strip off spaces and quotes"""
@@ -156,6 +159,7 @@ class AnsibleCollections(CmdParser):
 
     @property
     def commands(self):
+        """The command to run for listing ansible collections."""
         command = "ansible-galaxy collection list"
         return [
             Command(
@@ -165,7 +169,8 @@ class AnsibleCollections(CmdParser):
             )
         ]
 
-    def parse(self, command: Command):
+    @staticmethod
+    def parse(command: Command):
         """parse"""
         collections = {}
         for line in command.stdout.splitlines():
@@ -183,7 +188,8 @@ class AnsibleVersion(CmdParser):
         """generate the command"""
         return [Command(id="ansible_version", command="ansible --version", parse=self.parse)]
 
-    def parse(self, command: Command) -> None:
+    @staticmethod
+    def parse(command: Command) -> None:
         """parse"""
         version = command.stdout.splitlines()[0].split(" ", 1)[1].strip()[1:-1]
         command.details = version
@@ -244,7 +250,8 @@ class RedhatRelease(CmdParser):
         """generate the command"""
         return [Command(id="redhat_release", command="cat /etc/redhat-release", parse=self.parse)]
 
-    def parse(self, command):
+    @staticmethod
+    def parse(command):
         """parse"""
         parsed = command.stdout
         command.details = parsed
