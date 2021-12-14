@@ -306,11 +306,11 @@ class Action(App):
                 variable = extracted.groupdict()["variable"]
                 try:
                     source = yaml.load(extracted.groupdict()["source"], Loader=Loader)
-                except yaml.YAMLError as exc:  # noqa: F841
+                except yaml.YAMLError as _exc:  # noqa: F841
                     source = extracted.groupdict()["source"]
                 try:
                     current = yaml.load(extracted.groupdict()["current"], Loader=Loader)
-                except yaml.YAMLError as exc:  # noqa: F841
+                except yaml.YAMLError as _exc:  # noqa: F841
                     current = extracted.groupdict()["current"]
                 try:
                     if isinstance(source, dict):

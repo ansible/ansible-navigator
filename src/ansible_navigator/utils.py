@@ -486,7 +486,7 @@ def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
     elif thing is not None:
         converted_value = [thing]
     else:
-        converted_value = list()
+        converted_value = []
     return converted_value
 
 
