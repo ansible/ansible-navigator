@@ -2,6 +2,7 @@
 import logging
 from . import _actions as actions
 from ..app_public import AppPublic
+from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 
 
@@ -13,7 +14,7 @@ class Action:
 
     KEGEX = r"^f(ilter)?(\s(?P<regex>.*))?$"
 
-    def __init__(self, args):
+    def __init__(self, args: ApplicationConfiguration):
         self._args = args
         self._logger = logging.getLogger(__name__)
 

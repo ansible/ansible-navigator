@@ -12,12 +12,10 @@ from typing import List
 
 from . import _actions as actions
 from ..app_public import AppPublic
-
+from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
-
 from ..utils import remove_dbl_un
-
 from .._yaml import human_dump
 
 
@@ -41,7 +39,7 @@ class Action:
 
     KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
 
-    def __init__(self, args):
+    def __init__(self, args: ApplicationConfiguration):
         self._args = args
         self._logger = logging.getLogger(__name__)
 
