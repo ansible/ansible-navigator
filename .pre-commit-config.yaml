@@ -14,7 +14,7 @@ repos:
       $
     stages: ["manual"]
 
-- repo: https://github.com/timothycrosley/isort.git
+- repo: https://github.com/PyCQA/isort
   rev: 5.10.1
   hooks:
   - id: isort
