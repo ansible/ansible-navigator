@@ -218,39 +218,24 @@ repos:
     - tests/
     pass_filenames: false
 
-- repo: local
+- repo: https://github.com/PyCQA/pylint
+  rev: v2.12.2
   hooks:
-  - id: pylint
-    language: system
-    name: PyLint
-    files: \.py$
-    entry: python -m pylint
-    args:
-    - --ignore=tm_tokenize
-    - |-
-      --disable=
-      consider-using-with,
-      implicit-str-concat,
-      import-error,
-      invalid-name,
-      missing-class-docstring,
-      missing-function-docstring,
-      missing-module-docstring,
-      no-else-return,
-      no-member,
-      no-self-use,
-      protected-access,
-      redefined-builtin,
-      too-few-public-methods,
-      too-many-arguments,
-      too-many-branches,
-      too-many-instance-attributes,
-      too-many-locals,
-      too-many-statements,
-      unused-import,
-      useless-else-on-loop,
-      wrong-import-order,
-    stages:
-    - manual
-
+    - id: pylint
+      additional_dependencies:
+        - ansible-runner
+        - libtmux
+        - onigurumacffi
+        - pytest
+        - pyyaml
+        - sphinx
+        - setuptools-scm
+      entry: pylint --rcfile=.pylintrc
+      exclude: >
+        (?x)^
+          (
+            share/ansible_navigator/utils/catalog_collections\.py|
+            src/ansible_navigator/tm_tokenize/.*
+          )
+        $
 ...

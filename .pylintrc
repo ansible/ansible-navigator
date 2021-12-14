@@ -1,3 +1,30 @@
 [MESSAGES CONTROL]
 
-disable=duplicate-code,unsubscriptable-object,fixme
+disable=
+    duplicate-code,
+    unsubscriptable-object,
+    fixme,
+    # FIXME: remove exclusions added during initial tool adoption
+    consider-using-with,
+    implicit-str-concat,
+    invalid-name,
+    missing-class-docstring,
+    missing-function-docstring,
+    missing-module-docstring,
+    no-else-return,
+    no-member,
+    no-self-use,
+    protected-access,
+    redefined-builtin,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-branches,
+    too-many-instance-attributes,
+    too-many-locals,
+    too-many-statements,
+    unspecified-encoding,
+    unused-import,
+    unused-variable,
+    use-list-literal,
+    useless-else-on-loop,
+    wrong-import-order,
