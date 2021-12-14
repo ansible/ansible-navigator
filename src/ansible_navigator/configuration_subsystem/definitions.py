@@ -60,6 +60,7 @@ class Entry(SimpleNamespace):
     apply_to_subsequent_cli: Should this be applied to future CLIs parsed
     choice: valid choices for this entry
     cli_parameters: argparse specific params
+    delay_post_process: Post process in normal (alphabetical) order or wait until after first pass?
     environment_variable_override: override the default environment variable
     name: the reference name for the entry
     settings_file_path_override: over the default settings file path
@@ -76,6 +77,7 @@ class Entry(SimpleNamespace):
     change_after_initial: bool = True
     choices: List = []
     cli_parameters: Union[None, CliParameters] = None
+    delay_post_process: bool = False
     environment_variable_override: Union[None, str] = None
     settings_file_path_override: Union[None, str] = None
     subcommands: Union[List[str], Constants] = Constants.ALL

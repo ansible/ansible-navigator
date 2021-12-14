@@ -6,6 +6,8 @@ import os
 import shlex
 import shutil
 
+from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
 from typing import List
 from typing import Tuple
@@ -46,12 +48,63 @@ def _post_processor(func):
     return wrapper
 
 
+class VolumeMountOption(Enum):
+    """Options that can be tagged on to the end of volume mounts.
+
+    Usually these are used for things like selinux relabeling, but there are
+    some other valid options as well, which can and should be added here as
+    needed. See ``man podman-run`` and ``man docker-run`` for valid choices and
+    keep in mind that we support both runtimes.
+    """
+
+    # Relabel as private
+    Z = "Z"
+
+    # Relabel as shared.
+    z = "z"  # pylint: disable=invalid-name
+
+
+@dataclass
+class VolumeMount:
+    """Describes EE volume mounts."""
+
+    #: The name of the config option requiring this volume mount.
+    calling_option: str
+
+    #: The source path of the volume mount.
+    src: str
+
+    #: The destination path in the container for the volume mount.
+    dest: str
+
+    #: Options for the bind mount.
+    options: List[VolumeMountOption] = field(default_factory=list)
+
+    def exists(self) -> bool:
+        """Determine if the volume mount source exists."""
+        return Path(self.src).exists()
+
+    def to_string(self) -> str:
+        """Render the volume mount in a way that (docker|podman) understands."""
+        out = f"{self.src}:{self.dest}"
+        if self.options:
+            joined_opts = ",".join(o.value for o in self.options)  # pylint: disable=not-an-iterable
+            out += f":{joined_opts}"
+        return out
+
+
 PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
 
 
 class NavigatorPostProcessor:
     # pylint:disable=too-many-public-methods
     """application post processor"""
+
+    def __init__(self):
+        # Volume mounts accumulated from post processing various config entries.
+        # These get processed towards the end, in the (delayed)
+        # execution_environment_volume_mounts() post-processor.
+        self.extra_volume_mounts: List[VolumeMount] = []
 
     @staticmethod
     def _true_or_false(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
@@ -233,12 +286,12 @@ class NavigatorPostProcessor:
             entry.value.current = f"{entry.value.current}:latest"
         return messages, exit_messages
 
-    @staticmethod
     @_post_processor
     def execution_environment_volume_mounts(
-        entry: Entry, config: ApplicationConfiguration
+        self, entry: Entry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
+        # pylint: disable=too-many-branches
         """Post process set_environment_variable"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -305,6 +358,18 @@ class NavigatorPostProcessor:
                     return messages, exit_messages
 
             entry.value.current = parsed_volume_mounts
+
+        if self.extra_volume_mounts and entry.value.current is C.NOT_SET:
+            entry.value.current = []
+
+        for mount in self.extra_volume_mounts:
+            if not mount.exists():
+                exit_msg = (
+                    f"The volume mount source path '{mount.src}', needed by "
+                    f"{mount.calling_option}, does not exist."
+                )
+                exit_messages.append(ExitMessage(message=exit_msg))
+            entry.value.current.append(mount.to_string())
         return messages, exit_messages
 
     @staticmethod
