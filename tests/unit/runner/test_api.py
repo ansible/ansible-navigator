@@ -38,16 +38,17 @@ from ansible_navigator.runner import Command
     ],
 )
 def test_command_base_runner_wrap_sh(orig_exec, orig_args, sh_c_arg):
+    # pylint: disable=protected-access
     """test CommandBaseRunner properly wraps commands with sh -c when asked."""
 
     # default (no sh wrap)
-    cr = Command(orig_exec, cmdline=orig_args)
-    cr.generate_run_command_args()
-    assert cr._runner_args.get("executable_cmd") == orig_exec
-    assert cr._runner_args.get("cmdline_args") == orig_args
+    runner_cmd = Command(orig_exec, cmdline=orig_args)
+    runner_cmd.generate_run_command_args()
+    assert runner_cmd._runner_args.get("executable_cmd") == orig_exec
+    assert runner_cmd._runner_args.get("cmdline_args") == orig_args
 
     # explicit sh wrap
-    cr = Command(orig_exec, cmdline=orig_args, wrap_sh=True)
-    cr.generate_run_command_args()
-    assert cr._runner_args.get("executable_cmd") == "/bin/sh"
-    assert cr._runner_args.get("cmdline_args") == ["-c", sh_c_arg]
+    runner_cmd = Command(orig_exec, cmdline=orig_args, wrap_sh=True)
+    runner_cmd.generate_run_command_args()
+    assert runner_cmd._runner_args.get("executable_cmd") == "/bin/sh"
+    assert runner_cmd._runner_args.get("cmdline_args") == ["-c", sh_c_arg]
