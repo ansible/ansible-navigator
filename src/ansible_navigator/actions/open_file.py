@@ -86,20 +86,24 @@ class Action:
 
         if not filename:
             if interaction.ui.xform() == "text.html.markdown":
-                filename = tempfile.NamedTemporaryFile(suffix=".md").name
-                with open(filename, "w", encoding="utf-8") as outfile:
-                    outfile.write(obj)
+                with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as temp_file:
+                    filename = temp_file.name
+                    with open(filename, "w", encoding="utf-8") as outfile:
+                        outfile.write(obj)
             elif interaction.ui.xform() == "source.yaml":
-                filename = tempfile.NamedTemporaryFile(suffix=".yaml").name
-                human_dump(obj=obj, filename=filename)
+                with tempfile.NamedTemporaryFile(suffix=".yaml", delete=False) as temp_file:
+                    filename = temp_file.name
+                    human_dump(obj=obj, filename=filename)
             elif interaction.ui.xform() == "source.json":
-                filename = tempfile.NamedTemporaryFile(suffix=".json").name
-                with open(filename, "w", encoding="utf-8") as outfile:
-                    json.dump(obj, outfile, indent=4, sort_keys=True)
+                with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
+                    filename = temp_file.name
+                    with open(filename, "w", encoding="utf-8") as outfile:
+                        json.dump(obj, outfile, indent=4, sort_keys=True)
             else:
-                filename = tempfile.NamedTemporaryFile(suffix=".txt").name
-                with open(filename, "w", encoding="utf-8") as outfile:
-                    outfile.write(obj)
+                with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as temp_file:
+                    filename = temp_file.name
+                    with open(filename, "w", encoding="utf-8") as outfile:
+                        outfile.write(obj)
 
         command = self._args.editor_command.format(filename=filename, line_number=line_number)
         is_console = self._args.editor_console
