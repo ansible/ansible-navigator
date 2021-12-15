@@ -29,8 +29,9 @@ try:
 except ImportError:
     from yaml import SafeLoader  # type: ignore
 
+# pylint: disable=import-error
 from key_value_store import KeyValueStore  # type: ignore
-
+# pylint: enable=import-error
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 

@@ -321,7 +321,7 @@ class Action(App):
                         parsed[variable]["via"] = source
                     parsed[variable]["current"] = current
                     parsed[variable]["__current_value"] = extracted.groupdict()["current"]
-                except KeyError as exc:  # noqa: F841
+                except KeyError as _exc:  # noqa: F841
                     self._logger.error("variable '%s' not found in list output")
                     return None
             else:
