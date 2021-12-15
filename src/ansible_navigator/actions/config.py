@@ -306,11 +306,11 @@ class Action(App):
                 variable = extracted.groupdict()["variable"]
                 try:
                     source = yaml.load(extracted.groupdict()["source"], Loader=Loader)
-                except yaml.YAMLError as _exc:  # noqa: F841
+                except yaml.YAMLError:
                     source = extracted.groupdict()["source"]
                 try:
                     current = yaml.load(extracted.groupdict()["current"], Loader=Loader)
-                except yaml.YAMLError as _exc:  # noqa: F841
+                except yaml.YAMLError:
                     current = extracted.groupdict()["current"]
                 try:
                     if isinstance(source, dict):
@@ -321,7 +321,7 @@ class Action(App):
                         parsed[variable]["via"] = source
                     parsed[variable]["current"] = current
                     parsed[variable]["__current_value"] = extracted.groupdict()["current"]
-                except KeyError as exc:  # noqa: F841
+                except KeyError:
                     self._logger.error("variable '%s' not found in list output")
                     return None
             else:
