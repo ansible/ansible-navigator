@@ -241,7 +241,6 @@ repos:
     # docs:
     - sphinx
     - setuptools-scm
-    entry: pylint --rcfile=.pylintrc
     exclude: >
       (?x)^
         (
