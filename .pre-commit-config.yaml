@@ -221,7 +221,6 @@ repos:
 - repo: local
   hooks:
   - id: pylint
-    additional_dependencies: ['-r', 'test-requirements.txt', '-r', 'requirements.txt']
     language: python
     language_version: python3
     name: pylint
