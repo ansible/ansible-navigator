@@ -13,6 +13,8 @@
     gate:
       jobs:
         - ansible-navigator-tox-lint
+        - ansible-navigator-tox-py36
+        - ansible-navigator-tox-py37
         - ansible-navigator-tox-py38
         - ansible-navigator-tox-py39
         - ansible-navigator-tox-py310
