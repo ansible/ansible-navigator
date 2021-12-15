@@ -11,7 +11,7 @@ from setuptools_scm import get_version
 
 # -- Path setup --------------------------------------------------------------
 
-PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
+PROJECT_ROOT_DIR = Path(__file__).resolve().parents[1]
 get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
 
 # Make in-tree extension importable in non-tox setups/envs, like RTD.

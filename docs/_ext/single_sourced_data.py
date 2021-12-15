@@ -45,8 +45,8 @@ SUBCOMMAND_TABLE_HEADER = [
 ]
 
 
-DOCS_DIR = Path(__file__).parents[1].resolve()
-PROJECT_DIR = DOCS_DIR.parent
+DOCS_DIR = Path(__file__).resolve().parents[1]
+PROJECT_DIR = Path(__file__).resolve().parents[2]
 
 PARAMS_SCHEMA_PATH = DOCS_DIR / "param_details.yml"
 TEST_SETTINGS_FIXTURE = (
