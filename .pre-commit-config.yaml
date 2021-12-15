@@ -222,7 +222,7 @@ repos:
   hooks:
   - id: pylint
     additional_dependencies: ['-r', 'test-requirements.txt', '-r', 'requirements.txt']
-    language: system
+    language_version: python3
     name: pylint
     entry: python -m pylint
     exclude: >
