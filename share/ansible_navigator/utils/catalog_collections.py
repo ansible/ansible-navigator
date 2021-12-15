@@ -55,7 +55,7 @@ class CollectionCatalog:
         if file_manifest_file:
             fpath = f"{path}/{file_manifest_file}"
             if os.path.exists(fpath):
-                with open(fpath) as read_file:
+                with open(file=fpath, encoding="utf-8") as read_file:
                     try:
                         loaded = json.load(read_file)
                         file_chksums = {v["name"]: v for v in loaded["files"]}
@@ -117,7 +117,7 @@ class CollectionCatalog:
             galaxy_file = f"{directory_path}/galaxy.yml"
             collection = None
             if os.path.exists(manifest_file):
-                with open(manifest_file) as read_file:
+                with open(file=manifest_file, encoding="utf-8") as read_file:
                     try:
                         collection = json.load(read_file)
                         collection["meta_source"] = "MANIFEST.json"
@@ -128,7 +128,7 @@ class CollectionCatalog:
                         }
                         self._errors.append(error)
             elif os.path.exists(galaxy_file):
-                with open(galaxy_file) as read_file:
+                with open(file=galaxy_file, encoding="utf-8") as read_file:
                     try:
                         collection = {"collection_info": yaml.load(read_file, Loader=SafeLoader)}
                         collection["meta_source"] = "galaxy.yml"
@@ -149,7 +149,7 @@ class CollectionCatalog:
                 runtime_file = f"{directory_path}/meta/runtime.yml"
                 collection["runtime"] = {}
                 if os.path.exists(runtime_file):
-                    with open(runtime_file) as read_file:
+                    with open(file=runtime_file, encoding="utf-8") as read_file:
                         try:
                             collection["runtime"] = yaml.load(read_file, Loader=SafeLoader)
                         except YAMLError as exc:
