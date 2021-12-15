@@ -4,5 +4,6 @@ libtmux
 lxml
 pre-commit
 pylint < 2.9  # v2.9.0 introduced a check for `with` which is not yet fixed
+pylint-pytest < 1.1.0
 pytest-cov
 pytest-xdist
