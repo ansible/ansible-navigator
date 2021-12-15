@@ -223,6 +223,7 @@ repos:
   hooks:
   - id: pylint
     additional_dependencies:
+      - ansible-core
       - ansible-runner
       - libtmux
       - onigurumacffi
