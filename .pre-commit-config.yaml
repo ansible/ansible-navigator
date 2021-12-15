@@ -223,15 +223,24 @@ repos:
   hooks:
   - id: pylint
     additional_dependencies:
-      - ansible-core
-      - ansible-runner
-      - dataclasses; python_version<"3.7"
-      - libtmux
-      - onigurumacffi
-      - pytest
-      - pyyaml
-      - sphinx
-      - setuptools-scm
+    # NOTE: The entries below must be kept in sync with the contents of `setup.cfg` at all times,
+    # NOTE: including `install_requires` and any extras that may be imported in runtime to accommodate
+    # NOTE: for `pylint`'s ability to import the modules being checked. They must also include any of the
+    # NOTE: test and platform-dependent requirements that may be imported under different circumstances.
+    - ansible-core  # dependency imported in utils/catalog_collections.py
+    # setup.cfg:
+    - ansible-runner ~= 2.0
+    - dataclasses; python_version < "3.7"
+    - importlib-resources; python_version < "3.9.0"
+    - jinja2
+    - onigurumacffi
+    - pyyaml
+    # tests:
+    - libtmux
+    - pytest
+    # docs:
+    - sphinx
+    - setuptools-scm
     entry: pylint --rcfile=.pylintrc
     exclude: >
       (?x)^
