@@ -218,11 +218,13 @@ repos:
     - tests/
     pass_filenames: false
 
-- repo: https://github.com/PyCQA/pylint.git
-  rev: v2.12.2
+- repo: local
   hooks:
   - id: pylint
     additional_dependencies: ['-r', 'test-requirements.txt', '-r', 'requirements.txt']
+    language: system
+    name: pylint
+    entry: python -m pylint
     exclude: >
       (?x)^
         (
