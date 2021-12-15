@@ -225,6 +225,7 @@ repos:
     additional_dependencies:
       - ansible-core
       - ansible-runner
+      - dataclasses; python_version<"3.7"
       - libtmux
       - onigurumacffi
       - pytest
