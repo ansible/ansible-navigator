@@ -3,6 +3,5 @@ black
 libtmux
 lxml
 pre-commit
-pylint
 pytest-cov
 pytest-xdist
