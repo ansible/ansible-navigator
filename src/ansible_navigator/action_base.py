@@ -170,7 +170,7 @@ class ActionBase:
         params: List,
         apply_previous_cli_entries: C = C.ALL,
         attach_cdc: bool = False,
-    ) -> None:
+    ) -> Tuple[List[LogMessage], List[ExitMessage]]:
         """Update the current args.
 
         Pass the params through the configuration subsystem
@@ -200,6 +200,8 @@ class ActionBase:
                 self._logger.warning(msg=exit_msg.message)
             else:
                 self._logger.log(level=exit_msg.level, msg=exit_msg.message)
+
+        return messages, exit_messages
 
     def write_artifact(self, filename: str) -> None:
         """Write an artifact file.

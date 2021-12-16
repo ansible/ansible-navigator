@@ -187,14 +187,6 @@ class Action(App):
     def _run_runner(self) -> Tuple[str, str, int]:
         """Spin up runner to run ansible-lint, either in an exec env or not."""
 
-        ansible_lint_path = "ansible-lint"
-        if not self._args.execution_environment:
-            ansible_lint_path_maybe = shutil.which("ansible-lint")
-            if ansible_lint_path_maybe is None:
-                err = "'ansible-lint' executable not found, therefore cannot lint."
-                return self._fatal(err, 127)
-            ansible_lint_path = ansible_lint_path_maybe
-
         kwargs = {
             "container_engine": self._args.container_engine,
             "execution_environment_image": self._args.execution_environment_image,
@@ -237,13 +229,11 @@ class Action(App):
                 return self._fatal(
                     "The given path `{0}` does not exist.".format(self._args.lintables)
                 )
-            # lint acts weirdly if we're not in the right directory.
-            #kwargs["container_workdir"] = self._args.lintables
             cmd_args.append(self._args.lintables)
 
         kwargs["cmdline"] = cmd_args
 
-        runner = Command(executable_cmd=ansible_lint_path, **kwargs)
+        runner = Command(executable_cmd="ansible-lint", **kwargs)
         return runner.run()
 
     def run_stdout(self) -> int:
@@ -262,10 +252,22 @@ class Action(App):
         """
 
         self._logger.debug("lint requested")
-        self._update_args(
+        _, exit_messages = self._update_args(
             ["lint"] + shlex.split(interaction.action.match.groupdict()["params"] or "")
         )
+
+        # Set up interaction
         self._prepare_to_run(app, interaction)
+
+        # ...but then if there were config errors after parsing our args, fatal on them.
+        if exit_messages:
+            # Configurator injects the "Command provided: ..." message as an exit message.
+            # However, for showing a fatal modal, we don't need it. So nuke it if it's there.
+            if len(exit_messages) > 1 and exit_messages[0].message.startswith('Command provided: '):
+                exit_messages = exit_messages[1:]
+            self._fatal('; '.join(msg.message for msg in exit_messages))
+            return None
+
         self.stdout = self._calling_app.stdout
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
@@ -280,6 +282,7 @@ class Action(App):
         except json.JSONDecodeError as e:
             self._logger.debug("json decode error: %s", str(e))
             self._logger.error("Failed to parse 'ansible-lint' JSON response")
+            self._logger.error(f"Output was: {out}")
             notification = error_notification(
                 messages=[
                     "Could not parse 'ansible-lint' output.",

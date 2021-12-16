@@ -521,7 +521,8 @@ class NavigatorPostProcessor:
                 )
 
         if isinstance(entry.value.current, str) and config.app == "lint":
-            self.append_vol_mount(entry.value.current, entry.value.current)
+            mount = NavigatorVolumeMount(entry.value.current, entry.value.current)
+            self.extra_volume_mounts.append(mount)
 
         return messages, exit_messages
 
