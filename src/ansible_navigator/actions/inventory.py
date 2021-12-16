@@ -423,11 +423,13 @@ class Action(App):
             if form.cancelled:
                 return
 
+            # pylint: disable=not-an-iterable
             inventories = [
                 field.value
                 for field in form.fields
                 if hasattr(field, "value") and field.value != ""
             ]
+            # pylint: enable=not-an-iterable
             if not inventories:
                 return
 

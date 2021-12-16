@@ -36,6 +36,7 @@ class FieldChecks:
     @property
     def checked(self) -> Tuple[bool, ...]:
         """conveniently return just checked"""
+        # pylint: disable=not-an-iterable
         return tuple(option.name for option in self.options if option.checked)
 
     @property

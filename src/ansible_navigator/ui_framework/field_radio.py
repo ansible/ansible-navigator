@@ -31,6 +31,7 @@ class FieldRadio:
     @property
     def checked(self):
         """conveniently return just checked"""
+        # pylint: disable=not-an-iterable
         return tuple(option.name for option in self.options if option.checked)
 
     @property
