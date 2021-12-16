@@ -51,6 +51,9 @@ Prerequisites:
    lint run-test-pre: PYTHONHASHSEED='4242713142'
    lint run-test: commands[0] | pylint ansible_navigator tests ...
    ...
+   _________________________________ summary __________________________________
+   lint: commands succeeded
+   congratulations :)
    ```
 
 4. We also suggest you to _optionally_ run the following check that is
@@ -74,4 +77,6 @@ Prerequisites:
    Add trailing commas...............................(no files to check)Skipped
    - hook id: add-trailing-comma
    ...
+   _________________________________ summary __________________________________
+   ERROR:   lint-vetting: commands failed
    ```
