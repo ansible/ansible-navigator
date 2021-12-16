@@ -226,7 +226,6 @@ repos:
     files: \.py$
     entry: python -m pylint
     args:
-    - --ignore=tm_tokenize
     - |-
       --disable=
       consider-using-with,

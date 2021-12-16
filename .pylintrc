@@ -1,3 +1,9 @@
+[MASTER]
+# tm_tokenize is ignored as the code originates from outside our team and,
+# at this time, we do not want to alter it to match our standards.
+ignore=
+    tm_tokenize
+
 [MESSAGES CONTROL]
 
 disable=duplicate-code,unsubscriptable-object,fixme
