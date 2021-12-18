@@ -234,7 +234,17 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _post_process(self) -> None:
+        delayed = []
+        normal = []
+
+        # Separate normal and delayed entries so they can be processed in that order.
         for entry in self._config.entries:
+            if entry.delay_post_process:
+                delayed.append(entry)
+            else:
+                normal.append(entry)
+
+        for entry in normal + delayed:
             if self._initial or entry.change_after_initial:
                 processor = getattr(self._config.post_processor, entry.name, None)
                 if callable(processor):
