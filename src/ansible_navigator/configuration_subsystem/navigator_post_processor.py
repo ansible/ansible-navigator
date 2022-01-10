@@ -514,13 +514,16 @@ class NavigatorPostProcessor:
                 )
                 exit_messages.append(
                     ExitMessage(
-                        message="Try 'pip install ansible-lint' or consider using an execution environment which provides ansible-lint.",
+                        message=(
+                            "Try 'pip install ansible-lint' or consider using an execution "
+                            "environment which provides ansible-lint."
+                        ),
                         prefix=ExitPrefix.HINT,
                     )
                 )
 
         if isinstance(entry.value.current, str) and config.app == "lint":
-            mount = NavigatorVolumeMount(entry.value.current, entry.value.current)
+            mount = VolumeMount(entry.value.current, entry.value.current)
             self.extra_volume_mounts.append(mount)
 
         return messages, exit_messages
