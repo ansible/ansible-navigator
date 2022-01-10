@@ -523,7 +523,7 @@ class NavigatorPostProcessor:
                 )
 
         if isinstance(entry.value.current, str) and config.app == "lint":
-            mount = VolumeMount(entry.value.current, entry.value.current)
+            mount = VolumeMount("lintables", entry.value.current, entry.value.current)
             self.extra_volume_mounts.append(mount)
 
         return messages, exit_messages
