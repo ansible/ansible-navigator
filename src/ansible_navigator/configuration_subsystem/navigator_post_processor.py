@@ -13,7 +13,6 @@ from pathlib import Path
 from string import Formatter
 from typing import List
 from typing import Tuple
-from typing import Optional
 
 from ..utils.compatibility import zoneinfo
 from ..utils.functions import ExitMessage
