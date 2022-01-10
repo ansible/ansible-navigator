@@ -263,9 +263,9 @@ class Action(App):
         if exit_messages:
             # Configurator injects the "Command provided: ..." message as an exit message.
             # However, for showing a fatal modal, we don't need it. So nuke it if it's there.
-            if len(exit_messages) > 1 and exit_messages[0].message.startswith('Command provided: '):
+            if len(exit_messages) > 1 and exit_messages[0].message.startswith("Command provided: "):
                 exit_messages = exit_messages[1:]
-            self._fatal('; '.join(msg.message for msg in exit_messages))
+            self._fatal("; ".join(msg.message for msg in exit_messages))
             return None
 
         self.stdout = self._calling_app.stdout
