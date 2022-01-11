@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "CREATOR-EE:V0.2.0 (PRIMARY) (INFORMATION ABOUT ANSIBLE AND ANSIBLE COLLECTIONS)",
+        "CREATOR-EE:V0.2.0 (INFORMATION ABOUT ANSIBLE AND ANSIBLE COLLECTIONS)",
         " 0│---",
         " 1│ansible:",
         " 2│  collections:",
