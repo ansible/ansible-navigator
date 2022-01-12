@@ -237,7 +237,8 @@ class Action(App):
                 else "installed"
             )
             self._fatal(
-                f"ansible-lint executable could not be found. Ensure 'ansible-lint' is {installed_or_ee} and try again."
+                "ansible-lint executable could not be found. Ensure 'ansible-lint' "
+                f"is {installed_or_ee} and try again."
             )
             return None
 
