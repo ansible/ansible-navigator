@@ -60,71 +60,15 @@ class Severity(IntEnum):
         """
         return Severity.unknown
 
-    # ui_framework.menu_builder.MenuBuilder will str() whatever it is given.
-    def __str__(self):
-        if self == Severity.unknown:
-            return "<unknown>"
-        return self.name
-
-
-@dataclass
-@total_ordering
-class LintResult:
-    """A single result, parsed from Ansible Lint."""
-
-    raw: dict
-    message: str
-    severity: Severity
-    line: int
-    column: Optional[int]
-    path: str
-    description: str
-
-    def __lt__(self, other):
-        """Allow for easy sorting of results by severity."""
-        return self.severity < other.severity
-
-    @staticmethod
-    def from_raw(issue: Dict[str, Any]):
-        """
-        Massages the raw JSON output into our LintResult structure and returns a
-        a list of them.
-        """
-
-        column = None
-        # This will be a dict if we have a line + column, otherwise an int
-        # with just the line number.
-        if isinstance(issue["location"]["lines"]["begin"], collections.Mapping):
-            line = issue["location"]["lines"]["begin"]["line"]
-            column = issue["location"]["lines"]["begin"]["column"]
-        else:
-            line = issue["location"]["lines"]["begin"]
-
-        # The codeclimate formatter combines the rule id and message, so we
-        # parse them out.
-        msg_split = issue["check_name"].split("] ", 1)
-        # admonition = msg_split[0][1:]  # take off the beginning [
-        msg = msg_split[1]
-
-        return LintResult(
-            raw=issue,
-            message=msg,
-            severity=Severity[issue["severity"]],
-            line=line,
-            column=column,
-            path=abs_user_path(issue["location"]["path"]),
-            description=issue["description"],
-        )
-
 
 def severity_to_color(severity: Severity) -> int:
-    if severity == Severity.minor:
+    if severity == "minor":
         return 5
-    elif severity == Severity.major:
+    elif severity == "major":
         return 3
-    elif severity in (Severity.critical, Severity.blocker):
+    elif severity in ("critical", "blocker"):
         return 1
-    elif severity == Severity.info:
+    elif severity == "info":
         return 6
     return 0
 
@@ -133,15 +77,15 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return (severity_to_color(entry["severity"]), 0)
 
 
-def content_heading(obj: LintResult, screen_w: int) -> Union[CursesLines, None]:
-    check_name = obj.raw["check_name"]
+def content_heading(obj: Dict, screen_w: int) -> Union[CursesLines, None]:
+    check_name = obj["check_name"]
     check_name = check_name + (" " * (screen_w - len(check_name)))
 
     return (
         (
             CursesLinePart(
                 column=0,
-                string=obj.path,
+                string=abs_user_path(obj["location"]["path"]),
                 color=0,
                 decoration=curses.A_BOLD,
             ),
@@ -150,18 +94,29 @@ def content_heading(obj: LintResult, screen_w: int) -> Union[CursesLines, None]:
             CursesLinePart(
                 column=0,
                 string=check_name,
-                color=severity_to_color(obj.severity),
+                color=severity_to_color(obj["severity"]),
                 decoration=curses.A_UNDERLINE,
             ),
         ),
     )
 
 
-# TODO: I'd really like this to be a step-level thing. I want to be able to
-# pass a callable to manipulate data (in this case, dig into obj.raw) before
-# it is rendered, without having to do this at an action-global level.
-def filter_content_keys(obj: LintResult) -> Dict[Any, Any]:
-    return obj.raw
+def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
+    """when showing content, filter out some keys"""
+    return {k: v for k, v in obj.items() if not k.startswith("__")}
+
+
+def massage_issues(issues: List[Dict]) -> List[Dict]:
+    out = []
+    for issue in issues:
+        issue["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
+        issue["__path"] = abs_user_path(issue["location"]["path"])
+        if isinstance(issue["location"]["lines"]["begin"], collections.Mapping):
+            issue["__line"] = issue["location"]["lines"]["begin"]
+        else:
+            issue["__line"] = issue["location"]["lines"]["begin"]
+        out.append(issue)
+    return out
 
 
 @actions.register
@@ -272,16 +227,24 @@ class Action(App):
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
         interaction.ui.show(notification)
-
-        # TODO: This is blocking... We could probably make it use the async
-        # command runner instead.
         out, err, rc = self._run_runner()
+
+        # Quick sanity check, make sure we actually have a result to parse.
+        if rc != 0 and "ansible-lint: No such file or directory" in out:
+            installed_or_ee = (
+                "in the execution environment you are using"
+                if self._args.execution_environment
+                else "installed"
+            )
+            self._fatal(
+                f"ansible-lint executable could not be found. Ensure 'ansible-lint' is {installed_or_ee} and try again."
+            )
+            return None
 
         try:
             issues = json.loads(out)
         except json.JSONDecodeError as e:
-            self._logger.debug("json decode error: %s", str(e))
-            self._logger.error("Failed to parse 'ansible-lint' JSON response")
+            self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(e))
             self._logger.error(f"Output was: {out}")
             notification = error_notification(
                 messages=[
@@ -291,8 +254,8 @@ class Action(App):
             self._interaction.ui.show(notification)
             return None
 
-        issues = [LintResult.from_raw(issue) for issue in issues]
-        issues = sorted(issues, key=lambda i: i.severity, reverse=True)
+        issues = massage_issues(issues)
+        issues = sorted(issues, key=lambda i: Severity[i["severity"]], reverse=True)
         self.steps.append(self._build_main_menu(issues))
 
         while True:
@@ -321,7 +284,7 @@ class Action(App):
 
             if self.steps.current.type == "menu":
                 result = self._interaction.ui.show(
-                    obj=[asdict(x) for x in self.steps.current.value],
+                    obj=self.steps.current.value,
                     columns=self.steps.current.columns,
                     color_menu_item=color_menu,
                 )
@@ -338,13 +301,12 @@ class Action(App):
         else:
             self.steps.append(result)
 
-    def _build_main_menu(self, issues: List[LintResult]):
+    def _build_main_menu(self, issues: List[Dict]):
         columns = [
             "severity",
-            "message",
-            "path",
-            "line",
-            "column",
+            "__message",
+            "__path",
+            "__line",
         ]
 
         return Step(
@@ -355,7 +317,7 @@ class Action(App):
             select_func=lambda: self._build_lint_result(issues),
         )
 
-    def _build_lint_result(self, issues: List[LintResult]):
+    def _build_lint_result(self, issues: List[Dict]):
         return Step(
             name="singular_lint_result",
             tipe="content",
