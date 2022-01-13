@@ -103,7 +103,8 @@ def content_heading(obj: Dict, screen_w: int) -> Union[CursesLines, None]:
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     """when showing content, filter out some keys"""
-    return {k: v for k, v in obj.items() if not k.startswith("__")}
+    ignored_keys = ("fingerprint",)
+    return {k: v for k, v in obj.items() if not k.startswith("__") and not k in ignored_keys}
 
 
 def massage_issues(issues: List[Dict]) -> List[Dict]:
