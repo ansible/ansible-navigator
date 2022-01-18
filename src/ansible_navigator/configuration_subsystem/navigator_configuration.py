@@ -91,7 +91,7 @@ class Internals(SimpleNamespace):
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
     settings_file_path: Union[None, str] = None
-    settings_source: C
+    settings_source: C = C.NOT_SET
     share_directory: str = generate_share_directory()
 
 

@@ -47,6 +47,7 @@ def test_no_subcommand():
     """Ensure a configuration without no ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        internals=Internals(),
         post_processor=None,
         subcommands=[
             SubCommand(name="subcommand1", description="subcommand1"),
@@ -61,6 +62,7 @@ def test_many_subcommand():
     """Ensure a configuration without a ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        internals=Internals(),
         post_processor=None,
         subcommands=[
             SubCommand(name="subcommand1", description="subcommand1"),
