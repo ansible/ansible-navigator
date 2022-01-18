@@ -158,7 +158,7 @@ def parse_and_update(
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
 
-    new_messages, new_exit_messages, config_path = find_config()
+    new_messages, new_exit_messages, args.internals.settings_file_path = find_config()
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
     if exit_messages:
@@ -166,7 +166,6 @@ def parse_and_update(
 
     configurator = Configurator(
         params=params,
-        settings_file_path=config_path,
         application_configuration=args,
         apply_previous_cli_entries=apply_previous_cli_entries,
         initial=initial,

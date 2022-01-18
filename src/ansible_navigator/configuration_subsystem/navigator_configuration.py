@@ -90,6 +90,7 @@ class Internals(SimpleNamespace):
     collection_doc_cache: Union[C, Dict] = C.NOT_SET
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
+    settings_file_path: Union[None, str] = None
     share_directory: str = generate_share_directory()
 
 

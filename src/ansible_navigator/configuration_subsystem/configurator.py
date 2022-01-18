@@ -32,7 +32,6 @@ class Configurator:
         application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: Union[List, C] = C.NONE,
         initial: bool = False,
-        settings_file_path: str = None,
     ):
         """
         :param params: A list of parameters e.g. ['-x', 'value']
@@ -42,7 +41,6 @@ class Configurator:
                                            ['all'] will apply all previous
         :param initial: Save the resulting configuration as the 'initial' configuration
                         The 'initial' will be used as a source for apply_previous_cli
-        :param settings_file_path: The full path to a settings file
         """
         self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
@@ -50,7 +48,6 @@ class Configurator:
         self._messages: List[LogMessage] = []
         self._params = params
         self._initial = initial
-        self._settings_file_path = settings_file_path
         self._sanity_check()
         self._unaltered_entries = deepcopy(self._config.entries)
 
@@ -145,19 +142,18 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_settings_file(self) -> None:
-        if self._settings_file_path:
-            with open(self._settings_file_path, "r", encoding="utf-8") as config_fh:
+        settings_file_path = self._config.internals.settings_file_path
+        if isinstance(settings_file_path, str):
+            with open(settings_file_path, "r", encoding="utf-8") as config_fh:
                 try:
                     config = yaml.load(config_fh, Loader=SafeLoader)
                 except (yaml.scanner.ScannerError, yaml.parser.ParserError) as exc:
-                    exit_msg = (
-                        f"Settings file found {self._settings_file_path}, but failed to load it."
-                    )
+                    exit_msg = f"Settings file found {settings_file_path}, but failed to load it."
                     self._exit_messages.append(ExitMessage(message=exit_msg))
                     exit_msg = f"  error was: '{' '.join(str(exc).splitlines())}'"
                     self._exit_messages.append(ExitMessage(message=exit_msg))
                     exit_msg = (
-                        f"Try checking the settings file '{self._settings_file_path}'"
+                        f"Try checking the settings file '{settings_file_path}'"
                         "and ensure it is properly formatted"
                     )
                     self._exit_messages.append(
