@@ -12,6 +12,7 @@ def test_settings_file_path_provided(generate_config):
     response = generate_config(setting_file_name="ansible-navigator.yml")
     assert response.application_configuration.internals.settings_file_path == settings_file_path
 
+
 def test_settings_file_path_not_provided(generate_config):
     """Test a settings file path is stored in the internals as None"""
     response = generate_config()

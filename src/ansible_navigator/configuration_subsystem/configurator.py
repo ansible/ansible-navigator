@@ -142,18 +142,20 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_settings_file(self) -> None:
-        settings_file_path = self._config.internals.settings_file_path
-        if isinstance(settings_file_path, str):
-            with open(settings_file_path, "r", encoding="utf-8") as config_fh:
+        settings_filesystem_path = self._config.internals.settings_file_path
+        if isinstance(settings_filesystem_path, str):
+            with open(settings_filesystem_path, "r", encoding="utf-8") as config_fh:
                 try:
                     config = yaml.load(config_fh, Loader=SafeLoader)
                 except (yaml.scanner.ScannerError, yaml.parser.ParserError) as exc:
-                    exit_msg = f"Settings file found {settings_file_path}, but failed to load it."
+                    exit_msg = (
+                        f"Settings file found {settings_filesystem_path}, but failed to load it."
+                    )
                     self._exit_messages.append(ExitMessage(message=exit_msg))
                     exit_msg = f"  error was: '{' '.join(str(exc).splitlines())}'"
                     self._exit_messages.append(ExitMessage(message=exit_msg))
                     exit_msg = (
-                        f"Try checking the settings file '{settings_file_path}'"
+                        f"Try checking the settings file '{settings_filesystem_path}'"
                         "and ensure it is properly formatted"
                     )
                     self._exit_messages.append(
@@ -176,13 +178,13 @@ class Configurator:
                 except TypeError as exc:
                     exit_msg = (
                         "Errors encountered when loading settings file:"
-                        f" {self._settings_file_path}"
+                        f" {settings_filesystem_path}"
                         f" while loading entry {entry.name}, attempted: {settings_file_path}."
                         f"The resulting error was {str(exc)}"
                     )
                     self._exit_messages.append(ExitMessage(message=exit_msg))
                     exit_msg = (
-                        f"Try checking the settings file '{self._settings_file_path}'"
+                        f"Try checking the settings file '{settings_filesystem_path}'"
                         "and ensure it is properly formatted"
                     )
                     self._exit_messages.append(
