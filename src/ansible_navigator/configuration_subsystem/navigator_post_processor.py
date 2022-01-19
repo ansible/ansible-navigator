@@ -231,6 +231,7 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def execution_environment(self, entry: SettingsEntry, config) -> PostProcessorReturn:
+        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         """Post process execution_environment"""
         messages, exit_messages = self._true_or_false(entry, config)
