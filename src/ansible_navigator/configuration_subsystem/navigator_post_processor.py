@@ -12,7 +12,8 @@ from pathlib import Path
 from typing import List
 from typing import Tuple
 
-from .definitions import CliParameters, Constants as C
+from .definitions import CliParameters
+from .definitions import Constants as C
 from .definitions import SettingsEntry
 from .definitions import ApplicationConfiguration
 
