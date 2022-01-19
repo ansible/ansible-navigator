@@ -12,8 +12,8 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import CliParameters
-from ansible_navigator.configuration_subsystem.definitions import Entry
-from ansible_navigator.configuration_subsystem.definitions import EntryValue
+from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
+from ansible_navigator.configuration_subsystem.definitions import SettingsEntryValue
 from ansible_navigator.configuration_subsystem.definitions import SubCommand
 
 from ansible_navigator.configuration_subsystem.parser import Parser
@@ -30,10 +30,10 @@ def test_cmdline_source_not_set():
             SubCommand(name="subcommand1", description="subcommand1"),
         ],
         entries=[
-            Entry(
+            SettingsEntry(
                 name="cmdline",
                 short_description="cmdline",
-                value=EntryValue(),
+                value=SettingsEntryValue(),
             ),
         ],
     )
@@ -66,17 +66,17 @@ def test_many_subcommand():
             SubCommand(name="subcommand1", description="subcommand1"),
         ],
         entries=[
-            Entry(
+            SettingsEntry(
                 name="sb1",
                 short_description="Subcommands",
                 subcommand_value=True,
-                value=EntryValue(default="welcome"),
+                value=SettingsEntryValue(default="welcome"),
             ),
-            Entry(
+            SettingsEntry(
                 name="sb2",
                 short_description="Subcommands",
                 subcommand_value=True,
-                value=EntryValue(default="welcome"),
+                value=SettingsEntryValue(default="welcome"),
             ),
         ],
     )
@@ -93,16 +93,16 @@ def test_invalid_choice_not_set():
             SubCommand(name="subcommand1", description="subcommand1"),
         ],
         entries=[
-            Entry(
+            SettingsEntry(
                 name="sb1",
                 short_description="Subcommands",
                 subcommand_value=True,
-                value=EntryValue(default="welcome"),
+                value=SettingsEntryValue(default="welcome"),
             ),
-            Entry(
+            SettingsEntry(
                 name="e1",
                 short_description="ex1",
-                value=EntryValue(),
+                value=SettingsEntryValue(),
             ),
         ],
     )
@@ -119,17 +119,17 @@ def test_cutom_nargs_for_postional():
             SubCommand(name="subcommand1", description="subcommand1"),
         ],
         entries=[
-            Entry(
+            SettingsEntry(
                 name="sb1",
                 short_description="Subcommands",
                 subcommand_value=True,
-                value=EntryValue(default="welcome"),
+                value=SettingsEntryValue(default="welcome"),
             ),
-            Entry(
+            SettingsEntry(
                 name="e1",
                 cli_parameters=CliParameters(positional=True, nargs=3),
                 short_description="ex1",
-                value=EntryValue(),
+                value=SettingsEntryValue(),
                 subcommands=["subcommand1"],
             ),
         ],

@@ -12,8 +12,8 @@ from pathlib import Path
 from typing import List
 from typing import Tuple
 
-from .definitions import Constants as C
-from .definitions import Entry
+from .definitions import CliParameters, Constants as C
+from .definitions import SettingsEntry
 from .definitions import ApplicationConfiguration
 
 from ..utils import abs_user_path
@@ -107,7 +107,9 @@ class NavigatorPostProcessor:
         self.extra_volume_mounts: List[VolumeMount] = []
 
     @staticmethod
-    def _true_or_false(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def _true_or_false(
+        entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -122,7 +124,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def ansible_runner_artifact_dir(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process ansible_runner_artifact_dir path"""
@@ -135,7 +137,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def ansible_runner_rotate_artifacts_count(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process ansible_runner_rotate_artifacts_count"""
@@ -152,7 +154,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def ansible_runner_timeout(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process ansible_runner_timeout"""
@@ -169,7 +171,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def collection_doc_cache_path(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process collection doc cache path"""
@@ -180,7 +182,7 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def cmdline(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def cmdline(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process cmdline"""
         messages: List[LogMessage] = []
@@ -191,7 +193,9 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def container_engine(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def container_engine(
+        entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process container_engine"""
         messages: List[LogMessage] = []
@@ -205,7 +209,9 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def display_color(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def display_color(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         """Post process displacy_color"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -217,12 +223,14 @@ class NavigatorPostProcessor:
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def editor_console(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def editor_console(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         """Post process editor_console"""
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def execution_environment(self, entry, config) -> PostProcessorReturn:
+    def execution_environment(self, entry: SettingsEntry, config) -> PostProcessorReturn:
         # pylint: disable=too-many-locals
         """Post process execution_environment"""
         messages, exit_messages = self._true_or_false(entry, config)
@@ -239,7 +247,10 @@ class NavigatorPostProcessor:
                 exit_msg += f" set by '{config.entry('container_engine').value.source.value}'"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 ce_short = config.entry("container_engine").cli_parameters.short
-                entry_short = entry.cli_parameters.short
+                if isinstance(entry.cli_parameters, CliParameters):
+                    entry_short = entry.cli_parameters.short
+                else:
+                    entry_short = None
                 choices = config.entry("container_engine").choices
                 if ce_short and entry_short:
                     hint = ""
@@ -262,7 +273,7 @@ class NavigatorPostProcessor:
             messages.extend(new_messages)
             exit_messages.extend(new_exit_messages)
 
-            if config.app == "exec":
+            if config.app == "exec" and isinstance(entry.cli_parameters, CliParameters):
                 exit_msg = "The 'exec' subcommand requires execution environment support."
                 exit_messages.append(ExitMessage(message=exit_msg))
                 hint = (
@@ -276,7 +287,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def execution_environment_image(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process execution_environment_image"""
@@ -288,7 +299,7 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def execution_environment_volume_mounts(
-        self, entry: Entry, config: ApplicationConfiguration
+        self, entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         # pylint: disable=too-many-branches
@@ -374,7 +385,9 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def container_options(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def container_options(
+        entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process container_options"""
         messages: List[LogMessage] = []
@@ -386,7 +399,9 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def exec_shell(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def exec_shell(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process ``exec_shell``.
 
@@ -397,7 +412,9 @@ class NavigatorPostProcessor:
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def help_config(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def help_config(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process help_config"""
         messages, exit_messages = self._true_or_false(entry, config)
@@ -419,7 +436,9 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def help_doc(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def help_doc(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process help_doc"""
         messages, exit_messages = self._true_or_false(entry, config)
@@ -441,7 +460,9 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def help_inventory(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def help_inventory(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process help_inventory"""
         messages, exit_messages = self._true_or_false(entry, config)
@@ -465,7 +486,9 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def help_playbook(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def help_playbook(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process help_playbook"""
         messages, exit_messages = self._true_or_false(entry, config)
@@ -488,7 +511,7 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def inventory(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def inventory(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process inventory"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -517,7 +540,9 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def inventory_column(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def inventory_column(
+        entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process inventory_columns"""
         messages: List[LogMessage] = []
@@ -527,13 +552,15 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def log_append(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def log_append(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         """Post process log_append"""
         return self._true_or_false(entry, config)
 
     @staticmethod
     @_post_processor
-    def log_file(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def log_file(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process log_file
 
@@ -570,7 +597,7 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def mode(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def mode(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=too-many-statements
         """Post process mode"""
         messages: List[LogMessage] = []
@@ -642,13 +669,13 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def osc4(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def osc4(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process osc4"""
         return self._true_or_false(entry, config)
 
     @staticmethod
     @_post_processor
-    def plugin_name(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def plugin_name(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process plugin_name"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -670,7 +697,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def pass_environment_variable(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process pass_environment_variable"""
@@ -682,7 +709,7 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def playbook(entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def playbook(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process pass_environment_variable"""
         messages: List[LogMessage] = []
@@ -703,7 +730,7 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def playbook_artifact_enable(
-        self, entry: Entry, config: ApplicationConfiguration
+        self, entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         """Post process playbook_artifact_enable"""
         return self._true_or_false(entry, config)
@@ -711,7 +738,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def playbook_artifact_replay(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         """Post process playbook_artifact_replay"""
         messages: List[LogMessage] = []
@@ -740,7 +767,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def set_environment_variable(
-        entry: Entry, config: ApplicationConfiguration
+        entry: SettingsEntry, config: ApplicationConfiguration
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process set_environment_variable"""
