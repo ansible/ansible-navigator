@@ -4,14 +4,15 @@ import os
 
 from copy import deepcopy
 
-from .defaults import TEST_FIXTURE_DIR
 
 from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.initialization import parse_and_update
 
+from .defaults import TEST_FIXTURE_DIR
 
-def test_settings_file_path_file_none(monkeypatch):
+
+def test_settings_file_path_file_none():
     """Confirm a settings file path is not stored in the internals when not present."""
     args = deepcopy(NavigatorConfiguration)
     _messages, _exit_messages = parse_and_update(params=[], args=args, initial=True)
