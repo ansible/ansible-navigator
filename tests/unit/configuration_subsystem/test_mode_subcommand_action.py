@@ -4,8 +4,8 @@ using invalid package and subcommand names
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
-from ansible_navigator.configuration_subsystem.definitions import Entry
-from ansible_navigator.configuration_subsystem.definitions import EntryValue
+from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
+from ansible_navigator.configuration_subsystem.definitions import SettingsEntryValue
 from ansible_navigator.configuration_subsystem.definitions import SubCommand
 
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
@@ -30,15 +30,15 @@ def test_import_error():
             SubCommand(name="subcommand1", description="subcommand1"),
         ],
         entries=[
-            Entry(
+            SettingsEntry(
                 name="app",
                 short_description="test_app",
-                value=EntryValue(current="subcommand1"),
+                value=SettingsEntryValue(current="subcommand1"),
             ),
-            Entry(
+            SettingsEntry(
                 name="mode",
                 short_description="mode",
-                value=EntryValue(),
+                value=SettingsEntryValue(),
             ),
         ],
     )
@@ -61,15 +61,15 @@ def test_subcommand_not_found():
             SubCommand(name="__test_action", description="test_action"),
         ],
         entries=[
-            Entry(
+            SettingsEntry(
                 name="app",
                 short_description="test_app",
-                value=EntryValue(current="__test_action"),
+                value=SettingsEntryValue(current="__test_action"),
             ),
-            Entry(
+            SettingsEntry(
                 name="mode",
                 short_description="mode",
-                value=EntryValue(),
+                value=SettingsEntryValue(),
             ),
         ],
     )

@@ -1,7 +1,7 @@
 """Utility functions used by adjacent tests
 """
 
-from ansible_navigator.configuration_subsystem.definitions import Entry
+from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 
 
 def id_for_base(val):
@@ -24,7 +24,7 @@ def id_for_cli(val):
 
 def id_for_name(val):
     """Return an id based on entry name."""
-    if isinstance(val, Entry):
+    if isinstance(val, SettingsEntry):
         return f" {val.name} "
     return ""
 

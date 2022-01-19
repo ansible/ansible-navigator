@@ -22,7 +22,7 @@ import yaml
 from ansible_navigator import __version__
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem import Constants as C
-from ansible_navigator.configuration_subsystem.definitions import Entry
+from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.utils import oxfordcomma
 
 
@@ -162,7 +162,7 @@ def _params_retrieve_details(filename: str) -> Dict:
         return yaml.load(fhand, Loader=yaml.SafeLoader)
 
 
-def _params_row_for_entry(entry: Entry, param_details: Dict) -> Tuple:
+def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
     # pylint: disable=too-many-branches
     """create a row entry for a param"""
     if entry.cli_parameters is None:

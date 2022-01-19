@@ -44,7 +44,7 @@ class Constants(Enum):
     USER_CLI = "cli parameters"
 
 
-class EntryValue(SimpleNamespace):
+class SettingsEntryValue(SimpleNamespace):
     # pylint: disable=too-few-public-methods
     """An object to store a value"""
 
@@ -53,7 +53,7 @@ class EntryValue(SimpleNamespace):
     source: Constants = Constants.NOT_SET
 
 
-class Entry(SimpleNamespace):
+class SettingsEntry(SimpleNamespace):
     # pylint: disable=too-few-public-methods
     """One entry in the configuration
 
@@ -67,11 +67,11 @@ class Entry(SimpleNamespace):
     short_description: A short description used for the argparse help
     subcommand_value: Does the hold the names of the subcommand
     subcommands: which subcommand should this be used for
-    value: the EntryValue for the entry
+    value: the SettingsEntryValue for the entry
     """
     name: str
     short_description: str
-    value: EntryValue
+    value: SettingsEntryValue
 
     apply_to_subsequent_cli: Constants = Constants.ALL
     change_after_initial: bool = True
@@ -134,7 +134,7 @@ class ApplicationConfiguration(SimpleNamespace):
     """The main object for storing an application config"""
 
     application_name: str = ""
-    entries: List[Entry] = []
+    entries: List[SettingsEntry] = []
     internals: SimpleNamespace
     subcommands: List[SubCommand]
     post_processor = Callable
@@ -154,7 +154,7 @@ class ApplicationConfiguration(SimpleNamespace):
         except KeyError:
             return super().__getattribute__(attr)
 
-    def entry(self, name) -> Entry:
+    def entry(self, name) -> SettingsEntry:
         """Retrieve a configuration entry by name"""
         return self._get_by_name(name, "entries")
 
