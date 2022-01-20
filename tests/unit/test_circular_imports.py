@@ -73,7 +73,19 @@ def test_no_warnings(import_path: str) -> None:
 
     This is seeking for any import errors including ones caused
     by circular imports.
+
+    DeprecationWarnings related to distutils in ansible_runner are ignored
     """
-    imp_cmd = sys.executable, "-W", "error", "-c", f"import {import_path!s}",
+    imp_cmd = (
+        sys.executable,
+        "-W",
+        "error",
+        "-W",
+        "ignore:The distutils package is deprecated and slated for removal in Python 3.12."
+        " Use setuptools or check PEP 632 for potential alternatives:DeprecationWarning:"
+        "ansible_runner.config.runner",
+        "-c",
+        f"import {import_path!s}",
+    )
 
     subprocess.check_call(imp_cmd)
