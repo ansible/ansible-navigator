@@ -68,7 +68,7 @@ def _discover_path_importables(
     "import_path",
     _find_all_importables(ansible_navigator),
 )
-def test_no_warnings(import_path: str) -> None:  # pylint: disable=unused-import
+def test_no_warnings(import_path: str) -> None:
     """Verify that exploding importables doesn't explode.
 
     This is seeking for any import errors including ones caused
