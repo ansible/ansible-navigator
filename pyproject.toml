@@ -50,11 +50,11 @@
 line-length = 100
 
 [tool.isort]
-force_single_line = true
-lines_after_imports = 2
-lines_between_types = 1
-profile = "black"
-reverse_relative = true
+force_single_line = true # Force from .. import to be 1 per line
+lines_after_imports = 2 # Ensure 2 lines after all imports
+lines_between_types = 1 # Separate import/from with 1 line 
+profile = "black" # Avoid conflict with black
+reverse_relative = true # Import local prior to parent
 
 [tool.pylint]
     [tool.pylint.master]
