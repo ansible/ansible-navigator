@@ -80,6 +80,10 @@ def test_no_warnings(import_path: str) -> None:
         sys.executable,
         "-W",
         "error",
+        # NOTE: This exclusion is only necessary because ansible-runner still uses `distutils`
+        # NOTE: but this project already aims to target Python 3.10 as well.
+        # TODO: Remove this exclusion once the runner issue is addressed.
+        # Ref: https://github.com/ansible/ansible-runner/issues/969
         "-W",
         "ignore:The distutils package is deprecated and slated for removal in Python 3.12."
         " Use setuptools or check PEP 632 for potential alternatives:DeprecationWarning:"
