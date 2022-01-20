@@ -1,23 +1,20 @@
 """Tokenize and color text
 """
 
+import colorsys
+import curses
+import functools
 import json
 import logging
 import os
 import re
 
-import colorsys
-import curses
-import functools
-
 from itertools import chain
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
-
 from ..tm_tokenize.grammars import Grammars
 from ..tm_tokenize.tokenize import tokenize
-
 
 CURSES_STYLES = {
     0: None,

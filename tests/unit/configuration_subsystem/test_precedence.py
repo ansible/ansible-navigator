@@ -18,7 +18,9 @@ from unittest.mock import patch
 import pytest
 
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
-from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem.navigator_configuration import (
+    NavigatorConfiguration,
+)
 
 from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
@@ -26,13 +28,11 @@ from .data import BASE_SHORT_CLI
 from .data import CLI_DATA
 from .data import ENVVAR_DATA
 from .data import SETTINGS
-
+from .utils import config_post_process
 from .utils import id_for_base
 from .utils import id_for_cli
 from .utils import id_for_name
 from .utils import id_for_settings
-from .utils import config_post_process
-
 
 # pylint: disable=too-many-arguments
 

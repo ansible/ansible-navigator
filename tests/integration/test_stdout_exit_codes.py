@@ -1,9 +1,9 @@
 """check return codes from mode ``stdout``
 """
 import os
+
 from typing import NamedTuple
 from typing import Tuple
-
 
 import pytest
 

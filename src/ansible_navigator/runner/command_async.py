@@ -7,6 +7,7 @@ queue with messages.
 """
 
 from queue import Queue
+
 from ansible_runner import run_command_async  # type: ignore[import]
 
 from .command_base import CommandBase

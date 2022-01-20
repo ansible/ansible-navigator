@@ -6,7 +6,6 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 
-
 # pylint: disable=protected-access
 
 

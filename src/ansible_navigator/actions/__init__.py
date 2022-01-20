@@ -2,12 +2,11 @@
 from typing import Any
 from typing import Callable
 from typing import Union
-from . import _actions as actions
 
+from . import _actions as actions
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
-
 
 get: Callable[[str], Any] = actions.get_factory(__package__)
 

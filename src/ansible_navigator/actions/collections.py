@@ -7,21 +7,19 @@ import sys
 
 from copy import deepcopy
 from json.decoder import JSONDecodeError
-
 from typing import Any
 from typing import Dict
 from typing import List
-from typing import Union
 from typing import Tuple
+from typing import Union
 
-from . import run_action
 from . import _actions as actions
+from . import run_action
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import Command
 from ..steps import Step
-
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction

@@ -3,13 +3,12 @@
 import curses
 
 from curses import ascii as curses_ascii
+from typing import TYPE_CHECKING
 from typing import List
 from typing import Tuple
-from typing import TYPE_CHECKING
 
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow
-
 
 if TYPE_CHECKING:
     from .field_button import FieldButton  # pylint: disable=cyclic-import

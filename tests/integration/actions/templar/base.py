@@ -8,13 +8,12 @@ from typing import Optional
 
 import pytest
 
-from ..._interactions import SearchFor
-from ..._interactions import Step
-from ....defaults import FIXTURES_DIR
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
+from ..._interactions import SearchFor
+from ..._interactions import Step
 from ..._tmux_session import TmuxSession
-
+from ....defaults import FIXTURES_DIR
 
 # run playbook
 run_fixture_dir = os.path.join(FIXTURES_DIR, "integration", "actions", "run")

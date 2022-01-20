@@ -1,7 +1,6 @@
 """a text input field
 """
 from dataclasses import dataclass
-
 from typing import Callable
 from typing import Union
 

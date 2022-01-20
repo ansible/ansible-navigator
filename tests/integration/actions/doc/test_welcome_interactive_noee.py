@@ -6,7 +6,6 @@ import pytest
 
 from .base import BaseClass
 
-
 # module doc
 CLI_MODULE_DOC = "ansible-navigator --execution-environment false"
 

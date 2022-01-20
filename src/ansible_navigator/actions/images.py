@@ -4,23 +4,20 @@ import json
 import shlex
 
 from functools import partial
-
 from typing import Any
 from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Union
 
-from . import run_action
 from . import _actions as actions
-
+from . import run_action
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..image_manager import inspect_all
 from ..runner import Command
 from ..steps import Step
-
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction

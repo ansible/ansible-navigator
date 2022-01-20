@@ -1,12 +1,12 @@
 """steps here
 """
+from collections import deque
 from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Union
-from collections import deque
 
 
 class Step:

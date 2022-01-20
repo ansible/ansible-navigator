@@ -1,9 +1,10 @@
 import functools
 import re
+
+from typing import TYPE_CHECKING
 from typing import Match
 from typing import Optional
 from typing import Tuple
-from typing import TYPE_CHECKING
 
 import onigurumacffi  # type: ignore[import]
 
@@ -13,9 +14,9 @@ if TYPE_CHECKING:
     from ._types import Protocol  # noqa: F401
     from .compiler import Compiler
     from .region import Regions
-    from .rules import _Rule  # noqa: F401
-    from .rules import CompiledRule  # noqa: F401
     from .rules import CompiledRegsetRule
+    from .rules import CompiledRule  # noqa: F401
+    from .rules import _Rule  # noqa: F401
     from .state import State
 
 _BACKREF_RE = re.compile(r"((?<!\\)(?:\\\\)*)\\([0-9]+)")

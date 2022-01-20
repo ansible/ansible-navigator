@@ -5,8 +5,8 @@ import functools
 import importlib
 import logging
 import re
-from collections import namedtuple
 
+from collections import namedtuple
 from typing import Any
 from typing import Callable
 from typing import Dict

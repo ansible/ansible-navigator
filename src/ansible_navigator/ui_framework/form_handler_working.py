@@ -2,12 +2,11 @@
 utf-8 max = 112064
 """
 
+from typing import TYPE_CHECKING
 from typing import List
 from typing import Tuple
-from typing import TYPE_CHECKING
 
 from .curses_window import CursesWindow
-
 
 if TYPE_CHECKING:
     from .field_working import FieldWorking  # pylint: disable=cyclic-import

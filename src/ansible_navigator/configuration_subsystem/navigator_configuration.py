@@ -15,15 +15,13 @@ from .definitions import Constants as C
 from .definitions import SettingsEntry
 from .definitions import SettingsEntryValue
 from .definitions import SubCommand
-
 from .navigator_post_processor import NavigatorPostProcessor
-
-from ..utils import ExitMessage, get_share_directory
-from ..utils import abs_user_path
-from ..utils import oxfordcomma
-from ..utils import LogMessage
-
 from .._version import __version__ as VERSION
+from ..utils import ExitMessage
+from ..utils import LogMessage
+from ..utils import abs_user_path
+from ..utils import get_share_directory
+from ..utils import oxfordcomma
 
 APP_NAME = "ansible_navigator"
 

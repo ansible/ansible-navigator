@@ -4,17 +4,15 @@
 import os
 
 from collections.abc import Iterable
-
 from random import randrange
-
 from typing import Any
 from typing import List
 from typing import NamedTuple
 from typing import Union
 from urllib.parse import urlparse
 
-from .sentinels import unknown
 from .sentinels import Unknown
+from .sentinels import unknown
 
 
 class Validation(NamedTuple):

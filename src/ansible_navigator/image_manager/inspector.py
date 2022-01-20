@@ -7,7 +7,6 @@ from typing import Tuple
 
 from ..command_runner import Command
 from ..command_runner import CommandRunner
-
 from ..utils import pascal_to_snake
 
 

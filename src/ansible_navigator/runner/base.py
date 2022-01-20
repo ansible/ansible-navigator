@@ -6,8 +6,8 @@ are defined within the base class
 import logging
 import os
 import shutil
-import tempfile
 import sys
+import tempfile
 
 from typing import Any
 from typing import Dict

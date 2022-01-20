@@ -5,7 +5,6 @@ import sys
 import tempfile
 
 from copy import deepcopy
-
 from typing import Any
 from typing import Dict
 from typing import List
@@ -15,10 +14,10 @@ from typing import Tuple
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.steps import Steps
 from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
 from ansible_navigator.ui_framework.ui import Ui
-from ansible_navigator.steps import Steps
 
 
 class ActionRunTest:

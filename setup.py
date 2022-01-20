@@ -1,6 +1,7 @@
 """ setup """
 import glob
 import os
+
 from itertools import groupby
 from operator import itemgetter
 

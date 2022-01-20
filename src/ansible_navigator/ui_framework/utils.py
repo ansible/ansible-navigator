@@ -2,8 +2,8 @@
 """
 import functools
 import re
-from math import floor
 
+from math import floor
 from typing import List
 
 

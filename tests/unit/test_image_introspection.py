@@ -1,7 +1,9 @@
 """unit tests for image introspection
 """
 import importlib
+
 import pytest
+
 from ansible_navigator import utils
 
 RPM_OUTPUT = """Name        : net-snmp

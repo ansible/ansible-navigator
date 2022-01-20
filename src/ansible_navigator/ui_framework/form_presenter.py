@@ -3,17 +3,15 @@
 import curses
 
 from curses import ascii as curses_ascii
+from typing import TYPE_CHECKING
 from typing import List
 from typing import Tuple
-from typing import TYPE_CHECKING
 from typing import Union
 
-
-from .curses_defs import CursesLinePart
 from .curses_defs import CursesLine
+from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
 from .curses_window import CursesWindow
-
 from .field_button import FieldButton
 from .field_checks import FieldChecks
 from .field_information import FieldInformation

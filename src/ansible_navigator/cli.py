@@ -2,22 +2,22 @@
 """
 import logging
 import os
-import sys
 import signal
+import sys
 import time
 
 from copy import deepcopy
 from curses import wrapper
-from typing import List
 from pathlib import Path
+from typing import List
 
-from .actions import run_action_stdout
 from .action_runner import ActionRunner
+from .actions import run_action_stdout
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import NavigatorConfiguration
 from .image_manager import ImagePuller
-from .initialization import parse_and_update
 from .initialization import error_and_exit_early
+from .initialization import parse_and_update
 from .utils import ExitMessage
 from .utils import ExitPrefix
 from .utils import LogMessage

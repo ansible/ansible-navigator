@@ -1,10 +1,9 @@
 """Build the argument parser
 """
 
+from argparse import SUPPRESS
 from argparse import ArgumentParser
 from argparse import _SubParsersAction
-from argparse import SUPPRESS
-
 from typing import Any
 from typing import Dict
 from typing import Tuple
@@ -12,9 +11,8 @@ from typing import Union
 
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
-
-from ..utils import oxfordcomma
 from .._version import __version__
+from ..utils import oxfordcomma
 
 
 class Parser:

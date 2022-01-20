@@ -3,12 +3,11 @@ entries for for all entries.
 """
 import os
 
-from ansible_navigator.configuration_subsystem import NavigatorConfiguration
-from ansible_navigator._yaml import yaml
 from ansible_navigator._yaml import Loader
+from ansible_navigator._yaml import yaml
+from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 
 from .data import ENVVAR_DATA
-
 from .defaults import TEST_FIXTURE_DIR
 
 

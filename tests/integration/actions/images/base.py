@@ -8,9 +8,9 @@ import pytest
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._tmux_session import TmuxSession
 from ..._interactions import SearchFor
 from ..._interactions import Step
+from ..._tmux_session import TmuxSession
 from ....defaults import DEFAULT_CONTAINER_IMAGE
 
 IMAGE_SHORT = DEFAULT_CONTAINER_IMAGE.rsplit("/", maxsplit=1)[-1].split(":")[0]

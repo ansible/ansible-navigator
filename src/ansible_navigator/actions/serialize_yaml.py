@@ -1,5 +1,6 @@
 """:yaml"""
 import logging
+
 from . import _actions as actions
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration

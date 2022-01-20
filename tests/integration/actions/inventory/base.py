@@ -6,10 +6,10 @@ import os
 
 import pytest
 
-from ..._interactions import SearchFor
-from ..._interactions import Step
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
+from ..._interactions import SearchFor
+from ..._interactions import Step
 from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 

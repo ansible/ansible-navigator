@@ -9,15 +9,13 @@ from typing import NamedTuple
 from typing import Tuple
 from typing import TypeVar
 
-
 from .compiler import Compiler
 from .fchainmap import FChainMap
 from .reg import _Reg
 from .reg import make_reg
-from .rules import _Rule
 from .rules import Rule
+from .rules import _Rule
 from .utils import uniquely_constructed
-
 
 T = TypeVar("T")
 

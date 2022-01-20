@@ -8,9 +8,9 @@ import pytest
 
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
-from ..._tmux_session import TmuxSession
 from ..._interactions import SearchFor
 from ..._interactions import Step
+from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
 CONFIG_FIXTURE = os.path.join(FIXTURES_DIR, "integration", "actions", "config", "ansible.cfg")

@@ -1,7 +1,6 @@
+from typing import TYPE_CHECKING
 from typing import NamedTuple
 from typing import Tuple
-from typing import TYPE_CHECKING
-
 
 if TYPE_CHECKING:
     from .rules import Entry

@@ -8,7 +8,6 @@ from sys import path
 
 from setuptools_scm import get_version
 
-
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()

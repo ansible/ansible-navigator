@@ -6,25 +6,28 @@
 from copy import copy
 from pathlib import Path
 from re import match
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Tuple
+from typing import Union
 
 from sphinx.application import Sphinx
 from sphinx.util import logging
 from sphinx.util.docutils import SphinxDirective
-from sphinx.util.nodes import nested_parse_with_titles, nodes
+from sphinx.util.nodes import nested_parse_with_titles
+from sphinx.util.nodes import nodes
 
 # isort: split
 
-from docutils import statemachine
-
 import yaml
 
+from docutils import statemachine
+
 from ansible_navigator import __version__
-from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.utils import oxfordcomma
-
 
 APP = "ansible-navigator"
 

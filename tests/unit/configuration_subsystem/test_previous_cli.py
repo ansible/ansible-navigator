@@ -8,17 +8,18 @@ from copy import deepcopy
 from unittest import mock
 from unittest.mock import patch
 
-
 from ansible_navigator.configuration_subsystem.configurator import Configurator
-
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.configuration_subsystem.definitions import (
+    ApplicationConfiguration,
+)
 from ansible_navigator.configuration_subsystem.definitions import CliParameters
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntryValue
 from ansible_navigator.configuration_subsystem.definitions import SubCommand
-
-from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem.navigator_configuration import (
+    NavigatorConfiguration,
+)
 
 
 def test_apply_previous_cli_all():

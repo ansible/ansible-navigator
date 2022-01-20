@@ -2,14 +2,13 @@
 """
 import ast
 import decimal
-import logging
 import html
+import logging
 import os
 import re
 import shutil
 import sys
 import sysconfig
-
 
 from enum import Enum
 from types import SimpleNamespace
@@ -25,7 +24,6 @@ from typing import Union
 from jinja2 import Environment
 from jinja2 import StrictUndefined
 from jinja2 import TemplateError
-
 
 logger = logging.getLogger(__name__)
 

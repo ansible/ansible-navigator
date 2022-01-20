@@ -19,13 +19,12 @@ repos:
   hooks:
   - id: isort
     args:
+    # Keep in sync with pyproject.toml
+    - --force-single-line-imports
     - --honor-noqa
-    exclude: |
-      (?x)
-      ^
-        .*
-      $
-    stages: ["manual"]
+    - --lines-between-types=1
+    - --profile=black
+    - --reverse-relative
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git
   rev: v1.1.10
