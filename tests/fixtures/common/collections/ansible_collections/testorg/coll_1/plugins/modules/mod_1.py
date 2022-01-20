@@ -1,8 +1,9 @@
-"""An ansible test module."""
+"""An ansible test module.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+   isort:skip_file
+"""
+
+from __future__ import absolute_import, division, print_function
 
 
 DOCUMENTATION = """
