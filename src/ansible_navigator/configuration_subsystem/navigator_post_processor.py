@@ -13,16 +13,13 @@ from pathlib import Path
 from typing import List
 from typing import Tuple
 
-<<<<<<< HEAD
-from .definitions import CliParameters
-||||||| parent of 74ae5ce (isort changes)
-=======
 from .definitions import ApplicationConfiguration
->>>>>>> 74ae5ce (isort changes)
+from .definitions import CliParameters
 from .definitions import Constants as C
 from .definitions import SettingsEntry
-from .definitions import ApplicationConfiguration
-
+from ..utils import ExitMessage
+from ..utils import ExitPrefix
+from ..utils import LogMessage
 from ..utils import abs_user_path
 from ..utils import check_for_ansible
 from ..utils import flatten_list

@@ -26,6 +26,7 @@ from docutils import statemachine
 
 from ansible_navigator import __version__
 from ansible_navigator.configuration_subsystem import Constants as C
+from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.utils import oxfordcomma
 
