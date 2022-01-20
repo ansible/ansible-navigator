@@ -23,6 +23,7 @@ import yaml
 from ansible.utils.plugin_docs import get_docstring  # type: ignore
 from yaml.error import YAMLError
 
+
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
@@ -30,6 +31,7 @@ except ImportError:
 
 # pylint: disable=import-error
 from key_value_store import KeyValueStore  # type: ignore
+
 
 # pylint: enable=import-error
 

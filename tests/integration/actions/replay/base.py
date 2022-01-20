@@ -11,6 +11,7 @@ from ..._common import update_fixtures
 from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
+
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/replay")
 PLAYBOOK_ARTIFACT = os.path.join(TEST_FIXTURE_DIR, "playbook-artifact.json")
 TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")

@@ -6,6 +6,7 @@ import pytest
 
 from .base import BaseClass
 
+
 # ansible-doc help with EE
 CLI_DOC_HELP_WITH_EE = (
     "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m stdout"

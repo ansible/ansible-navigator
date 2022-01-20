@@ -23,6 +23,7 @@ from .utils import ExitPrefix
 from .utils import LogMessage
 from .utils import clear_screen
 
+
 APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
 

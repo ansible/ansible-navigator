@@ -9,6 +9,7 @@ from ..._interactions import Step
 from ..._interactions import add_indicies
 from ..._interactions import step_id
 
+
 CLI = Command(subcommand="config", execution_environment=True).join()
 
 initial_steps = (Step(user_input=CLI, comment="ansible-navigator config command top window"),)

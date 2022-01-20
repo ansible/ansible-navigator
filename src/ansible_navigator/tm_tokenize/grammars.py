@@ -17,6 +17,7 @@ from .rules import Rule
 from .rules import _Rule
 from .utils import uniquely_constructed
 
+
 T = TypeVar("T")
 
 

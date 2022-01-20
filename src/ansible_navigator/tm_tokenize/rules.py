@@ -21,6 +21,7 @@ from .state import State
 from .tokenize import tokenize
 from .utils import uniquely_constructed
 
+
 if TYPE_CHECKING:
     from .compiler import Compiler
     from .region import Scope

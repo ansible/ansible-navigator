@@ -14,6 +14,7 @@ from .rules import PatternRule
 from .rules import WhileRule
 from .state import State
 
+
 if TYPE_CHECKING:
     from .grammars import Grammar
     from .grammars import Grammars

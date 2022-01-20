@@ -8,6 +8,7 @@ from typing import Tuple
 
 from .curses_window import CursesWindow
 
+
 if TYPE_CHECKING:
     from .field_working import FieldWorking  # pylint: disable=cyclic-import
 

@@ -15,6 +15,7 @@ from ..._interactions import Step
 from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
+
 # run playbook
 run_fixture_dir = os.path.join(FIXTURES_DIR, "integration", "actions", "run")
 inventory_path = os.path.join(run_fixture_dir, "inventory")

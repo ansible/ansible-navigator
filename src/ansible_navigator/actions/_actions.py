@@ -14,6 +14,7 @@ from typing import Generator
 from typing import List
 from typing import Tuple
 
+
 try:
     from importlib import resources
 except ImportError:

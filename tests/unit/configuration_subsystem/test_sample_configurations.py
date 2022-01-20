@@ -17,6 +17,7 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 )
 from ansible_navigator.configuration_subsystem.parser import Parser
 
+
 # pylint: disable=protected-access
 
 

@@ -5,6 +5,7 @@ import pytest
 
 from ._action_run_test import ActionRunTest
 
+
 EXECUTION_MODES = ["interactive", "stdout"]
 
 

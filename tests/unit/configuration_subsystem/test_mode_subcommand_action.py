@@ -13,6 +13,7 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
     NavigatorPostProcessor,
 )
 
+
 # pylint: disable=protected-access
 
 

@@ -8,6 +8,7 @@ from typing import Union
 
 import yaml  # noqa: F401
 
+
 try:
     from yaml import CDumper as Dumper
 except ImportError:

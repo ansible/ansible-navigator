@@ -5,6 +5,7 @@ import pytest
 from .base import PLAYBOOK_ARTIFACT
 from .base import BaseClass
 
+
 CLI = "ansible-navigator" f" replay {PLAYBOOK_ARTIFACT}" " --execution-environment true --ll debug"
 
 testdata = [

@@ -10,6 +10,7 @@ import pytest
 from ..defaults import DEFAULT_CONTAINER_IMAGE
 from ..defaults import FIXTURES_DIR
 
+
 PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.yml")
 
 

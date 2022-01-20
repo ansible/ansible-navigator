@@ -9,6 +9,7 @@ from ..._interactions import Step
 from ..._interactions import add_indicies
 from ..._interactions import step_id
 
+
 CLI = Command(subcommand="config", execution_environment=False).join()
 
 initial_steps = (

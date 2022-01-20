@@ -25,6 +25,7 @@ from jinja2 import Environment
 from jinja2 import StrictUndefined
 from jinja2 import TemplateError
 
+
 logger = logging.getLogger(__name__)
 
 

@@ -17,6 +17,7 @@ from ..._interactions import Step
 from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
+
 TEST_FIXTURE_DIR = Path(FIXTURES_DIR, "integration", "actions", "exec")
 TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR, "ansible-navigator.yaml")
 

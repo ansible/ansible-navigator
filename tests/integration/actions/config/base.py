@@ -13,6 +13,7 @@ from ..._interactions import Step
 from ..._tmux_session import TmuxSession
 from ....defaults import FIXTURES_DIR
 
+
 CONFIG_FIXTURE = os.path.join(FIXTURES_DIR, "integration", "actions", "config", "ansible.cfg")
 
 

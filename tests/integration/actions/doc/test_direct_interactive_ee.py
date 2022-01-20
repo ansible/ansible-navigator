@@ -6,6 +6,7 @@ import pytest
 
 from .base import BaseClass
 
+
 # module doc
 CLI_MODULE_DOC = "ansible-navigator doc testorg.coll_1.mod_1 --execution-environment true"
 

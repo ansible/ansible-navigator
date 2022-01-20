@@ -10,6 +10,7 @@ from ..._interactions import Step
 from ..._interactions import add_indicies
 from ..._interactions import step_id
 
+
 CLI = Command(execution_environment=True).join()
 cmdline = f":inventory -i {ANSIBLE_INVENTORY_FIXTURE_DIR}"
 

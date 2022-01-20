@@ -16,6 +16,7 @@ from .curses_defs import CursesLinePart
 from ..tm_tokenize.grammars import Grammars
 from ..tm_tokenize.tokenize import tokenize
 
+
 CURSES_STYLES = {
     0: None,
     1: getattr(curses, "A_BOLD", None),

@@ -38,6 +38,7 @@ from ..utils import human_time
 from ..utils import remove_ansi
 from ..utils import round_half_up
 
+
 RESULT_TO_COLOR = [
     ("(?i)^failed$", 9),
     ("(?i)^ok$", 10),

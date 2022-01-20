@@ -18,6 +18,7 @@ from sphinx.util.docutils import SphinxDirective
 from sphinx.util.nodes import nested_parse_with_titles
 from sphinx.util.nodes import nodes
 
+
 # isort: split
 
 import yaml
@@ -29,6 +30,7 @@ from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.utils import oxfordcomma
+
 
 APP = "ansible-navigator"
 

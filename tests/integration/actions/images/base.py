@@ -13,6 +13,7 @@ from ..._interactions import Step
 from ..._tmux_session import TmuxSession
 from ....defaults import DEFAULT_CONTAINER_IMAGE
 
+
 IMAGE_SHORT = DEFAULT_CONTAINER_IMAGE.rsplit("/", maxsplit=1)[-1].split(":")[0]
 
 

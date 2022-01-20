@@ -13,6 +13,7 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
 from ..runner import Command
 
+
 GeneratedCommand = Tuple[str, Optional[List[str]]]
 
 

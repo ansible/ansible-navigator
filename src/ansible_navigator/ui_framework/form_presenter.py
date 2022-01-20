@@ -22,6 +22,7 @@ from .form_defs import FormType
 from .form_handler_text import FormHandlerText
 from .sentinels import unknown
 
+
 if TYPE_CHECKING:
     from .form import Form  # pylint: disable=cyclic-import
 

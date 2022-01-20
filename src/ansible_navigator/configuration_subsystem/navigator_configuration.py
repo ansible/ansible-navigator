@@ -23,6 +23,7 @@ from ..utils import abs_user_path
 from ..utils import get_share_directory
 from ..utils import oxfordcomma
 
+
 APP_NAME = "ansible_navigator"
 
 initialization_messages: List[LogMessage] = []

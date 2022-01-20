@@ -6,6 +6,7 @@ import pytest
 
 from ansible_navigator import utils
 
+
 RPM_OUTPUT = """Name        : net-snmp
 Epoch       : 1
 Version     : 5.9.1

@@ -7,6 +7,7 @@ from operator import itemgetter
 
 from setuptools import setup
 
+
 # valid files in share to be copied
 data_file_types = [".yml", ".py", ".json", ".md"]
 

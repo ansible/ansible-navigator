@@ -11,6 +11,7 @@ from typing import Union
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow
 
+
 if TYPE_CHECKING:
     from .field_checks import FieldChecks  # pylint: disable=cyclic-import
     from .field_radio import FieldRadio  # pylint: disable=cyclic-import

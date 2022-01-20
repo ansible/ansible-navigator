@@ -12,6 +12,7 @@ from ansible_navigator import cli
 from ._cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
 
+
 test_data = [
     ("defaults", "", "ansible-navigator_empty.yml", {"process_isolation": True}),
     ("set at command line", "--execution-environment false", "ansible-navigator_empty.yml", None),

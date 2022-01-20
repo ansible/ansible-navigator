@@ -38,6 +38,7 @@ from .ui_config import UIConfig
 from .._yaml import human_dump
 from ..utils import templar
 
+
 STND_KEYS = {"^f/PgUp": "page up", "^b/PgDn": "page down", "\u2191\u2193": "scroll", "esc": "back"}
 END_KEYS = {":help": "help"}
 

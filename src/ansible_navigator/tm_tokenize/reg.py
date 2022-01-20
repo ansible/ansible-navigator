@@ -10,6 +10,7 @@ import onigurumacffi  # type: ignore[import]
 
 from .region import Region
 
+
 if TYPE_CHECKING:
     from ._types import Protocol  # noqa: F401
     from .compiler import Compiler

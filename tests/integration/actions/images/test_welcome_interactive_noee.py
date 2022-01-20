@@ -10,6 +10,7 @@ from ..._interactions import Step
 from ..._interactions import add_indicies
 from ..._interactions import step_id
 
+
 # this is misleading b/c images will use an EE, but not for automation
 CLI = Command(execution_environment=False).join()
 

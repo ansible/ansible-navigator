@@ -18,6 +18,7 @@ import pytest
 from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 
+
 TEST_QUEUE: Queue = Queue()
 
 

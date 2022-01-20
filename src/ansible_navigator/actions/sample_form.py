@@ -9,6 +9,7 @@ from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
 
+
 FORM = """
 form:
   title:  Please confirm the following information
