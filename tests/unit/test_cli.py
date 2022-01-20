@@ -11,7 +11,6 @@ from unittest.mock import patch
 
 from ansible_navigator.cli import NavigatorConfiguration
 from ansible_navigator.cli import parse_and_update
-
 from ..defaults import FIXTURES_DIR
 
 

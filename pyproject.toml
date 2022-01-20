@@ -54,6 +54,7 @@ force_single_line = true # Force from .. import to be 1 per line
 known_testing = "pytest, unittest"
 lines_after_imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
 lines_between_types = 1 # Separate import/from with 1 line
+no_lines_before = "LOCALFOLDER"  # Keeps local imports bundled with first-party
 profile = "black" # Avoid conflict with black
 reverse_relative = true # Import local prior to parent
 sections = "FUTURE, STDLIB, TESTING, THIRDPARTY, FIRSTPARTY, LOCALFOLDER"

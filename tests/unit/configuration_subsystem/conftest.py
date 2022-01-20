@@ -20,7 +20,6 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import (
 )
 from ansible_navigator.utils import ExitMessage
 from ansible_navigator.utils import LogMessage
-
 from ...defaults import FIXTURES_DIR
 
 

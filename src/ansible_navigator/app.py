@@ -8,7 +8,6 @@ from typing import Tuple
 from typing import Union
 
 from ansible_navigator.actions import kegexes
-
 from .app_public import AppPublic
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants as C

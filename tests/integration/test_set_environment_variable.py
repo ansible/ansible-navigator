@@ -8,7 +8,6 @@ import pytest
 from unittest import mock
 
 from ansible_navigator import cli
-
 from ._cli2runner import Cli2Runner
 from ..defaults import FIXTURES_DIR
 

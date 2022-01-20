@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 from ansible_navigator.actions import kegexes
 from ansible_navigator.actions import run_action
-
 from .app import App
 from .configuration_subsystem import ApplicationConfiguration
 from .steps import Steps
