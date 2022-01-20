@@ -51,7 +51,6 @@ line-length = 100
 
 [tool.isort]
 force_single_line = true
-honor_noqa = true
 lines_between_types = 1
 profile = "black"
 reverse_relative = true
