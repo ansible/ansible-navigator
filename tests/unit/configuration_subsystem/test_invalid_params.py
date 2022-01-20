@@ -2,9 +2,9 @@
 """
 import tempfile
 
-from unittest.mock import patch
-
 import pytest
+
+from unittest.mock import patch
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.utils import ExitMessage

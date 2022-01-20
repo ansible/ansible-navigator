@@ -1,8 +1,8 @@
 """test from CLI up to runner
 """
-from unittest import mock
-
 import pytest
+
+from unittest import mock
 
 
 class Cli2Runner:

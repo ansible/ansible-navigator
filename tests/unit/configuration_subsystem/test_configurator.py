@@ -2,10 +2,10 @@
 """
 import os
 
+import pytest
+
 from unittest import mock
 from unittest.mock import patch
-
-import pytest
 
 from ansible_navigator.configuration_subsystem import Configurator
 from ansible_navigator.configuration_subsystem import Constants as C

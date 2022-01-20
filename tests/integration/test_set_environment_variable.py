@@ -3,9 +3,9 @@
 import os
 import shlex
 
-from unittest import mock
-
 import pytest
+
+from unittest import mock
 
 from ansible_navigator import cli
 

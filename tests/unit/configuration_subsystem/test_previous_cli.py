@@ -5,6 +5,7 @@ grouped here because they are all similar
 import os
 
 from copy import deepcopy
+
 from unittest import mock
 from unittest.mock import patch
 

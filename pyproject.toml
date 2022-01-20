@@ -51,10 +51,13 @@ line-length = 100
 
 [tool.isort]
 force_single_line = true # Force from .. import to be 1 per line
+known_testing = "pytest, unittest"
 lines_after_imports = 2 # Ensure 2 lines after all imports
 lines_between_types = 1 # Separate import/from with 1 line
 profile = "black" # Avoid conflict with black
 reverse_relative = true # Import local prior to parent
+sections = "FUTURE, STDLIB, TESTING, THIRDPARTY, FIRSTPARTY, LOCALFOLDER"
+
 
 [tool.pylint]
     [tool.pylint.master]

@@ -12,10 +12,10 @@ Note about decorators:
 import os
 import shlex
 
+import pytest
+
 from unittest import mock
 from unittest.mock import patch
-
-import pytest
 
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
