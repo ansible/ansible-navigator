@@ -19,11 +19,12 @@ from sphinx.util.nodes import nested_parse_with_titles
 from sphinx.util.nodes import nodes
 
 
+from docutils import statemachine # isort: skip
+
+
 # isort: split
 
 import yaml
-
-from docutils import statemachine
 
 from ansible_navigator import __version__
 from ansible_navigator.configuration_subsystem import Constants as C
