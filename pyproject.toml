@@ -51,6 +51,7 @@ line-length = 100
 
 [tool.isort]
 force_single_line = true # Force from .. import to be 1 per line, minimizing changes at time of implementation
+known_first_party = "ansible_navigator, key_value_store" # No effect at implementation, here anticipating future benefit 
 known_testing = "pytest, unittest"
 lines_after_imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
 lines_between_types = 1 # Separate import/from with 1 line, minimizing changes at time of implementation
