@@ -19,7 +19,7 @@ from sphinx.util.nodes import nested_parse_with_titles
 from sphinx.util.nodes import nodes
 
 
-from docutils import statemachine # isort: skip
+from docutils import statemachine  # isort: skip
 
 
 # isort: split
