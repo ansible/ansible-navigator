@@ -16,7 +16,8 @@ import sys
 from itertools import chain
 from pathlib import Path
 from types import ModuleType
-from typing import Generator, List
+from typing import Generator
+from typing import List
 
 import pytest
 
@@ -67,7 +68,7 @@ def _discover_path_importables(
     "import_path",
     _find_all_importables(ansible_navigator),
 )
-def test_no_warnings(import_path: str) -> None:
+def test_no_warnings(import_path: str) -> None:  # pylint: disable=unused-import
     """Verify that exploding importables doesn't explode.
 
     This is seeking for any import errors including ones caused
