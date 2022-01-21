@@ -23,9 +23,11 @@ class Action:
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle a request to quit the application.
 
+        A request to quit is ultimately handled by the App so return immediately.
+
         :param interaction: The interaction from the user
         :param app: The app instance
+        :return: The pending interaction
         """
-        # : quit will be handled in the app
         self._logger.debug("quit was requested as: %s", interaction.action.value)
         return interaction

@@ -23,6 +23,7 @@ class Action(App):
 
         :param interaction: The interaction from the user
         :param app: The app instance
+        :return: The pending interaction
         """
         self._logger.debug("help requested")
         self._prepare_to_run(app, interaction)

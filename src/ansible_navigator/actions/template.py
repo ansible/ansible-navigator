@@ -31,7 +31,7 @@ class Action(App):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending interaction or none
+        :return: The pending interaction or :data:`None`
         """
         self._logger.debug("template requested '%s'", interaction.action.value)
         self._prepare_to_run(app, interaction)
