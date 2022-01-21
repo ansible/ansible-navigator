@@ -24,7 +24,7 @@ class AnsibleConfig(Base):
             options along with config description, ``dump`` action will fetch all the active
             config and ``view`` action will return the active configuration file view.
         :param config_file: Path to configuration file, defaults to first file found in
-            precedence.. Defaults to ``None``.
+            precedence. Defaults to ``None``.
         :param only_changed: The boolean value when set to ``True`` returns only the
             configurations that have changed from the default. This parameter is applicable only
             when ``action`` is set to ``dump``.. Defaults to `None`.
