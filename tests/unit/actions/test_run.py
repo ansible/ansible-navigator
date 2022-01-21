@@ -10,11 +10,10 @@ from typing import List
 from typing import NamedTuple
 from typing import Optional
 from typing import Union
-
-import pytest
-
 from unittest.mock import mock_open
 from unittest.mock import patch
+
+import pytest
 
 from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
