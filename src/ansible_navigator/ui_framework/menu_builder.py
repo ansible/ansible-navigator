@@ -80,10 +80,11 @@ class MenuBuilder:
     def _menu_header_line(self, menu_layout: Tuple[List, ...]) -> CursesLine:
         """Generate the menu header line
 
-        :param menu_layout: A tuple of menu details
-            menu_layout[0]: List[int], the starting in for each column
-            menu_layout[1]: List[str], the columns of the menu
-            menu_layout[2]: List[int], the adjusted column widths
+        :param menu_layout: A tuple of menu details:
+
+            * ``menu_layout[0]``: ``List[int]``, the starting in for each column
+            * ``menu_layout[1]``: ``List[str]``, the columns of the menu
+            * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
         :return: The menu header line
         """
         _col_starts, cols, _adj_colws = menu_layout
@@ -94,10 +95,10 @@ class MenuBuilder:
         """Generate one part of the menu header line
 
         :param colno: The column number
-        :param menu_layout: A tuple of menu details
-            menu_layout[0]: List[int], the starting in for each column
-            menu_layout[1]: List[str], the columns of the menu
-            menu_layout[2]: List[int], the adjusted column widths
+        :param menu_layout: A tuple of menu details:
+            * ``menu_layout[0]``: ``List[int]``, the starting in for each column
+            * ``menu_layout[1]``: ``List[str]``, the columns of the menu
+            * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
         :return: The menu head line
         """
         col_starts, cols, adj_colws = menu_layout
@@ -120,11 +121,11 @@ class MenuBuilder:
         """Generate all the menu lines
 
         :params dicts: A list of dicts from which the menu will be generated
-        :param menu_layout: A tuple of menu details
-            menu_layout[0]: List[int], the starting in for each column
-            menu_layout[1]: List[str], the columns of the menu
-            menu_layout[2]: List[int], the adjusted column widths
-            menu_layout[3]: CursesLine, the menu header, used to determine justification
+        :param menu_layout: A tuple of menu details:
+            * ``menu_layout[0]``: ``List[int]``, the starting in for each column
+            * ``menu_layout[1]``: ``List[str]``, the columns of the menu
+            * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
+            * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
         :return: The menu lines
         """
         return tuple(self._menu_line(dicts[idx], menu_layout) for idx in indices)
@@ -133,11 +134,11 @@ class MenuBuilder:
         """Generate one the menu line
 
         :param dyct: One dict from which the menu line will be generated
-        :param menu_layout: A tuple of menu details
-            menu_layout[0]: List[int], the starting in for each column
-            menu_layout[1]: List[str], the columns of the menu
-            menu_layout[2]: List[int], the adjusted column widths
-            menu_layout[3]: CursesLine, the menu header, used to determine justification
+        :param menu_layout: A tuple of menu details:
+            * ``menu_layout[0]``: ``List[int]``, the starting in for each column
+            * ``menu_layout[1]``: ``List[str]``, the columns of the menu
+            * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
+            * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
         :return: A menu line
         """
         _col_starts, cols, _adj_colws, _header = menu_layout
@@ -155,11 +156,11 @@ class MenuBuilder:
         :param colno: The column number of the line part
         :param coltext: The text to be placed at the given column
         :param dyct: The dict from which the menu line will be generated
-        :param menu_layout: A tuple of menu details
-            menu_layout[0]: List[int], the starting in for each column
-            menu_layout[1]: List[str], the columns of the menu
-            menu_layout[2]: List[int], the adjusted column widths
-            menu_layout[3]: CursesLine, the menu header, used to determine justification
+        :param menu_layout: A tuple of menu details:
+            * ``menu_layout[0]``: ``List[int]``, the starting in for each column
+            * ``menu_layout[1]``: ``List[str]``, the columns of the menu
+            * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
+            * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
         :return: A menu line part
         """
         col_starts, cols, adj_colws, header = menu_layout
