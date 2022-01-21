@@ -11,10 +11,10 @@ import re
 
 from itertools import chain
 
-from .curses_defs import CursesLine
-from .curses_defs import CursesLinePart
 from ..tm_tokenize.grammars import Grammars
 from ..tm_tokenize.tokenize import tokenize
+from .curses_defs import CursesLine
+from .curses_defs import CursesLinePart
 
 
 CURSES_STYLES = {

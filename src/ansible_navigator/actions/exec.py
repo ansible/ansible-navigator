@@ -7,11 +7,11 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from . import _actions as actions
 from ..app import App
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
 from ..runner import Command
+from . import _actions as actions
 
 
 GeneratedCommand = Tuple[str, Optional[List[str]]]

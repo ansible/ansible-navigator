@@ -10,8 +10,6 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from . import _actions as actions
-from . import run_action
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -23,6 +21,8 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
+from . import _actions as actions
+from . import run_action
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:

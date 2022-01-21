@@ -9,10 +9,10 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from .definitions import ApplicationConfiguration
-from .definitions import Constants as C
 from .._version import __version__
 from ..utils import oxfordcomma
+from .definitions import ApplicationConfiguration
+from .definitions import Constants as C
 
 
 class Parser:

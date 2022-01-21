@@ -12,7 +12,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from . import _actions as actions
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -22,6 +21,7 @@ from ..runner import Command
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
+from . import _actions as actions
 
 
 @actions.register

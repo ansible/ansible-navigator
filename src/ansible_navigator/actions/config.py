@@ -12,8 +12,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from . import _actions as actions
-from . import run_action
 from .._yaml import Loader
 from .._yaml import yaml
 from ..app import App
@@ -27,6 +25,8 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
+from . import _actions as actions
+from . import run_action
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
