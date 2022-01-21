@@ -21,9 +21,11 @@ class Action:
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle a request to quit the application.
+        """Handle a request to quit the application from the user interface.
 
-        A request to quit is ultimately handled by the App so return immediately.
+        The application exit is ultimately handled by
+        :class:`~ansible_navigator.action_runner.ActionRunner` so return immediately,
+        passing the ``:quit`` request backwards through the stack of actions that are on the stack.
 
         :param interaction: The interaction from the user
         :param app: The app instance
