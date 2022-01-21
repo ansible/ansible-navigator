@@ -21,7 +21,12 @@ def get_executable_path(name):
 
 
 def update_fixtures(
-    request, index, received_output, comment, testname=None, additional_information=None
+    request,
+    index,
+    received_output,
+    comment,
+    testname=None,
+    additional_information=None,
 ):
     # pylint: disable=too-many-arguments
     """Used by action plugins to generate the fixtures"""
@@ -61,7 +66,13 @@ def generate_test_log_dir(unique_test_id):
     user = os.environ.get("USER")
     if user == "zuul":
         directory = os.path.join(
-            "/", "home", "zuul", "zuul-output", "logs", "anible-navigator", unique_test_id
+            "/",
+            "home",
+            "zuul",
+            "zuul-output",
+            "logs",
+            "anible-navigator",
+            unique_test_id,
         )
     else:
         directory = os.path.join("./", ".test_logs", unique_test_id)
@@ -76,7 +87,8 @@ class Error(EnvironmentError):
 def sanitize_output(output):
     """Sanitize test output that may be environment specific or unique per run."""
     re_uuid = re.compile(
-        "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.IGNORECASE
+        "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+        re.IGNORECASE,
     )
     re_home = re.compile("(/Users|/home)/(?!runner)[a-z,0-9]*/")
     for idx, line in enumerate(output):

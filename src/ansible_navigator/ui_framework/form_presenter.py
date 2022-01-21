@@ -179,7 +179,10 @@ class FormPresenter(CursesWindow):
     def _generate_field_options(self, form_field) -> CursesLine:
         lines = []
         window = curses.newwin(
-            len(form_field.options), self._field_win_width, self._line_number, self._field_win_start
+            len(form_field.options),
+            self._field_win_width,
+            self._line_number,
+            self._field_win_start,
         )
         window.keypad(True)
         form_field.win = window
@@ -250,7 +253,8 @@ class FormPresenter(CursesWindow):
         shared_input_line_cache: List[str] = []
         for form_field in self._form.fields:
             form_field.window_handler = form_field.window_handler(
-                screen=self._screen, ui_config=self._ui_config
+                screen=self._screen,
+                ui_config=self._ui_config,
             )
             if isinstance(form_field.window_handler, FormHandlerText):
                 form_field.window_handler.input_line_cache = shared_input_line_cache

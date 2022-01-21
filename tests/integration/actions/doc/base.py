@@ -39,7 +39,14 @@ class BaseClass:
             yield tmux_session
 
     def test(
-        self, request, tmux_doc_session, index, user_input, comment, testname, expected_in_output
+        self,
+        request,
+        tmux_doc_session,
+        index,
+        user_input,
+        comment,
+        testname,
+        expected_in_output,
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
@@ -54,7 +61,7 @@ class BaseClass:
         else:
             raise ValueError(
                 "Value of 'TEST_FOR_MODE' is not set."
-                " Valid value is either 'interactive' or 'stdout'"
+                " Valid value is either 'interactive' or 'stdout'",
             )
 
         received_output = tmux_doc_session.interaction(user_input, search_within_response)
@@ -88,6 +95,9 @@ class BaseClass:
                 expected_output = json.load(infile)["output"]
             assert expected_output == updated_received_output, "\n" + "\n".join(
                 difflib.unified_diff(
-                    expected_output, updated_received_output, "expected", "received"
-                )
+                    expected_output,
+                    updated_received_output,
+                    "expected",
+                    "received",
+                ),
             )

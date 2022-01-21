@@ -86,7 +86,9 @@ class Parser:
 
     def _configure_base(self) -> None:
         self._base_parser.add_argument(
-            "--version", action="version", version="%(prog)s " + __version__
+            "--version",
+            action="version",
+            version="%(prog)s " + __version__,
         )
 
         for entry in self._config.entries:

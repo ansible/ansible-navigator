@@ -219,7 +219,8 @@ class FormValidators:
 
     @staticmethod
     def no_validation(
-        response: Union[List, None] = None, hint: bool = False
+        response: Union[List, None] = None,
+        hint: bool = False,
     ) -> Union[Validation, str]:
         """no validation"""
         msg = ""

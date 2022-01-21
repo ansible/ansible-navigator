@@ -12,7 +12,10 @@ if TYPE_CHECKING:
 
 
 def tokenize(
-    compiler: "Compiler", state: State, line: str, first_line: bool
+    compiler: "Compiler",
+    state: State,
+    line: str,
+    first_line: bool,
 ) -> Tuple[State, Regions]:
 
     """tokenize a string into it's parts"""

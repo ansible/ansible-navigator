@@ -105,7 +105,11 @@ class CursesWindow:
             self._logger.error("Errors setting up terminal, check TERM value")
 
     def _add_line(
-        self, window: Window, lineno: int, line: CursesLine, prefix: Union[str, None] = None
+        self,
+        window: Window,
+        lineno: int,
+        line: CursesLine,
+        prefix: Union[str, None] = None,
     ) -> None:
         """add a line to a window
 

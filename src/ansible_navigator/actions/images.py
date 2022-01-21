@@ -120,18 +120,18 @@ class Action(App):
         self._prepare_to_run(app, interaction)
 
         self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
         )
 
         notification = nonblocking_notification(
-            messages=["Collecting available images, this may take a minute..."]
+            messages=["Collecting available images, this may take a minute..."],
         )
         interaction.ui.show(notification)
 
         self._collect_image_list()
         if not self._images.value:
             messages = [
-                "No images were found, or the configured container engine was not available."
+                "No images were found, or the configured container engine was not available.",
             ]
             messages.append("Please check the log (:log) for errors.")
             warning = warning_notification(messages=messages)
@@ -173,7 +173,8 @@ class Action(App):
                 )
             elif self.steps.current.type == "content":
                 content_heading = partial(
-                    self.generate_content_heading, name=self.steps.previous.name
+                    self.generate_content_heading,
+                    name=self.steps.previous.name,
                 )
                 result = self._interaction.ui.show(
                     obj=self.steps.current.value,
@@ -229,7 +230,8 @@ class Action(App):
                 tipe="menu",
                 select_func=self._build_python_content,
                 value=sorted(
-                    self._images.selected["python"]["details"], key=lambda i: i["name"].lower()
+                    self._images.selected["python"]["details"],
+                    key=lambda i: i["name"].lower(),
                 ),
             )
 
@@ -240,7 +242,8 @@ class Action(App):
                 tipe="menu",
                 select_func=self._build_system_content,
                 value=sorted(
-                    self._images.selected["system"]["details"], key=lambda i: i["name"].lower()
+                    self._images.selected["system"]["details"],
+                    key=lambda i: i["name"].lower(),
                 ),
             )
 
@@ -262,32 +265,32 @@ class Action(App):
             {
                 image_name: "Image information",
                 "description": "Information collected from image inspection",
-            }
+            },
         ]
         if self.steps.current.selected["execution_environment"]:
             menu.append(
                 {
                     image_name: "General information",
                     "description": "OS and python version information",
-                }
+                },
             )
             menu.append(
                 {
                     image_name: "Ansible version and collections",
                     "description": "Information about ansible and ansible collections",
-                }
+                },
             )
             menu.append(
                 {
                     image_name: "Python packages",
                     "description": "Information about python and python packages",
-                }
+                },
             )
             menu.append(
                 {
                     image_name: "Operating system packages",
                     "description": "Information about operating system packages",
-                }
+                },
             )
             menu.append({image_name: "Everything", "description": "All image information"})
         for menu_entry in menu:
@@ -368,20 +371,22 @@ class Action(App):
             kwargs.update({"container_options": self._args.container_options})
 
         self._logger.debug(
-            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}"
+            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}",
         )
         _runner = Command(executable_cmd=python_exec_path, **kwargs)
         output, error, _ = _runner.run()
         if error:
             self._logger.error(
-                "Image introspection failed (runner), the return value was: %s", error
+                "Image introspection failed (runner), the return value was: %s",
+                error,
             )
             self.notify_failed()
             return False
         parsed = self._parse(output)
         if parsed is None:
             self._logger.error(
-                "Image introspection failed (parsed), the return value was: %s", output[0:1000]
+                "Image introspection failed (parsed), the return value was: %s",
+                output[0:1000],
             )
             self.notify_failed()
             return False
@@ -396,13 +401,14 @@ class Action(App):
                 "ansible": {
                     "collections": parsed["ansible_collections"],
                     "version": parsed["ansible_version"],
-                }
+                },
             }
             self._images.selected["python"] = parsed["python_packages"]
             self._images.selected["system"] = parsed["system_packages"]
         except KeyError:
             self._logger.exception(
-                "Image introspection failed (keys), the return value was: %s", output[0:1000]
+                "Image introspection failed (keys), the return value was: %s",
+                output[0:1000],
             )
             self.notify_failed()
             return False

@@ -78,7 +78,11 @@ class CollectionCatalog:
                     plugin_type = "module"
                 for (dirpath, _dirnames, filenames) in os.walk(path):
                     self._process_plugin_dir(
-                        plugin_type, filenames, file_chksums, dirpath, collection
+                        plugin_type,
+                        filenames,
+                        file_chksums,
+                        dirpath,
+                        collection,
                     )
 
     @staticmethod
@@ -98,7 +102,12 @@ class CollectionCatalog:
         return res
 
     def _process_plugin_dir(
-        self, plugin_type: str, filenames: List, file_chksums: Dict, dirpath: str, collection: Dict
+        self,
+        plugin_type: str,
+        filenames: List,
+        file_chksums: Dict,
+        dirpath: str,
+        collection: Dict,
     ) -> None:
         # pylint: disable=too-many-arguments
         """process each plugin within one plugin directory"""
@@ -242,7 +251,7 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
             if chksum not in handled:
                 if chksum not in collection_cache:
                     missing.append(
-                        (collection["known_as"], chksum, f"{collection['path']}{details['path']}")
+                        (collection["known_as"], chksum, f"{collection['path']}{details['path']}"),
                     )
                 handled.add(chksum)
     return handled, missing, plugin_count
@@ -261,7 +270,10 @@ def parse_args():
 
     parser.add_argument("-a", dest="adjacent", help="prepended to dirs")
     parser.add_argument(
-        "-c", dest="collection_cache_path", help="path to collection cache", required=True
+        "-c",
+        dest="collection_cache_path",
+        help="path to collection cache",
+        required=True,
     )
     parsed_args = parser.parse_args()
 
@@ -300,7 +312,10 @@ def retrieve_collections_paths() -> Dict:
 
 
 def retrieve_docs(
-    collection_cache: KeyValueStore, errors: List, missing: List, stats: Dict
+    collection_cache: KeyValueStore,
+    errors: List,
+    missing: List,
+    stats: Dict,
 ) -> None:
     # pylint: disable=too-many-locals
     """extract the docs from the plugins"""

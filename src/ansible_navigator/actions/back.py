@@ -39,7 +39,10 @@ class Action:
                 if step.type == "menu" and app.steps.current.type == "menu":
                     interaction.ui.menu_filter(None)
             self._logger.debug(
-                "Stepping back in %s from %s to %s", app.name, step.name, app.steps.current.name
+                "Stepping back in %s from %s to %s",
+                app.name,
+                step.name,
+                app.steps.current.name,
             )
         else:
             self._logger.debug("Return to %s, at last step", app.name)

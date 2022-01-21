@@ -28,7 +28,9 @@ base_steps = (
     Step(user_input=":0", comment="task-1 details"),
     Step(user_input=":doc", comment="doc for task", look_fors=["module: debug"]),
     Step(
-        user_input=":{{ examples }}", comment="dig examples", look_fors=["ansible.builtin.debug:"]
+        user_input=":{{ examples }}",
+        comment="dig examples",
+        look_fors=["ansible.builtin.debug:"],
     ),
     Step(user_input=":back", comment="show doc", look_fors=["module: debug"]),
     Step(user_input=":back", comment="show task"),
@@ -125,5 +127,5 @@ class BaseClass:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(
-                difflib.unified_diff(expected_output, received_output, "expected", "received")
+                difflib.unified_diff(expected_output, received_output, "expected", "received"),
             )

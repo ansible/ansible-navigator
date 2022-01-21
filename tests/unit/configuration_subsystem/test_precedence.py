@@ -42,7 +42,12 @@ from .utils import id_for_settings
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_envvars(
-    _mf1, _mf2, generate_config, base, cli_entry, expected
+    _mf1,
+    _mf2,
+    generate_config,
+    base,
+    cli_entry,
+    expected,
 ):
     """Ensure all entries are set by the CLI, even with environment variables set."""
     if base is None:
@@ -77,7 +82,14 @@ def test_all_entries_reflect_cli_given_envvars(
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings(
-    _mf1, _mf2, generate_config, settings, settings_file_type, base, cli_entry, expected
+    _mf1,
+    _mf2,
+    generate_config,
+    settings,
+    settings_file_type,
+    base,
+    cli_entry,
+    expected,
 ):
     """Ensure all entries are set by the CLI
     based on the settings file, the non CLI parameters will be
@@ -113,7 +125,14 @@ def test_all_entries_reflect_cli_given_settings(
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings_and_envars(
-    _mf1, _mf2, generate_config, settings, source_other, base, cli_entry, expected
+    _mf1,
+    _mf2,
+    generate_config,
+    settings,
+    source_other,
+    base,
+    cli_entry,
+    expected,
 ):
     # pylint: disable=unused-argument
     """Ensure all entries are set by the CLI
@@ -170,7 +189,14 @@ def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
 @pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("entry, value, expected", ENVVAR_DATA)
 def test_all_entries_reflect_envvar_given_settings(
-    _mf1, _mf2, generate_config, settings, settings_file_type, entry, value, expected
+    _mf1,
+    _mf2,
+    generate_config,
+    settings,
+    settings_file_type,
+    entry,
+    value,
+    expected,
 ):
     # pylint: disable=unused-argument
     """Ensure each entry is are set by an environment variables
@@ -178,7 +204,7 @@ def test_all_entries_reflect_envvar_given_settings(
     should by default or settings file
     """
     environment_variable = NavigatorConfiguration.entry(entry).environment_variable(
-        "ansible_navigator"
+        "ansible_navigator",
     )
     with mock.patch.dict(os.environ, {environment_variable: str(value)}):
         response = generate_config(setting_file_name=settings)

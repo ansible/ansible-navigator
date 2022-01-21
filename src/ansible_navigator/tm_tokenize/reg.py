@@ -67,7 +67,11 @@ class _RegSet:
         return f"{type(self).__name__}({args})"
 
     def search(
-        self, line: str, pos: int, first_line: bool, boundary: bool
+        self,
+        line: str,
+        pos: int,
+        first_line: bool,
+        boundary: bool,
     ) -> Tuple[int, Optional[Match[str]]]:
         return self._set.search(line, pos, flags=_FLAGS[first_line, boundary])
 

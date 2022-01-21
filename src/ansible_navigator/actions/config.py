@@ -68,9 +68,9 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
                     string=string,
                     color=color,
                     decoration=curses.A_UNDERLINE,
-                )
-            ]
-        )
+                ),
+            ],
+        ),
     )
     return tuple(heading)
 
@@ -109,12 +109,12 @@ class Action(App):
         notification = nonblocking_notification(
             messages=[
                 "Collecting the ansible configuration, this may take a minute...",
-            ]
+            ],
         )
         interaction.ui.show(notification)
 
         self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
         )
 
         self._run_runner()
@@ -223,7 +223,7 @@ class Action(App):
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs.update(
-                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
+                {"container_volume_mounts": self._args.execution_environment_volume_mounts},
             )
 
         if isinstance(self._args.container_options, list):

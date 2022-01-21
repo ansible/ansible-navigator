@@ -21,7 +21,9 @@ step_back = Step(user_input=":back", comment="goto info menu", look_fors=["Every
 
 base_steps = (
     Step(
-        user_input=f":f {IMAGE_SHORT}", comment=f"filter for {IMAGE_SHORT}", look_fors=[IMAGE_SHORT]
+        user_input=f":f {IMAGE_SHORT}",
+        comment=f"filter for {IMAGE_SHORT}",
+        look_fors=[IMAGE_SHORT],
     ),
     Step(user_input=":0", comment="goto info menu", look_fors=["Everything"]),
     Step(user_input=":0", comment="goto Image information", look_fors=["architecture:"]),
@@ -100,5 +102,5 @@ class BaseClass:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(
-                difflib.unified_diff(expected_output, received_output, "expected", "received")
+                difflib.unified_diff(expected_output, received_output, "expected", "received"),
             )

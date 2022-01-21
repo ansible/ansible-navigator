@@ -40,24 +40,43 @@ def id_from_data(value):
 artifact_test_data = [
     ArtifactTstData("Filename absolute", "/tmp/artifact.json", "site.yml", "/tmp/artifact.json"),
     ArtifactTstData(
-        "Filename with .", "./artifact.json", "site.yml", f"{os.path.abspath('.')}/artifact.json"
+        "Filename with .",
+        "./artifact.json",
+        "site.yml",
+        f"{os.path.abspath('.')}/artifact.json",
     ),
     ArtifactTstData(
-        "Filename with ..", "../artifact.json", "site.yml", f"{os.path.abspath('..')}/artifact.json"
+        "Filename with ..",
+        "../artifact.json",
+        "site.yml",
+        f"{os.path.abspath('..')}/artifact.json",
     ),
     ArtifactTstData(
-        "Filename with ~", "~/artifact.json", "/tmp/site.yaml", "/home/test_user/artifact.json"
+        "Filename with ~",
+        "~/artifact.json",
+        "/tmp/site.yaml",
+        "/home/test_user/artifact.json",
     ),
     ArtifactTstData("Playbook absolute", None, "/tmp/site.yaml", "/tmp/site-artifact"),
     ArtifactTstData(
-        "Playbook with .", None, "./site.yaml", f"{os.path.abspath('.')}/site-artifact"
+        "Playbook with .",
+        None,
+        "./site.yaml",
+        f"{os.path.abspath('.')}/site-artifact",
     ),
     ArtifactTstData(
-        "Playbook with ..", None, "../site.yaml", f"{os.path.abspath('..')}/site-artifact"
+        "Playbook with ..",
+        None,
+        "../site.yaml",
+        f"{os.path.abspath('..')}/site-artifact",
     ),
     ArtifactTstData("Playbook with ~", None, "~/site.yaml", "/home/test_user/site-artifact"),
     ArtifactTstData(
-        "help_plabook enabled", None, "~/site.yaml", "/home/test_user/site-artifact", True
+        "help_plabook enabled",
+        None,
+        "~/site.yaml",
+        "/home/test_user/site-artifact",
+        True,
     ),
 ]
 
@@ -80,7 +99,7 @@ def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog
         args.entry("playbook_artifact_save_as").value.current = data.filename
     else:
         args.entry(
-            "playbook_artifact_save_as"
+            "playbook_artifact_save_as",
         ).value.current = playbook_artifact_save_as.value.default
     args.entry("playbook_artifact_enable").value.current = True
 

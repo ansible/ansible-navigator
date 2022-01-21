@@ -288,7 +288,9 @@ def test_apply_cli_subset_none():
         ],
     )
     configurator = Configurator(
-        params=["list", "-z", "zebra"], application_configuration=test_config, initial=True
+        params=["list", "-z", "zebra"],
+        application_configuration=test_config,
+        initial=True,
     )
     _messages, exit_messages = configurator.configure()
     assert not exit_messages
@@ -304,7 +306,9 @@ def test_apply_cli_subset_none():
         assert test_config.entry(expect[0]).value.source is C.USER_CLI
 
     configurator = Configurator(
-        params=["run"], application_configuration=test_config, apply_previous_cli_entries=C.ALL
+        params=["run"],
+        application_configuration=test_config,
+        apply_previous_cli_entries=C.ALL,
     )
     _messages, exit_messages = configurator.configure()
     assert not exit_messages

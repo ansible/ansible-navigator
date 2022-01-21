@@ -48,7 +48,8 @@ RESULT_TO_COLOR = [
 ]
 
 get_color = lambda word: next(  # noqa: E731
-    (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)), 0
+    (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)),
+    0,
 )
 
 
@@ -110,13 +111,13 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
         detail = f"PLAY [{obj['play']}:{obj['__number']}] "
         stars = "*" * (screen_w - len(detail))
         heading.append(
-            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)])
+            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)]),
         )
 
         detail = f"TASK [{obj['task']}] "
         stars = "*" * (screen_w - len(detail))
         heading.append(
-            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)])
+            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)]),
         )
 
         if obj["__changed"] is True:
@@ -141,9 +142,9 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
                         string=string,
                         color=color,
                         decoration=curses.A_UNDERLINE,
-                    )
-                ]
-            )
+                    ),
+                ],
+            ),
         )
         return tuple(heading)
     return None
@@ -228,7 +229,7 @@ class Action(App):
                 self._args.mode == "stdout",
                 self._args.playbook_artifact_enable,
                 self._args.app != "replay",
-            )
+            ),
         ):
             return "stdout_w_artifact"
         return self._args.mode
@@ -295,7 +296,8 @@ class Action(App):
                     self.steps.append(self._plays)
                 else:
                     self._logger.debug(
-                        "No steps remaining for '%s' returning to calling app", self._name
+                        "No steps remaining for '%s' returning to calling app",
+                        self._name,
                     )
                     break
 
@@ -319,7 +321,7 @@ class Action(App):
         # Ensure the playbook and inventory are valid
 
         self._update_args(
-            ["run"] + shlex.split(self._interaction.action.match.groupdict()["params_run"] or "")
+            ["run"] + shlex.split(self._interaction.action.match.groupdict()["params_run"] or ""),
         )
 
         if isinstance(self._args.playbook, str):
@@ -365,7 +367,7 @@ class Action(App):
         if self.mode == "interactive":
             self._update_args(
                 ["replay"]
-                + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or "")
+                + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or ""),
             )
 
         artifact_file = self._args.playbook_artifact_replay
@@ -409,7 +411,8 @@ class Action(App):
                 return False
         else:
             self._logger.error(
-                "Incompatible artifact version, got '%s', compatible = '1.y.z'", version
+                "Incompatible artifact version, got '%s', compatible = '1.y.z'",
+                version,
             )
             return False
 
@@ -575,7 +578,7 @@ class Action(App):
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs.update(
-                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
+                {"container_volume_mounts": self._args.execution_environment_volume_mounts},
             )
 
         if isinstance(self._args.container_options, list):
@@ -699,10 +702,10 @@ class Action(App):
                 {
                     tot: len([t for t in play["tasks"] if t["__result"].lower() == tot[2:]])
                     for tot in total
-                }
+                },
             )
             self._plays.value[idx]["__changed"] = len(
-                [t for t in play["tasks"] if t["__changed"] is True]
+                [t for t in play["tasks"] if t["__changed"] is True],
             )
             task_count = len(play["tasks"])
             self._plays.value[idx]["__task_count"] = task_count

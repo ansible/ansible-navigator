@@ -31,7 +31,9 @@ class BaseClass:
         tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
         os.makedirs(tmp_coll_dir, exist_ok=True)
         copytree(
-            FIXTURES_COLLECTION_DIR, os.path.join(tmp_coll_dir, "collections"), dirs_exist_ok=True
+            FIXTURES_COLLECTION_DIR,
+            os.path.join(tmp_coll_dir, "collections"),
+            dirs_exist_ok=True,
         )
         params = {
             "setup_commands": [
@@ -70,11 +72,13 @@ class BaseClass:
         else:
             raise ValueError(
                 "Value of 'TEST_FOR_MODE' is not set."
-                " Valid value is either 'interactive' or 'stdout'"
+                " Valid value is either 'interactive' or 'stdout'",
             )
 
         received_output = tmux_collections_session.interaction(
-            user_input, search_within_response, ignore_within_response=ignore_within_response
+            user_input,
+            search_within_response,
+            ignore_within_response=ignore_within_response,
         )
 
         received_output = [
@@ -92,5 +96,5 @@ class BaseClass:
         with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as infile:
             expected_output = json.load(infile)["output"]
         assert expected_output == received_output, "\n" + "\n".join(
-            difflib.unified_diff(expected_output, received_output, "expected", "received")
+            difflib.unified_diff(expected_output, received_output, "expected", "received"),
         )

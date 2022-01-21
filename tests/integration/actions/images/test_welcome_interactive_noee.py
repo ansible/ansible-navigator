@@ -17,7 +17,9 @@ CLI = Command(execution_environment=False).join()
 initial_steps = (
     Step(user_input=CLI, comment="welcome screen"),
     Step(
-        user_input=":images", comment="ansible-navigator images top window", look_fors=[IMAGE_SHORT]
+        user_input=":images",
+        comment="ansible-navigator images top window",
+        look_fors=[IMAGE_SHORT],
     ),
 )
 

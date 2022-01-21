@@ -73,7 +73,10 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
     ],
 )
 def test_env_var_is_file_path(
-    monkeypatch, set_env: bool, file_path: str, anticpated_result: Optional[str]
+    monkeypatch,
+    set_env: bool,
+    file_path: str,
+    anticpated_result: Optional[str],
 ) -> None:
     """test environment variable is a file path"""
     envvar = "ANSIBLE_NAVIGATOR_CONFIG"
@@ -115,7 +118,9 @@ human_time_test_data = [
     HumanTimeTestData(id="minutes seconds", value=60 + 1, expected="1m1s"),
     HumanTimeTestData(id="hours minutes seconds", value=3600 + 60 + 1, expected="1h1m1s"),
     HumanTimeTestData(
-        id="days hours minutes seconds", value=86400 + 3600 + 60 + 1, expected="1d1h1m1s"
+        id="days hours minutes seconds",
+        value=86400 + 3600 + 60 + 1,
+        expected="1d1h1m1s",
     ),
 ]
 

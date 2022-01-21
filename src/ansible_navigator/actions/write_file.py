@@ -40,14 +40,16 @@ class Action:
         if match["append"]:
             if not os.path.exists(filename) and not match["force"]:
                 self._logger.warning(
-                    "Append operation failed because %s does not exist, force with !", filename
+                    "Append operation failed because %s does not exist, force with !",
+                    filename,
                 )
                 return None
             fmode = "a"
         else:
             if os.path.exists(filename) and not match["force"]:
                 self._logger.warning(
-                    "Write operation failed because %s exists, force with !", filename
+                    "Write operation failed because %s exists, force with !",
+                    filename,
                 )
                 return None
             fmode = "w"

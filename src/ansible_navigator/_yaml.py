@@ -60,7 +60,10 @@ class HumanDumper(Dumper):
     """
 
     def represent_scalar(
-        self, tag: str, value: str, style: Union[str, None] = None
+        self,
+        tag: str,
+        value: str,
+        style: Union[str, None] = None,
     ) -> yaml.nodes.ScalarNode:
         """Represent all multiline strings as block scalars to improve readability for humans.
 

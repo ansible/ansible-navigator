@@ -48,8 +48,10 @@ class ImagesList:
         """generate command"""
         return [
             Command(
-                id="images", command=f"{self._container_engine} images", post_process=self.parse
-            )
+                id="images",
+                command=f"{self._container_engine} images",
+                post_process=self.parse,
+            ),
         ]
 
     @staticmethod
@@ -79,8 +81,8 @@ def inspect_all(container_engine: str) -> Tuple[List, str]:
             ImagesInspect(
                 container_engine=container_engine,
                 ids=[image["image_id"] for image in images.values()],
-            )
-        ]
+            ),
+        ],
     )
     for inspect in inspects:
         images[inspect.id]["inspect"] = {"details": inspect.details, "errors": inspect.errors}

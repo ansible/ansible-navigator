@@ -67,7 +67,8 @@ class Action(App):
         interaction.ui.scroll(0)
 
         errors, templated = templar(
-            string=str(interaction.action.value), template_vars=template_vars
+            string=str(interaction.action.value),
+            template_vars=template_vars,
         )
         if errors:
             msgs = ["Errors encountered while templating input"] + errors
