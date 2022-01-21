@@ -82,7 +82,7 @@ def test_no_warnings(import_path: str) -> None:
 
     DeprecationWarnings related to distutils in ansible_runner are ignored
 
-    :param import_path: The path to be imported and smoke-checked for warnings and crushes
+    :param import_path: The path to be imported and smoke-checked for warnings and crashes
     """
     imp_cmd = (
         sys.executable,
