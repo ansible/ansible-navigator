@@ -96,6 +96,7 @@ class MenuBuilder:
 
         :param colno: The column number
         :param menu_layout: A tuple of menu details:
+
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
             * ``menu_layout[1]``: ``List[str]``, the columns of the menu
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
@@ -122,6 +123,7 @@ class MenuBuilder:
 
         :params dicts: A list of dicts from which the menu will be generated
         :param menu_layout: A tuple of menu details:
+
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
             * ``menu_layout[1]``: ``List[str]``, the columns of the menu
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
@@ -135,6 +137,7 @@ class MenuBuilder:
 
         :param dyct: One dict from which the menu line will be generated
         :param menu_layout: A tuple of menu details:
+
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
             * ``menu_layout[1]``: ``List[str]``, the columns of the menu
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
@@ -157,6 +160,7 @@ class MenuBuilder:
         :param coltext: The text to be placed at the given column
         :param dyct: The dict from which the menu line will be generated
         :param menu_layout: A tuple of menu details:
+        
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
             * ``menu_layout[1]``: ``List[str]``, the columns of the menu
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths

@@ -297,7 +297,7 @@ class UserInterface(CursesWindow):
     def _scroll_bar(
         self, viewport_h: int, len_heading: int, menu_size: int, body_start: int, body_stop: int
     ) -> None:
-        """Add a scroll bar if the lines > viewport
+        """Add a scroll bar if the length of the content is longer than the viewport height.
 
         :param viewport_h: The height if the viewport
         :param len_heading: The height of the heading
