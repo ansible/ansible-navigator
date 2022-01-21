@@ -7,7 +7,6 @@ from copy import deepcopy
 from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.initialization import parse_and_update
-
 from .defaults import TEST_FIXTURE_DIR
 
 
