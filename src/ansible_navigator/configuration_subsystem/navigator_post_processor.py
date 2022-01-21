@@ -105,7 +105,7 @@ class NavigatorPostProcessor:
         """Initialize the post processor."""
         #: Volume mounts accumulated from post processing various config entries.
         #: These get processed towards the end, in the (delayed)
-        #: execution_environment_volume_mounts() post-processor.
+        #: :meth:`.execution_environment_volume_mounts` post-processor.
         self.extra_volume_mounts: List[VolumeMount] = []
 
     @staticmethod

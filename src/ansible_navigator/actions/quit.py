@@ -27,7 +27,7 @@ class Action:
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending interaction
+        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
         """
         self._logger.debug("quit was requested as: %s", interaction.action.value)
         return interaction
