@@ -27,7 +27,7 @@ class AnsibleConfig(Base):
             precedence. Defaults to ``None``.
         :param only_changed: The boolean value when set to ``True`` returns only the
             configurations that have changed from the default. This parameter is applicable only
-            when ``action`` is set to ``dump``.. Defaults to `None`.
+            when ``action`` is set to ``dump``. Defaults to `None`.
         :return: A tuple of response and error string (if any).
         """
         return get_ansible_config(
