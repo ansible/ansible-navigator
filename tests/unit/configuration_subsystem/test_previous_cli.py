@@ -17,6 +17,7 @@ from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntryValue
 from ansible_navigator.configuration_subsystem.definitions import SubCommand
+from ansible_navigator.configuration_subsystem.navigator_configuration import Internals
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
 )
