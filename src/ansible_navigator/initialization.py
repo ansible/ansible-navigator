@@ -9,19 +9,18 @@ import sys
 from typing import Dict
 from typing import List
 from typing import NoReturn
-from typing import Union
 from typing import Tuple
+from typing import Union
 
+from ._version import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
-
-from .utils import environment_variable_is_file_path
-from .utils import find_settings_file
 from .utils import ExitMessage
 from .utils import ExitPrefix
 from .utils import LogMessage
-from ._version import __version_collection_doc_cache__ as VERSION_CDC
+from .utils import environment_variable_is_file_path
+from .utils import find_settings_file
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:

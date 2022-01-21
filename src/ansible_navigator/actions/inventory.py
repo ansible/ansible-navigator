@@ -12,9 +12,8 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from . import run_action
 from . import _actions as actions
-
+from . import run_action
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration

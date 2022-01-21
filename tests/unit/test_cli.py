@@ -1,15 +1,15 @@
 """tests for CLI
 """
 import shlex
+
 from copy import deepcopy
 from typing import NamedTuple
 from unittest.mock import patch
 
 import pytest
 
-from ansible_navigator.cli import parse_and_update
 from ansible_navigator.cli import NavigatorConfiguration
-
+from ansible_navigator.cli import parse_and_update
 from ..defaults import FIXTURES_DIR
 
 

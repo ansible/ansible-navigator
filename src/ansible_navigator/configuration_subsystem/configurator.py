@@ -12,13 +12,12 @@ from typing import Union
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 from .parser import Parser
-
+from .._yaml import SafeLoader
+from .._yaml import yaml
 from ..utils import ExitMessage
 from ..utils import ExitPrefix
 from ..utils import LogMessage
 from ..utils import oxfordcomma
-from .._yaml import SafeLoader
-from .._yaml import yaml
 
 
 class Configurator:

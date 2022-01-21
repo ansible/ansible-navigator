@@ -1,11 +1,10 @@
 """some common functions for the tests
 """
+import json
 import os
 import re
 import shutil
 import sys
-import json
-
 
 from .. import defaults
 

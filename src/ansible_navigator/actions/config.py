@@ -12,25 +12,21 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-
-from . import run_action
 from . import _actions as actions
-
+from . import run_action
+from .._yaml import Loader
+from .._yaml import yaml
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import AnsibleConfig
 from ..runner import Command
 from ..steps import Step
-
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
-
-from .._yaml import yaml
-from .._yaml import Loader
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:

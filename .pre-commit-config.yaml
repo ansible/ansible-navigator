@@ -18,13 +18,6 @@ repos:
   rev: 5.10.1
   hooks:
   - id: isort
-    args:
-    - --honor-noqa
-    exclude: |
-      (?x)
-      ^
-        .*
-      $
     stages: ["manual"]
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git

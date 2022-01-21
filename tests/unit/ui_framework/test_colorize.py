@@ -5,9 +5,9 @@ import os
 
 from unittest.mock import patch
 
+from ansible_navigator._yaml import human_dump
 from ansible_navigator.ui_framework.colorize import Colorize
 
-from ansible_navigator._yaml import human_dump
 
 SHARE_DIR = os.path.abspath(
     os.path.join(os.path.basename(__file__), "..", "share", "ansible_navigator")

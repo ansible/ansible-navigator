@@ -1,8 +1,8 @@
 """Tests for inventory from CLI, stdout."""
 import pytest
 
-from .base import BaseClass
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
+from .base import BaseClass
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import Step

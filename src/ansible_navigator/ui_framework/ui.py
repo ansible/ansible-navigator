@@ -5,13 +5,10 @@
 import curses
 import json
 import logging
-
 import re
 
 from collections.abc import Mapping
-
 from curses import ascii as curses_ascii
-
 from functools import lru_cache
 from math import ceil
 from math import floor
@@ -27,25 +24,20 @@ from typing import Union
 
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
-
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
-
 from .curses_window import CursesWindow
 from .curses_window import Window
-
 from .field_text import FieldText
 from .form import Form
 from .form_handler_text import FormHandlerText
 from .form_utils import warning_notification
 from .menu_builder import MenuBuilder
-
 from .ui_config import UIConfig
+from .._yaml import human_dump
 from ..utils import templar
 
-
-from .._yaml import human_dump
 
 STND_KEYS = {"^f/PgUp": "page up", "^b/PgDn": "page down", "\u2191\u2193": "scroll", "esc": "back"}
 END_KEYS = {":help": "help"}

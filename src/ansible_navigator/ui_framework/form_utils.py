@@ -8,16 +8,15 @@ from functools import partial
 from typing import Dict
 from typing import List
 
-
 from .field_checks import FieldChecks
 from .field_information import FieldInformation
 from .field_option import FieldOption
 from .field_radio import FieldRadio
 from .field_text import FieldText
 from .field_working import FieldWorking
-from .validators import FieldValidators
 from .form import Form
 from .form import FormType
+from .validators import FieldValidators
 
 
 def dict_to_form(form_data: Dict) -> Form:

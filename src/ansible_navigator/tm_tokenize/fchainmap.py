@@ -3,6 +3,7 @@ from typing import TypeVar
 
 from ._types import Protocol
 
+
 TKey = TypeVar("TKey", contravariant=True)
 TValue = TypeVar("TValue", covariant=True)
 

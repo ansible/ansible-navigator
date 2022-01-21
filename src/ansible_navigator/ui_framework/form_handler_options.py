@@ -2,12 +2,11 @@
 """
 import curses
 
+from curses import ascii as curses_ascii
+from typing import TYPE_CHECKING
 from typing import List
 from typing import Tuple
-from typing import TYPE_CHECKING
 from typing import Union
-from curses import ascii as curses_ascii
-
 
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow

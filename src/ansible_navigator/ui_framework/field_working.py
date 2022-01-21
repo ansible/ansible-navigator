@@ -1,15 +1,14 @@
 """an field with a 'working on it message'
 """
 from dataclasses import dataclass
-
 from typing import Callable
 from typing import List
 from typing import Union
 
 from .curses_window import Window
 from .form_handler_working import FormHandlerWorking
-from .sentinels import unknown
 from .sentinels import Unknown
+from .sentinels import unknown
 from .validators import FieldValidators
 
 

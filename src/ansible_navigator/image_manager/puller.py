@@ -2,8 +2,8 @@
 import logging
 import subprocess
 
-from typing import List
 from types import SimpleNamespace
+from typing import List
 
 from ..utils import ExitMessage
 from ..utils import ExitPrefix

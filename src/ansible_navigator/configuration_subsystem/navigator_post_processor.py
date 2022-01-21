@@ -6,26 +6,26 @@ import os
 import shlex
 import shutil
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from enum import Enum
 from pathlib import Path
 from typing import List
 from typing import Tuple
 
+from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
 from .definitions import SettingsEntry
-from .definitions import ApplicationConfiguration
-
+from ..utils import ExitMessage
+from ..utils import ExitPrefix
+from ..utils import LogMessage
 from ..utils import abs_user_path
 from ..utils import check_for_ansible
 from ..utils import flatten_list
 from ..utils import oxfordcomma
 from ..utils import str2bool
 from ..utils import to_list
-from ..utils import LogMessage
-from ..utils import ExitMessage
-from ..utils import ExitPrefix
 
 
 def _post_processor(func):

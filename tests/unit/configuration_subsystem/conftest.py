@@ -1,27 +1,27 @@
 """fixtures for configuration subsystem tests
 """
 import os
-from copy import deepcopy
 
+from copy import deepcopy
 from typing import Dict
 from typing import List
 from typing import NamedTuple
 
 import pytest
 
+from ansible_navigator._yaml import Loader
+from ansible_navigator._yaml import yaml
 from ansible_navigator.configuration_subsystem.configurator import Configurator
-
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
-
-from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
-
+from ansible_navigator.configuration_subsystem.definitions import (
+    ApplicationConfiguration,
+)
+from ansible_navigator.configuration_subsystem.navigator_configuration import (
+    NavigatorConfiguration,
+)
 from ansible_navigator.utils import ExitMessage
 from ansible_navigator.utils import LogMessage
-
-from ansible_navigator._yaml import yaml
-from ansible_navigator._yaml import Loader
-
 from ...defaults import FIXTURES_DIR
+
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
 

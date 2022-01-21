@@ -1,16 +1,15 @@
 """a text input field
 """
 from dataclasses import dataclass
-
 from typing import Any
 from typing import Callable
 from typing import Union
 
 from .curses_window import Window
 from .form_handler_text import FormHandlerText
+from .sentinels import Unknown
 from .sentinels import nonexistent
 from .sentinels import unknown
-from .sentinels import Unknown
 from .validators import FieldValidators
 
 

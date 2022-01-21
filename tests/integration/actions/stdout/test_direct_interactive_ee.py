@@ -2,8 +2,8 @@
 """
 import pytest
 
-from .base import BaseClass
 from .base import ANSIBLE_PLAYBOOK
+from .base import BaseClass
 
 
 CLI = "ansible-navigator" f" run {ANSIBLE_PLAYBOOK}" " --execution-environment true --ll debug"

@@ -1,10 +1,11 @@
+from typing import TYPE_CHECKING
 from typing import List
 from typing import Tuple
-from typing import TYPE_CHECKING
 
 from .region import Region
 from .region import Regions
 from .state import State
+
 
 if TYPE_CHECKING:
     from .compiler import Compiler

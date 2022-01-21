@@ -1,13 +1,14 @@
 """:quit
 """
 from . import _actions as actions
+from .._yaml import yaml
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
-from .._yaml import yaml
+
 
 FORM = """
 form:

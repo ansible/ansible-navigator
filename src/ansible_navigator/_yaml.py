@@ -2,11 +2,12 @@
 # pylint: disable=unused-import
 import re
 
+from typing import Any
 from typing import NamedTuple
 from typing import Union
-from typing import Any
 
 import yaml  # noqa: F401
+
 
 try:
     from yaml import CDumper as Dumper

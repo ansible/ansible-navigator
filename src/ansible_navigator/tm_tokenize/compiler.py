@@ -1,10 +1,9 @@
 import functools
 
+from typing import TYPE_CHECKING
 from typing import Dict
 from typing import List
 from typing import Tuple
-from typing import TYPE_CHECKING
-
 
 from .fchainmap import FChainMap
 from .reg import make_regset
@@ -15,12 +14,13 @@ from .rules import PatternRule
 from .rules import WhileRule
 from .state import State
 
+
 if TYPE_CHECKING:
     from .grammars import Grammar
     from .grammars import Grammars
-    from .rules import _Rule
     from .rules import Captures
     from .rules import CompiledRule
+    from .rules import _Rule
 
 
 class Compiler:

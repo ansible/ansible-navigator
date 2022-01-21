@@ -2,8 +2,9 @@
 """
 import pytest
 
-from .base import BaseClass
 from .base import PLAYBOOK_ARTIFACT
+from .base import BaseClass
+
 
 CLI = "ansible-navigator --execution-environment false"
 

@@ -8,22 +8,16 @@ from typing import Tuple
 from typing import Union
 
 from ansible_navigator.actions import kegexes
-
 from .app_public import AppPublic
-
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants as C
-
 from .initialization import parse_and_update
-
 from .steps import Steps
-
 from .ui_framework import Interaction
 from .ui_framework import ui
 from .ui_framework import warning_notification
-
-from .utils import LogMessage
 from .utils import ExitMessage
+from .utils import LogMessage
 
 
 class App:

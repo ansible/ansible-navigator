@@ -1,9 +1,7 @@
 """configuration definitions
 """
 from enum import Enum
-
 from types import SimpleNamespace
-
 from typing import Any
 from typing import Callable
 from typing import Dict

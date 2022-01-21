@@ -1,8 +1,8 @@
 """one option in either a check or radio field
 """
 from dataclasses import dataclass
-
 from typing import Union
+
 from .field_checks import FieldChecks
 from .field_radio import FieldRadio
 

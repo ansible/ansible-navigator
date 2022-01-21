@@ -4,19 +4,20 @@ import logging
 import os
 
 from copy import deepcopy
+from queue import Queue
 from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Optional
 from typing import Union
-from queue import Queue
-from unittest.mock import patch
 from unittest.mock import mock_open
+from unittest.mock import patch
 
 import pytest
 
-from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.actions.run import Action as action
+from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+
 
 TEST_QUEUE: Queue = Queue()
 

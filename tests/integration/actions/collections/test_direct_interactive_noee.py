@@ -4,6 +4,7 @@ import pytest
 
 from .base import BaseClass
 
+
 CLI = "ansible-navigator collections --execution-environment false"
 
 testdata = [

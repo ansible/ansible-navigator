@@ -5,7 +5,6 @@ import curses
 from ansible_navigator.actions.inventory import color_menu
 from ansible_navigator.actions.inventory import content_heading
 from ansible_navigator.actions.inventory import filter_content_keys
-
 from ansible_navigator.ui_framework.curses_defs import CursesLinePart
 
 

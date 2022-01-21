@@ -11,12 +11,12 @@ from typing import Dict
 from typing import List
 
 from . import _actions as actions
+from .._yaml import human_dump
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 from ..utils import remove_dbl_un
-from .._yaml import human_dump
 
 
 class SuspendCurses:

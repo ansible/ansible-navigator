@@ -1,6 +1,7 @@
 from typing import NamedTuple
 from typing import Tuple
 
+
 Scope = Tuple[str, ...]
 
 Regions = Tuple["Region", ...]

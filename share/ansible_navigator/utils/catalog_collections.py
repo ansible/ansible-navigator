@@ -9,7 +9,6 @@ import re
 import subprocess
 import sys
 
-
 from collections import Counter
 from collections import OrderedDict
 from datetime import datetime
@@ -19,18 +18,22 @@ from typing import Dict
 from typing import List
 from typing import Tuple
 
-from ansible.utils.plugin_docs import get_docstring  # type: ignore
-
 import yaml
+
+from ansible.utils.plugin_docs import get_docstring  # type: ignore
 from yaml.error import YAMLError
+
 
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
     from yaml import SafeLoader  # type: ignore
 
-from key_value_store import KeyValueStore  # type: ignore  # pylint: disable=import-error
+# pylint: disable=import-error
+from key_value_store import KeyValueStore  # type: ignore
 
+
+# pylint: enable=import-error
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 

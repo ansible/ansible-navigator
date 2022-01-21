@@ -3,13 +3,12 @@
 import curses
 import json
 import logging
+
 from typing import TYPE_CHECKING
 from typing import Union
 
 from .colorize import hex_to_rgb_curses
-
 from .curses_defs import CursesLine
-
 from .ui_config import UIConfig
 
 

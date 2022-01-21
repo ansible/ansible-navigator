@@ -1,16 +1,18 @@
 """introspect an image"""
 import json
+import multiprocessing
 import re
 import subprocess
 import sys
-import multiprocessing
-from types import SimpleNamespace
 
-from typing import Any
-from typing import Callable, List
-from typing import Dict
-from typing import Union
 from queue import Queue
+from types import SimpleNamespace
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Union
+
 
 # pylint: disable=broad-except
 

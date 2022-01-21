@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING
 
 from ansible_navigator.actions import kegexes
 from ansible_navigator.actions import run_action
-
 from .app import App
 from .configuration_subsystem import ApplicationConfiguration
 from .steps import Steps
 from .ui_framework import Interaction
 from .ui_framework import UIConfig
 from .ui_framework import UserInterface
+
 
 if TYPE_CHECKING:
     from _curses import _CursesWindow  # pylint: disable=no-name-in-module

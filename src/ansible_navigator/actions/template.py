@@ -5,12 +5,11 @@ from collections.abc import Mapping
 from typing import Union
 
 from . import _actions as actions
-
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..ui_framework import warning_notification
 from ..ui_framework import Interaction
+from ..ui_framework import warning_notification
 from ..utils import remove_dbl_un
 from ..utils import templar
 

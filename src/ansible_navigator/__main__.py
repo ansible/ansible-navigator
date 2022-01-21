@@ -5,5 +5,6 @@ via :command:`python -m ansible_navigator`.
 """
 from .cli import main
 
+
 if __name__ == "__main__":
     main()

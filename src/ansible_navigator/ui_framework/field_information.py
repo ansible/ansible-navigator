@@ -1,15 +1,14 @@
 """an information field
 """
 from dataclasses import dataclass
-
 from typing import Callable
 from typing import List
 from typing import Union
 
 from .curses_window import Window
 from .form_handler_information import FormHandlerInformation
-from .sentinels import unknown
 from .sentinels import Unknown
+from .sentinels import unknown
 from .validators import FieldValidators
 
 

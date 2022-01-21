@@ -2,10 +2,10 @@
 """
 
 import curses
-from curses.textpad import Textbox
-from curses import ascii as curses_ascii
-from typing import Tuple
 
+from curses import ascii as curses_ascii
+from curses.textpad import Textbox
+from typing import Tuple
 
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow

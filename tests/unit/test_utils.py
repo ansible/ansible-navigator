@@ -11,6 +11,7 @@ import pytest
 
 from ansible_navigator import utils
 
+
 EXTENSIONS = [".yml", ".yaml", ".json"]
 
 

@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Dict
 from typing import List
@@ -5,13 +6,12 @@ from typing import Match
 from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
-from typing import TYPE_CHECKING
 
 from ._types import Protocol
 from .fchainmap import FChainMap
+from .reg import ERR_REG
 from .reg import _Reg
 from .reg import _RegSet
-from .reg import ERR_REG
 from .reg import do_regset
 from .reg import expand_escaped
 from .reg import make_reg

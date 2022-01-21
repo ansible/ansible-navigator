@@ -5,8 +5,8 @@ import uuid
 from typing import NamedTuple
 
 import pytest
-from ansible_navigator.image_manager import ImagePuller
 
+from ansible_navigator.image_manager import ImagePuller
 from ...defaults import DEFAULT_CONTAINER_IMAGE
 from ...defaults import SMALL_TEST_IMAGE
 

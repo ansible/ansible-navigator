@@ -5,14 +5,15 @@ import functools
 import importlib
 import logging
 import re
-from collections import namedtuple
 
+from collections import namedtuple
 from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import Generator
 from typing import List
 from typing import Tuple
+
 
 try:
     from importlib import resources
