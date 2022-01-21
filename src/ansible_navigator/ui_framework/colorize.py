@@ -260,9 +260,7 @@ def ansi_to_curses(line: str) -> CursesLine:
     """Convert ansible color codes to curses colors
 
     :param line: A string with ansi colors
-    :type line: str
     :return: A list of str tuples [(x, s, c), (x, s, c)...]
-    :rtype: list
     """
     printable = []
     ansi_regex = re.compile(r"(\x1b\[[\d;]*m)")

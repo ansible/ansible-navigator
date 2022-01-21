@@ -21,12 +21,10 @@ class Action:
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :doc
+        """Handle a request to quit the application.
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
         """
         # : quit will be handled in the app
         self._logger.debug("quit was requested as: %s", interaction.action.value)

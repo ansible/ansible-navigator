@@ -1,4 +1,4 @@
-""" tests for the utilities in utils
+"""Test the utilities functions in utils.
 """
 import os
 

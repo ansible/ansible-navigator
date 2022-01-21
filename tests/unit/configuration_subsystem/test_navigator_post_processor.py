@@ -27,5 +27,9 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
     ),
 )
 def test_navigator_volume_mount_to_string(volmount, expected):
-    """Make sure volume mount ``to_string`` is sane."""
+    """Make sure volume mount ``to_string`` is sane.
+
+    :param volmount: The volume mount to test
+    :param expected: The expected string resulting from the conversion of the mount to a string
+    """
     assert volmount.to_string() == expected

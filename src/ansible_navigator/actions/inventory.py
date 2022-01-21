@@ -164,9 +164,8 @@ class Action(App):
         """Handle :inventory
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
-        :param calling_app: The calling_app instance
-        :type calling_app: App
+        :param app: The app instance
+        :return: The pending interaction or none
         """
         self._logger.debug("inventory requested in interactive mode")
         self._prepare_to_run(app, interaction)

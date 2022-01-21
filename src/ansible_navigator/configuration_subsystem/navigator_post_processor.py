@@ -102,9 +102,10 @@ class NavigatorPostProcessor:
     """application post processor"""
 
     def __init__(self):
-        # Volume mounts accumulated from post processing various config entries.
-        # These get processed towards the end, in the (delayed)
-        # execution_environment_volume_mounts() post-processor.
+        """Initialize the post processor."""
+        #: Volume mounts accumulated from post processing various config entries.
+        #: These get processed towards the end, in the (delayed)
+        #: execution_environment_volume_mounts() post-processor.
         self.extra_volume_mounts: List[VolumeMount] = []
 
     @staticmethod

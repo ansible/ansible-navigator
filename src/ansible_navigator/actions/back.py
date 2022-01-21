@@ -24,9 +24,7 @@ class Action:
         """Handle <ESC>
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
         """
         self._logger.debug("back requested")
         interaction.ui.scroll(0)
