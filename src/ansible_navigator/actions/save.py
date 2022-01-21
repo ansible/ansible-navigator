@@ -23,9 +23,7 @@ class Action:
         """Handle :save
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
         """
         self._logger.debug("save requested")
         filename = interaction.action.match.groupdict()["filename"]

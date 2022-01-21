@@ -24,9 +24,7 @@ class Action:
         """Handle :json
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
         """
         self._logger.debug("json requested")
         if interaction.ui is not None:

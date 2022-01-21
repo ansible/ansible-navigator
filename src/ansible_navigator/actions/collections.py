@@ -99,9 +99,9 @@ class Action(App):
         """Handle :doc
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
+        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+            :data:`None`
         """
         self._logger.debug("collections requested")
         self._prepare_to_run(app, interaction)

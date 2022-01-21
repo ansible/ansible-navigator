@@ -26,9 +26,7 @@ class Action:
         """Handle :[0-n]
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
         """
         self._logger.debug("selection made")
         interaction.ui.scroll(0)

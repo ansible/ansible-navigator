@@ -28,7 +28,8 @@ import ansible_navigator
 def _find_all_importables(pkg: ModuleType) -> List[str]:
     """Find all importables in the project.
 
-    Return them in order.
+    :param pkg: The package in which importables will be found
+    :return: A sorted list of the importables
     """
     return sorted(
         set(
@@ -44,7 +45,12 @@ def _discover_path_importables(
     pkg_pth: Path,
     pkg_name: str,
 ) -> Generator[str, None, None]:
-    """Yield all importables under a given path and package."""
+    """Yield all importables under a given path and package.
+
+    :param pkg_pth: The path to the package to walk
+    :param pkg_name: The name of the package
+    :yields: Package directory paths
+    """
     for dir_path, _d, file_names in os.walk(pkg_pth):
         pkg_dir_path = Path(dir_path)
 
@@ -76,6 +82,8 @@ def test_no_warnings(import_path: str) -> None:
     by circular imports.
 
     DeprecationWarnings related to distutils in ansible_runner are ignored
+
+    :param import_path: The path to be imported and smoke-checked for warnings and crashes
     """
     imp_cmd = (
         sys.executable,

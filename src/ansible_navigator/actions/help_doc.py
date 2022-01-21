@@ -23,9 +23,8 @@ class Action(App):
         """Handle :help
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
+        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
         """
         self._logger.debug("help requested")
         self._prepare_to_run(app, interaction)

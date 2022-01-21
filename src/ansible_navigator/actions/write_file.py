@@ -29,9 +29,7 @@ class Action:
         """Handle :write
 
         :param interaction: The interaction from the user
-        :type interaction: Interaction
         :param app: The app instance
-        :type app: App
         """
         # pylint: disable=too-many-branches
         self._logger.debug("write requested as %s", interaction.action.value)

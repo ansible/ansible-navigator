@@ -103,14 +103,14 @@ class UserInterface(CursesWindow):
         pbar_width: int = 8,
         status_width=12,
     ) -> None:
-        """initialize
+        """Initialize the user interface.
 
         :param screen_miny: The minimum screen height
-        :type screen_miny: int
+        :param kegexes: A callable producing a list og action regular expressions to match against
+        :param refresh: The screen refresh time is ms
+        :param ui_config: the current UI configuration
         :param pbar_width: The width of the progress bar
-        :type pbar_width: int
-        :param words_to_color: Words that get colored (regex, color_int)
-        :type words_to_color: list
+        :param status_width: The width of the status indicator
         """
         super().__init__(ui_config=ui_config)
         self._color_menu_item: Callable[[int, str, Dict[str, Any]], Tuple[int, int]]
@@ -168,7 +168,7 @@ class UserInterface(CursesWindow):
     def menu_filter(self, value: Union[str, None] = "") -> Union[Pattern, None]:
         """Set or return the menu filter.
 
-        :param args[0]: None or the menu_filter regex to set
+        :param value: None or the menu_filter regex to set
         :return: the current menu filter
         """
         if value != "":
@@ -289,18 +289,13 @@ class UserInterface(CursesWindow):
     def _scroll_bar(
         self, viewport_h: int, len_heading: int, menu_size: int, body_start: int, body_stop: int
     ) -> None:
-        """Add a scroll bar if the lines > viewport
+        """Add a scroll bar if the length of the content is longer than the viewport height.
 
-        :param footer_height: The height of the footer
-        :type footer_height: int
-        :param_len_heading: the height of the heading
-        :type len_heading: int
-        :param len_lines: the number of lines in the content
-        :type len_lines: int
-        :param body_start: where we are in the body
-        :type body_start: int
-        :param body_stop: the end of the body
-        :type body_stop: int
+        :param viewport_h: The height if the viewport
+        :param len_heading: The height of the heading
+        :param menu_size: The number of lines in the content
+        :param body_start: Where we are in the body
+        :param body_stop: The end of the body
         """
         start_scroll_bar = body_start / menu_size * viewport_h
         stop_scroll_bar = body_stop / menu_size * viewport_h
@@ -520,11 +515,9 @@ class UserInterface(CursesWindow):
         add colors as needed, maintain a mapping of RGB colors
         to curses colors in self._rgb_to_curses_color_idx
 
-        :params lines: the lines to transform
-        :type lines: list of lists of dicts
+        :params lines: The lines to transform
             Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
         :return: the lines ready for curses
-        :type: CursesLines
         """
         if curses.COLORS > 16 and self._term_osc4_supprt:
             unique_colors = list(
@@ -712,11 +705,8 @@ class UserInterface(CursesWindow):
         """Check columns in a dictionary against a regex
 
         :param obj: The dict to check
-        :type obj: dict
         :param columns: The dicts keys to check
-        :type columns: list
         :return: True if a match else False
-        :rtype: bool
         """
         for key in columns:
             if self._search_value(self.menu_filter(), obj[key]):
@@ -744,13 +734,8 @@ class UserInterface(CursesWindow):
         """build the menu
 
         :param current: A dict
-        :type current: dict
         :param columns: The keys from the dictionary to use as columns
-        :type columns: list
-        :param distribute: method for width deficit
-        :type distribute: str
         :return: The heading and menu items
-        :rtype: CursesLines, CursesLines
         """
         menu_builder = MenuBuilder(
             pbar_width=self._pbar_width,
@@ -766,13 +751,9 @@ class UserInterface(CursesWindow):
         """Show a menu on the screen
 
         :param current: A dict
-        :type current: dict
         :param columns: The keys from the dictionary to use as columns
-        :type columns: list
         :param await_input: Should we wait for user input?
-        :type await_input: bool
-        :return: interaction with the user
-        :rtype: Interaction
+        :return: Interaction with the user
         """
 
         while True:
