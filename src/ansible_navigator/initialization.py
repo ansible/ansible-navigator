@@ -30,7 +30,7 @@ def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
     sys.exit(1)
 
 
-def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str], C]:
     """
     Find a configuration file, logging each step.
     Return (log messages, path).
@@ -40,6 +40,7 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
     config_path = None
+    settings_source = C.NONE
 
     # Check if the configuration file path is set via an environment var
     cfg_env_var = "ANSIBLE_NAVIGATOR_CONFIG"
@@ -49,7 +50,7 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
     if exit_messages:
-        return messages, exit_messages, config_path
+        return messages, exit_messages, config_path, settings_source
 
     # Find the setting file
     new_messages, new_exit_messages, found_config_path = find_settings_file()
@@ -57,21 +58,23 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
     if exit_messages:
-        return messages, exit_messages, config_path
+        return messages, exit_messages, config_path, settings_source
 
     # Pick the environment variable set first, followed by found, followed by leave as none
     if env_config_path is not None:
         config_path = env_config_path
+        settings_source = C.ENVIRONMENT_VARIABLE
         message = f"Using settings file at {config_path} set by {cfg_env_var}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
     elif found_config_path is not None:
         config_path = found_config_path
+        settings_source = C.SEARCH_PATH
         message = f"Using settings file at {config_path} in search path"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
     else:
         message = "No valid settings file found, using all default values for settings."
         messages.append(LogMessage(level=logging.DEBUG, message=message))
-    return messages, exit_messages, config_path
+    return messages, exit_messages, config_path, settings_source
 
 
 def get_and_check_collection_doc_cache(
@@ -158,7 +161,12 @@ def parse_and_update(
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
 
-    new_messages, new_exit_messages, config_path = find_config()
+    (
+        new_messages,
+        new_exit_messages,
+        args.internals.settings_file_path,
+        args.internals.settings_source,
+    ) = find_config()
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
     if exit_messages:
@@ -166,7 +174,6 @@ def parse_and_update(
 
     configurator = Configurator(
         params=params,
-        settings_file_path=config_path,
         application_configuration=args,
         apply_previous_cli_entries=apply_previous_cli_entries,
         initial=initial,

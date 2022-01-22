@@ -17,6 +17,7 @@ from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntryValue
 from ansible_navigator.configuration_subsystem.definitions import SubCommand
+from ansible_navigator.configuration_subsystem.navigator_configuration import Internals
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
 )
@@ -266,6 +267,7 @@ def test_apply_cli_subset_none():
     """Ensure subset none works for apply CLI"""
     test_config = ApplicationConfiguration(
         application_name="test_application",
+        internals=Internals(),
         post_processor=None,
         subcommands=[
             SubCommand(name="list", description="list"),
