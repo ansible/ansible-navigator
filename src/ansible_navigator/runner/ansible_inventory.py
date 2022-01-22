@@ -48,5 +48,5 @@ class AnsibleInventory(Base):
             playbook_dir=playbook_dir,
             vault_ids=vault_ids,
             vault_password_file=vault_password_file,
-            **self._runner_args
+            **self._runner_args,
         )

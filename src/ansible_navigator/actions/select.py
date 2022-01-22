@@ -36,5 +36,7 @@ class Action:
         app.steps.append(app.steps.current.select_func())  # add next
         app.steps.append(this)  # put this back on stack
         self._logger.debug(
-            "Requested next step in %s will be %s", app.name, app.steps.previous.name
+            "Requested next step in %s will be %s",
+            app.name,
+            app.steps.previous.name,
         )

@@ -78,7 +78,9 @@ def test_dont_have(valid_container_engine, data):
     """test using an image not local"""
     uuid_str = str(uuid.uuid4())
     image_puller = ImagePuller(
-        container_engine=valid_container_engine, image=uuid_str, pull_policy=data.pull_policy
+        container_engine=valid_container_engine,
+        image=uuid_str,
+        pull_policy=data.pull_policy,
     )
     image_puller.assess()
     assert image_puller.assessment.pull_required == data.pull_required

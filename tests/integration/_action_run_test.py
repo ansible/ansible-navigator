@@ -62,7 +62,9 @@ class ActionRunTest:
             "ansible_runner_timeout": self._timeout,
         }
         self._app_action = __import__(
-            f"ansible_navigator.actions.{self._action_name}", globals(), fromlist=["Action"]
+            f"ansible_navigator.actions.{self._action_name}",
+            globals(),
+            fromlist=["Action"],
         )
 
     def callable_pass_one_arg(self, value=0):

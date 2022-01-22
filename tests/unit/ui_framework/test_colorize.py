@@ -10,7 +10,7 @@ from ansible_navigator.ui_framework.colorize import Colorize
 
 
 SHARE_DIR = os.path.abspath(
-    os.path.join(os.path.basename(__file__), "..", "share", "ansible_navigator")
+    os.path.join(os.path.basename(__file__), "..", "share", "ansible_navigator"),
 )
 THEME_PATH = os.path.join(SHARE_DIR, "themes", "dark_vs.json")
 GRAMMAR_DIR = os.path.join(SHARE_DIR, "grammar")
@@ -21,7 +21,8 @@ def test_basic_success_json():
     to the json string"""
     sample = json.dumps({"test": "data"})
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
-        doc=sample, scope="source.json"
+        doc=sample,
+        scope="source.json",
     )
     assert len(result) == 1
     assert len(result[0]) == 5
@@ -35,7 +36,8 @@ def test_basic_success_yaml():
     """
     sample = human_dump({"test": "data"})
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
-        doc=sample, scope="source.yaml"
+        doc=sample,
+        scope="source.yaml",
     )
     assert len(result) == 2
     assert len(result[0]) == 1
@@ -48,7 +50,8 @@ def test_basic_success_no_color():
     """Ensure scope nocolor return just lines"""
     sample = json.dumps({"test": "data"})
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
-        doc=sample, scope="no_color"
+        doc=sample,
+        scope="no_color",
     )
     assert len(result) == 1
     assert len(result[0]) == 1
@@ -65,7 +68,8 @@ def test_graceful_failure(mocked_func, caplog):
     mocked_func.side_effect = ValueError()
     sample = json.dumps({"test": "data"})
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
-        doc=sample, scope="source.json"
+        doc=sample,
+        scope="source.json",
     )
     assert len(result) == 1
     assert len(result[0]) == 1

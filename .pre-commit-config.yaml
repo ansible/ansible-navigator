@@ -7,11 +7,6 @@ repos:
   - id: add-trailing-comma
     args:
     - --py36-plus
-    exclude: |
-      (?x)
-      ^
-        .*
-      $
     stages: ["manual"]
 
 - repo: https://github.com/PyCQA/isort

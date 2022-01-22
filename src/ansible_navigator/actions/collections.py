@@ -61,9 +61,9 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
                     string=string,
                     color=2,
                     decoration=curses.A_UNDERLINE,
-                )
-            ]
-        )
+                ),
+            ],
+        ),
     )
     return tuple(heading)
 
@@ -110,12 +110,12 @@ class Action(App):
         notification = nonblocking_notification(
             messages=[
                 "Collecting collection content, this may take a minute the first time...",
-            ]
+            ],
         )
         interaction.ui.show(notification)
 
         params = [self._name] + shlex.split(
-            self._interaction.action.match.groupdict()["params"] or ""
+            self._interaction.action.match.groupdict()["params"] or "",
         )
 
         self._update_args(params=params, attach_cdc=True)
@@ -280,7 +280,7 @@ class Action(App):
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs.update(
-                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
+                {"container_volume_mounts": self._args.execution_environment_volume_mounts},
             )
 
         if isinstance(self._args.container_options, list):
@@ -308,11 +308,11 @@ class Action(App):
             container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
             if os.path.exists(self._adjacent_collection_dir):
                 container_volume_mounts.append(
-                    f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z"
+                    f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
                 )
 
             container_volume_mounts.append(
-                f"{self._collection_cache_path}:{self._collection_cache_path}:z"
+                f"{self._collection_cache_path}:{self._collection_cache_path}:z",
             )
             kwargs.update({"container_volume_mounts": container_volume_mounts})
 
@@ -321,7 +321,7 @@ class Action(App):
             python_exec_path = sys.executable
 
         self._logger.debug(
-            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}"
+            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}",
         )
         _runner = Command(executable_cmd=python_exec_path, **kwargs)
         output, error, _ = _runner.run()
@@ -355,7 +355,8 @@ class Action(App):
             self._logger.error("%s %s", error["path"], error["error"])
 
         self._collections = sorted(
-            list(parsed["collections"].values()), key=lambda i: i["known_as"]
+            list(parsed["collections"].values()),
+            key=lambda i: i["known_as"],
         )
         for collection in self._collections:
             collection["__name"] = collection["known_as"]

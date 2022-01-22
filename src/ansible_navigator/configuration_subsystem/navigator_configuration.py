@@ -437,7 +437,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description="Specify the name for artifacts created from completed playbooks",
             subcommands=["run"],
             value=SettingsEntryValue(
-                default="{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"
+                default="{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json",
             ),
         ),
         SettingsEntry(

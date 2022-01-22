@@ -24,7 +24,7 @@ def test_entries_no_duplicate_shorts():
             entry.cli_parameters.short
             for entry in NavigatorConfiguration.entries
             if entry.cli_parameters is not None
-        ]
+        ],
     )
     assert not any(k for (k, v) in values.items() if v > 1)
 

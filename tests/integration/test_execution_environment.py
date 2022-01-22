@@ -66,7 +66,8 @@ class Test(Cli2Runner):
         with mock.patch("sys.argv", params):
             with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
                 with mock.patch.dict(
-                    os.environ, {"ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH": coll_cache_path}
+                    os.environ,
+                    {"ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH": coll_cache_path},
                 ):
                     with pytest.raises(Exception, match="called"):
                         cli.main()

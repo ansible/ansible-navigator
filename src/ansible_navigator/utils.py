@@ -178,7 +178,8 @@ def escape_moustaches(obj):
 
 
 def environment_variable_is_file_path(
-    env_var: str, kind: str
+    env_var: str,
+    kind: str,
 ) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     """check if a given environment var is a viable file path, if so return that path"""
     messages: List[LogMessage] = []
@@ -281,7 +282,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     # We want the share directory to resolve adjacent to the directory the code lives in
     # as that's the layout in the source.
     share_directory = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "share", app_name)
+        os.path.join(os.path.dirname(__file__), "..", "..", "share", app_name),
     )
     description = "development path"
     if os.path.exists(share_directory):

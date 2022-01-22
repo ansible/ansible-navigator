@@ -38,7 +38,10 @@ class Compiler:
 
     @functools.lru_cache(maxsize=None)
     def _include(
-        self, grammar: "Grammar", repository: FChainMap[str, "_Rule"], s: str
+        self,
+        grammar: "Grammar",
+        repository: FChainMap[str, "_Rule"],
+        s: str,
     ) -> Tuple[List[str], Tuple["_Rule", ...]]:
         if s == "$self":
             return self._patterns(grammar, grammar.patterns)
@@ -57,7 +60,9 @@ class Compiler:
 
     @functools.lru_cache(maxsize=None)
     def _patterns(
-        self, grammar: "Grammar", rules: Tuple["_Rule", ...]
+        self,
+        grammar: "Grammar",
+        rules: Tuple["_Rule", ...],
     ) -> Tuple[List[str], Tuple["_Rule", ...]]:
         ret_regs = []
         ret_rules: List["_Rule"] = []

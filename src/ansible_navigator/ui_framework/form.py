@@ -32,8 +32,11 @@ class Form:
             # pylint: disable=no-member
             self.fields.append(
                 FieldButton(
-                    name="submit", text="Submit", validator=FormValidators.all_true, color=10
-                )
+                    name="submit",
+                    text="Submit",
+                    validator=FormValidators.all_true,
+                    color=10,
+                ),
             )
             self.fields.append(FieldButton(name="cancel", text="Cancel", color=9))
             # pylint: enable=no-member
@@ -41,8 +44,11 @@ class Form:
             # pylint: disable=no-member
             self.fields.append(
                 FieldButton(
-                    name="submit", text=" Ok ", validator=FormValidators.no_validation, color=10
-                )
+                    name="submit",
+                    text=" Ok ",
+                    validator=FormValidators.no_validation,
+                    color=10,
+                ),
             )
             # pylint: enable=no-member
         elif self.type is FormType.WORKING:

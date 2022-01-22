@@ -70,9 +70,9 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
                     string=string,
                     color=0,
                     decoration=curses.A_UNDERLINE,
-                )
-            ]
-        )
+                ),
+            ],
+        ),
     )
     return tuple(heading)
 
@@ -146,7 +146,7 @@ class Action(App):
                             os.path.getmtime(e)
                             for e in glob.glob(os.path.join(inventory, "**"), recursive=True)
                         )
-                    )
+                    ),
                 )
             elif os.path.isfile(inventory):
                 mtimes.append(os.path.getmtime(inventory))
@@ -264,7 +264,8 @@ class Action(App):
             description="Explore each inventory group and group members members",
         )
         hosts = MenuEntry(
-            title="Browse hosts", description="Explore the inventory with a list of all hosts"
+            title="Browse hosts",
+            description="Explore the inventory with a list of all hosts",
         )
 
         step = Step(
@@ -292,7 +293,7 @@ class Action(App):
             menu = Menu()
             taxonomy = "\u25B8".join(
                 ["all"]
-                + [step.selected["__name"] for step in self.steps if step.name == "group_menu"]
+                + [step.selected["__name"] for step in self.steps if step.name == "group_menu"],
             )
 
             columns = ["__name", "__taxonomy", "__type"]
@@ -381,7 +382,7 @@ class Action(App):
     def _build_inventory_list(self) -> None:
 
         self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or "")
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
         )
 
         if isinstance(self._args.inventory, list):
@@ -516,7 +517,7 @@ class Action(App):
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs.update(
-                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
+                {"container_volume_mounts": self._args.execution_environment_volume_mounts},
             )
 
         if isinstance(self._args.container_options, list):

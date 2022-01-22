@@ -15,7 +15,10 @@ class AnsibleConfig(Base):
     """abstraction for ansible-config command-line"""
 
     def fetch_ansible_config(
-        self, action: str, config_file: Optional[str] = None, only_changed: Optional[bool] = None
+        self,
+        action: str,
+        config_file: Optional[str] = None,
+        only_changed: Optional[bool] = None,
     ) -> Tuple[str, str]:
         """Run ansible-config command and get the configuration related details.
 
@@ -31,5 +34,8 @@ class AnsibleConfig(Base):
         :return: A tuple of response and error string (if any).
         """
         return get_ansible_config(
-            action, config_file=config_file, only_changed=only_changed, **self._runner_args
+            action,
+            config_file=config_file,
+            only_changed=only_changed,
+            **self._runner_args,
         )

@@ -105,7 +105,8 @@ class CommandRunner:
         processes = []
         for _proc in range(worker_count):
             proc = multiprocessing.Process(
-                target=worker, args=(self._pending_queue, self._completed_queue)
+                target=worker,
+                args=(self._pending_queue, self._completed_queue),
             )
             processes.append(proc)
             proc.start()
@@ -168,7 +169,7 @@ class AnsibleCollections(CmdParser):
                 id="ansible_collections",
                 command=command,
                 parse=self.parse,
-            )
+            ),
         ]
 
     @staticmethod
@@ -222,7 +223,7 @@ class PythonPackages(CmdParser):
         pre.parse(pre)
         pkgs = " ".join(pkg for pkg in pre.details[0])
         return [
-            Command(id="python_packages", command=f"python3 -m pip show {pkgs}", parse=self.parse)
+            Command(id="python_packages", command=f"python3 -m pip show {pkgs}", parse=self.parse),
         ]
 
     def parse(self, command):

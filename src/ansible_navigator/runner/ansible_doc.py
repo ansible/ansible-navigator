@@ -51,5 +51,5 @@ class AnsibleDoc(Base):
             snippet=snippet,
             playbook_dir=playbook_dir,
             module_path=module_path,
-            **self._runner_args
+            **self._runner_args,
         )

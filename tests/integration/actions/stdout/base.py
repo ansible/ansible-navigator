@@ -58,5 +58,5 @@ class BaseClass:
         with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as infile:
             expected_output = json.load(infile)["output"]
         assert expected_output == received_output, "\n" + "\n".join(
-            difflib.unified_diff(expected_output, received_output, "expected", "received")
+            difflib.unified_diff(expected_output, received_output, "expected", "received"),
         )

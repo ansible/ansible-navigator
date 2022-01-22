@@ -5,7 +5,7 @@ import os
 
 FIXTURES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "fixtures"))
 FIXTURES_COLLECTION_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections")
+    os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections"),
 )
 
 # every attempt should be made for these images to share as many layers as possible

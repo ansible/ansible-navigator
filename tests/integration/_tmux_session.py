@@ -53,7 +53,9 @@ class TmuxSession:
         # pylint: disable=too-many-statements
         self._server = libtmux.Server()
         self._session = self._server.new_session(
-            session_name=self._session_name, start_directory=self._cwd, kill_session=True
+            session_name=self._session_name,
+            start_directory=self._cwd,
+            kill_session=True,
         )
         self._window = self._session.new_window(self._session_name)
         self._pane = self._window.panes[0]
@@ -71,7 +73,7 @@ class TmuxSession:
         venv_path = os.environ.get("VIRTUAL_ENV")
         if venv_path is None:
             raise AssertionError(
-                "VIRTUAL_ENV environment variable was not set but tox should have set it."
+                "VIRTUAL_ENV environment variable was not set but tox should have set it.",
             )
         venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
 
@@ -95,11 +97,11 @@ class TmuxSession:
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_LOG_FILE='{log_file}'")
         playbook_artifact = os.path.join(self._test_log_dir, "playbook-artifact.log")
         tmux_common.append(
-            f"export ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS='{playbook_artifact}'"
+            f"export ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS='{playbook_artifact}'",
         )
         collection_doc_cache = os.path.join(self._test_log_dir, "collection_doc_cache.db")
         tmux_common.append(
-            f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH='{collection_doc_cache}'"
+            f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH='{collection_doc_cache}'",
         )
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_PULL_POLICY='{self._pull_policy}'")
         tmux_common.append("env")
@@ -118,7 +120,8 @@ class TmuxSession:
             # because the environment variables were dumped
             if showing:
                 prompt_showing = self.cli_prompt in showing[-1] and len(showing) > min(
-                    len(tmux_common), int(self._pane_height) - 1
+                    len(tmux_common),
+                    int(self._pane_height) - 1,
                 )
             if prompt_showing:
                 break
@@ -274,7 +277,8 @@ class TmuxSession:
                 tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
                 # taint the screen output w/ timestamp so it's never a valid fixture
                 alerts = [
-                    f"******** ERROR: TMUX '{err_message}' TIMEOUT @ {elapsed}s @ {tstamp} ********"
+                    f"******** ERROR: TMUX '{err_message}'"
+                    " TIMEOUT @ {elapsed}s @ {tstamp} ********",
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing

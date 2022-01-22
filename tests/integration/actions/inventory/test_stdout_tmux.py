@@ -67,7 +67,7 @@ stdout_tests = (
             execution_environment=True,
         ).join(),
         look_fors=[
-            "--hi or --help-inventory is valid only when 'mode' argument is set to 'stdout'"
+            "--hi or --help-inventory is valid only when 'mode' argument is set to 'stdout'",
         ],
     ),
     ShellCommand(
@@ -78,7 +78,7 @@ stdout_tests = (
             execution_environment=False,
         ).join(),
         look_fors=[
-            "--hi or --help-inventory is valid only when 'mode' argument is set to 'stdout'"
+            "--hi or --help-inventory is valid only when 'mode' argument is set to 'stdout'",
         ],
     ),
 )

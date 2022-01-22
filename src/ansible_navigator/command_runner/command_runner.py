@@ -90,7 +90,8 @@ class CommandRunner:
         processes = []
         for _proc in range(worker_count):
             proc = multiprocessing.Process(
-                target=worker, args=(self._pending_queue, self._completed_queue)
+                target=worker,
+                args=(self._pending_queue, self._completed_queue),
             )
             processes.append(proc)
             proc.start()

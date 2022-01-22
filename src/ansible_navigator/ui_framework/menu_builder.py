@@ -115,7 +115,10 @@ class MenuBuilder:
                 decoration=curses.A_UNDERLINE,
             )
         return CursesLinePart(
-            column=col_starts[colno], string=adj_entry, color=0, decoration=curses.A_UNDERLINE
+            column=col_starts[colno],
+            string=adj_entry,
+            color=0,
+            decoration=curses.A_UNDERLINE,
         )
 
     def _menu_lines(self, dicts: List[Dict], menu_layout: Tuple[List, ...], indices) -> CursesLines:
@@ -152,7 +155,11 @@ class MenuBuilder:
         )
 
     def _menu_line_part(
-        self, colno: int, coltext: Any, dyct: dict, menu_layout: Tuple[List, ...]
+        self,
+        colno: int,
+        coltext: Any,
+        dyct: dict,
+        menu_layout: Tuple[List, ...],
     ) -> CursesLinePart:
         """Generate one menu line part
 

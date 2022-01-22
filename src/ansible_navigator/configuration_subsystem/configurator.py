@@ -159,7 +159,7 @@ class Configurator:
                         "and ensure it is properly formatted"
                     )
                     self._exit_messages.append(
-                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT)
+                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
                     )
                     return
             for entry in self._config.entries:
@@ -188,7 +188,7 @@ class Configurator:
                         "and ensure it is properly formatted"
                     )
                     self._exit_messages.append(
-                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT)
+                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
                     )
                     return
                 except KeyError:
@@ -263,7 +263,7 @@ class Configurator:
                     ]
                     exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
                     self._exit_messages.append(
-                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT)
+                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
                     )
 
     def _apply_previous_cli_to_current(self) -> None:
@@ -272,7 +272,8 @@ class Configurator:
 
         # _apply_previous_cli_entries must be ALL or a list of entries
         if self._apply_previous_cli_entries is not C.ALL and not isinstance(
-            self._apply_previous_cli_entries, list
+            self._apply_previous_cli_entries,
+            list,
         ):
             return
 

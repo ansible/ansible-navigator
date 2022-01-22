@@ -49,7 +49,7 @@ which contains NET-SNMP utilities.
 def image_introspection():
     """import the image introspection script using the share directory"""
     _log_messages, _exit_messages, share_dir = utils.get_share_directory(
-        app_name="ansible_navigator"
+        app_name="ansible_navigator",
     )
     full_path = f"{share_dir}/utils/image_introspect.py"
     spec = importlib.util.spec_from_file_location("module", full_path)

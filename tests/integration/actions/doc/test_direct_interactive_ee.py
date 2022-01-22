@@ -41,7 +41,8 @@ testdata_module_doc_not_exist = [
 
 
 @pytest.mark.parametrize(
-    "index, user_input, comment, testname, expected_in_output", testdata_module_doc
+    "index, user_input, comment, testname, expected_in_output",
+    testdata_module_doc,
 )
 class TestModuleDoc(BaseClass):
     """Run the tests for doc from CLI, interactive, with an EE."""
@@ -51,7 +52,8 @@ class TestModuleDoc(BaseClass):
 
 
 @pytest.mark.parametrize(
-    "index, user_input, comment, testname, expected_in_output", testdata_lookup_doc
+    "index, user_input, comment, testname, expected_in_output",
+    testdata_lookup_doc,
 )
 class TestLookUpDoc(BaseClass):
     """run the tests"""
@@ -61,7 +63,8 @@ class TestLookUpDoc(BaseClass):
 
 
 @pytest.mark.parametrize(
-    "index, user_input, comment, testname, expected_in_output", testdata_module_doc_not_exist
+    "index, user_input, comment, testname, expected_in_output",
+    testdata_module_doc_not_exist,
 )
 class TestModuleDocNotExist(BaseClass):
     """run the tests"""

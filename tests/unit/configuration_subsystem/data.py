@@ -75,7 +75,7 @@ BASE_EXPECTED = d2t(
         "pass_environment_variable": ["FOO", "BAR"],
         "pull_policy": "never",
         "set_environment_variable": {"E1": "V1", "E2": "V2"},
-    }
+    },
 )
 
 
@@ -149,7 +149,7 @@ CLI_DATA_REPLAY = [
     (
         "replay /tmp/part.json -m interactive",
         {"app": "replay", "mode": "interactive", "playbook_artifact_replay": "/tmp/part.json"},
-    )
+    ),
 ]
 CLI_DATA_RUN = [
     ("run /tmp/site.yml", {"app": "run", "playbook": "/tmp/site.yml"}),

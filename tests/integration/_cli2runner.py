@@ -34,7 +34,14 @@ class Cli2Runner:
 
     @mock.patch("ansible_navigator.runner.ansible_config.get_ansible_config")
     def test_config_interactive(
-        self, mocked_runner, tmpdir, comment, cli_entry, config_fixture, expected, patch_curses
+        self,
+        mocked_runner,
+        tmpdir,
+        comment,
+        cli_entry,
+        config_fixture,
+        expected,
+        patch_curses,
     ):
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["config"], cli_entry, "interactive")
@@ -42,7 +49,13 @@ class Cli2Runner:
 
     @mock.patch("ansible_navigator.runner.command.run_command")
     def test_config_stdout(
-        self, mocked_runner, tmpdir, comment, cli_entry, config_fixture, expected
+        self,
+        mocked_runner,
+        tmpdir,
+        comment,
+        cli_entry,
+        config_fixture,
+        expected,
     ):
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
@@ -51,7 +64,14 @@ class Cli2Runner:
 
     @mock.patch("ansible_navigator.runner.ansible_inventory.get_inventory")
     def test_inventory_interactive(
-        self, mocked_runner, tmpdir, comment, cli_entry, config_fixture, expected, patch_curses
+        self,
+        mocked_runner,
+        tmpdir,
+        comment,
+        cli_entry,
+        config_fixture,
+        expected,
+        patch_curses,
     ):
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["inventory"], cli_entry, "interactive")
@@ -59,7 +79,13 @@ class Cli2Runner:
 
     @mock.patch("ansible_navigator.runner.command.run_command")
     def test_inventory_stdout(
-        self, mocked_runner, tmpdir, comment, cli_entry, config_fixture, expected
+        self,
+        mocked_runner,
+        tmpdir,
+        comment,
+        cli_entry,
+        config_fixture,
+        expected,
     ):
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
@@ -68,7 +94,14 @@ class Cli2Runner:
 
     @mock.patch("ansible_navigator.runner.command_async.run_command_async")
     def test_run_interactive(
-        self, mocked_runner, tmpdir, comment, cli_entry, config_fixture, expected, patch_curses
+        self,
+        mocked_runner,
+        tmpdir,
+        comment,
+        cli_entry,
+        config_fixture,
+        expected,
+        patch_curses,
     ):
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""

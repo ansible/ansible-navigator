@@ -56,7 +56,8 @@ class ColorSchema:
             for parts in range(0, len(name.split("."))):
                 prop = name.split()[-1].rsplit(".", parts)[0]
                 color = next(
-                    (tc for tc in self._schema["tokenColors"] if prop in to_list(tc["scope"])), None
+                    (tc for tc in self._schema["tokenColors"] if prop in to_list(tc["scope"])),
+                    None,
                 )
                 if color:
                     foreground = color.get("settings", {}).get("foreground", None)
@@ -109,10 +110,12 @@ class Colorize:
                         (
                             "An unexpected error occurred within the tokenization"
                             " subsystem.  Please log an issue with the following:"
-                        )
+                        ),
                     )
                     self._logger.critical(
-                        "  Err: '%s', Scope: '%s', Line follows....", str(exc), scope
+                        "  Err: '%s', Scope: '%s', Line follows....",
+                        str(exc),
+                        scope,
                     )
                     self._logger.critical("  '%s'", line)
                     self._logger.critical("  The current content will be rendered without color")
@@ -270,7 +273,7 @@ def ansi_to_curses(line: str) -> CursesLine:
             (?P<one>\d+)                        # required, one number
             (;(?P<two>\d+))?                    # optional 2nd number
             m
-        """
+        """,
     )
     parts = ansi_regex.split(line)
     colno = 0
@@ -301,7 +304,10 @@ def ansi_to_curses(line: str) -> CursesLine:
                         style = CURSES_STYLES.get(int(one), None) or 0
             else:
                 curses_line = CursesLinePart(
-                    column=colno, string=part, color=color, decoration=style
+                    column=colno,
+                    string=part,
+                    color=color,
+                    decoration=style,
                 )
                 printable.append(curses_line)
                 colno += len(part)

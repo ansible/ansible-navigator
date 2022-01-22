@@ -81,7 +81,11 @@ class ActionRunner(App):
         name, action = self._action_match(self._args.app)
         if name and action:
             interaction = Interaction(
-                name=name, action=action, menu=None, content=None, ui=self._ui._ui
+                name=name,
+                action=action,
+                menu=None,
+                content=None,
+                ui=self._ui._ui,
             )
             self._run_app(interaction)
 

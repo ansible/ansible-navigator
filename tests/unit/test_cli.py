@@ -105,7 +105,8 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
 def test_editor_command_default(_mf1, monkeypatch):
     """test editor with default"""
     monkeypatch.setenv(
-        "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
+        "ANSIBLE_NAVIGATOR_CONFIG",
+        f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml",
     )
     args = deepcopy(NavigatorConfiguration)
     _messages, exit_msgs = parse_and_update(params=[], args=args, initial=True)
@@ -139,7 +140,8 @@ tst_hint_data = [
     TstHint(command="inventory", expected="with '-i <path to inventory>'"),
     TstHint(command="--la fallss", expected="with '--la true'"),
     TstHint(
-        command="--lf {locked_directory}/test.log", expected="with '--lf ~/ansible-navigator.log'"
+        command="--lf {locked_directory}/test.log",
+        expected="with '--lf ~/ansible-navigator.log'",
     ),
     TstHint(command="-m stderr", expected="with '-m stdout'"),
     TstHint(command="--osc4 troo", expected="with '--osc4 true'"),
@@ -155,7 +157,8 @@ tst_hint_data = [
 def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
     """test the hints don't generate a traceback"""
     monkeypatch.setenv(
-        "ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml"
+        "ANSIBLE_NAVIGATOR_CONFIG",
+        f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml",
     )
     args = deepcopy(NavigatorConfiguration)
     command = data.command.format(locked_directory=locked_directory)

@@ -45,7 +45,8 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
     # Check if the configuration file path is set via an environment var
     cfg_env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     new_messages, new_exit_messages, env_config_path = environment_variable_is_file_path(
-        env_var=cfg_env_var, kind="config"
+        env_var=cfg_env_var,
+        kind="config",
     )
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
@@ -78,7 +79,8 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
 
 
 def get_and_check_collection_doc_cache(
-    share_directory: str, collection_doc_cache_path: str
+    share_directory: str,
+    collection_doc_cache_path: str,
 ) -> Tuple[List[LogMessage], List[ExitMessage], Dict]:
     """ensure the collection doc cache
     has the current version of the application
@@ -198,7 +200,8 @@ def parse_and_update(
 
     if mount_collection_cache:
         new_messages, new_exit_messages, cache = get_and_check_collection_doc_cache(
-            args.internals.share_directory, args.collection_doc_cache_path
+            args.internals.share_directory,
+            args.collection_doc_cache_path,
         )
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
