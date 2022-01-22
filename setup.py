@@ -23,8 +23,7 @@ file_pairs = [
 # data_files specifies a sequence of (directory, files) pairs in the following way:
 # setup(...,
 #     data_files=[('bitmaps', ['bm/b1.gif', 'bm/b2.gif']),
-#                 ('config', ['cfg/data.cfg'])],
-#     )
+#                 ('config', ['cfg/data.cfg'])], ...)
 # Each (directory, files) pair in the sequence specifies the installation directory
 # and the files to install there.
 data_file_list = [(k, list(list(zip(*g))[1])) for k, g in groupby(file_pairs, itemgetter(0))]
