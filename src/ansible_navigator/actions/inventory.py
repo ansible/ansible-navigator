@@ -142,10 +142,8 @@ class Action(App):
             if os.path.isdir(inventory):
                 mtimes.append(
                     max(
-                        (
-                            os.path.getmtime(e)
-                            for e in glob.glob(os.path.join(inventory, "**"), recursive=True)
-                        )
+                        os.path.getmtime(e)
+                        for e in glob.glob(os.path.join(inventory, "**"), recursive=True)
                     ),
                 )
             elif os.path.isfile(inventory):
