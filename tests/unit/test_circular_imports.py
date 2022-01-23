@@ -34,8 +34,8 @@ def _find_all_importables(pkg: ModuleType) -> List[str]:
     return sorted(
         set(
             chain.from_iterable(
-                _discover_path_importables(Path(p), pkg.__name__)
-                for p in pkg.__path__  # type: ignore[attr-defined]
+                _discover_path_importables(Path(path), pkg.__name__)
+                for path in pkg.__path__  # type: ignore[attr-defined]
             ),
         ),
     )
@@ -51,7 +51,7 @@ def _discover_path_importables(
     :param pkg_name: The name of the package
     :yields: Package directory paths
     """
-    for dir_path, _d, file_names in os.walk(pkg_pth):
+    for dir_path, _dir_names, file_names in os.walk(pkg_pth):
         pkg_dir_path = Path(dir_path)
 
         if pkg_dir_path.parts[-1] == "__pycache__":
