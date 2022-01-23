@@ -59,16 +59,14 @@ inline-quotes = "
 max-line-length = 100
 
 # Allow certain violations in certain files:
-# Please keep both sections sorted, as it will be easier for others to find and add entries in the future
+# Please keep both sections of this list sorted, as it will be easier for others to find and add entries in the future
 per-file-ignores =
   # The following ignores have been researched and should be considered permanent
   # each should be preceeded with an explanation of each of the error codes
-  # These might be commented out as they overlap with the perfile ignores
-  # once the per file ignores are removed or added within the file itself
-  # they should be able to be uncommented
-
+  # When ignores are added for a specific file, these will need to be added to that line as well.
+  
   # S101: Allow the use of assert within the tests directory
-  # tests/*: S101
+  tests/**.py: S101
 
   # The following were present during the initial implementation.
   # They are expected to be fixed and unignored over time.
