@@ -30,7 +30,7 @@ class FieldButton:
         """no default to add into the prompt for checkbox"""
         return ""
 
-    def validate(self, response: List) -> None:
+    def validate(self, response: List[Union[str, bool]]) -> None:
         """validate this instance"""
         validation = self.validator(response)
         if validation.error_msg:
@@ -38,7 +38,7 @@ class FieldButton:
         else:
             self.disabled = False
 
-    def conditional_validation(self, response: List) -> None:
+    def conditional_validation(self, response: List[Union[str, bool]]) -> None:
         """conditional validation used for
         tab
         """
