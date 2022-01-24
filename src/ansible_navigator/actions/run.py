@@ -20,8 +20,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from . import _actions as actions
-from . import run_action
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -37,6 +35,8 @@ from ..utils import abs_user_path
 from ..utils import human_time
 from ..utils import remove_ansi
 from ..utils import round_half_up
+from . import _actions as actions
+from . import run_action
 
 
 RESULT_TO_COLOR = [

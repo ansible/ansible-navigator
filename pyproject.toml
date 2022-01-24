@@ -56,7 +56,6 @@ lines_after_imports = 2 # Ensures consistency for cases when there's variable vs
 lines_between_types = 1 # Separate import/from with 1 line, minimizing changes at time of implementation
 no_lines_before = "LOCALFOLDER"  # Keeps local imports bundled with first-party
 profile = "black" # Avoid conflict with black
-reverse_relative = true # Import local prior to parent
 skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to ansible-test sanity ruleset
 
 [tool.pylint]

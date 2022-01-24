@@ -6,10 +6,10 @@ import os
 
 import pytest
 
+from ....defaults import FIXTURES_DIR
 from ..._common import fixture_path_from_request
 from ..._common import update_fixtures
 from ..._tmux_session import TmuxSession
-from ....defaults import FIXTURES_DIR
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/stdout")

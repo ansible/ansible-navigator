@@ -2,13 +2,13 @@
 """
 import pytest
 
-from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
-from .base import BaseClass
-from .base import base_steps
 from ..._interactions import Command
 from ..._interactions import Step
 from ..._interactions import add_indicies
 from ..._interactions import step_id
+from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
+from .base import BaseClass
+from .base import base_steps
 
 
 cmdline = f"-i {ANSIBLE_INVENTORY_FIXTURE_DIR}"

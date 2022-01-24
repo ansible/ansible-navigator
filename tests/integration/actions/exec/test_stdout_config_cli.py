@@ -2,11 +2,11 @@
 
 import pytest
 
-from .base import BaseClass
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import Step
 from ..._interactions import add_indicies
+from .base import BaseClass
 
 
 class StdoutCommand(Command):

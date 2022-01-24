@@ -9,6 +9,12 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
+from .._version import __version__ as VERSION
+from ..utils import ExitMessage
+from ..utils import LogMessage
+from ..utils import abs_user_path
+from ..utils import get_share_directory
+from ..utils import oxfordcomma
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
@@ -16,12 +22,6 @@ from .definitions import SettingsEntry
 from .definitions import SettingsEntryValue
 from .definitions import SubCommand
 from .navigator_post_processor import NavigatorPostProcessor
-from .._version import __version__ as VERSION
-from ..utils import ExitMessage
-from ..utils import LogMessage
-from ..utils import abs_user_path
-from ..utils import get_share_directory
-from ..utils import oxfordcomma
 
 
 APP_NAME = "ansible_navigator"

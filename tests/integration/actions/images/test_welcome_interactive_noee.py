@@ -2,13 +2,13 @@
 """
 import pytest
 
-from .base import IMAGE_SHORT
-from .base import BaseClass
-from .base import base_steps
 from ..._interactions import Command
 from ..._interactions import Step
 from ..._interactions import add_indicies
 from ..._interactions import step_id
+from .base import IMAGE_SHORT
+from .base import BaseClass
+from .base import base_steps
 
 
 # this is misleading b/c images will use an EE, but not for automation

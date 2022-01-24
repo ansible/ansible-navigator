@@ -22,6 +22,8 @@ from typing import Pattern
 from typing import Tuple
 from typing import Union
 
+from .._yaml import human_dump
+from ..utils import templar
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
 from .curses_defs import CursesLine
@@ -35,8 +37,6 @@ from .form_handler_text import FormHandlerText
 from .form_utils import warning_notification
 from .menu_builder import MenuBuilder
 from .ui_config import UIConfig
-from .._yaml import human_dump
-from ..utils import templar
 
 
 STND_KEYS = {"^f/PgUp": "page up", "^b/PgDn": "page down", "\u2191\u2193": "scroll", "esc": "back"}

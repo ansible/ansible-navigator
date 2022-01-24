@@ -12,8 +12,6 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from . import _actions as actions
-from . import run_action
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -25,6 +23,8 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import warning_notification
+from . import _actions as actions
+from . import run_action
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:

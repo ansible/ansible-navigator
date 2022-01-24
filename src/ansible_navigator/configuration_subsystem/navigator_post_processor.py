@@ -13,10 +13,6 @@ from pathlib import Path
 from typing import List
 from typing import Tuple
 
-from .definitions import ApplicationConfiguration
-from .definitions import CliParameters
-from .definitions import Constants as C
-from .definitions import SettingsEntry
 from ..utils import ExitMessage
 from ..utils import ExitPrefix
 from ..utils import LogMessage
@@ -26,6 +22,10 @@ from ..utils import flatten_list
 from ..utils import oxfordcomma
 from ..utils import str2bool
 from ..utils import to_list
+from .definitions import ApplicationConfiguration
+from .definitions import CliParameters
+from .definitions import Constants as C
+from .definitions import SettingsEntry
 
 
 def _post_processor(func):

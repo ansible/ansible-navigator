@@ -1,13 +1,13 @@
 """Tests for run from CLI, stdout."""
 import pytest
 
-from .base import BaseClass
-from .base import inventory_path
-from .base import playbook_path
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import Step
 from ..._interactions import add_indicies
+from .base import BaseClass
+from .base import inventory_path
+from .base import playbook_path
 
 
 class StdoutCommand(Command):

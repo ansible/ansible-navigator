@@ -8,9 +8,9 @@ from unittest import mock
 import pytest
 
 from ansible_navigator import cli
-from ._cli2runner import Cli2Runner
 from ..defaults import DEFAULT_CONTAINER_IMAGE
 from ..defaults import FIXTURES_DIR
+from ._cli2runner import Cli2Runner
 
 
 test_data = [
