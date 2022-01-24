@@ -63,8 +63,9 @@ max-line-length = 100
 per-file-ignores =
   # The following ignores have been researched and should be considered permanent
   # each should be preceeded with an explanation of each of the error codes
-  # When ignores are added for a specific file, these will need to be added to that line as well.
-  
+  # If other ignores are added for a specific file in the section following this,
+  # these will need to be added to that line as well.
+
   # S101: Allow the use of assert within the tests directory
   tests/**.py: S101
 
@@ -267,7 +268,6 @@ per-file-ignores =
   tests/unit/__init__.py: D104
   tests/unit/actions/__init__.py: D104
   tests/unit/actions/test_config.py: D200, D400, D403, S101, WPS110, WPS204, WPS218, WPS221, WPS226, WPS305
-  tests/unit/actions/test_exec.py: S101
   tests/unit/actions/test_inventory.py: D200, D400, D403, S101, WPS110, WPS204, WPS218, WPS221, WPS226, WPS305
   tests/unit/actions/test_run.py: D200, D400, DAR101, DAR201, N813, PT019, S101, S108, WPS110, WPS121, WPS122, WPS201, WPS226, WPS237, WPS305, WPS425, WPS432, WPS437
   tests/unit/configuration_subsystem/__init__.py: D104
@@ -279,10 +279,8 @@ per-file-ignores =
   tests/unit/configuration_subsystem/test_container_engine_auto.py: D200, DAR101, S101, WPS430, WPS520
   tests/unit/configuration_subsystem/test_entries_sanity.py: D200, D400, DAR101, N817, S101, WPS110, WPS111, WPS202, WPS221, WPS226, WPS300, WPS347
   tests/unit/configuration_subsystem/test_fixture_sanity.py: D205, D400, S101, WPS110, WPS210, WPS300, WPS436
-  tests/unit/configuration_subsystem/test_internals.py: S101
   tests/unit/configuration_subsystem/test_invalid_params.py: D200, D202, D400, DAR101, PT006, PT019, S101, WPS110, WPS202, WPS204, WPS226, WPS300, WPS305, WPS420, WPS430, WPS510
   tests/unit/configuration_subsystem/test_mode_subcommand_action.py: D205, D400, S101, WPS226, WPS336, WPS437, WPS510
-  tests/unit/configuration_subsystem/test_navigator_post_processor.py: S101
   tests/unit/configuration_subsystem/test_precedence.py: D205, D400, DAR101, N817, PT006, PT019, S101, WPS110, WPS111, WPS118, WPS201, WPS210, WPS211, WPS218, WPS226, WPS231, WPS232, WPS300, WPS347, WPS440, WPS458, WPS520, WPS529
   tests/unit/configuration_subsystem/test_previous_cli.py: D202, D205, D400, N817, PT019, S101, S108, WPS110, WPS111, WPS121, WPS204, WPS210, WPS218, WPS226, WPS347, WPS440, WPS458, WPS520
   tests/unit/configuration_subsystem/test_sample_configurations.py: D205, D400, S101, WPS219, WPS221, WPS226, WPS428, WPS437
