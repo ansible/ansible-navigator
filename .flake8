@@ -59,7 +59,7 @@ inline-quotes = "
 max-line-length = 100
 
 # Allow certain violations in certain files:
-# Please keep this list sorted, as it will be easier for others to find and add entries in the future
+# Please keep both sections sorted, as it will be easier for others to find and add entries in the future
 per-file-ignores =
   # The following ignores have been researched and should be considered permanent
   # each should be preceeded with an explanation of each of the error codes
@@ -72,8 +72,6 @@ per-file-ignores =
 
   # The following were present during the initial implementation.
   # They are expected to be fixed and unignored over time.
-  # Please try to keep it in alphabetical order to make finding files easier for the next person
-
   docs/_ext/single_sourced_data.py: D400, D403, DAR101, DAR201, N817, P103, WPS110, WPS111, WPS201, WPS202, WPS210, WPS213, WPS221, WPS229, WPS231, WPS237, WPS305, WPS318, WPS323, WPS331, WPS336, WPS347, WPS407, WPS432, WPS440, WPS441, WPS453, WPS504
   docs/_ext/spelling_stub_ext.py: DAR101, DAR201
   docs/conf.py: WPS221, WPS226, WPS301, WPS305, WPS323, WPS420, WPS429, WPS433
@@ -214,10 +212,15 @@ per-file-ignores =
   tests/integration/actions/doc/test_welcome_interactive_ee.py: D200, D400, PT006, WPS115, WPS300, WPS326
   tests/integration/actions/doc/test_welcome_interactive_noee.py: D200, D400, PT006, WPS115, WPS300
 <<<<<<< HEAD
+<<<<<<< HEAD
   tests/integration/actions/images/__init__.py: D104
 ||||||| parent of f8edcee (assert)
 =======
   tests/integration/actions/exec/base.py: S101
+||||||| parent of c24ed9f (Sort the entries in the flake8 `per_file_ignore` list (#794))
+  tests/integration/actions/exec/base.py: S101
+=======
+>>>>>>> c24ed9f (Sort the entries in the flake8 `per_file_ignore` list (#794))
   tests/integration/actions/images/__init__.py: D104
 >>>>>>> f8edcee (assert)
   tests/integration/actions/images/base.py: D200, D202, D400, D403, DAR101, DAR301, DAR401, S101, WPS110, WPS115, WPS210, WPS300, WPS305, WPS306, WPS336, WPS337, WPS436
