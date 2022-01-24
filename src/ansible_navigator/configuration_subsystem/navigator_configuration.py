@@ -397,7 +397,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="ansible-lint.config",
             short_description="Specify the path to the ansible-lint configuration file",
             subcommands=["lint"],
-            value=EntryValue(),
+            value=SettingsEntryValue(),
         ),
         SettingsEntry(
             name="lintables",
@@ -405,7 +405,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description="Path to files on which to run ansible-lint",
             settings_file_path_override="ansible-lint.lintables",
             subcommands=["lint"],
-            value=EntryValue(),
+            value=SettingsEntryValue(),
         ),
         SettingsEntry(
             name="log_append",
