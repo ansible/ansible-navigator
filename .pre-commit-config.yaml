@@ -224,5 +224,22 @@ repos:
     pass_filenames: false
     stages:
     - manual
+  - id: pylint
+    language: system
+    name: Spell check using pylint and enchant
+    files: \.py$
+    entry: python -m pylint
+    args:
+    - --disable=all
+    - --enable=spelling
+    - --spelling-dict=en_US
+    - --spelling-private-dict-file=.pylint-spelling-private-dict
+    - docs/
+    - share/
+    - src/
+    - tests/
+    pass_filenames: false
+    stages:
+    - manual
 
 ...
