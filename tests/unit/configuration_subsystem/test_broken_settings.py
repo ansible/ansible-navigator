@@ -4,7 +4,6 @@ import os
 
 
 def test_broken_settings_file(generate_config):
-    # pylint: disable=import-outside-toplevel
     """Ensure exit_messages generated for broken settings file"""
     response = generate_config(setting_file_name="ansible-navigator_broken.yml")
     assert len(response.exit_messages) == 3, response.exit_messages
@@ -13,7 +12,6 @@ def test_broken_settings_file(generate_config):
 
 
 def test_garbage_settings_file(generate_config):
-    # pylint: disable=import-outside-toplevel
     """Ensure exit_messages generated for garbage settings file"""
     response = generate_config(setting_file_name=os.path.abspath(__file__))
     error = "but failed to load it."
