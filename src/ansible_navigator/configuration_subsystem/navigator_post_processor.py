@@ -498,7 +498,7 @@ class NavigatorPostProcessor:
             entry.value.current = flatten_list(entry.value.current)
         return messages, exit_messages
 
-    def lintables(self, entry: Entry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def lintables(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=unused-argument
         """Post process lintables"""
         messages: List[LogMessage] = []
