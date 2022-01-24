@@ -35,7 +35,6 @@ TPAD_RATIO = 2 / 5
 BUTTON_SPACE = 10
 
 
-# pylint: disable=no-member
 class FormPresenter(CursesWindow):
     """present the form to the user"""
 

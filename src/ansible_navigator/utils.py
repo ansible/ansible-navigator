@@ -52,7 +52,6 @@ class ExitPrefix(Enum):
 
 
 class ExitMessage(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
     """An object to hold a message destined for the logger"""
 
     message: str

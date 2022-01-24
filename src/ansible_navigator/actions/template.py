@@ -18,8 +18,6 @@ from . import _actions as actions
 class Action(App):
     """{{ }}"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^{{.*}}$"
 
     def __init__(self, args: ApplicationConfiguration):

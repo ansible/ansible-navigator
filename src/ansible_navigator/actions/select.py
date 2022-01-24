@@ -7,9 +7,6 @@ from ..ui_framework import Interaction
 from . import _actions as actions
 
 
-# pylint: disable=protected-access
-
-
 @actions.register
 class Action:
     r""":\d+|[0-9]"""

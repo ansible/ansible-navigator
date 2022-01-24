@@ -53,7 +53,6 @@ class SettingsEntryValue(SimpleNamespace):
 
 
 class SettingsEntry(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
     """One entry in the configuration
 
     apply_to_subsequent_cli: Should this be applied to future CLIs parsed
@@ -68,6 +67,7 @@ class SettingsEntry(SimpleNamespace):
     subcommands: which subcommand should this be used for
     value: the SettingsEntryValue for the entry
     """
+
     name: str
     short_description: str
     value: SettingsEntryValue

@@ -19,13 +19,12 @@ from .validators import Validation
 
 @dataclass
 class FieldChecks:
-
-    # pylint: disable=too-many-instance-attributes
     """a form filed containing checks"""
+
     prompt: str
     name: str
     current_error: str = ""
-    valid: Union[Unknown, bool] = unknown  # pylint: disable=unsubscriptable-object
+    valid: Union[Unknown, bool] = unknown
     options: List = field(default_factory=list)
     max_selected: int = sys.maxsize
     min_selected: int = 1
@@ -34,7 +33,6 @@ class FieldChecks:
     @property
     def checked(self) -> Tuple[bool, ...]:
         """conveniently return just checked"""
-        # pylint: disable=not-an-iterable
         return tuple(option.name for option in self.options if option.checked)
 
     @property

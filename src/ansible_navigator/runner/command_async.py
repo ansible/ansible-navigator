@@ -14,8 +14,6 @@ from .command_base import CommandBase
 
 
 class CommandAsync(CommandBase):
-    # pylint: disable=too-few-public-methods
-    # pylint: disable=too-many-instance-attributes
     """A wrapper for the asynchronous runner."""
 
     def __init__(self, executable_cmd: str, queue: Queue, **kwargs):

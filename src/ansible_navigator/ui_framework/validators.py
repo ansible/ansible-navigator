@@ -16,8 +16,6 @@ from .sentinels import unknown
 
 
 class Validation(NamedTuple):
-    # pylint: disable=inherit-non-class
-    # pylint: disable=too-few-public-methods
     """the response from a validation"""
 
     value: Any
@@ -41,7 +39,6 @@ class FieldValidators:
 
     @staticmethod
     def masked_or_none(text="", hint: bool = False) -> Union[Validation, str]:
-        # pylint: disable=unused-argument
         """no validation"""
         if hint:
             return "Please provide a value (optional)"

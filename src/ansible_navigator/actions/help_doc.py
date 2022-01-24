@@ -12,8 +12,6 @@ from . import _actions as actions
 class Action(App):
     """:help"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^h(?:elp)?$"
 
     def __init__(self, args: ApplicationConfiguration):

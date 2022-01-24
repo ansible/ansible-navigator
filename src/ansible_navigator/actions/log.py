@@ -10,8 +10,6 @@ from . import _actions as actions
 class Action(App):
     """:log"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^l(?:og)?$"
 
     def __init__(self, args: ApplicationConfiguration):

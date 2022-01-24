@@ -42,7 +42,6 @@ class FormHandlerOptions(CursesWindow):
             self._add_line(self.win, idx, ([clp_option_code, clp_text]))
 
     def handle(self, idx, form_fields: List) -> Tuple[Union["FieldChecks", "FieldRadio"], int]:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-nested-blocks
 
         """handle the check box field"""

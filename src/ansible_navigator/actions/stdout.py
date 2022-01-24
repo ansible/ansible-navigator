@@ -11,8 +11,6 @@ from . import _actions as actions
 class Action(App):
     """:stdout"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^st(?:dout)?$"
 
     def __init__(self, args: ApplicationConfiguration):
