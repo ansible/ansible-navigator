@@ -59,6 +59,7 @@ inline-quotes = "
 max-line-length = 100
 
 # Allow certain violations in certain files:
+# Please keep this list sorted, as it will be easier for others to find and add entries in the future
 per-file-ignores =
   docs/_ext/single_sourced_data.py: D400, D403, DAR101, DAR201, N817, P103, WPS110, WPS111, WPS201, WPS202, WPS210, WPS213, WPS221, WPS229, WPS231, WPS237, WPS305, WPS318, WPS323, WPS331, WPS336, WPS347, WPS407, WPS432, WPS440, WPS441, WPS453, WPS504
   docs/_ext/spelling_stub_ext.py: DAR101, DAR201
