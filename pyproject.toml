@@ -64,7 +64,11 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
     ignore = "tm_tokenize"
 
     [tool.pylint.messages_control]
-    disable = "duplicate-code,unsubscriptable-object,fixme"
+    disable = [
+      "duplicate-code",
+      "fixme",
+      "unsubscriptable-object",
+    ]
 
     [tool.pylint.format]
     max-line-length = 100
