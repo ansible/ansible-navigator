@@ -17,17 +17,12 @@ import curses
 import json
 import os
 import shlex
-import shutil
 
 from collections.abc import Mapping
-from dataclasses import asdict
-from dataclasses import dataclass
 from enum import IntEnum
-from functools import total_ordering
 from typing import Any
 from typing import Dict
 from typing import List
-from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -47,15 +42,20 @@ from . import run_action
 
 
 class Severity(IntEnum):
-    info = 10
-    minor = 20
-    major = 30
-    critical = 40
-    blocker = 50
+    """
+    A mapping from ansible-lint severity to an integer represented internally.
+    Primarily used for sorting.
+    """
+
+    INFO = 10
+    MINOR = 20
+    MAJOR = 30
+    CRITICAL = 40
+    BLOCKER = 50
 
     # If ansible-lint ever gives us something we don't expect, return this.
     # In practice, we reverse-sort, so this will always be last.
-    unknown = -1
+    UNKNOWN = -1
 
     @classmethod
     def _missing_(cls, value):
@@ -63,26 +63,30 @@ class Severity(IntEnum):
         If ansible-lint ever gives us something we don't expect return something
         that tells us.
         """
-        return Severity.unknown
+        return Severity.UNKNOWN
 
 
 def severity_to_color(severity: str) -> int:
+    """Convert severity to curses colors."""
     if severity == "minor":
         return 5
-    elif severity == "major":
+    if severity == "major":
         return 3
-    elif severity in ("critical", "blocker"):
+    if severity in ("critical", "blocker"):
         return 1
-    elif severity == "info":
+    if severity == "info":
         return 6
     return 0
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
+    # pylint: disable=unused-argument
+    """Color the menu."""
     return (severity_to_color(entry["severity"]), 0)
 
 
 def content_heading(obj: Dict, screen_w: int) -> Union[CursesLines, None]:
+    """Generate the content heading."""
     check_name = obj["check_name"]
     check_name = check_name + (" " * (screen_w - len(check_name)))
 
@@ -113,6 +117,7 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 
 
 def massage_issues(issues: List[Dict]) -> List[Dict]:
+    """Massage issues by injecting some useful keys with strings for rendering."""
     out = []
     for issue in issues:
         issue["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
@@ -135,6 +140,7 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="lint")
 
     def _fatal(self, msg: str, rc: int = 1) -> Tuple[str, str, int]:
+        # pylint: disable=invalid-name
         self._logger.error(msg)
 
         if self._args.mode == "interactive":
@@ -187,9 +193,7 @@ class Action(App):
         if isinstance(self._args.lintables, str):
             # Does it actually exist?
             if not os.path.exists(self._args.lintables):
-                return self._fatal(
-                    "The given path `{0}` does not exist.".format(self._args.lintables)
-                )
+                return self._fatal(f"The given path `{self._args.lintables}` does not exist.")
             cmd_args.append(self._args.lintables)
 
         kwargs["cmdline"] = cmd_args
@@ -200,7 +204,7 @@ class Action(App):
     def run_stdout(self) -> int:
         """Run in oldschool mode, just stdout."""
         self._logger.debug("lint requested in stdout mode")
-        out, err, rc = self._run_runner()
+        _, _, rc = self._run_runner()  # pylint: disable=invalid-name
         return rc
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
@@ -233,7 +237,7 @@ class Action(App):
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
         interaction.ui.show(notification)
-        out, err, rc = self._run_runner()
+        out, _, rc = self._run_runner()  # pylint: disable=invalid-name
 
         # Quick sanity check, make sure we actually have a result to parse.
         if rc != 0 and "ansible-lint: No such file or directory" in out:
@@ -250,9 +254,9 @@ class Action(App):
 
         try:
             issues = json.loads(out)
-        except json.JSONDecodeError as e:
-            self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(e))
-            self._logger.error(f"Output was: {out}")
+        except json.JSONDecodeError as exc:
+            self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(exc))
+            self._logger.error("Output was: %s", out)
             notification = error_notification(
                 messages=[
                     "Could not parse 'ansible-lint' output.",
@@ -262,7 +266,7 @@ class Action(App):
             return None
 
         issues = massage_issues(issues)
-        issues = sorted(issues, key=lambda i: Severity[i["severity"]], reverse=True)
+        issues = sorted(issues, key=lambda i: Severity[i["severity"].upper()], reverse=True)
         self.steps.append(self._build_main_menu(issues))
 
         while True:
