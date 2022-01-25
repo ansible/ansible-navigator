@@ -224,7 +224,7 @@ repos:
     pass_filenames: false
     stages:
     - manual
-  - id: pylint
+  - id: pylint-spelling
     language: system
     name: Spell check using pylint and enchant
     files: \.py$
