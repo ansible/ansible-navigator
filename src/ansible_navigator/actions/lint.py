@@ -66,7 +66,7 @@ class Severity(IntEnum):
         return Severity.unknown
 
 
-def severity_to_color(severity: Severity) -> int:
+def severity_to_color(severity: str) -> int:
     if severity == "minor":
         return 5
     elif severity == "major":
