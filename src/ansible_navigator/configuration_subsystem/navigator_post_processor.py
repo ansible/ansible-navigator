@@ -504,7 +504,7 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process lintables"""
+        """Post-process lintables."""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
 

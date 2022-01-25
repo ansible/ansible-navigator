@@ -89,12 +89,14 @@ def content_heading(obj: Dict, screen_w: int) -> Union[CursesLines, None]:
     """Generate the content heading."""
     check_name = obj["check_name"]
     check_name = check_name + (" " * (screen_w - len(check_name)))
+    path_line = f"PATH: {abs_user_path(obj['location']['path'])}"
+    check_name_line = f"MESSAGE: {check_name}"
 
     return (
         (
             CursesLinePart(
                 column=0,
-                string=abs_user_path(obj["location"]["path"]),
+                string=path_line,
                 color=0,
                 decoration=curses.A_BOLD,
             ),
@@ -102,7 +104,7 @@ def content_heading(obj: Dict, screen_w: int) -> Union[CursesLines, None]:
         (
             CursesLinePart(
                 column=0,
-                string=check_name,
+                string=check_name_line,
                 color=severity_to_color(obj["severity"]),
                 decoration=curses.A_UNDERLINE,
             ),
@@ -126,6 +128,7 @@ def massage_issues(issues: List[Dict]) -> List[Dict]:
             issue["__line"] = issue["location"]["lines"]["begin"]
         else:
             issue["__line"] = issue["location"]["lines"]["begin"]
+        issue["issue_path"] = f"{issue['__path']}:{issue['__line']}"
         out.append(issue)
     return out
 
@@ -139,11 +142,15 @@ class Action(App):
     def __init__(self, args: ApplicationConfiguration):
         super().__init__(args=args, logger_name=__name__, name="lint")
 
+    @property
+    def is_interactive(self):
+        return self._args.mode == "interactive"
+
     def _fatal(self, msg: str, rc: int = 1) -> Tuple[str, str, int]:
         # pylint: disable=invalid-name
         self._logger.error(msg)
 
-        if self._args.mode == "interactive":
+        if self.is_interactive:
             notification = error_notification(messages=[msg])
             self._interaction.ui.show(notification)
         else:
@@ -168,16 +175,14 @@ class Action(App):
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
-            kwargs.update(
-                {"container_volume_mounts": self._args.execution_environment_volume_mounts}
-            )
+            kwargs["container_volume_mounts"] = self._args.execution_environment_volume_mounts
 
         if isinstance(self._args.container_options, list):
-            kwargs.update({"container_options": self._args.container_options})
+            kwargs["container_options"] = self._args.container_options
 
         cmd_args = ["-qq", "--offline"]
 
-        if self._args.mode == "interactive":
+        if self.is_interactive:
             cmd_args += [
                 "--nocolor",
                 "-f",
