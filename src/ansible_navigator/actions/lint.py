@@ -13,13 +13,13 @@ formatter) can be found in src/ansiblelint/formatters/__init__.py in the
 ansible-lint codebase.
 """
 
-from collections.abc import Mapping
 import curses
 import json
 import os
 import shlex
 import shutil
 
+from collections.abc import Mapping
 from dataclasses import asdict
 from dataclasses import dataclass
 from enum import IntEnum
