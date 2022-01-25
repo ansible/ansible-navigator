@@ -13,7 +13,7 @@ formatter) can be found in src/ansiblelint/formatters/__init__.py in the
 ansible-lint codebase.
 """
 
-import collections
+from collections.abc import Mapping
 import curses
 import json
 import os
@@ -117,7 +117,7 @@ def massage_issues(issues: List[Dict]) -> List[Dict]:
     for issue in issues:
         issue["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
         issue["__path"] = abs_user_path(issue["location"]["path"])
-        if isinstance(issue["location"]["lines"]["begin"], collections.Mapping):
+        if isinstance(issue["location"]["lines"]["begin"], Mapping):
             issue["__line"] = issue["location"]["lines"]["begin"]
         else:
             issue["__line"] = issue["location"]["lines"]["begin"]
