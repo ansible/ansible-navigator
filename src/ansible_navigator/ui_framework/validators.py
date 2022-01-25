@@ -11,6 +11,7 @@ from typing import NamedTuple
 from typing import Union
 from urllib.parse import urlparse
 
+from .form_defs import FieldValidationStates
 from .sentinels import Unknown
 from .sentinels import unknown
 
@@ -53,7 +54,8 @@ class FieldValidators:
 
     @staticmethod
     def none(
-        text: Union[List[Union[Unknown, bool]], str] = "", hint: bool = False
+        text: Union[FieldValidationStates, str] = "",
+        hint: bool = False,
     ) -> Union[Validation, str]:
         """no validation"""
         if hint:
