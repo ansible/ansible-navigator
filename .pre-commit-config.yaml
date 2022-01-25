@@ -226,4 +226,30 @@ repos:
     stages:
     - manual
 
+- repo: local
+  hooks:
+  - id: pylint-useless-supression
+    language: python
+    language_version: python3.10
+    additional_dependencies:
+      - "pylint"
+      - "pytest"
+      - astroid==2.9.0
+      - ansible_runner
+      - ansible-core
+      - libtmux
+      - sphinx
+    name: PyLint (useless-suppression)
+    files: \.py$
+    entry: python -m pylint
+    args:
+    - --disable=all
+    - --enable=useless-supression
+    - docs/
+    - share/
+    - src/
+    - tests/
+    pass_filenames: false
+    stages:
+    - manual
 ...
