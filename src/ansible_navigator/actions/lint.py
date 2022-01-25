@@ -144,6 +144,7 @@ class Action(App):
 
     @property
     def is_interactive(self):
+        """are we interactive?"""
         return self._args.mode == "interactive"
 
     def _fatal(self, msg: str, rc: int = 1) -> Tuple[str, str, int]:
