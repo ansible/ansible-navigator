@@ -59,8 +59,18 @@ inline-quotes = "
 max-line-length = 100
 
 # Allow certain violations in certain files:
-# Please keep this list sorted, as it will be easier for others to find and add entries in the future
+# Please keep both sections of this list sorted, as it will be easier for others to find and add entries in the future
 per-file-ignores =
+  # The following ignores have been researched and should be considered permanent
+  # each should be preceeded with an explanation of each of the error codes
+  # If other ignores are added for a specific file in the section following this,
+  # these will need to be added to that line as well.
+
+  # S101: Allow the use of assert within the tests directory, since tests require it.
+  tests/**.py: S101
+
+  # The following were present during the initial implementation.
+  # They are expected to be fixed and unignored over time.
   docs/_ext/single_sourced_data.py: D400, D403, DAR101, DAR201, N817, P103, WPS110, WPS111, WPS201, WPS202, WPS210, WPS213, WPS221, WPS229, WPS231, WPS237, WPS305, WPS318, WPS323, WPS331, WPS336, WPS347, WPS407, WPS432, WPS440, WPS441, WPS453, WPS504
   docs/_ext/spelling_stub_ext.py: DAR101, DAR201
   docs/conf.py: WPS221, WPS226, WPS301, WPS305, WPS323, WPS420, WPS429, WPS433
