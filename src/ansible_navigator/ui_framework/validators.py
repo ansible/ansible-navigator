@@ -52,7 +52,9 @@ class FieldValidators:
         return Validation(value=value, error_msg="")
 
     @staticmethod
-    def none(text="", hint: bool = False) -> Union[Validation, str]:
+    def none(
+        text: Union[List[Union[Unknown, bool]], str] = "", hint: bool = False
+    ) -> Union[Validation, str]:
         """no validation"""
         if hint:
             return "Please provide a value (optional)"
