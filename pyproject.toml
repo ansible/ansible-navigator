@@ -60,10 +60,11 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
 
 [tool.pylint]
     [tool.pylint.master]
-    ignore="tm_tokenize"
+    # tm_tokenize is virtually vendored and shouldn't be linted as such
+    ignore = "tm_tokenize"
 
     [tool.pylint.messages_control]
-    disable = "C0330, C0326"
+    disable = "duplicate-code,unsubscriptable-object,fixme"
 
     [tool.pylint.format]
     max-line-length = 100
