@@ -15,30 +15,35 @@ ansible-lint codebase.
 
 import collections
 import curses
-from dataclasses import asdict, dataclass
-from enum import IntEnum
-from functools import total_ordering
 import json
 import os
-import shutil
 import shlex
-from typing import Any, Dict, List, Optional, Tuple, Union
+import shutil
 
-from . import _actions as actions
-from . import run_action
+from dataclasses import asdict
+from dataclasses import dataclass
+from enum import IntEnum
+from functools import total_ordering
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
+
 from ..app import App
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner.command import Command
 from ..steps import Step
-from ..ui_framework import (
-    CursesLines,
-    CursesLinePart,
-    Interaction,
-    nonblocking_notification,
-    error_notification,
-)
+from ..ui_framework import CursesLinePart
+from ..ui_framework import CursesLines
+from ..ui_framework import Interaction
+from ..ui_framework import error_notification
+from ..ui_framework import nonblocking_notification
 from ..utils import abs_user_path
+from . import _actions as actions
+from . import run_action
 
 
 class Severity(IntEnum):
