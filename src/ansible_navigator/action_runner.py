@@ -28,7 +28,6 @@ THEME = "dark_vs.json"
 
 
 class ActionRunner(App):
-
     """A single action runner."""
 
     def __init__(self, args: ApplicationConfiguration) -> None:

@@ -15,7 +15,6 @@ from .validators import FieldValidators
 
 @dataclass
 class FieldText:
-
     # pylint: disable=too-many-instance-attributes
     """a text input field"""
     name: str
