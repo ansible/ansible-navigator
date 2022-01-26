@@ -13,7 +13,7 @@ class CommandTestData(NamedTuple):
 
     name: str
     command: str
-    shell: bool
+    use_shell: bool
     result_command: str
     result_params: List
 
@@ -31,14 +31,14 @@ command_test_data = [
     CommandTestData(
         name="With shell simple",
         command="echo foo",
-        shell=True,
+        use_shell=True,
         result_command="/bin/bash",
         result_params=["-c", "echo foo"],
     ),
     CommandTestData(
         name="Without shell simple",
         command="echo foo",
-        shell=False,
+        use_shell=False,
         result_command="echo",
         result_params=["foo"],
     ),
@@ -46,7 +46,7 @@ command_test_data = [
         name="With shell complex",
         command="ansible-vault encrypt_string --vault-password-file"
         + " a_password_file 'foobar' --name 'the_secret'",
-        shell=True,
+        use_shell=True,
         result_command="/bin/bash",
         result_params=[
             "-c",
@@ -58,7 +58,7 @@ command_test_data = [
         name="Without shell complex",
         command="ansible-vault encrypt_string --vault-password-file"
         + " a_password_file 'foobar' --name 'the secret'",
-        shell=False,
+        use_shell=False,
         result_command="ansible-vault",
         result_params=[
             "encrypt_string",
@@ -80,7 +80,7 @@ def test_artifact_path(cmd_test_data: CommandTestData):
     """
     command, additional_params = _generate_command(
         exec_command=cmd_test_data.command,
-        exec_shell=cmd_test_data.shell,
+        exec_shell=cmd_test_data.use_shell,
     )
     comment = command_test_data, command, additional_params
     assert command == cmd_test_data.result_command, comment
