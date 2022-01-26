@@ -184,11 +184,14 @@ repos:
 - repo: https://github.com/pre-commit/mirrors-mypy.git
   rev: v0.910-1
   hooks:
-  - id: mypy
+  - &mypy-config
+    id: mypy
+    name: mypy-3.6
     additional_dependencies:
     - lxml == 4.6.4  # needed for `--txt-report`
     - types-docutils
     - types-PyYAML
+    language_version: "3.6"
     args:
     # FIXME: get rid of missing imports ignore
     - --ignore-missing-imports
@@ -208,6 +211,9 @@ repos:
     - src/
     - tests/
     pass_filenames: false
+  - <<: *mypy-config
+    language_version: "3.10"
+    name: mypy-3.10
 
 - repo: local
   hooks:
