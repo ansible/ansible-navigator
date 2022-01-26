@@ -11,7 +11,7 @@ This module is based on an idea that pytest uses for self-testing:
 """  # noqa: E501
 import os
 import pkgutil
-import subprocess
+import subprocess  # noqa: S404 Required due to the nature of this test
 import sys
 
 from itertools import chain
@@ -101,4 +101,4 @@ def test_no_warnings(import_path: str) -> None:
         f"import {import_path!s}",
     )
 
-    subprocess.check_call(imp_cmd)
+    subprocess.check_call(imp_cmd)  # noqa: S603 Input is trusted, generated above, not external
