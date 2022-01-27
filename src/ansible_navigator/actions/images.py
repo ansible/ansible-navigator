@@ -48,6 +48,10 @@ class Action(App):
     KEGEX = r"^im(?:ages)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:images`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="images")
         self._image_list: List = []
         self._images = Step(

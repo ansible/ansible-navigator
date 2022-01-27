@@ -45,9 +45,9 @@ class Action(App):
     KEGEX = "^e(?:xec)?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        """Initialize the action.
+        """Initialize the ``:exec`` action.
 
-        :param args: The current application configuration.
+        :param args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="exec")
 
