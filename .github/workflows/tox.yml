@@ -68,8 +68,6 @@ jobs:
           TOXENV: ${{ matrix.tox_env }}
 
   check:
-    if: always()
-
     needs:
       - tox
     runs-on: ubuntu-latest
