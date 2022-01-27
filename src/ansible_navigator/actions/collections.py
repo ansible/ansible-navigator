@@ -83,6 +83,10 @@ class Action(App):
     KEGEX = r"^collections(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:collections`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
         self._collection_cache: Dict
