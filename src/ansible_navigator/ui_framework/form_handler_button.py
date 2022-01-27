@@ -9,8 +9,6 @@ from typing import Tuple
 
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow
-from .curses_window import Window
-from .ui_config import UIConfig
 
 
 if TYPE_CHECKING:
