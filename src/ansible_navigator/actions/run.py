@@ -15,6 +15,7 @@ from queue import Queue
 from typing import Any
 from typing import Callable
 from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
@@ -215,7 +216,7 @@ class Action(App):
             show_func=self._play_stats,
             select_func=self._task_list_for_play,
         )
-        self._task_list_columns = TASK_LIST_COLUMNS
+        self._task_list_columns: List[str] = TASK_LIST_COLUMNS
         self._content_key_filter: Callable = filter_content_keys
 
     @property
