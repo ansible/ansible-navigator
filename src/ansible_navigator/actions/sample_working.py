@@ -19,6 +19,10 @@ class Action(App):
     KEGEX = r"^sample_working$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:sample_working`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="sample_working")
 
     # pylint: disable=unused-argument

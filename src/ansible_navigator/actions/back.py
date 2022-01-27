@@ -17,6 +17,10 @@ class Action:
     KEGEX = r"^\^\[|\x1b|back$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:back`` action.
+
+        :param args: The current settings for the application
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 
