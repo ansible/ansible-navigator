@@ -21,9 +21,7 @@ from .parser import Parser
 
 
 class Configurator:
-    # pylint: disable=too-many-arguments
     # pylint: disable=too-few-public-methods
-    # pylint: disable=too-many-instance-attributes
     """the configuration class"""
 
     def __init__(
@@ -267,7 +265,6 @@ class Configurator:
                     )
 
     def _apply_previous_cli_to_current(self) -> None:
-        # pylint: disable=too-many-nested-blocks
         """Apply eligible previous CLI values to current not set by the CLI"""
 
         # _apply_previous_cli_entries must be ALL or a list of entries

@@ -14,10 +14,8 @@ from .validators import FieldValidators
 
 @dataclass
 class FieldInformation:
-
-    # pylint: disable=too-many-instance-attributes
-    # pylint: disable=unsubscriptable-object
     """a text input field"""
+
     name: str
     information: List[str]
     current_error: str = ""
@@ -40,6 +38,5 @@ class FieldInformation:
         self.valid = True
 
     def conditional_validation(self, response: str) -> None:
-        # pylint: disable=unused-argument
         """no conditional validation"""
         self.validate(response)

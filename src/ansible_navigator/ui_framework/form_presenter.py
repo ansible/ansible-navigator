@@ -35,7 +35,6 @@ TPAD_RATIO = 2 / 5
 BUTTON_SPACE = 10
 
 
-# pylint: disable=no-member
 class FormPresenter(CursesWindow):
     """present the form to the user"""
 
@@ -158,9 +157,10 @@ class FormPresenter(CursesWindow):
             window = curses.newwin(1, len(string), self._line_number, far_right + self._pad_left)
             window.keypad(True)
             form_field.win = window
-            form_field.conditional_validation(
-                (f.valid for f in self._form.fields if not isinstance(f, FieldButton))
-            )
+            form_validity_state = [
+                f.valid for f in self._form.fields if not isinstance(f, FieldButton)
+            ]
+            form_field.conditional_validation(form_validity_state)
             if form_field.disabled is True:
                 color = 8
             else:

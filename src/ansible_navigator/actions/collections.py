@@ -77,12 +77,13 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 class Action(App):
     """:doc"""
 
-    # pylint:disable=too-few-public-methods
-    # pylint:disable=too-many-instance-attributes
-
     KEGEX = r"^collections(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:collections`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
         self._collection_cache: Dict
@@ -95,7 +96,6 @@ class Action(App):
         self._calling_app.update()
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        # pylint: disable=too-many-branches
         """Handle :doc
 
         :param interaction: The interaction from the user

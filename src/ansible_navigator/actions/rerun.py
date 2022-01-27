@@ -8,9 +8,6 @@ from ..ui_framework import Interaction
 from . import _actions as actions
 
 
-# pylint: disable=protected-access
-
-
 @actions.register
 class Action:
     """:rerun"""
@@ -20,6 +17,10 @@ class Action:
     KEGEX = r"^rr|rerun?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:rerun`` action.
+
+        :param args: The current settings for the application
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

@@ -11,13 +11,12 @@ from typing import NamedTuple
 from typing import Union
 from urllib.parse import urlparse
 
+from .form_defs import FieldValidationStates
 from .sentinels import Unknown
 from .sentinels import unknown
 
 
 class Validation(NamedTuple):
-    # pylint: disable=inherit-non-class
-    # pylint: disable=too-few-public-methods
     """the response from a validation"""
 
     value: Any
@@ -41,7 +40,6 @@ class FieldValidators:
 
     @staticmethod
     def masked_or_none(text="", hint: bool = False) -> Union[Validation, str]:
-        # pylint: disable=unused-argument
         """no validation"""
         if hint:
             return "Please provide a value (optional)"
@@ -52,7 +50,10 @@ class FieldValidators:
         return Validation(value=value, error_msg="")
 
     @staticmethod
-    def none(text="", hint: bool = False) -> Union[Validation, str]:
+    def none(
+        text: Union[FieldValidationStates, str] = "",
+        hint: bool = False,
+    ) -> Union[Validation, str]:
         """no validation"""
         if hint:
             return "Please provide a value (optional)"

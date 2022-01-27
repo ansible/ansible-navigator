@@ -12,11 +12,13 @@ from . import _actions as actions
 class Action(App):
     """:help"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^h(?:elp)?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:help`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="help")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:

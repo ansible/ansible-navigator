@@ -200,7 +200,6 @@ class CollectionCatalog:
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
     """extract a doc from a plugin, place in completed q"""
-    # pylint: disable=ungrouped-imports
     # pylint: disable=import-outside-toplevel
 
     # load the fragment_loader _after_ the path is set

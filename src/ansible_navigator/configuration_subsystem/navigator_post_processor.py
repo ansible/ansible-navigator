@@ -89,7 +89,7 @@ class VolumeMount:
         """Render the volume mount in a way that (docker|podman) understands."""
         out = f"{self.src}:{self.dest}"
         if self.options:
-            joined_opts = ",".join(o.value for o in self.options)  # pylint: disable=not-an-iterable
+            joined_opts = ",".join(o.value for o in self.options)
             out += f":{joined_opts}"
         return out
 
@@ -421,7 +421,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ``exec_shell``.
 
         :param entry: The current settings entry
@@ -436,7 +435,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process help_config"""
         messages, exit_messages = self._true_or_false(entry, config)
         if all((entry.value.current is True, config.app == "config", config.mode == "interactive")):
@@ -462,7 +460,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process help_doc"""
         messages, exit_messages = self._true_or_false(entry, config)
         if all((entry.value.current is True, config.app == "doc", config.mode == "interactive")):
@@ -488,7 +485,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process help_inventory"""
         messages, exit_messages = self._true_or_false(entry, config)
         if all(
@@ -516,7 +512,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process help_playbook"""
         messages, exit_messages = self._true_or_false(entry, config)
         if all((entry.value.current is True, config.app == "run", config.mode == "interactive")):
@@ -741,7 +736,6 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def playbook(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process pass_environment_variable"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []

@@ -1,9 +1,0 @@
-[MASTER]
-
-ignore =
-  tm_tokenize,  # virtually vendored and shouldn't be linted as such
-
-
-[MESSAGES CONTROL]
-
-disable=duplicate-code,unsubscriptable-object,fixme

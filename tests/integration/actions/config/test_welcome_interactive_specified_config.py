@@ -18,7 +18,6 @@ steps = (
         user_input=":config",
         comment="enter config from welcome screen (no ee)",
         mask=False,
-        look_nots=["/home/runner"],
         look_fors=["YAML_FILENAME_EXTENSIONS", "['.yml', '.yaml', '.json']"],
     ),
     Step(user_input=":back", comment="return to welcome screen"),
@@ -26,7 +25,6 @@ steps = (
         user_input=":config -c " + CONFIG_FIXTURE,
         comment="enter config from welcome screen, custom config, (no ee)",
         mask=False,
-        look_nots=["/home/runner"],
         look_fors=["YAML_FILENAME_EXTENSIONS", "['.yahmool']"],
     ),
 )

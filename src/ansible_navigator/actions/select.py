@@ -7,9 +7,6 @@ from ..ui_framework import Interaction
 from . import _actions as actions
 
 
-# pylint: disable=protected-access
-
-
 @actions.register
 class Action:
     r""":\d+|[0-9]"""
@@ -19,6 +16,10 @@ class Action:
     KEGEX = r"^\d+$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the select action.
+
+        :param args: The current settings for the application
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 

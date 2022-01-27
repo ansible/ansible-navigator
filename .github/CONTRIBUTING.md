@@ -12,6 +12,8 @@ maintain it and you contribute.
 
 3. code-spell (prevents typos in code)
 
+4. isort (sorts import statements)
+
 ```{note}
 In early development cycles, a decision was made to use black as a formatter
 which is why current pull-requests are required to pass a
