@@ -319,6 +319,7 @@ rst-roles =
   data,
   exc,
   meth,
+  mod,
   term,
   py:class,
   py:data,
