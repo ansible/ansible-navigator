@@ -34,6 +34,10 @@ class Action(App):
     KEGEX = r"^sample_notification$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:sample_notification`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="sample_form")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:

@@ -21,6 +21,10 @@ class Action:
     KEGEX = r"^w(?:rite)?(?P<force>!)?\s+(?P<append>>>)?\s*(?P<filename>.+)$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:write`` action.
+
+        :param args: The current settings for the application
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 
