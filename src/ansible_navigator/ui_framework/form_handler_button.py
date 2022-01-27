@@ -9,6 +9,8 @@ from typing import Tuple
 
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow
+from .curses_window import Window
+from .ui_config import UIConfig
 
 
 if TYPE_CHECKING:
@@ -19,6 +21,11 @@ class FormHandlerButton(CursesWindow):
     """handle form button"""
 
     def __init__(self, screen, ui_config):
+        """Initialize the handler for a form button.
+
+        :param screen:  A curses window
+        :param ui_config: The current user interface configuration
+        """
         super().__init__(ui_config=ui_config)
         self._form_field = None
         self._form_fields = None
