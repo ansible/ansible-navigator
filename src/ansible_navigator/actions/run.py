@@ -15,7 +15,6 @@ from queue import Queue
 from typing import Any
 from typing import Callable
 from typing import Dict
-from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
@@ -194,12 +193,11 @@ class Action(App):
     def __init__(
         self,
         args: ApplicationConfiguration,
-        play_columns: List = PLAY_COLUMNS,
-        task_list_columns: List = TASK_LIST_COLUMNS,
-        content_key_filter: Callable = filter_content_keys,
     ):
-        # pylint: disable=dangerous-default-value
-        # for display purposes use the 4: of the uuid
+        """Initialize the ``:run`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="run")
 
         self._subaction_type: str
@@ -212,13 +210,13 @@ class Action(App):
         self._plays = Step(
             name="plays",
             tipe="menu",
-            columns=play_columns,
+            columns=PLAY_COLUMNS,
             value=[],
             show_func=self._play_stats,
             select_func=self._task_list_for_play,
         )
-        self._task_list_columns = task_list_columns
-        self._content_key_filter = content_key_filter
+        self._task_list_columns = TASK_LIST_COLUMNS
+        self._content_key_filter: Callable = filter_content_keys
 
     @property
     def mode(self):
