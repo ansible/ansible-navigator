@@ -17,8 +17,6 @@ WELCOME = """
 class Action(App):
     """:welcome"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^welcome$"
 
     def __init__(self, args: ApplicationConfiguration):

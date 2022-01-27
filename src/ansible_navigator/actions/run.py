@@ -250,7 +250,6 @@ class Action(App):
         return self.runner.ansible_runner_instance.rc
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        # pylint: disable=too-many-branches
         """run :run or :replay
 
         :param interaction: The interaction from the user

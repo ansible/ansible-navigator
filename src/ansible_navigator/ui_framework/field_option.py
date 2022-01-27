@@ -16,7 +16,6 @@ class FieldOption:
     checked: bool = False
     disabled: bool = False
 
-    # pylint: disable=unsubscriptable-object
     def ansi_code(self, form_field: Union[FieldChecks, FieldRadio]) -> str:
         """return our icon based on the
         form provided

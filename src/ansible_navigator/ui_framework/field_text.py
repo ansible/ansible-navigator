@@ -15,9 +15,7 @@ from .validators import FieldValidators
 
 @dataclass
 class FieldText:
-
     # pylint: disable=too-many-instance-attributes
-    # pylint: disable=unsubscriptable-object
     """a text input field"""
     name: str
     prompt: str

@@ -11,7 +11,6 @@ from .base import Base
 
 
 class AnsibleConfig(Base):
-    # pylint: disable=too-many-arguments
     """abstraction for ansible-config command-line"""
 
     def fetch_ansible_config(

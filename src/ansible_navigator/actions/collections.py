@@ -77,9 +77,6 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 class Action(App):
     """:doc"""
 
-    # pylint:disable=too-few-public-methods
-    # pylint:disable=too-many-instance-attributes
-
     KEGEX = r"^collections(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
@@ -99,7 +96,6 @@ class Action(App):
         self._calling_app.update()
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        # pylint: disable=too-many-branches
         """Handle :doc
 
         :param interaction: The interaction from the user

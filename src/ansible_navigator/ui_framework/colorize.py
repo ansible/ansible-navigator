@@ -255,9 +255,6 @@ def columns_and_colors(lines, schema):
 
 
 def ansi_to_curses(line: str) -> CursesLine:
-
-    # pylint: disable=too-many-branches
-    # pylint: disable=too-many-locals
     """Convert ansible color codes to curses colors
 
     :param line: A string with ansi colors

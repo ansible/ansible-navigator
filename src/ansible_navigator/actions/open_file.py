@@ -56,7 +56,6 @@ class Action:
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
         return obj
 
-    # pylint: disable=too-many-branches
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
         # pylint: disable=unused-argument

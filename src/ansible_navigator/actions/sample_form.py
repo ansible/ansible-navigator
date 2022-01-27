@@ -88,8 +88,6 @@ form:
 class Action(App):
     """handle :sample_form"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^sample_form$"
 
     def __init__(self, args: ApplicationConfiguration):
@@ -99,7 +97,6 @@ class Action(App):
         """
         super().__init__(args=args, logger_name=__name__, name="sample_form")
 
-    # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle :doc
 
