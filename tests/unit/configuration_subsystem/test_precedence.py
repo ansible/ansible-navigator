@@ -198,7 +198,6 @@ def test_all_entries_reflect_envvar_given_settings(
     value,
     expected,
 ):
-    # pylint: disable=unused-argument
     """Ensure each entry is are set by an environment variables
     even though settings file has been provided, the others
     should by default or settings file

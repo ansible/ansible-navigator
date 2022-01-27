@@ -13,7 +13,6 @@ from .ui_config import UIConfig
 
 
 if TYPE_CHECKING:
-    # pylint: disable= no-name-in-module
     from _curses import _CursesWindow
 
     Window = _CursesWindow

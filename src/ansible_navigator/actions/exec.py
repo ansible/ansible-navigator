@@ -40,8 +40,6 @@ def _generate_command(exec_command: str, exec_shell: bool) -> GeneratedCommand:
 class Action(App):
     """Run the :exec subcommand."""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = "^e(?:xec)?$"
 
     def __init__(self, args: ApplicationConfiguration):
@@ -64,8 +62,6 @@ class Action(App):
         return None
 
     def _run_runner(self) -> Optional[Tuple]:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         """Spin up runner.
 
         :return: The stdout, stderr and return code from runner

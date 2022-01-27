@@ -73,6 +73,9 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
       "fixme",
       "unsubscriptable-object",
     ]
+    enable = [
+      "useless-suppression",  # Identify unneeded pylint disable statements
+    ]
 
     [tool.pylint.format]
     max-line-length = 100

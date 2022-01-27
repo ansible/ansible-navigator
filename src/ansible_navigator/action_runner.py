@@ -14,7 +14,7 @@ from .ui_framework import UserInterface
 
 
 if TYPE_CHECKING:
-    from _curses import _CursesWindow  # pylint: disable=no-name-in-module
+    from _curses import _CursesWindow
 
     Window = _CursesWindow
 else:
@@ -28,9 +28,6 @@ THEME = "dark_vs.json"
 
 
 class ActionRunner(App):
-
-    # pylint: disable=too-few-public-methods
-    # pylint: disable=too-many-instance-attributes
     """A single action runner."""
 
     def __init__(self, args: ApplicationConfiguration) -> None:

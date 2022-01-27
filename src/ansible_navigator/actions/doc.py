@@ -28,8 +28,6 @@ from . import _actions as actions
 class Action(App):
     """:doc"""
 
-    # pylint:disable=too-few-public-methods
-
     KEGEX = r"^d(?:oc)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
@@ -63,7 +61,6 @@ class Action(App):
         return heading
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        # pylint: disable=too-many-branches
         """Handle :doc
 
         :param interaction: The interaction from the user

@@ -21,7 +21,6 @@ from ansible_runner import Runner  # type: ignore[import]
 class Base:
     """Base class"""
 
-    # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-instance-attributes
     def __init__(

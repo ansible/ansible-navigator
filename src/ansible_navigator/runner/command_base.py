@@ -12,9 +12,7 @@ from .base import Base
 
 
 class CommandBase(Base):
-    # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-arguments
-    # pylint: disable=too-many-instance-attributes
 
     """Base class for runner command interaction"""
 

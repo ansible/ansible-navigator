@@ -59,7 +59,6 @@ class BaseClass:
         comment,
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=too-many-locals
         """Run the tests for collections, mode and ``ee`` set in child class.
 
         wait on help here to ensure we get the welcome screen and subsequent screens

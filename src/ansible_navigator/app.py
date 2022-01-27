@@ -21,7 +21,6 @@ from .utils import LogMessage
 
 
 class App:
-    # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
     """Base class for apps (actions)."""
 

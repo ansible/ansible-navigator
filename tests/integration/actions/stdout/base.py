@@ -40,7 +40,6 @@ class BaseClass:
 
     def test(self, request, tmux_session, index, user_input, comment, search_within_response):
         # pylint:disable=too-many-arguments
-        # pylint: disable=too-many-locals
         """Run the tests for stdout, mode and EE set in child class."""
         assert os.path.exists(ANSIBLE_PLAYBOOK)
         assert os.path.exists(TEST_CONFIG_FILE)

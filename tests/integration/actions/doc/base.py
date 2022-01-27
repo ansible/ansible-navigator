@@ -23,7 +23,6 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_doc_session")
     def fixture_tmux_doc_session(request):
-        # pylint: disable=too-many-locals
         """Tmux fixture for this module."""
         params = {
             "pane_height": "2000",
