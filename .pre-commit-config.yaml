@@ -169,6 +169,22 @@ repos:
     - flake8-2020 >= 1.6.0
     - flake8-isort >= 4.1.1
   - id: flake8
+    alias: flake8-rule-candidates
+    name: An unenforced set of flake8 candidate rule candidates
+    args:
+    - --ignore=
+    - --extend-ignore=
+    - >-
+      --select=
+      D,
+      DAR,
+    language_version: python3
+    additional_dependencies:
+    - darglint
+    - flake8-docstrings
+    stages:
+    - manual
+  - id: flake8
     alias: flake8-extended
     name: >-
       An unenforced set of strict flake8 plugins,
