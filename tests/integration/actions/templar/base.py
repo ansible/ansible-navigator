@@ -82,11 +82,11 @@ class BaseClass:
         else:
             search_within_response = step.search_within_response
 
-        original_output = tmux_session.interaction(
+        unmasked_output = tmux_session.interaction(
             value=step.user_input,
             search_within_response=search_within_response,
         )
-        received_output = original_output
+        received_output = unmasked_output
 
         if step.mask:
             # mask out some configuration that is subject to change each run
@@ -129,5 +129,5 @@ class BaseClass:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(
-                difflib.unified_diff(expected_output, original_output, "expected", "received"),
+                difflib.unified_diff(expected_output, received_output, "expected", "received"),
             )
