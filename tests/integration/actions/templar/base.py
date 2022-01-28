@@ -40,6 +40,7 @@ base_steps = (
         search_within_response="---",
         look_fors=["---"],
     ),
+    Step(user_input=":q!", comment="exit vi"),
 )
 
 
