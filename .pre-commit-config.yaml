@@ -171,13 +171,11 @@ repos:
   - id: flake8
     alias: flake8-extended
     name: >-
-      An unenforced set of strict flake8 plugins,
-      including WPS and pytest-style
+      An unenforced set of flake8 plugins currently being vetted and triaged.
     language_version: python3
     additional_dependencies:
-    - flake8-docstrings >= 1.5.0
-    - flake8-pytest-style >= 1.2.2
-    - wemake-python-styleguide ~= 0.16.0
+    - darglint >= 1.8.1
+    - flake8-docstrings >= 1.6.0
     stages:
     - manual
 
