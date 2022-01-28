@@ -4,6 +4,7 @@ import difflib
 import json
 import os
 
+from copy import copy
 from typing import Optional
 
 import pytest
@@ -86,7 +87,7 @@ class BaseClass:
             value=step.user_input,
             search_within_response=search_within_response,
         )
-        received_output = unmasked_output
+        received_output = copy(unmasked_output)
 
         if step.mask:
             # mask out some configuration that is subject to change each run
