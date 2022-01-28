@@ -5,6 +5,7 @@ import functools
 import importlib
 import logging
 import re
+import sys
 
 from collections import namedtuple
 from typing import Any
@@ -15,10 +16,12 @@ from typing import List
 from typing import Tuple
 
 
-try:
+# mypy/pylint idiom for py36 compatibility
+# https://github.com/python/typeshed/issues/3500#issuecomment-560958608
+if sys.version_info >= (3, 7):
     from importlib import resources
-except ImportError:
-    import importlib_resources as resources  # type: ignore[import, no-redef]
+else:
+    import importlib_resources as resources
 
 
 logger = logging.getLogger(__name__)

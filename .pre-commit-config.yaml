@@ -26,7 +26,7 @@ repos:
       $
 
 - repo: https://github.com/pre-commit/pre-commit-hooks.git
-  rev: v4.0.1
+  rev: v4.1.0
   hooks:
   # Side-effects:
   - id: trailing-whitespace
@@ -182,7 +182,7 @@ repos:
     - manual
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v0.910-1
+  rev: v0.931
   hooks:
   # NOTE: Here MyPy is executed twice -- once for the highest and once
   # NOTE: for the lowest supported version. They are hardcoded in the
