@@ -41,6 +41,12 @@ class FormPresenter(CursesWindow):
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-few-public-methods
     def __init__(self, form, screen, ui_config):
+        """Initialize the form presenter.
+
+        :param form: The form to present to the user
+        :param screen: A curses window
+        :param ui_config: The current user interface configuration
+        """
         super().__init__(ui_config=ui_config)
         self._form = form
         self._screen = screen
