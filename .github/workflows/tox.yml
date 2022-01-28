@@ -27,7 +27,7 @@ jobs:
         python-version:
           - 3.8
         include:
-          - tox_env: lint-vetting
+          - tox_env: lint-candidates
             devel: true
           - tox_env: py36
             python-version: 3.6
