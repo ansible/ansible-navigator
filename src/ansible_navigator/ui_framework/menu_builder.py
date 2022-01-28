@@ -30,6 +30,14 @@ class MenuBuilder:
         color_menu_item: Callable,
         ui_config: UIConfig,
     ):
+        """Initialize the menu builder.
+
+        :param pbar_width:  The width of the progress bar
+        :param screen_w: The current screen width
+        :param number_colors: The number of colors the current terminal supports
+        :param color_menu_item: The callback for adding color to menu entries
+        :param ui_config: The current user interface configuration
+        """
         # pylint: disable=too-many-arguments
         self._number_colors = number_colors
         self._pbar_width = pbar_width

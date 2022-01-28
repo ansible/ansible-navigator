@@ -70,6 +70,11 @@ class Colorize:
 
     # pylint: disable=too-few-public-methods
     def __init__(self, grammar_dir: str, theme_path: str):
+        """Initialize the colorizer.
+
+        :param grammar_dir: The directory in which the grammars reside
+        :param theme_path: The path to the currently configured color theme
+        """
         self._logger = logging.getLogger(__name__)
         self._schema = None
         self._grammars = Grammars(grammar_dir)
