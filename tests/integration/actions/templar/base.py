@@ -37,8 +37,8 @@ base_steps = (
     Step(
         user_input=":open {{ task_path }}",
         comment="goto vi",
-        search_within_response="---",
-        # look_fors=["---"],
+        search_within_response="name: run integration test play-1",
+        look_fors=["name: run integration test play-1"],
     ),
     Step(user_input=":q!", comment="exit vi"),
 )
@@ -82,10 +82,11 @@ class BaseClass:
         else:
             search_within_response = step.search_within_response
 
-        received_output = tmux_session.interaction(
+        original_output = tmux_session.interaction(
             value=step.user_input,
             search_within_response=search_within_response,
         )
+        received_output = original_output
 
         if step.mask:
             # mask out some configuration that is subject to change each run
@@ -128,5 +129,5 @@ class BaseClass:
                 expected_output = json.load(infile)["output"]
 
             assert expected_output == received_output, "\n" + "\n".join(
-                difflib.unified_diff(expected_output, received_output, "expected", "received"),
+                difflib.unified_diff(expected_output, original_output, "expected", "received"),
             )
