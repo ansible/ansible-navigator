@@ -16,6 +16,11 @@ class FormHandlerText(CursesWindow, Textbox):
     """Get one line of text input"""
 
     def __init__(self, screen, ui_config):
+        """Initialize the handler for a form text field.
+
+        :param screen: A curses window
+        :param ui_config: The current user interface configuration
+        """
         super().__init__(ui_config=ui_config)
         self.input_line_cache = []
         self.input_line_pointer = 0

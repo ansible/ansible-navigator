@@ -43,6 +43,10 @@ class CollectionCatalog:
     """collection cataloger"""
 
     def __init__(self, directories: List[str]):
+        """Initialize the collection cataloger.
+
+        :param directories: A list of directories that may contain collections
+        """
         self._directories = directories
         self._collections: OrderedDict[str, Dict] = OrderedDict()
         self._errors: List[Dict[str, str]] = []

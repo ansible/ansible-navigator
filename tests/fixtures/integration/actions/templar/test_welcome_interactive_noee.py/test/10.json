@@ -4,7 +4,7 @@
     "comment": "goto vi",
     "additional_information": {
         "look_fors": [
-            "---"
+            "name: run integration test play-1"
         ],
         "look_nots": [],
         "compared_fixture": false

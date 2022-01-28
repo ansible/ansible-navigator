@@ -19,6 +19,11 @@ class FormHandlerButton(CursesWindow):
     """handle form button"""
 
     def __init__(self, screen, ui_config):
+        """Initialize the handler for a form button.
+
+        :param screen:  A curses window
+        :param ui_config: The current user interface configuration
+        """
         super().__init__(ui_config=ui_config)
         self._form_field = None
         self._form_fields = None
