@@ -7,8 +7,6 @@ from .run import Action as BaseAction
 
 @actions.register
 class Action(BaseAction):
-
-    # pylint: disable=too-many-instance-attributes
     """:replay"""
 
     KEGEX = r"""(?x)

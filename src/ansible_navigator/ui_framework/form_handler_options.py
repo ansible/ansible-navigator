@@ -21,6 +21,11 @@ class FormHandlerOptions(CursesWindow):
     """handle form checkbox field"""
 
     def __init__(self, screen, ui_config):
+        """Initialize the handler for either form checkboxes or radio buttons.
+
+        :param screen: A curses window
+        :param ui_config: The current user interface configuration
+        """
         super().__init__(ui_config=ui_config)
         self._screen = screen
 
@@ -42,7 +47,6 @@ class FormHandlerOptions(CursesWindow):
             self._add_line(self.win, idx, ([clp_option_code, clp_text]))
 
     def handle(self, idx, form_fields: List) -> Tuple[Union["FieldChecks", "FieldRadio"], int]:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-nested-blocks
 
         """handle the check box field"""

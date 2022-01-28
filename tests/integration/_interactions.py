@@ -47,8 +47,8 @@ class Command(NamedTuple):
 
 
 class Step(NamedTuple):
-    # pylint: disable=too-few-public-methods
     """test data object"""
+
     user_input: str
     comment: str
 

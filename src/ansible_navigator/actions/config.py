@@ -84,18 +84,19 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 class Action(App):
     """:doc"""
 
-    # pylint:disable=too-few-public-methods
-
     KEGEX = r"^config(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:config`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="config")
 
         self._config: Union[List[Any], None] = None
         self._runner: Union[AnsibleConfig, Command]
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        # pylint: disable=too-many-branches
         """Handle :doc
 
         :param interaction: The interaction from the user
@@ -287,7 +288,6 @@ class Action(App):
         """yaml load the list, and parse the dump
         merge dump int list
         """
-        # pylint: disable=too-many-branches
         try:
             parsed = yaml.load(list_output, Loader=Loader)
             self._logger.debug("yaml loading list output succeeded")

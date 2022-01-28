@@ -30,6 +30,19 @@ class TmuxSession:
         setup_commands=None,
         shell_prompt_timeout=10,
     ) -> None:
+        """Initialize a tmux session.
+
+        :param unique_test_id: The unique id for this tmux session, the session name
+        :param config_path: The path to a settings file to use
+        :param cwd: The current working directory to set when starting the tmux session
+        :param pane_height: The height of the tmux session in lines
+        :param pane_width: The width of the tmux session in characters
+        :param pull_policy: The pull policy to set for the session
+        :param setup_commands: Any commands needing to be run before starting the application
+            in the tmux session
+        :param shell_prompt_timeout: The amount of time to wait for a shell prompt in seconds after
+            issuing commands in the tmux session
+        """
         self.cli_prompt: str
         self._config_path = config_path
         self._cwd = cwd

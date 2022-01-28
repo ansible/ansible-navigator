@@ -53,7 +53,7 @@ def dict_to_form(form_data: Dict) -> Form:
             if pre_populate:
                 frm_field_text.pre_populate(pre_populate)
 
-            form.fields.append(frm_field_text)  # pylint: disable=no-member
+            form.fields.append(frm_field_text)
 
         elif field["type"] in ["checkbox", "radio"]:
             field_params["prompt"] = field["prompt"]
@@ -67,19 +67,19 @@ def dict_to_form(form_data: Dict) -> Form:
                 if min_selected:
                     field_params["min_selected"] = min_selected
                 frm_field_checks = FieldChecks(**field_params)
-                form.fields.append(frm_field_checks)  # pylint: disable=no-member
+                form.fields.append(frm_field_checks)
 
             elif field["type"] == "radio":
                 frm_field_radio = FieldRadio(**field_params)
-                form.fields.append(frm_field_radio)  # pylint: disable=no-member
+                form.fields.append(frm_field_radio)
 
         elif field["type"] == "information":
             frm_field_info = FieldInformation(name=field["name"], information=field["information"])
-            form.fields.append(frm_field_info)  # pylint: disable=no-member
+            form.fields.append(frm_field_info)
 
         elif field["type"] == "working":
             frm_field_working = FieldWorking(name=field["name"], messages=field["messages"])
-            form.fields.append(frm_field_working)  # pylint: disable=no-member
+            form.fields.append(frm_field_working)
 
     return form
 

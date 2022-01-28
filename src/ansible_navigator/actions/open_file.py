@@ -40,6 +40,10 @@ class Action:
     KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:open`` action.
+
+        :param args: The current settings for the application
+        """
         self._args = args
         self._logger = logging.getLogger(__name__)
 
@@ -52,7 +56,6 @@ class Action:
             obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
         return obj
 
-    # pylint: disable=too-many-branches
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
         # pylint: disable=unused-argument

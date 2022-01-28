@@ -20,6 +20,10 @@ class Parser:
 
     # pylint: disable=too-few-public-methods
     def __init__(self, config: ApplicationConfiguration):
+        """Initialize the command line interface parameter parser.
+
+        :param config: The current settings for the application
+        """
         self._config = config
         self._base_parser = ArgumentParser(add_help=False)
         self._configure_base()

@@ -43,11 +43,13 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 class Action(App):
     """:images"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^im(?:ages)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:images`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="images")
         self._image_list: List = []
         self._images = Step(
@@ -416,7 +418,6 @@ class Action(App):
 
     def _parse(self, output) -> Union[Dict, None]:
         """parse the introspection output"""
-        # pylint: disable=too-many-branches
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)

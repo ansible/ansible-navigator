@@ -1,7 +1,5 @@
 """the main UI renderer
 """
-
-# pylint: disable=too-many-lines
 import curses
 import json
 import logging
@@ -41,9 +39,6 @@ from .ui_config import UIConfig
 
 STND_KEYS = {"^f/PgUp": "page up", "^b/PgDn": "page down", "\u2191\u2193": "scroll", "esc": "back"}
 END_KEYS = {":help": "help"}
-
-# pylint: disable=inherit-non-class
-# pylint: disable=too-few-public-methods
 
 
 class Action(NamedTuple):
@@ -89,7 +84,6 @@ class Interaction(NamedTuple):
 
 class UserInterface(CursesWindow):
     # pylint: disable=too-many-instance-attributes
-    # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-arguments
 
     """The main UI class"""
@@ -360,7 +354,6 @@ class UserInterface(CursesWindow):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
-        # pylint: disable=too-many-nested-blocks
         """show something on the screen
 
         :param lines: The lines to show
@@ -623,7 +616,6 @@ class UserInterface(CursesWindow):
         return res
 
     def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:
-        # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements

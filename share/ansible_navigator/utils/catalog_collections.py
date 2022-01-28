@@ -43,6 +43,10 @@ class CollectionCatalog:
     """collection cataloger"""
 
     def __init__(self, directories: List[str]):
+        """Initialize the collection cataloger.
+
+        :param directories: A list of directories that may contain collections
+        """
         self._directories = directories
         self._collections: OrderedDict[str, Dict] = OrderedDict()
         self._errors: List[Dict[str, str]] = []
@@ -200,7 +204,6 @@ class CollectionCatalog:
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
     """extract a doc from a plugin, place in completed q"""
-    # pylint: disable=ungrouped-imports
     # pylint: disable=import-outside-toplevel
 
     # load the fragment_loader _after_ the path is set

@@ -31,14 +31,15 @@ form:
 class Action(App):
     """handle :sample_notification"""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^sample_notification$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:sample_notification`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="sample_form")
 
-    # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle :doc
 

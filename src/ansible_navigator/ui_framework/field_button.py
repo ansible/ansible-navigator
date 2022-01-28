@@ -12,8 +12,6 @@ from .validators import FieldValidators
 
 @dataclass
 class FieldButton:
-
-    # pylint: disable=too-many-instance-attributes
     """a text input field"""
 
     name: str
@@ -23,7 +21,7 @@ class FieldButton:
     color: int = 0
     window_handler = FormHandlerButton
     validator: Callable = FieldValidators.none
-    win: Union[Window, None] = None  # pylint: disable=unsubscriptable-object
+    win: Union[Window, None] = None
 
     @property
     def full_prompt(self) -> str:

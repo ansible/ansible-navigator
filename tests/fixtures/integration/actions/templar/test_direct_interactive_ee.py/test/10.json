@@ -1,0 +1,35 @@
+{
+    "name": "test[10-:q!-exit vi]",
+    "index": 10,
+    "comment": "exit vi",
+    "additional_information": {
+        "look_fors": [],
+        "look_nots": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "PLAY [run integration test play-1:0] *******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************",
+        "TASK [debug print play-1 task-1] ***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************",
+        "OK: [localhost] This is play-1 task-1",
+        " 0│---",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 3│event_loop: null",
+        " 4│host: localhost",
+        " 5│play: run integration test play-1",
+        " 6│play_pattern: localhost",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 8│remote_addr: localhost",
+        " 9│res:",
+        "10│  _ansible_no_log: false",
+        "11│  _ansible_verbose_always: true",
+        "12│  changed: false",
+        "13│  msg: This is play-1 task-1",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "15│task: debug print play-1 task-1",
+        "16│task_action: debug",
+        "17│task_args: ''",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "^f/PgUp page up                                                  ^b/PgDn page down                                                  ↑↓ scroll                                                  esc back                                                  - previous                                                  + next                                                  [0-9] goto                                                  :help help                                                     SUCCESSFUL"
+    ]
+}

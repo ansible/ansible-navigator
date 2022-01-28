@@ -13,7 +13,6 @@ from .ui_config import UIConfig
 
 
 if TYPE_CHECKING:
-    # pylint: disable= no-name-in-module
     from _curses import _CursesWindow
 
     Window = _CursesWindow
@@ -49,6 +48,10 @@ class CursesWindow:
     """abstraction for a curses window"""
 
     def __init__(self, ui_config: UIConfig):
+        """Initialize a curses window.
+
+        :param ui_config: The current user interface configuration
+        """
         self._logger = logging.getLogger(__name__)
 
         self._screen: Window

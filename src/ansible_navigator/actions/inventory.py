@@ -94,12 +94,15 @@ class Menu(list):
 class Action(App):
     """:inventory"""
 
-    # pylint:disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
 
     KEGEX = r"^i(?:nventory)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the ``:images`` action.
+
+        :param args: The current settings for the application
+        """
         super().__init__(args=args, logger_name=__name__, name="inventory")
 
         self.__inventory: Dict[Any, Any] = {}
@@ -157,7 +160,6 @@ class Action(App):
         self._calling_app.update()
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        # pylint: disable=too-many-branches
         """Handle :inventory
 
         :param interaction: The interaction from the user
@@ -421,7 +423,6 @@ class Action(App):
             if form.cancelled:
                 return
 
-            # pylint: disable=not-an-iterable
             inventories = [
                 field.value
                 for field in form.fields
