@@ -15,6 +15,11 @@ class Indexable(Generic[TKey, TValue], Protocol):
 
 class FChainMap(Generic[TKey, TValue]):
     def __init__(self, *mappings: Indexable[TKey, TValue]) -> None:
+        """Initialize the FChainMap.
+
+        :param mappings: A tuple of mappings, each corresponding to a repository entry of a
+            ``tm_language`` file
+        """
         self._mappings = mappings
 
     def __getitem__(self, key: TKey) -> TValue:
