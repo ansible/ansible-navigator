@@ -38,7 +38,7 @@ base_steps = (
         user_input=":open {{ task_path }}",
         comment="goto vi",
         search_within_response="---",
-        look_fors=["---"],
+        # look_fors=["---"],
     ),
     Step(user_input=":q!", comment="exit vi"),
 )
