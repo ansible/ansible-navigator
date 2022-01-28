@@ -45,6 +45,10 @@ class Grammar(NamedTuple):
 
 class Grammars:
     def __init__(self, *directories: str) -> None:
+        """Initialize an instance of Grammars.
+
+        :param directories: A tuple of strings, each a directory in which grammar files can be found
+        """
         self._scope_to_files = {
             os.path.splitext(filename)[0]: os.path.join(directory, filename)
             for directory in directories

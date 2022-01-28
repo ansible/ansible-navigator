@@ -7,6 +7,10 @@ class KeyValueStore(dict):
     """use sqlite as a k,v store"""
 
     def __init__(self, filename):
+        """Initialize the key value store.
+
+        :param filename: The full path to the sqlite database file
+        """
         # pylint: disable=super-init-not-called
         self.conn = sqlite3.connect(filename)
         self.path = filename
