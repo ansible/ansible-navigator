@@ -39,6 +39,23 @@ class ActionRunTest:
         rotate_artifacts: Optional[int] = None,
         timeout: Optional[int] = None,
     ) -> None:
+        """Initialize the test runner for an action.
+
+        :param action_name: The name of the action tests will be run against
+        :param container_engine: The name of the container engine
+        :param container_options: Any options being passed directly to the container engine
+        :param execution_environment: A boolean indicating if an execution environment
+            should be used
+        :param execution_environment_image: The name of the execution environment image to be used
+        :param host_cwd: The current working directory for the host
+        :param set_environment_variable: Any environment variable to set in the
+            execution environment
+        :param pass_environment_variable: Any environment variables to pass into the
+            execution environment
+        :param private_data_dir: The artifact directory for ansible runner
+        :param rotate_artifacts: The number of artifacts ansible runner should maintain
+        :param timeout: The ansible runner timeout value
+        """
         self._action_name = action_name
         self._container_engine = container_engine
         self._container_options = container_options
