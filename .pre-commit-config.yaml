@@ -267,21 +267,30 @@ repos:
     - src/
     - tests/
 
-- repo: local
+- repo: https://github.com/pycqa/pylint.git
+  rev: v2.12.2
   hooks:
   - id: pylint
-    language: system
-    name: PyLint
-    files: \.py$
-    entry: python -m pylint
     args:
     # FIXME: uncomment once it doesn't have violations
     # - docs/
     - share/
     - src/
     - tests/
+    additional_dependencies:
+    - ansible-core
+    # astroid is a transitive dep for pylint, > 2.9.0 introduces false no-name-in-module and no-member errors
+    # attempt to remove this when astroid 2.9.4 or later is released
+    # related: https://github.com/PyCQA/pylint/issues/5131
+    # related: https://github.com/ansible/ansible-navigator/issues/772
+    - astroid == 2.9.0
+    - ansible-runner
+    - jinja2
+    - libtmux
+    - onigurumacffi
+    - pylint-pytest < 1.1.0
+    - setuptools-scm
+    - sphinx
     pass_filenames: false
-    stages:
-    - manual
 
 ...
