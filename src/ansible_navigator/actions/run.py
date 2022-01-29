@@ -716,9 +716,7 @@ class Action(App):
         """Looks like we're headed out of here
 
         :param interaction: the quit interaction
-        :type interaction: Interaction
         :return: a bool indicating whether of not it's safe to exit
-        :rtype: bool
         """
         self.update()
         if self.runner is not None and not self.runner.finished:
