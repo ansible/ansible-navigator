@@ -66,6 +66,14 @@ jobs:
           python3 -m tox
         env:
           TOXENV: ${{ matrix.tox_env }}
+      - name: Upload coverage data
+        uses: codecov/codecov-action@v2
+        with:
+          directory: .tox
+          files: 'coverage-*.xml'
+          name: ${{ matrix.tox_env }}
+          verbose: true  # optional (default = false)
+        if: ${{ startsWith(matrix.tox_env, 'py') }}
 
   check:  # This job does nothing and is only used for the branch protection
     if: always()
