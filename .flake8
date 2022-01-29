@@ -38,6 +38,7 @@ extend-exclude =
 # Completely and unconditionally ignore the following errors:
 extend-ignore =
   E203,  # skipped because it annoys black
+  F401,  # skipped for unknown reason
   WPS300,  # "Found local folder import" -- nothing bad about this
   # An opposite consistency expectation is currently enforced
   # by pylint via: useless-object-inheritance (R0205):

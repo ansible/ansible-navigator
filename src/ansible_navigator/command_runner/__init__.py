@@ -4,7 +4,7 @@ from .command_runner import Command
 from .command_runner import CommandRunner
 
 
-__all__ = [
+__all__ = (
     "Command",
     "CommandRunner",
-]
+)

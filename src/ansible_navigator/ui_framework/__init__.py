@@ -18,7 +18,7 @@ from .ui import UIConfig
 from .ui import UserInterface
 
 
-__all__ = [
+__all__ = (
     "Action",
     "Content",
     "CursesLine",
@@ -34,4 +34,4 @@ __all__ = [
     "UIConfig",
     "UserInterface",
     "warning_notification",
-]
+)

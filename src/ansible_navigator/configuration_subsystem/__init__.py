@@ -7,10 +7,10 @@ from .definitions import SettingsEntry
 from .navigator_configuration import NavigatorConfiguration
 
 
-__all__ = [
+__all__ = (
     "ApplicationConfiguration",
     "Configurator",
     "Constants",
     "NavigatorConfiguration",
     "SettingsEntry",
-]
+)

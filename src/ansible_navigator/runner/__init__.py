@@ -8,10 +8,10 @@ from .command import Command
 from .command_async import CommandAsync
 
 
-__all__ = [
+__all__ = (
     "AnsibleConfig",
     "AnsibleDoc",
     "AnsibleInventory",
     "Command",
     "CommandAsync",
-]
+)
