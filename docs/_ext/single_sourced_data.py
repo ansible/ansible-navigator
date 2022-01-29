@@ -42,7 +42,7 @@ PARAM_TABLE_HEADER = [
     "  :header-rows: 1",
 ]
 RST_FIRST_ROW_ENTRY = "  * - {}"
-RST_ADDITONAL_ROW_ENTRY = "    - {}"
+RST_ADDITIONAL_ROW_ENTRY = "    - {}"
 RST_NL_CELL_FIRST = "    - | {}"
 RST_NL_IN_CELL = "      | {}"
 SUBCOMMAND_TABLE_HEADER = [
@@ -76,6 +76,11 @@ def _nodes_from_rst(
     """Turn an RST string into a list of nodes.
 
     These nodes can be used in the document.
+
+    :param state: The superclass for a docutils statemachine which contains a list or transitions
+        and transition methods
+    :param rst_source: The source of the RST content from which nodes will be extracted
+    :returns: A list of nodes extracted from the RST content
     """
     node = nodes.Element()
     node.document = state.document
@@ -91,12 +96,16 @@ def _nodes_from_rst(
 
 
 def _rst_generate_row(row: Tuple) -> List:
-    """generate an r for an rst list table"""
+    """Generate a row for an RST list table.
+
+    :param row: A tuple containing the text for the row
+    :return: A list of columns containing the formatted text
+    """
     data = []
     data.append(RST_FIRST_ROW_ENTRY.format(row[0]))
     for row_part in row[1:]:
         if isinstance(row_part, str):
-            data.append(RST_ADDITONAL_ROW_ENTRY.format(row_part))
+            data.append(RST_ADDITIONAL_ROW_ENTRY.format(row_part))
         elif isinstance(row_part, tuple):
             data.append(RST_NL_CELL_FIRST.format(row_part[0]))
             for nl_cell in row_part[1:]:
@@ -108,7 +117,11 @@ def _rst_generate_row(row: Tuple) -> List:
 
 
 def _params_generate_tables(param_details: Dict) -> List:
-    """generate tables for parameters"""
+    """Generate a table for each subcommand's settings parameters.
+
+    :param param_details: A dictionary of the settings parameters details
+    :returns: A list of tables, one each for each subcommand
+    """
     tables = []
     table = copy(PARAM_TABLE_HEADER)
     table[0] = table[0].format("**General parameters**")
@@ -152,7 +165,12 @@ def _params_generate_tables(param_details: Dict) -> List:
 def _params_get_param_file_entry(
         param_details: Dict, path: str,
 ) -> Union[None, Dict[Any, Any]]:
-    """get a param from the details files"""
+    """Retrieve one settings parameter's details from settings data.
+
+    :param param_details: The full settings data
+    :param path: The dot delimited path for the settings parameter to retrieve
+    :returns: The settings parameter's details if present in the data
+    """
     path_parts = path.split(".")
     data = param_details
     try:
@@ -164,14 +182,23 @@ def _params_get_param_file_entry(
 
 
 def _params_retrieve_details(filename: str) -> Dict:
-    """load the param details file"""
+    """Load the settings file.
+
+    :param filename: The path to the settings file to load
+    :return: The deserialized contents of the file
+    """
     with open(filename, encoding="utf-8") as fhand:
         return yaml.load(fhand, Loader=yaml.SafeLoader)
 
 
 def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
     # pylint: disable=too-many-branches
-    """create a row entry for a param"""
+    """Create a row entry for one settings parameter.
+
+    :param entry: The settings entry for which the row will be generated
+    :param param_details: The details for the settings parameter
+    :return: A tuple describing the settings parameter
+    """
     if entry.cli_parameters is None:
         cli_parameters = "positional"
     else:
@@ -228,7 +255,10 @@ def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
 
 
 def _subcommands_generate_tables() -> List:
-    """generate the subcommand table"""
+    """Generate the subcommand table.
+
+    :returns: A list of available subcommands
+    """
     table = SUBCOMMAND_TABLE_HEADER
     table[0] = table[0].format("Available subcommands")
     table.append("")
@@ -254,7 +284,10 @@ class AnsibleNavigatorSubcommandsTableDirective(SphinxDirective):
     has_content = False
 
     def run(self) -> List[nodes.Node]:
-        """Generate a node tree in place of the directive."""
+        """Generate a node tree in place of the directive.
+
+        :returns: A list of nodes generated from the RST content for the subcommands table
+        """
         self.env.note_reread()  # rebuild the current RST doc unconditionally
 
         rst_table = "\n".join(_subcommands_generate_tables())
@@ -268,7 +301,10 @@ class AnsibleNavigatorSettingsSampleDirective(SphinxDirective):
     has_content = False
 
     def run(self) -> List[nodes.Node]:
-        """Generate a node tree in place of the directive."""
+        """Generate a node tree in place of the directive.
+
+        :returns: A list of nodes generated from the RST content for the settings parameters sample
+        """
         # make sphinx discard doctree cache on file changes
         self.env.note_dependency(str(TEST_SETTINGS_FIXTURE))
 
@@ -293,7 +329,10 @@ class AnsibleNavigatorParametersTablesDirective(SphinxDirective):
     has_content = False
 
     def run(self) -> List[nodes.Node]:
-        """Generate a node tree in place of the directive."""
+        """Generate a node tree in place of the directive.
+
+        :returns: A list of nodes generated from the RST content for all settings parameter tables
+        """
         params_schema_path_str = str(PARAMS_SCHEMA_PATH)
 
         # make sphinx discard doctree cache on file changes
@@ -307,7 +346,11 @@ class AnsibleNavigatorParametersTablesDirective(SphinxDirective):
 
 
 def setup(app: Sphinx) -> Dict[str, Union[bool, str]]:
-    """Initialize the Sphinx extension."""
+    """Initialize the Sphinx extension.
+
+    :param app: An instance of sphinx
+    :return: A dictionary describing the extension after populating it with directives
+    """
     app.add_directive(
         "ansible-navigator-subcommands-table",
         AnsibleNavigatorSubcommandsTableDirective,
