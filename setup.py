@@ -1,9 +1,8 @@
-"""Configuration for setuptools.
+"""Configuration for setuptools."""
 
-Most things should go into setup.cfg, this is here to dynamically build
-the list of files in the share directory.
+# Most things should go into setup.cfg, this is here to dynamically build
+# the list of files in the share directory.
 
-"""
 import glob
 import os
 

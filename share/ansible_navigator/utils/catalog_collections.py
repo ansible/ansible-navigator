@@ -55,7 +55,7 @@ class CollectionCatalog:
         # pylint: disable=too-many-locals
         """Catalog the plugins within a collection.
 
-        :param collection: A dictionary describing the collection
+        :param collection: Details describing the collection
         """
         path = collection["path"]
         file_chksums = {}
@@ -97,7 +97,7 @@ class CollectionCatalog:
 
         :param file_path: The path to the file to generate a checksum for
         :param relative_path: The relative path within the collection directory structure
-        :returns: A diction or details about the file, including the checksum
+        :returns: Details about the file, including the checksum
         """
         sha256_hash = hashlib.sha256()
         with open(file_path, "rb") as fhand:
@@ -127,7 +127,7 @@ class CollectionCatalog:
         :param filenames: The filenames of the plugins
         :param file_chksums: The checksums for the plugin files
         :param dirpath: The path of the directory containing the plugins
-        :param collection: A dictionary containing the details of the collection
+        :param collection: The details of the collection
         """
         for filename in filenames:
             file_path = f"{dirpath}/{filename}"
@@ -270,9 +270,9 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tuple[set, List, int]:
     """Identify plugins missing from the cache.
 
-    :param collections: A dictionary containing all plugins found
+    :param collections: All plugins found across all collections
     :param collection_cache: The key value interface to a sqlite database
-    :returns: A tuple of handled and plugins missing from the cache, including a count of plugins
+    :returns: Handled and plugins missing from the cache, including a count of plugins
     """
     handled = set()
     missing = []
@@ -292,7 +292,7 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
 def parse_args():
     """Parse the arguments from the command line.
 
-    :returns: The parsed arguments and a list of directories to search
+    :returns: The parsed arguments and all directories to search
     """
     parser = argparse.ArgumentParser(description="Catalog collections.")
     parser.add_argument(
@@ -332,7 +332,7 @@ def parse_args():
 def retrieve_collections_paths() -> Dict:
     """Retrieve the currently set collection paths.
 
-    :returns: A dictionary containing errors or the configured collection directories
+    :returns: Errors or the configured collection directories
     """
     cmd = ["ansible-config", "dump", "|", "grep", "COLLECTIONS_PATHS"]
     proc_out = run_command(cmd)
@@ -359,9 +359,9 @@ def retrieve_docs(
     """Extract the docs from the plugins.
 
     :param collection_cache: The key value interface to a sqlite database
-    :param errors: A list of errors encountered
-    :param missing: A list of plugins missing from the collection cache
-    :param stats: A dictionary of statistics related to the collection cataloging process
+    :param errors: Previous errors encountered
+    :param missing: Plugins missing from the collection cache
+    :param stats: Statistics related to the collection cataloging process
     """
     pending_queue = multiprocessing.Manager().Queue()
     completed_queue = multiprocessing.Manager().Queue()
@@ -394,8 +394,8 @@ def retrieve_docs(
 def run_command(cmd: List) -> Dict:
     """Run a command using subprocess.
 
-    :param cmd: The command to run provided as a list
-    :returns: A dictionary containing errors and stdout from the command run
+    :param cmd: The command to run, split
+    :returns: Errors and the stdout from the command run
     """
     try:
         proc_out = subprocess.run(
@@ -415,7 +415,7 @@ def main() -> Dict:
     # pylint: disable=protected-access
     """Run the collection catalog process.
 
-    :returns: A dictionary with the results from the completed collection cataloging process
+    :returns: The results from the completed collection cataloging process
     """
     stats = {}
     stats["cache_added_success"] = 0
