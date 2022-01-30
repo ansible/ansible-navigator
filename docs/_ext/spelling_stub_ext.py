@@ -27,7 +27,7 @@ def setup(app: Sphinx) -> Dict[str, Union[bool, str]]:
     """Initialize the extension.
 
     :param app: An instance of sphinx
-    :return: A dictionary describing the extension after populating it with directives
+    :return: The extension metadata
     """
     app.add_directive("spelling", SpellingNoOpDirective)
 
