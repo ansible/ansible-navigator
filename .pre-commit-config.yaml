@@ -275,6 +275,7 @@ repos:
   hooks:
   - id: pylint
     language: python
+    language_version: python3.8
     args:
     # FIXME: uncomment once it doesn't have violations
     # - docs/
