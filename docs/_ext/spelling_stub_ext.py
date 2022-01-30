@@ -18,7 +18,7 @@ class SpellingNoOpDirective(SphinxDirective):
     def run(self) -> List[nodes.Node]:
         """Generate nothing in place of the directive.
 
-        :returns: A empty list rather than a typical list of Docutils/Sphinx nodes
+        :returns: An empty list rather than a typical list of Docutils/Sphinx nodes
         """
         return []
 
