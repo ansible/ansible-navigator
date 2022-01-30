@@ -25,7 +25,7 @@ jobs:
           - lint
           - build-docs
         python-version:
-          - 3.8
+          - 3.10
         include:
           - tox_env: lint-candidates
             devel: true
