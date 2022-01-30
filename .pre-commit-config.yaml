@@ -2,7 +2,7 @@
 
 default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
-  python: python3.8
+  python: python3.10
 repos:
 - repo: https://github.com/asottile/add-trailing-comma.git
   rev: v2.2.1
@@ -271,7 +271,11 @@ repos:
     - tests/
 
 - repo: https://github.com/pycqa/pylint.git
-  rev: v2.12.2
+  # pylint 2.12+ pulls in astroid 2.9.0+ which reports false no-member
+  # so stick to the last 2.11 release for now
+  # related: https://github.com/PyCQA/pylint/issues/5131
+  # related: https://github.com/ansible/ansible-navigator/issues/772
+  rev: v2.11.1
   hooks:
   - id: pylint
     args:
@@ -282,11 +286,6 @@ repos:
     - tests/
     additional_dependencies:
     - ansible-core
-    # astroid is a transitive dep for pylint, > 2.9.0 introduces false no-name-in-module and no-member errors
-    # attempt to remove this when astroid 2.9.4 or later is released
-    # related: https://github.com/PyCQA/pylint/issues/5131
-    # related: https://github.com/ansible/ansible-navigator/issues/772
-    - astroid == 2.9.0
     - ansible-runner
     - jinja2
     - libtmux
