@@ -16,12 +16,19 @@ class SpellingNoOpDirective(SphinxDirective):
     has_content = True
 
     def run(self) -> List[nodes.Node]:
-        """Generate nothing in place of the directive."""
+        """Generate nothing in place of the directive.
+
+        :returns: A empty list rather than a typical list of Docutils/Sphinx nodes
+        """
         return []
 
 
 def setup(app: Sphinx) -> Dict[str, Union[bool, str]]:
-    """Initialize the extension."""
+    """Initialize the extension.
+
+    :param app: An instance of sphinx
+    :return: A dictionary describing the extension after populating it with directives
+    """
     app.add_directive("spelling", SpellingNoOpDirective)
 
     return {
