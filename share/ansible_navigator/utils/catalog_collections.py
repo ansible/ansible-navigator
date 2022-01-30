@@ -197,7 +197,7 @@ class CollectionCatalog:
                 self._messages.append(msg)
 
     def _find_shadows(self) -> None:
-        """Determine which collections are hidden by a another installation of the same."""
+        """Determine which collections are hidden by another installation of the same."""
         collection_list = list(self._collections.values())
         counts = Counter([collection["known_as"] for collection in collection_list])
         for idx, (cpath, o_collection) in reversed(list(enumerate(self._collections.items()))):
