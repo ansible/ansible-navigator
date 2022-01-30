@@ -60,10 +60,11 @@ Prerequisites:
 
 ```{note}
 Because the version of python is pinned to a specific version to ensure the
-outcome of running `tox -e lint` locally is the same as `tox -e lint` being run by github
-actions, you may see the following error: `RuntimeError: failed to find interpreter
-for Builtin discover of python_spec='python3.XX'`. This indicates the version of python
-that needs to be installed for tox to run locally.
+outcome of running `tox -e lint` locally is the same as `tox -e lint` being run
+by github actions, you may see the following error: `RuntimeError: failed to 
+find interpreter for Builtin discover of python_spec='python3.XX'`. This 
+indicates the version of python that needs to be installed for tox to run 
+locally.
 ```
 
 4. We also suggest you to _optionally_ run the following check that is
