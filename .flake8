@@ -327,7 +327,8 @@ rst-roles =
 # wemake-python-styleguide
 show-source = true
 
-# flake8-quotes (pulled in by wemake style guide)
+# flake8-quotes
+# (pulled in by wemake style guide)
 # https://github.com/zheller/flake8-quotes
 # at bottom of configuration because some IDEs
 # may see this as an unterminated string and not properly
