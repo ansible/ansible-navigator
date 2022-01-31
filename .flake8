@@ -39,9 +39,9 @@ extend-exclude =
 extend-ignore =
   E203,  # skipped because it annoys black
   WPS300,  # "Found local folder import" -- nothing bad about this
+  WPS305,  # "Found `f` string" -- f strings are preferred for readability
   # An opposite consistency expectation is currently enforced
   # by pylint via: useless-object-inheritance (R0205):
-  WPS305,  # "Found `f` string", allow the use of f strings
   WPS306,  # "Found class without a base class: *"
   WPS326,  # "Forbid implicit string concatenation."
   WPS421,  # "Forbids to call some built-in functions.", hasattr is good.
