@@ -1,5 +1,4 @@
-"""catalog collections
-"""
+"""Catalog collections within the execution environment."""
 import argparse
 import hashlib
 import json
@@ -40,7 +39,7 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 class CollectionCatalog:
     # pylint: disable=too-few-public-methods
-    """collection cataloger"""
+    """A collection cataloger."""
 
     def __init__(self, directories: List[str]):
         """Initialize the collection cataloger.
@@ -54,7 +53,10 @@ class CollectionCatalog:
 
     def _catalog_plugins(self, collection: Dict) -> None:
         # pylint: disable=too-many-locals
-        """catalog the plugins within a collection"""
+        """Catalog the plugins within a collection.
+
+        :param collection: Details describing the collection
+        """
         path = collection["path"]
         file_chksums = {}
 
@@ -91,7 +93,12 @@ class CollectionCatalog:
 
     @staticmethod
     def _generate_chksum(file_path: str, relative_path: str) -> Dict:
-        """generate a std checksum for a file"""
+        """Generate a standard checksum for a file.
+
+        :param file_path: The path to the file to generate a checksum for
+        :param relative_path: The relative path within the collection directory structure
+        :returns: Details about the file, including the checksum
+        """
         sha256_hash = hashlib.sha256()
         with open(file_path, "rb") as fhand:
             for byte_block in iter(lambda: fhand.read(4096), b""):
@@ -114,7 +121,14 @@ class CollectionCatalog:
         collection: Dict,
     ) -> None:
         # pylint: disable=too-many-arguments
-        """process each plugin within one plugin directory"""
+        """Process each plugin within one plugin directory.
+
+        :param plugin_type: The type of plugins
+        :param filenames: The filenames of the plugins
+        :param file_chksums: The checksums for the plugin files
+        :param dirpath: The path of the directory containing the plugins
+        :param collection: The details of the collection
+        """
         for filename in filenames:
             file_path = f"{dirpath}/{filename}"
             relative_path = file_path.replace(collection["path"], "")
@@ -127,7 +141,10 @@ class CollectionCatalog:
                 collection["plugin_chksums"][chksum] = {"path": relative_path, "type": plugin_type}
 
     def _one_path(self, directory: str) -> None:
-        """process the contents of an <...>/ansible_collections/ directory"""
+        """Process the contents of an <...>/ansible_collections/ directory.
+
+        :param directory: The path to collections directory to walk and load
+        """
         for directory_path in glob(f"{directory}/*/*/"):
             manifest_file = f"{directory_path}/MANIFEST.json"
             galaxy_file = f"{directory_path}/galaxy.yml"
@@ -180,7 +197,7 @@ class CollectionCatalog:
                 self._messages.append(msg)
 
     def _find_shadows(self) -> None:
-        """for each collection, determine which other collections are hiding it"""
+        """Determine which collections are hidden by another installation of the same."""
         collection_list = list(self._collections.values())
         counts = Counter([collection["known_as"] for collection in collection_list])
         for idx, (cpath, o_collection) in reversed(list(enumerate(self._collections.items()))):
@@ -191,7 +208,10 @@ class CollectionCatalog:
                         self._collections[cpath]["hidden_by"].insert(0, i_collection["path"])
 
     def process_directories(self) -> Tuple[Dict, List]:
-        """process each parent directory"""
+        """Process each parent directory.
+
+        :returns: All collections found and any errors
+        """
         for directory in self._directories:
             collection_directory = f"{directory}/ansible_collections"
             if os.path.exists(collection_directory):
@@ -203,7 +223,11 @@ class CollectionCatalog:
 
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
-    """extract a doc from a plugin, place in completed q"""
+    """Extract the documentation from a plugin, place in completed queue.
+
+    :param pending_queue: A queue with plugins to process
+    :param completed_queue: The queue in which extracted documentation will be placed
+    """
     # pylint: disable=import-outside-toplevel
 
     # load the fragment_loader _after_ the path is set
@@ -244,7 +268,12 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
 
 def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tuple[set, List, int]:
-    """identify plugins missing from the cache"""
+    """Identify plugins missing from the cache.
+
+    :param collections: All plugins found across all collections
+    :param collection_cache: The key value interface to a sqlite database
+    :returns: Handled and plugins missing from the cache, including a count of plugins
+    """
     handled = set()
     missing = []
     plugin_count = 0
@@ -261,7 +290,10 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
 
 
 def parse_args():
-    """parse the cli args"""
+    """Parse the arguments from the command line.
+
+    :returns: The parsed arguments and all directories to search
+    """
     parser = argparse.ArgumentParser(description="Catalog collections.")
     parser.add_argument(
         "-d",
@@ -298,7 +330,10 @@ def parse_args():
 
 
 def retrieve_collections_paths() -> Dict:
-    """retrieve the currently set collection paths"""
+    """Retrieve the currently set collection paths.
+
+    :returns: Errors or the configured collection directories
+    """
     cmd = ["ansible-config", "dump", "|", "grep", "COLLECTIONS_PATHS"]
     proc_out = run_command(cmd)
     if "error" in proc_out:
@@ -321,7 +356,13 @@ def retrieve_docs(
     stats: Dict,
 ) -> None:
     # pylint: disable=too-many-locals
-    """extract the docs from the plugins"""
+    """Extract the docs from the plugins.
+
+    :param collection_cache: The key value interface to a sqlite database
+    :param errors: Previous errors encountered
+    :param missing: Plugins missing from the collection cache
+    :param stats: Statistics related to the collection cataloging process
+    """
     pending_queue = multiprocessing.Manager().Queue()
     completed_queue = multiprocessing.Manager().Queue()
     processes = []
@@ -351,7 +392,11 @@ def retrieve_docs(
 
 
 def run_command(cmd: List) -> Dict:
-    """run a command"""
+    """Run a command using subprocess.
+
+    :param cmd: The command to run, split
+    :returns: Errors and the stdout from the command run
+    """
     try:
         proc_out = subprocess.run(
             " ".join(cmd),
@@ -368,7 +413,10 @@ def run_command(cmd: List) -> Dict:
 
 def main() -> Dict:
     # pylint: disable=protected-access
-    """main"""
+    """Run the collection catalog process.
+
+    :returns: The results from the completed collection cataloging process
+    """
     stats = {}
     stats["cache_added_success"] = 0
     stats["cache_added_errors"] = 0
