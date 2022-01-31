@@ -330,7 +330,8 @@ show-source = true
 # flake8-quotes
 # (pulled in by wemake style guide)
 # https://github.com/zheller/flake8-quotes
-# at bottom of configuration because some IDEs
-# may see this as an unterminated string and not properly
+# keep at bottom of configuration because some IDEs
+# may see the single double quote in the inline-quotes
+# entry as an unterminated string and not properly 
 # highlight the remainder of the file
 inline-quotes = "
