@@ -332,6 +332,6 @@ show-source = true
 # https://github.com/zheller/flake8-quotes
 # keep at bottom of configuration because some IDEs
 # may see the single double quote in the inline-quotes
-# entry as an unterminated string and not properly 
+# entry as an unterminated string and not properly
 # highlight the remainder of the file
 inline-quotes = "
