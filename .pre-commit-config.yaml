@@ -19,7 +19,7 @@ repos:
     name: Sort import statements using isort
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-  rev: v1.1.10
+  rev: v1.1.11
   hooks:
   - id: remove-tabs
     exclude: |
