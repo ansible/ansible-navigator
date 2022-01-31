@@ -58,7 +58,7 @@ Prerequisites:
    congratulations :)
    ```
 
-   ```{note}
+   ```{tip}
    Because the version of python is pinned to a specific version to ensure the
    outcome of running `tox -e lint` locally is the same as `tox -e lint` being run
    by github actions, you may see the following error: `RuntimeError: failed to
