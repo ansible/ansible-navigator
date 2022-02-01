@@ -27,13 +27,23 @@ base_steps = (
     Step(user_input=":{{ this[0] }}", comment="render menu as content"),
     Step(user_input=":back", comment="show play-1 details"),
     Step(user_input=":0", comment="task-1 details"),
-    Step(user_input=":doc", comment="doc for task", look_fors=["module: debug"], search_within_response="module: debug"),
+    Step(
+        user_input=":doc",
+        comment="doc for task",
+        look_fors=["module: debug"],
+        search_within_response="module: debug",
+    ),
     Step(
         user_input=":{{ examples }}",
         comment="dig examples",
         look_fors=["ansible.builtin.debug:"],
     ),
-    Step(user_input=":back", comment="show doc", look_fors=["module: debug"], search_within_response="module: debug"),
+    Step(
+        user_input=":back",
+        comment="show doc",
+        look_fors=["module: debug"],
+        search_within_response="module: debug",
+    ),
     Step(user_input=":back", comment="show task"),
     Step(
         user_input=":open {{ task_path }}",
