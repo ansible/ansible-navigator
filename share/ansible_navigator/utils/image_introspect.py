@@ -1,4 +1,4 @@
-"""introspect an image"""
+"""Introspect an execution environment image."""
 import json
 import multiprocessing
 import re
@@ -21,7 +21,7 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 class Command(SimpleNamespace):
     # pylint: disable=too-few-public-methods
-    """command obj holder"""
+    """Abstraction for a details about a shell command."""
 
     id: str
     command: str
@@ -33,7 +33,10 @@ class Command(SimpleNamespace):
 
 
 def run_command(command: Command) -> None:
-    """run a command"""
+    """Run a command using subprocess.
+
+    :param command: Details of the command to run
+    """
     try:
         proc_out = subprocess.run(
             command.command,
@@ -50,8 +53,11 @@ def run_command(command: Command) -> None:
 
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
-    """a worker, pulls from pending, runs & processes
-    places in completed"""
+    """Run a command from pending, parse, and place in completed.
+
+    :param pending_queue: A queue with plugins to process
+    :param completed_queue: The queue in which extracted documentation will be placed
+    """
     while True:
         command = pending_queue.get()
         if command is None:
@@ -65,7 +71,10 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
 
 class CommandRunner:
-    """runs commands"""
+    """A command runner.
+
+    Run commands using single or multiple processes.
+    """
 
     def __init__(self):
         """Initialize the command runner."""
@@ -74,7 +83,11 @@ class CommandRunner:
 
     @staticmethod
     def run_sproc(cmd_clss: Any):
-        """run with a single proc"""
+        """Run commands with a single process.
+
+        :param cmd_clss: All command classes to be run
+        :returns: The results from running all commands
+        """
         all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
         results = []
         for command in all_commands:
@@ -87,7 +100,15 @@ class CommandRunner:
         return results
 
     def run_mproc(self, cmd_clss):
-        """start the workers, unload the completed queue"""
+        """Run commands with multiple processes.
+
+        Workers are started to read from pending queue.
+        Exit when the number of results is equal to the number
+        of commands needing to be run.
+
+        :param cmd_clss: All command classes to be run
+        :returns: The results from running all commands
+        """
         if self._completed_queue is None:
             self._completed_queue = multiprocessing.Manager().Queue()
         if self._pending_queue is None:
@@ -101,7 +122,10 @@ class CommandRunner:
         return results
 
     def start_workers(self, jobs):
-        """start workers, submit jobs to pending queue"""
+        """Start workers and submit jobs to pending queue.
+
+        :param jobs: The jobs to be run
+        """
         worker_count = min(len(jobs), PROCESSES)
         processes = []
         for _proc in range(worker_count):
@@ -124,12 +148,21 @@ class CmdParser:
 
     @staticmethod
     def _strip(value: str) -> str:
-        """strip off spaces and quotes"""
+        """Remove quotes, leading and trailing whitespace.
+
+        :param value: The string to act on.
+        :returns: The string after removing quotes, leading and trailing whitespace.
+        """
         return value.strip('"').strip("'").strip()
 
     @staticmethod
     def re_partition(content, separator):
-        """like partition, but uses an re"""
+        """Partition a string using a regular expression.
+
+        :param content: The content to partition
+        :param separator: The separator to use for the partitioning
+        :returns: The first partition, separator, and final partition
+        """
         separator_match = re.search(separator, content)
         if not separator_match:
             return content, "", ""
@@ -138,7 +171,12 @@ class CmdParser:
         return parts[0], matched_separator, parts[1]
 
     def splitter(self, lines, delimiter):
-        """split sections of delimited results"""
+        """Split lines given a delimiter.
+
+        :param lines: The lines to split
+        :param delimiter: The delimiter to use for splitting
+        :returns: All lines split on the delimiter
+        """
         results = []
         result = {}
         while lines:
@@ -159,11 +197,14 @@ class CmdParser:
 
 
 class AnsibleCollections(CmdParser):
-    """collect ansible collections"""
+    """Available ansible collections collector."""
 
     @property
     def commands(self):
-        """The command to run for listing ansible collections."""
+        """Define the ansible-galaxy command to list ansible collections.
+
+        :returns: The defined command
+        """
         command = "ansible-galaxy collection list"
         return [
             Command(
@@ -175,7 +216,10 @@ class AnsibleCollections(CmdParser):
 
     @staticmethod
     def parse(command: Command):
-        """parse"""
+        """Parse the output of the ansible-galaxy command.
+
+        :param command: The result of running the command
+        """
         collections = {}
         for line in command.stdout.splitlines():
             parts = line.split()
@@ -185,40 +229,55 @@ class AnsibleCollections(CmdParser):
 
 
 class AnsibleVersion(CmdParser):
-    """collect ansible version"""
+    """Ansible version collector."""
 
     @property
     def commands(self) -> List[Command]:
-        """generate the command"""
+        """Define the ansible command to get the version.
+
+        :returns: The defined command
+        """
         return [Command(id="ansible_version", command="ansible --version", parse=self.parse)]
 
     @staticmethod
     def parse(command: Command) -> None:
-        """parse"""
+        """Parse the output of the ansible command.
+
+        :param command: The result of running the command
+        """
         version = command.stdout.splitlines()[0].split(" ", 1)[1].strip()[1:-1]
         command.details = version
 
 
 class OsRelease(CmdParser):
-    """collect os release info"""
+    """OS release information collector."""
 
     @property
     def commands(self) -> List[Command]:
-        """generate the command"""
+        """Define the command to collect os release information.
+
+        :returns: The defined command
+        """
         return [Command(id="os_release", command="cat /etc/os-release", parse=self.parse)]
 
     def parse(self, command) -> None:
-        """parse"""
+        """Parse the output of the cat command.
+
+        :param command: The result of running the command
+        """
         parsed = self.splitter(command.stdout.splitlines(), "=")
         command.details = parsed
 
 
 class PythonPackages(CmdParser):
-    """collect python packages"""
+    """Python package collector."""
 
     @property
     def commands(self) -> List[Command]:
-        """generate the command"""
+        """Define the pip command to list installed pip packages.
+
+        :returns: The defined command
+        """
         pre = Command(id="pip_freeze", command="python3 -m pip freeze", parse=self.parse_freeze)
         run_command(pre)
         pre.parse(pre)
@@ -228,7 +287,10 @@ class PythonPackages(CmdParser):
         ]
 
     def parse(self, command):
-        """parse"""
+        """Parse the output of the pip command.
+
+        :param command: The result of running the command
+        """
         parsed = self.splitter(command.stdout.splitlines(), ":")
         for pkg in parsed:
             for entry in ["required-by", "requires"]:
@@ -239,38 +301,52 @@ class PythonPackages(CmdParser):
         command.details = parsed
 
     def parse_freeze(self, command):
-        """parse pip freeze"""
-        # skip the editables
+        """Parse the output of the pip freeze command, skipping editables.
+
+        :param command: The result of running the command
+        """
         lines = [line for line in command.stdout.splitlines() if not line.startswith("-e")]
         parsed = self.splitter(lines, "(==|@)")
         command.details = parsed
 
 
 class RedhatRelease(CmdParser):
-    """collect rh release"""
+    """Red Hat release collector."""
 
     @property
     def commands(self) -> List[Command]:
-        """generate the command"""
+        """Define the command to get the redhat release information.
+
+        :returns: The defined command
+        """
         return [Command(id="redhat_release", command="cat /etc/redhat-release", parse=self.parse)]
 
     @staticmethod
     def parse(command):
-        """parse"""
+        """Parse the output of the cat redhat release command.
+
+        :param command: The result of running the command
+        """
         parsed = command.stdout
         command.details = parsed
 
 
 class SystemPackages(CmdParser):
-    """collect system pkgs"""
+    """System packages collector."""
 
     @property
     def commands(self) -> List[Command]:
-        """generate the command"""
+        """Define the command to list system packages.
+
+        :returns: The defined command
+        """
         return [Command(id="system_packages", command="rpm -qai", parse=self.parse)]
 
     def parse(self, command):
-        """parse"""
+        """Parse the output of the rpm command.
+
+        :param command: The result of running the command
+        """
         packages = []
         package = []
         for line in command.stdout.splitlines():
@@ -311,7 +387,7 @@ class SystemPackages(CmdParser):
 
 
 def main():
-    """start here"""
+    """Enter the image introspection process."""
     response = {"errors": []}
     response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}
     try:
