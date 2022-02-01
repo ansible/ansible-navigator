@@ -263,7 +263,7 @@ class OsRelease(CmdParser):
 
 
 class PythonPackages(CmdParser):
-    """Define the installed python package collector."""
+    """Installed python package collector."""
 
     @property
     def commands(self) -> List[Command]:
