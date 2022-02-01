@@ -17,6 +17,8 @@ from . import _actions as actions
 class Action(App):
     """Run the builder subcommand."""
 
+    KEGEX = "^b(?:uilder)?$"
+
     def __init__(self, args: ApplicationConfiguration):
         """Initialize the action.
 
