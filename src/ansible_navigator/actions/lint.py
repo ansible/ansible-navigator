@@ -118,19 +118,17 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     return {k: v for k, v in obj.items() if not k.startswith("__") and k not in ignored_keys}
 
 
-def massage_issues(issues: List[Dict]) -> List[Dict]:
-    """Massage issues by injecting some useful keys with strings for rendering."""
-    out = []
-    for issue in issues:
-        issue["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
-        issue["__path"] = abs_user_path(issue["location"]["path"])
-        if isinstance(issue["location"]["lines"]["begin"], Mapping):
-            issue["__line"] = issue["location"]["lines"]["begin"]
-        else:
-            issue["__line"] = issue["location"]["lines"]["begin"]
-        issue["issue_path"] = f"{issue['__path']}:{issue['__line']}"
-        out.append(issue)
-    return out
+def massage_issue(issue: Dict) -> Dict:
+    """Massage an issue by injecting some useful keys with strings for rendering."""
+    massaged = issue.copy()
+    massaged["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
+    massaged["__path"] = abs_user_path(issue["location"]["path"])
+    if isinstance(issue["location"]["lines"]["begin"], Mapping):
+        massaged["__line"] = issue["location"]["lines"]["begin"]["line"]
+    else:
+        massaged["__line"] = issue["location"]["lines"]["begin"]
+    massaged["issue_path"] = f"{massaged['__path']}:{massaged['__line']}"
+    return massaged
 
 
 @actions.register
@@ -147,7 +145,7 @@ class Action(App):
         """are we interactive?"""
         return self._args.mode == "interactive"
 
-    def _fatal(self, msg: str, rc: int = 1) -> Tuple[str, str, int]:
+    def _fatal(self, msg: str) -> None:
         # pylint: disable=invalid-name
         self._logger.error(msg)
 
@@ -156,8 +154,6 @@ class Action(App):
             self._interaction.ui.show(notification)
         else:
             raise RuntimeError(msg)
-
-        return "", "", rc
 
     def _run_runner(self) -> Tuple[str, str, int]:
         """Spin up runner to run ansible-lint, either in an exec env or not."""
@@ -199,7 +195,8 @@ class Action(App):
         if isinstance(self._args.lintables, str):
             # Does it actually exist?
             if not os.path.exists(self._args.lintables):
-                return self._fatal(f"The given path `{self._args.lintables}` does not exist.")
+                self._fatal(f"The given path `{self._args.lintables}` does not exist.")
+                return "", "", 1
             cmd_args.append(self._args.lintables)
 
         kwargs["cmdline"] = cmd_args
@@ -259,7 +256,7 @@ class Action(App):
             return None
 
         try:
-            issues = json.loads(out)
+            raw_issues = json.loads(out)
         except json.JSONDecodeError as exc:
             self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(exc))
             self._logger.error("Output was: %s", out)
@@ -271,7 +268,7 @@ class Action(App):
             self._interaction.ui.show(notification)
             return None
 
-        issues = massage_issues(issues)
+        issues = [massage_issue(issue) for issue in raw_issues]
         issues = sorted(issues, key=lambda i: Severity[i["severity"].upper()], reverse=True)
         self.steps.append(self._build_main_menu(issues))
 
