@@ -2,7 +2,7 @@
 This action provides ansible-lint results through ansible-navigator.
 Internally, it works by using ansible-runner to execute ansible-lint (optionally
 in an execution environment). When running ansible-lint, it passes
-'-f codeclimate' which requests JSON output on stdout. The JSON output contains
+``-f codeclimate`` which requests JSON output on stdout. The JSON output contains
 a list of issues which we then report in the ansible-navigator UI.
 
 We allow users to dig into an individual issue using the standard :<lineno>
