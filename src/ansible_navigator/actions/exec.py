@@ -80,7 +80,7 @@ class Action(App):
                 log_message,
                 self._args.set_environment_variable,
             )
-        envvars_to_set = {}
+            envvars_to_set = {}
 
         if self._args.display_color is False:
             envvars_to_set["ANSIBLE_NOCOLOR"] = "1"
