@@ -17,7 +17,7 @@ class KeyValueStore(dict):
         cursor.execute("CREATE TABLE IF NOT EXISTS kv (key text unique, value text)")
 
     def close(self):
-        """Close the connections to the database."""
+        """Close the connection to the database."""
         self.conn.commit()
         self.conn.close()
 
@@ -26,7 +26,7 @@ class KeyValueStore(dict):
         self.conn = sqlite3.connect(self.path)
 
     def __len__(self):
-        """Determine the number of keys in the key-value store.
+        """Count the number of keys in the key-value store.
 
         :returns: The number of keys
         """
@@ -35,7 +35,7 @@ class KeyValueStore(dict):
         return rows if rows is not None else 0
 
     def iterkeys(self):
-        """Iterate the keys in the key-value store.
+        """Yield keys from the key-value store one by one.
 
         :yields: The keys in the key-value store
         """
@@ -44,7 +44,7 @@ class KeyValueStore(dict):
             yield row[0]
 
     def itervalues(self):
-        """Iterate the values in the key-value store.
+        """Yield values from the key-value store one by one.
 
         :yields: The values in the key-value store
         """
@@ -53,7 +53,7 @@ class KeyValueStore(dict):
             yield row[0]
 
     def iteritems(self):
-        """Iterate the entries in the key-value store.
+        """Yield items from the key-value store one by one.
 
         :yields: The key-value store as items (key, value)
         """
@@ -62,28 +62,28 @@ class KeyValueStore(dict):
             yield row[0], row[1]
 
     def keys(self):
-        """Return all the keys in the key-value store.
+        """Return all keys in the key-value store.
 
         :returns: All the keys
         """
         return list(self.iterkeys())
 
     def values(self):
-        """Return all the values in the key-value store.
+        """Return all values in the key-value store.
 
         :returns: All the values
         """
         return list(self.itervalues())
 
     def items(self):
-        """Return the entries from the key-value store.
+        """Return all items from the key-value store.
 
         :returns: The key-value store as items (key, value)
         """
         return list(self.iteritems())
 
     def __contains__(self, key):
-        """Determine if a given key is in the key-value store.
+        """Check if a given key is in the key-value store.
 
         This provides dictionary like  `some_key in` support for the key-value store.
 
@@ -94,7 +94,7 @@ class KeyValueStore(dict):
         return cursor.execute("SELECT 1 FROM kv WHERE key = ?", (key,)).fetchone() is not None
 
     def __getitem__(self, key):
-        """Retrieve a value from the key-value store given a key.
+        """Return a value from the key-value store given a key.
 
         :param key: The key to find
         :raises KeyError: When the key does not exist in the key-value store
@@ -107,7 +107,7 @@ class KeyValueStore(dict):
         return item[0]
 
     def __setitem__(self, key, value):
-        """Set a key-value combination in the key-value store.
+        """Place a key-value combination in the key-value store.
 
         :param key: The key of the combination to set
         :param value: The value of the combination to set
@@ -116,7 +116,7 @@ class KeyValueStore(dict):
         cursor.execute("REPLACE INTO kv (key, value) VALUES (?,?)", (key, value))
 
     def __delitem__(self, key):
-        """Delete an key-value combination in the key-value store.
+        """Delete a key-value combination in the key-value store.
 
         :param key: The key of the entry to delete
         :raises KeyError: When the provided key does not exist in the key-value store
@@ -127,7 +127,7 @@ class KeyValueStore(dict):
         cursor.execute("DELETE FROM kv WHERE key = ?", (key,))
 
     def __iter__(self):
-        """Iterate the entries in the key-value store.
+        """Yield values extracted from the key-value store one by one.
 
         This provides dictionary like `for key in` support for the key-value store.
 
