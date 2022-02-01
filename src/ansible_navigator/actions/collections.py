@@ -29,7 +29,6 @@ from . import run_action
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=unused-argument
-
     """color the menu"""
     if entry.get("__shadowed") is True:
         return 8, 0

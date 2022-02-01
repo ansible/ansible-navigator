@@ -31,7 +31,6 @@ from . import run_action
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=unused-argument
-
     """color the menu"""
     if entry["__default"] is False:
         return 3, 0

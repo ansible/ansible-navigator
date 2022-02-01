@@ -62,7 +62,6 @@ class Action(App):
 
     def color_menu(self, colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
         # pylint: disable=unused-argument
-
         """color the menu"""
         # images list menu
         if "__full_name" in entry:

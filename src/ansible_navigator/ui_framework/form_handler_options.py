@@ -48,7 +48,6 @@ class FormHandlerOptions(CursesWindow):
 
     def handle(self, idx, form_fields: List) -> Tuple[Union["FieldChecks", "FieldRadio"], int]:
         # pylint: disable=too-many-nested-blocks
-
         """handle the check box field"""
         form_field = form_fields[idx]
         active = 0
