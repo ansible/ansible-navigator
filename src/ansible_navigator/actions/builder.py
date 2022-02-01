@@ -1,9 +1,7 @@
 """Run the builder subcommand."""
 import os
-import shlex
 import shutil
 
-from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
@@ -17,18 +15,14 @@ from . import _actions as actions
 
 @actions.register
 class Action(App):
-    """Run the :exec subcommand."""
-
-    # pylint: disable=too-few-public-methods
-
-    KEGEX = "^e(?:xec)?$"
+    """Run the builder subcommand."""
 
     def __init__(self, args: ApplicationConfiguration):
         """Initialize the action.
 
         :param args: The current application configuration.
         """
-        super().__init__(args=args, logger_name=__name__, name="exec")
+        super().__init__(args=args, logger_name=__name__, name="builder")
         self._runner: Command
 
     def run_stdout(self) -> Union[None, int]:
