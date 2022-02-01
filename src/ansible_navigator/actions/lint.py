@@ -146,7 +146,6 @@ class Action(App):
         return self._args.mode == "interactive"
 
     def _fatal(self, msg: str) -> None:
-        # pylint: disable=invalid-name
         self._logger.error(msg)
 
         if self.is_interactive:
@@ -221,7 +220,7 @@ class Action(App):
 
         self._logger.debug("lint requested")
         _, exit_messages = self._update_args(
-            ["lint"] + shlex.split(interaction.action.match.groupdict()["params"] or "")
+            ["lint"] + shlex.split(interaction.action.match.groupdict()["params"] or ""),
         )
 
         # Set up interaction
@@ -251,7 +250,7 @@ class Action(App):
             )
             self._fatal(
                 "ansible-lint executable could not be found. Ensure 'ansible-lint' "
-                f"is {installed_or_ee} and try again."
+                f"is {installed_or_ee} and try again.",
             )
             return None
 
@@ -263,7 +262,7 @@ class Action(App):
             notification = error_notification(
                 messages=[
                     "Could not parse 'ansible-lint' output.",
-                ]
+                ],
             )
             self._interaction.ui.show(notification)
             return None

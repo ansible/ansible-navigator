@@ -503,7 +503,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post-process lintables."""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -514,7 +513,7 @@ class NavigatorPostProcessor:
             ansible_lint_location = shutil.which("ansible-lint")
             if ansible_lint_location is None:
                 exit_messages.append(
-                    ExitMessage(message="ansible-lint command could not be found.")
+                    ExitMessage(message="ansible-lint command could not be found."),
                 )
                 exit_messages.append(
                     ExitMessage(
@@ -523,7 +522,7 @@ class NavigatorPostProcessor:
                             "environment which provides ansible-lint."
                         ),
                         prefix=ExitPrefix.HINT,
-                    )
+                    ),
                 )
 
         if isinstance(entry.value.current, str) and config.app == "lint":
