@@ -302,9 +302,8 @@ repos:
     - jinja2
     - libtmux
     - onigurumacffi
-    - pylint-pytest < 1.1.0
+    - pytest
     - setuptools-scm
     - sphinx
     pass_filenames: false
-
 ...
