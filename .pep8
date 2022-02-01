@@ -1,0 +1,10 @@
+[pep8]
+aggressive = 0
+in-place = true
+# Fixing E203 is disabled because it annoys black
+ignore =
+  E203,
+jobs = 0
+# Accessibility/large fonts and PEP8 unfriendly:
+max-line-length = 100
+recursive = true

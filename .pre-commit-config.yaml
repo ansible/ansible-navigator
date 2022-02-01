@@ -12,6 +12,13 @@ repos:
     - --py36-plus
     stages: ["manual"]
 
+- repo: https://github.com/pre-commit/mirrors-autopep8.git
+  rev: v1.6.0
+  hooks:
+  - id: autopep8
+    stages:
+    - manual
+
 - repo: https://github.com/PyCQA/isort
   rev: 5.10.1
   hooks:
