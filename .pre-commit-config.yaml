@@ -24,10 +24,10 @@ repos:
     - id: black
       language_version: python3
       args:
-        - -v
-        - --diff
-        - --check
-        - .
+      - -v
+      - --diff
+      - --check
+      - .
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git
   rev: v1.1.10
