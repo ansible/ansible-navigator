@@ -304,7 +304,7 @@ class PythonPackages(CmdParser):
 
 
 class RedhatRelease(CmdParser):
-    """Define the redhat release collector."""
+    """Red Hat release collector."""
 
     @property
     def commands(self) -> List[Command]:
