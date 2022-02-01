@@ -47,10 +47,17 @@ RESULT_TO_COLOR = [
     ("(?i)^in_progress$", 8),
 ]
 
-get_color = lambda word: next(  # noqa: E731
-    (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)),
-    0,
-)
+
+def get_color(status_word):
+    """Return a color value for a given status word."""
+    return next(
+        (
+            color_number
+            for status_pattern, color_number in RESULT_TO_COLOR
+            if re.match(status_pattern, status_word)
+        ),
+        0,
+    )
 
 
 def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:

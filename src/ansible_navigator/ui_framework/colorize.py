@@ -171,7 +171,11 @@ def hex_to_rgb_curses(value):
     :return: The colors scaled to 1000
     :rtype: tuple
     """
-    scale = lambda x: int(x * 1000 / 255)  # noqa: E731
+
+    def scale(color_value):
+        """Map an absolute single color value to a small integer."""
+        return int(color_value * 1000 / 255)
+
     red, green, blue = hex_to_rgb(value)
     return (scale(red), scale(green), scale(blue))
 
