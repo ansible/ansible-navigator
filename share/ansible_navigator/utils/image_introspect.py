@@ -71,7 +71,10 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
 
 class CommandRunner:
-    """A command runner."""
+    """A command runner.
+
+    Run commands using single or multiple processes.
+    """
 
     def __init__(self):
         """Initialize the command runner."""
@@ -98,6 +101,10 @@ class CommandRunner:
 
     def run_mproc(self, cmd_clss):
         """Run commands with multiple processes.
+
+        Workers are started to read from pending queue.
+        Exit when the number of results is equal to the number
+        of commands needing to be run.
 
         :param cmd_clss: All command classes to be run
         :returns: The results from running all commands
@@ -190,7 +197,7 @@ class CmdParser:
 
 
 class AnsibleCollections(CmdParser):
-    """Define the available ansible collections collector."""
+    """Available ansible collections collector."""
 
     @property
     def commands(self):
@@ -222,7 +229,7 @@ class AnsibleCollections(CmdParser):
 
 
 class AnsibleVersion(CmdParser):
-    """Define the ansible version collector."""
+    """Ansible version collector."""
 
     @property
     def commands(self) -> List[Command]:
@@ -243,7 +250,7 @@ class AnsibleVersion(CmdParser):
 
 
 class OsRelease(CmdParser):
-    """Define the OS release information collector."""
+    """OS release information collector."""
 
     @property
     def commands(self) -> List[Command]:
@@ -263,7 +270,7 @@ class OsRelease(CmdParser):
 
 
 class PythonPackages(CmdParser):
-    """Installed python package collector."""
+    """Python package collector."""
 
     @property
     def commands(self) -> List[Command]:
@@ -325,7 +332,7 @@ class RedhatRelease(CmdParser):
 
 
 class SystemPackages(CmdParser):
-    """Define the system packages collector."""
+    """System packages collector."""
 
     @property
     def commands(self) -> List[Command]:
