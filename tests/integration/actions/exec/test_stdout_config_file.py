@@ -41,6 +41,14 @@ stdout_tests = (
         ).join(),
         look_nots=["/sbin"],
     ),
+    ShellCommand(
+        comment="ensure env vars get set from config",
+        user_input=StdoutCommand(
+            cmdline="--excmd '/bin/env'",
+            execution_environment=True,
+        ).join(),
+        look_fors=["ANSIBLE_COLLECTIONS_PATHS=/tmp/collections"],
+    ),
 )
 
 steps = add_indicies(stdout_tests)

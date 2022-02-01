@@ -1,4 +1,8 @@
 ansible-navigator:
+  execution-environment:
+    environment-variables:
+      set:
+        ANSIBLE_COLLECTIONS_PATHS: /tmp/collections
   exec:
     command: echo test_data_from_config
     shell: False
