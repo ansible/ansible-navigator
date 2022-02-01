@@ -15,28 +15,6 @@ from ..runner import Command
 from . import _actions as actions
 
 
-GeneratedCommand = Tuple[str, Optional[List[str]]]
-
-
-def _generate_command(exec_command: str, exec_shell: bool) -> GeneratedCommand:
-    """Generate the command and args.
-
-    :param exec_command: The command to run
-    :param exec_shell: Should the command be wrapped in a shell
-    :returns: The command and any pass through arguments
-    """
-    pass_through_args = None
-    if exec_shell and exec_command:
-        command = "/bin/bash"
-        pass_through_args = ["-c", exec_command]
-    else:
-        parts = shlex.split(exec_command)
-        command = parts[0]
-        if len(parts) > 1:
-            pass_through_args = parts[1:]
-    return (command, pass_through_args)
-
-
 @actions.register
 class Action(App):
     """Run the :exec subcommand."""
