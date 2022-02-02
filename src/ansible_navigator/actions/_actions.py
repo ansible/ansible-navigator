@@ -141,7 +141,7 @@ def names_factory(package: str) -> Callable:
 
 
 def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
-    """Call the given actions's run method.
+    r"""Call the given actions's run method.
 
     :param package: The name of the package
     :param action: The name of the action
@@ -170,7 +170,7 @@ def run_interactive_factory(package: str) -> Callable:
 
 
 def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
-    """Call the given action's ``run_stdout`` method.
+    r"""Call the given action's ``run_stdout`` method.
 
     :param package: The name of the package
     :param action: The name of the action
