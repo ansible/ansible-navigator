@@ -281,6 +281,20 @@ class NavigatorPostProcessor:
                         )
                     if hint:
                         exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+
+            # check for /dev/mqueue when using podman because runner passes ipc=host
+            # https://github.com/ansible/ansible-navigator/issues/610
+            if config.container_engine == "podman" and not Path("/dev/mqueue").exists():
+                exit_msg = (
+                    "Execution environment support while using podman requires a"
+                    " '/dev/mqueue' directory."
+                )
+                exit_messages.append(ExitMessage(message=exit_msg))
+                hint = (
+                    "Try creating it with 'mkdir /dev/mqueue' or reference the documentation for"
+                    " your operating system related to POSIX message queues."
+                )
+                exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
         else:
             new_messages, new_exit_messages = check_for_ansible()
             messages.extend(new_messages)
