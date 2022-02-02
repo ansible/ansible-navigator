@@ -259,7 +259,7 @@ class Action(App):
             set_environment_variable = deepcopy(self._args.set_environment_variable)
         else:
             set_environment_variable = {}
-        set_environment_variable.update({"ANSIBLE_NOCOLOR": "True"})
+        set_environment_variable["ANSIBLE_NOCOLOR"] = "True"
 
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -279,14 +279,12 @@ class Action(App):
             playbook_dir = os.getcwd()
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
-            kwargs.update(
-                {"container_volume_mounts": self._args.execution_environment_volume_mounts},
-            )
+            kwargs["container_volume_mounts"] = self._args.execution_environment_volume_mounts
 
         if isinstance(self._args.container_options, list):
-            kwargs.update({"container_options": self._args.container_options})
+            kwargs["container_options"] = self._args.container_options
 
-        kwargs.update({"host_cwd": playbook_dir})
+        kwargs["host_cwd"] = playbook_dir
 
         self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")
         share_directory = self._args.internals.share_directory
@@ -299,7 +297,7 @@ class Action(App):
             self._collection_cache_path,
         ]
 
-        kwargs.update({"cmdline": pass_through_arg})
+        kwargs["cmdline"] = pass_through_arg
 
         if self._args.execution_environment:
             self._logger.debug("running collections command with execution environment enabled")
