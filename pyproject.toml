@@ -70,10 +70,7 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
     [tool.pylint.master]
     # tm_tokenize is virtually vendored and shouldn't be linted as such
     ignore = "tm_tokenize"
-
-    load-plugins = [
-      "pylint_pytest",  # suppresses false-positive violations in pytest tests
-    ]
+    jobs = 0
 
     [tool.pylint.messages_control]
     disable = [
