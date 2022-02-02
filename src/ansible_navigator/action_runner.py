@@ -1,10 +1,11 @@
 """A mechanism to start the main application loop for the text user interface.
 
-Invoked after settings are parsed, a loop is entered and only
+A instance of :class:`~ansible_navigator.action_runner.ActionRunner`
+is invoked once, after settings are parsed. A loop is entered and only
 exited when the user requests to quit.
 
-After initializing the user interface, an interaction is
-created from the fully initialized settings, and the requested
+After initializing the user interface, an :class:`~ansible_navigator.ui_framework.ui.Interaction`
+is created from the fully initialized settings, and the requested
 action is run.
 
 From that point forward flow control of the application is handled
