@@ -1,4 +1,16 @@
-"""Jump to one action."""
+"""A mechanism to start the main application loop for the text user interface.
+
+Invoked after settings are parsed, a loop is entered and only
+exited when the user requests to quit.
+
+After initializing the user interface, an interaction is
+created from the fully initialized settings, and the requested
+action is run.
+
+From that point forward flow control of the application is handled
+by each action in the action stack, control returned here when
+`:quit` is requested by the user.
+"""
 import os
 
 from typing import TYPE_CHECKING
