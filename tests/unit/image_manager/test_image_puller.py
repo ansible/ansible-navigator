@@ -108,3 +108,28 @@ def test_will_have(valid_container_engine, pullable_image, data):
     assert image_puller.assessment.pull_required == data.pull_required
     image_puller.pull_stdout()
     assert image_puller.assessment.pull_required is False
+
+
+data_image_tag = [
+    ("foo", "latest"),
+    ("foo:bar", "bar"),
+    ("registry.redhat.io:443/ansible-automation-platform-21/ee-supported-rhel8", "latest"),
+    ("registry.redhat.io:443/ansible-automation-platform-21/ee-supported-rhel8:latest", "latest"),
+]
+
+
+@pytest.mark.parametrize(
+    "image, expected_tag",
+    data_image_tag,
+    ids=[
+        "simple image name, no tag specified",
+        "simple image name, with tag",
+        "complex image URL, with port but no tag",
+        "complex image URL, with port and tag",
+    ],
+)
+def test_tag_parsing(image, expected_tag):
+    """test that we parse image tags in a reasonable way"""
+    image_puller = ImagePuller("podman", image, "tag")
+    image_puller._extract_tag()  # pylint: disable=protected-access
+    assert image_puller._image_tag == expected_tag  # pylint: disable=protected-access

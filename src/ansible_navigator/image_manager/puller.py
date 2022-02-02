@@ -99,8 +99,18 @@ class ImagePuller:
         self._assessment.pull_required = pull
 
     def _extract_tag(self):
-        _image, _, image_tag = self._image.partition(":")
-        self._image_tag = image_tag or "latest"
+        image_pieces = self._image.split(":")
+        self._image_tag = "latest"
+        if len(image_pieces) > 1:
+            tag = image_pieces[-1]
+            if "/" not in tag:
+                # If there's a slash in the tag, it means we were probably given
+                # an image name that has a port number but no tag at the end.
+                # e.g.: registry.example.com:443/my/image
+                # In this case, we /don't/ want "443/my/image" to be considered
+                # a tag. Only if the ending doesn't have a slash in it, is it a
+                # valid tag.
+                self._image_tag = tag
         message = f"Image tag is: {self._image_tag}"
         self._log_message(level=logging.INFO, message=message)
 
