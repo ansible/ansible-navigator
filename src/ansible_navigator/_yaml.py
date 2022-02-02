@@ -64,6 +64,7 @@ class HumanDumper(Dumper):
         """Return true to disable use of anchors and aliases.
 
         :param _data: The data used to make the determination
+        :returns: True, indicating aliases and anchors should not be used
         """
         return True
 

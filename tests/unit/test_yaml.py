@@ -1,7 +1,6 @@
 """Tests related to the yaml abstraction layer.
 """
 
-from typing import Any
 from unittest.mock import patch
 
 from yaml import Dumper
