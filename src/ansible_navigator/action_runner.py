@@ -9,7 +9,7 @@ action is run.
 
 From that point forward flow control of the application is handled
 by each action in the action stack, control returned here when
-`:quit` is requested by the user.
+``:quit`` is requested by the user.
 """
 import os
 
