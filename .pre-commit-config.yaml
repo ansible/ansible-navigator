@@ -1,306 +1,308 @@
 ---
+
 default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
   python: python3.10
 repos:
-  - repo: https://github.com/asottile/add-trailing-comma.git
-    rev: v2.2.1
-    hooks:
-      - id: add-trailing-comma
-        args:
-          - --py36-plus
-        stages: ["manual"]
+- repo: https://github.com/asottile/add-trailing-comma.git
+  rev: v2.2.1
+  hooks:
+  - id: add-trailing-comma
+    args:
+    - --py36-plus
+    stages: ["manual"]
 
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
-        name: Sort import statements using isort
+- repo: https://github.com/PyCQA/isort
+  rev: 5.10.1
+  hooks:
+  - id: isort
+    name: Sort import statements using isort
 
-  - repo: https://github.com/psf/black.git
-    rev: 22.1.0
-    hooks:
-      - id: black
-        language_version: python3
-        args:
-          - --diff
-          - --check
-          - .
+- repo: https://github.com/psf/black.git
+  rev: 22.1.0
+  hooks:
+    - id: black
+      language_version: python3
+      args:
+      - --diff
+      - --check
+      - .
 
-  - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.1.11
-    hooks:
-      - id: remove-tabs
-        exclude: |
-          (?x)
-          ^
-            share/ansible_navigator/themes/dark_vs\.json
-          $
+- repo: https://github.com/Lucas-C/pre-commit-hooks.git
+  rev: v1.1.11
+  hooks:
+  - id: remove-tabs
+    exclude: |
+      (?x)
+      ^
+        share/ansible_navigator/themes/dark_vs\.json
+      $
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v4.1.0
-    hooks:
-      # Side-effects:
-      - id: trailing-whitespace
-      - id: check-merge-conflict
-      - id: double-quote-string-fixer
-        exclude: |
-          (?x)
-          ^
-            .*
-          $
-        stages: ["manual"]
-      - id: end-of-file-fixer
-      - id: requirements-txt-fixer
-        exclude: >-
-          ^requirements\.txt$
-      # Non-modifying checks:
-      - id: name-tests-test
-        args:
-          - --django
-        exclude: |
-          (?x)
-          ^
-            .*
-          $
-        files: >-
-          ^tests/[^_].*\.py$
-        stages: ["manual"]
-      - id: check-added-large-files
-      - id: check-byte-order-marker
-      - id: check-case-conflict
-      # disabled due to pre-commit/pre-commit-hooks#159
-      # - id: check-docstring-first
-      - id: check-json
-        exclude: |
-          (?x)
-          ^
-            licenses/.*\.json
-          $
-      - id: check-symlinks
-      - id: check-yaml
-      - id: detect-private-key
+- repo: https://github.com/pre-commit/pre-commit-hooks.git
+  rev: v4.1.0
+  hooks:
+  # Side-effects:
+  - id: trailing-whitespace
+  - id: check-merge-conflict
+  - id: double-quote-string-fixer
+    exclude: |
+      (?x)
+      ^
+        .*
+      $
+    stages: ["manual"]
+  - id: end-of-file-fixer
+  - id: requirements-txt-fixer
+    exclude: >-
+      ^requirements\.txt$
+  # Non-modifying checks:
+  - id: name-tests-test
+    args:
+    - --django
+    exclude: |
+      (?x)
+      ^
+        .*
+      $
+    files: >-
+      ^tests/[^_].*\.py$
+    stages: ["manual"]
+  - id: check-added-large-files
+  - id: check-byte-order-marker
+  - id: check-case-conflict
+  # disabled due to pre-commit/pre-commit-hooks#159
+  # - id: check-docstring-first
+  - id: check-json
+    exclude: |
+      (?x)
+      ^
+        licenses/.*\.json
+      $
+  - id: check-symlinks
+  - id: check-yaml
+  - id: detect-private-key
 
-      # Heavy checks:
-      - id: check-ast
-      - id: debug-statements
+  # Heavy checks:
+  - id: check-ast
+  - id: debug-statements
 
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.30.0
-    hooks:
-      - id: markdownlint
-        exclude: >
-          (?x)^
-            (
-              \.github/ISSUE_TEMPLATE/\w+|
-              docs/(
-                changelog-fragments\.d/\d+\.\w+(\.\d+)?|
-                faq|
-                index|
-                installation
-              )|
-              README|
-              share/ansible_navigator/markdown/(help|welcome)
-            )\.md
-          $
+- repo: https://github.com/igorshubovych/markdownlint-cli
+  rev: v0.30.0
+  hooks:
+  - id: markdownlint
+    exclude: >
+      (?x)^
+        (
+          \.github/ISSUE_TEMPLATE/\w+|
+          docs/(
+            changelog-fragments\.d/\d+\.\w+(\.\d+)?|
+            faq|
+            index|
+            installation
+          )|
+          README|
+          share/ansible_navigator/markdown/(help|welcome)
+        )\.md
+      $
 
-  - repo: https://github.com/PyCQA/pydocstyle.git
-    rev: 6.1.1
-    hooks:
-      - id: pydocstyle
-        additional_dependencies:
-          - toml
-        args:
-          - |-
-            --ignore=
-            D100,
-            D101,
-            D102,
-            D103,
-            D104,
-            D105,
-            D106,
-            D107,
-            D200,
-            D201,
-            D202,
-            D203,
-            D204,
-            D205,
-            D208,
-            D209,
-            D210,
-            D211,
-            D212,
-            D213,
-            D300,
-            D400,
-            D401,
-            D402,
-            D403,
-            D404,
-            D405,
-            D406,
-            D407,
-            D412,
-            D413,
-            D415,
-        stages: ["manual"]
+- repo: https://github.com/PyCQA/pydocstyle.git
+  rev: 6.1.1
+  hooks:
+  - id: pydocstyle
+    additional_dependencies:
+    - toml
+    args:
+    - |-
+      --ignore=
+      D100,
+      D101,
+      D102,
+      D103,
+      D104,
+      D105,
+      D106,
+      D107,
+      D200,
+      D201,
+      D202,
+      D203,
+      D204,
+      D205,
+      D208,
+      D209,
+      D210,
+      D211,
+      D212,
+      D213,
+      D300,
+      D400,
+      D401,
+      D402,
+      D403,
+      D404,
+      D405,
+      D406,
+      D407,
+      D412,
+      D413,
+      D415,
+    stages: ["manual"]
 
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
-    hooks:
-      - id: codespell
-        # FIXME: Address remove current spelling exceptions:
-        args: ["-L", "tipe,dout"]
-        # We exclude generated and external files as they are not directly under
-        # our control, so we cannot fix spelling in them.
-        exclude: >
-          (?x)^
-            (
-              tests/fixtures/integration/actions/.*\.json|
-              share/ansible_navigator/grammar/.*\.json
-            )
-          $
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.1.0
+  hooks:
+  - id: codespell
+    # FIXME: Address remove current spelling exceptions:
+    args: ["-L", "tipe,dout"]
+    # We exclude generated and external files as they are not directly under
+    # our control, so we cannot fix spelling in them.
+    exclude: >
+      (?x)^
+        (
+          tests/fixtures/integration/actions/.*\.json|
+          share/ansible_navigator/grammar/.*\.json
+        )
+      $
 
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.26.3
-    hooks:
-      - id: yamllint
-        args:
-          - --strict
-        types: [file, yaml]
+- repo: https://github.com/adrienverge/yamllint.git
+  rev: v1.26.3
+  hooks:
+  - id: yamllint
+    args:
+    - --strict
+    types: [file, yaml]
 
-  - repo: https://github.com/PyCQA/flake8.git
-    rev: 4.0.1
-    hooks:
-      - id: flake8
-        alias: flake8-enforced
-        language_version: python3
-        additional_dependencies:
-          - flake8-2020 >= 1.6.0
-          - flake8-isort >= 4.1.1
-      - id: flake8
-        alias: flake8-rule-candidates
-        name: An unenforced set of flake8 candidate rule candidates
-        args:
-          - --ignore=
-          - --extend-ignore=
-          - >-
-            --select=
-            D,
-            DAR,
-        language_version: python3
-        additional_dependencies:
-          - darglint
-          - flake8-docstrings
-        stages:
-          - manual
-      - id: flake8
-        alias: flake8-extended
-        name: >-
-          An unenforced set of strict flake8 plugins,
-          including WPS and pytest-style
-        language_version: python3
-        additional_dependencies:
-          - flake8-docstrings >= 1.5.0
-          - flake8-pytest-style >= 1.2.2
-          - wemake-python-styleguide ~= 0.16.0
-        stages:
-          - manual
+- repo: https://github.com/PyCQA/flake8.git
+  rev: 4.0.1
+  hooks:
+  - id: flake8
+    alias: flake8-enforced
+    language_version: python3
+    additional_dependencies:
+    - flake8-2020 >= 1.6.0
+    - flake8-isort >= 4.1.1
+  - id: flake8
+    alias: flake8-rule-candidates
+    name: An unenforced set of flake8 candidate rule candidates
+    args:
+    - --ignore=
+    - --extend-ignore=
+    - >-
+      --select=
+      D,
+      DAR,
+    language_version: python3
+    additional_dependencies:
+    - darglint
+    - flake8-docstrings
+    stages:
+    - manual
+  - id: flake8
+    alias: flake8-extended
+    name: >-
+      An unenforced set of strict flake8 plugins,
+      including WPS and pytest-style
+    language_version: python3
+    additional_dependencies:
+    - flake8-docstrings >= 1.5.0
+    - flake8-pytest-style >= 1.2.2
+    - wemake-python-styleguide ~= 0.16.0
+    stages:
+    - manual
 
-  - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v0.931
-    hooks:
-      # NOTE: Here MyPy is executed twice -- once for the highest and once
-      # NOTE: for the lowest supported version. They are hardcoded in the
-      # NOTE: hook invocations below. Whenever one of these versions needs
-      # NOTE: to be updated, the values in the `alias` and `name` fields
-      # NOTE: should be adjusted along with the `--python-version` CLI
-      # NOTE: option.
-      # NOTE: The external developer environment is configured to only run
-      # NOTE: the check with the lowest version on the tox side while the
-      # NOTE: CI automations run both checks. Whenever the versions are
-      # NOTE: updated in this config, a symmetric action must be performed
-      # NOTE: in `tox.ini` as well.
-      - &_base-mypy-setup-map
-        id: mypy
-        alias: mypy-py310
-        name: MyPy, for Python 3.10
-        additional_dependencies:
-          - lxml == 4.6.4 # needed for `--txt-report`
-          - types-docutils
-          - types-PyYAML
-        args:
-          # FIXME: get rid of missing imports ignore
-          - --ignore-missing-imports
-          - --install-types
-          - --namespace-packages
-          - --non-interactive
-          - --pretty
-          - --python-version=3.10
-          - --show-column-numbers
-          - --show-error-codes
-          - --show-error-context
-          #- --strict
-          #- --strict-optional
-          - --txt-report
-          - .tox/.tmp/.mypy/
-          - docs/
-          - share/
-          - src/
-          - tests/
-        pass_filenames: false
-      - <<: *_base-mypy-setup-map
-        alias: mypy-py36
-        name: MyPy, for Python 3.6
-        additional_dependencies:
-          - lxml == 4.6.4 # needed for `--txt-report`
-          - types-dataclasses
-          - types-docutils
-          - types-PyYAML
-        args:
-          # FIXME: get rid of missing imports ignore
-          - --ignore-missing-imports
-          - --install-types
-          - --namespace-packages
-          - --non-interactive
-          - --pretty
-          - --python-version=3.6
-          - --show-column-numbers
-          - --show-error-codes
-          - --show-error-context
-          #- --strict
-          #- --strict-optional
-          - --txt-report
-          - .tox/.tmp/.mypy/
-          - docs/
-          - share/
-          - src/
-          - tests/
+- repo: https://github.com/pre-commit/mirrors-mypy.git
+  rev: v0.931
+  hooks:
+  # NOTE: Here MyPy is executed twice -- once for the highest and once
+  # NOTE: for the lowest supported version. They are hardcoded in the
+  # NOTE: hook invocations below. Whenever one of these versions needs
+  # NOTE: to be updated, the values in the `alias` and `name` fields
+  # NOTE: should be adjusted along with the `--python-version` CLI
+  # NOTE: option.
+  # NOTE: The external developer environment is configured to only run
+  # NOTE: the check with the lowest version on the tox side while the
+  # NOTE: CI automations run both checks. Whenever the versions are
+  # NOTE: updated in this config, a symmetric action must be performed
+  # NOTE: in `tox.ini` as well.
+  - &_base-mypy-setup-map
+    id: mypy
+    alias: mypy-py310
+    name: MyPy, for Python 3.10
+    additional_dependencies:
+    - lxml == 4.6.4  # needed for `--txt-report`
+    - types-docutils
+    - types-PyYAML
+    args:
+    # FIXME: get rid of missing imports ignore
+    - --ignore-missing-imports
+    - --install-types
+    - --namespace-packages
+    - --non-interactive
+    - --pretty
+    - --python-version=3.10
+    - --show-column-numbers
+    - --show-error-codes
+    - --show-error-context
+    #- --strict
+    #- --strict-optional
+    - --txt-report
+    - .tox/.tmp/.mypy/
+    - docs/
+    - share/
+    - src/
+    - tests/
+    pass_filenames: false
+  - <<: *_base-mypy-setup-map
+    alias: mypy-py36
+    name: MyPy, for Python 3.6
+    additional_dependencies:
+    - lxml == 4.6.4  # needed for `--txt-report`
+    - types-dataclasses
+    - types-docutils
+    - types-PyYAML
+    args:
+    # FIXME: get rid of missing imports ignore
+    - --ignore-missing-imports
+    - --install-types
+    - --namespace-packages
+    - --non-interactive
+    - --pretty
+    - --python-version=3.6
+    - --show-column-numbers
+    - --show-error-codes
+    - --show-error-context
+    #- --strict
+    #- --strict-optional
+    - --txt-report
+    - .tox/.tmp/.mypy/
+    - docs/
+    - share/
+    - src/
+    - tests/
 
-  - repo: https://github.com/pycqa/pylint.git
-    rev: v2.12.2
-    hooks:
-      - id: pylint
-        args:
-          # FIXME: uncomment once it doesn't have violations
-          # - docs/
-          - share/
-          - src/
-          - tests/
-        additional_dependencies:
-          - ansible-core
-          # astroid is a transitive dep for pylint, > 2.9.0 introduces false no-name-in-module and no-member errors
-          # attempt to remove this when astroid 2.9.4 or later is released
-          # related: https://github.com/PyCQA/pylint/issues/5131
-          # related: https://github.com/ansible/ansible-navigator/issues/772
-          - astroid == 2.9.0
-          - ansible-runner
-          - jinja2
-          - libtmux
-          - onigurumacffi
-          - pytest
-          - setuptools-scm
-          - sphinx
-        pass_filenames: false
+- repo: https://github.com/pycqa/pylint.git
+  rev: v2.12.2
+  hooks:
+  - id: pylint
+    args:
+    # FIXME: uncomment once it doesn't have violations
+    # - docs/
+    - share/
+    - src/
+    - tests/
+    additional_dependencies:
+    - ansible-core
+    # astroid is a transitive dep for pylint, > 2.9.0 introduces false no-name-in-module and no-member errors
+    # attempt to remove this when astroid 2.9.4 or later is released
+    # related: https://github.com/PyCQA/pylint/issues/5131
+    # related: https://github.com/ansible/ansible-navigator/issues/772
+    - astroid == 2.9.0
+    - ansible-runner
+    - jinja2
+    - libtmux
+    - onigurumacffi
+    - pytest
+    - setuptools-scm
+    - sphinx
+    pass_filenames: false
+...
