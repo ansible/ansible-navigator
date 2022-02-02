@@ -314,7 +314,7 @@ class Action(App):
             container_volume_mounts.append(
                 f"{self._collection_cache_path}:{self._collection_cache_path}:z",
             )
-            kwargs.update({"container_volume_mounts": container_volume_mounts})
+            kwargs["container_volume_mounts"] += container_volume_mounts
 
         else:
             self._logger.debug("running collections command locally")
