@@ -61,7 +61,10 @@ class HumanDumper(Dumper):
     """
 
     def ignore_aliases(self, _data: Any) -> bool:
-        # Return true to disable use of anchors and aliases
+        """Return true to disable use of anchors and aliases.
+
+        :param _data: The data used to make the determination
+        """
         return True
 
     def represent_scalar(
