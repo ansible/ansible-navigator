@@ -1,10 +1,10 @@
-"""Tests related to the auto detection of the container engine.
+"""Tests related to a missing ``/dev/mqueue`` directory when using ``podman``.
 """
 from pathlib import Path
 
 
 def test_posix_message_queue(monkeypatch, generate_config):
-    """Check for error messages related to missing /dev/mqueue and podman.
+    """Check for error messages related to missing ``/dev/mqueue`` and ``podman``.
 
     :param monkeypatch: The monkeypatch fixture
     :param generate_config: The configuration generator fixture
