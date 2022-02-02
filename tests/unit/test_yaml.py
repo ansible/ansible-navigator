@@ -26,7 +26,7 @@ def test_no_anchor_alias():
 
 @patch("ansible_navigator._yaml.HumanDumper.ignore_aliases", Dumper.ignore_aliases)
 def test_anchor_alias():
-    """Ensure anchors and aliases are present with ignore_aliases defaulted."""
+    """Ensure anchors and aliases are present with ignore_aliases restored."""
     data = {"integer": 42}
     many_data = [data, data, data]
     result = yaml_import.human_dump(many_data)
