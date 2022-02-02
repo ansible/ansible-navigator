@@ -136,7 +136,6 @@ def names_factory(package: str) -> Callable:
     :param package: The name of the package
     :returns: a ``names`` method for the package
     """
-
     return functools.partial(names, package)
 
 
@@ -148,8 +147,7 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     :param \*args: The arguments passeed to the action's run method
     :param \**_kwargs: The keyword arguments passed to the action's run method
     :returns: The outcome of running the actions' run method
-    """
-
+    """  # noqa: DAR101, DAR102 # *args, **kwargs escaped for sphinx
     action_cls = get(package, action)
     app, interaction = args
     app_action = action_cls(app.args)
@@ -177,7 +175,7 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
     :param \*args: The arguments passeed to the action's run_stdout method
     :param \**_kwargs: The keyword arguments passed to the action's run_stdout method
     :returns: The outcome of running the actions' run_stdout method
-    """
+    """  # noqa: DAR101, DAR102 # *args, **kwargs escaped for sphinx
     action_cls = get(package, action)
     args = args[0]
     return action_cls(args).run_stdout()
