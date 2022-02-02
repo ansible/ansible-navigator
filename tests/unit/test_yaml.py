@@ -5,6 +5,7 @@ from typing import Any
 from unittest.mock import patch
 
 from yaml import Dumper
+
 import ansible_navigator._yaml as yaml_import
 
 
