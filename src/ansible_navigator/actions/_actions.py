@@ -82,7 +82,7 @@ def get(package: str, action: str) -> Callable:
 
 
 def get_factory(package: str) -> Callable:
-    """Create a ``get()`` function for one package.
+    """Create a ``get`` function for one package.
 
     :param package: The name of the package
     :returns: The action's registered class
@@ -112,10 +112,10 @@ def kegexes(package: str) -> Generator:
 
 
 def kegexes_factory(package: str) -> Callable:
-    """Create a ``kegexs()`` function for all packages.
+    """Create a ``kegexs`` function for all packages.
 
     :param package: The name of the package
-    :returns: A ``kegexes()`` method for the package
+    :returns: A ``kegexes`` method for the package
     """
     return functools.partial(kegexes, package)
 
@@ -131,10 +131,10 @@ def names(package: str) -> List:
 
 
 def names_factory(package: str) -> Callable:
-    """Create a ``names()`` function for one package.
+    """Create a ``names`` function for one package.
 
     :param package: The name of the package
-    :returns: a ``names()`` method for the package
+    :returns: a ``names`` method for the package
     """
 
     return functools.partial(names, package)
@@ -145,8 +145,8 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
 
     :param package: The name of the package
     :param action: The name of the action
-    :param *args: The arguments passeed to the action's run method
-    :param **_kwargs: The keyword arguments passed to the action's run method
+    :param \*args: The arguments passeed to the action's run method
+    :param \**_kwargs: The keyword arguments passed to the action's run method
     :returns: The outcome of running the actions' run method
     """
 
@@ -161,10 +161,10 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
 
 
 def run_interactive_factory(package: str) -> Callable:
-    """Create a ``run_interactive()`` function for one package.
+    """Create a ``run_interactive`` function for one package.
 
     :param package: The name of the package
-    :returns: A partial ``run_interactive()`` method for the package
+    :returns: A partial ``run_interactive`` method for the package
     """
     return functools.partial(run_interactive, package)
 
@@ -174,8 +174,8 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
 
     :param package: The name of the package
     :param action: The name of the action
-    :param *args: The arguments passeed to the action's run_stdout method
-    :param **_kwargs: The keyword arguments passed to the action's run_stdout method
+    :param \*args: The arguments passeed to the action's run_stdout method
+    :param \**_kwargs: The keyword arguments passed to the action's run_stdout method
     :returns: The outcome of running the actions' run_stdout method
     """
     action_cls = get(package, action)
@@ -184,9 +184,9 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
 
 
 def run_stdout_factory(package: str) -> Callable:
-    """Create a ``run_stdout()`` function for one package.
+    """Create a ``run_stdout`` function for one package.
 
     :param package: The name of the package
-    :returns: A partial ``run_interactive()`` method for the package
+    :returns: A partial ``run_stdout`` method for the package
     """
     return functools.partial(run_stdout, package)
