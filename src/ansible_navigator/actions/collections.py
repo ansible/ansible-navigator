@@ -253,6 +253,7 @@ class Action(App):
         )
 
     def _run_runner(self) -> None:
+        # pylint: disable=too-many-branches
         """spin up runner"""
 
         if isinstance(self._args.set_environment_variable, dict):
