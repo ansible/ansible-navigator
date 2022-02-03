@@ -19,6 +19,7 @@ testdata = [
     (0, CLI, "ansible-navigator collections browse window"),
 ]
 
+
 @pytest.mark.parametrize("index, user_input, comment", testdata)
 class Test(BaseClass):
     # pylint: disable=too-few-public-methods

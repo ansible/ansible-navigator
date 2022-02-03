@@ -49,7 +49,6 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-
     def test(
         self,
         request,
