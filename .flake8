@@ -79,7 +79,7 @@ per-file-ignores =
   src/ansible_navigator/__main__.py: RST304, WPS300
   src/ansible_navigator/_version.py: D412, WPS410
   src/ansible_navigator/_yaml.py: WPS110, WPS229, WPS433, WPS437, WPS440, WPS458
-  src/ansible_navigator/action_runner.py: D200, D400, D403, DAR101, WPS231, WPS300, WPS436, WPS437, WPS450
+  src/ansible_navigator/action_runner.py: WPS231, WPS300, WPS436, WPS437, WPS450
   src/ansible_navigator/actions/__init__.py: D400, WPS300, WPS410, WPS412, WPS450
   src/ansible_navigator/actions/_actions.py: D210, D400, D401, DAR101, DAR201, WPS111, WPS201, WPS202, WPS210, WPS221, WPS323, WPS407, WPS433, WPS440, WPS458
   src/ansible_navigator/actions/back.py: D400, DAR101, WPS115, WPS300, WPS306, WPS323, WPS450
