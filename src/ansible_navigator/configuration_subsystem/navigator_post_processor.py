@@ -443,9 +443,7 @@ class NavigatorPostProcessor:
         app_run_in_interactive_mode = config.mode == "interactive"
 
         builder_help_in_interactive_mode = (
-            help_builder_is_set and
-            builder_app_selected and
-            app_run_in_interactive_mode
+            help_builder_is_set and builder_app_selected and app_run_in_interactive_mode
         )
 
         if builder_help_in_interactive_mode:
