@@ -3,9 +3,6 @@
 import pytest
 
 from .base import BaseClass
-from .base import FIXTURES_COLLECTION_DIR
-
-import os
 
 
 CLI = (
