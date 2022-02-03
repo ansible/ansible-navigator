@@ -69,11 +69,9 @@ class TmuxSession:
         https://github.com/ansible/ansible-navigator/issues/812
         """
         count = 1
-        tries = 5
+        tries = 3
         while count <= tries:
             try:
-                if count == 1:
-                    raise libtmux.exc.LibTmuxException("hello")
                 self._session = self._server.new_session(
                     session_name=self._session_name,
                     start_directory=self._cwd,
