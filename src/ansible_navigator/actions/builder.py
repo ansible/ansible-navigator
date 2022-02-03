@@ -5,6 +5,7 @@ global subcommand registry.
 """
 import os
 import shutil
+import sys
 
 from typing import Optional
 from typing import Tuple
@@ -39,7 +40,9 @@ class Action(App):
         self._logger.debug("builder requested in stdout mode")
         response = self._run_runner()
         if response:
-            _, _, ret_code = response
+            _, err, ret_code = response
+            if err:
+                sys.stdout.write(err)
             return ret_code
         return None
 
@@ -87,11 +90,11 @@ class Action(App):
 
         pass_through_arg = []
 
-        if self._args.help_builder is True:
-            pass_through_arg.append("--help")
-
         if isinstance(self._args.cmdline, list):
             pass_through_arg.extend(self._args.cmdline)
+
+        if self._args.help_builder is True:
+            pass_through_arg.append("--help")
 
         kwargs.update({"cmdline": pass_through_arg})
 

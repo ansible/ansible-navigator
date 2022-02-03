@@ -88,8 +88,7 @@ stdout_tests = (
             execution_environment=False,
         ).join(),
         look_fors=[
-            "Subcommand 'builder' does not support mode 'interactive'. \
-                   Supported modes: 'stdout'.",
+            "does not support mode 'interactive'.",
         ],
     ),
     ShellCommand(
@@ -101,8 +100,7 @@ stdout_tests = (
             execution_environment=True,
         ).join(),
         look_fors=[
-            "Subcommand 'builder' does not support mode 'interactive'. \
-                Supported modes: 'stdout'.",
+            "does not support mode 'interactive'.",
         ],
     ),
 )
