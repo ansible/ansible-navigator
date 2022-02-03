@@ -29,7 +29,6 @@ class Action(App):
         :param args: The current application configuration.
         """
         super().__init__(args=args, logger_name=__name__, name="builder")
-        self._runner: Command
 
     def run_stdout(self) -> Optional[int]:
         """Run in mode stdout.
@@ -97,5 +96,5 @@ class Action(App):
 
         kwargs.update({"cmdline": pass_through_arg})
 
-        self._runner = Command(executable_cmd=ansible_builder_path, **kwargs)
-        return self._runner.run()
+        command_runner = Command(executable_cmd=ansible_builder_path, **kwargs)
+        return command_runner.run()
