@@ -8,7 +8,6 @@ import shutil
 
 from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from ..app import App
 from ..configuration_subsystem import ApplicationConfiguration
