@@ -72,6 +72,8 @@ class TmuxSession:
         tries = 5
         while count <= tries:
             try:
+                if count == 1:
+                    raise libtmux.exc.LibTmuxException("hello")
                 self._session = self._server.new_session(
                     session_name=self._session_name,
                     start_directory=self._cwd,
