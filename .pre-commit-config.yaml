@@ -24,7 +24,6 @@ repos:
     - id: black
       language_version: python3
       args:
-      - -v
       - --diff
       - --check
       - .
