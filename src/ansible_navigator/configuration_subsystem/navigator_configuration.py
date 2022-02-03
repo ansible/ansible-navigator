@@ -504,7 +504,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         SettingsEntry(
             name="workdir",
             cli_parameters=CliParameters(short="--bwd"),
-            settings_file_path_override="builder.workdir",
+            settings_file_path_override="ansible-builder.workdir",
             short_description="Specify the path that contains ansible-builder manifest files",
             subcommands=["builder"],
             value=SettingsEntryValue(default=os.getcwd()),

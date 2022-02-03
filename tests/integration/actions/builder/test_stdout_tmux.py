@@ -39,7 +39,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["Print ansible-builder version and exit."],
+        look_fors=["usage: ansible-builder [-h]"],
     ),
     ShellCommand(
         comment="builder help-builder fail with interactive with ee",
@@ -87,8 +87,10 @@ stdout_tests = (
             mode="interactive",
             execution_environment=False,
         ).join(),
-        look_fors=["Subcommand 'builder' does not support mode 'interactive'. \
-                   Supported modes: 'stdout'."],
+        look_fors=[
+            "Subcommand 'builder' does not support mode 'interactive'. \
+                   Supported modes: 'stdout'.",
+        ],
     ),
     ShellCommand(
         comment="build execution-environment with ee in interactive mode",
@@ -100,7 +102,7 @@ stdout_tests = (
         ).join(),
         look_fors=[
             "Subcommand 'builder' does not support mode 'interactive'. \
-                Supported modes: 'stdout'."
+                Supported modes: 'stdout'.",
         ],
     ),
 )

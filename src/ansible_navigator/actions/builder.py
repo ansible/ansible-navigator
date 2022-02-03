@@ -1,4 +1,8 @@
-"""Run the builder subcommand."""
+"""Builder subcommand implementation.
+
+Importing this module registers this subcommand in the external
+global subcommand registry.
+"""
 import os
 import shutil
 
@@ -27,10 +31,12 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="builder")
         self._runner: Command
 
-    def run_stdout(self) -> Union[None, int]:
+    def run_stdout(self) -> Optional[int]:
         """Run in mode stdout.
 
-        :returns: The return code or None
+        :returns: The return code or None. If the response from the
+                  runner invocation is None, indicates there is no
+                  console output to display.
         """
         self._logger.debug("builder requested in stdout mode")
         response = self._run_runner()
@@ -44,6 +50,12 @@ class Action(App):
 
         :return: The stdout, stderr and return code from runner
         """
+        ansible_builder_path = shutil.which("ansible-builder")
+        if ansible_builder_path is None:
+            msg = "'ansible-builder' executable not found"
+            self._logger.error(msg)
+            raise RuntimeError(msg)
+
         if isinstance(self._args.set_environment_variable, dict):
             envvars_to_set = self._args.set_environment_variable.copy()
         elif isinstance(self._args.set_environment_variable, Constants):
@@ -74,12 +86,6 @@ class Action(App):
             "set_environment_variable": envvars_to_set,
             "timeout": self._args.ansible_runner_timeout,
         }
-
-        ansible_builder_path = shutil.which("ansible-builder")
-        if ansible_builder_path is None:
-            msg = "'ansible-builder' executable not found"
-            self._logger.error(msg)
-            raise RuntimeError(msg)
 
         pass_through_arg = []
 

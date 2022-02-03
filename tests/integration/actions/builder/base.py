@@ -47,7 +47,8 @@ class BaseClass:
             raise ValueError("test mode not set")
 
         received_output = tmux_session.interaction(
-            value=step.user_input, search_within_response=search_within_response
+            value=step.user_input,
+            search_within_response=search_within_response,
         )
 
         fixtures_update_requested = (
