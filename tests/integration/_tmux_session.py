@@ -68,7 +68,6 @@ class TmuxSession:
         Retry here do to errors captured here:
         https://github.com/ansible/ansible-navigator/issues/812
         """
-
         count = 1
         tries = 5
         while count <= tries:
