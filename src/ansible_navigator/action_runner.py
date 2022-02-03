@@ -1,6 +1,6 @@
 """A mechanism to start the main application loop for the text user interface.
 
-A instance of :class:`~ansible_navigator.action_runner.ActionRunner`
+An instance of :class:`~ansible_navigator.action_runner.ActionRunner`
 is invoked once, after settings are parsed. A loop is entered and only
 exited when the user requests to quit.
 
