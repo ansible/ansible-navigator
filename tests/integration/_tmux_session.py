@@ -76,7 +76,7 @@ class TmuxSession:
                 self._session = self._server.new_session(
                     session_name=self._session_name,
                     start_directory=self._cwd,
-                    # kill_session=True,
+                    kill_session=True,
                 )
                 break
             except libtmux.exc.LibTmuxException as exc:
