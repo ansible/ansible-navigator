@@ -84,7 +84,7 @@ class BaseClass:
                 "DEFAULT_CALLBACK_PLUGIN_PATH",
                 "DEFAULT_LOCAL_TMP",
             ]
-            # Determine if a menu if showing
+            # Determine if a menu is showing
             match = re.search("CURRENT VALUE", received_output[0])
             if match:
                 mask_start, mask_end = match.span()
