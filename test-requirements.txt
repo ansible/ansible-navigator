@@ -3,4 +3,5 @@ libtmux
 lxml
 pre-commit
 pytest-cov
+pytest-mock
 pytest-xdist

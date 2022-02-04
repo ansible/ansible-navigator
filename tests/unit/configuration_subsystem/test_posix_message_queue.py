@@ -1,21 +1,27 @@
 """Tests related to a missing ``/dev/mqueue/`` directory when using ``podman``."""
 
-from unittest.mock import patch
+import pathlib
+
+from typing import Callable
 
 import pytest
 
 
-@pytest.mark.parametrize("exists,", [True, False], ids=["exists-True", "exists-False"])
 @pytest.mark.parametrize("is_dir", [True, False], ids=["is_dir-True", "is_dir-False"])
 @pytest.mark.parametrize("ee_support", [True, False], ids=["ee_support-True", "ee_support-False"])
 @pytest.mark.parametrize("engine", ["podman", "docker"], ids=["engine-podman", "engine-docker"])
-def test_posix_message_queue_ee(exists, is_dir, ee_support, engine, generate_config):
+def test_posix_message_queue_ee(
+    monkeypatch: pytest.MonkeyPatch,
+    is_dir: bool,
+    ee_support: bool,
+    engine: str,
+    generate_config: Callable,
+):
     """Confirm error messages related to missing ``/dev/mqueue/`` and ``podman``.
 
-    Test using all possible combinations of container_engine, ee_support, directory exists
-    and is a directory.
+    Test using all possible combinations of container_engine, ee_support, and ``is_dir``.
 
-    :param exists: The return value to set for ``pathlib.Path.exists``
+    :param monkeypatch: Fixture for patching
     :param is_dir: The return value to set for ``pathlib.Path.is_dir``
     :param ee_support: The value to set for ``--ee``
     :param engine: The value to set for ``--ce``
@@ -24,10 +30,20 @@ def test_posix_message_queue_ee(exists, is_dir, ee_support, engine, generate_con
     mqueue_msg = (
         "Execution environment support while using podman requires a '/dev/mqueue/' directory."
     )
-    with patch("pathlib.Path.exists", return_value=exists):
-        with patch("pathlib.Path.is_dir", return_value=is_dir):
-            response = generate_config(params=["--ce", engine, "--ee", str(ee_support)])
-            if ee_support is False or engine == "docker" or (exists is True and is_dir is True):
-                assert mqueue_msg not in [exit_msg.message for exit_msg in response.exit_messages]
-            else:
-                assert mqueue_msg in [exit_msg.message for exit_msg in response.exit_messages]
+    unpatched_is_dir = pathlib.Path.is_dir
+
+    def mock_is_dir(path):
+        """Override the result for ``Path('/dev/mqueue/')`` to ``is_dir``.
+
+        :param _path: The provided path to check
+        :returns: ``is_dir`` if the path is ``/dev/mqueue/``, else the real result
+        """
+        if str(path) == str(pathlib.Path("/dev/mqueue/")):
+            return is_dir
+        return unpatched_is_dir(path)
+
+    monkeypatch.setattr("pathlib.Path.is_dir", mock_is_dir)
+    response = generate_config(params=["--ce", engine, "--ee", str(ee_support)])
+    should_error = ee_support and engine == "podman" and not is_dir
+    mqueue_msg_exists = any(exit_msg.message == mqueue_msg for exit_msg in response.exit_messages)
+    assert should_error == mqueue_msg_exists
