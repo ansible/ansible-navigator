@@ -47,7 +47,7 @@ def _import(package: str, action: str) -> None:
 def _import_all(package: str) -> None:
     """Import all actions in a package.
 
-    :param package: The name of the package.
+    :param package: The name of the package
     """
     # The following ignore can be removed when python 3.6 support is not required.
     files = resources.contents(package)  # type: ignore[attr-defined]
