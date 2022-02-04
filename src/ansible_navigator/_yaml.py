@@ -56,8 +56,17 @@ class HumanDumper(Dumper):
     # pylint: disable=too-many-ancestors
     """An instance of a pyyaml Dumper.
 
-    This deviates from the base to dump a multiline string in a human readable format.
+    This deviates from the base to dump a multiline string in a human readable format
+    and disables the use of anchors and aliases.
     """
+
+    def ignore_aliases(self, _data: Any) -> bool:
+        """Disable the use of anchors and aliases in the given data.
+
+        :param _data: The data used to make the determination
+        :returns: True, indicating aliases and anchors should not be used
+        """
+        return True
 
     def represent_scalar(
         self,
