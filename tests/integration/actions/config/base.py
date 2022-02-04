@@ -90,7 +90,7 @@ class BaseClass:
                 mask_start, mask_end = match.span()
                 mask = (mask_end - mask_start) * "X"
                 for idx, line in enumerate(received_output):
-                    if any(m in line for m in maskables):
+                    if any(f"│{m}" in line for m in maskables):
                         received_output[idx] = received_output[idx][0:mask_start] + mask
 
         fixtures_update_requested = (
