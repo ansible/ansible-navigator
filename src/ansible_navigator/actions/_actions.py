@@ -91,7 +91,7 @@ def get_factory(package: str) -> Callable:
 
 
 def kegex(package: str, action: str) -> Tuple:
-    """Return a tuple of name, class, kegex for a action.
+    """Return a tuple of name, class, ``kegex`` for an action.
 
     :param package: The name of the package
     :param action: The name of the action
