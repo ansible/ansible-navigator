@@ -67,6 +67,14 @@ profile = "black" # Avoid conflict with black
 skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to ansible-test sanity ruleset
 
 [tool.pylint]
+    [tool.pylint.imports]
+    preferred-modules = [
+      # NOTE: The unittest replacements below help keep
+      # NOTE: the tests pytest ecosystem-oriented.
+      "unittest:pytest",
+      "unittest.mock:pytest-mock",
+    ]
+
     [tool.pylint.master]
     # tm_tokenize is virtually vendored and shouldn't be linted as such
     ignore = "tm_tokenize"

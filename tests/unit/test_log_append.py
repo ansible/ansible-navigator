@@ -1,6 +1,7 @@
 """Test appending to the log.
 """
 
+# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest import mock
 
 from ansible_navigator import cli
