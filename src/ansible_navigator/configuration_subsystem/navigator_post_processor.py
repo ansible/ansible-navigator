@@ -293,7 +293,7 @@ class NavigatorPostProcessor:
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
                     hint = (
-                        "Try creating it with 'mkdir {mqueue_path}' or reference the documentation"
+                        f"Try creating it with 'mkdir {mqueue_path}' or reference the documentation"
                         " for your operating system related to POSIX message queues."
                     )
                     exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
