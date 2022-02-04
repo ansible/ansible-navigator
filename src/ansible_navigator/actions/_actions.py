@@ -112,7 +112,7 @@ def kegexes(package: str) -> Generator:
 
 
 def kegexes_factory(package: str) -> Callable:
-    """Create a ``kegexs()`` function for all packages.
+    """Create a ``kegexes()`` function for all packages.
 
     :param package: The name of the package
     :returns: A ``kegexes()`` method for the package
