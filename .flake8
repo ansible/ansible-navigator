@@ -77,7 +77,7 @@ per-file-ignores =
   share/ansible_navigator/utils/key_value_store.py: WPS110, WPS214, WPS526, WPS600, WPS603
   src/ansible_navigator/__init__.py: WPS300, WPS412, WPS436
   src/ansible_navigator/__main__.py: RST304, WPS300
-  src/ansible_navigator/_version.py: D412, WPS410
+  src/ansible_navigator/_version.py: WPS410
   src/ansible_navigator/_yaml.py: WPS110, WPS229, WPS433, WPS437, WPS440, WPS458
   src/ansible_navigator/action_runner.py: WPS231, WPS300, WPS436, WPS437, WPS450
   src/ansible_navigator/actions/__init__.py: D400, WPS300, WPS410, WPS412, WPS450

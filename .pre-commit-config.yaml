@@ -143,7 +143,6 @@ repos:
       D405,
       D406,
       D407,
-      D412,
       D413,
       D415,
     stages: ["manual"]
@@ -183,7 +182,7 @@ repos:
     - flake8-isort >= 4.1.1
   - id: flake8
     alias: flake8-rule-candidates
-    name: An unenforced set of flake8 candidate rule candidates
+    name: Help improve our developer documentation. Try "tox -e lint-candidates" (optional)
     args:
     - --ignore=
     - --extend-ignore=
