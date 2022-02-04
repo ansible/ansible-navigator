@@ -16,15 +16,13 @@ steps = (
     Step(
         user_input=":config",
         comment="enter config from welcome screen",
-        mask=False,
         look_fors=["ANSIBLE_CACHE_PLUGIN_TIMEOUT", "42"],
     ),
     Step(user_input=":back", comment="return to welcome screen"),
     Step(
         user_input=":config --ee True",
         comment="enter config from welcome screen",
-        mask=False,
-        look_fors=["/home/runner"],
+        look_fors=["ANSIBLE_CACHE_PLUGIN_TIMEOUT", "42"],
     ),
 )
 

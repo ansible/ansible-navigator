@@ -3,6 +3,7 @@
 import difflib
 import json
 import os
+import re
 
 import pytest
 
@@ -25,6 +26,7 @@ base_steps = (
         user_input=":f",
         comment="clear filter, full list",
         look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        mask=True,
     ),
     Step(user_input=":f yaml", comment="filter off screen value"),
     Step(user_input=":3", comment="YAML_FILENAME_EXTENSIONS details"),
@@ -33,6 +35,7 @@ base_steps = (
         user_input=":f",
         comment="clear filter, full list",
         look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        mask=True,
     ),
 )
 
@@ -74,11 +77,21 @@ class BaseClass:
 
         if step.mask:
             # mask out some configuration that is subject to change each run
-            mask = "X" * 50
-            maskables = ["BECOME_PLUGIN_PATH", "CACHE_PLUGIN_CONNECTION", "COLLECTIONS_PATHS"]
-            for idx, line in enumerate(received_output):
-                if any(m in line for m in maskables):
-                    received_output[idx] = mask
+            maskables = [
+                "BECOME_PLUGIN_PATH",
+                "CACHE_PLUGIN_CONNECTION",
+                "COLLECTIONS_PATHS",
+                "DEFAULT_CALLBACK_PLUGIN_PATH",
+                "DEFAULT_LOCAL_TMP",
+            ]
+            # Determine if a menu if showing
+            match = re.search("CURRENT VALUE", received_output[0])
+            if match:
+                mask_start, mask_end = match.span()
+                mask = (mask_end - mask_start) * "X"
+                for idx, line in enumerate(received_output):
+                    if any(m in line for m in maskables):
+                        received_output[idx] = received_output[idx][0:mask_start] + mask
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
