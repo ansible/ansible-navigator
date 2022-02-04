@@ -3,6 +3,7 @@ import datetime
 import os
 import shlex
 import time
+import warnings
 
 from timeit import default_timer as timer
 from typing import List
@@ -50,6 +51,7 @@ class TmuxSession:
         self._pane_height = pane_height
         self._pane_width = pane_width
         self._pull_policy = pull_policy
+        self._session: libtmux.Session
         self._session_name = os.path.splitext(unique_test_id)[0]
         self._setup_capture: List
         self._setup_commands = setup_commands or []
@@ -60,16 +62,34 @@ class TmuxSession:
             # ensure CWD is top folder of library
             self._cwd = os.path.join(os.path.dirname(__file__), "..", "..")
 
+    def _build_tmux_session(self):
+        """Create a new tmux session.
+
+        Retry here do to errors captured here:
+        https://github.com/ansible/ansible-navigator/issues/812
+        """
+        count = 1
+        tries = 3
+        while count <= tries:
+            try:
+                self._session = self._server.new_session(
+                    session_name=self._session_name,
+                    start_directory=self._cwd,
+                    kill_session=True,
+                )
+                break
+            except libtmux.exc.LibTmuxException as exc:
+                warnings.warn(f"tmux session failure #{count}: {str(exc)}", RuntimeWarning)
+                if count == tries:
+                    raise
+                count += 1
+
     def __enter__(self):
         # pylint: disable=attribute-defined-outside-init
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
         self._server = libtmux.Server()
-        self._session = self._server.new_session(
-            session_name=self._session_name,
-            start_directory=self._cwd,
-            kill_session=True,
-        )
+        self._build_tmux_session()
         self._window = self._session.new_window(self._session_name)
         self._pane = self._window.panes[0]
         self._pane.split_window(attach=False)
