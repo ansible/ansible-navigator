@@ -146,7 +146,7 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     :param action: The name of the action
     :param args: The arguments passeed to the action's run method
     :param _kwargs: The keyword arguments passed to the action's run method
-    :returns: The outcome of running the actions' run method
+    :returns: The outcome of running the action's run method
     """
     action_cls = get(package, action)
     app, interaction = args
