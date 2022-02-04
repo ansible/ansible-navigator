@@ -6,6 +6,8 @@ ansible-navigator:
     inventories:
     - /tmp/test_inventory.yml
     playbook: /tmp/test_playbook.yml
+  ansible-builder:
+    workdir: /tmp/
   ansible-runner:
     artifact-dir: /tmp/test1
     rotate-artifacts-count: 10
@@ -45,6 +47,7 @@ ansible-navigator:
       label: "Z"
     container-options:
     - "--net=host"
+  help-builder: False
   help-config: True
   help-doc: True
   help-inventory: True

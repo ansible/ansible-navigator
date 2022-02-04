@@ -430,6 +430,39 @@ class NavigatorPostProcessor:
         return self._true_or_false(entry, config)
 
     @_post_processor
+    def help_builder(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        """Post process help_builder"""
+        messages, exit_messages = self._true_or_false(entry, config)
+
+        help_builder_is_set = entry.value.current is True
+        builder_app_selected = config.app == "builder"
+        app_run_in_interactive_mode = config.mode == "interactive"
+
+        builder_help_in_interactive_mode = (
+            help_builder_is_set and builder_app_selected and app_run_in_interactive_mode
+        )
+
+        if builder_help_in_interactive_mode:
+            if entry.cli_parameters:
+                long_hc = entry.cli_parameters.long_override or entry.name_dashed
+                exit_msg = (
+                    f"{entry.cli_parameters.short} or --{long_hc}"
+                    " is valid only when 'mode' argument is set to 'stdout'"
+                )
+                exit_messages.append(ExitMessage(message=exit_msg))
+                mode_cli = config.entry("mode").cli_parameters
+                if mode_cli:
+                    m_short = mode_cli.short
+                    if m_short:
+                        exit_msg = f"Try again with '{m_short} stdout'"
+                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+        return messages, exit_messages
+
+    @_post_processor
     def help_config(
         self,
         entry: SettingsEntry,
