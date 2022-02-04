@@ -10,6 +10,8 @@ from typing import List
 from typing import NamedTuple
 from typing import Optional
 from typing import Union
+
+# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest.mock import mock_open
 from unittest.mock import patch
 

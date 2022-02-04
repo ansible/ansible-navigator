@@ -2,6 +2,7 @@
 """
 import tempfile
 
+# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest.mock import patch
 
 import pytest

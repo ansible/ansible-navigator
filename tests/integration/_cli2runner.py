@@ -1,5 +1,6 @@
 """test from CLI up to runner
 """
+# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest import mock
 
 import pytest

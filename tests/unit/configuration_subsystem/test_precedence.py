@@ -12,6 +12,7 @@ Note about decorators:
 import os
 import shlex
 
+# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest import mock
 from unittest.mock import patch
 
