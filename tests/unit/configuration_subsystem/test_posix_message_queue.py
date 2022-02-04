@@ -6,9 +6,9 @@ import pytest
 
 
 @pytest.mark.parametrize("exists,", [True, False], ids=["exists-True", "exists-False"])
-@pytest.mark.parametrize("is_dir,", [True, False], ids=["is_dir-True", "is_dir-False"])
-@pytest.mark.parametrize("ee_support,", [True, False], ids=["ee_support-True", "ee_support-False"])
-@pytest.mark.parametrize("engine,", ["podman", "docker"], ids=["engine-podman", "engine-docker"])
+@pytest.mark.parametrize("is_dir", [True, False], ids=["is_dir-True", "is_dir-False"])
+@pytest.mark.parametrize("ee_support", [True, False], ids=["ee_support-True", "ee_support-False"])
+@pytest.mark.parametrize("engine", ["podman", "docker"], ids=["engine-podman", "engine-docker"])
 def test_posix_message_queue_ee(exists, is_dir, ee_support, engine, generate_config):
     """Confirm error messages related to missing ``/dev/mqueue/`` and ``podman``.
 
