@@ -35,10 +35,10 @@ def test_posix_message_queue_ee(
     def mock_is_dir(path):
         """Override the result for ``Path('/dev/mqueue/')`` to ``is_dir``.
 
-        :param _path: The provided path to check
+        :param path: The provided path to check
         :returns: ``is_dir`` if the path is ``/dev/mqueue/``, else the real result
         """
-        if str(path) == str(pathlib.Path("/dev/mqueue/")):
+        if path == pathlib.Path("/dev/mqueue/"):
             return is_dir
         return unpatched_is_dir(path)
 
