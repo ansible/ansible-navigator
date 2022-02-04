@@ -136,7 +136,6 @@ def names_factory(package: str) -> Callable:
     :param package: The name of the package
     :returns: a ``names()`` method for the package
     """
-
     return functools.partial(names, package)
 
 
@@ -149,7 +148,6 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     :param _kwargs: The keyword arguments passed to the action's run method
     :returns: The outcome of running the actions' run method
     """
-
     action_cls = get(package, action)
     app, interaction = args
     app_action = action_cls(app.args)
@@ -170,7 +168,7 @@ def run_interactive_factory(package: str) -> Callable:
 
 
 def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
-    """Call the given action's ``run_stdout()`` method.
+    """Call the given action's ``run_stdout()`` method. # noqa: D402 # Not this run_stdout.
 
     :param package: The name of the package
     :param action: The name of the action
