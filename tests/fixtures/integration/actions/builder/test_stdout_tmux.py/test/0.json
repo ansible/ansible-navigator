@@ -1,0 +1,26 @@
+{
+    "name": "test[builder help-builder with ee  clear && ansible-navigator builder --help-builder --ee True --ll debug --mode stdout]",
+    "index": 0,
+    "comment": "builder help-builder with ee",
+    "additional_information": {
+        "look_fors": [
+            "usage: ansible-builder [-h]"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "usage: ansible-builder [-h] [--version] {create,build,introspect} ...",
+        "Tooling to help build container images for running Ansible content. Get started by looking at the help text for one of the subcommands.",
+        "positional arguments:",
+        "  {create,build,introspect}",
+        "                        The command to invoke.",
+        "    create              Creates a build context, which can be used by podman to build an image.",
+        "    build               Builds a container image.",
+        "    introspect          Introspects collections in folder.",
+        "optional arguments:",
+        "  -h, --help            show this help message and exit",
+        "  --version             Print ansible-builder version and exit.",
+        "(.env) bash-3.2$"
+    ]
+}

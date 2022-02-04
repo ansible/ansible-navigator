@@ -224,6 +224,7 @@ ENVVAR_DATA = [
     ("execution_environment", "false", False),
     ("execution_environment_image", "test_image:latest", "test_image:latest"),
     ("execution_environment_volume_mounts", "/test1:/test1:Z", ["/test1:/test1:Z"]),
+    ("help_builder", "false", False),
     ("help_config", "false", False),
     ("help_doc", "false", False),
     ("help_inventory", "false", False),
@@ -244,6 +245,7 @@ ENVVAR_DATA = [
     ("plugin_type", "become", "become"),
     ("pull_policy", "never", "never"),
     ("set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}),
+    ("workdir", "/tmp/", "/tmp/"),
 ]
 
 SETTINGS = [

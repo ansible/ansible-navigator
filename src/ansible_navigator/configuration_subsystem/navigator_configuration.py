@@ -96,6 +96,16 @@ class Internals(SimpleNamespace):
 
 
 navigator_subcommds = [
+    SubCommand(
+        name="builder",
+        description="Build execution environment (container image)",
+        epilog=(
+            "Note: 'ansible-navigator builder' additionally supports"
+            " the same parameters as the 'ansible-builder' command."
+            " For more information about these, try "
+            " 'ansible-navigator builder --help-builder --mode stdout'"
+        ),
+    ),
     SubCommand(name="collections", description="Explore available collections"),
     SubCommand(
         name="config",
@@ -301,6 +311,14 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(),
         ),
         SettingsEntry(
+            name="help_builder",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--hb", action="store_true"),
+            short_description="Help options for ansible-builder command in stdout mode",
+            subcommands=["builder"],
+            value=SettingsEntryValue(default=False),
+        ),
+        SettingsEntry(
             name="help_config",
             choices=[True, False],
             cli_parameters=CliParameters(short="--hc", action="store_true"),
@@ -482,6 +500,14 @@ NavigatorConfiguration = ApplicationConfiguration(
                 " execution environment (--senv MY_VAR=42)"
             ),
             value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
+            name="workdir",
+            cli_parameters=CliParameters(short="--bwd"),
+            settings_file_path_override="ansible-builder.workdir",
+            short_description="Specify the path that contains ansible-builder manifest files",
+            subcommands=["builder"],
+            value=SettingsEntryValue(default=os.getcwd()),
         ),
     ],
 )

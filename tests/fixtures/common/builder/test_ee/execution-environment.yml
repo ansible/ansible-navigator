@@ -1,0 +1,8 @@
+---
+version: 1
+dependencies:
+  galaxy: requirements.yml
+
+additional_build_steps:
+  append:
+    - RUN echo "Hello from EE"
