@@ -143,7 +143,6 @@ repos:
       D405,
       D406,
       D407,
-      D412,
       D413,
       D415,
     stages: ["manual"]
