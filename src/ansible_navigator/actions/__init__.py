@@ -1,6 +1,6 @@
 """A package containing all available actions.
 
-The actions package is a plugin-like implementation for all available application actions.
+The ``actions`` package is a plugin-like implementation for all available application actions.
 
 Actions can be added without registration and are discovered and loaded
 when their ``KEGEX`` is matched against user input.
