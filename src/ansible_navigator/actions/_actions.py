@@ -1,4 +1,4 @@
-"""Helper functions for the actions package."""
+"""Helper functions for the ``actions`` package."""
 
 
 import functools
