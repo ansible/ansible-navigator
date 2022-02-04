@@ -85,13 +85,14 @@ class BaseClass:
                 "DEFAULT_LOCAL_TMP",
             ]
             # Determine if a menu is showing
-            match = re.search("CURRENT VALUE", received_output[0])
-            if match:
-                mask_start, mask_end = match.span()
-                mask = (mask_end - mask_start) * "X"
+            mask_column_name = "CURRENT VALUE"
+            column_start = received_output[0].find(mask_column_name)
+            column_exists = column_start != -1
+            if column_exists:
+                mask = len(mask_column_name) * "X"
                 for idx, line in enumerate(received_output):
                     if any(f"│{m}" in line for m in maskables):
-                        received_output[idx] = received_output[idx][0:mask_start] + mask
+                        received_output[idx] = received_output[idx][0:column_start] + mask
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
