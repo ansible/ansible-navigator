@@ -25,6 +25,7 @@ base_steps = (
         user_input=":f",
         comment="clear filter, full list",
         look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        mask=True,
     ),
     Step(user_input=":f yaml", comment="filter off screen value"),
     Step(user_input=":3", comment="YAML_FILENAME_EXTENSIONS details"),
@@ -33,6 +34,7 @@ base_steps = (
         user_input=":f",
         comment="clear filter, full list",
         look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        mask=True,
     ),
 )
 
@@ -74,11 +76,22 @@ class BaseClass:
 
         if step.mask:
             # mask out some configuration that is subject to change each run
-            mask = "X" * 50
-            maskables = ["BECOME_PLUGIN_PATH", "CACHE_PLUGIN_CONNECTION", "COLLECTIONS_PATHS"]
-            for idx, line in enumerate(received_output):
-                if any(m in line for m in maskables):
-                    received_output[idx] = mask
+            maskables = [
+                "BECOME_PLUGIN_PATH",
+                "CACHE_PLUGIN_CONNECTION",
+                "COLLECTIONS_PATHS",
+                "DEFAULT_CALLBACK_PLUGIN_PATH",
+                "DEFAULT_LOCAL_TMP",
+            ]
+            # Determine if a menu is showing
+            mask_column_name = "CURRENT VALUE"
+            column_start = received_output[0].find(mask_column_name)
+            column_exists = column_start != -1
+            if column_exists:
+                mask = len(mask_column_name) * "X"
+                for idx, line in enumerate(received_output):
+                    if any(f"│{m}" in line for m in maskables):
+                        received_output[idx] = received_output[idx][0:column_start] + mask
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
