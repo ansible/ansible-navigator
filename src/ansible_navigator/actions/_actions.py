@@ -174,7 +174,7 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
     :param action: The name of the action
     :param args: The arguments passeed to the action's run_stdout method
     :param _kwargs: The keyword arguments passed to the action's run_stdout method
-    :returns: The outcome of running the action's run_stdout method
+    :returns: The outcome of running the action's ``run_stdout()`` method
     """  # noqa: D402 # Refers to the actions's run_stdout, not this function
     action_cls = get(package, action)
     args = args[0]
