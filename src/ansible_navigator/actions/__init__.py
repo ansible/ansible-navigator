@@ -10,7 +10,7 @@ and isolated instance of the action.
 
 Currently, the actions package is the only package supported for actions and
 is identified in the
-:class:`~ansible_navigator.configuration_subsystem.navigator_configuration.Internals`
+:class:`~ansible_navigator.configuration_subsystem.navigator_configuration.Internals`.
 """
 from typing import Any
 from typing import Callable
