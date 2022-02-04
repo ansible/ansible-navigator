@@ -1,7 +1,7 @@
 """Tests related to the yaml abstraction layer.
 """
 
-from unittest.mock import patch
+import pytest
 
 from yaml import Dumper
 
@@ -15,20 +15,38 @@ def test_check_yaml_imports():
     assert yaml_import.Loader is not None
 
 
-def test_no_anchor_alias():
-    """Ensure anchors and aliases are not present with ingore_aliases present."""
-    data = {"integer": 42}
-    many_data = [data, data, data]
-    result = yaml_import.human_dump(many_data)
-    assert "&id" not in result
-    assert "*id" not in result
+@pytest.fixture(name="aliases_allowed")
+def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest):
+    """Patch the human dumper if requested.
+
+    :param monkeypatch: Fixture for patching
+    :param request: The request for this fixture from a test
+    :returns: The original request parameter
+    """
+    if request.param:
+        monkeypatch.setattr(
+            "ansible_navigator._yaml.HumanDumper.ignore_aliases",
+            Dumper.ignore_aliases,
+        )
+    return request.param
 
 
-@patch("ansible_navigator._yaml.HumanDumper.ignore_aliases", Dumper.ignore_aliases)
-def test_anchor_alias():
-    """Ensure anchors and aliases are present with ignore_aliases restored."""
+@pytest.mark.parametrize(
+    "aliases_allowed",
+    [True, False],
+    ids=["pyaml original", "no aliases or anchors"],
+    indirect=("aliases_allowed",),
+)
+def test_anchor_alias(aliases_allowed: bool):
+    """Test for anchors and aliases in yaml output.
+
+    :param aliases_allowed: Indicates if aliases and anchors should be found
+    """
     data = {"integer": 42}
     many_data = [data, data, data]
     yaml_string = yaml_import.human_dump(many_data)
-    assert "&id" in yaml_string
-    assert "*id" in yaml_string
+    assert isinstance(yaml_string, str), "Unexpected value from human_dump"
+    found_alias = "&id" in yaml_string
+    assert found_alias is aliases_allowed
+    found_anchor = "*id" in yaml_string
+    assert found_anchor is aliases_allowed
