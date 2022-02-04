@@ -49,6 +49,7 @@ class Action(App):
     def _run_runner(self) -> Optional[Tuple]:
         """Spin up runner.
 
+        :raises RuntimeError: When ansible-builder can not be found
         :return: The stdout, stderr and return code from runner
         """
         ansible_builder_path = shutil.which("ansible-builder")

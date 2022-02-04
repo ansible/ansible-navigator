@@ -10,14 +10,14 @@ from .base import BaseClass
 
 
 class StdoutCommand(Command):
-    """stdout command"""
+    """A stdout command."""
 
     subcommand = "builder"
     preclear = True
 
 
 class ShellCommand(Step):
-    """a shell command"""
+    """A shell command."""
 
     search_within_response = SearchFor.PROMPT
 
@@ -109,7 +109,11 @@ steps = add_indicies(stdout_tests)
 
 
 def step_id(value):
-    """return the test id from the test step object"""
+    """Return the test id from the test step object.
+
+    :param value: The parameterized value from which the id will be generated
+    :returns: A formatted id for the test
+    """
     return f"{value.comment}  {value.user_input}"
 
 
