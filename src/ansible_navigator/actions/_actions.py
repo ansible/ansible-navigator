@@ -182,7 +182,7 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
 
 
 def run_stdout_factory(package: str) -> Callable:
-    """Create a ``run_stdout`` function for one package.
+    """Create a ``run_stdout()`` function for one package.
 
     :param package: The name of the package
     :returns: A partial ``run_stdout`` method for the package
