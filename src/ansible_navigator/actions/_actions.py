@@ -102,7 +102,7 @@ def kegex(package: str, action: str) -> Tuple:
 
 
 def kegexes(package: str) -> Generator:
-    """Return a tuple of tuples, name, kegex for all actions.
+    """Return a tuple of tuples, name, ``kegex`` for all actions.
 
     :param package: The name of the package
     :returns: A generator for all ``kegexs``
@@ -168,14 +168,14 @@ def run_interactive_factory(package: str) -> Callable:
 
 
 def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
-    """Call the given action's ``run_stdout()`` method. # noqa: D402 # Not this run_stdout.
+    """Call the given action's ``run_stdout()`` method.
 
     :param package: The name of the package
     :param action: The name of the action
     :param args: The arguments passeed to the action's run_stdout method
     :param _kwargs: The keyword arguments passed to the action's run_stdout method
     :returns: The outcome of running the actions' run_stdout method
-    """
+    """  # noqa: D402 # Refers to the actions's run_stdout, not this function
     action_cls = get(package, action)
     args = args[0]
     return action_cls(args).run_stdout()
