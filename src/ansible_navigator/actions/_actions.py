@@ -185,6 +185,6 @@ def run_stdout_factory(package: str) -> Callable:
     """Create a ``run_stdout()`` function for one package.
 
     :param package: The name of the package
-    :returns: A partial ``run_stdout`` method for the package
+    :returns: A partial ``run_stdout()`` method for the package
     """
     return functools.partial(run_stdout, package)
