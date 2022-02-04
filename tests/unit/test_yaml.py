@@ -29,6 +29,6 @@ def test_anchor_alias():
     """Ensure anchors and aliases are present with ignore_aliases restored."""
     data = {"integer": 42}
     many_data = [data, data, data]
-    result = yaml_import.human_dump(many_data)
-    assert "&id" in result
-    assert "*id" in result
+    yaml_string = yaml_import.human_dump(many_data)
+    assert "&id" in yaml_string
+    assert "*id" in yaml_string
