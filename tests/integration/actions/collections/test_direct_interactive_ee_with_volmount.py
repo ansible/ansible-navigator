@@ -1,5 +1,4 @@
-"""Tests for collections from CLI, interactive, with an EE and volmount.
-"""
+"""Tests for collections from CLI, interactive, with an EE and volume mount."""
 import pytest
 
 from .base import BaseClass
