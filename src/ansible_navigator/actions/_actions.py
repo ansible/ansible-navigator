@@ -134,7 +134,7 @@ def names_factory(package: str) -> Callable:
     """Create a ``names`` function for one package.
 
     :param package: The name of the package
-    :returns: a ``names`` method for the package
+    :returns: a ``names`` :class:`callable <collections.abc.Callable>` for the package
     """
     return functools.partial(names, package)
 
