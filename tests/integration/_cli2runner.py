@@ -26,7 +26,7 @@ class Cli2Runner:
 
     def run_test(self, mocked_runner, mocker, tmpdir, cli_entry, config_fixture, expected):
         # pylint: disable=no-self-use
-        """The function to run the test and assert.
+        """Confirm execution of ``cli.main()`` produces the desired results.
 
         :param mocked_runner: A patched instance of runner
         :param mocker: The pytest-mock fixture
