@@ -1,4 +1,4 @@
-""":doc"""
+"""Doc subcommand implementation."""
 
 import curses
 import json
@@ -26,12 +26,12 @@ from . import _actions as actions
 
 @actions.register
 class Action(App):
-    """:doc"""
+    """Doc subcommand implementation."""
 
     KEGEX = r"^d(?:oc)?(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        """Initialize the ``:doc`` action.
+        """Initialize the ``doc`` action.
 
         :param args: The current settings for the application
         """
@@ -42,7 +42,12 @@ class Action(App):
         self._runner: Union[Command, AnsibleDoc]
 
     def generate_content_heading(self, _obj: Dict, screen_w: int) -> CursesLines:
-        """Generate a heading string for the doc"""
+        """Create a heading for doc content.
+
+        :param _obj: The content going to be shown
+        :param screen_w: The current screen width
+        :return: The heading
+        """
         plugin_str = f"{self._plugin_name} ({self._plugin_type})"
         empty_str = " " * (screen_w - len(plugin_str) + 1)
         heading_str = (plugin_str + empty_str).upper()
@@ -61,7 +66,7 @@ class Action(App):
         return heading
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        """Handle :doc
+        """Execute the ``doc`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
@@ -123,7 +128,10 @@ class Action(App):
         return next_interaction
 
     def run_stdout(self) -> Union[None, int]:
-        """Run in old school mode, just stdout"""
+        """Execute the ``config`` request for mode stdout.
+
+        :returns: Nothing or the error code
+        """
         self._plugin_name = self._args.plugin_name
         self._plugin_type = self._args.plugin_type
         self._logger.debug("doc requested in stdout mode")
@@ -136,8 +144,13 @@ class Action(App):
     def _run_runner(self) -> Union[None, dict, Tuple[str, str, int]]:
         # pylint: disable=too-many-branches
         # pylint: disable=no-else-return
-        """spin up runner"""
+        """Use the runner subsystem to retrieve the configuration.
 
+        :raises RuntimeError: When the ansible-doc command cannot be found with execution
+            environment support disabled.
+        :returns: For mode interactive nothing or the plugin's doc. For mode stdout the
+            output, errors and return code from runner.
+        """
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
         else:
@@ -228,6 +241,12 @@ class Action(App):
         out: Union[Dict[Any, Any], str],
         err: Union[Dict[Any, Any], str],
     ) -> Optional[Dict[Any, Any]]:
+        """Extract the plugin's documentation from the runner output.
+
+        :param out: The output from runner
+        :param err: Any runner errors
+        :return: The plugin's doc or errors
+        """
         # pylint: disable=too-many-branches
         plugin_doc = {}
         if self._args.execution_environment:
