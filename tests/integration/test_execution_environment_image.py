@@ -56,12 +56,12 @@ class Test(Cli2Runner):
         "run": "run site.yaml",
     }
 
-    def run_test(self, mocked_runner, mocker, tmpdir, cli_entry, config_fixture, expected):
+    def run_test(self, mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected):
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
 
         :param mocked_runner: A patched instance of runner
-        :param mocker: The pytest-mock fixture
+        :param monkeypatch: The monkey patch fixture
         :param tmpdir: A fixture generating a unique temporary directory
         :param cli_entry: The CLI entry to set as ``sys.argv``
         :param config_fixture: The settings fixture
@@ -75,12 +75,10 @@ class Test(Cli2Runner):
 
         params = shlex.split(cli_entry) + ["--pp", "never"]
 
-        mocker.patch("sys.argv", params)
-        mocker.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path})
-        mocker.patch.dict(
-            os.environ,
-            {"ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH": coll_cache_path},
-        )
+        monkeypatch.setattr("sys.argv", params)
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", cfg_path)
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", coll_cache_path)
+
         with pytest.raises(Exception, match="called"):
             cli.main()
 
