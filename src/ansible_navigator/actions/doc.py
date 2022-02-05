@@ -240,7 +240,7 @@ class Action(App):
         self,
         out: Union[Dict[Any, Any], str],
         err: Union[Dict[Any, Any], str],
-    ) -> Dict[Any, Any]:
+    ) -> Optional[Dict[Any, Any]]:
         """Extract the plugin's documentation from the runner output.
 
         :param out: The output from runner
