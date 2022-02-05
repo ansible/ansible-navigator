@@ -1,4 +1,4 @@
-""":doc"""
+"""Config subcommand implementation."""
 import curses
 import os
 import re
@@ -31,24 +31,25 @@ from . import run_action
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=unused-argument
+    """Provide a color for a collections menu entry in one column.
 
-    """color the menu"""
+    :param colno: The column number
+    :param colname: The column name
+    :param entry: The menu entry
+    :returns: The color and decoration
+    """
     if entry["__default"] is False:
         return 3, 0
     return 2, 0
 
 
 def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
-    """create a heading for host showing
+    """Create a heading for config content.
 
     :param obj: The content going to be shown
-    :type obj: Any
     :param screen_w: The current screen width
-    :type screen_w: int
     :return: The heading
-    :rtype: Union[CursesLines, None]
     """
-
     heading = []
     string = obj["option"].replace("_", " ")
     if obj["__default"] is False:
@@ -76,13 +77,17 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
-    """when showing content, filter out some keys"""
+    """Filter out some keys when showing collection content.
+
+    :param obj: The object from which keys should be removed.
+    :returns: The object with keys removed.
+    """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
 
 @actions.register
 class Action(App):
-    """:doc"""
+    """Config subcommand implementation."""
 
     KEGEX = r"^config(\s(?P<params>.*))?$"
 
@@ -97,7 +102,7 @@ class Action(App):
         self._runner: Union[AnsibleConfig, Command]
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        """Handle :doc
+        """Execute the ``config`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
@@ -139,7 +144,10 @@ class Action(App):
         return None
 
     def run_stdout(self) -> Union[None, int]:
-        """Run in old school mode, just stdout"""
+        """Execute the ``config`` request for mode stdout.
+
+        :returns: Nothing or the error code
+        """
         self._logger.debug("config requested in stdout mode")
         response = self._run_runner()
         if response:
@@ -148,7 +156,7 @@ class Action(App):
         return None
 
     def _take_step(self) -> None:
-        """take one step"""
+        """Take a step based on the current step or step back."""
         result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(self.steps.current.name, self.app, self.steps.current)
@@ -178,7 +186,10 @@ class Action(App):
             self.steps.append(result)
 
     def _build_main_menu(self):
-        """build the main menu of options"""
+        """Build the menu of configuration options.
+
+        :returns: The config menu definition
+        """
         return Step(
             name="all_options",
             columns=["option", "__default", "source", "via", "__current_value"],
@@ -188,7 +199,10 @@ class Action(App):
         )
 
     def _build_option_content(self):
-        """build the content for one option"""
+        """Build the content for one configuration option.
+
+        :returns: The options's content
+        """
         return Step(
             name="option_content",
             tipe="content",
@@ -199,8 +213,13 @@ class Action(App):
     def _run_runner(self) -> Optional[Tuple]:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
-        """spin up runner"""
+        """Use the runner subsystem to retrieve the configuration.
 
+        :raises RuntimeError: When the ansible-config command cannot be found with execution
+            environment support disabled.
+        :returns: For mode interactive nothing. For mode stdout the
+            output, errors and return code from runner.
+        """
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
         else:
@@ -285,8 +304,11 @@ class Action(App):
         return (None, None, None)
 
     def _parse_and_merge(self, list_output, dump_output) -> None:
-        """yaml load the list, and parse the dump
-        merge dump int list
+        """Parse the list and dump output. Merge dump into list.
+
+        :param list_output: The output from config list
+        :param dump_output: The output from config dump
+        :returns: Nothing
         """
         try:
             parsed = yaml.load(list_output, Loader=Loader)
