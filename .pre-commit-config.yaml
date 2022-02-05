@@ -105,48 +105,6 @@ repos:
         )\.md
       $
 
-- repo: https://github.com/PyCQA/pydocstyle.git
-  rev: 6.1.1
-  hooks:
-  - id: pydocstyle
-    additional_dependencies:
-    - toml
-    args:
-    - |-
-      --ignore=
-      D100,
-      D101,
-      D102,
-      D103,
-      D104,
-      D105,
-      D106,
-      D107,
-      D200,
-      D201,
-      D202,
-      D203,
-      D204,
-      D205,
-      D208,
-      D209,
-      D210,
-      D211,
-      D212,
-      D213,
-      D300,
-      D400,
-      D401,
-      D402,
-      D403,
-      D404,
-      D405,
-      D406,
-      D407,
-      D413,
-      D415,
-    stages: ["manual"]
-
 - repo: https://github.com/codespell-project/codespell
   rev: v2.1.0
   hooks:
@@ -193,7 +151,7 @@ repos:
     language_version: python3
     additional_dependencies:
     - darglint
-    - flake8-docstrings
+    - flake8-docstrings # uses pydocstyle
     stages:
     - manual
   - id: flake8
@@ -203,7 +161,7 @@ repos:
       including WPS and pytest-style
     language_version: python3
     additional_dependencies:
-    - flake8-docstrings >= 1.5.0
+    - flake8-docstrings >= 1.5.0 # uses pydocstyle
     - flake8-pytest-style >= 1.2.2
     - wemake-python-styleguide ~= 0.16.0
     stages:
