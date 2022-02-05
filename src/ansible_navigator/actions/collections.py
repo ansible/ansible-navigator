@@ -1,4 +1,4 @@
-""":doc"""
+"""Collections subcommand implementation."""
 import curses
 import json
 import os
@@ -29,8 +29,13 @@ from . import run_action
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=unused-argument
+    """Provide a color for a collections menu entry in one column.
 
-    """color the menu"""
+    :param colno: The column number
+    :param colname: The column name
+    :param entry: The menu entry
+    :returns: The color and decoration
+    """
     if entry.get("__shadowed") is True:
         return 8, 0
     if entry.get("__deprecated") is True:
@@ -39,16 +44,12 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
 
 
 def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
-    """create a heading for host showing
+    """Create a heading for collection content.
 
     :param obj: The content going to be shown
-    :type obj: Any
     :param screen_w: The current screen width
-    :type screen_w: int
     :return: The heading
-    :rtype: Union[CursesLines, None]
     """
-
     heading = []
     string = f"{obj['full_name'].upper()}: {obj['__description']}"
     string = string + (" " * (screen_w - len(string) + 1))
@@ -69,18 +70,22 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
-    """when showing content, filter out some keys"""
+    """Filter out some keys when showing collection content.
+
+    :param obj: The object from which keys should be removed.
+    :returns: The object with keys removed.
+    """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
 
 @actions.register
 class Action(App):
-    """:doc"""
+    """Collections subcommand implementation."""
 
     KEGEX = r"^collections(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        """Initialize the ``:collections`` action.
+        """Initialize the ``collections`` action.
 
         :param args: The current settings for the application
         """
@@ -92,11 +97,12 @@ class Action(App):
         self._collections: List = []
         self._stats: Dict = {}
 
-    def update(self):
+    def update(self) -> None:
+        """Request calling app update, no collection update is required."""
         self._calling_app.update()
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        """Handle :doc
+        """Execute the ``collections`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
@@ -145,7 +151,7 @@ class Action(App):
         return None
 
     def _take_step(self) -> None:
-        """take one step"""
+        """Take a step based on the current step or step back."""
         result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(self.steps.current.name, self.app, self.steps.current)
@@ -175,7 +181,10 @@ class Action(App):
             self.steps.append(result)
 
     def _build_main_menu(self):
-        """build the main menu of options"""
+        """Build the menu of collections.
+
+        :returns: The collections menu definition
+        """
         if self._args.execution_environment:
             columns = ["__name", "__version", "__shadowed", "__type", "path"]
         else:
@@ -190,6 +199,10 @@ class Action(App):
         )
 
     def _build_plugin_menu(self):
+        """Build the menu of plugins.
+
+        :returns: The plugin menu definition
+        """
         self._collection_cache.open()
         selected_collection = self._collections[self.steps.current.index]
         cname_col = f"__{selected_collection['known_as']}"
@@ -244,7 +257,10 @@ class Action(App):
         )
 
     def _build_plugin_content(self):
-        """build the content for one option"""
+        """Build the content for one plugin.
+
+        :returns: The plugin's content
+        """
         return Step(
             name="plugin_content",
             tipe="content",
@@ -254,8 +270,7 @@ class Action(App):
 
     def _run_runner(self) -> None:
         # pylint: disable=too-many-branches
-        """spin up runner"""
-
+        """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
             set_environment_variable = deepcopy(self._args.set_environment_variable)
         else:
@@ -335,10 +350,12 @@ class Action(App):
             self._parse(output)
 
     def _parse(self, output) -> None:
-        """yaml load the list, and parse the dump
-        merge dump int list
-        """
         # pylint: disable=too-many-branches
+        """Load and process the ``json`` output from the collection cataloging process.
+
+        :param output: The output from the collection cataloging process
+        :returns: Nothing
+        """
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)
@@ -399,7 +416,7 @@ class Action(App):
         return None
 
     def notify_none(self):
-        """notify no collections were found"""
+        """Notify no collections were found."""
         msgs = ["humph. no collections were found in the following paths:"]
         paths = []
         for path in self._collection_scanned_paths:

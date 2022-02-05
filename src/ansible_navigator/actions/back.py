@@ -1,4 +1,7 @@
-"""ESC, (step back)"""
+"""``:back`` command implementation.
+
+Additionally triggered by the escape key.
+"""
 import logging
 
 from ..app_public import AppPublic
@@ -10,7 +13,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """ESC, (step back)"""
+    """``:back`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -25,7 +28,7 @@ class Action:
         self._logger = logging.getLogger(__name__)
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle <ESC>
+        """Execute the ``:back`` request.
 
         :param interaction: The interaction from the user
         :param app: The app instance
