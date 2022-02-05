@@ -151,7 +151,7 @@ repos:
     language_version: python3
     additional_dependencies:
     - darglint
-    - flake8-docstrings
+    - flake8-docstrings # uses pydocstyle
     stages:
     - manual
   - id: flake8
@@ -161,7 +161,7 @@ repos:
       including WPS and pytest-style
     language_version: python3
     additional_dependencies:
-    - flake8-docstrings >= 1.5.0
+    - flake8-docstrings >= 1.5.0 # uses pydocstyle
     - flake8-pytest-style >= 1.2.2
     - wemake-python-styleguide ~= 0.16.0
     stages:
