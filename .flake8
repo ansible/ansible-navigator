@@ -249,10 +249,10 @@ per-file-ignores =
   tests/integration/actions/templar/test_welcome_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
   tests/integration/actions/templar/test_welcome_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
   tests/integration/conftest.py: D205, D400, D401, D403, DAR101, DAR201, DAR301, PT001, PT003, PT004, PT022, S108, WPS300, WPS407, WPS433, WPS436
-  tests/integration/test_execution_environment_image.py: D200, D205, D400, D403, DAR101, S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS226, WPS300, WPS301, WPS436
-  tests/integration/test_execution_environment.py: D200, D205, D400, D403, DAR101, S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS300, WPS301, WPS436
-  tests/integration/test_pass_environment_variable.py: D200, D205, D400, D403, DAR101, S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS226, WPS300, WPS301, WPS436
-  tests/integration/test_set_environment_variable.py: D200, D205, D400, D403, DAR101, S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS300, WPS301, WPS436
+  tests/integration/test_execution_environment_image.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS226, WPS300, WPS301, WPS436
+  tests/integration/test_execution_environment.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS300, WPS301, WPS436
+  tests/integration/test_pass_environment_variable.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS226, WPS300, WPS301, WPS436
+  tests/integration/test_set_environment_variable.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS300, WPS301, WPS436
   tests/integration/test_stdout_exit_codes.py: D200, D400, D403, DAR101, DAR201, S101, WPS110, WPS226, WPS300
   tests/unit/__init__.py: D104
   tests/unit/actions/__init__.py: D104
