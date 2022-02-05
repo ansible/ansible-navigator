@@ -31,7 +31,7 @@ class Cli2Runner:
         :param mocked_runner: A patched instance of runner
         :param mocker: The pytest-mock fixture
         :param tmpdir: A fixture generating a unique temporary directory
-        :param cli_entry: The CLI entry to set as ``sys.argv``
+        :param cli_entry: The CLI entry to set as :data:`sys.argv`
         :param config_fixture: The settings fixture
         :param expected: the expected return value
         """
