@@ -201,7 +201,7 @@ class Action(App):
     def _build_option_content(self):
         """Build the content for one configuration option.
 
-        :returns: The options's content
+        :returns: The option's content
         """
         return Step(
             name="option_content",
