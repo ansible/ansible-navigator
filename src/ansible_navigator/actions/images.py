@@ -28,8 +28,8 @@ from . import run_action
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     """Filter out some keys when showing image content.
 
-    :param obj: The object from which keys should be removed.
-    :returns: The object with keys removed.
+    :param obj: The object from which keys should be removed
+    :returns: The object with keys removed
     """
     if isinstance(obj, list):
         working = [filter_content_keys(x) for x in obj]

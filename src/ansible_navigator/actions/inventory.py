@@ -79,8 +79,8 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     """Filter out some keys when showing inventory content.
 
-    :param obj: The object from which keys should be removed.
-    :returns: The object with keys removed.
+    :param obj: The object from which keys should be removed
+    :returns: The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
@@ -516,7 +516,7 @@ class Action(App):
 
         :param kwargs: The arguments for the runner call
         :raises RuntimeError: When the ``ansible-inventory`` command cannot be found for mode stdout
-        :returns: The output, errors and return code from runner.
+        :returns: The output, errors and return code from runner
         """
         if self._args.execution_environment:
             ansible_inventory_path = "ansible-inventory"
@@ -548,7 +548,7 @@ class Action(App):
         """Use the runner subsystem to collect inventory details for either mode.
 
         :returns: For mode interactive nothing. For mode stdout, the output, errors and return
-            code from runner.
+            code from runner
         """
         if isinstance(self._args.set_environment_variable, dict):
             set_envvars = {**self._args.set_environment_variable}
