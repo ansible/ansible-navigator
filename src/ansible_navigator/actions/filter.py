@@ -1,4 +1,4 @@
-""":filter"""
+"""``:filter`` command implementation."""
 import logging
 
 from ..app_public import AppPublic
@@ -9,7 +9,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """:filter"""
+    """``:filter`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -25,7 +25,7 @@ class Action:
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :filter
+        """Execute the ``:filter`` request.
 
         :param interaction: The interaction from the user
         :param app: The app instance

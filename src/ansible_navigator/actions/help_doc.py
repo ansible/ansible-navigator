@@ -1,4 +1,4 @@
-""":help"""
+"""``:help`` command implementation."""
 import os
 
 from ..app import App
@@ -10,7 +10,7 @@ from . import _actions as actions
 
 @actions.register
 class Action(App):
-    """:help"""
+    """``:help`` command implementation."""
 
     KEGEX = r"^h(?:elp)?$"
 
@@ -22,7 +22,7 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="help")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :help
+        """Execute the ``:help`` request.
 
         :param interaction: The interaction from the user
         :param app: The app instance

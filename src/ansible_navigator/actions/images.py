@@ -1,4 +1,4 @@
-""":images"""
+"""Images subcommand implementation."""
 import curses
 import json
 import shlex
@@ -26,7 +26,11 @@ from . import run_action
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
-    """when showing content, filter out some keys"""
+    """Filter out some keys when showing image content.
+
+    :param obj: The object from which keys should be removed.
+    :returns: The object with keys removed.
+    """
     if isinstance(obj, list):
         working = [filter_content_keys(x) for x in obj]
         return working
@@ -41,7 +45,7 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 
 @actions.register
 class Action(App):
-    """:images"""
+    """Images subcommand implementation."""
 
     KEGEX = r"^im(?:ages)?(\s(?P<params>.*))?$"
 
@@ -62,9 +66,13 @@ class Action(App):
 
     def color_menu(self, colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
         # pylint: disable=unused-argument
+        """Provide a color for a images menu entry in one column.
 
-        """color the menu"""
-        # images list menu
+        :param colno: The column number
+        :param colname: The column name
+        :param entry: The menu entry
+        :returns: The color and decoration
+        """
         if "__full_name" in entry:
             if entry.get("execution_environment") is False:
                 return 8, 0
@@ -80,7 +88,13 @@ class Action(App):
         return 2, 0
 
     def generate_content_heading(self, obj: Dict, screen_w: int, name: str = "") -> CursesLines:
-        """generate the content heading"""
+        """Create a heading for image content.
+
+        :param obj: The content going to be shown
+        :param screen_w: The current screen width
+        :param name: The name of the images menu
+        :return: The heading
+        """
         if name == "image_menu":
             text = (
                 self.steps.previous.selected["image_name"]
@@ -111,7 +125,7 @@ class Action(App):
         return heading
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        """Handle :images
+        """Execute the ``images`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
@@ -157,7 +171,7 @@ class Action(App):
         return None
 
     def _take_step(self) -> None:
-        """take one step"""
+        """Take a step based on the current step or step back."""
         result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(self.steps.current.name, self.app, self.steps.current)
@@ -191,6 +205,10 @@ class Action(App):
             self.steps.append(result)
 
     def _build_image_content(self) -> Step:
+        """Build the menu of image details.
+
+        :returns: The image details menu definition
+        """
         if self._images.selected is None:
             # an image should always be selected by now
             return self.steps.previous
@@ -258,6 +276,10 @@ class Action(App):
         return step
 
     def _build_image_menu(self) -> Step:
+        """Build the menu of images.
+
+        :returns: The images menu definition
+        """
         if self._images.selected is None:
             # an image should always be selected by now
             return self.steps.previous
@@ -310,6 +332,10 @@ class Action(App):
         return step
 
     def _build_python_content(self) -> Step:
+        """Build the content for an image's python packages.
+
+        :returns: The python package content
+        """
         return Step(
             name="python_content",
             tipe="content",
@@ -318,6 +344,10 @@ class Action(App):
         )
 
     def _build_system_content(self) -> Step:
+        """Build the content for an image's system packages.
+
+        :returns: The system package content
+        """
         return Step(
             name="system_content",
             tipe="content",
@@ -350,7 +380,10 @@ class Action(App):
         self._images.value = sorted(images, key=lambda i: i["name"])
 
     def _introspect_image(self) -> bool:
+        """Use the runner subsystem to introspect an image.
 
+        :returns: An indication of image introspection success
+        """
         if self._images.selected is None:
             # an image should always be selected by now
             return False
@@ -417,7 +450,11 @@ class Action(App):
         return True
 
     def _parse(self, output) -> Union[Dict, None]:
-        """parse the introspection output"""
+        """Load and process the ``json`` output from the image introspection process.
+
+        :param output: The output from the image introspection process
+        :returns: The parsed output
+        """
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)
@@ -437,7 +474,7 @@ class Action(App):
         return parsed
 
     def notify_failed(self):
-        """notify introspection failed"""
+        """Notify image introspeciton failed."""
         msgs = ["humph. Something went really wrong while introspecting the image."]
         msgs.append("Details have been added to the log file")
         closing = ["[HINT] Please log an issue about this one, it shouldn't have happened"]
