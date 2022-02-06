@@ -526,7 +526,7 @@ class UserInterface(CursesWindow):
             Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
         :return: the lines ready for curses
         """
-        if curses.COLORS > 16 and self._term_osc4_supprt:
+        if curses.COLORS > 16 and self._term_osc4_support:
             unique_colors = list(
                 set(chars["color"] for line in lines for chars in line if chars["color"]),
             )
@@ -584,7 +584,7 @@ class UserInterface(CursesWindow):
         :return: the colored line part
         """
         if lp_dict["color"]:
-            if self._term_osc4_supprt and curses.COLORS > 16:
+            if self._term_osc4_support and curses.COLORS > 16:
                 color = self._rgb_to_curses_color_idx[lp_dict["color"]]
             else:
                 red, green, blue = lp_dict["color"]
