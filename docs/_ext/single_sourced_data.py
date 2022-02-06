@@ -236,7 +236,7 @@ def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
             default = entry.value.default
 
     choices = oxfordcomma(entry.choices, "or")
-    envvar = entry.environment_variable(APP.replace("-", "_"))
+    env_var = entry.environment_variable(APP.replace("-", "_"))
 
     settings = []
     if choices:
@@ -245,8 +245,8 @@ def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
         settings.append(f"**Default:** {default}")
     if cli_parameters is not None:
         settings.append(f"**CLI:** {cli_parameters}")
-    if envvar is not None:
-        settings.append(f"**ENV:** {envvar}")
+    if env_var is not None:
+        settings.append(f"**ENV:** {env_var}")
 
     settings.extend(["**Settings file:**", *yaml_like])
 

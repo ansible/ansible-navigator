@@ -78,10 +78,10 @@ def test_env_var_is_file_path(
     anticpated_result: Optional[str],
 ) -> None:
     """test environment variable is a file path"""
-    envvar = "ANSIBLE_NAVIGATOR_CONFIG"
+    env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
-        monkeypatch.setenv(envvar, file_path)
-    _messages, _exit_messages, result = utils.environment_variable_is_file_path(envvar, "config")
+        monkeypatch.setenv(env_var, file_path)
+    _messages, _exit_messages, result = utils.environment_variable_is_file_path(env_var, "config")
     assert result == anticpated_result
 
 
