@@ -474,7 +474,7 @@ class Action(App):
         return parsed
 
     def notify_failed(self):
-        """Notify image introspeciton failed."""
+        """Notify image introspection failed."""
         msgs = ["humph. Something went really wrong while introspecting the image."]
         msgs.append("Details have been added to the log file")
         closing = ["[HINT] Please log an issue about this one, it shouldn't have happened"]
