@@ -160,8 +160,8 @@ class TmuxSession:
                 break
             elapsed = timer() - start_time
             if elapsed > self._shell_prompt_timeout:
-                tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX SETUP TIMEOUT  @ {elapsed}s @ {tstamp} ********"
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                alert = f"******** ERROR: TMUX SETUP TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 raise ValueError(alert)
 
             time.sleep(0.1)
@@ -182,8 +182,8 @@ class TmuxSession:
                 break
             elapsed = timer() - start_time
             if elapsed > self._shell_prompt_timeout:
-                tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX CLEAR TIMEOUT  @ {elapsed}s @ {tstamp} ********"
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                alert = f"******** ERROR: TMUX CLEAR TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 raise ValueError(alert)
             time.sleep(0.1)
 
@@ -230,8 +230,8 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX MODE TIMEOUT  @ {elapsed}s @ {tstamp} ********"
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                alert = f"******** ERROR: TMUX MODE TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 showing.insert(0, alert)
                 return showing
             time.sleep(0.1)
@@ -257,8 +257,8 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX EXEC TIMEOUT  @ {elapsed}s @ {tstamp} ********"
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                alert = f"******** ERROR: TMUX EXEC TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 showing.insert(0, alert)
                 return showing
             time.sleep(0.1)
@@ -280,7 +280,7 @@ class TmuxSession:
                             break
                 elif isinstance(search_within_response, list):
                     page = " ".join(showing)
-                    ok_to_return = all(srch in page for srch in search_within_response)
+                    ok_to_return = all(search in page for search in search_within_response)
 
                 if ignore_within_response:
                     for line in showing:
@@ -307,11 +307,11 @@ class TmuxSession:
                 with open(file=setup_capture_path, mode="w", encoding="utf-8") as filehandle:
                     filehandle.writelines("\n".join(self._setup_capture))
 
-                tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
                 # taint the screen output w/ timestamp so it's never a valid fixture
                 alerts = [
                     f"******** ERROR: TMUX '{err_message}'"
-                    " TIMEOUT @ {elapsed}s @ {tstamp} ********",
+                    " TIMEOUT @ {elapsed}s @ {time_stamp} ********",
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
@@ -337,8 +337,8 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > self._shell_prompt_timeout:
-                tstamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX BASH TIMEOUT  @ {elapsed}s @ {tstamp} ********"
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                alert = f"******** ERROR: TMUX BASH TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 raise ValueError(alert)
             time.sleep(0.1)
         return showing[-1]

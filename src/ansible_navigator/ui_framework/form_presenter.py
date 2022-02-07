@@ -57,7 +57,7 @@ class FormPresenter(CursesWindow):
         self._form_height: int = 0
         self._pad_left: int = 0
         self._pad_top: int = 0
-        self._seperator = ": "
+        self._separator = ": "
 
     @property
     def _field_win_start(self):
@@ -69,7 +69,7 @@ class FormPresenter(CursesWindow):
 
     def _dimensions(self):
         self._prompt_end = max([len(form_field.full_prompt) for form_field in self._form.fields])
-        self._input_start = self._prompt_end + len(self._seperator)
+        self._input_start = self._prompt_end + len(self._separator)
 
         widths = []
         for field in self._form.fields:
@@ -242,8 +242,8 @@ class FormPresenter(CursesWindow):
             4,
             0,
         )
-        cl_seperator = CursesLinePart(self._prompt_end, self._seperator, color, 0)
-        line_parts = (cl_prompt, cl_default, cl_seperator)
+        cl_separator = CursesLinePart(self._prompt_end, self._separator, color, 0)
+        line_parts = (cl_prompt, cl_default, cl_separator)
         return line_parts
 
     def _generate_title(self) -> CursesLine:

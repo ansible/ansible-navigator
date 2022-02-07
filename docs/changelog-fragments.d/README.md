@@ -57,7 +57,7 @@ Added a `{user}` role to Sphinx config -- by {user}`webknjaz`
 File `docs/changelog-fragments.d/116.feature.md`:
 
 ```md
-Added support for nested module options (suboptions)
+Added support for nested module options (sub_options)
 -- by {user}`tomaciazek`
 ```
 

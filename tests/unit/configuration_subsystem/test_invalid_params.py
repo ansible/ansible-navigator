@@ -85,7 +85,7 @@ def test_replay_missing_artifact(_mocked_func, generate_config):
 
 
 @patch("shutil.which", return_value="/path/to/container_engine")
-def test_badly_formatted_envar(_mocked_func, generate_config):
+def test_badly_formatted_env_var(_mocked_func, generate_config):
     """Ensure exit_messages generated for badly formatted ``--senv``."""
     params = "run site.yml --senv TK1:TV1"
     response = generate_config(params=params.split())
