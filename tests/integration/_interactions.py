@@ -60,7 +60,7 @@ class Step(NamedTuple):
     search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
 
 
-def add_indicies(steps):
+def add_indices(steps):
     """update the index of each"""
     return (step._replace(step_index=idx) for idx, step in enumerate(steps))
 

@@ -4,7 +4,7 @@ import pytest
 
 from ..._interactions import Command
 from ..._interactions import Step
-from ..._interactions import add_indicies
+from ..._interactions import add_indices
 from ..._interactions import step_id
 from .base import BaseClass
 
@@ -26,7 +26,7 @@ steps = (
     ),
 )
 
-steps = add_indicies(steps)
+steps = add_indices(steps)
 
 
 @pytest.mark.parametrize("step", steps, ids=step_id)

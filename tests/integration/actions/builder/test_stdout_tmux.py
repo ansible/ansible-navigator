@@ -4,7 +4,7 @@ import pytest
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import Step
-from ..._interactions import add_indicies
+from ..._interactions import add_indices
 from .base import BUIDLER_FIXTURE
 from .base import BaseClass
 
@@ -105,7 +105,7 @@ stdout_tests = (
     ),
 )
 
-steps = add_indicies(stdout_tests)
+steps = add_indices(stdout_tests)
 
 
 def step_id(value):
