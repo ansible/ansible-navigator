@@ -7,24 +7,24 @@ from math import floor
 from typing import List
 
 
-def convert_percentage(dyct: dict, keys: List, pbar_width: int) -> None:
+def convert_percentage(data_dict: dict, keys: List, progress_bar_width: int) -> None:
     """convert a string % to a little progress bar
     not recursive
     80% = 80%|XXXXXXXX  |
 
-    :param dyct: The dictionary to update
+    :param data_dict: The dictionary to update
     :param keys: The keys to convert in each dictionary
-    :param pbar_width: The width of the progress bar
+    :param progress_bar_width: The width of the progress bar
     """
     for key in keys:
-        value = dyct.get(key)
+        value = data_dict.get(key)
         if value and is_percent(str(value)):
             if value == "100%":
-                dyct[key] = "COMPLETE".center(pbar_width, " ")
+                data_dict[key] = "COMPLETE".center(progress_bar_width, " ")
             else:
-                numx = floor(pbar_width / 100 * int(value[0:-1]))
-                dyct["_" + key] = value
-                dyct[key] = ("\u2587" * numx).ljust(pbar_width)
+                chars_in_progress_bar = floor(progress_bar_width / 100 * int(value[0:-1]))
+                data_dict["_" + key] = value
+                data_dict[key] = ("\u2587" * chars_in_progress_bar).ljust(progress_bar_width)
 
 
 @functools.lru_cache(maxsize=None)
@@ -48,9 +48,9 @@ def distribute(available, weights):
     total = sum(weights)
     if available < total:
         while available != total:
-            maxv = max(weights)
-            maxvs = [i for i, j in enumerate(weights) if j == maxv]
-            for idx in maxvs:
+            max_value = max(weights)
+            max_values = [i for i, j in enumerate(weights) if j == max_value]
+            for idx in max_values:
                 weights[idx] -= 1
                 if sum(weights) == available:
                     return weights
@@ -59,8 +59,8 @@ def distribute(available, weights):
     total_weights = sum(weights)
     for weight in weights:
         weight = float(weight)
-        pcent = weight / total_weights
-        distributed_amount = round(pcent * available)
+        percent_of_total = weight / total_weights
+        distributed_amount = round(percent_of_total * available)
         distributed_amounts.append(distributed_amount)
         total_weights -= weight
         available -= distributed_amount
