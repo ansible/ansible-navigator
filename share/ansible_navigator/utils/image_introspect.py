@@ -82,13 +82,15 @@ class CommandRunner:
         self._pending_queue: Union[Queue, None] = None
 
     @staticmethod
-    def run_sproc(cmd_clss: Any):
+    def run_single_proccess(command_classes: Any):
         """Run commands with a single process.
 
-        :param cmd_clss: All command classes to be run
+        :param command_classes: All command classes to be run
         :returns: The results from running all commands
         """
-        all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
+        all_commands = tuple(
+            command for command_class in command_classes for command in command_class.commands
+        )
         results = []
         for command in all_commands:
             run_command(command)
@@ -99,14 +101,14 @@ class CommandRunner:
             results.append(command)
         return results
 
-    def run_mproc(self, cmd_clss):
+    def run_multiproccess(self, command_classes):
         """Run commands with multiple processes.
 
         Workers are started to read from pending queue.
         Exit when the number of results is equal to the number
         of commands needing to be run.
 
-        :param cmd_clss: All command classes to be run
+        :param command_classes: All command classes to be run
         :returns: The results from running all commands
         """
         if self._completed_queue is None:
@@ -114,7 +116,9 @@ class CommandRunner:
         if self._pending_queue is None:
             self._pending_queue = multiprocessing.Manager().Queue()
         results = {}
-        all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
+        all_commands = tuple(
+            command for command_class in command_classes for command in command_class.commands
+        )
         self.start_workers(all_commands)
         results = []
         while len(results) != len(all_commands):
@@ -400,7 +404,7 @@ def main():
             PythonPackages(),
             SystemPackages(),
         ]
-        results = command_runner.run_mproc(commands)
+        results = command_runner.run_multiproccess(commands)
         for result in results:
             result_as_dict = vars(result)
             result_as_dict.pop("parse")
