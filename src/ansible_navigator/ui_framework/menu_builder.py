@@ -24,7 +24,7 @@ class MenuBuilder:
 
     def __init__(
         self,
-        pbar_width: int,
+        progress_bar_width: int,
         screen_w: int,
         number_colors: int,
         color_menu_item: Callable,
@@ -32,7 +32,7 @@ class MenuBuilder:
     ):
         """Initialize the menu builder.
 
-        :param pbar_width:  The width of the progress bar
+        :param progress_bar_width:  The width of the progress bar
         :param screen_w: The current screen width
         :param number_colors: The number of colors the current terminal supports
         :param color_menu_item: The callback for adding color to menu entries
@@ -40,7 +40,7 @@ class MenuBuilder:
         """
         # pylint: disable=too-many-arguments
         self._number_colors = number_colors
-        self._pbar_width = pbar_width
+        self._progress_bar_width = progress_bar_width
         self._screen_w = screen_w
         self._color_menu_item = color_menu_item
         self._ui_config = ui_config
@@ -61,27 +61,27 @@ class MenuBuilder:
         line_prefix_w = len(str(len(dicts))) + len("|")
 
         for idx in indices:
-            convert_percentage(dicts[idx], cols, self._pbar_width)
+            convert_percentage(dicts[idx], cols, self._progress_bar_width)
 
         lines = [[str(dicts[idx].get(c)) for c in cols] for idx in indices]
-        colws = [
+        column_widths = [
             max([len(str(v)) for v in c])
             for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]])
         ]
         # add a space
-        colws = [c + 1 for c in colws]
+        column_widths = [c + 1 for c in column_widths]
 
         available = self._screen_w - line_prefix_w - 1  # scrollbar width
-        adj_colws = distribute(available, colws)
+        adjusted_column_widths = distribute(available, column_widths)
 
         col_starts = [0]
-        for idx, colw in enumerate(adj_colws):
-            col_starts.append(colw + col_starts[idx])
+        for idx, column_width in enumerate(adjusted_column_widths):
+            col_starts.append(column_width + col_starts[idx])
 
-        menu_layout = tuple([col_starts, cols, adj_colws])
+        menu_layout = tuple([col_starts, cols, adjusted_column_widths])
         header = self._menu_header_line(menu_layout)
 
-        menu_layout = tuple([col_starts, cols, adj_colws, header])
+        menu_layout = tuple([col_starts, cols, adjusted_column_widths, header])
         menu_lines = self._menu_lines(dicts, menu_layout, indices)
         return tuple([header]), menu_lines
 
@@ -95,7 +95,7 @@ class MenuBuilder:
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
         :return: The menu header line
         """
-        _col_starts, cols, _adj_colws = menu_layout
+        _column_starts, cols, _adjusted_column_widths = menu_layout
         return tuple(self._menu_header_line_part(colno, menu_layout) for colno in range(len(cols)))
 
     @staticmethod
@@ -110,14 +110,14 @@ class MenuBuilder:
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
         :return: The menu head line
         """
-        col_starts, cols, adj_colws = menu_layout
+        col_starts, cols, adjusted_column_widths = menu_layout
         coltext = re.sub("^__", "", cols[colno])
         coltext = re.sub("_", " ", coltext)
-        adj_entry = coltext[0 : adj_colws[colno]].upper()
+        adj_entry = coltext[0 : adjusted_column_widths[colno]].upper()
         # right justify header if progress
         if cols[colno] == "__progress":
             return CursesLinePart(
-                column=col_starts[colno] + adj_colws[colno] - len(adj_entry),
+                column=col_starts[colno] + adjusted_column_widths[colno] - len(adj_entry),
                 string=adj_entry,
                 color=0,
                 decoration=curses.A_UNDERLINE,
@@ -143,10 +143,10 @@ class MenuBuilder:
         """
         return tuple(self._menu_line(dicts[idx], menu_layout) for idx in indices)
 
-    def _menu_line(self, dyct: dict, menu_layout: Tuple[List, ...]) -> CursesLine:
+    def _menu_line(self, menu_entry: dict, menu_layout: Tuple[List, ...]) -> CursesLine:
         """Generate one the menu line
 
-        :param dyct: One dict from which the menu line will be generated
+        :param menu_entry: One dict from which the menu line will be generated
         :param menu_layout: A tuple of menu details:
 
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
@@ -155,10 +155,10 @@ class MenuBuilder:
             * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
         :return: A menu line
         """
-        _col_starts, cols, _adj_colws, _header = menu_layout
-        menu_line = (dyct.get(c) for c in cols)
+        _column_starts, cols, _adjusted_column_widths, _header = menu_layout
+        menu_line = (menu_entry.get(c) for c in cols)
         return tuple(
-            self._menu_line_part(colno, coltext, dyct, menu_layout)
+            self._menu_line_part(colno, coltext, menu_entry, menu_layout)
             for colno, coltext in enumerate(menu_line)
         )
 
@@ -166,14 +166,14 @@ class MenuBuilder:
         self,
         colno: int,
         coltext: Any,
-        dyct: dict,
+        menu_entry: dict,
         menu_layout: Tuple[List, ...],
     ) -> CursesLinePart:
         """Generate one menu line part
 
         :param colno: The column number of the line part
         :param coltext: The text to be placed at the given column
-        :param dyct: The dict from which the menu line will be generated
+        :param menu_entry: The dict from which the menu line will be generated
         :param menu_layout: A tuple of menu details:
 
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
@@ -182,20 +182,20 @@ class MenuBuilder:
             * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
         :return: A menu line part
         """
-        col_starts, cols, adj_colws, header = menu_layout
+        column_starts, cols, adjusted_column_widths, header = menu_layout
 
-        color, decoration = self._color_menu_item(colno, cols[colno], dyct)
+        color, decoration = self._color_menu_item(colno, cols[colno], menu_entry)
 
-        text = str(coltext)[0 : adj_colws[colno]]
+        text = str(coltext)[0 : adjusted_column_widths[colno]]
         if (isinstance(coltext, (int, bool, float)) and not isinstance(coltext, enum.Enum)) or cols[
             colno
         ].lower() == "__duration":
             # right justify on header if int, bool, float or "duration"
-            print_at = col_starts[colno] + len(header[colno][1]) - len(text)
+            print_at = column_starts[colno] + len(header[colno][1]) - len(text)
         elif cols[colno].lower() == "__progress":
             # right justify in column if progress indicator
-            print_at = col_starts[colno] + adj_colws[colno] - len(text)
+            print_at = column_starts[colno] + adjusted_column_widths[colno] - len(text)
         else:
             # left justify
-            print_at = col_starts[colno]
+            print_at = column_starts[colno]
         return CursesLinePart(column=print_at, string=str(text), color=color, decoration=decoration)
