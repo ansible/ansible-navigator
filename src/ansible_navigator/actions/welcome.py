@@ -39,8 +39,8 @@ class Action(App):
         with open(
             os.path.join(self._args.internals.share_directory, "markdown", "welcome.md"),
             encoding="utf-8",
-        ) as file_object:
-            welcome_md = file_object.read()
+        ) as fh:
+            welcome_md = fh.read()
 
         while True:
             self._calling_app.update()

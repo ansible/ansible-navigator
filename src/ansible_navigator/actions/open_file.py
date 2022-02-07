@@ -103,8 +103,8 @@ class Action:
             else:
                 with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as temp_file:
                     filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as file_object:
-                        file_object.write(obj)
+                    with open(filename, "w", encoding="utf-8") as fh:
+                        fh.write(obj)
 
         command = self._args.editor_command.format(filename=filename, line_number=line_number)
         is_console = self._args.editor_console

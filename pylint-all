@@ -1,0 +1,10 @@
+    no-docstring-rgx="__.*__"
+
+
+commands =
+  {envpython} -m \
+    pre_commit run \
+    --show-diff-on-failure \
+    --hook-stage manual \
+    flake8-rule-candidates \
+    {posargs:--all-files}

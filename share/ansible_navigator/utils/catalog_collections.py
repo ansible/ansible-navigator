@@ -100,8 +100,8 @@ class CollectionCatalog:
         :returns: Details about the file, including the checksum
         """
         sha256_hash = hashlib.sha256()
-        with open(file_path, "rb") as file_object:
-            for byte_block in iter(lambda: file_object.read(4096), b""):
+        with open(file_path, "rb") as fh:
+            for byte_block in iter(lambda: fh.read(4096), b""):
                 sha256_hash.update(byte_block)
         res = {
             "name": relative_path,
@@ -153,9 +153,9 @@ class CollectionCatalog:
             galaxy_file = f"{directory_path}/galaxy.yml"
             collection = None
             if os.path.exists(manifest_file):
-                with open(file=manifest_file, encoding="utf-8") as file_object:
+                with open(file=manifest_file, encoding="utf-8") as fh:
                     try:
-                        collection = json.load(file_object)
+                        collection = json.load(fh)
                         collection["meta_source"] = "MANIFEST.json"
                     except JSONDecodeError:
                         error = {
@@ -164,9 +164,9 @@ class CollectionCatalog:
                         }
                         self._errors.append(error)
             elif os.path.exists(galaxy_file):
-                with open(file=galaxy_file, encoding="utf-8") as file_object:
+                with open(file=galaxy_file, encoding="utf-8") as fh:
                     try:
-                        collection = {"collection_info": yaml.load(file_object, Loader=SafeLoader)}
+                        collection = {"collection_info": yaml.load(fh, Loader=SafeLoader)}
                         collection["meta_source"] = "galaxy.yml"
                     except YAMLError:
                         error = {
@@ -185,9 +185,9 @@ class CollectionCatalog:
                 runtime_file = f"{directory_path}/meta/runtime.yml"
                 collection["runtime"] = {}
                 if os.path.exists(runtime_file):
-                    with open(file=runtime_file, encoding="utf-8") as file_object:
+                    with open(file=runtime_file, encoding="utf-8") as fh:
                         try:
-                            collection["runtime"] = yaml.load(file_object, Loader=SafeLoader)
+                            collection["runtime"] = yaml.load(fh, Loader=SafeLoader)
                         except YAMLError as exc:
                             self._errors.append({"path": runtime_file, "error": str(exc)})
 
