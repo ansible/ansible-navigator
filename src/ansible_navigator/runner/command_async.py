@@ -21,8 +21,8 @@ class CommandAsync(CommandBase):
 
         For common arguments refer to the documentation of the ``CommandBase`` class.
 
-        :param executable_cmd: The command to be invoked.
-        :param queue: The queue to post events from ``ansible-runner``.
+        :param executable_cmd: The command to be invoked
+        :param queue: The queue to post events from ``ansible-runner``
         """
         self._eventq = None
         self._queue = queue

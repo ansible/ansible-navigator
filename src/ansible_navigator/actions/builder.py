@@ -26,7 +26,7 @@ class Action(App):
     def __init__(self, args: ApplicationConfiguration):
         """Initialize the action.
 
-        :param args: The current application configuration.
+        :param args: The current application configuration
         """
         super().__init__(args=args, logger_name=__name__, name="builder")
 
