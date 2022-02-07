@@ -24,9 +24,12 @@ def test_fixtures_dir():
 @pytest.fixture
 def patch_curses(monkeypatch):
     """patch curses so it doesn't traceback during tests"""
-    monkeypatch.setattr("curses.cbreak", lambda: None)
-    monkeypatch.setattr("curses.nocbreak", lambda: None)
-    monkeypatch.setattr("curses.endwin", lambda: None)
+    # pylint: disable=import-outside-toplevel
+    import curses
+
+    monkeypatch.setattr(curses, "cbreak", lambda: None)
+    monkeypatch.setattr(curses, "nocbreak", lambda: None)
+    monkeypatch.setattr(curses, "endwin", lambda: None)
 
 
 @pytest.fixture(scope="session")
