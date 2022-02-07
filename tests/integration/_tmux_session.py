@@ -315,8 +315,16 @@ class TmuxSession:
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
+<<<<<<< HEAD
                 with open(file=timeout_capture_path, mode="w", encoding="utf-8") as fh:
                     fh.writelines("\n".join(showing))
+||||||| parent of 5da5aaa1 (Normalize open context handler var)
+                with open(file=timeout_capture_path, mode="w", encoding="utf-8") as filehandle:
+                    filehandle.writelines("\n".join(showing))
+=======
+                with open(file=timeout_capture_path, mode="w", encoding="utf-8") as file_object:
+                    file_object.writelines("\n".join(showing))
+>>>>>>> 5da5aaa1 (Normalize open context handler var)
                 self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
                 return showing
 
