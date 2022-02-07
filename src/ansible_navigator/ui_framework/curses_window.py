@@ -59,7 +59,7 @@ class CursesWindow:
         self._screen_miny = 3
         self._prefix_color = 8
         self._theme_dir: str
-        self._term_osc4_supprt: bool
+        self._term_osc4_support: bool
         self._ui_config = ui_config
         self._logger.debug("self._ui_config: %s", self._ui_config)
         self._set_colors()
@@ -179,19 +179,19 @@ class CursesWindow:
             curses.use_default_colors()
         except curses.error:
             self._logger.error("Errors setting up terminal, no color support")
-            self._term_osc4_supprt = False
+            self._term_osc4_support = False
             self._ui_config.colors_initialized = True
             return
 
         self._logger.debug("curses.COLORS: %s", curses.COLORS)
         self._logger.debug("curses.can_change_color: %s", curses.can_change_color())
 
-        self._term_osc4_supprt = curses.can_change_color()
+        self._term_osc4_support = curses.can_change_color()
         if self._ui_config.osc4 is False:
-            self._term_osc4_supprt = False
-        self._logger.debug("term_osc4_supprt: %s", self._term_osc4_supprt)
+            self._term_osc4_support = False
+        self._logger.debug("term_osc4_support: %s", self._term_osc4_support)
 
-        if self._term_osc4_supprt:
+        if self._term_osc4_support:
             with open(self._ui_config.terminal_colors_path, encoding="utf-8") as data_file:
                 colors = json.load(data_file)
 

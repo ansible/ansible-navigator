@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 
+from typing import TYPE_CHECKING
 from typing import Dict
 from typing import List
 from typing import NoReturn
@@ -21,6 +22,11 @@ from .utils import ExitPrefix
 from .utils import LogMessage
 from .utils import environment_variable_is_file_path
 from .utils import find_settings_file
+
+
+if TYPE_CHECKING:
+
+    from ...share.ansible_navigator.utils import key_value_store  # type: ignore[misc]
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
@@ -88,7 +94,7 @@ def get_and_check_collection_doc_cache(
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
-    collecion_cache: Dict[str, Dict] = {}
+    collection_cache: "key_value_store.KeyValueStore" = {}
     message = f"Collection doc cache: 'path' is '{collection_doc_cache_path}'"
     messages.append(LogMessage(level=logging.DEBUG, message=message))
 
@@ -112,7 +118,7 @@ def get_and_check_collection_doc_cache(
         exit_messages.extend([ExitMessage(message=exit_msg) for exit_msg in exit_msgs])
         exit_msg = "Try again without '--cdcp' or try '--cdcp ~/collection_doc_cache.db"
         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-        return messages, exit_messages, collecion_cache
+        return messages, exit_messages, collection_cache
 
     collection_cache = _get_kvs(share_directory, collection_doc_cache_path)
     if "version" in collection_cache:

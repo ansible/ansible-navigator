@@ -206,7 +206,7 @@ def cli_data():
 
 CLI_DATA = cli_data()
 
-ENVVAR_DATA = [
+ENV_VAR_DATA = [
     ("ansible_runner_artifact_dir", "/tmp/test1", "/tmp/test1"),
     ("ansible_runner_rotate_artifacts_count", "10", 10),
     ("ansible_runner_timeout", "300", 300),
@@ -217,7 +217,7 @@ ENVVAR_DATA = [
     ("container_engine", "docker", "docker"),
     ("container_options", "--net=host", ["--net=host"]),
     ("display_color", "yellow is the color of a banana", False),
-    ("editor_command", "nano_envvar", "nano_envvar"),
+    ("editor_command", "nano_env_var", "nano_env_var"),
     ("editor_console", "false", False),
     ("exec_command", "/bin/foo", "/bin/foo"),
     ("exec_shell", "false", False),
