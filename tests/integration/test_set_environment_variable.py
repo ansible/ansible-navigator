@@ -93,4 +93,4 @@ class Test(Cli2Runner):
         _args, kwargs = mocked_runner.call_args
 
         for item in expected.items():
-            assert item in kwargs["envvars"].items()
+            assert item in kwargs["envvars"].items()  # cspell:ignore envvars

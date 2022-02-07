@@ -59,9 +59,9 @@ class Action(App):
             raise RuntimeError(msg)
 
         if isinstance(self._args.set_environment_variable, dict):
-            envvars_to_set = self._args.set_environment_variable.copy()
+            env_vars_to_set = self._args.set_environment_variable.copy()
         elif isinstance(self._args.set_environment_variable, Constants):
-            envvars_to_set = {}
+            env_vars_to_set = {}
         else:
             log_message = (
                 "The setting 'set_environment_variable' was neither a dictionary"
@@ -72,10 +72,10 @@ class Action(App):
                 log_message,
                 self._args.set_environment_variable,
             )
-        envvars_to_set = {}
+        env_vars_to_set = {}
 
         if self._args.display_color is False:
-            envvars_to_set["ANSIBLE_NOCOLOR"] = "1"
+            env_vars_to_set["ANSIBLE_NOCOLOR"] = "1"
 
         if self._args.execution_environment:
             self._logger.info("For builder subcommand execution-environment is disabled")
@@ -85,7 +85,7 @@ class Action(App):
             "host_cwd": os.path.abspath(os.path.expanduser(self._args.workdir)),
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "set_environment_variable": envvars_to_set,
+            "set_environment_variable": env_vars_to_set,
             "timeout": self._args.ansible_runner_timeout,
         }
 
