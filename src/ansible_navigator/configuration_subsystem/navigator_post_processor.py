@@ -282,7 +282,7 @@ class NavigatorPostProcessor:
                     if hint:
                         exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
 
-            # check for /dev/mqueue/ when using podman because runner passes ipc=host
+            # check for ``/dev/mqueue/`` when using podman because runner passes ipc=host
             # https://github.com/ansible/ansible-navigator/issues/610
             mqueue_path = "/dev/mqueue/"
             podman_no_mqueue_dir = (

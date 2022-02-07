@@ -1,4 +1,4 @@
-"""Tests for exec, mode stdout, parameters set using cli."""
+"""Tests for exec, mode stdout, parameters set using the CLI."""
 
 import pytest
 
@@ -73,6 +73,6 @@ def step_id(test_value: ShellCommand) -> str:
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for exec, mode stdout, parameters set using cli."""
+    """Run the tests for exec, mode stdout, parameters set using the CLI."""
 
     update_fixtures = False
