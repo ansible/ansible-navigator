@@ -25,10 +25,10 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_collections_session")
-    def _fixture_tmux_config_session(request, os_indendent_tmp):
+    def _fixture_tmux_config_session(request, os_independent_tmp):
         """Tmux fixture for this module."""
 
-        tmp_coll_dir = os.path.join(os_indendent_tmp, request.node.name, "")
+        tmp_coll_dir = os.path.join(os_independent_tmp, request.node.name, "")
         os.makedirs(tmp_coll_dir, exist_ok=True)
         copytree(
             FIXTURES_COLLECTION_DIR,
@@ -52,7 +52,7 @@ class BaseClass:
     def test(
         self,
         request,
-        os_indendent_tmp,
+        os_independent_tmp,
         tmux_collections_session,
         index,
         user_input,
@@ -81,7 +81,7 @@ class BaseClass:
         )
 
         received_output = [
-            line.replace(os_indendent_tmp, "FIXTURES_COLLECTION_DIR") for line in received_output
+            line.replace(os_independent_tmp, "FIXTURES_COLLECTION_DIR") for line in received_output
         ]
 
         fixtures_update_requested = (

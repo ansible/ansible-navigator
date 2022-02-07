@@ -152,12 +152,12 @@ class Action(App):
             output, errors and return code from runner.
         """
         if isinstance(self._args.set_environment_variable, dict):
-            set_envvars = {**self._args.set_environment_variable}
+            set_env_vars = {**self._args.set_environment_variable}
         else:
-            set_envvars = {}
+            set_env_vars = {}
 
         if self._args.display_color is False or self._args.mode == "interactive":
-            set_envvars["ANSIBLE_NOCOLOR"] = "1"
+            set_env_vars["ANSIBLE_NOCOLOR"] = "1"
 
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -165,7 +165,7 @@ class Action(App):
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
-            "set_environment_variable": set_envvars,
+            "set_environment_variable": set_env_vars,
             "private_data_dir": self._args.ansible_runner_artifact_dir,
             "rotate_artifacts": self._args.ansible_runner_rotate_artifacts_count,
             "timeout": self._args.ansible_runner_timeout,
