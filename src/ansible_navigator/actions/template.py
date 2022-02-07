@@ -85,7 +85,8 @@ class Action(App):
             app.update()
             serialization_format = "source.txt" if isinstance(templated, str) else ""
             next_interaction: Interaction = interaction.ui.show(
-                obj=templated, serialization_format=serialization_format
+                obj=templated,
+                serialization_format=serialization_format,
             )
             if next_interaction.name != "refresh":
                 break

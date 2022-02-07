@@ -39,7 +39,8 @@ class Action(App):
 
         while True:
             interaction = interaction.ui.show(
-                obj=help_md, serialization_format="text.html.markdown"
+                obj=help_md,
+                serialization_format="text.html.markdown",
             )
             app.update()
             if interaction.name != "refresh":
