@@ -402,13 +402,13 @@ def main():
         ]
         results = command_runner.run_mproc(commands)
         for result in results:
-            dicted = vars(result)
-            dicted.pop("parse")
-            for key in list(dicted.keys()):
+            result_as_dict = vars(result)
+            result_as_dict.pop("parse")
+            for key in list(result_as_dict.keys()):
                 if key not in ["details", "errors"]:
-                    dicted[f"__{key}"] = dicted[key]
-                    dicted.pop(key)
-            response[dicted["__id"]] = dicted
+                    result_as_dict[f"__{key}"] = result_as_dict[key]
+                    result_as_dict.pop(key)
+            response[result_as_dict["__id"]] = result_as_dict
     except Exception as exc:
         response["errors"].append(str(exc))
     print(json.dumps(response))

@@ -46,7 +46,7 @@ class Action:
                     filename,
                 )
                 return None
-            fmode = "a"
+            file_mode = "a"
         else:
             if os.path.exists(filename) and not match["force"]:
                 self._logger.warning(
@@ -54,7 +54,7 @@ class Action:
                     filename,
                 )
                 return None
-            fmode = "w"
+            file_mode = "w"
 
         if interaction.content:
             obj = interaction.content.showing
@@ -81,14 +81,14 @@ class Action:
                 write_as = interaction.ui.serialization_format()
 
         if write_as == "text":
-            with open(os.path.abspath(filename), fmode, encoding="utf-8") as outfile:
+            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as outfile:
                 outfile.write(obj)
         elif write_as == "yaml":
-            human_dump(obj=obj, filename=filename, fmode=fmode)
+            human_dump(obj=obj, filename=filename, file_mode=file_mode)
         elif write_as == "json":
-            with open(os.path.abspath(filename), fmode, encoding="utf-8") as outfile:
+            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as outfile:
                 json.dump(obj, outfile, indent=4, sort_keys=True)
                 outfile.write("\n")
 
-        self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, fmode, write_as)
+        self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, file_mode, write_as)
         return None

@@ -1,7 +1,7 @@
 The work in this directory is from https://github.com/asottile/babi
 
 The only changes have been to split the classes into files
-and rename the hightlight_text to tokenize
+and rename the highlight_text to tokenize
 
 Thank you @asottile
 

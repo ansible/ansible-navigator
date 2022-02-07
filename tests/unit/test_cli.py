@@ -134,23 +134,23 @@ class TstHint(NamedTuple):
 
 tst_hint_data = [
     TstHint(command=r"--cdcp {locked_directory}/foo.db", expected="without '--cdcp'", set_ce=True),
-    TstHint(command="--econ troo", expected="with '--econ true'"),
-    TstHint(command="--ee troo", expected="with '--ee true'"),
+    TstHint(command="--econ not_bool", expected="with '--econ true'"),
+    TstHint(command="--ee not_bool", expected="with '--ee true'"),
     TstHint(command="config --help-config --mode interactive", expected="with '-m stdout'"),
     TstHint(command="doc --help-doc --mode interactive", expected="with '-m stdout'"),
     TstHint(command="inventory", expected="with '-i <path to inventory>'"),
-    TstHint(command="--la fallss", expected="with '--la true'"),
+    TstHint(command="--la not_bool", expected="with '--la true'"),
     TstHint(
         command="--lf {locked_directory}/test.log",
         expected="with '--lf ~/ansible-navigator.log'",
     ),
     TstHint(command="-m stderr", expected="with '-m stdout'"),
-    TstHint(command="--osc4 troo", expected="with '--osc4 true'"),
+    TstHint(command="--osc4 not_bool", expected="with '--osc4 true'"),
     TstHint(command="doc", expected="with 'doc <plugin_name>"),
     TstHint(command="run", expected="with 'run <playbook name>"),
-    TstHint(command="run --pae troo", expected="with '--pae true"),
+    TstHint(command="run --pae not_bool", expected="with '--pae true"),
     TstHint(command="replay", expected="with 'replay <path to playbook artifact>'"),
-    TstHint(command="--senv FOO:BAR", expected="with '--senv MYVAR=myvalue'"),
+    TstHint(command="--senv FOO:BAR", expected="with '--senv MY_VAR=my_value'"),
 ]
 
 

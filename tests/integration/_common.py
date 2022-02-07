@@ -71,7 +71,7 @@ def generate_test_log_dir(unique_test_id):
             "zuul",
             "zuul-output",
             "logs",
-            "anible-navigator",
+            "ansible-navigator",
             unique_test_id,
         )
     else:
