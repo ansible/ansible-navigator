@@ -101,7 +101,7 @@ class CommandRunner:
             results.append(command)
         return results
 
-    def run_multiproccess(self, command_classes):
+    def run_multi_proccess(self, command_classes):
         """Run commands with multiple processes.
 
         Workers are started to read from pending queue.
@@ -404,7 +404,7 @@ def main():
             PythonPackages(),
             SystemPackages(),
         ]
-        results = command_runner.run_multiproccess(commands)
+        results = command_runner.run_multi_proccess(commands)
         for result in results:
             result_as_dict = vars(result)
             result_as_dict.pop("parse")
