@@ -28,10 +28,10 @@ if TYPE_CHECKING:
 
 
 # the maximum form size
-MAX_FORM_H = 1024
-MAX_FORM_W = 1024
-LPAD_RATIO = 2 / 5
-TPAD_RATIO = 2 / 5
+MAX_FORM_HEIGHT = 1024
+MAX_FORM_WIDTH = 1024
+LEFT_PAD_RATIO = 2 / 5
+TOP_PAD_RATIO = 2 / 5
 BUTTON_SPACE = 10
 
 
@@ -101,14 +101,14 @@ class FormPresenter(CursesWindow):
         height += 2  # horizontal line + buttons
         self._form_height = height
 
-        self._pad_top = max(int((self._screen_h - self._form_height) * TPAD_RATIO), 0)
-        self._pad_left = max(int((self._screen_w - self._form_width) * LPAD_RATIO), 0)
+        self._pad_top = max(int((self._screen_h - self._form_height) * TOP_PAD_RATIO), 0)
+        self._pad_left = max(int((self._screen_w - self._form_width) * LEFT_PAD_RATIO), 0)
 
     def _generate_form(self) -> Tuple[Tuple[int, CursesLine], ...]:
         lines = []
         lines.append((self._line_number, self._generate_title()))
         self._line_number += 1
-        lines.append((self._line_number, self._generate_hline()))
+        lines.append((self._line_number, self._generate_horizontal_line()))
         self._line_number += 1
 
         body_fields = [
@@ -148,7 +148,7 @@ class FormPresenter(CursesWindow):
                 lines.append((self._line_number, error))
                 self._line_number += 1
 
-        lines.append((self._line_number, self._generate_hline()))
+        lines.append((self._line_number, self._generate_horizontal_line()))
         self._line_number += 1
         lines.append((self._line_number, self._generate_buttons()))
         return tuple(lines)
@@ -214,7 +214,7 @@ class FormPresenter(CursesWindow):
         clp = CursesLinePart(self._input_start, text, color, 0)
         return (clp,)
 
-    def _generate_hline(self) -> CursesLine:
+    def _generate_horizontal_line(self) -> CursesLine:
         clp = CursesLinePart(0, "\u2500" * self._form_width, 8, 0)
         return (clp,)
 
@@ -255,7 +255,7 @@ class FormPresenter(CursesWindow):
         self._screen.clear()
         self._screen.refresh()
         idx = 0
-        pad = curses.newpad(MAX_FORM_H, MAX_FORM_W)
+        pad = curses.newpad(MAX_FORM_HEIGHT, MAX_FORM_WIDTH)
         shared_input_line_cache: List[str] = []
         for form_field in self._form.fields:
             form_field.window_handler = form_field.window_handler(
