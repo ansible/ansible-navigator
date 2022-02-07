@@ -100,7 +100,7 @@ class UserInterface(CursesWindow):
         """Initialize the user interface.
 
         :param screen_miny: The minimum screen height
-        :param kegexes: A callable producing a list og action regular expressions to match against
+        :param kegexes: A callable producing a list of action regular expressions to match against
         :param refresh: The screen refresh time is ms
         :param ui_config: the current UI configuration
         :param pbar_width: The width of the progress bar
@@ -121,7 +121,7 @@ class UserInterface(CursesWindow):
         self._kegexes = kegexes
         self._logger = logging.getLogger(__name__)
         self._menu_filter: Union[Pattern, None] = None
-        self._menu_indicies: Tuple[int, ...] = tuple()
+        self._menu_indices: Tuple[int, ...] = tuple()
 
         self._pbar_width = pbar_width
         self._status_width = status_width
@@ -526,7 +526,7 @@ class UserInterface(CursesWindow):
             Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
         :return: the lines ready for curses
         """
-        if curses.COLORS > 16 and self._term_osc4_supprt:
+        if curses.COLORS > 16 and self._term_osc4_support:
             unique_colors = list(
                 set(chars["color"] for line in lines for chars in line if chars["color"]),
             )
@@ -584,7 +584,7 @@ class UserInterface(CursesWindow):
         :return: the colored line part
         """
         if lp_dict["color"]:
-            if self._term_osc4_supprt and curses.COLORS > 16:
+            if self._term_osc4_support and curses.COLORS > 16:
                 color = self._rgb_to_curses_color_idx[lp_dict["color"]]
             else:
                 red, green, blue = lp_dict["color"]
@@ -672,23 +672,23 @@ class UserInterface(CursesWindow):
 
             # get the less or more, wrap, in case we jumped out of the menu indices
             if entry == "-":
-                less = list(reversed([i for i in self._menu_indicies if i - index < 0]))
-                more = list(reversed([i for i in self._menu_indicies if i - index > 0]))
+                less = list(reversed([i for i in self._menu_indices if i - index < 0]))
+                more = list(reversed([i for i in self._menu_indices if i - index > 0]))
 
-                ordered_indicies = less + more
-                if ordered_indicies:
-                    index = ordered_indicies[0]
+                ordered_indices = less + more
+                if ordered_indices:
+                    index = ordered_indices[0]
                     self.scroll(0)
                     entry = "KEY_F(5)"
                 continue
 
             if entry == "+":
-                more = [i for i in self._menu_indicies if i - index > 0]
-                less = [i for i in self._menu_indicies if i - index < 0]
+                more = [i for i in self._menu_indices if i - index > 0]
+                less = [i for i in self._menu_indices if i - index < 0]
 
-                ordered_indicies = more + less
-                if ordered_indicies:
-                    index = ordered_indicies[0]
+                ordered_indices = more + less
+                if ordered_indices:
+                    index = ordered_indices[0]
                     self.scroll(0)
                     entry = "KEY_F(5)"
                 continue
@@ -778,22 +778,22 @@ class UserInterface(CursesWindow):
             first_line_idx = max(0, last_line_idx - (self._screen_h - 3))
 
             if self.menu_filter():
-                self._menu_indicies = tuple(
+                self._menu_indices = tuple(
                     idx for idx, mi in enumerate(current) if self._obj_match_filter(mi, columns)
                 )
                 line_numbers = tuple(range(last_line_idx - first_line_idx + 1))
-                self._scroll = min(len(self._menu_indicies), self._scroll)
+                self._scroll = min(len(self._menu_indices), self._scroll)
             else:
-                self._menu_indicies = tuple(range(len(current)))
-                line_numbers = self._menu_indicies[first_line_idx : last_line_idx + 1]
+                self._menu_indices = tuple(range(len(current)))
+                line_numbers = self._menu_indices[first_line_idx : last_line_idx + 1]
 
-            showing_idxs = self._menu_indicies[first_line_idx : last_line_idx + 1]
+            showing_idxs = self._menu_indices[first_line_idx : last_line_idx + 1]
             menu_heading, menu_lines = self._get_heading_menu_items(current, columns, showing_idxs)
 
             entry = self._display(
                 lines=menu_lines,
                 line_numbers=line_numbers,
-                count=len(self._menu_indicies),
+                count=len(self._menu_indices),
                 heading=menu_heading,
                 indent_heading=True,
                 key_dict={"[0-9]": "goto"},
@@ -807,7 +807,7 @@ class UserInterface(CursesWindow):
             if name and action:
                 if name == "select":
                     if current:
-                        index = self._menu_indicies[int(entry) % len(self._menu_indicies)]
+                        index = self._menu_indices[int(entry) % len(self._menu_indices)]
                         action = action._replace(value=index)
                     else:
                         continue
