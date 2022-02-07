@@ -3,7 +3,7 @@
 This ensures all internal packages can be imported right away without
 any need to import some other module before doing so.
 
-This module is based on an idea that pytest uses for self-testing:
+This module is based on an idea that ``pytest`` uses for self-testing:
 * https://github.com/sanitizers/octomachinery/blob/be18b54/tests/circular_imports_test.py
 * https://github.com/pytest-dev/pytest/blob/d18c75b/testing/test_meta.py
 * https://twitter.com/codewithanthony/status/1229445110510735361
@@ -81,7 +81,7 @@ def test_no_warnings(import_path: str) -> None:
     This is seeking for any import errors including ones caused
     by circular imports.
 
-    DeprecationWarnings related to distutils in ansible_runner are ignored
+    DeprecationWarnings related to ``distutils`` in ansible_runner are ignored
 
     :param import_path: The path to be imported and smoke-checked for warnings and crashes
     """

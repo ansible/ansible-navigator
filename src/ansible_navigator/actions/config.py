@@ -79,8 +79,8 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
-    :param obj: The object from which keys should be removed.
-    :returns: The object with keys removed.
+    :param obj: The object from which keys should be removed
+    :returns: The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
@@ -201,7 +201,7 @@ class Action(App):
     def _build_option_content(self):
         """Build the content for one configuration option.
 
-        :returns: The options's content
+        :returns: The option's content
         """
         return Step(
             name="option_content",

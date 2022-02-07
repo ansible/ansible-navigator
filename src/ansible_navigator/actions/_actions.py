@@ -16,7 +16,7 @@ from typing import List
 from typing import Tuple
 
 
-# mypy/pylint idiom for py36 compatibility
+# ``mypy``/``pylint`` idiom for py36 compatibility
 # https://github.com/python/typeshed/issues/3500#issuecomment-560958608
 if sys.version_info >= (3, 7):
     from importlib import resources
@@ -140,11 +140,11 @@ def names_factory(package: str) -> Callable:
 
 
 def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
-    """Call the given actions's ``run()`` method.
+    """Call the given action's ``run()`` method.
 
     :param package: The name of the package
     :param action: The name of the action
-    :param args: The arguments passeed to the action's run method
+    :param args: The arguments passed to the action's run method
     :param _kwargs: The keyword arguments passed to the action's run method
     :returns: The outcome of running the action's run method
     """
@@ -172,10 +172,10 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
 
     :param package: The name of the package
     :param action: The name of the action
-    :param args: The arguments passeed to the action's run_stdout method
+    :param args: The arguments passed to the action's run_stdout method
     :param _kwargs: The keyword arguments passed to the action's run_stdout method
     :returns: The outcome of running the action's ``run_stdout()`` method
-    """  # noqa: D402 # Refers to the actions's run_stdout in the first line, not this function
+    """  # noqa: D402 # Refers to the action's run_stdout in the first line, not this function
     action_cls = get(package, action)
     args = args[0]
     return action_cls(args).run_stdout()

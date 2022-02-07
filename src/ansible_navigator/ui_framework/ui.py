@@ -100,7 +100,7 @@ class UserInterface(CursesWindow):
         """Initialize the user interface.
 
         :param screen_miny: The minimum screen height
-        :param kegexes: A callable producing a list og action regular expressions to match against
+        :param kegexes: A callable producing a list of action regular expressions to match against
         :param refresh: The screen refresh time is ms
         :param ui_config: the current UI configuration
         :param pbar_width: The width of the progress bar
