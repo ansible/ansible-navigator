@@ -33,7 +33,7 @@ def patch_curses(monkeypatch):
 
 
 @pytest.fixture(scope="session")
-def os_indendent_tmp():
+def os_independent_tmp():
     """
     this attempts to ensure the length of the ``/tmp``
     is the same between MacOS and Linux
