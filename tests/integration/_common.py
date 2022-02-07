@@ -45,9 +45,9 @@ def update_fixtures(
         if additional_information["look_fors"]:
             received_output = sanitize_output(received_output)
     fixture["output"] = received_output
-    with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as outfile:
-        json.dump(fixture, outfile, indent=4, ensure_ascii=False, sort_keys=False)
-        outfile.write("\n")
+    with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as file_object:
+        json.dump(fixture, file_object, indent=4, ensure_ascii=False, sort_keys=False)
+        file_object.write("\n")
 
 
 def fixture_path_from_request(request, index, testname=None):

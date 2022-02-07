@@ -82,8 +82,8 @@ class Colorize:
         self._load()
 
     def _load(self):
-        with open(os.path.join(self._theme_path), encoding="utf-8") as data_file:
-            self._schema = ColorSchema(json.load(data_file))
+        with open(os.path.join(self._theme_path), encoding="utf-8") as file_object:
+            self._schema = ColorSchema(json.load(file_object))
 
     @functools.lru_cache(maxsize=100)
     def render(self, doc, scope):
