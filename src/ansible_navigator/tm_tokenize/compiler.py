@@ -69,33 +69,33 @@ class Compiler:
         grammar: "Grammar",
         rules: Tuple["_Rule", ...],
     ) -> Tuple[List[str], Tuple["_Rule", ...]]:
-        ret_regs = []
+        ret_regexes = []
         ret_rules: List["_Rule"] = []
         for rule in rules:
             if rule.include is not None:
-                tmp_regs, tmp_rules = self._include(grammar, rule.repository, rule.include)
-                ret_regs.extend(tmp_regs)
+                tmp_regexes, tmp_rules = self._include(grammar, rule.repository, rule.include)
+                ret_regexes.extend(tmp_regexes)
                 ret_rules.extend(tmp_rules)
             elif rule.match is None and rule.begin is None and rule.patterns:
-                tmp_regs, tmp_rules = self._patterns(grammar, rule.patterns)
-                ret_regs.extend(tmp_regs)
+                tmp_regexes, tmp_rules = self._patterns(grammar, rule.patterns)
+                ret_regexes.extend(tmp_regexes)
                 ret_rules.extend(tmp_rules)
             elif rule.match is not None:
-                ret_regs.append(rule.match)
+                ret_regexes.append(rule.match)
                 ret_rules.append(self._visit_rule(grammar, rule))
             elif rule.begin is not None:
-                ret_regs.append(rule.begin)
+                ret_regexes.append(rule.begin)
                 ret_rules.append(self._visit_rule(grammar, rule))
             else:
                 raise AssertionError(f"unreachable {rule}")
-        return ret_regs, tuple(ret_rules)
+        return ret_regexes, tuple(ret_rules)
 
     def _captures_ref(self, grammar: "Grammar", captures: "Captures") -> "Captures":
         return tuple((n, self._visit_rule(grammar, r)) for n, r in captures)
 
     def _compile_root(self, grammar: "Grammar") -> "PatternRule":
-        regs, rules = self._patterns(grammar, grammar.patterns)
-        return PatternRule((grammar.scope_name,), make_regset(*regs), rules)
+        regexes, rules = self._patterns(grammar, grammar.patterns)
+        return PatternRule((grammar.scope_name,), make_regset(*regexes), rules)
 
     def _compile_rule(self, grammar: "Grammar", rule: "_Rule") -> "CompiledRule":
         assert rule.include is None, rule
@@ -103,30 +103,30 @@ class Compiler:
             captures_ref = self._captures_ref(grammar, rule.captures)
             return MatchRule(rule.name, captures_ref)
         elif rule.begin is not None and rule.end is not None:
-            regs, rules = self._patterns(grammar, rule.patterns)
+            regexes, rules = self._patterns(grammar, rule.patterns)
             return EndRule(
                 rule.name,
                 rule.content_name,
                 self._captures_ref(grammar, rule.begin_captures),
                 self._captures_ref(grammar, rule.end_captures),
                 rule.end,
-                make_regset(*regs),
+                make_regset(*regexes),
                 rules,
             )
         elif rule.begin is not None and rule.while_ is not None:
-            regs, rules = self._patterns(grammar, rule.patterns)
+            regexes, rules = self._patterns(grammar, rule.patterns)
             return WhileRule(
                 rule.name,
                 rule.content_name,
                 self._captures_ref(grammar, rule.begin_captures),
                 self._captures_ref(grammar, rule.while_captures),
                 rule.while_,
-                make_regset(*regs),
+                make_regset(*regexes),
                 rules,
             )
         else:
-            regs, rules = self._patterns(grammar, rule.patterns)
-            return PatternRule(rule.name, make_regset(*regs), rules)
+            regexes, rules = self._patterns(grammar, rule.patterns)
+            return PatternRule(rule.name, make_regset(*regexes), rules)
 
     def compile_rule(self, rule: "_Rule") -> "CompiledRule":
         try:

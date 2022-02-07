@@ -437,16 +437,16 @@ def _captures(
             while j > 0 and start < ret[j - 1].end:
                 j -= 1
 
-            oldtok = ret[j]
-            newtok = []
-            if start > oldtok.start:
-                newtok.append(oldtok._replace(end=start))
+            old_token = ret[j]
+            new_token = []
+            if start > old_token.start:
+                new_token.append(old_token._replace(end=start))
 
-            newtok.extend(_inner_capture_parse(compiler, start, match[i], oldtok.scope, rule))
+            new_token.extend(_inner_capture_parse(compiler, start, match[i], old_token.scope, rule))
 
-            if end < oldtok.end:
-                newtok.append(oldtok._replace(start=end))
-            ret[j : j + 1] = newtok
+            if end < old_token.end:
+                new_token.append(old_token._replace(start=end))
+            ret[j : j + 1] = new_token
         else:
             if start > pos:
                 ret.append(Region(pos, start, scope))
