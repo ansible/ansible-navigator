@@ -750,7 +750,7 @@ class UserInterface(CursesWindow):
         :return: The heading and menu items
         """
         menu_builder = MenuBuilder(
-            pbar_width=self._pbar_width,
+            progress_bar_width=self._pbar_width,
             screen_w=self._screen_w,
             number_colors=curses.COLORS,
             color_menu_item=self._color_menu_item,
