@@ -3,6 +3,17 @@ default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
   python: python3.10
 repos:
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.17.0
+    hooks:
+      - id: gitlint
+        name: Check the last commit message against the best practices
+        always_run: true
+        args: []
+        pass_filenames: false
+        stages:
+          - manual
+
   - repo: https://github.com/asottile/add-trailing-comma.git
     rev: v2.2.1
     hooks:
