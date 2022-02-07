@@ -85,11 +85,11 @@ class SettingsEntry(SimpleNamespace):
     def environment_variable(self, prefix: str = "") -> str:
         """Generate an effective environment variable for this entry"""
         if self.environment_variable_override is not None:
-            envvar = self.environment_variable_override
+            env_var = self.environment_variable_override
         else:
-            envvar = f"{prefix}_{self.name.replace('--', '')}"
-        envvar = envvar.replace("-", "_").upper()
-        return envvar
+            env_var = f"{prefix}_{self.name.replace('--', '')}"
+        env_var = env_var.replace("-", "_").upper()
+        return env_var
 
     @property
     def invalid_choice(self) -> str:

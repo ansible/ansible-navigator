@@ -6,14 +6,14 @@ import os
 from ansible_navigator._yaml import Loader
 from ansible_navigator._yaml import yaml
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
-from .data import ENVVAR_DATA
+from .data import ENV_VAR_DATA
 from .defaults import TEST_FIXTURE_DIR
 
 
-def test_data_no_missing_envvar_data():
-    """Ensure the ENVVAR_DATA covers all entries"""
+def test_data_no_missing_env_var_data():
+    """Ensure the ENV_VAR_DATA covers all entries"""
     entry_names = [entry.name for entry in NavigatorConfiguration.entries]
-    data_names = [entry[0] for entry in ENVVAR_DATA]
+    data_names = [entry[0] for entry in ENV_VAR_DATA]
     assert entry_names == data_names
 
 
