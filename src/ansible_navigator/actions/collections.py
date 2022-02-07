@@ -243,7 +243,7 @@ class Action(App):
 
                     plugins.append(plugin)
             except (KeyError, JSONDecodeError) as exc:
-                self._logger.error("error loading plguin doc %s", details)
+                self._logger.error("error loading plugin doc %s", details)
                 self._logger.debug("error was %s", str(exc))
         plugins = sorted(plugins, key=lambda i: i[cname_col])
         self._collection_cache.close()

@@ -6,7 +6,7 @@ Note about decorators:
 - ensure the container engine check in post_process does not fail
 
 @patch("os.path.isfile",return_value=True)
-- ensure the playbook_artificat_laod file does not fail in post processing
+- ensure the playbook_artifact_load file does not fail in post processing
 
 """
 import os

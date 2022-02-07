@@ -16,8 +16,8 @@ from ansible_navigator.runner import Command
         ),
         (
             "ansible-lint",
-            ["/tmp/myroles/supercool/tasks/main.yml"],
-            "exec 2>/dev/null; ansible-lint /tmp/myroles/supercool/tasks/main.yml",
+            ["/tmp/my_roles/supercool/tasks/main.yml"],
+            "exec 2>/dev/null; ansible-lint /tmp/my_roles/supercool/tasks/main.yml",
         ),
         (
             "ansible-lint",

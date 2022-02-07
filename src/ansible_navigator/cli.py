@@ -54,14 +54,14 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     """
     if os.path.exists(args.log_file) and args.log_append is False:
         os.remove(args.log_file)
-    hdlr = logging.FileHandler(args.log_file)
+    handler = logging.FileHandler(args.log_file)
     formatter = logging.Formatter(
         fmt="%(asctime)s.%(msecs)03d %(levelname)s '%(name)s.%(funcName)s' %(message)s",
         datefmt="%y%m%d%H%M%S",
     )
     setattr(formatter, "converter", time.gmtime)
-    hdlr.setFormatter(formatter)
-    logger.addHandler(hdlr)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
     log_level = getattr(logging, args.log_level.upper())
     logger.setLevel(log_level)
     logger.info("New %s instance, logging initialized", APP_NAME)
@@ -69,7 +69,7 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     # set ansible-runner logs
     runner_logger = logging.getLogger("ansible-runner")
     runner_logger.setLevel(log_level)
-    runner_logger.addHandler(hdlr)
+    runner_logger.addHandler(handler)
     logger.info("New ansible-runner instance, logging initialized")
 
 
