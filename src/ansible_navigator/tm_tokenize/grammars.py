@@ -71,8 +71,8 @@ class Grammars:
             pass
 
         grammar_path = self._scope_to_files.pop(scope)
-        with open(grammar_path, encoding="UTF-8") as file_object:
-            ret = self._raw[scope] = json.load(file_object)
+        with open(grammar_path, encoding="UTF-8") as f:
+            ret = self._raw[scope] = json.load(f)
 
         file_types = frozenset(ret.get("fileTypes", ()))
         first_line = make_reg(ret.get("firstLineMatch", "$impossible^"))
