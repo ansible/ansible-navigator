@@ -38,7 +38,9 @@ class Action(App):
             if auto_scroll:
                 interaction.ui.scroll(new_scroll)
             obj = "\n".join(app.stdout)
-            next_interaction: Interaction = interaction.ui.show(obj=obj, xform="source.ansi")
+            next_interaction: Interaction = interaction.ui.show(
+                obj=obj, serialization_format="source.ansi"
+            )
             if next_interaction.name != "refresh":
                 break
 

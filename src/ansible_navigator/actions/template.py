@@ -83,8 +83,10 @@ class Action(App):
 
         while True:
             app.update()
-            xform = "source.txt" if isinstance(templated, str) else ""
-            next_interaction: Interaction = interaction.ui.show(obj=templated, xform=xform)
+            serialization_format = "source.txt" if isinstance(templated, str) else ""
+            next_interaction: Interaction = interaction.ui.show(
+                obj=templated, serialization_format=serialization_format
+            )
             if next_interaction.name != "refresh":
                 break
 

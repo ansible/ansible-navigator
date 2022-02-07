@@ -195,7 +195,9 @@ class Action(App):
 
         if self._inventory_error:
             while True:
-                interaction = self._interaction.ui.show(self._inventory_error, xform="source.ansi")
+                interaction = self._interaction.ui.show(
+                    self._inventory_error, serialization_format="source.ansi"
+                )
                 if interaction.name != "refresh":
                     break
             self._prepare_to_exit(interaction)
