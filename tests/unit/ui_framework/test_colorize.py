@@ -31,7 +31,7 @@ def test_basic_success_json():
 
 def test_basic_success_yaml():
     """Ensure the yaml string is returned as 2 lines, with 1 and 3 parts
-    respectively, ensure the parts of the second line can be reaseembled to
+    respectively, ensure the parts of the second line can be reassembled to
     the second line of the yaml string
     """
     sample = human_dump({"test": "data"})

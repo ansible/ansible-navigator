@@ -27,9 +27,9 @@ def patch_curses(monkeypatch):
     # pylint: disable=import-outside-toplevel
     import curses
 
-    monkeypatch.setattr(curses, "cbreak", lambda: None)
-    monkeypatch.setattr(curses, "nocbreak", lambda: None)
-    monkeypatch.setattr(curses, "endwin", lambda: None)
+    monkeypatch.setattr("curses.cbreak", lambda: None)
+    monkeypatch.setattr("curses.nocbreak", lambda: None)
+    monkeypatch.setattr("curses.endwin", lambda: None)
 
 
 @pytest.fixture(scope="session")

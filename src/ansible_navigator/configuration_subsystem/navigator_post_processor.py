@@ -222,7 +222,7 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process displacy_color"""
+        """Post process display_color"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.source == C.ENVIRONMENT_VARIABLE:
@@ -870,7 +870,7 @@ class NavigatorPostProcessor:
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
                     if entry.cli_parameters:
-                        exit_msg = f"Try again with '{entry.cli_parameters.short} MYVAR=myvalue'"
+                        exit_msg = f"Try again with '{entry.cli_parameters.short} MY_VAR=my_value'"
                         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
             entry.value.current = set_envs
         if entry.value.source is not C.NOT_SET:
