@@ -12,7 +12,7 @@ from ..._interactions import SearchFor
 from ..._tmux_session import TmuxSession
 
 
-BUIDLER_FIXTURE = os.path.join(FIXTURES_DIR, "common", "builder", "test_ee")
+BUILDER_FIXTURE = os.path.join(FIXTURES_DIR, "common", "builder", "test_ee")
 
 
 class BaseClass:

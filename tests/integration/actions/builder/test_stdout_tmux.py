@@ -5,7 +5,7 @@ from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import Step
 from ..._interactions import add_indices
-from .base import BUIDLER_FIXTURE
+from .base import BUILDER_FIXTURE
 from .base import BaseClass
 
 
@@ -63,7 +63,7 @@ stdout_tests = (
         comment="build execution-environment without ee",
         user_input=StdoutCommand(
             cmdline=f"build --tag test_ee --container-runtime \
-                     docker -v 3  --workdir {BUIDLER_FIXTURE}",
+                     docker -v 3  --workdir {BUILDER_FIXTURE}",
             mode="stdout",
             execution_environment=False,
         ).join(),
@@ -73,7 +73,7 @@ stdout_tests = (
         comment="build execution-environment with ee",
         user_input=StdoutCommand(
             cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
-                     --workdir {BUIDLER_FIXTURE}",
+                     --workdir {BUILDER_FIXTURE}",
             mode="stdout",
             execution_environment=True,
         ).join(),
@@ -83,7 +83,7 @@ stdout_tests = (
         comment="build execution-environment without ee in interactive mode",
         user_input=StdoutCommand(
             cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
-                      --workdir {BUIDLER_FIXTURE}",
+                      --workdir {BUILDER_FIXTURE}",
             mode="interactive",
             execution_environment=False,
         ).join(),
@@ -95,7 +95,7 @@ stdout_tests = (
         comment="build execution-environment with ee in interactive mode",
         user_input=StdoutCommand(
             cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
-                      --workdir {BUIDLER_FIXTURE}",
+                      --workdir {BUILDER_FIXTURE}",
             mode="interactive",
             execution_environment=True,
         ).join(),
