@@ -314,6 +314,7 @@ class TmuxSession:
                     " TIMEOUT @ {elapsed}s @ {time_stamp} ********",
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
+                showing = alerts + showing
                 with open(file=timeout_capture_path, mode="w", encoding="utf-8") as fh:
                     fh.writelines("\n".join(showing))
                 self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
