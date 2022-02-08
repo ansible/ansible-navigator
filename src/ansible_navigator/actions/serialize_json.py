@@ -33,5 +33,5 @@ class Action:
         self._logger.debug("json requested")
         if interaction.ui is not None:
             interaction.ui.scroll(0)
-            xform = interaction.ui.xform("source.json", default=True)
-            self._logger.debug("Serialization set to %s", xform)
+            serialization_format = interaction.ui.serialization_format("source.json", default=True)
+            self._logger.debug("Serialization set to %s", serialization_format)

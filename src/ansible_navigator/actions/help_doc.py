@@ -38,7 +38,10 @@ class Action(App):
             help_md = fhand.read()
 
         while True:
-            interaction = interaction.ui.show(obj=help_md, xform="text.html.markdown")
+            interaction = interaction.ui.show(
+                obj=help_md,
+                serialization_format="text.html.markdown",
+            )
             app.update()
             if interaction.name != "refresh":
                 break
