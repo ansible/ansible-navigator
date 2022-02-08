@@ -1,13 +1,14 @@
 """some common functions for the tests
 """
-from typing import Dict
-from typing import Optional
 import json
 import os
-from pathlib import Path
 import re
 import shutil
 import sys
+
+from pathlib import Path
+from typing import Dict
+from typing import Optional
 
 import pytest
 
