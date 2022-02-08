@@ -69,7 +69,7 @@ class Ui(NamedTuple):
     scroll: Callable
     show: Callable
     update_status: Callable
-    xform: Callable
+    serialization_format: Callable
 
 
 class Interaction(NamedTuple):
@@ -130,7 +130,7 @@ class UserInterface(CursesWindow):
         self._rgb_to_curses_color_idx: Dict[str, int] = {}
         self._screen_miny = screen_miny
         self._scroll = 0
-        self._xform = self._default_obj_serialization
+        self._serialization_format = self._default_obj_serialization
         self._status = ""
         self._status_color = 0
         self._screen: Window = curses.initscr()
@@ -192,19 +192,19 @@ class UserInterface(CursesWindow):
             self._scroll = value
         return self._scroll
 
-    def xform(self, value: Union[str, None] = None, default: bool = False) -> str:
-        """Set or return the current xform
+    def serialization_format(self, value: Union[str, None] = None, default: bool = False) -> str:
+        """Set or return the current serialization format
 
-        :param value: the value to set the xform to
+        :param value: the value to set the serialization format to
         :type value: str or None
-        :return: the current xform
+        :return: the current serialization format
         :rtype: str
         """
         if value is not None:
-            self._xform = value
+            self._serialization_format = value
             if default:
                 self._default_obj_serialization = value
-        return self._xform
+        return self._serialization_format
 
     @property
     def _ui(self) -> Ui:
@@ -219,7 +219,7 @@ class UserInterface(CursesWindow):
             scroll=self.scroll,
             show=self.show,
             update_status=self.update_status,
-            xform=self.xform,
+            serialization_format=self.serialization_format,
         )
         return res
 
@@ -500,18 +500,18 @@ class UserInterface(CursesWindow):
         :rtype: CursesLines
         """
 
-        if self.xform() == "source.ansi":
-            return self._colorizer.render(doc=obj, scope=self.xform())
-        if self.xform() == "source.yaml":
+        if self.serialization_format() == "source.ansi":
+            return self._colorizer.render(doc=obj, scope=self.serialization_format())
+        if self.serialization_format() == "source.yaml":
             string = human_dump(obj)
-        elif self.xform() == "source.json":
+        elif self.serialization_format() == "source.json":
             string = json.dumps(obj, indent=4, sort_keys=True)
         else:
             string = obj
 
         scope = "no_color"
         if self._ui_config.color:
-            scope = self.xform()
+            scope = self.serialization_format()
 
         rendered = self._colorizer.render(doc=string, scope=scope)
         return self._color_lines_for_term(rendered)
@@ -817,7 +817,7 @@ class UserInterface(CursesWindow):
     def show(
         self,
         obj: Union[List, Dict, str, bool, int, float],
-        xform: str = "",
+        serialization_format: str = "",
         index: int = None,
         columns: List = None,
         await_input: bool = True,
@@ -828,7 +828,7 @@ class UserInterface(CursesWindow):
         """Show something on the screen
 
         :param obj: The inbound object
-        :param xform: Set the xform
+        :param serialization_format: Set the serialization format
         :param index: When obj is a list, show this entry
         :param columns: When obj is a list of dicts, use these keys for menu columns
         :param await_input: Should we wait for user input?
@@ -838,7 +838,7 @@ class UserInterface(CursesWindow):
         self._content_heading = content_heading
         self._filter_content_keys = filter_content_keys
         columns = columns or []
-        self.xform(xform or self._default_obj_serialization)
+        self.serialization_format(serialization_format or self._default_obj_serialization)
 
         if isinstance(obj, Form):
             form_result = self._show_form(obj)
