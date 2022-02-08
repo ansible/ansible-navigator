@@ -44,7 +44,10 @@ class Action(App):
 
         while True:
             self._calling_app.update()
-            interaction = interaction.ui.show(obj=welcome_md, xform="text.html.markdown")
+            interaction = interaction.ui.show(
+                obj=welcome_md,
+                serialization_format="text.html.markdown",
+            )
             app.update()
             if interaction.name != "refresh":
                 break

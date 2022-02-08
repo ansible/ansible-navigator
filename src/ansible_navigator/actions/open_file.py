@@ -86,16 +86,16 @@ class Action:
                 return None
 
         if not filename:
-            if interaction.ui.xform() == "text.html.markdown":
+            if interaction.ui.serialization_format() == "text.html.markdown":
                 with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as temp_file:
                     filename = temp_file.name
                     with open(filename, "w", encoding="utf-8") as outfile:
                         outfile.write(obj)
-            elif interaction.ui.xform() == "source.yaml":
+            elif interaction.ui.serialization_format() == "source.yaml":
                 with tempfile.NamedTemporaryFile(suffix=".yaml", delete=False) as temp_file:
                     filename = temp_file.name
                     human_dump(obj=obj, filename=filename)
-            elif interaction.ui.xform() == "source.json":
+            elif interaction.ui.serialization_format() == "source.json":
                 with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
                     filename = temp_file.name
                     with open(filename, "w", encoding="utf-8") as outfile:

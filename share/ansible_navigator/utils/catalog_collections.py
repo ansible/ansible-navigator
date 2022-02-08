@@ -58,18 +58,18 @@ class CollectionCatalog:
         :param collection: Details describing the collection
         """
         path = collection["path"]
-        file_chksums = {}
+        file_checksums = {}
 
         file_manifest_file = collection.get("file_manifest_file", {}).get("name")
         if file_manifest_file:
-            fpath = f"{path}/{file_manifest_file}"
-            if os.path.exists(fpath):
-                with open(file=fpath, encoding="utf-8") as read_file:
+            file_path = f"{path}/{file_manifest_file}"
+            if os.path.exists(file_path):
+                with open(file=file_path, encoding="utf-8") as read_file:
                     try:
                         loaded = json.load(read_file)
-                        file_chksums = {v["name"]: v for v in loaded["files"]}
+                        file_checksums = {v["name"]: v for v in loaded["files"]}
                     except (JSONDecodeError, KeyError) as exc:
-                        self._errors.append({"path": fpath, "error": str(exc)})
+                        self._errors.append({"path": file_path, "error": str(exc)})
 
         exempt = ["action", "module_utils", "doc_fragments"]
         plugin_directory = os.path.join(path, "plugins")
@@ -86,13 +86,13 @@ class CollectionCatalog:
                     self._process_plugin_dir(
                         plugin_type,
                         filenames,
-                        file_chksums,
+                        file_checksums,
                         dirpath,
                         collection,
                     )
 
     @staticmethod
-    def _generate_chksum(file_path: str, relative_path: str) -> Dict:
+    def _generate_checksum(file_path: str, relative_path: str) -> Dict:
         """Generate a standard checksum for a file.
 
         :param file_path: The path to the file to generate a checksum for
@@ -116,7 +116,7 @@ class CollectionCatalog:
         self,
         plugin_type: str,
         filenames: List,
-        file_chksums: Dict,
+        file_checksums: Dict,
         dirpath: str,
         collection: Dict,
     ) -> None:
@@ -125,7 +125,7 @@ class CollectionCatalog:
 
         :param plugin_type: The type of plugins
         :param filenames: The filenames of the plugins
-        :param file_chksums: The checksums for the plugin files
+        :param file_checksums: The checksums for the plugin files
         :param dirpath: The path of the directory containing the plugins
         :param collection: The details of the collection
         """
@@ -134,11 +134,14 @@ class CollectionCatalog:
             relative_path = file_path.replace(collection["path"], "")
             _basename, extension = os.path.splitext(filename)
             if not filename.startswith("__") and extension == ".py":
-                chksum_dict = file_chksums.get(relative_path)
-                if not chksum_dict:
-                    chksum_dict = self._generate_chksum(file_path, relative_path)
-                chksum = chksum_dict[f"chksum_{chksum_dict['chksum_type']}"]
-                collection["plugin_chksums"][chksum] = {"path": relative_path, "type": plugin_type}
+                checksum_dict = file_checksums.get(relative_path)
+                if not checksum_dict:
+                    checksum_dict = self._generate_checksum(file_path, relative_path)
+                checksum = checksum_dict[f"chksum_{checksum_dict['chksum_type']}"]
+                collection["plugin_checksums"][checksum] = {
+                    "path": relative_path,
+                    "type": plugin_type,
+                }
 
     def _one_path(self, directory: str) -> None:
         """Process the contents of an <...>/ansible_collections/ directory.
@@ -172,11 +175,11 @@ class CollectionCatalog:
                         }
                         self._errors.append(error)
             if collection:
-                cname = f"{collection['collection_info']['namespace']}"
-                cname += f".{collection['collection_info']['name']}"
-                collection["known_as"] = cname
+                collection_name = f"{collection['collection_info']['namespace']}"
+                collection_name += f".{collection['collection_info']['name']}"
+                collection["known_as"] = collection_name
                 collection["plugins"] = []
-                collection["plugin_chksums"] = {}
+                collection["plugin_checksums"] = {}
                 collection["path"] = directory_path
 
                 runtime_file = f"{directory_path}/meta/runtime.yml"
@@ -200,12 +203,17 @@ class CollectionCatalog:
         """Determine which collections are hidden by another installation of the same."""
         collection_list = list(self._collections.values())
         counts = Counter([collection["known_as"] for collection in collection_list])
-        for idx, (cpath, o_collection) in reversed(list(enumerate(self._collections.items()))):
-            self._collections[cpath]["hidden_by"] = []
+        for idx, (collection_path, o_collection) in reversed(
+            list(enumerate(self._collections.items())),
+        ):
+            self._collections[collection_path]["hidden_by"] = []
             if counts[o_collection["known_as"]] > 1:
                 for i_collection in reversed(collection_list[0:idx]):
                     if i_collection["known_as"] == o_collection["known_as"]:
-                        self._collections[cpath]["hidden_by"].insert(0, i_collection["path"])
+                        self._collections[collection_path]["hidden_by"].insert(
+                            0,
+                            i_collection["path"],
+                        )
 
     def process_directories(self) -> Tuple[Dict, List]:
         """Process each parent directory.
@@ -216,7 +224,7 @@ class CollectionCatalog:
             collection_directory = f"{directory}/ansible_collections"
             if os.path.exists(collection_directory):
                 self._one_path(collection_directory)
-        for _cpath, collection in self._collections.items():
+        for _collection_path, collection in self._collections.items():
             self._catalog_plugins(collection)
         self._find_shadows()
         return self._collections, self._errors
@@ -237,7 +245,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
         entry = pending_queue.get()
         if entry is None:
             break
-        collection_name, chksum, plugin_path = entry
+        collection_name, checksum, plugin_path = entry
 
         try:
             (doc, examples, returndocs, metadata) = get_docstring(
@@ -248,7 +256,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
         except Exception as exc:  # pylint: disable=broad-except
             err_message = f"{type(exc).__name__} (get_docstring): {str(exc)}"
-            completed_queue.put(("error", (chksum, plugin_path, err_message)))
+            completed_queue.put(("error", (checksum, plugin_path, err_message)))
             continue
 
         try:
@@ -261,10 +269,10 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                 },
                 "timestamp": datetime.utcnow().isoformat(),
             }
-            completed_queue.put(("plugin", (chksum, json.dumps(q_message, default=str))))
+            completed_queue.put(("plugin", (checksum, json.dumps(q_message, default=str))))
         except JSONDecodeError as exc:
             err_message = f"{type(exc).__name__} (json_decode_doc): {str(exc)}"
-            completed_queue.put(("error", (chksum, plugin_path, err_message)))
+            completed_queue.put(("error", (checksum, plugin_path, err_message)))
 
 
 def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tuple[set, List, int]:
@@ -277,15 +285,19 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
     handled = set()
     missing = []
     plugin_count = 0
-    for _cpath, collection in collections.items():
-        for chksum, details in collection["plugin_chksums"].items():
+    for _collection_path, collection in collections.items():
+        for checksum, details in collection["plugin_checksums"].items():
             plugin_count += 1
-            if chksum not in handled:
-                if chksum not in collection_cache:
+            if checksum not in handled:
+                if checksum not in collection_cache:
                     missing.append(
-                        (collection["known_as"], chksum, f"{collection['path']}{details['path']}"),
+                        (
+                            collection["known_as"],
+                            checksum,
+                            f"{collection['path']}{details['path']}",
+                        ),
                     )
-                handled.add(chksum)
+                handled.add(checksum)
     return handled, missing, plugin_count
 
 
@@ -381,12 +393,12 @@ def retrieve_docs(
     while not completed_queue.empty():
         message_type, message = completed_queue.get()
         if message_type == "plugin":
-            chksum, plugin = message
-            collection_cache[chksum] = plugin
+            checksum, plugin = message
+            collection_cache[checksum] = plugin
             stats["cache_added_success"] += 1
         elif message_type == "error":
-            chksum, plugin_path, error = message
-            collection_cache[chksum] = json.dumps({"error": error})
+            checksum, plugin_path, error = message
+            collection_cache[checksum] = json.dumps({"error": error})
             errors.append({"path": plugin_path, "error": error})
             stats["cache_added_errors"] += 1
 
@@ -436,12 +448,12 @@ def main() -> Dict:
     if missing:
         retrieve_docs(collection_cache, errors, missing, stats)
 
-    cached_chksums = collection_cache.keys()
+    cached_checksums = collection_cache.keys()
     stats["cache_length"] = len(collection_cache.keys())
 
-    for _cpath, collection in collections.items():
-        for no_doc in set(collection["plugin_chksums"].keys()) - set(cached_chksums):
-            del collection["plugin_chksums"][no_doc]
+    for _collection_path, collection in collections.items():
+        for no_doc in set(collection["plugin_checksums"].keys()) - set(cached_checksums):
+            del collection["plugin_checksums"][no_doc]
 
     collection_cache.close()
     return {

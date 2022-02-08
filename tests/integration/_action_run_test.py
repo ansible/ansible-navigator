@@ -120,7 +120,7 @@ class ActionRunTest:
             scroll=self.callable_pass_one_arg,
             show=self.callable_pass,
             update_status=self.callable_pass,
-            xform=self.callable_pass,
+            serialization_format=self.callable_pass,
         )
         match = re.match(self._app_action.Action.KEGEX, self._action_name)
         if not match:
