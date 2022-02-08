@@ -13,7 +13,7 @@
 
 {% for text, values in sections[section][category].items() %}
 * {{ text }}\
-    {{- values | join(', ') | wordwrap(72 - 4) -}}
+    {{ values | join(', ') | wordwrap(72 - 4) }}
 {% endfor -%}
 
 {% else %}
