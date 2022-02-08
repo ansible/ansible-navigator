@@ -12,8 +12,8 @@ import sys
 from collections import Counter
 from collections import OrderedDict
 from datetime import datetime
-from glob import glob
 from json.decoder import JSONDecodeError
+from pathlib import Path
 from typing import Dict
 from typing import List
 from typing import Tuple
@@ -58,32 +58,32 @@ class CollectionCatalog:
 
         :param collection: Details describing the collection
         """
-        path = collection["path"]
         file_checksums = {}
 
         file_manifest_file = collection.get("file_manifest_file", {}).get("name")
         if file_manifest_file:
-            file_path = f"{path}/{file_manifest_file}"
-            if os.path.exists(file_path):
+            file_path = Path(collection["path"], file_manifest_file)
+            if file_path.exists():
                 with open(file=file_path, encoding="utf-8") as fh:
                     try:
                         loaded = json.load(fh)
                         file_checksums = {v["name"]: v for v in loaded["files"]}
                     except (JSONDecodeError, KeyError) as exc:
-                        self._errors.append({"path": file_path, "error": str(exc)})
+                        self._errors.append({"path": str(file_path), "error": str(exc)})
 
         exempt = ["action", "module_utils", "doc_fragments"]
-        plugin_directory = os.path.join(path, "plugins")
-        if os.path.isdir(plugin_directory):
+        plugin_directory = Path(collection["path"], "plugins")
+        if plugin_directory.is_dir():
             plugin_dirs = [
-                (f.name, f.path)
-                for f in os.scandir(plugin_directory)
-                if f.is_dir() and f.name not in exempt
+                plugin_dir
+                for plugin_dir in plugin_directory.iterdir()
+                if plugin_dir.is_dir() and plugin_dir.name not in exempt
             ]
-            for plugin_type, path in plugin_dirs:
+            for plugin_dir in plugin_dirs:
+                plugin_type = plugin_dir.name
                 if plugin_type == "modules":
                     plugin_type = "module"
-                for (dirpath, _dirnames, filenames) in os.walk(path):
+                for (dirpath, _dirnames, filenames) in self._path_walk(plugin_dir):
                     self._process_plugin_dir(
                         plugin_type,
                         filenames,
@@ -93,7 +93,7 @@ class CollectionCatalog:
                     )
 
     @staticmethod
-    def _generate_checksum(file_path: str, relative_path: str) -> Dict:
+    def _generate_checksum(file_path: Path, relative_path: Path) -> Dict:
         """Generate a standard checksum for a file.
 
         :param file_path: The path to the file to generate a checksum for
@@ -113,6 +113,29 @@ class CollectionCatalog:
         }
         return res
 
+    def _path_walk(self, top: Path, top_down: bool = False, follow_links: bool = False):
+        """Emit the file names in a directory tree by walking the tree top-down or bottom-up.
+
+        :param top: The root directory
+        :param top_down: Scan top-down or bottom-up
+        :param follow_links: Visit directories pointed to by symlinks
+        :yields: The top directory, subdirectories and non directories
+        """
+        names = list(top.iterdir())
+
+        dirs = (node for node in names if node.is_dir() is True)
+        nondirs = (node for node in names if node.is_dir() is False)
+
+        yield top, dirs, nondirs
+
+        for name in dirs:
+            if follow_links or name.is_symlink() is False:
+                for entry in self._path_walk(name, top_down, follow_links):
+                    yield entry
+
+        if top_down is not True:
+            yield top, dirs, nondirs
+
     def _process_plugin_dir(
         self,
         plugin_type: str,
@@ -131,47 +154,47 @@ class CollectionCatalog:
         :param collection: The details of the collection
         """
         for filename in filenames:
-            file_path = f"{dirpath}/{filename}"
-            relative_path = file_path.replace(collection["path"], "")
-            _basename, extension = os.path.splitext(filename)
-            if not filename.startswith("__") and extension == ".py":
+            file_path = Path(dirpath, filename)
+            relative_path = Path(str(file_path).replace(str(collection["path"]), ""))
+            extension = filename.suffix
+            if not str(filename).startswith("__") and extension == ".py":
                 checksum_dict = file_checksums.get(relative_path)
                 if not checksum_dict:
                     checksum_dict = self._generate_checksum(file_path, relative_path)
                 checksum = checksum_dict[f"chksum_{checksum_dict['chksum_type']}"]
                 collection["plugin_checksums"][checksum] = {
-                    "path": relative_path,
+                    "path": str(relative_path),
                     "type": plugin_type,
                 }
 
-    def _one_path(self, directory: str) -> None:
+    def _one_path(self, directory: Path) -> None:
         """Process the contents of an <...>/ansible_collections/ directory.
 
         :param directory: The path to collections directory to walk and load
         """
-        for directory_path in glob(f"{directory}/*/*/"):
-            manifest_file = f"{directory_path}/MANIFEST.json"
-            galaxy_file = f"{directory_path}/galaxy.yml"
+        for directory_path in directory.glob("*/*/"):
+            manifest_file = Path(directory_path, "MANIFEST.json")
+            galaxy_file = Path(directory_path, "galaxy.yml")
             collection = None
-            if os.path.exists(manifest_file):
+            if manifest_file.exists():
                 with open(file=manifest_file, encoding="utf-8") as fh:
                     try:
                         collection = json.load(fh)
                         collection["meta_source"] = "MANIFEST.json"
                     except JSONDecodeError:
                         error = {
-                            "path": os.path.dirname(manifest_file),
+                            "path": str(manifest_file),
                             "error": "failed to load MANIFEST.json",
                         }
                         self._errors.append(error)
-            elif os.path.exists(galaxy_file):
+            elif galaxy_file.exists():
                 with open(file=galaxy_file, encoding="utf-8") as fh:
                     try:
                         collection = {"collection_info": yaml.load(fh, Loader=SafeLoader)}
                         collection["meta_source"] = "galaxy.yml"
                     except YAMLError:
                         error = {
-                            "path": os.path.dirname(galaxy_file),
+                            "path": str(galaxy_file),
                             "error": "failed to load galaxy.yml",
                         }
                         self._errors.append(error)
@@ -181,16 +204,16 @@ class CollectionCatalog:
                 collection["known_as"] = collection_name
                 collection["plugins"] = []
                 collection["plugin_checksums"] = {}
-                collection["path"] = directory_path
+                collection["path"] = str(directory_path)
 
-                runtime_file = f"{directory_path}/meta/runtime.yml"
+                runtime_file = Path(directory_path, "meta", "runtime.yml")
                 collection["runtime"] = {}
-                if os.path.exists(runtime_file):
+                if runtime_file.exists():
                     with open(file=runtime_file, encoding="utf-8") as fh:
                         try:
                             collection["runtime"] = yaml.load(fh, Loader=SafeLoader)
                         except YAMLError as exc:
-                            self._errors.append({"path": runtime_file, "error": str(exc)})
+                            self._errors.append({"path": str(runtime_file), "error": str(exc)})
 
                 self._collections[collection["path"]] = collection
             else:
@@ -222,8 +245,8 @@ class CollectionCatalog:
         :returns: All collections found and any errors
         """
         for directory in self._directories:
-            collection_directory = f"{directory}/ansible_collections"
-            if os.path.exists(collection_directory):
+            collection_directory = Path(directory, "ansible_collections")
+            if collection_directory.exists():
                 self._one_path(collection_directory)
         for _collection_path, collection in self._collections.items():
             self._catalog_plugins(collection)
@@ -335,7 +358,7 @@ def parse_args():
 
     resolved = []
     for directory in directories:
-        realpath = os.path.realpath(directory)
+        realpath = Path(directory).resolve()
         if realpath not in resolved:
             resolved.append(realpath)
 
@@ -400,7 +423,7 @@ def retrieve_docs(
         elif message_type == "error":
             checksum, plugin_path, error = message
             collection_cache[checksum] = json.dumps({"error": error})
-            errors.append({"path": plugin_path, "error": error})
+            errors.append({"path": str(plugin_path), "error": error})
             stats["cache_added_errors"] += 1
 
 
@@ -438,7 +461,7 @@ def main() -> Dict:
     collections, errors = cc_obj.process_directories()
     stats["collection_count"] = len(collections)
 
-    collection_cache_path = os.path.abspath(os.path.expanduser(args.collection_cache_path))
+    collection_cache_path = Path(args.collection_cache_path).resolve().expanduser()
     collection_cache = KeyValueStore(collection_cache_path)
 
     handled, missing, plugin_count = identify_missing(collections, collection_cache)
@@ -476,7 +499,7 @@ if __name__ == "__main__":
 
     args, parent_directories = parse_args()
 
-    COLLECTION_SCAN_PATHS = ":".join(parent_directories)
+    COLLECTION_SCAN_PATHS = ":".join(str(parent) for parent in parent_directories)
     os.environ["ANSIBLE_COLLECTIONS_PATHS"] = COLLECTION_SCAN_PATHS
 
     result = main()
