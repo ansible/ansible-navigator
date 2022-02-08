@@ -21,9 +21,9 @@ class FieldOption:
         form provided
         """
         if isinstance(form_field, FieldChecks):
-            cbox = "\u25fc" if self.checked else "\u25fb"
-            return cbox
+            check_box = "\u25fc" if self.checked else "\u25fb"
+            return check_box
         if isinstance(form_field, FieldRadio):
-            cbox = "\u25cf" if self.checked else "\u25cb"
-            return cbox
+            check_box = "\u25cf" if self.checked else "\u25cb"
+            return check_box
         raise TypeError
