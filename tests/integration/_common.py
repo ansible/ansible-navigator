@@ -7,7 +7,7 @@ import shutil
 import sys
 
 from pathlib import Path
-from typing import Dict
+from typing import List
 from typing import Optional
 
 import pytest
@@ -27,9 +27,11 @@ def get_executable_path(name):
 
 
 def retrieve_fixture_for_step(
-    request: pytest.FixtureRequest, step_index: int, test_name: Optional[str] = None
-) -> Dict:
-    """Retrieve a fixture given based on the test request and step.
+    request: pytest.FixtureRequest,
+    step_index: int,
+    test_name: Optional[str] = None,
+) -> List[str]:
+    """Retrieve a fixture based on the test request and step index.
 
     :param request: The current test request
     :param step_index: The index of the current step in a set of TUI interactions
