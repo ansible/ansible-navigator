@@ -100,9 +100,9 @@ def oxfordcomma(listed, condition):
     return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
 
 
-def abs_user_path(fpath: str) -> str:
+def abs_user_path(file_path: str) -> str:
     """Resolve a path"""
-    return os.path.abspath(os.path.expanduser(os.path.expandvars(fpath)))
+    return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))
 
 
 def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
@@ -250,11 +250,11 @@ def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Union[Non
     return messages, exit_messages, use
 
 
-def flatten_list(lyst) -> List:
+def flatten_list(data_list) -> List:
     """flatten a list of lists"""
-    if isinstance(lyst, list):
-        return [a for i in lyst for a in flatten_list(i)]
-    return [lyst]
+    if isinstance(data_list, list):
+        return [a for i in data_list for a in flatten_list(i)]
+    return [data_list]
 
 
 def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
