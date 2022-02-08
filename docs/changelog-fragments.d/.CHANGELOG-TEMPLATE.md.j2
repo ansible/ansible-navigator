@@ -13,12 +13,7 @@
 
 {% for text, values in sections[section][category].items() %}
 * {{ text }}\
-    {% trans count=values|length %}
-    Pull request: {{- values | join(', ') | wordwrap(72 - 18) -}}
-    {% pluralize %}
-    Pull requests: {{- values | join(', ') | wordwrap(72 - 19) -}}
-    {% endtrans %}
-
+    {{- values | join(', ') | wordwrap(72 - 4) -}}
 {% endfor -%}
 
 {% else %}
