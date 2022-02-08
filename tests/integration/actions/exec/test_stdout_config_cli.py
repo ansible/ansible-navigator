@@ -1,11 +1,11 @@
-"""Tests for exec, mode stdout, parameters set using cli."""
+"""Tests for exec, mode stdout, parameters set using the CLI."""
 
 import pytest
 
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import Step
-from ..._interactions import add_indicies
+from ..._interactions import add_indices
 from .base import BaseClass
 
 
@@ -59,7 +59,7 @@ stdout_tests = (
     ),
 )
 
-steps = add_indicies(stdout_tests)
+steps = add_indices(stdout_tests)
 
 
 def step_id(test_value: ShellCommand) -> str:
@@ -73,6 +73,6 @@ def step_id(test_value: ShellCommand) -> str:
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for exec, mode stdout, parameters set using cli."""
+    """Run the tests for exec, mode stdout, parameters set using the CLI."""
 
     update_fixtures = False

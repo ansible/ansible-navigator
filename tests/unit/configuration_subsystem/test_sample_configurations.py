@@ -113,7 +113,7 @@ def test_invalid_choice_not_set():
         test_config.entry("e1").invalid_choice  # pylint: disable=expression-not-assigned
 
 
-def test_cutom_nargs_for_postional():
+def test_custom_nargs_for_positional():
     """Ensure a ``nargs`` for a positional are carried forward"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",

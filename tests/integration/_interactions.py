@@ -38,8 +38,8 @@ class Command(NamedTuple):
         args.extend(["--ll", self.log_level])
         args.extend(["--mode", self.mode])
         if self.pass_environment_variables:
-            for envvar in self.pass_environment_variables:
-                args.extend(["--penv", envvar])
+            for env_var in self.pass_environment_variables:
+                args.extend(["--penv", env_var])
         cmd = " ".join(shlex.quote(str(arg)) for arg in args)
         if self.preclear:
             return "clear && " + cmd
@@ -60,7 +60,7 @@ class Step(NamedTuple):
     search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
 
 
-def add_indicies(steps):
+def add_indices(steps):
     """update the index of each"""
     return (step._replace(step_index=idx) for idx, step in enumerate(steps))
 

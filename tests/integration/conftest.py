@@ -23,17 +23,17 @@ def test_fixtures_dir():
 
 @pytest.fixture
 def patch_curses(monkeypatch):
-    """patch curses so it doesn't traceback during tests"""
-    # pylint: disable=import-outside-toplevel
-    import curses
+    """Patch curses so it doesn't traceback during tests.
 
-    monkeypatch.setattr(curses, "cbreak", lambda: None)
-    monkeypatch.setattr(curses, "nocbreak", lambda: None)
-    monkeypatch.setattr(curses, "endwin", lambda: None)
+    :param monkeypatch: Fixture for patching
+    """
+    monkeypatch.setattr("curses.cbreak", lambda: None)
+    monkeypatch.setattr("curses.nocbreak", lambda: None)
+    monkeypatch.setattr("curses.endwin", lambda: None)
 
 
 @pytest.fixture(scope="session")
-def os_indendent_tmp():
+def os_independent_tmp():
     """
     this attempts to ensure the length of the ``/tmp``
     is the same between MacOS and Linux

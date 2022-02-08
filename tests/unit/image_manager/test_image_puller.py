@@ -65,7 +65,7 @@ def test_do_have_but_latest(valid_container_engine, data):
     assert image_puller.assessment.pull_required == data.pull_required
 
 
-data_dont_have = [
+data_missing_locally = [
     TstPullPolicy(pull_policy="always", pull_required=True),
     TstPullPolicy(pull_policy="missing", pull_required=True),
     TstPullPolicy(pull_policy="never", pull_required=False),
@@ -73,8 +73,8 @@ data_dont_have = [
 ]
 
 
-@pytest.mark.parametrize("data", data_dont_have, ids=id_from_data)
-def test_dont_have(valid_container_engine, data):
+@pytest.mark.parametrize("data", data_missing_locally, ids=id_from_data)
+def test_missing_locally(valid_container_engine, data):
     """test using an image not local"""
     uuid_str = str(uuid.uuid4())
     image_puller = ImagePuller(

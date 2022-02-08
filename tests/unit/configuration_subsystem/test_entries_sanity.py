@@ -29,7 +29,7 @@ def test_entries_no_duplicate_shorts():
     assert not any(k for (k, v) in values.items() if v > 1)
 
 
-def test_entries_alphbetical():
+def test_entries_alphabetical():
     """Ensure entries are alphabetical"""
     values = [entry.name for entry in NavigatorConfiguration.entries]
     assert values == sorted(values)
@@ -48,7 +48,7 @@ def test_entries_no_dash_in_environment_variable(entry):
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_entries_no_short_long_if_postional(entry):
+def test_entries_no_short_long_if_positional(entry):
     """Ensure no positional argument has a short or long set"""
     if hasattr(entry, "cli_arguments") and entry.cli_parameters.positional:
         assert entry.short is None

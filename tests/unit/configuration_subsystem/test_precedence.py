@@ -6,7 +6,7 @@ Note about decorators:
 - ensure the container engine check in post_process does not fail
 
 @patch("os.path.isfile",return_value=True)
-- ensure the playbook_artificat_laod file does not fail in post processing
+- ensure the playbook_artifact_load file does not fail in post processing
 
 """
 import os
@@ -26,7 +26,7 @@ from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
 from .data import BASE_SHORT_CLI
 from .data import CLI_DATA
-from .data import ENVVAR_DATA
+from .data import ENV_VAR_DATA
 from .data import SETTINGS
 from .utils import config_post_process
 from .utils import id_for_base
@@ -42,7 +42,7 @@ from .utils import id_for_settings
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
-def test_all_entries_reflect_cli_given_envvars(
+def test_all_entries_reflect_cli_given_env_vars(
     _mf1,
     _mf2,
     generate_config,
@@ -59,14 +59,14 @@ def test_all_entries_reflect_cli_given_envvars(
         params = cli_entry_split + " ".join(base.splitlines()).split()
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
-    envvars = {}
+    env_vars = {}
     for entry in NavigatorConfiguration.entries:
-        envvar_name = entry.environment_variable("ansible_navigator")
-        envvar_value = [value[1] for value in ENVVAR_DATA if value[0] == entry.name]
-        assert len(envvar_value) == 1, entry.name
-        envvars[envvar_name] = envvar_value[0]
+        env_var_name = entry.environment_variable("ansible_navigator")
+        env_var_value = [value[1] for value in ENV_VAR_DATA if value[0] == entry.name]
+        assert len(env_var_value) == 1, entry.name
+        env_vars[env_var_name] = env_var_value[0]
 
-    with mock.patch.dict(os.environ, envvars):
+    with mock.patch.dict(os.environ, env_vars):
         response = generate_config(params=params)
         assert response.exit_messages == []
         for key, value in expected.items():
@@ -125,7 +125,7 @@ def test_all_entries_reflect_cli_given_settings(
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
-def test_all_entries_reflect_cli_given_settings_and_envars(
+def test_all_entries_reflect_cli_given_settings_and_env_vars(
     _mf1,
     _mf2,
     generate_config,
@@ -147,14 +147,14 @@ def test_all_entries_reflect_cli_given_settings_and_envars(
         params = shlex.split(cli_entry) + " ".join(base.splitlines()).split()
         expected = {**dict(expected), **dict(BASE_EXPECTED)}
 
-    envvars = {}
+    env_vars = {}
     for entry in NavigatorConfiguration.entries:
-        envvar_name = entry.environment_variable("ansible_navigator")
-        envvar_value = [value[1] for value in ENVVAR_DATA if value[0] == entry.name]
-        assert len(envvar_value) == 1, entry.name
-        envvars[envvar_name] = envvar_value[0]
+        env_var_name = entry.environment_variable("ansible_navigator")
+        env_var_value = [value[1] for value in ENV_VAR_DATA if value[0] == entry.name]
+        assert len(env_var_value) == 1, entry.name
+        env_vars[env_var_name] = env_var_value[0]
 
-    with mock.patch.dict(os.environ, envvars):
+    with mock.patch.dict(os.environ, env_vars):
         response = generate_config(params=params, setting_file_name=settings)
         assert response.exit_messages == []
         for key, value in expected.items():
@@ -188,8 +188,8 @@ def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
-@pytest.mark.parametrize("entry, value, expected", ENVVAR_DATA)
-def test_all_entries_reflect_envvar_given_settings(
+@pytest.mark.parametrize("entry, value, expected", ENV_VAR_DATA)
+def test_all_entries_reflect_env_var_given_settings(
     _mf1,
     _mf2,
     generate_config,

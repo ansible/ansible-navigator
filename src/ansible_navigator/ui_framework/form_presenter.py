@@ -28,10 +28,10 @@ if TYPE_CHECKING:
 
 
 # the maximum form size
-MAX_FORM_H = 1024
-MAX_FORM_W = 1024
-LPAD_RATIO = 2 / 5
-TPAD_RATIO = 2 / 5
+MAX_FORM_HEIGHT = 1024
+MAX_FORM_WIDTH = 1024
+LEFT_PAD_RATIO = 2 / 5
+TOP_PAD_RATIO = 2 / 5
 BUTTON_SPACE = 10
 
 
@@ -57,7 +57,7 @@ class FormPresenter(CursesWindow):
         self._form_height: int = 0
         self._pad_left: int = 0
         self._pad_top: int = 0
-        self._seperator = ": "
+        self._separator = ": "
 
     @property
     def _field_win_start(self):
@@ -69,7 +69,7 @@ class FormPresenter(CursesWindow):
 
     def _dimensions(self):
         self._prompt_end = max([len(form_field.full_prompt) for form_field in self._form.fields])
-        self._input_start = self._prompt_end + len(self._seperator)
+        self._input_start = self._prompt_end + len(self._separator)
 
         widths = []
         for field in self._form.fields:
@@ -101,14 +101,14 @@ class FormPresenter(CursesWindow):
         height += 2  # horizontal line + buttons
         self._form_height = height
 
-        self._pad_top = max(int((self._screen_h - self._form_height) * TPAD_RATIO), 0)
-        self._pad_left = max(int((self._screen_w - self._form_width) * LPAD_RATIO), 0)
+        self._pad_top = max(int((self._screen_h - self._form_height) * TOP_PAD_RATIO), 0)
+        self._pad_left = max(int((self._screen_w - self._form_width) * LEFT_PAD_RATIO), 0)
 
     def _generate_form(self) -> Tuple[Tuple[int, CursesLine], ...]:
         lines = []
         lines.append((self._line_number, self._generate_title()))
         self._line_number += 1
-        lines.append((self._line_number, self._generate_hline()))
+        lines.append((self._line_number, self._generate_horizontal_line()))
         self._line_number += 1
 
         body_fields = [
@@ -148,7 +148,7 @@ class FormPresenter(CursesWindow):
                 lines.append((self._line_number, error))
                 self._line_number += 1
 
-        lines.append((self._line_number, self._generate_hline()))
+        lines.append((self._line_number, self._generate_horizontal_line()))
         self._line_number += 1
         lines.append((self._line_number, self._generate_buttons()))
         return tuple(lines)
@@ -214,7 +214,7 @@ class FormPresenter(CursesWindow):
         clp = CursesLinePart(self._input_start, text, color, 0)
         return (clp,)
 
-    def _generate_hline(self) -> CursesLine:
+    def _generate_horizontal_line(self) -> CursesLine:
         clp = CursesLinePart(0, "\u2500" * self._form_width, 8, 0)
         return (clp,)
 
@@ -242,8 +242,8 @@ class FormPresenter(CursesWindow):
             4,
             0,
         )
-        cl_seperator = CursesLinePart(self._prompt_end, self._seperator, color, 0)
-        line_parts = (cl_prompt, cl_default, cl_seperator)
+        cl_separator = CursesLinePart(self._prompt_end, self._separator, color, 0)
+        line_parts = (cl_prompt, cl_default, cl_separator)
         return line_parts
 
     def _generate_title(self) -> CursesLine:
@@ -255,7 +255,7 @@ class FormPresenter(CursesWindow):
         self._screen.clear()
         self._screen.refresh()
         idx = 0
-        pad = curses.newpad(MAX_FORM_H, MAX_FORM_W)
+        pad = curses.newpad(MAX_FORM_HEIGHT, MAX_FORM_WIDTH)
         shared_input_line_cache: List[str] = []
         for form_field in self._form.fields:
             form_field.window_handler = form_field.window_handler(

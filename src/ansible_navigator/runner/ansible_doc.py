@@ -28,8 +28,8 @@ class AnsibleDoc(Base):
     ) -> Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]:
         """Run ``ansible-doc`` command and get the plugin docs related details
 
-        :param plugin_names: The name of the plugins to get docs.
-        :param plugin_type: The type of the plugin mentioned in plugins_names.
+        :param plugin_names: The name of the plugins to get docs
+        :param plugin_type: The type of the plugin mentioned in plugins_names
             Valid values are ``become``, ``cache``, ``callback``, ``cliconf``, ``connection``,
             ``httpapi``, ``inventory``, ``lookup``, ``netconf``, ``shell``, ``vars``,
             ``module``, ``strategy``. If the value is not provided it defaults to ``module``.

@@ -29,19 +29,19 @@ class YamlStyle(NamedTuple):
     explicit_start: bool = True
 
 
-def human_dump(obj: Any, filename: str = None, fmode: str = "w") -> Union[str, None]:
+def human_dump(obj: Any, filename: str = None, file_mode: str = "w") -> Union[str, None]:
     """Serialize an object to yaml.
 
     This allows for the consistent representation across the application.
 
     :param obj: The object to serialize
     :param filename: The filename of the file in which the obj should be written
-    :param fmode: The mode to use for file writing
+    :param file_mode: The mode to use for file writing
     :return: Either the serialized obj or None if written to a file
     """
     dumper = HumanDumper
     if filename is not None:
-        with open(filename, fmode, encoding="utf-8") as outfile:
+        with open(filename, file_mode, encoding="utf-8") as outfile:
             yaml.dump(
                 obj,
                 outfile,

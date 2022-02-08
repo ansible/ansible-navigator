@@ -5,7 +5,7 @@ from .base import BaseClass
 
 
 CLI = (
-    "cd /tmp && "  # Get out of collection root, ensure test is independent of cwd
+    "cd /tmp && "  # Get out of collection root, ensure test is independent of CWD
     "ansible-navigator collections --execution-environment true "
     "--eev $ANSIBLE_COLLECTIONS_PATH/collections:/tmp/collections_to_volmount:Z "
     "--senv ANSIBLE_COLLECTIONS_PATH=/tmp/collections_to_volmount"

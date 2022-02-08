@@ -95,7 +95,7 @@ class Internals(SimpleNamespace):
     share_directory: str = generate_share_directory()
 
 
-navigator_subcommds = [
+navigator_subcommands = [
     SubCommand(
         name="builder",
         description="Build execution environment (container image)",
@@ -170,7 +170,7 @@ NavigatorConfiguration = ApplicationConfiguration(
     application_version=VERSION,
     internals=Internals(),
     post_processor=NavigatorPostProcessor(),
-    subcommands=navigator_subcommds,
+    subcommands=navigator_subcommands,
     entries=[
         SettingsEntry(
             name="ansible_runner_artifact_dir",
@@ -199,7 +199,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         SettingsEntry(
             name="app",
             apply_to_subsequent_cli=C.NONE,
-            choices=[subcommand.name for subcommand in navigator_subcommds],
+            choices=[subcommand.name for subcommand in navigator_subcommands],
             short_description="Subcommands",
             subcommand_value=True,
             value=SettingsEntryValue(default="welcome"),

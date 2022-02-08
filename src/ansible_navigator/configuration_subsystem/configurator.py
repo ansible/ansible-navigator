@@ -195,13 +195,13 @@ class Configurator:
 
     def _apply_environment_variables(self) -> None:
         for entry in self._config.entries:
-            set_envvar = os.environ.get(entry.environment_variable(self._config.application_name))
-            if set_envvar is not None:
+            set_env_var = os.environ.get(entry.environment_variable(self._config.application_name))
+            if set_env_var is not None:
                 if self._initial or entry.change_after_initial:
                     if entry.cli_parameters is not None and entry.cli_parameters.nargs == "+":
-                        entry.value.current = set_envvar.split(",")
+                        entry.value.current = set_env_var.split(",")
                     else:
-                        entry.value.current = set_envvar
+                        entry.value.current = set_env_var
                     entry.value.source = C.ENVIRONMENT_VARIABLE
                 else:
                     message = f"'{entry.name}' cannot be reconfigured. (environment variables)"

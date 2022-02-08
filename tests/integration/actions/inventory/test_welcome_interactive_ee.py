@@ -4,7 +4,7 @@ import pytest
 
 from ..._interactions import Command
 from ..._interactions import Step
-from ..._interactions import add_indicies
+from ..._interactions import add_indices
 from ..._interactions import step_id
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
 from .base import BaseClass
@@ -19,7 +19,7 @@ initial_steps = (
     Step(user_input=cmdline, comment="ansible-navigator inventory command top window"),
 )
 
-steps = add_indicies(initial_steps + base_steps)
+steps = add_indices(initial_steps + base_steps)
 
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
