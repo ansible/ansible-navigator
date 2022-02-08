@@ -25,7 +25,7 @@ class MenuBuilder:
     def __init__(
         self,
         progress_bar_width: int,
-        screen_w: int,
+        screen_width: int,
         number_colors: int,
         color_menu_item: Callable,
         ui_config: UIConfig,
@@ -33,7 +33,7 @@ class MenuBuilder:
         """Initialize the menu builder.
 
         :param progress_bar_width:  The width of the progress bar
-        :param screen_w: The current screen width
+        :param screen_width: The current screen width
         :param number_colors: The number of colors the current terminal supports
         :param color_menu_item: The callback for adding color to menu entries
         :param ui_config: The current user interface configuration
@@ -41,7 +41,7 @@ class MenuBuilder:
         # pylint: disable=too-many-arguments
         self._number_colors = number_colors
         self._progress_bar_width = progress_bar_width
-        self._screen_w = screen_w
+        self._screen_width = screen_width
         self._color_menu_item = color_menu_item
         self._ui_config = ui_config
 
@@ -71,7 +71,7 @@ class MenuBuilder:
         # add a space
         column_widths = [c + 1 for c in column_widths]
 
-        available = self._screen_w - line_prefix_w - 1  # scrollbar width
+        available = self._screen_width - line_prefix_w - 1  # scrollbar width
         adjusted_column_widths = distribute(available, column_widths)
 
         col_starts = [0]

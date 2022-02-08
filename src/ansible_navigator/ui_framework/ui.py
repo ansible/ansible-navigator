@@ -90,7 +90,7 @@ class UserInterface(CursesWindow):
 
     def __init__(
         self,
-        screen_miny: int,
+        screen_min_height: int,
         kegexes: Callable[..., Any],
         refresh: int,
         ui_config: UIConfig,
@@ -99,7 +99,7 @@ class UserInterface(CursesWindow):
     ) -> None:
         """Initialize the user interface.
 
-        :param screen_miny: The minimum screen height
+        :param screen_min_height: The minimum screen height
         :param kegexes: A callable producing a list of action regular expressions to match against
         :param refresh: The screen refresh time is ms
         :param ui_config: the current UI configuration
@@ -128,7 +128,7 @@ class UserInterface(CursesWindow):
         self._prefix_color = 8
         self._refresh = [refresh]
         self._rgb_to_curses_color_idx: Dict[str, int] = {}
-        self._screen_miny = screen_miny
+        self._screen_min_height = screen_min_height
         self._scroll = 0
         self._serialization_format = self._default_obj_serialization
         self._status = ""
@@ -237,7 +237,7 @@ class UserInterface(CursesWindow):
             status_width = self._pbar_width
         else:
             status_width = 0
-        gap = floor((self._screen_w - status_width - sum(colws)) / len(key_dict))
+        gap = floor((self._screen_width - status_width - sum(colws)) / len(key_dict))
         adj_colws = [c + gap for c in colws]
         col_starts = [0]
         for idx, colw in enumerate(adj_colws):
@@ -273,7 +273,7 @@ class UserInterface(CursesWindow):
             status = status.upper()  # upper
             footer.append(
                 CursesLinePart(
-                    column=self._screen_w - self._status_width - 1,
+                    column=self._screen_width - self._status_width - 1,
                     string=status,
                     color=self._status_color,
                     decoration=curses.A_REVERSE,
@@ -283,7 +283,7 @@ class UserInterface(CursesWindow):
 
     def _scroll_bar(
         self,
-        viewport_h: int,
+        viewport_height: int,
         len_heading: int,
         menu_size: int,
         body_start: int,
@@ -291,27 +291,27 @@ class UserInterface(CursesWindow):
     ) -> None:
         """Add a scroll bar if the length of the content is longer than the viewport height.
 
-        :param viewport_h: The height if the viewport
+        :param viewport_height: The height if the viewport
         :param len_heading: The height of the heading
         :param menu_size: The number of lines in the content
         :param body_start: Where we are in the body
         :param body_stop: The end of the body
         """
-        start_scroll_bar = body_start / menu_size * viewport_h
-        stop_scroll_bar = body_stop / menu_size * viewport_h
+        start_scroll_bar = body_start / menu_size * viewport_height
+        stop_scroll_bar = body_stop / menu_size * viewport_height
         len_scroll_bar = ceil(stop_scroll_bar - start_scroll_bar)
         color = self._prefix_color
         for idx in range(int(start_scroll_bar), int(start_scroll_bar + len_scroll_bar)):
             lineno = idx + len_heading
             line_part = CursesLinePart(
-                column=self._screen_w - 1,
+                column=self._screen_width - 1,
                 string="\u2592",
                 color=color,
                 decoration=0,
             )
             self._add_line(
                 window=self._screen,
-                lineno=min(lineno, viewport_h + len_heading),
+                lineno=min(lineno, viewport_height + len_heading),
                 line=tuple([line_part]),
             )
 
@@ -324,10 +324,10 @@ class UserInterface(CursesWindow):
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
         clp = CursesLinePart(column=0, string=":", color=0, decoration=0)
-        input_at = self._screen_h - 1  # screen y is zero based
+        input_at = self._screen_height - 1  # screen y is zero based
         self._add_line(window=self._screen, lineno=input_at, line=tuple([clp]))
         self._screen.refresh()
-        self._one_line_input.win = curses.newwin(1, self._screen_w, input_at, 1)
+        self._one_line_input.win = curses.newwin(1, self._screen_width, input_at, 1)
         self._one_line_input.win.keypad(True)
         while True:
             user_input, char = self._one_line_input.handle(0, [form_field])
@@ -370,11 +370,11 @@ class UserInterface(CursesWindow):
         heading = heading or ()
         heading_len = len(heading)
         footer = self._footer(dict(**STND_KEYS, **key_dict, **END_KEYS))
-        footer_at = self._screen_h - 1  # screen is 0 based index
+        footer_at = self._screen_height - 1  # screen is 0 based index
         footer_len = 1
 
-        viewport_h = self._screen_h - len(heading) - footer_len
-        self.scroll(max(self.scroll(), viewport_h))
+        viewport_height = self._screen_height - len(heading) - footer_len
+        self.scroll(max(self.scroll(), viewport_height))
 
         index_width = len(str(count))
 
@@ -402,12 +402,12 @@ class UserInterface(CursesWindow):
                 )
 
             # Add the scroll bar
-            if count > viewport_h:
+            if count > viewport_height:
                 self._scroll_bar(
-                    viewport_h=viewport_h,
+                    viewport_height=viewport_height,
                     len_heading=len(heading),
                     menu_size=count,
-                    body_start=self._scroll - viewport_h,
+                    body_start=self._scroll - viewport_height,
                     body_stop=self._scroll,
                 )
 
@@ -425,7 +425,7 @@ class UserInterface(CursesWindow):
             return_value = None
             if key == "KEY_RESIZE":
                 new_scroll = min(
-                    self._scroll - viewport_h + self._screen_h - heading_len - footer_len,
+                    self._scroll - viewport_height + self._screen_height - heading_len - footer_len,
                     len(lines),
                 )
                 self.scroll(new_scroll)
@@ -433,16 +433,16 @@ class UserInterface(CursesWindow):
             elif key in keypad or key in other_valid_keys:
                 return_value = key
             elif key == "KEY_DOWN":
-                self.scroll(max(min(self.scroll() + 1, count), viewport_h))
+                self.scroll(max(min(self.scroll() + 1, count), viewport_height))
                 return_value = key
             elif key == "KEY_UP":
-                self.scroll(max(self.scroll() - 1, viewport_h))
+                self.scroll(max(self.scroll() - 1, viewport_height))
                 return_value = key
             elif key in ["^F", "KEY_NPAGE"]:
-                self.scroll(max(min(self.scroll() + viewport_h, count), viewport_h))
+                self.scroll(max(min(self.scroll() + viewport_height, count), viewport_height))
                 return_value = key
             elif key in ["^B", "KEY_PPAGE"]:
-                self.scroll(max(self.scroll() - viewport_h, viewport_h))
+                self.scroll(max(self.scroll() - viewport_height, viewport_height))
                 return_value = key
             elif key == ":":
                 colon_entry = self._get_input_line()
@@ -606,7 +606,7 @@ class UserInterface(CursesWindow):
         :return: the serialize lines ready for display
         :rtype: CursesLines
         """
-        heading = self._content_heading(obj, self._screen_w)
+        heading = self._content_heading(obj, self._screen_width)
         filtered_obj = self._filter_content_keys(obj) if self._hide_keys else obj
         lines = self._serialize_color(filtered_obj)
         return heading, lines
@@ -635,11 +635,17 @@ class UserInterface(CursesWindow):
             footer_len = 1
 
             if self.scroll() == 0:
-                last_line_idx = min(len(lines) - 1, self._screen_h - heading_len - footer_len - 1)
+                last_line_idx = min(
+                    len(lines) - 1,
+                    self._screen_height - heading_len - footer_len - 1,
+                )
             else:
                 last_line_idx = min(len(lines) - 1, self._scroll - 1)
 
-            first_line_idx = max(0, last_line_idx - (self._screen_h - 1 - heading_len - footer_len))
+            first_line_idx = max(
+                0,
+                last_line_idx - (self._screen_height - 1 - heading_len - footer_len),
+            )
 
             if len(objs) > 1:
                 key_dict = {"-": "previous", "+": "next", "[0-9]": "goto"}
@@ -661,8 +667,8 @@ class UserInterface(CursesWindow):
                 continue
 
             if entry == "KEY_RESIZE":
-                # only the heading knows about the screen_w and screen_h
-                heading = self._content_heading(objs[index], self._screen_w)
+                # only the heading knows about the screen width and height
+                heading = self._content_heading(objs[index], self._screen_width)
                 continue
 
             if entry == "_":
@@ -751,7 +757,7 @@ class UserInterface(CursesWindow):
         """
         menu_builder = MenuBuilder(
             progress_bar_width=self._pbar_width,
-            screen_w=self._screen_w,
+            screen_width=self._screen_width,
             number_colors=curses.COLORS,
             color_menu_item=self._color_menu_item,
             ui_config=self._ui_config,
@@ -771,11 +777,11 @@ class UserInterface(CursesWindow):
         while True:
 
             if self.scroll() == 0:
-                last_line_idx = min(len(current) - 1, self._screen_h - 3)
+                last_line_idx = min(len(current) - 1, self._screen_height - 3)
             else:
                 last_line_idx = min(len(current) - 1, self._scroll - 1)
 
-            first_line_idx = max(0, last_line_idx - (self._screen_h - 3))
+            first_line_idx = max(0, last_line_idx - (self._screen_height - 3))
 
             if self.menu_filter():
                 self._menu_indices = tuple(
