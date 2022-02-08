@@ -20,8 +20,8 @@ def test_data_no_missing_env_var_data():
 def test_full_settings_file():
     """Test using a full settings file"""
     settings_file_path = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
-    with open(file=settings_file_path, encoding="utf-8") as file:
-        settings_contents = yaml.load(file, Loader=Loader)
+    with open(file=settings_file_path, encoding="utf-8") as fh:
+        settings_contents = yaml.load(fh, Loader=Loader)
     for entry in NavigatorConfiguration.entries:
         path = entry.settings_file_path("ansible-navigator")
         expected = settings_contents

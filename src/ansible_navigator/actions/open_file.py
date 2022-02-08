@@ -89,8 +89,8 @@ class Action:
             if interaction.ui.serialization_format() == "text.html.markdown":
                 with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as temp_file:
                     filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as outfile:
-                        outfile.write(obj)
+                    with open(filename, "w", encoding="utf-8") as fh:
+                        fh.write(obj)
             elif interaction.ui.serialization_format() == "source.yaml":
                 with tempfile.NamedTemporaryFile(suffix=".yaml", delete=False) as temp_file:
                     filename = temp_file.name
@@ -98,13 +98,13 @@ class Action:
             elif interaction.ui.serialization_format() == "source.json":
                 with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
                     filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as outfile:
-                        json.dump(obj, outfile, indent=4, sort_keys=True)
+                    with open(filename, "w", encoding="utf-8") as fh:
+                        json.dump(obj, fh, indent=4, sort_keys=True)
             else:
                 with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as temp_file:
                     filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as outfile:
-                        outfile.write(obj)
+                    with open(filename, "w", encoding="utf-8") as fh:
+                        fh.write(obj)
 
         command = self._args.editor_command.format(filename=filename, line_number=line_number)
         is_console = self._args.editor_console

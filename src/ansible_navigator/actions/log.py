@@ -32,8 +32,8 @@ class Action(App):
         auto_scroll = True
         while True:
             self._calling_app.update()
-            with open(self._args.log_file, encoding="utf-8") as fhand:
-                dalog = fhand.read()
+            with open(self._args.log_file, encoding="utf-8") as fh:
+                dalog = fh.read()
 
             new_scroll = len(dalog.splitlines())
             if auto_scroll:

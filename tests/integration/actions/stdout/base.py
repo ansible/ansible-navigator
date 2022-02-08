@@ -54,8 +54,8 @@ class BaseClass:
             update_fixtures(request, index, received_output, comment)
 
         dir_path, file_name = fixture_path_from_request(request, index)
-        with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as infile:
-            expected_output = json.load(infile)["output"]
+        with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as fh:
+            expected_output = json.load(fh)["output"]
         assert expected_output == received_output, "\n" + "\n".join(
             difflib.unified_diff(expected_output, received_output, "expected", "received"),
         )

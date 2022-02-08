@@ -78,6 +78,8 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
     [tool.pylint.master]
     # tm_tokenize is virtually vendored and shouldn't be linted as such
     ignore = "tm_tokenize"
+    # pylint defaults + fh for with open .. as (f|fh)
+    good-names = "i,j,k,ex,Run,_,f,fh"
     jobs = 0
 
     [tool.pylint.messages_control]

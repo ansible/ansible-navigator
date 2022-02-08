@@ -81,14 +81,14 @@ class Action:
                 write_as = interaction.ui.serialization_format()
 
         if write_as == "text":
-            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as outfile:
-                outfile.write(obj)
+            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
+                fh.write(obj)
         elif write_as == "yaml":
             human_dump(obj=obj, filename=filename, file_mode=file_mode)
         elif write_as == "json":
-            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as outfile:
-                json.dump(obj, outfile, indent=4, sort_keys=True)
-                outfile.write("\n")
+            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
+                json.dump(obj, fh, indent=4, sort_keys=True)
+                fh.write("\n")
 
         self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, file_mode, write_as)
         return None

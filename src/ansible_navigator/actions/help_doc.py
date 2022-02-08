@@ -34,8 +34,8 @@ class Action(App):
         with open(
             os.path.join(self._args.internals.share_directory, "markdown", "help.md"),
             encoding="utf-8",
-        ) as fhand:
-            help_md = fhand.read()
+        ) as fh:
+            help_md = fh.read()
 
         while True:
             interaction = interaction.ui.show(

@@ -64,9 +64,9 @@ class CollectionCatalog:
         if file_manifest_file:
             file_path = f"{path}/{file_manifest_file}"
             if os.path.exists(file_path):
-                with open(file=file_path, encoding="utf-8") as read_file:
+                with open(file=file_path, encoding="utf-8") as fh:
                     try:
-                        loaded = json.load(read_file)
+                        loaded = json.load(fh)
                         file_checksums = {v["name"]: v for v in loaded["files"]}
                     except (JSONDecodeError, KeyError) as exc:
                         self._errors.append({"path": file_path, "error": str(exc)})
@@ -100,8 +100,8 @@ class CollectionCatalog:
         :returns: Details about the file, including the checksum
         """
         sha256_hash = hashlib.sha256()
-        with open(file_path, "rb") as fhand:
-            for byte_block in iter(lambda: fhand.read(4096), b""):
+        with open(file_path, "rb") as fh:
+            for byte_block in iter(lambda: fh.read(4096), b""):
                 sha256_hash.update(byte_block)
         res = {
             "name": relative_path,
@@ -153,9 +153,9 @@ class CollectionCatalog:
             galaxy_file = f"{directory_path}/galaxy.yml"
             collection = None
             if os.path.exists(manifest_file):
-                with open(file=manifest_file, encoding="utf-8") as read_file:
+                with open(file=manifest_file, encoding="utf-8") as fh:
                     try:
-                        collection = json.load(read_file)
+                        collection = json.load(fh)
                         collection["meta_source"] = "MANIFEST.json"
                     except JSONDecodeError:
                         error = {
@@ -164,9 +164,9 @@ class CollectionCatalog:
                         }
                         self._errors.append(error)
             elif os.path.exists(galaxy_file):
-                with open(file=galaxy_file, encoding="utf-8") as read_file:
+                with open(file=galaxy_file, encoding="utf-8") as fh:
                     try:
-                        collection = {"collection_info": yaml.load(read_file, Loader=SafeLoader)}
+                        collection = {"collection_info": yaml.load(fh, Loader=SafeLoader)}
                         collection["meta_source"] = "galaxy.yml"
                     except YAMLError:
                         error = {
@@ -185,9 +185,9 @@ class CollectionCatalog:
                 runtime_file = f"{directory_path}/meta/runtime.yml"
                 collection["runtime"] = {}
                 if os.path.exists(runtime_file):
-                    with open(file=runtime_file, encoding="utf-8") as read_file:
+                    with open(file=runtime_file, encoding="utf-8") as fh:
                         try:
-                            collection["runtime"] = yaml.load(read_file, Loader=SafeLoader)
+                            collection["runtime"] = yaml.load(fh, Loader=SafeLoader)
                         except YAMLError as exc:
                             self._errors.append({"path": runtime_file, "error": str(exc)})
 
