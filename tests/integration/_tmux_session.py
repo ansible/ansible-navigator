@@ -304,8 +304,8 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                with open(file=setup_capture_path, mode="w", encoding="utf-8") as filehandle:
-                    filehandle.writelines("\n".join(self._setup_capture))
+                with open(file=setup_capture_path, mode="w", encoding="utf-8") as fh:
+                    fh.writelines("\n".join(self._setup_capture))
 
                 time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
                 # taint the screen output w/ timestamp so it's never a valid fixture
@@ -315,8 +315,8 @@ class TmuxSession:
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
-                with open(file=timeout_capture_path, mode="w", encoding="utf-8") as filehandle:
-                    filehandle.writelines("\n".join(showing))
+                with open(file=timeout_capture_path, mode="w", encoding="utf-8") as fh:
+                    fh.writelines("\n".join(showing))
                 self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
                 return showing
 
