@@ -142,9 +142,9 @@ class Configurator:
     def _apply_settings_file(self) -> None:
         settings_filesystem_path = self._config.internals.settings_file_path
         if isinstance(settings_filesystem_path, str):
-            with open(settings_filesystem_path, "r", encoding="utf-8") as config_fh:
+            with open(settings_filesystem_path, "r", encoding="utf-8") as fh:
                 try:
-                    config = yaml.load(config_fh, Loader=SafeLoader)
+                    config = yaml.load(fh, Loader=SafeLoader)
                 except (yaml.scanner.ScannerError, yaml.parser.ParserError) as exc:
                     exit_msg = (
                         f"Settings file found {settings_filesystem_path}, but failed to load it."

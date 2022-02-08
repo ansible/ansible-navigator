@@ -207,9 +207,9 @@ class Action(App):
         selected_collection = self._collections[self.steps.current.index]
         cname_col = f"__{selected_collection['known_as']}"
         plugins = []
-        for plugin_chksum, details in selected_collection["plugin_chksums"].items():
+        for plugin_checksum, details in selected_collection["plugin_checksums"].items():
             try:
-                plugin_json = self._collection_cache[plugin_chksum]
+                plugin_json = self._collection_cache[plugin_checksum]
                 loaded = json.loads(plugin_json)
 
                 plugin = loaded["plugin"]

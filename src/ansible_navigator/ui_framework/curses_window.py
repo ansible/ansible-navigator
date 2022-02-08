@@ -56,7 +56,7 @@ class CursesWindow:
 
         self._screen: Window
         self.win: Window
-        self._screen_miny = 3
+        self._screen_min_height = 3
         self._prefix_color = 8
         self._theme_dir: str
         self._term_osc4_support: bool
@@ -65,7 +65,7 @@ class CursesWindow:
         self._set_colors()
 
     @property
-    def _screen_w(self) -> int:
+    def _screen_width(self) -> int:
         """return the screen width
 
         :return: the current screen width
@@ -74,14 +74,14 @@ class CursesWindow:
         return self._screen.getmaxyx()[1]
 
     @property
-    def _screen_h(self) -> int:
+    def _screen_height(self) -> int:
         """return the screen height, or notify if too small
 
         :return: the current screen height
         :rtype: int
         """
         while True:
-            if self._screen.getmaxyx()[0] >= self._screen_miny:
+            if self._screen.getmaxyx()[0] >= self._screen_min_height:
                 return self._screen.getmaxyx()[0]
             curses.flash()
             curses.beep()
@@ -125,39 +125,45 @@ class CursesWindow:
         :param prefix: The prefix for the line
         :type prefix: str or None
         """
-        win = window
         if prefix:
             color = self._color_pair_or_none(self._prefix_color)
             if color is None:
-                win.addstr(lineno, 0, prefix)
+                window.addstr(lineno, 0, prefix)
             else:
-                win.addstr(lineno, 0, prefix, color)
+                window.addstr(lineno, 0, prefix, color)
         if line:
-            win.move(lineno, 0)
+            window.move(lineno, 0)
             for line_part in line:
                 column = line_part.column + len(prefix or "")
-                if column <= self._screen_w:
-                    text = line_part.string[0 : self._screen_w - column + 1]
+                if column <= self._screen_width:
+                    text = line_part.string[0 : self._screen_width - column + 1]
                     try:
                         color = self._color_pair_or_none(line_part.color)
                         if color is None:
-                            win.addstr(lineno, column, text)
+                            window.addstr(lineno, column, text)
                         else:
-                            win.addstr(lineno, column, text, color | line_part.decoration)
+                            window.addstr(lineno, column, text, color | line_part.decoration)
                     except curses.error:
                         # curses error at last column & row but I don't care
                         # because it still draws it
                         # https://stackoverflow.com/questions/10877469/
                         # ncurses-setting-last-character-on-screen-without-scrolling-enabled
-                        if lineno == win.getyx()[0] and column + len(text) == win.getyx()[1] + 1:
+                        if (
+                            lineno == window.getyx()[0]
+                            and column + len(text) == window.getyx()[1] + 1
+                        ):
                             pass
 
                         else:
                             self._logger.debug("curses error")
-                            self._logger.debug("screen_h: %s, lineno: %s", self._screen_h, lineno)
+                            self._logger.debug(
+                                "screen_height: %s, lineno: %s",
+                                self._screen_height,
+                                lineno,
+                            )
                             self._logger.debug(
                                 "screen_w: %s, column: %s text: %s, lentext: %s, end_col: %s",
-                                self._screen_w,
+                                self._screen_width,
                                 column,
                                 text,
                                 len(text),
@@ -192,8 +198,8 @@ class CursesWindow:
         self._logger.debug("term_osc4_support: %s", self._term_osc4_support)
 
         if self._term_osc4_support:
-            with open(self._ui_config.terminal_colors_path, encoding="utf-8") as data_file:
-                colors = json.load(data_file)
+            with open(self._ui_config.terminal_colors_path, encoding="utf-8") as fh:
+                colors = json.load(fh)
 
             for color_name, color_hex in colors.items():
                 idx = COLOR_MAP[color_name]

@@ -187,8 +187,8 @@ def _params_retrieve_details(filename: str) -> Dict:
     :param filename: The path to the settings file to load
     :return: The deserialized contents of the file
     """
-    with open(filename, encoding="utf-8") as fhand:
-        return yaml.load(fhand, Loader=yaml.SafeLoader)
+    with open(filename, encoding="utf-8") as fh:
+        return yaml.load(fh, Loader=yaml.SafeLoader)
 
 
 def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:

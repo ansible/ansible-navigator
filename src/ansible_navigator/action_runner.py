@@ -71,7 +71,7 @@ class ActionRunner(App):
         )
 
         self._ui = UserInterface(
-            screen_miny=3,
+            screen_min_height=3,
             kegexes=kegexes,
             refresh=refresh,
             ui_config=config,

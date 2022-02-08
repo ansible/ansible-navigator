@@ -65,7 +65,7 @@ class FormPresenter(CursesWindow):
 
     @property
     def _field_win_width(self):
-        return self._screen_w - self._field_win_start
+        return self._screen_width - self._field_win_start
 
     def _dimensions(self):
         self._prompt_end = max([len(form_field.full_prompt) for form_field in self._form.fields])
@@ -101,8 +101,8 @@ class FormPresenter(CursesWindow):
         height += 2  # horizontal line + buttons
         self._form_height = height
 
-        self._pad_top = max(int((self._screen_h - self._form_height) * TOP_PAD_RATIO), 0)
-        self._pad_left = max(int((self._screen_w - self._form_width) * LEFT_PAD_RATIO), 0)
+        self._pad_top = max(int((self._screen_height - self._form_height) * TOP_PAD_RATIO), 0)
+        self._pad_left = max(int((self._screen_width - self._form_width) * LEFT_PAD_RATIO), 0)
 
     def _generate_form(self) -> Tuple[Tuple[int, CursesLine], ...]:
         lines = []
@@ -272,7 +272,7 @@ class FormPresenter(CursesWindow):
             pad.clear()
             for line in self._generate_form():
                 self._add_line(pad, *line)
-            pad.refresh(0, 0, 0, self._pad_left, self._screen_h - 1, self._screen_w - 1)
+            pad.refresh(0, 0, 0, self._pad_left, self._screen_height - 1, self._screen_width - 1)
 
             idx = idx % len(self._form.fields)
             form_field = self._form.fields[idx]

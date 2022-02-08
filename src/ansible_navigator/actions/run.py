@@ -378,8 +378,8 @@ class Action(App):
             artifact_file = populated_form["fields"]["artifact_file"]["value"]
 
         try:
-            with open(artifact_file, encoding="utf-8") as json_file:
-                data = json.load(json_file)
+            with open(artifact_file, encoding="utf-8") as fh:
+                data = json.load(fh)
         except json.JSONDecodeError as exc:
             self._logger.debug("json decode error: %s", str(exc))
             self._logger.error("Unable to parse artifact file")
@@ -828,7 +828,7 @@ class Action(App):
 
             try:
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
-                with open(filename, "w", encoding="utf-8") as outfile:
+                with open(filename, "w", encoding="utf-8") as fh:
                     artifact = {
                         "version": "1.0.0",
                         "plays": self._plays.value,
@@ -836,7 +836,7 @@ class Action(App):
                         "status": status,
                         "status_color": status_color,
                     }
-                    json.dump(artifact, outfile, indent=4)
+                    json.dump(artifact, fh, indent=4)
                     self._logger.info("Saved artifact as %s", filename)
 
             except (IOError, OSError) as exc:
