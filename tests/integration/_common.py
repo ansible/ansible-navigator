@@ -1,10 +1,15 @@
 """some common functions for the tests
 """
+from typing import Dict
+from typing import Optional
 import json
 import os
+from pathlib import Path
 import re
 import shutil
 import sys
+
+import pytest
 
 from .. import defaults
 
@@ -18,6 +23,23 @@ def get_executable_path(name):
     if not exec_path:
         raise ValueError(f"{name} executable not found")
     return exec_path
+
+
+def retrieve_fixture_for_step(
+    request: pytest.FixtureRequest, step_index: int, test_name: Optional[str] = None
+) -> Dict:
+    """Retrieve a fixture given based on the test request and step.
+
+    :param request: The current test request
+    :param step_index: The index of the current step in a set of TUI interactions
+    :param test_name: A test name to add to the fixture path if needed
+    :returns: The specific test step fixture
+    """
+    dir_path, file_name = fixture_path_from_request(request, step_index, test_name)
+    fixture_path = Path(dir_path, file_name)
+    with open(file=fixture_path, encoding="utf-8") as fh:
+        expected_output = json.load(fh)["output"]
+    return expected_output
 
 
 def update_fixtures(

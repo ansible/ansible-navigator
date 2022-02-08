@@ -1,7 +1,6 @@
 """Base class for collections interactive tests.
 """
 import difflib
-import json
 import os
 
 from typing import Optional
@@ -10,7 +9,7 @@ import pytest
 
 from ....defaults import FIXTURES_COLLECTION_DIR
 from ..._common import copytree
-from ..._common import fixture_path_from_request
+from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._tmux_session import TmuxSession
 
@@ -91,9 +90,7 @@ class BaseClass:
         if fixtures_update_requested:
             update_fixtures(request, index, received_output, comment)
 
-        dir_path, file_name = fixture_path_from_request(request, index)
-        with open(file=f"{dir_path}/{file_name}", encoding="utf-8") as fh:
-            expected_output = json.load(fh)["output"]
+        expected_output = retrieve_fixture_for_step(request, index)
         assert expected_output == received_output, "\n" + "\n".join(
             difflib.unified_diff(expected_output, received_output, "expected", "received"),
         )
