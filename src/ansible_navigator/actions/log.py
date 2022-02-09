@@ -33,13 +33,13 @@ class Action(App):
         while True:
             self._calling_app.update()
             with open(self._args.log_file, encoding="utf-8") as fh:
-                dalog = fh.read()
+                log_contents = fh.read()
 
-            new_scroll = len(dalog.splitlines())
+            new_scroll = len(log_contents.splitlines())
             if auto_scroll:
                 interaction.ui.scroll(new_scroll)
 
-            interaction = interaction.ui.show(obj=dalog, serialization_format="text.log")
+            interaction = interaction.ui.show(obj=log_contents, serialization_format="text.log")
             if interaction.name != "refresh":
                 break
 

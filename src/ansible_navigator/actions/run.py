@@ -706,8 +706,8 @@ class Action(App):
             completed = task_count - self._plays.value[idx]["__in_progress"]
             if completed:
                 new = floor((completed / task_count * 100))
-                current = self._plays.value[idx].get("__pcomplete", 0)
-                self._plays.value[idx]["__pcomplete"] = max(new, current)
+                current = self._plays.value[idx].get("__percent_complete", 0)
+                self._plays.value[idx]["__percent_complete"] = max(new, current)
                 self._plays.value[idx]["__progress"] = str(max(new, current)) + "%"
             else:
                 self._plays.value[idx]["__progress"] = "0%"
