@@ -24,9 +24,17 @@ class Cli2Runner:
         "run": "override in subclass",
     }
 
-    def run_test(self, mocked_runner, tmpdir, cli_entry, config_fixture, expected):
+    def run_test(self, mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected):
         # pylint: disable=no-self-use
-        """the function to run the test and assert"""
+        """Confirm execution of ``cli.main()`` produces the desired results.
+
+        :param mocked_runner: A patched instance of runner
+        :param monkeypatch: The monkey patch fixture
+        :param tmpdir: A fixture generating a unique temporary directory
+        :param cli_entry: The CLI entry to set as :data:`sys.argv`
+        :param config_fixture: The settings fixture
+        :param expected: the expected return value
+        """
         raise Exception("Override in subclass")
 
     @pytest.fixture(autouse=True)
@@ -37,6 +45,7 @@ class Cli2Runner:
     def test_config_interactive(
         self,
         mocked_runner,
+        monkeypatch,
         tmpdir,
         comment,
         cli_entry,
@@ -46,12 +55,13 @@ class Cli2Runner:
     ):
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["config"], cli_entry, "interactive")
-        self.run_test(mocked_runner, tmpdir, cli_entry, config_fixture, expected)
+        self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command.run_command")
     def test_config_stdout(
         self,
         mocked_runner,
+        monkeypatch,
         tmpdir,
         comment,
         cli_entry,
@@ -61,12 +71,13 @@ class Cli2Runner:
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.STDOUT["config"], cli_entry, "stdout")
-        self.run_test(mocked_runner, tmpdir, cli_entry, config_fixture, expected)
+        self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.ansible_inventory.get_inventory")
     def test_inventory_interactive(
         self,
         mocked_runner,
+        monkeypatch,
         tmpdir,
         comment,
         cli_entry,
@@ -76,12 +87,13 @@ class Cli2Runner:
     ):
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["inventory"], cli_entry, "interactive")
-        self.run_test(mocked_runner, tmpdir, cli_entry, config_fixture, expected)
+        self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command.run_command")
     def test_inventory_stdout(
         self,
         mocked_runner,
+        monkeypatch,
         tmpdir,
         comment,
         cli_entry,
@@ -91,12 +103,13 @@ class Cli2Runner:
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.STDOUT["inventory"], cli_entry, "stdout")
-        self.run_test(mocked_runner, tmpdir, cli_entry, config_fixture, expected)
+        self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command_async.run_command_async")
     def test_run_interactive(
         self,
         mocked_runner,
+        monkeypatch,
         tmpdir,
         comment,
         cli_entry,
@@ -107,11 +120,20 @@ class Cli2Runner:
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["run"], cli_entry, "interactive")
-        self.run_test(mocked_runner, tmpdir, cli_entry, config_fixture, expected)
+        self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command_async.run_command_async")
-    def test_run_stdout(self, mocked_runner, tmpdir, comment, cli_entry, config_fixture, expected):
+    def test_run_stdout(
+        self,
+        mocked_runner,
+        monkeypatch,
+        tmpdir,
+        comment,
+        cli_entry,
+        config_fixture,
+        expected,
+    ):
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.STDOUT["run"], cli_entry, "stdout")
-        self.run_test(mocked_runner, tmpdir, cli_entry, config_fixture, expected)
+        self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
