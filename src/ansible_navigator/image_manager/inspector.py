@@ -78,21 +78,17 @@ class ImagesList:
 def inspect_all(container_engine: str) -> Tuple[List, str]:
     """run inspect against all images"""
     cmd_runner = CommandRunner()
-    result = cmd_runner.run_sproc([ImagesList(container_engine=container_engine)])
+    images_list_class = ImagesList(container_engine=container_engine)
+    result = cmd_runner.run_single_proccess(commands=images_list_class.commands)
     images_list = result[0]
     if images_list.errors:
         return [], images_list.errors
     if images_list.stderr and not images_list.details:
         return [], images_list.stderr
     images = {image["image_id"]: image for image in images_list.details}
-    inspects = cmd_runner.run_sproc(
-        [
-            ImagesInspect(
-                container_engine=container_engine,
-                ids=[image["image_id"] for image in images.values()],
-            ),
-        ],
-    )
+    image_ids = [image["image_id"] for image in images.values()]
+    images_inspect_class = ImagesInspect(container_engine=container_engine, ids=image_ids)
+    inspects = cmd_runner.run_single_proccess(commands=images_inspect_class.commands)
     for inspect in inspects:
         images[inspect.id]["inspect"] = {"details": inspect.details, "errors": inspect.errors}
     return list(images.values()), images_list.stderr
