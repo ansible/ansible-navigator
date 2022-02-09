@@ -205,7 +205,7 @@ class Action(App):
         """
         self._collection_cache.open()
         selected_collection = self._collections[self.steps.current.index]
-        cname_col = f"__{selected_collection['known_as']}"
+        collection_name = f"__{selected_collection['known_as']}"
         plugins = []
         for plugin_checksum, details in selected_collection["plugin_checksums"].items():
             try:
@@ -218,7 +218,7 @@ class Action(App):
                         short_name = plugin["doc"]["name"]
                     else:
                         short_name = plugin["doc"][details["type"]]
-                    plugin[cname_col] = short_name
+                    plugin[collection_name] = short_name
                     plugin["full_name"] = f"{selected_collection['known_as']}.{short_name}"
                     plugin["__type"] = details["type"]
                     plugin["collection_info"] = selected_collection["collection_info"]
@@ -232,11 +232,10 @@ class Action(App):
                     runtime_section = "modules" if details["type"] == "module" else details["type"]
                     plugin["__deprecated"] = False
                     try:
-                        rinfo = selected_collection["runtime"]["plugin_routing"][runtime_section][
-                            short_name
-                        ]
-                        plugin["additional_information"] = rinfo
-                        if "deprecation" in rinfo:
+                        routing_info = selected_collection["runtime"]["plugin_routing"]
+                        runtime_info = routing_info[runtime_section][short_name]
+                        plugin["additional_information"] = runtime_info
+                        if "deprecation" in runtime_info:
                             plugin["__deprecated"] = True
                     except KeyError:
                         plugin["additional_information"] = {}
@@ -245,12 +244,12 @@ class Action(App):
             except (KeyError, JSONDecodeError) as exc:
                 self._logger.error("error loading plugin doc %s", details)
                 self._logger.debug("error was %s", str(exc))
-        plugins = sorted(plugins, key=lambda i: i[cname_col])
+        plugins = sorted(plugins, key=lambda i: i[collection_name])
         self._collection_cache.close()
 
         return Step(
             name="all_plugins",
-            columns=[cname_col, "__type", "__added", "__deprecated", "__description"],
+            columns=[collection_name, "__type", "__added", "__deprecated", "__description"],
             select_func=self._build_plugin_content,
             tipe="menu",
             value=plugins,
