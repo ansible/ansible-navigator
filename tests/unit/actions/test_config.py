@@ -25,7 +25,7 @@ def test_content_heading_true():
     curses.initscr()
     curses.start_color()
     line_length = 100
-    default = "dval"
+    default = "default_value"
     obj = {
         "__default": True,
         "__current_value": default,
@@ -47,8 +47,8 @@ def test_content_heading_false() -> None:
     curses.initscr()
     curses.start_color()
     line_length = 100
-    current = "cval"
-    default = "dval"
+    current = "current_value"
+    default = "default_value"
     obj = {
         "__default": False,
         "__current_value": current,
