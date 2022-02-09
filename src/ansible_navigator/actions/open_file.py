@@ -25,7 +25,7 @@ class SuspendCurses:
     def __enter__(self):
         curses.endwin()
 
-    def __exit__(self, exc_type, exc_val, tback):
+    def __exit__(self, exc_type, exc_val, traceback):
         newscr = curses.initscr()
         newscr.refresh()
         curses.doupdate()

@@ -151,19 +151,19 @@ class Action(App):
         return []
 
     def _set_inventories_mtime(self) -> None:
-        mtimes = []
+        modification_times = []
         for inventory in self._inventories:
             if os.path.isdir(inventory):
-                mtimes.append(
+                modification_times.append(
                     max(
                         os.path.getmtime(e)
                         for e in glob.glob(os.path.join(inventory, "**"), recursive=True)
                     ),
                 )
             elif os.path.isfile(inventory):
-                mtimes.append(os.path.getmtime(inventory))
-        if mtimes:
-            self._inventories_mtime = max(mtimes)
+                modification_times.append(os.path.getmtime(inventory))
+        if modification_times:
+            self._inventories_mtime = max(modification_times)
         else:
             self._inventories_mtime = None
 
