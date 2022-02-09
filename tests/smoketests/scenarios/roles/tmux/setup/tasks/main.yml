@@ -1,3 +1,0 @@
----
-- name: Prepare tmux session that we can use for tests
-  shell: tmux new-session -d -s smoke
