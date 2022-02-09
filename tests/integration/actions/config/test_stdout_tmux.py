@@ -104,7 +104,7 @@ stdout_tests = (
             execution_environment=True,
             pass_environment_variables=["PAGER"],
         ).join(),
-        look_fors=[".yahmool"],
+        look_fors=[".os2"],
     ),
     ShellCommand(
         comment="config specified configuration file without ee",
@@ -113,7 +113,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=[".yahmool"],
+        look_fors=[".os2"],
     ),
 )
 
