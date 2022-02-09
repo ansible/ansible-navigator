@@ -42,7 +42,7 @@ class StdoutTest(NamedTuple):
     return_code: int
 
 
-test_datas = (
+fixture_test_data = (
     StdoutTest(
         action_name="config",
         action_params=(("cmdline", ["--help"]),),
@@ -95,7 +95,7 @@ test_datas = (
 
 
 @pytest.mark.parametrize("params", (True, False), indirect=["params"], ids=id_ee)
-@pytest.mark.parametrize("test_data", test_datas, ids=id_test_data)
+@pytest.mark.parametrize("test_data", fixture_test_data, ids=id_test_data)
 def test(action_run_stdout, params, test_data):
     """test for a return code"""
     actionruntest = action_run_stdout(action_name=test_data.action_name, **params)

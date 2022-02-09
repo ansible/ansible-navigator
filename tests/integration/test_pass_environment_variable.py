@@ -83,8 +83,8 @@ class Test(Cli2Runner):
         monkeypatch.setattr("sys.argv", params)
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", cfg_path)
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", coll_cache_path)
-        for envvar, value in expected.items():
-            monkeypatch.setenv(envvar, value)
+        for env_var, value in expected.items():
+            monkeypatch.setenv(env_var, value)
         with pytest.raises(Exception, match="called"):
             cli.main()
 
