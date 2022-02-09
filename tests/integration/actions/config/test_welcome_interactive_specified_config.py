@@ -23,7 +23,7 @@ steps = (
     Step(
         user_input=":config -c " + CONFIG_FIXTURE,
         comment="enter config from welcome screen, custom config, (no ee)",
-        look_fors=["YAML_FILENAME_EXTENSIONS", "['.yahmool']"],
+        look_fors=["YAML_FILENAME_EXTENSIONS", "['.os2']"],
     ),
 )
 
