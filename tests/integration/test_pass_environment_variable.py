@@ -1,10 +1,6 @@
-"""test the use of pass_environment_variable through to runner
-"""
+"""Test the use of ``pass-environment-variable`` through to runner."""
 import os
 import shlex
-
-# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
-from unittest import mock
 
 import pytest
 
@@ -48,7 +44,7 @@ test_data = [
     ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
 )
 class Test(Cli2Runner):
-    """test the use of pass_environment_variable through to runner"""
+    """Test the use of ``pass-environment-variable`` through to runner."""
 
     TEST_DIR_NAME = os.path.basename(__file__).replace("test_", "").replace(".py", "")
     TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/{TEST_DIR_NAME}"
@@ -65,13 +61,16 @@ class Test(Cli2Runner):
         "run": f"run {TEST_FIXTURE_DIR}/site.yml",
     }
 
-    def run_test(self, mocked_runner, tmpdir, cli_entry, config_fixture, expected):
+    def run_test(self, mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected):
         # pylint: disable=too-many-arguments
-        """mock the runner call so it raises an exception
-        mock the command line with ``sys.argv``
-        set the ANSIBLE_NAVIGATOR_CONFIG environment variable
-        set the expected environmental variables
-        call ``cli.main()``, check the ``envvars`` argument passed to the runner function
+        """Confirm execution of ``cli.main()`` produces the desired results.
+
+        :param mocked_runner: A patched instance of runner
+        :param monkeypatch: The monkey patch fixture
+        :param tmpdir: A fixture generating a unique temporary directory
+        :param cli_entry: The CLI entry to set as ``sys.argv``
+        :param config_fixture: The settings fixture
+        :param expected: the expected return value
         """
         mocked_runner.side_effect = Exception("called")
         cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
@@ -81,15 +80,13 @@ class Test(Cli2Runner):
 
         params = shlex.split(cli_entry) + ["--pp", "never"]
 
-        with mock.patch("sys.argv", params):
-            with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_CONFIG": cfg_path}):
-                with mock.patch.dict(
-                    os.environ,
-                    {"ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH": coll_cache_path},
-                ):
-                    with mock.patch.dict(os.environ, expected):
-                        with pytest.raises(Exception, match="called"):
-                            cli.main()
+        monkeypatch.setattr("sys.argv", params)
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", cfg_path)
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", coll_cache_path)
+        for envvar, value in expected.items():
+            monkeypatch.setenv(envvar, value)
+        with pytest.raises(Exception, match="called"):
+            cli.main()
 
         _args, kwargs = mocked_runner.call_args
 
