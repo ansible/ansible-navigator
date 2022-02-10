@@ -5,11 +5,11 @@ before use so they are immutable within the tests
 """
 
 
-def d2t(dyct):
+def d2t(dictionary):
     """turn the data dictionary into a frozen set
     so they are immutable
     """
-    return tuple(dyct.items())
+    return tuple(dictionary.items())
 
 
 BASE_SHORT_CLI = """

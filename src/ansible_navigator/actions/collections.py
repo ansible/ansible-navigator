@@ -194,7 +194,7 @@ class Action(App):
             name="all_collections",
             columns=columns,
             select_func=self._build_plugin_menu,
-            tipe="menu",
+            step_type="menu",
             value=self._collections,
         )
 
@@ -251,7 +251,7 @@ class Action(App):
             name="all_plugins",
             columns=[collection_name, "__type", "__added", "__deprecated", "__description"],
             select_func=self._build_plugin_content,
-            tipe="menu",
+            step_type="menu",
             value=plugins,
         )
 
@@ -262,7 +262,7 @@ class Action(App):
         """
         return Step(
             name="plugin_content",
-            tipe="content",
+            step_type="content",
             value=self.steps.current.value,
             index=self.steps.current.index,
         )

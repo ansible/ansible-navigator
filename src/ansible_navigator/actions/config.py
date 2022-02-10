@@ -194,7 +194,7 @@ class Action(App):
             name="all_options",
             columns=["option", "__default", "source", "via", "__current_value"],
             select_func=self._build_option_content,
-            tipe="menu",
+            step_type="menu",
             value=self._config,
         )
 
@@ -205,7 +205,7 @@ class Action(App):
         """
         return Step(
             name="option_content",
-            tipe="content",
+            step_type="content",
             value=self._config,
             index=self.steps.current.index,
         )

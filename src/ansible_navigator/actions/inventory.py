@@ -294,7 +294,7 @@ class Action(App):
             name="main_menu",
             columns=["title", "description"],
             select_func=self._step_from_main_menu,
-            tipe="menu",
+            step_type="menu",
             value=[groups, hosts],
         )
         return step
@@ -353,7 +353,7 @@ class Action(App):
 
             return Step(
                 name="group_menu",
-                tipe="menu",
+                step_type="menu",
                 value=menu,
                 columns=columns,
                 select_func=self._host_or_group_step,
@@ -377,7 +377,7 @@ class Action(App):
             ]
             entry = Step(
                 name="host_content",
-                tipe="content",
+                step_type="content",
                 value=values,
                 index=self.steps.current.index,
                 columns=["__name"] + self._show_columns,
@@ -406,7 +406,7 @@ class Action(App):
         return Step(
             columns=columns,
             name="host_menu",
-            tipe="menu",
+            step_type="menu",
             value=menu,
             select_func=self._build_host_content,
             show_func=self._refresh,

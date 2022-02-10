@@ -108,8 +108,8 @@ repos:
     rev: v2.1.0
     hooks:
       - id: codespell
-        # FIXME: Address remove current spelling exceptions:
-        args: ["-L", "tipe,dout"]
+        # NOTE: dout is part of the stdout action regex
+        args: ["-L", "dout"]
         # We exclude generated and external files as they are not directly under
         # our control, so we cannot fix spelling in them.
         exclude: >
