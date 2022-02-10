@@ -32,9 +32,7 @@ class TestDocHelpWithEE(BaseClass):
 
 
 # ansible-doc help without EE
-CLI_DOC_HELP_WITHOUT_EE = (
-    "ansible-navigator doc company_name.coll_1.mod_1 --help-doc -m stdout --execution-environment false"
-)
+CLI_DOC_HELP_WITHOUT_EE = "ansible-navigator doc company_name.coll_1.mod_1 --help-doc -m stdout --execution-environment false"
 
 testdata_2: List = [
     (

@@ -37,7 +37,7 @@
         "            \"version_added\": \"1.0.0\",",
         "            \"version_added_collection\": \"company_name.coll_1\"",
         "        },",
-        "        \"examples\": \"\\n    - name: Retrieve a value deep inside a using a path\\n      ansible.builtin.set_fact:\\n        value: \\\"{{ lookup('testorg.coll_1.lookup_1', var1, var2) }}\\\"\\n    \",",
+        "        \"examples\": \"\\n    - name: Retrieve a value deep inside a using a path\\n      ansible.builtin.set_fact:\\n        value: \\\"{{ lookup('company_name.coll_1.lookup_1', var1, var2) }}\\\"\\n    \",",
         "        \"metadata\": null,",
         "        \"return\": {",
         "            \"_raw\": {",

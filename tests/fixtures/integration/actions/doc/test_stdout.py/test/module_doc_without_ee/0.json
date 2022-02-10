@@ -45,7 +45,7 @@
         "            \"version_added\": \"1.0.0\",",
         "            \"version_added_collection\": \"company_name.coll_1\"",
         "        },",
-        "        \"examples\": \"\\n- name: test task-1\\n  testorg.coll_1.mod_1:\\n    foo: somevalue\\n    bar: candidate\\n\",",
+        "        \"examples\": \"\\n- name: test task-1\\n  company_name.coll_1.mod_1:\\n    foo: somevalue\\n    bar: candidate\\n\",",
         "        \"metadata\": null,",
         "        \"return\": {",
         "            \"baz\": {",

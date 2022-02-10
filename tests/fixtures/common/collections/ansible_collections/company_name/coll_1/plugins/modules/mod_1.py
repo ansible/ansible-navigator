@@ -31,7 +31,7 @@ notes:
 
 EXAMPLES = """
 - name: test task-1
-  testorg.coll_1.mod_1:
+  company_name.coll_1.mod_1:
     foo: somevalue
     bar: candidate
 """

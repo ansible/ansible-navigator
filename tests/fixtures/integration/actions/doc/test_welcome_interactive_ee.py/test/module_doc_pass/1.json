@@ -36,7 +36,7 @@
         "29│  version_added_collection: company_name.coll_1",
         "30│examples: |-",
         "31│  - name: test task-1",
-        "32│    testorg.coll_1.mod_1:",
+        "32│    company_name.coll_1.mod_1:",
         "33│      foo: somevalue",
         "34│      bar: candidate",
         "35│metadata: null",
