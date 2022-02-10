@@ -147,7 +147,7 @@ class ActionRunTest:
         action = self._app_action.Action(args=args)
 
         # get a TTY, runner/docker requires it
-        _mtty, stty = os.openpty()
+        _parent_tty, child_tty = os.openpty()
 
         # preserve current ``stdin``, ``stdout``, ``stderr``
         __stdin__ = sys.stdin
@@ -155,7 +155,7 @@ class ActionRunTest:
         __stderr__ = sys.stderr
 
         # ``pytest`` pseudo ``stdin`` doesn't ``fileno()``, use original
-        sys.stdin = stty  # type: ignore
+        sys.stdin = child_tty  # type: ignore
 
         # set ``stderr`` and ``stdout`` to file descriptors
         with tempfile.TemporaryFile() as sys_stdout, tempfile.TemporaryFile() as sys_stderr:
