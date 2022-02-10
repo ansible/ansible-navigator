@@ -24,7 +24,6 @@ class CommandAsync(CommandBase):
         :param executable_cmd: The command to be invoked
         :param queue: The queue to post events from ``ansible-runner``
         """
-        self._eventq = None
         self._queue = queue
         super().__init__(executable_cmd, **kwargs)
 
