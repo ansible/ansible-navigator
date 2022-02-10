@@ -3,9 +3,9 @@
     "index": 0,
     "comment": "ansible-navigator collections browse window",
     "output": [
-        "  NAME                   VERSION     SHADOWED      PATH",
-        "0│testorg.coll_1         1.0.0          False      FIXTURES_COLLECTION_DIR/test_direct_interactive_noee.py/collections/ansible_collections/testorg/coll_1/",
-        "1│testorg.coll_2         2.0.0          False      FIXTURES_COLLECTION_DIR/test_direct_interactive_noee.py/collections/ansible_collections/testorg/coll_2/",
+        "  NAME                         VERSION    SHADOWED     PATH",
+        "0│company_name.coll_1          1.0.0         False     FIXTURES_COLLECTION_DIR/test_direct_interactive_noee.py/collections/ansible_collections/company_name/coll_1/",
+        "1│company_name.coll_2          2.0.0         False     FIXTURES_COLLECTION_DIR/test_direct_interactive_noee.py/collections/ansible_collections/company_name/coll_2/",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

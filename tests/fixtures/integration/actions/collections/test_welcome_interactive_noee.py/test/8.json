@@ -1,11 +1,11 @@
 {
-    "name": "test[8-:1-Browse testorg.coll_2 plugins window]",
+    "name": "test[8-:1-Browse company_name.coll_2 plugins window]",
     "index": 8,
-    "comment": "Browse testorg.coll_2 plugins window",
+    "comment": "Browse company_name.coll_2 plugins window",
     "output": [
-        "  TESTORG.COLL 2                               TYPE                 ADDED             DEPRECATED                       DESCRIPTION",
-        "0│lookup_2                                     lookup               2.0.0                  False                       This is test lookup plugin",
-        "1│mod_2                                        module               2.0.0                  False                       This is a test module",
+        "  COMPANY NAME.COLL 2                                    TYPE               ADDED            DEPRECATED                     DESCRIPTION",
+        "0│lookup_2                                               lookup             2.0.0                 False                     This is test lookup plugin",
+        "1│mod_2                                                  module             2.0.0                 False                     This is a test module",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
