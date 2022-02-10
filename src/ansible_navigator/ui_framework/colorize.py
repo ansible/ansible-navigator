@@ -50,7 +50,6 @@ class ColorSchema:
         :param scope: The scope, aka format
         :type scope: str
         :return: the color in RGB format or None
-        :rtype: tuple or None
         """
         for name in reversed(scope):
             for parts in range(0, len(name.split("."))):
@@ -94,7 +93,6 @@ class Colorize:
         :param scope: The scope, aka the format of the string
         :type scope: str
         :return: A list of lines, each a list of dicts
-        :rtype: list
         """
         if scope == "source.ansi":
             return [ansi_to_curses(l) for l in doc.splitlines()]  # noqa: E741
@@ -140,7 +138,6 @@ def to_list(thing):
     :param thing: Maybe a list?
     :type thing: str or list
     :return: thing as list
-    :rtype: list
     """
     if not isinstance(thing, list):
         return [thing]
@@ -153,7 +150,6 @@ def hex_to_rgb(value):
     :param value: the hex color
     :type value: str
     :returns: RGB tuple
-    :rtype: tuple
     """
     if value:
         value = value.lstrip("#")
@@ -172,7 +168,6 @@ def hex_to_rgb_curses(value):
     :param value: an RGB color
     :type value: tuple
     :return: The colors scaled to 1000
-    :rtype: tuple
     """
     scale = lambda x: int(x * 1000 / 255)  # noqa: E731
     red, green, blue = hex_to_rgb(value)

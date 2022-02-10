@@ -170,7 +170,6 @@ def escape_moustaches(obj):
     :param obj: something
     :type obj: Any
     :return: the obj with replacements made
-    :rtype: Any
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     return dispatch(obj, replacements)
@@ -494,7 +493,6 @@ def unescape_moustaches(obj):
     :param obj: something
     :type obj: Any
     :return: the obj with replacements made
-    :rtype: Any
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)

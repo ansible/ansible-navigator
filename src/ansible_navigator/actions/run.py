@@ -736,7 +736,6 @@ class Action(App):
         """generate a menu of task for the currently selected play
 
         :return: The menu step
-        :rtype: Step
         """
         value = self.steps.current.selected["tasks"]
         step = Step(
@@ -752,7 +751,6 @@ class Action(App):
         """generate task content for the selected task
 
         :return: content which show a task
-        :rtype: Step
         """
         value = self.steps.current.value
         index = self.steps.current.index

@@ -52,7 +52,6 @@ class Step:
         """return if this has changed
 
         :return: if this has changed
-        :rtype: bool
         """
         return self._index_changed or self._value_changed
 
@@ -72,7 +71,6 @@ class Step:
         """return the index
 
         :return: index (should be ``int``)
-        :rtype: Optional[int]
         """
         return self._index
 
@@ -92,7 +90,6 @@ class Step:
         """return the selected item
 
         :return: the selected item
-        :rtype: Optional[Dict[str, Any]]
         """
         if self._index is None or not self._value:
             return None
@@ -103,7 +100,6 @@ class Step:
         """return the value
 
         :return: the value
-        :rtype: list
         """
         return self._value
 

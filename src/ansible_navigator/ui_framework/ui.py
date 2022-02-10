@@ -184,7 +184,6 @@ class UserInterface(CursesWindow):
         :param value: the value to set the scroll to
         :type value: int
         :return: the current scroll
-        :rtype: int
         """
         if value is not None:
             if not isinstance(value, int):
@@ -198,7 +197,6 @@ class UserInterface(CursesWindow):
         :param value: the value to set the serialization format to
         :type value: str or None
         :return: the current serialization format
-        :rtype: str
         """
         if value is not None:
             self._serialization_format = value
@@ -211,7 +209,6 @@ class UserInterface(CursesWindow):
         """Limit the callables the actions can access
 
         :return: A tuple of available functions
-        :rtype: Ui
         """
         res = Ui(
             clear=self.clear,
@@ -230,7 +227,6 @@ class UserInterface(CursesWindow):
         :param key_dict: the keys and their description
         :type key_dict: dict
         :return: The footer line
-        :rtype: CursesLine
         """
         colws = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
         if self._status:
@@ -319,7 +315,6 @@ class UserInterface(CursesWindow):
         """get one line of input from the user
 
         :return: the lines
-        :rtype: str
         """
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
@@ -365,7 +360,6 @@ class UserInterface(CursesWindow):
         :param await_input: Should we wait for a key
         :type await_input: bool
         :return: the key pressed
-        :rtype: str
         """
         heading = heading or ()
         heading_len = len(heading)
@@ -464,7 +458,6 @@ class UserInterface(CursesWindow):
         :param entry: the user input
         :param current: the content on the screen
         :return: The name and matching action or not
-        :rtype: str, Action or None, None
         """
         if not entry.startswith("{{"):  # don't match pure template
             if "{{" in entry and "}}" in entry:
@@ -497,7 +490,6 @@ class UserInterface(CursesWindow):
         :param obj: the object to color
         :type obj: Any
         :return: The generated lines
-        :rtype: CursesLines
         """
 
         if self.serialization_format() == "source.ansi":
@@ -563,7 +555,6 @@ class UserInterface(CursesWindow):
         :type lines: list of lists of dicts
             Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
         :return: all the lines
-        :rtype: CursesLines
         """
         return tuple(self._colored_line(line) for line in lines)
 
@@ -604,7 +595,6 @@ class UserInterface(CursesWindow):
         :param obj: the obj to serialize
         :type obj: Any
         :return: the serialize lines ready for display
-        :rtype: CursesLines
         """
         heading = self._content_heading(obj, self._screen_width)
         filtered_obj = self._filter_content_keys(obj) if self._hide_keys else obj
@@ -624,7 +614,6 @@ class UserInterface(CursesWindow):
         :param objs: A list of one or more object
         :param await_input: Should we wait for user input before returning
         :return: interaction with the user
-        :rtype: Interaction
         """
         heading, lines = self._filter_and_serialize(objs[index])
         while True:
@@ -739,7 +728,6 @@ class UserInterface(CursesWindow):
         :param value: the string to check
         :type value: str
         :return: the match if made
-        :rtype: Match or None
         """
         return regex.search(str(value))
 
