@@ -47,7 +47,7 @@ def test_basic_success_yaml():
 
 
 def test_basic_success_no_color():
-    """Ensure scope nocolor return just lines"""
+    """Ensure scope ``no_color`` return just lines."""
     sample = json.dumps({"test": "data"})
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
