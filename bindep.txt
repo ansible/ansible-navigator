@@ -1,6 +1,0 @@
-# Needed for Zuul (CI) to run smoke and lint
-gcc [test]
-git [test]
-python3-devel [test]
-tmux [test]
-vim [test]
