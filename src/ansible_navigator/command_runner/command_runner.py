@@ -4,7 +4,6 @@ import subprocess
 
 from queue import Queue
 from types import SimpleNamespace
-from typing import Any
 from typing import Callable
 from typing import List
 from typing import Union
@@ -62,26 +61,37 @@ class CommandRunner:
         self._pending_queue: Union[Queue, None] = None
 
     @staticmethod
-    def run_sproc(cmd_clss: Any):
-        """run with a single proc"""
-        all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
-        results = []
-        for command in all_commands:
+    def run_single_proccess(commands: List[Command]):
+        """Run commands with a single process.
+
+        :param commands: All commands to be run
+        :returns: The results from running all commands
+        """
+        results: List[Command] = []
+        for command in commands:
             run_command(command)
             command.post_process(command)
             results.append(command)
         return results
 
-    def run_mproc(self, cmd_clss: Any):
-        """run multiple proc"""
+    def run_multi_proccess(self, commands: List[Command]) -> List[Command]:
+        """Run commands with multiple processes.
+
+        Workers are started to read from pending queue.
+        Exit when the number of results is equal to the number
+        of commands needing to be run.
+
+        :param commands: All commands to be run
+        :returns: The results from running all commands
+        """
         if self._completed_queue is None:
             self._completed_queue = multiprocessing.Manager().Queue()
         if self._pending_queue is None:
             self._pending_queue = multiprocessing.Manager().Queue()
-        all_commands = tuple(cmd for cmd_cls in cmd_clss for cmd in cmd_cls.commands)
-        self.start_workers(all_commands)
+
+        self.start_workers(commands)
         results: List[Command] = []
-        while len(results) != len(all_commands):
+        while len(results) != len(commands):
             results.append(self._completed_queue.get())
         return results
 

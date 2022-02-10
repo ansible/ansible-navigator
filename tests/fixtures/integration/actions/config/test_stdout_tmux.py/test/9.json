@@ -4,7 +4,7 @@
     "comment": "config specified configuration file without ee",
     "additional_information": {
         "look_fors": [
-            ".yahmool"
+            ".os2"
         ],
         "look_nots": [],
         "compared_fixture": false
@@ -34,6 +34,6 @@
         "WIN_ASYNC_STARTUP_TIMEOUT(default) = 5",
         "WORKER_SHUTDOWN_POLL_COUNT(default) = 0",
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
-        "YAML_FILENAME_EXTENSIONS(/home/user/github/ansible-navigator/tests/fixtures/integration/actions/config/ansible.cfg) = ['.yahmool'](venv) bash-5.1$"
+        "YAML_FILENAME_EXTENSIONS(/home/user/github/ansible-navigator/tests/fixtures/integration/actions/config/ansible.cfg) = ['.os2'](venv) bash-5.1$"
     ]
 }

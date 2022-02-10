@@ -1,4 +1,0 @@
----
-- name: Kill tmux session
-  command: "tmux kill-session -t smoke:"
-  ignore_errors: true

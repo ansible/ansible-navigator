@@ -105,7 +105,7 @@ def kegexes(package: str) -> Generator:
     """Return a tuple of tuples, name, ``kegex`` for all actions.
 
     :param package: The name of the package
-    :returns: A generator for all ``kegexs``
+    :returns: A generator for all ``kegexes``
     """
     _import_all(package)
     return (kegex(package, name) for name in names(package))

@@ -157,8 +157,11 @@ def hex_to_rgb(value):
     """
     if value:
         value = value.lstrip("#")
-        lenv = len(value)
-        return tuple(int(value[i : i + lenv // 3], 16) for i in range(0, lenv, lenv // 3))
+        value_length = len(value)
+        return tuple(
+            int(value[i : i + value_length // 3], 16)
+            for i in range(0, value_length, value_length // 3)
+        )
     return None
 
 

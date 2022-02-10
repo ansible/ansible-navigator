@@ -158,23 +158,29 @@ def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
     for name in names:
         if name in ignored_names:
             continue
-        srcname = os.path.join(src, name)
-        dstname = os.path.join(dst, name)
+        source_path = os.path.join(src, name)
+        destination_path = os.path.join(dst, name)
         try:
-            if symlinks and os.path.islink(srcname):
-                linkto = os.readlink(srcname)
-                os.symlink(linkto, dstname)
-            elif os.path.isdir(srcname):
-                copytree(srcname, dstname, symlinks, ignore, dirs_exist_ok=dirs_exist_ok)
+            if symlinks and os.path.islink(source_path):
+                source_link = os.readlink(source_path)
+                os.symlink(source_link, destination_path)
+            elif os.path.isdir(source_path):
+                copytree(
+                    source_path,
+                    destination_path,
+                    symlinks,
+                    ignore,
+                    dirs_exist_ok=dirs_exist_ok,
+                )
             else:
                 # Will raise a SpecialFileError for unsupported file types
-                shutil.copy(srcname, dstname)
+                shutil.copy(source_path, destination_path)
         # catch the Error from the recursive ``copytree`` so that we can
         # continue with other files
         except Error as err:
             errors.extend(err.args[0])
         except EnvironmentError as why:
-            errors.append((srcname, dstname, str(why)))
+            errors.append((source_path, destination_path, str(why)))
     try:
         shutil.copystat(src, dst)
     except OSError as why:

@@ -5,7 +5,7 @@
     "additional_information": {
         "look_fors": [
             "YAML_FILENAME_EXTENSIONS",
-            "['.yahmool']"
+            "['.os2']"
         ],
         "look_nots": [],
         "compared_fixture": false
@@ -201,7 +201,7 @@
         "186│WIN_ASYNC_STARTUP_TIMEOUT                  True default                                                                           default                                                                           5",
         "187│WORKER_SHUTDOWN_POLL_COUNT                 True default                                                                           default                                                                           0",
         "188│WORKER_SHUTDOWN_POLL_DELAY                 True default                                                                           default                                                                           0.1",
-        "189│YAML_FILENAME_EXTENSIONS                  False /home/user/github/ansible-navigator/tests/fixtures/integration/actions/config//home/user/github/ansible-navigator/tests/fixtures/integration/actions/config/['.yahmool']",
+        "189│YAML_FILENAME_EXTENSIONS                  False /home/user/github/ansible-navigator/tests/fixtures/integration/actions/config//home/user/github/ansible-navigator/tests/fixtures/integration/actions/config/['.os2']",
         "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }
