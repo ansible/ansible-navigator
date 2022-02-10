@@ -91,14 +91,15 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
     res = form._dict  # pylint: disable=protected-access
     res["cancelled"] = form.cancelled
     res["submitted"] = form.submitted
-    for idx, field in enumerate(form.fields):
+    for field_idx, field in enumerate(form.fields):
         if isinstance(field, FieldText):
-            res["fields"][idx]["response"] = copy.copy(field.response)
-            res["fields"][idx]["value"] = copy.copy(field.value)
+            res["fields"][field_idx]["response"] = copy.copy(field.response)
+            res["fields"][field_idx]["value"] = copy.copy(field.value)
         elif isinstance(field, (FieldChecks, FieldRadio)):
-            for oidx, option in enumerate(field.options):
-                res["fields"][idx]["options"][oidx]["checked"] = option.checked
-            res["fields"][idx]["checked"] = [
+            for option_idx, option in enumerate(field.options):
+                res_field_options = res["fields"][field_idx]["options"]
+                res_field_options[option_idx]["checked"] = option.checked
+            res["fields"][field_idx]["checked"] = [
                 option.name for option in field.options if option.checked
             ]
 
