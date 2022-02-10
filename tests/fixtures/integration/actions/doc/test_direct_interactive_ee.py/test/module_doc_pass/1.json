@@ -5,7 +5,7 @@
     "output": [
         "0│",
         "1│- name: test task-1",
-        "2│  testorg.coll_1.mod_1:",
+        "2│  company_name.coll_1.mod_1:",
         "3│    foo: somevalue",
         "4│    bar: candidate",
         "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"

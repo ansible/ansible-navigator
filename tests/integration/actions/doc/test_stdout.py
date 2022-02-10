@@ -9,7 +9,7 @@ from .base import BaseClass
 
 # ansible-doc help with EE
 CLI_DOC_HELP_WITH_EE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m stdout"
+    "ansible-navigator doc company_name.coll_1.mod_1 --help-doc -m stdout"
     " --execution-environment true"
 )
 
@@ -33,7 +33,8 @@ class TestDocHelpWithEE(BaseClass):
 
 # ansible-doc help without EE
 CLI_DOC_HELP_WITHOUT_EE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m stdout --execution-environment false"
+    "ansible-navigator doc company_name.coll_1.mod_1"
+    " --help-doc -m stdout --execution-environment false"
 )
 
 testdata_2: List = [
@@ -56,7 +57,7 @@ class TestDocHelpWithoutEE(BaseClass):
 
 # ansible-doc help failed check in interactive mode
 CLI_DOC_HELP_WITH_EE_WRONG_MODE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m interactive"
+    "ansible-navigator doc company_name.coll_1.mod_1 --help-doc -m interactive"
     " --execution-environment true"
 )
 
@@ -80,7 +81,7 @@ class TestDocHelpWithEEWrongMode(BaseClass):
 
 # ansible-doc help failed check in interactive mode
 CLI_DOC_HELP_WITHOUT_EE_WRONG_MODE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 --help-doc -m interactive"
+    "ansible-navigator doc company_name.coll_1.mod_1 --help-doc -m interactive"
     " --execution-environment false"
 )
 
@@ -104,7 +105,7 @@ class TestDocHelpWithoutEEWrongMode(BaseClass):
 
 # doc command run in stdout mode without EE
 CLI_MODULE_DOC_WITHOUT_EE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j --execution-environment false"
+    "ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment false"
 )
 
 testdata_5: List = [
@@ -128,7 +129,7 @@ class TestModuleDocWithoutEE(BaseClass):
 
 # doc command run in stdout mode with EE
 CLI_MODULE_DOC_WITH_EE = (
-    "ansible-navigator doc testorg.coll_1.mod_1 -m stdout -j --execution-environment true"
+    "ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment true"
 )
 
 testdata_6: List = [
@@ -152,7 +153,7 @@ class TestModuleDocWithEE(BaseClass):
 
 # doc command run in stdout mode without EE
 CLI_LOOKUP_DOC_WITHOUT_EE = (
-    "ansible-navigator doc testorg.coll_1.lookup_1 -t lookup -m stdout -j"
+    "ansible-navigator doc company_name.coll_1.lookup_1 -t lookup -m stdout -j"
     " --execution-environment false"
 )
 
@@ -177,7 +178,7 @@ class TestLookUpDocWithoutEE(BaseClass):
 
 # doc command run in stdout mode with EE
 CLI_LOOKUP_DOC_WITH_EE = (
-    "ansible-navigator doc testorg.coll_1.lookup_1 -t lookup -m stdout -j"
+    "ansible-navigator doc company_name.coll_1.lookup_1 -t lookup -m stdout -j"
     " --execution-environment true"
 )
 

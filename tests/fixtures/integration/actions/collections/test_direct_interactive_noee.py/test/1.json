@@ -1,11 +1,11 @@
 {
-    "name": "test[1-:0-Browse testorg.coll_1 plugins window]",
+    "name": "test[1-:0-Browse company_name.coll_1 plugins window]",
     "index": 1,
-    "comment": "Browse testorg.coll_1 plugins window",
+    "comment": "Browse company_name.coll_1 plugins window",
     "output": [
-        "  TESTORG.COLL 1                               TYPE                 ADDED             DEPRECATED                       DESCRIPTION",
-        "0│lookup_1                                     lookup               1.0.0                  False                       This is test lookup plugin",
-        "1│mod_1                                        module               1.0.0                  False                       This is a test module",
+        "  COMPANY NAME.COLL 1                                    TYPE               ADDED            DEPRECATED                     DESCRIPTION",
+        "0│lookup_1                                               lookup             1.0.0                 False                     This is test lookup plugin",
+        "1│mod_1                                                  module             1.0.0                 False                     This is a test module",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
