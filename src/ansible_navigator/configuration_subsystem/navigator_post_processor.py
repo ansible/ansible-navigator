@@ -291,12 +291,12 @@ class NavigatorPostProcessor:
             if podman_no_message_queue_dir:
                 exit_msg = (
                     "Execution environment support while using podman requires a"
-                    f" '{mqueue_path}' directory."
+                    f" '{message_queue_path}' directory."
                 )
                 exit_messages.append(ExitMessage(message=exit_msg))
                 hint = (
-                    f"Try creating it with 'mkdir {message_queue_path}' or reference the documentation"
-                    " for your operating system related to POSIX message queues."
+                    f"Try creating it with 'mkdir {message_queue_path}' or reference the"
+                    " documentation for your operating system related to POSIX message queues."
                 )
                 exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
         else:
