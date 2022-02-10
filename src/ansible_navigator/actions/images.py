@@ -58,7 +58,7 @@ class Action(App):
         self._image_list: List = []
         self._images = Step(
             name="images",
-            tipe="menu",
+            step_type="menu",
             columns=["__name", "tag", "execution_environment", "created", "size"],
             value=[],
             select_func=self._build_image_menu,
@@ -216,7 +216,7 @@ class Action(App):
         if self.steps.current.index == 0:
             step = Step(
                 name="image_inspection",
-                tipe="content",
+                step_type="content",
                 value=self._images.selected["inspect"],
             )
             return step
@@ -232,14 +232,14 @@ class Action(App):
         if self.steps.current.index == 1:
             step = Step(
                 name="general",
-                tipe="content",
+                step_type="content",
                 value=self._images.selected["general"],
             )
 
         elif self.steps.current.index == 2:
             step = Step(
                 name="ansible",
-                tipe="content",
+                step_type="content",
                 value=self._images.selected["ansible"],
             )
 
@@ -247,7 +247,7 @@ class Action(App):
             step = Step(
                 columns=["name", "version", "summary"],
                 name="python_package_list",
-                tipe="menu",
+                step_type="menu",
                 select_func=self._build_python_content,
                 value=sorted(
                     self._images.selected["python"]["details"],
@@ -259,7 +259,7 @@ class Action(App):
             step = Step(
                 columns=["name", "version", "summary"],
                 name="system_package_list",
-                tipe="menu",
+                step_type="menu",
                 select_func=self._build_system_content,
                 value=sorted(
                     self._images.selected["system"]["details"],
@@ -270,7 +270,7 @@ class Action(App):
         elif self.steps.current.index == 5:
             step = Step(
                 name="everything",
-                tipe="content",
+                step_type="content",
                 value=self.steps.previous.selected,
             )
         return step
@@ -324,7 +324,7 @@ class Action(App):
         step = Step(
             columns=columns,
             name="image_menu",
-            tipe="menu",
+            step_type="menu",
             value=menu,
             select_func=self._build_image_content,
         )
@@ -338,7 +338,7 @@ class Action(App):
         """
         return Step(
             name="python_content",
-            tipe="content",
+            step_type="content",
             value=self.steps.current.value,
             index=self.steps.current.index,
         )
@@ -350,7 +350,7 @@ class Action(App):
         """
         return Step(
             name="system_content",
-            tipe="content",
+            step_type="content",
             value=self.steps.current.value,
             index=self.steps.current.index,
         )

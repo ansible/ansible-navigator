@@ -18,7 +18,7 @@ class Step:
     def __init__(
         self,
         name: str,
-        tipe: str,
+        step_type: str,
         value: List[Dict[str, str]],
         columns: Union[List[str], None] = None,
         index: Union[int, None] = None,
@@ -28,7 +28,7 @@ class Step:
         """Initialize the instance of a step.
 
         :param name: The name of the step
-        :param tipe: The type of step
+        :param step_type: The type of step
         :param value: The data corresponding to the step
         :param columns: The columns to show when the data is presented as a menu
         :param index: The currently selected entry in the data
@@ -45,7 +45,7 @@ class Step:
         self.previous = None
         self.select_func = select_func
         self.show_func = show_func
-        self.type = tipe
+        self.type = step_type
 
     @property
     def changed(self) -> bool:
