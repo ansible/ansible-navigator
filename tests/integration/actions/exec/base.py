@@ -1,7 +1,6 @@
 """The base class for exec interactive and stdout tests."""
 
 import difflib
-import json
 import os
 
 from pathlib import Path
@@ -11,7 +10,7 @@ from typing import Union
 import pytest
 
 from ....defaults import FIXTURES_DIR
-from ..._common import fixture_path_from_request
+from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
 from ..._interactions import Step
@@ -96,9 +95,7 @@ class BaseClass:
             assert not any(look_not in page for look_not in step.look_nots)
 
         if not any((step.look_fors, step.look_nots)):
-            dir_path, file_name = fixture_path_from_request(request, step.step_index)
-            with open(f"{dir_path}/{file_name}", encoding="utf-8") as fh:
-                expected_output = json.load(fh)["output"]
+            expected_output = retrieve_fixture_for_step(request, step.step_index)
 
             diff = "\n".join(
                 difflib.unified_diff(
