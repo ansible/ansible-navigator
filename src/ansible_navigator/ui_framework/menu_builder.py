@@ -56,7 +56,6 @@ class MenuBuilder:
         :param cols: The columns (keys) to use in the dicts
         :param indices: A range of what's showing in the UI
         :return: the heading and body of the menu
-        :rtype: (CursesLines, CursesLines)
         """
         line_prefix_w = len(str(len(dicts))) + len("|")
 
