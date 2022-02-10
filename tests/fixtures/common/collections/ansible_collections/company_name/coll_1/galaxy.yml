@@ -3,6 +3,6 @@ authors:
   - Ansible team (ansible-navigator)
 license_file: LICENSE
 name: coll_1
-namespace: testorg
+namespace: company_name
 readme: README.md
 version: 1.0.0

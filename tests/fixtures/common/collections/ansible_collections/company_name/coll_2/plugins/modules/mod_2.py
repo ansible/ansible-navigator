@@ -2,14 +2,19 @@
 
 from __future__ import absolute_import, division, print_function
 
+# pylint: disable=invalid-name
+__metaclass__ = type
+# pylint: enable=invalid-name
+
+
 DOCUMENTATION = """
-module: mod_1
+module: mod_2
 author:
 - test
 short_description: This is a test module
 description:
 - This is a test module
-version_added: 1.0.0
+version_added: 2.0.0
 options:
   foo:
     description:
@@ -31,7 +36,7 @@ notes:
 
 EXAMPLES = """
 - name: test task-1
-  testorg.coll_1.mod_1:
+  company_name.coll_2.mod_2:
     foo: somevalue
     bar: candidate
 """
