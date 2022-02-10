@@ -164,13 +164,12 @@ def dispatch(obj, replacements):
     return obj
 
 
-def escape_moustaches(obj):
+def escape_moustaches(obj: Mapping) -> Mapping:
     """escape moustaches
 
     :param obj: something
     :type obj: Any
     :return: the obj with replacements made
-    :rtype: Any
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     return dispatch(obj, replacements)
@@ -488,13 +487,12 @@ def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
     return converted_value
 
 
-def unescape_moustaches(obj):
+def unescape_moustaches(obj: Mapping) -> Mapping:
     """unescape moustaches
 
     :param obj: something
     :type obj: Any
     :return: the obj with replacements made
-    :rtype: Any
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)
