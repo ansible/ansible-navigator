@@ -1,7 +1,6 @@
 """Base class for doc interactive/stdout tests.
 """
 import difflib
-import json
 import os
 
 from typing import Optional
@@ -9,7 +8,7 @@ from typing import Optional
 import pytest
 
 from ....defaults import FIXTURES_COLLECTION_DIR
-from ..._common import fixture_path_from_request
+from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._tmux_session import TmuxSession
 
@@ -89,9 +88,7 @@ class BaseClass:
             if fixtures_update_requested:
                 update_fixtures(request, index, updated_received_output, comment, testname=testname)
 
-            dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
-            with open(f"{dir_path}/{file_name}", encoding="utf-8") as fh:
-                expected_output = json.load(fh)["output"]
+            expected_output = retrieve_fixture_for_step(request, index, testname)
             assert expected_output == updated_received_output, "\n" + "\n".join(
                 difflib.unified_diff(
                     expected_output,
