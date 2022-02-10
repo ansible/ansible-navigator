@@ -37,7 +37,12 @@ from .menu_builder import MenuBuilder
 from .ui_config import UIConfig
 
 
-STND_KEYS = {"^f/PgUp": "page up", "^b/PgDn": "page down", "\u2191\u2193": "scroll", "esc": "back"}
+STANDARD_KEYS = {
+    "^f/PgUp": "page up",
+    "^b/PgDn": "page down",
+    "\u2191\u2193": "scroll",
+    "esc": "back",
+}
 END_KEYS = {":help": "help"}
 
 
@@ -94,7 +99,7 @@ class UserInterface(CursesWindow):
         kegexes: Callable[..., Any],
         refresh: int,
         ui_config: UIConfig,
-        pbar_width: int = 8,
+        progress_bar_width: int = 8,
         status_width=12,
     ) -> None:
         """Initialize the user interface.
@@ -103,7 +108,7 @@ class UserInterface(CursesWindow):
         :param kegexes: A callable producing a list of action regular expressions to match against
         :param refresh: The screen refresh time is ms
         :param ui_config: the current UI configuration
-        :param pbar_width: The width of the progress bar
+        :param progress_bar_width: The width of the progress bar
         :param status_width: The width of the status indicator
         """
         super().__init__(ui_config=ui_config)
@@ -123,7 +128,7 @@ class UserInterface(CursesWindow):
         self._menu_filter: Union[Pattern, None] = None
         self._menu_indices: Tuple[int, ...] = tuple()
 
-        self._pbar_width = pbar_width
+        self._progress_bar_width = progress_bar_width
         self._status_width = status_width
         self._prefix_color = 8
         self._refresh = [refresh]
@@ -232,21 +237,21 @@ class UserInterface(CursesWindow):
         :return: The footer line
         :rtype: CursesLine
         """
-        colws = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
+        column_widths = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
         if self._status:
-            status_width = self._pbar_width
+            status_width = self._progress_bar_width
         else:
             status_width = 0
-        gap = floor((self._screen_width - status_width - sum(colws)) / len(key_dict))
-        adj_colws = [c + gap for c in colws]
+        gap = floor((self._screen_width - status_width - sum(column_widths)) / len(key_dict))
+        adjusted_column_widths = [c + gap for c in column_widths]
         col_starts = [0]
-        for idx, colw in enumerate(adj_colws):
-            col_starts.append(colw + col_starts[idx])
+        for idx, column_width in enumerate(adjusted_column_widths):
+            col_starts.append(column_width + col_starts[idx])
         footer = []
         for idx, key in enumerate(key_dict):
-            left = key[0 : adj_colws[idx]]
+            left = key[0 : adjusted_column_widths[idx]]
             right = f" {key_dict[key]}"
-            right = right[0 : adj_colws[idx] - len(key)]
+            right = right[0 : adjusted_column_widths[idx] - len(key)]
             footer.append(
                 CursesLinePart(
                     column=col_starts[idx],
@@ -369,7 +374,7 @@ class UserInterface(CursesWindow):
         """
         heading = heading or ()
         heading_len = len(heading)
-        footer = self._footer(dict(**STND_KEYS, **key_dict, **END_KEYS))
+        footer = self._footer(dict(**STANDARD_KEYS, **key_dict, **END_KEYS))
         footer_at = self._screen_height - 1  # screen is 0 based index
         footer_len = 1
 
@@ -458,13 +463,11 @@ class UserInterface(CursesWindow):
         entry: str,
         current: Any,
     ) -> Union[Tuple[str, Action], Tuple[None, None]]:
-        """attempt to template & match the user input against the regexen
-        provided by each action
+        """Attempt to template & match the user input against the kegexes.
 
         :param entry: the user input
         :param current: the content on the screen
-        :return: The name and matching action or not
-        :rtype: str, Action or None, None
+        :returns: The name of the action and the action to call or nothing if no match found
         """
         if not entry.startswith("{{"):  # don't match pure template
             if "{{" in entry and "}}" in entry:
@@ -756,7 +759,7 @@ class UserInterface(CursesWindow):
         :return: The heading and menu items
         """
         menu_builder = MenuBuilder(
-            progress_bar_width=self._pbar_width,
+            progress_bar_width=self._progress_bar_width,
             screen_width=self._screen_width,
             number_colors=curses.COLORS,
             color_menu_item=self._color_menu_item,
@@ -793,8 +796,12 @@ class UserInterface(CursesWindow):
                 self._menu_indices = tuple(range(len(current)))
                 line_numbers = self._menu_indices[first_line_idx : last_line_idx + 1]
 
-            showing_idxs = self._menu_indices[first_line_idx : last_line_idx + 1]
-            menu_heading, menu_lines = self._get_heading_menu_items(current, columns, showing_idxs)
+            showing_indices = self._menu_indices[first_line_idx : last_line_idx + 1]
+            menu_heading, menu_lines = self._get_heading_menu_items(
+                current,
+                columns,
+                showing_indices,
+            )
 
             entry = self._display(
                 lines=menu_lines,
