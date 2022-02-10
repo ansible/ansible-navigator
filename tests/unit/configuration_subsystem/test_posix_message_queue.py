@@ -27,7 +27,7 @@ def test_posix_message_queue_ee(
     :param engine: The value to set for ``--ce``
     :param generate_config: The configuration generator fixture
     """
-    mqueue_msg = (
+    message_queue_msg = (
         "Execution environment support while using podman requires a '/dev/mqueue/' directory."
     )
     unpatched_is_dir = pathlib.Path.is_dir
@@ -45,5 +45,7 @@ def test_posix_message_queue_ee(
     monkeypatch.setattr("pathlib.Path.is_dir", mock_is_dir)
     response = generate_config(params=["--ce", engine, "--ee", str(ee_support)])
     should_error = ee_support and engine == "podman" and not is_dir
-    mqueue_msg_exists = any(exit_msg.message == mqueue_msg for exit_msg in response.exit_messages)
-    assert should_error == mqueue_msg_exists
+    message_queue_msg_exists = any(
+        exit_msg.message == message_queue_msg for exit_msg in response.exit_messages
+    )
+    assert should_error == message_queue_msg_exists
