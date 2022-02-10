@@ -207,7 +207,7 @@ class Action(App):
 
         self._plays = Step(
             name="plays",
-            tipe="menu",
+            step_type="menu",
             columns=PLAY_COLUMNS,
             value=[],
             show_func=self._play_stats,
@@ -741,7 +741,7 @@ class Action(App):
         value = self.steps.current.selected["tasks"]
         step = Step(
             name="task_list",
-            tipe="menu",
+            step_type="menu",
             columns=self._task_list_columns,
             select_func=self._task_from_task_list,
             value=value,
@@ -756,7 +756,7 @@ class Action(App):
         """
         value = self.steps.current.value
         index = self.steps.current.index
-        step = Step(name="task", tipe="content", index=index, value=value)
+        step = Step(name="task", step_type="content", index=index, value=value)
         return step
 
     def update(self) -> None:
