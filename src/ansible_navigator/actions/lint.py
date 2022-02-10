@@ -325,7 +325,7 @@ class Action(App):
         return Step(
             name="lint_result",
             columns=columns,
-            tipe="menu",
+            step_type="menu",
             value=issues,
             select_func=lambda: self._build_lint_result(issues),
         )
@@ -333,7 +333,7 @@ class Action(App):
     def _build_lint_result(self, issues: List[Dict]):
         return Step(
             name="singular_lint_result",
-            tipe="content",
+            step_type="content",
             value=issues,
             index=self.steps.current.index,
         )
