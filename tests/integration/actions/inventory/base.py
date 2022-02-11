@@ -9,7 +9,7 @@ from ....defaults import FIXTURES_DIR
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
@@ -19,28 +19,34 @@ TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
 
 
 base_steps = (
-    Step(user_input=":0", comment="Browse hosts/ungrouped window"),
-    Step(user_input=":0", comment="Group list window"),
-    Step(user_input=":0", comment="group01 hosts detail window"),
-    Step(user_input=":0", comment="host0101 detail window"),
-    Step(user_input=":back", comment="Previous window (group01 hosts detail window)"),
-    Step(user_input=":back", comment="Previous window (Group list window)"),
-    Step(user_input=":1", comment="group02 hosts detail window"),
-    Step(user_input=":0", comment="host0201 detail window"),
-    Step(user_input=":back", comment="Previous window (group02 hosts detail window)"),
-    Step(user_input=":back", comment="Previous window (Group list window)"),
-    Step(user_input=":2", comment="group03 hosts detail window"),
-    Step(user_input=":0", comment="host0301 detail window"),
-    Step(user_input=":back", comment="Previous window (group03 hosts detail window)"),
-    Step(user_input=":back", comment="Previous window (Group list window)"),
-    Step(user_input=":back", comment="Previous window (Browse hosts/ungrouped window)"),
-    Step(user_input=":back", comment="Previous window (top window)"),
-    Step(user_input=":1", comment="Inventory hostname window"),
-    Step(user_input=":0", comment="host0101 detail window"),
-    Step(user_input=":back", comment="Previous window after host0101 (Inventory hostname window)"),
-    Step(user_input=":1", comment="host0201 detail window"),
-    Step(user_input=":back", comment="Previous window after host0201 (Inventory hostname window)"),
-    Step(user_input=":2", comment="host0301 detail window"),
+    UiTestStep(user_input=":0", comment="Browse hosts/ungrouped window"),
+    UiTestStep(user_input=":0", comment="Group list window"),
+    UiTestStep(user_input=":0", comment="group01 hosts detail window"),
+    UiTestStep(user_input=":0", comment="host0101 detail window"),
+    UiTestStep(user_input=":back", comment="Previous window (group01 hosts detail window)"),
+    UiTestStep(user_input=":back", comment="Previous window (Group list window)"),
+    UiTestStep(user_input=":1", comment="group02 hosts detail window"),
+    UiTestStep(user_input=":0", comment="host0201 detail window"),
+    UiTestStep(user_input=":back", comment="Previous window (group02 hosts detail window)"),
+    UiTestStep(user_input=":back", comment="Previous window (Group list window)"),
+    UiTestStep(user_input=":2", comment="group03 hosts detail window"),
+    UiTestStep(user_input=":0", comment="host0301 detail window"),
+    UiTestStep(user_input=":back", comment="Previous window (group03 hosts detail window)"),
+    UiTestStep(user_input=":back", comment="Previous window (Group list window)"),
+    UiTestStep(user_input=":back", comment="Previous window (Browse hosts/ungrouped window)"),
+    UiTestStep(user_input=":back", comment="Previous window (top window)"),
+    UiTestStep(user_input=":1", comment="Inventory hostname window"),
+    UiTestStep(user_input=":0", comment="host0101 detail window"),
+    UiTestStep(
+        user_input=":back",
+        comment="Previous window after host0101 (Inventory hostname window)",
+    ),
+    UiTestStep(user_input=":1", comment="host0201 detail window"),
+    UiTestStep(
+        user_input=":back",
+        comment="Previous window after host0201 (Inventory hostname window)",
+    ),
+    UiTestStep(user_input=":2", comment="host0301 detail window"),
 )
 
 
@@ -93,7 +99,7 @@ class BaseClass:
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-            and not any((step.look_fors, step.look_nots))
+            and not any((step.present, step.absent))
         )
         if fixtures_update_requested:
             update_fixtures(
@@ -102,20 +108,20 @@ class BaseClass:
                 received_output,
                 step.comment,
                 additional_information={
-                    "look_fors": step.look_fors,
-                    "look_nots": step.look_nots,
-                    "compared_fixture": not any((step.look_fors, step.look_nots)),
+                    "present": step.present,
+                    "absent": step.absent,
+                    "compared_fixture": not any((step.present, step.absent)),
                 },
             )
         page = " ".join(received_output)
 
-        if step.look_fors:
-            assert all(look_for in page for look_for in step.look_fors)
+        if step.present:
+            assert all(present in page for present in step.present)
 
-        if step.look_nots:
-            assert not any(look_not in page for look_not in step.look_nots)
+        if step.absent:
+            assert not any(absent in page for absent in step.absent)
 
-        if not any((step.look_fors, step.look_nots)):
+        if not any((step.present, step.absent)):
             expected_output = retrieve_fixture_for_step(request, step.step_index)
             assert expected_output == received_output, "\n" + "\n".join(
                 difflib.unified_diff(expected_output, received_output, "expected", "received"),

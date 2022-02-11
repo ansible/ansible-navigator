@@ -3,8 +3,8 @@
     "index": 19,
     "comment": "Previous window after host0101 (Inventory hostname window)",
     "additional_information": {
-        "look_fors": [],
-        "look_nots": [],
+        "present": [],
+        "absent": [],
         "compared_fixture": true
     },
     "output": [
