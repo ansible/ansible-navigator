@@ -46,20 +46,6 @@ class Command(NamedTuple):
         return cmd
 
 
-class Step(NamedTuple):
-    """test data object"""
-
-    user_input: str
-    comment: str
-
-    look_fors: List[str] = []
-    look_nots: List[str] = []
-    mask: bool = True
-    playbook_status: Union[None, str] = None
-    step_index: int = 0
-    search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
-
-
 class UiTestStep(NamedTuple):
     """A simulated user interaction with the user interface."""
 
