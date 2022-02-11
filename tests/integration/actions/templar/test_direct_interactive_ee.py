@@ -3,7 +3,7 @@
 import pytest
 
 from ..._interactions import Command
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from ..._interactions import step_id
 from .base import BaseClass
@@ -16,7 +16,7 @@ cmdline = f"{playbook_path} -i {inventory_path}"
 CLI = Command(subcommand="run", cmdline=cmdline, execution_environment=True).join()
 
 initial_steps = (
-    Step(
+    UiTestStep(
         user_input=CLI,
         comment="ansible-navigator run playbook",
         search_within_response=["COMPLETE", "SUCCESSFUL"],

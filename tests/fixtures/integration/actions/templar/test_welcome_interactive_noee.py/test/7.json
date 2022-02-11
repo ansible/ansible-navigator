@@ -3,10 +3,10 @@
     "index": 7,
     "comment": "dig examples",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "ansible.builtin.debug:"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
