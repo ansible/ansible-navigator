@@ -1,3 +1,4 @@
+# cspell:ignore ecmd
 """Utility functions used by adjacent tests
 """
 

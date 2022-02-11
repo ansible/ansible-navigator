@@ -1,9 +1,9 @@
+# cspell:ignore envvars
 """Herewithin lies the base class for all interaction with
 ansible-runner. Attributes common to all ansible-runner calls
 are defined within the base class
 """
 
-# cspell:ignore envvars
 
 import logging
 import os

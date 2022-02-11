@@ -1,3 +1,4 @@
+<!-- cspell:ignore autodoc, maxdepth, toctree -->
 (_ansible_navigator_index)=
 # Ansible Navigator Documentation
 

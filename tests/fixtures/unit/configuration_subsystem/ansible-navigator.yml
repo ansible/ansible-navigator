@@ -1,3 +1,4 @@
+# cspell:ignore cmdline, workdir
 ---
 ansible-navigator:
   ansible:

@@ -1,3 +1,4 @@
+# cspell:ignore ansiblefest, cyaml, fchainmap, linkify, toctree
 # pylint: disable=invalid-name
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""

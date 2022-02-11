@@ -1,3 +1,4 @@
+# cspell:ignore buildvm
 """unit tests for image introspection
 """
 import importlib

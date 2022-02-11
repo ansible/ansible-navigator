@@ -1,3 +1,4 @@
+# cspell:ignore A_INVIS
 """Tokenize and color text
 """
 
