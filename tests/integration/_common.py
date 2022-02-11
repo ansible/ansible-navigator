@@ -67,7 +67,9 @@ def update_fixtures(
     }
     if additional_information is not None:
         fixture["additional_information"] = additional_information
-        if additional_information["look_fors"]:
+        if additional_information.get("look_fors"):
+            received_output = sanitize_output(received_output)
+        elif additional_information.get("present"):
             received_output = sanitize_output(received_output)
     fixture["output"] = received_output
     with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as fh:

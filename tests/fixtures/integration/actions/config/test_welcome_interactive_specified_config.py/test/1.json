@@ -3,11 +3,11 @@
     "index": 1,
     "comment": "enter config from welcome screen (no ee)",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "YAML_FILENAME_EXTENSIONS",
             "['.yml', '.yaml', '.json']"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

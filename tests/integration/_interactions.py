@@ -60,6 +60,25 @@ class Step(NamedTuple):
     search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
 
 
+class UiTestStep(NamedTuple):
+    """A simulated user interaction with the user interface."""
+
+    #: The string to send to the tmux session
+    user_input: str
+    #: Explanation of what is being sent or done
+    comment: str
+    #: Search for in the response
+    present: List[str] = []
+    #: Ensure not in the response
+    absent: List[str] = []
+    #: Should the output be masked prior to writing a fixture
+    mask: bool = True
+    #: The index of the step with the list of all steps
+    step_index: int = 0
+    #: Find this before returning from the tmux session to the test
+    search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
+
+
 def add_indices(steps):
     """update the index of each"""
     return (step._replace(step_index=idx) for idx, step in enumerate(steps))

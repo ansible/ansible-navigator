@@ -3,7 +3,7 @@
 import pytest
 
 from ..._interactions import Command
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from ..._interactions import step_id
 from .base import BaseClass
@@ -13,10 +13,10 @@ from .base import base_steps
 CLI = Command(subcommand="config", execution_environment=False).join()
 
 initial_steps = (
-    Step(
+    UiTestStep(
         user_input=CLI,
         comment="ansible-navigator config command top window",
-        look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        present=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
     ),
 )
 

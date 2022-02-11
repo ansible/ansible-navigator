@@ -3,7 +3,7 @@ import pytest
 
 from ..._interactions import Command
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from .base import CONFIG_FIXTURE
 from .base import BaseClass
@@ -16,7 +16,7 @@ class StdoutCommand(Command):
     preclear = True
 
 
-class ShellCommand(Step):
+class ShellCommand(UiTestStep):
     """a shell command"""
 
     search_within_response = SearchFor.PROMPT
@@ -30,7 +30,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        look_fors=["YAML_FILENAME_EXTENSIONS"],
+        present=["YAML_FILENAME_EXTENSIONS"],
     ),
     ShellCommand(
         comment="config dump without ee",
@@ -39,7 +39,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["YAML_FILENAME_EXTENSIONS"],
+        present=["YAML_FILENAME_EXTENSIONS"],
     ),
     ShellCommand(
         comment="config list with ee",
@@ -48,7 +48,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        look_fors=["YAML_FILENAME_EXTENSIONS"],
+        present=["YAML_FILENAME_EXTENSIONS"],
     ),
     ShellCommand(
         comment="config list without ee",
@@ -57,7 +57,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["YAML_FILENAME_EXTENSIONS"],
+        present=["YAML_FILENAME_EXTENSIONS"],
     ),
     ShellCommand(
         comment="config helpconfig with ee",
@@ -66,7 +66,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        look_fors=["usage: ansible-config [-h]"],
+        present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
         comment="config helpconfig without ee",
@@ -75,7 +75,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["usage: ansible-config [-h]"],
+        present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
         comment="config helpconfig fail with interactive with ee",
@@ -84,7 +84,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=True,
         ).join(),
-        look_fors=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
+        present=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
     ),
     ShellCommand(
         comment="config helpconfig fail with interactive without ee",
@@ -93,7 +93,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=False,
         ).join(),
-        look_fors=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
+        present=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
     ),
     ShellCommand(
         comment="config specified configuration file with ee",
@@ -104,7 +104,7 @@ stdout_tests = (
             execution_environment=True,
             pass_environment_variables=["PAGER"],
         ).join(),
-        look_fors=[".os2"],
+        present=[".os2"],
     ),
     ShellCommand(
         comment="config specified configuration file without ee",
@@ -113,7 +113,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=[".os2"],
+        present=[".os2"],
     ),
 )
 

@@ -3,11 +3,11 @@
     "index": 3,
     "comment": "enter config from welcome screen, custom config, (no ee)",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "YAML_FILENAME_EXTENSIONS",
             "['.os2']"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
