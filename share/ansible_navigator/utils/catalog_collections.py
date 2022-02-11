@@ -1,6 +1,5 @@
 # cspell:ignore ftype, chksum
 """Catalog collections within the execution environment."""
-
 import argparse
 import hashlib
 import json

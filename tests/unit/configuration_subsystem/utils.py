@@ -2,7 +2,6 @@
 """Utility functions used by adjacent tests
 """
 
-
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 
 
