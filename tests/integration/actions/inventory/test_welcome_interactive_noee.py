@@ -3,7 +3,7 @@
 import pytest
 
 from ..._interactions import Command
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from ..._interactions import step_id
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
@@ -15,8 +15,8 @@ CLI = Command(execution_environment=False).join()
 cmdline = f":inventory -i {ANSIBLE_INVENTORY_FIXTURE_DIR}"
 
 initial_steps = (
-    Step(user_input=CLI, comment="welcome screen"),
-    Step(user_input=cmdline, comment="ansible-navigator inventory command top window"),
+    UiTestStep(user_input=CLI, comment="welcome screen"),
+    UiTestStep(user_input=cmdline, comment="ansible-navigator inventory command top window"),
 )
 
 steps = add_indices(initial_steps + base_steps)

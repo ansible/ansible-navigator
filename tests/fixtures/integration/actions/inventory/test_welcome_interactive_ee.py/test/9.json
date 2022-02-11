@@ -3,8 +3,8 @@
     "index": 9,
     "comment": "host0201 detail window",
     "additional_information": {
-        "look_fors": [],
-        "look_nots": [],
+        "present": [],
+        "absent": [],
         "compared_fixture": true
     },
     "output": [

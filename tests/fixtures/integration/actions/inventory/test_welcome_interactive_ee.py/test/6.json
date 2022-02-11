@@ -3,8 +3,8 @@
     "index": 6,
     "comment": "Previous window (group01 hosts detail window)",
     "additional_information": {
-        "look_fors": [],
-        "look_nots": [],
+        "present": [],
+        "absent": [],
         "compared_fixture": true
     },
     "output": [
