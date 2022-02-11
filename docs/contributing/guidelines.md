@@ -1,5 +1,5 @@
 <!-- markdownlint-disable first-line-heading -->
-<!-- cspell:ignore installdeps, rdocs -->
+
 ```{spelling}
 de
 facto
@@ -17,6 +17,7 @@ Towncrier
 We use [Sphinx] to generate our docs website. You can trigger
 the process locally by executing:
 
+<!-- cspell:disable -->
 ```shell-session
 $ tox -e build-docs
 build-docs create: .tox/build-docs
@@ -38,6 +39,8 @@ _______________________________________________________ summary ________________
   build-docs: commands succeeded
   congratulations :)
 ```
+<!-- cspell:enable -->
+
 
 It is also integrated with [Read The Docs] that builds and
 publishes each commit to the main branch and generates live

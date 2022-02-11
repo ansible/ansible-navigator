@@ -1,7 +1,6 @@
+# cspell:ignore getpid, gmtime, msecs
 """start here
 """
-
-# cspell:ignore getpid, gmtime, msecs
 
 import logging
 import os
