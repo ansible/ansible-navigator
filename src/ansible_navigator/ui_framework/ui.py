@@ -1,5 +1,8 @@
 """the main UI renderer
 """
+
+# cspell:ignore KEY_NPAGE, KEY_PPAGE
+
 import curses
 import json
 import logging

@@ -1,6 +1,8 @@
 """Utility functions used by adjacent tests
 """
 
+# cspell:ignore ecmd
+
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 
 

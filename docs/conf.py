@@ -2,6 +2,8 @@
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
 
+# cspell:ignore ansiblefest, cyaml, fchainmap, linkify
+
 from functools import partial
 from pathlib import Path
 from sys import path

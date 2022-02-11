@@ -1,4 +1,5 @@
 <!-- markdownlint-disable first-line-heading -->
+<!-- cspell:ignore installdeps -->
 ```{spelling}
 de
 facto

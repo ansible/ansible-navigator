@@ -1,6 +1,8 @@
 """Tokenize and color text
 """
 
+# cspell:ignore A_INVIS
+
 import colorsys
 import curses
 import functools

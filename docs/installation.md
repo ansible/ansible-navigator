@@ -1,3 +1,4 @@
+<!-- cspell:ignore devel, kubic, libcontainers -->
 # Installing ansible-navigator with execution environment support
 
 ```{contents}

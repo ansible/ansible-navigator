@@ -3,7 +3,7 @@ ansible-runner. Attributes common to all ansible-runner calls
 are defined within the base class
 """
 
-# cspell:ignore envvars
+# cspell:ignore envvars, mkdtemp
 
 import logging
 import os
