@@ -3,7 +3,7 @@ import pytest
 
 from ..._interactions import Command
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from .base import BaseClass
 from .base import inventory_path
@@ -17,7 +17,7 @@ class StdoutCommand(Command):
     preclear = True
 
 
-class ShellCommand(Step):
+class ShellCommand(UiTestStep):
     """a shell command"""
 
     search_within_response = SearchFor.PROMPT
@@ -31,7 +31,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        look_fors=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
+        present=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
     ),
     ShellCommand(
         comment="run playbook without ee",
@@ -40,7 +40,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
+        present=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
     ),
     ShellCommand(
         comment="playbook help with ee",
@@ -49,7 +49,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        look_fors=["usage: ansible-playbook [-h]"],
+        present=["usage: ansible-playbook [-h]"],
     ),
     ShellCommand(
         comment="playbook help without ee",
@@ -58,7 +58,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["usage: ansible-playbook [-h]"],
+        present=["usage: ansible-playbook [-h]"],
     ),
     ShellCommand(
         comment="run help-playbook fail with interactive with ee",
@@ -67,7 +67,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=True,
         ).join(),
-        look_fors=["--hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'"],
+        present=["--hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'"],
     ),
     ShellCommand(
         comment="run help-playbook fail with interactive without ee",
@@ -76,7 +76,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=False,
         ).join(),
-        look_fors=["--hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'"],
+        present=["--hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'"],
     ),
 )
 

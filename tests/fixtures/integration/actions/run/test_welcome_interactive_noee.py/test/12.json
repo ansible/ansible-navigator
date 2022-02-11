@@ -3,8 +3,8 @@
     "index": 12,
     "comment": "play-2 details",
     "additional_information": {
-        "look_fors": [],
-        "look_nots": [],
+        "present": [],
+        "absent": [],
         "compared_fixture": true
     },
     "output": [
