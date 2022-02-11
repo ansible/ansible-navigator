@@ -1,4 +1,5 @@
 ---
+# cspell:ignore cmdline, workdir
 ansible-navigator:
   ansible:
     config: /tmp/ansible.cfg

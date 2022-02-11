@@ -1,4 +1,5 @@
 <!-- markdownlint-disable first-line-heading -->
+<!-- cspell:ignore pyproject -->
 
 (_ansible_navigator_adding_changelog_fragments)=
 

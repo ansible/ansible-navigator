@@ -1,5 +1,5 @@
 <!-- markdownlint-disable first-line-heading -->
-<!-- cspell:ignore installdeps -->
+<!-- cspell:ignore installdeps, rdocs -->
 ```{spelling}
 de
 facto

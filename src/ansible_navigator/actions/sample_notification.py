@@ -10,6 +10,7 @@ from ..ui_framework import form_to_dict
 from . import _actions as actions
 
 
+# cspell:disable
 FORM = """
 form:
   title:  BLOCKING NOTIFICATION
@@ -25,6 +26,7 @@ form:
       type: information
   type: notification
 """
+# cspell:enable
 
 
 @actions.register
