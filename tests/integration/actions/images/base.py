@@ -9,33 +9,33 @@ from ....defaults import DEFAULT_CONTAINER_IMAGE
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
 IMAGE_SHORT = DEFAULT_CONTAINER_IMAGE.rsplit("/", maxsplit=1)[-1].split(":")[0]
 
 
-step_back = Step(user_input=":back", comment="goto info menu", look_fors=["Everything"])
+step_back = UiTestStep(user_input=":back", comment="goto info menu", present=["Everything"])
 
 base_steps = (
-    Step(
+    UiTestStep(
         user_input=f":f {IMAGE_SHORT}",
         comment=f"filter for {IMAGE_SHORT}",
-        look_fors=[IMAGE_SHORT],
+        present=[IMAGE_SHORT],
     ),
-    Step(user_input=":0", comment="goto info menu", look_fors=["Everything"]),
-    Step(user_input=":0", comment="goto Image information", look_fors=["architecture:"]),
+    UiTestStep(user_input=":0", comment="goto info menu", present=["Everything"]),
+    UiTestStep(user_input=":0", comment="goto Image information", present=["architecture:"]),
     step_back,
-    Step(user_input=":1", comment="goto General information", look_fors=["friendly:"]),
+    UiTestStep(user_input=":1", comment="goto General information", present=["friendly:"]),
     step_back,
-    Step(user_input=":2", comment="goto Ansible information", look_fors=["collections:"]),
+    UiTestStep(user_input=":2", comment="goto Ansible information", present=["collections:"]),
     step_back,
-    Step(user_input=":3", comment="goto Python information", look_fors=["ansible-runner"]),
+    UiTestStep(user_input=":3", comment="goto Python information", present=["ansible-runner"]),
     step_back,
-    Step(user_input=":4", comment="goto System information", look_fors=["basesystem"]),
+    UiTestStep(user_input=":4", comment="goto System information", present=["basesystem"]),
     step_back,
-    Step(user_input=":5", comment="goto Everything", look_fors=["collections:"]),
+    UiTestStep(user_input=":5", comment="goto Everything", present=["collections:"]),
 )
 
 
@@ -80,21 +80,21 @@ class BaseClass:
                 received_output,
                 step.comment,
                 additional_information={
-                    "look_fors": step.look_fors,
-                    "look_nots": step.look_nots,
-                    "compared_fixture": not any((step.look_fors, step.look_nots)),
+                    "present": step.present,
+                    "absent": step.absent,
+                    "compared_fixture": not any((step.present, step.absent)),
                 },
             )
 
         page = " ".join(received_output)
 
-        if step.look_fors:
-            assert all(look_for in page for look_for in step.look_fors)
+        if step.present:
+            assert all(present in page for present in step.present)
 
-        if step.look_nots:
-            assert not any(look_not in page for look_not in step.look_nots)
+        if step.absent:
+            assert not any(absent in page for absent in step.absent)
 
-        if not any((step.look_fors, step.look_nots)):
+        if not any((step.present, step.absent)):
             expected_output = retrieve_fixture_for_step(request, step.step_index)
             assert expected_output == received_output, "\n" + "\n".join(
                 difflib.unified_diff(expected_output, received_output, "expected", "received"),

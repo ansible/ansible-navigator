@@ -3,15 +3,15 @@
     "index": 2,
     "comment": "filter for creator-ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "creator-ee"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  NAME                                                       TAG                 EXECUTION ENVIRONMENT                                         CREATED                           SIZE",
-        "0│creator-ee (primary)                                       v0.2.0                               True                                         3 weeks ago                       1.33 GB",
+        "  NAME                                                      TAG                EXECUTION ENVIRONMENT                                        CREATED                              SIZE",
+        "0│creator-ee (primary)                                      v0.2.0                              True                                        2 months ago                         1.33 GB",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

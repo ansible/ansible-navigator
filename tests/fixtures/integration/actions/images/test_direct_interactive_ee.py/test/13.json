@@ -3,10 +3,10 @@
     "index": 13,
     "comment": "goto Everything",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "collections:"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
