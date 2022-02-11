@@ -4,7 +4,7 @@ import pytest
 
 from ..._interactions import Command
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from .base import BaseClass
 
@@ -17,7 +17,7 @@ class StdoutCommand(Command):
     preclear = True
 
 
-class ShellCommand(Step):
+class ShellCommand(UiTestStep):
     """A shell command."""
 
     search_within_response = SearchFor.PROMPT
@@ -30,8 +30,8 @@ stdout_tests = (
             cmdline="--excmd 'echo test_data_from_cli'",
             execution_environment=True,
         ).join(),
-        look_fors=["bash", "test_data_from_cli"],
-        look_nots=["ERROR"],
+        present=["bash", "test_data_from_cli"],
+        absent=["ERROR"],
     ),
     ShellCommand(
         comment="exec echo without ee",
@@ -39,7 +39,7 @@ stdout_tests = (
             cmdline="--excmd 'echo test_data_from_cli'",
             execution_environment=False,
         ).join(),
-        look_fors=["bash", "test_data_from_cli", "ERROR", "requires execution environment support"],
+        present=["bash", "test_data_from_cli", "ERROR", "requires execution environment support"],
     ),
     ShellCommand(
         comment="exec echo check path via shell",
@@ -47,7 +47,7 @@ stdout_tests = (
             cmdline="--excmd 'echo $PATH'",
             execution_environment=True,
         ).join(),
-        look_fors=["/sbin"],
+        present=["/sbin"],
     ),
     ShellCommand(
         comment="exec echo check no path via shell",
@@ -55,7 +55,7 @@ stdout_tests = (
             cmdline="--excmd 'echo $PATH' --exshell false",
             execution_environment=True,
         ).join(),
-        look_fors=["$PATH"],
+        present=["$PATH"],
     ),
 )
 

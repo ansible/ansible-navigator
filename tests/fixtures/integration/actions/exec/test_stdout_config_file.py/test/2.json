@@ -1,0 +1,38 @@
+{
+    "name": "test[ensure env vars get set from config  clear && ansible-navigator exec --excmd /bin/env --ee True --ll debug --mode stdout]",
+    "index": 2,
+    "comment": "ensure env vars get set from config",
+    "additional_information": {
+        "present": [
+            "ANSIBLE_COLLECTIONS_PATHS=/tmp/collections"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "ANSIBLE_HOST_KEY_CHECKING=False",
+        "ANSIBLE_NAVIGATOR_LOG_LEVEL=debug",
+        "ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH=./.test_logs/tests/integration/actions/exec/test_stdout_config_file.py/collection_doc_cache.db",
+        "AWX_ISOLATED_DATA_DIR=/runner/artifacts/00000000-0000-0000-0000-000000000000",
+        "HOSTNAME=454f1f8ad1e4",
+        "ANSIBLE_CACHE_PLUGIN_CONNECTION=/runner/artifacts/00000000-0000-0000-0000-000000000000/fact_cache",
+        "ANSIBLE_CACHE_PLUGIN=jsonfile",
+        "ANSIBLE_UNSAFE_WRITES=1",
+        "container=podman",
+        "PWD=/home/user/github/ansible-navigator",
+        "HOME=/home/runner",
+        "ANSIBLE_RETRY_FILES_ENABLED=False",
+        "ANSIBLE_NAVIGATOR_PULL_POLICY=never",
+        "ANSIBLE_STDOUT_CALLBACK=awx_display",
+        "ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS=./.test_logs/tests/integration/actions/exec/test_stdout_config_file.py/playbook-artifact.log",
+        "ANSIBLE_COLLECTIONS_PATHS=/tmp/collections",
+        "TERM=xterm",
+        "LAUNCHED_BY_RUNNER=1",
+        "ANSIBLE_NAVIGATOR_CONFIG=/home/user/github/ansible-navigator/tests/fixtures/integration/actions/exec/ansible-navigator.yaml",
+        "SHLVL=0",
+        "ANSIBLE_NAVIGATOR_LOG_FILE=./.test_logs/tests/integration/actions/exec/test_stdout_config_file.py/ansible-navigator.log",
+        "ANSIBLE_CALLBACK_PLUGINS=/usr/local/lib/python3.8/site-packages/ansible_runner/callbacks",
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "(venv) bash-5.1$"
+    ]
+}

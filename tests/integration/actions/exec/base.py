@@ -13,7 +13,7 @@ from ....defaults import FIXTURES_DIR
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
@@ -51,7 +51,7 @@ class BaseClass:
         with TmuxSession(**tmux_params) as tmux_session:
             yield tmux_session
 
-    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: Step):
+    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep):
         """Test interactive/stdout exec.
 
         :param request: The test request
@@ -80,21 +80,21 @@ class BaseClass:
                 received_output,
                 step.comment,
                 additional_information={
-                    "look_fors": step.look_fors,
-                    "look_nots": step.look_nots,
-                    "compared_fixture": not any((step.look_fors, step.look_nots)),
+                    "present": step.present,
+                    "absent": step.absent,
+                    "compared_fixture": not any((step.present, step.absent)),
                 },
             )
 
         page = " ".join(received_output)
 
-        if step.look_fors:
-            assert all(look_for in page for look_for in step.look_fors)
+        if step.present:
+            assert all(present in page for present in step.present)
 
-        if step.look_nots:
-            assert not any(look_not in page for look_not in step.look_nots)
+        if step.absent:
+            assert not any(absent in page for absent in step.absent)
 
-        if not any((step.look_fors, step.look_nots)):
+        if not any((step.present, step.absent)):
             expected_output = retrieve_fixture_for_step(request, step.step_index)
 
             diff = "\n".join(
