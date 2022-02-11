@@ -3,7 +3,7 @@ import pytest
 
 from ..._interactions import Command
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from .base import BUILDER_FIXTURE
 from .base import BaseClass
@@ -16,7 +16,7 @@ class StdoutCommand(Command):
     preclear = True
 
 
-class ShellCommand(Step):
+class ShellCommand(UiTestStep):
     """A shell command."""
 
     search_within_response = SearchFor.PROMPT
@@ -30,7 +30,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        look_fors=["usage: ansible-builder [-h]"],
+        present=["usage: ansible-builder [-h]"],
     ),
     ShellCommand(
         comment="builder help-builder without ee",
@@ -39,7 +39,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["usage: ansible-builder [-h]"],
+        present=["usage: ansible-builder [-h]"],
     ),
     ShellCommand(
         comment="builder help-builder fail with interactive with ee",
@@ -48,7 +48,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=True,
         ).join(),
-        look_fors=["--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"],
+        present=["--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"],
     ),
     ShellCommand(
         comment="builder help-builder fail with interactive without ee",
@@ -57,7 +57,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=False,
         ).join(),
-        look_fors=["--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"],
+        present=["--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"],
     ),
     ShellCommand(
         comment="build execution-environment without ee",
@@ -67,7 +67,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        look_fors=["Hello from EE", "The build context can be found at"],
+        present=["Hello from EE", "The build context can be found at"],
     ),
     ShellCommand(
         comment="build execution-environment with ee",
@@ -77,7 +77,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        look_fors=["Hello from EE", "The build context can be found at"],
+        present=["Hello from EE", "The build context can be found at"],
     ),
     ShellCommand(
         comment="build execution-environment without ee in interactive mode",
@@ -87,7 +87,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=False,
         ).join(),
-        look_fors=[
+        present=[
             "does not support mode 'interactive'.",
         ],
     ),
@@ -99,7 +99,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=True,
         ).join(),
-        look_fors=[
+        present=[
             "does not support mode 'interactive'.",
         ],
     ),
