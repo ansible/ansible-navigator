@@ -3,13 +3,13 @@
     "index": 1,
     "comment": "exec echo without ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "bash",
             "test_data_from_cli",
             "ERROR",
             "requires execution environment support"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

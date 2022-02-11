@@ -3,11 +3,11 @@
     "index": 0,
     "comment": "exec echo with ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "bash",
             "test_data_from_config"
         ],
-        "look_nots": [
+        "absent": [
             "ERROR"
         ],
         "compared_fixture": false

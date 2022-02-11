@@ -3,10 +3,10 @@
     "index": 2,
     "comment": "exec echo check path via shell",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "/sbin"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
