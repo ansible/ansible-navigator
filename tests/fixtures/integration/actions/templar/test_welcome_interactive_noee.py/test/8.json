@@ -3,10 +3,10 @@
     "index": 8,
     "comment": "show doc",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "module: debug"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

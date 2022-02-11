@@ -3,10 +3,10 @@
     "index": 10,
     "comment": "goto vi",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "name: run integration test play-1"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

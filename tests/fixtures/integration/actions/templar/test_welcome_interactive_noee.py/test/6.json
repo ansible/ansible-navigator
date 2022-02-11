@@ -3,10 +3,10 @@
     "index": 6,
     "comment": "doc for task",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "module: debug"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
