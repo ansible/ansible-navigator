@@ -3,7 +3,7 @@
     "index": 4,
     "comment": "clear filter, full list",
     "additional_information": {
-        "look_fors": [
+        "look_for": [
             "ACTION_WARNINGS",
             "CALLBACKS_ENABLED"
         ],

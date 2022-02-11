@@ -3,7 +3,7 @@
     "index": 6,
     "comment": "YAML_FILENAME_EXTENSIONS details",
     "additional_information": {
-        "look_fors": [],
+        "look_for": [],
         "look_nots": [],
         "compared_fixture": true
     },

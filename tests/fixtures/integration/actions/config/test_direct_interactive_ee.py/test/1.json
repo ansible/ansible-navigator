@@ -3,7 +3,7 @@
     "index": 1,
     "comment": "filter for cache plugin timeout",
     "additional_information": {
-        "look_fors": [],
+        "look_for": [],
         "look_nots": [],
         "compared_fixture": true
     },

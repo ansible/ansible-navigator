@@ -3,7 +3,7 @@
     "index": 5,
     "comment": "filter off screen value",
     "additional_information": {
-        "look_fors": [],
+        "look_for": [],
         "look_nots": [],
         "compared_fixture": true
     },

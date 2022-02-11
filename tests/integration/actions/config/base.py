@@ -9,7 +9,7 @@ from ....defaults import FIXTURES_DIR
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
-from ..._interactions import Step
+from ..._interactions import TestStep
 from ..._tmux_session import TmuxSession
 
 
@@ -17,22 +17,22 @@ CONFIG_FIXTURE = os.path.join(FIXTURES_DIR, "integration", "actions", "config", 
 
 
 base_steps = (
-    Step(user_input=":f CACHE_PLUGIN_TIMEOUT", comment="filter for cache plugin timeout"),
-    Step(user_input=":0", comment="cache plugin details"),
-    Step(user_input=":back", comment="return to filtered list"),
-    Step(
+    TestStep(user_input=":f CACHE_PLUGIN_TIMEOUT", comment="filter for cache plugin timeout"),
+    TestStep(user_input=":0", comment="cache plugin details"),
+    TestStep(user_input=":back", comment="return to filtered list"),
+    TestStep(
         user_input=":f",
         comment="clear filter, full list",
-        look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        look_for=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
         mask=True,
     ),
-    Step(user_input=":f yaml", comment="filter off screen value"),
-    Step(user_input=":3", comment="YAML_FILENAME_EXTENSIONS details"),
-    Step(user_input=":back", comment="return to filtered list"),
-    Step(
+    TestStep(user_input=":f yaml", comment="filter off screen value"),
+    TestStep(user_input=":3", comment="YAML_FILENAME_EXTENSIONS details"),
+    TestStep(user_input=":back", comment="return to filtered list"),
+    TestStep(
         user_input=":f",
         comment="clear filter, full list",
-        look_fors=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        look_for=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
         mask=True,
     ),
 )
@@ -103,21 +103,21 @@ class BaseClass:
                 received_output,
                 step.comment,
                 additional_information={
-                    "look_fors": step.look_fors,
+                    "look_for": step.look_for,
                     "look_nots": step.look_nots,
-                    "compared_fixture": not any((step.look_fors, step.look_nots)),
+                    "compared_fixture": not any((step.look_for, step.look_nots)),
                 },
             )
 
         page = " ".join(received_output)
 
-        if step.look_fors:
-            assert all(look_for in page for look_for in step.look_fors)
+        if step.look_for:
+            assert all(look_for in page for look_for in step.look_for)
 
         if step.look_nots:
             assert not any(look_not in page for look_not in step.look_nots)
 
-        if not any((step.look_fors, step.look_nots)):
+        if not any((step.look_for, step.look_nots)):
             expected_output = retrieve_fixture_for_step(request, step.step_index)
             assert expected_output == received_output, "\n" + "\n".join(
                 difflib.unified_diff(expected_output, received_output, "expected", "received"),
