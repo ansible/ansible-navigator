@@ -3,10 +3,10 @@
     "index": 1,
     "comment": "builder help-builder without ee",
     "additional_information": {
-        "look_fors": [
-            "Print ansible-builder version and exit."
+        "present": [
+            "usage: ansible-builder [-h]"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
@@ -18,9 +18,9 @@
         "    create              Creates a build context, which can be used by podman to build an image.",
         "    build               Builds a container image.",
         "    introspect          Introspects collections in folder.",
-        "optional arguments:",
+        "options:",
         "  -h, --help            show this help message and exit",
         "  --version             Print ansible-builder version and exit.",
-        "(.env) bash-3.2$"
+        "(venv) bash-5.1$"
     ]
 }

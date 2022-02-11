@@ -3,10 +3,10 @@
     "index": 2,
     "comment": "builder help-builder fail with interactive with ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
@@ -15,8 +15,8 @@
         " [HINT]: Try again with '-m stdout'",
         "[ERROR]: Subcommand 'builder' does not support mode 'interactive'. Supported modes: 'stdout'.",
         " [HINT]: Try again with '-m stdout'",
-        "[ERROR]: Configuration failed, using default log file location: /home/user/Documents/ansible-navigator/ansible-navigator.log. Log level set to debug",
-        " [HINT]: Review the hints and log file to see what went wrong: /home/user/Documents/ansible-navigator/ansible-navigator.log",
-        "(.env) bash-3.2$"
+        "[ERROR]: Configuration failed, using default log file location: /home/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
+        " [HINT]: Review the hints and log file to see what went wrong: /home/user/github/ansible-navigator/ansible-navigator.log",
+        "(venv) bash-5.1$"
     ]
 }

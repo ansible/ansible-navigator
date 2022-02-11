@@ -68,21 +68,21 @@ class BaseClass:
                 received_output,
                 step.comment,
                 additional_information={
-                    "look_fors": step.look_fors,
-                    "look_nots": step.look_nots,
-                    "compared_fixture": not any((step.look_fors, step.look_nots)),
+                    "present": step.present,
+                    "absent": step.absent,
+                    "compared_fixture": not any((step.present, step.absent)),
                 },
             )
 
         page = " ".join(received_output)
 
-        if step.look_fors:
-            assert all(look_for in page for look_for in step.look_fors)
+        if step.present:
+            assert all(present in page for present in step.present)
 
-        if step.look_nots:
-            assert not any(look_not in page for look_not in step.look_nots)
+        if step.absent:
+            assert not any(absent in page for absent in step.absent)
 
-        if not any((step.look_fors, step.look_nots)):
+        if not any((step.present, step.absent)):
             expected_output = retrieve_fixture_for_step(request, step.step_index)
             assert expected_output == received_output, "\n" + "\n".join(
                 difflib.unified_diff(expected_output, received_output, "expected", "received"),
