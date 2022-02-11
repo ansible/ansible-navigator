@@ -1,5 +1,4 @@
 <!-- markdownlint-disable first-line-heading -->
-
 ```{spelling}
 de
 facto
@@ -40,7 +39,6 @@ _______________________________________________________ summary ________________
   congratulations :)
 ```
 <!-- cspell:enable -->
-
 
 It is also integrated with [Read The Docs] that builds and
 publishes each commit to the main branch and generates live

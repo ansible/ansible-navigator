@@ -2,7 +2,6 @@
 """Tokenize and color text
 """
 
-
 import colorsys
 import curses
 import functools
