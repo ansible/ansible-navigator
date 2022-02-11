@@ -89,10 +89,10 @@ class BaseClass:
         page = " ".join(received_output)
 
         if step.present:
-            assert all(look_for in page for look_for in step.present)
+            assert all(present in page for present in step.present)
 
         if step.absent:
-            assert not any(look_not in page for look_not in step.absent)
+            assert not any(absent in page for absent in step.absent)
 
         if not any((step.present, step.absent)):
             expected_output = retrieve_fixture_for_step(request, step.step_index)
