@@ -3,11 +3,11 @@
     "index": 5,
     "comment": "clear filter, full list",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "ACTION_WARNINGS",
             "CALLBACKS_ENABLED"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

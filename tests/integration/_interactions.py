@@ -60,7 +60,7 @@ class Step(NamedTuple):
     search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
 
 
-class TestStep(NamedTuple):
+class UiTestStep(NamedTuple):
     """A simulated user interaction with the user interface."""
 
     #: The string to send to the tmux session
@@ -68,9 +68,9 @@ class TestStep(NamedTuple):
     #: Explanation of what is being sent or done
     comment: str
     #: Search for in the response
-    look_for: List[str] = []
+    present: List[str] = []
     #: Ensure not in the response
-    look_nots: List[str] = []
+    absent: List[str] = []
     #: Should the output be masked prior to writing a fixture
     mask: bool = True
     #: The index of the step with the list of all steps

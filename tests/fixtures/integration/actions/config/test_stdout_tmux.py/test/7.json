@@ -3,10 +3,10 @@
     "index": 7,
     "comment": "config helpconfig fail with interactive without ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

@@ -3,11 +3,11 @@
     "index": 0,
     "comment": "ansible-navigator config command top window",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "ACTION_WARNINGS",
             "CALLBACKS_ENABLED"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

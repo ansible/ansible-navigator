@@ -3,10 +3,10 @@
     "index": 3,
     "comment": "config list without ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "YAML_FILENAME_EXTENSIONS"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

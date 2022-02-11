@@ -3,10 +3,10 @@
     "index": 4,
     "comment": "config helpconfig with ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "usage: ansible-config [-h]"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

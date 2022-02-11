@@ -3,7 +3,7 @@
 import pytest
 
 from ..._interactions import Command
-from ..._interactions import TestStep
+from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from ..._interactions import step_id
 from .base import BaseClass
@@ -13,11 +13,11 @@ from .base import base_steps
 CLI = Command(execution_environment=False).join()
 
 initial_steps = (
-    TestStep(user_input=CLI, comment="welcome screen"),
-    TestStep(
+    UiTestStep(user_input=CLI, comment="welcome screen"),
+    UiTestStep(
         user_input=":config",
         comment="enter config from welcome screen",
-        look_for=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        present=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
     ),
 )
 
