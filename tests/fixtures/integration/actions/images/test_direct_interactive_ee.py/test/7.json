@@ -3,10 +3,10 @@
     "index": 7,
     "comment": "goto Ansible information",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "collections:"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

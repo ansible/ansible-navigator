@@ -3,23 +3,22 @@
     "index": 0,
     "comment": "ansible-navigator images top window",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "creator-ee"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
         "  NAME                                                                                              TAG           EXECUTION ENVIRONMENT                      CREATED                   SIZE",
-        "0│ansible-automation-platform-20-ee-minimal-rhel8                                                   latest                         True                      5 months ago              288 MB",
-        "1│ansible-automation-platform-20-ee-supported-rhel8                                                 latest                         True                      5 months ago              920 MB",
-        "2│ansible-automation-platform-21-ee-minimal-rhel8                                                   latest                         True                      3 weeks ago               515 MB",
-        "3│ansible-automation-platform-21-ee-supported-rhel8                                                 latest                         True                      3 weeks ago               1.2 GB",
-        "4│ansible-builder                                                                                   latest                        False                      10 days ago               655 MB",
-        "5│ansible-navigator-demo-ee                                                                         0.6.0                          True                      4 months ago              1.35 GB",
-        "6│creator-ee (primary)                                                                              v0.2.0                         True                      3 weeks ago               1.33 GB",
-        "7│python-base                                                                                       latest                        False                      20 hours ago              558 MB",
-        "8│webinar_ee                                                                                        latest                         True                      4 weeks ago               484 MB",
+        "0│ansible-automation-platform-21-ee-29-rhel8                                                        latest                         True                      13 days ago               787 MB",
+        "1│ansible-automation-platform-21-ee-minimal-rhel8                                                   latest                         True                      7 days ago                399 MB",
+        "2│ansible-automation-platform-21-ee-supported-rhel8                                                 latest                         True                      3 weeks ago               1.13 GB",
+        "3│ansible-builder                                                                                   latest                        False                      8 days ago                781 MB",
+        "4│creator-ee (primary)                                                                              v0.2.0                         True                      2 months ago              1.33 GB",
+        "5│ee-minimal-rhel8                                                                                  latest                         True                      3 weeks ago               399 MB",
+        "6│network_archive_ee                                                                                latest                         True                      7 days ago                484 MB",
+        "7│python-base                                                                                       latest                        False                      8 days ago                690 MB",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

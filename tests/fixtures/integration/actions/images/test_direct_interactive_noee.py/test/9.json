@@ -3,10 +3,10 @@
     "index": 9,
     "comment": "goto Python information",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "ansible-runner"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
