@@ -15,7 +15,9 @@ CLI = Command(subcommand="images", execution_environment=True).join()
 
 initial_steps = (
     UiTestStep(
-        user_input=CLI, comment="ansible-navigator images top window", present=[IMAGE_SHORT]
+        user_input=CLI,
+        comment="ansible-navigator images top window",
+        present=[IMAGE_SHORT],
     ),
 )
 
