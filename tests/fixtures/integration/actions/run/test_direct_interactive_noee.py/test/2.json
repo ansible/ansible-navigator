@@ -3,8 +3,8 @@
     "index": 2,
     "comment": "task-1 details",
     "additional_information": {
-        "look_fors": [],
-        "look_nots": [],
+        "present": [],
+        "absent": [],
         "compared_fixture": true
     },
     "output": [
