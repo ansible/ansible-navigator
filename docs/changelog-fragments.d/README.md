@@ -1,4 +1,3 @@
-<!-- cspell:ignore pyproject -->
 <!-- markdownlint-disable first-line-heading -->
 
 (_ansible_navigator_adding_changelog_fragments)=
