@@ -3,8 +3,8 @@
     "index": 1,
     "comment": "ansible-navigator run playbook",
     "additional_information": {
-        "look_fors": [],
-        "look_nots": [],
+        "present": [],
+        "absent": [],
         "compared_fixture": true
     },
     "output": [
