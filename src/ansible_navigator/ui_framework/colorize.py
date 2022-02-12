@@ -10,6 +10,7 @@ import os
 import re
 
 from itertools import chain
+from typing import Dict
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -43,7 +44,7 @@ class ColorSchema:
 
     # pylint: disable=too-few-public-methods
 
-    def __init__(self, schema: dict):
+    def __init__(self, schema: Dict[str, Union[str, List, Dict]]):
         """Initialize the ColorSchema class.
 
         :param schema: The color scheme, theme to use
@@ -64,7 +65,10 @@ class ColorSchema:
                     (
                         token_color
                         for token_color in self._schema["tokenColors"]
-                        if prop in scope_to_list(token_color["scope"])
+                        if (
+                            isinstance(token_color, dict)
+                            and prop in scope_to_list(token_color.get("scope", []))
+                        )
                     ),
                     None,
                 )
@@ -154,12 +158,17 @@ class Colorize:
 def scope_to_list(scope: Union[str, List]) -> List:
     """Convert a token scope to a list if necessary.
 
+    A scope in a theme should always be a string or list,
+    but just in case return an empty list if not
+
     :param scope: The scope
     :return: Scope as list
     """
-    if not isinstance(scope, list):
+    if isinstance(scope, list):
+        return scope
+    if isinstance(scope, str):
         return [scope]
-    return scope
+    return []
 
 
 def hex_to_rgb(value: str) -> RgbTuple:
