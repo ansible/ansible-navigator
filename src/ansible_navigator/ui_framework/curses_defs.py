@@ -32,6 +32,9 @@ class SimpleLinePart(SimpleNamespace):
     """Definition of one part of one line having a common color."""
 
     # pylint: disable=too-few-public-methods
+    #: One group of characters sharing the same color
     chars: str
+    #: The column as which the characters start, the sum of all previous character in the line
     column: int
+    #: The color for these characters
     color: RgbTuple
