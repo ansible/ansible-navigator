@@ -2,7 +2,6 @@ cliconf             # Ansible network cli abstraction plugin
 kegex               # An action's regex
 netcommon           # Ansible network collection, seen in tests and README
 pyproject           # Already in dictionary
-rtype               # FIXME in colorize.py, requires code and type changes
 Towncrier           # Changelog generator
 
 _asdict             # https://github.com/streetsidesoftware/cspell-dicts/pull/912
@@ -20,6 +19,7 @@ pexpect             # https://github.com/streetsidesoftware/cspell-dicts/pull/91
 podman              # https://github.com/streetsidesoftware/cspell-dicts/pull/899
 pycharm             # https://github.com/streetsidesoftware/cspell-dicts/pull/914
 pyyaml              # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+rtype               # https://github.com/ansible/ansible-navigator/pull/939
 SNMP                # https://github.com/streetsidesoftware/cspell-dicts/pull/919
 snmpd               # https://github.com/streetsidesoftware/cspell-dicts/pull/918
 snmptrapd           # https://github.com/streetsidesoftware/cspell-dicts/pull/918
