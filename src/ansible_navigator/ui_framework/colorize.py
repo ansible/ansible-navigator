@@ -197,7 +197,7 @@ def hex_to_rgb_curses(value: str) -> RgbTuple:
 
 
 def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
-    """Convert an RGB color to an terminal color.
+    """Convert an RGB color to an ansi color.
 
     :param red: The red component
     :param green: The green component
