@@ -148,7 +148,7 @@ per-file-ignores =
   src/ansible_navigator/tm_tokenize/tokenize.py: D100, D201, D400, D403, DAR101, DAR201, WPS210, WPS300
   src/ansible_navigator/tm_tokenize/utils.py: D100, D400, D403, DAR101, DAR201, WPS100, WPS111, WPS609
   src/ansible_navigator/ui_framework/__init__.py: D200, D400, WPS201, WPS300, WPS412
-  src/ansible_navigator/ui_framework/colorize.py: D200, D205, D400, D403, DAR101, DAR201, WPS110, WPS111, WPS114, WPS202, WPS204, WPS210, WPS220, WPS221, WPS226, WPS231, WPS232, WPS300, WPS306, WPS323, WPS331, WPS338, WPS355, WPS407, WPS420, WPS432, WPS440, WPS518
+  src/ansible_navigator/ui_framework/colorize.py: WPS110, WPS111, WPS114, WPS202, WPS204, WPS210, WPS220, WPS221, WPS226, WPS231, WPS232, WPS300, WPS306, WPS323, WPS331, WPS338, WPS355, WPS407, WPS420, WPS432, WPS440, WPS518
   src/ansible_navigator/ui_framework/curses_defs.py: D200, D400
   src/ansible_navigator/ui_framework/curses_window.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201, WPS110, WPS111, WPS210, WPS213, WPS220, WPS221, WPS229, WPS231, WPS300, WPS306, WPS323, WPS349, WPS407, WPS420, WPS436, WPS450
   src/ansible_navigator/ui_framework/field_button.py: D200, D205, D400, D403, DAR101, DAR201, WPS300, WPS306, WPS502, WPS601

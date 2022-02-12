@@ -1,6 +1,7 @@
 """commonly used definitions
 """
 
+from types import SimpleNamespace
 from typing import NamedTuple
 from typing import Tuple
 
@@ -22,3 +23,15 @@ class CursesLinePart(NamedTuple):
 
 CursesLine = Tuple[CursesLinePart, ...]
 CursesLines = Tuple[CursesLine, ...]
+
+
+RgbTuple = Tuple[int, ...]
+
+
+class SimpleLinePart(SimpleNamespace):
+    """Definition of one part of one line having a common color."""
+
+    # pylint: disable=too-few-public-methods
+    chars: str
+    column: int
+    color: RgbTuple
