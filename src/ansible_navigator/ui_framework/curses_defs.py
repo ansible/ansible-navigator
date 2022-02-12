@@ -34,7 +34,7 @@ class SimpleLinePart(SimpleNamespace):
     # pylint: disable=too-few-public-methods
     #: One group of characters sharing the same color
     chars: str
-    #: The column as which the characters start, the sum of all previous character in the line
+    #: The column where the characters start, the sum of all previous characters in the line
     column: int
     #: The color for these characters
     color: RgbTuple
