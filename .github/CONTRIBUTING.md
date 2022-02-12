@@ -71,20 +71,20 @@ Prerequisites:
    not yet enforced (meaning you can skip it):
 
    ```shell-session
-   $ tox -qe preflight
-   preflight create: .tox/preflight
-   preflight installdeps: pre-commit
-   preflight installed: ...
-   preflight run-test-pre: PYTHONHASHSEED='2351399476'
-   preflight run-test: commands[0] | python -m pre_commit run ...--all-files
+   $ tox -e lint-candidates
+   lint-candidates create: .tox/lint-candidates
+   lint-candidates installdeps: pre-commit
+   lint-candidates installed: ...
+   lint-candidates run-test-pre: PYTHONHASHSEED='2351399476'
+   lint-candidates run-test: commands[0] | python -m pre_commit run ...--all-files
    ...
    [INFO] Installing environment for https://github.com/PyCQA/flake8.git
    [INFO] Once installed this environment will be reused.
    [INFO] This may take a few minutes...
    ...
-   Help maintain our spelling. Try "tox -qe preflight" (optional)...........................Passed
-   Help improve our documentation. Try "tox -qe preflight" (optional).......................Passed
+   An unenforced set of flake8 candidate rule candidates.................Passed
+   - hook id: flake8
    ...
    _________________________________ summary __________________________________
-   ERROR:   preflight: commands failed
+   ERROR:   lint-candidates: commands failed
    ```
