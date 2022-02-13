@@ -81,6 +81,7 @@ def test_artifact_path(cmd_test_data: CommandTestData):
     command, additional_params = _generate_command(
         exec_command=cmd_test_data.command,
         exec_shell=cmd_test_data.use_shell,
+        extra_args=[],
     )
     comment = command_test_data, command, additional_params
     assert command == cmd_test_data.result_command, comment

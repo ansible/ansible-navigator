@@ -1,4 +1,5 @@
 """Run the :exec subcommand."""
+import logging
 import os
 import shlex
 
@@ -16,23 +17,42 @@ from . import _actions as actions
 
 GeneratedCommand = Tuple[str, Optional[List[str]]]
 
+logger = logging.getLogger(__name__)
 
-def _generate_command(exec_command: str, exec_shell: bool) -> GeneratedCommand:
+
+def _generate_command(
+    exec_command: str,
+    exec_shell: bool,
+    extra_args: List[str],
+) -> GeneratedCommand:
     """Generate the command and args.
 
     :param exec_command: The command to run
     :param exec_shell: Should the command be wrapped in a shell
     :returns: The command and any pass through arguments
     """
-    pass_through_args = None
+    logger.debug("exec_command: %s", exec_command)
+    logger.debug("exec_shell: %s", exec_shell)
+    logger.debug("extra_args: %s", extra_args)
     if exec_shell and exec_command:
         command = "/bin/bash"
-        pass_through_args = ["-c", exec_command]
+        # Determine if any extra args were picked up
+        if isinstance(extra_args, list):
+            pass_command = exec_command + " " + " ".join(extra_args)
+        else:
+            pass_command = exec_command
+        pass_through_args = ["-c", pass_command]
     else:
         parts = shlex.split(exec_command)
         command = parts[0]
-        if len(parts) > 1:
+        if len(parts) == 1:
+            # Use the extra arguments
+            pass_through_args = extra_args
+        else:
+            # Use the left overs
             pass_through_args = parts[1:]
+    logger.debug("runner command: %s", command)
+    logger.debug("runner passthrough: %s", pass_through_args)
     return (command, pass_through_args)
 
 
@@ -108,6 +128,7 @@ class Action(ActionBase):
         command, pass_through_args = _generate_command(
             exec_command=self._args.exec_command,
             exec_shell=self._args.exec_shell,
+            extra_args=self._args.cmdline,
         )
         if isinstance(pass_through_args, list):
             kwargs["cmdline"] = pass_through_args
