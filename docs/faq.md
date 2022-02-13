@@ -5,7 +5,7 @@
 :local:
 ```
 
-## About the `ansible.cfg` file
+## The `ansible.cfg` file
 
 ### Where should the `ansible.cfg` file go when using an execution environment?
 
@@ -15,7 +15,7 @@ The easiest place to have the `ansible.cfg` is in the project directory adjacent
 
 Ansible will look for the `ansible.cfg` in the typical locations when not using an execution-environment.  (See the ansible docs for the possibilities)
 
-## About the placement of ansible collections
+## Placement of ansible collections
 
 ### Where should ansible collections be placed when using an execution environment?
 
@@ -25,7 +25,7 @@ The easiest place to have ansible collections is in the project directory, in a 
 
 When not using an execution environment, ansible will look in the default locations for collections.  For more information about these, check out the [collections guide](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html).
 
-## About `ansible-navigator` settings
+## `ansible-navigator` settings
 
 ### What is the order in which configuration settings are applied?
 
@@ -77,7 +77,7 @@ ansible-navigator:
     console: false
 ```
 
-## About SSH keys
+## SSH keys
 
 ### How do I use my SSH keys with an execution environment?
 
@@ -99,7 +99,7 @@ Additionally, `ansible-navigator` will automatically volume mount the user's SSH
 
 Note: When using `ansible_ssh_private_key_file` with execution environments, the path to the key needs to reference it's location after being volume mounted to the execution environment. (eg `/home/runner/.ssh/key_name` or `/root/.ssh/key_name`).  It may be convenient to specify the path to the key as `~/.ssh/key_name` which will resolve to the user's home directory with or without the use of an execution environment.
 
-## Other questions
+## Other
 
 ### Why does the playbook hang when `vars_prompt` or `pause/prompt` is used?
 
