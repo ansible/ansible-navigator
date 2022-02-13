@@ -2,8 +2,8 @@
 """
 import logging
 import os
-from turtle import position
 
+from turtle import position
 from types import SimpleNamespace
 from typing import Dict
 from typing import List
