@@ -27,6 +27,7 @@ class YamlStyle(NamedTuple):
 
     default_flow_style: bool = False
     explicit_start: bool = True
+    allow_unicode: bool = True
 
 
 def human_dump(obj: Any, filename: str = None, file_mode: str = "w") -> Union[str, None]:

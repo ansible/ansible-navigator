@@ -502,7 +502,7 @@ class UserInterface(CursesWindow):
         if self.serialization_format() == "source.yaml":
             string = human_dump(obj)
         elif self.serialization_format() == "source.json":
-            string = json.dumps(obj, indent=4, sort_keys=True)
+            string = json.dumps(obj, indent=4, sort_keys=True, ensure_ascii=False)
         else:
             string = obj
 
