@@ -5,9 +5,8 @@ from typing import NamedTuple
 
 import pytest
 
-from ansible_navigator.configuration_subsystem.definitions import Constants
-
 from ansible_navigator.actions.exec import _generate_command
+from ansible_navigator.configuration_subsystem.definitions import Constants
 
 
 class CommandTestData(NamedTuple):

@@ -29,6 +29,7 @@ def _generate_command(
 
     :param exec_command: The command to run
     :param exec_shell: Should the command be wrapped in a shell
+    :param extra_args: Any unknown or extra arguments passed on the command line
     :returns: The command and any pass through arguments
     """
     logger.debug("exec_command: %s", exec_command)
@@ -45,11 +46,11 @@ def _generate_command(
     else:
         parts = shlex.split(exec_command)
         command = parts[0]
-        if len(parts) == 1:
+        if len(parts) == 1 and isinstance(extra_args, list):
             # Use the extra arguments
             pass_through_args = extra_args
         else:
-            # Use the left overs
+            # Use the leftovers or an empty list
             pass_through_args = parts[1:]
     logger.debug("runner command: %s", command)
     logger.debug("runner passthrough: %s", pass_through_args)

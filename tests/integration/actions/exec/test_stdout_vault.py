@@ -3,7 +3,8 @@
 A variety of formats are tested here, each with a different
 placement of the vault command. Although none result in a vaulted
 file, the intent is to ensure the entire vault command is passed
-to ansible vault within the execution environment."""
+to ansible vault within the execution environment.
+"""
 
 import pytest
 
