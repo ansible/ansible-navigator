@@ -1,8 +1,12 @@
-"""Tests for exec, mode stdout, parameters set using the CLI."""
+"""Tests for exec, mode stdout, parameters set using the CLI.
+
+A variety of formats are tested here, each with a different
+placement of the vault command. Although none result in a vaulted
+file, the intent is to ensure the entire vault command is passed
+to ansible vault within the execution environment."""
 
 import pytest
 
-from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._interactions import add_indices
