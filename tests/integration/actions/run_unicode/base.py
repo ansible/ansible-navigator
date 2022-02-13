@@ -2,7 +2,9 @@
 import difflib
 import os
 
+from typing import List
 from typing import Optional
+from typing import Union
 
 import pytest
 
@@ -21,11 +23,11 @@ playbook_path = os.path.join(run_fixture_dir, "site.yaml")
 
 base_steps = (
     UiTestStep(user_input=":0", comment="play-1 details"),
-    UiTestStep(user_input=":0", comment="task-1 yaml"),
-    UiTestStep(user_input=":json", comment="task-1 json"),
+    UiTestStep(user_input=":0", comment="task-1 yaml", present=["航海家"]),
+    UiTestStep(user_input=":json", comment="task-1 json", present=["航海家"]),
     UiTestStep(user_input=":back", comment="play-1 details"),
-    UiTestStep(user_input=":1", comment="task-2 json"),
-    UiTestStep(user_input=":yaml", comment="task-2 yaml"),
+    UiTestStep(user_input=":1", comment="task-2 json", present=["航海家"]),
+    UiTestStep(user_input=":yaml", comment="task-2 yaml", present=["航海家"]),
     UiTestStep(user_input=":back", comment="play-1 details"),
     UiTestStep(user_input=":back", comment="all play details"),
     UiTestStep(user_input=":st", comment="display stream"),
@@ -33,7 +35,7 @@ base_steps = (
 
 
 class BaseClass:
-    """Base class for run_unicode interactive/stdout tests."""
+    """Base class for run interactive/stdout tests, with unicode."""
 
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
@@ -47,6 +49,7 @@ class BaseClass:
         :yields: A tmux session
         """
         params = {
+            "pane_height": "100",
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
@@ -69,6 +72,7 @@ class BaseClass:
         :param tmux_session: The tmux session
         :param step: A step within a series of tests
         """
+        search_within_response: Union[str, List[str]]
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
