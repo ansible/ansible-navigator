@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def _generate_command(
     exec_command: str,
     exec_shell: bool,
-    extra_args: List[str],
+    extra_args: Union[Constants, List[str]],
 ) -> GeneratedCommand:
     """Generate the command and args.
 

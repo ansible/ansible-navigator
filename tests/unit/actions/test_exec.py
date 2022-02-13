@@ -5,6 +5,8 @@ from typing import NamedTuple
 
 import pytest
 
+from ansible_navigator.configuration_subsystem.definitions import Constants
+
 from ansible_navigator.actions.exec import _generate_command
 
 
@@ -81,7 +83,7 @@ def test_command_generation(cmd_test_data: CommandTestData):
     command, additional_params = _generate_command(
         exec_command=cmd_test_data.command,
         exec_shell=cmd_test_data.use_shell,
-        extra_args=None,
+        extra_args=Constants.NOT_SET,
     )
     comment = command_test_data, command, additional_params
     assert command == cmd_test_data.result_command, comment
