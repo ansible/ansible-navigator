@@ -27,7 +27,7 @@ stdout_tests = (
     ShellCommand(
         comment="exec echo with ee",
         user_input=StdoutCommand(
-            cmdline="--excmd 'echo test_data_from_cli'",
+            cmdline="'echo test_data_from_cli'",
             execution_environment=True,
         ).join(),
         present=["bash", "test_data_from_cli"],
@@ -36,7 +36,7 @@ stdout_tests = (
     ShellCommand(
         comment="exec echo without ee",
         user_input=StdoutCommand(
-            cmdline="--excmd 'echo test_data_from_cli'",
+            cmdline="'echo test_data_from_cli'",
             execution_environment=False,
         ).join(),
         present=["bash", "test_data_from_cli", "ERROR", "requires execution environment support"],
@@ -44,7 +44,7 @@ stdout_tests = (
     ShellCommand(
         comment="exec echo check path via shell",
         user_input=StdoutCommand(
-            cmdline="--excmd 'echo $PATH'",
+            cmdline="'echo $PATH'",
             execution_environment=True,
         ).join(),
         present=["/sbin"],
@@ -52,7 +52,7 @@ stdout_tests = (
     ShellCommand(
         comment="exec echo check no path via shell",
         user_input=StdoutCommand(
-            cmdline="--excmd 'echo $PATH' --exshell false",
+            cmdline="'echo $PATH' --exshell false",
             execution_environment=True,
         ).join(),
         present=["$PATH"],
