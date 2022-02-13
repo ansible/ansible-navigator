@@ -168,7 +168,6 @@ def escape_moustaches(obj: Mapping) -> Mapping:
     """escape moustaches
 
     :param obj: something
-    :type obj: Any
     :return: the obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
@@ -491,7 +490,6 @@ def unescape_moustaches(obj: Mapping) -> Mapping:
     """unescape moustaches
 
     :param obj: something
-    :type obj: Any
     :return: the obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
