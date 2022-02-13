@@ -1,6 +1,6 @@
 dictionaryDefinitions:
   - name: words
-    path: ./.cspell-dictionary.txt
+    path: .config/dictionary.txt
     addWords: true
 dictionaries:
   - words
