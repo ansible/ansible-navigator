@@ -1,5 +1,5 @@
 <!-- cspell:ignore id_xmss -->
-# Some frequently asked questions:
+# Some frequently asked questions
 
 ```{contents}
 :local:
