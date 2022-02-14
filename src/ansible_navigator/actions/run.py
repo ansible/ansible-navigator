@@ -284,7 +284,7 @@ class Action(App):
 
         # Show a notification until the first the first message from the queue is processed
         if self._subaction_type == "run":
-            messages = ["Preparing for automation, please hold on..."]
+            messages = ["Preparing for automation, please wait..."]
             notification = nonblocking_notification(messages=messages)
             interaction.ui.show(notification)
             while not self._first_message_received:
