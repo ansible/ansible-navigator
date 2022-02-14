@@ -235,16 +235,18 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return None
 
-    def run_stdout(self) -> int:
+    def run_stdout(self) -> Tuple[str, int]:
         """Execute the ``inventory`` request for mode stdout.
 
-        :returns: The error code
+        :returns: The error code, 1 indicating failure, 0 success
         """
         self._logger.debug("inventory requested in stdout mode")
         if hasattr(self._args, "inventory") and self._args.inventory:
             self._inventories = self._args.inventory
         self._collect_inventory_details()
-        return 1 if self._runner.status == "failed" else 0
+        if self._runner.status == "failed":
+            return ("Please review the log for errors.", 1)
+        return ("", 0)
 
     def _take_step(self) -> None:
         """Take a step based on the current step or step back."""

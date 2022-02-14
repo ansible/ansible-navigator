@@ -11,6 +11,7 @@ from copy import deepcopy
 from curses import wrapper
 from pathlib import Path
 from typing import List
+from typing import Tuple
 
 from .action_runner import ActionRunner
 from .actions import run_action_stdout
@@ -74,19 +75,23 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     logger.info("New ansible-runner instance, logging initialized")
 
 
-def run(args: ApplicationConfiguration) -> int:
-    """run the appropriate app"""
+def run(args: ApplicationConfiguration) -> Tuple[str, int]:
+    """Run the appropriate subcommand.
+
+    :param args: The current application settings
+    :returns: A return and any messages to display
+    """
     try:
         if args.mode == "stdout":
-            return_code = run_action_stdout(args.app.replace("-", "_"), args)
-            return return_code
+            result = run_action_stdout(args.app.replace("-", "_"), args)
+            return result
         clear_screen()
         wrapper(ActionRunner(args=args).run)
-        return 0
+        return ("", 0)
     except KeyboardInterrupt:
         logger.warning("Dirty exit, killing the pid")
         os.kill(os.getpid(), signal.SIGTERM)
-        return 1
+        return ("", 1)
 
 
 def main():
@@ -140,9 +145,13 @@ def main():
     if args.execution_environment:
         pull_image(args)
 
-    return_code = run(args)
+    messages, return_code = run(args)
     if return_code:
+        if messages:
+            sys.stderr.write(messages)
         sys.exit(return_code)
+    if messages:
+        sys.stdout.write(messages)
 
 
 if __name__ == "__main__":

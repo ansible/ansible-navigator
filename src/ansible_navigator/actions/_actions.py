@@ -167,7 +167,7 @@ def run_interactive_factory(package: str) -> Callable:
     return functools.partial(run_interactive, package)
 
 
-def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
+def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Tuple[str, int]:
     """Call the given action's ``run_stdout()`` method.
 
     :param package: The name of the package

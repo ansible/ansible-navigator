@@ -233,11 +233,17 @@ class Action(ActionBase):
             return "stdout_w_artifact"
         return self._args.mode
 
-    def run_stdout(self) -> int:
-        """Run in old school mode, just stdout."""
+    def run_stdout(self) -> Tuple[str, int]:
+        """Execute the ``inventory`` request for mode stdout.
+
+        :returns: The return code from the runner invocation, along with a message to review the
+            logs if not 0.
+        """
         if self._args.app == "replay":
             successful: bool = self._init_replay()
-            return 0 if successful else 1
+            if successful:
+                return ("", 0)
+            return ("Please review the log for errors.", 1)
 
         self._logger.debug("playbook requested in interactive mode")
         self._subaction_type = "playbook"
@@ -250,7 +256,10 @@ class Action(ActionBase):
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break
-        return self.runner.ansible_runner_instance.rc
+        ret_code = self.runner.ansible_runner_instance.rc
+        if ret_code:
+            return ("Please review the log for errors.", ret_code)
+        return ("", ret_code)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """run :run or :replay

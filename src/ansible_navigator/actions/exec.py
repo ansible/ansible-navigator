@@ -5,7 +5,6 @@ import shlex
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from ..action_base import ActionBase
 from ..configuration_subsystem import ApplicationConfiguration
@@ -49,17 +48,20 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="exec")
 
-    def run_stdout(self) -> Union[None, int]:
-        """Run in mode stdout.
+    def run_stdout(self) -> Tuple[str, int]:
+        """Execute the ``exec`` request for mode stdout.
 
-        :returns: The return code or None
+        :returns: The return code or 1. If the response from the runner invocation is None,
+            indicates there is no console output to display, so assume an issue and return 1
+            along with a message to review the logs.
         """
         self._logger.debug("exec requested in stdout mode")
         response = self._run_runner()
-        if response:
-            _, _, ret_code = response
-            return ret_code
-        return None
+        if response is None:
+            self._logger.error("Unexpected response: %s", response)
+            return ("Please review the log for errors.", 1)
+        _out, err, ret_code = response
+        return (err, ret_code)
 
     def _run_runner(self) -> Optional[Tuple]:
         """Spin up runner.

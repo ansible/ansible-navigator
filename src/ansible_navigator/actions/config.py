@@ -143,17 +143,20 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return None
 
-    def run_stdout(self) -> Union[None, int]:
+    def run_stdout(self) -> Tuple[str, int]:
         """Execute the ``config`` request for mode stdout.
 
-        :returns: Nothing or the error code
+        :returns: The return code or 1. If the response from the runner invocation is None,
+            indicates there is no console output to display, so assume an issue and return 1
+            along with a message to review the logs.
         """
         self._logger.debug("config requested in stdout mode")
         response = self._run_runner()
-        if response:
-            _, _, ret_code = response
-            return ret_code
-        return None
+        if response is None:
+            self._logger.error("Unexpected response: %s", response)
+            return ("Please review the log for errors.", 1)
+        _out, err, ret_code = response
+        return (err, ret_code)
 
     def _take_step(self) -> None:
         """Take a step based on the current step or step back."""

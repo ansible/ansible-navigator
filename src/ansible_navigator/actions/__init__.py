@@ -14,6 +14,7 @@ is identified in the
 """
 from typing import Any
 from typing import Callable
+from typing import Tuple
 from typing import Union
 
 from ..app_public import AppPublic
@@ -28,7 +29,10 @@ names = actions.names_factory(__package__)
 
 kegexes: Callable = actions.kegexes_factory(__package__)
 
-run_action_stdout: Callable[[str, ApplicationConfiguration], int] = actions.run_stdout_factory(
+run_action_stdout: Callable[
+    [str, ApplicationConfiguration],
+    Tuple[str, int],
+] = actions.run_stdout_factory(
     __package__,
 )
 

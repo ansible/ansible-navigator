@@ -5,7 +5,6 @@ global subcommand registry.
 """
 import os
 import shutil
-import sys
 
 from typing import Optional
 from typing import Tuple
@@ -30,21 +29,20 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="builder")
 
-    def run_stdout(self) -> Optional[int]:
-        """Run in mode stdout.
+    def run_stdout(self) -> Tuple[str, int]:
+        """Execute the ``builder`` request for mode stdout.
 
-        :returns: The return code or None. If the response from the
-                  runner invocation is None, indicates there is no
-                  console output to display.
+        :returns: The return code or 1. If the response from the runner invocation is None,
+            indicates there is no console output to display, so assume an issue and return 1
+            along with a message to review the logs.
         """
         self._logger.debug("builder requested in stdout mode")
         response = self._run_runner()
-        if response:
-            _, err, ret_code = response
-            if err:
-                sys.stdout.write(err)
-            return ret_code
-        return None
+        if response is None:
+            self._logger.error("Unexpected response: %s", response)
+            return ("Please review the log for errors.", 1)
+        _out, err, ret_code = response
+        return (err, ret_code)
 
     def _run_runner(self) -> Optional[Tuple]:
         """Spin up runner.
