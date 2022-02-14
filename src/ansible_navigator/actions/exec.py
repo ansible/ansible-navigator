@@ -38,10 +38,8 @@ def _generate_command(
     if exec_shell and exec_command:
         command = "/bin/bash"
         # Determine if any extra args were picked up
-        if isinstance(extra_args, list):
-            pass_command = " ".join((exec_command, *extra_args))
-        else:
-            pass_command = exec_command
+        _extra_args = extra_args if isinstance(extra_args, list) else ()
+        pass_command = " ".join((exec_command, *_extra_args))
         pass_through_args = ["-c", pass_command]
     else:
         parts = shlex.split(exec_command)
