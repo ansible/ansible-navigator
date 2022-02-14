@@ -18,7 +18,6 @@ from typing import Dict
 from typing import Generator
 from typing import List
 from typing import Tuple
-from typing import Union
 
 import yaml
 
@@ -55,7 +54,6 @@ class CollectionCatalog:
         self._messages: List[str] = []
 
     def _catalog_plugins(self, collection: Dict) -> None:
-        # pylint: disable=too-many-locals
         """Catalog the plugins within a collection.
 
         :param collection: Details describing the collection
@@ -121,7 +119,6 @@ class CollectionCatalog:
         file_checksums: Dict[str, Dict],
         collection: Dict,
     ) -> None:
-        # pylint: disable=too-many-arguments
         """Process each plugin within one plugin directory.
 
         :param plugin_type: The type of plugins
