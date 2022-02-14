@@ -177,7 +177,7 @@ class CollectionCatalog:
                 collection["plugin_checksums"] = {}
                 collection["path"] = str(directory_path)
 
-                runtime_file = Path(directory_path, "meta", "runtime.yml")
+                runtime_file = directory_path / "meta" / "runtime.yml"
                 collection["runtime"] = {}
                 if runtime_file.exists():
                     with open(file=runtime_file, encoding="utf-8") as fh:
