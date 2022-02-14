@@ -144,8 +144,8 @@ class CollectionCatalog:
         :param directory: The path to collections directory to walk and load
         """
         for directory_path in directory.glob("*/*/"):
-            manifest_file = Path(directory_path, "MANIFEST.json")
-            galaxy_file = Path(directory_path, "galaxy.yml")
+            manifest_file = directory_path / "MANIFEST.json"
+            galaxy_file = directory_path / "galaxy.yml"
             collection = None
             if manifest_file.exists():
                 with open(file=manifest_file, encoding="utf-8") as fh:
