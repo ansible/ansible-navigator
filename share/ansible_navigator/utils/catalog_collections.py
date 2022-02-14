@@ -43,12 +43,12 @@ class CollectionCatalog:
     # pylint: disable=too-few-public-methods
     """A collection cataloger."""
 
-    def __init__(self, directories: List[str]):
+    def __init__(self, directories: List[Path]):
         """Initialize the collection cataloger.
 
         :param directories: A list of directories that may contain collections
         """
-        self._directories = directories
+        self._directories: List[Path] = directories
         self._collections: OrderedDict[str, Dict] = OrderedDict()
         self._errors: List[Dict[str, str]] = []
         self._messages: List[str] = []
@@ -296,7 +296,7 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
     return handled, missing, plugin_count
 
 
-def parse_args():
+def parse_args() -> Tuple[argparse.Namespace, List[Path]]:
     """Parse the arguments from the command line.
 
     :returns: The parsed arguments and all directories to search
