@@ -216,7 +216,7 @@ class CollectionCatalog:
         :returns: All collections found and any errors
         """
         for directory in self._directories:
-            collection_directory = Path(directory, "ansible_collections")
+            collection_directory = directory / "ansible_collections"
             if collection_directory.exists():
                 self._one_path(collection_directory)
         for _collection_path, collection in self._collections.items():
