@@ -134,7 +134,7 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, **kwargs) -> Tuple[int, str, str]:
+    def run_action_stdout(self, **kwargs) -> Tuple[str, int, str, str]:
         # pylint: disable=too-many-locals
         """run the action"""
         self._app_args.update({"mode": "stdout"})
@@ -163,7 +163,7 @@ class ActionRunTest:
             sys.stderr = sys_stderr  # type: ignore
 
             # run the action
-            return_code = action.run_stdout()
+            action_return_code, action_return_message = action.run_stdout()
 
             # restore ``stdin``
             sys.stdin = __stdin__
@@ -178,4 +178,4 @@ class ActionRunTest:
             stderr = sys.stderr.read().decode()  # type: ignore
             sys.stderr = __stderr__
 
-        return return_code, stdout, stderr
+        return action_return_code, action_return_message, stdout, stderr

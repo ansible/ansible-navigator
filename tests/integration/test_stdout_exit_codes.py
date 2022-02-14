@@ -34,61 +34,67 @@ def id_test_data(value):
 
 
 class StdoutTest(NamedTuple):
-    """define the stdout test"""
+    """Definition of a stdout test."""
 
+    #: The name of the action
     action_name: str
+    #: Parameters for the action
     action_params: Tuple[Tuple, ...]
-    message: str
+    #: Text to search for
+    present: str
+    #: Expected return code
     return_code: int
+    #: Expected return message
+    message: str = ""
 
 
 fixture_test_data = (
     StdoutTest(
         action_name="config",
         action_params=(("cmdline", ["--help"]),),
-        message="usage: ansible-config",
+        present="usage: ansible-config",
         return_code=0,
     ),
     StdoutTest(
         action_name="config",
         action_params=(("cmdline", ["foo"]),),
-        message="invalid choice: 'foo'",
+        present="invalid choice: 'foo'",
         return_code=2,
     ),
     StdoutTest(
         action_name="doc",
         action_params=(("cmdline", ["--help"]),),
-        message="usage: ansible-doc",
+        present="usage: ansible-doc",
         return_code=0,
     ),
     StdoutTest(
         action_name="doc",
         action_params=(("cmdline", ["--json"]),),
-        message="Incorrect options passed",
+        present="Incorrect options passed",
         return_code=5,
     ),
     StdoutTest(
         action_name="inventory",
         action_params=(("cmdline", ["--help"]),),
-        message="usage: ansible-inventory",
+        present="usage: ansible-inventory",
         return_code=0,
     ),
     StdoutTest(
         action_name="inventory",
         action_params=(("cmdline", ["foo"]),),
-        message="No action selected",
+        present="No action selected",
         return_code=1,
     ),
     StdoutTest(
         action_name="run",
         action_params=(("playbook", PLAYBOOK), ("playbook_artifact_enable", False)),
-        message="success",
+        present="success",
         return_code=0,
     ),
     StdoutTest(
         action_name="run",
         action_params=(("playbook", "foo"), ("playbook_artifact_enable", False)),
-        message="foo could not be found",
+        present="foo could not be found",
         return_code=1,
     ),
 )
@@ -99,10 +105,14 @@ fixture_test_data = (
 def test(action_run_stdout, params, test_data):
     """test for a return code"""
     actionruntest = action_run_stdout(action_name=test_data.action_name, **params)
-    ret, out, err = actionruntest.run_action_stdout(**dict(test_data.action_params))
-    assert ret == test_data.return_code
+    action_return_message, action_return_code, stdout, stderr = actionruntest.run_action_stdout(
+        **dict(test_data.action_params),
+    )
+    assert action_return_code == test_data.return_code
     if test_data.return_code == 0:
-        assert test_data.message in out, (test_data.message, out, err)
+        assert test_data.present in stdout
+        assert test_data.message in action_return_message
     else:
-        std_stream = out if params["execution_environment"] else err
-        assert test_data.message in std_stream, (test_data.message, out, err)
+        std_stream = stdout if params["execution_environment"] else stderr
+        assert test_data.present in std_stream
+        assert test_data.message in action_return_message
