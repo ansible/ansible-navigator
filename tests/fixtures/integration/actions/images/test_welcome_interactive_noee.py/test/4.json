@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "CREATOR-EE:V0.2.0 (PRIMARY) (INFORMATION COLLECTED FROM IMAGE INSPECTION)",
+        "CREATOR-EE:V0.2.0 (PRIMARY/DISABLED) (INFORMATION COLLECTED FROM IMAGE INSPECTION)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations: {}",

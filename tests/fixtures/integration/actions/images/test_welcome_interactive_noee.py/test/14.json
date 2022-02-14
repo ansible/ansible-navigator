@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "CREATOR-EE:V0.2.0 (PRIMARY) (ALL IMAGE INFORMATION)",
+        "CREATOR-EE:V0.2.0 (PRIMARY/DISABLED) (ALL IMAGE INFORMATION)",
         "   0│---                                                                                                                                                                                               ▒",
         "   1│ansible:",
         "   2│  ansible:",

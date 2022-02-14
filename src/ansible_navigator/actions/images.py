@@ -368,8 +368,10 @@ class Action(App):
             image["__full_name"] = f"{image['repository']}:{image['tag']}"
             image["__name"] = image["name"]
             if image["__full_name"] == self._args.execution_environment_image:
-                image["__name"] += " (primary)"
-                image["__name_tag"] += " (primary)"
+                ee_support = "enabled" if self._args.execution_environment else "disabled"
+                hint = f" (primary/{ee_support})"
+                image["__name"] += hint
+                image["__name_tag"] += hint
 
             try:
                 image["execution_environment"] = (

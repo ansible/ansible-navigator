@@ -4,21 +4,21 @@
     "comment": "ansible-navigator images top window",
     "additional_information": {
         "present": [
-            "creator-ee"
+            "creator-ee (primary/enabled)"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
         "  NAME                                                                                              TAG           EXECUTION ENVIRONMENT                      CREATED                   SIZE",
-        "0│ansible-automation-platform-21-ee-29-rhel8                                                        latest                         True                      13 days ago               787 MB",
-        "1│ansible-automation-platform-21-ee-minimal-rhel8                                                   latest                         True                      7 days ago                399 MB",
+        "0│ansible-automation-platform-21-ee-29-rhel8                                                        latest                         True                      2 weeks ago               787 MB",
+        "1│ansible-automation-platform-21-ee-minimal-rhel8                                                   latest                         True                      11 days ago               399 MB",
         "2│ansible-automation-platform-21-ee-supported-rhel8                                                 latest                         True                      3 weeks ago               1.13 GB",
-        "3│ansible-builder                                                                                   latest                        False                      8 days ago                781 MB",
-        "4│creator-ee (primary)                                                                              v0.2.0                         True                      2 months ago              1.33 GB",
+        "3│ansible-builder                                                                                   latest                        False                      11 days ago               781 MB",
+        "4│creator-ee (primary/enabled)                                                                      v0.2.0                         True                      2 months ago              1.33 GB",
         "5│ee-minimal-rhel8                                                                                  latest                         True                      3 weeks ago               399 MB",
-        "6│network_archive_ee                                                                                latest                         True                      7 days ago                484 MB",
-        "7│python-base                                                                                       latest                        False                      8 days ago                690 MB",
+        "6│network_archive_ee                                                                                latest                         True                      11 days ago               484 MB",
+        "7│python-base                                                                                       latest                        False                      11 days ago               690 MB",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

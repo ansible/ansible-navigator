@@ -18,7 +18,7 @@ initial_steps = (
     UiTestStep(
         user_input=":images",
         comment="ansible-navigator images top window",
-        present=[IMAGE_SHORT],
+        present=[f"{IMAGE_SHORT} (primary/enabled)"],
     ),
 )
 
