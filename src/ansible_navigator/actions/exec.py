@@ -39,7 +39,7 @@ def _generate_command(
         command = "/bin/bash"
         # Determine if any extra args were picked up
         if isinstance(extra_args, list):
-            pass_command = exec_command + " " + " ".join(extra_args)
+            pass_command = " ".join((exec_command, *extra_args))
         else:
             pass_command = exec_command
         pass_through_args = ["-c", pass_command]
