@@ -12,7 +12,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import AnsibleInventory
@@ -94,7 +94,7 @@ class Menu(list):
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """Inventory subcommand implementation."""
 
     # pylint: disable=too-many-instance-attributes

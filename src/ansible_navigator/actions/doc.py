@@ -12,7 +12,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants as C
@@ -25,7 +25,7 @@ from . import _actions as actions
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """Doc subcommand implementation."""
 
     KEGEX = r"^d(?:oc)?(\s(?P<params>.*))?$"

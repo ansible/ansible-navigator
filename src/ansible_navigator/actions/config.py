@@ -14,7 +14,7 @@ from typing import Union
 
 from .._yaml import Loader
 from .._yaml import yaml
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import AnsibleConfig
@@ -86,7 +86,7 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """Config subcommand implementation."""
 
     KEGEX = r"^config(\s(?P<params>.*))?$"
