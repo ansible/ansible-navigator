@@ -845,6 +845,27 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
+    def pull_arguments(
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process ```pull_arguments```
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :return: An instance of the standard post process return object
+        """
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.source == C.ENVIRONMENT_VARIABLE:
+            entry.value.current = to_list(entry.value.current)
+        if entry.value.current is not C.NOT_SET:
+            entry.value.current = flatten_list(entry.value.current)
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
     def set_environment_variable(
         entry: SettingsEntry,
         config: ApplicationConfiguration,

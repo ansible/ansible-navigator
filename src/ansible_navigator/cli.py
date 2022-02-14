@@ -49,7 +49,8 @@ def pull_image(args):
     image_puller = ImagePuller(
         container_engine=args.container_engine,
         image=args.execution_environment_image,
-        pull_policy=args.pull_policy,
+        arguments=args.pull_arguments,
+        policy=args.pull_policy,
     )
     image_puller.assess()
     if image_puller.assessment.exit_messages:
