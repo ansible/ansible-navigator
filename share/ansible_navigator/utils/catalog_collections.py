@@ -15,8 +15,10 @@ from datetime import datetime
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import Dict
+from typing import Generator
 from typing import List
 from typing import Tuple
+from typing import Union
 
 import yaml
 
@@ -83,14 +85,13 @@ class CollectionCatalog:
                 plugin_type = plugin_dir.name
                 if plugin_type == "modules":
                     plugin_type = "module"
-                for (dirpath, _dirnames, filenames) in self._path_walk(plugin_dir):
-                    self._process_plugin_dir(
-                        plugin_type,
-                        filenames,
-                        file_checksums,
-                        dirpath,
-                        collection,
-                    )
+                filenames = plugin_dir.glob("**/*.py")
+                self._process_plugin_dir(
+                    plugin_type,
+                    filenames,
+                    file_checksums,
+                    collection,
+                )
 
     @staticmethod
     def _generate_checksum(file_path: Path, relative_path: Path) -> Dict:
@@ -113,35 +114,11 @@ class CollectionCatalog:
         }
         return res
 
-    def _path_walk(self, top: Path, top_down: bool = False, follow_links: bool = False):
-        """Emit the file names in a directory tree by walking the tree top-down or bottom-up.
-
-        :param top: The root directory
-        :param top_down: Scan top-down or bottom-up
-        :param follow_links: Visit directories pointed to by symlinks
-        :yields: The top directory, subdirectories and non directories
-        """
-        names = list(top.iterdir())
-
-        dirs = (node for node in names if node.is_dir() is True)
-        nondirs = (node for node in names if node.is_dir() is False)
-
-        yield top, dirs, nondirs
-
-        for name in dirs:
-            if follow_links or name.is_symlink() is False:
-                for entry in self._path_walk(name, top_down, follow_links):
-                    yield entry
-
-        if top_down is not True:
-            yield top, dirs, nondirs
-
     def _process_plugin_dir(
         self,
         plugin_type: str,
-        filenames: List,
-        file_checksums: Dict,
-        dirpath: str,
+        filenames: Generator[Path, None, None],
+        file_checksums: Dict[str, Dict],
         collection: Dict,
     ) -> None:
         # pylint: disable=too-many-arguments
@@ -150,17 +127,14 @@ class CollectionCatalog:
         :param plugin_type: The type of plugins
         :param filenames: The filenames of the plugins
         :param file_checksums: The checksums for the plugin files
-        :param dirpath: The path of the directory containing the plugins
         :param collection: The details of the collection
         """
         for filename in filenames:
-            file_path = Path(dirpath, filename)
-            relative_path = Path(str(file_path).replace(str(collection["path"]), ""))
-            extension = filename.suffix
-            if not str(filename).startswith("__") and extension == ".py":
-                checksum_dict = file_checksums.get(relative_path)
+            relative_path = Path(filename).relative_to(collection["path"])
+            if not str(filename).startswith("__"):
+                checksum_dict = file_checksums.get(str(relative_path))
                 if not checksum_dict:
-                    checksum_dict = self._generate_checksum(file_path, relative_path)
+                    checksum_dict = self._generate_checksum(filename, relative_path)
                 checksum = checksum_dict[f"chksum_{checksum_dict['chksum_type']}"]
                 collection["plugin_checksums"][checksum] = {
                     "path": str(relative_path),
@@ -273,7 +247,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
         try:
             (doc, examples, returndocs, metadata) = get_docstring(
-                filename=plugin_path,
+                filename=str(plugin_path),
                 fragment_loader=fragment_loader,
                 collection_name=collection_name,
             )
@@ -318,7 +292,7 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
                         (
                             collection["known_as"],
                             checksum,
-                            f"{collection['path']}{details['path']}",
+                            Path(collection["path"], details["path"]),
                         ),
                     )
                 handled.add(checksum)
