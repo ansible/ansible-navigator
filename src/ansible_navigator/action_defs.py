@@ -19,7 +19,7 @@ class RunInteractiveReturn(RunReturn):
 
 
 class RunStdoutReturn(RunReturn):
-    """The return object for an actions' run stdout method."""
+    """The return object for an action's run stdout method."""
 
 
 ActionReturn = Union[RunReturn, RunInteractiveReturn, RunStdoutReturn]
