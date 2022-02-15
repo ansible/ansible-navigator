@@ -1,26 +1,28 @@
 """configuration definitions
 """
+from dataclasses import dataclass
 from enum import Enum
 from types import SimpleNamespace
 from typing import Any
 from typing import Callable
-from typing import Dict
+from typing import Iterable
 from typing import List
+from typing import Optional
 from typing import Union
 
 from ..utils import oxfordcomma
 
 
-class CliParameters(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
-    """An object to hold the CLI parameters"""
+@dataclass
+class CliParameters:
+    """An object to hold the CLI parameters."""
 
-    action: Union[None, str] = None
-    long_override: Union[None, str] = None
-    nargs: Union[None, Dict] = None
+    action: Optional[str] = None
+    long_override: Optional[str] = None
+    nargs: Optional[str] = None
     positional: bool = False
-    short: Union[None, str] = None
-    metavar: Union[None, str] = None
+    short: Optional[str] = None
+    metavar: Optional[str] = None
 
 
 class Constants(Enum):
@@ -43,43 +45,46 @@ class Constants(Enum):
     USER_CLI = "cli parameters"
 
 
-class SettingsEntryValue(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
-    """An object to store a value"""
+@dataclass
+class SettingsEntryValue:
+    """An object to store a value."""
 
+    #: The default value for the entry
     default: Any = Constants.NOT_SET
+    #: The current, effective value for the entry
     current: Any = Constants.NOT_SET
+    #: Indicates where the current value came from
     source: Constants = Constants.NOT_SET
 
 
-class SettingsEntry(SimpleNamespace):
-    """One entry in the configuration
+@dataclass
+class SettingsEntry:
+    # pylint: disable=too-many-instance-attributes
+    """One entry in the configuration."""
 
-    apply_to_subsequent_cli: Should this be applied to future CLIs parsed
-    choice: valid choices for this entry
-    cli_parameters: argparse specific params
-    delay_post_process: Post process in normal (alphabetical) order or wait until after first pass?
-    environment_variable_override: override the default environment variable
-    name: the reference name for the entry
-    settings_file_path_override: over the default settings file path
-    short_description: A short description used for the argparse help
-    subcommand_value: Does the hold the names of the subcommand
-    subcommands: which subcommand should this be used for
-    value: the SettingsEntryValue for the entry
-    """
-
+    #: The reference name for the entry
     name: str
+    #: A short description used for the argparse help
     short_description: str
+    #: The value for the entry
     value: SettingsEntryValue
-
+    #: Indicates if this should be applied to future CLIs parsed
     apply_to_subsequent_cli: Constants = Constants.ALL
+    #: Indicates if this can be changed after initialization
     change_after_initial: bool = True
-    choices: List = []
+    #: The possible values for this entry
+    choices: Iterable[Union[bool, str]] = []
+    #: Argparse specific params
     cli_parameters: Union[None, CliParameters] = None
+    #: Post process in normal (alphabetical) order or wait until after first pass
     delay_post_process: bool = False
+    #: Override the default, generated environment variable
     environment_variable_override: Union[None, str] = None
+    #: Over the default settings file path, dot delimited representation in tree
     settings_file_path_override: Union[None, str] = None
+    #: Subcommand this should this be used for
     subcommands: Union[List[str], Constants] = Constants.ALL
+    #: Does this hold the name of the active subcommand
     subcommand_value: bool = False
 
     def environment_variable(self, prefix: str = "") -> str:
