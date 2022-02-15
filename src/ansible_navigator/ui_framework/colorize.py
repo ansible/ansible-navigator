@@ -179,17 +179,9 @@ def hex_to_rgb(value: str) -> RgbTuple:
     """
     value = value.lstrip("#")
     value_length = len(value)
-    result = tuple(
+    red, green, blue = (
         int(value[i : i + value_length // 3], 16) for i in range(0, value_length, value_length // 3)
     )
-    if len(result) != 3:
-        raise ValueError(
-            f"hex to rgb conversion encountered an error with '{value}',"
-            " possibly a corrupt theme file"
-        )
-    red = result[0]
-    green = result[1]
-    blue = result[2]
     return red, green, blue
 
 
