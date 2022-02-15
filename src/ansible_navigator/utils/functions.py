@@ -7,6 +7,7 @@ import logging
 import os
 import re
 import shutil
+import shlex
 import sys
 import sysconfig
 
@@ -441,6 +442,13 @@ def round_half_up(number: Union[float, int]) -> int:
     """
     rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
+
+
+def shlex_join(tokens) -> str:
+    """Concatenate the tokens of a list and return a string."""
+    if sys.version_info >= (3, 8):
+        return shlex.join(tokens)
+    return " ".join(shlex.quote(token) for token in tokens)
 
 
 def str2bool(value: Any) -> bool:

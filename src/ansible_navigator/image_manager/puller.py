@@ -9,6 +9,7 @@ from typing import List
 from ..utils import ExitMessage
 from ..utils import ExitPrefix
 from ..utils import LogMessage
+from ..utils import shlex_join
 
 
 class ImageAssessment(SimpleNamespace):
@@ -23,13 +24,13 @@ class ImagePuller:
     # pylint: disable=too-many-instance-attributes
     """Image puller"""
 
-    def __init__(self, container_engine: str, image: str, arguments: List, policy: str):
+    def __init__(self, container_engine: str, image: str, arguments: List[str], pull_policy: str):
         """Initialize the container image puller.
 
         :param container_engine: The name of the container engine
         :param image: The name of the image to pull
         :param arguments: Additional arguments to be appended to the pull policy
-        :param policy: The current pull policy from the settings
+        :param pull_policy: The current pull policy from the settings
         """
         self._arguments: List = arguments
         self._assessment = ImageAssessment
@@ -40,7 +41,7 @@ class ImagePuller:
         self._image_tag: str
         self._logger = logging.getLogger(__name__)
         self._messages: List[LogMessage] = []
-        self._policy: str = policy
+        self._pull_policy: str = pull_policy
         self._pull_required: bool = False
 
     def assess(self):
@@ -48,7 +49,7 @@ class ImagePuller:
         self._extract_tag()
         self._check_for_image()
         self._determine_pull()
-        if self._policy == "never" and self._image_present is False:
+        if self._pull_policy == "never" and self._image_present is False:
             exit_msg = (
                 "Pull policy is set to 'never' and execution environment"
                 " image was not found locally"
@@ -87,13 +88,13 @@ class ImagePuller:
                 self._log_message(level=logging.WARNING, message=message)
 
     def _determine_pull(self):
-        if self._policy == "missing" and self._image_present is False:
+        if self._pull_policy == "missing" and self._image_present is False:
             pull = True
-        elif self._policy == "always":
+        elif self._pull_policy == "always":
             pull = True
-        elif self._policy == "tag" and self._image_tag == "latest":
+        elif self._pull_policy == "tag" and self._image_tag == "latest":
             pull = True
-        elif self._policy == "tag" and self._image_present is False:
+        elif self._pull_policy == "tag" and self._image_present is False:
             pull = True
         else:
             pull = False
@@ -131,11 +132,11 @@ class ImagePuller:
         messages = [("Execution environment image name:", self._image)]
         messages.append(("Execution environment image tag:", self._image_tag))
         if isinstance(self._arguments, list):
-            arguments = " ".join(shlex.quote(arg) for arg in self._arguments)
+            arguments = shlex_join(arguments)
         else:
             arguments = "None"
         messages.append(("Execution environment pull arguments:", arguments))
-        messages.append(("Execution environment pull policy:", self._policy))
+        messages.append(("Execution environment pull policy:", self._pull_policy))
         messages.append(("Execution environment pull needed:", self._pull_required))
 
         width = max((len(m[0]) + len(str(m[1])) + 2 for m in messages))
@@ -150,7 +151,7 @@ class ImagePuller:
         print("Updating the execution environment")
         print("\u002d" * width)
 
-    def _generate_pull_command(self) -> List:
+    def _generate_pull_command(self) -> List[str]:
         """Generate the pull command.
 
         :returns: The list of command parts
@@ -163,26 +164,22 @@ class ImagePuller:
         return command_line
 
     def pull_stdout(self):
-        """pull the image, print to stdout
+        """Pull the image, print to stdout.
 
-        podman writes to stderr
-        docker writes to stdout
+        ``podman`` writes errors to stdout and ``docker`` writes to stderr.
+
+        This allows us to capture, log and color the error from ``docker`` but in the case
+        of ``podman`` the error is only printed on the screen.
+
+        In both cases, stdout is not captured so the user can see the progress on the screen
+        as the pull is happening.
         """
         try:
             command_line = self._generate_pull_command()
-            shlex_joined = " ".join(shlex.quote(arg) for arg in command_line)
+            shlex_joined = shlex_join(command_line)
             print(f"Running the command: {shlex_joined}")
-            if self._container_engine == "podman":
-                subprocess.run(command_line, check=True)
-            elif self._container_engine == "docker":
-                subprocess.run(
-                    command_line,
-                    check=True,
-                    stderr=subprocess.PIPE,
-                )
-            else:
-                raise ValueError("Unknown container engine")
-
+            stderr_pipe = subprocess.PIPE if self._container_engine == "docker" else None
+            subprocess.run(command_line, check=True, stderr=stderr_pipe)
             self._log_message(level=logging.INFO, message="Execution environment updated")
             self._pull_required = False
             self._assessment.pull_required = False

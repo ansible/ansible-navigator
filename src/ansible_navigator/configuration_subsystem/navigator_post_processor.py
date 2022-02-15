@@ -850,7 +850,7 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process ```pull_arguments```
+        """Post process ``pull_arguments``
 
         :param entry: The current settings entry
         :param config: The full application configuration
