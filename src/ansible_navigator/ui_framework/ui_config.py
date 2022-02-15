@@ -11,7 +11,7 @@ class UIConfig:
     class gets threaded throughout most of the UI system, so it can be used for
     fairly global things, such as "should we render color, ever?"
     """
-    
+
     #: Indicates coloring is enabled or disabled
     color: bool
     #: Indicates if the curses colors have been initialized
