@@ -32,11 +32,11 @@ class ImagePuller:
         :param arguments: Additional arguments to be appended to the pull policy
         :param pull_policy: The current pull policy from the settings
         """
-        self._arguments: List = arguments
+        self._arguments: List[str] = arguments
         self._assessment = ImageAssessment
-        self._container_engine = container_engine
+        self._container_engine: str = container_engine
         self._exit_messages: List[ExitMessage] = []
-        self._image = image
+        self._image: str = image
         self._image_present: bool
         self._image_tag: str
         self._logger = logging.getLogger(__name__)
