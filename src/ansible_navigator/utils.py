@@ -10,8 +10,8 @@ import shutil
 import sys
 import sysconfig
 
+from dataclasses import dataclass
 from enum import Enum
-from types import SimpleNamespace
 from typing import Any
 from typing import List
 from typing import Mapping
@@ -51,10 +51,13 @@ class ExitPrefix(Enum):
         return f"{' ' * (self._longest() - len(self.name))}[{self.name}]: "
 
 
-class ExitMessage(SimpleNamespace):
-    """An object to hold a message destined for the logger"""
+@dataclass
+class ExitMessage:
+    """An object to hold a message to present when exiting."""
 
+    #: The message that will be presented
     message: str
+    #: The prefix for the message, used for formatting
     prefix: ExitPrefix = ExitPrefix.ERROR
 
     @property
