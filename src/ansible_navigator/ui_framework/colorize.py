@@ -256,9 +256,10 @@ def columns_and_colors(
     results: List[List[SimpleLinePart]] = []
 
     for line in lines:
-        column = 0
-        # Break the into 1 character parts
-        line_parts = [SimpleLinePart(chars=character, color=None) for character in line[1]]
+        # Break the into 1 character parts, temporarily set the column to 0
+        line_parts = [
+            SimpleLinePart(chars=character, color=None, column=0) for character in line[1]
+        ]
 
         # Replace the color with the RgbTuple
         for region in line[0]:
@@ -278,9 +279,9 @@ def columns_and_colors(
                     grouped.append(entry)
             results.append(grouped)
         else:
-            results.append([SimpleLinePart(chars=line[1], color=None)])
+            results.append([SimpleLinePart(chars=line[1], color=None, column=0)])
 
-    # Add a column to each line parts, based on the total of the preceding text lengths
+    # Update the column in each line part, based on the total of the preceding text lengths
     for result in results:
         column = 0
         for line_part in result:

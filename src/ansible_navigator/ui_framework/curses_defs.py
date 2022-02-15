@@ -1,8 +1,9 @@
 """commonly used definitions
 """
 
-from types import SimpleNamespace
+from dataclasses import dataclass
 from typing import NamedTuple
+from typing import Optional
 from typing import Tuple
 
 
@@ -28,13 +29,13 @@ CursesLines = Tuple[CursesLine, ...]
 RgbTuple = Tuple[int, ...]
 
 
-class SimpleLinePart(SimpleNamespace):
+@dataclass
+class SimpleLinePart:
     """Definition of one part of one line having a common color."""
 
-    # pylint: disable=too-few-public-methods
     #: One group of characters sharing the same color
     chars: str
     #: The column where the characters start, the sum of all previous characters in the line
     column: int
     #: The color for these characters
-    color: RgbTuple
+    color: Optional[RgbTuple]
