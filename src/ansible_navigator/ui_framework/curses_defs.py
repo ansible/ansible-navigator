@@ -26,7 +26,7 @@ CursesLine = Tuple[CursesLinePart, ...]
 CursesLines = Tuple[CursesLine, ...]
 
 
-RgbTuple = Tuple[int, ...]
+RgbTuple = Tuple[int, int, int]
 
 
 @dataclass
