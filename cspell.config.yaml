@@ -1,0 +1,42 @@
+dictionaryDefinitions:
+  - name: words
+    path: .config/dictionary.txt
+    addWords: true
+dictionaries:
+  - words
+ignorePaths:
+  # All dot files in the root
+  - \.*
+  # This file
+  - cspell.config.yaml
+  # The docs requirements file
+  - docs/requirements.in
+  # Ignore licenses
+  - licenses/*
+  # The shared file for tool configuration
+  - pyproject.toml
+  # The setup file
+  - setup.cfg
+  # All grammar (text-mate) tokenization files
+  - share/ansible_navigator/grammar/*.json
+  # Theme files
+  - share/ansible_navigator/themes/*.json
+  # Anything in the vendored tokenization directory
+  - src/ansible_navigator/tm_tokenize/*
+  # test requirements
+  - test-requirements.txt
+  # All fixture files in the tests directory
+  - tests/fixtures/integration/actions/**/*.json
+  # The tox configuration file
+  - tox.ini
+
+ignoreRegExpList:
+  - "--\\w+" # ansible-navigator long CLI parameters
+  - "(window|_screen|win)\\.\\w+" # curses calls e.g. getyx
+  - "{user}`\\w+`" # usernames in changelog entry
+  - "\\^.*$" # kegex regular expressions
+  - "`sentinals`" # mentioned in a changelog when corrected, here vs. list w/ ``
+  - "ANSIBLE_\\w+" # ansible environment variables
+  - "curses\\.\\w+" # curses functions e.g. curses.doupdate
+  - "monkeypatch\\.\\w+" # monkeypatch functions e.g. monkeypatch.setenv
+  - "request\\.node\\.\\w+" # pytest request  e.g. request.node.nodeid
