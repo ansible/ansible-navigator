@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 
 from ansible_navigator.actions import kegexes
 from ansible_navigator.actions import run_action
-from .app import App
+from .action_base import ActionBase
 from .configuration_subsystem import ApplicationConfiguration
 from .steps import Steps
 from .ui_framework import Interaction
@@ -40,7 +40,7 @@ DEFAULT_COLORS = "terminal_colors.json"
 THEME = "dark_vs.json"
 
 
-class ActionRunner(App):
+class ActionRunner(ActionBase):
     """A single action runner."""
 
     def __init__(self, args: ApplicationConfiguration) -> None:
