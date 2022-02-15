@@ -1,0 +1,46 @@
+{
+    "name": "test[6-:yaml-task-2 yaml]",
+    "index": 6,
+    "comment": "task-2 yaml",
+    "additional_information": {
+        "present": [
+            "航海家"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "PLAY [Simple unicode output test:1] ********************************************************************************************************************************************************************",
+        "TASK [Debug the output] ********************************************************************************************************************************************************************************",
+        "OK: [localhost]",
+        " 0│---",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 3│event_loop: null",
+        " 4│host: localhost",
+        " 5│play: Simple unicode output test",
+        " 6│play_pattern: localhost",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 8│remote_addr: localhost",
+        " 9│res:",
+        "10│  _ansible_no_log: false",
+        "11│  _ansible_verbose_always: true",
+        "12│  changed: false",
+        "13│  output:",
+        "14│    changed: true",
+        "15│    failed: false",
+        "16│    rc: 0",
+        "17│    stderr: ''",
+        "18│    stderr_lines: []",
+        "19│    stdout: |-",
+        "20│      航海家",
+        "21│    stdout_lines:",
+        "22│    - 航海家",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "24│task: Debug the output",
+        "25│task_action: debug",
+        "26│task_args: ''",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "^f/PgUp page up             ^b/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            SUCCESSFUL"
+    ]
+}
