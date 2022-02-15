@@ -1,0 +1,29 @@
+cliconf             # Ansible network cli abstraction plugin
+kegex               # An action's regex
+netcommon           # Ansible network collection, seen in tests and README
+pyproject           # Already in dictionary
+Towncrier           # Changelog generator
+
+_asdict             # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+backport            # https://github.com/streetsidesoftware/cspell-dicts/pull/913
+curses              # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+deque               # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+libtmux             # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+markdownlint        # https://github.com/streetsidesoftware/cspell-dicts/pull/916
+mkdir               # https://github.com/streetsidesoftware/cspell-dicts/pull/915
+mkdtemp             # https://github.com/streetsidesoftware/cspell-dicts/pull/918
+mqueue              # https://github.com/ansible/ansible-runner/issues/984
+nxos                # https://github.com/streetsidesoftware/cspell-dicts/pull/919
+paramiko            # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+pexpect             # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+podman              # https://github.com/streetsidesoftware/cspell-dicts/pull/899
+pycharm             # https://github.com/streetsidesoftware/cspell-dicts/pull/914
+pyyaml              # https://github.com/streetsidesoftware/cspell-dicts/pull/912
+rtype               # https://github.com/ansible/ansible-navigator/pull/939
+SNMP                # https://github.com/streetsidesoftware/cspell-dicts/pull/919
+snmpd               # https://github.com/streetsidesoftware/cspell-dicts/pull/918
+snmptrapd           # https://github.com/streetsidesoftware/cspell-dicts/pull/918
+ungrouped           # https://github.com/streetsidesoftware/cspell-dicts/pull/900
+unparsable          # https://github.com/streetsidesoftware/cspell-dicts/pull/900
+unpatched           # https://github.com/streetsidesoftware/cspell-dicts/pull/900
+zuul                # https://github.com/streetsidesoftware/cspell-dicts/pull/899
