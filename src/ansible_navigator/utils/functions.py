@@ -6,8 +6,8 @@ import html
 import logging
 import os
 import re
-import shutil
 import shlex
+import shutil
 import sys
 import sysconfig
 
