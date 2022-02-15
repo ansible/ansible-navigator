@@ -11,8 +11,11 @@ from copy import deepcopy
 from curses import wrapper
 from pathlib import Path
 from typing import List
-from typing import Tuple
 
+from .action_base import ActionReturn
+from .action_base import RunInteractiveReturn
+from .action_base import RunReturn
+from .action_base import RunStdoutReturn
 from .action_runner import ActionRunner
 from .actions import run_action_stdout
 from .configuration_subsystem import ApplicationConfiguration
@@ -75,23 +78,30 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     logger.info("New ansible-runner instance, logging initialized")
 
 
-def run(args: ApplicationConfiguration) -> Tuple[str, int]:
+def run(args: ApplicationConfiguration) -> ActionReturn:
     """Run the appropriate subcommand.
 
     :param args: The current application settings
-    :returns: A return and any messages to display
+    :returns: A message to display and return code.
     """
-    try:
-        if args.mode == "stdout":
+    if args.mode == "stdout":
+        try:
             result = run_action_stdout(args.app.replace("-", "_"), args)
             return result
-        clear_screen()
-        wrapper(ActionRunner(args=args).run)
-        return ("", 0)
-    except KeyboardInterrupt:
-        logger.warning("Dirty exit, killing the pid")
-        os.kill(os.getpid(), signal.SIGTERM)
-        return ("", 1)
+        except KeyboardInterrupt:
+            logger.warning("Dirty exit, killing the pid")
+            os.kill(os.getpid(), signal.SIGTERM)
+            return RunStdoutReturn(message="", return_code=1)
+    elif args.mode == "interactive":
+        try:
+            clear_screen()
+            wrapper(ActionRunner(args=args).run)
+            return RunInteractiveReturn(message="", return_code=0)
+        except KeyboardInterrupt:
+            logger.warning("Dirty exit, killing the pid")
+            os.kill(os.getpid(), signal.SIGTERM)
+            return RunInteractiveReturn(message="", return_code=1)
+    return RunReturn(message="", return_code=0)
 
 
 def main():
@@ -145,13 +155,12 @@ def main():
     if args.execution_environment:
         pull_image(args)
 
-    messages, return_code = run(args)
-    if return_code:
-        if messages:
-            sys.stderr.write(messages)
-        sys.exit(return_code)
-    if messages:
-        sys.stdout.write(messages)
+    run_return = run(args)
+    if run_return.return_code and run_return.message:
+        sys.stderr.write(run_return.message)
+    elif run_return.message:
+        sys.stdout.write(run_return.message)
+    sys.exit(run_return.return_code)
 
 
 if __name__ == "__main__":

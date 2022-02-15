@@ -10,6 +10,7 @@ from typing import Optional
 from typing import Tuple
 
 from ..action_base import ActionBase
+from ..action_base import RunStdoutReturn
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
 from ..runner import Command
@@ -29,7 +30,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="builder")
 
-    def run_stdout(self) -> Tuple[str, int]:
+    def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``builder`` request for mode stdout.
 
         :returns: The return code or 1. If the response from the runner invocation is None,
@@ -40,9 +41,9 @@ class Action(ActionBase):
         response = self._run_runner()
         if response is None:
             self._logger.error("Unexpected response: %s", response)
-            return ("Please review the log for errors.", 1)
-        _out, err, ret_code = response
-        return (err, ret_code)
+            return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
+        _out, error, return_code = response
+        return RunStdoutReturn(message=error, return_code=return_code)
 
     def _run_runner(self) -> Optional[Tuple]:
         """Spin up runner.

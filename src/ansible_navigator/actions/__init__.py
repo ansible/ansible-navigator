@@ -17,6 +17,7 @@ from typing import Callable
 from typing import Tuple
 from typing import Union
 
+from ..action_base import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
@@ -31,7 +32,7 @@ kegexes: Callable = actions.kegexes_factory(__package__)
 
 run_action_stdout: Callable[
     [str, ApplicationConfiguration],
-    Tuple[str, int],
+    RunStdoutReturn,
 ] = actions.run_stdout_factory(
     __package__,
 )

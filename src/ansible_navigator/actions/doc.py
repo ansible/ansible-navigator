@@ -13,6 +13,7 @@ from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
+from ..action_base import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants as C
@@ -127,7 +128,7 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return next_interaction
 
-    def run_stdout(self) -> Tuple[str, int]:
+    def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``doc`` request for mode stdout.
 
         :returns: The return code or 1. If the response from the runner invocation is None,
@@ -140,9 +141,9 @@ class Action(ActionBase):
         response = self._run_runner()
         if response is None:
             self._logger.error("Unexpected response: %s", response)
-            return ("Please review the log for errors.", 1)
-        _out, err, ret_code = response
-        return (err, ret_code)
+            return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
+        _out, error, return_code = response
+        return RunStdoutReturn(message=error, return_code=return_code)
 
     def _run_runner(self) -> Union[None, dict, Tuple[str, str, int]]:
         # pylint: disable=too-many-branches

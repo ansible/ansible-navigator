@@ -21,6 +21,7 @@ from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
+from ..action_base import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import CommandAsync
@@ -233,7 +234,7 @@ class Action(ActionBase):
             return "stdout_w_artifact"
         return self._args.mode
 
-    def run_stdout(self) -> Tuple[str, int]:
+    def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``inventory`` request for mode stdout.
 
         :returns: The return code from the runner invocation, along with a message to review the
@@ -242,8 +243,8 @@ class Action(ActionBase):
         if self._args.app == "replay":
             successful: bool = self._init_replay()
             if successful:
-                return ("", 0)
-            return ("Please review the log for errors.", 1)
+                return RunStdoutReturn(message="", return_code=0)
+            return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
 
         self._logger.debug("playbook requested in interactive mode")
         self._subaction_type = "playbook"
@@ -256,10 +257,13 @@ class Action(ActionBase):
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break
-        ret_code = self.runner.ansible_runner_instance.rc
-        if ret_code:
-            return ("Please review the log for errors.", ret_code)
-        return ("", ret_code)
+        return_code = self.runner.ansible_runner_instance.rc
+        if return_code:
+            return RunStdoutReturn(
+                message="Please review the log for errors.",
+                return_code=return_code,
+            )
+        return RunStdoutReturn(message="", return_code=return_code)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """run :run or :replay
