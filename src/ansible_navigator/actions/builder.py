@@ -10,7 +10,7 @@ import sys
 from typing import Optional
 from typing import Tuple
 
-from ..app import App
+from ..action_base import ActionBase
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
 from ..runner import Command
@@ -18,7 +18,7 @@ from . import _actions as actions
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """Run the builder subcommand."""
 
     KEGEX = "^b(?:uilder)?$"

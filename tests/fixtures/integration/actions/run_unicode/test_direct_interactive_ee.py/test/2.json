@@ -1,0 +1,42 @@
+{
+    "name": "test[2-:0-task-1 yaml]",
+    "index": 2,
+    "comment": "task-1 yaml",
+    "additional_information": {
+        "present": [
+            "航海家"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "PLAY [Simple unicode output test:0] ********************************************************************************************************************************************************************",
+        "TASK [Raw with unicode arg and output] *****************************************************************************************************************************************************************",
+        "CHANGED: [localhost]",
+        " 0│---",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 3│event_loop: null",
+        " 4│host: localhost",
+        " 5│play: Simple unicode output test",
+        " 6│play_pattern: localhost",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 8│remote_addr: localhost",
+        " 9│res:",
+        "10│  _ansible_no_log: false",
+        "11│  changed: true",
+        "12│  rc: 0",
+        "13│  stderr: ''",
+        "14│  stderr_lines: []",
+        "15│  stdout: |-",
+        "16│    航海家",
+        "17│  stdout_lines:",
+        "18│  - 航海家",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "20│task: Raw with unicode arg and output",
+        "21│task_action: raw",
+        "22│task_args: ''",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "^f/PgUp page up             ^b/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            SUCCESSFUL"
+    ]
+}

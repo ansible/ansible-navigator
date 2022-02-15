@@ -7,7 +7,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
 from ..runner import Command
@@ -37,7 +37,7 @@ def _generate_command(exec_command: str, exec_shell: bool) -> GeneratedCommand:
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """Run the :exec subcommand."""
 
     KEGEX = "^e(?:xec)?$"
