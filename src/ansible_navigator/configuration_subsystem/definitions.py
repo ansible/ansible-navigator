@@ -1,6 +1,7 @@
 """configuration definitions
 """
 from dataclasses import dataclass
+from dataclasses import field
 from enum import Enum
 from types import SimpleNamespace
 from typing import Any
@@ -73,7 +74,7 @@ class SettingsEntry:
     #: Indicates if this can be changed after initialization
     change_after_initial: bool = True
     #: The possible values for this entry
-    choices: Iterable[Union[bool, str]] = []
+    choices: Iterable[Union[bool, str]] = field(default_factory=list)
     #: Argparse specific params
     cli_parameters: Union[None, CliParameters] = None
     #: Post process in normal (alphabetical) order or wait until after first pass
