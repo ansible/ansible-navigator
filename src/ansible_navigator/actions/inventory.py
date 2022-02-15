@@ -13,6 +13,7 @@ from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import AnsibleInventory
@@ -235,16 +236,19 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return None
 
-    def run_stdout(self) -> int:
+    def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``inventory`` request for mode stdout.
 
-        :returns: The error code
+        :returns: The return code, 0 or 1. If the runner status if failed, return 1
+            along with a message to review the logs.
         """
         self._logger.debug("inventory requested in stdout mode")
         if hasattr(self._args, "inventory") and self._args.inventory:
             self._inventories = self._args.inventory
         self._collect_inventory_details()
-        return 1 if self._runner.status == "failed" else 0
+        if self._runner.status == "failed":
+            return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
+        return RunStdoutReturn(message="", return_code=0)
 
     def _take_step(self) -> None:
         """Take a step based on the current step or step back."""

@@ -11,6 +11,7 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
+from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
@@ -134,7 +135,7 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, **kwargs) -> Tuple[int, str, str]:
+    def run_action_stdout(self, **kwargs) -> Tuple[RunStdoutReturn, str, str]:
         # pylint: disable=too-many-locals
         """run the action"""
         self._app_args.update({"mode": "stdout"})
@@ -163,7 +164,7 @@ class ActionRunTest:
             sys.stderr = sys_stderr  # type: ignore
 
             # run the action
-            return_code = action.run_stdout()
+            result = action.run_stdout()
 
             # restore ``stdin``
             sys.stdin = __stdin__
@@ -178,4 +179,4 @@ class ActionRunTest:
             stderr = sys.stderr.read().decode()  # type: ignore
             sys.stderr = __stderr__
 
-        return return_code, stdout, stderr
+        return result, stdout, stderr
