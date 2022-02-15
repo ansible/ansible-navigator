@@ -156,10 +156,11 @@ def main():
         pull_image(args)
 
     run_return = run(args)
+    run_message = f"{run_return.message}\n"
     if run_return.return_code != 0 and run_return.message:
-        sys.stderr.write(run_return.message)
+        sys.stderr.write(run_message)
     elif run_return.message:
-        sys.stdout.write(run_return.message)
+        sys.stdout.write(run_message)
 
 
 if __name__ == "__main__":
