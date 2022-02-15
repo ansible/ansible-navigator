@@ -10,7 +10,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..image_manager import inspect_all
@@ -44,7 +44,7 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """Images subcommand implementation."""
 
     KEGEX = r"^im(?:ages)?(\s(?P<params>.*))?$"

@@ -20,7 +20,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import CommandAsync
@@ -181,7 +181,7 @@ TASK_LIST_COLUMNS = [
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
 
     # pylint: disable=too-many-instance-attributes
     """:run"""

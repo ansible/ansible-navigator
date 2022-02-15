@@ -20,9 +20,9 @@ from .utils import ExitMessage
 from .utils import LogMessage
 
 
-class App:
+class ActionBase:
     # pylint: disable=too-many-instance-attributes
-    """Base class for apps (actions)."""
+    """Base class for actions."""
 
     def __init__(self, args: ApplicationConfiguration, name: str, logger_name: str = __name__):
         """Initialize the App class.
