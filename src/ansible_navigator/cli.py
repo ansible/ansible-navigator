@@ -160,7 +160,6 @@ def main():
         sys.stderr.write(run_return.message)
     elif run_return.message:
         sys.stdout.write(run_return.message)
-    sys.exit(run_return.return_code)
 
 
 if __name__ == "__main__":
