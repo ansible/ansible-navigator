@@ -4,7 +4,7 @@ import html
 from collections.abc import Mapping
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
@@ -15,7 +15,7 @@ from . import _actions as actions
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """{{ }}"""
 
     KEGEX = r"^{{.*}}$"

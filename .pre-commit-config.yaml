@@ -27,6 +27,13 @@ repos:
           - --check
           - .
 
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v5.8.1
+    hooks:
+      - id: cspell
+        name: Spell check with cspell
+        stages: ["manual"]
+
   - repo: https://github.com/Lucas-C/pre-commit-hooks.git
     rev: v1.1.12
     hooks:

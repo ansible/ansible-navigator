@@ -20,7 +20,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import CommandAsync
@@ -30,6 +30,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
+from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils import abs_user_path
 from ..utils import human_time
@@ -180,7 +181,7 @@ TASK_LIST_COLUMNS = [
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
 
     # pylint: disable=too-many-instance-attributes
     """:run"""
@@ -204,6 +205,8 @@ class Action(App):
         self.runner: CommandAsync
         self._runner_finished: bool
         self._auto_scroll = False
+        #: Flag when the first message is received from runner
+        self._first_message_received: bool = False
 
         self._plays = Step(
             name="plays",
@@ -278,6 +281,14 @@ class Action(App):
             return None
 
         self.steps.append(self._plays)
+
+        # Show a notification until the first the first message from the queue is processed
+        if self._subaction_type == "run":
+            messages = ["Preparing for automation, please wait..."]
+            notification = nonblocking_notification(messages=messages)
+            interaction.ui.show(notification)
+            while not self._first_message_received:
+                self.update()
 
         while True:
             self.update()
@@ -603,6 +614,8 @@ class Action(App):
         """Drain the runner queue"""
         drain_count = 0
         while not self._queue.empty():
+            if not self._first_message_received:
+                self._first_message_received = True
             message = self._queue.get()
             self._handle_message(message)
             drain_count += 1
