@@ -12,10 +12,10 @@ from curses import wrapper
 from pathlib import Path
 from typing import List
 
-from .action_base import ActionReturn
-from .action_base import RunInteractiveReturn
-from .action_base import RunReturn
-from .action_base import RunStdoutReturn
+from .action_defs import ActionReturn
+from .action_defs import RunInteractiveReturn
+from .action_defs import RunReturn
+from .action_defs import RunStdoutReturn
 from .action_runner import ActionRunner
 from .actions import run_action_stdout
 from .configuration_subsystem import ApplicationConfiguration

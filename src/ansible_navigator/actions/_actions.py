@@ -15,7 +15,7 @@ from typing import Generator
 from typing import List
 from typing import Tuple
 
-from ..action_base import RunStdoutReturn
+from ..action_defs import RunStdoutReturn
 
 
 # ``mypy``/``pylint`` idiom for py36 compatibility

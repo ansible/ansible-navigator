@@ -3,7 +3,6 @@ import logging
 
 from copy import deepcopy
 from typing import List
-from typing import NamedTuple
 from typing import Pattern
 from typing import Tuple
 from typing import Union
@@ -19,26 +18,6 @@ from .ui_framework import ui
 from .ui_framework import warning_notification
 from .utils import ExitMessage
 from .utils import LogMessage
-
-
-class RunReturn(NamedTuple):
-    """The base return object for any action's run method."""
-
-    #: A message to display immediately before exiting
-    message: str
-    #: The return code for the for the process
-    return_code: int
-
-
-class RunInteractiveReturn(RunReturn):
-    """The return object for an actions' run interactive method."""
-
-
-class RunStdoutReturn(RunReturn):
-    """The return object for an actions' run stdout method."""
-
-
-ActionReturn = Union[RunReturn, RunInteractiveReturn, RunStdoutReturn]
 
 
 class ActionBase:

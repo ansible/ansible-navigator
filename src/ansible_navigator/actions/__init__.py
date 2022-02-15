@@ -12,12 +12,13 @@ Currently, the ``actions`` package is the only package supported for actions and
 is identified in the
 :class:`~ansible_navigator.configuration_subsystem.navigator_configuration.Internals`.
 """
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Callable
 from typing import Tuple
 from typing import Union
 
-from ..action_base import RunStdoutReturn
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction

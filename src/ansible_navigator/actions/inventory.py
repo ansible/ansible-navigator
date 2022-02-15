@@ -13,7 +13,7 @@ from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
-from ..action_base import RunStdoutReturn
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import AnsibleInventory
