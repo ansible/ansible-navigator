@@ -104,15 +104,15 @@ fixture_test_data = (
 @pytest.mark.parametrize("test_data", fixture_test_data, ids=id_test_data)
 def test(action_run_stdout, params, test_data):
     """test for a return code"""
-    actionruntest = action_run_stdout(action_name=test_data.action_name, **params)
-    action_return_message, action_return_code, stdout, stderr = actionruntest.run_action_stdout(
+    action_runner = action_run_stdout(action_name=test_data.action_name, **params)
+    run_stdout_return, stdout, stderr = action_runner.run_action_stdout(
         **dict(test_data.action_params),
     )
-    assert action_return_code == test_data.return_code
+    assert run_stdout_return.return_code == test_data.return_code
     if test_data.return_code == 0:
         assert test_data.present in stdout
-        assert test_data.message in action_return_message
+        assert test_data.message in run_stdout_return.message
     else:
         std_stream = stdout if params["execution_environment"] else stderr
         assert test_data.present in std_stream
-        assert test_data.message in action_return_message
+        assert test_data.message in run_stdout_return.message
