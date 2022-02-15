@@ -132,7 +132,7 @@ class ImagePuller:
         messages = [("Execution environment image name:", self._image)]
         messages.append(("Execution environment image tag:", self._image_tag))
         if isinstance(self._arguments, list):
-            arguments = shlex_join(arguments)
+            arguments = shlex_join(self._arguments)
         else:
             arguments = "None"
         messages.append(("Execution environment pull arguments:", arguments))

@@ -480,7 +480,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description=(
                 "Specify any additional parameters that should be added to the"
                 " pull command when pulling an execution environment from a container"
-                " registry. e.g. --pa \"'--tls-verify=false'\""
+                " registry. e.g. --pa='--tls-verify=false'"
             ),
             value=SettingsEntryValue(),
         ),
