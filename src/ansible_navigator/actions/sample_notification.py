@@ -1,7 +1,7 @@
 """:sample_notification, this is a blocking form
 """
 from .._yaml import yaml
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
@@ -30,7 +30,7 @@ form:
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """handle :sample_notification"""
 
     KEGEX = r"^sample_notification$"

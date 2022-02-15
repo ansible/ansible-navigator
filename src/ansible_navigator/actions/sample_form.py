@@ -1,7 +1,7 @@
 """:quit
 """
 from .._yaml import yaml
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
@@ -85,7 +85,7 @@ form:
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """handle :sample_form"""
 
     KEGEX = r"^sample_form$"
