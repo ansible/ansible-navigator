@@ -79,7 +79,11 @@ class ActionBase:
 
     def no_interactive_mode(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=unused-argument
-        """Show a warning notification that the user interactive mode is not supported."""
+        """Show a warning notification that the user interactive mode is not supported.
+
+        :param interaction: The interaction from the user
+        :param app: The app instance
+        """
         warning = warning_notification(
             messages=[
                 f"The '{self._name}' subcommand is not available while using interactive mode.",
