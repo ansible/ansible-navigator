@@ -156,7 +156,7 @@ def main():
         pull_image(args)
 
     run_return = run(args)
-    if run_return.return_code and run_return.message:
+    if run_return.return_code != 0 and run_return.message:
         sys.stderr.write(run_return.message)
     elif run_return.message:
         sys.stdout.write(run_return.message)
