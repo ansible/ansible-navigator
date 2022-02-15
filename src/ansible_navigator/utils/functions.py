@@ -8,7 +8,6 @@ import os
 import re
 import shlex
 import shutil
-import shlex
 import sys
 import sysconfig
 
