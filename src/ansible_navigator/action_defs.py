@@ -15,7 +15,7 @@ class RunReturn(NamedTuple):
 
 
 class RunInteractiveReturn(RunReturn):
-    """The return object for an actions' run interactive method."""
+    """The return object for an action's run interactive method."""
 
 
 class RunStdoutReturn(RunReturn):
