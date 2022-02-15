@@ -113,7 +113,7 @@ per-file-ignores =
   src/ansible_navigator/actions/welcome.py: D400, DAR101, DAR201, WPS115, WPS300, WPS360, WPS450
   src/ansible_navigator/actions/write_file.py: D400, DAR101, DAR201, WPS110, WPS111, WPS115, WPS210, WPS221, WPS231, WPS232, WPS300, WPS306, WPS323, WPS324, WPS436, WPS440, WPS450
   src/ansible_navigator/app_public.py: D204, D205, D211, D400, WPS300
-  src/ansible_navigator/app.py: D200, D205, D209, D400, D401, D403, DAR101, DAR201, DAR401, N817, WPS110, WPS111, WPS201, WPS214, WPS221, WPS300, WPS306, WPS338, WPS347, WPS602
+  src/ansible_navigator/action_base.py: N817, WPS110, WPS111, WPS201, WPS214, WPS221, WPS300, WPS306, WPS338, WPS347, WPS602
   src/ansible_navigator/cli.py: B010, D200, D400, D403, DAR101, DAR201, WPS201, WPS210, WPS213, WPS221, WPS229, WPS237, WPS300, WPS323, WPS331, WPS336, WPS440
   src/ansible_navigator/command_runner/__init__.py: D210, D400, WPS300, WPS412
   src/ansible_navigator/command_runner/command_runner.py: D400, D403, DAR101, DAR201, S404, S602, WPS110, WPS121, WPS122, WPS229, WPS306, WPS440, WPS602
