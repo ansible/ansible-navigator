@@ -1,0 +1,11 @@
+- name: Simple unicode output test
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Raw with unicode arg and output
+      raw: echo 航海家
+      register: output
+    - name: Debug the output
+      debug:
+        var: output

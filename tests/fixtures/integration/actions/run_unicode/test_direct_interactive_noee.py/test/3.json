@@ -1,0 +1,44 @@
+{
+    "name": "test[3-:json-task-1 json]",
+    "index": 3,
+    "comment": "task-1 json",
+    "additional_information": {
+        "present": [
+            "航海家"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "PLAY [Simple unicode output test:0] ********************************************************************************************************************************************************************",
+        "TASK [Raw with unicode arg and output] *****************************************************************************************************************************************************************",
+        "CHANGED: [localhost]",
+        " 0│{",
+        " 1│    \"duration\": 0.040641,",
+        " 2│    \"end\": \"2022-02-13T18:28:55.230601\",",
+        " 3│    \"event_loop\": null,",
+        " 4│    \"host\": \"localhost\",",
+        " 5│    \"play\": \"Simple unicode output test\",",
+        " 6│    \"play_pattern\": \"localhost\",",
+        " 7│    \"playbook\": \"/home/user/github/ansible-navigator/tests/fixtures/integration/actions/run_unicode/site.yaml\",",
+        " 8│    \"remote_addr\": \"localhost\",",
+        " 9│    \"res\": {",
+        "10│        \"_ansible_no_log\": false,",
+        "11│        \"changed\": true,",
+        "12│        \"rc\": 0,",
+        "13│        \"stderr\": \"\",",
+        "14│        \"stderr_lines\": [],",
+        "15│        \"stdout\": \"航海家,n\"",
+        "16│        \"stdout_lines\": [",
+        "17│            \"航海家\"",
+        "18│        ]",
+        "19│    },",
+        "20│    \"start\": \"2022-02-13T18:28:55.189960\",",
+        "21│    \"task\": \"Raw with unicode arg and output\",",
+        "22│    \"task_action\": \"raw\",",
+        "23│    \"task_args\": \"\",",
+        "24│    \"task_path\": \"/home/user/github/ansible-navigator/tests/fixtures/integration/actions/run_unicode/site.yaml:6\"",
+        "25│}",
+        "^f/PgUp page up             ^b/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            SUCCESSFUL"
+    ]
+}

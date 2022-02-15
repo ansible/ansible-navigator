@@ -1,0 +1,36 @@
+{
+    "name": "test[9-:st-display stream]",
+    "index": 9,
+    "comment": "display stream",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        " 0│",
+        " 1│PLAY [Simple unicode output test] **********************************************",
+        " 2│",
+        " 3│TASK [Raw with unicode arg and output] *****************************************",
+        " 4│changed: [localhost]",
+        " 5│",
+        " 6│TASK [Debug the output] ********************************************************",
+        " 7│ok: [localhost] => {",
+        " 8│    \"output\": {",
+        " 9│        \"changed\": true,",
+        "10│        \"failed\": false,",
+        "11│        \"rc\": 0,",
+        "12│        \"stderr\": \"\",",
+        "13│        \"stderr_lines\": [],",
+        "14│        \"stdout\": \"航海家\\n\",",
+        "15│        \"stdout_lines\": [",
+        "16│            \"航海家\"",
+        "17│        ]",
+        "18│    }",
+        "19│}",
+        "20│",
+        "21│PLAY RECAP *********************************************************************",
+        "22│localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0",
+        "^f/PgUp page up                          ^b/PgDn page down                          ↑↓ scroll                          esc back                          :help help                         SUCCESSFUL"
+    ]
+}
