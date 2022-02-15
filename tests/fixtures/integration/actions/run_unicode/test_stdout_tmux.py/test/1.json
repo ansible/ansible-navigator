@@ -1,0 +1,36 @@
+{
+    "name": "test[run playbook without ee  clear && ansible-navigator run /tests/fixtures/integration/actions/run_unicode/site.yaml -i /tests/fixtures/integration/actions/run_unicode/inventory --pae false --ee False --ll debug --mode stdout]",
+    "index": 1,
+    "comment": "run playbook without ee",
+    "additional_information": {
+        "present": [
+            "航海家",
+            "ok=2",
+            "failed=0"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "PLAY [Simple unicode output test] **********************************************************************************************************************************************************************",
+        "TASK [Raw with unicode arg and output] *****************************************************************************************************************************************************************",
+        "changed: [localhost]",
+        "TASK [Debug the output] ********************************************************************************************************************************************************************************",
+        "ok: [localhost] => {",
+        "    \"output\": {",
+        "        \"changed\": true,",
+        "        \"failed\": false,",
+        "        \"rc\": 0,",
+        "        \"stderr\": \"\",",
+        "        \"stderr_lines\": [],",
+        "        \"stdout\": \"航海家\\n\",",
+        "        \"stdout_lines\": [",
+        "            \"航海家\"",
+        "        ]",
+        "    }",
+        "}",
+        "PLAY RECAP *********************************************************************************************************************************************************************************************",
+        "localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
+}
