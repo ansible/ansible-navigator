@@ -152,6 +152,7 @@ class Action(ActionBase):
         return []
 
     def _set_inventories_mtime(self) -> None:
+        """Record the inventory modification time."""
         modification_times = []
         for inventory in self._inventories:
             if os.path.isdir(inventory):

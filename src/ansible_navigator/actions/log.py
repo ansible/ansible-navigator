@@ -1,4 +1,4 @@
-""":log"""
+"""``:log`` command implementation."""
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -8,19 +8,19 @@ from . import _actions as actions
 
 @actions.register
 class Action(ActionBase):
-    """:log"""
+    """``:log`` command implementation."""
 
     KEGEX = r"^l(?:og)?$"
 
     def __init__(self, args: ApplicationConfiguration):
-        """Initialize the ``:exec`` action.
+        """Initialize the ``:log`` action.
 
         :param args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="log")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :log
+        """Execute the ``:log`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

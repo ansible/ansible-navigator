@@ -1,5 +1,9 @@
-"""stub action for replay
+"""Replay subcommand implementation.
+
+A stub, the logic is used from ``:run``, only here as a place
+to put the kegex.
 """
+
 
 from . import _actions as actions
 from .run import Action as BaseAction
@@ -7,7 +11,7 @@ from .run import Action as BaseAction
 
 @actions.register
 class Action(BaseAction):
-    """:replay"""
+    """``:replay`` command implementation."""
 
     KEGEX = r"""(?x)
             ^
