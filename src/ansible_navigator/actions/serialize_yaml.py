@@ -25,7 +25,7 @@ class Action:
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Execute the ``:json`` request for mode interactive.
+        """Execute the ``:yaml`` request for mode interactive.
 
         :param interaction: The interaction from the user, action and value
         :param app: The app instance
