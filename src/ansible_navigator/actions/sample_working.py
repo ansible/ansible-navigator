@@ -24,7 +24,7 @@ class Action(ActionBase):
         super().__init__(args=args, logger_name=__name__, name="sample_working")
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Execute the ``:sample_notification`` request for mode interactive.
+        """Execute the ``:sample_working`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
