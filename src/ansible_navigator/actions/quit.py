@@ -9,7 +9,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """``:open`` command implementation."""
+    """``:quit`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
