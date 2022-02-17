@@ -5,7 +5,9 @@ import subprocess
 
 from types import SimpleNamespace
 from typing import List
+from typing import Union
 
+from ..configuration_subsystem import Constants
 from ..utils import ExitMessage
 from ..utils import ExitPrefix
 from ..utils import LogMessage
@@ -24,7 +26,13 @@ class ImagePuller:
     # pylint: disable=too-many-instance-attributes
     """Image puller"""
 
-    def __init__(self, container_engine: str, image: str, arguments: List[str], pull_policy: str):
+    def __init__(
+        self,
+        container_engine: str,
+        image: str,
+        arguments: Union[Constants, List[str]],
+        pull_policy: str,
+    ):
         """Initialize the container image puller.
 
         :param container_engine: The name of the container engine
@@ -32,7 +40,7 @@ class ImagePuller:
         :param arguments: Additional arguments to be appended to the pull policy
         :param pull_policy: The current pull policy from the settings
         """
-        self._arguments: List[str] = arguments
+        self._arguments: Union[Constants, List[str]] = arguments
         self._assessment = ImageAssessment
         self._container_engine: str = container_engine
         self._exit_messages: List[ExitMessage] = []
