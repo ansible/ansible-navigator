@@ -21,17 +21,6 @@ def test_fixtures_dir():
     return os.path.join(os.path.dirname(__file__), "..", "fixtures")
 
 
-@pytest.fixture
-def patch_curses(monkeypatch):
-    """Patch curses so it doesn't traceback during tests.
-
-    :param monkeypatch: Fixture for patching
-    """
-    monkeypatch.setattr("curses.cbreak", lambda: None)
-    monkeypatch.setattr("curses.nocbreak", lambda: None)
-    monkeypatch.setattr("curses.endwin", lambda: None)
-
-
 @pytest.fixture(scope="session")
 def os_independent_tmp():
     """
