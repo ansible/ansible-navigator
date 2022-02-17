@@ -3,6 +3,7 @@ import shlex
 
 from pathlib import Path
 from typing import NamedTuple
+
 import pytest
 
 from ansible_navigator import cli
