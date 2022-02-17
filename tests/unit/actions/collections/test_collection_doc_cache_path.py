@@ -34,7 +34,10 @@ class DuplicateMountException(RuntimeError):
 @pytest.mark.parametrize("doc_cache_path", DOC_CACHE_PATHS, ids=_id_description)
 @pytest.mark.usefixtures("patch_curses")
 def test_for_duplicates_sources(
-    doc_cache_path, monkeypatch: pytest.MonkeyPatch, tmp_path: Path, mocker
+    doc_cache_path,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    mocker,
 ):
     """Ensure duplicate volume mounts are not passed to runner.
 
@@ -49,7 +52,8 @@ def test_for_duplicates_sources(
     command = f"ansible-navigator collections '--cdcp={cdc_full_path!s}' --pp never"
     monkeypatch.setattr("sys.argv", shlex.split(command))
     run_cmd_mocked = mocker.patch(
-        "ansible_navigator.runner.command.run_command", side_effect=DuplicateMountException
+        "ansible_navigator.runner.command.run_command",
+        side_effect=DuplicateMountException,
     )
     monkeypatch.chdir(working_dir)
     with pytest.raises(DuplicateMountException):
