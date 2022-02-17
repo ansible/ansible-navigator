@@ -30,3 +30,14 @@ def pullable_image(valid_container_engine):
     """A container that can be pulled."""
     yield PULLABLE_IMAGE
     subprocess.run([valid_container_engine, "image", "rm", PULLABLE_IMAGE], check=True)
+
+
+@pytest.fixture
+def patch_curses(monkeypatch):
+    """Patch curses so it doesn't traceback during tests.
+
+    :param monkeypatch: Fixture for patching
+    """
+    monkeypatch.setattr("curses.cbreak", lambda: None)
+    monkeypatch.setattr("curses.nocbreak", lambda: None)
+    monkeypatch.setattr("curses.endwin", lambda: None)

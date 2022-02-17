@@ -12,6 +12,7 @@ import sysconfig
 
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 from typing import Any
 from typing import List
 from typing import Mapping
@@ -382,6 +383,22 @@ def pascal_to_snake(obj):
             working[new_key] = pascal_to_snake(val)
         return working
     return obj
+
+
+def path_is_relative_to(child: Path, parent: Path) -> bool:
+    """Return True if the path is relative to another path or False.
+
+    :param child: The path that may be a child
+    :param parent: The path that may be a parent
+    :returns: Indicates the child is a child of the parent
+    """
+    if sys.version_info >= (3, 9):
+        return child.is_relative_to(parent)
+    try:
+        child.relative_to(parent)
+        return True
+    except ValueError:
+        return False
 
 
 def remove_ansi(string):
