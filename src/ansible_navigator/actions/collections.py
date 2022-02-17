@@ -7,6 +7,7 @@ import sys
 
 from copy import deepcopy
 from json.decoder import JSONDecodeError
+from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import List
@@ -23,6 +24,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
+from ..utils import path_is_relative_to
 from . import _actions as actions
 from . import run_action
 
@@ -324,9 +326,15 @@ class Action(ActionBase):
                     f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
                 )
 
-            container_volume_mounts.append(
-                f"{self._collection_cache_path}:{self._collection_cache_path}:z",
-            )
+            # The playbook directory will be mounted as host_cwd, so don't duplicate
+            if not path_is_relative_to(
+                child=Path(self._collection_cache_path),
+                parent=(Path(playbook_dir)),
+            ):
+                container_volume_mounts.append(
+                    f"{self._collection_cache_path}:{self._collection_cache_path}:z",
+                )
+
             if "container_volume_mounts" in kwargs:
                 kwargs["container_volume_mounts"] += container_volume_mounts
             else:

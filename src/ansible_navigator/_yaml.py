@@ -4,6 +4,7 @@ import re
 
 from typing import Any
 from typing import NamedTuple
+from typing import Optional
 from typing import Union
 
 import yaml  # noqa: F401
@@ -30,7 +31,7 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def human_dump(obj: Any, filename: str = None, file_mode: str = "w") -> Union[str, None]:
+def human_dump(obj: Any, filename: str = None, file_mode: str = "w") -> Optional[str]:
     """Serialize an object to yaml.
 
     This allows for the consistent representation across the application.
@@ -73,7 +74,7 @@ class HumanDumper(Dumper):
         self,
         tag: str,
         value: str,
-        style: Union[str, None] = None,
+        style: Optional[str] = None,
     ) -> yaml.nodes.ScalarNode:
         """Represent all multiline strings as block scalars to improve readability for humans.
 
