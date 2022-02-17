@@ -54,7 +54,8 @@ def test_for_duplicates_sources(
     monkeypatch.chdir(working_dir)
     with pytest.raises(DuplicateMountException):
         cli.main()
-    host_cwd = Path(run_cmd_mocked.call_args.kwargs["host_cwd"])
-    mounts = run_cmd_mocked.call_args.kwargs["container_volume_mounts"]
+    _args, kwargs = run_cmd_mocked.call_args
+    host_cwd = Path(kwargs["host_cwd"])
+    mounts = kwargs["container_volume_mounts"]
     sources = [Path(mount.split(":")[0]).parents[0] for mount in mounts]
     assert host_cwd not in sources
