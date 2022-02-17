@@ -31,25 +31,24 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def human_dump(obj: Any, filename: str = None, file_mode: str = "w") -> Optional[str]:
+def human_dump(obj: Any, filename: Any = None, file_mode: str = "w") -> Optional[str]:
     """Serialize an object to yaml.
 
     This allows for the consistent representation across the application.
 
     :param obj: The object to serialize
-    :param filename: The filename of the file in which the obj should be written
-    :param file_mode: The mode to use for file writing
+    :param filename : A file object or filename to write the obj to
+    :param file_mode: The mode to use for file writing, if a file name is provided
     :return: Either the serialized obj or None if written to a file
     """
     dumper = HumanDumper
     if filename is not None:
-        with open(filename, file_mode, encoding="utf-8") as fh:
-            yaml.dump(
-                obj,
-                fh,
-                Dumper=dumper,
-                **YamlStyle()._asdict(),
-            )
+        try:
+            # expcect fileobj as arg, fall back to file name
+            yaml.dump(obj, filename, Dumper=dumper, **YamlStyle()._asdict())
+        except TypeError:
+            with open(filename, file_mode, encoding="utf-8") as fh:
+                yaml.dump(obj, fh, Dumper=dumper, **YamlStyle()._asdict())
         return None
     return yaml.dump(obj, Dumper=dumper, **YamlStyle()._asdict())
 

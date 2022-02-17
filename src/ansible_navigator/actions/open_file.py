@@ -98,26 +98,32 @@ class Action:
                 return None
 
         if not filename:
+            # common arguments, only suffix varies
+            myargs = {'mode': 'w', 'encoding': 'utf-8', 'delete': False}
             if interaction.ui.serialization_format() == "text.html.markdown":
-                with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as temp_file:
+                myargs['suffix'] = '.md'
+                with tempfile.NamedTemporaryFile(**myargs) as temp_file:
+                    temp_file.write(obj)
                     filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as fh:
-                        fh.write(obj)
             elif interaction.ui.serialization_format() == "source.yaml":
-                with tempfile.NamedTemporaryFile(suffix=".yaml", delete=False) as temp_file:
+                myargs['suffix'] = '.yaml'
+                with tempfile.NamedTemporaryFile(**myargs) as temp_file:
+                    human_dump(obj=obj, filename=temp_file)
                     filename = temp_file.name
-                    human_dump(obj=obj, filename=filename)
             elif interaction.ui.serialization_format() == "source.json":
-                with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
+                myargs['suffix'] = '.json'
+                with tempfile.NamedTemporaryFile(**myargs) as temp_file:
+                    json.dump(obj, temp_file, indent=4, sort_keys=True)
                     filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as fh:
-                        json.dump(obj, fh, indent=4, sort_keys=True)
             else:
-                with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as temp_file:
+                myargs['suffix'] = '.txt'
+                with tempfile.NamedTemporaryFile(**myargs) as temp_file:
+                    temp_file.write(obj)
                     filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as fh:
-                        fh.write(obj)
 
+        # There is still a race condition between writing the file and opening it in the editor
+        # but since most editors won't take filehandles nor content on a pipe, it is inevitable.
+        # The mitigation is that tempfile uses restrictive permissions on said file.
         command = self._args.editor_command.format(filename=filename, line_number=line_number)
         is_console = self._args.editor_console
 
