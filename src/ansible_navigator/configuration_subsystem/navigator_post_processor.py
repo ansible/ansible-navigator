@@ -211,7 +211,7 @@ class NavigatorPostProcessor:
         if entry.value.current == "auto":
             choices = filter(lambda x: x != "auto", entry.choices)
             for choice in choices:
-                if shutil.which(choice):
+                if shutil.which(str(choice)):
                     entry.value.current = choice
                     break
         return messages, exit_messages

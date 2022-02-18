@@ -1,6 +1,7 @@
 """Test the functions exposed in the :mod:`~ansible_navigator.utils` subpackage."""
 import os
 
+from pathlib import Path
 from typing import List
 from typing import NamedTuple
 from typing import Optional
@@ -193,3 +194,11 @@ def test_round_half_up(data: RoundHalfUpTestData) -> None:
     """
     result = utils.round_half_up(data.value)
     assert result == data.expected
+
+
+def test_path_is_relative_to():
+    """Ensure path_is_relative_to returns accurate results."""
+    directory = Path("/tmp/test")
+    file_in_directory = Path("/tmp/test/file.txt")
+    assert utils.path_is_relative_to(child=file_in_directory, parent=directory)
+    assert not utils.path_is_relative_to(child=directory, parent=file_in_directory)
