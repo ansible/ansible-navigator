@@ -50,34 +50,12 @@ repos:
       # Side-effects:
       - id: trailing-whitespace
       - id: check-merge-conflict
-      - id: double-quote-string-fixer
-        exclude: |
-          (?x)
-          ^
-            .*
-          $
-        stages: ["manual"]
       - id: end-of-file-fixer
       - id: requirements-txt-fixer
-        exclude: >-
-          ^requirements\.txt$
-      # Non-modifying checks:
-      - id: name-tests-test
-        args:
-          - --django
-        exclude: |
-          (?x)
-          ^
-            .*
-          $
-        files: >-
-          ^tests/[^_].*\.py$
-        stages: ["manual"]
       - id: check-added-large-files
-      - id: check-byte-order-marker
+      - id: fix-byte-order-marker
       - id: check-case-conflict
-      # disabled due to pre-commit/pre-commit-hooks#159
-      # - id: check-docstring-first
+      - id: check-docstring-first
       - id: check-json
         exclude: |
           (?x)
@@ -144,6 +122,7 @@ repos:
         additional_dependencies:
           - flake8-2020 >= 1.6.0
           - flake8-isort >= 4.1.1
+          - flake8-quotes >= 3.3.1
       - id: flake8
         alias: flake8-rule-candidates
         name: Help improve our developer documentation. Try "tox -e lint-candidates" (optional)
@@ -158,18 +137,6 @@ repos:
         additional_dependencies:
           - darglint
           - flake8-docstrings # uses pydocstyle
-        stages:
-          - manual
-      - id: flake8
-        alias: flake8-extended
-        name: >-
-          An unenforced set of strict flake8 plugins,
-          including WPS and pytest-style
-        language_version: python3
-        additional_dependencies:
-          - flake8-docstrings >= 1.5.0 # uses pydocstyle
-          - flake8-pytest-style >= 1.2.2
-          - wemake-python-styleguide ~= 0.16.0
         stages:
           - manual
 
