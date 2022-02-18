@@ -1,4 +1,4 @@
-""":welcome"""
+"""Welcome subcommand implementation."""
 import os
 
 from ..action_base import ActionBase
@@ -15,7 +15,7 @@ WELCOME = """
 
 @actions.register
 class Action(ActionBase):
-    """:welcome"""
+    """Welcome subcommand implementation."""
 
     KEGEX = r"^welcome$"
 
@@ -27,7 +27,7 @@ class Action(ActionBase):
         super().__init__(args=args, logger_name=__name__, name="welcome")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :welcome
+        """Execute the ``:welcome`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

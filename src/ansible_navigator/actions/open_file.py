@@ -1,4 +1,4 @@
-""":open"""
+"""``:open`` command implementation."""
 import curses
 import json
 import logging
@@ -20,12 +20,19 @@ from . import _actions as actions
 
 
 class SuspendCurses:
-    """Context Manager to temporarily leave curses mode"""
+    """Context Manager to temporarily leave curses mode."""
 
     def __enter__(self):
+        """Close the curses window."""
         curses.endwin()
 
     def __exit__(self, exc_type, exc_val, traceback):
+        """Open the curses window.
+
+        :param exc_type: The exception class
+        :param exc_val: The type of exception
+        :param traceback: Report of all information related to the exception
+        """
         newscr = curses.initscr()
         newscr.refresh()
         curses.doupdate()
@@ -33,7 +40,7 @@ class SuspendCurses:
 
 @actions.register
 class Action:
-    """:open"""
+    """``:open`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -48,6 +55,12 @@ class Action:
         self._logger = logging.getLogger(__name__)
 
     def _menu(self, menu: Menu, menu_filter: Callable) -> List[Dict[Any, Any]]:
+        """Convert a menu into structured data.
+
+        :param menu: The current menu showing
+        :param menu_filter: The effective menu filter
+        :returns: The menu converted to a structured data
+        """
         self._logger.debug("menu is showing, open that")
         obj = [
             {remove_dbl_un(k): v for k, v in c.items() if k in menu.columns} for c in menu.current
@@ -59,10 +72,11 @@ class Action:
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
         # pylint: disable=unused-argument
-        """Handle :open
+        """Execute the ``:open`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
+        :returns: Nothing
         """
         self._logger.debug("open requested")
 

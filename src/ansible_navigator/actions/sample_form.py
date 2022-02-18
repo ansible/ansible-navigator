@@ -1,5 +1,4 @@
-""":quit
-"""
+"""``:sample_form`` command implementation."""
 from .._yaml import yaml
 from ..action_base import ActionBase
 from ..app_public import AppPublic
@@ -86,7 +85,7 @@ form:
 
 @actions.register
 class Action(ActionBase):
-    """handle :sample_form"""
+    """``:sample_form`` command implementation."""
 
     KEGEX = r"^sample_form$"
 
@@ -98,7 +97,7 @@ class Action(ActionBase):
         super().__init__(args=args, logger_name=__name__, name="sample_form")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :doc
+        """Execute the ``:sample_form`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

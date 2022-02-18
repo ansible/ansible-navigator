@@ -1,4 +1,4 @@
-""":yaml"""
+"""``:yaml`` command implementation."""
 import logging
 
 from ..app_public import AppPublic
@@ -9,7 +9,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """:yaml"""
+    """``:yaml`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -25,7 +25,7 @@ class Action:
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :yaml
+        """Execute the ``:yaml`` request for mode interactive.
 
         :param interaction: The interaction from the user, action and value
         :param app: The app instance
