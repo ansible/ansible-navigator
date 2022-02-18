@@ -1,4 +1,4 @@
-""":save"""
+"""``:save`` command implementation."""
 import logging
 
 from ..app_public import AppPublic
@@ -9,7 +9,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """:save"""
+    """``:save`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -24,7 +24,7 @@ class Action:
         self._logger = logging.getLogger(__name__)
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :save
+        """Execute the ``:save`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

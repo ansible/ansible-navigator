@@ -356,6 +356,7 @@ class Action(ActionBase):
         )
 
     def _collect_image_list(self):
+        """Build a list of images for the images menu."""
         images, error = inspect_all(container_engine=self._args.container_engine)
         if error or not images:
             self._logger.error(error)

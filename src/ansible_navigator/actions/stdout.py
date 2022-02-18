@@ -1,4 +1,4 @@
-""":stdout"""
+"""``:stdout`` command implementation."""
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic
@@ -9,7 +9,7 @@ from . import _actions as actions
 
 @actions.register
 class Action(ActionBase):
-    """:stdout"""
+    """``:stdout`` command implementation."""
 
     KEGEX = r"^st(?:dout)?$"
 
@@ -21,7 +21,7 @@ class Action(ActionBase):
         super().__init__(args=args, logger_name=__name__, name="stdout")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :stdout
+        """Execute the ``:stdout`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

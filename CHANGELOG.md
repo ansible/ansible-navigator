@@ -14,7 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 <!--
 Do *NOT* manually add changelog entries here!
 This changelog is managed by Towncrier and is built at release time.
-See https://ansible-navigator.rtfd.io/en/latest/contributing.html#adding-change-notes-with-your-prs
+See https://ansible-navigator.readthedocs.io/en/latest/contributing.html#adding-change-notes-with-your-prs
 for details. Or read
 https://github.com/ansible/ansible-navigator/tree/main/docs/changelog-fragments.d#adding-change-notes-with-your-prs
 -->

@@ -1,5 +1,5 @@
-""":sample_working, this is a non-blocking form
-"""
+"""``:sample_working`` command implementation."""
+
 import time
 
 from ..action_base import ActionBase
@@ -12,7 +12,7 @@ from . import _actions as actions
 
 @actions.register
 class Action(ActionBase):
-    """handle :sample_working"""
+    """``:sample_working`` command implementation."""
 
     KEGEX = r"^sample_working$"
 
@@ -24,7 +24,7 @@ class Action(ActionBase):
         super().__init__(args=args, logger_name=__name__, name="sample_working")
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :doc
+        """Execute the ``:sample_working`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
