@@ -6,6 +6,7 @@ import shlex
 from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
