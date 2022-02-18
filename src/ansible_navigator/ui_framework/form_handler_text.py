@@ -82,7 +82,7 @@ class FormHandlerText(CursesWindow, Textbox):
         return ret
 
     def handle(self, idx, form_fields) -> Tuple[str, int]:
-        "Edit in the widget window and collect the results."
+        """Edit in the widget window and collect the results."""
         form_field = form_fields[idx]
 
         if form_field.response is not unknown:

@@ -1,4 +1,7 @@
 ansible-core
+darglint
+flake8-docstrings
+flake8-quotes
 libtmux
 lxml
 pre-commit

@@ -41,21 +41,7 @@ extend-ignore =
   F401,  # duplicate of pylint W0611 (unused-import)
   F821,  # duplicate of pylint E0602 (undefined-variable)
   F841,  # duplicate of pylint W0612 (unused-variable)
-  WPS300,  # "Found local folder import" -- nothing bad about this
-  WPS305,  # "Found `f` string" -- f strings are preferred for readability
-  # An opposite consistency expectation is currently enforced
-  # by pylint via: useless-object-inheritance (R0205):
-  WPS306,  # "Found class without a base class: *"
-  WPS326,  # "Forbid implicit string concatenation."
-  WPS421,  # "Forbids to call some built-in functions.", hasattr is good.
-# https://wemake-python-stylegui.de/en/latest/pages/usage/formatter.html
-#format = wemake
 
-# Let's not overcomplicate the code:
-#max-complexity = 10
-
-# Accessibility/large fonts and PEP8 friendly:
-#max-line-length = 79
 # Accessibility/large fonts and PEP8 unfriendly:
 max-line-length = 100
 
@@ -72,266 +58,173 @@ per-file-ignores =
 
   # The following were present during the initial implementation.
   # They are expected to be fixed and unignored over time.
-  docs/_ext/single_sourced_data.py: N817, P103, WPS110, WPS111, WPS201, WPS202, WPS210, WPS213, WPS221, WPS229, WPS231, WPS237, WPS318, WPS323, WPS331, WPS336, WPS347, WPS407, WPS432, WPS440, WPS441, WPS453, WPS504
-  docs/conf.py: WPS221, WPS226, WPS301, WPS323, WPS420, WPS429, WPS433
-  setup.py: WPS111, WPS221
-  share/ansible_navigator/utils/catalog_collections.py: S404, S602, WPS110, WPS111, WPS121, WPS122, WPS201, WPS202, WPS210, WPS211, WPS220, WPS221, WPS226, WPS229, WPS231, WPS232, WPS237, WPS306, WPS331, WPS336, WPS338, WPS349, WPS420, WPS426, WPS432, WPS433, WPS437, WPS440, WPS458, WPS529, WPS602
-  share/ansible_navigator/utils/image_introspect.py: S404, S602, WPS110, WPS111, WPS121, WPS122, WPS202, WPS210, WPS220, WPS221, WPS226, WPS229, WPS231, WPS306, WPS335, WPS338, WPS440, WPS441, WPS510, WPS602
-  share/ansible_navigator/utils/key_value_store.py: WPS110, WPS214, WPS526, WPS600, WPS603
-  src/ansible_navigator/__init__.py: WPS300, WPS412, WPS436
-  src/ansible_navigator/__main__.py: RST304, WPS300
-  src/ansible_navigator/_version.py: WPS410
-  src/ansible_navigator/_yaml.py: WPS110, WPS229, WPS433, WPS437, WPS440, WPS458
-  src/ansible_navigator/action_runner.py: WPS231, WPS300, WPS436, WPS437, WPS450
-  src/ansible_navigator/actions/__init__.py: WPS300, WPS410, WPS412, WPS450
-  src/ansible_navigator/actions/_actions.py: WPS111, WPS201, WPS202, WPS210, WPS221, WPS323, WPS407, WPS433, WPS440, WPS458
-  src/ansible_navigator/actions/back.py: WPS115, WPS300, WPS306, WPS323, WPS450
-  src/ansible_navigator/actions/collections.py: C409, C414, WPS110, WPS111, WPS115, WPS121, WPS122, WPS201, WPS204, WPS210, WPS213, WPS214, WPS220, WPS221, WPS226, WPS229, WPS231, WPS237, WPS300, WPS323, WPS324, WPS336, WPS338, WPS440, WPS441, WPS450, WPS504, WPS505, WPS529
-  src/ansible_navigator/actions/config.py: C405, C409, WPS110, WPS111, WPS115, WPS201, WPS204, WPS210, WPS213, WPS214, WPS220, WPS221, WPS226, WPS229, WPS231, WPS232, WPS300, WPS323, WPS324, WPS331, WPS336, WPS436, WPS440, WPS450, WPS502
-  src/ansible_navigator/actions/doc.py: N817, WPS110, WPS111, WPS115, WPS201, WPS210, WPS213, WPS220, WPS221, WPS229, WPS231, WPS232, WPS300, WPS323, WPS331, WPS347, WPS450, WPS503
-  src/ansible_navigator/actions/exec.py: WPS115, WPS210, WPS323, WPS450
-  src/ansible_navigator/actions/filter.py: WPS115, WPS300, WPS306, WPS323, WPS450
-  src/ansible_navigator/actions/help_doc.py: WPS115, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/images.py: WPS110, WPS111, WPS115, WPS121, WPS122, WPS201, WPS210, WPS212, WPS213, WPS214, WPS221, WPS223, WPS226, WPS229, WPS231, WPS237, WPS300, WPS323, WPS331, WPS336, WPS338, WPS349, WPS450, WPS504, WPS510, WPS529
-  src/ansible_navigator/actions/inventory.py: C409, N806, WPS110, WPS111, WPS112, WPS115, WPS201, WPS210, WPS212, WPS213, WPS214, WPS220, WPS221, WPS226, WPS229, WPS231, WPS300, WPS323, WPS324, WPS331, WPS336, WPS338, WPS450, WPS510, WPS600
-  src/ansible_navigator/actions/log.py: WPS115, WPS231, WPS232, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/open_file.py: S605, WPS110, WPS111, WPS115, WPS201, WPS210, WPS220, WPS221, WPS231, WPS300, WPS306, WPS323, WPS324, WPS338, WPS436, WPS440, WPS450
-  src/ansible_navigator/actions/quit.py: WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/refresh.py: WPS115, WPS300, WPS306, WPS450
-  src/ansible_navigator/actions/replay.py: WPS115, WPS300, WPS450
-  src/ansible_navigator/actions/rerun.py: WPS115, WPS300, WPS306, WPS360, WPS450
-  src/ansible_navigator/actions/run.py: B014, C409, D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201, DAR401, N806, WPS110, WPS111, WPS115, WPS201, WPS204, WPS210, WPS213, WPS214, WPS219, WPS220, WPS221, WPS226, WPS229, WPS231, WPS232, WPS237, WPS300, WPS323, WPS328, WPS331, WPS336, WPS337, WPS338, WPS407, WPS420, WPS440, WPS450, WPS504, WPS510
-  src/ansible_navigator/actions/sample_form.py: WPS115, WPS300, WPS323, WPS360, WPS436, WPS450
-  src/ansible_navigator/actions/sample_notification.py: WPS115, WPS300, WPS323, WPS360, WPS436, WPS450
-  src/ansible_navigator/actions/sample_working.py: WPS115, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/save.py: WPS115, WPS300, WPS306, WPS450
-  src/ansible_navigator/actions/select.py: WPS115, WPS300, WPS306, WPS323, WPS450
-  src/ansible_navigator/actions/serialize_json.py: WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/serialize_yaml.py: WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/stdout.py: WPS110, WPS115, WPS231, WPS232, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/template.py: WPS110, WPS111, WPS115, WPS210, WPS213, WPS221, WPS231, WPS232, WPS300, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/welcome.py: WPS115, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/write_file.py: WPS110, WPS111, WPS115, WPS210, WPS221, WPS231, WPS232, WPS300, WPS306, WPS323, WPS324, WPS436, WPS440, WPS450
-  src/ansible_navigator/app_public.py: D204, D205, D211, D400, WPS300
-  src/ansible_navigator/action_base.py: N817, WPS110, WPS111, WPS201, WPS214, WPS221, WPS300, WPS306, WPS338, WPS347, WPS602
-  src/ansible_navigator/cli.py: B010, D200, D400, D403, DAR101, DAR201, WPS201, WPS210, WPS213, WPS221, WPS229, WPS237, WPS300, WPS323, WPS331, WPS336, WPS440
-  src/ansible_navigator/command_runner/__init__.py: D210, D400, WPS300, WPS412
-  src/ansible_navigator/command_runner/command_runner.py: D400, D403, DAR101, DAR201, S404, S602, WPS110, WPS121, WPS122, WPS229, WPS306, WPS440, WPS602
-  src/ansible_navigator/configuration_subsystem/__init__.py: D200, D400, WPS300, WPS412
-  src/ansible_navigator/configuration_subsystem/configurator.py: B010, D200, D202, D205, D400, D401, D403, DAR101, DAR201, N817, WPS110, WPS111, WPS201, WPS210, WPS211, WPS213, WPS214, WPS220, WPS221, WPS226, WPS229, WPS231, WPS232, WPS237, WPS300, WPS306, WPS336, WPS337, WPS338, WPS347, WPS436, WPS440, WPS510
-  src/ansible_navigator/configuration_subsystem/definitions.py: D200, D204, D400, D401, DAR101, DAR201, DAR401, WPS110, WPS115, WPS221, WPS226, WPS237, WPS300, WPS331, WPS338, WPS613
-  src/ansible_navigator/configuration_subsystem/navigator_configuration.py: D200, D205, D400, DAR201, N812, N817, WPS111, WPS201, WPS204, WPS221, WPS226, WPS237, WPS300, WPS347, WPS436
-  src/ansible_navigator/configuration_subsystem/navigator_post_processor.py: B009, B014, D200, D400, DAR101, DAR201, N817, WPS111, WPS115, WPS201, WPS204, WPS210, WPS213, WPS214, WPS220, WPS221, WPS226, WPS229, WPS231, WPS237, WPS300, WPS306, WPS336, WPS337, WPS338, WPS347, WPS420, WPS440, WPS441, WPS448, WPS510, WPS602
-  src/ansible_navigator/configuration_subsystem/parser.py: D200, D400, DAR101, DAR201, N817, WPS111, WPS221, WPS237, WPS300, WPS306, WPS323, WPS336, WPS347, WPS436, WPS450, WPS504, WPS507, WPS602
-  src/ansible_navigator/image_manager/__init__.py: D210, D400, WPS300, WPS412
-  src/ansible_navigator/image_manager/inspector.py: D400, D403, DAR101, DAR201, WPS110, WPS114, WPS210, WPS221, WPS300, WPS306, WPS602
-  src/ansible_navigator/image_manager/puller.py: D400, D403, DAR201, DAR401, S404, S603, WPS110, WPS111, WPS213, WPS214, WPS221, WPS226, WPS229, WPS231, WPS237, WPS300, WPS306, WPS338
-  src/ansible_navigator/initialization.py: D202, D205, D400, D403, DAR101, DAR201, N812, N817, WPS110, WPS111, WPS201, WPS204, WPS210, WPS213, WPS221, WPS226, WPS237, WPS300, WPS301, WPS336, WPS347, WPS414, WPS436, WPS504, WPS529, WPS609
-  src/ansible_navigator/runner/__init__.py: D200, D400, WPS300, WPS412
-  src/ansible_navigator/runner/ansible_config.py: C815, D205, D400, WPS300
-  src/ansible_navigator/runner/ansible_doc.py: C815, D205, D400, DAR101, DAR201, WPS211, WPS221, WPS234, WPS300
-  src/ansible_navigator/runner/ansible_inventory.py: C815, D205, D400, WPS211, WPS300
-  src/ansible_navigator/runner/base.py: D202, D205, D400, D401, D403, DAR101, DAR201, RST203, RST301, WPS110, WPS111, WPS211, WPS214, WPS306, WPS323, WPS337, WPS338, WPS602, WPS603, WPS605
-  src/ansible_navigator/runner/command_async.py: D400, DAR101, DAR201, WPS300, WPS323, WPS338, WPS414
-  src/ansible_navigator/runner/command_base.py: D205, D211, D400, D401, DAR101, RST201, RST301, WPS110, WPS111, WPS211, WPS300, WPS323
-  src/ansible_navigator/runner/command.py: D202, D205, D400, D403, DAR201, WPS300, WPS331
-  src/ansible_navigator/steps.py: D200, D211, D400, D401, D403, DAR101, DAR201, DAR401, WPS110, WPS211, WPS214, WPS230, WPS237, WPS306, WPS602
+  src/ansible_navigator/actions/run.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201, DAR401
+  src/ansible_navigator/app_public.py: D204, D205, D211, D400
+  src/ansible_navigator/cli.py: D200, D400, D403, DAR101, DAR201
+  src/ansible_navigator/command_runner/__init__.py: D210, D400
+  src/ansible_navigator/command_runner/command_runner.py: D400, D403, DAR101, DAR201
+  src/ansible_navigator/configuration_subsystem/__init__.py: D200, D400
+  src/ansible_navigator/configuration_subsystem/configurator.py: D200, D202, D205, D400, D401, D403, DAR101, DAR201
+  src/ansible_navigator/configuration_subsystem/definitions.py: D200, D204, D400, D401, DAR101, DAR201, DAR401
+  src/ansible_navigator/configuration_subsystem/navigator_configuration.py: D200, D205, D400, DAR201
+  src/ansible_navigator/configuration_subsystem/navigator_post_processor.py: D200, D400, DAR101, DAR201
+  src/ansible_navigator/configuration_subsystem/parser.py: D200, D400, DAR101, DAR201
+  src/ansible_navigator/image_manager/__init__.py: D210, D400
+  src/ansible_navigator/image_manager/inspector.py: D400, D403, DAR101, DAR201
+  src/ansible_navigator/image_manager/puller.py: D400, D403, DAR201, DAR401
+  src/ansible_navigator/initialization.py: D202, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/runner/__init__.py: D200, D400
+  src/ansible_navigator/runner/ansible_config.py: D205, D400
+  src/ansible_navigator/runner/ansible_doc.py: D205, D400, DAR101, DAR201
+  src/ansible_navigator/runner/ansible_inventory.py: D205, D400
+  src/ansible_navigator/runner/base.py: D202, D205, D400, D401, D403, DAR101, DAR201
+  src/ansible_navigator/runner/command_async.py: D400, DAR101, DAR201
+  src/ansible_navigator/runner/command_base.py: D205, D211, D400, D401, DAR101
+  src/ansible_navigator/runner/command.py: D202, D205, D400, D403, DAR201
+  src/ansible_navigator/steps.py: D200, D211, D400, D401, D403, DAR101, DAR201, DAR401
   src/ansible_navigator/tm_tokenize/__init__.py: D104
-  src/ansible_navigator/tm_tokenize/_types.py: WPS440
-  src/ansible_navigator/tm_tokenize/compiler.py: D100, D101, D102, S101, WPS111, WPS201, WPS214, WPS221, WPS226, WPS231, WPS300, WPS306, WPS331, WPS338, WPS420, WPS429, WPS450, WPS503
-  src/ansible_navigator/tm_tokenize/fchainmap.py: D100, D101, D105, WPS300, WPS420, WPS428, WPS436, WPS500, WPS503
-  src/ansible_navigator/tm_tokenize/grammars.py: D100, D101, D102, WPS110, WPS111, WPS201, WPS210, WPS226, WPS234, WPS300, WPS306, WPS331, WPS338, WPS361, WPS420, WPS429, WPS440, WPS450, WPS529
-  src/ansible_navigator/tm_tokenize/reg.py: D100, D103, WPS111, WPS201, WPS211, WPS221, WPS234, WPS237, WPS300, WPS306, WPS407, WPS436, WPS450
+  src/ansible_navigator/tm_tokenize/compiler.py: D100, D101, D102
+  src/ansible_navigator/tm_tokenize/fchainmap.py: D100, D101, D105
+  src/ansible_navigator/tm_tokenize/grammars.py: D100, D101, D102
+  src/ansible_navigator/tm_tokenize/reg.py: D100, D103
   src/ansible_navigator/tm_tokenize/region.py: D100, D101
-  src/ansible_navigator/tm_tokenize/rules.py: D100, D101, D102, D400, WPS111, WPS201, WPS202, WPS210, WPS211, WPS214, WPS221, WPS231, WPS300, WPS338, WPS362, WPS428, WPS429, WPS436, WPS437, WPS441, WPS450, WPS503, WPS529
-  src/ansible_navigator/tm_tokenize/state.py: D100, D101, D102, WPS221, WPS300
-  src/ansible_navigator/tm_tokenize/tokenize.py: D100, D201, D400, D403, DAR101, DAR201, WPS210, WPS300
-  src/ansible_navigator/tm_tokenize/utils.py: D100, D400, D403, DAR101, DAR201, WPS100, WPS111, WPS609
-  src/ansible_navigator/ui_framework/__init__.py: D200, D400, WPS201, WPS300, WPS412
-  src/ansible_navigator/ui_framework/colorize.py: WPS110, WPS111, WPS114, WPS202, WPS204, WPS210, WPS220, WPS221, WPS226, WPS231, WPS232, WPS300, WPS306, WPS323, WPS331, WPS338, WPS355, WPS407, WPS420, WPS432, WPS440, WPS518
+  src/ansible_navigator/tm_tokenize/rules.py: D100, D101, D102, D400
+  src/ansible_navigator/tm_tokenize/state.py: D100, D101, D102
+  src/ansible_navigator/tm_tokenize/tokenize.py: D100, D201, D400, D403, DAR101, DAR201
+  src/ansible_navigator/tm_tokenize/utils.py: D100, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/__init__.py: D200, D400
+  src/ansible_navigator/ui_framework/colorize.py: D200, D205, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/curses_defs.py: D200, D400
-  src/ansible_navigator/ui_framework/curses_window.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201, WPS110, WPS111, WPS210, WPS213, WPS220, WPS221, WPS229, WPS231, WPS300, WPS306, WPS323, WPS349, WPS407, WPS420, WPS436, WPS450
-  src/ansible_navigator/ui_framework/field_button.py: D200, D205, D400, D403, DAR101, DAR201, WPS300, WPS306, WPS502, WPS601
-  src/ansible_navigator/ui_framework/field_checks.py: D200, D204, D205, D400, D403, DAR101, DAR201, WPS201, WPS300, WPS306, WPS338, WPS502, WPS601
-  src/ansible_navigator/ui_framework/field_information.py: D200, D204, D205, D400, D403, DAR101, DAR201, WPS300, WPS306, WPS601
-  src/ansible_navigator/ui_framework/field_option.py: D200, D205, D400, D403, DAR101, DAR201, DAR401, WPS300, WPS306, WPS331
-  src/ansible_navigator/ui_framework/field_radio.py: D200, D204, D205, D400, D403, DAR101, DAR201, WPS300, WPS306, WPS338, WPS502, WPS601
-  src/ansible_navigator/ui_framework/field_text.py: D200, D204, D205, D400, D401, D403, DAR101, DAR201, WPS110, WPS300, WPS306, WPS601
-  src/ansible_navigator/ui_framework/field_working.py: D200, D204, D205, D400, D403, DAR101, DAR201, WPS300, WPS306, WPS601
-  src/ansible_navigator/ui_framework/form_defs.py: D200, D400, WPS115
-  src/ansible_navigator/ui_framework/form_handler_button.py: D200, D400, D403, DAR101, DAR201, WPS110, WPS237, WPS300, WPS510
-  src/ansible_navigator/ui_framework/form_handler_information.py: D200, D400, D403, DAR101, DAR201, WPS110, WPS300, WPS602
-  src/ansible_navigator/ui_framework/form_handler_options.py: D200, D201, D400, D403, DAR101, DAR201, WPS110, WPS210, WPS220, WPS223, WPS231, WPS232, WPS237, WPS300, WPS336, WPS510, WPS525
-  src/ansible_navigator/ui_framework/form_handler_text.py: C409, D200, D205, D300, D400, D403, DAR101, DAR201, Q002, WPS110, WPS223, WPS231, WPS232, WPS300, WPS338, WPS504, WPS510
-  src/ansible_navigator/ui_framework/form_handler_working.py: D205, D400, D403, DAR101, DAR201, WPS110, WPS300, WPS602
-  src/ansible_navigator/ui_framework/form_presenter.py: C409, D200, D400, D403, DAR201, WPS110, WPS111, WPS201, WPS210, WPS213, WPS214, WPS221, WPS231, WPS237, WPS300, WPS331, WPS338, WPS432, WPS440, WPS441, WPS510, WPS602
-  src/ansible_navigator/ui_framework/form_utils.py: D200, D205, D400, D403, DAR101, DAR201, WPS110, WPS201, WPS204, WPS210, WPS219, WPS226, WPS231, WPS232, WPS300, WPS432, WPS437, WPS440, WPS441, WPS510, WPS529
-  src/ansible_navigator/ui_framework/form.py: D200, D205, D400, D403, DAR101, DAR201, WPS221, WPS300, WPS306, WPS420, WPS601
-  src/ansible_navigator/ui_framework/menu_builder.py: C409, D200, D400, D401, D403, DAR101, DAR201, WPS111, WPS201, WPS210, WPS211, WPS214, WPS221, WPS300, WPS306, WPS337, WPS349, WPS440, WPS441, WPS602
-  src/ansible_navigator/ui_framework/sentinels.py: D102, D105, D205, D400, WPS221, WPS306, WPS608
-  src/ansible_navigator/ui_framework/ui.py: C401, C408, C409, D200, D202, D205, D211, D400, D403, DAR101, DAR201, DAR401, WPS110, WPS111, WPS201, WPS210, WPS211, WPS213, WPS214, WPS220, WPS221, WPS223, WPS226, WPS231, WPS232, WPS237, WPS300, WPS323, WPS331, WPS338, WPS349, WPS404, WPS407, WPS432, WPS436, WPS437, WPS440, WPS504, WPS510, WPS602
-  src/ansible_navigator/ui_framework/utils.py: D200, D205, D400, D403, DAR101, DAR201, WPS100, WPS110, WPS111, WPS210, WPS221, WPS336, WPS349
-  src/ansible_navigator/ui_framework/validators.py: B006, D200, D400, D401, D403, DAR101, DAR201, DAR401, S311, WPS110, WPS111, WPS214, WPS221, WPS229, WPS237, WPS300, WPS306, WPS334, WPS336, WPS337, WPS404, WPS420, WPS432, WPS504, WPS510, WPS602
-  src/ansible_navigator/utils.py: C408, D105, D200, D202, D205, D400, D401, D403, DAR101, DAR201, DAR401, E302, RST304, WPS100, WPS110, WPS111, WPS115, WPS122, WPS201, WPS202, WPS204, WPS210, WPS212, WPS213, WPS221, WPS226, WPS229, WPS231, WPS237, WPS323, WPS331, WPS336, WPS338, WPS425, WPS430, WPS432, WPS440, WPS507, WPS510
+  src/ansible_navigator/ui_framework/curses_window.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/field_button.py: D200, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/field_checks.py: D200, D204, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/field_information.py: D200, D204, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/field_option.py: D200, D205, D400, D403, DAR101, DAR201, DAR401
+  src/ansible_navigator/ui_framework/field_radio.py: D200, D204, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/field_text.py: D200, D204, D205, D400, D401, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/field_working.py: D200, D204, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/form_defs.py: D200, D400
+  src/ansible_navigator/ui_framework/form_handler_button.py: D200, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/form_handler_information.py: D200, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/form_handler_options.py: D200, D201, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/form_handler_text.py: D200, D205, D300, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/form_handler_working.py: D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/form_presenter.py: D200, D400, D403, DAR201
+  src/ansible_navigator/ui_framework/form_utils.py: D200, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/form.py: D200, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/menu_builder.py: D200, D400, D401, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/sentinels.py: D102, D105, D205, D400
+  src/ansible_navigator/ui_framework/ui.py: D200, D202, D205, D211, D400, D403, DAR101, DAR201, DAR401
+  src/ansible_navigator/ui_framework/utils.py: D200, D205, D400, D403, DAR101, DAR201
+  src/ansible_navigator/ui_framework/validators.py: D200, D400, D401, D403, DAR101, DAR201, DAR401
+  src/ansible_navigator/utils.py: D105, D200, D202, D205, D400, D401, D403, DAR101, DAR201, DAR401
   tests/__init__.py: D104
-  tests/conftest.py: D210, D400, D401, D403, DAR101, DAR201, DAR301, DAR401, PT003, S103, S404, S603, WPS300, WPS339, WPS432, WPS454
-  tests/defaults.py: D200, WPS221
-  tests/fixtures/common/collections/ansible_collections/testorg/coll_1/plugins/lookup/lookup_1.py: WPS114, WPS422
-  tests/fixtures/common/collections/ansible_collections/testorg/coll_1/plugins/modules/mod_1.py: WPS114, WPS422
-  tests/fixtures/common/collections/ansible_collections/testorg/coll_2/plugins/lookup/lookup_2.py: WPS114, WPS422
-  tests/fixtures/common/collections/ansible_collections/testorg/coll_2/plugins/modules/mod_2.py: WPS114, WPS422
+  tests/conftest.py: D210, D400, D401, D403, DAR101, DAR201, DAR301, DAR401
+  tests/defaults.py: D200
   tests/integration/__init__.py: D104
-  tests/integration/_action_run_test.py: D205, D400, D401, D403, DAR101, DAR201, DAR401, N817, WPS110, WPS111, WPS201, WPS210, WPS211, WPS306, WPS316, WPS347
-  tests/integration/_cli2runner.py: D200, D400, D401, D403, DAR101, DAR401, WPS115, WPS211, WPS214, WPS226, WPS306, WPS338, WPS454
-  tests/integration/_common.py: B005, D103, D200, D400, D401, D403, DAR101, DAR201, DAR401, WPS210, WPS211, WPS231, WPS300, WPS440
-  tests/integration/_interactions.py: D200, D204, D400, D403, DAR101, DAR201, WPS110, WPS115, WPS336, WPS437, WPS503
-  tests/integration/_tmux_session.py: D105, D205, D400, D403, DAR101, DAR201, DAR401, WPS110, WPS210, WPS211, WPS213, WPS220, WPS221, WPS226, WPS231, WPS232, WPS300, WPS306, WPS436, WPS440
+  tests/integration/_action_run_test.py: D205, D400, D401, D403, DAR101, DAR201, DAR401
+  tests/integration/_cli2runner.py: D200, D400, D401, D403, DAR101, DAR401
+  tests/integration/_common.py: D103, D200, D400, D401, D403, DAR101, DAR201, DAR401
+  tests/integration/_interactions.py: D200, D204, D400, D403, DAR101, DAR201
+  tests/integration/_tmux_session.py: D105, D205, D400, D403, DAR101, DAR201, DAR401
   tests/integration/actions/__init__.py: D104
   tests/integration/actions/collections/__init__.py: D104
-  tests/integration/actions/collections/base.py: D200, D202, D400, D403, DAR101, DAR301, DAR401, PT005, S101, WPS110, WPS115, WPS210, WPS211, WPS300, WPS306, WPS336, WPS337, WPS338, WPS436, WPS602
-  tests/integration/actions/collections/test_direct_interactive_ee.py: D200, D400, PT006, WPS115, WPS226, WPS300
-  tests/integration/actions/collections/test_direct_interactive_noee.py: D200, D400, PT006, WPS115, WPS226, WPS300
-  tests/integration/actions/collections/test_welcome_interactive_ee.py: D200, D400, PT006, WPS115, WPS226, WPS300
-  tests/integration/actions/collections/test_welcome_interactive_noee.py: D200, D400, PT006, WPS115, WPS226, WPS300
+  tests/integration/actions/collections/base.py: D200, D202, D400, D403, DAR101, DAR301, DAR401
+  tests/integration/actions/collections/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/collections/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/collections/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/collections/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/config/__init__.py: D104
-  tests/integration/actions/config/base.py: D200, D202, D400, D403, DAR101, DAR301, DAR401, S101, WPS110, WPS111, WPS115, WPS210, WPS231, WPS300, WPS306, WPS336, WPS337, WPS432, WPS436
-  tests/integration/actions/config/test_direct_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/config/test_direct_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/config/test_stdout_tmux.py: D210, D400, D403, DAR101, DAR201, WPS110, WPS115, WPS226, WPS300, WPS436
-  tests/integration/actions/config/test_welcome_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/config/test_welcome_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/config/test_welcome_interactive_param_use.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/config/test_welcome_interactive_specified_config.py: D200, D400, WPS115, WPS300, WPS336, WPS436
+  tests/integration/actions/config/base.py: D200, D202, D400, D403, DAR101, DAR301, DAR401
+  tests/integration/actions/config/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/config/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/config/test_stdout_tmux.py: D210, D400, D403, DAR101, DAR201
+  tests/integration/actions/config/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/config/test_welcome_interactive_noee.py: D200, D400
+  tests/integration/actions/config/test_welcome_interactive_param_use.py: D200, D400
+  tests/integration/actions/config/test_welcome_interactive_specified_config.py: D200, D400
   tests/integration/actions/doc/__init__.py: D104
-  tests/integration/actions/doc/base.py: D200, D400, D403, DAR101, DAR301, DAR401, S101, WPS110, WPS115, WPS210, WPS211, WPS220, WPS231, WPS232, WPS300, WPS306, WPS335, WPS336, WPS337, WPS432, WPS436, WPS441, WPS602
-  tests/integration/actions/doc/test_direct_interactive_ee.py: D200, D400, PT006, WPS115, WPS300, WPS326
-  tests/integration/actions/doc/test_direct_interactive_noee.py: D200, D400, PT006, WPS115, WPS300
-  tests/integration/actions/doc/test_stdout.py: D200, D400, PT006, WPS114, WPS115, WPS202, WPS226, WPS300, WPS326
-  tests/integration/actions/doc/test_welcome_interactive_ee.py: D200, D400, PT006, WPS115, WPS300, WPS326
-  tests/integration/actions/doc/test_welcome_interactive_noee.py: D200, D400, PT006, WPS115, WPS300
-  tests/integration/actions/exec/base.py: S101, WPS201, WPS210, WPS436
-  tests/integration/actions/exec/test_stdout_config_cli.py: WPS436
-  tests/integration/actions/exec/test_stdout_config_file.py: WPS436
+  tests/integration/actions/doc/base.py: D200, D400, D403, DAR101, DAR301, DAR401
+  tests/integration/actions/doc/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/doc/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/doc/test_stdout.py: D200, D400
+  tests/integration/actions/doc/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/doc/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/images/__init__.py: D104
-  tests/integration/actions/images/base.py: D200, D202, D400, D403, DAR101, DAR301, DAR401, S101, WPS110, WPS115, WPS210, WPS221, WPS300, WPS306, WPS336, WPS337, WPS436, WPS602
-  tests/integration/actions/images/test_direct_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/images/test_direct_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/images/test_welcome_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/images/test_welcome_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
+  tests/integration/actions/images/base.py: D200, D202, D400, D403, DAR101, DAR301, DAR401
+  tests/integration/actions/images/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/images/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/images/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/images/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/inventory/__init__.py: D104
-  tests/integration/actions/inventory/base.py: D200, D201, D400, D403, DAR101, DAR301, DAR401, S101, WPS110, WPS115, WPS210, WPS226, WPS231, WPS232, WPS300, WPS306, WPS336, WPS337, WPS432, WPS436, WPS602
-  tests/integration/actions/inventory/test_direct_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/inventory/test_direct_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/inventory/test_stdout_tmux.py: D400, D403, DAR101, DAR201, WPS110, WPS115, WPS226, WPS300, WPS436
-  tests/integration/actions/inventory/test_welcome_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/inventory/test_welcome_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
+  tests/integration/actions/inventory/base.py: D200, D201, D400, D403, DAR101, DAR301, DAR401
+  tests/integration/actions/inventory/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/inventory/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/inventory/test_stdout_tmux.py: D400, D403, DAR101, DAR201
+  tests/integration/actions/inventory/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/inventory/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/replay/__init__.py: D104
-  tests/integration/actions/replay/base.py: D200, D201, D400, D403, DAR101, DAR301, S101, WPS110, WPS115, WPS210, WPS211, WPS300, WPS306, WPS336, WPS337, WPS436, WPS602
-  tests/integration/actions/replay/test_direct_interactive_ee.py: D200, D400, PT006, WPS115, WPS226, WPS300, WPS326
-  tests/integration/actions/replay/test_direct_interactive_noee.py: D200, D400, PT006, WPS115, WPS226, WPS300
-  tests/integration/actions/replay/test_welcome_interactive_ee.py: D200, D400, PT006, WPS115, WPS226, WPS300
-  tests/integration/actions/replay/test_welcome_interactive_noee.py: D200, D400, PT006, WPS115, WPS226, WPS300
+  tests/integration/actions/replay/base.py: D200, D201, D400, D403, DAR101, DAR301
+  tests/integration/actions/replay/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/replay/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/replay/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/replay/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/run/__init__.py: D104
-  tests/integration/actions/run/base.py: D200, D202, D400, D403, DAR101, DAR301, S101, WPS110, WPS115, WPS210, WPS220, WPS226, WPS231, WPS232, WPS300, WPS306, WPS335, WPS336, WPS337, WPS432, WPS436, WPS602
-  tests/integration/actions/run/test_direct_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/run/test_direct_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/run/test_stdout_tmux.py: D210, D400, D403, DAR101, DAR201, WPS110, WPS115, WPS226, WPS300, WPS436
-  tests/integration/actions/run/test_welcome_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/run/test_welcome_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
+  tests/integration/actions/run/base.py: D200, D202, D400, D403, DAR101, DAR301
+  tests/integration/actions/run/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/run/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/run/test_stdout_tmux.py: D210, D400, D403, DAR101, DAR201
+  tests/integration/actions/run/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/run/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/stdout/__init__.py: D104
-  tests/integration/actions/stdout/base.py: D200, D201, D400, D403, DAR101, DAR301, S101, WPS110, WPS115, WPS210, WPS211, WPS300, WPS306, WPS336, WPS337, WPS436, WPS602
-  tests/integration/actions/stdout/test_direct_interactive_ee.py: D200, D400, PT006, WPS115, WPS226, WPS300, WPS326
-  tests/integration/actions/stdout/test_direct_interactive_noee.py: D200, D400, PT006, WPS115, WPS226, WPS300, WPS326
-  tests/integration/actions/stdout/test_welcome_interactive_ee.py: D200, D400, PT006, WPS115, WPS226, WPS300, WPS326
-  tests/integration/actions/stdout/test_welcome_interactive_noee.py: D200, D400, PT006, WPS115, WPS226, WPS300
+  tests/integration/actions/stdout/base.py: D200, D201, D400, D403, DAR101, DAR301
+  tests/integration/actions/stdout/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/stdout/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/stdout/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/stdout/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/templar/__init__.py: D104
-  tests/integration/actions/templar/base.py: D200, D202, D400, D403, DAR101, DAR301, S101, WPS110, WPS115, WPS210, WPS220, WPS231, WPS232, WPS300, WPS306, WPS335, WPS336, WPS337, WPS432, WPS436, WPS602
-  tests/integration/actions/templar/test_direct_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/templar/test_direct_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/templar/test_welcome_interactive_ee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/actions/templar/test_welcome_interactive_noee.py: D200, D400, WPS115, WPS300, WPS436
-  tests/integration/conftest.py: D205, D400, D401, D403, DAR101, DAR201, DAR301, PT001, PT003, PT004, PT022, S108, WPS300, WPS407, WPS433, WPS436
-  tests/integration/test_execution_environment_image.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS226, WPS300, WPS301, WPS436
-  tests/integration/test_execution_environment.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS300, WPS301, WPS436
-  tests/integration/test_pass_environment_variable.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS226, WPS300, WPS301, WPS436
-  tests/integration/test_set_environment_variable.py: S101, WPS110, WPS111, WPS115, WPS210, WPS211, WPS220, WPS221, WPS300, WPS301, WPS436
-  tests/integration/test_stdout_exit_codes.py: D200, D400, D403, DAR101, DAR201, S101, WPS110, WPS226, WPS300
+  tests/integration/actions/templar/base.py: D200, D202, D400, D403, DAR101, DAR301
+  tests/integration/actions/templar/test_direct_interactive_ee.py: D200, D400
+  tests/integration/actions/templar/test_direct_interactive_noee.py: D200, D400
+  tests/integration/actions/templar/test_welcome_interactive_ee.py: D200, D400
+  tests/integration/actions/templar/test_welcome_interactive_noee.py: D200, D400
+  tests/integration/conftest.py: D205, D400, D401, D403, DAR101, DAR201, DAR301
+  tests/integration/test_stdout_exit_codes.py: D200, D400, D403, DAR101, DAR201
   tests/unit/__init__.py: D104
   tests/unit/actions/__init__.py: D104
-  tests/unit/actions/test_config.py: D200, D400, D403, S101, WPS110, WPS204, WPS218, WPS221, WPS226
-  tests/unit/actions/test_exec.py: S101, WPS450
-  tests/unit/actions/test_inventory.py: D200, D400, D403, S101, WPS110, WPS204, WPS218, WPS221, WPS226
-  tests/unit/actions/test_run.py: D200, D400, DAR101, DAR201, N813, PT019, S101, S108, WPS110, WPS121, WPS122, WPS201, WPS226, WPS237, WPS425, WPS432, WPS437
+  tests/unit/actions/collections/test_collection_doc_cache_path.py: D400, DAR101, DAR102, DAR201
+  tests/unit/actions/test_config.py: D200, D400, D403
+  tests/unit/actions/test_inventory.py: D200, D400, D403
+  tests/unit/actions/test_run.py: D200, D400, DAR101, DAR201
   tests/unit/configuration_subsystem/__init__.py: D104
-  tests/unit/configuration_subsystem/conftest.py: D200, D400, D403, DAR101, DAR201, WPS110, WPS201, WPS210, WPS300, WPS436
-  tests/unit/configuration_subsystem/data.py: D205, D400, D403, DAR101, DAR201, S108, WPS226, WPS331, WPS407
-  tests/unit/configuration_subsystem/defaults.py: D200, D400, WPS300
-  tests/unit/configuration_subsystem/test_broken_settings.py: D200, D400, DAR101, S101
-  tests/unit/configuration_subsystem/test_configurator.py: D200, D205, D209, D400, DAR101, N817, PT019, S101, WPS111, WPS118, WPS347, WPS458, WPS520
-  tests/unit/configuration_subsystem/test_container_engine_auto.py: D200, DAR101, S101, WPS430, WPS520
-  tests/unit/configuration_subsystem/test_entries_sanity.py: D200, D400, DAR101, N817, S101, WPS110, WPS111, WPS202, WPS221, WPS226, WPS300, WPS347
-  tests/unit/configuration_subsystem/test_fixture_sanity.py: D205, D400, S101, WPS110, WPS210, WPS300, WPS436
-  tests/unit/configuration_subsystem/test_internals.py: S101, WPS430
-  tests/unit/configuration_subsystem/test_invalid_params.py: D200, D202, D400, DAR101, PT006, PT019, S101, WPS110, WPS202, WPS204, WPS226, WPS300, WPS420, WPS430, WPS510
-  tests/unit/configuration_subsystem/test_mode_subcommand_action.py: D205, D400, S101, WPS226, WPS336, WPS437, WPS510
-  tests/unit/configuration_subsystem/test_navigator_post_processor.py: S101, WPS226, WPS317
-  tests/unit/configuration_subsystem/test_precedence.py: D205, D400, DAR101, N817, PT006, PT019, S101, WPS110, WPS111, WPS118, WPS201, WPS210, WPS211, WPS218, WPS221, WPS226, WPS231, WPS232, WPS300, WPS347, WPS440, WPS458, WPS520, WPS529
-  tests/unit/configuration_subsystem/test_previous_cli.py: D202, D205, D400, N817, PT019, S101, S108, WPS110, WPS111, WPS121, WPS201, WPS204, WPS210, WPS218, WPS226, WPS347, WPS440, WPS458, WPS520
-  tests/unit/configuration_subsystem/test_sample_configurations.py: D205, D400, S101, WPS219, WPS221, WPS226, WPS428, WPS437
-  tests/unit/configuration_subsystem/utils.py: D200, D400, DAR101, DAR201, WPS100, WPS110, WPS336, WPS510
+  tests/unit/configuration_subsystem/conftest.py: D200, D400, D403, DAR101, DAR201
+  tests/unit/configuration_subsystem/data.py: D205, D400, D403, DAR101, DAR201
+  tests/unit/configuration_subsystem/defaults.py: D200, D400
+  tests/unit/configuration_subsystem/test_broken_settings.py: D200, D400, DAR101
+  tests/unit/configuration_subsystem/test_configurator.py: D200, D205, D209, D400, DAR101
+  tests/unit/configuration_subsystem/test_container_engine_auto.py: D200, DAR101
+  tests/unit/configuration_subsystem/test_entries_sanity.py: D200, D400, DAR101
+  tests/unit/configuration_subsystem/test_fixture_sanity.py: D205, D400
+  tests/unit/configuration_subsystem/test_invalid_params.py: D200, D202, D400, DAR101
+  tests/unit/configuration_subsystem/test_mode_subcommand_action.py: D205, D400
+  tests/unit/configuration_subsystem/test_precedence.py: D205, D400, DAR101
+  tests/unit/configuration_subsystem/test_previous_cli.py: D202, D205, D400
+  tests/unit/configuration_subsystem/test_sample_configurations.py: D205, D400
+  tests/unit/configuration_subsystem/utils.py: D200, D400, DAR101, DAR201
   tests/unit/image_manager/__init__.py: D104
-  tests/unit/image_manager/test_image_puller.py: D400, D403, DAR101, DAR201, S101, WPS110, WPS226, WPS300
-  tests/unit/runner/test_api.py: D200, D202, D400, D403, DAR101, PT006, S101, S108, WPS226, WPS317, WPS437
-  tests/unit/test_circular_imports.py: WPS210, WPS317
-  tests/unit/test_cli.py: D200, D202, D205, D400, D403, DAR101, DAR201, PT006, PT019, S101, S108, WPS110, WPS210, WPS226, WPS300, WPS317, WPS360
-  tests/unit/test_image_introspection.py: D200, D400, D403, DAR101, DAR201, S101, WPS111, WPS204, WPS210, WPS218, WPS221, WPS226
-  tests/unit/test_log_append.py: D200, D400, D403, DAR101, S101, WPS324, WPS430
-  tests/unit/test_utils.py: D200, D202, D400, D403, DAR101, PT006, S101, WPS110, WPS202, WPS221, WPS226, WPS237, WPS317, WPS336, WPS407, WPS430, WPS432
-  tests/unit/test_yaml.py: D200, S101, WPS301, WPS436
-  tests/unit/ui_framework/test_colorize.py: D200, D205, D209, D400, DAR101, S101, WPS110, WPS204, WPS218, WPS221, WPS226, WPS436
+  tests/unit/image_manager/test_image_puller.py: D400, D403, DAR101, DAR201
+  tests/unit/runner/test_api.py: D200, D202, D400, D403, DAR101
+  tests/unit/test_cli.py: D200, D202, D205, D400, D403, DAR101, DAR201
+  tests/unit/test_image_introspection.py: D200, D400, D403, DAR101, DAR201
+  tests/unit/test_log_append.py: D200, D400, D403, DAR101
+  tests/unit/test_utils.py: D200, D202, D400, D403, DAR101
+  tests/unit/test_yaml.py: D200
+  tests/unit/ui_framework/test_colorize.py: D200, D205, D209, D400, DAR101
 
 # Count the number of occurrences of each error/warning code and print a report:
 statistics = true
 
-# flake8-eradicate
-# E800:
-eradicate-whitelist-extend = isort:\s+\w+
-
-# flake8-pytest-style
-# PT001:
-pytest-fixture-no-parentheses = true
-# PT006:
-pytest-parametrize-names-type = tuple
-# PT007:
-pytest-parametrize-values-type = tuple
-pytest-parametrize-values-row-type = tuple
-# PT023:
-pytest-mark-no-parentheses = true
-
-# flake8-rst-docstrings
-rst-directives =
-  spelling
-rst-roles =
-  # Built-in Sphinx roles:
-  class,
-  data,
-  exc,
-  meth,
-  mod,
-  term,
-  py:class,
-  py:data,
-  py:exc,
-  py:meth,
-  py:term,
-  # Sphinx's internal role:
-  event,
-
-# wemake-python-styleguide
-show-source = true
-
 # flake8-quotes
-# (pulled in by wemake style guide)
 # https://github.com/zheller/flake8-quotes
 # keep at bottom of configuration because some IDEs
 # may see the single double quote in the inline-quotes
