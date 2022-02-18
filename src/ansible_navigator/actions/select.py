@@ -1,4 +1,9 @@
-r""":\d+[0-9] etc"""
+"""Menu selection implementation.
+
+Processor of a menu selection from a numeric key press
+or entry at the single line prompt. e.g ``:42``
+"""
+
 import logging
 
 from ..app_public import AppPublic
@@ -9,7 +14,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    r""":\d+|[0-9]"""
+    """Menu selection implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -24,7 +29,7 @@ class Action:
         self._logger = logging.getLogger(__name__)
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :[0-n]
+        """Execute a menu selection for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

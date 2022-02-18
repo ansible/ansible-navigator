@@ -1,4 +1,4 @@
-""":rerun"""
+"""``:rerun`` command implementation."""
 import copy
 import logging
 
@@ -10,7 +10,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """:rerun"""
+    """``:rerun`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -26,7 +26,7 @@ class Action:
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :rerun
+        """Execute the ``:rerun`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

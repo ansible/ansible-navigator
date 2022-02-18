@@ -1,4 +1,4 @@
-"""refresh"""
+"""Screen refresh implementation."""
 import logging
 
 from ..app_public import AppPublic
@@ -9,7 +9,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """refresh"""
+    """Screen refresh implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -25,7 +25,7 @@ class Action:
 
     # pylint: disable=no-self-use
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :refresh
+        """Execute the screen refresh request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

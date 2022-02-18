@@ -37,7 +37,7 @@ extend-exclude =
 # IMPORTANT: avoid using ignore option, always use extend-ignore instead
 # Completely and unconditionally ignore the following errors:
 extend-ignore =
-  E203,  # skipped because it annoys black
+  E203,  # annoy black by allowing white space before : https://github.com/psf/black/issues/315
   F401,  # duplicate of pylint W0611 (unused-import)
   F821,  # duplicate of pylint E0602 (undefined-variable)
   F841,  # duplicate of pylint W0612 (unused-variable)
@@ -94,24 +94,24 @@ per-file-ignores =
   src/ansible_navigator/actions/help_doc.py: WPS115, WPS300, WPS360, WPS450
   src/ansible_navigator/actions/images.py: WPS110, WPS111, WPS115, WPS121, WPS122, WPS201, WPS210, WPS212, WPS213, WPS214, WPS221, WPS223, WPS226, WPS229, WPS231, WPS237, WPS300, WPS323, WPS331, WPS336, WPS338, WPS349, WPS450, WPS504, WPS510, WPS529
   src/ansible_navigator/actions/inventory.py: C409, N806, WPS110, WPS111, WPS112, WPS115, WPS201, WPS210, WPS212, WPS213, WPS214, WPS220, WPS221, WPS226, WPS229, WPS231, WPS300, WPS323, WPS324, WPS331, WPS336, WPS338, WPS450, WPS510, WPS600
-  src/ansible_navigator/actions/log.py: D400, DAR101, DAR201, WPS115, WPS231, WPS232, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/open_file.py: D105, D400, DAR101, DAR201, S605, WPS110, WPS111, WPS115, WPS201, WPS210, WPS220, WPS221, WPS231, WPS300, WPS306, WPS323, WPS324, WPS338, WPS436, WPS440, WPS450
-  src/ansible_navigator/actions/quit.py: D200, D400, DAR101, DAR201, WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/refresh.py: D400, DAR101, WPS115, WPS300, WPS306, WPS450
-  src/ansible_navigator/actions/replay.py: D200, D400, WPS115, WPS300, WPS450
-  src/ansible_navigator/actions/rerun.py: D400, DAR101, WPS115, WPS300, WPS306, WPS360, WPS450
+  src/ansible_navigator/actions/log.py: WPS115, WPS231, WPS232, WPS300, WPS360, WPS450
+  src/ansible_navigator/actions/open_file.py: S605, WPS110, WPS111, WPS115, WPS201, WPS210, WPS220, WPS221, WPS231, WPS300, WPS306, WPS323, WPS324, WPS338, WPS436, WPS440, WPS450
+  src/ansible_navigator/actions/quit.py: WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
+  src/ansible_navigator/actions/refresh.py: WPS115, WPS300, WPS306, WPS450
+  src/ansible_navigator/actions/replay.py: WPS115, WPS300, WPS450
+  src/ansible_navigator/actions/rerun.py: WPS115, WPS300, WPS306, WPS360, WPS450
   src/ansible_navigator/actions/run.py: B014, C409, D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201, DAR401, N806, WPS110, WPS111, WPS115, WPS201, WPS204, WPS210, WPS213, WPS214, WPS219, WPS220, WPS221, WPS226, WPS229, WPS231, WPS232, WPS237, WPS300, WPS323, WPS328, WPS331, WPS336, WPS337, WPS338, WPS407, WPS420, WPS440, WPS450, WPS504, WPS510
-  src/ansible_navigator/actions/sample_form.py: D200, D400, DAR101, DAR201, WPS115, WPS300, WPS323, WPS360, WPS436, WPS450
-  src/ansible_navigator/actions/sample_notification.py: D200, D400, DAR101, DAR201, WPS115, WPS300, WPS323, WPS360, WPS436, WPS450
-  src/ansible_navigator/actions/sample_working.py: D200, D400, DAR101, WPS115, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/save.py: D400, DAR101, WPS115, WPS300, WPS306, WPS450
-  src/ansible_navigator/actions/select.py: D400, DAR101, WPS115, WPS300, WPS306, WPS323, WPS450
-  src/ansible_navigator/actions/serialize_json.py: D400, DAR101, WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/serialize_yaml.py: D400, DAR101, WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/stdout.py: D400, DAR101, DAR201, WPS110, WPS115, WPS231, WPS232, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/template.py: D400, DAR101, DAR201, WPS110, WPS111, WPS115, WPS210, WPS213, WPS221, WPS231, WPS232, WPS300, WPS323, WPS360, WPS450
-  src/ansible_navigator/actions/welcome.py: D400, DAR101, DAR201, WPS115, WPS300, WPS360, WPS450
-  src/ansible_navigator/actions/write_file.py: D400, DAR101, DAR201, WPS110, WPS111, WPS115, WPS210, WPS221, WPS231, WPS232, WPS300, WPS306, WPS323, WPS324, WPS436, WPS440, WPS450
+  src/ansible_navigator/actions/sample_form.py: WPS115, WPS300, WPS323, WPS360, WPS436, WPS450
+  src/ansible_navigator/actions/sample_notification.py: WPS115, WPS300, WPS323, WPS360, WPS436, WPS450
+  src/ansible_navigator/actions/sample_working.py: WPS115, WPS300, WPS360, WPS450
+  src/ansible_navigator/actions/save.py: WPS115, WPS300, WPS306, WPS450
+  src/ansible_navigator/actions/select.py: WPS115, WPS300, WPS306, WPS323, WPS450
+  src/ansible_navigator/actions/serialize_json.py: WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
+  src/ansible_navigator/actions/serialize_yaml.py: WPS115, WPS300, WPS306, WPS323, WPS360, WPS450
+  src/ansible_navigator/actions/stdout.py: WPS110, WPS115, WPS231, WPS232, WPS300, WPS360, WPS450
+  src/ansible_navigator/actions/template.py: WPS110, WPS111, WPS115, WPS210, WPS213, WPS221, WPS231, WPS232, WPS300, WPS323, WPS360, WPS450
+  src/ansible_navigator/actions/welcome.py: WPS115, WPS300, WPS360, WPS450
+  src/ansible_navigator/actions/write_file.py: WPS110, WPS111, WPS115, WPS210, WPS221, WPS231, WPS232, WPS300, WPS306, WPS323, WPS324, WPS436, WPS440, WPS450
   src/ansible_navigator/app_public.py: D204, D205, D211, D400, WPS300
   src/ansible_navigator/action_base.py: N817, WPS110, WPS111, WPS201, WPS214, WPS221, WPS300, WPS306, WPS338, WPS347, WPS602
   src/ansible_navigator/cli.py: B010, D200, D400, D403, DAR101, DAR201, WPS201, WPS210, WPS213, WPS221, WPS229, WPS237, WPS300, WPS323, WPS331, WPS336, WPS440
