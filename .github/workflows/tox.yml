@@ -29,6 +29,7 @@ jobs:
         include:
           - tox_env: lint-candidates
             devel: true
+            python-version: "3.10"
           - tox_env: py36
             python-version: 3.6
           - tox_env: py37
