@@ -40,7 +40,7 @@ Additional `Linux`, `macOS` and `Windows with WSL2` installation
 instructions are available in the [Installation guide].
 
 [Installation guide]:
-https://ansible-navigator.rtfd.io/en/latest/installation
+https://ansible-navigator.readthedocs.io/en/latest/installation
 
 ## Welcome
 
@@ -65,7 +65,7 @@ The **interactive** mode is the default and this default can be overwritten by
 passing `--mode stdout` (`-m stdout`) or setting `mode` in
 [configuration][settings documentation].
 
-[settings documentation]: https://ansible-navigator.rtfd.io/en/latest/settings
+[settings documentation]: https://ansible-navigator.readthedocs.io/en/latest/settings
 
 ## Example commands
 
@@ -96,7 +96,7 @@ Or, using the **stdout** mode described above:
 commands can be found in the [subcommand documentation].
 
 [subcommand documentation]:
-https://ansible-navigator.rtfd.io/en/latest/subcommands
+https://ansible-navigator.readthedocs.io/en/latest/subcommands
 
 ## Configuring ansible-navigator:
 
@@ -116,7 +116,7 @@ We maintain a [list of common questions][FAQ] which provides a good
 resource to check if something is tripping you up. We also encourage additions
 to this document for the greater community!
 
-[FAQ]: https://ansible-navigator.rtfd.io/en/latest/faq
+[FAQ]: https://ansible-navigator.readthedocs.io/en/latest/faq
 
 ## License
 
