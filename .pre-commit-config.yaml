@@ -50,34 +50,12 @@ repos:
       # Side-effects:
       - id: trailing-whitespace
       - id: check-merge-conflict
-      - id: double-quote-string-fixer
-        exclude: |
-          (?x)
-          ^
-            .*
-          $
-        stages: ["manual"]
       - id: end-of-file-fixer
       - id: requirements-txt-fixer
-        exclude: >-
-          ^requirements\.txt$
-      # Non-modifying checks:
-      - id: name-tests-test
-        args:
-          - --django
-        exclude: |
-          (?x)
-          ^
-            .*
-          $
-        files: >-
-          ^tests/[^_].*\.py$
-        stages: ["manual"]
       - id: check-added-large-files
-      - id: check-byte-order-marker
+      - id: fix-byte-order-marker
       - id: check-case-conflict
-      # disabled due to pre-commit/pre-commit-hooks#159
-      # - id: check-docstring-first
+      - id: check-docstring-first
       - id: check-json
         exclude: |
           (?x)
