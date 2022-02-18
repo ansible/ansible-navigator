@@ -28,6 +28,8 @@ from .colorize import rgb_to_ansi
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
+from .curses_defs import RgbTuple
+from .curses_defs import SimpleLinePart
 from .curses_window import CursesWindow
 from .curses_window import Window
 from .field_text import FieldText
@@ -133,7 +135,7 @@ class UserInterface(CursesWindow):
         self._status_width = status_width
         self._prefix_color = 8
         self._refresh = [refresh]
-        self._rgb_to_curses_color_idx: Dict[str, int] = {}
+        self._rgb_to_curses_color_idx: Dict[RgbTuple, int] = {}
         self._screen_min_height = screen_min_height
         self._scroll = 0
         self._serialization_format = self._default_obj_serialization
@@ -498,7 +500,7 @@ class UserInterface(CursesWindow):
         """
 
         if self.serialization_format() == "source.ansi":
-            return self._colorizer.render(doc=obj, scope=self.serialization_format())
+            return self._colorizer.render_ansi(doc=obj)
         if self.serialization_format() == "source.yaml":
             string = human_dump(obj)
         elif self.serialization_format() == "source.json":
@@ -525,7 +527,7 @@ class UserInterface(CursesWindow):
         """
         if curses.COLORS > 16 and self._term_osc4_support:
             unique_colors = list(
-                set(chars["color"] for line in lines for chars in line if chars["color"]),
+                set(chars.color for line in lines for chars in line if chars.color),
             )
             # start custom colors at 16
             for color in unique_colors:
@@ -553,43 +555,39 @@ class UserInterface(CursesWindow):
         colored_lines = self._colored_lines(lines)
         return colored_lines
 
-    def _colored_lines(self, lines: List[List[Dict]]) -> CursesLines:
-        """color each of the lines
+    def _colored_lines(self, lines: List[List[SimpleLinePart]]) -> CursesLines:
+        """Color each of the lines.
 
-        :params lines: the lines to transform
-        :type lines: list of lists of dicts
-            Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
-        :return: all the lines
+        :params lines: The lines to transform
+        :return: All lines colored
         """
         return tuple(self._colored_line(line) for line in lines)
 
-    def _colored_line(self, line: List[Dict]) -> CursesLine:
-        """color one line
+    def _colored_line(self, line: List[SimpleLinePart]) -> CursesLine:
+        """Color one line.
 
-        :param line: the line to transform (e.g. ``LinePart[{"color": \
-                     rgb, "chars": text, "column": n},...]``)
-        :return one colored line:
+        :param line: The line to color
+        :returns: One line colored
         """
         return tuple(self._colored_line_part(line_part) for line_part in line)
 
-    def _colored_line_part(self, lp_dict: Dict) -> CursesLinePart:
-        """color one linepart
+    def _colored_line_part(self, line_part: SimpleLinePart) -> CursesLinePart:
+        """Color one line part.
 
-        :param lp_dict: a dict describing the line part (e.g. \
-                        ``{"color": rgb, "chars": text, "column": n}``)
-        :return: the colored line part
+        :param line_part: One line part
+        :returns: One line part colored
         """
-        if lp_dict["color"]:
+        if line_part.color:
             if self._term_osc4_support and curses.COLORS > 16:
-                color = self._rgb_to_curses_color_idx[lp_dict["color"]]
+                color = self._rgb_to_curses_color_idx[line_part.color]
             else:
-                red, green, blue = lp_dict["color"]
+                red, green, blue = line_part.color
                 color = rgb_to_ansi(red, green, blue, curses.COLORS)
         else:
             color = 0
         return CursesLinePart(
-            column=lp_dict["column"],
-            string=lp_dict["chars"],
+            column=line_part.column,
+            string=line_part.chars,
             color=color,
             decoration=0,
         )

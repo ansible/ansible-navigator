@@ -26,7 +26,7 @@ def test_basic_success_json():
     )
     assert len(result) == 1
     assert len(result[0]) == 5
-    assert "".join(line_part["chars"] for line_part in result[0]) == sample
+    assert "".join(line_part.chars for line_part in result[0]) == sample
 
 
 def test_basic_success_yaml():
@@ -41,9 +41,9 @@ def test_basic_success_yaml():
     )
     assert len(result) == 2
     assert len(result[0]) == 1
-    assert result[0][0]["chars"] == sample.splitlines()[0]
+    assert result[0][0].chars == sample.splitlines()[0]
     assert len(result[1]) == 3
-    assert "".join(line_part["chars"] for line_part in result[1]) == sample.splitlines()[1]
+    assert "".join(line_part.chars for line_part in result[1]) == sample.splitlines()[1]
 
 
 def test_basic_success_no_color():
@@ -55,9 +55,9 @@ def test_basic_success_no_color():
     )
     assert len(result) == 1
     assert len(result[0]) == 1
-    assert result[0][0]["chars"] == sample
-    assert result[0][0]["color"] is None
-    assert result[0][0]["column"] == 0
+    assert result[0][0].chars == sample
+    assert result[0][0].color is None
+    assert result[0][0].column == 0
 
 
 @patch("ansible_navigator.ui_framework.colorize.tokenize")
@@ -73,7 +73,7 @@ def test_graceful_failure(mocked_func, caplog):
     )
     assert len(result) == 1
     assert len(result[0]) == 1
-    assert result[0][0]["chars"] == sample
-    assert result[0][0]["color"] is None
-    assert result[0][0]["column"] == 0
+    assert result[0][0].chars == sample
+    assert result[0][0].color is None
+    assert result[0][0].column == 0
     assert "rendered without color" in caplog.text
