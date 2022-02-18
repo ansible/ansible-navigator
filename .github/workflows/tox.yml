@@ -6,11 +6,11 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  create: # is used for publishing to PyPI and TestPyPI
-    tags: # any tag regardless of its name, no branches
+  create:  # is used for publishing to PyPI and TestPyPI
+    tags:  # any tag regardless of its name, no branches
       - "**"
-  push: # only publishes pushes to the main branch to TestPyPI
-    branches: # any integration branch but not tag
+  push:  # only publishes pushes to the main branch to TestPyPI
+    branches:  # any integration branch but not tag
       - "main"
   pull_request:
 
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0 # needed by setuptools-scm
+          fetch-depth: 0  # needed by setuptools-scm
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -71,12 +71,12 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           directory: .tox
-          files: "coverage-*.xml"
+          files: 'coverage-*.xml'
           name: ${{ matrix.tox_env }}
-          verbose: true # optional (default = false)
+          verbose: true  # optional (default = false)
         if: ${{ startsWith(matrix.tox_env, 'py') }}
 
-  check: # This job does nothing and is only used for the branch protection
+  check:  # This job does nothing and is only used for the branch protection
     if: always()
 
     needs:
