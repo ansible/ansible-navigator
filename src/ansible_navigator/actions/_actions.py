@@ -15,6 +15,8 @@ from typing import Generator
 from typing import List
 from typing import Tuple
 
+from ..action_defs import RunStdoutReturn
+
 
 # ``mypy``/``pylint`` idiom for py36 compatibility
 # https://github.com/python/typeshed/issues/3500#issuecomment-560958608
@@ -167,7 +169,7 @@ def run_interactive_factory(package: str) -> Callable:
     return functools.partial(run_interactive, package)
 
 
-def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
+def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> RunStdoutReturn:
     """Call the given action's ``run_stdout()`` method.
 
     :param package: The name of the package

@@ -13,6 +13,7 @@ from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants as C
@@ -127,19 +128,22 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return next_interaction
 
-    def run_stdout(self) -> Union[None, int]:
-        """Execute the ``config`` request for mode stdout.
+    def run_stdout(self) -> RunStdoutReturn:
+        """Execute the ``doc`` request for mode stdout.
 
-        :returns: Nothing or the error code
+        :returns: The return code or 1. If the response from the runner invocation is None,
+            indicates there is no console output to display, so assume an issue and return 1
+            along with a message to review the logs.
         """
         self._plugin_name = self._args.plugin_name
         self._plugin_type = self._args.plugin_type
         self._logger.debug("doc requested in stdout mode")
         response = self._run_runner()
-        if response:
-            _, _, ret_code = response
-            return ret_code
-        return None
+        if response is None:
+            self._logger.error("Unexpected response: %s", response)
+            return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
+        _out, error, return_code = response
+        return RunStdoutReturn(message=error, return_code=return_code)
 
     def _run_runner(self) -> Union[None, dict, Tuple[str, str, int]]:
         # pylint: disable=too-many-branches

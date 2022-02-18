@@ -11,6 +11,7 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
+from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
@@ -134,7 +135,7 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, **kwargs) -> Tuple[int, str, str]:
+    def run_action_stdout(self, **kwargs) -> Tuple[RunStdoutReturn, str, str]:
         # pylint: disable=too-many-locals
         """run the action"""
         self._app_args.update({"mode": "stdout"})
@@ -155,27 +156,27 @@ class ActionRunTest:
         __stderr__ = sys.stderr
 
         # ``pytest`` pseudo ``stdin`` doesn't ``fileno()``, use original
-        sys.stdin = child_tty  # type: ignore
+        sys.stdin = child_tty  # type: ignore[assignment]
 
         # set ``stderr`` and ``stdout`` to file descriptors
         with tempfile.TemporaryFile() as sys_stdout, tempfile.TemporaryFile() as sys_stderr:
-            sys.stdout = sys_stdout  # type: ignore
-            sys.stderr = sys_stderr  # type: ignore
+            sys.stdout = sys_stdout  # type: ignore[assignment]
+            sys.stderr = sys_stderr  # type: ignore[assignment]
 
             # run the action
-            return_code = action.run_stdout()
+            result = action.run_stdout()
 
             # restore ``stdin``
             sys.stdin = __stdin__
 
             # read and restore ``stdout``
             sys.stdout.seek(0)
-            stdout = sys.stdout.read().decode()  # type: ignore
+            stdout = sys.stdout.read().decode()  # type: ignore[attr-defined]
             sys.stdout = __stdout__
 
             # read and restore ``stderr``
             sys.stderr.seek(0)
-            stderr = sys.stderr.read().decode()  # type: ignore
+            stderr = sys.stderr.read().decode()  # type: ignore[attr-defined]
             sys.stderr = __stderr__
 
-        return return_code, stdout, stderr
+        return result, stdout, stderr

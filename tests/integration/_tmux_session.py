@@ -9,7 +9,7 @@ from timeit import default_timer as timer
 from typing import List
 from typing import Union
 
-import libtmux  # type: ignore
+import libtmux
 
 from ._common import generate_test_log_dir
 
