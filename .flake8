@@ -224,25 +224,6 @@ per-file-ignores =
 # Count the number of occurrences of each error/warning code and print a report:
 statistics = true
 
-# flake8-rst-docstrings
-rst-directives =
-  spelling
-rst-roles =
-  # Built-in Sphinx roles:
-  class,
-  data,
-  exc,
-  meth,
-  mod,
-  term,
-  py:class,
-  py:data,
-  py:exc,
-  py:meth,
-  py:term,
-  # Sphinx's internal role:
-  event,
-
 # flake8-quotes
 # https://github.com/zheller/flake8-quotes
 # keep at bottom of configuration because some IDEs
