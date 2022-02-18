@@ -156,12 +156,12 @@ class ActionRunTest:
         __stderr__ = sys.stderr
 
         # ``pytest`` pseudo ``stdin`` doesn't ``fileno()``, use original
-        sys.stdin = child_tty  # type: ignore
+        sys.stdin = child_tty  # type: ignore[assignment]
 
         # set ``stderr`` and ``stdout`` to file descriptors
         with tempfile.TemporaryFile() as sys_stdout, tempfile.TemporaryFile() as sys_stderr:
-            sys.stdout = sys_stdout  # type: ignore
-            sys.stderr = sys_stderr  # type: ignore
+            sys.stdout = sys_stdout  # type: ignore[assignment]
+            sys.stderr = sys_stderr  # type: ignore[assignment]
 
             # run the action
             result = action.run_stdout()
@@ -171,12 +171,12 @@ class ActionRunTest:
 
             # read and restore ``stdout``
             sys.stdout.seek(0)
-            stdout = sys.stdout.read().decode()  # type: ignore
+            stdout = sys.stdout.read().decode()  # type: ignore[attr-defined]
             sys.stdout = __stdout__
 
             # read and restore ``stderr``
             sys.stderr.seek(0)
-            stderr = sys.stderr.read().decode()  # type: ignore
+            stderr = sys.stderr.read().decode()  # type: ignore[attr-defined]
             sys.stderr = __stderr__
 
         return result, stdout, stderr

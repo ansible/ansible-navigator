@@ -34,8 +34,7 @@ def _find_all_importables(pkg: ModuleType) -> List[str]:
     return sorted(
         set(
             chain.from_iterable(
-                _discover_path_importables(Path(path), pkg.__name__)
-                for path in pkg.__path__  # type: ignore[attr-defined]
+                _discover_path_importables(Path(path), pkg.__name__) for path in pkg.__path__
             ),
         ),
     )
