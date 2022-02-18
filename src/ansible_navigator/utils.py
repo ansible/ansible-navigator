@@ -10,8 +10,9 @@ import shutil
 import sys
 import sysconfig
 
+from dataclasses import dataclass
 from enum import Enum
-from types import SimpleNamespace
+from pathlib import Path
 from typing import Any
 from typing import List
 from typing import Mapping
@@ -51,10 +52,13 @@ class ExitPrefix(Enum):
         return f"{' ' * (self._longest() - len(self.name))}[{self.name}]: "
 
 
-class ExitMessage(SimpleNamespace):
-    """An object to hold a message destined for the logger"""
+@dataclass
+class ExitMessage:
+    """An object to hold a message to present when exiting."""
 
+    #: The message that will be presented
     message: str
+    #: The prefix for the message, used for formatting
     prefix: ExitPrefix = ExitPrefix.ERROR
 
     @property
@@ -168,7 +172,6 @@ def escape_moustaches(obj: Mapping) -> Mapping:
     """escape moustaches
 
     :param obj: something
-    :type obj: Any
     :return: the obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
@@ -382,6 +385,22 @@ def pascal_to_snake(obj):
     return obj
 
 
+def path_is_relative_to(child: Path, parent: Path) -> bool:
+    """Return True if the path is relative to another path or False.
+
+    :param child: The path that may be a child
+    :param parent: The path that may be a parent
+    :returns: Indicates the child is a child of the parent
+    """
+    if sys.version_info >= (3, 9):
+        return child.is_relative_to(parent)
+    try:
+        child.relative_to(parent)
+        return True
+    except ValueError:
+        return False
+
+
 def remove_ansi(string):
     """strip ansi code from a str"""
     ansi_escape = re.compile(
@@ -491,7 +510,6 @@ def unescape_moustaches(obj: Mapping) -> Mapping:
     """unescape moustaches
 
     :param obj: something
-    :type obj: Any
     :return: the obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))

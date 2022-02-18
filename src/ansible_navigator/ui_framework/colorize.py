@@ -1,6 +1,5 @@
 # cspell:ignore A_INVIS
-"""Tokenize and color text
-"""
+"""Tokenize and color text."""
 
 import colorsys
 import curses
@@ -11,11 +10,20 @@ import os
 import re
 
 from itertools import chain
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 from ..tm_tokenize.grammars import Grammars
+from ..tm_tokenize.region import Regions
 from ..tm_tokenize.tokenize import tokenize
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
+from .curses_defs import CursesLines
+from .curses_defs import RgbTuple
+from .curses_defs import SimpleLinePart
 
 
 CURSES_STYLES = {
@@ -32,32 +40,36 @@ CURSES_STYLES = {
 
 
 class ColorSchema:
-    """Simple holder for the schema (theme)"""
+    """A storage mechanism for the schema (theme)."""
 
     # pylint: disable=too-few-public-methods
 
-    def __init__(self, schema):
-        """start
+    def __init__(self, schema: Dict[str, Union[str, List, Dict]]):
+        """Initialize the ColorSchema class.
 
         :param schema: The color scheme, theme to use
-        :type schema: dict
         """
         self._schema = schema
 
     @functools.lru_cache(maxsize=None)
-    def get_color(self, scope):
-        """Get a color from the schema, from most specific to least
+    def get_color(self, scope: str) -> Optional[RgbTuple]:
+        """Get a color from the schema, from most specific to least.
 
         :param scope: The scope, aka format
-        :type scope: str
-        :return: the color in RGB format or None
-        :rtype: tuple or None
+        :return: The color in RGB format or nothing
         """
         for name in reversed(scope):
             for parts in range(0, len(name.split("."))):
                 prop = name.split()[-1].rsplit(".", parts)[0]
                 color = next(
-                    (tc for tc in self._schema["tokenColors"] if prop in to_list(tc["scope"])),
+                    (
+                        token_color
+                        for token_color in self._schema["tokenColors"]
+                        if (
+                            isinstance(token_color, dict)
+                            and prop in scope_to_list(token_color.get("scope", []))
+                        )
+                    ),
                     None,
                 )
                 if color:
@@ -67,9 +79,8 @@ class ColorSchema:
 
 
 class Colorize:
-    """Functionality for coloring"""
+    """Functionality for coloring."""
 
-    # pylint: disable=too-few-public-methods
     def __init__(self, grammar_dir: str, theme_path: str):
         """Initialize the colorizer.
 
@@ -77,28 +88,35 @@ class Colorize:
         :param theme_path: The path to the currently configured color theme
         """
         self._logger = logging.getLogger(__name__)
-        self._schema = None
+        self._schema: ColorSchema
         self._grammars = Grammars(grammar_dir)
         self._theme_path = theme_path
         self._load()
 
     def _load(self):
+        """Load the color scheme from the file system."""
         with open(os.path.join(self._theme_path), encoding="utf-8") as fh:
             self._schema = ColorSchema(json.load(fh))
 
+    @staticmethod
     @functools.lru_cache(maxsize=100)
-    def render(self, doc, scope):
-        """render some text into columns and colors
+    def render_ansi(doc: str) -> CursesLines:
+        """Convert ansi colored text into curses lines.
 
-        :param doc: The thing to tokenize and color
-        :type doc: str
-        :param scope: The scope, aka the format of the string
-        :type scope: str
-        :return: A list of lines, each a list of dicts
-        :rtype: list
+        :param doc: The text to convert
+        :return: Lines ready to present using the TUI
         """
-        if scope == "source.ansi":
-            return [ansi_to_curses(l) for l in doc.splitlines()]  # noqa: E741
+        lines = tuple(ansi_to_curses(line) for line in doc.splitlines())
+        return lines
+
+    @functools.lru_cache(maxsize=100)
+    def render(self, doc: str, scope: str) -> List[List[SimpleLinePart]]:
+        """Render text lines into lines of columns and colors.
+
+        :param doc: The string to split, tokenize and color
+        :param scope: The scope, aka the format of the string
+        :return: A list of lines, each a list of dicts
+        """
         try:
             compiler = self._grammars.compiler_for_scope(scope)
         except KeyError:
@@ -131,66 +149,71 @@ class Colorize:
             else:
                 return columns_and_colors(lines, self._schema)
 
-        res = [[{"column": 0, "chars": doc_line, "color": None}] for doc_line in doc.splitlines()]
+        res = [
+            [SimpleLinePart(column=0, chars=doc_line, color=None)] for doc_line in doc.splitlines()
+        ]
         return res
 
 
-def to_list(thing):
-    """convert something to a list if necessary
+def scope_to_list(scope: Union[str, List]) -> List:
+    """Convert a token scope to a list if necessary.
 
-    :param thing: Maybe a list?
-    :type thing: str or list
-    :return: thing as list
-    :rtype: list
+    A scope in a theme should always be a string or list,
+    but just in case return an empty list if not
+
+    :param scope: The scope
+    :return: Scope as list
     """
-    if not isinstance(thing, list):
-        return [thing]
-    return thing
+    if isinstance(scope, list):
+        return scope
+    if isinstance(scope, str):
+        return [scope]
+    return []
 
 
-def hex_to_rgb(value):
-    """Convert a hex value to RGB
+def hex_to_rgb(value: str) -> RgbTuple:
+    """Convert a hex value to RGB tuple.
 
-    :param value: the hex color
-    :type value: str
+    :param value: The hex color
     :returns: RGB tuple
-    :rtype: tuple
     """
-    if value:
-        value = value.lstrip("#")
-        value_length = len(value)
-        return tuple(
-            int(value[i : i + value_length // 3], 16)
-            for i in range(0, value_length, value_length // 3)
-        )
-    return None
+    value = value.lstrip("#")
+    value_length = len(value)
+    red, green, blue = (
+        int(value[i : i + value_length // 3], 16) for i in range(0, value_length, value_length // 3)
+    )
+    return red, green, blue
 
 
-def hex_to_rgb_curses(value):
-    """Convert a hex color to RGB scaled to 1000
-    b/c that's what curses needs
+def scale_for_curses(rgb_value: int) -> int:
+    """Scale a single RGB value for curses.
+
+    :param rgb_value: One RGB value
+    :returns: The value scaled for curses
+    """
+    curses_ceiling = 1000
+    rgb_ceiling = 255
+    return int(rgb_value * curses_ceiling / rgb_ceiling)
+
+
+def hex_to_rgb_curses(value: str) -> RgbTuple:
+    """Convert a hex color to RGB scaled for curses.
 
     :param value: an RGB color
-    :type value: tuple
     :return: The colors scaled to 1000
-    :rtype: tuple
     """
-    scale = lambda x: int(x * 1000 / 255)  # noqa: E731
     red, green, blue = hex_to_rgb(value)
-    return (scale(red), scale(green), scale(blue))
+    return (scale_for_curses(red), scale_for_curses(green), scale_for_curses(blue))
 
 
 def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
-    """Convert an RGB color to an terminal color
+    """Convert an RGB color to an ansi color.
 
-    :param red: the red component
-    :type red: int
-    :param green: the green component
-    :type green: int
-    :param blue: the blue component
-    :type blue: int
+    :param red: The red component
+    :param green: The green component
+    :param blue: The blue component
     :param colors: The number of color supported by the terminal
-    :type colors: int
+    :returns: A color suitable for the terminal
     """
     # https://github.com/Qix-/color-convert/blob/master/conversions.js
     if colors == 256:
@@ -221,53 +244,59 @@ def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
     return ansi
 
 
-def columns_and_colors(lines, schema):
-    """Convert to colors and columns
+def columns_and_colors(
+    lines: List[Tuple[Regions, str]],
+    schema: ColorSchema,
+) -> List[List[SimpleLinePart]]:
+    """Convert to colors and columns.
 
-    :param lines: A list of regions (line parts) and the line, \
-                  each a ([regions], line)
-    :type lines: List[Tuple[List[str], str]]
+    :param lines: Lines of text and their regions
     :param schema: An instance of the ColorSchema
-    :type schema: ColorSchema
+    :returns: Lines of text, each broken into sections
     """
-    result = []
+    results: List[List[SimpleLinePart]] = []
 
     for line in lines:
-        column = 0
-        char_dicts = [{"chars": c, "color": None} for c in line[1]]
+        # Break the into 1 character parts, temporarily set the column to 0
+        line_parts = [
+            SimpleLinePart(chars=character, color=None, column=0) for character in line[1]
+        ]
 
+        # Replace the color with the RgbTuple
         for region in line[0]:
             color = schema.get_color(region.scope)
             if color:
                 for idx in range(region.start, region.end):
-                    char_dicts[idx]["color"] = color
+                    line_parts[idx].color = color
 
-        if char_dicts:
-            grouped = [char_dicts.pop(0)]
-            while char_dicts:
-                entry = char_dicts.pop(0)
-                if entry["color"] == grouped[-1]["color"]:
-                    grouped[-1]["chars"] += entry["chars"]
+        # Compress the line, grouping characters of like color
+        if line_parts:
+            grouped = [line_parts.pop(0)]
+            while line_parts:
+                entry = line_parts.pop(0)
+                if entry.color == grouped[-1].color:
+                    grouped[-1].chars += entry.chars
                 else:
                     grouped.append(entry)
-            result.append(grouped)
+            results.append(grouped)
         else:
-            result.append([{"chars": line[1], "color": None}])
+            results.append([SimpleLinePart(chars=line[1], color=None, column=0)])
 
-    for line in result:
+    # Update the column in each line part, based on the total of the preceding text lengths
+    for result in results:
         column = 0
-        for chunk in line:
-            chunk["column"] = column
-            column += len(chunk["chars"])
+        for line_part in result:
+            line_part.column = column
+            column += len(line_part.chars)
 
-    return result
+    return results
 
 
 def ansi_to_curses(line: str) -> CursesLine:
-    """Convert ansible color codes to curses colors
+    """Convert ansible color codes to curses colors.
 
     :param line: A string with ansi colors
-    :return: A list of str tuples [(x, s, c), (x, s, c)...]
+    :return: A line ready for presentation in the TUI
     """
     printable = []
     ansi_regex = re.compile(r"(\x1b\[[\d;]*m)")

@@ -1,4 +1,4 @@
-""":write"""
+"""``:write`` command implementation."""
 import json
 import logging
 import os
@@ -14,7 +14,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """:write"""
+    """``:write`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 
@@ -30,10 +30,11 @@ class Action:
 
     # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        """Handle :write
+        """Execute the ``:write`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
+        :returns: Nothing
         """
         # pylint: disable=too-many-branches
         self._logger.debug("write requested as %s", interaction.action.value)

@@ -5,6 +5,7 @@ from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -20,10 +21,10 @@ class Step:
         name: str,
         step_type: str,
         value: List[Dict[str, str]],
-        columns: Union[List[str], None] = None,
-        index: Union[int, None] = None,
-        select_func: Union[Callable[[], "Step"], None] = None,
-        show_func: Union[Callable[[], None], None] = None,
+        columns: Optional[List[str]] = None,
+        index: Optional[int] = None,
+        select_func: Optional[Callable[[], "Step"]] = None,
+        show_func: Optional[Callable[[], None]] = None,
     ) -> None:
         """Initialize the instance of a step.
 
@@ -67,7 +68,7 @@ class Step:
         self._value_changed = value
 
     @property
-    def index(self) -> Union[int, None]:
+    def index(self) -> Optional[int]:
         """return the index
 
         :return: index (should be ``int``)
@@ -86,7 +87,7 @@ class Step:
         self._index = index
 
     @property
-    def selected(self) -> Union[None, Dict[str, Any]]:
+    def selected(self) -> Optional[Dict[str, Any]]:
         """return the selected item
 
         :return: the selected item

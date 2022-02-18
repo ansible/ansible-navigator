@@ -1,7 +1,7 @@
-""":sample_notification, this is a blocking form
-"""
+"""``:sample_notification`` command implementation."""
+
 from .._yaml import yaml
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
@@ -30,8 +30,8 @@ form:
 
 
 @actions.register
-class Action(App):
-    """handle :sample_notification"""
+class Action(ActionBase):
+    """``:sample_notification`` command implementation."""
 
     KEGEX = r"^sample_notification$"
 
@@ -43,7 +43,7 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="sample_form")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
-        """Handle :doc
+        """Execute the ``:sample_notification`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance

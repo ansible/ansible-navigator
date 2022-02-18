@@ -20,7 +20,8 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import CommandAsync
@@ -30,6 +31,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
+from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils import abs_user_path
 from ..utils import human_time
@@ -180,7 +182,7 @@ TASK_LIST_COLUMNS = [
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
 
     # pylint: disable=too-many-instance-attributes
     """:run"""
@@ -204,6 +206,8 @@ class Action(App):
         self.runner: CommandAsync
         self._runner_finished: bool
         self._auto_scroll = False
+        #: Flag when the first message is received from runner
+        self._first_message_received: bool = False
 
         self._plays = Step(
             name="plays",
@@ -230,11 +234,17 @@ class Action(App):
             return "stdout_w_artifact"
         return self._args.mode
 
-    def run_stdout(self) -> int:
-        """Run in old school mode, just stdout."""
+    def run_stdout(self) -> RunStdoutReturn:
+        """Execute the ``inventory`` request for mode stdout.
+
+        :returns: The return code from the runner invocation, along with a message to review the
+            logs if not 0.
+        """
         if self._args.app == "replay":
             successful: bool = self._init_replay()
-            return 0 if successful else 1
+            if successful:
+                return RunStdoutReturn(message="", return_code=0)
+            return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
 
         self._logger.debug("playbook requested in interactive mode")
         self._subaction_type = "playbook"
@@ -247,7 +257,13 @@ class Action(App):
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break
-        return self.runner.ansible_runner_instance.rc
+        return_code = self.runner.ansible_runner_instance.rc
+        if return_code != 0:
+            return RunStdoutReturn(
+                message="Please review the log for errors.",
+                return_code=return_code,
+            )
+        return RunStdoutReturn(message="", return_code=return_code)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """run :run or :replay
@@ -278,6 +294,14 @@ class Action(App):
             return None
 
         self.steps.append(self._plays)
+
+        # Show a notification until the first the first message from the queue is processed
+        if self._subaction_type == "run":
+            messages = ["Preparing for automation, please wait..."]
+            notification = nonblocking_notification(messages=messages)
+            interaction.ui.show(notification)
+            while not self._first_message_received:
+                self.update()
 
         while True:
             self.update()
@@ -603,6 +627,8 @@ class Action(App):
         """Drain the runner queue"""
         drain_count = 0
         while not self._queue.empty():
+            if not self._first_message_received:
+                self._first_message_received = True
             message = self._queue.get()
             self._handle_message(message)
             drain_count += 1

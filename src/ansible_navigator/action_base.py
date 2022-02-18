@@ -20,9 +20,9 @@ from .utils import ExitMessage
 from .utils import LogMessage
 
 
-class App:
+class ActionBase:
     # pylint: disable=too-many-instance-attributes
-    """Base class for apps (actions)."""
+    """Base class for actions."""
 
     def __init__(self, args: ApplicationConfiguration, name: str, logger_name: str = __name__):
         """Initialize the App class.
@@ -79,7 +79,11 @@ class App:
 
     def no_interactive_mode(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=unused-argument
-        """Show a warning notification that the user interactive mode is not supported."""
+        """Show a warning notification that the user interactive mode is not supported.
+
+        :param interaction: The interaction from the user
+        :param app: The app instance
+        """
         warning = warning_notification(
             messages=[
                 f"The '{self._name}' subcommand is not available while using interactive mode.",

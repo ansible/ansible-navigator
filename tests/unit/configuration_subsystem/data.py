@@ -192,13 +192,13 @@ CLI_DATA_RUN = [
 def cli_data():
     """turn them all into tuples"""
     aggregated = (
-        CLI_DATA_COLLECTIONS  # type: ignore
-        + CLI_DATA_CONFIG  # type: ignore
-        + CLI_DATA_DOC  # type: ignore
-        + CLI_DATA_INVENTORY  # type: ignore
-        + CLI_DATA_INVENTORY_COLUMNS  # type: ignore
-        + CLI_DATA_REPLAY  # type: ignore
-        + CLI_DATA_RUN  # type: ignore
+        CLI_DATA_COLLECTIONS
+        + CLI_DATA_CONFIG
+        + CLI_DATA_DOC
+        + CLI_DATA_INVENTORY
+        + CLI_DATA_INVENTORY_COLUMNS
+        + CLI_DATA_REPLAY
+        + CLI_DATA_RUN
     )
     frozen = [(cmd, d2t(expected)) for cmd, expected in aggregated]
     return frozen

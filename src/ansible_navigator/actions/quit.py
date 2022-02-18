@@ -1,5 +1,4 @@
-""":quit
-"""
+"""``:quit`` command implementation."""
 import logging
 
 from ..app_public import AppPublic
@@ -10,7 +9,7 @@ from . import _actions as actions
 
 @actions.register
 class Action:
-    """handle :quit"""
+    """``:quit`` command implementation."""
 
     # pylint: disable=too-few-public-methods
 

@@ -5,9 +5,9 @@ import shlex
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
 from ..runner import Command
@@ -37,7 +37,7 @@ def _generate_command(exec_command: str, exec_shell: bool) -> GeneratedCommand:
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """Run the :exec subcommand."""
 
     KEGEX = "^e(?:xec)?$"
@@ -49,17 +49,20 @@ class Action(App):
         """
         super().__init__(args=args, logger_name=__name__, name="exec")
 
-    def run_stdout(self) -> Union[None, int]:
-        """Run in mode stdout.
+    def run_stdout(self) -> RunStdoutReturn:
+        """Execute the ``exec`` request for mode stdout.
 
-        :returns: The return code or None
+        :returns: The return code or 1. If the response from the runner invocation is None,
+            indicates there is no console output to display, so assume an issue and return 1
+            along with a message to review the logs.
         """
         self._logger.debug("exec requested in stdout mode")
         response = self._run_runner()
-        if response:
-            _, _, ret_code = response
-            return ret_code
-        return None
+        if response is None:
+            self._logger.error("Unexpected response: %s", response)
+            return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
+        _out, error, return_code = response
+        return RunStdoutReturn(message=error, return_code=return_code)
 
     def _run_runner(self) -> Optional[Tuple]:
         """Spin up runner.

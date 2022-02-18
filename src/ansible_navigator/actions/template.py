@@ -1,10 +1,13 @@
-"""{{ }}"""
+"""Template command implementation.
+
+Processor of a template request at the single line prompt. e.g. {{ }}
+"""
 import html
 
 from collections.abc import Mapping
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
@@ -15,8 +18,8 @@ from . import _actions as actions
 
 
 @actions.register
-class Action(App):
-    """{{ }}"""
+class Action(ActionBase):
+    """Template command implementation."""
 
     KEGEX = r"^{{.*}}$"
 
@@ -28,7 +31,7 @@ class Action(App):
         super().__init__(args=args, logger_name=__name__, name="template")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
-        """Handle :{{ }}
+        """Execute the templating request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
