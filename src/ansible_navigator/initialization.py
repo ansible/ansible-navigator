@@ -26,7 +26,9 @@ from .utils import find_settings_file
 
 if TYPE_CHECKING:
 
-    from ...share.ansible_navigator.utils import key_value_store  # type: ignore[misc]
+    from ...share.ansible_navigator.utils import (  # type: ignore[import, misc] # isort: skip
+        key_value_store,
+    )
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:

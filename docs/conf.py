@@ -141,7 +141,7 @@ extensions = [
 
 # Conditional third-party extensions:
 try:
-    import sphinxcontrib.spelling as _sphinxcontrib_spelling
+    import sphinxcontrib.spelling as _sphinxcontrib_spelling  # type: ignore[import]
 except ImportError:
     extensions.append("spelling_stub_ext")
 else:
@@ -251,7 +251,7 @@ apidoc_module_dir = "../src/ansible_navigator"
 apidoc_module_first = False
 apidoc_output_dir = "pkg"
 apidoc_separate_modules = True
-apidoc_toc_file = None
+apidoc_toc_file: None = None
 
 # -- Options for linkcheck builder -------------------------------------------
 

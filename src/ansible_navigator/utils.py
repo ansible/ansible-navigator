@@ -491,7 +491,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
         logger.debug("error was: %s", str(exc))
         logger.debug("attempted on %s", result)
 
-    result = unescape_moustaches(result)
+    result = unescape_moustaches(result)  # type: ignore[assignment, arg-type]
     return errors, result
 
 
