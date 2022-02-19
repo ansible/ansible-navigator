@@ -143,15 +143,15 @@ repos:
   - repo: https://github.com/pre-commit/mirrors-mypy.git
     rev: v0.931
     hooks:
-      # NOTE: The 3.10 dependencies should include all dependancies for all interpreter
+      # NOTE: The latest version dependencies should include all dependancies for all interpreter
       # NOTE: versions so the configuration doesn' grow out of control.
       # NOTE: As new interpreters are added or removed, the dependency list should be auditted
-      # NOTE: For version specific dependendcies, please not the interpreter version.
+      # NOTE: For version specific dependendcies, please note the interpreter version.
       # NOTE: These are ordered from latest version to earliest for no particular reason
       # NOTE: other than a way to keep them organized.
       - id: mypy
-        alias: mypy-py310
-        name: MyPy, for Python 3.10
+        alias: mypy-py311
+        name: MyPy, for Python 3.11
         additional_dependencies: &_mypy_deps
           - importlib_resources # Needed for checking py3.6 with a later interpreter
           - importlib_metadata # Needed for checking py3.6 with a later interpreter
@@ -164,28 +164,29 @@ repos:
           - types-setuptools # Avoid mypy trying to do it for 3.6 in precommit-ci
           - types-typed-ast # Avoid mypy trying to do it for 3.6 in precommit-ci
         args:
-          - --python-version=3.10
+          - --python-version=3.11
         pass_filenames: false
       - id: mypy
-        alias: mypy-py39
+        name: MyPy, for Python 3.10
+        additional_dependencies: *_mypy_deps
+        args:
+          - --python-version=3.10
+      - id: mypy
         name: MyPy, for Python 3.9
         additional_dependencies: *_mypy_deps
         args:
           - --python-version=3.9
       - id: mypy
-        alias: mypy-py38
         name: MyPy, for Python 3.8
         additional_dependencies: *_mypy_deps
         args:
           - --python-version=3.8
       - id: mypy
-        alias: mypy-py37
         name: MyPy, for Python 3.7
         additional_dependencies: *_mypy_deps
         args:
           - --python-version=3.7
       - id: mypy
-        alias: mypy-py36
         name: MyPy, for Python 3.6
         additional_dependencies: *_mypy_deps
         args:
