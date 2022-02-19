@@ -178,6 +178,7 @@ repos:
           - types-PyYAML
           - types-dataclasses
           - types-docutils
+          - types-setuptools # Avoid mypy trying to do it in precommit-ci
           - types-typed-ast
         args:
           - --python-version=3.6
