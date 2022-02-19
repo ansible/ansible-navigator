@@ -22,11 +22,7 @@ from .utils import ExitPrefix
 from .utils import LogMessage
 from .utils import environment_variable_is_file_path
 from .utils import find_settings_file
-
-
-if TYPE_CHECKING:
-
-    from ...share.ansible_navigator.utils import key_value_store  # type: ignore[misc]
+from .utils.key_value_store import KeyValueStore
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
@@ -87,14 +83,13 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
 def get_and_check_collection_doc_cache(
     share_directory: str,
     collection_doc_cache_path: str,
-) -> Tuple[List[LogMessage], List[ExitMessage], Dict]:
+) -> Tuple[List[LogMessage], List[ExitMessage], KeyValueStore]:
     """ensure the collection doc cache
     has the current version of the application
     as a safeguard, always delete and rebuild if not
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
-    collection_cache: "key_value_store.KeyValueStore" = {}
     message = f"Collection doc cache: 'path' is '{collection_doc_cache_path}'"
     messages.append(LogMessage(level=logging.DEBUG, message=message))
 
@@ -120,7 +115,7 @@ def get_and_check_collection_doc_cache(
         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages, collection_cache
 
-    collection_cache = _get_kvs(share_directory, collection_doc_cache_path)
+    collection_cache: KeyValueStore = KeyValueStore(collection_doc_cache_path)
     if "version" in collection_cache:
         cache_version = collection_cache["version"]
     else:
@@ -132,22 +127,13 @@ def get_and_check_collection_doc_cache(
         messages.append(LogMessage(level=logging.INFO, message=message))
         collection_cache.close()
         os.remove(collection_doc_cache_path)
-        collection_cache.__init__(collection_doc_cache_path)
+        collection_cache = KeyValueStore(collection_doc_cache_path)
         collection_cache["version"] = VERSION_CDC
         cache_version = collection_cache["version"]
         message = f"Collection doc cache: 'current version' is '{cache_version}'"
         messages.append(LogMessage(level=logging.INFO, message=message))
     collection_cache.close()
     return messages, exit_messages, collection_cache
-
-
-def _get_kvs(share_directory, path):
-    """Retrieve a key value store given a path"""
-    spec_path = os.path.join(share_directory, "utils", "key_value_store.py")
-    spec = importlib.util.spec_from_file_location("kvs", spec_path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod.KeyValueStore(path)
 
 
 def parse_and_update(

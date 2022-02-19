@@ -150,6 +150,7 @@ def clear_screen() -> None:
             print()
 
 
+# TODO: Replace this with something type-safe.
 def dispatch(obj, replacements):
     """make the replacement based on type
 
@@ -456,6 +457,8 @@ def str2bool(value: Any) -> bool:
     raise ValueError
 
 
+# TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
+#       returns Any. Need to find a better solution... "Any" isn't it.
 def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     """template some string with jinja2
     always to and from json so we return an object if it is
@@ -470,7 +473,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
 
     env = Environment(autoescape=True, undefined=StrictUndefined)
     try:
-        template = env.from_string(string)
+        template: Any = env.from_string(string)
         result = template.render(template_vars)
     except (ValueError, TemplateError) as exc:
         errors.append(f"Error while templating string: '{string}'")
@@ -506,7 +509,7 @@ def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
     return converted_value
 
 
-def unescape_moustaches(obj: Mapping) -> Mapping:
+def unescape_moustaches(obj: Any) -> Mapping:
     """unescape moustaches
 
     :param obj: something
