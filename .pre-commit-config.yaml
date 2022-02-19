@@ -161,6 +161,9 @@ repos:
           - jinja2
           - pytest
           - sphinx
+          - types-PyYAML
+          - types-docutils
+          - types-setuptools
         args:
           - --python-version=3.10
         pass_filenames: false
@@ -173,6 +176,11 @@ repos:
           - jinja2
           - pytest
           - sphinx
+          - types-PyYAML
+          - types-dataclasses
+          - types-docutils
+          - types-setuptools
+          - types-typed-ast
         args:
           - --python-version=3.6
 
