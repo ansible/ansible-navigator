@@ -15,8 +15,6 @@ from . import _actions as actions
 class Action:
     """``:back`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^\^\[|\x1b|back$"
 
     def __init__(self, args: ApplicationConfiguration):

@@ -39,7 +39,6 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
 class CollectionCatalog:
-    # pylint: disable=too-few-public-methods
     """A collection cataloger."""
 
     def __init__(self, directories: List[str]):

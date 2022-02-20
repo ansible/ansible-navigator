@@ -11,8 +11,6 @@ from . import _actions as actions
 class Action:
     """``:quit`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"q(?:uit)?(?P<exclamation>!)?$"
 
     def __init__(self, args: ApplicationConfiguration):
