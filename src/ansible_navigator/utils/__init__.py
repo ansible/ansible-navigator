@@ -1,1 +1,1 @@
-from ansible_navigator.utils.functions import *
+from ansible_navigator.utils.functions import *  # noqa: F403

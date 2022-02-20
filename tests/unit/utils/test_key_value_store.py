@@ -1,9 +1,10 @@
 """Test KVS from share.ansible_navigator."""
 
 import os
-import pytest
 import sys
 import types
+
+import pytest
 
 from ansible_navigator.utils.key_value_store import KeyValueStore
 
