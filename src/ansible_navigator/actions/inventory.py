@@ -29,7 +29,7 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[Color, Decoration]:
+def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     """Provide a color for a inventory menu entry in one column.
 
     :param colno: The column number
