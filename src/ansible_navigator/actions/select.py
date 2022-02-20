@@ -16,7 +16,6 @@ from . import _actions as actions
 class Action:
     """Menu selection implementation."""
 
-
     KEGEX = r"^\d+$"
 
     def __init__(self, args: ApplicationConfiguration):

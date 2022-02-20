@@ -15,7 +15,6 @@ from . import _actions as actions
 class Action:
     """``:back`` command implementation."""
 
-
     KEGEX = r"^\^\[|\x1b|back$"
 
     def __init__(self, args: ApplicationConfiguration):

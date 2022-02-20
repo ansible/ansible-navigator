@@ -16,7 +16,6 @@ from . import _actions as actions
 class Action:
     """``:write`` command implementation."""
 
-
     KEGEX = r"^w(?:rite)?(?P<force>!)?\s+(?P<append>>>)?\s*(?P<filename>.+)$"
 
     def __init__(self, args: ApplicationConfiguration):

@@ -12,7 +12,6 @@ from . import _actions as actions
 class Action:
     """``:rerun`` command implementation."""
 
-
     KEGEX = r"^rr|rerun?$"
 
     def __init__(self, args: ApplicationConfiguration):

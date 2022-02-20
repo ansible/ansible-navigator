@@ -11,7 +11,6 @@ from . import _actions as actions
 class Action:
     """``:json`` command implementation."""
 
-
     KEGEX = r"^j(?:son)?$"
 
     def __init__(self, args: ApplicationConfiguration):

@@ -42,7 +42,6 @@ class SuspendCurses:
 class Action:
     """``:open`` command implementation."""
 
-
     KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):

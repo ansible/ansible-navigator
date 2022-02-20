@@ -11,7 +11,6 @@ from . import _actions as actions
 class Action:
     """``:yaml`` command implementation."""
 
-
     KEGEX = r"^y(?:aml)?$"
 
     def __init__(self, args: ApplicationConfiguration):

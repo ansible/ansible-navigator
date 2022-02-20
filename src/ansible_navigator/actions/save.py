@@ -11,7 +11,6 @@ from . import _actions as actions
 class Action:
     """``:save`` command implementation."""
 
-
     KEGEX = r"^s(?:ave)?\s(?P<filename>.*)$"
 
     def __init__(self, args: ApplicationConfiguration):
