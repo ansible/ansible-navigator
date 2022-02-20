@@ -21,6 +21,7 @@ def test_import_error():
     """Ensure an error for invalid action_package"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        application_version="1.0",
         internals=Internals(action_packages=["__ansible_navigator.__actions"]),
         post_processor=NavigatorPostProcessor(),
         subcommands=[
@@ -52,6 +53,7 @@ def test_subcommand_not_found():
     """Ensure an error for invalid subcommand/action"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        application_version="1.0",
         internals=Internals(action_packages=["ansible_navigator.actions"]),
         post_processor=NavigatorPostProcessor(),
         subcommands=[

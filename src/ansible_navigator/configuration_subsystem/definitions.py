@@ -5,13 +5,13 @@ from dataclasses import field
 from enum import Enum
 from types import SimpleNamespace
 from typing import Any
-from typing import Callable
 from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Union
 
 from ..utils import oxfordcomma
+from .navigator_post_processor import NavigatorPostProcessor
 
 
 @dataclass
@@ -134,16 +134,21 @@ class SubCommand(SimpleNamespace):
     epilog: Union[None, str] = None
 
 
-class ApplicationConfiguration(SimpleNamespace):
+@dataclass
+class ApplicationConfiguration:
+    # pylint: disable=too-many-instance-attributes
     """The main object for storing an application config"""
 
-    application_name: str = ""
-    entries: List[SettingsEntry] = []
+    application_version: str
     internals: SimpleNamespace
+    post_processor: NavigatorPostProcessor
     subcommands: List[SubCommand]
-    post_processor = Callable
+
+    application_name: str = ""
+    entries: List[SettingsEntry] = field(default_factory=list)
+    original_command: List[str] = field(default_factory=list)
+
     initial: Any = None
-    original_command: List[str]
 
     def _get_by_name(self, name, kind):
         try:
