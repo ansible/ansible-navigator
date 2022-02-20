@@ -86,6 +86,7 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
     disable = [
       "duplicate-code",
       "fixme",
+      "too-few-public-methods",
       "unsubscriptable-object",
     ]
     enable = [

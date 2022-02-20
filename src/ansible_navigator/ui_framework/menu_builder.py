@@ -19,7 +19,6 @@ from .utils import distribute
 
 
 class MenuBuilder:
-    # pylint: disable=too-few-public-methods
     """build a menu from list of dicts"""
 
     def __init__(

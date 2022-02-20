@@ -62,7 +62,7 @@ class BaseClass:
     def test(
         self,
         request: pytest.FixtureRequest,
-        tmux_session: pytest.FixtureRequest,
+        tmux_session: TmuxSession,
         step: UiTestStep,
     ):
         # pylint: disable=too-many-branches

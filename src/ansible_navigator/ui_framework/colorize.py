@@ -42,8 +42,6 @@ CURSES_STYLES = {
 class ColorSchema:
     """A storage mechanism for the schema (theme)."""
 
-    # pylint: disable=too-few-public-methods
-
     def __init__(self, schema: Dict[str, Union[str, List, Dict]]):
         """Initialize the ColorSchema class.
 

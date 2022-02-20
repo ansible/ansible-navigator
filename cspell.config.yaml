@@ -13,6 +13,8 @@ ignorePaths:
   - docs/requirements.in
   # Ignore licenses
   - licenses/*
+  # The mypy configuration file
+  - mypy.ini
   # The shared file for tool configuration
   - pyproject.toml
   # The setup file
