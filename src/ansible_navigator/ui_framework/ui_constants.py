@@ -1,8 +1,10 @@
 """Constants for use with the user interface."""
 import curses
 
+from enum import IntEnum
 
-class Color:
+
+class Color(IntEnum):
     """Constants for the 16 basic ANSI colors."""
 
     BLACK = curses.COLOR_BLACK
@@ -39,7 +41,7 @@ class Color:
     """15"""
 
 
-class Decoration:
+class Decoration(IntEnum):
     """Constants for text decoration.
 
     These are rarely used within the interface.
