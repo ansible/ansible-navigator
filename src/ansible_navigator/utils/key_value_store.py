@@ -12,15 +12,18 @@ from typing import ValuesView
 
 
 class KVSKeysView(KeysView[str]):
-    pass
+    """A glorified KeysView specific to, and returned by, methods in KeyValueStore"""
+    # pylint: too-few-public-methods
 
 
 class KVSItemsView(ItemsView[str, str]):
-    pass
+    """A glorified ItemsView specific to, and returned by, methods in KeyValueStore"""
+    # pylint: too-few-public-methods
 
 
 class KVSValuesView(ValuesView[str]):
-    pass
+    """A glorified ValuesView specific to, and returned by, methods in KeyValueStore"""
+    # pylint: too-few-public-methods
 
 
 class KeyValueStore(MutableMapping[str, str]):
