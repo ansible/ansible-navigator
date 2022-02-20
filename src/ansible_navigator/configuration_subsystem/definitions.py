@@ -4,13 +4,15 @@ from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
 from types import SimpleNamespace
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+from typing import Any
 from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Union
 
 from ..utils import oxfordcomma
+
 
 if TYPE_CHECKING:
     from .navigator_post_processor import NavigatorPostProcessor
