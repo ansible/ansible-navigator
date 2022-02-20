@@ -1,10 +1,8 @@
 """Constants for use with the user interface."""
 import curses
 
-from enum import Enum
 
-
-class Color(Enum):
+class Color:
     """Constants for the 16 basic ANSI colors."""
 
     # 16 ANSI colors
