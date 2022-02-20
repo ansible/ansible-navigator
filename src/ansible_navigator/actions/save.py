@@ -11,8 +11,6 @@ from . import _actions as actions
 class Action:
     """``:save`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^s(?:ave)?\s(?P<filename>.*)$"
 
     def __init__(self, args: ApplicationConfiguration):

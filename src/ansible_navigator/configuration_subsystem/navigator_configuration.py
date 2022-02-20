@@ -81,7 +81,6 @@ def generate_share_directory():
 
 
 class Internals(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
     """a place to hold object that need to be carried
     from application initiation to the rest of the app
     """

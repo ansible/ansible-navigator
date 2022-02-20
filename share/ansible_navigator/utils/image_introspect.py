@@ -20,7 +20,6 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
 class Command(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
     """Abstraction for a details about a shell command."""
 
     id: str

@@ -11,7 +11,6 @@ from ..utils import LogMessage
 
 
 class ImageAssessment(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
     """report the findings"""
 
     messages: List[LogMessage]

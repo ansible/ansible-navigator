@@ -18,7 +18,6 @@ from .definitions import Constants as C
 class Parser:
     """Build the args"""
 
-    # pylint: disable=too-few-public-methods
     def __init__(self, config: ApplicationConfiguration):
         """Initialize the command line interface parameter parser.
 
