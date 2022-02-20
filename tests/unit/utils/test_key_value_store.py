@@ -1,18 +1,11 @@
 """Test KVS from share.ansible_navigator."""
 
 import os
+import pytest
 import sys
-
-SHARE_DIR = os.path.abspath(
-    os.path.join(os.path.basename(__file__), "..", "share", "ansible_navigator"),
-)
-sys.path.insert(0, SHARE_DIR)
-
 import types
 
-import pytest
-
-from ansible_navigator.utils.key_value_store import *
+from ansible_navigator.utils.key_value_store import KeyValueStore
 
 
 def test_kvs_save_restore(empty_kvs):
