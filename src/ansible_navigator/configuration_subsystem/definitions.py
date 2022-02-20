@@ -4,14 +4,16 @@ from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
 from types import SimpleNamespace
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Union
 
 from ..utils import oxfordcomma
-from .navigator_post_processor import NavigatorPostProcessor
+
+if TYPE_CHECKING:
+    from .navigator_post_processor import NavigatorPostProcessor
 
 
 @dataclass
@@ -140,12 +142,13 @@ class ApplicationConfiguration:
     """The main object for storing an application config"""
 
     application_version: str
+    entries: List[SettingsEntry]
     internals: SimpleNamespace
-    post_processor: NavigatorPostProcessor
+    post_processor: "NavigatorPostProcessor"
     subcommands: List[SubCommand]
 
     application_name: str = ""
-    entries: List[SettingsEntry] = field(default_factory=list)
+    #  = field(default_factory=list)
     original_command: List[str] = field(default_factory=list)
 
     initial: Any = None
@@ -160,7 +163,7 @@ class ApplicationConfiguration:
         """Returns a matching entry or the default from super"""
         try:
             return super().__getattribute__("_get_by_name")(attr, "entries").value.current
-        except KeyError:
+        except (AttributeError, KeyError):
             return super().__getattribute__(attr)
 
     def entry(self, name) -> SettingsEntry:
