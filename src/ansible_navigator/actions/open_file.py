@@ -42,7 +42,6 @@ class SuspendCurses:
 class Action:
     """``:open`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
 
     KEGEX = r"^o(?:pen)?(\s(?P<something>.*))?$"
 

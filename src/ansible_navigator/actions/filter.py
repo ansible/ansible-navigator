@@ -11,7 +11,6 @@ from . import _actions as actions
 class Action:
     """``:filter`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
 
     KEGEX = r"^f(ilter)?(\s(?P<regex>.*))?$"
 

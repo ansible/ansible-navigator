@@ -16,7 +16,6 @@ from . import _actions as actions
 class Action:
     """Menu selection implementation."""
 
-    # pylint: disable=too-few-public-methods
 
     KEGEX = r"^\d+$"
 

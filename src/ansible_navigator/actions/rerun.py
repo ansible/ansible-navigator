@@ -12,7 +12,6 @@ from . import _actions as actions
 class Action:
     """``:rerun`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
 
     KEGEX = r"^rr|rerun?$"
 

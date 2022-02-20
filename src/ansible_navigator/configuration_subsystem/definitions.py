@@ -127,7 +127,6 @@ class SettingsEntry:
 
 
 class SubCommand(SimpleNamespace):
-    # pylint: disable=too-few-public-methods
     """An object to hold a subcommand"""
 
     name: str

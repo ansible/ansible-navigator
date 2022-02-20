@@ -11,7 +11,6 @@ from . import _actions as actions
 class Action:
     """Screen refresh implementation."""
 
-    # pylint: disable=too-few-public-methods
 
     KEGEX = r"^KEY_F\(5\)$"
 
