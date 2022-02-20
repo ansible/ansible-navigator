@@ -150,7 +150,6 @@ class ApplicationConfiguration:
     subcommands: List[SubCommand]
 
     application_name: str = ""
-    #  = field(default_factory=list)
     original_command: List[str] = field(default_factory=list)
 
     initial: Any = None
