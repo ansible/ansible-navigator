@@ -43,7 +43,6 @@ COLOR_MAP = {
 
 
 class CursesWindow:
-    # pylint: disable=too-few-public-methods
     # pylint: disable=too-many-instance-attributes
     """abstraction for a curses window"""
 

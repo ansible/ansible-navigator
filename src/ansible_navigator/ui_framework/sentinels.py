@@ -18,7 +18,6 @@ class Singleton(type):
 
 
 class Unknown(metaclass=Singleton):
-    # pylint: disable=too-few-public-methods
     """something that should eventually be known"""
 
     def __repr__(self):
@@ -29,7 +28,6 @@ unknown = Unknown()
 
 
 class Nonexistent(metaclass=Singleton):
-    # pylint: disable=too-few-public-methods
     """something that does not exist"""
 
     def __repr__(self):
