@@ -4,6 +4,7 @@ flake8-docstrings
 flake8-quotes
 libtmux
 lxml
+sphinx
 pre-commit
 pytest-cov
 pytest-mock

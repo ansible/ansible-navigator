@@ -160,6 +160,7 @@ repos:
         name: MyPy, for Python 3.10
         additional_dependencies:
           - lxml == 4.6.4 # needed for `--txt-report`
+          - shpinx
           - types-docutils
           - types-PyYAML
         args:
@@ -170,6 +171,7 @@ repos:
         name: MyPy, for Python 3.6
         additional_dependencies:
           - lxml == 4.6.4 # needed for `--txt-report`
+          - sphinx
           - types-dataclasses # Needed for checking py3.6 with a later interpreter
           - types-docutils
           - types-PyYAML
