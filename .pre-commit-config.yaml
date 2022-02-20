@@ -143,72 +143,27 @@ repos:
   - repo: https://github.com/pre-commit/mirrors-mypy.git
     rev: v0.931
     hooks:
-      # NOTE: Here MyPy is executed twice -- once for the highest and once
-      # NOTE: for the lowest supported version. They are hardcoded in the
-      # NOTE: hook invocations below. Whenever one of these versions needs
-      # NOTE: to be updated, the values in the `alias` and `name` fields
-      # NOTE: should be adjusted along with the `--python-version` CLI
-      # NOTE: option.
-      # NOTE: The external developer environment is configured to only run
-      # NOTE: the check with the lowest version on the tox side while the
-      # NOTE: CI automations run both checks. Whenever the versions are
-      # NOTE: updated in this config, a symmetric action must be performed
-      # NOTE: in `tox.ini` as well.
-      - &_base-mypy-setup-map
-        id: mypy
+      # NOTE: The latest version dependencies should include all dependancies for all interpreter
+      # NOTE: versions so the configuration doesn' grow out of control.
+      # NOTE: As new interpreters are added or removed, the dependency list should be auditted
+      # NOTE: For version specific dependendcies, please note the interpreter version.
+      # NOTE: These are ordered from latest version to earliest for no particular reason
+      # NOTE: other than a way to keep them organized.
+      - id: mypy
         alias: mypy-py310
         name: MyPy, for Python 3.10
-        additional_dependencies:
-          - lxml == 4.6.4 # needed for `--txt-report`
-          - types-docutils
+        additional_dependencies: &_mypy_deps
           - types-PyYAML
+          - types-dataclasses # Needed for checking py3.6 with a later interpreter
+          - types-docutils
         args:
-          # FIXME: get rid of missing imports ignore
-          - --ignore-missing-imports
-          - --install-types
-          - --namespace-packages
-          - --non-interactive
-          - --pretty
           - --python-version=3.10
-          - --show-column-numbers
-          - --show-error-codes
-          - --show-error-context
-          #- --strict
-          #- --strict-optional
-          - --txt-report
-          - .tox/.tmp/.mypy/
-          - docs/
-          - share/
-          - src/
-          - tests/
         pass_filenames: false
-      - <<: *_base-mypy-setup-map
-        alias: mypy-py36
+      - id: mypy
         name: MyPy, for Python 3.6
-        additional_dependencies:
-          - lxml == 4.6.4 # needed for `--txt-report`
-          - types-dataclasses
-          - types-docutils
-          - types-PyYAML
+        additional_dependencies: *_mypy_deps
         args:
-          # FIXME: get rid of missing imports ignore
-          - --ignore-missing-imports
-          - --install-types
-          - --namespace-packages
-          - --non-interactive
-          - --pretty
           - --python-version=3.6
-          - --show-column-numbers
-          - --show-error-codes
-          - --show-error-context
-          #- --strict
-          #- --strict-optional
-          - --txt-report
-          - .tox/.tmp/.mypy/
-          - docs/
-          - share/
-          - src/
-          - tests/
 
   - repo: https://github.com/pycqa/pylint.git
     rev: v2.12.2
