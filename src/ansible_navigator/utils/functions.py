@@ -284,7 +284,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     # We want the share directory to resolve adjacent to the directory the code lives in
     # as that's the layout in the source.
     share_directory = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "share", app_name),
+        os.path.join(os.path.dirname(__file__), "..", "..", "..", "share", app_name),
     )
     description = "development path"
     if os.path.exists(share_directory):
