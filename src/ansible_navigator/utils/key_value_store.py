@@ -1,14 +1,14 @@
 """An interface to use a sqlite database as a key-value store."""
 import sqlite3
 
-from collections.abc import ItemsView
-from collections.abc import KeysView
-from collections.abc import ValuesView
 from pathlib import Path
-from typing import MutableMapping
+from typing import ItemsView
 from typing import Iterator
+from typing import KeysView
+from typing import MutableMapping
 from typing import Tuple
 from typing import Union
+from typing import ValuesView
 
 
 class KVSKeysView(KeysView[str]):
