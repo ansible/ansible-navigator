@@ -5,7 +5,6 @@ import curses
 class Color:
     """Constants for the 16 basic ANSI colors."""
 
-    # 16 ANSI colors
     BLACK = curses.COLOR_BLACK
     """0"""
     RED = curses.COLOR_RED
