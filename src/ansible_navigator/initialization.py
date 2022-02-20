@@ -83,7 +83,7 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
 def get_and_check_collection_doc_cache(
     share_directory: str,
     collection_doc_cache_path: str,
-) -> Tuple[List[LogMessage], List[ExitMessage], KeyValueStore]:
+) -> Tuple[List[LogMessage], List[ExitMessage], Optional[KeyValueStore]]:
     """ensure the collection doc cache
     has the current version of the application
     as a safeguard, always delete and rebuild if not
@@ -113,7 +113,7 @@ def get_and_check_collection_doc_cache(
         exit_messages.extend([ExitMessage(message=exit_msg) for exit_msg in exit_msgs])
         exit_msg = "Try again without '--cdcp' or try '--cdcp ~/collection_doc_cache.db"
         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-        return messages, exit_messages, collection_cache
+        return messages, exit_messages, None
 
     collection_cache: KeyValueStore = KeyValueStore(collection_doc_cache_path)
     if "version" in collection_cache:
@@ -197,7 +197,7 @@ def parse_and_update(
         )
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
-        if exit_messages:
+        if exit_messages or cache is None:
             return messages, exit_messages
         if attach_cdc:
             args.internals.collection_doc_cache = cache
