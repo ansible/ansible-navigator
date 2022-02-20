@@ -154,19 +154,25 @@ repos:
       # NOTE: CI automations run both checks. Whenever the versions are
       # NOTE: updated in this config, a symmetric action must be performed
       # NOTE: in `tox.ini` as well.
-      - id: mypy
+      - &_base-mypy-setup-map
+        id: mypy
         alias: mypy-py310
         name: MyPy, for Python 3.10
-        additional_dependencies: &_mypy_deps
-          - types-dataclasses # Needed for checking py3.6 with a later interpreter
+        additional_dependencies:
+          - lxml == 4.6.4 # needed for `--txt-report`
           - types-docutils
           - types-PyYAML
         args:
           - --python-version=3.10
         pass_filenames: false
-      - id: mypy
+      - <<: *_base-mypy-setup-map
+        alias: mypy-py36
         name: MyPy, for Python 3.6
-        additional_dependencies: *_mypy_deps
+        additional_dependencies:
+          - lxml == 4.6.4 # needed for `--txt-report`
+          - types-dataclasses # Needed for checking py3.6 with a later interpreter
+          - types-docutils
+          - types-PyYAML
         args:
           - --python-version=3.6
 
