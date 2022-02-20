@@ -17,7 +17,7 @@ class Color:
     """4"""
     MAGENTA = curses.COLOR_MAGENTA
     """5"""
-    CYAN = curses.COLOR_MAGENTA
+    CYAN = curses.COLOR_CYAN
     """6"""
     WHITE = curses.COLOR_WHITE
     """7"""
