@@ -83,7 +83,7 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
 
     [tool.pylint.master]
     ignore = [
-      "/src/ansible_navigator/_version.py", # built by setuptools_scm
+      "src/ansible_navigator/_version.py", # built by setuptools_scm
       "tm_tokenize", # tm_tokenize is virtually vendored and shouldn't be linted as such
     ]
     # pylint defaults + fh for with open .. as (f|fh)
