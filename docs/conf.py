@@ -37,7 +37,7 @@ copyright = author  # pylint:disable=redefined-builtin
 NAVIGATOR_VERSION = version("ansible_navigator")
 
 # The short X.Y version
-version = ".".join(NAVIGATOR_VERSION.split(".")[:2])
+major_minor_version = ".".join(NAVIGATOR_VERSION.split(".")[:2])
 
 # The full version, including alpha/beta/rc tags
 release = NAVIGATOR_VERSION
@@ -274,5 +274,5 @@ myst_substitutions = {
     "project": project,
     "release": release,
     "release_l": f"`v{release}`",
-    "version": version,
+    "version": major_minor_version,
 }
