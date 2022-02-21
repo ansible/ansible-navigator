@@ -3,17 +3,16 @@
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
 
-from functools import partial
+import re
 from pathlib import Path
 from sys import path
 
-from setuptools_scm import get_version
+from ansible_navigator import _version
 
 
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
-get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
 
 # Make in-tree extension importable in non-tox setups/envs, like RTD.
 # Refs:
@@ -36,22 +35,49 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-# fmt: off
-# The short X.Y version
-version = ".".join(
-    get_scm_version(
-        local_scheme="no-local-version",
-    ).split(".")[:3],
+NAVIGATOR_VERSION = _version.__version__
+
+# Regular expression taken from
+# https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+SEMVER_RE = re.compile(
+    r"""
+    ^
+        (?P<major>0|[1-9]\d*)
+        \.
+        (?P<minor>0|[1-9]\d*)
+        \.
+        (?P<patch>0|[1-9]\d*)
+        (?:
+            -
+            (?P<prerelease>
+                (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
+                (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
+            )
+        )?
+        (?:
+            \+
+            (?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)
+        )?
+    $
+    """,
+    flags=re.X,
 )
 
+parsed_version = SEMVER_RE.match(NAVIGATOR_VERSION)
+if parsed_version is None:
+    raise ValueError(f"Malformed version. Ensure it is semver compliant: {NAVIGATOR_VERSION}")
+version_dictionary = parsed_version.groupdict()
+
+# The short X.Y version
+version = f"{version_dictionary['major']}.{version_dictionary['minor']}"
+
 # The full version, including alpha/beta/rc tags
-release = get_scm_version()
+release = NAVIGATOR_VERSION
 
 rst_epilog = f"""
 .. |project| replace:: {project}
 .. |release_l| replace:: ``v{release}``
 """
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -277,8 +303,8 @@ myst_enable_extensions = [
     "substitution",  # replace common ASCII shortcuts into their symbols
 ]
 myst_substitutions = {
-  "project": project,
-  "release": release,
-  "release_l": f"`v{release}`",
-  "version": version,
+    "project": project,
+    "release": release,
+    "release_l": f"`v{release}`",
+    "version": version,
 }
