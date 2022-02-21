@@ -44,7 +44,7 @@ def human_dump(obj: Any, filename: Any = None, file_mode: str = "w") -> Optional
     dumper = HumanDumper
     if filename is not None:
         try:
-            # expcect fileobj as arg, fall back to file name
+            # expect fileobj as arg, fall back to file name
             yaml.dump(obj, filename, Dumper=dumper, **YamlStyle()._asdict())
         except TypeError:
             with open(filename, file_mode, encoding="utf-8") as fh:
