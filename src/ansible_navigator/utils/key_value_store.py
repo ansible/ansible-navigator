@@ -31,7 +31,6 @@ class KeyValueStore(MutableMapping[str, str]):
 
         :param filename: The full path to the sqlite database file
         """
-        # pylint: disable=super-init-not-called
         self._path = str(filename)
         self.conn = sqlite3.connect(self._path)
         cursor = self.conn.cursor()
