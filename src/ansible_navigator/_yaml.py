@@ -1,5 +1,6 @@
 """A wrapper for pyyaml."""
 # pylint: disable=unused-import
+import io
 import re
 
 from typing import Any
