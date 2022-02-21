@@ -122,7 +122,7 @@ class Action:
                     filename = temp_file.name
 
         # There is still a race condition between writing the file and opening it in the editor
-        # but since most editors won't take filehandles nor content on a pipe, it is inevitable.
+        # but since many editors won't take filehandles nor content on a pipe, it is inevitable.
         # The mitigation is that tempfile uses restrictive permissions on said file.
         command = self._args.editor_command.format(filename=filename, line_number=line_number)
         is_console = self._args.editor_console
