@@ -284,13 +284,14 @@ class Action(ActionBase):
         # to inject this utils directory into the PYTHONPATH. If not, we'll just
         # use the EE's default PYTHONPATH (if it exists) and just add our path
         # at the end.
-        ee_navigator_utils_mount = "/opt/ansible_navigator_utils"
-        if "PYTHONPATH" in set_environment_variable:
-            set_environment_variable["PYTHONPATH"].append(
-                f":{ee_navigator_utils_mount}",
-            )
-        else:
-            set_environment_variable["PYTHONPATH"] = f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
+        if self._args.execution_environment:
+            ee_navigator_utils_mount = "/opt/ansible_navigator_utils"
+            if "PYTHONPATH" in set_environment_variable:
+                set_environment_variable["PYTHONPATH"].append(
+                    f":{ee_navigator_utils_mount}",
+                )
+            else:
+                set_environment_variable["PYTHONPATH"] = f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
 
         kwargs = {
             "container_engine": self._args.container_engine,

@@ -29,8 +29,10 @@ try:
 except ImportError:
     from yaml import SafeLoader  # type: ignore
 
-# pylint: disable=import-error
-from key_value_store import KeyValueStore  # type: ignore
+try:
+    from key_value_store import KeyValueStore
+except ImportError:
+    from ansible_navigator.utils.key_value_store import KeyValueStore
 
 
 # pylint: enable=import-error
