@@ -23,7 +23,7 @@ from ..action_defs import RunStdoutReturn
 if sys.version_info >= (3, 7):
     from importlib import resources
 else:
-    import importlib_resources as resources  # type: ignore
+    import importlib_resources as resources
 
 
 logger = logging.getLogger(__name__)
