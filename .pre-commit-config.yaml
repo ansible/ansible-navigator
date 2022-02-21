@@ -28,7 +28,7 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v5.8.1
+    rev: v5.8.4
     hooks:
       - id: cspell
         name: Spell check with cspell
