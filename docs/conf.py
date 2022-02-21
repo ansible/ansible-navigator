@@ -187,7 +187,7 @@ html_context = {
     "github_user": github_repo_org,
     "github_repo": github_repo_name,
     "github_version": "main/docs/",
-    "current_version": version,
+    "current_version": major_minor_version,
     "latest_version": "latest",
     "available_versions": ("latest",),
 }
