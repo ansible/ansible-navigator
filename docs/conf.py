@@ -36,7 +36,8 @@ copyright = author  # pylint:disable=redefined-builtin
 
 NAVIGATOR_VERSION = get_version("ansible_navigator")
 
-# The short X.Y.Z version
+# The short X.Y version
+# including .Z, resulting in the X.Y.Z version
 version = ".".join(NAVIGATOR_VERSION.split(".")[:3])
 
 # The full version, including alpha/beta/rc tags
