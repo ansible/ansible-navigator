@@ -271,6 +271,8 @@ class Action(ActionBase):
 
     def _run_runner(self) -> None:
         # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
             set_environment_variable = deepcopy(self._args.set_environment_variable)
@@ -295,7 +297,8 @@ class Action(ActionBase):
                     "PYTHONPATH"
                 ] = f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
             self._logger.debug(
-                f"Execution Environment's PYTHONPATH is set to: {set_environment_variable['PYTHONPATH']}",
+                "Execution Environment's PYTHONPATH is set to: %s",
+                set_environment_variable["PYTHONPATH"],
             )
 
         kwargs = {
@@ -366,7 +369,7 @@ class Action(ActionBase):
                 )
 
             for volume_mount in container_volume_mounts:
-                self._logger.debug(f"Adding volume mount to container invocation: {volume_mount}")
+                self._logger.debug("Adding volume mount to container invocation: %s", volume_mount)
 
             if "container_volume_mounts" in kwargs:
                 kwargs["container_volume_mounts"] += container_volume_mounts
@@ -378,7 +381,9 @@ class Action(ActionBase):
             python_exec_path = sys.executable
 
         self._logger.debug(
-            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}",
+            "Invoke runner with executable_cmd: %s and kwargs: %s",
+            python_exec_path,
+            kwargs,
         )
         _runner = Command(executable_cmd=python_exec_path, **kwargs)
         output, error, _ = _runner.run()
