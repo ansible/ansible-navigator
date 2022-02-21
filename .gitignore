@@ -1,9 +1,16 @@
-/tests/output/
-/changelogs/.plugin-cache.yaml
+# The following entries have been rationalized and should all have detailed explanations
+
+# Version created and populated by setuptools_scm
+/src/ansible_navigator/_version.py
 
 # tmux integration test logs
 .test_logs
 
+# The following entries came from an untracted source
+# when rationalized and explanined, they should be moved above
+
+/tests/output/
+/changelogs/.plugin-cache.yaml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -33,9 +40,6 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
-# Version created and populated by setuptools_scm
-/src/ansible_navigator/_version.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
