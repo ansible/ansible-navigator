@@ -8,3 +8,4 @@ pre-commit
 pytest-cov
 pytest-mock
 pytest-xdist
+sphinx
