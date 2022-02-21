@@ -126,16 +126,18 @@ class CollectionCatalog:
         :param collection: The details of the collection
         """
         for filename in filenames:
+            if str(filename).startswith("__"):
+                continue
+
             relative_path = Path(filename).relative_to(collection["path"])
-            if not str(filename).startswith("__"):
-                checksum_dict = file_checksums.get(str(relative_path))
-                if not checksum_dict:
-                    checksum_dict = self._generate_checksum(filename, relative_path)
-                checksum = checksum_dict[f"chksum_{checksum_dict['chksum_type']}"]
-                collection["plugin_checksums"][checksum] = {
-                    "path": str(relative_path),
-                    "type": plugin_type,
-                }
+            checksum_dict = file_checksums.get(str(relative_path))
+            if not checksum_dict:
+                checksum_dict = self._generate_checksum(filename, relative_path)
+            checksum = checksum_dict[f"chksum_{checksum_dict['chksum_type']}"]
+            collection["plugin_checksums"][checksum] = {
+                "path": str(relative_path),
+                "type": plugin_type,
+            }
 
     def _one_path(self, directory: Path) -> None:
         """Process the contents of an <...>/ansible_collections/ directory.
