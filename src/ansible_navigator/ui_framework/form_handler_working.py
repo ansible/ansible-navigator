@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 
 class FormHandlerWorking(CursesWindow):
-    # pylint: disable=too-few-public-methods
     """handle form button"""
 
     def __init__(self, screen, ui_config):

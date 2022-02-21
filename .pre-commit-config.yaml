@@ -159,56 +159,26 @@ repos:
         alias: mypy-py310
         name: MyPy, for Python 3.10
         additional_dependencies:
-          - lxml == 4.6.4 # needed for `--txt-report`
+          - jinja2
+          - pytest
+          - sphinx
           - types-docutils
           - types-PyYAML
         args:
-          # FIXME: get rid of missing imports ignore
-          - --ignore-missing-imports
-          - --install-types
-          - --namespace-packages
-          - --non-interactive
-          - --pretty
           - --python-version=3.10
-          - --show-column-numbers
-          - --show-error-codes
-          - --show-error-context
-          #- --strict
-          #- --strict-optional
-          - --txt-report
-          - .tox/.tmp/.mypy/
-          - docs/
-          - share/
-          - src/
-          - tests/
         pass_filenames: false
       - <<: *_base-mypy-setup-map
         alias: mypy-py36
         name: MyPy, for Python 3.6
         additional_dependencies:
-          - lxml == 4.6.4 # needed for `--txt-report`
-          - types-dataclasses
+          - jinja2
+          - pytest
+          - sphinx
+          - types-dataclasses # Needed for checking py3.6 with a later interpreter
           - types-docutils
           - types-PyYAML
         args:
-          # FIXME: get rid of missing imports ignore
-          - --ignore-missing-imports
-          - --install-types
-          - --namespace-packages
-          - --non-interactive
-          - --pretty
           - --python-version=3.6
-          - --show-column-numbers
-          - --show-error-codes
-          - --show-error-context
-          #- --strict
-          #- --strict-optional
-          - --txt-report
-          - .tox/.tmp/.mypy/
-          - docs/
-          - share/
-          - src/
-          - tests/
 
   - repo: https://github.com/pycqa/pylint.git
     rev: v2.12.2

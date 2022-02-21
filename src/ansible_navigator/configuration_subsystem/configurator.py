@@ -21,7 +21,6 @@ from .parser import Parser
 
 
 class Configurator:
-    # pylint: disable=too-few-public-methods
     """the configuration class"""
 
     def __init__(

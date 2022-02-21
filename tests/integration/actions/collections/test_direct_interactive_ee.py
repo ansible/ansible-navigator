@@ -26,7 +26,6 @@ testdata = [
 
 @pytest.mark.parametrize("index, user_input, comment", testdata)
 class Test(BaseClass):
-    # pylint: disable=too-few-public-methods
     """Run the tests for collections from CLI, interactive, with an EE."""
 
     TEST_FOR_MODE = "interactive"

@@ -15,7 +15,6 @@ from ..._tmux_session import TmuxSession
 
 
 class BaseClass:
-    # pylint: disable=too-few-public-methods
     """Base class for interactive collections tests."""
 
     UPDATE_FIXTURES = False

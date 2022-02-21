@@ -11,8 +11,6 @@ from . import _actions as actions
 class Action:
     """``:json`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^j(?:son)?$"
 
     def __init__(self, args: ApplicationConfiguration):

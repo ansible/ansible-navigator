@@ -39,7 +39,6 @@ class FormPresenter(CursesWindow):
     """present the form to the user"""
 
     # pylint: disable=too-many-instance-attributes
-    # pylint: disable=too-few-public-methods
     def __init__(self, form, screen, ui_config):
         """Initialize the form presenter.
 
