@@ -9,7 +9,6 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from .._version import __version__
 from ..utils import oxfordcomma
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
@@ -88,10 +87,14 @@ class Parser:
         )
 
     def _configure_base(self) -> None:
+        if isinstance(self._config.application_version, C):
+            version = self._config.application_version.value
+        else:
+            version = self._config.application_version
         self._base_parser.add_argument(
             "--version",
             action="version",
-            version="%(prog)s " + __version__,
+            version="%(prog)s " + version,
         )
 
         for entry in self._config.entries:
