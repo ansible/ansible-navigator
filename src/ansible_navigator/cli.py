@@ -115,7 +115,7 @@ def main():
     exit_messages: List[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
-    if __version__:
+    if isinstance(__version__, str):
         args.application_version = __version__
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
