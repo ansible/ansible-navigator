@@ -294,6 +294,9 @@ class Action(ActionBase):
                 set_environment_variable[
                     "PYTHONPATH"
                 ] = f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
+            self._logger.debug(
+                f"Execution Environment's PYTHONPATH is set to: {set_environment_variable['PYTHONPATH']}",
+            )
 
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -361,6 +364,9 @@ class Action(ActionBase):
                 container_volume_mounts.append(
                     f"{self._collection_cache_path}:{self._collection_cache_path}:z",
                 )
+
+            for volume_mount in container_volume_mounts:
+                self._logger.debug(f"Adding volume mount to container invocation: {volume_mount}")
 
             if "container_volume_mounts" in kwargs:
                 kwargs["container_volume_mounts"] += container_volume_mounts

@@ -1,14 +1,22 @@
 """An interface to use a sqlite database as a key-value store."""
 import sqlite3
+import sys
 
 from pathlib import Path
-from typing import ItemsView
 from typing import Iterator
-from typing import KeysView
 from typing import MutableMapping
 from typing import Tuple
 from typing import Union
-from typing import ValuesView
+
+
+if sys.version_info >= (3, 9):
+    from collections.abc import ItemsView
+    from collections.abc import KeysView
+    from collections.abc import ValuesView
+else:
+    from typing import ItemsView
+    from typing import KeysView
+    from typing import ValuesView
 
 
 class KVSKeysView(KeysView[str]):
@@ -37,7 +45,7 @@ class KeyValueStore(MutableMapping[str, str]):
         cursor.execute("CREATE TABLE IF NOT EXISTS kv (key text unique, value text)")
 
     @property
-    def path(self):
+    def path(self) -> str:
         """The filename where the KVS is stored on disk."""
         return self._path
 
