@@ -46,10 +46,10 @@
     showcontent = true
 
 [build-system]
+build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=45",
-  "wheel",
-  "setuptools_scm[toml]>=6.2"
+  "setuptools_scm[toml]>=6.2",
 ]
 
 [tool.black]
