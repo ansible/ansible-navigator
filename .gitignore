@@ -1,16 +1,9 @@
-# The following entries have been rationalized and should all have detailed explanations
-
-# Version created and populated by setuptools_scm
-/src/ansible_navigator/_version.py
+/tests/output/
+/changelogs/.plugin-cache.yaml
 
 # tmux integration test logs
 .test_logs
 
-# The following entries came from an untracted source
-# when rationalized and explanined, they should be moved above
-
-/tests/output/
-/changelogs/.plugin-cache.yaml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -144,3 +137,11 @@ dmypy.json
 
 # IntelliJ
 .idea/
+
+
+# In contrast to the entries above this line which largely come from
+# untracked sources, the following have been inidividually rationalized
+# and should all have detailed explanations
+
+# Version created and populated by setuptools_scm
+/src/ansible_navigator/_version.py
