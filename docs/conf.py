@@ -4,7 +4,7 @@
 """Configuration file for the Sphinx docs."""
 
 
-from importlib.metadata import version
+from importlib.metadata import version as get_version
 from pathlib import Path
 from sys import path
 
@@ -34,10 +34,10 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-NAVIGATOR_VERSION = version("ansible_navigator")
+NAVIGATOR_VERSION = get_version("ansible_navigator")
 
-# The short X.Y version
-major_minor_version = ".".join(NAVIGATOR_VERSION.split(".")[:2])
+# The short X.Y.Z version
+version = ".".join(NAVIGATOR_VERSION.split(".")[:3])
 
 # The full version, including alpha/beta/rc tags
 release = NAVIGATOR_VERSION
@@ -187,7 +187,7 @@ html_context = {
     "github_user": github_repo_org,
     "github_repo": github_repo_name,
     "github_version": "main/docs/",
-    "current_version": major_minor_version,
+    "current_version": version,
     "latest_version": "latest",
     "available_versions": ("latest",),
 }
@@ -274,5 +274,5 @@ myst_substitutions = {
     "project": project,
     "release": release,
     "release_l": f"`v{release}`",
-    "version": major_minor_version,
+    "version": version,
 }
