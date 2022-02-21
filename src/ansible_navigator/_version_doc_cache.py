@@ -2,7 +2,7 @@
 
 .. note::
 
-   __version_collection_doc_cache__:
+   ``__version_collection_doc_cache__``:
 
    Indicates the version of the schema of the collection doc cache
    this is checked during initialization, if the version of the cache
