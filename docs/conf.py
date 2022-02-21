@@ -141,7 +141,7 @@ extensions = [
 
 # Conditional third-party extensions:
 try:
-    import sphinxcontrib.spelling as _sphinxcontrib_spelling
+    import sphinxcontrib.spelling as _sphinxcontrib_spelling  # type: ignore[import]
 except ImportError:
     extensions.append("spelling_stub_ext")
 else:

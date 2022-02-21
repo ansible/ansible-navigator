@@ -11,8 +11,6 @@ from . import _actions as actions
 class Action:
     """``:yaml`` command implementation."""
 
-    # pylint: disable=too-few-public-methods
-
     KEGEX = r"^y(?:aml)?$"
 
     def __init__(self, args: ApplicationConfiguration):
