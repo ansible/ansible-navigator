@@ -16,4 +16,5 @@
    not a bad idea to minimize the amount of stale docs in the user's cache
 """
 __version__ = "1.1.0a1"
+version = __version__
 __version_collection_doc_cache__ = "1.0"

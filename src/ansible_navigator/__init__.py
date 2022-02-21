@@ -8,7 +8,4 @@ version being populated during the build.
 try:
     from ._version import __version__
 except ImportError:
-    try:
-        from ._version import version  # type: ignore[attr-defined]
-    except ImportError:
-        __version__ = "source"
+    __version__ = "source"
