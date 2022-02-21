@@ -28,6 +28,7 @@ from .utils import ExitPrefix
 from .utils import LogMessage
 from .utils import clear_screen
 
+
 try:
     from ._version import __version__
 except ImportError:
