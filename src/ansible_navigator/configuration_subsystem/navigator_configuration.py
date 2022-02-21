@@ -9,7 +9,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from .._version import __version__ as VERSION
+from .. import __version__ as VERSION
 from ..utils import ExitMessage
 from ..utils import LogMessage
 from ..utils import abs_user_path
