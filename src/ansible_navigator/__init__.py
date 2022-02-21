@@ -1,6 +1,6 @@
 """The ansible-navigator application."""
 
 try:
-    from ._version import version
+    from ._version import version as __version__
 except ImportError:
-    version = "source"
+    __version__ = "source"
