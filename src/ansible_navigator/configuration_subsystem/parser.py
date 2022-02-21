@@ -9,7 +9,7 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from .._version import __version__
+from .. import version
 from ..utils import oxfordcomma
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
@@ -91,7 +91,7 @@ class Parser:
         self._base_parser.add_argument(
             "--version",
             action="version",
-            version="%(prog)s " + __version__,
+            version="%(prog)s " + version,
         )
 
         for entry in self._config.entries:

@@ -1,2 +1,6 @@
 """The ansible-navigator application."""
-from ._version import __version__  # noqa: F401
+
+try:
+    from ._version import version
+except ImportError:
+    version = "source"

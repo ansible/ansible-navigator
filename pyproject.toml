@@ -45,6 +45,12 @@
     name = "Contributor-facing changes"
     showcontent = true
 
+[build-system]
+requires = [
+  "setuptools>=45",
+  "wheel",
+  "setuptools_scm[toml]>=6.2"
+]
 
 [tool.black]
 line-length = 100
@@ -95,3 +101,6 @@ skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to
 
     [tool.pylint.format]
     max-line-length = 100
+
+[tool.setuptools_scm]
+write_to = "src/ansible_navigator/_version.py"
