@@ -13,7 +13,7 @@ from typing import NoReturn
 from typing import Tuple
 from typing import Union
 
-from ._version import __version_collection_doc_cache__ as VERSION_CDC
+from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
