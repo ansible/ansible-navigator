@@ -31,7 +31,11 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def human_dump(obj: Any, filename: Any = None, file_mode: str = "w") -> Optional[str]:
+def human_dump(
+    obj: Any,
+    filename: Union[io.TextIOWrapper, str] = None,
+    file_mode: str = "w",
+) -> Optional[str]:
     """Serialize an object to yaml.
 
     This allows for the consistent representation across the application.
