@@ -4,6 +4,7 @@
 """Configuration file for the Sphinx docs."""
 
 import re
+
 from pathlib import Path
 from sys import path
 
