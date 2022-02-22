@@ -29,6 +29,12 @@ from .utils import LogMessage
 from .utils import clear_screen
 
 
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = ""
+
+
 APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
 
@@ -110,6 +116,8 @@ def main():
     exit_messages: List[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
+    if __version__:
+        args.application_version = __version__
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
 
