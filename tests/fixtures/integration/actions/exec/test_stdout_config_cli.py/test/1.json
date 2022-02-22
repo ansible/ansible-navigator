@@ -1,5 +1,5 @@
 {
-    "name": "test[exec echo without ee  clear && ansible-navigator exec --excmd 'echo test_data_from_cli' --ee False --ll debug --mode stdout]",
+    "name": "test[exec echo without ee  clear && ansible-navigator exec 'echo test_data_from_cli' --ee False --ll debug --mode stdout]",
     "index": 1,
     "comment": "exec echo without ee",
     "additional_information": {
@@ -13,7 +13,7 @@
         "compared_fixture": false
     },
     "output": [
-        "[ERROR]: Command provided: 'exec --excmd 'echo test_data_from_cli' --ee False --ll debug --mode stdout'",
+        "[ERROR]: Command provided: 'exec 'echo test_data_from_cli' --ee False --ll debug --mode stdout'",
         "[ERROR]: The 'exec' subcommand requires execution environment support.",
         " [HINT]: Try again with '--ee true' to enable the use of an execution environment.",
         "[ERROR]: Configuration failed, using default log file location: /home/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
