@@ -20,15 +20,15 @@ else:
 
 
 class KVSKeysView(KeysView[str]):
-    """A glorified KeysView specific to, and returned by, methods in KeyValueStore"""
+    """A glorified KeysView specific to, and returned by, methods in KeyValueStore."""
 
 
 class KVSItemsView(ItemsView[str, str]):
-    """A glorified ItemsView specific to, and returned by, methods in KeyValueStore"""
+    """A glorified ItemsView specific to, and returned by, methods in KeyValueStore."""
 
 
 class KVSValuesView(ValuesView[str]):
-    """A glorified ValuesView specific to, and returned by, methods in KeyValueStore"""
+    """A glorified ValuesView specific to, and returned by, methods in KeyValueStore."""
 
 
 class KeyValueStore(MutableMapping[str, str]):
@@ -46,7 +46,10 @@ class KeyValueStore(MutableMapping[str, str]):
 
     @property
     def path(self) -> str:
-        """The filename where the KVS is stored on disk."""
+        """Provide the filename where the KVS is stored on disk.
+
+        :returns: The path to the key-value store
+        """
         return self._path
 
     def close(self) -> None:
@@ -55,7 +58,10 @@ class KeyValueStore(MutableMapping[str, str]):
         self.conn.close()
 
     def open(self) -> sqlite3.Connection:
-        """Establish the connection to the database."""
+        """Establish the connection to the database.
+
+        :returns: A connection to the database
+        """
         self.conn = sqlite3.connect(self.path)
         return self.conn
 
@@ -120,7 +126,7 @@ class KeyValueStore(MutableMapping[str, str]):
     # that dict's Mapping superclass wants. However, it's correct in our case.
     # Our sqlite table expects string keys (column type 'text'). It's an error to
     # pass something else. If we pass something too weird, the sqlite3 lib will
-    # throw an error at runrtime.
+    # throw an error at runtime.
     def __contains__(self, key: str) -> bool:  # type: ignore[override]
         """Check if a given key is in the key-value store.
 
@@ -175,10 +181,9 @@ class KeyValueStore(MutableMapping[str, str]):
         return self.iterkeys()
 
     def __repr__(self) -> str:
-        """
-        KVS repr
+        """Represent the key-value store.
 
-        :returns: The KVS repr.
+        :returns: Representation of the key-value store
         """
         # Loosely based on collections.OrderedDict#__repr__
         if not self:

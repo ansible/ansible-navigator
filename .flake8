@@ -117,7 +117,7 @@ per-file-ignores =
   src/ansible_navigator/ui_framework/ui.py: D200, D202, D205, D211, D400, D403, DAR101, DAR201, DAR401
   src/ansible_navigator/ui_framework/utils.py: D200, D205, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/validators.py: D200, D400, D401, D403, DAR101, DAR201, DAR401
-  src/ansible_navigator/utils.py: D105, D200, D202, D205, D400, D401, D403, DAR101, DAR201, DAR401
+  src/ansible_navigator/utils/functions.py: D105, D200, D202, D205, D400, D401, D403, DAR101, DAR201, DAR401
   tests/__init__.py: D104
   tests/conftest.py: D210, D400, D401, D403, DAR101, DAR201, DAR301, DAR401
   tests/defaults.py: D200
@@ -217,9 +217,9 @@ per-file-ignores =
   tests/unit/test_cli.py: D200, D202, D205, D400, D403, DAR101, DAR201
   tests/unit/test_image_introspection.py: D200, D400, D403, DAR101, DAR201
   tests/unit/test_log_append.py: D200, D400, D403, DAR101
-  tests/unit/test_utils.py: D200, D202, D400, D403, DAR101
   tests/unit/test_yaml.py: D200
   tests/unit/ui_framework/test_colorize.py: D200, D205, D209, D400, DAR101
+  tests/unit/utils/test_functions.py: D200, D202, D400, D403, DAR101
 
 # Count the number of occurrences of each error/warning code and print a report:
 statistics = true
