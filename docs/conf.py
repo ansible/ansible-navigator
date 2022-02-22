@@ -106,6 +106,7 @@ nitpick_ignore = [
     ("py:class", "Grammars"),
     ("py:class", "Match"),
     ("py:class", "multiprocessing.context.BaseContext.Queue"),
+    ("py:class", "NavigatorPostProcessor"),
     ("py:class", "Pattern"),
     ("py:class", "PatternRule"),
     ("py:class", "Region"),
