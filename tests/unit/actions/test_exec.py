@@ -6,6 +6,7 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.actions.exec import _generate_command
+from ansible_navigator.configuration_subsystem.definitions import Constants
 
 
 class CommandTestData(NamedTuple):
@@ -73,7 +74,7 @@ command_test_data = [
 
 
 @pytest.mark.parametrize("cmd_test_data", command_test_data, ids=id_from_data)
-def test_artifact_path(cmd_test_data: CommandTestData):
+def test_command_generation(cmd_test_data: CommandTestData):
     """Test the generation of the command and params.
 
     :param cmd_test_data: The test data
@@ -81,6 +82,7 @@ def test_artifact_path(cmd_test_data: CommandTestData):
     command, additional_params = _generate_command(
         exec_command=cmd_test_data.command,
         exec_shell=cmd_test_data.use_shell,
+        extra_args=Constants.NOT_SET,
     )
     comment = command_test_data, command, additional_params
     assert command == cmd_test_data.result_command, comment
