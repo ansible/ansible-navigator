@@ -1,4 +1,0 @@
----
-collections:
-  - source: ansible-utils-2.5.0.tar.gz
-    type: file

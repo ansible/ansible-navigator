@@ -1,5 +1,3 @@
----
 collections:
-  - name: ansible.utils
-    src: https://github.com/ansible-collections/ansible.utils
-    version: main
+  - source: ansible-utils-2.5.0.tar.gz
+    type: file
