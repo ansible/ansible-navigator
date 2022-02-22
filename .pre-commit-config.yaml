@@ -28,7 +28,7 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v5.8.1
+    rev: v5.8.4
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -160,6 +160,7 @@ repos:
         name: MyPy, for Python 3.10
         additional_dependencies:
           - jinja2
+          - libtmux
           - pytest
           - sphinx
           - types-docutils
@@ -172,6 +173,7 @@ repos:
         name: MyPy, for Python 3.6
         additional_dependencies:
           - jinja2
+          - libtmux
           - pytest
           - sphinx
           - types-dataclasses # Needed for checking py3.6 with a later interpreter
