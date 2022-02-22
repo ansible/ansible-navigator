@@ -1,7 +1,7 @@
-"""fixtures for share tests"""
+"""Fixtures for share tests."""
 
-import os
-import sys
+from pathlib import Path
+from typing import Generator
 
 import pytest
 
@@ -9,30 +9,30 @@ from ansible_navigator.utils.key_value_store import KeyValueStore
 
 
 @pytest.fixture
-def empty_kvs(tmp_path):
-    """
-    Gives us a temporary, empty KeyValueStore.
+def empty_kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
+    """Give us a temporary, empty KeyValueStore.
 
-    :returns: the temporary KVS
+    :param tmp_path: Path to a temporary directory
+    :yields: The temporary KVS
     """
-    db = tmp_path / "basic_kvs_usage.db"
-    yield KeyValueStore(db)
+    database_path = tmp_path / "basic_kvs_usage.db"
+    yield KeyValueStore(database_path)
 
 
 @pytest.fixture
-def kvs(tmp_path):
-    """
-    Gives us a temporary KeyValueStore with some data.
+def kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
+    """Give us a temporary KeyValueStore with some data.
 
-    :returns: the temporary KVS
+    :param tmp_path: Path to a temporary directory
+    :yields: The temporary KVS
     """
-    db = tmp_path / "basic_kvs_usage.db"
-    kvs = KeyValueStore(db)
-    kvs["banana"] = "blue"  # ewww
-    kvs["apple"] = "red"
-    kvs["grape"] = "green"
-    kvs["strawberry"] = "red"
-    kvs["banana"] = "yellow"  # just kidding
-    kvs["cherry"] = "red"
-    del kvs["cherry"]
-    yield kvs
+    database_path = tmp_path / "basic_kvs_usage.db"
+    key_value_store = KeyValueStore(database_path)
+    key_value_store["banana"] = "blue"  # yuck
+    key_value_store["apple"] = "red"
+    key_value_store["grape"] = "green"
+    key_value_store["strawberry"] = "red"
+    key_value_store["banana"] = "yellow"  # just kidding
+    key_value_store["cherry"] = "red"
+    del key_value_store["cherry"]
+    yield key_value_store
