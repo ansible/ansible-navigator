@@ -267,7 +267,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="exec_command",
-            cli_parameters=CliParameters(short="--excmd"),
+            cli_parameters=CliParameters(positional=True),
             settings_file_path_override="exec.command",
             short_description="Specify the command to run within the execution environment",
             subcommands=["exec"],
