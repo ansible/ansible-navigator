@@ -2,10 +2,6 @@
 enforce_name:
   suffix: .md
 exclude:
-  bots:
-  - dependabot-preview
-  - dependabot
-  - patchback
   humans:
   - pyup-bot
 ...

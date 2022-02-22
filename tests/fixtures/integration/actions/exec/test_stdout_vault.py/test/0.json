@@ -1,0 +1,16 @@
+{
+    "name": "test[Vault variation  clear && ansible-navigator --ll debug --la false --mode stdout exec ansible-vault encrypt_string --vault-password-file a_password_file 'foobar' --name 'the_secret']",
+    "index": 0,
+    "comment": "Vault variation",
+    "additional_information": {
+        "present": [
+            "a_password_file was not found"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "ERROR! The vault password file /home/user/github/ansible-navigator/a_password_file was not found",
+        "(venv) bash-5.1$"
+    ]
+}

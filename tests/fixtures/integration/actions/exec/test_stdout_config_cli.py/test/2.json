@@ -1,5 +1,5 @@
 {
-    "name": "test[exec echo check path via shell  clear && ansible-navigator exec --excmd 'echo $PATH' --ee True --ll debug --mode stdout]",
+    "name": "test[exec echo check path via shell  clear && ansible-navigator exec 'echo $PATH' --ee True --ll debug --mode stdout]",
     "index": 2,
     "comment": "exec echo check path via shell",
     "additional_information": {
