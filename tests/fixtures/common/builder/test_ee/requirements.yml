@@ -1,3 +1,5 @@
 ---
 collections:
-  - ansible.utils
+  - name: ansible.utils
+    src: https://github.com/ansible-collections/ansible.utils
+    version: main
