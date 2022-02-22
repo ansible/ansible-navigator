@@ -143,7 +143,7 @@ class ApplicationConfiguration:
     # pylint: disable=too-many-instance-attributes
     """The main object for storing an application config"""
 
-    application_version: str
+    application_version: Union[Constants, str]
     entries: List[SettingsEntry]
     internals: SimpleNamespace
     post_processor: "NavigatorPostProcessor"
