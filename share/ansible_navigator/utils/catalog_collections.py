@@ -12,9 +12,10 @@ import sys
 from collections import Counter
 from collections import OrderedDict
 from datetime import datetime
-from glob import glob
 from json.decoder import JSONDecodeError
+from pathlib import Path
 from typing import Dict
+from typing import Generator
 from typing import List
 from typing import Tuple
 
@@ -43,58 +44,56 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 class CollectionCatalog:
     """A collection cataloger."""
 
-    def __init__(self, directories: List[str]):
+    def __init__(self, directories: List[Path]):
         """Initialize the collection cataloger.
 
         :param directories: A list of directories that may contain collections
         """
-        self._directories = directories
+        self._directories: List[Path] = directories
         self._collections: OrderedDict[str, Dict] = OrderedDict()
         self._errors: List[Dict[str, str]] = []
         self._messages: List[str] = []
 
     def _catalog_plugins(self, collection: Dict) -> None:
-        # pylint: disable=too-many-locals
         """Catalog the plugins within a collection.
 
         :param collection: Details describing the collection
         """
-        path = collection["path"]
         file_checksums = {}
 
         file_manifest_file = collection.get("file_manifest_file", {}).get("name")
         if file_manifest_file:
-            file_path = f"{path}/{file_manifest_file}"
-            if os.path.exists(file_path):
+            file_path = Path(collection["path"], file_manifest_file)
+            if file_path.exists():
                 with open(file=file_path, encoding="utf-8") as fh:
                     try:
                         loaded = json.load(fh)
                         file_checksums = {v["name"]: v for v in loaded["files"]}
                     except (JSONDecodeError, KeyError) as exc:
-                        self._errors.append({"path": file_path, "error": str(exc)})
+                        self._errors.append({"path": str(file_path), "error": str(exc)})
 
         exempt = ["action", "module_utils", "doc_fragments"]
-        plugin_directory = os.path.join(path, "plugins")
-        if os.path.isdir(plugin_directory):
+        plugin_directory = Path(collection["path"], "plugins")
+        if plugin_directory.is_dir():
             plugin_dirs = [
-                (f.name, f.path)
-                for f in os.scandir(plugin_directory)
-                if f.is_dir() and f.name not in exempt
+                plugin_dir
+                for plugin_dir in plugin_directory.iterdir()
+                if plugin_dir.is_dir() and plugin_dir.name not in exempt
             ]
-            for plugin_type, path in plugin_dirs:
+            for plugin_dir in plugin_dirs:
+                plugin_type = plugin_dir.name
                 if plugin_type == "modules":
                     plugin_type = "module"
-                for (dirpath, _dirnames, filenames) in os.walk(path):
-                    self._process_plugin_dir(
-                        plugin_type,
-                        filenames,
-                        file_checksums,
-                        dirpath,
-                        collection,
-                    )
+                filenames = plugin_dir.glob("**/*.py")
+                self._process_plugin_dir(
+                    plugin_type,
+                    filenames,
+                    file_checksums,
+                    collection,
+                )
 
     @staticmethod
-    def _generate_checksum(file_path: str, relative_path: str) -> Dict:
+    def _generate_checksum(file_path: Path, relative_path: Path) -> Dict:
         """Generate a standard checksum for a file.
 
         :param file_path: The path to the file to generate a checksum for
@@ -117,62 +116,59 @@ class CollectionCatalog:
     def _process_plugin_dir(
         self,
         plugin_type: str,
-        filenames: List,
-        file_checksums: Dict,
-        dirpath: str,
+        filenames: Generator[Path, None, None],
+        file_checksums: Dict[str, Dict],
         collection: Dict,
     ) -> None:
-        # pylint: disable=too-many-arguments
         """Process each plugin within one plugin directory.
 
         :param plugin_type: The type of plugins
         :param filenames: The filenames of the plugins
         :param file_checksums: The checksums for the plugin files
-        :param dirpath: The path of the directory containing the plugins
         :param collection: The details of the collection
         """
         for filename in filenames:
-            file_path = f"{dirpath}/{filename}"
-            relative_path = file_path.replace(collection["path"], "")
-            _basename, extension = os.path.splitext(filename)
-            if not filename.startswith("__") and extension == ".py":
-                checksum_dict = file_checksums.get(relative_path)
-                if not checksum_dict:
-                    checksum_dict = self._generate_checksum(file_path, relative_path)
-                checksum = checksum_dict[f"chksum_{checksum_dict['chksum_type']}"]
-                collection["plugin_checksums"][checksum] = {
-                    "path": relative_path,
-                    "type": plugin_type,
-                }
+            if str(filename).startswith("__"):
+                continue
 
-    def _one_path(self, directory: str) -> None:
+            relative_path = Path(filename).relative_to(collection["path"])
+            checksum_dict = file_checksums.get(str(relative_path))
+            if not checksum_dict:
+                checksum_dict = self._generate_checksum(filename, relative_path)
+            checksum = checksum_dict[f"chksum_{checksum_dict['chksum_type']}"]
+            collection["plugin_checksums"][checksum] = {
+                "path": str(relative_path),
+                "type": plugin_type,
+            }
+
+    def _one_path(self, directory: Path) -> None:
         """Process the contents of an <...>/ansible_collections/ directory.
 
         :param directory: The path to collections directory to walk and load
         """
-        for directory_path in glob(f"{directory}/*/*/"):
-            manifest_file = f"{directory_path}/MANIFEST.json"
-            galaxy_file = f"{directory_path}/galaxy.yml"
+        for directory_path in directory.glob("*/*/"):
+            manifest_file = directory_path / "MANIFEST.json"
+            galaxy_file = directory_path / "galaxy.yml"
             collection = None
-            if os.path.exists(manifest_file):
+            if manifest_file.exists():
                 with open(file=manifest_file, encoding="utf-8") as fh:
                     try:
                         collection = json.load(fh)
                         collection["meta_source"] = "MANIFEST.json"
                     except JSONDecodeError:
                         error = {
-                            "path": os.path.dirname(manifest_file),
+                            "path": str(manifest_file),
                             "error": "failed to load MANIFEST.json",
                         }
                         self._errors.append(error)
-            elif os.path.exists(galaxy_file):
+            elif galaxy_file.exists():
                 with open(file=galaxy_file, encoding="utf-8") as fh:
                     try:
                         collection = {"collection_info": yaml.load(fh, Loader=SafeLoader)}
                         collection["meta_source"] = "galaxy.yml"
                     except YAMLError:
                         error = {
-                            "path": os.path.dirname(galaxy_file),
+                            "path": str(galaxy_file),
                             "error": "failed to load galaxy.yml",
                         }
                         self._errors.append(error)
@@ -182,16 +178,16 @@ class CollectionCatalog:
                 collection["known_as"] = collection_name
                 collection["plugins"] = []
                 collection["plugin_checksums"] = {}
-                collection["path"] = directory_path
+                collection["path"] = str(directory_path)
 
-                runtime_file = f"{directory_path}/meta/runtime.yml"
+                runtime_file = directory_path / "meta" / "runtime.yml"
                 collection["runtime"] = {}
-                if os.path.exists(runtime_file):
+                if runtime_file.exists():
                     with open(file=runtime_file, encoding="utf-8") as fh:
                         try:
                             collection["runtime"] = yaml.load(fh, Loader=SafeLoader)
                         except YAMLError as exc:
-                            self._errors.append({"path": runtime_file, "error": str(exc)})
+                            self._errors.append({"path": str(runtime_file), "error": str(exc)})
 
                 self._collections[collection["path"]] = collection
             else:
@@ -223,8 +219,8 @@ class CollectionCatalog:
         :returns: All collections found and any errors
         """
         for directory in self._directories:
-            collection_directory = f"{directory}/ansible_collections"
-            if os.path.exists(collection_directory):
+            collection_directory = directory / "ansible_collections"
+            if collection_directory.exists():
                 self._one_path(collection_directory)
         for _collection_path, collection in self._collections.items():
             self._catalog_plugins(collection)
@@ -251,7 +247,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
         try:
             (doc, examples, returndocs, metadata) = get_docstring(
-                filename=plugin_path,
+                filename=str(plugin_path),
                 fragment_loader=fragment_loader,
                 collection_name=collection_name,
             )
@@ -296,14 +292,14 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
                         (
                             collection["known_as"],
                             checksum,
-                            f"{collection['path']}{details['path']}",
+                            Path(collection["path"], details["path"]),
                         ),
                     )
                 handled.add(checksum)
     return handled, missing, plugin_count
 
 
-def parse_args():
+def parse_args() -> Tuple[argparse.Namespace, List[Path]]:
     """Parse the arguments from the command line.
 
     :returns: The parsed arguments and all directories to search
@@ -336,7 +332,7 @@ def parse_args():
 
     resolved = []
     for directory in directories:
-        realpath = os.path.realpath(directory)
+        realpath = Path(directory).resolve()
         if realpath not in resolved:
             resolved.append(realpath)
 
@@ -401,7 +397,7 @@ def retrieve_docs(
         elif message_type == "error":
             checksum, plugin_path, error = message
             collection_cache[checksum] = json.dumps({"error": error})
-            errors.append({"path": plugin_path, "error": error})
+            errors.append({"path": str(plugin_path), "error": error})
             stats["cache_added_errors"] += 1
 
 
@@ -439,8 +435,12 @@ def main() -> Dict:
     collections, errors = cc_obj.process_directories()
     stats["collection_count"] = len(collections)
 
-    collection_cache_path = os.path.abspath(os.path.expanduser(args.collection_cache_path))
-    collection_cache = KeyValueStore(collection_cache_path)
+    collection_cache_path = Path(args.collection_cache_path).resolve().expanduser()
+    # compatibility with py36, pass string to sqlite3.connect
+    if sys.version_info >= (3, 7):
+        collection_cache = KeyValueStore(collection_cache_path)
+    else:
+        collection_cache = KeyValueStore(str(collection_cache_path))
 
     handled, missing, plugin_count = identify_missing(collections, collection_cache)
     stats["plugin_count"] = plugin_count
@@ -477,7 +477,7 @@ if __name__ == "__main__":
 
     args, parent_directories = parse_args()
 
-    COLLECTION_SCAN_PATHS = ":".join(parent_directories)
+    COLLECTION_SCAN_PATHS = ":".join(str(parent) for parent in parent_directories)
     os.environ["ANSIBLE_COLLECTIONS_PATHS"] = COLLECTION_SCAN_PATHS
 
     result = main()
