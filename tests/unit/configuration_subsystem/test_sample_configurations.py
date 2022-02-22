@@ -26,6 +26,8 @@ def test_cmdline_source_not_set():
     """Ensure a configuration without a ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        application_version="1.0",
+        internals=Internals(),
         post_processor=NavigatorPostProcessor(),
         subcommands=[
             SubCommand(name="subcommand1", description="subcommand1"),
@@ -48,6 +50,7 @@ def test_no_subcommand():
     """Ensure a configuration without no ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        application_version="1.0",
         internals=Internals(),
         post_processor=None,
         subcommands=[
@@ -63,6 +66,7 @@ def test_many_subcommand():
     """Ensure a configuration without a ``subparser`` entry fails"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        application_version="1.0",
         internals=Internals(),
         post_processor=None,
         subcommands=[
@@ -91,6 +95,8 @@ def test_invalid_choice_not_set():
     """Ensure an error is raised for no choice"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        application_version="1.0",
+        internals=Internals(),
         post_processor=None,
         subcommands=[
             SubCommand(name="subcommand1", description="subcommand1"),
@@ -117,6 +123,8 @@ def test_custom_nargs_for_positional():
     """Ensure a ``nargs`` for a positional are carried forward"""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
+        application_version="1.0",
+        internals=Internals(),
         post_processor=None,
         subcommands=[
             SubCommand(name="subcommand1", description="subcommand1"),

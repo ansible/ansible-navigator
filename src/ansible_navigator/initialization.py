@@ -1,15 +1,13 @@
 """initialization helpers that are used early in application
 initialization and are specific to ansible_navigator
 """
-import importlib.util
 import logging
 import os
 import sys
 
-from typing import TYPE_CHECKING
-from typing import Dict
 from typing import List
 from typing import NoReturn
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -22,11 +20,7 @@ from .utils import ExitPrefix
 from .utils import LogMessage
 from .utils import environment_variable_is_file_path
 from .utils import find_settings_file
-
-
-if TYPE_CHECKING:
-
-    from ...share.ansible_navigator.utils import key_value_store  # type: ignore[misc]
+from .utils.key_value_store import KeyValueStore
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
@@ -85,16 +79,14 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
 
 
 def get_and_check_collection_doc_cache(
-    share_directory: str,
     collection_doc_cache_path: str,
-) -> Tuple[List[LogMessage], List[ExitMessage], Dict]:
+) -> Tuple[List[LogMessage], List[ExitMessage], Optional[KeyValueStore]]:
     """ensure the collection doc cache
     has the current version of the application
     as a safeguard, always delete and rebuild if not
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
-    collection_cache: "key_value_store.KeyValueStore" = {}
     message = f"Collection doc cache: 'path' is '{collection_doc_cache_path}'"
     messages.append(LogMessage(level=logging.DEBUG, message=message))
 
@@ -118,9 +110,9 @@ def get_and_check_collection_doc_cache(
         exit_messages.extend([ExitMessage(message=exit_msg) for exit_msg in exit_msgs])
         exit_msg = "Try again without '--cdcp' or try '--cdcp ~/collection_doc_cache.db"
         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-        return messages, exit_messages, collection_cache
+        return messages, exit_messages, None
 
-    collection_cache = _get_kvs(share_directory, collection_doc_cache_path)
+    collection_cache: KeyValueStore = KeyValueStore(collection_doc_cache_path)
     if "version" in collection_cache:
         cache_version = collection_cache["version"]
     else:
@@ -132,22 +124,13 @@ def get_and_check_collection_doc_cache(
         messages.append(LogMessage(level=logging.INFO, message=message))
         collection_cache.close()
         os.remove(collection_doc_cache_path)
-        collection_cache.__init__(collection_doc_cache_path)
+        collection_cache = KeyValueStore(collection_doc_cache_path)
         collection_cache["version"] = VERSION_CDC
         cache_version = collection_cache["version"]
         message = f"Collection doc cache: 'current version' is '{cache_version}'"
         messages.append(LogMessage(level=logging.INFO, message=message))
     collection_cache.close()
     return messages, exit_messages, collection_cache
-
-
-def _get_kvs(share_directory, path):
-    """Retrieve a key value store given a path"""
-    spec_path = os.path.join(share_directory, "utils", "key_value_store.py")
-    spec = importlib.util.spec_from_file_location("kvs", spec_path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod.KeyValueStore(path)
 
 
 def parse_and_update(
@@ -206,12 +189,11 @@ def parse_and_update(
 
     if mount_collection_cache:
         new_messages, new_exit_messages, cache = get_and_check_collection_doc_cache(
-            args.internals.share_directory,
             args.collection_doc_cache_path,
         )
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
-        if exit_messages:
+        if exit_messages or cache is None:
             return messages, exit_messages
         if attach_cdc:
             args.internals.collection_doc_cache = cache

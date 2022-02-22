@@ -269,6 +269,7 @@ def test_apply_cli_subset_none():
     """Ensure subset none works for apply CLI"""
     test_config = ApplicationConfiguration(
         application_name="test_application",
+        application_version="1.0",
         internals=Internals(),
         post_processor=None,
         subcommands=[
