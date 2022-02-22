@@ -9,7 +9,6 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from .._version import __version__ as VERSION
 from ..utils import ExitMessage
 from ..utils import LogMessage
 from ..utils import abs_user_path
@@ -166,7 +165,7 @@ navigator_subcommands = [
 
 NavigatorConfiguration = ApplicationConfiguration(
     application_name=APP_NAME,
-    application_version=VERSION,
+    application_version=C.NOT_SET,
     internals=Internals(),
     post_processor=NavigatorPostProcessor(),
     subcommands=navigator_subcommands,
