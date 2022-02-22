@@ -178,12 +178,23 @@ class KeyValueStore(MutableMapping[str, str]):
         """
         return KVSItemsView(self)
 
+<<<<<<< HEAD
     # mypy complains about this 'str' because it's more specific than the 'object'
     # that dict's Mapping superclass wants. However, it's correct in our case.
     # Our sqlite table expects string keys (column type 'text'). It's an error to
     # pass something else. If we pass something too weird, the sqlite3 lib will
     # throw an error at runtime.
     def __contains__(self, key: str) -> bool:  # type: ignore[override]
+||||||| parent of d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
+    def __contains__(self, key):
+=======
+    # mypy complains about this 'str' because it's more specific than the 'object'
+    # that dict's Mapping superclass wants. However, it's correct in our case.
+    # Our sqlite table expects string keys (column type 'text'). It's an error to
+    # pass something else. If we pass something too weird, the sqlite3 lib will
+    # throw an error at runrtime.
+    def __contains__(self, key: str) -> bool:  # type: ignore[override]
+>>>>>>> d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
         """Check if a given key is in the key-value store.
 
         This provides dictionary like  `some_key in` support for the key-value store.
