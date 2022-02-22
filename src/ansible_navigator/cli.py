@@ -32,7 +32,7 @@ from .utils import clear_screen
 try:
     from ._version import __version__
 except ImportError:
-    __version__ = None
+    __version__ = ""
 
 
 APP_NAME = "ansible-navigator"
@@ -116,7 +116,7 @@ def main():
     exit_messages: List[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
-    if isinstance(__version__, str):
+    if __version__:
         args.application_version = __version__
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
