@@ -53,7 +53,7 @@ requires = [
 
   # Plugins
   "setuptools_scm[toml] >= 6.2",
-  "setuptools_scm_git_archive>=1.1",
+  "setuptools_scm_git_archive >= 1.1",
 ]
 
 [tool.black]
