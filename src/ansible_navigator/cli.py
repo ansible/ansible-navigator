@@ -30,6 +30,7 @@ from .utils import ExitPrefix
 from .utils import LogMessage
 from .utils import clear_screen
 
+
 __version__: Union[Constants, str]
 try:
     from ._version import version as __version__
