@@ -8,6 +8,6 @@
 # The contents of this file can be tested for a dictionary returned
 # >>> from setuptools_scm.utils import data_from_mime
 # >>> data_from_mime(".git_archival.txt")
-# {'ref-names': '$Format:%D$'}
+# A dict of key-value pairs of the below should be returned.
 
 ref-names: $Format:%D$
