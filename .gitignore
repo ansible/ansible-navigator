@@ -137,3 +137,11 @@ dmypy.json
 
 # IntelliJ
 .idea/
+
+
+# In contrast to the entries above this line which largely come from
+# untracked sources, the following have been inidividually rationalized
+# and should all have detailed explanations
+
+# Version created and populated by setuptools_scm
+/src/ansible_navigator/_version.py

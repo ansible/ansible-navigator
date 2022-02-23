@@ -1,0 +1,13 @@
+# The name of this file is hardcoded in the setuptools_scm_git_archive
+# package as the source of ref-name replacement when converting tags to
+# version information. See the __init__.py file for the package.
+# When the archive is built this file will contain the
+# %D ref names without the " (", ")" wrapping.
+# Documented as a placeholder if git-log
+
+# The contents of this file can be tested for a dictionary returned
+# >>> from setuptools_scm.utils import data_from_mime
+# >>> data_from_mime(".git_archival.txt")
+# A dict of key-value pairs of the below should be returned.
+
+ref-names: $Format:%D$
