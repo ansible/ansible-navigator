@@ -14,7 +14,7 @@ from collections import OrderedDict
 from datetime import datetime
 from json.decoder import JSONDecodeError
 from pathlib import Path
-from typing import Dict
+from typing import TYPE_CHECKING, Dict
 from typing import Generator
 from typing import List
 from typing import Tuple
@@ -30,10 +30,13 @@ try:
 except ImportError:
     from yaml import SafeLoader  # type: ignore
 
-try:
-    from key_value_store import KeyValueStore
-except ImportError:
+if TYPE_CHECKING:
     from ansible_navigator.utils.key_value_store import KeyValueStore
+else:
+    try:
+        from key_value_store import KeyValueStore
+    except ImportError:
+        from ansible_navigator.utils.key_value_store import KeyValueStore
 
 
 # pylint: enable=import-error
