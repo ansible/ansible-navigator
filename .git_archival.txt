@@ -1,0 +1,8 @@
+# The name of this file is hardcoded in the setuptools_scm_git_archive
+# package as the source of ref-name replacement when converting tags to
+# version information. See the __init__.py file for the package.
+# When the archive is built this file will contain the
+# %D: ref names without the " (", ")" wrapping.
+# Documented as a placeholder if git-log
+
+ref-names: $Format:%D$

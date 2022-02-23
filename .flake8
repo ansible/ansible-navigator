@@ -53,6 +53,8 @@ per-file-ignores =
   # If other ignores are added for a specific file in the section following this,
   # these will need to be added to that line as well.
 
+  # Q000: Allow single-quotes in _version.py because setuptools_scm will create it with them.
+  src/ansible_navigator/_version.py: Q000
   # S101: Allow the use of assert within the tests directory, since tests require it.
   tests/**.py: S101
 
