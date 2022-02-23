@@ -12,7 +12,7 @@
         " 5│  license_file: LICENSE",
         " 6│  name: company_name.coll_2",
         " 7│  namespace: company_name",
-        " 8│  path: FIXTURES_COLLECTION_DIR/test_welcome_interactive_noee.py/collections/ansible_collections/company_name/coll_2/",
+        " 8│  path: FIXTURES_COLLECTION_DIR/test_welcome_interactive_noee.py/collections/ansible_collections/company_name/coll_2",
         " 9│  readme: README.md",
         "10│  shadowed_by: []",
         "11│  version: 2.0.0",
