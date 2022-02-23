@@ -11,6 +11,7 @@ from copy import deepcopy
 from curses import wrapper
 from pathlib import Path
 from typing import List
+from typing import Union
 
 from .action_defs import ActionReturn
 from .action_defs import RunInteractiveReturn
@@ -31,6 +32,7 @@ from .utils import clear_screen
 
 
 try:
+    __version__: Union[Constants, str]
     from ._version import version as __version__
 except ImportError:
     __version__ = Constants.NOT_SET

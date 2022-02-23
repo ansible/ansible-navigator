@@ -1,5 +1,3 @@
-# fmt: off
-# isort: skip_file
 """Stub (interface) file for ``_version.py``.
 
 Provides type hint PEP 484 information for the ``_version.py``
@@ -8,9 +6,4 @@ not exist when type checking is don and will not
 container type hint information.
 """
 
-from typing import Union
-
-from .configuration_subsystem import Constants
-
-
-version: Union[Constants, str]
+version: str
