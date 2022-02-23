@@ -30,9 +30,8 @@ from .utils import ExitPrefix
 from .utils import LogMessage
 from .utils import clear_screen
 
-
+__version__: Union[Constants, str]
 try:
-    __version__: Union[Constants, str]
     from ._version import version as __version__
 except ImportError:
     __version__ = Constants.NOT_SET
