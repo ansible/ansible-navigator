@@ -3,10 +3,9 @@
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
 
+from importlib.metadata import version as get_version
 from pathlib import Path
 from sys import path
-
-from importlib.metadata import version as get_version
 
 
 # -- Path setup --------------------------------------------------------------
