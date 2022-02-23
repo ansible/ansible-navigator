@@ -98,7 +98,7 @@ commands can be found in the [subcommand documentation].
 [subcommand documentation]:
 https://ansible-navigator.readthedocs.io/en/latest/subcommands
 
-## Configuring ansible-navigator:
+## Configuring ansible-navigator
 
 There are several ways to configure ansible-navigator and users and projects
 are free to choose the most convenient method for them. The full hierarchy of
