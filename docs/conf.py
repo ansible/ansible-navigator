@@ -3,6 +3,7 @@
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
 
+from functools import partial
 from pathlib import Path
 from sys import path
 
