@@ -41,6 +41,7 @@ release = get_version("ansible-navigator")
 # including .Z, resulting in the X.Y.Z version
 version = ".".join(release.split(".")[:3])
 
+print(release, version)
 
 rst_epilog = f"""
 .. |project| replace:: {project}
@@ -256,7 +257,7 @@ linkcheck_workers = 25
 
 # -- Options for towncrier_draft extension -----------------------------------
 
-towncrier_draft_autoversion_mode = "sphinx-version"  # or: "sphinx-version", "sphinx-release"
+towncrier_draft_autoversion_mode = "draft"  # or: "sphinx-version", "sphinx-release"
 towncrier_draft_include_empty = True
 towncrier_draft_working_directory = PROJECT_ROOT_DIR
 # Not yet supported: towncrier_draft_config_path = "pyproject.toml"  # relative to cwd
