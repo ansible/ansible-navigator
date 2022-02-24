@@ -1,0 +1,4 @@
+# Needed for setuptools-scm-git-archive
+# It instructs git to expand placeholder when adding the
+# .git_archival.txt file to an archive.
+.git_archival.txt  export-subst
