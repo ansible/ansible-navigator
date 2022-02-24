@@ -30,7 +30,6 @@ try:
 except ImportError:
     from yaml import SafeLoader  # type: ignore
 
-
 try:
     from key_value_store import KeyValueStore  # type: ignore[import] # Not present unless in an EE
 except ImportError:
