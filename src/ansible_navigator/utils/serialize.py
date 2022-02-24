@@ -1,8 +1,9 @@
 """Abstractions for common serialization formats."""
 
 import json
-from typing import Any
+
 from typing import IO
+from typing import Any
 from typing import NamedTuple
 
 
