@@ -10,7 +10,12 @@ from itertools import groupby
 from operator import itemgetter
 
 from setuptools import setup
+import shutil
 
+with open("./docs/conf.orig.py", "r") as src:
+    with open("./docs/conf.py", "w") as dst:
+        dst.write("# FILE COPIED FROM conf.orig.py; DO NOT CHANGE\n")
+        shutil.copyfileobj(src, dst)
 
 # valid files in share to be copied
 data_file_types = [".yml", ".py", ".json", ".md"]
