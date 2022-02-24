@@ -7,6 +7,10 @@ from importlib.metadata import version as get_version
 from pathlib import Path
 from sys import path
 
+# -- RTD ---------------------------------------------------------------------
+# on_rtd is whether we are on readthedocs.org, this line of code grabbed from docs.readthedocs.org
+# https://docs.readthedocs.io/en/latest/faq.html?highlight=environ#how-do-i-change-behavior-for-read-the-docs
+on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 
 # -- Path setup --------------------------------------------------------------
 
@@ -33,7 +37,10 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-NAVIGATOR_VERSION = get_version("ansible_navigator")
+if on_rtd:
+    NAVIGATOR_VERSION = os.environ["READTHEDOCS_VERSION"]
+else:
+    NAVIGATOR_VERSION = get_version("ansible_navigator")
 
 # The short X.Y version
 # including .Z, resulting in the X.Y.Z version
