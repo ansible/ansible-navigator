@@ -14,7 +14,6 @@ from collections import OrderedDict
 from datetime import datetime
 from json.decoder import JSONDecodeError
 from pathlib import Path
-from typing import TYPE_CHECKING
 from typing import Dict
 from typing import Generator
 from typing import List
