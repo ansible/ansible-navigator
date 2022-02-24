@@ -31,8 +31,8 @@ except ImportError:
     from yaml import SafeLoader  # type: ignore
 
 try:
-    from key_value_store import (
-        KeyValueStore,  # type: ignore[import] # Not present unless in an EE
+    from key_value_store import (  # type: ignore[import] # Not present unless in an EE
+        KeyValueStore,
     )
 except ImportError:
     from ansible_navigator.utils.key_value_store import KeyValueStore
