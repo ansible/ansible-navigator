@@ -35,7 +35,7 @@ except ImportError:
 # in an execution environment, and therefore not type checking
 # import from the key_value_store which was injected in the path.
 # The TYPE_CHECKING conditional prevents mypy from attempting the
-# import and cause an import error.
+# import and causing an import error.
 try:
     from ansible_navigator.utils.key_value_store import KeyValueStore
 except ImportError:
