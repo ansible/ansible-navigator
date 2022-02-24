@@ -5,12 +5,13 @@
 
 import glob
 import os
+import shutil
 
 from itertools import groupby
 from operator import itemgetter
 
 from setuptools import setup
-import shutil
+
 
 with open("./docs/conf.orig.py", "r") as src:
     with open("./docs/conf.py", "w") as dst:
