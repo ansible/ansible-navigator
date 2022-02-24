@@ -7,6 +7,7 @@ from importlib.metadata import version as get_version
 from pathlib import Path
 from sys import path
 
+
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
@@ -32,14 +33,14 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-NAVIGATOR_VERSION = get_version("ansible_navigator")
+
+# The full version, including alpha/beta/rc tags
+release = get_version("ansible-navigator")
 
 # The short X.Y version
 # including .Z, resulting in the X.Y.Z version
-version = ".".join(NAVIGATOR_VERSION.split(".")[:3])
+version = ".".join(release.split(".")[:3])
 
-# The full version, including alpha/beta/rc tags
-release = NAVIGATOR_VERSION
 
 rst_epilog = f"""
 .. |project| replace:: {project}
