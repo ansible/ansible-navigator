@@ -1,5 +1,4 @@
 """``:write`` command implementation."""
-import json
 import logging
 import os
 import re
@@ -9,6 +8,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..utils import remove_dbl_un
+from ..utils.serialize import json_dump
 from . import _actions as actions
 
 
@@ -86,7 +86,7 @@ class Action:
             human_dump(obj=obj, filename=filename, file_mode=file_mode)
         elif write_as == "json":
             with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
-                json.dump(obj, fh, indent=4, sort_keys=True)
+                json_dump(obj, fh)
                 fh.write("\n")
 
         self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, file_mode, write_as)
