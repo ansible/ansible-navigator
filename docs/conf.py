@@ -7,7 +7,6 @@ from importlib.metadata import version as get_version
 from pathlib import Path
 from sys import path
 
-
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
