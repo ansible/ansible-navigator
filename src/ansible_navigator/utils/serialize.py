@@ -1,6 +1,5 @@
 """Abstractions for common serialization formats."""
 
-from functools import lru_cache
 import json
 from typing import Any
 from typing import IO
