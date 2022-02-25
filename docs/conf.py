@@ -29,6 +29,7 @@ def parse_with_fetch(*args, **kwargs) -> str:
     :param kwargs: The keyword arguments
     :returns: The parsed version
     """
+    assert 'pre_parse' not in kwargs
     return parse(*args, pre_parse=fetch_on_shallow, **kwargs)
 
 
