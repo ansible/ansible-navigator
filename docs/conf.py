@@ -4,6 +4,7 @@
 """Configuration file for the Sphinx docs."""
 
 import os
+
 from importlib.metadata import version as get_version
 from pathlib import Path
 from sys import path
@@ -51,6 +52,8 @@ else:
     version = ".".join(release.split(".")[:3])
 
 from setuptools_scm import get_version
+
+
 raise ValueError(get_version(root='..', local_scheme='no-local-version', relative_to=__file__))
 
 
