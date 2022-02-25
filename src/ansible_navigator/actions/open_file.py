@@ -1,6 +1,5 @@
 """``:open`` command implementation."""
 import curses
-import json
 import logging
 import os
 import tempfile
@@ -16,6 +15,7 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 from ..utils import remove_dbl_un
+from ..utils.serialize import json_dump
 from . import _actions as actions
 
 
@@ -111,7 +111,7 @@ class Action:
                 with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
                     filename = temp_file.name
                     with open(filename, "w", encoding="utf-8") as fh:
-                        json.dump(obj, fh, indent=4, sort_keys=True)
+                        json_dump(obj, fh)
             else:
                 with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as temp_file:
                     filename = temp_file.name

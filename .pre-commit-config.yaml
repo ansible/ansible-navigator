@@ -17,6 +17,23 @@ repos:
       - id: isort
         name: Sort import statements using isort
 
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: "v2.5.1"
+    hooks:
+      - id: prettier
+        # Temporary excludes so we can gradually normalize the formatting
+        exclude: >
+          (?x)^(
+            tests/fixtures/integration/actions/.*\.json|
+            share/ansible_navigator/grammar/.*\.json|
+            share/ansible_navigator/themes/.*\.json|
+            .*\.md|
+            .*\.yml
+          )$
+        additional_dependencies:
+          - prettier
+          - prettier-plugin-toml
+
   - repo: https://github.com/psf/black.git
     rev: 22.1.0
     hooks:
@@ -172,6 +189,7 @@ repos:
         alias: mypy-py36
         name: MyPy, for Python 3.6
         additional_dependencies:
+          - importlib_resources # Needed for checking py3.6 with a later interpreter
           - jinja2
           - libtmux
           - pytest

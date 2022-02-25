@@ -104,6 +104,7 @@ nitpick_ignore = [
     ("py:class", "Form"),
     ("py:class", "Grammar"),
     ("py:class", "Grammars"),
+    ("py:class", "IO"),
     ("py:class", "Match"),
     ("py:class", "multiprocessing.context.BaseContext.Queue"),
     ("py:class", "NavigatorPostProcessor"),
@@ -142,7 +143,7 @@ extensions = [
 
 # Conditional third-party extensions:
 try:
-    import sphinxcontrib.spelling as _sphinxcontrib_spelling  # type: ignore[import]
+    import sphinxcontrib.spelling as _sphinxcontrib_spelling
 except ImportError:
     extensions.append("spelling_stub_ext")
 else:

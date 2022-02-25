@@ -38,6 +38,7 @@ from ..utils import abs_user_path
 from ..utils import human_time
 from ..utils import remove_ansi
 from ..utils import round_half_up
+from ..utils.serialize import json_dump
 from . import _actions as actions
 from . import run_action
 
@@ -864,7 +865,7 @@ class Action(ActionBase):
                         "status": status,
                         "status_color": status_color,
                     }
-                    json.dump(artifact, fh, indent=4)
+                    json_dump(artifact, fh)
                     self._logger.info("Saved artifact as %s", filename)
 
             except (IOError, OSError) as exc:
