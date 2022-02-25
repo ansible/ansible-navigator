@@ -50,6 +50,9 @@ else:
     # including .Z, resulting in the X.Y.Z version
     version = ".".join(release.split(".")[:3])
 
+from setuptools_scm import get_version
+raise ValueError(get_version(root='..', relative_to=__file__))
+
 
 rst_epilog = f"""
 .. |project| replace:: {project}
