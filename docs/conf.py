@@ -50,9 +50,11 @@ release = get_scm_version()
 file = open(f"{PROJECT_ROOT_DIR}/src/ansible_navigator/_version.py", "r")
 content = file.read()
 
+import subprocess
 
+git_diff = subprocess.check_output(["git", "diff"])
 
-raise ValueError(release, version, content)
+raise ValueError(release, version, content, git_diff)
 
 rst_epilog = f"""
 .. |project| replace:: {project}
