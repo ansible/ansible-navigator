@@ -33,15 +33,21 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-from ansible_navigator._version import version
+
+import os
+
+rtd_version = os.environ["READTHEDOCS_VERSION"]
+os.environ["SETUPTOOLS_SCM_PRETEND_VERSION"] = rtd_version
+
+
 # The full version, including alpha/beta/rc tags
-release = version #get_version("ansible_navigator")
+release = rtd_version
 
 # The short X.Y version
 # including .Z, resulting in the X.Y.Z version
 version = ".".join(release.split(".")[:3])
 
-raise ValueError(f"{release}-{version}")
+raise ValueError(f"{release}-{version}-{rtd_version}")
 
 rst_epilog = f"""
 .. |project| replace:: {project}
