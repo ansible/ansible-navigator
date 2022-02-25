@@ -1,5 +1,7 @@
 # https://docs.readthedocs.io/en/stable/config-file/v2.html
+
 ---
+
 version: 2
 
 build:
@@ -10,6 +12,7 @@ build:
 formats: all
 
 python:
+  version: 3.8
   install:
     - method: pip
       path: .

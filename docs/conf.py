@@ -3,15 +3,16 @@
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
 
-
-from importlib.metadata import version as get_version
 from pathlib import Path
 from sys import path
+
+from setuptools_scm import get_version
 
 
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
+get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
 
 # Make in-tree extension importable in non-tox setups/envs, like RTD.
 # Refs:
@@ -35,15 +36,18 @@ author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
 
-# The full version, including alpha/beta/rc tags
-release = get_version("ansible_navigator")
-
+# fmt: off
 # The short X.Y version
-# including .Z, resulting in the X.Y.Z version
-version = ".".join(release.split(".")[:3])
+version = '.'.join(
+    get_scm_version(
+        local_scheme='no-local-version',
+    ).split('.')[:3],
+)
+
+# The full version, including alpha/beta/rc tags
+release = get_scm_version()
 
 raise ValueError(release, version)
-
 
 rst_epilog = f"""
 .. |project| replace:: {project}
@@ -277,8 +281,8 @@ myst_enable_extensions = [
     "substitution",  # replace common ASCII shortcuts into their symbols
 ]
 myst_substitutions = {
-    "project": project,
-    "release": release,
-    "release_l": f"`v{release}`",
-    "version": version,
+  "project": project,
+  "release": release,
+  "release_l": f"`v{release}`",
+  "version": version,
 }

@@ -5,7 +5,6 @@
 
 import glob
 import os
-import shutil
 
 from itertools import groupby
 from operator import itemgetter
