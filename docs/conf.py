@@ -51,7 +51,7 @@ else:
     version = ".".join(release.split(".")[:3])
 
 from setuptools_scm import get_version
-raise ValueError(get_version(root='..', relative_to=__file__))
+raise ValueError(get_version(root='..', local_scheme='no-local-version', relative_to=__file__))
 
 
 rst_epilog = f"""
