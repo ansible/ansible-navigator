@@ -21,12 +21,14 @@ repos:
     rev: "v2.5.1"
     hooks:
       - id: prettier
-        # Temporary excludes so we can gradually normalize the formatting
+        # The default --list-different was causing stdout issues
+        # https://github.com/pre-commit/mirrors-prettier/blob/master/.pre-commit-hooks.yaml#L3
+        entry: prettier --write --ignore-unknown
         exclude: >
           (?x)^(
             tests/fixtures/integration/actions/.*\.json|
             share/ansible_navigator/grammar/.*\.json|
-            share/ansible_navigator/themes/.*\.json|
+            share/ansible_navigator/themes/.*\.json
           )$
         additional_dependencies:
           - prettier
