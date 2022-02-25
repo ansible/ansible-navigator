@@ -8,12 +8,36 @@ from pathlib import Path
 from sys import path
 
 from setuptools_scm import get_version
+from setuptools_scm.git import fetch_on_shallow
+from setuptools_scm.git import parse
 
+
+# -- Special accommodations for RTD ------------------------------------------
+
+
+def parse_with_fetch(*args, **kwargs) -> str:
+    """If the repo is found to be shallow, fetch a full.
+
+    By default, RTD does a fetch --limit 50, if a tag is not
+    present in the last 50 commits, the version reported by setuptools_scm
+    will be incorrect and appears as ``v0.1.dev...`` in the towncrier changelog.
+    Another approach is to enable ``DONT_SHALLOW_CLONE`` for the repo
+    https://docs.readthedocs.io/en/stable/feature-flags.html#feature-flags
+    This was done for ansible-navigator on the day of this commit.
+
+    :param args: The arguments
+    :param kwargs: The keyword arguments
+    :returns: The parsed version
+    """
+    return parse(*args, pre_parse=fetch_on_shallow, **kwargs)
+
+
+get_scm_version = partial(get_version, parse=parse_with_fetch)
 
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
-get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
+get_scm_version = partial(get_scm_version, root=PROJECT_ROOT_DIR)
 
 # Make in-tree extension importable in non-tox setups/envs, like RTD.
 # Refs:
@@ -46,17 +70,6 @@ version = ".".join(
 
 # The full version, including alpha/beta/rc tags
 release = get_scm_version()
-
-file = open(f"{PROJECT_ROOT_DIR}/src/ansible_navigator/_version.py", "r")
-content = file.read()
-
-import subprocess
-
-
-git_diff = subprocess.check_output(["git", "diff"])
-git_tag = subprocess.check_output(["git", "tag"])
-
-raise ValueError(release, version, content, git_tag, git_diff)
 
 rst_epilog = f"""
 .. |project| replace:: {project}
