@@ -47,7 +47,12 @@ version = ".".join(
 # The full version, including alpha/beta/rc tags
 release = get_scm_version()
 
-raise ValueError(release, version)
+file = open(f"{PROJECT_ROOT_DIR}/src/ansible_navigator/_version.py", "r")
+content = file.read()
+
+
+
+raise ValueError(release, version, content)
 
 rst_epilog = f"""
 .. |project| replace:: {project}
