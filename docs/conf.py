@@ -3,7 +3,6 @@
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
 
-import os
 
 from importlib.metadata import version as get_version
 from pathlib import Path
@@ -36,25 +35,14 @@ author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
 
-# on_rtd is whether we are on readthedocs.org, this line of code grabbed from docs.readthedocs.org
-# https://docs.readthedocs.io/en/latest/faq.html?highlight=environ#how-do-i-change-behavior-for-read-the-docs
-on_rtd = os.environ.get("READTHEDOCS", None) == "True"
-if on_rtd:
-    rtd_version = os.environ["READTHEDOCS_VERSION"]
-    release = rtd_version
-    version = rtd_version
-else:
-    # The full version, including alpha/beta/rc tags
-    release = get_version("ansible_navigator")
+# The full version, including alpha/beta/rc tags
+release = get_version("ansible_navigator")
 
-    # The short X.Y version
-    # including .Z, resulting in the X.Y.Z version
-    version = ".".join(release.split(".")[:3])
+# The short X.Y version
+# including .Z, resulting in the X.Y.Z version
+version = ".".join(release.split(".")[:3])
 
-from setuptools_scm import get_version
-
-
-raise ValueError(get_version(root='..', local_scheme='no-local-version', relative_to=__file__))
+raise ValueError(release, version)
 
 
 rst_epilog = f"""
