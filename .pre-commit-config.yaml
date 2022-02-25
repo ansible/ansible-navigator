@@ -27,8 +27,7 @@ repos:
             tests/fixtures/integration/actions/.*\.json|
             share/ansible_navigator/grammar/.*\.json|
             share/ansible_navigator/themes/.*\.json|
-            .*\.md|
-            .*\.yml
+            .*\.md
           )$
         additional_dependencies:
           - prettier
