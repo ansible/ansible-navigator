@@ -14,6 +14,7 @@ from collections import OrderedDict
 from datetime import datetime
 from json.decoder import JSONDecodeError
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Dict
 from typing import Generator
 from typing import List
@@ -30,13 +31,17 @@ try:
 except ImportError:
     from yaml import SafeLoader  # type: ignore
 
+# Import from the source tree whenever possible. When running
+# in an execution environment, and therefore not type checking
+# import from the key_value_store which was injected in the path.
+# The TYPE_CHECKING conditional prevents mypy from attempting the
+# import and causing an import error.
 try:
-    from key_value_store import KeyValueStore
-except ImportError:
     from ansible_navigator.utils.key_value_store import KeyValueStore
+except ImportError:
+    if not TYPE_CHECKING:
+        from key_value_store import KeyValueStore
 
-
-# pylint: enable=import-error
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
