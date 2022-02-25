@@ -13,7 +13,7 @@ python:
   install:
     - method: pip
       path: .
-    - requirements: docs/requirements.in
+    - requirements: docs/requirements.txt
   system_packages: false
 
 # Build documentation in the docs/ directory with Sphinx
