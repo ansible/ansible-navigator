@@ -54,8 +54,9 @@ import subprocess
 
 
 git_diff = subprocess.check_output(["git", "diff"])
+git_tag = subprocess.check_output(["git", "tag"])
 
-raise ValueError(release, version, content, git_diff)
+raise ValueError(release, "\n", version, "\n", content, "\n", git_diff, "\n", git_tag)
 
 rst_epilog = f"""
 .. |project| replace:: {project}
