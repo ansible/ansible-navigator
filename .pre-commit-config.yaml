@@ -189,6 +189,7 @@ repos:
         alias: mypy-py36
         name: MyPy, for Python 3.6
         additional_dependencies:
+          - importlib_resources # Needed for checking py3.6 with a later interpreter
           - jinja2
           - libtmux
           - pytest
