@@ -3,6 +3,7 @@
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
 
+from functools import partial
 from pathlib import Path
 from sys import path
 
@@ -35,13 +36,12 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-
 # fmt: off
 # The short X.Y version
-version = '.'.join(
+version = ".".join(
     get_scm_version(
-        local_scheme='no-local-version',
-    ).split('.')[:3],
+        local_scheme="no-local-version",
+    ).split(".")[:3],
 )
 
 # The full version, including alpha/beta/rc tags
