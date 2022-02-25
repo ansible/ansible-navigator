@@ -33,9 +33,9 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-
+from ansible_navigator._version import version
 # The full version, including alpha/beta/rc tags
-release = get_version("ansible_navigator")
+release = version #get_version("ansible_navigator")
 
 # The short X.Y version
 # including .Z, resulting in the X.Y.Z version
