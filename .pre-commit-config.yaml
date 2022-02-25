@@ -66,7 +66,7 @@ repos:
       - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: requirements-txt-fixer
-        exclude: >  # pip-tools managed lockfiles must not be changed
+        exclude: > # pip-tools managed lockfiles must not be changed
           (?x)^(
             docs/requirements\.txt
           )$
