@@ -52,6 +52,7 @@ content = file.read()
 
 import subprocess
 
+
 git_diff = subprocess.check_output(["git", "diff"])
 
 raise ValueError(release, version, content, git_diff)
