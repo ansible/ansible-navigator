@@ -92,7 +92,7 @@ def _nodes_from_rst(
         ),
         node=node,
     )
-    return node.children  # type: ignore
+    return node.children
 
 
 def _rst_generate_row(row: Tuple) -> List:

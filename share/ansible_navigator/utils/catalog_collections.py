@@ -22,14 +22,14 @@ from typing import Tuple
 
 import yaml
 
-from ansible.utils.plugin_docs import get_docstring  # type: ignore
+from ansible.utils.plugin_docs import get_docstring
 from yaml.error import YAMLError
 
 
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import SafeLoader  # type: ignore
+    from yaml import SafeLoader  # type: ignore[misc]
 
 # Import from the source tree whenever possible. When running
 # in an execution environment, and therefore not type checking
@@ -242,7 +242,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
     # pylint: disable=import-outside-toplevel
 
     # load the fragment_loader _after_ the path is set
-    from ansible.plugins.loader import fragment_loader  # type: ignore
+    from ansible.plugins.loader import fragment_loader
 
     while True:
         entry = pending_queue.get()
