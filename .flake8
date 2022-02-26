@@ -219,7 +219,6 @@ per-file-ignores =
   tests/unit/test_cli.py: D200, D202, D205, D400, D403, DAR101, DAR201
   tests/unit/test_image_introspection.py: D200, D400, D403, DAR101, DAR201
   tests/unit/test_log_append.py: D200, D400, D403, DAR101
-  tests/unit/test_yaml.py: D200
   tests/unit/ui_framework/test_colorize.py: D200, D205, D209, D400, DAR101
   tests/unit/utils/test_functions.py: D200, D202, D400, D403, DAR101
 
