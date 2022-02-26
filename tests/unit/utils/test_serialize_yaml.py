@@ -1,5 +1,4 @@
-"""Tests related to the yaml abstraction layer.
-"""
+"""Tests related to the yaml abstraction layer."""
 
 import pytest
 
