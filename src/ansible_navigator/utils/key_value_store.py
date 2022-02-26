@@ -9,7 +9,6 @@ from typing import Tuple
 from typing import Union
 
 
-<<<<<<< HEAD
 if sys.version_info >= (3, 9):
     from collections.abc import ItemsView
     from collections.abc import KeysView
@@ -33,33 +32,6 @@ class KVSValuesView(ValuesView[str]):
 
 
 class KeyValueStore(MutableMapping[str, str]):
-||||||| parent of d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
-class KeyValueStore(dict):
-=======
-if sys.version_info >= (3, 9):
-    from collections.abc import ItemsView
-    from collections.abc import KeysView
-    from collections.abc import ValuesView
-else:
-    from typing import ItemsView
-    from typing import KeysView
-    from typing import ValuesView
-
-
-class KVSKeysView(KeysView[str]):
-    """A glorified KeysView specific to, and returned by, methods in KeyValueStore"""
-
-
-class KVSItemsView(ItemsView[str, str]):
-    """A glorified ItemsView specific to, and returned by, methods in KeyValueStore"""
-
-
-class KVSValuesView(ValuesView[str]):
-    """A glorified ValuesView specific to, and returned by, methods in KeyValueStore"""
-
-
-class KeyValueStore(MutableMapping[str, str]):
->>>>>>> d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
     """An interface to use a sqlite database as a key-value store."""
 
     def __init__(self, filename: Union[str, Path]):
@@ -72,7 +44,6 @@ class KeyValueStore(MutableMapping[str, str]):
         cursor = self.conn.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS kv (key text unique, value text)")
 
-<<<<<<< HEAD
     @property
     def path(self) -> str:
         """Provide the filename where the KVS is stored on disk.
@@ -82,46 +53,19 @@ class KeyValueStore(MutableMapping[str, str]):
         return self._path
 
     def close(self) -> None:
-||||||| parent of d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
-    def close(self):
-=======
-    @property
-    def path(self) -> str:
-        """The filename where the KVS is stored on disk."""
-        return self._path
-
-    def close(self) -> None:
->>>>>>> d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
         """Close the connection to the database."""
         self.conn.commit()
         self.conn.close()
 
-<<<<<<< HEAD
     def open(self) -> sqlite3.Connection:
         """Establish the connection to the database.
-||||||| parent of d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
-    def open(self):
-        """Establish the connection to the database."""
-        self.conn = sqlite3.connect(self.path)
-=======
-    def open(self) -> sqlite3.Connection:
-        """Establish the connection to the database."""
-        self.conn = sqlite3.connect(self.path)
-        return self.conn
->>>>>>> d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
 
-<<<<<<< HEAD
         :returns: A connection to the database
         """
         self.conn = sqlite3.connect(self.path)
         return self.conn
 
     def __len__(self) -> int:
-||||||| parent of d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
-    def __len__(self):
-=======
-    def __len__(self) -> int:
->>>>>>> d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
         """Count the number of keys in the key-value store.
 
         :returns: The number of keys
@@ -178,23 +122,12 @@ class KeyValueStore(MutableMapping[str, str]):
         """
         return KVSItemsView(self)
 
-<<<<<<< HEAD
     # mypy complains about this 'str' because it's more specific than the 'object'
     # that dict's Mapping superclass wants. However, it's correct in our case.
     # Our sqlite table expects string keys (column type 'text'). It's an error to
     # pass something else. If we pass something too weird, the sqlite3 lib will
     # throw an error at runtime.
     def __contains__(self, key: str) -> bool:  # type: ignore[override]
-||||||| parent of d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
-    def __contains__(self, key):
-=======
-    # mypy complains about this 'str' because it's more specific than the 'object'
-    # that dict's Mapping superclass wants. However, it's correct in our case.
-    # Our sqlite table expects string keys (column type 'text'). It's an error to
-    # pass something else. If we pass something too weird, the sqlite3 lib will
-    # throw an error at runrtime.
-    def __contains__(self, key: str) -> bool:  # type: ignore[override]
->>>>>>> d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
         """Check if a given key is in the key-value store.
 
         This provides dictionary like  `some_key in` support for the key-value store.
@@ -246,7 +179,6 @@ class KeyValueStore(MutableMapping[str, str]):
         :returns: The keys in the key-value store
         """
         return self.iterkeys()
-<<<<<<< HEAD
 
     def __repr__(self) -> str:
         """Represent the key-value store.
@@ -257,17 +189,3 @@ class KeyValueStore(MutableMapping[str, str]):
         if not self:
             return f"{self.__class__.__name__}()"
         return f"{self.__class__.__name__}({list(self.items())})"
-||||||| parent of d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
-=======
-
-    def __repr__(self) -> str:
-        """
-        KVS repr
-
-        :returns: The KVS repr.
-        """
-        # Loosely based on collections.OrderedDict#__repr__
-        if not self:
-            return f"{self.__class__.__name__}()"
-        return f"{self.__class__.__name__}({list(self.items())})"
->>>>>>> d622215e (Rework KVS with types and extend MutableMapping instead of dict (#988))
