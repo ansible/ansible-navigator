@@ -20,8 +20,8 @@ from typing import Pattern
 from typing import Tuple
 from typing import Union
 
-from .._yaml import human_dump
 from ..utils import templar
+from ..utils.serialize import human_dump
 from ..utils.serialize import json_dumps
 from .colorize import Colorize
 from .colorize import rgb_to_ansi

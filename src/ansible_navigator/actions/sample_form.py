@@ -1,11 +1,11 @@
 """``:sample_form`` command implementation."""
-from .._yaml import yaml
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
+from ..utils.serialize import yaml
 from . import _actions as actions
 
 

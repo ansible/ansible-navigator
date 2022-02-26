@@ -3,9 +3,9 @@ entries for for all entries.
 """
 import os
 
-from ansible_navigator._yaml import Loader
-from ansible_navigator._yaml import yaml
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.utils.serialize import Loader
+from ansible_navigator.utils.serialize import yaml
 from .data import ENV_VAR_DATA
 from .defaults import TEST_FIXTURE_DIR
 

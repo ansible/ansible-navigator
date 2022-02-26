@@ -5,7 +5,7 @@ import pytest
 
 from yaml import Dumper
 
-import ansible_navigator._yaml as yaml_import
+import ansible_navigator.utils.serialize as yaml_import
 
 
 def test_check_yaml_imports():
@@ -25,7 +25,7 @@ def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReq
     """
     if request.param:  # type: ignore[attr-defined] # github.com/pytest-dev/pytest/issues/8073
         monkeypatch.setattr(
-            "ansible_navigator._yaml.HumanDumper.ignore_aliases",
+            "ansible_navigator.utils.serialize.HumanDumper.ignore_aliases",
             Dumper.ignore_aliases,
         )
     return request.param  # type: ignore[attr-defined]
