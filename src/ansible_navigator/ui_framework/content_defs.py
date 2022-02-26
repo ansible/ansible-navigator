@@ -1,4 +1,4 @@
-"""Defintions of UI content objects."""
+"""Definitions of UI content objects."""
 
 from dataclasses import dataclass
 from enum import Enum
@@ -20,7 +20,9 @@ class ContentBase:
     """The base class for all content dataclasses presented in the UI."""
 
     def serialization_dict_factory(
-        self, serf: SerializationFormat, view: ContentView
+        self,
+        serf: SerializationFormat,
+        view: ContentView,
     ) -> Optional[Callable]:
         """Provide the factory to be used to convert self into a dictionary.
 

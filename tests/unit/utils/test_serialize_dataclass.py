@@ -21,14 +21,15 @@ def test_content_to_dict_default():
     """Test the conversion of the dataclass to a dict."""
     content = ContentTest()
     dict_factory = content.serialization_dict_factory(
-        serf=SerializationFormat.JSON, view=ContentView.NORMAL
+        serf=SerializationFormat.JSON,
+        view=ContentView.NORMAL,
     )
     result = _content_to_dict(content=content, dict_factory=dict_factory)
     assert result == {"attr_01": False, "attr_02": 2, "attr_03": "three"}
 
 
 def test_content_to_json():
-    """Test the converstion of the data class to json."""
+    """Test the conversion of the data class to json."""
     content = ContentTest()
     result = serialize(content=content, serf=SerializationFormat.JSON, view=ContentView.NORMAL)
     expected = '{\n    "attr_01": false,\n    "attr_02": 2,\n    "attr_03": "three"\n}'
