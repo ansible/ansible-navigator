@@ -1,4 +1,4 @@
-"""Defintions related to content serialization."""
+"""Definitions related to content serialization."""
 
 from enum import Enum
 
