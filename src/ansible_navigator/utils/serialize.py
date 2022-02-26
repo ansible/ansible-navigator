@@ -5,6 +5,7 @@ import re
 
 from dataclasses import asdict
 from typing import IO
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -13,10 +14,12 @@ from typing import Optional
 
 import yaml  # noqa: F401
 
-from ..ui_framework.content_defs import ContentBase
-from ..ui_framework.content_defs import ContentView
 from .serialize_defs import SerializationFormat
 
+
+if TYPE_CHECKING:
+    from ..ui_framework.content_defs import ContentBase
+    from ..ui_framework.content_defs import ContentView
 
 # pylint: disable=unused-import
 try:
@@ -34,9 +37,9 @@ except ImportError:
 
 
 def serialize(
-    content: ContentBase,
+    content: "ContentBase",
     serf: SerializationFormat,
-    view: ContentView,
+    view: "ContentView",
     filename: str = None,
     file_mode: str = "w",
 ) -> Optional[str]:
@@ -62,7 +65,7 @@ def serialize(
     return None
 
 
-def _content_to_dict(content: ContentBase, dict_factory: Optional[Callable]) -> Dict:
+def _content_to_dict(content: "ContentBase", dict_factory: Optional[Callable]) -> Dict:
     """Convert a content dataclass into a dictionary.
 
     :param content: The content dataclass to serialize
