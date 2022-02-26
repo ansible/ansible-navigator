@@ -113,6 +113,8 @@ nitpick_ignore = [
     ("py:class", "CompiledRegsetRule"),
     ("py:class", "CompiledRule"),
     ("py:class", "Compiler"),
+    ("py:class", "ContentBase"),
+    ("py:class", "ContentView"),
     ("py:class", "CursesLine"),
     ("py:class", "CursesLines"),
     ("py:class", "Entry"),
