@@ -3,12 +3,22 @@
 import json
 import re
 
+from dataclasses import asdict
+from enum import Enum
 from typing import IO
+from typing import TYPE_CHECKING
 from typing import Any
+from typing import Callable
+from typing import Dict
 from typing import NamedTuple
 from typing import Optional
 
 import yaml  # noqa: F401
+
+
+if TYPE_CHECKING:
+    from ..ui_framework.content_defs import ContentBase
+    from ..ui_framework.content_defs import ContentView
 
 
 # pylint: disable=unused-import
@@ -26,12 +36,71 @@ except ImportError:
 # pylint: enable=unused-import
 
 
+class SerializationFormat(Enum):
+    """The serialization format."""
+
+    YAML = "yaml"
+    JSON = "json"
+
+
+def serialize(
+    content: "ContentBase",
+    serf: SerializationFormat,
+    view: "ContentView",
+    filename: str = None,
+    file_mode: str = "w",
+) -> Optional[str]:
+    """Serialize a dataclass based on format and view.
+
+    :param content: The content dataclass to serialize
+    :param serf: The serialization format
+    :param view: The contest view
+    :param filename: A filename to write to
+    :param file_mode: The mode for the file operation
+    :returns: The serialized content
+    """
+    dict_factory = content.serialization_dict_factory(serf=serf, view=view)
+    content_as_dict = _content_to_dict(content=content, dict_factory=dict_factory)
+    if serf == SerializationFormat.YAML:
+        if filename is None:
+            return yaml_dumps(obj=content_as_dict)
+        return yaml_dump(obj=content_as_dict, filename=filename, file_mode=file_mode)
+    if serf == SerializationFormat.JSON:
+        if filename is None:
+            return json_dumps(content_as_dict)
+        return _json_dump(dumpable=content_as_dict, filename=filename, file_mode=file_mode)
+    return None
+
+
+def _content_to_dict(content: "ContentBase", dict_factory: Optional[Callable]) -> Dict:
+    """Convert a content dataclass into a dictionary.
+
+    :param content: The content dataclass to serialize
+    :param dict_factory: The factory to use to produce the dict
+    :returns: The resulting dictionary
+    """
+    if dict_factory is None:
+        return asdict(content)
+    return asdict(content, dict_factory=dict_factory)
+
+
 class JsonParams(NamedTuple):
     """The parameters for json dump and dumps."""
 
     indent: int = 4
     sort_keys: bool = True
     ensure_ascii: bool = False
+
+
+def _json_dump(dumpable: Dict, filename: str, file_mode: str):
+    """Create a file handle and dump json.
+
+    :param dumpable: The object to dump
+    :param filename: The file name for the file
+    :param file_mode: The file mode for the operation
+    """
+    with open(file=filename, mode=file_mode, encoding="utf-8") as file_handle:
+        json_dump(dumpable=dumpable, file_handle=file_handle)
 
 
 def json_dump(dumpable: Any, file_handle: IO, params: NamedTuple = JsonParams()) -> None:
@@ -84,6 +153,10 @@ def human_dump(obj: Any, filename: Optional[str] = None, file_mode: str = "w") -
             )
         return None
     return yaml.dump(obj, Dumper=dumper, **YamlStyle()._asdict())
+
+
+yaml_dump = human_dump
+yaml_dumps = human_dump
 
 
 class HumanDumper(Dumper):
