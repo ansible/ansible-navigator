@@ -4,9 +4,7 @@ import json
 import re
 
 from dataclasses import asdict
-from enum import Enum
 from typing import IO
-from typing import TYPE_CHECKING
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -15,10 +13,9 @@ from typing import Optional
 
 import yaml  # noqa: F401
 
-
-if TYPE_CHECKING:
-    from ..ui_framework.content_defs import ContentBase
-    from ..ui_framework.content_defs import ContentView
+from ..ui_framework.content_defs import ContentBase
+from ..ui_framework.content_defs import ContentView
+from .serialize_defs import SerializationFormat
 
 
 # pylint: disable=unused-import
@@ -36,17 +33,10 @@ except ImportError:
 # pylint: enable=unused-import
 
 
-class SerializationFormat(Enum):
-    """The serialization format."""
-
-    YAML = "yaml"
-    JSON = "json"
-
-
 def serialize(
-    content: "ContentBase",
+    content: ContentBase,
     serf: SerializationFormat,
-    view: "ContentView",
+    view: ContentView,
     filename: str = None,
     file_mode: str = "w",
 ) -> Optional[str]:
@@ -72,7 +62,7 @@ def serialize(
     return None
 
 
-def _content_to_dict(content: "ContentBase", dict_factory: Optional[Callable]) -> Dict:
+def _content_to_dict(content: ContentBase, dict_factory: Optional[Callable]) -> Dict:
     """Convert a content dataclass into a dictionary.
 
     :param content: The content dataclass to serialize

@@ -5,7 +5,7 @@ from enum import Enum
 from typing import Callable
 from typing import Optional
 
-from ..utils.serialize import SerializationFormat
+from ..utils.serialize_defs import SerializationFormat
 
 
 class ContentView(Enum):
