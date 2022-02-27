@@ -12,8 +12,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from .._yaml import Loader
-from .._yaml import yaml
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
@@ -26,6 +24,8 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
+from ..utils.serialize import Loader
+from ..utils.serialize import yaml
 from . import _actions as actions
 from . import run_action
 

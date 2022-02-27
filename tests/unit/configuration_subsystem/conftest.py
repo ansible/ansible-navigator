@@ -9,8 +9,6 @@ from typing import NamedTuple
 
 import pytest
 
-from ansible_navigator._yaml import Loader
-from ansible_navigator._yaml import yaml
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 from ansible_navigator.configuration_subsystem.definitions import (
     ApplicationConfiguration,
@@ -20,6 +18,8 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import (
 )
 from ansible_navigator.utils import ExitMessage
 from ansible_navigator.utils import LogMessage
+from ansible_navigator.utils.serialize import Loader
+from ansible_navigator.utils.serialize import yaml
 from ...defaults import FIXTURES_DIR
 
 
