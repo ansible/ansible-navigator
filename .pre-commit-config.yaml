@@ -21,19 +21,24 @@ repos:
     rev: "v2.5.1"
     hooks:
       - id: prettier
-        exclude: >
-          (?x)^(
-            tests/fixtures/integration/actions/.*\.json|
-            share/ansible_navigator/grammar/.*\.json|
-            share/ansible_navigator/themes/.*\.json
-          )$
+        # Original hook implementation is flaky due to *several* bugs described
+        # in https://github.com/prettier/prettier/issues/12364
+        # a) CI=1 needed to avoid incomplete output
+        # b) two executions are needed because --list-different works correctly
+        # only when run with --check as with --write the output will also
+        # include other entries and logging level cannot be used to keep only
+        # modified files listed (any file is listes using the log level, regardless if
+        # is modified or not).
+        # c) We avoid letting pre-commit pass each filename in order to avoid
+        # runing multiple instances in parallel. This also ensures that running
+        # prettier from the command line behaves identically with the pre-commit
+        # one. No real performance downsides.
+        entry: env CI=1 bash -c "prettier --list-different . || true && prettier --loglevel=error --write ."
+        pass_filenames: false
+        args: []
         additional_dependencies:
           - prettier
           - prettier-plugin-toml
-        types_or:
-          - javascript
-          - toml
-          - yaml
 
   - repo: https://github.com/psf/black.git
     rev: 22.1.0

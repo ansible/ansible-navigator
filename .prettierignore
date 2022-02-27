@@ -1,0 +1,12 @@
+# Stuff we don't want priettier to ever to look into
+.git/
+.tox/
+.mypy_cache/
+
+# Tracked but not manually edited
+tests/fixtures/integration/actions/**/*.json
+share/ansible_navigator/grammar/**/*.json
+share/ansible_navigator/themes/**/*.json
+
+# Temporary disabled during adoption:
+*.md
