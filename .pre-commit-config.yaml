@@ -33,7 +33,9 @@ repos:
         # runing multiple instances in parallel. This also ensures that running
         # prettier from the command line behaves identically with the pre-commit
         # one. No real performance downsides.
-        entry: env CI=1 bash -c "prettier --list-different . || true && prettier --loglevel=error --write ."
+        # d) exit with the return code from list-different (0=none, 1=some)
+        # rather than the write (0=successfully rewrote files). pre-commit.ci
+        entry: env CI=1 bash -c "prettier --list-different . || ec=$? && prettier --loglevel=error --write . && exit $ec"
         pass_filenames: false
         args: []
         additional_dependencies:
