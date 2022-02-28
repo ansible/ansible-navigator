@@ -19,6 +19,7 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants as C
 from ..runner import AnsibleDoc
 from ..runner import Command
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -53,18 +54,14 @@ class Action(ActionBase):
         empty_str = " " * (screen_w - len(plugin_str) + 1)
         heading_str = (plugin_str + empty_str).upper()
 
-        heading = (
-            (
-                CursesLinePart(
-                    column=0,
-                    string=heading_str,
-                    color=0,
-                    decoration=curses.A_UNDERLINE | curses.A_BOLD,
-                ),
-            ),
+        line_part = CursesLinePart(
+            column=0,
+            string=heading_str,
+            color=0,
+            decoration=curses.A_UNDERLINE | curses.A_BOLD,
         )
 
-        return heading
+        return CursesLines((CursesLine((line_part,)),))
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Execute the ``doc`` request for mode interactive.

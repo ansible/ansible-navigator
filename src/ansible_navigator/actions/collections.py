@@ -19,6 +19,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import Command
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -52,23 +53,15 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
     :param screen_w: The current screen width
     :return: The heading
     """
-    heading = []
     string = f"{obj['full_name'].upper()}: {obj['__description']}"
     string = string + (" " * (screen_w - len(string) + 1))
-
-    heading.append(
-        tuple(
-            [
-                CursesLinePart(
-                    column=0,
-                    string=string,
-                    color=2,
-                    decoration=curses.A_UNDERLINE,
-                ),
-            ],
-        ),
+    line_part = CursesLinePart(
+        column=0,
+        string=string,
+        color=2,
+        decoration=curses.A_UNDERLINE,
     )
-    return tuple(heading)
+    return CursesLines((CursesLine((line_part,)),))
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
