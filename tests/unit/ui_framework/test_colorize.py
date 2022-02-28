@@ -46,6 +46,24 @@ def test_basic_success_yaml():
     assert "".join(line_part.chars for line_part in result[1]) == sample.splitlines()[1]
 
 
+def test_basic_success_log():
+    """Ensure the log string is returned as 1 line, with 5 parts.
+
+    Also ensure the parts can be reassembled to match the string.
+    """
+    sample = "1 ERROR text 42"
+
+    result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
+        doc=sample,
+        scope="text.log",
+    )
+    assert len(result) == 1
+    first_line = result[0]
+    line_parts = tuple(p.chars for p in first_line)
+    assert line_parts == ("1", " ", "ERROR", " text ", "42")
+    assert "".join(line_parts) == sample
+
+
 def test_basic_success_no_color():
     """Ensure scope ``no_color`` return just lines."""
     sample = json.dumps({"test": "data"})
