@@ -716,7 +716,7 @@ class UserInterface(CursesWindow):
         :return: True if a match else False
         """
         for key in columns:
-            if self._search_value(self.menu_filter(), obj[key]):
+            if self._search_value(self.menu_filter(), obj.get(key)):
                 return True
         return False
 
