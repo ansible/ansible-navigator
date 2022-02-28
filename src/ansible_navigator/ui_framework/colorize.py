@@ -47,6 +47,7 @@ class ColorSchema:
 
         :param schema: The color scheme, theme to use
         """
+        self._logger = logging.getLogger(__name__)
         self._schema = schema
 
     @functools.lru_cache(maxsize=None)
@@ -72,7 +73,13 @@ class ColorSchema:
                 )
                 if color:
                     foreground = color.get("settings", {}).get("foreground", None)
-                    return hex_to_rgb(foreground)
+                    # Without decoration support, continue resolving to a until we find a
+                    # forground color or ultimately return None. This currently completely
+                    # ignores font styles.
+                    # e.g. color={'scope': 'strong', 'settings': {'fontStyle': 'bold'}}
+                    if foreground is not None:
+                        return hex_to_rgb(foreground)
+                    self._logger.debug("Color resolution continued: %s", color)
         return None
 
 
