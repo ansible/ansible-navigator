@@ -31,27 +31,42 @@ class ContentBase:
         :returns: The factory
         """
         if (view, serf) == (ContentView.FULL, SerializationFormat.JSON):
-            return self._serialize_json_full()
+            return self.serialize_json_full()
         if (view, serf) == (ContentView.FULL, SerializationFormat.YAML):
-            return self._serialize_yaml_full()
+            return self.serialize_yaml_full()
         if (view, serf) == (ContentView.NORMAL, SerializationFormat.JSON):
-            return self._serialize_json_normal()
+            return self.serialize_json_normal()
         if (view, serf) == (ContentView.NORMAL, SerializationFormat.YAML):
-            return self._serialize_yaml_normal()
+            return self.serialize_yaml_normal()
         return None
 
-    def _serialize_json_full(self):
-        return self._default_dict_factory()
+    # pylint: disable=no-self-use
+    def serialize_json_full(self) -> Optional[Callable]:
+        """Provide dictionary factory for ``JSON`` with all attributes.
 
-    def _serialize_json_normal(self):
-        return self._default_dict_factory()
-
-    def _serialize_yaml_full(self):
-        return self._default_dict_factory()
-
-    def _serialize_yaml_normal(self):
-        return self._default_dict_factory()
-
-    @staticmethod
-    def _default_dict_factory():
+        :returns: The function used for conversion to a dictionary or nothing
+        """
         return None
+
+    def serialize_json_normal(self) -> Optional[Callable]:
+        """Provide dictionary factory for ``JSON`` with curated attributes.
+
+        :returns: The function used for conversion to a dictionary or nothing
+        """
+        return None
+
+    def serialize_yaml_full(self) -> Optional[Callable]:
+        """Provide dictionary factory for ``YAML`` with all attributes.
+
+        :returns: The function used for conversion to a dictionary or nothing
+        """
+        return None
+
+    def serialize_yaml_normal(self) -> Optional[Callable]:
+        """Provide dictionary factory for ``JSON`` with curated attributes.
+
+        :returns: The function used for conversion to a dictionary or nothing
+        """
+        return None
+
+    # pylint: enable=no-self-use
