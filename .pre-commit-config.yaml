@@ -72,7 +72,6 @@ repos:
       - id: check-added-large-files
       - id: fix-byte-order-marker
       - id: check-case-conflict
-      - id: check-docstring-first
       - id: check-json
         exclude: |
           (?x)
