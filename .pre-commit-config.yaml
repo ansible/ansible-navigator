@@ -52,7 +52,7 @@ repos:
         stages: ["manual"]
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.1.12
+    rev: v1.1.13
     hooks:
       - id: remove-tabs
         exclude: |
