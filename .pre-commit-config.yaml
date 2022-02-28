@@ -60,7 +60,7 @@ repos:
         stages: ["manual"]
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.1.12
+    rev: v1.1.13
     hooks:
       - id: remove-tabs
         exclude: |
@@ -80,7 +80,6 @@ repos:
       - id: check-added-large-files
       - id: fix-byte-order-marker
       - id: check-case-conflict
-      - id: check-docstring-first
       - id: check-json
         exclude: |
           (?x)
