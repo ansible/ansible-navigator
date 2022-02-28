@@ -74,7 +74,7 @@ class ColorSchema:
                 if color:
                     foreground = color.get("settings", {}).get("foreground", None)
                     # Without decoration support, continue resolving to a until we find a
-                    # forground color or ultimately return None. This currently completely
+                    # foreground color or ultimately return None. This currently completely
                     # ignores font styles.
                     # e.g. color={'scope': 'strong', 'settings': {'fontStyle': 'bold'}}
                     if foreground is not None:
