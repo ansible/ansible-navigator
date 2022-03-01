@@ -5,7 +5,7 @@ ansible-navigator:
     config: /tmp/ansible.cfg
     cmdline: "--forks 15"
     inventories:
-    - /tmp/test_inventory.yml
+      - /tmp/test_inventory.yml
     playbook: /tmp/test_playbook.yml
   ansible-builder:
     workdir: /tmp/
@@ -46,11 +46,11 @@ ansible-navigator:
       arguments:
       - "--tls-verify=false"
     volume-mounts:
-    - src: "/test1"
-      dest: "/test1"
-      label: "Z"
+      - src: "/test1"
+        dest: "/test1"
+        label: "Z"
     container-options:
-    - "--net=host"
+      - "--net=host"
   help-builder: False
   help-config: True
   help-doc: True
