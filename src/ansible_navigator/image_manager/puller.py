@@ -143,7 +143,7 @@ class ImagePuller:
         """print a little value added information"""
         messages = [("Execution environment image name:", self._image)]
         messages.append(("Execution environment image tag:", self._image_tag))
-        arguments = shlex_join(self._arguments) or "None"
+        arguments = shlex_join(self._arguments) or None
         messages.append(("Execution environment pull arguments:", arguments))
         messages.append(("Execution environment pull policy:", self._pull_policy))
         messages.append(("Execution environment pull needed:", self._pull_required))
@@ -154,8 +154,8 @@ class ImagePuller:
         print("\u002d" * width)
         column_width = max((len(m[0]) for m in messages))
         for msg, value in messages:
-            print(f"{msg.ljust(column_width)} {value}")
-            self._log_message(message=f"{msg}: {value}", level=logging.INFO)
+            print(f"{msg.ljust(column_width)} {value!s}")
+            self._log_message(message=f"{msg!s}: {value!s}", level=logging.INFO)
         print("\u002d" * width)
         print("Updating the execution environment")
         print("\u002d" * width)
