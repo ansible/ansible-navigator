@@ -40,7 +40,11 @@ class ImagePuller:
         :param arguments: Additional arguments to be appended to the pull policy
         :param pull_policy: The current pull policy from the settings
         """
-        self._arguments: Union[Constants, List[str]] = arguments
+        if isinstance(arguments, list):
+            self._arguments = arguments
+        else:
+            self._arguments = []
+
         self._assessment = ImageAssessment
         self._container_engine: str = container_engine
         self._exit_messages: List[ExitMessage] = []
@@ -139,10 +143,7 @@ class ImagePuller:
         """print a little value added information"""
         messages = [("Execution environment image name:", self._image)]
         messages.append(("Execution environment image tag:", self._image_tag))
-        if isinstance(self._arguments, list):
-            arguments = shlex_join(self._arguments)
-        else:
-            arguments = "None"
+        arguments = shlex_join(self._arguments) or "None"
         messages.append(("Execution environment pull arguments:", arguments))
         messages.append(("Execution environment pull policy:", self._pull_policy))
         messages.append(("Execution environment pull needed:", self._pull_required))
@@ -165,9 +166,10 @@ class ImagePuller:
         :returns: The list of command parts
         """
         command_line = [self._container_engine, "pull"]
-        if isinstance(self._arguments, list):
-            for argument in self._arguments:
-                command_line.extend(shlex.split(argument))
+        # In case the settings file has an entry with a space
+        # e.g. ``--authfile file.txt``, split all of the entries
+        for argument in self._arguments:
+            command_line.extend(shlex.split(argument))
         command_line.append(self._image)
         return command_line
 

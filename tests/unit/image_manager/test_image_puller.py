@@ -151,9 +151,11 @@ def test_pull_with_args():
     image_puller = ImagePuller(
         container_engine="podman",
         image="my_image",
-        arguments=["--tls-verify=false"],
+        arguments=["--tls-verify false"],
         pull_policy="tag",
     )
     result = image_puller._generate_pull_command()  # pylint: disable=protected-access
-    expected = "podman pull --tls-verify=false my_image"
-    assert result == shlex.split(expected)
+    expected_list = ["podman", "pull", "--tls-verify", "false", "my_image"]
+    assert result == expected_list
+    expected_string = "podman pull --tls-verify false my_image"
+    assert result == shlex.split(expected_string)

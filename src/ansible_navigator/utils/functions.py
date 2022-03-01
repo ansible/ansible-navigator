@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from typing import Iterable
 from typing import List
 from typing import Mapping
 from typing import NamedTuple
@@ -444,10 +445,16 @@ def round_half_up(number: Union[float, int]) -> int:
     return int(rounded)
 
 
-def shlex_join(tokens) -> str:
-    """Concatenate the tokens of a list and return a string."""
+def shlex_join(tokens: Iterable[str]) -> str:
+    """Concatenate the tokens of a list and return a string.
+
+    ``shlex.join`` was new in version 3.8
+
+    :param tokens: The iterable of strings to join
+    :returns: The iterable joined with spaces
+    """
     if sys.version_info >= (3, 8):
-        return shlex.join(tokens)
+        return shlex.join(split_command=tokens)
     return " ".join(shlex.quote(token) for token in tokens)
 
 
