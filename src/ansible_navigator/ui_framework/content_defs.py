@@ -23,7 +23,7 @@ DictT = Dict[str, DictValueT]
 
 @dataclass
 class ContentBase(Generic[DictValueT]):
-    """The base class for all content dataclasses presented in the UI.
+    r"""The base class for all content dataclasses presented in the UI.
 
     It should be noted, that while the return type is defined as ``DictValueT``
     for the serialization functions below, mypy will not catch in incorrect
@@ -33,7 +33,7 @@ class ContentBase(Generic[DictValueT]):
     @overload
     def asdict(obj: Any) -> dict[str, Any]: ...
     @overload
-    def asdict(obj: Any, *, dict_factory: Callable[[list[tuple[str, Any]]], _T]) -> _T: ...
+    def asdict(obj: Any, \*, dict_factory: Callable[[list[tuple[str, Any]]], _T]) -> _T: ...
 
     Which result in mypy believing the outcome of asdict is dict[str, Any] and letting it silently
     pass through an incorrect ``DictValueT``. ``Mypy`` identifies this as a known issue:
