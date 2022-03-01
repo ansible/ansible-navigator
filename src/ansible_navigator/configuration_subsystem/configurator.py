@@ -9,10 +9,10 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..utils import ExitMessage
-from ..utils import ExitPrefix
-from ..utils import LogMessage
-from ..utils import oxfordcomma
+from ..utils.functions import ExitMessage
+from ..utils.functions import ExitPrefix
+from ..utils.functions import LogMessage
+from ..utils.functions import oxfordcomma
 from ..utils.serialize import SafeLoader
 from ..utils.serialize import yaml
 from .definitions import ApplicationConfiguration

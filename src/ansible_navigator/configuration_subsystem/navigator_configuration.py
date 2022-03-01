@@ -9,11 +9,11 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..utils import ExitMessage
-from ..utils import LogMessage
-from ..utils import abs_user_path
-from ..utils import get_share_directory
-from ..utils import oxfordcomma
+from ..utils.functions import ExitMessage
+from ..utils.functions import LogMessage
+from ..utils.functions import abs_user_path
+from ..utils.functions import get_share_directory
+from ..utils.functions import oxfordcomma
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C

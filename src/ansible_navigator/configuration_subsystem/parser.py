@@ -9,7 +9,7 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from ..utils import oxfordcomma
+from ..utils.functions import oxfordcomma
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 

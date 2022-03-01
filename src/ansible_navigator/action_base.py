@@ -16,8 +16,8 @@ from .steps import Steps
 from .ui_framework import Interaction
 from .ui_framework import ui
 from .ui_framework import warning_notification
-from .utils import ExitMessage
-from .utils import LogMessage
+from .utils.functions import ExitMessage
+from .utils.functions import LogMessage
 
 
 class ActionBase:

@@ -25,10 +25,10 @@ from .configuration_subsystem import NavigatorConfiguration
 from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
-from .utils import ExitMessage
-from .utils import ExitPrefix
-from .utils import LogMessage
-from .utils import clear_screen
+from .utils.functions import ExitMessage
+from .utils.functions import ExitPrefix
+from .utils.functions import LogMessage
+from .utils.functions import clear_screen
 
 
 __version__: Union[Constants, str]

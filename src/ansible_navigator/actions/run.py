@@ -34,10 +34,10 @@ from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
-from ..utils import abs_user_path
-from ..utils import human_time
-from ..utils import remove_ansi
-from ..utils import round_half_up
+from ..utils.functions import abs_user_path
+from ..utils.functions import human_time
+from ..utils.functions import remove_ansi
+from ..utils.functions import round_half_up
 from ..utils.serialize import json_dump
 from . import _actions as actions
 from . import run_action
