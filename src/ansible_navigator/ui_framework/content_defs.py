@@ -27,7 +27,7 @@ class ContentBase(Generic[DictValueT]):
 
     It should be noted, that while the return type is defined as ``DictValueT``
     for the serialization functions below, mypy will not catch in incorrect
-    defintion aof ``DictValueT`` at this time.  This is because of how ``asdict()``
+    definition of ``DictValueT`` at this time.  This is because of how ``asdict()``
     is typed:
 
     @overload
