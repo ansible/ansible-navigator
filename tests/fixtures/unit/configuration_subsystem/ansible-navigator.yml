@@ -44,7 +44,7 @@ ansible-navigator:
     pull-policy: never
     pull:
       arguments:
-      - "--tls-verify=false"
+        - "--tls-verify=false"
     volume-mounts:
       - src: "/test1"
         dest: "/test1"
