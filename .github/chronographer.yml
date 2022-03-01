@@ -3,5 +3,4 @@ enforce_name:
   suffix: .md
 exclude:
   humans:
-  - pyup-bot
-...
+    - pyup-bot
