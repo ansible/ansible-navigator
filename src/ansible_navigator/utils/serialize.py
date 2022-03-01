@@ -22,8 +22,8 @@ class SerializationFormat(Enum):
 
 
 if TYPE_CHECKING:
-    from ..ui_framework.content_defs import ContentBase
-    from ..ui_framework.content_defs import ContentView
+    from ..ui_framework import ContentBase
+    from ..ui_framework import ContentView
 
 
 # pylint: disable=unused-import

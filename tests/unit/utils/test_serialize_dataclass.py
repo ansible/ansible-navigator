@@ -12,8 +12,8 @@ from typing import Union
 
 import pytest
 
-from ansible_navigator.ui_framework.content_defs import ContentBase
-from ansible_navigator.ui_framework.content_defs import ContentView
+from ansible_navigator.ui_framework import ContentBase
+from ansible_navigator.ui_framework import ContentView
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
 
