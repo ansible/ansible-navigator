@@ -488,7 +488,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="pull_policy",
             choices=["always", "missing", "never", "tag"],
             cli_parameters=CliParameters(short="--pp"),
-            settings_file_path_override="execution-environment.pull-policy",
+            settings_file_path_override="execution-environment.pull.policy",
             short_description=(
                 "Specify the image pull policy."
                 " always:Always pull the image,"
