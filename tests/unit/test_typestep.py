@@ -2,6 +2,7 @@
 
 from ansible_navigator.steps import TypedStep
 
+
 # Test variables
 
 # Select a test index for @property index test
