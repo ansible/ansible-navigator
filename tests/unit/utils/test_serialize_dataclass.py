@@ -1,18 +1,20 @@
 """Tests for serializing a dataclass."""
+from dataclasses import asdict
 from dataclasses import dataclass
 from functools import partial
 from typing import Callable
+from typing import Dict
 from typing import Iterable
+from typing import List
 from typing import NamedTuple
-from typing import Optional
 from typing import Tuple
+from typing import Union
 
 import pytest
 
 from ansible_navigator.ui_framework.content_defs import ContentBase
 from ansible_navigator.ui_framework.content_defs import ContentView
 from ansible_navigator.utils.serialize import SerializationFormat
-from ansible_navigator.utils.serialize import _content_to_dict
 from ansible_navigator.utils.serialize import serialize
 
 
@@ -32,8 +34,11 @@ class ParametrizeFormat(NamedTuple):
     ids: Callable = str
 
 
+SimpleDictValueT = Union[bool, str, int]
+
+
 @dataclass
-class ContentTestSimple(ContentBase):
+class ContentTestSimple(ContentBase[SimpleDictValueT]):
     """Test content, no dictionary factory overrides."""
 
     attr_01: bool = False
@@ -41,47 +46,62 @@ class ContentTestSimple(ContentBase):
     attr_03: str = "three"
 
 
-def custom_dict_factory(kv_pairs, suffix: str):
-    """Create a dictionary with suffixed values from a list of key-value pairs.
-
-    :param kv_pairs: The key-value pairs provided by ``dataclasses.asdict()``
-    :param suffix: The suffix to append to values
-    :returns: The dictionary with suffixed values
-    """
-    return {name: f"{str(value)}_{suffix}" for name, value in kv_pairs}
+OverrideDictValueT = str
+OverrideDictReturn = Dict[str, OverrideDictValueT]
+OverrideAllValuesT = Union[bool, int, str]
 
 
 @dataclass
-class ContentTestOverride(ContentTestSimple):
+class ContentTestOverride(ContentBase[OverrideDictValueT]):
     """Test content, with dictionary factory overrides."""
 
-    def serialize_json_full(self) -> Optional[Callable]:
+    attr_01: bool = False
+    attr_02: int = 2
+    attr_03: str = "three"
+
+    def serialize_json_full(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``JSON`` with all attributes.
 
         :returns: The function used for conversion to a dictionary or nothing
         """
-        return partial(custom_dict_factory, suffix=f"_j_{ContentView.FULL!s}")
+        return self._asdict(suffix=f"_j_{ContentView.FULL!s}")
 
-    def serialize_json_normal(self) -> Optional[Callable]:
+    def serialize_json_normal(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``JSON`` with curated attributes.
 
         :returns: The function used for conversion to a dictionary or nothing
         """
-        return partial(custom_dict_factory, suffix=f"_j_{ContentView.NORMAL!s}")
+        return self._asdict(suffix=f"_j_{ContentView.NORMAL!s}")
 
-    def serialize_yaml_full(self) -> Optional[Callable]:
+    def serialize_yaml_full(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``YAML`` with all attributes.
 
         :returns: The function used for conversion to a dictionary or nothing
         """
-        return partial(custom_dict_factory, suffix=f"_y_{ContentView.FULL!s}")
+        return self._asdict(suffix=f"_y_{ContentView.FULL!s}")
 
-    def serialize_yaml_normal(self) -> Optional[Callable]:
+    def serialize_yaml_normal(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``JSON`` with curated attributes.
 
         :returns: The function used for conversion to a dictionary or nothing
         """
-        return partial(custom_dict_factory, suffix=f"_y_{ContentView.NORMAL!s}")
+        return self._asdict(suffix=f"_y_{ContentView.NORMAL!s}")
+
+    def _asdict(self, suffix) -> OverrideDictReturn:
+        return asdict(self, dict_factory=partial(self._custom_dict_factory, suffix=suffix))
+
+    @staticmethod
+    def _custom_dict_factory(
+        kv_pairs: List[Tuple[str, OverrideAllValuesT]],
+        suffix: str,
+    ) -> OverrideDictReturn:
+        """Create a dictionary with suffixed values from a list of key-value pairs.
+
+        :param kv_pairs: The key-value pairs provided by ``dataclasses.asdict()``
+        :param suffix: The suffix to append to values
+        :returns: The dictionary with suffixed values
+        """
+        return {name: f"{str(value)}_{suffix}" for name, value in kv_pairs}
 
 
 @pytest.mark.parametrize(**ParametrizeView()._asdict())
@@ -97,11 +117,10 @@ class Test:
         :param serf_tuple: The suffix, serialization format
         """
         content = ContentTestSimple()
-        dict_factory = content.serialization_dict_factory(
+        result = content.asdict(
             serf=serf_tuple[1],
             view=view,
         )
-        result = _content_to_dict(content=content, dict_factory=dict_factory)
         assert result == {"attr_01": False, "attr_02": 2, "attr_03": "three"}
 
     @staticmethod
@@ -138,11 +157,10 @@ class Test:
         :param serf_tuple: The suffix, serialization format
         """
         content = ContentTestOverride()
-        dict_factory = content.serialization_dict_factory(
+        result = content.asdict(
             serf=serf_tuple[1],
             view=view,
         )
-        result = _content_to_dict(content=content, dict_factory=dict_factory)
         for _key, value in result.items():
             assert value.endswith(f"_{serf_tuple[0]}_{str(view)}")
 

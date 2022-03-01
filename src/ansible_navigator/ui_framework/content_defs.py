@@ -1,11 +1,13 @@
 """Definitions of UI content objects."""
 
+from dataclasses import asdict
 from dataclasses import dataclass
 from enum import Enum
-from typing import Callable
-from typing import Optional
+from typing import Dict
+from typing import Generic
+from typing import TypeVar
 
-from ..utils.serialize_defs import SerializationFormat
+from ..utils.serialize import SerializationFormat
 
 
 class ContentView(Enum):
@@ -15,20 +17,24 @@ class ContentView(Enum):
     NORMAL = "normal"
 
 
+DictValueT = TypeVar("DictValueT")
+DictT = Dict[str, DictValueT]
+
+
 @dataclass
-class ContentBase:
+class ContentBase(Generic[DictValueT]):
     """The base class for all content dataclasses presented in the UI."""
 
-    def serialization_dict_factory(
+    def asdict(
         self,
         serf: SerializationFormat,
         view: ContentView,
-    ) -> Optional[Callable]:
-        """Provide the factory to be used to convert self into a dictionary.
+    ) -> DictT:
+        """Convert thy self into a dictionary.
 
         :param serf: The serialization format
         :param view: The content view
-        :returns: The factory
+        :returns: A dictionary created from self
         """
         if (view, serf) == (ContentView.FULL, SerializationFormat.JSON):
             return self.serialize_json_full()
@@ -38,35 +44,32 @@ class ContentBase:
             return self.serialize_json_normal()
         if (view, serf) == (ContentView.NORMAL, SerializationFormat.YAML):
             return self.serialize_yaml_normal()
-        return None
+        return asdict(self)
 
-    # pylint: disable=no-self-use
-    def serialize_json_full(self) -> Optional[Callable]:
-        """Provide dictionary factory for ``JSON`` with all attributes.
+    def serialize_json_full(self) -> DictT:
+        """Provide dictionary for ``JSON`` with all attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        :returns: A dictionary created from self
         """
-        return None
+        return asdict(self)
 
-    def serialize_json_normal(self) -> Optional[Callable]:
-        """Provide dictionary factory for ``JSON`` with curated attributes.
+    def serialize_json_normal(self) -> DictT:
+        """Provide dictionary for ``JSON`` with curated attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        :returns: A dictionary created from self
         """
-        return None
+        return asdict(self)
 
-    def serialize_yaml_full(self) -> Optional[Callable]:
-        """Provide dictionary factory for ``YAML`` with all attributes.
+    def serialize_yaml_full(self) -> DictT:
+        """Provide dictionary for ``YAML`` with all attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        :returns: A dictionary created from self
         """
-        return None
+        return asdict(self)
 
-    def serialize_yaml_normal(self) -> Optional[Callable]:
-        """Provide dictionary factory for ``JSON`` with curated attributes.
+    def serialize_yaml_normal(self) -> DictT:
+        """Provide dictionary for ``JSON`` with curated attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        :returns: A dictionary created from self
         """
-        return None
-
-    # pylint: enable=no-self-use
+        return asdict(self)

@@ -3,23 +3,28 @@
 import json
 import re
 
-from dataclasses import asdict
+from enum import Enum
 from typing import IO
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Callable
 from typing import Dict
 from typing import NamedTuple
 from typing import Optional
 
-import yaml  # noqa: F401
+import yaml
 
-from .serialize_defs import SerializationFormat
+
+class SerializationFormat(Enum):
+    """The serialization format."""
+
+    YAML = "yaml"
+    JSON = "json"
 
 
 if TYPE_CHECKING:
     from ..ui_framework.content_defs import ContentBase
     from ..ui_framework.content_defs import ContentView
+
 
 # pylint: disable=unused-import
 try:
@@ -52,8 +57,7 @@ def serialize(
     :param file_mode: The mode for the file operation
     :returns: The serialized content
     """
-    dict_factory = content.serialization_dict_factory(serf=serf, view=view)
-    content_as_dict = _content_to_dict(content=content, dict_factory=dict_factory)
+    content_as_dict = content.asdict(serf=serf, view=view)
     if serf == SerializationFormat.YAML:
         if filename is None:
             return yaml_dumps(obj=content_as_dict)
@@ -63,18 +67,6 @@ def serialize(
             return json_dumps(content_as_dict)
         return _json_dump(dumpable=content_as_dict, filename=filename, file_mode=file_mode)
     return None
-
-
-def _content_to_dict(content: "ContentBase", dict_factory: Optional[Callable]) -> Dict:
-    """Convert a content dataclass into a dictionary.
-
-    :param content: The content dataclass to serialize
-    :param dict_factory: The factory to use to produce the dict
-    :returns: The resulting dictionary
-    """
-    if dict_factory is None:
-        return asdict(content)
-    return asdict(content, dict_factory=dict_factory)
 
 
 class JsonParams(NamedTuple):
