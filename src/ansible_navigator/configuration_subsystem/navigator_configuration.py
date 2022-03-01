@@ -474,6 +474,17 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(default="module"),
         ),
         SettingsEntry(
+            name="pull_arguments",
+            cli_parameters=CliParameters(action="append", nargs="+", short="--pa"),
+            settings_file_path_override="execution-environment.pull.arguments",
+            short_description=(
+                "Specify any additional parameters that should be added to the"
+                " pull command when pulling an execution environment from a container"
+                " registry. e.g. --pa='--tls-verify=false'"
+            ),
+            value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
             name="pull_policy",
             choices=["always", "missing", "never", "tag"],
             cli_parameters=CliParameters(short="--pp"),

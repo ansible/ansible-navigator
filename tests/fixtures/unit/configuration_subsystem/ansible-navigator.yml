@@ -42,6 +42,9 @@ ansible-navigator:
         KEY3: VALUE3
     image: test_image:latest
     pull-policy: never
+    pull:
+      arguments:
+        - "--tls-verify=false"
     volume-mounts:
       - src: "/test1"
         dest: "/test1"
