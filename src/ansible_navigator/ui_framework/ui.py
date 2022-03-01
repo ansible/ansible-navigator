@@ -328,13 +328,13 @@ class UserInterface(CursesWindow):
         """
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
-        clp = CursesLinePart(column=0, string=":", color=0, decoration=0)
+        line_part = CursesLinePart(column=0, string=":", color=0, decoration=0)
         input_at = self._screen_height - 1  # screen y is zero based
         self._add_line(
             window=self._screen,
             lineno=input_at,
             line=CursesLine(
-                ((clp,)),
+                ((line_part,)),
             ),
         )
         self._screen.refresh()
