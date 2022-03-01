@@ -8,6 +8,7 @@ import os
 import re
 import shlex
 import shutil
+import time
 import uuid
 
 from math import floor
@@ -258,6 +259,9 @@ class Action(ActionBase):
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break
+            # Sleep briefly to prevent 100% CPU utilization
+            # in mode stdout, the delay introduced by the curses key read is not present
+            time.sleep(0.01)
         return_code = self.runner.ansible_runner_instance.rc
         if return_code != 0:
             return RunStdoutReturn(
