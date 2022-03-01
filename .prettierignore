@@ -23,5 +23,6 @@ share/ansible_navigator/markdown/welcome.md
 
 # WIP
 docs/changelog-fragments.d/README.md
+.github/SECURITY.md
 CHANGELOG.md
 README.md
