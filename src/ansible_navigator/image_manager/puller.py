@@ -3,7 +3,7 @@ import logging
 import shlex
 import subprocess
 
-from types import SimpleNamespace
+from dataclasses import dataclass
 from typing import List
 from typing import Union
 
@@ -14,7 +14,8 @@ from ..utils.functions import LogMessage
 from ..utils.functions import shlex_join
 
 
-class ImageAssessment(SimpleNamespace):
+@dataclass
+class ImageAssessment:
     """report the findings"""
 
     messages: List[LogMessage]
