@@ -11,7 +11,7 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from ..utils import oxfordcomma
+from ..utils.functions import oxfordcomma
 
 
 if TYPE_CHECKING:
