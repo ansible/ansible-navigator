@@ -130,7 +130,8 @@ class SettingsEntry:
         return sfp.replace("_", "-")
 
 
-class SubCommand(SimpleNamespace):
+@dataclass(frozen=True)
+class SubCommand:
     """An object to hold a subcommand"""
 
     name: str
