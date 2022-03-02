@@ -1,4 +1,5 @@
 <!-- cspell:ignore devel, kubic, libcontainers -->
+
 # Installing ansible-navigator with execution environment support
 
 ```{contents}
@@ -9,7 +10,7 @@
 
 ### Requirements
 
-- Either [podman] or [Docker for Linux][Docker for Linux installation instructions]
+- Either [podman] or [Docker for Linux][docker for linux installation instructions]
 - Internet access (during initial installation)
 
 ### Install the desired container engine for execution environment support
@@ -63,7 +64,6 @@
 
 - Follow the [Docker Desktop for Mac] installation instructions
 
-
 ```{note}
 There is no convenient way to use `ansible-navigator` with [podman] on macOS.  Native source mounts from macOS through the [podman] machine into the execution environment are not currently available.
 
@@ -71,7 +71,6 @@ See this [related issue][macOS podman issue #8016] for details.
 ```
 
 ### Install ansible-navigator
-
 
 1. Install the command line developer tools and proceed with the installation if prompted.
 
@@ -105,7 +104,6 @@ See this [related issue][macOS podman issue #8016] for details.
 
 1. `ansible-navigator` triggers a one-time download of the demo execution-environment image.
 
-
 ## Windows with WSL2
 
 ### Requirements
@@ -133,52 +131,51 @@ See this [related issue][macOS podman issue #8016] for details.
 
 ### Install the desired container engine for execution environment support
 
-
 - Installation instructions for [podman] on Ubuntu 20.04 LTS.
 
-   ```{note}
-   The podman package is available in the official repositories for Ubuntu 20.10 and newer.
-   Since interim releases of Ubuntu are not available on the Microsoft Store for WSL the
-   [Kubic project] package can be used.
-   ```
+  ```{note}
+  The podman package is available in the official repositories for Ubuntu 20.10 and newer.
+  Since interim releases of Ubuntu are not available on the Microsoft Store for WSL the
+  [Kubic project] package can be used.
+  ```
 
-   1. Update the ubuntu package index:
+  1.  Update the ubuntu package index:
 
       ```
       sudo apt update
       ```
 
-   1. Install system dependencies for [podman]:
+  1.  Install system dependencies for [podman]:
 
       ```
       apt-get install curl wget gnupg2
       ```
 
-   1. Source the Ubuntu release:
+  1.  Source the Ubuntu release:
 
       ```
       source /etc/os-release
       ```
 
-   1. Add the podman repository:
+  1.  Add the podman repository:
 
       ```
       sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
       ```
 
-   1. Download the GPG key:
+  1.  Download the GPG key:
 
       ```
       wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key -O- | sudo apt-key add -
       ```
 
-   1. Update using the new repository:
+  1.  Update using the new repository:
 
       ```
       sudo apt-get update
       ```
 
-   1. Install podman:
+  1.  Install podman:
 
       ```
       sudo apt-get install podman
@@ -186,65 +183,57 @@ See this [related issue][macOS podman issue #8016] for details.
 
 - Follow the [Docker Desktop for Windows] installation instructions (if podman was not installed above)
 
-   - Be sure to complete the [Manage Docker as a non-root user] steps.
+  - Be sure to complete the [Manage Docker as a non-root user] steps.
 
 ### Install ansible-navigator
 
 From the Ubuntu terminal:
-   1. Ensure the `/dev/mqueue` directory exists:
 
-      ```
-      sudo mkdir /dev/mqueue
-      ```
+1.  Ensure the `/dev/mqueue` directory exists:
 
-   1. Install the python package manager:
+    ```
+    sudo mkdir /dev/mqueue
+    ```
 
-      ```
-      sudo apt install python3-pip
-      ```
+1.  Install the python package manager:
 
-   1. Install ansible-navigator:
+    ```
+    sudo apt install python3-pip
+    ```
 
-      ```
-      python3 -m pip install ansible-navigator --user
-      ```
+1.  Install ansible-navigator:
 
-   1. Add the installation path to the user shell initialization file:
+    ```
+    python3 -m pip install ansible-navigator --user
+    ```
 
-      ```
-      echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.profile
-      ```
+1.  Add the installation path to the user shell initialization file:
 
-   1. Refresh the PATH:
+    ```
+    echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.profile
+    ```
 
-      ```
-      source ~/.profile
-      ```
+1.  Refresh the PATH:
 
-   1. Launch ansible-navigator:
+    ```
+    source ~/.profile
+    ```
 
-      ```
-      ansible-navigator
-      ```
+1.  Launch ansible-navigator:
 
-   1. `ansible-navigator` triggers a one-time download of the demo execution-environment image.
+    ```
+    ansible-navigator
+    ```
 
+1.  `ansible-navigator` triggers a one-time download of the demo execution-environment image.
 
-[Docker Desktop for Mac]:
-https://hub.docker.com/editions/community/docker-ce-desktop-mac
-[Docker for Linux installation instructions]:
-https://docs.docker.com/engine/install/
-[Docker Desktop for Windows]:
-https://hub.docker.com/editions/community/docker-ce-desktop-windows
-[Kubic project]:
-https://build.opensuse.org/package/show/devel:kubic:libcontainers:stable/podman
-[Manage Docker as a non-root user]:
-https://docs.docker.com/engine/install/linux-postinstall/
-[macOS podman issue #8016]:
-https://github.com/containers/podman/issues/8016
+[docker desktop for mac]: https://hub.docker.com/editions/community/docker-ce-desktop-mac
+[docker for linux installation instructions]: https://docs.docker.com/engine/install/
+[docker desktop for windows]: https://hub.docker.com/editions/community/docker-ce-desktop-windows
+[kubic project]: https://build.opensuse.org/package/show/devel:kubic:libcontainers:stable/podman
+[manage docker as a non-root user]: https://docs.docker.com/engine/install/linux-postinstall/
+[macos podman issue #8016]: https://github.com/containers/podman/issues/8016
 [podman]: https://podman.io/
-[podman installation instructions]:
-https://podman.io/getting-started/installation
-[Ubuntu]: https://ubuntu.com
-[Windows Subsystem for Linux 2]:
-https://docs.microsoft.com/en-us/windows/wsl/install-win10
+[podman installation instructions]: https://podman.io/getting-started/installation
+[ubuntu]: https://ubuntu.com
+[windows subsystem for linux 2]: https://docs.microsoft.com/en-us/windows/wsl/install-win10

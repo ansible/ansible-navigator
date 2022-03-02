@@ -17,5 +17,11 @@ tests/fixtures/integration/actions/**/*.json
 share/ansible_navigator/grammar/**/*.json
 share/ansible_navigator/themes/**/*.json
 
-# Temporary disabled during adoption:
-*.md
+# Tracked but manually formatted
+share/ansible_navigator/markdown/help.md
+share/ansible_navigator/markdown/welcome.md
+
+# WIP
+docs/changelog-fragments.d/README.md
+CHANGELOG.md
+README.md
