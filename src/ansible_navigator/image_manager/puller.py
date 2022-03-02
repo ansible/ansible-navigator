@@ -14,9 +14,13 @@ from ..utils.functions import LogMessage
 from ..utils.functions import shlex_join
 
 
-@dataclass
+@dataclass(frozen=False)
 class ImageAssessment:
-    """report the findings"""
+    """Data structure contianing the image assessment.
+
+    An ``ImageAssessment`` gets updated after instantiation
+    with the determination of whether or not a pull is required.
+    """
 
     messages: List[LogMessage]
     exit_messages: List[ExitMessage]
