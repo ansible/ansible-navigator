@@ -4,12 +4,14 @@ import json
 import re
 
 from enum import Enum
+from pathlib import Path
 from typing import IO
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Dict
 from typing import NamedTuple
 from typing import Optional
+from typing import Union
 
 import yaml
 
@@ -46,7 +48,7 @@ def serialize(
     content: "ContentBase",
     serialization_format: SerializationFormat,
     file_mode: str = "w",
-    filename: str = None,
+    filename: Optional[Union[Path, str]] = None,
 ) -> Optional[str]:
     """Serialize a dataclass based on format and view.
 
@@ -80,7 +82,7 @@ class JsonParams(NamedTuple):
     ensure_ascii: bool = False
 
 
-def _json_dump(dumpable: Dict, filename: str, file_mode: str):
+def _json_dump(dumpable: Dict, filename: Union[Path, str], file_mode: str):
     """Create a file handle and dump json.
 
     :param dumpable: The object to dump
@@ -120,7 +122,11 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def human_dump(obj: Any, filename: Optional[str] = None, file_mode: str = "w") -> Optional[str]:
+def human_dump(
+    obj: Any,
+    filename: Optional[Union[Path, str]] = None,
+    file_mode: str = "w",
+) -> Optional[str]:
     """Serialize an object to yaml.
 
     This allows for the consistent representation across the application.
