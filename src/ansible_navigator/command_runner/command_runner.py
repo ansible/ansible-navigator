@@ -13,7 +13,7 @@ from typing import Union
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
-@dataclass
+@dataclass(frozen=False)  # updated with results after run
 class Command:
     """command obj"""
 
