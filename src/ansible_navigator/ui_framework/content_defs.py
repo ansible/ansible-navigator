@@ -51,15 +51,19 @@ class ContentBase(Generic[DictValueT]):
         :param view: The content view
         :returns: A dictionary created from self
         """
-        if (view, serf) == (ContentView.FULL, SerializationFormat.JSON):
-            return self.serialize_json_full()
-        if (view, serf) == (ContentView.FULL, SerializationFormat.YAML):
-            return self.serialize_yaml_full()
-        if (view, serf) == (ContentView.NORMAL, SerializationFormat.JSON):
-            return self.serialize_json_normal()
-        if (view, serf) == (ContentView.NORMAL, SerializationFormat.YAML):
-            return self.serialize_yaml_normal()
-        return asdict(self)
+        converter_map = {
+            (ContentView.FULL, SerializationFormat.JSON): self.serialize_json_full,
+            (ContentView.FULL, SerializationFormat.YAML): self.serialize_yaml_full,
+            (ContentView.NORMAL, SerializationFormat.JSON): self.serialize_json_normal,
+            (ContentView.NORMAL, SerializationFormat.YAML): self.serialize_yaml_normal,
+        }
+
+        try:
+            dump_self_as_dict = converter_map[view, serf]
+        except KeyError:
+            return asdict(self)
+        else:
+            return dump_self_as_dict()
 
     def serialize_json_full(self) -> DictT:
         """Provide dictionary for ``JSON`` with all attributes.
