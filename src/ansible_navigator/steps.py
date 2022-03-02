@@ -19,7 +19,7 @@ class Step:
     # pylint: disable=too-many-arguments
     """One step in the flow of things.
 
-    This MappingStep below should be used for all new actions.
+    The ``TypedStep`` below should be used for all new actions.
     """
 
     def __init__(
