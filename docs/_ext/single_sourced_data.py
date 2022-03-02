@@ -30,7 +30,7 @@ from ansible_navigator._version import version as __version__
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
-from ansible_navigator.utils import oxfordcomma
+from ansible_navigator.utils.functions import oxfordcomma
 
 
 APP = "ansible-navigator"

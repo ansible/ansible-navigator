@@ -2,12 +2,12 @@
 using ansible-runner. All attributes common to a
 subprocess or async command are defined here
 """
-import shlex
 import sys
 
 from typing import List
 from typing import Optional
 
+from ..utils.functions import shlex_join
 from .base import Base
 
 
@@ -57,7 +57,7 @@ class CommandBase(Base):
         if self._wrap_sh:
             self._cmdline.insert(0, self._executable_cmd)
             self._runner_args["executable_cmd"] = "/bin/sh"
-            cmd_args = " ".join(shlex.quote(s) for s in self._cmdline)
+            cmd_args = shlex_join(self._cmdline)
             self._runner_args["cmdline_args"] = ["-c", f"exec 2>/dev/null; {cmd_args}"]
         else:
             self._runner_args["executable_cmd"] = self._executable_cmd

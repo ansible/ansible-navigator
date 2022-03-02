@@ -24,7 +24,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
-from ..utils import path_is_relative_to
+from ..utils.functions import path_is_relative_to
 from . import _actions as actions
 from . import run_action
 

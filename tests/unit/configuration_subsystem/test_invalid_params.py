@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
-from ansible_navigator.utils import ExitMessage
+from ansible_navigator.utils.functions import ExitMessage
 from .utils import id_for_name
 
 
