@@ -1,42 +1,61 @@
 """Tests for TypeStep class."""
 
+from dataclasses import dataclass
+
 from ansible_navigator.steps import TypedStep
 
 
-# Test variables
+# Test dataclass
+
+@dataclass
+class TSTestClass:
+    """A dataclass for testing TypedStep @property and @setter functions.
+
+    :attr attr_1: Test integer
+    :attr attr_2: Test string
+    """
+
+    attr_1: int
+    attr_2: str
+
 
 # Select a test index for @property index test
-TEST_INDEX = 1
+TEST_INDEX = 5
+
+# Dataclass objects contained in value attr for @value.setter test
+value_1 = TSTestClass(attr_1=1, attr_2="test element 1")
+value_2 = TSTestClass(attr_1=3, attr_2="test element 2")
 
 # TypedStep object for all tests
-TypedStepTest = TypedStep(name="test_menu", step_type="menu")
-
-# TypedStep objects contained in test_value list for @value.setter test
-TypedStep1 = TypedStep(name="test_element_one", step_type="menu")
-TypedStep2 = TypedStep(name="test_element_two", step_type="menu")
-test_value_list = [TypedStep1, TypedStep2]
+TypedStepTest1 = TypedStep[TSTestClass](name="test_menu", step_type="menu")
 
 
-def test_property_changed():
-    """Test for TypedStep @property changed() and setter."""
-    assert TypedStepTest.changed is False
-    TypedStepTest.changed = True
-    assert TypedStepTest.changed is True
+def test_property_setters():
+    """Test for TypedStep @properties and setters."""
+    # Test @changed.setter
+    assert TypedStepTest1.changed is False
+    TypedStepTest1.changed = True
+    assert TypedStepTest1.changed is True
 
+    # Reset
+    TypedStepTest1.changed = False
+    assert TypedStepTest1.changed is False
 
-def test_property_index():
-    """Test for TypedStep @property index() and setter."""
-    assert TypedStepTest.index is None
-    TypedStepTest.index = TEST_INDEX
-    assert TypedStepTest.index == TEST_INDEX
+    # Test @value.setter and @changed
+    TypedStepTest1.value = [value_1, value_2]
+    assert TypedStepTest1.value == [value_1, value_2]
+    assert TypedStepTest1.changed is True
 
+    # Reset
+    TypedStepTest1.changed = False
+    assert TypedStepTest1.changed is False
 
-def test_property_value():
-    """Test for TypedStep @property value() and setter."""
-    TypedStepTest.value = test_value_list
-    assert TypedStepTest.value == test_value_list
+    # Test @index and @index.setter and changed
+    TypedStepTest1.index = TEST_INDEX
+    assert TypedStepTest1.index == TEST_INDEX
+    assert TypedStepTest1.changed is True
 
 
 def test_property_selected():
     """Test for TypedStep @property selected()."""
-    assert TypedStepTest.selected == TypedStep2
+    assert TypedStepTest1.selected == value_2
