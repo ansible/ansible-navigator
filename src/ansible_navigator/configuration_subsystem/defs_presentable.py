@@ -203,5 +203,6 @@ class PresentableSettingsEntry:
 
 
 PresentableSettingsEntries = NewType(
-    "PresentableSettingsEntries", Tuple[PresentableSettingsEntry, ...]
+    "PresentableSettingsEntries",
+    Tuple[PresentableSettingsEntry, ...],
 )

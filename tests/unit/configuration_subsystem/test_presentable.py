@@ -81,7 +81,9 @@ def test_settings_entry(sample_settings, settings_file_dict):
         cli_parameters=CliParameters(short="-se1"),
         short_description="description",
         value=SettingsEntryValue(
-            current="current", default="default", source=Constants.ENVIRONMENT_VARIABLE
+            current="current",
+            default="default",
+            source=Constants.ENVIRONMENT_VARIABLE,
         ),
     )
     sample_settings.entries = [entry]
