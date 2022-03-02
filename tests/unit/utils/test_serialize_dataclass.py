@@ -159,6 +159,7 @@ class Test:
     @staticmethod
     @pytest.mark.parametrize(**ParametrizeFormat()._asdict())
     def test_content_to_dict_override(
+        subtests,
         content_view: ContentView,
         serialization_tuple: Tuple[str, SerializationFormat],
     ):
@@ -172,8 +173,9 @@ class Test:
             content_view=content_view,
             serialization_format=serialization_tuple[1],
         )
-        for _key, value in result.items():
-            assert value.endswith(f"_{serialization_tuple[0]}_{str(content_view)}")
+        for key, value in result.items():
+            with subtests.test(msg=key, value=value):
+                assert value.endswith(f"_{serialization_tuple[0]}_{str(content_view)}")
 
     @staticmethod
     def test_content_to_json_override(content_view: ContentView):

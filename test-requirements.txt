@@ -7,5 +7,6 @@ lxml
 pre-commit
 pytest-cov
 pytest-mock
+pytest-subtests
 pytest-xdist
 sphinx
