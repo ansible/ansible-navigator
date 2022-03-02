@@ -17,6 +17,7 @@ from typing import Union
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem import Constants
 from ..runner import Command
 from ..steps import Step
 from ..ui_framework import CursesLinePart
@@ -25,6 +26,7 @@ from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import path_is_relative_to
+from ..utils.key_value_store import KeyValueStore
 from . import _actions as actions
 from . import run_action
 
@@ -93,7 +95,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
-        self._collection_cache: Dict
+        self._collection_cache: Union[Constants, KeyValueStore]
         self._collection_cache_path: str
         self._collection_scanned_paths: List = []
         self._collections: List = []

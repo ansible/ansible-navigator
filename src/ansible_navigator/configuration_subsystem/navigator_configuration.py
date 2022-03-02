@@ -3,8 +3,7 @@
 import logging
 import os
 
-from types import SimpleNamespace
-from typing import Dict
+from dataclasses import dataclass
 from typing import List
 from typing import Tuple
 from typing import Union
@@ -14,6 +13,7 @@ from ..utils.functions import LogMessage
 from ..utils.functions import abs_user_path
 from ..utils.functions import get_share_directory
 from ..utils.functions import oxfordcomma
+from ..utils.key_value_store import KeyValueStore
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
@@ -79,13 +79,14 @@ def generate_share_directory():
     return share_directory
 
 
-class Internals(SimpleNamespace):
+@dataclass
+class Internals:
     """a place to hold object that need to be carried
     from application initiation to the rest of the app
     """
 
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
-    collection_doc_cache: Union[C, Dict] = C.NOT_SET
+    collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
     settings_file_path: Union[None, str] = None
