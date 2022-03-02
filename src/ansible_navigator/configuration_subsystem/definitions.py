@@ -136,7 +136,7 @@ class SubCommand:
 
     name: str
     description: str
-    epilog: Union[None, str] = None
+    epilog: Optional[str] = None
 
 
 @dataclass
