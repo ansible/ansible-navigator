@@ -2,8 +2,9 @@
 import multiprocessing
 import subprocess
 
+from dataclasses import dataclass
+from dataclasses import field
 from queue import Queue
-from types import SimpleNamespace
 from typing import Callable
 from typing import List
 from typing import Union
@@ -12,15 +13,16 @@ from typing import Union
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
-class Command(SimpleNamespace):
+@dataclass
+class Command:
     """command obj"""
 
-    id: str
+    identity: str
     command: str
     post_process: Callable
     stdout: str = ""
     stderr: str = ""
-    details: List = []
+    details: List = field(default_factory=list)
     errors: str = ""
 
 

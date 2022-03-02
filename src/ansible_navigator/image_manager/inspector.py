@@ -27,7 +27,7 @@ class ImagesInspect:
         """generate commands"""
         return [
             Command(
-                id=image_id,
+                identity=image_id,
                 command=f"{self._container_engine} inspect {image_id}",
                 post_process=self.parse,
             )
@@ -57,7 +57,7 @@ class ImagesList:
         """generate command"""
         return [
             Command(
-                id="images",
+                identity="images",
                 command=f"{self._container_engine} images",
                 post_process=self.parse,
             ),
