@@ -243,6 +243,7 @@ ENV_VAR_DATA = [
     ("playbook_artifact_save_as", "/tmp/save.json", "/tmp/save.json"),
     ("plugin_name", "shell", "shell"),
     ("plugin_type", "become", "become"),
+    ("pull_arguments", "--tls-verify=false", ["--tls-verify=false"]),
     ("pull_policy", "never", "never"),
     ("set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}),
     ("workdir", "/tmp/", "/tmp/"),

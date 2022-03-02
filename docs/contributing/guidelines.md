@@ -1,4 +1,5 @@
 <!-- markdownlint-disable first-line-heading -->
+
 ```{spelling}
 de
 facto
@@ -9,6 +10,7 @@ Towncrier
 ```
 
 ```{include} ../../.github/CONTRIBUTING.md
+
 ```
 
 # Contributing docs
@@ -17,6 +19,7 @@ We use [Sphinx] to generate our docs website. You can trigger
 the process locally by executing:
 
 <!-- cspell:disable -->
+
 ```shell-session
 $ tox -e build-docs
 build-docs create: .tox/build-docs
@@ -38,6 +41,7 @@ _______________________________________________________ summary ________________
   build-docs: commands succeeded
   congratulations :)
 ```
+
 <!-- cspell:enable -->
 
 It is also integrated with [Read The Docs] that builds and
@@ -52,9 +56,10 @@ Markdown that supports using Sphinx directives and roles.
 {ref}`Read the docs <myst:intro/writing>` to learn more on how
 to use it.
 
-[MyST parser]: https://pypi.org/project/myst-parser/
-[Read The Docs]: https://readthedocs.org
-[Sphinx]: https://www.sphinx-doc.org
+[myst parser]: https://pypi.org/project/myst-parser/
+[read the docs]: https://readthedocs.org
+[sphinx]: https://www.sphinx-doc.org
 
 ```{include} ../changelog-fragments.d/README.md
+
 ```

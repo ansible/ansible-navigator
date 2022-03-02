@@ -2,17 +2,17 @@
 """
 import logging
 import os
-import shlex
 
 from copy import deepcopy
 from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..utils import ExitMessage
-from ..utils import ExitPrefix
-from ..utils import LogMessage
-from ..utils import oxfordcomma
+from ..utils.functions import ExitMessage
+from ..utils.functions import ExitPrefix
+from ..utils.functions import LogMessage
+from ..utils.functions import oxfordcomma
+from ..utils.functions import shlex_join
 from ..utils.serialize import SafeLoader
 from ..utils.serialize import yaml
 from .definitions import ApplicationConfiguration
@@ -80,7 +80,7 @@ class Configurator:
         restore them
         """
         self._config.original_command = self._params
-        shlex_joined = " ".join(shlex.quote(arg) for arg in self._config.original_command)
+        shlex_joined = shlex_join(self._config.original_command)
         cmd_message = f"Command provided: '{shlex_joined}'"
         self._messages.append(LogMessage(level=logging.DEBUG, message=cmd_message))
 

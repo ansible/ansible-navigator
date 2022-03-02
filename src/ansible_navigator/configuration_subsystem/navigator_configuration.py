@@ -3,17 +3,17 @@
 import logging
 import os
 
-from types import SimpleNamespace
-from typing import Dict
+from dataclasses import dataclass
 from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..utils import ExitMessage
-from ..utils import LogMessage
-from ..utils import abs_user_path
-from ..utils import get_share_directory
-from ..utils import oxfordcomma
+from ..utils.functions import ExitMessage
+from ..utils.functions import LogMessage
+from ..utils.functions import abs_user_path
+from ..utils.functions import get_share_directory
+from ..utils.functions import oxfordcomma
+from ..utils.key_value_store import KeyValueStore
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
@@ -79,13 +79,14 @@ def generate_share_directory():
     return share_directory
 
 
-class Internals(SimpleNamespace):
+@dataclass
+class Internals:
     """a place to hold object that need to be carried
     from application initiation to the rest of the app
     """
 
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
-    collection_doc_cache: Union[C, Dict] = C.NOT_SET
+    collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
     settings_file_path: Union[None, str] = None
@@ -474,10 +475,21 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(default="module"),
         ),
         SettingsEntry(
+            name="pull_arguments",
+            cli_parameters=CliParameters(action="append", nargs="+", short="--pa"),
+            settings_file_path_override="execution-environment.pull.arguments",
+            short_description=(
+                "Specify any additional parameters that should be added to the"
+                " pull command when pulling an execution environment from a container"
+                " registry. e.g. --pa='--tls-verify=false'"
+            ),
+            value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
             name="pull_policy",
             choices=["always", "missing", "never", "tag"],
             cli_parameters=CliParameters(short="--pp"),
-            settings_file_path_override="execution-environment.pull-policy",
+            settings_file_path_override="execution-environment.pull.policy",
             short_description=(
                 "Specify the image pull policy."
                 " always:Always pull the image,"

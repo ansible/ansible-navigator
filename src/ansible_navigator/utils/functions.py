@@ -6,6 +6,7 @@ import html
 import logging
 import os
 import re
+import shlex
 import shutil
 import sys
 import sysconfig
@@ -14,6 +15,7 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from typing import Iterable
 from typing import List
 from typing import Mapping
 from typing import NamedTuple
@@ -441,6 +443,19 @@ def round_half_up(number: Union[float, int]) -> int:
     """
     rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
+
+
+def shlex_join(tokens: Iterable[str]) -> str:
+    """Concatenate the tokens of a list and return a string.
+
+    ``shlex.join`` was new in version 3.8
+
+    :param tokens: The iterable of strings to join
+    :returns: The iterable joined with spaces
+    """
+    if sys.version_info >= (3, 8):
+        return shlex.join(split_command=tokens)
+    return " ".join(shlex.quote(token) for token in tokens)
 
 
 def str2bool(value: Any) -> bool:

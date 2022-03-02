@@ -11,10 +11,11 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from ..utils import oxfordcomma
+from ..utils.functions import oxfordcomma
 
 
 if TYPE_CHECKING:
+    from .navigator_configuration import Internals
     from .navigator_post_processor import NavigatorPostProcessor
 
 
@@ -145,7 +146,7 @@ class ApplicationConfiguration:
 
     application_version: Union[Constants, str]
     entries: List[SettingsEntry]
-    internals: SimpleNamespace
+    internals: "Internals"
     post_processor: "NavigatorPostProcessor"
     subcommands: List[SubCommand]
 

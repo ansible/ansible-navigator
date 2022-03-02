@@ -1,4 +1,4 @@
-"""Test the functions exposed in the :mod:`~ansible_navigator.utils` subpackage."""
+"""Test the functions exposed in the :mod:`~ansible_navigator.utils.functions` subpackage."""
 import os
 
 from pathlib import Path
@@ -9,7 +9,7 @@ from typing import Union
 
 import pytest
 
-from ansible_navigator import utils
+from ansible_navigator.utils import functions
 
 
 EXTENSIONS = [".yml", ".yaml", ".json"]
@@ -26,8 +26,8 @@ def test_find_many_settings_home(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    _messages, exit_messages, _found = utils.find_settings_file()
-    expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
+    _messages, exit_messages, _found = functions.find_settings_file()
+    expected = f"Only one file among {functions.oxfordcomma(paths, 'and')}"
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
@@ -40,8 +40,8 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    _messages, exit_messages, _found = utils.find_settings_file()
-    expected = f"Only one file among {utils.oxfordcomma(paths, 'and')}"
+    _messages, exit_messages, _found = functions.find_settings_file()
+    expected = f"Only one file among {functions.oxfordcomma(paths, 'and')}"
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
@@ -55,7 +55,7 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    _messages, _exit_messages, found = utils.find_settings_file()
+    _messages, _exit_messages, found = functions.find_settings_file()
     assert expected == found
 
 
@@ -82,7 +82,10 @@ def test_env_var_is_file_path(
     env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
         monkeypatch.setenv(env_var, file_path)
-    _messages, _exit_messages, result = utils.environment_variable_is_file_path(env_var, "config")
+    _messages, _exit_messages, result = functions.environment_variable_is_file_path(
+        env_var,
+        "config",
+    )
     assert result == anticpated_result
 
 
@@ -101,7 +104,7 @@ def test_env_var_is_file_path(
 )
 def test_flatten_list(value: List, anticpated_result: List) -> None:
     """test for flatten list"""
-    actual_result = utils.flatten_list(value)
+    actual_result = functions.flatten_list(value)
     assert list(actual_result) == anticpated_result
 
 
@@ -127,41 +130,41 @@ human_time_test_data = [
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_integer(data: HumanTimeTestData) -> None:
-    """Test for the utils.human_time function (integer passed).
+    """Test for the functions.human_time function (integer passed).
 
     Ensure the integer passed is correctly transformed into a human readable time string.
     """
-    result = utils.human_time(data.value)
+    result = functions.human_time(data.value)
     assert result == data.expected
 
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
-    """Test for the utils.human_time function (negative integer passed).
+    """Test for the functions.human_time function (negative integer passed).
 
     Ensure the negative integer passed is correctly transformed into a human readable time string.
     """
-    result = utils.human_time(-data.value)
+    result = functions.human_time(-data.value)
     assert result == f"-{data.expected}"
 
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_float(data: HumanTimeTestData) -> None:
-    """Test for the utils.human_time function (float passed).
+    """Test for the functions.human_time function (float passed).
 
     Ensure the float passed is correctly transformed into a human readable time string.
     """
-    result = utils.human_time(float(data.value))
+    result = functions.human_time(float(data.value))
     assert result == data.expected
 
 
 @pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
 def test_human_time_negative_float(data: HumanTimeTestData) -> None:
-    """Test for the utils.human_time function (negative float passed).
+    """Test for the functions.human_time function (negative float passed).
 
     Ensure the negative float passed is correctly transformed into a human readable time string.
     """
-    result = utils.human_time(-float(data.value))
+    result = functions.human_time(-float(data.value))
     assert result == f"-{data.expected}"
 
 
@@ -187,12 +190,12 @@ round_half_up_test_data = [
 
 @pytest.mark.parametrize("data", round_half_up_test_data, ids=lambda data: data.id)
 def test_round_half_up(data: RoundHalfUpTestData) -> None:
-    """Test for the utils.round_half_up function.
+    """Test for the functions.round_half_up function.
 
     Ensure the number passed is consistently rounded to the nearest
     integer with ties going away from zero.
     """
-    result = utils.round_half_up(data.value)
+    result = functions.round_half_up(data.value)
     assert result == data.expected
 
 
@@ -200,5 +203,5 @@ def test_path_is_relative_to():
     """Ensure path_is_relative_to returns accurate results."""
     directory = Path("/tmp/test")
     file_in_directory = Path("/tmp/test/file.txt")
-    assert utils.path_is_relative_to(child=file_in_directory, parent=directory)
-    assert not utils.path_is_relative_to(child=directory, parent=file_in_directory)
+    assert functions.path_is_relative_to(child=file_in_directory, parent=directory)
+    assert not functions.path_is_relative_to(child=directory, parent=file_in_directory)
