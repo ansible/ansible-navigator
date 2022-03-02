@@ -90,5 +90,5 @@ def inspect_all(container_engine: str) -> Tuple[List, str]:
     images_inspect_class = ImagesInspect(container_engine=container_engine, ids=image_ids)
     inspects = cmd_runner.run_single_proccess(commands=images_inspect_class.commands)
     for inspect in inspects:
-        images[inspect.id]["inspect"] = {"details": inspect.details, "errors": inspect.errors}
+        images[inspect.identity]["inspect"] = {"details": inspect.details, "errors": inspect.errors}
     return list(images.values()), images_list.stderr
