@@ -1,5 +1,7 @@
 <!-- cspell:ignore autodoc, maxdepth, toctree -->
-(_ansible_navigator_index)=
+
+(\_ansible_navigator_index)=
+
 # Ansible Navigator Documentation
 
 `ansible-navigator` is a command based tool for creating, reviewing, and troubleshooting Ansible content, including inventories, playbooks, and collections.
@@ -8,7 +10,6 @@
 :start-after: (DO-NOT-REMOVE-docs-intro-START)
 :end-before: (DO-NOT-REMOVE-docs-intro-END)
 ```
-
 
 ```{toctree}
 :maxdepth: 2
