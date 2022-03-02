@@ -16,7 +16,7 @@ from ..utils.functions import shlex_join
 
 @dataclass(frozen=False)
 class ImageAssessment:
-    """Data structure contianing the image assessment.
+    """Data structure containing the image assessment.
 
     An ``ImageAssessment`` gets updated after instantiation
     with the determination of whether or not a pull is required.
