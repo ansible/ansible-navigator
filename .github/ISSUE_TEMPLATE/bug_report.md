@@ -2,26 +2,32 @@
 name: "\U0001F41B Bug report"
 about: Create a report to help us improve
 labels: bug, new
-
 ---
+
 ##### ISSUE TYPE
- - Bug Report
+
+- Bug Report
 
 ##### SUMMARY
+
 <!-- Briefly describe the problem. -->
 
 ##### ANSIBLE-NAVIGATOR VERSION
+
 <!--- Paste, BELOW THIS COMMENT, verbatim output from "ansible-navigator --version" between quotes below -->
+
 ```
 
 ```
 
 ##### CONFIGURATION
+
 <!--- Paste verbatim output from `ansible-navigator.yaml` file or
       any other custom setting file defined by `ANSIBLE_NAVIGATOR_CONFIG`
       environment variable below (if present).-->
 
 ##### LOG FILE
+
 <!--- Paste relevant logs from the ansible-navigator
       log file preferably after setting the log-level to `debug`,
       under the prompt line.
