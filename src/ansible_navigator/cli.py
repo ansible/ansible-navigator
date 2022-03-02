@@ -1,9 +1,6 @@
 # cspell:ignore getpid, gmtime, msecs
 """start here
 """
-
-# TODO: Remove me again
-
 import logging
 import os
 import signal
