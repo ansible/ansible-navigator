@@ -13,15 +13,15 @@ from pathlib import Path
 from typing import List
 from typing import Tuple
 
-from ..utils import ExitMessage
-from ..utils import ExitPrefix
-from ..utils import LogMessage
-from ..utils import abs_user_path
-from ..utils import check_for_ansible
-from ..utils import flatten_list
-from ..utils import oxfordcomma
-from ..utils import str2bool
-from ..utils import to_list
+from ..utils.functions import ExitMessage
+from ..utils.functions import ExitPrefix
+from ..utils.functions import LogMessage
+from ..utils.functions import abs_user_path
+from ..utils.functions import check_for_ansible
+from ..utils.functions import flatten_list
+from ..utils.functions import oxfordcomma
+from ..utils.functions import str2bool
+from ..utils.functions import to_list
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C

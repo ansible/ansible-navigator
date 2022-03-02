@@ -5,7 +5,7 @@ import importlib
 
 import pytest
 
-from ansible_navigator import utils
+from ansible_navigator.utils.functions import get_share_directory
 
 
 RPM_OUTPUT = """Name        : net-snmp
@@ -49,7 +49,7 @@ which contains NET-SNMP utilities.
 @pytest.fixture(scope="module", name="imported_ii")
 def image_introspection():
     """import the image introspection script using the share directory"""
-    _log_messages, _exit_messages, share_dir = utils.get_share_directory(
+    _log_messages, _exit_messages, share_dir = get_share_directory(
         app_name="ansible_navigator",
     )
     full_path = f"{share_dir}/utils/image_introspect.py"

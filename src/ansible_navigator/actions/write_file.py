@@ -6,7 +6,7 @@ import re
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
-from ..utils import remove_dbl_un
+from ..utils.functions import remove_dbl_un
 from ..utils.serialize import human_dump
 from ..utils.serialize import json_dump
 from . import _actions as actions

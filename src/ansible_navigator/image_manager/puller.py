@@ -8,10 +8,10 @@ from typing import List
 from typing import Union
 
 from ..configuration_subsystem import Constants
-from ..utils import ExitMessage
-from ..utils import ExitPrefix
-from ..utils import LogMessage
-from ..utils import shlex_join
+from ..utils.functions import ExitMessage
+from ..utils.functions import ExitPrefix
+from ..utils.functions import LogMessage
+from ..utils.functions import shlex_join
 
 
 class ImageAssessment(SimpleNamespace):

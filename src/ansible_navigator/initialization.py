@@ -15,11 +15,11 @@ from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
-from .utils import ExitMessage
-from .utils import ExitPrefix
-from .utils import LogMessage
-from .utils import environment_variable_is_file_path
-from .utils import find_settings_file
+from .utils.functions import ExitMessage
+from .utils.functions import ExitPrefix
+from .utils.functions import LogMessage
+from .utils.functions import environment_variable_is_file_path
+from .utils.functions import find_settings_file
 from .utils.key_value_store import KeyValueStore
 
 
