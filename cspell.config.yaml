@@ -4,6 +4,7 @@ dictionaryDefinitions:
     addWords: true
 dictionaries:
   - words
+  - "!cpp"
 ignorePaths:
   # All dot files in the root
   - \.*
