@@ -2,8 +2,6 @@
 """start here
 """
 
-# TODO: Remove me
-
 import logging
 import os
 import signal
