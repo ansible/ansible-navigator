@@ -13,9 +13,13 @@ from typing import Union
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
-@dataclass(frozen=False)  # updated with results after run
+@dataclass(frozen=False)
 class Command:
-    """command obj"""
+    """Data structure for details of a command to be run.
+
+    A ``Command`` is updated after instantiated with details from either
+    ``stdout`` or ``stderr``.
+    """
 
     identity: str
     command: str
