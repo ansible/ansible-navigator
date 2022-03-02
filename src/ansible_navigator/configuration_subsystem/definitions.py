@@ -3,7 +3,6 @@
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
-from types import SimpleNamespace
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Iterable
@@ -131,12 +130,13 @@ class SettingsEntry:
         return sfp.replace("_", "-")
 
 
-class SubCommand(SimpleNamespace):
+@dataclass(frozen=True)
+class SubCommand:
     """An object to hold a subcommand"""
 
     name: str
     description: str
-    epilog: Union[None, str] = None
+    epilog: Optional[str] = None
 
 
 @dataclass
