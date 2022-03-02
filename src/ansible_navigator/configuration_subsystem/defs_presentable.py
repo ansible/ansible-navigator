@@ -15,6 +15,7 @@ from typing import Union
 from .definitions import CliParameters
 from .definitions import Constants as C
 from .definitions import SettingsEntry
+from .navigator_configuration import Internals
 from .utils import create_settings_file_sample
 
 
@@ -121,7 +122,7 @@ class PresentableSettingsEntry:
         cls: Type[TEnt],
         all_subcommands: List,
         application_name: str,
-        internals: SimpleNamespace,
+        internals: Internals,
     ) -> TEnt:
         """Create an ``PresentableSettingsEntry`` containing the details for the settings file.
 
