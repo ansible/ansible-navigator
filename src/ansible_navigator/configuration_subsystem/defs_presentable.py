@@ -1,7 +1,6 @@
 """Object definitions for the presentable transformation of the settings."""
 
 from dataclasses import dataclass
-from types import SimpleNamespace
 from typing import ClassVar
 from typing import Dict
 from typing import List
