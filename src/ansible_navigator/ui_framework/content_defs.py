@@ -42,13 +42,13 @@ class ContentBase(Generic[DictValueT]):
 
     def asdict(
         self,
-        serf: SerializationFormat,
-        view: ContentView,
+        content_view: ContentView,
+        serialization_format: SerializationFormat,
     ) -> DictT:
         """Convert thy self into a dictionary.
 
-        :param serf: The serialization format
-        :param view: The content view
+        :param content_view: The content view
+        :param serialization_format: The serialization format
         :returns: A dictionary created from self
         """
         converter_map = {
@@ -59,7 +59,7 @@ class ContentBase(Generic[DictValueT]):
         }
 
         try:
-            dump_self_as_dict = converter_map[view, serf]
+            dump_self_as_dict = converter_map[content_view, serialization_format]
         except KeyError:
             return asdict(self)
         else:

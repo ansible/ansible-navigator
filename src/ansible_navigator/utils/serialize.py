@@ -42,27 +42,30 @@ except ImportError:
 
 
 def serialize(
+    content_view: "ContentView",
     content: "ContentBase",
-    serf: SerializationFormat,
-    view: "ContentView",
-    filename: str = None,
+    serialization_format: SerializationFormat,
     file_mode: str = "w",
+    filename: str = None,
 ) -> Optional[str]:
     """Serialize a dataclass based on format and view.
 
+    :param content_view: The contest view
     :param content: The content dataclass to serialize
-    :param serf: The serialization format
-    :param view: The contest view
-    :param filename: A filename to write to
+    :param serialization_format: The serialization format
     :param file_mode: The mode for the file operation
+    :param filename: A filename to write to
     :returns: The serialized content
     """
-    content_as_dict = content.asdict(serf=serf, view=view)
-    if serf == SerializationFormat.YAML:
+    content_as_dict = content.asdict(
+        content_view=content_view,
+        serialization_format=serialization_format,
+    )
+    if serialization_format == SerializationFormat.YAML:
         if filename is None:
             return yaml_dumps(obj=content_as_dict)
         return yaml_dump(obj=content_as_dict, filename=filename, file_mode=file_mode)
-    if serf == SerializationFormat.JSON:
+    if serialization_format == SerializationFormat.JSON:
         if filename is None:
             return json_dumps(content_as_dict)
         return _json_dump(dumpable=content_as_dict, filename=filename, file_mode=file_mode)
