@@ -135,6 +135,7 @@ nitpick_ignore = [
     ("py:class", "Form"),
     ("py:class", "Grammar"),
     ("py:class", "Grammars"),
+    ("py:class", "Internals"),
     ("py:class", "IO"),
     ("py:class", "Match"),
     ("py:class", "multiprocessing.context.BaseContext.Queue"),
