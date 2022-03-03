@@ -14,7 +14,7 @@ is identified in the
 """
 from typing import Any
 from typing import Callable
-from typing import Union
+from typing import Optional
 
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
@@ -38,7 +38,7 @@ run_action_stdout: Callable[
 
 run_action: Callable[
     [str, AppPublic, Interaction],
-    Union[None, Interaction],
+    Optional[Interaction],
 ] = actions.run_interactive_factory(__package__)
 
 

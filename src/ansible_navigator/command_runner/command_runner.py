@@ -7,7 +7,7 @@ from dataclasses import field
 from queue import Queue
 from typing import Callable
 from typing import List
-from typing import Union
+from typing import Optional
 
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
@@ -62,8 +62,8 @@ class CommandRunner:
 
     def __init__(self):
         """Initialize the command runner."""
-        self._completed_queue: Union[Queue, None] = None
-        self._pending_queue: Union[Queue, None] = None
+        self._completed_queue: Optional[Queue] = None
+        self._pending_queue: Optional[Queue] = None
 
     @staticmethod
     def run_single_proccess(commands: List[Command]):

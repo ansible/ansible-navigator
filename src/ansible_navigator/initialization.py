@@ -30,7 +30,7 @@ def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
     sys.exit(1)
 
 
-def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str], C]:
+def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str], C]:
     """
     Find a configuration file, logging each step.
     Return (log messages, path).

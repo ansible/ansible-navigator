@@ -16,6 +16,7 @@ from typing import Dict
 from typing import List
 from typing import Match
 from typing import NamedTuple
+from typing import Optional
 from typing import Pattern
 from typing import Tuple
 from typing import Union
@@ -86,8 +87,8 @@ class Interaction(NamedTuple):
     name: str
     action: Action
     ui: Ui
-    content: Union[Content, None] = None
-    menu: Union[Menu, None] = None
+    content: Optional[Content] = None
+    menu: Optional[Menu] = None
 
 
 class UserInterface(CursesWindow):
@@ -120,7 +121,7 @@ class UserInterface(CursesWindow):
             grammar_dir=self._ui_config.grammar_dir,
             theme_path=self._ui_config.theme_path,
         )
-        self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
+        self._content_heading: Callable[[Any, int], Optional[CursesLines]]
         self._default_colors = None
         self._default_pairs = None
         self._default_obj_serialization = "source.yaml"
@@ -128,7 +129,7 @@ class UserInterface(CursesWindow):
         self._hide_keys = True
         self._kegexes = kegexes
         self._logger = logging.getLogger(__name__)
-        self._menu_filter: Union[Pattern, None] = None
+        self._menu_filter: Optional[Pattern] = None
         self._menu_indices: Tuple[int, ...] = tuple()
 
         self._progress_bar_width = progress_bar_width
@@ -168,7 +169,7 @@ class UserInterface(CursesWindow):
         self._status = status
         self._status_color = status_color
 
-    def menu_filter(self, value: Union[str, None] = "") -> Union[Pattern, None]:
+    def menu_filter(self, value: Optional[str] = "") -> Optional[Pattern]:
         """Set or return the menu filter.
 
         :param value: None or the menu_filter regex to set
@@ -186,7 +187,7 @@ class UserInterface(CursesWindow):
                     self._logger.exception(exc)
         return self._menu_filter
 
-    def scroll(self, value: Union[int, None] = None) -> int:
+    def scroll(self, value: Optional[int] = None) -> int:
         """Set or return the current scroll
 
         :param value: the value to set the scroll to
@@ -199,7 +200,7 @@ class UserInterface(CursesWindow):
             self._scroll = value
         return self._scroll
 
-    def serialization_format(self, value: Union[str, None] = None, default: bool = False) -> str:
+    def serialization_format(self, value: Optional[str] = None, default: bool = False) -> str:
         """Set or return the current serialization format
 
         :param value: the value to set the serialization format to
@@ -356,7 +357,7 @@ class UserInterface(CursesWindow):
         self,
         lines: CursesLines,
         line_numbers: Tuple[int, ...],
-        heading: Union[CursesLines, None],
+        heading: Optional[CursesLines],
         indent_heading: int,
         key_dict: dict,
         await_input: bool,
@@ -602,7 +603,7 @@ class UserInterface(CursesWindow):
             decoration=0,
         )
 
-    def _filter_and_serialize(self, obj: Any) -> Tuple[Union[CursesLines, None], CursesLines]:
+    def _filter_and_serialize(self, obj: Any) -> Tuple[Optional[CursesLines], CursesLines]:
         """filter an obj and serialize
 
         :param obj: the obj to serialize
@@ -732,7 +733,7 @@ class UserInterface(CursesWindow):
 
     @staticmethod
     @lru_cache(maxsize=None)
-    def _search_value(regex: Pattern, value: str) -> Union[Match, None]:
+    def _search_value(regex: Pattern, value: str) -> Optional[Match]:
         """check a str against a regex
         lru_cache enabled because this is hit during resize
 
@@ -829,8 +830,8 @@ class UserInterface(CursesWindow):
         self,
         obj: Union[List, Dict, str, bool, int, float],
         serialization_format: str = "",
-        index: int = None,
-        columns: List = None,
+        index: Optional[int] = None,
+        columns: Optional[List] = None,
         await_input: bool = True,
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),

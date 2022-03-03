@@ -9,7 +9,6 @@ from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Optional
-from typing import Union
 
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest.mock import mock_open
@@ -28,7 +27,7 @@ class ArtifactTstData(NamedTuple):
     """The artifact files test data object."""
 
     name: str
-    filename: Union[None, str]
+    filename: Optional[str]
     playbook: str
     expected: str
     help_playbook: bool = False

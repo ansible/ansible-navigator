@@ -120,13 +120,13 @@ class SettingsEntry:
     #: The possible values for this entry
     choices: Iterable[Union[bool, str]] = field(default_factory=list)
     #: Argparse specific params
-    cli_parameters: Union[None, CliParameters] = None
+    cli_parameters: Optional[CliParameters] = None
     #: Post process in normal (alphabetical) order or wait until after first pass
     delay_post_process: bool = False
     #: Override the default, generated environment variable
-    environment_variable_override: Union[None, str] = None
+    environment_variable_override: Optional[str] = None
     #: Over the default settings file path, dot delimited representation in tree
-    settings_file_path_override: Union[None, str] = None
+    settings_file_path_override: Optional[str] = None
     #: Subcommand this should this be used for
     subcommands: Union[List[str], Constants] = Constants.ALL
     #: Does this hold the name of the active subcommand

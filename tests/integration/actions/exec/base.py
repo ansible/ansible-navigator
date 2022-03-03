@@ -5,7 +5,7 @@ import os
 
 from pathlib import Path
 from typing import Generator
-from typing import Union
+from typing import Optional
 
 import pytest
 
@@ -27,7 +27,7 @@ class BaseClass:
     update_fixtures = False
     pane_height = 25
     pane_width = 300
-    config_file: Union[Path, None] = None
+    config_file: Optional[Path] = None
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(
