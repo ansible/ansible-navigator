@@ -3,7 +3,14 @@ dictionaryDefinitions:
     path: .config/dictionary.txt
     addWords: true
 dictionaries:
+  - bash
+  - networking-terms
+  - python
   - words
+  - "!aws"
+  - "!backwards-compatibility"
+  - "!cryptocurrencies"
+  - "!cpp"
 ignorePaths:
   # All dot files in the root
   - \.*
