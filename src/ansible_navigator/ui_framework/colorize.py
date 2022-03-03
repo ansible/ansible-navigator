@@ -112,7 +112,7 @@ class Colorize:
         :return: Lines ready to present using the TUI
         """
         lines = tuple(ansi_to_curses(line) for line in doc.splitlines())
-        return lines
+        return CursesLines(lines)
 
     @functools.lru_cache(maxsize=100)
     def render(self, doc: str, scope: str) -> List[List[SimpleLinePart]]:
@@ -353,4 +353,4 @@ def ansi_to_curses(line: str) -> CursesLine:
                 colno += len(part)
                 color = 0
                 style = 0
-    return tuple(printable)
+    return CursesLine(tuple(printable))

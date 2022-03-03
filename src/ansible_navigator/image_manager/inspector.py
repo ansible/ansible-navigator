@@ -27,7 +27,7 @@ class ImagesInspect:
         """generate commands"""
         return [
             Command(
-                id=image_id,
+                identity=image_id,
                 command=f"{self._container_engine} inspect {image_id}",
                 post_process=self.parse,
             )
@@ -57,7 +57,7 @@ class ImagesList:
         """generate command"""
         return [
             Command(
-                id="images",
+                identity="images",
                 command=f"{self._container_engine} images",
                 post_process=self.parse,
             ),
@@ -90,5 +90,5 @@ def inspect_all(container_engine: str) -> Tuple[List, str]:
     images_inspect_class = ImagesInspect(container_engine=container_engine, ids=image_ids)
     inspects = cmd_runner.run_single_proccess(commands=images_inspect_class.commands)
     for inspect in inspects:
-        images[inspect.id]["inspect"] = {"details": inspect.details, "errors": inspect.errors}
+        images[inspect.identity]["inspect"] = {"details": inspect.details, "errors": inspect.errors}
     return list(images.values()), images_list.stderr

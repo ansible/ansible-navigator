@@ -16,6 +16,7 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..image_manager import inspect_all
 from ..runner import Command
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -112,17 +113,13 @@ class Action(ActionBase):
 
         empty_str = " " * (screen_w - len(text) + 1)
         heading_str = (text + empty_str).upper()
-        heading = (
-            (
-                CursesLinePart(
-                    column=0,
-                    string=heading_str,
-                    color=color,
-                    decoration=curses.A_UNDERLINE | curses.A_BOLD,
-                ),
-            ),
+        line_part = CursesLinePart(
+            column=0,
+            string=heading_str,
+            color=color,
+            decoration=curses.A_UNDERLINE | curses.A_BOLD,
         )
-        return heading
+        return CursesLines((CursesLine((line_part,)),))
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Execute the ``images`` request for mode interactive.

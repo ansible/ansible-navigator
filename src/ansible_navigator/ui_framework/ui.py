@@ -283,7 +283,7 @@ class UserInterface(CursesWindow):
                     decoration=curses.A_REVERSE,
                 ),
             )
-        return tuple(footer)
+        return CursesLine(tuple(footer))
 
     def _scroll_bar(
         self,
@@ -316,7 +316,9 @@ class UserInterface(CursesWindow):
             self._add_line(
                 window=self._screen,
                 lineno=min(lineno, viewport_height + len_heading),
-                line=tuple([line_part]),
+                line=CursesLine(
+                    ((line_part,)),
+                ),
             )
 
     def _get_input_line(self) -> str:
@@ -326,9 +328,15 @@ class UserInterface(CursesWindow):
         """
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
-        clp = CursesLinePart(column=0, string=":", color=0, decoration=0)
+        line_part = CursesLinePart(column=0, string=":", color=0, decoration=0)
         input_at = self._screen_height - 1  # screen y is zero based
-        self._add_line(window=self._screen, lineno=input_at, line=tuple([clp]))
+        self._add_line(
+            window=self._screen,
+            lineno=input_at,
+            line=CursesLine(
+                ((line_part,)),
+            ),
+        )
         self._screen.refresh()
         self._one_line_input.win = curses.newwin(1, self._screen_width, input_at, 1)
         self._one_line_input.win.keypad(True)
@@ -369,7 +377,7 @@ class UserInterface(CursesWindow):
         :type await_input: bool
         :return: the key pressed
         """
-        heading = heading or ()
+        heading = heading or CursesLines(tuple())
         heading_len = len(heading)
         footer = self._footer(dict(**STANDARD_KEYS, **key_dict, **END_KEYS))
         footer_at = self._screen_height - 1  # screen is 0 based index
@@ -561,7 +569,7 @@ class UserInterface(CursesWindow):
         :params lines: The lines to transform
         :return: All lines colored
         """
-        return tuple(self._colored_line(line) for line in lines)
+        return CursesLines(tuple(self._colored_line(line) for line in lines))
 
     def _colored_line(self, line: List[SimpleLinePart]) -> CursesLine:
         """Color one line.
@@ -569,7 +577,9 @@ class UserInterface(CursesWindow):
         :param line: The line to color
         :returns: One line colored
         """
-        return tuple(self._colored_line_part(line_part) for line_part in line)
+        return CursesLine(
+            tuple(self._colored_line_part(line_part) for line_part in line),
+        )
 
     def _colored_line_part(self, line_part: SimpleLinePart) -> CursesLinePart:
         """Color one line part.
@@ -647,7 +657,7 @@ class UserInterface(CursesWindow):
             line_numbers = tuple(range(first_line_idx, last_line_idx + 1))
 
             entry = self._display(
-                lines=lines[first_line_idx : last_line_idx + 1],
+                lines=CursesLines(lines[first_line_idx : last_line_idx + 1]),
                 line_numbers=line_numbers,
                 heading=heading,
                 indent_heading=False,
