@@ -136,8 +136,7 @@ class StepType(Enum):
     CONTENT = "content"
 
 
-# pylint: disable=invalid-name
-T = TypeVar("T")
+T = TypeVar("T")  # pylint: disable=invalid-name
 
 
 @dataclass
