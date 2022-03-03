@@ -30,6 +30,10 @@ value_2 = TSTestClass(attr_1=3, attr_2="test element 2")
 
 @pytest.fixture(name="test_step")
 def _test_step():
+    """Instantiate and set default attribute values for TypedStep test object.
+
+    :returns: Test fixture
+    """
     test_step = TypedStep[TSTestClass](name="test", step_type=StepType.MENU)
     test_step.value = [value_1, value_2]
     test_step.value = [value_1, value_2]  # produce it "unchanged"
@@ -41,7 +45,7 @@ def _test_step():
 def test_fixture(test_step):
     """Base test fixture test for the other tests.
 
-    :param test_step: test fixture
+    :param test_step: Test fixture
     """
     assert not test_step.changed
     assert test_step.index == 0
@@ -52,7 +56,7 @@ def test_fixture(test_step):
 def test_index(test_step):
     """Testing @property index and index.setter.
 
-    :param test_step: test fixture
+    :param test_step: Test fixture
     """
     test_step.index = 1
     assert test_step.index == 1
@@ -68,7 +72,7 @@ def test_index(test_step):
 def test_selected(test_step):
     """Testing @property selected.
 
-    :param test_step: test fixture
+    :param test_step: Test fixture
     """
     test_step.index = 1
     assert test_step.selected == value_2
@@ -79,7 +83,7 @@ def test_selected(test_step):
 def test_value(test_step):
     """Testing @property value and value.setter.
 
-    :param test_step: test fixture
+    :param test_step: Test fixture
     """
     assert not test_step.changed
     test_step.value = [value_2, value_2]

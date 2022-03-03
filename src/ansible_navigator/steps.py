@@ -146,7 +146,7 @@ class TypedStep(Generic[T]):
     """One step in the flow of things.
 
     This should be used for new actions following the pattern of a
-    TypedDict for the user interface as seen in settings.
+    ``TypedDict`` for the user interface as seen in settings.
     """
 
     name: str
@@ -197,7 +197,7 @@ class TypedStep(Generic[T]):
     def selected(self) -> Optional[T]:
         """Return the selected item.
 
-        :return: the selected item
+        :return: The selected item
         """
         if self._index is None or not self._value:
             return None
