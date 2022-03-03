@@ -210,7 +210,7 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     """find the settings file as
     ./ansible-navigator.(.yml,.yaml,.json)
     ~/.ansible-navigator.(.yml,.yaml,.json)
@@ -262,7 +262,7 @@ def flatten_list(data_list) -> List:
     return [data_list]
 
 
-def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     # pylint: disable=too-many-return-statements
     """
     returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
@@ -513,7 +513,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     return errors, result
 
 
-def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
+def to_list(thing: Optional[Union[str, List, Tuple, Set]]) -> List:
     """convert something to a list if necessary"""
     if isinstance(thing, (list, tuple, set)):
         converted_value = list(thing)

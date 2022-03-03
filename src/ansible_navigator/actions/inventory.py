@@ -8,6 +8,7 @@ import shutil
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -60,7 +61,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return colors[colno % len(colors)], Decoration.NORMAL
 
 
-def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """Create a heading for inventory content.
 
     :param obj: The content going to be shown
@@ -114,7 +115,7 @@ class Action(ActionBase):
 
         self.__inventory: Dict[Any, Any] = {}
         self._host_vars: Dict[str, Dict[Any, Any]]
-        self._inventories_mtime: Union[float, None]
+        self._inventories_mtime: Optional[float]
         self._inventories: List[str] = []
         self._inventory_error: str = ""
         self._runner: Union[Command, AnsibleInventory]
@@ -176,7 +177,7 @@ class Action(ActionBase):
         """Request calling app update, inventory update checked in ``run()``."""
         self._calling_app.update()
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``inventory`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -522,7 +523,7 @@ class Action(ActionBase):
     def _collect_inventory_details_automated(
         self,
         kwargs: Dict[str, Any],
-    ) -> Tuple[Union[None, str], Union[None, str], Union[None, int]]:
+    ) -> Tuple[Optional[str], Optional[str], Optional[int]]:
         """Use the runner subsystem to collect inventory details for mode stdout.
 
         :param kwargs: The arguments for the runner call
@@ -555,7 +556,7 @@ class Action(ActionBase):
 
     def _collect_inventory_details(
         self,
-    ) -> Tuple[Union[None, str], Union[None, str], Union[None, int]]:
+    ) -> Tuple[Optional[str], Optional[str], Optional[int]]:
         """Use the runner subsystem to collect inventory details for either mode.
 
         :returns: For mode interactive nothing. For mode stdout, the output, errors and return

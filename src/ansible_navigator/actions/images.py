@@ -7,8 +7,8 @@ from functools import partial
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic
@@ -121,7 +121,7 @@ class Action(ActionBase):
         )
         return CursesLines((CursesLine((line_part,)),))
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``images`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -447,7 +447,7 @@ class Action(ActionBase):
             return False
         return True
 
-    def _parse(self, output) -> Union[Dict, None]:
+    def _parse(self, output) -> Optional[Dict]:
         """Load and process the ``json`` output from the image introspection process.
 
         :param output: The output from the image introspection process

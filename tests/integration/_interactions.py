@@ -5,6 +5,7 @@ import shlex
 from enum import Enum
 from typing import List
 from typing import NamedTuple
+from typing import Optional
 from typing import Union
 
 
@@ -20,12 +21,12 @@ class Command(NamedTuple):
 
     execution_environment: bool
     command: str = "ansible-navigator"
-    cmdline: Union[None, str] = None
+    cmdline: Optional[str] = None
     log_level: str = "debug"
     mode: str = "interactive"
     pass_environment_variables: List = []
     preclear: bool = False
-    subcommand: Union[None, str] = None
+    subcommand: Optional[str] = None
 
     def join(self):
         """create CLI command"""

@@ -8,6 +8,7 @@ from random import randrange
 from typing import Any
 from typing import List
 from typing import NamedTuple
+from typing import Optional
 from typing import Union
 from urllib.parse import urlparse
 
@@ -208,7 +209,7 @@ class FormValidators:
     """Validators for a form"""
 
     @staticmethod
-    def all_true(response: Union[List, None] = None, hint: bool = False) -> Union[Validation, str]:
+    def all_true(response: Optional[List] = None, hint: bool = False) -> Union[Validation, str]:
         """validate all in list are true"""
         msg = "Please ensure all values are true"
         if hint:
@@ -220,7 +221,7 @@ class FormValidators:
 
     @staticmethod
     def no_validation(
-        response: Union[List, None] = None,
+        response: Optional[List] = None,
         hint: bool = False,
     ) -> Union[Validation, str]:
         """no validation"""
