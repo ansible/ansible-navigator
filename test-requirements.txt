@@ -12,4 +12,4 @@ pytest-xdist
 sphinx
 
 # used for TypeAlias, can be removed once Python 3.10 is required
-typing-extentions 
+typing-extentions; python_version < "3.10.0"
