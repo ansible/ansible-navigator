@@ -1,15 +1,17 @@
-"""A wrapper for pyyaml."""
-# pylint: disable=unused-import
+"""Abstractions for common serialization formats."""
+
+import json
 import re
 
+from typing import IO
 from typing import Any
 from typing import NamedTuple
 from typing import Optional
-from typing import Union
 
 import yaml  # noqa: F401
 
 
+# pylint: disable=unused-import
 try:
     from yaml import CDumper as Dumper
 except ImportError:
@@ -21,6 +23,36 @@ try:
 except ImportError:
     from yaml import Loader  # type: ignore[misc] # noqa: F401
     from yaml import SafeLoader  # type: ignore[misc] # noqa: F401
+# pylint: enable=unused-import
+
+
+class JsonParams(NamedTuple):
+    """The parameters for json dump and dumps."""
+
+    indent: int = 4
+    sort_keys: bool = True
+    ensure_ascii: bool = False
+
+
+def json_dump(dumpable: Any, file_handle: IO, params: NamedTuple = JsonParams()) -> None:
+    """Serialize and write the dumpable to a file.
+
+    :param dumpable: The object to serialize
+    :param file_handle: The file handle to write to
+    :param params: Parameters to override the defaults
+    """
+    json.dump(dumpable, file_handle, **params._asdict())
+
+
+def json_dumps(dumpable: Any, params: NamedTuple = JsonParams()) -> str:
+    """Serialize the dumpable to json.
+
+    :param dumpable: The object to serialize
+    :param params: Parameters to override the defaults
+    :returns: The object serialized
+    """
+    string = json.dumps(dumpable, **params._asdict())
+    return string
 
 
 class YamlStyle(NamedTuple):

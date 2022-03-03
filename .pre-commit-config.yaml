@@ -17,6 +17,31 @@ repos:
       - id: isort
         name: Sort import statements using isort
 
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: "v2.5.1"
+    hooks:
+      - id: prettier
+        # Original hook implementation is flaky due to *several* bugs described
+        # in https://github.com/prettier/prettier/issues/12364
+        # a) CI=1 needed to avoid incomplete output
+        # b) two executions are needed because --list-different works correctly
+        # only when run with --check as with --write the output will also
+        # include other entries and logging level cannot be used to keep only
+        # modified files listed (any file is listes using the log level, regardless if
+        # is modified or not).
+        # c) We avoid letting pre-commit pass each filename in order to avoid
+        # runing multiple instances in parallel. This also ensures that running
+        # prettier from the command line behaves identically with the pre-commit
+        # one. No real performance downsides.
+        # d) exit with the return code from list-different (0=none, 1=some)
+        # rather than the write (0=successfully rewrote files). pre-commit.ci
+        entry: env CI=1 bash -c "prettier --list-different . || ec=$? && prettier --loglevel=error --write . && exit $ec"
+        pass_filenames: false
+        args: []
+        additional_dependencies:
+          - prettier
+          - prettier-plugin-toml
+
   - repo: https://github.com/psf/black.git
     rev: 22.1.0
     hooks:
@@ -28,13 +53,13 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v5.8.1
+    rev: v5.8.4
     hooks:
       - id: cspell
         name: Spell check with cspell
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.1.12
+    rev: v1.1.13
     hooks:
       - id: remove-tabs
         exclude: |
@@ -54,7 +79,6 @@ repos:
       - id: check-added-large-files
       - id: fix-byte-order-marker
       - id: check-case-conflict
-      - id: check-docstring-first
       - id: check-json
         exclude: |
           (?x)
@@ -159,6 +183,7 @@ repos:
         name: MyPy, for Python 3.10
         additional_dependencies:
           - jinja2
+          - libtmux
           - pytest
           - sphinx
           - types-docutils
@@ -170,7 +195,9 @@ repos:
         alias: mypy-py36
         name: MyPy, for Python 3.6
         additional_dependencies:
+          - importlib_resources # Needed for checking py3.6 with a later interpreter
           - jinja2
+          - libtmux
           - pytest
           - sphinx
           - types-dataclasses # Needed for checking py3.6 with a later interpreter

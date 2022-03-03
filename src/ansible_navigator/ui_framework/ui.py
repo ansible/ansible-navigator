@@ -2,7 +2,6 @@
 """the main UI renderer
 """
 import curses
-import json
 import logging
 import re
 
@@ -21,8 +20,9 @@ from typing import Pattern
 from typing import Tuple
 from typing import Union
 
-from .._yaml import human_dump
-from ..utils import templar
+from ..utils.functions import templar
+from ..utils.serialize import human_dump
+from ..utils.serialize import json_dumps
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
 from .curses_defs import CursesLine
@@ -504,7 +504,7 @@ class UserInterface(CursesWindow):
         if self.serialization_format() == "source.yaml":
             string = human_dump(obj)
         elif self.serialization_format() == "source.json":
-            string = json.dumps(obj, indent=4, sort_keys=True, ensure_ascii=False)
+            string = json_dumps(obj)
         else:
             string = obj
 
@@ -716,7 +716,7 @@ class UserInterface(CursesWindow):
         :return: True if a match else False
         """
         for key in columns:
-            if self._search_value(self.menu_filter(), obj[key]):
+            if self._search_value(self.menu_filter(), obj.get(key)):
                 return True
         return False
 

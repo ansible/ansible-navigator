@@ -6,6 +6,7 @@ import html
 import logging
 import os
 import re
+import shlex
 import shutil
 import sys
 import sysconfig
@@ -14,6 +15,7 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from typing import Iterable
 from typing import List
 from typing import Mapping
 from typing import NamedTuple
@@ -150,6 +152,7 @@ def clear_screen() -> None:
             print()
 
 
+# TODO: Replace this with something type-safe.
 def dispatch(obj, replacements):
     """make the replacement based on type
 
@@ -283,7 +286,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     # We want the share directory to resolve adjacent to the directory the code lives in
     # as that's the layout in the source.
     share_directory = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "share", app_name),
+        os.path.join(os.path.dirname(__file__), "..", "..", "..", "share", app_name),
     )
     description = "development path"
     if os.path.exists(share_directory):
@@ -442,6 +445,19 @@ def round_half_up(number: Union[float, int]) -> int:
     return int(rounded)
 
 
+def shlex_join(tokens: Iterable[str]) -> str:
+    """Concatenate the tokens of a list and return a string.
+
+    ``shlex.join`` was new in version 3.8
+
+    :param tokens: The iterable of strings to join
+    :returns: The iterable joined with spaces
+    """
+    if sys.version_info >= (3, 8):
+        return shlex.join(split_command=tokens)
+    return " ".join(shlex.quote(token) for token in tokens)
+
+
 def str2bool(value: Any) -> bool:
     """Convert some commonly used values
     to a boolean
@@ -456,6 +472,8 @@ def str2bool(value: Any) -> bool:
     raise ValueError
 
 
+# TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
+#       returns Any. Need to find a better solution... "Any" isn't it.
 def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     """template some string with jinja2
     always to and from json so we return an object if it is
@@ -470,7 +488,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
 
     env = Environment(autoescape=True, undefined=StrictUndefined)
     try:
-        template = env.from_string(string)
+        template: Any = env.from_string(string)
         result = template.render(template_vars)
     except (ValueError, TemplateError) as exc:
         errors.append(f"Error while templating string: '{string}'")
@@ -506,7 +524,7 @@ def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
     return converted_value
 
 
-def unescape_moustaches(obj: Mapping) -> Mapping:
+def unescape_moustaches(obj: Any) -> Mapping:
     """unescape moustaches
 
     :param obj: something

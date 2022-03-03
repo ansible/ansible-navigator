@@ -1,12 +1,8 @@
-"""Version information for ansible-navigator.
+"""Version information for ansible-navigator collection doc cache.
 
 .. note::
 
-   __version__:
-
-   Indicates the version of the ansible_navigator application.
-
-   __version_collection_doc_cache__:
+   ``__version_collection_doc_cache__``:
 
    Indicates the version of the schema of the collection doc cache
    this is checked during initialization, if the version of the cache
@@ -15,5 +11,4 @@
    application version, although keeping the major in sync is probably
    not a bad idea to minimize the amount of stale docs in the user's cache
 """
-__version__ = "1.1.0a1"
 __version_collection_doc_cache__ = "1.0"

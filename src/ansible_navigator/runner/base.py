@@ -17,7 +17,7 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from ansible_runner import Runner  # type: ignore[import]
+from ansible_runner import Runner
 
 
 class Base:

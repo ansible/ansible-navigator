@@ -11,6 +11,7 @@ from copy import deepcopy
 from curses import wrapper
 from pathlib import Path
 from typing import List
+from typing import Union
 
 from .action_defs import ActionReturn
 from .action_defs import RunInteractiveReturn
@@ -19,14 +20,22 @@ from .action_defs import RunStdoutReturn
 from .action_runner import ActionRunner
 from .actions import run_action_stdout
 from .configuration_subsystem import ApplicationConfiguration
+from .configuration_subsystem import Constants
 from .configuration_subsystem import NavigatorConfiguration
 from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
-from .utils import ExitMessage
-from .utils import ExitPrefix
-from .utils import LogMessage
-from .utils import clear_screen
+from .utils.functions import ExitMessage
+from .utils.functions import ExitPrefix
+from .utils.functions import LogMessage
+from .utils.functions import clear_screen
+
+
+__version__: Union[Constants, str]
+try:
+    from ._version import version as __version__
+except ImportError:
+    __version__ = Constants.NOT_SET
 
 
 APP_NAME = "ansible-navigator"
@@ -40,6 +49,7 @@ def pull_image(args):
     image_puller = ImagePuller(
         container_engine=args.container_engine,
         image=args.execution_environment_image,
+        arguments=args.pull_arguments,
         pull_policy=args.pull_policy,
     )
     image_puller.assess()
@@ -110,6 +120,7 @@ def main():
     exit_messages: List[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
+    args.application_version = __version__
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
 

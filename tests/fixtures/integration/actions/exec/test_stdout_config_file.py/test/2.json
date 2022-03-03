@@ -1,5 +1,5 @@
 {
-    "name": "test[ensure env vars get set from config  clear && ansible-navigator exec --excmd /bin/env --ee True --ll debug --mode stdout]",
+    "name": "test[ensure env vars get set from config  clear && ansible-navigator exec /bin/env --ee True --ll debug --mode stdout]",
     "index": 2,
     "comment": "ensure env vars get set from config",
     "additional_information": {
@@ -14,7 +14,7 @@
         "ANSIBLE_NAVIGATOR_LOG_LEVEL=debug",
         "ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH=./.test_logs/tests/integration/actions/exec/test_stdout_config_file.py/collection_doc_cache.db",
         "AWX_ISOLATED_DATA_DIR=/runner/artifacts/00000000-0000-0000-0000-000000000000",
-        "HOSTNAME=454f1f8ad1e4",
+        "HOSTNAME=210c869e7acc",
         "ANSIBLE_CACHE_PLUGIN_CONNECTION=/runner/artifacts/00000000-0000-0000-0000-000000000000/fact_cache",
         "ANSIBLE_CACHE_PLUGIN=jsonfile",
         "ANSIBLE_UNSAFE_WRITES=1",

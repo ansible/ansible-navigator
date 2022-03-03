@@ -8,6 +8,7 @@ import os
 import re
 import shlex
 import shutil
+import time
 import uuid
 
 from math import floor
@@ -33,10 +34,11 @@ from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
-from ..utils import abs_user_path
-from ..utils import human_time
-from ..utils import remove_ansi
-from ..utils import round_half_up
+from ..utils.functions import abs_user_path
+from ..utils.functions import human_time
+from ..utils.functions import remove_ansi
+from ..utils.functions import round_half_up
+from ..utils.serialize import json_dump
 from . import _actions as actions
 from . import run_action
 
@@ -257,6 +259,9 @@ class Action(ActionBase):
                     self.write_artifact()
                 self._logger.debug("runner finished")
                 break
+            # Sleep briefly to prevent 100% CPU utilization
+            # in mode stdout, the delay introduced by the curses key read is not present
+            time.sleep(0.01)
         return_code = self.runner.ansible_runner_instance.rc
         if return_code != 0:
             return RunStdoutReturn(
@@ -860,7 +865,7 @@ class Action(ActionBase):
                         "status": status,
                         "status_color": status_color,
                     }
-                    json.dump(artifact, fh, indent=4)
+                    json_dump(artifact, fh)
                     self._logger.info("Saved artifact as %s", filename)
 
             except (IOError, OSError) as exc:

@@ -36,7 +36,7 @@ stdout_tests = (
     ShellCommand(
         comment="exec echo check no path via shell",
         user_input=StdoutCommand(
-            cmdline="--excmd '/usr/bin/echo $PATH'",
+            cmdline="'/usr/bin/echo $PATH'",
             execution_environment=True,
         ).join(),
         absent=["/sbin"],
@@ -44,7 +44,7 @@ stdout_tests = (
     ShellCommand(
         comment="ensure env vars get set from config",
         user_input=StdoutCommand(
-            cmdline="--excmd '/bin/env'",
+            cmdline="/bin/env",
             execution_environment=True,
         ).join(),
         present=["ANSIBLE_COLLECTIONS_PATHS=/tmp/collections"],

@@ -1,97 +1,118 @@
-[tool.towncrier]
-  directory = "docs/changelog-fragments.d/"
-  filename = "CHANGELOG.md"
-  issue_format = "{{issue}}`{issue}`"
-  start_string = "<!-- towncrier release notes start -->\n\n"
-  template = "docs/changelog-fragments.d/.CHANGELOG-TEMPLATE.md.j2"
-  title_format = "## [{version}] - {project_date}"
-  underlines = ["##", "###", "####", "#####"]
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  # Essentials
+  "setuptools >= 45",
+  # Plugins
+  "setuptools_scm[toml] >= 6.2",
+  "setuptools_scm_git_archive >= 1.1",
+]
 
-  [[tool.towncrier.section]]
-    path = ""
-
-  [[tool.towncrier.type]]
-    directory = "bugfix"
-    name = "Bugfixes"
-    showcontent = true
-
-  [[tool.towncrier.type]]
-    directory = "feature"
-    name = "Features"
-    showcontent = true
-
-  [[tool.towncrier.type]]
-    directory = "deprecation"
-    name = "Deprecations (removal in next major release)"
-    showcontent = true
-
-  [[tool.towncrier.type]]
-    directory = "breaking"
-    name = "Backward incompatible changes"
-    showcontent = true
-
-  [[tool.towncrier.type]]
-    directory = "doc"
-    name = "Documentation"
-    showcontent = true
-
-  [[tool.towncrier.type]]
-    directory = "misc"
-    name = "Miscellaneous"
-    showcontent = true
-
-  [[tool.towncrier.type]]
-    directory = "internal"
-    name = "Contributor-facing changes"
-    showcontent = true
-
+[tool]
 
 [tool.black]
 line-length = 100
 
-[tool.coverage.run]
-    branch = true
-    source_pkgs = ["ansible_navigator"]
-    source = ["share"]
-
 [tool.coverage.report]
-    show_missing = true
+show_missing = true
+
+[tool.coverage.run]
+branch = true
+source_pkgs = ["ansible_navigator"]
+source = ["share"]
 
 [tool.isort]
 force_single_line = true # Force from .. import to be 1 per line, minimizing changes at time of implementation
 known_first_party = "ansible_navigator, key_value_store" # No effect at implementation, here anticipating future benefit
 lines_after_imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
 lines_between_types = 1 # Separate import/from with 1 line, minimizing changes at time of implementation
-no_lines_before = "LOCALFOLDER"  # Keeps local imports bundled with first-party
+no_lines_before = "LOCALFOLDER" # Keeps local imports bundled with first-party
 profile = "black" # Avoid conflict with black
-skip_glob = ["tests/fixtures/common/collections*"] # Skip ansible content due to ansible-test sanity ruleset
+skip_glob = [
+  "tests/fixtures/common/collections*"
+] # Skip ansible content due to ansible-test sanity ruleset
 
 [tool.pylint]
-    [tool.pylint.imports]
-    preferred-modules = [
-      # NOTE: The unittest replacements below help keep
-      # NOTE: the tests pytest ecosystem-oriented.
-      "unittest:pytest",
-      "unittest.mock:pytest-mock",
-    ]
 
-    [tool.pylint.master]
-    # tm_tokenize is virtually vendored and shouldn't be linted as such
-    ignore = "tm_tokenize"
-    # pylint defaults + fh for with open .. as (f|fh)
-    good-names = "i,j,k,ex,Run,_,f,fh"
-    jobs = 0
+[tool.pylint.format]
+max-line-length = 100
 
-    [tool.pylint.messages_control]
-    disable = [
-      "duplicate-code",
-      "fixme",
-      "too-few-public-methods",
-      "unsubscriptable-object",
-    ]
-    enable = [
-      "useless-suppression",  # Identify unneeded pylint disable statements
-    ]
+[tool.pylint.imports]
+preferred-modules = [
+  # NOTE: The unittest replacements below help keep
+  # NOTE: the tests pytest ecosystem-oriented.
+  "unittest:pytest",
+  "unittest.mock:pytest-mock",
+]
 
-    [tool.pylint.format]
-    max-line-length = 100
+[tool.pylint.master]
+ignore = [
+  "_version.py", # built by setuptools_scm
+  "tm_tokenize", # tm_tokenize is virtually vendored and shouldn't be linted as such
+
+]
+# pylint defaults + fh for with open .. as (f|fh)
+good-names = "i,j,k,ex,Run,_,f,fh"
+jobs = 0
+
+[tool.pylint.messages_control]
+disable = [
+  "duplicate-code",
+  "fixme",
+  "too-few-public-methods",
+  "unsubscriptable-object",
+]
+enable = [
+  "useless-suppression", # Identify unneeded pylint disable statements
+
+]
+
+[tool.setuptools_scm]
+write_to = "src/ansible_navigator/_version.py"
+
+[tool.towncrier]
+directory = "docs/changelog-fragments.d/"
+filename = "CHANGELOG.md"
+issue_format = "{{issue}}`{issue}`"
+start_string = "<!-- towncrier release notes start -->\n\n"
+template = "docs/changelog-fragments.d/.CHANGELOG-TEMPLATE.md.j2"
+title_format = "## [{version}] - {project_date}"
+underlines = ["##", "###", "####", "#####"]
+
+[[tool.towncrier.section]]
+path = ""
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bugfixes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "Features"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecation"
+name = "Deprecations (removal in next major release)"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name = "Backward incompatible changes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "doc"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "misc"
+name = "Miscellaneous"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "internal"
+name = "Contributor-facing changes"
+showcontent = true

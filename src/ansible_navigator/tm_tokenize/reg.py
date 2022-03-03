@@ -6,7 +6,7 @@ from typing import Match
 from typing import Optional
 from typing import Tuple
 
-import onigurumacffi  # type: ignore[import]
+import onigurumacffi
 
 from .region import Region
 

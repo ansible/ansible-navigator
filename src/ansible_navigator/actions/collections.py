@@ -17,6 +17,7 @@ from typing import Union
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem import Constants
 from ..runner import Command
 from ..steps import Step
 from ..ui_framework import CursesLinePart
@@ -24,7 +25,8 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
-from ..utils import path_is_relative_to
+from ..utils.functions import path_is_relative_to
+from ..utils.key_value_store import KeyValueStore
 from . import _actions as actions
 from . import run_action
 
@@ -93,7 +95,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
-        self._collection_cache: Dict
+        self._collection_cache: Union[Constants, KeyValueStore]
         self._collection_cache_path: str
         self._collection_scanned_paths: List = []
         self._collections: List = []
@@ -271,12 +273,35 @@ class Action(ActionBase):
 
     def _run_runner(self) -> None:
         # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
             set_environment_variable = deepcopy(self._args.set_environment_variable)
         else:
             set_environment_variable = {}
         set_environment_variable["ANSIBLE_NOCOLOR"] = "True"
+
+        # We mount in the utils directory to /opt/ansible_navigator_utils
+        # We do this so that we can access key_value_store (KVS) from within
+        # the EE. If the Navigator user is overriding PYTHONPATH, we still need
+        # to inject this utils directory into the PYTHONPATH. If not, we'll just
+        # use the EE's default PYTHONPATH (if it exists) and just add our path
+        # at the end.
+        if self._args.execution_environment:
+            ee_navigator_utils_mount = "/opt/ansible_navigator_utils"
+            if "PYTHONPATH" in set_environment_variable:
+                set_environment_variable["PYTHONPATH"].append(
+                    f":{ee_navigator_utils_mount}",
+                )
+            else:
+                set_environment_variable[
+                    "PYTHONPATH"
+                ] = f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
+            self._logger.debug(
+                "Execution Environment's PYTHONPATH is set to: %s",
+                set_environment_variable["PYTHONPATH"],
+            )
 
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -319,8 +344,18 @@ class Action(ActionBase):
         if self._args.execution_environment:
             self._logger.debug("running collections command with execution environment enabled")
             python_exec_path = "python3"
+            utils_lib = os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "utils",
+            )
 
-            container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
+            container_volume_mounts = [
+                # share utils directory which has introspection script
+                f"{share_directory}/utils:{share_directory}/utils",
+                # KVS library used by both Navigator and the introspection script
+                f"{utils_lib}:/opt/ansible_navigator_utils",
+            ]
             if os.path.exists(self._adjacent_collection_dir):
                 container_volume_mounts.append(
                     f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
@@ -335,6 +370,9 @@ class Action(ActionBase):
                     f"{self._collection_cache_path}:{self._collection_cache_path}:z",
                 )
 
+            for volume_mount in container_volume_mounts:
+                self._logger.debug("Adding volume mount to container invocation: %s", volume_mount)
+
             if "container_volume_mounts" in kwargs:
                 kwargs["container_volume_mounts"] += container_volume_mounts
             else:
@@ -345,7 +383,9 @@ class Action(ActionBase):
             python_exec_path = sys.executable
 
         self._logger.debug(
-            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}",
+            "Invoke runner with executable_cmd: %s and kwargs: %s",
+            python_exec_path,
+            kwargs,
         )
         _runner = Command(executable_cmd=python_exec_path, **kwargs)
         output, error, _ = _runner.run()

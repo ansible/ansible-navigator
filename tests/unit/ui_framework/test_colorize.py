@@ -5,8 +5,8 @@ import os
 
 from unittest.mock import patch
 
-from ansible_navigator._yaml import human_dump
 from ansible_navigator.ui_framework.colorize import Colorize
+from ansible_navigator.utils.serialize import human_dump
 
 
 SHARE_DIR = os.path.abspath(
@@ -44,6 +44,24 @@ def test_basic_success_yaml():
     assert result[0][0].chars == sample.splitlines()[0]
     assert len(result[1]) == 3
     assert "".join(line_part.chars for line_part in result[1]) == sample.splitlines()[1]
+
+
+def test_basic_success_log():
+    """Ensure the log string is returned as 1 line, with 5 parts.
+
+    Also ensure the parts can be reassembled to match the string.
+    """
+    sample = "1 ERROR text 42"
+
+    result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
+        doc=sample,
+        scope="text.log",
+    )
+    assert len(result) == 1
+    first_line = result[0]
+    line_parts = tuple(p.chars for p in first_line)
+    assert line_parts == ("1", " ", "ERROR", " text ", "42")
+    assert "".join(line_parts) == sample
 
 
 def test_basic_success_no_color():

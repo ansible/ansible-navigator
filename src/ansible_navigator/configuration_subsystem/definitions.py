@@ -3,15 +3,19 @@
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
-from types import SimpleNamespace
+from typing import TYPE_CHECKING
 from typing import Any
-from typing import Callable
 from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Union
 
-from ..utils import oxfordcomma
+from ..utils.functions import oxfordcomma
+
+
+if TYPE_CHECKING:
+    from .navigator_configuration import Internals
+    from .navigator_post_processor import NavigatorPostProcessor
 
 
 @dataclass
@@ -126,24 +130,30 @@ class SettingsEntry:
         return sfp.replace("_", "-")
 
 
-class SubCommand(SimpleNamespace):
+@dataclass(frozen=True)
+class SubCommand:
     """An object to hold a subcommand"""
 
     name: str
     description: str
-    epilog: Union[None, str] = None
+    epilog: Optional[str] = None
 
 
-class ApplicationConfiguration(SimpleNamespace):
+@dataclass
+class ApplicationConfiguration:
+    # pylint: disable=too-many-instance-attributes
     """The main object for storing an application config"""
 
-    application_name: str = ""
-    entries: List[SettingsEntry] = []
-    internals: SimpleNamespace
+    application_version: Union[Constants, str]
+    entries: List[SettingsEntry]
+    internals: "Internals"
+    post_processor: "NavigatorPostProcessor"
     subcommands: List[SubCommand]
-    post_processor = Callable
+
+    application_name: str = ""
+    original_command: List[str] = field(default_factory=list)
+
     initial: Any = None
-    original_command: List[str]
 
     def _get_by_name(self, name, kind):
         try:
@@ -155,7 +165,7 @@ class ApplicationConfiguration(SimpleNamespace):
         """Returns a matching entry or the default from super"""
         try:
             return super().__getattribute__("_get_by_name")(attr, "entries").value.current
-        except KeyError:
+        except (AttributeError, KeyError):
             return super().__getattribute__(attr)
 
     def entry(self, name) -> SettingsEntry:
