@@ -27,6 +27,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import CommandAsync
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -111,17 +112,17 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
     """
 
     if isinstance(obj, dict) and "task" in obj:
-        heading = []
         detail = f"PLAY [{obj['play']}:{obj['__number']}] "
         stars = "*" * (screen_w - len(detail))
-        heading.append(
-            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)]),
+
+        line_1 = CursesLine(
+            (CursesLinePart(column=0, string=detail + stars, color=0, decoration=0),),
         )
 
         detail = f"TASK [{obj['task']}] "
         stars = "*" * (screen_w - len(detail))
-        heading.append(
-            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)]),
+        line_2 = CursesLine(
+            (CursesLinePart(column=0, string=detail + stars, color=0, decoration=0),),
         )
 
         if obj["__changed"] is True:
@@ -138,19 +139,11 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
         string = f"{res}: [{obj['__host']}] {msg}"
         string = string + (" " * (screen_w - len(string) + 1))
-        heading.append(
-            tuple(
-                [
-                    CursesLinePart(
-                        column=0,
-                        string=string,
-                        color=color,
-                        decoration=curses.A_UNDERLINE,
-                    ),
-                ],
-            ),
+        line_3 = CursesLine(
+            (CursesLinePart(column=0, string=string, color=color, decoration=curses.A_UNDERLINE),),
         )
-        return tuple(heading)
+
+        return CursesLines((line_1, line_2, line_3))
     return None
 
 

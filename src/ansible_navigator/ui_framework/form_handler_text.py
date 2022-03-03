@@ -7,6 +7,7 @@ from curses import ascii as curses_ascii
 from curses.textpad import Textbox
 from typing import Tuple
 
+from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow
 from .sentinels import unknown
@@ -31,9 +32,8 @@ class FormHandlerText(CursesWindow, Textbox):
 
     def _paint_from_line_cache(self) -> None:
         """put the text from the line cache in the text input window"""
-        clp = CursesLinePart(0, self.input_line_cache[self.input_line_pointer], 0, 0)
-        cline = (clp,)
-        self._add_line(self.win, 0, cline)
+        line_part = CursesLinePart(0, self.input_line_cache[self.input_line_pointer], 0, 0)
+        self._add_line(self.win, 0, CursesLine((line_part,)))
         self.win.clrtoeol()
 
     def _adjust_line_pointer(self, amount: int) -> None:
@@ -86,8 +86,8 @@ class FormHandlerText(CursesWindow, Textbox):
         form_field = form_fields[idx]
 
         if form_field.response is not unknown:
-            clp = CursesLinePart(0, form_field.response, 0, 0)
-            self._add_line(self.win, 0, tuple([clp]))
+            line_part = CursesLinePart(0, form_field.response, 0, 0)
+            self._add_line(self.win, 0, CursesLine((line_part,)))
         else:
             self.win.move(0, 0)
 
