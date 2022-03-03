@@ -1,12 +1,7 @@
 cliconf             # Ansible network cli abstraction plugin
 kegex               # An action's regex
 netcommon           # Ansible network collection, seen in tests and README
-pyproject           # Already in dictionary
 setuptools          # Used in _version.pyi
 Towncrier           # Changelog generator
 
-mkdir               # https://github.com/streetsidesoftware/cspell-dicts/pull/915
 mqueue              # https://github.com/ansible/ansible-runner/issues/984
-nxos                # https://github.com/streetsidesoftware/cspell-dicts/pull/919
-paramiko            # https://github.com/streetsidesoftware/cspell-dicts/pull/912
-SNMP                # https://github.com/streetsidesoftware/cspell-dicts/pull/919
