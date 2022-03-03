@@ -132,13 +132,13 @@ class StdoutCliTest(NamedTuple):
     return_code: int
     """Expected return code"""
     navigator_stderr: str
-    """Substring to search for in stderr"""
+    """Navigator produced stderr"""
     navigator_stdout: str
-    """Substring to search for in stdout"""
+    """Navigator produced stdout"""
     ansible_stdout: str
-    """Substring to search for in stdout"""
+    """Ansible produced stdout"""
     ansible_stderr: str
-    """Substring to search for in stdout"""
+    """Ansible produced stderr"""
     subcommand: str
     """The name of the subcommand"""
     mode: str = "stdout"
