@@ -5,8 +5,8 @@ import curses
 from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
 from typing import List
+from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -183,7 +183,7 @@ class FormPresenter(CursesWindow):
             far_right -= 1
         return CursesLine(tuple(line_parts))
 
-    def _generate_error(self, form_field) -> Union[CursesLine, None]:
+    def _generate_error(self, form_field) -> Optional[CursesLine]:
         if form_field.current_error:
             line_part = CursesLinePart(self._input_start, form_field.current_error, 9, 0)
             return CursesLine((line_part,))

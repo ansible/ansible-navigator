@@ -63,7 +63,7 @@ class Action(ActionBase):
 
         return CursesLines((CursesLine((line_part,)),))
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``doc`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -142,7 +142,7 @@ class Action(ActionBase):
         _out, error, return_code = response
         return RunStdoutReturn(message=error, return_code=return_code)
 
-    def _run_runner(self) -> Union[None, dict, Tuple[str, str, int]]:
+    def _run_runner(self) -> Optional[Union[dict, Tuple[str, str, int]]]:
         # pylint: disable=too-many-branches
         # pylint: disable=no-else-return
         """Use the runner subsystem to retrieve the configuration.
