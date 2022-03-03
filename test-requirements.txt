@@ -10,4 +10,6 @@ pytest-mock
 pytest-subtests
 pytest-xdist
 sphinx
+
+# used for TypeAlias, can be removed once Python 3.10 is required
 typing-extentions 
