@@ -127,17 +127,17 @@ class StdoutCliTest(NamedTuple):
 
     comment: str
     """Description of the test"""
-    execution_environment: bool
-    """Run in an execution environment"""
     params: List[str]
     """Parameters for the subcommand"""
-    playbook_artifact_enable: bool
-    """Enable playbook artifact creation"""
     return_code: int
     """Expected return code"""
-    stderr_find: List
+    navigator_stderr: str
     """Substring to search for in stderr"""
-    stdout_find: List
+    navigator_stdout: str
+    """Substring to search for in stdout"""
+    ansible_stdout: str
+    """Substring to search for in stdout"""
+    ansible_stderr: str
     """Substring to search for in stdout"""
     subcommand: str
     """The name of the subcommand"""
@@ -157,93 +157,32 @@ class StdoutCliTest(NamedTuple):
 # Intentionally not using parametrize so the behavior can be documented
 StdoutCliTests = (
     StdoutCliTest(
-        comment="run pass/ee/pae",
-        execution_environment=True,
+        comment="run pass",
         subcommand="run",
         params=[PLAYBOOK],
-        playbook_artifact_enable=True,
         return_code=0,
-        stderr_find=[],
-        stdout_find=["ok=1"],
+        ansible_stdout="ok=1",
+        ansible_stderr="",
+        navigator_stdout="",
+        navigator_stderr="",
     ),
     StdoutCliTest(
-        comment="run pass/ee/no pae",
-        execution_environment=True,
-        subcommand="run",
-        params=[PLAYBOOK],
-        playbook_artifact_enable=False,
-        return_code=0,
-        stderr_find=[],
-        stdout_find=["ok=1"],
-    ),
-    StdoutCliTest(
-        comment="run pass/no ee/pae",
-        execution_environment=False,
-        subcommand="run",
-        params=[PLAYBOOK],
-        playbook_artifact_enable=True,
-        return_code=0,
-        stderr_find=[],
-        stdout_find=["ok=1"],
-    ),
-    StdoutCliTest(
-        comment="run pass/no ee/no pae",
-        execution_environment=False,
-        subcommand="run",
-        params=[PLAYBOOK],
-        playbook_artifact_enable=False,
-        return_code=0,
-        stderr_find=[],
-        stdout_find=["ok=1"],
-    ),
-    StdoutCliTest(
-        comment="run fail/ee/pae",
-        execution_environment=True,
+        comment="run fail",
         subcommand="run",
         params=["no_such_playbook.yaml"],
-        playbook_artifact_enable=True,
         return_code=1,
-        stderr_find=["review the log"],  # navigator writes to stderr
-        stdout_find=["could not be found"],  # ee/pae only produces stdout
-    ),
-    StdoutCliTest(
-        comment="run fail/ee/no pae",
-        execution_environment=True,
-        subcommand="run",
-        params=["no_such_playbook.yaml"],
-        playbook_artifact_enable=False,
-        return_code=1,
-        stderr_find=["review the log"],  # navigator writes to stderr
-        stdout_find=["could not be found"],  # ee only produces stdout
-    ),
-    StdoutCliTest(
-        comment="run fail/no ee/pae",
-        execution_environment=False,
-        subcommand="run",
-        params=["no_such_playbook.yaml"],
-        playbook_artifact_enable=True,
-        return_code=1,
-        stderr_find=["review the log"],  # navigator writes to stderr
-        stdout_find=["could not be found"],  # pae produces stdout
-    ),
-    StdoutCliTest(
-        comment="run fail/no ee/no pae",
-        execution_environment=False,
-        subcommand="run",
-        params=["no_such_playbook.yaml"],
-        playbook_artifact_enable=False,
-        return_code=1,
-        stderr_find=["review the log", "could not be found"],  # ansible/navigator write to stderr
-        stdout_find=[],
+        ansible_stdout="",
+        ansible_stderr="could not be found",
+        navigator_stdout="",
+        navigator_stderr="review the log",
     ),
 )
 
 
+@pytest.mark.parametrize(argnames="pae", argvalues=(True, False), ids=("pae_true", "pae_false"))
+@pytest.mark.parametrize(argnames="exec_env", argvalues=(True, False), ids=("ee_true", "ee_false"))
 @pytest.mark.parametrize(argnames="data", argvalues=StdoutCliTests, ids=str)
-def test_run_through_cli(
-    tmp_path: Path,
-    data: StdoutCliTest,
-) -> None:
+def test_run_through_cli(tmp_path: Path, data: StdoutCliTest, exec_env: bool, pae: bool) -> None:
     """Test for a return code from run through a shell.
 
     :param data: The test data
@@ -262,11 +201,11 @@ def test_run_through_cli(
         "--lf",
         log_file,
         "--pae",
-        str(data.playbook_artifact_enable),
+        str(pae),
         "--pas",
         artifact_file,
         "--ee",
-        str(data.execution_environment),
+        str(exec_env),
     ]
     bash_wrapped = f"/bin/bash -c 'source {venv!s} && {shlex_join(command)}'"
     proc_out = subprocess.run(
@@ -277,6 +216,14 @@ def test_run_through_cli(
         universal_newlines=True,
         shell=True,
     )
-    assert all(find in proc_out.stdout for find in data.stdout_find)
-    assert all(find in proc_out.stderr for find in data.stderr_find)
+
+    assert data.ansible_stdout in proc_out.stdout
+    if not exec_env and not pae:
+        # Without an EE and PAE, ansible writes to ``stderr``
+        assert data.ansible_stderr in proc_out.stderr
+    else:
+        # Everything is routed through ``stdout``
+        assert data.ansible_stderr in proc_out.stdout
+    assert data.navigator_stdout in proc_out.stdout
+    assert data.navigator_stderr in proc_out.stderr
     assert data.return_code == proc_out.returncode
