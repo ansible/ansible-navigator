@@ -1,20 +1,27 @@
-"""steps here
+"""Step abstractions for actions.
 """
 from collections import deque
+from dataclasses import dataclass
+from dataclasses import field
+from enum import Enum
 from typing import Any
 from typing import Callable
 from typing import Dict
+from typing import Generic
 from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import TypeVar
 from typing import Union
 
 
 class Step:
-
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-arguments
-    """One step in the flow of things"""
+    """One step in the flow of things.
+
+    The ``TypedStep`` below should be used for all new actions.
+    """
 
     def __init__(
         self,
@@ -120,6 +127,97 @@ class Step:
         """check some expect type against a value"""
         if not isinstance(value, want):
             raise ValueError(f"wanted {want}, got {type(value)}")
+
+
+class StepType(Enum):
+    """Type of step, either menu or content."""
+
+    MENU = "menu"
+    CONTENT = "content"
+
+
+T = TypeVar("T")  # pylint: disable=invalid-name
+
+
+@dataclass
+class TypedStep(Generic[T]):
+    # pylint: disable=too-many-instance-attributes
+    """One step in the flow of things.
+
+    This should be used for new actions following the pattern of a
+    ``TypedDict`` for the user interface as seen in settings.
+    """
+
+    name: str
+    step_type: StepType
+    _index_changed: bool = False
+    _index: Optional[int] = None
+    _value_changed: bool = False
+    _value: List[T] = field(default_factory=list)
+    columns: Optional[List[str]] = None
+    select_func: Optional[Callable[[], "TypedStep"]] = None
+    show_func: Optional[Callable[[], None]] = None
+
+    @property
+    def changed(self) -> bool:
+        """Return the changed flag.
+
+        :return: Indication of change
+        """
+        return self._index_changed or self._value_changed
+
+    @changed.setter
+    def changed(self, value: bool) -> None:
+        """Set the changed value.
+
+        :param value: Indication of change
+        """
+        self._index_changed = value
+        self._value_changed = value
+
+    @property
+    def index(self) -> Optional[int]:
+        """Return the index.
+
+        :returns: The index
+        """
+        return self._index
+
+    @index.setter
+    def index(self, index: int) -> None:
+        """Set the index.
+
+        :param index: The index
+        """
+        self._index_changed = self.index != index
+        self._index = index
+
+    @property
+    def selected(self) -> Optional[T]:
+        """Return the selected item.
+
+        :return: The selected item
+        """
+        if self._index is None or not self._value:
+            return None
+        return self._value[self._index % len(self._value)]
+
+    @property
+    def value(self) -> List[T]:
+        """Return the value.
+
+        :return: The value
+        """
+        return self._value
+
+    @value.setter
+    def value(self, value: List[T]) -> None:
+        """Set the value and value changed if needed
+
+        :param value: The value for this instance
+        """
+        self._value_changed = self._value != value
+        self._value = value
 
 
 class Steps(deque):
