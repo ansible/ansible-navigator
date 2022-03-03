@@ -10,3 +10,4 @@ pytest-mock
 pytest-subtests
 pytest-xdist
 sphinx
+typing-extentions 
