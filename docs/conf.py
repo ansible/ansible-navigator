@@ -61,13 +61,8 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-# fmt: off
 # The short X.Y version
-version = ".".join(
-    get_scm_version(
-        local_scheme="no-local-version",
-    ).split(".")[:3],
-)
+version = ".".join(get_scm_version(local_scheme="no-local-version").split(".")[:3])
 
 # The full version, including alpha/beta/rc tags
 release = get_scm_version()
@@ -305,8 +300,8 @@ myst_enable_extensions = [
     "substitution",  # replace common ASCII shortcuts into their symbols
 ]
 myst_substitutions = {
-  "project": project,
-  "release": release,
-  "release_l": f"`v{release}`",
-  "version": version,
+    "project": project,
+    "release": release,
+    "release_l": f"`v{release}`",
+    "version": version,
 }
