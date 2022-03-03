@@ -268,7 +268,7 @@ def test_run_through_cli(
         "--ee",
         str(data.execution_environment),
     ]
-    bash_wrapped = f"/bin/sh -c 'source {venv!s} && {shlex_join(command)}'"
+    bash_wrapped = f"/bin/bash -c 'source {venv!s} && {shlex_join(command)}'"
     proc_out = subprocess.run(
         bash_wrapped,
         stdout=subprocess.PIPE,
