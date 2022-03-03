@@ -19,4 +19,5 @@ for details. Or read
 https://github.com/ansible/ansible-navigator/tree/main/docs/changelog-fragments.d#adding-change-notes-with-your-prs
 -->
 
+
 <!-- towncrier release notes start -->
