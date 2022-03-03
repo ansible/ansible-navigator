@@ -3,7 +3,7 @@ import logging
 import shlex
 import subprocess
 
-from types import SimpleNamespace
+from dataclasses import dataclass
 from typing import List
 from typing import Union
 
@@ -14,8 +14,13 @@ from ..utils.functions import LogMessage
 from ..utils.functions import shlex_join
 
 
-class ImageAssessment(SimpleNamespace):
-    """report the findings"""
+@dataclass(frozen=False)
+class ImageAssessment:
+    """Data structure containing the image assessment.
+
+    An ``ImageAssessment`` gets updated after instantiation
+    with the determination of whether or not a pull is required.
+    """
 
     messages: List[LogMessage]
     exit_messages: List[ExitMessage]
