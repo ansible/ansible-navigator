@@ -3,6 +3,7 @@
 from collections import deque
 from dataclasses import dataclass
 from dataclasses import field
+from enum import Enum
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -128,11 +129,19 @@ class Step:
             raise ValueError(f"wanted {want}, got {type(value)}")
 
 
-TValueType = TypeVar("TValueType")
+class StepType(Enum):
+    """Type of step, either menu or content."""
+
+    MENU = "menu"
+    CONTENT = "content"
+
+
+# pylint: disable=invalid-name
+T = TypeVar("T")
 
 
 @dataclass
-class TypedStep(Generic[TValueType]):
+class TypedStep(Generic[T]):
     # pylint: disable=too-many-instance-attributes
     """One step in the flow of things.
 
@@ -141,11 +150,11 @@ class TypedStep(Generic[TValueType]):
     """
 
     name: str
-    step_type: str
+    step_type: StepType
     _index_changed: bool = False
     _index: Optional[int] = None
     _value_changed: bool = False
-    _value: List[TValueType] = field(default_factory=list)
+    _value: List[T] = field(default_factory=list)
     columns: Optional[List[str]] = None
     select_func: Optional[Callable[[], "TypedStep"]] = None
     show_func: Optional[Callable[[], None]] = None
@@ -185,7 +194,7 @@ class TypedStep(Generic[TValueType]):
         self._index = index
 
     @property
-    def selected(self) -> Optional[TValueType]:
+    def selected(self) -> Optional[T]:
         """Return the selected item.
 
         :return: the selected item
@@ -195,7 +204,7 @@ class TypedStep(Generic[TValueType]):
         return self._value[self._index % len(self._value)]
 
     @property
-    def value(self) -> List[TValueType]:
+    def value(self) -> List[T]:
         """Return the value.
 
         :return: The value
@@ -203,7 +212,7 @@ class TypedStep(Generic[TValueType]):
         return self._value
 
     @value.setter
-    def value(self, value: List[TValueType]) -> None:
+    def value(self, value: List[T]) -> None:
         """Set the value and value changed if needed
 
         :param value: The value for this instance

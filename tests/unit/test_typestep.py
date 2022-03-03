@@ -2,10 +2,11 @@
 
 from dataclasses import dataclass
 
+import pytest
+
+from ansible_navigator.steps import StepType
 from ansible_navigator.steps import TypedStep
 
-
-# Test dataclass
 
 @dataclass
 class TSTestClass:
@@ -26,36 +27,64 @@ TEST_INDEX = 5
 value_1 = TSTestClass(attr_1=1, attr_2="test element 1")
 value_2 = TSTestClass(attr_1=3, attr_2="test element 2")
 
-# TypedStep object for all tests
-TypedStepTest1 = TypedStep[TSTestClass](name="test_menu", step_type="menu")
+
+@pytest.fixture(name="test_step")
+def _test_step():
+    test_step = TypedStep[TSTestClass](name="test", step_type=StepType.MENU)
+    test_step.value = [value_1, value_2]
+    test_step.value = [value_1, value_2]  # produce it "unchanged"
+    test_step.index = 0
+    test_step.index = 0  # produce it "unchanged"
+    return test_step
 
 
-def test_property_setters():
-    """Test for TypedStep @properties and setters."""
-    # Test @changed.setter
-    assert TypedStepTest1.changed is False
-    TypedStepTest1.changed = True
-    assert TypedStepTest1.changed is True
+def test_fixture(test_step):
+    """Base test fixture test for the other tests.
 
-    # Reset
-    TypedStepTest1.changed = False
-    assert TypedStepTest1.changed is False
-
-    # Test @value.setter and @changed
-    TypedStepTest1.value = [value_1, value_2]
-    assert TypedStepTest1.value == [value_1, value_2]
-    assert TypedStepTest1.changed is True
-
-    # Reset
-    TypedStepTest1.changed = False
-    assert TypedStepTest1.changed is False
-
-    # Test @index and @index.setter and changed
-    TypedStepTest1.index = TEST_INDEX
-    assert TypedStepTest1.index == TEST_INDEX
-    assert TypedStepTest1.changed is True
+    :param test_step: test fixture
+    """
+    assert not test_step.changed
+    assert test_step.index == 0
+    assert test_step.value == [value_1, value_2]
+    assert test_step.selected == value_1
 
 
-def test_property_selected():
-    """Test for TypedStep @property selected()."""
-    assert TypedStepTest1.selected == value_2
+def test_index(test_step):
+    """Testing @property index and index.setter.
+
+    :param test_step: test fixture
+    """
+    test_step.index = 1
+    assert test_step.index == 1
+    assert test_step.changed
+    test_step.index = 1
+    assert test_step.index == 1
+    assert not test_step.changed
+    test_step.index = 2
+    assert test_step.index == 2
+    assert test_step.changed
+
+
+def test_selected(test_step):
+    """Testing @property selected.
+
+    :param test_step: test fixture
+    """
+    test_step.index = 1
+    assert test_step.selected == value_2
+    test_step.index = 2
+    assert test_step.selected == value_1
+
+
+def test_value(test_step):
+    """Testing @property value and value.setter.
+
+    :param test_step: test fixture
+    """
+    assert not test_step.changed
+    test_step.value = [value_2, value_2]
+    assert test_step.value == [value_2, value_2]
+    assert test_step.changed
+    test_step.value = [value_2, value_2]
+    assert test_step.value == [value_2, value_2]
+    assert not test_step.changed
