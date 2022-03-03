@@ -7,6 +7,7 @@ from typing import Dict
 from typing import Generic
 from typing import TypeVar
 
+from ..utils.compatibility import TypeAlias
 from ..utils.serialize import SerializationFormat
 
 
@@ -17,17 +18,17 @@ class ContentView(Enum):
     NORMAL = "normal"
 
 
-DictValueT = TypeVar("DictValueT")
-DictT = Dict[str, DictValueT]
+T = TypeVar("T")  # pylint:disable=invalid-name # https://github.com/PyCQA/pylint/pull/5221
+DictType: TypeAlias = Dict[str, T]
 
 
 @dataclass
-class ContentBase(Generic[DictValueT]):
+class ContentBase(Generic[T]):
     r"""The base class for all content dataclasses presented in the UI.
 
-    It should be noted, that while the return type is defined as ``DictValueT``
+    It should be noted, that while the return type is defined as ``T``
     for the serialization functions below, mypy will not catch in incorrect
-    definition of ``DictValueT`` at this time.  This is because of how ``asdict()``
+    definition of ``T`` at this time.  This is because of how ``asdict()``
     is typed:
 
     @overload
@@ -36,7 +37,7 @@ class ContentBase(Generic[DictValueT]):
     def asdict(obj: Any, \*, dict_factory: Callable[[list[tuple[str, Any]]], _T]) -> _T: ...
 
     Which result in mypy believing the outcome of asdict is dict[str, Any] and letting it silently
-    pass through an incorrect ``DictValueT``. ``Mypy`` identifies this as a known issue:
+    pass through an incorrect ``T``. ``Mypy`` identifies this as a known issue:
     https://mypy.readthedocs.io/en/stable/additional_features.html#caveats-known-issues
     """
 
@@ -44,7 +45,7 @@ class ContentBase(Generic[DictValueT]):
         self,
         content_view: ContentView,
         serialization_format: SerializationFormat,
-    ) -> DictT:
+    ) -> DictType:
         """Convert thy self into a dictionary.
 
         :param content_view: The content view
@@ -65,28 +66,28 @@ class ContentBase(Generic[DictValueT]):
         else:
             return dump_self_as_dict()
 
-    def serialize_json_full(self) -> DictT:
+    def serialize_json_full(self) -> DictType:
         """Provide dictionary for ``JSON`` with all attributes.
 
         :returns: A dictionary created from self
         """
         return asdict(self)
 
-    def serialize_json_normal(self) -> DictT:
+    def serialize_json_normal(self) -> DictType:
         """Provide dictionary for ``JSON`` with curated attributes.
 
         :returns: A dictionary created from self
         """
         return asdict(self)
 
-    def serialize_yaml_full(self) -> DictT:
+    def serialize_yaml_full(self) -> DictType:
         """Provide dictionary for ``YAML`` with all attributes.
 
         :returns: A dictionary created from self
         """
         return asdict(self)
 
-    def serialize_yaml_normal(self) -> DictT:
+    def serialize_yaml_normal(self) -> DictType:
         """Provide dictionary for ``JSON`` with curated attributes.
 
         :returns: A dictionary created from self

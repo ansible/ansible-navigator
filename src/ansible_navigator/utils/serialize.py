@@ -48,7 +48,7 @@ def serialize(
     content: "ContentBase",
     serialization_format: SerializationFormat,
     file_mode: str = "w",
-    filename: Optional[Union[Path, str]] = None,
+    filename: Optional[Path] = None,
 ) -> Optional[str]:
     """Serialize a dataclass based on format and view.
 
@@ -82,14 +82,14 @@ class JsonParams(NamedTuple):
     ensure_ascii: bool = False
 
 
-def _json_dump(dumpable: Dict, filename: Union[Path, str], file_mode: str):
+def _json_dump(dumpable: Dict, filename: Path, file_mode: str):
     """Create a file handle and dump json.
 
     :param dumpable: The object to dump
     :param filename: The file name for the file
     :param file_mode: The file mode for the operation
     """
-    with open(file=filename, mode=file_mode, encoding="utf-8") as file_handle:
+    with filename.open(mode=file_mode, encoding="utf-8") as file_handle:
         json_dump(dumpable=dumpable, file_handle=file_handle)
 
 

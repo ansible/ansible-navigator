@@ -107,7 +107,7 @@ nitpick_ignore = [
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
     ("py:class", "ansible_navigator.tm_tokenize.utils.T"),
-    ("py:class", "ansible_navigator.ui_framework.content_defs.DictValueT"),
+    ("py:class", "ansible_navigator.ui_framework.content_defs.T"),
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse._SubParsersAction"),
     ("py:class", "Captures"),
@@ -144,7 +144,7 @@ nitpick_ignore = [
     ("py:class", "yaml.nodes.ScalarNode"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
-    ("py:obj", "ansible_navigator.ui_framework.content_defs.DictValueT"),
+    ("py:obj", "ansible_navigator.ui_framework.content_defs.T"),
 ]
 
 # Add any Sphinx extension module names here, as strings. They can be

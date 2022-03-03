@@ -105,8 +105,12 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
         return {name: f"{str(value)}_{suffix}" for name, value in kv_pairs}
 
 
-@pytest.mark.parametrize(**ParametrizeFormat()._asdict())
-@pytest.mark.parametrize(**ParametrizeView()._asdict())
+parametrize_content_views = pytest.mark.parametrize(**ParametrizeView()._asdict())
+parametrize_serialization_format = pytest.mark.parametrize(**ParametrizeFormat()._asdict())
+
+
+@parametrize_serialization_format
+@parametrize_content_views
 def test_content_to_dict(
     content_view: ContentView,
     serialization_tuple: Tuple[str, SerializationFormat],
@@ -117,47 +121,47 @@ def test_content_to_dict(
     :param serialization_tuple: The suffix, serialization format
     """
     content = ContentTestSimple()
-    result = content.asdict(
+    content_as_dict = content.asdict(
         serialization_format=serialization_tuple[1],
         content_view=content_view,
     )
-    assert result == {"attr_01": False, "attr_02": 2, "attr_03": "three"}
+    assert content_as_dict == {"attr_01": False, "attr_02": 2, "attr_03": "three"}
 
 
-@pytest.mark.parametrize(**ParametrizeView()._asdict())
+@parametrize_content_views
 def test_content_to_json(content_view: ContentView):
     """Test the conversion of the dataclass to json.
 
     :param content_view: The content view
     """
     content = ContentTestSimple()
-    result = serialize(
+    content_serialized = serialize(
         content=content,
         content_view=content_view,
         serialization_format=SerializationFormat.JSON,
     )
     expected = '{\n    "attr_01": false,\n    "attr_02": 2,\n    "attr_03": "three"\n}'
-    assert result == expected
+    assert content_serialized == expected
 
 
-@pytest.mark.parametrize(**ParametrizeView()._asdict())
+@parametrize_content_views
 def test_content_to_yaml(content_view: ContentView):
     """Test the conversion of the dataclass to yaml.
 
     :param content_view: The content view
     """
     content = ContentTestSimple()
-    result = serialize(
+    content_serialized = serialize(
         content=content,
         content_view=content_view,
         serialization_format=SerializationFormat.YAML,
     )
     expected = "---\nattr_01: false\nattr_02: 2\nattr_03: three\n"
-    assert result == expected
+    assert content_serialized == expected
 
 
-@pytest.mark.parametrize(**ParametrizeFormat()._asdict())
-@pytest.mark.parametrize(**ParametrizeView()._asdict())
+@parametrize_serialization_format
+@parametrize_content_views
 def test_content_to_dict_override(
     subtests: Any,
     content_view: ContentView,
@@ -170,48 +174,48 @@ def test_content_to_dict_override(
     :param serialization_tuple: The suffix, serialization format
     """
     content = ContentTestOverride()
-    result = content.asdict(
+    content_as_dict = content.asdict(
         content_view=content_view,
         serialization_format=serialization_tuple[1],
     )
-    for key, value in result.items():
+    for key, value in content_as_dict.items():
         with subtests.test(msg=key, value=value):
             assert value.endswith(f"_{serialization_tuple[0]}_{str(content_view)}")
 
 
-@pytest.mark.parametrize(**ParametrizeView()._asdict())
+@parametrize_content_views
 def test_content_to_json_override(content_view: ContentView):
     """Test the conversion of the dataclass with overrides to ``JSON``.
 
     :param content_view: The content view
     """
     content = ContentTestOverride()
-    result = serialize(
+    content_serialized = serialize(
         content=content,
         content_view=content_view,
         serialization_format=SerializationFormat.JSON,
     )
-    result_template = (
+    expected_template = (
         '{{\n    "attr_01": "False__j_{view}",\n'
         '    "attr_02": "2__j_{view}",\n'
         '    "attr_03": "three__j_{view}"\n}}'
     )
-    assert result == result_template.format(view=content_view)
+    assert content_serialized == expected_template.format(view=content_view)
 
 
-@pytest.mark.parametrize(**ParametrizeView()._asdict())
+@parametrize_content_views
 def test_content_to_yaml_override(content_view: ContentView):
     """Test the conversion of the dataclass with overrides to ``YAML``.
 
     :param content_view: The content view
     """
     content = ContentTestOverride()
-    result = serialize(
+    content_serialized = serialize(
         content=content,
         content_view=content_view,
         serialization_format=SerializationFormat.YAML,
     )
-    result_template = (
+    expected_template = (
         "---\nattr_01: False__y_{view}\nattr_02: 2__y_{view}\nattr_03: three__y_{view}\n"
     )
-    assert result == result_template.format(view=content_view)
+    assert content_serialized == expected_template.format(view=content_view)
