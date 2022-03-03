@@ -3,6 +3,7 @@ import logging
 
 from copy import deepcopy
 from typing import List
+from typing import Optional
 from typing import Pattern
 from typing import Tuple
 from typing import Union
@@ -37,7 +38,7 @@ class ActionBase:
         self._calling_app: AppPublic
         self._interaction: Interaction
         self._name = name
-        self._previous_filter: Union[Pattern, None]
+        self._previous_filter: Optional[Pattern]
         self._previous_scroll: int
         self.stdout: List = []
         self.steps = Steps()

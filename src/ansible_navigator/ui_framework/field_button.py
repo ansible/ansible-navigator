@@ -2,7 +2,7 @@
 """
 from dataclasses import dataclass
 from typing import Callable
-from typing import Union
+from typing import Optional
 
 from .curses_window import Window
 from .form_defs import FieldValidationStates
@@ -21,7 +21,7 @@ class FieldButton:
     color: int = 0
     window_handler = FormHandlerButton
     validator: Callable = FieldValidators.none
-    win: Union[Window, None] = None
+    win: Optional[Window] = None
 
     @property
     def full_prompt(self) -> str:

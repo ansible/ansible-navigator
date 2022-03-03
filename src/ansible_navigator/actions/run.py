@@ -19,7 +19,6 @@ from typing import Dict
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
@@ -103,7 +102,7 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, i
     return color, decoration
 
 
-def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """create a heading for some piece of content showing
 
     :param obj: The content going to be shown
@@ -263,7 +262,7 @@ class Action(ActionBase):
             )
         return RunStdoutReturn(message="", return_code=return_code)
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """run :run or :replay
 
         :param interaction: The interaction from the user

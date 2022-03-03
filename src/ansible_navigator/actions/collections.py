@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -48,7 +49,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return 2, 0
 
 
-def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """Create a heading for collection content.
 
     :param obj: The content going to be shown
@@ -98,7 +99,7 @@ class Action(ActionBase):
         """Request calling app update, no collection update is required."""
         self._calling_app.update()
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``collections`` request for mode interactive.
 
         :param interaction: The interaction from the user

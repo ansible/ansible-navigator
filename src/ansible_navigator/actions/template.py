@@ -5,7 +5,7 @@ Processor of a template request at the single line prompt. e.g. {{ }}
 import html
 
 from collections.abc import Mapping
-from typing import Union
+from typing import Optional
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic
@@ -30,7 +30,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="template")
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the templating request for mode interactive.
 
         :param interaction: The interaction from the user

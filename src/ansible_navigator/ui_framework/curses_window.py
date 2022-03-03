@@ -5,7 +5,7 @@ import json
 import logging
 
 from typing import TYPE_CHECKING
-from typing import Union
+from typing import Optional
 
 from .colorize import hex_to_rgb_curses
 from .curses_defs import CursesLine
@@ -84,7 +84,7 @@ class CursesWindow:
             curses.beep()
             self._screen.refresh()
 
-    def _color_pair_or_none(self, color: int) -> Union[None, int]:
+    def _color_pair_or_none(self, color: int) -> Optional[int]:
         """
         Returns 0 if colors are disabled.
         Otherwise returns the curses color pair by
@@ -109,7 +109,7 @@ class CursesWindow:
         window: Window,
         lineno: int,
         line: CursesLine,
-        prefix: Union[str, None] = None,
+        prefix: Optional[str] = None,
     ) -> None:
         """add a line to a window
 

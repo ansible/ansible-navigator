@@ -45,7 +45,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return 2, 0
 
 
-def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """Create a heading for config content.
 
     :param obj: The content going to be shown
@@ -93,10 +93,10 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="config")
 
-        self._config: Union[List[Any], None] = None
+        self._config: Optional[List[Any]] = None
         self._runner: Union[AnsibleConfig, Command]
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``config`` request for mode interactive.
 
         :param interaction: The interaction from the user

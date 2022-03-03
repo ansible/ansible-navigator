@@ -15,7 +15,6 @@ from typing import Any
 from typing import Dict
 from typing import List
 from typing import Optional
-from typing import Union
 
 from ansible_runner import Runner
 
@@ -161,7 +160,7 @@ class Base:
         """generate a tmp directory for artifacts"""
         return tempfile.mkdtemp(prefix="ansible-navigator_")
 
-    def _set_private_data_directory(self, provided: Union[str, None]) -> None:
+    def _set_private_data_directory(self, provided: Optional[str]) -> None:
         """Set the private data directory to the provided, the username, or a uuid"""
 
         if isinstance(provided, str):
