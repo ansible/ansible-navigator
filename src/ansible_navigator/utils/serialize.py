@@ -3,12 +3,29 @@
 import json
 import re
 
+from enum import Enum
+from pathlib import Path
 from typing import IO
+from typing import TYPE_CHECKING
 from typing import Any
+from typing import Dict
 from typing import NamedTuple
 from typing import Optional
+from typing import Union
 
-import yaml  # noqa: F401
+import yaml
+
+
+class SerializationFormat(Enum):
+    """The serialization format."""
+
+    YAML = "yaml"
+    JSON = "json"
+
+
+if TYPE_CHECKING:
+    from ..ui_framework import ContentBase
+    from ..ui_framework import ContentView
 
 
 # pylint: disable=unused-import
@@ -26,12 +43,54 @@ except ImportError:
 # pylint: enable=unused-import
 
 
+def serialize(
+    content_view: "ContentView",
+    content: "ContentBase",
+    serialization_format: SerializationFormat,
+    file_mode: str = "w",
+    filename: Optional[Path] = None,
+) -> Optional[str]:
+    """Serialize a dataclass based on format and view.
+
+    :param content_view: The content view
+    :param content: The content dataclass to serialize
+    :param serialization_format: The serialization format
+    :param file_mode: The mode for the file operation
+    :param filename: A filename to write to
+    :returns: The serialized content
+    """
+    content_as_dict = content.asdict(
+        content_view=content_view,
+        serialization_format=serialization_format,
+    )
+    if serialization_format == SerializationFormat.YAML:
+        if filename is None:
+            return yaml_dumps(obj=content_as_dict)
+        return yaml_dump(obj=content_as_dict, filename=filename, file_mode=file_mode)
+    if serialization_format == SerializationFormat.JSON:
+        if filename is None:
+            return json_dumps(content_as_dict)
+        return _json_dump(dumpable=content_as_dict, filename=filename, file_mode=file_mode)
+    return None
+
+
 class JsonParams(NamedTuple):
     """The parameters for json dump and dumps."""
 
     indent: int = 4
     sort_keys: bool = True
     ensure_ascii: bool = False
+
+
+def _json_dump(dumpable: Dict, filename: Path, file_mode: str):
+    """Create a file handle and dump json.
+
+    :param dumpable: The object to dump
+    :param filename: The file name for the file
+    :param file_mode: The file mode for the operation
+    """
+    with filename.open(mode=file_mode, encoding="utf-8") as file_handle:
+        json_dump(dumpable=dumpable, file_handle=file_handle)
 
 
 def json_dump(dumpable: Any, file_handle: IO, params: NamedTuple = JsonParams()) -> None:
@@ -63,7 +122,11 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def human_dump(obj: Any, filename: Optional[str] = None, file_mode: str = "w") -> Optional[str]:
+def human_dump(
+    obj: Any,
+    filename: Optional[Union[Path, str]] = None,
+    file_mode: str = "w",
+) -> Optional[str]:
     """Serialize an object to yaml.
 
     This allows for the consistent representation across the application.
@@ -84,6 +147,10 @@ def human_dump(obj: Any, filename: Optional[str] = None, file_mode: str = "w") -
             )
         return None
     return yaml.dump(obj, Dumper=dumper, **YamlStyle()._asdict())
+
+
+yaml_dump = human_dump
+yaml_dumps = human_dump
 
 
 class HumanDumper(Dumper):
