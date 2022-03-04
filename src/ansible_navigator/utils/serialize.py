@@ -2,13 +2,16 @@
 
 import json
 import re
+import tempfile
 
+from dataclasses import is_dataclass
 from enum import Enum
 from pathlib import Path
 from typing import IO
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Dict
+from typing import List
 from typing import NamedTuple
 from typing import Optional
 from typing import Union
@@ -42,36 +45,111 @@ except ImportError:
     from yaml import SafeLoader  # type: ignore[misc] # noqa: F401
 # pylint: enable=unused-import
 
+ContentType = Union["ContentBase", bool, Dict[str, Any], float, int, List[Any], str]
+
 
 def serialize(
+    content: ContentType,
     content_view: "ContentView",
-    content: "ContentBase",
     serialization_format: SerializationFormat,
-    file_mode: str = "w",
-    filename: Optional[Path] = None,
-) -> Optional[str]:
+) -> str:
     """Serialize a dataclass based on format and view.
 
-    :param content_view: The content view
     :param content: The content dataclass to serialize
+    :param content_view: The content view
     :param serialization_format: The serialization format
-    :param file_mode: The mode for the file operation
-    :param filename: A filename to write to
+    :raises ValueError: When serialization format is not recognized
     :returns: The serialized content
     """
-    content_as_dict = content.asdict(
+    dumpable = _prepare_content(
+        content=content,
         content_view=content_view,
         serialization_format=serialization_format,
     )
     if serialization_format == SerializationFormat.YAML:
-        if filename is None:
-            return yaml_dumps(obj=content_as_dict)
-        return yaml_dump(obj=content_as_dict, filename=filename, file_mode=file_mode)
+        return _yaml_dumps(dumpable=dumpable)
     if serialization_format == SerializationFormat.JSON:
-        if filename is None:
-            return json_dumps(content_as_dict)
-        return _json_dump(dumpable=content_as_dict, filename=filename, file_mode=file_mode)
-    return None
+        return _json_dumps(dumpable=dumpable)
+    raise ValueError("Unknown serialization format")
+
+
+def serialize_write_file(
+    content: ContentType,
+    content_view: "ContentView",
+    file_mode: str,
+    file: Path,
+    serialization_format: SerializationFormat,
+):
+    """Serialize and write content to a file.
+
+    :param content: The content to serialize
+    :param content_view: The content view
+    :param file_mode: The file mode for the file
+    :param file: The file to write to
+    :param serialization_format: The serialization format
+    :raises ValueError: When serialization format is not recognized
+    """
+    dumpable = _prepare_content(
+        content=content,
+        content_view=content_view,
+        serialization_format=serialization_format,
+    )
+    with file.open(mode=file_mode, encoding="utf-8") as file_handle:
+        if serialization_format == SerializationFormat.JSON:
+            _json_dump(dumpable=dumpable, file_handle=file_handle)
+            return
+        if serialization_format == SerializationFormat.YAML:
+            _yaml_dump(dumpable=dumpable, file_handle=file_handle)
+            return
+    raise ValueError("Unknown serialization format")
+
+
+def serialize_write_temp_file(
+    content: ContentType,
+    content_view: "ContentView",
+    serialization_format: SerializationFormat,
+) -> Path:
+    """Serialize and write content to a premanent temporary file.
+
+    :param content: The content to serialize
+    :param content_view: The content view
+    :param serialization_format: The serialization format
+    :raises ValueError: When serialization format is not recognized
+    :returns: A ``Path`` to the file written to
+    """
+    dumpable = _prepare_content(
+        content=content,
+        content_view=content_view,
+        serialization_format=serialization_format,
+    )
+    suffix = f".{serialization_format.value!s}"
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False, mode="w+t") as file_like:
+        if serialization_format == SerializationFormat.JSON:
+            _json_dump(dumpable=dumpable, file_handle=file_like)
+            return Path(file_like.name)
+        if serialization_format == SerializationFormat.YAML:
+            _yaml_dump(dumpable=dumpable, file_handle=file_like)
+            return Path(file_like.name)
+    raise ValueError("Unknown serialization format")
+
+
+def _prepare_content(
+    content: ContentType,
+    content_view: "ContentView",
+    serialization_format: SerializationFormat,
+) -> ContentType:
+    if isinstance(content, (bool, dict, float, int, list, str)):
+        return content
+    if is_dataclass(content):
+        return content.asdict(
+            content_view=content_view,
+            serialization_format=serialization_format,
+        )
+    # This is a big chance, it suggests all content is
+    # one of ``ContentType``. the thinking is it's better
+    # to traceback here early, then return a str(content)
+    # Ideally this get caught in testing
+    raise ValueError("Content could not be serialized")
 
 
 class JsonParams(NamedTuple):
@@ -82,36 +160,23 @@ class JsonParams(NamedTuple):
     ensure_ascii: bool = False
 
 
-def _json_dump(dumpable: Dict, filename: Path, file_mode: str):
-    """Create a file handle and dump json.
+def _json_dump(dumpable: ContentType, file_handle: IO) -> None:
+    """Serialize the dumpable to json and write to a file.
 
     :param dumpable: The object to dump
-    :param filename: The file name for the file
-    :param file_mode: The file mode for the operation
-    """
-    with filename.open(mode=file_mode, encoding="utf-8") as file_handle:
-        json_dump(dumpable=dumpable, file_handle=file_handle)
-
-
-def json_dump(dumpable: Any, file_handle: IO, params: NamedTuple = JsonParams()) -> None:
-    """Serialize and write the dumpable to a file.
-
-    :param dumpable: The object to serialize
     :param file_handle: The file handle to write to
-    :param params: Parameters to override the defaults
     """
-    json.dump(dumpable, file_handle, **params._asdict())
+    json.dump(dumpable, file_handle, **JsonParams()._asdict())
+    file_handle.write("\n")  # Add newline json does not
 
 
-def json_dumps(dumpable: Any, params: NamedTuple = JsonParams()) -> str:
+def _json_dumps(dumpable: ContentType) -> str:
     """Serialize the dumpable to json.
 
     :param dumpable: The object to serialize
-    :param params: Parameters to override the defaults
     :returns: The object serialized
     """
-    string = json.dumps(dumpable, **params._asdict())
-    return string
+    return json.dumps(dumpable, **JsonParams()._asdict())
 
 
 class YamlStyle(NamedTuple):
@@ -122,35 +187,22 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def human_dump(
-    obj: Any,
-    filename: Optional[Union[Path, str]] = None,
-    file_mode: str = "w",
-) -> Optional[str]:
-    """Serialize an object to yaml.
+def _yaml_dump(dumpable: ContentType, file_handle: IO):
+    """Serialize the dumpable to yaml and write to a file.
 
-    This allows for the consistent representation across the application.
-
-    :param obj: The object to serialize
-    :param filename: The filename of the file in which the obj should be written
-    :param file_mode: The mode to use for file writing
-    :returns: Either the serialized obj or None if written to a file
+    :param dumpable: The object to serialize
+    :param file_handle: The file handle to write to
     """
-    dumper = HumanDumper
-    if filename is not None:
-        with open(filename, file_mode, encoding="utf-8") as fh:
-            yaml.dump(
-                obj,
-                fh,
-                Dumper=dumper,
-                **YamlStyle()._asdict(),
-            )
-        return None
-    return yaml.dump(obj, Dumper=dumper, **YamlStyle()._asdict())
+    yaml.dump(dumpable, file_handle, Dumper=HumanDumper, **YamlStyle()._asdict())
 
 
-yaml_dump = human_dump
-yaml_dumps = human_dump
+def _yaml_dumps(dumpable: ContentType):
+    """Serialize the dumpable to yaml.
+
+    :param dumpable: The object to serialize
+    :return: The serialized object
+    """
+    return yaml.dump(dumpable, Dumper=HumanDumper, **YamlStyle()._asdict())
 
 
 class HumanDumper(Dumper):

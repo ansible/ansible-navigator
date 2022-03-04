@@ -1,12 +1,13 @@
 """tests for colorize
 """
-import json
 import os
 
 from unittest.mock import patch
 
 from ansible_navigator.ui_framework.colorize import Colorize
-from ansible_navigator.utils.serialize import human_dump
+from ansible_navigator.ui_framework.content_defs import ContentView
+from ansible_navigator.utils.serialize import SerializationFormat
+from ansible_navigator.utils.serialize import serialize
 
 
 SHARE_DIR = os.path.abspath(
@@ -19,7 +20,11 @@ GRAMMAR_DIR = os.path.join(SHARE_DIR, "grammar")
 def test_basic_success_json():
     """Ensure the json string is returned as 1 lines, 5 parts and can be reassembled
     to the json string"""
-    sample = json.dumps({"test": "data"})
+    sample = serialize(
+        content={"test": "data"},
+        content_view=ContentView.NORMAL,
+        serialization_format=SerializationFormat.JSON,
+    )
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.json",
@@ -34,7 +39,11 @@ def test_basic_success_yaml():
     respectively, ensure the parts of the second line can be reassembled to
     the second line of the yaml string
     """
-    sample = human_dump({"test": "data"})
+    sample = serialize(
+        content={"test": "data"},
+        content_view=ContentView.NORMAL,
+        serialization_format=SerializationFormat.YAML,
+    )
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.yaml",
@@ -66,7 +75,11 @@ def test_basic_success_log():
 
 def test_basic_success_no_color():
     """Ensure scope ``no_color`` return just lines."""
-    sample = json.dumps({"test": "data"})
+    sample = sample = serialize(
+        content={"test": "data"},
+        content_view=ContentView.NORMAL,
+        serialization_format=SerializationFormat.JSON,
+    )
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="no_color",
@@ -84,7 +97,12 @@ def test_graceful_failure(mocked_func, caplog):
     w/o color and the log reflects the critical error
     """
     mocked_func.side_effect = ValueError()
-    sample = json.dumps({"test": "data"})
+    sample = serialize(
+        content={"test": "data"},
+        content_view=ContentView.NORMAL,
+        serialization_format=SerializationFormat.JSON,
+    )
+
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.json",

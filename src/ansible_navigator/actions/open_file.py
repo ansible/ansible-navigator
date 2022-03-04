@@ -4,6 +4,7 @@ import logging
 import os
 import tempfile
 
+from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -11,11 +12,12 @@ from typing import List
 
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..ui_framework import ContentView
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 from ..utils.functions import remove_dbl_un
-from ..utils.serialize import human_dump
-from ..utils.serialize import json_dump
+from ..utils.serialize import SerializationFormat
+from ..utils.serialize import serialize_write_temp_file
 from . import _actions as actions
 
 
@@ -85,7 +87,7 @@ class Action:
         if something:
             parts = something.rsplit(":", 1)
             if os.path.isfile(parts[0]):
-                filename = parts[0]
+                filename = Path(parts[0])
                 line_number = parts[1:][0] if parts[1:] else 0
             else:
                 obj = something
@@ -99,24 +101,33 @@ class Action:
 
         if not filename:
             if interaction.ui.serialization_format() == "text.html.markdown":
-                with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as temp_file:
-                    filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as fh:
-                        fh.write(obj)
+                with tempfile.NamedTemporaryFile(
+                    suffix=".md",
+                    delete=False,
+                    mode="w+t",
+                ) as file_like:
+                    filename = Path(file_like.name)
+                    file_like.write(obj)
             elif interaction.ui.serialization_format() == "source.yaml":
-                with tempfile.NamedTemporaryFile(suffix=".yaml", delete=False) as temp_file:
-                    filename = temp_file.name
-                    human_dump(obj=obj, filename=filename)
+                filename = serialize_write_temp_file(
+                    content=obj,
+                    content_view=ContentView.NORMAL,
+                    serialization_format=SerializationFormat.YAML,
+                )
             elif interaction.ui.serialization_format() == "source.json":
-                with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
-                    filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as fh:
-                        json_dump(obj, fh)
+                filename = serialize_write_temp_file(
+                    content=obj,
+                    content_view=ContentView.NORMAL,
+                    serialization_format=SerializationFormat.JSON,
+                )
             else:
-                with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as temp_file:
-                    filename = temp_file.name
-                    with open(filename, "w", encoding="utf-8") as fh:
-                        fh.write(obj)
+                with tempfile.NamedTemporaryFile(
+                    suffix=".txt",
+                    delete=False,
+                    mode="w+t",
+                ) as file_like:
+                    filename = Path(file_like.name)
+                    file_like.write(obj)
 
         command = self._args.editor_command.format(filename=filename, line_number=line_number)
         is_console = self._args.editor_console
