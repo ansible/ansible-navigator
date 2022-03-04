@@ -16,7 +16,7 @@ on:
 
 jobs:
   tox:
-    name: ${{ matrix.tox_env }}/(python ${{ matrix.python-version }})
+    name: ${{ matrix.tox_env }} / python ${{ matrix.python-version }}
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
