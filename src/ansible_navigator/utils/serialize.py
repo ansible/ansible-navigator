@@ -52,7 +52,7 @@ def serialize(
 ) -> Optional[str]:
     """Serialize a dataclass based on format and view.
 
-    :param content_view: The contest view
+    :param content_view: The content view
     :param content: The content dataclass to serialize
     :param serialization_format: The serialization format
     :param file_mode: The mode for the file operation
