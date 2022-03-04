@@ -3,12 +3,16 @@
 from dataclasses import asdict
 from dataclasses import dataclass
 from enum import Enum
+from typing import TYPE_CHECKING
 from typing import Dict
 from typing import Generic
 from typing import TypeVar
 
-from ..utils.compatibility import TypeAlias
 from ..utils.serialize import SerializationFormat
+
+
+if TYPE_CHECKING:
+    from ..utils.compatibility import TypeAlias
 
 
 class ContentView(Enum):
@@ -19,7 +23,7 @@ class ContentView(Enum):
 
 
 T = TypeVar("T")  # pylint:disable=invalid-name # https://github.com/PyCQA/pylint/pull/5221
-DictType: TypeAlias = Dict[str, T]
+DictType: "TypeAlias" = Dict[str, T]
 
 
 @dataclass
