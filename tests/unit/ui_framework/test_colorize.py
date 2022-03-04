@@ -2,6 +2,8 @@
 """
 import os
 
+from typing import Dict
+from typing import NamedTuple
 from unittest.mock import patch
 
 from ansible_navigator.ui_framework.colorize import Colorize
@@ -17,21 +19,31 @@ THEME_PATH = os.path.join(SHARE_DIR, "themes", "dark_vs.json")
 GRAMMAR_DIR = os.path.join(SHARE_DIR, "grammar")
 
 
+class Sample(NamedTuple):
+    """Sample data for colorize tests."""
+
+    serialization_format: SerializationFormat
+    content: Dict[str, str] = {"test": "data"}
+    content_view: ContentView = ContentView.NORMAL
+
+
+SAMPLE_JSON = Sample(serialization_format=SerializationFormat.JSON)._asdict()
+SAMPLE_YAML = Sample(serialization_format=SerializationFormat.YAML)._asdict()
+
+
 def test_basic_success_json():
     """Ensure the json string is returned as 1 lines, 5 parts and can be reassembled
     to the json string"""
-    sample = serialize(
-        content={"test": "data"},
-        content_view=ContentView.NORMAL,
-        serialization_format=SerializationFormat.JSON,
-    )
-    result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
+    sample = serialize(**SAMPLE_JSON)
+    colorized = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.json",
     )
-    assert len(result) == 1
-    assert len(result[0]) == 5
-    assert "".join(line_part.chars for line_part in result[0]) == sample
+    assert len(colorized) == 3
+    serialized_lines = '{\n    "test": "data"\n}'.splitlines()
+    colorized_lines = ["".join(part.chars for part in line) for line in colorized]
+    assert serialized_lines == colorized_lines
+    assert "\n".join(serialized_lines) == sample
 
 
 def test_basic_success_yaml():
@@ -39,11 +51,7 @@ def test_basic_success_yaml():
     respectively, ensure the parts of the second line can be reassembled to
     the second line of the yaml string
     """
-    sample = serialize(
-        content={"test": "data"},
-        content_view=ContentView.NORMAL,
-        serialization_format=SerializationFormat.YAML,
-    )
+    sample = serialize(**SAMPLE_YAML)
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.yaml",
@@ -75,20 +83,12 @@ def test_basic_success_log():
 
 def test_basic_success_no_color():
     """Ensure scope ``no_color`` return just lines."""
-    sample = sample = serialize(
-        content={"test": "data"},
-        content_view=ContentView.NORMAL,
-        serialization_format=SerializationFormat.JSON,
-    )
-    result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
+    sample = serialize(**SAMPLE_JSON)
+    colorized = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="no_color",
     )
-    assert len(result) == 1
-    assert len(result[0]) == 1
-    assert result[0][0].chars == sample
-    assert result[0][0].color is None
-    assert result[0][0].column == 0
+    assert not any(part.color for line in colorized for part in line)
 
 
 @patch("ansible_navigator.ui_framework.colorize.tokenize")
@@ -97,19 +97,10 @@ def test_graceful_failure(mocked_func, caplog):
     w/o color and the log reflects the critical error
     """
     mocked_func.side_effect = ValueError()
-    sample = serialize(
-        content={"test": "data"},
-        content_view=ContentView.NORMAL,
-        serialization_format=SerializationFormat.JSON,
-    )
+    sample = serialize(**SAMPLE_JSON)
 
-    result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
+    _result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.json",
     )
-    assert len(result) == 1
-    assert len(result[0]) == 1
-    assert result[0][0].chars == sample
-    assert result[0][0].color is None
-    assert result[0][0].column == 0
     assert "rendered without color" in caplog.text
