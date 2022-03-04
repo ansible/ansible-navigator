@@ -104,6 +104,7 @@ pygments_style = "ansible"
 nitpicky = True
 nitpick_ignore = [
     ("py:class", "_Rule"),
+    ("py:class", "ansible_navigator.steps.T"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
     ("py:class", "ansible_navigator.tm_tokenize.utils.T"),
@@ -142,6 +143,7 @@ nitpick_ignore = [
     ("py:class", "Window"),
     ("py:class", "yaml.cyaml.CDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
+    ("py:obj", "ansible_navigator.steps.T"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
     ("py:obj", "ansible_navigator.ui_framework.content_defs.T"),
