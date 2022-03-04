@@ -40,15 +40,20 @@ jobs:
             python-version: 3.9
           - tox_env: py310
             python-version: "3.10"
-          - tox_env: no-test-deps
+          - name: py36 - no-test-deps 
+            tox_env: no-test-deps
             python-version: 3.6
-          - tox_env: no-test-deps
+          - name: py37 - no-test-deps 
+            tox_env: no-test-deps
             python-version: 3.7
-          - tox_env: no-test-deps
+          - name: py38 - no-test-deps 
+            tox_env: no-test-deps
             python-version: 3.8
-          - tox_env: no-test-deps
+          - name: py39 - no-test-deps 
+            tox_env: no-test-deps
             python-version: 3.9
-          - tox_env: no-test-deps
+          - name: py310 - no-test-deps 
+            tox_env: no-test-deps
             python-version: "3.10"
 
     steps:

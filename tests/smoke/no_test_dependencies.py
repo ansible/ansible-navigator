@@ -38,9 +38,7 @@ class NavigatorCommand(Command):
         """Post the init."""
         self.identity = self.command
         venv = _get_venv()
-        self.command = (
-            f"source {venv} && ansible-navigator {self.command} {self.set_env} {self.mode}"
-        )
+        self.command = f". {venv} && ansible-navigator {self.command} {self.set_env} {self.mode}"
 
 
 @dataclass
