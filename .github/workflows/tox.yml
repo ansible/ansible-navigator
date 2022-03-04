@@ -16,7 +16,7 @@ on:
 
 jobs:
   tox:
-    name: ${{ matrix.tox_env }}
+    name: ${{ matrix.tox_env }}/(python ${{ matrix.python-version }})
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -40,20 +40,16 @@ jobs:
             python-version: 3.9
           - tox_env: py310
             python-version: "3.10"
-          - name: py36 - no-test-deps 
+          - name: py36 - no-test-deps
             tox_env: no-test-deps
             python-version: 3.6
-          - name: py37 - no-test-deps 
-            tox_env: no-test-deps
+          - tox_env: no-test-deps
             python-version: 3.7
-          - name: py38 - no-test-deps 
-            tox_env: no-test-deps
+          - tox_env: no-test-deps
             python-version: 3.8
-          - name: py39 - no-test-deps 
-            tox_env: no-test-deps
+          - tox_env: no-test-deps
             python-version: 3.9
-          - name: py310 - no-test-deps 
-            tox_env: no-test-deps
+          - tox_env: no-test-deps
             python-version: "3.10"
 
     steps:

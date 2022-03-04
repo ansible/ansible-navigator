@@ -113,7 +113,7 @@ class Test(unittest.TestCase):
                 self.assertIn(
                     command.find,
                     command.stdout,
-                    msg=f"stdout: {command.stdout}, stderr: {command.stderr}",
+                    msg=f"command: {command.command}, stdout: {command.stdout}, stderr: {command.stderr}",
                 )
 
 
