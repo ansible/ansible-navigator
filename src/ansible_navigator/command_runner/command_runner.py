@@ -43,6 +43,7 @@ def run_command(command: Command) -> None:
         )
         command.stdout = proc_out.stdout
     except subprocess.CalledProcessError as exc:
+        command.stdout = str(exc.stdout)
         command.stderr = str(exc.stderr)
 
 
