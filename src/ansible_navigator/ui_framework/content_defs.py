@@ -93,3 +93,18 @@ class ContentBase(Generic[T]):
         :returns: A dictionary created from self
         """
         return asdict(self)
+
+    def get(self, attribute: str):
+        """Allow this dataclass to be treated like a dictionary.
+
+        This is a work around until the UI fully supports dataclasses
+        at which time this can be removed.
+
+        Default is intentionally not implemented as a safeguard to enure
+        this is not more work than necessary to remove in the future
+        and will only return attributes in existence.
+
+        :param attribute: The attribute to get
+        :returns: The gotten attribute
+        """
+        return getattr(self, attribute)

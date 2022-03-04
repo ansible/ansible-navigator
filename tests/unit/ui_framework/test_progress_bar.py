@@ -1,10 +1,11 @@
 """Test for the conversion of percent string to progress bars."""
 from dataclasses import dataclass
 
+from ansible_navigator.ui_framework.content_defs import ContentBase
 from ansible_navigator.ui_framework.utils import convert_percentage
 
 
-def test_dictionary_running():
+def test_dictionary_running() -> None:
     """Test the conversion of a string within a dictionary to a progress bar when not complete."""
     test_data = {"progress": "30%", "other": "test value"}
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)
@@ -12,7 +13,7 @@ def test_dictionary_running():
     assert test_data == expected
 
 
-def test_dictionary_complete():
+def test_dictionary_complete() -> None:
     """Test the conversion of a string within a dictionary to a progress bar when complete."""
     test_data = {"progress": "100%", "other": "test value"}
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)
@@ -21,7 +22,7 @@ def test_dictionary_complete():
 
 
 @dataclass
-class ContentTest:
+class ContentTest(ContentBase):
     """Test data for string conversion to a progress bar."""
 
     progress: str
@@ -44,7 +45,7 @@ class ContentTest:
         return getattr(self, attribute)
 
 
-def test_dataclass_running():
+def test_dataclass_running() -> None:
     """Test the conversion of a string within a dataclass to a progress bar when not complete."""
     test_data = ContentTest(progress="30%")
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)
@@ -53,7 +54,7 @@ def test_dataclass_running():
     assert test_data.other == "test_value"
 
 
-def test_dataclass_complete():
+def test_dataclass_complete() -> None:
     """Test the conversion of a string within a dataclass to a progress bar when not complete."""
     test_data = ContentTest(progress="100%")
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)

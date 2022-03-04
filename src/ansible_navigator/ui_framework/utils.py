@@ -10,9 +10,11 @@ from typing import Dict
 from typing import List
 from typing import Union
 
+from .content_defs import ContentBase
+
 
 def convert_percentage(
-    content: Union[Dict[str, Any], Any],
+    content: Union[Dict[str, Any], ContentBase],
     columns: List[str],
     progress_bar_width: int,
 ) -> None:
