@@ -104,6 +104,12 @@ pygments_style = "ansible"
 nitpicky = True
 nitpick_ignore = [
     ("py:class", "_Rule"),
+    (
+        "py:class",
+        "ansible_navigator.configuration_subsystem.defs_presentable.PresentableSettingsEntries",
+    ),
+    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TCli"),
+    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TEnt"),
     ("py:class", "ansible_navigator.steps.T"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TValue"),

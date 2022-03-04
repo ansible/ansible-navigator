@@ -1,5 +1,8 @@
 """configuration definitions
 """
+
+import copy
+
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
@@ -29,25 +32,34 @@ class CliParameters:
     short: Optional[str] = None
     metavar: Optional[str] = None
 
+    def long(self, name_dashed: str) -> str:
+        """Provide a cli long parameter.
+
+        :param name_dashed: The dashed name of the parent settings entry
+        :returns: The long cli parameter
+        """
+        long = self.long_override or f"--{name_dashed}"
+        return long
+
 
 class Constants(Enum):
     """Mapping some constants to friendly text"""
 
-    ALL = "All the things"
-    DEFAULT_CFG = "default configuration value"
-    ENVIRONMENT_VARIABLE = "environment variable"
-    NONE = "None of the things"
-    NOT_SET = "value has not been set"
-    PREVIOUS_CLI = "previous cli command"
+    ALL = "All"
+    DEFAULT_CFG = "Defaults"
+    ENVIRONMENT_VARIABLE = "Environment variable"
+    NONE = "None"
+    NOT_SET = "Not set"
+    PREVIOUS_CLI = "Previous cli command"
     SAME_SUBCOMMAND = (
-        "used to determine if an entry should be used when"
+        "Used to determine if an entry should be used when"
         " applying previous cli common entries, this indicates"
         " that it will only be used if the subcommand is the same"
     )
     SEARCH_PATH = "Found using search path"
-    SENTINEL = "indicates a nonvalue"
-    USER_CFG = "user provided configuration file"
-    USER_CLI = "cli parameters"
+    SENTINEL = "Indicates a nonvalue"
+    USER_CFG = "User-provided configuration file"
+    USER_CLI = "Provided at command line"
 
 
 @dataclass
@@ -60,6 +72,34 @@ class SettingsEntryValue:
     current: Any = Constants.NOT_SET
     #: Indicates where the current value came from
     source: Constants = Constants.NOT_SET
+
+    @property
+    def is_default(self):
+        """Determine if the current value is the default value.
+
+        :returns: Indication of if the current is the default
+        """
+        result = self.default == self.current
+        return result
+
+    @property
+    def resolved(self):
+        """Transform this entry to an entry without internal constants.
+
+        This would typically be used when the attributes need to be presented to the user.
+        Constants are resolved to their value.
+
+        :returns: An entry without internal constants for attributes
+        """
+        new_entry = copy.deepcopy(self)
+
+        if isinstance(self.current, Constants):
+            new_entry.current = self.current.value
+
+        if isinstance(self.default, Constants):
+            new_entry.default = self.default.value
+
+        return new_entry
 
 
 @dataclass
@@ -154,6 +194,11 @@ class ApplicationConfiguration:
     original_command: List[str] = field(default_factory=list)
 
     initial: Any = None
+
+    @property
+    def application_name_dashed(self) -> str:
+        """Generate a dashed version of the application name"""
+        return self.application_name.replace("_", "-")
 
     def _get_by_name(self, name, kind):
         try:
