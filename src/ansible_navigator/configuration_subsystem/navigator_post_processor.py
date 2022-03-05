@@ -587,7 +587,7 @@ class NavigatorPostProcessor:
 
         :param entry: The current settings entry
         :param config: The full application configuration
-        :raises ValueError: When more than 2 mode changes requests are present, this shouldn't happen
+        :raises ValueError: When more than 2 mode changes requests are present, shouldn't happen
         :return: An instance of the standard post process return object
         """
         messages: List[LogMessage] = []
@@ -664,9 +664,8 @@ class NavigatorPostProcessor:
                 entry.value.source = C.AUTO
 
         # Check if any other entry has requested a mode change different than current
-        if not self._requested_mode:
-            pass
-        elif len(self._requested_mode) == 1:
+        mode_set = set(request.mode for request in self._requested_mode)
+        if len(mode_set) == 1:
             requested = self._requested_mode[0]
             auto_mode = requested.mode.value
             if auto_mode != entry.value.current:
@@ -679,7 +678,7 @@ class NavigatorPostProcessor:
                 )
                 entry.value.current = auto_mode
                 entry.value.source = C.AUTO
-        else:
+        elif len(mode_set) > 1:
             raise ValueError(f"Conflicting mode requests: {self._requested_mode}")
         return messages, exit_messages
 

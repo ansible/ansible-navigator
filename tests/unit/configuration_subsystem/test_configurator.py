@@ -19,7 +19,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import (
 def test_mutual_exclusivity_for_configuration_init():
     """Ensure the configuration cannot be initiated with both
     apply_previous_cli_entries and initial"""
-    with pytest.raises(ValueError, match="cannot be used with"):
+    with pytest.raises(ValueError, match="cannot be used while initializing"):
         application_configuration = NavigatorConfiguration
         application_configuration.internals.initializing = True
         Configurator(
