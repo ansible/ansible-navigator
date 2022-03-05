@@ -147,14 +147,14 @@ class ActionBase:
         """
 
     def run_stdout(self) -> RunStdoutReturn:
-        """Execute the ``collections`` request for mode stdout.
+        """Provide a message saying subcommand does not support mode stdout.
 
         :returns: Message suggesting mode interactive, return code of 1
         """
         messages = []
         message = f"Subcommand '{self._name}' does not support mode 'stdout'."
         messages.append(ExitMessage(message=message))
-        message = "Try again with '--mode stdout'"
+        message = "Try again with '--mode interactive'"
         messages.append(ExitMessage(message=message, prefix=ExitPrefix.HINT))
         message = "\n".join(str(message) for message in messages)
         return RunStdoutReturn(message=message, return_code=1)
