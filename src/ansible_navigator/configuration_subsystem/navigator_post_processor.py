@@ -9,6 +9,7 @@ import shutil
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
+from functools import partialmethod
 from pathlib import Path
 from typing import List
 from typing import Tuple
@@ -470,27 +471,29 @@ class NavigatorPostProcessor:
         self,
         entry: SettingsEntry,
         config: ApplicationConfiguration,
+        subcommand: str,
     ) -> PostProcessorReturn:
         """Post process help_xxxx
 
         :param entry: The current settings entry
         :param config: The full application configuration
+        :param subcommand: The applicable subcommand
         :return: An instance of the standard post process return object
         """
         messages, exit_messages = self._true_or_false(entry, config)
 
-        if entry.value.current is True:
+        if entry.value.current is True and config.app == subcommand:
             mode = Mode.STDOUT
             self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
             message = message = f"`{entry.name} requesting mode {mode.value}"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
-    help_builder = _help_for_command
-    help_config = _help_for_command
-    help_doc = _help_for_command
-    help_inventory = _help_for_command
-    help_playbook = _help_for_command
+    help_builder = partialmethod(_help_for_command, subcommand="builder")
+    help_config = partialmethod(_help_for_command, subcommand="config")
+    help_doc = partialmethod(_help_for_command, subcommand="doc")
+    help_inventory = partialmethod(_help_for_command, subcommand="inventory")
+    help_playbook = partialmethod(_help_for_command, subcommand="run")
 
     @staticmethod
     @_post_processor
