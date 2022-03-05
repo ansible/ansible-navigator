@@ -587,7 +587,7 @@ class NavigatorPostProcessor:
 
         :param entry: The current settings entry
         :param config: The full application configuration
-        :raises ValueError: When more than 2 modes exist, and they have not been all accounted for
+        :raises ValueError: When more than 2 mode changes requests are present, this shouldn't happen
         :return: An instance of the standard post process return object
         """
         messages: List[LogMessage] = []
@@ -662,8 +662,6 @@ class NavigatorPostProcessor:
                 )
                 entry.value.current = auto_mode
                 entry.value.source = C.AUTO
-            else:
-                raise ValueError(f"Mode not accounted for: {entry.value.current}")
 
         # Check if any other entry has requested a mode change different than current
         if not self._requested_mode:
