@@ -644,7 +644,7 @@ class NavigatorPostProcessor:
             messages.extend(
                 LogMessage(level=logging.INFO, message=msg) for msg in subcommand_mode_change_msgs
             )
-            entry.value.current = "interactive"
+            entry.value.current = "stdout"
             entry.value.source = C.AUTO
 
         # Check if any other entry has requested a mode change different than current
