@@ -94,6 +94,23 @@ class VolumeMount:
         return out
 
 
+class Mode(Enum):
+    """An enum to restrict mode type."""
+
+    STDOUT: str = "stdout"
+    INTERACTIVE: str = "interactive"
+
+
+@dataclass
+class ModeChangeRequest:
+    """Data structure to contain a mode change request by a settings entry."""
+
+    entry: str
+    """The entry making the request"""
+    mode: Mode
+    """The desired mode"""
+
+
 PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
 
 
@@ -107,6 +124,7 @@ class NavigatorPostProcessor:
         #: These get processed towards the end, in the (delayed)
         #: :meth:`.execution_environment_volume_mounts` post-processor.
         self.extra_volume_mounts: List[VolumeMount] = []
+        self._requested_mode: List[ModeChangeRequest] = []
 
     @staticmethod
     def _true_or_false(
@@ -448,139 +466,30 @@ class NavigatorPostProcessor:
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def help_builder(
+    def _help_for_command(
         self,
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process help_builder"""
+        """Post process help_xxxx
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :return: An instance of the standard post process return object
+        """
         messages, exit_messages = self._true_or_false(entry, config)
 
-        help_builder_is_set = entry.value.current is True
-        builder_app_selected = config.app == "builder"
-        app_run_in_interactive_mode = config.mode == "interactive"
-
-        builder_help_in_interactive_mode = (
-            help_builder_is_set and builder_app_selected and app_run_in_interactive_mode
-        )
-
-        if builder_help_in_interactive_mode:
-            if entry.cli_parameters:
-                long_hc = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hc}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+        if entry.value.current is True:
+            mode = Mode.STDOUT
+            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+            message = message = f"`{entry.name} requesting mode {mode.value}"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
-    @_post_processor
-    def help_config(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_config"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "config", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hc = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hc}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_doc(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_doc"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "doc", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hd = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hd}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_inventory(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_inventory"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all(
-            (entry.value.current is True, config.app == "inventory", config.mode == "interactive"),
-        ):
-            if entry.cli_parameters:
-                long_hd = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hd}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_playbook(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_playbook"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "run", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hp = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hp}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
+    help_builder = _help_for_command
+    help_config = _help_for_command
+    help_doc = _help_for_command
+    help_playbook = _help_for_command
 
     @staticmethod
     @_post_processor
@@ -671,15 +580,27 @@ class NavigatorPostProcessor:
                 exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
-    @staticmethod
     @_post_processor
-    def mode(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def mode(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=too-many-statements
-        """Post process mode"""
+        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
+        """Post process mode
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :raises ValueError: When more than 2 modes exist, and they have not been all accounted for
+        :return: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         subcommand_action = None
         subcommand_name = config.subcommand(config.app).name
+
+        # Post initialization of mode processing is not needed since switching modes after
+        # is not supported
+        if not config.internals.initializing:
+            return messages, exit_messages
 
         for action_package_name in config.internals.action_packages:
             try:
@@ -715,6 +636,7 @@ class NavigatorPostProcessor:
 
         subcommand_modes = []
 
+        # Check if the mode is available for the subcommand
         try:
             getattr(subcommand_action, "run_stdout")
         except AttributeError:
@@ -730,18 +652,39 @@ class NavigatorPostProcessor:
             subcommand_modes.append("interactive")
 
         if entry.value.current not in subcommand_modes:
-            exit_msg = f"Subcommand '{config.app}' does not support mode '{entry.value.current}'."
-            exit_msg += f" Supported modes: {oxfordcomma(subcommand_modes, 'and')}."
-            exit_messages.append(ExitMessage(message=exit_msg))
-            mode_cli = config.entry("mode").cli_parameters
-            if mode_cli:
-                other = [
-                    f"{mode_cli.short} {mode}"
-                    for mode in subcommand_modes
-                    if mode != entry.value.current
-                ]
-                exit_msg = f"Try again with {oxfordcomma(other, 'or')}"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            if len(subcommand_modes) == 1:
+                auto_mode = subcommand_modes[0]
+                subcommand_mode_change_msgs = (
+                    f"Subcommand '{config.app}' does not support mode '{entry.value.current}'.",
+                    f"Supported mode: '{auto_mode}'. Mode will be set to '{auto_mode}'",
+                )
+                messages.extend(
+                    LogMessage(level=logging.INFO, message=msg)
+                    for msg in subcommand_mode_change_msgs
+                )
+                entry.value.current = auto_mode
+                entry.value.source = C.AUTO
+            else:
+                raise ValueError(f"Mode not accounted for: {entry.value.current}")
+
+        # Check if any other entry has requested a mode change different than current
+        if not self._requested_mode:
+            pass
+        elif len(self._requested_mode) == 1:
+            requested = self._requested_mode[0]
+            auto_mode = requested.mode.value
+            if auto_mode != entry.value.current:
+                entry_mode_change_msgs = (
+                    f"Parameter '{requested.entry}' required mode '{auto_mode!s}'.",
+                    f"Mode will be set to '{auto_mode}'",
+                )
+                messages.extend(
+                    LogMessage(level=logging.INFO, message=msg) for msg in entry_mode_change_msgs
+                )
+                entry.value.current = auto_mode
+                entry.value.source = C.AUTO
+        else:
+            raise ValueError(f"Conflicting mode requests: {self._requested_mode}")
         return messages, exit_messages
 
     @_post_processor

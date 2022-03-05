@@ -137,16 +137,14 @@ def parse_and_update(
     params: List,
     args: ApplicationConfiguration,
     apply_previous_cli_entries: Union[C, List[str]] = C.NONE,
-    initial: bool = False,
     attach_cdc=False,
 ) -> Tuple[List[LogMessage], List[ExitMessage]]:
     """Build a configuration
 
     :param args: The application args
     :param apply_previous_cli_entries: Should previous params from the CLI be applied
-    :param initial: Is this the initial (first) configuration
     :param attach_cdc: Should the collection doc cache be attached to the args.internals
-
+    :returns: Log and exit messages
     """
 
     messages: List[LogMessage] = []
@@ -167,7 +165,6 @@ def parse_and_update(
         params=params,
         application_configuration=args,
         apply_previous_cli_entries=apply_previous_cli_entries,
-        initial=initial,
     )
 
     new_messages, new_exit_messages = configurator.configure()

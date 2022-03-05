@@ -37,10 +37,10 @@ def test_apply_previous_cli_all():
     ]
 
     application_configuration = deepcopy(NavigatorConfiguration)
+    application_configuration.internals.initializing = True
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        initial=True,
     )
     _messages, exit_messages = configurator.configure()
     assert exit_messages == []
@@ -75,10 +75,10 @@ def test_apply_previous_cli_specified():
     """Ensure only some of the previous CLI parameters are applied when requested"""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
+    application_configuration.internals.initializing = True
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        initial=True,
     )
 
     _messages, exit_messages = configurator.configure()
@@ -121,11 +121,10 @@ def test_apply_previous_cli_mixed():
 
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
-
+    application_configuration.internals.initializing = True
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        initial=True,
     )
     with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
         _messages, exit_messages = configurator.configure()
@@ -173,10 +172,10 @@ def test_apply_previous_cli_cmdline_not_applied():
     """Ensure the command line parameters are not carried forward"""
     params = "run /tmp/site.yml --ee False --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
+    application_configuration.internals.initializing = True
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        initial=True,
     )
 
     _messages, exit_messages = configurator.configure()
@@ -222,10 +221,10 @@ def test_apply_previous_cli_none(_mf1):
     """Ensure nothing is carried forward"""
     params = "run /tmp/site.yml --ee False --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
+    application_configuration.internals.initializing = True
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params.split(),
-        initial=True,
     )
 
     _messages, exit_messages = configurator.configure()
@@ -270,7 +269,7 @@ def test_apply_cli_subset_none():
     test_config = ApplicationConfiguration(
         application_name="test_application",
         application_version="1.0",
-        internals=Internals(),
+        internals=Internals(initializing=True),
         post_processor=None,
         subcommands=[
             SubCommand(name="list", description="list"),
@@ -295,7 +294,6 @@ def test_apply_cli_subset_none():
     configurator = Configurator(
         params=["list", "-z", "zebra"],
         application_configuration=test_config,
-        initial=True,
     )
     _messages, exit_messages = configurator.configure()
     assert not exit_messages
