@@ -583,8 +583,6 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def mode(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=too-many-statements
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         """Post process mode
 
