@@ -635,36 +635,19 @@ class NavigatorPostProcessor:
             )
             exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
-        subcommand_modes = []
-
-        # Check if the mode is available for the subcommand
-        try:
-            getattr(subcommand_action, "run_stdout")
-        except AttributeError:
-            pass
-        else:
-            subcommand_modes.append("stdout")
-
-        try:
-            getattr(subcommand_action, "run")
-        except AttributeError:
-            pass
-        else:
-            subcommand_modes.append("interactive")
-
-        if entry.value.current not in subcommand_modes:
-            if len(subcommand_modes) == 1:
-                auto_mode = subcommand_modes[0]
-                subcommand_mode_change_msgs = (
-                    f"Subcommand '{config.app}' does not support mode '{entry.value.current}'.",
-                    f"Supported mode: '{auto_mode}'. Mode will be set to '{auto_mode}'",
-                )
-                messages.extend(
-                    LogMessage(level=logging.INFO, message=msg)
-                    for msg in subcommand_mode_change_msgs
-                )
-                entry.value.current = auto_mode
-                entry.value.source = C.AUTO
+        # Check if the mode interactive is available for the subcommand
+        # mode stdout is always available since the action base class has a `run_stdout`
+        subcommand_stdout_only = not hasattr(subcommand_action, "run")
+        if entry.value.current == "interactive" and subcommand_stdout_only:
+            subcommand_mode_change_msgs = (
+                f"Subcommand '{config.app}' does not support mode 'interactive'.",
+                "Mode set to 'interactive'",
+            )
+            messages.extend(
+                LogMessage(level=logging.INFO, message=msg) for msg in subcommand_mode_change_msgs
+            )
+            entry.value.current = "interactive"
+            entry.value.source = C.AUTO
 
         # Check if any other entry has requested a mode change different than current
         mode_set = set(request.mode for request in self._requested_mode)
