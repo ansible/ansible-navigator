@@ -52,8 +52,8 @@ class PartialCommand:
 PartialCommands = (
     PartialCommand(params="--help", find="Start at the welcome page"),
     PartialCommand(params="builder --help-builder", find="Print ansible-builder version"),
-    PartialCommand(params="config list", find="Valid YAML extensions"),
-    PartialCommand(params="doc debug", find="ansible.builtin.debug"),
+    PartialCommand(params="config list --mode stdout", find="Valid YAML extensions"),
+    PartialCommand(params="doc debug --mode stdout", find="ansible.builtin.debug"),
     PartialCommand(params="exec whoami", find="root", ee_support=(True,)),
     PartialCommand(params="run --help-playbook", find="--become"),
 )
