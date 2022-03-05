@@ -489,6 +489,7 @@ class NavigatorPostProcessor:
     help_builder = _help_for_command
     help_config = _help_for_command
     help_doc = _help_for_command
+    help_inventory = _help_for_command
     help_playbook = _help_for_command
 
     @staticmethod
@@ -498,10 +499,7 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "inventory" and entry.value.current is C.NOT_SET:
-            if not (
-                config.entry("help_inventory").value.current
-                and config.entry("mode").value.current == "stdout"
-            ):
+            if config.entry("help_inventory").value.current is False:
                 exit_msg = "An inventory is required when using the inventory subcommand"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 if entry.cli_parameters:
@@ -698,19 +696,13 @@ class NavigatorPostProcessor:
         """Post process plugin_name"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if all(
-            (
-                config.app == "doc",
-                entry.value.current is C.NOT_SET,
-                config.help_doc is False,
-                config.mode != "stdout",
-            ),
-        ):
-            exit_msg = "A plugin name is required when using the doc subcommand"
-            exit_messages.append(ExitMessage(message=exit_msg))
-            exit_msg = "Try again with 'doc <plugin_name>'"
-            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
+        if config.app == "doc" and entry.value.current is C.NOT_SET:
+            if config.entry("help_doc").value.current is False:
+                exit_msg = "A plugin name is required when using the doc subcommand"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = "Try again with 'doc <plugin_name>'"
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                return messages, exit_messages
         return messages, exit_messages
 
     @staticmethod
@@ -734,10 +726,7 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:
-            if not (
-                config.entry("help_playbook").value.current
-                and config.entry("mode").value.current == "stdout"
-            ):
+            if config.entry("help_playbook").value.current is False:
                 exit_msg = "A playbook is required when using the run subcommand"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 exit_msg = "Try again with 'run <playbook name>'"

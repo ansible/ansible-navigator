@@ -138,8 +138,6 @@ tst_hint_data = [
     TstHint(command=r"--cdcp {locked_directory}/foo.db", expected="without '--cdcp'", set_ce=True),
     TstHint(command="--econ not_bool", expected="with '--econ true'"),
     TstHint(command="--ee not_bool", expected="with '--ee true'"),
-    TstHint(command="config --help-config --mode interactive", expected="with '-m stdout'"),
-    TstHint(command="doc --help-doc --mode interactive", expected="with '-m stdout'"),
     TstHint(command="inventory", expected="with '-i <path to inventory>'"),
     TstHint(command="--la not_bool", expected="with '--la true'"),
     TstHint(

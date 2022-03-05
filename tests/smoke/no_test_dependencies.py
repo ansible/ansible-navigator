@@ -31,14 +31,13 @@ class NavigatorCommand(Command):
 
     ee_tests: Tuple[bool, bool] = (True, False)
     find: str = ""
-    mode: str = "--mode stdout"
     set_env: str = "--senv PAGER=cat"
 
     def __post_init__(self):
         """Post the init."""
         self.identity = self.command
         venv = _get_venv()
-        self.command = f". {venv} && ansible-navigator {self.command} {self.set_env} {self.mode}"
+        self.command = f". {venv} && ansible-navigator {self.command} {self.set_env}"
 
 
 @dataclass
