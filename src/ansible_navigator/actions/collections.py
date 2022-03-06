@@ -44,7 +44,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     """
     if entry.get("__shadowed") is True:
         return 8, 0
-    if entry.get("__deprecated") is True:
+    if entry.get("__deprecated") == "True":
         return 9, 0
     return 2, 0
 
@@ -204,12 +204,12 @@ class Action(ActionBase):
         return Step(
             name="all_collections",
             columns=columns,
-            select_func=self._build_plugin_menu,
+            select_func=self._build_collection_content_menu,
             step_type="menu",
             value=self._collections,
         )
 
-    def _build_plugin_menu(self):
+    def _build_collection_content_menu(self):
         """Build the menu of plugins.
 
         :returns: The plugin menu definition
@@ -217,7 +217,7 @@ class Action(ActionBase):
         self._collection_cache.open()
         selected_collection = self._collections[self.steps.current.index]
         collection_name = f"__{selected_collection['known_as']}"
-        plugins = []
+        collection_contents = []
         for plugin_checksum, details in selected_collection["plugin_checksums"].items():
             try:
                 plugin_json = self._collection_cache[plugin_checksum]
@@ -241,38 +241,51 @@ class Action(ActionBase):
                     plugin["__description"] = plugin["doc"]["short_description"]
 
                     runtime_section = "modules" if details["type"] == "module" else details["type"]
-                    plugin["__deprecated"] = False
+                    plugin["__deprecated"] = "False"
                     try:
                         routing_info = selected_collection["runtime"]["plugin_routing"]
                         runtime_info = routing_info[runtime_section][short_name]
                         plugin["additional_information"] = runtime_info
                         if "deprecation" in runtime_info:
-                            plugin["__deprecated"] = True
+                            plugin["__deprecated"] = "True"
                     except KeyError:
                         plugin["additional_information"] = {}
 
-                    plugins.append(plugin)
+                    collection_contents.append(plugin)
             except (KeyError, JSONDecodeError) as exc:
                 self._logger.error("error loading plugin doc %s", details)
                 self._logger.debug("error was %s", str(exc))
-        plugins = sorted(plugins, key=lambda i: i[collection_name])
+
         self._collection_cache.close()
 
+        for role in selected_collection["roles"]:
+            role[collection_name] = role["short_name"]
+            try:
+                role["__description"] = role["info"]["galaxy_info"]["description"]
+            except KeyError:
+                role["__description"] = ""
+            role["__deprecated"] = "Unknown"
+            role["__added"] = "Unknown"
+            role["__type"] = "role"
+            collection_contents.append(role)
+
+        collection_contents = sorted(collection_contents, key=lambda i: i[collection_name])
+
         return Step(
-            name="all_plugins",
+            name="all_collection_content",
             columns=[collection_name, "__type", "__added", "__deprecated", "__description"],
-            select_func=self._build_plugin_content,
+            select_func=self._build_collection_content,
             step_type="menu",
-            value=plugins,
+            value=collection_contents,
         )
 
-    def _build_plugin_content(self):
+    def _build_collection_content(self):
         """Build the content for one plugin.
 
         :returns: The plugin's content
         """
         return Step(
-            name="plugin_content",
+            name="collection_content",
             step_type="content",
             value=self.steps.current.value,
             index=self.steps.current.index,
