@@ -9,6 +9,7 @@ from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
+from typing import Optional
 
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -80,14 +81,15 @@ class Action:
         """
         self._logger.debug("open requested")
 
-        filename = None
+        filename: Optional[Path] = None
         line_number = 0
 
         something = interaction.action.match.groupdict()["something"]
         if something:
             parts = something.rsplit(":", 1)
-            if os.path.isfile(parts[0]):
-                filename = Path(parts[0])
+            possible_filename = Path(parts[0])
+            if possible_filename.is_file():
+                filename = possible_filename
                 line_number = parts[1:][0] if parts[1:] else 0
             else:
                 obj = something

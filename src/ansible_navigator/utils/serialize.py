@@ -1,6 +1,7 @@
 """Abstractions for common serialization formats."""
 
 import json
+import logging
 import re
 import tempfile
 
@@ -19,11 +20,14 @@ from typing import Union
 import yaml
 
 
+logger = logging.getLogger(__name__)
+
+
 class SerializationFormat(Enum):
     """The serialization format."""
 
-    YAML = "yaml"
-    JSON = "json"
+    YAML = "YAML"
+    JSON = "JSON"
 
 
 if TYPE_CHECKING:
@@ -33,9 +37,9 @@ if TYPE_CHECKING:
 
 # pylint: disable=unused-import
 try:
-    from yaml import CDumper as Dumper
+    from yaml import CSafeDumper as SafeDumper
 except ImportError:
-    from yaml import Dumper  # type: ignore[misc] # noqa: F401
+    from yaml import SafeDumper  # type: ignore[misc] # noqa: F401
 
 try:
     from yaml import CLoader as Loader
@@ -133,6 +137,14 @@ def serialize_write_temp_file(
     raise ValueError("Unknown serialization format")
 
 
+SERIALIZATION_FAILURE_MSG = (
+    "The requested content could not be converted to {serialization_format}.\n"
+    "The content was {content}\n"
+    "Please log an issue for this, it should not have happened\n"
+    "Error details: {exception_str}\n"
+)
+
+
 def _prepare_content(
     content: ContentType,
     content_view: "ContentView",
@@ -145,11 +157,19 @@ def _prepare_content(
             content_view=content_view,
             serialization_format=serialization_format,
         )
+
     # This is a big chance, it suggests all content is
     # one of ``ContentType``. the thinking is it's better
-    # to traceback here early, then return a str(content)
+    # to error here early, then return a str(content)
     # Ideally this get caught in testing
-    raise ValueError("Content could not be serialized")
+    value_error = "Content type not recognized"
+    error = SERIALIZATION_FAILURE_MSG.format(
+        content=str(content),
+        exception_str=value_error,
+        serialization_format=serialization_format.value,
+    )
+    error += f"Content view: {content_view}\n"
+    return error
 
 
 class JsonParams(NamedTuple):
@@ -166,8 +186,17 @@ def _json_dump(dumpable: ContentType, file_handle: IO) -> None:
     :param dumpable: The object to dump
     :param file_handle: The file handle to write to
     """
-    json.dump(dumpable, file_handle, **JsonParams()._asdict())
-    file_handle.write("\n")  # Add newline json does not
+    try:
+        json.dump(dumpable, file_handle, **JsonParams()._asdict())
+        file_handle.write("\n")  # Add newline json does not
+    except TypeError as exc:
+        error_message = SERIALIZATION_FAILURE_MSG.format(
+            content=str(dumpable),
+            exception_str=str(exc),
+            serialization_format="JSON",
+        )
+        file_handle.write(error_message)
+        logger.error(error_message)
 
 
 def _json_dumps(dumpable: ContentType) -> str:
@@ -176,7 +205,16 @@ def _json_dumps(dumpable: ContentType) -> str:
     :param dumpable: The object to serialize
     :returns: The object serialized
     """
-    return json.dumps(dumpable, **JsonParams()._asdict())
+    try:
+        return json.dumps(dumpable, **JsonParams()._asdict())
+    except TypeError as exc:
+        error_message = SERIALIZATION_FAILURE_MSG.format(
+            content=str(dumpable),
+            exception_str=str(exc),
+            serialization_format="JSON",
+        )
+        logger.error(error_message)
+        return error_message
 
 
 class YamlStyle(NamedTuple):
@@ -193,7 +231,16 @@ def _yaml_dump(dumpable: ContentType, file_handle: IO):
     :param dumpable: The object to serialize
     :param file_handle: The file handle to write to
     """
-    yaml.dump(dumpable, file_handle, Dumper=HumanDumper, **YamlStyle()._asdict())
+    try:
+        yaml.dump(dumpable, file_handle, Dumper=HumanDumper, **YamlStyle()._asdict())
+    except yaml.representer.RepresenterError as exc:
+        error_message = SERIALIZATION_FAILURE_MSG.format(
+            content=str(dumpable),
+            exception_str=str(exc),
+            serialization_format="YAML",
+        )
+        file_handle.write(error_message)
+        logger.error(error_message)
 
 
 def _yaml_dumps(dumpable: ContentType):
@@ -202,10 +249,19 @@ def _yaml_dumps(dumpable: ContentType):
     :param dumpable: The object to serialize
     :return: The serialized object
     """
-    return yaml.dump(dumpable, Dumper=HumanDumper, **YamlStyle()._asdict())
+    try:
+        return yaml.dump(dumpable, Dumper=HumanDumper, **YamlStyle()._asdict())
+    except yaml.representer.RepresenterError as exc:
+        error_message = SERIALIZATION_FAILURE_MSG.format(
+            content=str(dumpable),
+            exception_str=str(exc),
+            serialization_format="YAML",
+        )
+        logger.error(error_message)
+        return error_message
 
 
-class HumanDumper(Dumper):
+class HumanDumper(SafeDumper):
     # pylint: disable=too-many-ancestors
     """An instance of a pyyaml Dumper.
 

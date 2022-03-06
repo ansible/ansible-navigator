@@ -11,7 +11,7 @@ from ansible_navigator.utils import serialize
 def test_check_yaml_imports():
     """Ensure yaml, Dumper, and Loader are imported without error."""
     assert serialize.yaml is not None
-    assert serialize.Dumper is not None
+    assert serialize.SafeDumper is not None
     assert serialize.Loader is not None
 
 
