@@ -20,12 +20,15 @@ class Command(NamedTuple):
     """command details"""
 
     execution_environment: bool
-    command: str = "ansible-navigator"
     cmdline: Optional[str] = None
+    command: str = "ansible-navigator"
     log_level: str = "debug"
     mode: str = "interactive"
     pass_environment_variables: List = []
     preclear: bool = False
+    precommand: str = ""
+    raw_append: str = ""
+    """Anything raw that should be appended, and not shlex quoted"""
     subcommand: Optional[str] = None
 
     def join(self):
@@ -42,8 +45,12 @@ class Command(NamedTuple):
             for env_var in self.pass_environment_variables:
                 args.extend(["--penv", env_var])
         cmd = " ".join(shlex.quote(str(arg)) for arg in args)
+        if self.precommand:
+            cmd = f"{self.precommand} {cmd}"
         if self.preclear:
-            return "clear && " + cmd
+            cmd = f"clear && {cmd}"
+        if self.raw_append:
+            cmd = f"{cmd} {self.raw_append}"
         return cmd
 
 
@@ -74,3 +81,11 @@ def add_indices(steps):
 def step_id(value):
     """return the test id from the test step object"""
     return f"{value.step_index}-{value.user_input}-{value.comment}"
+
+
+def step_id_padded(value):
+    """Return the test id from the test step object, index padded to 2.
+
+    :param value: The test value
+    """
+    return f"{value.step_index:02d}-{value.user_input}-{value.comment}"

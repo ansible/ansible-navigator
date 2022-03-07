@@ -1,7 +1,12 @@
 {
-    "name": "test[5-:1-mod_1 plugin docs window]",
+    "name": "test[05-:1-mod_1 plugin docs window]",
     "index": 5,
     "comment": "mod_1 plugin docs window",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
     "output": [
         "COMPANY_NAME.COLL_1.MOD_1: This is a test module",
         " 0│---",

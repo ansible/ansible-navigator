@@ -1,7 +1,12 @@
 {
-    "name": "test[12-:back-Back to browse company_name.coll_2 plugins window]",
+    "name": "test[12-:1-Browse company_name.coll_2 plugins window]",
     "index": 12,
-    "comment": "Back to browse company_name.coll_2 plugins window",
+    "comment": "Browse company_name.coll_2 plugins window",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
     "output": [
         "  COMPANY NAME.COLL 2                                    TYPE               ADDED            DEPRECATED                     DESCRIPTION",
         "0│lookup_2                                               lookup             2.0.0            False                          This is test lookup plugin",

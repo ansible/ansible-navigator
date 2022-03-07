@@ -123,13 +123,16 @@ class CollectionCatalog:
             # Argument spec cataloging, it is not required
             argspec_name = "argument_specs.yml"
             argspec_path = role_directory / "meta" / argspec_name
-            role["argument_spec"] = {}
-            role["argument_spec_path"] = ""
+            role["argument_specs"] = {}
+            role["argument_specs_path"] = ""
             error = {"path": str(argspec_path)}
             try:
                 with argspec_path.open(encoding="utf-8") as fh:
-                    role["argument_spec"] = yaml.load(fh, Loader=SafeLoader)
-                    role["argument_spec_path"] = str(argspec_path)
+                    role["argument_specs"] = yaml.load(fh, Loader=SafeLoader)["argument_specs"]
+                    role["argument_specs_path"] = str(argspec_path)
+            except KeyError:
+                error["error"] = f"Malformed {argspec_name} for role in {collection_name}."
+                self._errors.append(error)
             except FileNotFoundError:
                 error["error"] = f"Failed to find {argspec_name} for role in {collection_name}."
                 self._errors.append(error)

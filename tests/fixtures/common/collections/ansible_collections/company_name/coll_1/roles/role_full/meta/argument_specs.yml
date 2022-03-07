@@ -1,0 +1,26 @@
+---
+argument_specs:
+  # roles/role_full/tasks/main.yml entry point
+  main:
+    short_description: The main entry point for the role_full role.
+    options:
+      role_full_int:
+        description: "The integer value, defaulting to 42."
+        default: 42
+        required: false
+        type: "int"
+
+      role_full_str:
+        description: "The string value"
+        required: true
+        type: "str"
+
+  # roles/role_full/tasks/alternate.yml entry point
+  alternate:
+    short_description: The alternate entry point for the role_full role.
+    options:
+      role_full_int:
+        description: "The integer value, defaulting to 1024."
+        default: 1024
+        required: false
+        type: "int"
