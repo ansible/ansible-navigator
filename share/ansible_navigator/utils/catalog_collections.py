@@ -107,6 +107,7 @@ class CollectionCatalog:
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
 
+        collection_name: str = collection["known_as"]
         collection["roles"] = []
         roles_directory = Path(collection["path"], "roles")
         if not roles_directory.is_dir():
@@ -115,98 +116,78 @@ class CollectionCatalog:
         for role_directory in roles_directory.iterdir():
             role: Dict[str, Union[str, Dict[str, Any]]] = {
                 "short_name": role_directory.name,
-                "full_name": f"{collection['known_as']}.{role_directory.name}",
+                "full_name": f"{collection_name}.{role_directory.name}",
             }
             error_cataloging_role = False
 
             # Argument spec cataloging, it is not required
-            argument_spec_file_name = "argument_specs.yml"
-            argument_spec_file = role_directory / "meta" / argument_spec_file_name
+            argspec_name = "argument_specs.yml"
+            argspec_path = role_directory / "meta" / argspec_name
             role["argument_spec"] = {}
             role["argument_spec_path"] = ""
-            if argument_spec_file.exists():
-                role["argument_spec_path"] = str(argument_spec_file)
-                with argument_spec_file.open(encoding="utf-8") as fh:
-                    try:
-                        role["argument_spec"] = yaml.load(fh, Loader=SafeLoader)
-                    except YAMLError:
-                        error = {
-                            "path": str(argument_spec_file),
-                            "error": (
-                                f"Failed to load {argument_spec_file_name}"
-                                " for role in {collection['known_as']}."
-                            ),
-                        }
-                        self._errors.append(error)
-                        error_cataloging_role = True
+            error = {"path": str(argspec_path)}
+            try:
+                with argspec_path.open(encoding="utf-8") as fh:
+                    role["argument_spec"] = yaml.load(fh, Loader=SafeLoader)
+                    role["argument_spec_path"] = str(argspec_path)
+            except FileNotFoundError:
+                error["error"] = f"Failed to find {argspec_name} for role in {collection_name}."
+                self._errors.append(error)
+            except YAMLError:
+                error["error"] = f"Failed to load {argspec_name} for role in {collection_name}."
+                self._errors.append(error)
 
             # Defaults cataloging, it is not required
-            defaults_file_name = "main.yml"
-            defaults_file = role_directory / "defaults" / defaults_file_name
+            defaults_name = "main.yml"
+            defaults_path = role_directory / "defaults" / defaults_name
             role["defaults"] = {}
             role["defaults_path"] = ""
-            if defaults_file.exists():
-                role["defaults_path"] = str(defaults_file)
-                with defaults_file.open(encoding="utf-8") as fh:
-                    try:
-                        role["defaults"] = yaml.load(fh, Loader=SafeLoader)
-                    except YAMLError:
-                        error = {
-                            "path": str(defaults_file),
-                            "error": (
-                                f"Failed to load {defaults_file_name}"
-                                " for role in {collection['known_as']}."
-                            ),
-                        }
-                        self._errors.append(error)
-                        error_cataloging_role = True
-
-            # Meta/main.yml, it is required
-            meta_file_name = "main.yml"
-            meta_file = role_directory / "meta" / meta_file_name
-            if not meta_file.exists():
-                error = {
-                    "path": str(meta_file),
-                    "error": (
-                        f"Failed to find {meta_file_name} for role in {collection['known_as']}."
-                    ),
-                }
-                self._errors.append(error)
-                continue
-
-            with meta_file.open(encoding="utf-8") as fh:
-                try:
-                    role.update(
-                        {
-                            "info": yaml.load(fh, Loader=SafeLoader),
-                            "info_path": str(meta_file),
-                        },
-                    )
-                except YAMLError:
-                    error = {
-                        "path": str(meta_file),
-                        "error": (
-                            f"Failed to load {meta_file_name} for role in {collection['known_as']}."
-                        ),
-                    }
-                    self._errors.append(error)
-                    error_cataloging_role = True
-
-            # Readme.md cataloging, it is required
-            readme_file_name = "README.md"
-            readme_file = role_directory / readme_file_name
-            if not readme_file.exists():
-                error = {
-                    "path": str(readme_file),
-                    "error": (
-                        f"Failed to find {readme_file_name} for role in {collection['known_as']}."
-                    ),
-                }
+            error = {"path": str(defaults_path)}
+            try:
+                with defaults_path.open(encoding="utf-8") as fh:
+                    role["defaults"] = yaml.load(fh, Loader=SafeLoader)
+                    role["defaults_path"] = str(defaults_path)
+            except FileNotFoundError:
+                pass
+            except YAMLError:
+                error["error"] = f"Failed to load {defaults_name} for role in {collection_name}."
                 self._errors.append(error)
                 error_cataloging_role = True
 
-            with readme_file.open(encoding="utf-8") as fh:
-                role.update({"readme": fh.read(), "readme_path": str(readme_file)})
+            # Meta/main.yml cataloging, it is required
+            meta_name = "main.yml"
+            meta_path = role_directory / "meta" / meta_name
+            role["info"] = {}
+            role["info_path"] = ""
+            error = {"path": str(meta_path)}
+            try:
+                with meta_path.open(encoding="utf-8") as fh:
+                    role["info"] = yaml.load(fh, Loader=SafeLoader)
+                    role["info_path"] = str(meta_path)
+            except FileNotFoundError:
+                error["error"] = f"Failed to find {meta_name} for role in {collection_name}."
+                self._errors.append(error)
+                error_cataloging_role = True
+            except YAMLError:
+                error["error"] = f"Failed to load {meta_name} for role in {collection_name}."
+                self._errors.append(error)
+                error_cataloging_role = True
+
+            # Readme.md cataloging, it is required
+            readme_name = "README.md"
+            readme_path = role_directory / readme_name
+            role["readme"] = ""
+            role["readme_path"] = ""
+            error = {"path": str(readme_path)}
+            try:
+                with readme_path.open(encoding="utf-8") as fh:
+                    role["readme"] = fh.read()
+                    role["readme_path"] = str(readme_path)
+            except FileNotFoundError:
+                error["error"] = f"Failed to find {readme_name} for role in {collection_name}."
+                self._errors.append(error)
+                error_cataloging_role = True
+
             if not error_cataloging_role:
                 collection["roles"].append(role)
 
