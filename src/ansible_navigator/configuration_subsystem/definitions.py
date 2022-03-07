@@ -6,11 +6,16 @@ import copy
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
+from itertools import chain
+from itertools import repeat
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Iterable
 from typing import List
 from typing import Optional
+from typing import Type
+from typing import TypeVar
 from typing import Union
 
 from ..utils.functions import oxfordcomma
@@ -164,10 +169,16 @@ class SettingsEntry:
 
     def settings_file_path(self, prefix: str) -> str:
         """Generate an effective settings file path for this entry"""
-        if self.settings_file_path_override is not None:
-            sfp = f"{prefix}.{self.settings_file_path_override}"
+        if prefix:
+            prefix_str = f"{prefix}."
         else:
-            sfp = f"{prefix}.{self.name}"
+            prefix_str = prefix
+
+        if self.settings_file_path_override is not None:
+            sfp = f"{prefix_str}{self.settings_file_path_override}"
+        else:
+            sfp = f"{prefix_str}{self.name}"
+
         return sfp.replace("_", "-")
 
 
@@ -221,3 +232,142 @@ class ApplicationConfiguration:
     def subcommand(self, name) -> SubCommand:
         """Retrieve a configuration subcommand by name"""
         return self._get_by_name(name, "subcommands")
+
+
+class VolumeMountOption(Enum):
+    """Options that can be tagged on to the end of volume mounts.
+
+    Usually these are used for things like selinux relabeling, but there are
+    some other valid options as well, which can and should be added here as
+    needed. See ``man podman-run`` and ``man docker-run`` for valid choices and
+    keep in mind that we support both runtimes.
+    """
+
+    # Relabel as private
+    Z = "Z"
+
+    # Relabel as shared.
+    z = "z"  # pylint: disable=invalid-name
+
+
+V = TypeVar("V", bound="VolumeMount")  # pylint: disable=invalid-name
+
+
+@dataclass
+class VolumeMount:
+    """Describes EE volume mounts."""
+
+    fs_destination: str
+    """The destination file system path in the container for the volume mount"""
+    fs_source: str
+    """The source file system path of the volume mount"""
+    settings_entry: str
+    """The name of the settings entry requiring this volume mount"""
+    source: Constants
+    """The settings source for this volume mount"""
+    options: List[VolumeMountOption] = field(default_factory=list)
+    """Options for the bind mount"""
+
+    def exists(self) -> bool:
+        """Determine if the volume mount source exists."""
+        return Path(self.fs_source).exists()
+
+    def to_string(self) -> str:
+        """Render the volume mount in a way that (docker|podman) understands."""
+        out = f"{self.fs_source}:{self.fs_destination}"
+        if self.options:
+            joined_opts = ",".join(o.value for o in self.options)
+            out += f":{joined_opts}"
+        return out
+
+    @classmethod
+    def from_string(cls: Type[V], settings_entry: str, source: Constants, string: str) -> V:
+        """Create a ``VolumeMount`` from a string.
+
+        :param settings_entry: The settings entry
+        :param source: The source of the string
+        :param string: The string from which the volume mount will be created
+        :raises ValueError: When source or destination are missing, or unrecognized label
+        :returns: A populated volume mount
+        """
+        fs_source, fs_destination, options, *left_overs = chain(string.split(":"), repeat("", 3))
+        if options:
+            option_list = [
+                const
+                for const in VolumeMountOption
+                for option in options.split(",")
+                if const.value == option
+            ]
+        unrecognized_label = len(options.split(",")) != len(option_list)
+
+        if any(left_overs):
+            raise ValueError("Not formatted correctly")
+        if unrecognized_label:
+            raise ValueError("Unrecognized label in volume mount string")
+        if not fs_source:
+            raise ValueError("Could not extract source from string")
+        if not fs_destination:
+            raise ValueError("Could not extract destination from string")
+        return cls(
+            fs_source=fs_source,
+            fs_destination=fs_destination,
+            options=option_list,
+            settings_entry=settings_entry,
+            source=source,
+        )
+
+    @classmethod
+    def from_dictionary(
+        cls: Type[V],
+        settings_entry: str,
+        source: Constants,
+        dictionary: dict,
+    ) -> V:
+        """Create a ``VolumeMount`` from a dictionary.
+
+        :param dictionary: The dictionary from which the volume mount will be created
+        :param settings_entry: The settings entry
+        :param source: The source of the string
+        :raises ValueError: When source or destination are missing, or unrecognized label
+        :returns: A populated volume mount
+        """
+        options = dictionary.get("label", "")
+        if options:
+            option_list = [
+                const
+                for const in VolumeMountOption
+                for option in options.split(",")
+                if const.value == option
+            ]
+        unrecognized_label = len(options.split(",")) != len(option_list)
+        if unrecognized_label:
+            raise ValueError("Unrecognized labe in volume mount string")
+        try:
+            return cls(
+                fs_source=dictionary["src"],
+                fs_destination=dictionary["dest"],
+                options=option_list,
+                settings_entry=settings_entry,
+                source=source,
+            )
+        except KeyError as exc:
+            raise ValueError("Source or destination missing") from exc
+        except TypeError as exc:
+            raise ValueError("Not a dictionary") from exc
+
+
+class Mode(Enum):
+    """An enum to restrict mode type."""
+
+    STDOUT: str = "stdout"
+    INTERACTIVE: str = "interactive"
+
+
+@dataclass
+class ModeChangeRequest:
+    """Data structure to contain a mode change request by a settings entry."""
+
+    entry: str
+    """The entry making the request"""
+    mode: Mode
+    """The desired mode"""

@@ -2,24 +2,53 @@
 
 import pytest
 
-from ansible_navigator.configuration_subsystem.navigator_post_processor import (
-    VolumeMount,
-)
-from ansible_navigator.configuration_subsystem.navigator_post_processor import (
-    VolumeMountOption,
-)
+from ansible_navigator.configuration_subsystem.definitions import Constants
+from ansible_navigator.configuration_subsystem.definitions import VolumeMount
+from ansible_navigator.configuration_subsystem.definitions import VolumeMountOption
 
 
 @pytest.mark.parametrize(
     ("volmount", "expected"),
     (
-        (VolumeMount("test_option", "/foo", "/bar"), "/foo:/bar"),
-        (VolumeMount("test_option", "/foo", "/bar", [VolumeMountOption.z]), "/foo:/bar:z"),
         (
-            VolumeMount("test_option", "/foo", "/bar", [VolumeMountOption.z, VolumeMountOption.Z]),
+            VolumeMount(
+                settings_entry="test_option",
+                fs_source="/foo",
+                fs_destination="/bar",
+                source=Constants.USER_CLI,
+            ),
+            "/foo:/bar",
+        ),
+        (
+            VolumeMount(
+                settings_entry="test_option",
+                fs_source="/foo",
+                fs_destination="/bar",
+                options=[VolumeMountOption.z],
+                source=Constants.USER_CLI,
+            ),
+            "/foo:/bar:z",
+        ),
+        (
+            VolumeMount(
+                settings_entry="test_option",
+                fs_source="/foo",
+                fs_destination="/bar",
+                options=[VolumeMountOption.z, VolumeMountOption.Z],
+                source=Constants.USER_CLI,
+            ),
             "/foo:/bar:z,Z",
         ),
-        (VolumeMount("test_option", "/foo", "/bar", []), "/foo:/bar"),
+        (
+            VolumeMount(
+                settings_entry="test_option",
+                fs_source="/foo",
+                fs_destination="/bar",
+                options=[],
+                source=Constants.USER_CLI,
+            ),
+            "/foo:/bar",
+        ),
     ),
     ids=(
         "normal mount",

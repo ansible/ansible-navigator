@@ -6,9 +6,6 @@ import os
 import shlex
 import shutil
 
-from dataclasses import dataclass
-from dataclasses import field
-from enum import Enum
 from functools import partialmethod
 from pathlib import Path
 from typing import List
@@ -26,7 +23,10 @@ from ..utils.functions import to_list
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
+from .definitions import Mode
+from .definitions import ModeChangeRequest
 from .definitions import SettingsEntry
+from .definitions import VolumeMount
 
 
 def _post_processor(func):
@@ -48,68 +48,6 @@ def _post_processor(func):
         return messages, exit_messages
 
     return wrapper
-
-
-class VolumeMountOption(Enum):
-    """Options that can be tagged on to the end of volume mounts.
-
-    Usually these are used for things like selinux relabeling, but there are
-    some other valid options as well, which can and should be added here as
-    needed. See ``man podman-run`` and ``man docker-run`` for valid choices and
-    keep in mind that we support both runtimes.
-    """
-
-    # Relabel as private
-    Z = "Z"
-
-    # Relabel as shared.
-    z = "z"  # pylint: disable=invalid-name
-
-
-@dataclass
-class VolumeMount:
-    """Describes EE volume mounts."""
-
-    #: The name of the config option requiring this volume mount.
-    calling_option: str
-
-    #: The source path of the volume mount.
-    src: str
-
-    #: The destination path in the container for the volume mount.
-    dest: str
-
-    #: Options for the bind mount.
-    options: List[VolumeMountOption] = field(default_factory=list)
-
-    def exists(self) -> bool:
-        """Determine if the volume mount source exists."""
-        return Path(self.src).exists()
-
-    def to_string(self) -> str:
-        """Render the volume mount in a way that (docker|podman) understands."""
-        out = f"{self.src}:{self.dest}"
-        if self.options:
-            joined_opts = ",".join(o.value for o in self.options)
-            out += f":{joined_opts}"
-        return out
-
-
-class Mode(Enum):
-    """An enum to restrict mode type."""
-
-    STDOUT: str = "stdout"
-    INTERACTIVE: str = "interactive"
-
-
-@dataclass
-class ModeChangeRequest:
-    """Data structure to contain a mode change request by a settings entry."""
-
-    entry: str
-    """The entry making the request"""
-    mode: Mode
-    """The desired mode"""
 
 
 PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
@@ -355,21 +293,25 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        # pylint: disable=too-many-branches
         """Post process set_environment_variable"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if entry.value.source in [
-            C.ENVIRONMENT_VARIABLE,
-            C.USER_CLI,
-        ]:
-            volume_mounts = flatten_list(entry.value.current)
-            for mount_path in volume_mounts:
-                parts = mount_path.split(":")
-                if len(parts) > 3:
+        settings_entry = entry.settings_file_path(prefix="")
+        volume_mounts: List[VolumeMount] = []
+        if entry.value.source in [C.ENVIRONMENT_VARIABLE, C.USER_CLI]:
+            for mount_str in flatten_list(entry.value.current):
+                try:
+                    volume_mounts.append(
+                        VolumeMount.from_string(
+                            settings_entry=settings_entry,
+                            source=entry.value.source,
+                            string=mount_str,
+                        ),
+                    )
+                except ValueError as exc:
                     exit_msg = (
-                        "The following execution-environment-volume-mounts"
-                        f" entry could not be parsed: {mount_path}"
+                        f"The following {settings_entry} entry could not be parsed:"
+                        f" {mount_str} ({entry.value.source.value}), {str(exc)}"
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
                     if entry.cli_parameters:
@@ -380,60 +322,43 @@ class NavigatorPostProcessor:
                             + " Note: label is optional."
                         )
                         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                    return messages, exit_messages
 
-            entry.value.current = volume_mounts
-
-        elif entry.value.current is not C.NOT_SET:
-            parsed_volume_mounts = []
-            volume_mounts = to_list(entry.value.current)
-            for mount_obj in volume_mounts:
-                if not isinstance(mount_obj, dict):
-                    exit_msg = (
-                        "The following execution-environment.volume-mounts"
-                        f" entry could not be parsed: {mount_obj}"
-                    )
-                    exit_messages.append(ExitMessage(message=exit_msg))
-                    if entry.cli_parameters:
-                        exit_msg = (
-                            "The value of execution-environment.volume-mounts"
-                            + "should be list of dictionaries"
-                            + " and valid keys are 'src', 'dest' and 'label'."
-                        )
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                    return messages, exit_messages
-
+        elif entry.value.source is C.USER_CFG:
+            for list_entry in entry.value.current:
                 try:
-                    mount_path = f"{mount_obj['src']}:{mount_obj['dest']}"
-                    if mount_obj.get("label"):
-                        mount_path += f":{mount_obj['label']}"
-                    parsed_volume_mounts.append(mount_path)
-                except KeyError as exc:
+                    volume_mounts.append(
+                        VolumeMount.from_dictionary(
+                            dictionary=list_entry,
+                            settings_entry=settings_entry,
+                            source=entry.value.source,
+                        ),
+                    )
+                except ValueError as exc:
                     exit_msg = (
-                        f"Failed to parse following execution-environment.volume-mounts"
-                        f" entry: '{mount_obj}'. Value of '{str(exc)}' key not provided."
+                        f"The following {settings_entry} entry could not be parsed:"
+                        f" {list_entry} ({entry.value.source.value}), {str(exc)}"
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
-                    exit_hint_msg = (
-                        " Valid keys are 'src', 'dest' and 'label'. Note: label key is optional."
+                    exit_msg = (
+                        "The value of execution-environment.volume-mounts"
+                        + "should be a list of dictionaries"
+                        + " and valid keys are 'src', 'dest' and 'label'."
                     )
-                    exit_messages.append(ExitMessage(message=exit_hint_msg, prefix=ExitPrefix.HINT))
+                    exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
-                    return messages, exit_messages
+        volume_mounts.extend(self.extra_volume_mounts)
 
-            entry.value.current = parsed_volume_mounts
-
-        if self.extra_volume_mounts and entry.value.current is C.NOT_SET:
-            entry.value.current = []
-
-        for mount in self.extra_volume_mounts:
+        for mount in volume_mounts:
             if not mount.exists():
                 exit_msg = (
-                    f"The volume mount source path '{mount.src}', needed by "
-                    f"{mount.calling_option}, does not exist."
+                    f"The volume mount source path '{mount.fs_source}', configured with "
+                    f"'{mount.settings_entry}' ({mount.source.value}), does not exist."
                 )
                 exit_messages.append(ExitMessage(message=exit_msg))
-            entry.value.current.append(mount.to_string())
+
+        if exit_messages:
+            return messages, exit_messages
+        entry.value.current = [mount.to_string() for mount in volume_mounts]
         return messages, exit_messages
 
     @staticmethod
