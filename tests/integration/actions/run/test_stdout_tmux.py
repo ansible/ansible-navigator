@@ -61,22 +61,22 @@ stdout_tests = (
         present=["usage: ansible-playbook [-h]"],
     ),
     ShellCommand(
-        comment="run help-playbook fail with interactive with ee",
+        comment="run help-playbook with interactive with ee",
         user_input=StdoutCommand(
             cmdline="--help-playbook",
             mode="interactive",
             execution_environment=True,
         ).join(),
-        present=["--hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'"],
+        present=["usage: ansible-playbook [-h]"],
     ),
     ShellCommand(
-        comment="run help-playbook fail with interactive without ee",
+        comment="run help-playbook with interactive without ee",
         user_input=StdoutCommand(
             cmdline="--help-playbook",
             mode="interactive",
             execution_environment=False,
         ).join(),
-        present=["--hp or --help-playbook is valid only when 'mode' argument is set to 'stdout'"],
+        present=["usage: ansible-playbook [-h]"],
     ),
 )
 

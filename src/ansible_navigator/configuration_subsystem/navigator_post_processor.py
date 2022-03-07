@@ -9,6 +9,7 @@ import shutil
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
+from functools import partialmethod
 from pathlib import Path
 from typing import List
 from typing import Tuple
@@ -94,6 +95,23 @@ class VolumeMount:
         return out
 
 
+class Mode(Enum):
+    """An enum to restrict mode type."""
+
+    STDOUT: str = "stdout"
+    INTERACTIVE: str = "interactive"
+
+
+@dataclass
+class ModeChangeRequest:
+    """Data structure to contain a mode change request by a settings entry."""
+
+    entry: str
+    """The entry making the request"""
+    mode: Mode
+    """The desired mode"""
+
+
 PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
 
 
@@ -107,6 +125,7 @@ class NavigatorPostProcessor:
         #: These get processed towards the end, in the (delayed)
         #: :meth:`.execution_environment_volume_mounts` post-processor.
         self.extra_volume_mounts: List[VolumeMount] = []
+        self._requested_mode: List[ModeChangeRequest] = []
 
     @staticmethod
     def _true_or_false(
@@ -448,139 +467,33 @@ class NavigatorPostProcessor:
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def help_builder(
+    def _help_for_command(
         self,
         entry: SettingsEntry,
         config: ApplicationConfiguration,
+        subcommand: str,
     ) -> PostProcessorReturn:
-        """Post process help_builder"""
+        """Post process help_xxxx
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :param subcommand: The applicable subcommand
+        :return: An instance of the standard post process return object
+        """
         messages, exit_messages = self._true_or_false(entry, config)
 
-        help_builder_is_set = entry.value.current is True
-        builder_app_selected = config.app == "builder"
-        app_run_in_interactive_mode = config.mode == "interactive"
-
-        builder_help_in_interactive_mode = (
-            help_builder_is_set and builder_app_selected and app_run_in_interactive_mode
-        )
-
-        if builder_help_in_interactive_mode:
-            if entry.cli_parameters:
-                long_hc = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hc}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+        if entry.value.current is True and config.app == subcommand:
+            mode = Mode.STDOUT
+            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+            message = message = f"`{entry.name} requesting mode {mode.value}"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
-    @_post_processor
-    def help_config(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_config"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "config", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hc = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hc}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_doc(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_doc"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "doc", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hd = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hd}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_inventory(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_inventory"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all(
-            (entry.value.current is True, config.app == "inventory", config.mode == "interactive"),
-        ):
-            if entry.cli_parameters:
-                long_hd = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hd}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_playbook(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_playbook"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "run", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hp = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hp}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
+    help_builder = partialmethod(_help_for_command, subcommand="builder")
+    help_config = partialmethod(_help_for_command, subcommand="config")
+    help_doc = partialmethod(_help_for_command, subcommand="doc")
+    help_inventory = partialmethod(_help_for_command, subcommand="inventory")
+    help_playbook = partialmethod(_help_for_command, subcommand="run")
 
     @staticmethod
     @_post_processor
@@ -589,10 +502,7 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "inventory" and entry.value.current is C.NOT_SET:
-            if not (
-                config.entry("help_inventory").value.current
-                and config.entry("mode").value.current == "stdout"
-            ):
+            if config.entry("help_inventory").value.current is False:
                 exit_msg = "An inventory is required when using the inventory subcommand"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 if entry.cli_parameters:
@@ -671,15 +581,25 @@ class NavigatorPostProcessor:
                 exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
-    @staticmethod
     @_post_processor
-    def mode(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=too-many-statements
-        """Post process mode"""
+    def mode(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=too-many-locals
+        """Post process mode
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :raises ValueError: When more than 2 mode changes requests are present, shouldn't happen
+        :return: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         subcommand_action = None
         subcommand_name = config.subcommand(config.app).name
+
+        # Post initialization of mode processing is not needed since switching modes after
+        # is not supported
+        if not config.internals.initializing:
+            return messages, exit_messages
 
         for action_package_name in config.internals.action_packages:
             try:
@@ -713,35 +633,37 @@ class NavigatorPostProcessor:
             )
             exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
-        subcommand_modes = []
+        # Check if the mode interactive is available for the subcommand
+        # mode stdout is always available since the action base class has a `run_stdout`
+        subcommand_stdout_only = not hasattr(subcommand_action, "run")
+        if entry.value.current == "interactive" and subcommand_stdout_only:
+            subcommand_mode_change_msgs = (
+                f"Subcommand '{config.app}' does not support mode 'interactive'.",
+                "Mode set to 'interactive'",
+            )
+            messages.extend(
+                LogMessage(level=logging.INFO, message=msg) for msg in subcommand_mode_change_msgs
+            )
+            entry.value.current = "stdout"
+            entry.value.source = C.AUTO
 
-        try:
-            getattr(subcommand_action, "run_stdout")
-        except AttributeError:
-            pass
-        else:
-            subcommand_modes.append("stdout")
-
-        try:
-            getattr(subcommand_action, "run")
-        except AttributeError:
-            pass
-        else:
-            subcommand_modes.append("interactive")
-
-        if entry.value.current not in subcommand_modes:
-            exit_msg = f"Subcommand '{config.app}' does not support mode '{entry.value.current}'."
-            exit_msg += f" Supported modes: {oxfordcomma(subcommand_modes, 'and')}."
-            exit_messages.append(ExitMessage(message=exit_msg))
-            mode_cli = config.entry("mode").cli_parameters
-            if mode_cli:
-                other = [
-                    f"{mode_cli.short} {mode}"
-                    for mode in subcommand_modes
-                    if mode != entry.value.current
-                ]
-                exit_msg = f"Try again with {oxfordcomma(other, 'or')}"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+        # Check if any other entry has requested a mode change different than current
+        mode_set = set(request.mode for request in self._requested_mode)
+        if len(mode_set) == 1:
+            requested = self._requested_mode[0]
+            auto_mode = requested.mode.value
+            if auto_mode != entry.value.current:
+                entry_mode_change_msgs = (
+                    f"Parameter '{requested.entry}' required mode '{auto_mode!s}'.",
+                    f"Mode will be set to '{auto_mode}'",
+                )
+                messages.extend(
+                    LogMessage(level=logging.INFO, message=msg) for msg in entry_mode_change_msgs
+                )
+                entry.value.current = auto_mode
+                entry.value.source = C.AUTO
+        elif len(mode_set) > 1:
+            raise ValueError(f"Conflicting mode requests: {self._requested_mode}")
         return messages, exit_messages
 
     @_post_processor
@@ -755,19 +677,13 @@ class NavigatorPostProcessor:
         """Post process plugin_name"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if all(
-            (
-                config.app == "doc",
-                entry.value.current is C.NOT_SET,
-                config.help_doc is False,
-                config.mode != "stdout",
-            ),
-        ):
-            exit_msg = "A plugin name is required when using the doc subcommand"
-            exit_messages.append(ExitMessage(message=exit_msg))
-            exit_msg = "Try again with 'doc <plugin_name>'"
-            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
+        if config.app == "doc" and entry.value.current is C.NOT_SET:
+            if config.entry("help_doc").value.current is False:
+                exit_msg = "A plugin name is required when using the doc subcommand"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = "Try again with 'doc <plugin_name>'"
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                return messages, exit_messages
         return messages, exit_messages
 
     @staticmethod
@@ -791,10 +707,7 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:
-            if not (
-                config.entry("help_playbook").value.current
-                and config.entry("mode").value.current == "stdout"
-            ):
+            if config.entry("help_playbook").value.current is False:
                 exit_msg = "A playbook is required when using the run subcommand"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 exit_msg = "Try again with 'run <playbook name>'"

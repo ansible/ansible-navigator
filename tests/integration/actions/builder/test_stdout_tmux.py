@@ -42,22 +42,22 @@ stdout_tests = (
         present=["usage: ansible-builder [-h]"],
     ),
     ShellCommand(
-        comment="builder help-builder fail with interactive with ee",
+        comment="builder help-builder with interactive with ee",
         user_input=StdoutCommand(
             cmdline="--help-builder",
             mode="interactive",
             execution_environment=True,
         ).join(),
-        present=["--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"],
+        present=["usage: ansible-builder [-h]"],
     ),
     ShellCommand(
-        comment="builder help-builder fail with interactive without ee",
+        comment="builder help-builder with interactive without ee",
         user_input=StdoutCommand(
             cmdline="--help-builder",
             mode="interactive",
             execution_environment=False,
         ).join(),
-        present=["--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"],
+        present=["usage: ansible-builder [-h]"],
     ),
     ShellCommand(
         comment="build execution-environment without ee",
@@ -87,9 +87,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=False,
         ).join(),
-        present=[
-            "does not support mode 'interactive'.",
-        ],
+        present=["Hello from EE", "The build context can be found at"],
     ),
     ShellCommand(
         comment="build execution-environment with ee in interactive mode",
@@ -99,9 +97,7 @@ stdout_tests = (
             mode="interactive",
             execution_environment=True,
         ).join(),
-        present=[
-            "does not support mode 'interactive'.",
-        ],
+        present=["Hello from EE", "The build context can be found at"],
     ),
 )
 

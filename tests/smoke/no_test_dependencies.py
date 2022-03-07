@@ -31,14 +31,13 @@ class NavigatorCommand(Command):
 
     ee_tests: Tuple[bool, bool] = (True, False)
     find: str = ""
-    mode: str = "--mode stdout"
     set_env: str = "--senv PAGER=cat"
 
     def __post_init__(self):
         """Post the init."""
         self.identity = self.command
         venv = _get_venv()
-        self.command = f". {venv} && ansible-navigator {self.command} {self.set_env} {self.mode}"
+        self.command = f". {venv} && ansible-navigator {self.command} {self.set_env}"
 
 
 @dataclass
@@ -53,8 +52,8 @@ class PartialCommand:
 PartialCommands = (
     PartialCommand(params="--help", find="Start at the welcome page"),
     PartialCommand(params="builder --help-builder", find="Print ansible-builder version"),
-    PartialCommand(params="config list", find="Valid YAML extensions"),
-    PartialCommand(params="doc debug", find="ansible.builtin.debug"),
+    PartialCommand(params="config list --mode stdout", find="Valid YAML extensions"),
+    PartialCommand(params="doc debug --mode stdout", find="ansible.builtin.debug"),
     PartialCommand(params="exec whoami", find="root", ee_support=(True,)),
     PartialCommand(params="run --help-playbook", find="--become"),
 )

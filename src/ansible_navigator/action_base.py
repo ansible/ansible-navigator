@@ -9,6 +9,7 @@ from typing import Tuple
 from typing import Union
 
 from ansible_navigator.actions import kegexes
+from .action_defs import RunStdoutReturn
 from .app_public import AppPublic
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants as C
@@ -18,6 +19,7 @@ from .ui_framework import Interaction
 from .ui_framework import ui
 from .ui_framework import warning_notification
 from .utils.functions import ExitMessage
+from .utils.functions import ExitPrefix
 from .utils.functions import LogMessage
 
 
@@ -143,6 +145,19 @@ class ActionBase:
 
         Defined in the child class if necessary.
         """
+
+    def run_stdout(self) -> RunStdoutReturn:
+        """Provide a message saying subcommand does not support mode stdout.
+
+        :returns: Message suggesting mode interactive, return code of 1
+        """
+        messages = []
+        message = f"Subcommand '{self._name}' does not support mode 'stdout'."
+        messages.append(ExitMessage(message=message))
+        message = "Try again with '--mode interactive'"
+        messages.append(ExitMessage(message=message, prefix=ExitPrefix.HINT))
+        message = "\n".join(str(message) for message in messages)
+        return RunStdoutReturn(message=message, return_code=1)
 
     def update(self) -> None:
         """Update the action.

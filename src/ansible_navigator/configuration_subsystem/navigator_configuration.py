@@ -88,6 +88,8 @@ class Internals:
 
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
+    initializing: bool = False
+    """This is an initial run (app starting for the first time)"""
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
     settings_file_path: Optional[str] = None
@@ -397,6 +399,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         SettingsEntry(
             name="mode",
             change_after_initial=False,
+            delay_post_process=True,
             choices=["stdout", "interactive"],
             cli_parameters=CliParameters(short="-m"),
             short_description="Specify the user-interface mode",

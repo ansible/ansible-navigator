@@ -46,6 +46,7 @@ class Constants(Enum):
     """Mapping some constants to friendly text"""
 
     ALL = "All"
+    AUTO = "Automatically determined"
     DEFAULT_CFG = "Defaults"
     ENVIRONMENT_VARIABLE = "Environment variable"
     NONE = "None"

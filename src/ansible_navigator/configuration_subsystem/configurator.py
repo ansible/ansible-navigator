@@ -28,7 +28,6 @@ class Configurator:
         params: List[str],
         application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: Union[List, C] = C.NONE,
-        initial: bool = False,
     ):
         """
         :param params: A list of parameters e.g. ['-x', 'value']
@@ -36,24 +35,21 @@ class Configurator:
         :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
                                            is not a USER_CLI sourced value, a list of entry names
                                            ['all'] will apply all previous
-        :param initial: Save the resulting configuration as the 'initial' configuration
-                        The 'initial' will be used as a source for apply_previous_cli
         """
         self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
         self._exit_messages: List[ExitMessage] = []
         self._messages: List[LogMessage] = []
         self._params = params
-        self._initial = initial
         self._sanity_check()
         self._unaltered_entries = deepcopy(self._config.entries)
 
     def _sanity_check(self) -> None:
         if self._apply_previous_cli_entries is not C.NONE:
-            if self._initial is True:
-                raise ValueError("'apply_previous_cli' cannot be used with 'initial'")
-            if self._config.initial is None:
-                raise ValueError("'apply_previous_cli' enabled prior to 'initial'")
+            if self._config.internals.initializing:
+                raise ValueError("'apply_previous_cli' cannot be used while initializing")
+            if not self._config.initial:
+                raise ValueError("'apply_previous_cli' enabled prior to an initialization")
 
     def _roll_back(self) -> None:
         """In the case of a rollback, log the configuration state
@@ -103,8 +99,10 @@ class Configurator:
             self._roll_back()
             return self._messages, self._exit_messages
 
-        if self._initial:
+        if self._config.internals.initializing:
             self._config.initial = deepcopy(self._config)
+            # Our work is done, set the initialization flag to false
+            self._config.internals.initializing = False
 
         return self._messages, self._exit_messages
 
@@ -121,7 +119,7 @@ class Configurator:
         restore the current values back to NOT_SET
         """
         for entry in self._config.entries:
-            if self._initial or entry.change_after_initial:
+            if self._config.internals.initializing or entry.change_after_initial:
                 entry.value.current = C.NOT_SET
                 entry.value.source = C.NOT_SET
             else:
@@ -130,7 +128,7 @@ class Configurator:
 
     def _apply_defaults(self) -> None:
         for entry in self._config.entries:
-            if self._initial or entry.change_after_initial:
+            if self._config.internals.initializing or entry.change_after_initial:
                 if entry.value.default is not C.NOT_SET:
                     entry.value.current = entry.value.default
                     entry.value.source = C.DEFAULT_CFG
@@ -166,7 +164,7 @@ class Configurator:
                 try:
                     for key in path_parts:
                         data = data[key]
-                    if self._initial or entry.change_after_initial:
+                    if self._config.internals.initializing or entry.change_after_initial:
                         entry.value.current = data
                         entry.value.source = C.USER_CFG
                     else:
@@ -196,7 +194,7 @@ class Configurator:
         for entry in self._config.entries:
             set_env_var = os.environ.get(entry.environment_variable(self._config.application_name))
             if set_env_var is not None:
-                if self._initial or entry.change_after_initial:
+                if self._config.internals.initializing or entry.change_after_initial:
                     if entry.cli_parameters is not None and entry.cli_parameters.nargs == "+":
                         entry.value.current = set_env_var.split(",")
                     else:
@@ -220,7 +218,7 @@ class Configurator:
             if self._config.entry(param).subcommand_value is True and value is None:
                 continue
             entry = self._config.entry(param)
-            if self._initial or entry.change_after_initial:
+            if self._config.internals.initializing or entry.change_after_initial:
                 entry.value.current = value
                 entry.value.source = C.USER_CLI
             else:
@@ -239,7 +237,7 @@ class Configurator:
                 normal.append(entry)
 
         for entry in normal + delayed:
-            if self._initial or entry.change_after_initial:
+            if self._config.internals.initializing or entry.change_after_initial:
                 processor = getattr(self._config.post_processor, entry.name, None)
                 if callable(processor):
                     messages, errors = processor(entry=entry, config=self._config)
@@ -287,7 +285,7 @@ class Configurator:
             previous_entry = self._config.initial.entry(current_entry.name)
 
             # skip if not initial and not able to be changed
-            if not any((self._initial, current_entry.change_after_initial)):
+            if not any((self._config.internals.initializing, current_entry.change_after_initial)):
                 message = f"'{current_entry.name}' cannot be reconfigured (apply previous cli)"
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
                 continue
