@@ -1,6 +1,4 @@
-"""Herewithin lies the ability for ansible-runner
-to run the ansible-config command
-"""
+"""Here within lies the ability for ansible-runner to run the ansible-config command."""
 
 from typing import Optional
 from typing import Tuple
@@ -11,7 +9,7 @@ from .base import Base
 
 
 class AnsibleConfig(Base):
-    """abstraction for ansible-config command-line"""
+    """Abstraction for ansible-config command-line."""
 
     def fetch_ansible_config(
         self,

@@ -1,8 +1,6 @@
 # cspell:ignore envvars
-"""Herewithin lies the base class for all interaction with
-ansible-runner. Attributes common to all ansible-runner calls
-are defined within the base class
-"""
+"""Here within lies the base class for all interaction with ansible-runner. Attributes common \
+to all ansible-runner calls are defined within the base class."""
 
 
 import logging
@@ -20,7 +18,7 @@ from ansible_runner import Runner
 
 
 class Base:
-    """Base class"""
+    """Base class."""
 
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-instance-attributes
@@ -40,47 +38,40 @@ class Base:
         rotate_artifacts: Optional[int] = None,
         timeout: Optional[int] = None,
     ) -> None:
-        """Base class handle common argument for ansible-runner interface class
+        """Handle the common argument for ansible-runner interface class.
 
-        Args:
-            private_data_dir ([str], optional): The directory containing all runner metadata
-                                                needed to invoke the runner module. Output
-                                                artifacts will also be stored here for later
-                                                consumption.
-            container_engine ([str], optional): container engine used to isolate execution.
-                                                Defaults to podman. # noqa: E501
-            execution_environment ([bool], optional): Boolean argument controls execution
-                                                      environment enable or not. Defaults to False.
-            execution_environment_image ([str], optional): Container image to use when
-                                                           running an command.
-                                                           Defaults to None.
-            navigator_mode ([str], optional): Valid value is either ``stdout`` or ``interactive``.
-                                              If value is set to ``stdout`` passed the
-                                              ``stdin`` of current running process is passed to
-                                              ``ansible-runner`` which enables receiving command
-                                              line prompts after the executing the command. If value
-                                              is set to ``interactive`` the ``ansible-navigator``
-                                              will run using text user interface (TUI).
-            container_volume_mounts ([list], optional): List of bind mounts in the form
-                                                        ``host_dir:/container_dir:labels``.
-                                                        Defaults to None.
-            container_options ([list], optional): List of container options to pass to execution
-                                                  engine. Defaults to None.
-            container_workdir ([str], optional): The working directory within the container.
-                                                 Defaults to None.
-            host_cwd ([str], optional): The current local working directory. Defaults to None.
-                                   If value of execution_environment is set to True this
-                                   path will be volume mounted within the execution environment
-            set_environment_variable([dict], optional): Dict of user requested environment
-                                                        variables to set
-            pass_environment_variable([list], optional): List of user requested environment
-                                                         variables to pass
-            rotate_artifacts ([int], optional): Keep at most n artifact directories
-            timeout ([int], optional): The timeout value in seconds that will be passed to either
-                                       ``pexpect`` of ``subprocess`` invocation
-                                       (based on ``runner_mode`` selected) while executing command.
-                                       It the timeout is triggered it will force cancel the
-                                       execution.
+        :param container_engine: Container engine used to isolate execution. \
+                                 Defaults to podman.
+        :param execution_environment: Boolean argument that controls execution environment enable \
+                                      or not. Defaults to False.
+        :param execution_environment_image: Container image to use when running an command. \
+                                            Defaults to None.
+        :param navigator_mode: Valid value is either ``stdout`` or ``interactive``. If value is \
+                               set to ``stdout`` passed the ``stdin`` of current running process \
+                               is passed to ``ansible-runner`` which enables receiving command \
+                               line prompts after the executing the command. If value is set to \
+                               ``interactive`` the ``ansible-navigator` will run using \
+                               text user interface (TUI).
+        :param container_volume_mounts: List of bind mounts in the form \
+                                        ``host_dir:/container_dir:labels``. \
+                                        Defaults to None.
+        :param container_options: List of container options to pass to execution engine. \
+                                  Defaults to None.
+        :param container_workdir: The working directory within the container. \
+                                  Defaults to None.
+        :param host_cwd: The current local working directory. Defaults to None. \
+                         If value of execution_environment is set to True this path will \
+                         be volume mounted within the execution environment.
+        :param set_environment_variable: Dict of user requested environment variables to set.
+        :param private_data_dir: The directory containing all runner metadata needed to invoke \
+                                 the runner module. Output artifacts will also be stored here for \
+                                 later consumption.
+        :param pass_environment_variable: List of user requested environment variables to pass
+        :param rotate_artifacts: Keep at most n artifact directories
+        :param timeout: The timeout value in seconds that will be passed to either ``pexpect`` of \
+                        ``subprocess`` invocation (based on ``runner_mode`` selected) while \
+                        executing command. It the timeout is triggered it will force cancel \
+                        the execution.
         """
         self._logger = logging.getLogger(__name__)
 
@@ -157,12 +148,17 @@ class Base:
 
     @staticmethod
     def _generate_tmp_directory():
-        """generate a tmp directory for artifacts"""
+        """Generate a tmp directory for artifacts.
+
+        :returns: Temporary directory path
+        """
         return tempfile.mkdtemp(prefix="ansible-navigator_")
 
     def _set_private_data_directory(self, provided: Optional[str]) -> None:
-        """Set the private data directory to the provided, the username, or a uuid"""
+        """Set the private data directory to the provided, the username, or a uuid.
 
+        :param provided: Data directory path
+        """
         if isinstance(provided, str):
             if os.access(provided, os.W_OK | os.R_OK | os.X_OK):
                 private_data_directory = provided
@@ -179,25 +175,25 @@ class Base:
         self._logger.debug("private data dir %s: %s", source, self._private_data_dir)
 
     def runner_artifacts_handler(self, artifact_dir):
-        """
-        ansible-runner callback to handle artifacts after each runner invocation
+        """Ansible-runner callback to handle artifacts after each runner invocation.
 
-        Args:
-            artifact_dir ([str]): The directory path of artifact directory for current \
-                                  runner invocation.
+        :param artifact_dir: The directory path of artifact directory for current \
+                             runner invocation.
         """
         self._logger.debug("ansible-runner artifact_dir set to: '%s'", artifact_dir)
         self._runner_artifact_dir = artifact_dir
 
     def runner_cancelled_callback(self):
-        """check by runner to see if it should cancel"""
+        """Check by runner to see if it should cancel.
+
+        :returns: Boolean cancelled value
+        """
         return self.cancelled
 
     def runner_finished_callback(self, runner: Runner):
-        """called when runner finishes
+        """Call when runner finishes.
 
-        Args:
-            runner (Runner): a runner instance
+        :param runner: A runner instance.
         """
         self.status = runner.status
         self.finished = True

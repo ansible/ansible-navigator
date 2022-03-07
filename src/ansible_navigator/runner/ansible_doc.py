@@ -1,6 +1,5 @@
-"""Herewithin lies the ability for ansible-runner
-to run the ansible-doc command
-"""
+"""Here within lies the ability for ansible-runner to run the ansible-doc command."""
+
 from typing import Any
 from typing import Dict
 from typing import List
@@ -26,7 +25,7 @@ class AnsibleDoc(Base):
         playbook_dir: Optional[str] = None,
         module_path: Optional[str] = None,
     ) -> Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]:
-        """Run ``ansible-doc`` command and get the plugin docs related details
+        """Run ``ansible-doc`` command and get the plugin docs related details.
 
         :param plugin_names: The name of the plugins to get docs
         :param plugin_type: The type of the plugin mentioned in plugins_names
