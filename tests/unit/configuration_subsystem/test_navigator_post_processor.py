@@ -3,8 +3,12 @@
 import pytest
 
 from ansible_navigator.configuration_subsystem.definitions import Constants
-from ansible_navigator.configuration_subsystem.definitions import VolumeMount
-from ansible_navigator.configuration_subsystem.definitions import VolumeMountOption
+from ansible_navigator.configuration_subsystem.navigator_post_processor import (
+    VolumeMount,
+)
+from ansible_navigator.configuration_subsystem.navigator_post_processor import (
+    VolumeMountOption,
+)
 
 
 @pytest.mark.parametrize(
