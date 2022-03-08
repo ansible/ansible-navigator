@@ -8,7 +8,6 @@ import shutil
 
 from dataclasses import asdict
 from dataclasses import dataclass
-from dataclasses import field
 from enum import Enum
 from functools import partialmethod
 from itertools import chain
@@ -81,16 +80,17 @@ V = TypeVar("V", bound="VolumeMount")  # pylint: disable=invalid-name
 class VolumeMount:
     """Describes EE volume mounts."""
 
-    fs_destination: str
-    """The destination file system path in the container for the volume mount"""
     fs_source: str
     """The source file system path of the volume mount"""
+    fs_destination: str
+    """The destination file system path in the container for the volume mount"""
+    options: List[VolumeMountOption]
+    """Options for the bind mount"""
+
     settings_entry: str
     """The name of the settings entry requiring this volume mount"""
     source: C
     """The settings source for this volume mount"""
-    options: List[VolumeMountOption] = field(default_factory=list)
-    """Options for the bind mount"""
 
     def exists(self) -> bool:
         """Determine if the volume mount source exists."""

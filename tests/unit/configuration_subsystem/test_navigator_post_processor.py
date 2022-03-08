@@ -16,9 +16,10 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
     (
         (
             VolumeMount(
-                settings_entry="test_option",
-                fs_source="/foo",
                 fs_destination="/bar",
+                fs_source="/foo",
+                options=[],
+                settings_entry="test_option",
                 source=Constants.USER_CLI,
             ),
             "/foo:/bar",
