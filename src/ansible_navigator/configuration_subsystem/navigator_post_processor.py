@@ -13,6 +13,7 @@ from functools import partialmethod
 from itertools import chain
 from itertools import repeat
 from pathlib import Path
+from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Type
@@ -131,32 +132,27 @@ class VolumeMount:
         )
 
     @classmethod
-    def from_dictionary(cls: Type[V], settings_entry: str, source: C, dictionary: dict) -> V:
+    def from_dictionary(
+        cls: Type[V],
+        settings_entry: str,
+        source: C,
+        dictionary: Dict[str, str],
+    ) -> V:
         """Create a ``VolumeMount`` from a dictionary.
 
         :param dictionary: The dictionary from which the volume mount will be created
         :param settings_entry: The settings entry
         :param source: The source of the string
-        :raises ValueError: When source or destination are missing, or unrecognized label
         :returns: A populated volume mount
         """
-        if not isinstance(dictionary, dict):
-            raise ValueError("Must be a list of dictionaries")
-
         options = dictionary.get("label", "")
-
-        try:
-            return cls(
-                fs_source=dictionary["src"],
-                fs_destination=dictionary["dest"],
-                options=cls._option_list_from_comma_string(options),
-                settings_entry=settings_entry,
-                source=source,
-            )
-        except KeyError as exc:
-            raise ValueError("Source or destination missing") from exc
-        except TypeError as exc:
-            raise ValueError("Not a dictionary") from exc
+        return cls(
+            fs_source=dictionary["src"],
+            fs_destination=dictionary["dest"],
+            options=cls._option_list_from_comma_string(options),
+            settings_entry=settings_entry,
+            source=source,
+        )
 
     @staticmethod
     def _option_list_from_comma_string(options: str) -> List[VolumeMountOption]:
@@ -438,16 +434,14 @@ class NavigatorPostProcessor:
         # pylint: disable=unused-argument
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
 
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         settings_entry = entry.settings_file_path(prefix="")
         volume_mounts: List[VolumeMount] = []
         if entry.value.source in (C.ENVIRONMENT_VARIABLE, C.USER_CLI):
-            if entry.value.source is C.USER_CLI:
-                mount_strings = flatten_list(entry.value.current)
-            elif entry.value.source is C.ENVIRONMENT_VARIABLE:
-                mount_strings = [mount.strip() for mount in entry.value.current.split(";")]
+            mount_strings = flatten_list(entry.value.current)
             for mount_str in mount_strings:
                 try:
                     volume_mounts.append(
@@ -476,9 +470,22 @@ class NavigatorPostProcessor:
                 "The value of execution-environment.volume-mounts should be a list"
                 " of dictionaries and valid keys are 'src', 'dest' and 'label'."
             )
-            try:
+            if isinstance(entry.value.current, list):
                 for list_entry in entry.value.current:
                     try:
+                        # Ensure it is a dictionary
+                        if not isinstance(list_entry, dict):
+                            raise ValueError
+
+                        # Ensure only required and optional keys are present
+                        key_variations = [["dest", "src"], ["dest", "label", "src"]]
+                        if sorted(list_entry.keys()) not in key_variations:
+                            raise ValueError
+
+                        # Ensure all values are a string
+                        if not all(isinstance(value, str) for value in list_entry.values()):
+                            raise ValueError
+
                         volume_mounts.append(
                             VolumeMount.from_dictionary(
                                 dictionary=list_entry,
@@ -494,11 +501,11 @@ class NavigatorPostProcessor:
                         exit_messages.append(ExitMessage(message=exit_msg))
                         exit_msg = hint
                         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            except TypeError as exc:
+            else:
                 exit_msg = f"{settings_entry} entries could not be parsed."
                 exit_messages.append(ExitMessage(message=exit_msg))
                 exit_msg = hint
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))                
 
         exit_msg = (
             "The volume mount source path '{fs_source}', configured with '{settings_entry}'"

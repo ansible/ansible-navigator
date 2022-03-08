@@ -305,6 +305,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="execution_environment_volume_mounts",
             cli_parameters=CliParameters(action="append", nargs="+", short="--eev"),
             delay_post_process=True,
+            environment_variable_split_char=";",
             settings_file_path_override="execution-environment.volume-mounts",
             short_description=(
                 "Specify volume to be bind mounted within an execution environment"

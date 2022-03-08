@@ -127,6 +127,8 @@ class SettingsEntry:
     #: Override the default, generated environment variable
     environment_variable_override: Optional[str] = None
     #: Over the default settings file path, dot delimited representation in tree
+    environment_variable_split_char: str = ","
+    #: The character used to split an environment variable value into a list
     settings_file_path_override: Optional[str] = None
     #: Subcommand this should this be used for
     subcommands: Union[List[str], Constants] = Constants.ALL

@@ -41,7 +41,9 @@ class TestData:
 test_data = (
     TestData(current="", source=C.USER_CLI, exit_message_substr="Could not extract source"),
     TestData(
-        current="abcdef", source=C.USER_CLI, exit_message_substr="Could not extract destination"
+        current="abcdef",
+        source=C.USER_CLI,
+        exit_message_substr="Could not extract destination",
     ),
     TestData(
         current=[["/tmp:/tmp"]],
@@ -69,32 +71,27 @@ test_data = (
         exit_message_substr="Unrecognized label: Y",
     ),
     TestData(
-        current="/tmp:/tmp",
+        current=["/tmp:/tmp"],
         expected=["/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
     TestData(
-        current="/tmp:/tmp;/tmp:/tmp",
+        current=["/tmp:/tmp", "/tmp:/tmp"],
         expected=["/tmp:/tmp", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
     TestData(
-        current="/tmp:/tmp ; /tmp:/tmp",
-        expected=["/tmp:/tmp", "/tmp:/tmp"],
-        source=C.ENVIRONMENT_VARIABLE,
-    ),
-    TestData(
-        current="/tmp:/tmp:Z ; /tmp:/tmp",
+        current=["/tmp:/tmp:Z", "/tmp:/tmp"],
         expected=["/tmp:/tmp:Z", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
     TestData(
-        current="/tmp:/tmp:Z,z ; /tmp:/tmp",
+        current=["/tmp:/tmp:Z,z", "/tmp:/tmp"],
         expected=["/tmp:/tmp:Z,z", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
     TestData(
-        current="/tmp:/tmp:Z,y ; /tmp:/tmp",
+        current=["/tmp:/tmp:Z,y", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
         exit_message_substr="Unrecognized label: y",
     ),
@@ -102,7 +99,7 @@ test_data = (
     TestData(
         current={"src": "/tmp", "dest": "/tmp", "label": "Z"},
         source=C.USER_CFG,
-        exit_message_substr="Must be a list of dictionaries",
+        exit_message_substr="could not be parsed",
     ),
     TestData(
         current=[{"src": "/tmp", "dest": "/tmp", "label": "Z"}],
@@ -150,7 +147,8 @@ def test(data: TestData):
     entry.value.source = data.source
 
     _messages, exit_messages = NavigatorPostProcessor().execution_environment_volume_mounts(
-        entry=entry, config=settings
+        entry=entry,
+        config=settings,
     )
     assert data.expected == entry.value.current
     if data.exit_message_substr:
