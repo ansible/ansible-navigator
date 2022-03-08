@@ -202,9 +202,6 @@ def parse_and_update(
             message = "Collection doc cache not attached to args.internals"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-    if exit_messages:
-        return messages, exit_messages
-
     for entry in args.entries:
         message = f"Running with {entry.name} as '{entry.value.current}'"
         message += f" ({type(entry.value.current).__name__}/{entry.value.source.value})"
