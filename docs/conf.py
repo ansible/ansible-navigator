@@ -110,11 +110,8 @@ nitpick_ignore = [
     ),
     ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TCli"),
     ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TEnt"),
-    ("py:class", "ansible_navigator.steps.T"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
-    ("py:class", "ansible_navigator.tm_tokenize.utils.T"),
-    ("py:class", "ansible_navigator.ui_framework.content_defs.T"),
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse._SubParsersAction"),
     ("py:class", "Captures"),
@@ -149,10 +146,13 @@ nitpick_ignore = [
     ("py:class", "Window"),
     ("py:class", "yaml.cyaml.CDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
-    ("py:obj", "ansible_navigator.steps.T"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
-    ("py:obj", "ansible_navigator.ui_framework.content_defs.T"),
+]
+
+nitpick_ignore_regex = [
+    # Any single letter TypeVar, class or object
+    ("py:(class|obj)", r"^.*\.[A-Z]$"),
 ]
 
 # Add any Sphinx extension module names here, as strings. They can be
