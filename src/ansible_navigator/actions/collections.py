@@ -123,8 +123,21 @@ class Action(ActionBase):
         )
 
         self._update_args(params=params, attach_cdc=True)
+
         self._collection_cache = self._args.internals.collection_doc_cache
         self._collection_cache_path = self._args.collection_doc_cache_path
+
+        if not isinstance(self._collection_cache, KeyValueStore):
+            notification = warning_notification(
+                messages=[
+                    "Something has gone really wrong, the collection document cache is not",
+                    "available.  This should not have happened. Please log an issue, and",
+                    "include the contents of the log file.",
+                ],
+            )
+            interaction.ui.show(notification)
+            self._prepare_to_exit(interaction)
+            return None
 
         self._run_runner()
 

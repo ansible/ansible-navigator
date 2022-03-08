@@ -13,6 +13,8 @@ CLI = (
 
 testdata = [
     (0, CLI, "ansible-navigator collections browse window"),
+    (1, ":0", "Browse company_name.coll_1 plugins window"),
+    (2, ":0", "lookup_1 plugin docs window"),
 ]
 
 
