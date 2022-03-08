@@ -11,7 +11,7 @@ from ..utils.functions import pascal_to_snake
 
 
 class ImagesInspect:
-    """Inspect images."""
+    """Functionality for inspecting container images."""
 
     def __init__(self, container_engine, ids):
         """Initialize the container image inspector.
@@ -49,7 +49,7 @@ class ImagesInspect:
 
 
 class ImagesList:
-    """List the images."""
+    """Functionality for listing container images."""
 
     def __init__(self, container_engine):
         """Initialize the container image lister.
