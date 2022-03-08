@@ -1,6 +1,4 @@
-"""Herewithin lies the ability for ansible-runner
-to run the ansible-inventory command
-"""
+"""Herein lies the ability for ansible-runner to run the ansible-inventory command."""
 
 from typing import List
 from typing import Optional
@@ -13,7 +11,7 @@ from .base import Base
 
 class AnsibleInventory(Base):
     # pylint: disable=too-many-arguments
-    """abstraction for ansible-inventory command-line"""
+    """Abstraction for ansible-inventory command-line."""
 
     def fetch_inventory(
         self,
@@ -25,7 +23,7 @@ class AnsibleInventory(Base):
         vault_ids: Optional[str] = None,
         vault_password_file: Optional[str] = None,
     ) -> Tuple[str, str]:
-        """Run ansible-inventory command and get the inventory related details
+        """Run ansible-inventory command and get the inventory related details.
 
         :param action: Valid values are one of ``graph``, ``host``, ``list``, ``graph`` create
             inventory graph, ``host`` returns specific host info and works as inventory script
