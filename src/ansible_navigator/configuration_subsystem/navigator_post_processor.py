@@ -115,19 +115,9 @@ class VolumeMount:
         :returns: A populated volume mount
         """
         fs_source, fs_destination, options, *left_overs = chain(string.split(":"), repeat("", 3))
-        if options:
-            option_list = [
-                const
-                for const in VolumeMountOption
-                for option in options.split(",")
-                if const.value == option
-            ]
-        unrecognized_label = len(options.split(",")) != len(option_list)
 
         if any(left_overs):
             raise ValueError("Not formatted correctly")
-        if unrecognized_label:
-            raise ValueError("Unrecognized label in volume mount string")
         if not fs_source:
             raise ValueError("Could not extract source from string")
         if not fs_destination:
@@ -135,18 +125,13 @@ class VolumeMount:
         return cls(
             fs_source=fs_source,
             fs_destination=fs_destination,
-            options=option_list,
+            options=cls._option_list_from_comma_string(options),
             settings_entry=settings_entry,
             source=source,
         )
 
     @classmethod
-    def from_dictionary(
-        cls: Type[V],
-        settings_entry: str,
-        source: C,
-        dictionary: dict,
-    ) -> V:
+    def from_dictionary(cls: Type[V], settings_entry: str, source: C, dictionary: dict) -> V:
         """Create a ``VolumeMount`` from a dictionary.
 
         :param dictionary: The dictionary from which the volume mount will be created
@@ -155,22 +140,16 @@ class VolumeMount:
         :raises ValueError: When source or destination are missing, or unrecognized label
         :returns: A populated volume mount
         """
+        if not isinstance(dictionary, dict):
+            raise ValueError("Must be a list of dictionaries")
+
         options = dictionary.get("label", "")
-        if options:
-            option_list = [
-                const
-                for const in VolumeMountOption
-                for option in options.split(",")
-                if const.value == option
-            ]
-        unrecognized_label = len(options.split(",")) != len(option_list)
-        if unrecognized_label:
-            raise ValueError("Unrecognized labe in volume mount string")
+
         try:
             return cls(
                 fs_source=dictionary["src"],
                 fs_destination=dictionary["dest"],
-                options=option_list,
+                options=cls._option_list_from_comma_string(options),
                 settings_entry=settings_entry,
                 source=source,
             )
@@ -178,6 +157,20 @@ class VolumeMount:
             raise ValueError("Source or destination missing") from exc
         except TypeError as exc:
             raise ValueError("Not a dictionary") from exc
+
+    @staticmethod
+    def _option_list_from_comma_string(options: str) -> List[VolumeMountOption]:
+        """Build a list of options from a comma delimited string.
+
+        :param options: The comma delimited string
+        :raises ValueError: When an option is not recognized
+        """
+        if options == "":
+            return []
+        try:
+            return [getattr(VolumeMountOption, option) for option in options.split(",")]
+        except AttributeError as exc:
+            raise ValueError(f"Unrecognized label: {str(exc)}") from exc
 
 
 class Mode(Enum):
@@ -444,13 +437,18 @@ class NavigatorPostProcessor:
         """
         # pylint: disable=unused-argument
         # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
 
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         settings_entry = entry.settings_file_path(prefix="")
         volume_mounts: List[VolumeMount] = []
-        if entry.value.source in [C.ENVIRONMENT_VARIABLE, C.USER_CLI]:
-            for mount_str in flatten_list(entry.value.current):
+        if entry.value.source in (C.ENVIRONMENT_VARIABLE, C.USER_CLI):
+            if entry.value.source is C.USER_CLI:
+                mount_strings = flatten_list(entry.value.current)
+            elif entry.value.source is C.ENVIRONMENT_VARIABLE:
+                mount_strings = [mount.strip() for mount in entry.value.current.split(";")]
+            for mount_str in mount_strings:
                 try:
                     volume_mounts.append(
                         VolumeMount.from_string(
@@ -467,35 +465,40 @@ class NavigatorPostProcessor:
                     exit_messages.append(ExitMessage(message=exit_msg))
                     if entry.cli_parameters:
                         exit_msg = (
-                            "Try again with format "
-                            + f"'{entry.cli_parameters.short}"
-                            + " <source-path>:<destination-path>:<label(Z or z)>'."
-                            + " Note: label is optional."
+                            f"Try again with format {entry.cli_parameters.short}"
+                            " <source-path>:<destination-path>:<label(Z or z)>'."
+                            " Note: label is optional."
                         )
                         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
         elif entry.value.source is C.USER_CFG:
-            for list_entry in entry.value.current:
-                try:
-                    volume_mounts.append(
-                        VolumeMount.from_dictionary(
-                            dictionary=list_entry,
-                            settings_entry=settings_entry,
-                            source=entry.value.source,
-                        ),
-                    )
-                except ValueError as exc:
-                    exit_msg = (
-                        f"The following {settings_entry} entry could not be parsed:"
-                        f" {list_entry} ({entry.value.source.value}), {str(exc)}"
-                    )
-                    exit_messages.append(ExitMessage(message=exit_msg))
-                    exit_msg = (
-                        "The value of execution-environment.volume-mounts"
-                        + "should be a list of dictionaries"
-                        + " and valid keys are 'src', 'dest' and 'label'."
-                    )
-                    exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            hint = (
+                "The value of execution-environment.volume-mounts should be a list"
+                " of dictionaries and valid keys are 'src', 'dest' and 'label'."
+            )
+            try:
+                for list_entry in entry.value.current:
+                    try:
+                        volume_mounts.append(
+                            VolumeMount.from_dictionary(
+                                dictionary=list_entry,
+                                settings_entry=settings_entry,
+                                source=entry.value.source,
+                            ),
+                        )
+                    except ValueError as exc:
+                        exit_msg = (
+                            f"The following {settings_entry} entry could not be parsed:"
+                            f" {list_entry} ({entry.value.source.value}), {str(exc)}"
+                        )
+                        exit_messages.append(ExitMessage(message=exit_msg))
+                        exit_msg = hint
+                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            except TypeError as exc:
+                exit_msg = f"{settings_entry} entries could not be parsed."
+                exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = hint
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
         exit_msg = (
             "The volume mount source path '{fs_source}', configured with '{settings_entry}'"
@@ -514,6 +517,10 @@ class NavigatorPostProcessor:
             if not mount.exists():
                 exit_messages.append(ExitMessage(message=exit_msg.format(**asdict(mount))))
             extra_mounts.append(mount.to_string())
+
+        # Get out fast if we had any errors
+        if exit_messages:
+            return messages, exit_messages
 
         # New mounts were provided
         if new_mounts:
