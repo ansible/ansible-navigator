@@ -1,8 +1,10 @@
-"""Implementation of the asynchronous invocation of ``ansible-runner``. \
-Here with lies the ability to invoke ``ansible-runner`` in an async fashion. \
-A queue is provided and ``ansible-runner`` uses ``pexpect`` to parse \
-standard out and error from the command run and populates the \
-queue with messages."""
+"""Implementation of the asynchronous invocation of ``ansible-runner``.
+
+Herein lies the ability to invoke ``ansible-runner`` in an async fashion.
+A queue is provided and ``ansible-runner`` uses ``pexpect`` to parse
+standard out and error from the command run and populates the
+queue with messages.
+"""
 
 from queue import Queue
 
@@ -15,7 +17,8 @@ class CommandAsync(CommandBase):
     """A wrapper for the asynchronous runner."""
 
     def __init__(self, executable_cmd: str, queue: Queue, **kwargs):
-        """Initialize the arguments for the ``run_command_async`` interface of ``ansible-runner``. \
+        """Initialize the arguments for the ``run_command_async`` interface of ``ansible-runner``.
+
         For common arguments refer to the documentation of the ``CommandBase`` class.
 
         :param executable_cmd: The command to be invoked

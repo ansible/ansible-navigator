@@ -1,4 +1,4 @@
-"""Here within lies the ability for ansible-runner to run the ansible-doc command."""
+"""Herein lies the ability for ansible-runner to run the ansible-doc command."""
 
 from typing import Any
 from typing import Dict

@@ -1,4 +1,4 @@
-"""Here within lies the ability for ansible-runner to run the ansible-config command."""
+"""Herein lies the ability for ansible-runner to run the ansible-config command."""
 
 from typing import Optional
 from typing import Tuple

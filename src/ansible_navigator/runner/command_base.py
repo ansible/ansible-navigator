@@ -1,6 +1,7 @@
-"""Herewithin lies the base class for running commands \
-using ansible-runner. All attributes common to a \
-subprocess or async command are defined here."""
+"""Herein lies the base class for running commands using ansible-runner.
+
+All attributes common to a subprocess or async command are defined here.
+"""
 
 import sys
 
@@ -27,16 +28,16 @@ class CommandBase(Base):
         """Handle common arguments of ``run_command`` interface for ``ansible-runner``.
 
         :param executable_cmd: The command to be invoked.
-        :param cmdline: A list of arguments to be passed to the executable command. \
-                        Defaults to None.
+        :param cmdline: A list of arguments to be passed to the executable command.
+            Defaults to None.
         :param playbook: The playbook file name to run. Defaults to None.
         :param inventory: List of path to the inventory files. Defaults to None.
-        :param wrap_sh: Wrap the command with `sh -c`, disregarding stderr output. \
-                                    Runner will pass --tty in almost all (default) cases. When \
-                                    that flag is given, docker and podman will combine the \
-                                    process's stdout and stderr into just stdout. Wrapping the \
-                                    command with sh allows us to disregard the stderr output \
-                                    when we only care about stdout.
+        :param wrap_sh: Wrap the command with `sh -c`, disregarding stderr output.
+            Runner will pass --tty in almost all (default) cases. When
+            that flag is given, docker and podman will combine the
+            process's stdout and stderr into just stdout. Wrapping the
+            command with sh allows us to disregard the stderr output
+            when we only care about stdout.
         :param kwargs: The arguments for the runner call
         """
         self._executable_cmd = executable_cmd

@@ -1,4 +1,4 @@
-"""Here within lies the ability for ansible-runner to run the ansible-inventory command."""
+"""Herein lies the ability for ansible-runner to run the ansible-inventory command."""
 
 from typing import List
 from typing import Optional
