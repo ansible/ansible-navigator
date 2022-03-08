@@ -185,7 +185,7 @@ def parse_and_update(
     else:
         mount_collection_cache = False
 
-    if mount_collection_cache:
+    if mount_collection_cache and isinstance(args.collection_doc_cache_path, str):
         new_messages, new_exit_messages, cache = get_and_check_collection_doc_cache(
             args.collection_doc_cache_path,
         )
