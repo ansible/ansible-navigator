@@ -40,7 +40,7 @@ class Base:
         rotate_artifacts: Optional[int] = None,
         timeout: Optional[int] = None,
     ) -> None:
-        """Handle the common argument for ansible-runner interface class.
+        """Handle the common argument for the ansible-runner interface class.
 
         :param container_engine: Container engine used to isolate execution.
             Defaults to podman.
