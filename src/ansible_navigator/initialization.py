@@ -139,7 +139,10 @@ def parse_and_update(
     apply_previous_cli_entries: Union[C, List[str]] = C.NONE,
     attach_cdc=False,
 ) -> Tuple[List[LogMessage], List[ExitMessage]]:
-    """Build a configuration
+    """Build a configuration.
+
+    Return after the CDC is mounted, even if exit messages are generated, the CDC may still
+    be needed. e.g. ``:collections --ee NotBool``.
 
     :param args: The application args
     :param apply_previous_cli_entries: Should previous params from the CLI be applied
@@ -170,8 +173,6 @@ def parse_and_update(
     new_messages, new_exit_messages = configurator.configure()
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
-    if exit_messages:
-        return messages, exit_messages
 
     if args.internals.collection_doc_cache is C.NOT_SET:
         mount_collection_cache = True
@@ -190,7 +191,8 @@ def parse_and_update(
         )
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
-        if exit_messages or cache is None:
+        if cache is None:
+            # There's nothing to be done here, it cannot be attached.
             return messages, exit_messages
         if attach_cdc:
             args.internals.collection_doc_cache = cache
@@ -199,6 +201,9 @@ def parse_and_update(
         else:
             message = "Collection doc cache not attached to args.internals"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
+
+    if exit_messages:
+        return messages, exit_messages
 
     for entry in args.entries:
         message = f"Running with {entry.name} as '{entry.value.current}'"
