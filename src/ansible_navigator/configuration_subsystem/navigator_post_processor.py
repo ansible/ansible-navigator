@@ -6,6 +6,7 @@ import os
 import shlex
 import shutil
 
+from dataclasses import asdict
 from functools import partialmethod
 from pathlib import Path
 from typing import List
@@ -292,8 +293,15 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
+        """Post process set_environment_variable.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :return: An instance of the standard post process return object
+        """
         # pylint: disable=unused-argument
-        """Post process set_environment_variable"""
+        # pylint: disable=too-many-branches
+
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         settings_entry = entry.settings_file_path(prefix="")
@@ -346,19 +354,35 @@ class NavigatorPostProcessor:
                     )
                     exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
-        volume_mounts.extend(self.extra_volume_mounts)
-
+        exit_msg = (
+            "The volume mount source path '{fs_source}', configured with '{settings_entry}'"
+            " ({source.value}), does not exist."
+        )
+        # Check any new volume mounts first
+        new_mounts = []
         for mount in volume_mounts:
             if not mount.exists():
-                exit_msg = (
-                    f"The volume mount source path '{mount.fs_source}', configured with "
-                    f"'{mount.settings_entry}' ({mount.source.value}), does not exist."
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
+                exit_messages.append(ExitMessage(message=exit_msg.format(**asdict(mount))))
+            new_mounts.append(mount.to_string())
 
-        if exit_messages:
-            return messages, exit_messages
-        entry.value.current = [mount.to_string() for mount in volume_mounts]
+        # Check extra mounts next
+        extra_mounts = []
+        for mount in self.extra_volume_mounts:
+            if not mount.exists():
+                exit_messages.append(ExitMessage(message=exit_msg.format(**asdict(mount))))
+            extra_mounts.append(mount.to_string())
+
+        # New mounts were provided
+        if new_mounts:
+            entry.value.current = new_mounts
+
+        # Extra mounts were requested, these get added to either
+        # new_mounts, C.PREVIOUS_CLI or C.NOT_SET
+        if extra_mounts:
+            if not isinstance(entry.value.current, list):
+                entry.value.current = []
+            entry.value.current.extend(exit_messages)
+
         return messages, exit_messages
 
     @staticmethod
