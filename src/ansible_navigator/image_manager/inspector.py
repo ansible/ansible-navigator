@@ -1,4 +1,4 @@
-"""inspect all images"""
+"""Definitions for image inspection."""
 import json
 import re
 
@@ -11,7 +11,7 @@ from ..utils.functions import pascal_to_snake
 
 
 class ImagesInspect:
-    """inspect images"""
+    """Inspect images."""
 
     def __init__(self, container_engine, ids):
         """Initialize the container image inspector.
@@ -24,7 +24,10 @@ class ImagesInspect:
 
     @property
     def commands(self) -> List[Command]:
-        """generate commands"""
+        """Generate image inspection commands.
+
+        :returns: List of image inspection command objects
+        """
         return [
             Command(
                 identity=image_id,
@@ -36,25 +39,31 @@ class ImagesInspect:
 
     @staticmethod
     def parse(command: Command):
-        """parse the output"""
+        """Parse the image inspection command output.
+
+        :param command: Image inspection command object.
+        """
         obj = json.loads(command.stdout)
         snake = pascal_to_snake(obj[0])
         command.details = snake
 
 
 class ImagesList:
-    """list the images"""
+    """List the images."""
 
     def __init__(self, container_engine):
         """Initialize the container image lister.
 
-        :param container_engine: The name of the container engine to use
+        :param container_engine: The name of the container engine to use.
         """
         self._container_engine = container_engine
 
     @property
     def commands(self) -> List[Command]:
-        """generate command"""
+        """Generate image lister commands.
+
+        :returns: List of the image lister commands.
+        """
         return [
             Command(
                 identity="images",
@@ -65,7 +74,10 @@ class ImagesList:
 
     @staticmethod
     def parse(command: Command):
-        """parse the output"""
+        """Parse the image lister command output.
+
+        :param command: Image lister command object.
+        """
         if command.stdout:
             images = command.stdout.splitlines()
             re_2omo = re.compile(r"\s{2,}")
@@ -76,7 +88,11 @@ class ImagesList:
 
 
 def inspect_all(container_engine: str) -> Tuple[List, str]:
-    """run inspect against all images"""
+    """Run inspect against all images in the list.
+
+    :param container_engine: Name of the container engine.
+    :returns: List of all image values and stderr, if applicable.
+    """
     cmd_runner = CommandRunner()
     images_list_class = ImagesList(container_engine=container_engine)
     result = cmd_runner.run_single_proccess(commands=images_list_class.commands)
