@@ -126,7 +126,7 @@ class VolumeMount:
             if not options_string == "":
                 options = []
                 option_values = [o.value for o in VolumeMountOption]
-                for option in sorted(options_string.split(",")):
+                for option in options_string.split(","):
                     if option not in option_values:
                         errors.append(
                             f"Unrecognized label: '{option}',"
