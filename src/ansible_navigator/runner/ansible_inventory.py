@@ -33,7 +33,7 @@ class AnsibleInventory(Base):
             ``yaml``, ``toml``. If ``action`` is ``graph`` only allowed value is ``json``.
         :param host: When ``action`` is set to ``host`` this parameter is used to get the host
             specific information.
-        :param playbook_dir: This parameter is used to sets the relative path for the inventory.
+        :param playbook_dir: This parameter is used to sets the relative path for the inventory
         :param vault_ids: The vault identity to use
         :param vault_password_file: The vault identity to use
         :return: A tuple of response and error string (if any)
