@@ -87,7 +87,7 @@ class Action(ActionBase):
     def _run_runner(self) -> Optional[Tuple]:
         """Spin up runner.
 
-        :return: The stdout, stderr and return code from runner
+        :returns: The stdout, stderr and return code from runner
         """
         if isinstance(self._args.set_environment_variable, dict):
             env_vars_to_set = self._args.set_environment_variable.copy()

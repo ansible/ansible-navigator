@@ -527,7 +527,7 @@ class NavigatorPostProcessor:
 
         :param entry: The current settings entry
         :param config: The full application configuration
-        :return: An instance of the standard post process return object
+        :returns: An instance of the standard post process return object
         """
         return self._true_or_false(entry, config)
 
@@ -543,7 +543,7 @@ class NavigatorPostProcessor:
         :param entry: The current settings entry
         :param config: The full application configuration
         :param subcommand: The applicable subcommand
-        :return: An instance of the standard post process return object
+        :returns: An instance of the standard post process return object
         """
         messages, exit_messages = self._true_or_false(entry, config)
 
@@ -654,7 +654,7 @@ class NavigatorPostProcessor:
         :param entry: The current settings entry
         :param config: The full application configuration
         :raises ValueError: When more than 2 mode changes requests are present, shouldn't happen
-        :return: An instance of the standard post process return object
+        :returns: An instance of the standard post process return object
         """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -832,7 +832,7 @@ class NavigatorPostProcessor:
 
         :param entry: The current settings entry
         :param config: The full application configuration
-        :return: An instance of the standard post process return object
+        :returns: An instance of the standard post process return object
         """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
