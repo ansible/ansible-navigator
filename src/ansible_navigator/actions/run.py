@@ -107,7 +107,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
-    :return: The heading
+    :returns: The heading
     """
 
     if isinstance(obj, dict) and "task" in obj:
@@ -267,7 +267,7 @@ class Action(ActionBase):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending interaction or none
+        :returns: The pending interaction or none
         """
 
         self._prepare_to_run(app, interaction)
@@ -739,7 +739,7 @@ class Action(ActionBase):
         """Looks like we're headed out of here
 
         :param interaction: the quit interaction
-        :return: a bool indicating whether of not it's safe to exit
+        :returns: a bool indicating whether of not it's safe to exit
         """
         self.update()
         if self.runner is not None and not self.runner.finished:
@@ -758,7 +758,7 @@ class Action(ActionBase):
     def _task_list_for_play(self) -> Step:
         """generate a menu of task for the currently selected play
 
-        :return: The menu step
+        :returns: The menu step
         """
         value = self.steps.current.selected["tasks"]
         step = Step(
@@ -773,7 +773,7 @@ class Action(ActionBase):
     def _task_from_task_list(self) -> Step:
         """generate task content for the selected task
 
-        :return: content which show a task
+        :returns: content which show a task
         """
         value = self.steps.current.value
         index = self.steps.current.index
@@ -799,7 +799,7 @@ class Action(ActionBase):
     def _get_status(self) -> Tuple[str, int]:
         """Get the status and color
 
-        :return: status string, status color
+        :returns: status string, status color
         """
         status = ""
         status_color = 0

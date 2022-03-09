@@ -42,14 +42,10 @@ class Base:
     ) -> None:
         """Handle the common argument for the ansible-runner interface class.
 
-        :param container_engine: Container engine used to isolate execution.
-            Defaults to podman.
-        :param container_options: List of container options to pass to execution engine.
-            Defaults to None.
-        :param execution_environment: Boolean argument that controls execution environment enable
-            or not. Defaults to False.
-        :param execution_environment_image: Container image to use when running an command.
-            Defaults to None.
+        :param container_engine: Container engine used to isolate execution
+        :param container_options: List of container options to pass to execution engine
+        :param execution_environment: Boolean argument that enable execution environment support
+        :param execution_environment_image: Container image to use when running an command
         :param navigator_mode: Valid value is either ``stdout`` or ``interactive``. If value is
             set to ``stdout`` passed the ``stdin`` of current running process
             is passed to ``ansible-runner`` which enables receiving command
@@ -57,14 +53,11 @@ class Base:
             ``interactive`` the ``ansible-navigator` will run using
             text user interface (TUI).
         :param container_volume_mounts: List of bind mounts in the form
-            ``host_dir:/container_dir:labels``.
-            Defaults to None.
-        :param container_workdir: The working directory within the container.
-            Defaults to None.
-        :param host_cwd: The current local working directory. Defaults to None.
-            If value of execution_environment is set to True this path will
-            be volume mounted within the execution environment.
-        :param set_environment_variable: Dict of user requested environment variables to set.
+            ``host_dir:/container_dir:labels``
+        :param container_workdir: The working directory within the container
+        :param host_cwd: The current local working directory. If value of execution_environment is
+            set to True this path will be volume mounted within the execution environment.
+        :param set_environment_variable: Dict of user requested environment variables to set
         :param private_data_dir: The directory containing all runner metadata needed to invoke
             the runner module. Output artifacts will also be stored here for
             later consumption.
@@ -195,7 +188,7 @@ class Base:
     def runner_finished_callback(self, runner: Runner):
         """Call when runner finishes.
 
-        :param runner: A runner instance.
+        :param runner: A runner instance
         """
         self.status = runner.status
         self.finished = True

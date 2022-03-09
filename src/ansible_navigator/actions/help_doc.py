@@ -26,7 +26,7 @@ class Action(ActionBase):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
         """
         self._logger.debug("help requested")
         self._prepare_to_run(app, interaction)

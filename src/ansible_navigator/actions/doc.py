@@ -48,7 +48,7 @@ class Action(ActionBase):
 
         :param _obj: The content going to be shown
         :param screen_w: The current screen width
-        :return: The heading
+        :returns: The heading
         """
         plugin_str = f"{self._plugin_name} ({self._plugin_type})"
         empty_str = " " * (screen_w - len(plugin_str) + 1)
@@ -68,7 +68,7 @@ class Action(ActionBase):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("doc requested in interactive")
@@ -246,7 +246,7 @@ class Action(ActionBase):
 
         :param out: The output from runner
         :param err: Any runner errors
-        :return: The plugin's doc or errors
+        :returns: The plugin's doc or errors
         """
         # pylint: disable=too-many-branches
         plugin_doc = {}

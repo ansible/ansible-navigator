@@ -41,7 +41,7 @@ class ImagesInspect:
     def parse(command: Command):
         """Parse the image inspection command output.
 
-        :param command: Image inspection command object.
+        :param command: Image inspection command object
         """
         obj = json.loads(command.stdout)
         snake = pascal_to_snake(obj[0])
@@ -54,7 +54,7 @@ class ImagesList:
     def __init__(self, container_engine):
         """Initialize the container image lister.
 
-        :param container_engine: The name of the container engine to use.
+        :param container_engine: The name of the container engine to use
         """
         self._container_engine = container_engine
 
@@ -62,7 +62,7 @@ class ImagesList:
     def commands(self) -> List[Command]:
         """Generate image lister commands.
 
-        :returns: List of the image lister commands.
+        :returns: List of the image lister commands
         """
         return [
             Command(
@@ -76,7 +76,7 @@ class ImagesList:
     def parse(command: Command):
         """Parse the image lister command output.
 
-        :param command: Image lister command object.
+        :param command: Image lister command object
         """
         if command.stdout:
             images = command.stdout.splitlines()
@@ -90,8 +90,8 @@ class ImagesList:
 def inspect_all(container_engine: str) -> Tuple[List, str]:
     """Run inspect against all images in the list.
 
-    :param container_engine: Name of the container engine.
-    :returns: List of all image values and stderr, if applicable.
+    :param container_engine: Name of the container engine
+    :returns: List of all image values and stderr, if applicable
     """
     cmd_runner = CommandRunner()
     images_list_class = ImagesList(container_engine=container_engine)

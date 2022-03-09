@@ -94,7 +94,7 @@ class Action(ActionBase):
         :param obj: The content going to be shown
         :param screen_w: The current screen width
         :param name: The name of the images menu
-        :return: The heading
+        :returns: The heading
         """
         if name == "image_menu":
             text = (
@@ -126,7 +126,7 @@ class Action(ActionBase):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("images requested")
