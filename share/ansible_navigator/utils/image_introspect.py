@@ -154,8 +154,8 @@ class CmdParser:
     def _strip(value: str) -> str:
         """Remove quotes, leading and trailing whitespace.
 
-        :param value: The string to act on.
-        :returns: The string after removing quotes, leading and trailing whitespace.
+        :param value: The string to act on
+        :returns: The string after removing quotes, leading and trailing whitespace
         """
         return value.strip('"').strip("'").strip()
 

@@ -55,7 +55,7 @@ class ColorSchema:
         """Get a color from the schema, from most specific to least.
 
         :param scope: The scope, aka format
-        :return: The color in RGB format or nothing
+        :returns: The color in RGB format or nothing
         """
         for name in reversed(scope):
             for parts in range(0, len(name.split("."))):
@@ -109,7 +109,7 @@ class Colorize:
         """Convert ansi colored text into curses lines.
 
         :param doc: The text to convert
-        :return: Lines ready to present using the TUI
+        :returns: Lines ready to present using the TUI
         """
         lines = tuple(ansi_to_curses(line) for line in doc.splitlines())
         return CursesLines(lines)
@@ -120,7 +120,7 @@ class Colorize:
 
         :param doc: The string to split, tokenize and color
         :param scope: The scope, aka the format of the string
-        :return: A list of lines, each a list of dicts
+        :returns: A list of lines, each a list of dicts
         """
         try:
             compiler = self._grammars.compiler_for_scope(scope)
@@ -167,7 +167,7 @@ def scope_to_list(scope: Union[str, List]) -> List:
     but just in case return an empty list if not
 
     :param scope: The scope
-    :return: Scope as list
+    :returns: Scope as list
     """
     if isinstance(scope, list):
         return scope
@@ -205,7 +205,7 @@ def hex_to_rgb_curses(value: str) -> RgbTuple:
     """Convert a hex color to RGB scaled for curses.
 
     :param value: an RGB color
-    :return: The colors scaled to 1000
+    :returns: The colors scaled to 1000
     """
     red, green, blue = hex_to_rgb(value)
     return (scale_for_curses(red), scale_for_curses(green), scale_for_curses(blue))
@@ -301,7 +301,7 @@ def ansi_to_curses(line: str) -> CursesLine:
     """Convert ansible color codes to curses colors.
 
     :param line: A string with ansi colors
-    :return: A line ready for presentation in the TUI
+    :returns: A line ready for presentation in the TUI
     """
     printable = []
     ansi_regex = re.compile(r"(\x1b\[[\d;]*m)")

@@ -164,7 +164,7 @@ class PresentableSettingsEntry:
         :param entry: A settings entry
         :param settings_file_path: The path to the settings file
 
-        :return: The settings file entry
+        :returns: The settings file entry
         """
         cli_parameters = PresentableCliParameters.from_cli_params(
             cli_parameters=entry.cli_parameters,

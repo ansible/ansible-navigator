@@ -87,7 +87,7 @@ class ImagePuller:
     def assessment(self):
         """Return an image assessment.
 
-        :returns: Image assessment.
+        :returns: Image assessment
         """
         return self._assessment
 
@@ -171,7 +171,7 @@ class ImagePuller:
     def _generate_pull_command(self) -> List[str]:
         """Generate the pull command.
 
-        :returns: The list of command parts.
+        :returns: The list of command parts
         """
         command_line = [self._container_engine, "pull"]
         # In case the settings file has an entry with a space
