@@ -67,7 +67,7 @@ class CursesWindow:
     def _screen_width(self) -> int:
         """return the screen width
 
-        :return: the current screen width
+        :returns: the current screen width
         """
         return self._screen.getmaxyx()[1]
 
@@ -75,7 +75,7 @@ class CursesWindow:
     def _screen_height(self) -> int:
         """return the screen height, or notify if too small
 
-        :return: the current screen height
+        :returns: the current screen height
         """
         while True:
             if self._screen.getmaxyx()[0] >= self._screen_min_height:

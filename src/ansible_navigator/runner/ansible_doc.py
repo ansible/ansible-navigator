@@ -40,7 +40,7 @@ class AnsibleDoc(Base):
             adjacent installed plugins
         :param module_path: This parameter is prepend colon-separated path(s) to module library
             (default=~/.ansible/plugins/modules: /usr/share/ansible/plugins/modules).
-        :return: A tuple of response and error string. If the value of ``response_format`` is
+        :returns: A tuple of response and error string. If the value of ``response_format`` is
             ``json`` it returns a python dictionary object.
         """
         return get_plugin_docs(

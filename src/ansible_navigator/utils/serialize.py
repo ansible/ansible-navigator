@@ -134,7 +134,7 @@ def human_dump(
     :param obj: The object to serialize
     :param filename: The filename of the file in which the obj should be written
     :param file_mode: The mode to use for file writing
-    :return: Either the serialized obj or None if written to a file
+    :returns: Either the serialized obj or None if written to a file
     """
     dumper = HumanDumper
     if filename is not None:
@@ -180,7 +180,7 @@ class HumanDumper(Dumper):
         :param tag: A custom tag
         :param value: The value to represent
         :param style: The style to use
-        :return: The serialized multiline string, result of the super scalar
+        :returns: The serialized multiline string, result of the super scalar
         """
         if style is None and _is_multiline_string(value):
             style = "|"
@@ -203,7 +203,7 @@ def _is_multiline_string(value: str):
        Inspired by http://stackoverflow.com/a/15423007/115478.
 
     :param value: The value to check
-    :return: A boolean indicating if the string is multiline
+    :returns: A boolean indicating if the string is multiline
     """
     for character in "\u000a\u000d\u001c\u001d\u001e\u0085\u2028\u2029":
         if character in value:

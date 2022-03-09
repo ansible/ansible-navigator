@@ -59,7 +59,7 @@ class Step:
     def changed(self) -> bool:
         """return if this has changed
 
-        :return: if this has changed
+        :returns: if this has changed
         """
         return self._index_changed or self._value_changed
 
@@ -78,7 +78,7 @@ class Step:
     def index(self) -> Optional[int]:
         """return the index
 
-        :return: index (should be ``int``)
+        :returns: index (should be ``int``)
         """
         return self._index
 
@@ -97,7 +97,7 @@ class Step:
     def selected(self) -> Optional[Dict[str, Any]]:
         """return the selected item
 
-        :return: the selected item
+        :returns: the selected item
         """
         if self._index is None or not self._value:
             return None
@@ -107,7 +107,7 @@ class Step:
     def value(self) -> List[Dict[str, Any]]:
         """return the value
 
-        :return: the value
+        :returns: the value
         """
         return self._value
 
@@ -162,7 +162,7 @@ class TypedStep(Generic[T]):
     def changed(self) -> bool:
         """Return the changed flag.
 
-        :return: Indication of change
+        :returns: Indication of change
         """
         return self._index_changed or self._value_changed
 
@@ -196,7 +196,7 @@ class TypedStep(Generic[T]):
     def selected(self) -> Optional[T]:
         """Return the selected item.
 
-        :return: The selected item
+        :returns: The selected item
         """
         if self._index is None or not self._value:
             return None
@@ -206,7 +206,7 @@ class TypedStep(Generic[T]):
     def value(self) -> List[T]:
         """Return the value.
 
-        :return: The value
+        :returns: The value
         """
         return self._value
 

@@ -36,7 +36,7 @@ class AnsibleInventory(Base):
         :param playbook_dir: This parameter is used to sets the relative path for the inventory
         :param vault_ids: The vault identity to use
         :param vault_password_file: The vault identity to use
-        :return: A tuple of response and error string (if any)
+        :returns: A tuple of response and error string (if any)
         """
         return get_inventory(
             action,

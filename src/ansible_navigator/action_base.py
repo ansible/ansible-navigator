@@ -50,7 +50,7 @@ class ActionBase:
         """Attempt to match the user input against the regex provided by each action.
 
         :param entry: the user input
-        :return: The name and matching action or not
+        :returns: The name and matching action or not
         """
         for kegex in kegexes():
             match = kegex.kegex.match(entry)
@@ -65,7 +65,7 @@ class ActionBase:
         This will be passed to other actions to limit the scope of
         what can be mutated internally.
 
-        :return: An instance of AppPublic for the current instance of the action
+        :returns: An instance of AppPublic for the current instance of the action
         :raises AttributeError: If the args have not been initialized
         """
         if self._args:
@@ -106,7 +106,7 @@ class ActionBase:
         in parse and update
 
         :param args: the current application configuration
-        :return: A copy of the current application configuration
+        :returns: A copy of the current application configuration
         """
         args.internals.collection_doc_cache = C.NOT_SET
         return deepcopy(args)
