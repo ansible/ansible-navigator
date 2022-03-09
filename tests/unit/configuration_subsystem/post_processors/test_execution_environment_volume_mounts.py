@@ -118,6 +118,15 @@ test_data = (
         source=C.USER_CFG,
     ),
     Scenario(
+        current=[{"src": True, "dest": False, "label": 42}],
+        source=C.USER_CFG,
+        exit_message_substr=(
+            "Source: 'True' is not a string."
+            " Destination: 'False is not a string."
+            " Labels: '42' is not a string."
+        ),
+    ),
+    Scenario(
         current=list(repeat({"src": "/tmp", "dest": "/tmp", "label": "Z"}, 4)),
         expected=["/tmp:/tmp:Z", "/tmp:/tmp:Z", "/tmp:/tmp:Z", "/tmp:/tmp:Z"],
         source=C.USER_CFG,
