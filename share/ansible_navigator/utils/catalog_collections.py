@@ -99,7 +99,7 @@ class CollectionCatalog:
                     collection,
                 )
 
-    def _catalog_roles(self, collection: Dict) -> None:
+    def _catalog_roles(self, collection: Dict[str, Any]) -> None:
         """Catalog the roles within a collection.
 
         :param collection: Details describing the collection
