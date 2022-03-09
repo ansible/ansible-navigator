@@ -54,7 +54,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
-    :return: The heading
+    :returns: The heading
     """
     string = f"{obj['full_name'].upper()}: {obj['__description']}"
     string = string + (" " * (screen_w - len(string) + 1))
@@ -70,8 +70,8 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
-    :param obj: The object from which keys should be removed.
-    :returns: The object with keys removed.
+    :param obj: The object from which keys should be removed
+    :returns: The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
@@ -104,7 +104,7 @@ class Action(ActionBase):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("collections requested")

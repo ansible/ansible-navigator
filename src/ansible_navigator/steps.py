@@ -96,7 +96,7 @@ class Step:
     def selected(self) -> Optional[Dict[str, Any]]:
         """Return the selected item.
 
-        :returns: The selected item, selected from _value list by _index mod length of _value
+        :returns: The selected item.
         """
         if self._index is None or not self._value:
             return None

@@ -175,7 +175,7 @@ def escape_moustaches(obj: Mapping) -> Mapping:
     """escape moustaches
 
     :param obj: something
-    :return: the obj with replacements made
+    :returns: the obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     return dispatch(obj, replacements)
@@ -439,7 +439,7 @@ def round_half_up(number: Union[float, int]) -> int:
     This will always round based on distance from zero. (e.g round(2.5) = 3, round(3.5) = 4).
 
     :param number: The number to round
-    :return: The rounded number as an it
+    :returns: The rounded number as an it
     """
     rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
@@ -480,7 +480,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
 
     :param string: The template string
     :param template_vars: The vars used to render the template
-    :return: A list of errors and either the result of templating or original string
+    :returns: A list of errors and either the result of templating or original string
     """
     errors = []
     # hide the jinja that may be in the template_vars
@@ -528,7 +528,7 @@ def unescape_moustaches(obj: Any) -> Mapping:
     """unescape moustaches
 
     :param obj: something
-    :return: the obj with replacements made
+    :returns: the obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)

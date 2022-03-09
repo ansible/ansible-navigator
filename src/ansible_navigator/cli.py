@@ -92,7 +92,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
     """Run the appropriate subcommand.
 
     :param args: The current application settings
-    :returns: A message to display and a return code.
+    :returns: A message to display and a return code
     """
     if args.mode == "stdout":
         try:
