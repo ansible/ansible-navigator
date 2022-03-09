@@ -122,6 +122,7 @@ nitpick_ignore = [
     ("py:class", "ContentView"),
     ("py:class", "CursesLine"),
     ("py:class", "CursesLines"),
+    ("py:class", "dataclasses.InitVar"),
     ("py:class", "Entry"),
     ("py:class", "FieldButton"),
     ("py:class", "FieldChecks"),
