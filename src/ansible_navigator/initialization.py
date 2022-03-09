@@ -90,7 +90,7 @@ def get_and_check_collection_doc_cache(
 
     Always delete and rebuild if not.
 
-    :param collection_doc_cache_path: Path for collection documentation cache.
+    :param collection_doc_cache_path: Path for collection documentation cache
     :returns: All messages and collection cache or None
     """
     messages: List[LogMessage] = []
