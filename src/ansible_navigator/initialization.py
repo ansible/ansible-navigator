@@ -1,5 +1,6 @@
-"""initialization helpers that are used early in application
-initialization and are specific to ansible_navigator
+"""Initialization helpers that are used early in application initialization.
+
+These helpers are specific to ansible_navigator.
 """
 import logging
 import os
@@ -24,18 +25,22 @@ from .utils.key_value_store import KeyValueStore
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
-    """get out of here fast"""
+    """Exit the application early.
+
+    :param exit_messages: List of all exit messages to be printed
+    """
     for exit_msg in exit_messages:
         print(exit_msg)
     sys.exit(1)
 
 
 def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str], C]:
-    """
-    Find a configuration file, logging each step.
-    Return (log messages, path).
+    """Find a configuration file, logging each step.
+
     If the config can't be found/loaded, use default settings.
     If it's found but empty or not well formed, bail out.
+
+    :returns: All log messages and config path
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
@@ -81,9 +86,12 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str], C
 def get_and_check_collection_doc_cache(
     collection_doc_cache_path: str,
 ) -> Tuple[List[LogMessage], List[ExitMessage], Optional[KeyValueStore]]:
-    """ensure the collection doc cache
-    has the current version of the application
-    as a safeguard, always delete and rebuild if not
+    """Ensure the collection doc cache has current application version as a safeguard.
+
+    Always delete and rebuild if not.
+
+    :param collection_doc_cache_path: Path for collection documentation cache
+    :returns: All messages and collection cache or None
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
@@ -144,12 +152,12 @@ def parse_and_update(
     Return after the CDC is mounted, even if exit messages are generated, the CDC may still
     be needed. e.g. ``:collections --ee NotBool``.
 
+    :param params: A list of parameters e.g. ['-x', 'value']
     :param args: The application args
     :param apply_previous_cli_entries: Should previous params from the CLI be applied
     :param attach_cdc: Should the collection doc cache be attached to the args.internals
     :returns: Log and exit messages
     """
-
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
 
