@@ -1,4 +1,5 @@
 """Tests for the execution environment volume mount post processor."""
+from collections.abc import Iterable
 from dataclasses import dataclass
 from itertools import repeat
 from typing import Dict
@@ -81,7 +82,7 @@ test_data = (
     ),
     Scenario(
         current=["/tmp:/tmp", "/tmp:/tmp"],
-        expected=["/tmp:/tmp", "/tmp:/tmp"],
+        expected=["/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
     Scenario(
@@ -133,14 +134,14 @@ test_data = (
         current=[{"src": True, "dest": False, "label": 42}],
         exit_message_substr=(
             "Source: 'True' is not a string."
-            " Destination: 'False is not a string."
+            " Destination: 'False' is not a string."
             " Labels: '42' is not a string."
         ),
         source=C.USER_CFG,
     ),
     Scenario(
         current=list(repeat({"src": "/tmp", "dest": "/tmp", "label": "Z"}, 4)),
-        expected=["/tmp:/tmp:Z", "/tmp:/tmp:Z", "/tmp:/tmp:Z", "/tmp:/tmp:Z"],
+        expected=["/tmp:/tmp:Z"],
         source=C.USER_CFG,
     ),
     Scenario(
@@ -182,6 +183,11 @@ def test(data: Scenario):
         entry=entry,
         config=settings,
     )
-    assert data.expected == entry.value.current
+    if isinstance(data.expected, Iterable) and isinstance(entry.value.current, Iterable):
+        assert sorted(data.expected) == sorted(entry.value.current)
+    else:
+        # A bool can't be sorted
+        assert data.expected == entry.value.current
+
     if data.exit_message_substr:
         assert data.exit_message_substr in exit_messages[0].message

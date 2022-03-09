@@ -6,6 +6,7 @@ import os
 import shlex
 import shutil
 
+from dataclasses import InitVar
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
@@ -14,6 +15,7 @@ from itertools import chain
 from itertools import repeat
 from pathlib import Path
 from typing import List
+from typing import Set
 from typing import Tuple
 from typing import TypeVar
 
@@ -79,7 +81,7 @@ class VolumeMountError(Exception):
     """Custom exception raised when building VolumeMounts."""
 
 
-@dataclass
+@dataclass(frozen=True)
 class VolumeMount:
     """Describes EE volume mounts."""
 
@@ -89,14 +91,14 @@ class VolumeMount:
     """The destination file system path in the container for the volume mount"""
     settings_entry: str
     """The name of the settings entry requiring this volume mount"""
-    source: C
+    source: C = field(compare=False)
     """The settings source for this volume mount"""
-    options_string: str = ""
+    options_string: InitVar[str]
     """Comma delimited options"""
-    _options: List[VolumeMountOption] = field(default_factory=list)
+    options: Tuple[VolumeMountOption, ...] = ()
     """Options for the bind mount"""
 
-    def __post_init__(self):
+    def __post_init__(self, options_string):
         """Post process the ``VolumeMount`` and perform sanity checks.
 
         :raises VolumeMountError: When a viable VolumeMount cannot be created
@@ -117,24 +119,27 @@ class VolumeMount:
             if self.fs_destination == "":
                 errors.append("Destination not provided.")
         else:
-            errors.append(f"Destination: '{self.fs_destination} is not a string.")
+            errors.append(f"Destination: '{self.fs_destination}' is not a string.")
 
         # Validate and populate _options
-        if isinstance(self.options_string, str):
-            if not self.options_string == "":
+        if isinstance(options_string, str):
+            if not options_string == "":
                 options = []
                 option_values = [o.value for o in VolumeMountOption]
-                for option in self.options_string.split(","):
+                for option in sorted(options_string.split(",")):
                     if option not in option_values:
                         errors.append(
                             f"Unrecognized label: '{option}',"
-                            " available labels include {oxfordcomma(option_values)}.",
+                            f" available labels include"
+                            f" {oxfordcomma(option_values, condition='and/or')}.",
                         )
                     else:
                         options.append(VolumeMountOption(option))
-                self._options = options
+                unique = sorted(set(options), key=options.index)
+                # frozen, cannot use simple assignment to initialize fields, and must use:
+                object.__setattr__(self, "options", tuple(unique))
         else:
-            errors.append(f"Labels: '{self.options_string}' is not a string.")
+            errors.append(f"Labels: '{options_string}' is not a string.")
 
         if errors:
             raise VolumeMountError(" ".join(errors))
@@ -142,8 +147,8 @@ class VolumeMount:
     def to_string(self) -> str:
         """Render the volume mount in a way that (docker|podman) understands."""
         out = f"{self.fs_source}:{self.fs_destination}"
-        if self._options:
-            joined_opts = ",".join(o.value for o in self._options)
+        if self.options:
+            joined_opts = ",".join(o.value for o in self.options)
             out += f":{joined_opts}"
         return out
 
@@ -418,7 +423,7 @@ class NavigatorPostProcessor:
         exit_messages: List[ExitMessage] = []
         entry_name = entry.settings_file_path(prefix="")
         entry_source = entry.value.source
-        volume_mounts: List[VolumeMount] = []
+        volume_mounts: Set[VolumeMount] = set()
 
         if entry_source in (C.ENVIRONMENT_VARIABLE, C.USER_CLI):
             hint = (
@@ -437,7 +442,7 @@ class NavigatorPostProcessor:
                     exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
 
                 try:
-                    volume_mounts.append(
+                    volume_mounts.add(
                         VolumeMount(
                             fs_source=src,
                             fs_destination=dest,
@@ -467,7 +472,7 @@ class NavigatorPostProcessor:
             else:
                 for volume_mount in entry.value.current:
                     try:
-                        volume_mounts.append(
+                        volume_mounts.add(
                             VolumeMount(
                                 fs_source=volume_mount.get("src"),
                                 fs_destination=volume_mount.get("dest"),
@@ -496,8 +501,8 @@ class NavigatorPostProcessor:
         # new_mounts, C.PREVIOUS_CLI or C.NOT_SET
         if self.extra_volume_mounts:
             if not isinstance(entry.value.current, list):
-                entry.value.current = []
-            entry.value.current.extend([v.to_string() for v in self.extra_volume_mounts])
+                entry.value.current = set()
+            entry.value.current.extend(v.to_string() for v in self.extra_volume_mounts)
 
         return messages, exit_messages
 
