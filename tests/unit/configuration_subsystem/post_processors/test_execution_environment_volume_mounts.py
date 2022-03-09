@@ -137,7 +137,6 @@ test_data = (
             " Labels: '42' is not a string."
         ),
         source=C.USER_CFG,
-
     ),
     Scenario(
         current=list(repeat({"src": "/tmp", "dest": "/tmp", "label": "Z"}, 4)),
