@@ -66,7 +66,7 @@ class Step:
     def changed(self, value: bool) -> None:
         """Set the changed value.
 
-        :param value: The value to set.
+        :param value: The value to set
         :type value: bool
         """
         self._value_check(value, bool)
@@ -77,7 +77,7 @@ class Step:
     def index(self) -> Optional[int]:
         """Return the index.
 
-        :returns: Index (should be ``int``).
+        :returns: Index (should be ``int``)
         """
         return self._index
 
@@ -85,7 +85,7 @@ class Step:
     def index(self, index: int) -> None:
         """Set the index.
 
-        :param index: The index.
+        :param index: The index
         :type index: int
         """
         self._value_check(index, (int, type(None)))
@@ -96,7 +96,7 @@ class Step:
     def selected(self) -> Optional[Dict[str, Any]]:
         """Return the selected item.
 
-        :returns: The selected item, selected from _value list by _index mod length of _value.
+        :returns: The selected item, selected from _value list by _index mod length of _value
         """
         if self._index is None or not self._value:
             return None
@@ -106,7 +106,7 @@ class Step:
     def value(self) -> List[Dict[str, Any]]:
         """Return the value.
 
-        :returns: The value.
+        :returns: The value
         """
         return self._value
 
@@ -114,7 +114,7 @@ class Step:
     def value(self, value: List[Dict[str, Any]]) -> None:
         """Set the value and changed is needed.
 
-        :param value: List of dicts.
+        :param value: List of dicts
         :type value: list
         """
         self._value_check(value, list)
@@ -125,9 +125,9 @@ class Step:
     def _value_check(value: Any, want: Union[type, Tuple[type, ...]]) -> None:
         """Check some expected type against a value's type.
 
-        :param value: Some value for comparison.
-        :param want: The desired type for value.
-        :raises ValueError: If value type doesn't match wanted type.
+        :param value: Some value for comparison
+        :param want: The desired type for value
+        :raises ValueError: If value type doesn't match wanted type
         """
         if not isinstance(value, want):
             raise ValueError(f"wanted {want}, got {type(value)}")
@@ -166,7 +166,7 @@ class TypedStep(Generic[T]):
     def changed(self) -> bool:
         """Return the changed flag.
 
-        :returns: Indication of change.
+        :returns: Indication of change
         """
         return self._index_changed or self._value_changed
 
@@ -174,7 +174,7 @@ class TypedStep(Generic[T]):
     def changed(self, value: bool) -> None:
         """Set the changed value.
 
-        :param value: Indication of change.
+        :param value: Indication of change
         """
         self._index_changed = value
         self._value_changed = value
@@ -183,7 +183,7 @@ class TypedStep(Generic[T]):
     def index(self) -> Optional[int]:
         """Return the index.
 
-        :returns: The index.
+        :returns: The index
         """
         return self._index
 
@@ -191,7 +191,7 @@ class TypedStep(Generic[T]):
     def index(self, index: int) -> None:
         """Set the index.
 
-        :param index: The index.
+        :param index: The index
         """
         self._index_changed = self.index != index
         self._index = index
@@ -200,7 +200,7 @@ class TypedStep(Generic[T]):
     def selected(self) -> Optional[T]:
         """Return the selected item.
 
-        :returns: The selected item.
+        :returns: The selected item
         """
         if self._index is None or not self._value:
             return None
@@ -210,7 +210,7 @@ class TypedStep(Generic[T]):
     def value(self) -> List[T]:
         """Return the value.
 
-        :returns: The value.
+        :returns: The value
         """
         return self._value
 
@@ -218,7 +218,7 @@ class TypedStep(Generic[T]):
     def value(self, value: List[T]) -> None:
         """Set the value and value changed if needed.
 
-        :param value: The value for this instance.
+        :param value: The value for this instance
         """
         self._value_changed = self._value != value
         self._value = value
@@ -230,7 +230,7 @@ class Steps(deque):
     def back_one(self) -> Any:
         """Pop one step off the dequeue to move backwards.
 
-        :returns: The dequeue after pop().
+        :returns: The dequeue after pop() or None if no steps are left
         """
         if self:
             return self.pop()
@@ -240,7 +240,7 @@ class Steps(deque):
     def current(self) -> Any:
         """Return the current step.
 
-        :returns: The TypedStep (or Step) currently accessed.
+        :returns: The TypedStep (or Step) currently accessed
         """
         return self[-1]
 
@@ -248,6 +248,6 @@ class Steps(deque):
     def previous(self) -> Any:
         """Return the previous step.
 
-        :returns: The TypedStep (or Step) previously accessed.
+        :returns: The TypedStep (or Step) previously accessed
         """
         return self[-2]
