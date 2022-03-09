@@ -6,9 +6,6 @@ from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.configuration_subsystem.navigator_post_processor import (
     VolumeMount,
 )
-from ansible_navigator.configuration_subsystem.navigator_post_processor import (
-    VolumeMountOption,
-)
 
 
 @pytest.mark.parametrize(
@@ -17,42 +14,42 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
         (
             VolumeMount(
                 fs_destination="/bar",
-                fs_source="/foo",
-                options=[],
+                fs_source="/tmp",
+                options_string="",
                 settings_entry="test_option",
                 source=Constants.USER_CLI,
             ),
-            "/foo:/bar",
+            "/tmp:/bar",
         ),
         (
             VolumeMount(
                 settings_entry="test_option",
-                fs_source="/foo",
+                fs_source="/tmp",
                 fs_destination="/bar",
-                options=[VolumeMountOption.z],
+                options_string="z",
                 source=Constants.USER_CLI,
             ),
-            "/foo:/bar:z",
+            "/tmp:/bar:z",
         ),
         (
             VolumeMount(
                 settings_entry="test_option",
-                fs_source="/foo",
+                fs_source="/tmp",
                 fs_destination="/bar",
-                options=[VolumeMountOption.z, VolumeMountOption.Z],
+                options_string="z,Z",
                 source=Constants.USER_CLI,
             ),
-            "/foo:/bar:z,Z",
+            "/tmp:/bar:z,Z",
         ),
         (
             VolumeMount(
                 settings_entry="test_option",
-                fs_source="/foo",
+                fs_source="/tmp",
                 fs_destination="/bar",
-                options=[],
+                options_string="",
                 source=Constants.USER_CLI,
             ),
-            "/foo:/bar",
+            "/tmp:/bar",
         ),
     ),
     ids=(

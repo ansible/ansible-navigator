@@ -16,7 +16,7 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 
 
 @dataclass
-class TestData:
+class Scenario:
     """Data structure for EEV post processor tests."""
 
     current: Union[bool, str, List, Dict]
@@ -39,94 +39,105 @@ class TestData:
 
 
 test_data = (
-    TestData(current="", source=C.USER_CLI, exit_message_substr="Could not extract source"),
-    TestData(
+    Scenario(
+        current="",
+        source=C.USER_CLI,
+        exit_message_substr="Source not provided. Destination not provided",
+    ),
+    Scenario(
         current="abcdef",
         source=C.USER_CLI,
-        exit_message_substr="Could not extract destination",
+        exit_message_substr="Source: 'abcdef' does not exist. Destination not provided.",
     ),
-    TestData(
+    Scenario(
         current=[["/tmp:/tmp"]],
         expected=["/tmp:/tmp"],
         source=C.USER_CLI,
     ),
-    TestData(
+    Scenario(
         current=[["/tmp:/tmp:Z"]],
         expected=["/tmp:/tmp:Z"],
         source=C.USER_CLI,
     ),
-    TestData(
+    Scenario(
         current=[["/tmp:/tmp:Y"]],
         source=C.USER_CLI,
-        exit_message_substr="Unrecognized label: Y",
+        exit_message_substr="Unrecognized label: 'Y'",
     ),
-    TestData(
+    Scenario(
         current=[["/tmp:/tmp:Z,z"]],
         expected=["/tmp:/tmp:Z,z"],
         source=C.USER_CLI,
     ),
-    TestData(
+    Scenario(
         current=[["/tmp:/tmp:Z,Y"]],
         source=C.USER_CLI,
-        exit_message_substr="Unrecognized label: Y",
+        exit_message_substr="Unrecognized label: 'Y'",
     ),
-    TestData(
+    Scenario(
         current=["/tmp:/tmp"],
         expected=["/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
-    TestData(
+    Scenario(
         current=["/tmp:/tmp", "/tmp:/tmp"],
         expected=["/tmp:/tmp", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
-    TestData(
+    Scenario(
         current=["/tmp:/tmp:Z", "/tmp:/tmp"],
         expected=["/tmp:/tmp:Z", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
-    TestData(
+    Scenario(
         current=["/tmp:/tmp:Z,z", "/tmp:/tmp"],
         expected=["/tmp:/tmp:Z,z", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
     ),
-    TestData(
+    Scenario(
         current=["/tmp:/tmp:Z,y", "/tmp:/tmp"],
         source=C.ENVIRONMENT_VARIABLE,
-        exit_message_substr="Unrecognized label: y",
+        exit_message_substr="Unrecognized label: 'y'",
     ),
-    TestData(current=True, source=C.USER_CFG, exit_message_substr="could not be parsed"),
-    TestData(
+    Scenario(current=True, source=C.USER_CFG, exit_message_substr="could not be parsed"),
+    Scenario(current=[True], source=C.USER_CFG, exit_message_substr="could not be parsed"),
+    Scenario(current=[[True]], source=C.USER_CFG, exit_message_substr="could not be parsed"),
+    Scenario(
         current={"src": "/tmp", "dest": "/tmp", "label": "Z"},
         source=C.USER_CFG,
         exit_message_substr="could not be parsed",
     ),
-    TestData(
+    Scenario(
+        current=[{"my_src": "/tmp", "my_dest": "/tmp", "my_label": "Z"}],
+        source=C.USER_CFG,
+        exit_message_substr="could not be parsed",
+    ),
+    Scenario(
         current=[{"src": "/tmp", "dest": "/tmp", "label": "Z"}],
         expected=["/tmp:/tmp:Z"],
         source=C.USER_CFG,
     ),
-    TestData(
+    Scenario(
         current=list(repeat({"src": "/tmp", "dest": "/tmp", "label": "Z"}, 4)),
         expected=["/tmp:/tmp:Z", "/tmp:/tmp:Z", "/tmp:/tmp:Z", "/tmp:/tmp:Z"],
         source=C.USER_CFG,
     ),
-    TestData(
+    Scenario(
         current=[{"src": "/tmp", "dest": "/tmp", "label": "Z,z"}],
         expected=["/tmp:/tmp:Z,z"],
         source=C.USER_CFG,
     ),
-    TestData(
+    Scenario(
         current=[{"src": "/tmp", "dest": "/tmp", "label": "Z,y"}],
         source=C.USER_CFG,
-        exit_message_substr="Unrecognized label: y",
+        exit_message_substr="Unrecognized label: 'y'",
     ),
-    TestData(
+    Scenario(
         current=[[r"C:\WINNT\System32:/tmp"]],
         source=C.USER_CLI,
-        exit_message_substr="Unrecognized label: /tmp",
+        exit_message_substr="Unrecognized label: '/tmp'",
     ),
-    TestData(
+    Scenario(
         current=[[r"/WINNT/System32:/tmp"]],
         source=C.USER_CLI,
         exit_message_substr="does not exist",
@@ -135,7 +146,7 @@ test_data = (
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=test_data, ids=str)
-def test(data: TestData):
+def test(data: Scenario):
     """Test the eev post processor.
 
     :param data: The test data
