@@ -1,5 +1,4 @@
-"""Step abstractions for actions.
-"""
+"""Step abstractions for actions."""
 from collections import deque
 from dataclasses import dataclass
 from dataclasses import field
@@ -57,15 +56,15 @@ class Step:
 
     @property
     def changed(self) -> bool:
-        """return if this has changed
+        """Return if this has changed.
 
-        :return: if this has changed
+        :returns: Boolean if index or value has changed
         """
         return self._index_changed or self._value_changed
 
     @changed.setter
     def changed(self, value: bool) -> None:
-        """set the changed value
+        """Set the changed value.
 
         :param value: The value to set
         :type value: bool
@@ -76,17 +75,17 @@ class Step:
 
     @property
     def index(self) -> Optional[int]:
-        """return the index
+        """Return the index.
 
-        :return: index (should be ``int``)
+        :returns: Index (should be ``int``)
         """
         return self._index
 
     @index.setter
     def index(self, index: int) -> None:
-        """set the index
+        """Set the index.
 
-        :param index: the index
+        :param index: The index
         :type index: int
         """
         self._value_check(index, (int, type(None)))
@@ -95,9 +94,9 @@ class Step:
 
     @property
     def selected(self) -> Optional[Dict[str, Any]]:
-        """return the selected item
+        """Return the selected item.
 
-        :return: the selected item
+        :returns: The selected item.
         """
         if self._index is None or not self._value:
             return None
@@ -105,17 +104,17 @@ class Step:
 
     @property
     def value(self) -> List[Dict[str, Any]]:
-        """return the value
+        """Return the value.
 
-        :return: the value
+        :returns: The value
         """
         return self._value
 
     @value.setter
     def value(self, value: List[Dict[str, Any]]) -> None:
-        """set the value and changed is needed
+        """Set the value and changed is needed.
 
-        :param value: list
+        :param value: List of dicts
         :type value: list
         """
         self._value_check(value, list)
@@ -124,7 +123,12 @@ class Step:
 
     @staticmethod
     def _value_check(value: Any, want: Union[type, Tuple[type, ...]]) -> None:
-        """check some expect type against a value"""
+        """Check some expected type against a value's type.
+
+        :param value: Some value for comparison
+        :param want: The desired type for value
+        :raises ValueError: If value type doesn't match wanted type
+        """
         if not isinstance(value, want):
             raise ValueError(f"wanted {want}, got {type(value)}")
 
@@ -162,7 +166,7 @@ class TypedStep(Generic[T]):
     def changed(self) -> bool:
         """Return the changed flag.
 
-        :return: Indication of change
+        :returns: Indication of change
         """
         return self._index_changed or self._value_changed
 
@@ -196,7 +200,7 @@ class TypedStep(Generic[T]):
     def selected(self) -> Optional[T]:
         """Return the selected item.
 
-        :return: The selected item
+        :returns: The selected item
         """
         if self._index is None or not self._value:
             return None
@@ -206,13 +210,13 @@ class TypedStep(Generic[T]):
     def value(self) -> List[T]:
         """Return the value.
 
-        :return: The value
+        :returns: The value
         """
         return self._value
 
     @value.setter
     def value(self, value: List[T]) -> None:
-        """Set the value and value changed if needed
+        """Set the value and value changed if needed.
 
         :param value: The value for this instance
         """
@@ -221,21 +225,29 @@ class TypedStep(Generic[T]):
 
 
 class Steps(deque):
-
-    """a custom deque"""
+    """A custom deque."""
 
     def back_one(self) -> Any:
-        """convenience method"""
+        """Pop one step off the dequeue to move backwards.
+
+        :returns: The dequeue after pop() or None if no steps are left
+        """
         if self:
             return self.pop()
         return None
 
     @property
     def current(self) -> Any:
-        """return the current step"""
+        """Return the current step.
+
+        :returns: The TypedStep (or Step) currently accessed
+        """
         return self[-1]
 
     @property
     def previous(self) -> Any:
-        """return the previous step"""
+        """Return the previous step.
+
+        :returns: The TypedStep (or Step) previously accessed
+        """
         return self[-2]

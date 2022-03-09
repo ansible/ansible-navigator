@@ -50,7 +50,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
-    :return: The heading
+    :returns: The heading
     """
     string = obj["option"].replace("_", " ")
     if obj["__default"] is False:
@@ -101,7 +101,7 @@ class Action(ActionBase):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("config requested in interactive mode")

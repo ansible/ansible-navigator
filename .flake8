@@ -69,8 +69,6 @@ per-file-ignores =
   src/ansible_navigator/configuration_subsystem/navigator_configuration.py: D200, D205, D400, DAR201
   src/ansible_navigator/configuration_subsystem/navigator_post_processor.py: D200, D400, DAR101, DAR201
   src/ansible_navigator/configuration_subsystem/parser.py: D200, D400, DAR101, DAR201
-  src/ansible_navigator/initialization.py: D202, D205, D400, D403, DAR101, DAR201
-  src/ansible_navigator/steps.py: D200, D211, D400, D401, D403, DAR101, DAR201, DAR401
   src/ansible_navigator/tm_tokenize/__init__.py: D104
   src/ansible_navigator/tm_tokenize/compiler.py: D100, D101, D102
   src/ansible_navigator/tm_tokenize/fchainmap.py: D100, D101, D105
