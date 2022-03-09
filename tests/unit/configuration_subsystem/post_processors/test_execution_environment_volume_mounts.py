@@ -41,13 +41,13 @@ class Scenario:
 test_data = (
     Scenario(
         current="",
-        source=C.USER_CLI,
         exit_message_substr="Source not provided. Destination not provided",
+        source=C.USER_CLI,
     ),
     Scenario(
         current="abcdef",
-        source=C.USER_CLI,
         exit_message_substr="Source: 'abcdef' does not exist. Destination not provided.",
+        source=C.USER_CLI,
     ),
     Scenario(
         current=[["/tmp:/tmp"]],
@@ -61,8 +61,8 @@ test_data = (
     ),
     Scenario(
         current=[["/tmp:/tmp:Y"]],
-        source=C.USER_CLI,
         exit_message_substr="Unrecognized label: 'Y'",
+        source=C.USER_CLI,
     ),
     Scenario(
         current=[["/tmp:/tmp:Z,z"]],
@@ -71,8 +71,8 @@ test_data = (
     ),
     Scenario(
         current=[["/tmp:/tmp:Z,Y"]],
-        source=C.USER_CLI,
         exit_message_substr="Unrecognized label: 'Y'",
+        source=C.USER_CLI,
     ),
     Scenario(
         current=["/tmp:/tmp"],
@@ -96,21 +96,33 @@ test_data = (
     ),
     Scenario(
         current=["/tmp:/tmp:Z,y", "/tmp:/tmp"],
-        source=C.ENVIRONMENT_VARIABLE,
         exit_message_substr="Unrecognized label: 'y'",
+        source=C.ENVIRONMENT_VARIABLE,
     ),
-    Scenario(current=True, source=C.USER_CFG, exit_message_substr="could not be parsed"),
-    Scenario(current=[True], source=C.USER_CFG, exit_message_substr="could not be parsed"),
-    Scenario(current=[[True]], source=C.USER_CFG, exit_message_substr="could not be parsed"),
+    Scenario(
+        current=True,
+        exit_message_substr="could not be parsed",
+        source=C.USER_CFG,
+    ),
+    Scenario(
+        current=[True],
+        exit_message_substr="could not be parsed",
+        source=C.USER_CFG,
+    ),
+    Scenario(
+        current=[[True]],
+        exit_message_substr="could not be parsed",
+        source=C.USER_CFG,
+    ),
     Scenario(
         current={"src": "/tmp", "dest": "/tmp", "label": "Z"},
-        source=C.USER_CFG,
         exit_message_substr="could not be parsed",
+        source=C.USER_CFG,
     ),
     Scenario(
         current=[{"my_src": "/tmp", "my_dest": "/tmp", "my_label": "Z"}],
-        source=C.USER_CFG,
         exit_message_substr="could not be parsed",
+        source=C.USER_CFG,
     ),
     Scenario(
         current=[{"src": "/tmp", "dest": "/tmp", "label": "Z"}],
@@ -119,12 +131,13 @@ test_data = (
     ),
     Scenario(
         current=[{"src": True, "dest": False, "label": 42}],
-        source=C.USER_CFG,
         exit_message_substr=(
             "Source: 'True' is not a string."
             " Destination: 'False is not a string."
             " Labels: '42' is not a string."
         ),
+        source=C.USER_CFG,
+
     ),
     Scenario(
         current=list(repeat({"src": "/tmp", "dest": "/tmp", "label": "Z"}, 4)),
@@ -138,18 +151,18 @@ test_data = (
     ),
     Scenario(
         current=[{"src": "/tmp", "dest": "/tmp", "label": "Z,y"}],
-        source=C.USER_CFG,
         exit_message_substr="Unrecognized label: 'y'",
+        source=C.USER_CFG,
     ),
     Scenario(
         current=[[r"C:\WINNT\System32:/tmp"]],
-        source=C.USER_CLI,
         exit_message_substr="Unrecognized label: '/tmp'",
+        source=C.USER_CLI,
     ),
     Scenario(
         current=[[r"/WINNT/System32:/tmp"]],
-        source=C.USER_CLI,
         exit_message_substr="does not exist",
+        source=C.USER_CLI,
     ),
 )
 
