@@ -71,7 +71,7 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
     :param obj: The object from which keys should be removed
-    :returns: The object with keys removed.
+    :returns: The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
