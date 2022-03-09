@@ -191,13 +191,15 @@ def test_no_term(monkeypatch):
 
 
 def test_for_version_logged(
-    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture, tmp_path: Path
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+    tmp_path: Path,
 ):
     """Ensure the version is captured in the log.
 
     :param monkeypatch: The monkey patch fixture
     :param caplog: The log capture fixture
-    :param tmp_path: A temporary director fot this test
+    :param tmp_path: A temporary director for this test
     """
     logfile = tmp_path / "log.txt"
     command_line = [
