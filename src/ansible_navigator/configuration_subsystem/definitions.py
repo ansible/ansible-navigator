@@ -1,5 +1,4 @@
-"""configuration definitions
-"""
+"""Configuration definitions."""
 
 import copy
 
@@ -43,7 +42,7 @@ class CliParameters:
 
 
 class Constants(Enum):
-    """Mapping some constants to friendly text"""
+    """Mapping some constants to friendly text."""
 
     ALL = "All"
     AUTO = "Automatically determined"
@@ -136,7 +135,11 @@ class SettingsEntry:
     subcommand_value: bool = False
 
     def environment_variable(self, prefix: str = "") -> str:
-        """Generate an effective environment variable for this entry"""
+        """Generate an effective environment variable for this entry.
+
+        :param prefix: The prefix for environmental variable
+        :returns: Environmental variable with prefix prepended
+        """
         if self.environment_variable_override is not None:
             env_var = self.environment_variable_override
         else:
@@ -146,7 +149,11 @@ class SettingsEntry:
 
     @property
     def invalid_choice(self) -> str:
-        """Generate an invalid choice message for this entry"""
+        """Generate an invalid choice message for this entry.
+
+        :returns: Constructed message
+        :raises ValueError: If source is not set for that entry
+        """
         name = self.name.replace("_", "-")
         if self.value.source is not Constants.NOT_SET:
             choices = [str(choice).lower() for choice in self.choices]
@@ -161,16 +168,18 @@ class SettingsEntry:
 
     @property
     def name_dashed(self) -> str:
-        """Generate a dashed version of the name"""
+        """Generate a dashed version of the name.
+
+        :returns: Dashed name
+        """
         return self.name.replace("_", "-")
 
     def settings_file_path(self, prefix: str) -> str:
-        """Generate an effective settings file path for this entry"""
-        if prefix:
-            prefix_str = f"{prefix}."
-        else:
-            prefix_str = prefix
+        """Generate an effective settings file path for this entry.
 
+        :param prefix: The prefix for the settings file path
+        :returns: Settings file path
+        """
         if self.settings_file_path_override is not None:
             sfp = f"{prefix_str}{self.settings_file_path_override}"
         else:
@@ -181,7 +190,7 @@ class SettingsEntry:
 
 @dataclass(frozen=True)
 class SubCommand:
-    """An object to hold a subcommand"""
+    """An object to hold a subcommand."""
 
     name: str
     description: str
@@ -191,7 +200,7 @@ class SubCommand:
 @dataclass
 class ApplicationConfiguration:
     # pylint: disable=too-many-instance-attributes
-    """The main object for storing an application config"""
+    """The main object for storing an application config."""
 
     application_version: Union[Constants, str]
     entries: List[SettingsEntry]
@@ -206,7 +215,10 @@ class ApplicationConfiguration:
 
     @property
     def application_name_dashed(self) -> str:
-        """Generate a dashed version of the application name"""
+        """Generate a dashed version of the application name.
+
+        :returns: Application name dashed
+        """
         return self.application_name.replace("_", "-")
 
     def _get_by_name(self, name, kind):
@@ -216,16 +228,28 @@ class ApplicationConfiguration:
             raise KeyError(name) from exc
 
     def __getattribute__(self, attr: str) -> Any:
-        """Returns a matching entry or the default from super"""
+        """Return a matching entry or default from super.
+
+        :param attr: The attribute to get
+        :returns: Either the matching entry or default from super
+        """
         try:
             return super().__getattribute__("_get_by_name")(attr, "entries").value.current
         except (AttributeError, KeyError):
             return super().__getattribute__(attr)
 
     def entry(self, name) -> SettingsEntry:
-        """Retrieve a configuration entry by name"""
+        """Retrieve a configuration entry by name.
+
+        :param name: The name of the entry
+        :returns: Configuration entry name
+        """
         return self._get_by_name(name, "entries")
 
     def subcommand(self, name) -> SubCommand:
-        """Retrieve a configuration subcommand by name"""
+        """Retrieve a configuration subcommand by name.
+
+        :param name: The name of the subcommand
+        :returns: Configuration subcommand name
+        """
         return self._get_by_name(name, "subcommands")

@@ -1,5 +1,4 @@
-"""configuration subsystem
-"""
+"""The configuration subsystem for Ansible Navigator."""
 from .configurator import Configurator
 from .definitions import ApplicationConfiguration
 from .definitions import Constants
