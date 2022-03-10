@@ -128,8 +128,8 @@ class VolumeMount:
                 for option in options_string.split(","):
                     if option not in option_values:
                         errors.append(
-                            f"Unrecognized label: '{option}',"
-                            f" available labels include"
+                            f"Unrecognized option: '{option}',"
+                            f" available options include"
                             f" {oxfordcomma(option_values, condition='and/or')}.",
                         )
                     else:
@@ -138,7 +138,7 @@ class VolumeMount:
                 # frozen, cannot use simple assignment to initialize fields, and must use:
                 object.__setattr__(self, "options", tuple(unique))
         else:
-            errors.append(f"Labels: '{options_string}' is not a string.")
+            errors.append(f"Options: '{options_string}' is not a string.")
 
         if errors:
             raise VolumeMountError(" ".join(errors))
@@ -427,12 +427,12 @@ class NavigatorPostProcessor:
 
         if entry_source in (C.ENVIRONMENT_VARIABLE, C.USER_CLI):
             hint = (
-                "Try again with format <source-path>:<destination-path>:<labels>'."
-                " Note: label is optional."
+                "Try again with format <source-path>:<destination-path>:<options>'."
+                " Note: options is optional."
             )
             mount_strings = flatten_list(entry.value.current)
             for mount_str in mount_strings:
-                src, dest, labels, *left_overs = chain(mount_str.split(":"), repeat("", 3))
+                src, dest, options, *left_overs = chain(mount_str.split(":"), repeat("", 3))
                 if any(left_overs):
                     exit_msg = (
                         f"The following {entry_name} entry could not be parsed:"
@@ -446,7 +446,7 @@ class NavigatorPostProcessor:
                         VolumeMount(
                             fs_source=src,
                             fs_destination=dest,
-                            options_string=labels,
+                            options_string=options,
                             settings_entry=entry_name,
                             source=entry_source,
                         ),
@@ -462,7 +462,7 @@ class NavigatorPostProcessor:
         elif entry.value.source is C.USER_CFG:
             hint = (
                 "The value of execution-environment.volume-mounts should be a list"
-                " of dictionaries and valid keys are 'src', 'dest' and 'label'."
+                " of dictionaries and valid keys are 'src', 'dest' and 'options'."
             )
             if not isinstance(entry.value.current, list):
                 exit_msg = f"{entry_name} entries could not be parsed. ({entry_source.value})"
@@ -476,7 +476,7 @@ class NavigatorPostProcessor:
                             VolumeMount(
                                 fs_source=volume_mount.get("src"),
                                 fs_destination=volume_mount.get("dest"),
-                                options_string=volume_mount.get("label", ""),
+                                options_string=volume_mount.get("options", ""),
                                 settings_entry=entry_name,
                                 source=entry_source,
                             ),
