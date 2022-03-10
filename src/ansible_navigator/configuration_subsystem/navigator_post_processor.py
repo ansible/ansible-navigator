@@ -15,7 +15,6 @@ from itertools import chain
 from itertools import repeat
 from pathlib import Path
 from typing import List
-from typing import Set
 from typing import Tuple
 from typing import TypeVar
 
