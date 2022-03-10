@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import List
 from typing import Union
 
+from pkg_resources import working_set
+
 from .action_defs import ActionReturn
 from .action_defs import RunInteractiveReturn
 from .action_defs import RunReturn
@@ -42,6 +44,17 @@ APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
 
 logger = logging.getLogger(PKG_NAME)
+
+
+def log_dependencies() -> List[LogMessage]:
+    """Retrieve installed packages and log as debug.
+
+    :returns: All packages, version and location
+    """
+    # pylint: disable=not-an-iterable
+    installed_packages_list = sorted([f"{i.key}=={i.version} {i.location}" for i in working_set])
+    messages = [LogMessage(level=logging.DEBUG, message=pkg) for pkg in installed_packages_list]
+    return messages
 
 
 def pull_image(args):
@@ -116,7 +129,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
 
 def main():
     """start here"""
-    messages: List[LogMessage] = []
+    messages: List[LogMessage] = log_dependencies()
     exit_messages: List[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
