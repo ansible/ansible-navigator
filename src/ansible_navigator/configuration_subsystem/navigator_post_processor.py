@@ -1,5 +1,4 @@
-"""post processing of ansible-navigator configuration
-"""
+"""Post processing of ansible-navigator configuration."""
 import importlib
 import logging
 import os
@@ -34,7 +33,19 @@ from .definitions import VolumeMountError
 
 
 def _post_processor(func):
+    """Return the wrapper for given func.
+
+    :param func: Function to be called in wrapper
+    :returns: Wrapper messages and exit messages
+    """
+
     def wrapper(*args, **kwargs):
+        """Run function and provide messages.
+
+        :param args: The arguments
+        :param kwargs: The keyword arguments
+        :returns: Log messages before and after
+        """
         name = kwargs["entry"].name
         before = str(kwargs["entry"].value.current)
         messages, exit_messages = func(*args, **kwargs)
@@ -59,7 +70,7 @@ PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
 
 class NavigatorPostProcessor:
     # pylint:disable=too-many-public-methods
-    """application post processor"""
+    """Application post processor."""
 
     def __init__(self):
         """Initialize the post processor."""
@@ -75,6 +86,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
+        """Post error if entry could not convert to boolean.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         try:
@@ -92,7 +109,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process ansible_runner_artifact_dir path"""
+        """Post process ansible_runner_artifact_dir path.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
@@ -106,7 +128,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process ansible_runner_rotate_artifacts_count"""
+        """Post process ansible_runner_rotate_artifacts_count.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
@@ -124,7 +151,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process ansible_runner_timeout"""
+        """Post process ansible_runner_timeout.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
@@ -142,7 +174,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process collection doc cache path"""
+        """Post process collection doc cache path.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         entry.value.current = abs_user_path(entry.value.current)
@@ -150,9 +187,17 @@ class NavigatorPostProcessor:
 
     @staticmethod
     @_post_processor
-    def cmdline(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def cmdline(
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process cmdline"""
+        """Post process cmdline.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if isinstance(entry.value.current, str):
@@ -166,7 +211,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process container_engine"""
+        """Post process container_engine.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.current == "auto":
@@ -184,7 +234,12 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process display_color"""
+        """Post process display_color.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.source == C.ENVIRONMENT_VARIABLE:
@@ -200,14 +255,24 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process editor_console"""
+        """Post process editor_console.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         return self._true_or_false(entry, config)
 
     @_post_processor
     def execution_environment(self, entry: SettingsEntry, config) -> PostProcessorReturn:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        """Post process execution_environment"""
+        """Post process execution_environment.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages, exit_messages = self._true_or_false(entry, config)
         if entry.value.current is True:
             exit_msg = ""
@@ -284,7 +349,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process execution_environment_image"""
+        """Post process execution_environment_image.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if ":" not in entry.value.current:
@@ -305,8 +375,12 @@ class NavigatorPostProcessor:
         """
         # pylint: disable=unused-argument
         # pylint: disable=too-many-branches
-        # pylint: disable=too-many-locals
+        """Post process set_environment_variable.
 
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         entry_name = entry.settings_file_path(prefix="")
@@ -405,7 +479,13 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process container_options"""
+        """Post process container_options.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.source == C.ENVIRONMENT_VARIABLE:
@@ -435,7 +515,7 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
         subcommand: str,
     ) -> PostProcessorReturn:
-        """Post process help_xxxx
+        """Post process help_xxxx.
 
         :param entry: The current settings entry
         :param config: The full application configuration
@@ -460,7 +540,12 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def inventory(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        """Post process inventory"""
+        """Post process inventory.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "inventory" and entry.value.current is C.NOT_SET:
@@ -490,7 +575,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process inventory_columns"""
+        """Post process inventory_columns.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
@@ -503,18 +593,30 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process log_append"""
+        """Post process log_append.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         return self._true_or_false(entry, config)
 
     @staticmethod
     @_post_processor
-    def log_file(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def log_file(
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process log_file
+        """Post process log_file.
 
         If the parent directory for the log file cannot be created and is writable.
         If not restore to default, this will allow the writing of log messages
         even if application initialization results in a sys.exit condition
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
         """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
@@ -546,7 +648,7 @@ class NavigatorPostProcessor:
     @_post_processor
     def mode(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         # pylint: disable=too-many-locals
-        """Post process mode
+        """Post process mode.
 
         :param entry: The current settings entry
         :param config: The full application configuration
@@ -630,13 +732,23 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def osc4(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        """Post process osc4"""
+        """Post process osc4.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         return self._true_or_false(entry, config)
 
     @staticmethod
     @_post_processor
     def plugin_name(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        """Post process plugin_name"""
+        """Post process plugin_name.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "doc" and entry.value.current is C.NOT_SET:
@@ -655,7 +767,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process pass_environment_variable"""
+        """Post process pass_environment_variable.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
@@ -665,7 +782,12 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def playbook(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        """Post process pass_environment_variable"""
+        """Post process pass_environment_variable.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:
@@ -685,7 +807,12 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process playbook_artifact_enable"""
+        """Post process playbook_artifact_enable.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         return self._true_or_false(entry, config)
 
     @staticmethod
@@ -694,7 +821,12 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process playbook_artifact_replay"""
+        """Post process playbook_artifact_replay.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "replay" and entry.value.current is C.NOT_SET:
@@ -725,7 +857,7 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process ``pull_arguments``
+        """Post process ``pull_arguments``.
 
         :param entry: The current settings entry
         :param config: The full application configuration
@@ -746,7 +878,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        """Post process set_environment_variable"""
+        """Post process set_environment_variable.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if entry.value.source in [

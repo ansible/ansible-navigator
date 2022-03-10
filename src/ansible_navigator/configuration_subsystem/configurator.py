@@ -1,5 +1,4 @@
-"""The configuration object
-"""
+"""The configuration object."""
 import logging
 import os
 
@@ -21,7 +20,7 @@ from .parser import Parser
 
 
 class Configurator:
-    """the configuration class"""
+    """The configuration class."""
 
     def __init__(
         self,
@@ -29,8 +28,9 @@ class Configurator:
         application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: Union[List, C] = C.NONE,
     ):
-        """
-        :param params: A list of parameters e.g. ['-x', 'value']
+        """Initialize the configuration variables.
+
+        :param params: A list of parameters e.g. ['-x', 'value'].
         :param application_configuration: An application specific Config object
         :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
                                            is not a USER_CLI sourced value, a list of entry names
@@ -52,9 +52,7 @@ class Configurator:
                 raise ValueError("'apply_previous_cli' enabled prior to an initialization")
 
     def _roll_back(self) -> None:
-        """In the case of a rollback, log the configuration state
-        prior to roll back
-        """
+        """In the case of a rollback, log the configuration state."""
         message = "Configuration errors encountered, rolling back to previous configuration."
         self._messages.append(LogMessage(level=logging.WARNING, message=message))
         for entry in self._config.entries:
@@ -70,10 +68,11 @@ class Configurator:
         self._messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     def configure(self) -> Tuple[List[LogMessage], List[ExitMessage]]:
-        """Perform the configuration
+        """Perform the configuration.
 
-        save the original entries, if an error is encountered
-        restore them
+        Save the original entries, if an error is encountered
+        restore them.
+        :returns: Log messages
         """
         self._config.original_command = self._params
         shlex_joined = shlex_join(self._config.original_command)
@@ -107,7 +106,7 @@ class Configurator:
         return self._messages, self._exit_messages
 
     def _argparse_error_handler(self, message: str):
-        """callback for argparse error handling to prevent sys.exit
+        """Call back for argparser error handling.
 
         :param message: A message from the parser
         :type message: str
@@ -115,9 +114,7 @@ class Configurator:
         self._exit_messages.append(ExitMessage(message=message))
 
     def _restore_original(self) -> None:
-        """Since we always operate on the same object
-        restore the current values back to NOT_SET
-        """
+        """Restore the current values back to NOT_SET."""
         for entry in self._config.entries:
             if self._config.internals.initializing or entry.change_after_initial:
                 entry.value.current = C.NOT_SET
@@ -265,8 +262,7 @@ class Configurator:
                     )
 
     def _apply_previous_cli_to_current(self) -> None:
-        """Apply eligible previous CLI values to current not set by the CLI"""
-
+        """Apply eligible previous CLI values to current not set by the CLI."""
         # _apply_previous_cli_entries must be ALL or a list of entries
         if self._apply_previous_cli_entries is not C.ALL and not isinstance(
             self._apply_previous_cli_entries,
