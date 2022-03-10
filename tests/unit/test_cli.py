@@ -3,6 +3,7 @@
 import shlex
 
 from copy import deepcopy
+from pathlib import Path
 from typing import NamedTuple
 
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
@@ -11,6 +12,7 @@ from unittest.mock import patch
 import pytest
 
 from ansible_navigator.cli import NavigatorConfiguration
+from ansible_navigator.cli import main
 from ansible_navigator.cli import parse_and_update
 from ..defaults import FIXTURES_DIR
 
@@ -186,3 +188,34 @@ def test_no_term(monkeypatch):
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
     expected = "Try again after setting the TERM environment variable"
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
+
+
+def test_for_version_logged(
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+    tmp_path: Path,
+):
+    """Ensure the version is captured in the log.
+
+    :param monkeypatch: The monkey patch fixture
+    :param caplog: The log capture fixture
+    :param tmp_path: A temporary director for this test
+    """
+    logfile = tmp_path / "log.txt"
+    command_line = [
+        "ansible-navigator",
+        "exec",
+        "ls",
+        "--ll",
+        "debug",
+        "--lf",
+        str(logfile),
+        "--pp",
+        "never",
+    ]
+    monkeypatch.setattr("sys.argv", command_line)
+    with pytest.raises(SystemExit):
+        # A SystemExit happens here because the container vanishes quickly
+        main()
+    assert "ansible-navigator==" in caplog.text
+    assert "ansible-runner==" in caplog.text

@@ -48,7 +48,7 @@ ansible-navigator:
     volume-mounts:
       - src: "/tmp"
         dest: "/test1"
-        label: "Z"
+        options: "Z"
     container-options:
       - "--net=host"
   help-builder: False
