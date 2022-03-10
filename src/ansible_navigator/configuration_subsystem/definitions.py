@@ -127,6 +127,8 @@ class SettingsEntry:
     #: Override the default, generated environment variable
     environment_variable_override: Optional[str] = None
     #: Over the default settings file path, dot delimited representation in tree
+    environment_variable_split_char: str = ","
+    #: The character used to split an environment variable value into a list
     settings_file_path_override: Optional[str] = None
     #: Subcommand this should this be used for
     subcommands: Union[List[str], Constants] = Constants.ALL
@@ -164,10 +166,16 @@ class SettingsEntry:
 
     def settings_file_path(self, prefix: str) -> str:
         """Generate an effective settings file path for this entry"""
-        if self.settings_file_path_override is not None:
-            sfp = f"{prefix}.{self.settings_file_path_override}"
+        if prefix:
+            prefix_str = f"{prefix}."
         else:
-            sfp = f"{prefix}.{self.name}"
+            prefix_str = prefix
+
+        if self.settings_file_path_override is not None:
+            sfp = f"{prefix_str}{self.settings_file_path_override}"
+        else:
+            sfp = f"{prefix_str}{self.name}"
+
         return sfp.replace("_", "-")
 
 
