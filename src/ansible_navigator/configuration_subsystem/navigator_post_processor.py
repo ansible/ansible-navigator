@@ -286,6 +286,7 @@ class NavigatorPostProcessor:
             for choice in choices:
                 if shutil.which(str(choice)):
                     entry.value.current = choice
+                    entry.value.source = C.AUTO
                     break
         return messages, exit_messages
 
