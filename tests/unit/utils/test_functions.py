@@ -1,5 +1,6 @@
 """Test the functions exposed in the :mod:`~ansible_navigator.utils.functions` subpackage."""
 import os
+import re
 
 from pathlib import Path
 from typing import List
@@ -205,3 +206,48 @@ def test_path_is_relative_to():
     file_in_directory = Path("/tmp/test/file.txt")
     assert functions.path_is_relative_to(child=file_in_directory, parent=directory)
     assert not functions.path_is_relative_to(child=directory, parent=file_in_directory)
+
+
+iso8601 = re.compile(
+    r"""
+    ^
+    (?P<year>-?(?:[1-9][0-9]*)?[0-9]{4})-
+    (?P<month>1[0-2]|0[1-9])-
+    (?P<day>3[01]|0[1-9]|[12][0-9])
+    T
+    (?P<hour>2[0-3]|[01][0-9]):
+    (?P<minute>[0-5][0-9]):
+    (?P<second>[0-5][0-9])
+    (?P<ms>\.[0-9]+)?
+    (?P<timezone>Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?
+    $""",
+    re.VERBOSE,
+)
+
+
+@pytest.mark.parametrize("time_zone", ("local", "America/Los_Angeles", "UTC", "bogus"))
+def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str):
+    """Test the using local as a time zone.
+
+    :param caplog: The log capture fixture
+    :param time_zone: The timezone
+    """
+    time_string = functions.now_iso(time_zone=time_zone)
+    re_matched = iso8601.match(time_string)
+    assert re_matched is not None
+    matched = re_matched.groupdict()
+    assert len(matched["year"]) == 4
+    assert len(matched["month"]) == 2
+    assert len(matched["day"]) == 2
+    assert len(matched["hour"]) == 2
+    assert len(matched["minute"]) == 2
+    assert len(matched["second"]) == 2
+    assert matched.get("ms", ".").startswith(".")
+    assert len(matched["timezone"]) == 6
+    if time_zone == "America/Los_Angeles":
+        assert matched["timezone"] in ("-08:00", "-07:00")
+    if time_zone == "UTC":
+        assert matched["timezone"] == "+00:00"
+    if time_zone == "bogus":
+        assert matched["timezone"] == "+00:00"
+        assert "The time zone 'bogus' could not be found. Using UTC." in caplog.text

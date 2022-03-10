@@ -1,6 +1,7 @@
 """some utilities that are specific to ansible_navigator
 """
 import ast
+import datetime
 import decimal
 import html
 import logging
@@ -27,6 +28,8 @@ from typing import Union
 from jinja2 import Environment
 from jinja2 import StrictUndefined
 from jinja2 import TemplateError
+
+from .compatibility import zoneinfo
 
 
 logger = logging.getLogger(__name__)
@@ -367,6 +370,21 @@ def human_time(seconds: Union[int, float]) -> str:
     if minutes > 0:
         return f"{sign_string!s}{minutes:d}m{seconds:d}s"
     return f"{sign_string!s}{seconds:d}s"
+
+
+def now_iso(time_zone: str) -> str:
+    """Return the current time as an ISO 8601 formatted string, given a time zone.
+
+    :params time_zone: The IANA timezone name or local.
+    :returns: The ISO 8601 formatted time zone string
+    """
+    if time_zone == "local":
+        return datetime.datetime.now(tz=datetime.timezone.utc).astimezone().isoformat()
+    try:
+        return datetime.datetime.now(tz=zoneinfo.ZoneInfo(time_zone)).isoformat()
+    except zoneinfo.ZoneInfoNotFoundError:
+        logger.error("The time zone '%s' could not be found. Using UTC.", time_zone)
+        return datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
 
 
 PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
