@@ -15,7 +15,7 @@ if TYPE_CHECKING:
         from typing_extensions import TypeAlias
 
 
-if sys.version_info < (3, 10):
+if sys.version_info < (3, 9):
     from backports import zoneinfo
 else:
     import zoneinfo
