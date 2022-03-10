@@ -1,5 +1,4 @@
-"""Build the argument parser
-"""
+"""Build the argument parser."""
 
 from argparse import SUPPRESS
 from argparse import ArgumentParser
@@ -14,7 +13,7 @@ from .definitions import Constants as C
 
 
 class Parser:
-    """Build the args"""
+    """Build the args."""
 
     def __init__(self, config: ApplicationConfiguration):
         """Initialize the command line interface parameter parser.
@@ -30,7 +29,11 @@ class Parser:
 
     @staticmethod
     def generate_argument(entry) -> Tuple[Any, Any, Dict[str, Any]]:
-        """Generate an argparse argument"""
+        """Generate an argparse argument.
+
+        :param entry: Single settings entry
+        :returns: Argparse object
+        """
         kwargs = {}
         help_strings = [entry.short_description]
         if entry.choices:
