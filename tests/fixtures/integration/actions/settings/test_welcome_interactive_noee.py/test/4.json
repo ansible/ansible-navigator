@@ -9,7 +9,7 @@
     },
     "output": [
         "  NAME                                             DEFAULT                                                                        SOURCE                                                                                   CURRENT",
-        "0│App                                                 True                                                                        Defaults                                                                                 welcome",
+        "0│App                                                 True                                                                        Defaults                                                                                 XXXXXXX",
         "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }

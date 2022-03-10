@@ -86,12 +86,12 @@ class BaseClass:
         if step.mask:
             # mask out some settings that is subject to change each run
             maskables = [
-                "app",
-                "collection_doc_cache_path",
-                "current_settings_file",
+                "App",
+                "Collection doc cache path",
+                "Current settings file",
             ]
             # Determine if a menu is showing
-            mask_column_name = "CURRENT VALUE"
+            mask_column_name = "CURRENT"
             column_start = received_output[0].find(mask_column_name)
             column_exists = column_start != -1
             if column_exists:
