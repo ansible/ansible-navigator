@@ -423,7 +423,7 @@ class NavigatorPostProcessor:
         exit_messages: List[ExitMessage] = []
         entry_name = entry.settings_file_path(prefix="")
         entry_source = entry.value.source
-        volume_mounts: Set[VolumeMount] = set()
+        volume_mounts: List[VolumeMount] = []
 
         if entry_source in (C.ENVIRONMENT_VARIABLE, C.USER_CLI):
             hint = (
@@ -442,7 +442,7 @@ class NavigatorPostProcessor:
                     exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
 
                 try:
-                    volume_mounts.add(
+                    volume_mounts.append(
                         VolumeMount(
                             fs_source=src,
                             fs_destination=dest,
@@ -472,7 +472,7 @@ class NavigatorPostProcessor:
             else:
                 for volume_mount in entry.value.current:
                     try:
-                        volume_mounts.add(
+                        volume_mounts.append(
                             VolumeMount(
                                 fs_source=volume_mount.get("src"),
                                 fs_destination=volume_mount.get("dest"),
@@ -503,6 +503,10 @@ class NavigatorPostProcessor:
             if not isinstance(entry.value.current, list):
                 entry.value.current = set()
             entry.value.current.extend(v.to_string() for v in self.extra_volume_mounts)
+
+        # Finally, ensure the list has no duplicates
+        if isinstance(entry.value.current, list):
+            entry.value.current = sorted(set(entry.value.current), key=entry.value.current.index)
 
         return messages, exit_messages
 
