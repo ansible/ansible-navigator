@@ -112,19 +112,6 @@ class BaseClass:
             line.replace(os_independent_tmp, "FIXTURES_COLLECTION_DIR") for line in received_output
         ]
 
-        # if step.mask:
-        #     # mask out some configuration that is subject to change each run
-        #     maskables = []
-        #     # Determine if a menu is showing
-        #     mask_column_name = "CURRENT VALUE"
-        #     column_start = received_output[0].find(mask_column_name)
-        #     column_exists = column_start != -1
-        #     if column_exists:
-        #         mask = len(mask_column_name) * "X"
-        #         for idx, line in enumerate(received_output):
-        #             if any(f"│{m}" in line for m in maskables):
-        #                 received_output[idx] = received_output[idx][0:column_start] + mask
-
         fixtures_update_requested = (
             self.update_fixtures
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
