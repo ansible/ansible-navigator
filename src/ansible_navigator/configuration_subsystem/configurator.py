@@ -196,7 +196,10 @@ class Configurator:
             if set_env_var is not None:
                 if self._config.internals.initializing or entry.change_after_initial:
                     if entry.cli_parameters is not None and entry.cli_parameters.nargs == "+":
-                        entry.value.current = set_env_var.split(",")
+                        entry.value.current = [
+                            value.strip()
+                            for value in set_env_var.split(entry.environment_variable_split_char)
+                        ]
                     else:
                         entry.value.current = set_env_var
                     entry.value.source = C.ENVIRONMENT_VARIABLE
