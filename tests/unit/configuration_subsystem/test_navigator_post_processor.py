@@ -2,24 +2,55 @@
 
 import pytest
 
+from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.configuration_subsystem.navigator_post_processor import (
     VolumeMount,
-)
-from ansible_navigator.configuration_subsystem.navigator_post_processor import (
-    VolumeMountOption,
 )
 
 
 @pytest.mark.parametrize(
     ("volmount", "expected"),
     (
-        (VolumeMount("test_option", "/foo", "/bar"), "/foo:/bar"),
-        (VolumeMount("test_option", "/foo", "/bar", [VolumeMountOption.z]), "/foo:/bar:z"),
         (
-            VolumeMount("test_option", "/foo", "/bar", [VolumeMountOption.z, VolumeMountOption.Z]),
-            "/foo:/bar:z,Z",
+            VolumeMount(
+                fs_destination="/bar",
+                fs_source="/tmp",
+                options_string="",
+                settings_entry="test_option",
+                source=Constants.USER_CLI,
+            ),
+            "/tmp:/bar",
         ),
-        (VolumeMount("test_option", "/foo", "/bar", []), "/foo:/bar"),
+        (
+            VolumeMount(
+                settings_entry="test_option",
+                fs_source="/tmp",
+                fs_destination="/bar",
+                options_string="z",
+                source=Constants.USER_CLI,
+            ),
+            "/tmp:/bar:z",
+        ),
+        (
+            VolumeMount(
+                settings_entry="test_option",
+                fs_source="/tmp",
+                fs_destination="/bar",
+                options_string="z,Z",
+                source=Constants.USER_CLI,
+            ),
+            "/tmp:/bar:z,Z",
+        ),
+        (
+            VolumeMount(
+                settings_entry="test_option",
+                fs_source="/tmp",
+                fs_destination="/bar",
+                options_string="",
+                source=Constants.USER_CLI,
+            ),
+            "/tmp:/bar",
+        ),
     ),
     ids=(
         "normal mount",

@@ -12,6 +12,7 @@ import time
 import uuid
 
 from math import floor
+from pathlib import Path
 from queue import Queue
 from typing import Any
 from typing import Callable
@@ -20,6 +21,7 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
+from ansible_navigator.ui_framework.content_defs import ContentView
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
@@ -38,7 +40,8 @@ from ..utils.functions import abs_user_path
 from ..utils.functions import human_time
 from ..utils.functions import remove_ansi
 from ..utils.functions import round_half_up
-from ..utils.serialize import json_dump
+from ..utils.serialize import SerializationFormat
+from ..utils.serialize import serialize_write_file
 from . import _actions as actions
 from . import run_action
 
@@ -849,16 +852,21 @@ class Action(ActionBase):
 
             try:
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
-                with open(filename, "w", encoding="utf-8") as fh:
-                    artifact = {
-                        "version": "1.0.0",
-                        "plays": self._plays.value,
-                        "stdout": self.stdout,
-                        "status": status,
-                        "status_color": status_color,
-                    }
-                    json_dump(artifact, fh)
-                    self._logger.info("Saved artifact as %s", filename)
+                artifact = {
+                    "version": "1.0.0",
+                    "plays": self._plays.value,
+                    "stdout": self.stdout,
+                    "status": status,
+                    "status_color": status_color,
+                }
+                serialize_write_file(
+                    content=artifact,
+                    content_view=ContentView.NORMAL,
+                    file_mode="w",
+                    file=Path(filename),
+                    serialization_format=SerializationFormat.JSON,
+                )
+                self._logger.info("Saved artifact as %s", filename)
 
             except (IOError, OSError) as exc:
                 error = (
