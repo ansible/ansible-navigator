@@ -46,7 +46,7 @@ PKG_NAME = "ansible_navigator"
 logger = logging.getLogger(PKG_NAME)
 
 
-def log_dependencies():
+def log_dependencies() -> List[LogMessage]:
     """Retrieve installed packages and log as debug.
 
     :returns: All packages, version and location
