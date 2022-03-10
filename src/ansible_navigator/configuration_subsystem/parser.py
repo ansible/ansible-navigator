@@ -32,7 +32,7 @@ class Parser:
         """Generate an argparse argument.
 
         :param entry: Single settings entry
-        :returns: Long and short cli parameters, and dictionary of parsed arguments 
+        :returns: Long and short cli parameters, and dictionary of parsed arguments
         """
         kwargs = {}
         help_strings = [entry.short_description]
