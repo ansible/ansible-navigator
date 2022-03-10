@@ -151,8 +151,8 @@ class SettingsEntry:
     def invalid_choice(self) -> str:
         """Generate an invalid choice message for this entry.
 
-        :returns: Constructed message
         :raises ValueError: If source is not set for that entry
+        :returns: Constructed message
         """
         name = self.name.replace("_", "-")
         if self.value.source is not Constants.NOT_SET:
