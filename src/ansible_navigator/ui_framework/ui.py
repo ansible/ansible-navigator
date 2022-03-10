@@ -22,10 +22,11 @@ from typing import Tuple
 from typing import Union
 
 from ..utils.functions import templar
-from ..utils.serialize import human_dump
-from ..utils.serialize import json_dumps
+from ..utils.serialize import SerializationFormat
+from ..utils.serialize import serialize
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
+from .content_defs import ContentView
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -510,10 +511,20 @@ class UserInterface(CursesWindow):
 
         if self.serialization_format() == "source.ansi":
             return self._colorizer.render_ansi(doc=obj)
+
+        content_view = ContentView.NORMAL if self._hide_keys else ContentView.FULL
         if self.serialization_format() == "source.yaml":
-            string = human_dump(obj)
+            string = serialize(
+                content_view=content_view,
+                content=obj,
+                serialization_format=SerializationFormat.YAML,
+            )
         elif self.serialization_format() == "source.json":
-            string = json_dumps(obj)
+            string = serialize(
+                content_view=content_view,
+                content=obj,
+                serialization_format=SerializationFormat.JSON,
+            )
         else:
             string = obj
 
