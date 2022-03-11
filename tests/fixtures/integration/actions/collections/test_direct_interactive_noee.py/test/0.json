@@ -1,7 +1,12 @@
 {
-    "name": "test[0-ansible-navigator collections --execution-environment false-ansible-navigator collections browse window]",
+    "name": "test[00-ansible-navigator collections --ee False --ll debug --mode interactive-ansible-navigator collections top window]",
     "index": 0,
-    "comment": "ansible-navigator collections browse window",
+    "comment": "ansible-navigator collections top window",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
     "output": [
         "  NAME                         VERSION    SHADOWED     PATH",
         "0│company_name.coll_1          1.0.0         False     FIXTURES_COLLECTION_DIR/test_direct_interactive_noee.py/collections/ansible_collections/company_name/coll_1",
