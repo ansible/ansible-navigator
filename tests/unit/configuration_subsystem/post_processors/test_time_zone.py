@@ -50,6 +50,10 @@ test_data = (
         source=C.ENVIRONMENT_VARIABLE,
     ),
     Scenario(
+        current="local",
+        source=C.ENVIRONMENT_VARIABLE,
+    ),
+    Scenario(
         current={},
         exit_message_substr=(
             "The specified time zone '{}', set by settings file,"
@@ -77,6 +81,10 @@ test_data = (
         source=C.USER_CFG,
     ),
     Scenario(
+        current="local",
+        source=C.USER_CFG,
+    ),
+    Scenario(
         current="foo",
         exit_message_substr=(
             "The specified time zone 'foo', set by command line, could not be found."
@@ -85,6 +93,10 @@ test_data = (
     ),
     Scenario(
         current="Japan",
+        source=C.USER_CLI,
+    ),
+    Scenario(
+        current="local",
         source=C.USER_CLI,
     ),
 )
