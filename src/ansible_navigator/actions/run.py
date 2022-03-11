@@ -1,7 +1,6 @@
 """:run
 """
 import curses
-import datetime
 import json
 import logging
 import os
@@ -38,6 +37,7 @@ from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import abs_user_path
 from ..utils.functions import human_time
+from ..utils.functions import now_iso
 from ..utils.functions import remove_ansi
 from ..utils.functions import round_half_up
 from ..utils.serialize import SerializationFormat
@@ -842,7 +842,7 @@ class Action(ActionBase):
             filename = filename.format(
                 playbook_dir=os.path.dirname(self._args.playbook),
                 playbook_name=os.path.splitext(os.path.basename(self._args.playbook))[0],
-                ts_utc=datetime.datetime.now(tz=datetime.timezone.utc).isoformat(),
+                ts_utc=now_iso(time_zone="UTC"),
             )
             self._logger.debug("Formatted artifact file name set to %s", filename)
             filename = abs_user_path(filename)
