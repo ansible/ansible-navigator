@@ -1,0 +1,13 @@
+---
+galaxy_info:
+  author: Ansible team (ansible-navigator)
+  description: Minimal sample role.
+  company: Ansible
+  license: LICENSE
+  min_ansible_version: 2.9.0
+  galaxy_tags: ["tag_1", "tag_2"]
+  platforms:
+    - name: eos
+      versions:
+        - all
+dependencies: []
