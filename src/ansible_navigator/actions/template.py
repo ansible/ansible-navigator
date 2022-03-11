@@ -86,7 +86,10 @@ class Action(ActionBase):
 
         while True:
             app.update()
-            serialization_format = "source.txt" if isinstance(templated, str) else ""
+            serialization_format = ""
+            if isinstance(templated, str):
+                if interaction.ui.serialization_format() != "text.html.markdown":
+                    serialization_format = "source.txt"
             next_interaction: Interaction = interaction.ui.show(
                 obj=templated,
                 serialization_format=serialization_format,

@@ -33,16 +33,22 @@ arrow up, arrow down                                  Scroll up/down
 :<number>                               Go to menu item
 :{{ n|filter }}                         Template the menu item
 
-## TASKS
+## CONTENT
 --------------------------------------------------------------------------------------
-[0-9]                                   Go to task number
-:<number>                               Go to task number
-+, -                                    Next/Previous task
+[0-9]                                   Go to entry number
+:<number>                               Go to entry number
++, -                                    Next/Previous entry
 _, :_                                   Toggle hidden keys
 :{{ key|filter }}                       Template the key's value
-:d, :doc                                Show the doc for the current task's module
 :j, :json                               Switch to JSON serialization
+:md, :markdown                          Switch to markdown coloring
 :y, :yaml                               Switch to YAML serialization
+
+
+## TASKS
+--------------------------------------------------------------------------------------
+:d, :doc                                Show the doc for the current task's module
+
 
 ## LINE INPUT
 --------------------------------------------------------------------------------------

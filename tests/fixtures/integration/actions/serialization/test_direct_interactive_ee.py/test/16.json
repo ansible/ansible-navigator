@@ -1,0 +1,21 @@
+{
+    "name": "test[16-:{{ readme }}-role_full readme, yaml]",
+    "index": 16,
+    "comment": "role_full readme, yaml",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "0│# Role full",
+        "1│",
+        "2│This is a role with:",
+        "3│",
+        "4│- defaults/main.yml",
+        "5│- meta/argument_spec.yml",
+        "6│- meta/main.yml",
+        "7│- README.md",
+        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+    ]
+}

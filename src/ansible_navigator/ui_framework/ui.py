@@ -3,6 +3,7 @@
 """
 import curses
 import logging
+import pprint
 import re
 
 from collections.abc import Mapping
@@ -525,6 +526,8 @@ class UserInterface(CursesWindow):
                 content=obj,
                 serialization_format=SerializationFormat.JSON,
             )
+        elif self.serialization_format() == "text.html.markdown" and not isinstance(obj, str):
+            string = pprint.pformat(obj, width=self._screen_width)
         else:
             string = obj
 

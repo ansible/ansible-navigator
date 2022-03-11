@@ -1,0 +1,35 @@
+{
+    "name": "test[14-:markdown-role_full details, markdown]",
+    "index": 14,
+    "comment": "role_full details, markdown",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "COMPANY_NAME.COLL_1.ROLE_FULL: Complete sample role.",
+        " 0│{'argument_specs': {'alternate': {'options': {'role_full_int': {'default': 1024, 'description': 'The integer value, defaulting to 1024.', 'required': False, 'type': 'int'}},",
+        " 1│                                  'short_description': 'The alternate entry point for the role_full role.'},",
+        " 2│                    'main': {'options': {'role_full_int': {'default': 42, 'description': 'The integer value, defaulting to 42.', 'required': False, 'type': 'int'},",
+        " 3│                                         'role_full_str': {'description': 'The string value', 'required': True, 'type': 'str'}},",
+        " 4│                             'short_description': 'The main entry point for the role_full role.'}},",
+        " 5│ 'argument_specs_path': 'FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/meta/argument_specs.yml',",
+        " 6│ 'defaults': {'role_full_bool': True, 'role_full_int': 42, 'role_full_str': 'Test string'},",
+        " 7│ 'defaults_path': 'FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/defaults/main.yml',",
+        " 8│ 'full_name': 'company_name.coll_1.role_full',",
+        " 9│ 'info': {'dependencies': [],",
+        "10│          'galaxy_info': {'author': 'Ansible team (ansible-navigator)',",
+        "11│                          'company': 'Ansible',",
+        "12│                          'description': 'Complete sample role.',",
+        "13│                          'galaxy_tags': ['tag_1', 'tag_2'],",
+        "14│                          'license': 'LICENSE',",
+        "15│                          'min_ansible_version': '2.9.0',",
+        "16│                          'platforms': [{'name': 'eos', 'versions': ['all']}]}},",
+        "17│ 'info_path': 'FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/meta/main.yml',",
+        "18│ 'readme': '# Role full\\n\\nThis is a role with:\\n\\n- defaults/main.yml\\n- meta/argument_spec.yml\\n- meta/main.yml\\n- README.md\\n',",
+        "19│ 'readme_path': 'FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/README.md',",
+        "20│ 'short_name': 'role_full'}",
+        "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
+    ]
+}

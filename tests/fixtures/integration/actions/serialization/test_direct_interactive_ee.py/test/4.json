@@ -1,0 +1,36 @@
+{
+    "name": "test[04-:markdown-mod_1 full, markdown]",
+    "index": 4,
+    "comment": "mod_1 full, markdown",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "COMPANY_NAME.COLL_1.MOD_1: This is a test module",
+        " 0│{'additional_information': {},",
+        " 1│ 'collection_info': {'authors': ['Ansible team (ansible-navigator)'],",
+        " 2│                     'license_file': 'LICENSE',",
+        " 3│                     'name': 'company_name.coll_1',",
+        " 4│                     'namespace': 'company_name',",
+        " 5│                     'path': 'FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1',",
+        " 6│                     'readme': 'README.md',",
+        " 7│                     'shadowed_by': [],",
+        " 8│                     'version': '1.0.0'},",
+        " 9│ 'doc': {'author': ['test'],",
+        "10│         'description': ['This is a test module'],",
+        "11│         'module': 'mod_1',",
+        "12│         'notes': ['This is a dummy module'],",
+        "13│         'options': {'bar': {'aliases': ['bam'], 'choices': ['candidate', 'running'], 'default': 'candidate', 'description': ['Dummy option I(bar)'], 'type': 'str'},",
+        "14│                     'foo': {'description': ['Dummy option I(foo)'], 'type': 'str'}},",
+        "15│         'short_description': 'This is a test module',",
+        "16│         'version_added': '1.0.0',",
+        "17│         'version_added_collection': 'company_name.coll_1'},",
+        "18│ 'examples': '\\n- name: test task-1\\n  company_name.coll_1.mod_1:\\n    foo: somevalue\\n    bar: candidate\\n',",
+        "19│ 'full_name': 'company_name.coll_1.mod_1',",
+        "20│ 'metadata': None,",
+        "21│ 'returndocs': {'baz': {'description': 'test return 1', 'returned': 'success', 'sample': ['a', 'b'], 'type': 'list'}}}",
+        "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
+    ]
+}
