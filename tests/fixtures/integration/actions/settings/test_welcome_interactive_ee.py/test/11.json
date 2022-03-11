@@ -3,9 +3,12 @@
     "index": 11,
     "comment": "quit vi",
     "additional_information": {
-        "present": [],
+        "present": [
+            "Ansible runner artifact dir",
+            "Help playbook"
+        ],
         "absent": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
         "   NAME                                                 DEFAULT    SOURCE                             CURRENT",
