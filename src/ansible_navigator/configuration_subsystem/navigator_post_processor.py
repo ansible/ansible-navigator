@@ -788,18 +788,21 @@ class NavigatorPostProcessor:
         """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        available_timezones = sorted(zoneinfo.available_timezones())
-        if entry.value.current in available_timezones:
-            return messages, exit_messages
 
-        msg = (
-            f"The specified time zone is not available: '{entry.value.current}'."
-            f" The default value '{entry.value.default}' will be used instead."
+        exit_msg = (
+            f"The specified time zone '{entry.value.current}', set by"
+            f" {entry.value.source.value.lower()}, "
         )
-        messages.append(LogMessage(level=logging.ERROR, message=msg))
-
-        entry.value.current = entry.value.default
-        entry.value.source = C.AUTO
-        msg = f"Available time zones include {oxfordcomma(available_timezones, 'and')}"
-        messages.append(LogMessage(level=logging.DEBUG, message=msg))
+        if isinstance(entry.value.current, str):
+            available_timezones = sorted(zoneinfo.available_timezones())
+            if entry.value.current in available_timezones or entry.value.current == "local":
+                return messages, exit_messages
+            exit_msg += "could not be found."
+        else:
+            exit_msg += (
+                f"must be a string but was found to be a '{type(entry.value.current).__name__}'."
+            )
+        exit_messages.append(ExitMessage(message=exit_msg))
+        exit_msg = "Please try again with a valid IANA time zone."
+        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages

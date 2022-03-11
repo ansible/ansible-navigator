@@ -6,7 +6,6 @@ from typing import Tuple
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
-from ..configuration_subsystem import Constants
 from ..configuration_subsystem import PresentableSettingsEntries
 from ..configuration_subsystem import PresentableSettingsEntry
 from ..configuration_subsystem import to_presentable
@@ -34,7 +33,7 @@ def color_menu(colno: int, colname: str, entry: PresentableSettingsEntry) -> Tup
     :param entry: Column value
     :returns: Constants that curses uses to color a line of text
     """
-    if entry.default and entry.source != Constants.AUTO.value:
+    if entry.default:
         return Color.GREEN, Color.BLACK
     return Color.YELLOW, Color.BLACK
 
