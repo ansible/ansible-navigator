@@ -62,7 +62,7 @@ test_data = (
     ),
     Scenario(
         current=[["/tmp:/tmp:Y"]],
-        exit_message_substr="Unrecognized label: 'Y'",
+        exit_message_substr="Unrecognized option: 'Y'",
         source=C.USER_CLI,
     ),
     Scenario(
@@ -72,7 +72,7 @@ test_data = (
     ),
     Scenario(
         current=[["/tmp:/tmp:Z,Y"]],
-        exit_message_substr="Unrecognized label: 'Y'",
+        exit_message_substr="Unrecognized option: 'Y'",
         source=C.USER_CLI,
     ),
     Scenario(
@@ -97,7 +97,7 @@ test_data = (
     ),
     Scenario(
         current=["/tmp:/tmp:Z,y", "/tmp:/tmp"],
-        exit_message_substr="Unrecognized label: 'y'",
+        exit_message_substr="Unrecognized option: 'y'",
         source=C.ENVIRONMENT_VARIABLE,
     ),
     Scenario(
@@ -116,47 +116,47 @@ test_data = (
         source=C.USER_CFG,
     ),
     Scenario(
-        current={"src": "/tmp", "dest": "/tmp", "label": "Z"},
+        current={"src": "/tmp", "dest": "/tmp", "options": "Z"},
         exit_message_substr="could not be parsed",
         source=C.USER_CFG,
     ),
     Scenario(
-        current=[{"my_src": "/tmp", "my_dest": "/tmp", "my_label": "Z"}],
+        current=[{"my_src": "/tmp", "my_dest": "/tmp", "my_options": "Z"}],
         exit_message_substr="could not be parsed",
         source=C.USER_CFG,
     ),
     Scenario(
-        current=[{"src": "/tmp", "dest": "/tmp", "label": "Z"}],
+        current=[{"src": "/tmp", "dest": "/tmp", "options": "Z"}],
         expected=["/tmp:/tmp:Z"],
         source=C.USER_CFG,
     ),
     Scenario(
-        current=[{"src": True, "dest": False, "label": 42}],
+        current=[{"src": True, "dest": False, "options": 42}],
         exit_message_substr=(
             "Source: 'True' is not a string."
             " Destination: 'False' is not a string."
-            " Labels: '42' is not a string."
+            " Options: '42' is not a string."
         ),
         source=C.USER_CFG,
     ),
     Scenario(
-        current=list(repeat({"src": "/tmp", "dest": "/tmp", "label": "Z"}, 4)),
+        current=list(repeat({"src": "/tmp", "dest": "/tmp", "options": "Z"}, 4)),
         expected=["/tmp:/tmp:Z"],
         source=C.USER_CFG,
     ),
     Scenario(
-        current=[{"src": "/tmp", "dest": "/tmp", "label": "Z,z"}],
+        current=[{"src": "/tmp", "dest": "/tmp", "options": "Z,z"}],
         expected=["/tmp:/tmp:Z,z"],
         source=C.USER_CFG,
     ),
     Scenario(
-        current=[{"src": "/tmp", "dest": "/tmp", "label": "Z,y"}],
-        exit_message_substr="Unrecognized label: 'y'",
+        current=[{"src": "/tmp", "dest": "/tmp", "options": "Z,y"}],
+        exit_message_substr="Unrecognized option: 'y'",
         source=C.USER_CFG,
     ),
     Scenario(
         current=[[r"C:\WINNT\System32:/tmp"]],
-        exit_message_substr="Unrecognized label: '/tmp'",
+        exit_message_substr="Unrecognized option: '/tmp'",
         source=C.USER_CLI,
     ),
     Scenario(

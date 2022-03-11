@@ -1,0 +1,37 @@
+{
+    "name": "test[6-:3-execution_environment_image details]",
+    "index": 6,
+    "comment": "execution_environment_image details",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "Execution environment image (current value/default value: quay.io/ansible/creator-ee:v0.2.0)",
+        " 0│---                                                                                                                                                                                                                                                                                                     ▒",
+        " 1│choices: []                                                                                                                                                                                                                                                                                             ▒",
+        " 2│cli_parameters:                                                                                                                                                                                                                                                                                         ▒",
+        " 3│  long: --execution-environment-image                                                                                                                                                                                                                                                                   ▒",
+        " 4│  short: --eei                                                                                                                                                                                                                                                                                          ▒",
+        " 5│current_settings_file: None                                                                                                                                                                                                                                                                             ▒",
+        " 6│current_value: quay.io/ansible/creator-ee:v0.2.0                                                                                                                                                                                                                                                        ▒",
+        " 7│default: true                                                                                                                                                                                                                                                                                           ▒",
+        " 8│default_value: quay.io/ansible/creator-ee:v0.2.0                                                                                                                                                                                                                                                        ▒",
+        " 9│description: Specify the name of the execution environment image                                                                                                                                                                                                                                        ▒",
+        "10│env_var: ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE                                                                                                                                                                                                                                                  ▒",
+        "11│name: Execution environment image                                                                                                                                                                                                                                                                       ▒",
+        "12│settings_file_sample:                                                                                                                                                                                                                                                                                   ▒",
+        "13│  ansible-navigator:                                                                                                                                                                                                                                                                                    ▒",
+        "14│    execution-environment:                                                                                                                                                                                                                                                                              ▒",
+        "15│      image: <------                                                                                                                                                                                                                                                                                    ▒",
+        "16│source: Defaults                                                                                                                                                                                                                                                                                        ▒",
+        "17│subcommands:                                                                                                                                                                                                                                                                                            ▒",
+        "18│- builder                                                                                                                                                                                                                                                                                               ▒",
+        "19│- collections",
+        "20│- config",
+        "21│- doc",
+        "22│- exec",
+        "^f/PgUp page up                          ^b/PgDn page down                          ↑↓ scroll                          esc back                          - previous                          + next                          [0-9] goto                          :help help"
+    ]
+}

@@ -3,14 +3,18 @@
 
 import copy
 
+from dataclasses import InitVar
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Iterable
 from typing import List
 from typing import Optional
+from typing import Tuple
+from typing import TypeVar
 from typing import Union
 
 from ..utils.functions import oxfordcomma
@@ -19,6 +23,30 @@ from ..utils.functions import oxfordcomma
 if TYPE_CHECKING:
     from .navigator_configuration import Internals
     from .navigator_post_processor import NavigatorPostProcessor
+
+
+class Constants(Enum):
+    """Mapping some constants to friendly text"""
+
+    ALL = "All"
+    AUTO = "Automatically determined"
+    DEFAULT_CFG = "Defaults"
+    ENVIRONMENT_VARIABLE = "Environment variable"
+    NONE = "None"
+    NOT_SET = "Not set"
+    PREVIOUS_CLI = "Previous cli command"
+    SAME_SUBCOMMAND = (
+        "Used to determine if an entry should be used when"
+        " applying previous cli common entries, this indicates"
+        " that it will only be used if the subcommand is the same"
+    )
+    SEARCH_PATH = "Search path"
+    SENTINEL = "Indicates a nonvalue"
+    USER_CFG = "Settings file"
+    USER_CLI = "Command line"
+
+
+# The following are ordered to build up to an ApplicationConfiguration
 
 
 @dataclass
@@ -40,27 +68,6 @@ class CliParameters:
         """
         long = self.long_override or f"--{name_dashed}"
         return long
-
-
-class Constants(Enum):
-    """Mapping some constants to friendly text"""
-
-    ALL = "All"
-    AUTO = "Automatically determined"
-    DEFAULT_CFG = "Defaults"
-    ENVIRONMENT_VARIABLE = "Environment variable"
-    NONE = "None"
-    NOT_SET = "Not set"
-    PREVIOUS_CLI = "Previous cli command"
-    SAME_SUBCOMMAND = (
-        "Used to determine if an entry should be used when"
-        " applying previous cli common entries, this indicates"
-        " that it will only be used if the subcommand is the same"
-    )
-    SEARCH_PATH = "Found using search path"
-    SENTINEL = "Indicates a nonvalue"
-    USER_CFG = "User-provided configuration file"
-    USER_CLI = "Provided at command line"
 
 
 @dataclass
@@ -229,3 +236,121 @@ class ApplicationConfiguration:
     def subcommand(self, name) -> SubCommand:
         """Retrieve a configuration subcommand by name"""
         return self._get_by_name(name, "subcommands")
+
+
+# The following are ordered to build up to an VolumeMount
+
+
+class VolumeMountOption(Enum):
+    """Options that can be tagged on to the end of volume mounts.
+
+    Usually these are used for things like selinux relabeling, but there are
+    some other valid options as well, which can and should be added here as
+    needed. See ``man podman-run`` and ``man docker-run`` for valid choices and
+    keep in mind that we support both runtimes.
+    """
+
+    # Relabel as private
+    Z = "Z"
+
+    # Relabel as shared.
+    z = "z"  # pylint: disable=invalid-name
+
+
+V = TypeVar("V", bound="VolumeMount")  # pylint: disable=invalid-name
+
+
+class VolumeMountError(Exception):
+    """Custom exception raised when building VolumeMounts."""
+
+
+@dataclass(frozen=True)
+class VolumeMount:
+    """Describes EE volume mounts."""
+
+    fs_source: str
+    """The source file system path of the volume mount"""
+    fs_destination: str
+    """The destination file system path in the container for the volume mount"""
+    settings_entry: str
+    """The name of the settings entry requiring this volume mount"""
+    source: Constants = field(compare=False)
+    """The settings source for this volume mount"""
+    options_string: InitVar[str]
+    """Comma delimited options"""
+    options: Tuple[VolumeMountOption, ...] = ()
+    """Options for the bind mount"""
+
+    def __post_init__(self, options_string):
+        """Post process the ``VolumeMount`` and perform sanity checks.
+
+        :raises VolumeMountError: When a viable VolumeMount cannot be created
+        """
+        # pylint: disable=too-many-branches
+        errors = []
+        # Validate the source
+        if isinstance(self.fs_source, str):
+            if self.fs_source == "":
+                errors.append("Source not provided.")
+            elif not Path(self.fs_source).exists():
+                errors.append(f"Source: '{self.fs_source}' does not exist.")
+        else:
+            errors.append(f"Source: '{self.fs_source}' is not a string.")
+
+        # Validate the destination
+        if isinstance(self.fs_destination, str):
+            if self.fs_destination == "":
+                errors.append("Destination not provided.")
+        else:
+            errors.append(f"Destination: '{self.fs_destination}' is not a string.")
+
+        # Validate and populate _options
+        if isinstance(options_string, str):
+            if not options_string == "":
+                options = []
+                option_values = [o.value for o in VolumeMountOption]
+                for option in options_string.split(","):
+                    if option not in option_values:
+                        errors.append(
+                            f"Unrecognized option: '{option}',"
+                            f" available options include"
+                            f" {oxfordcomma(option_values, condition='and/or')}.",
+                        )
+                    else:
+                        options.append(VolumeMountOption(option))
+                unique = sorted(set(options), key=options.index)
+                # frozen, cannot use simple assignment to initialize fields, and must use:
+                object.__setattr__(self, "options", tuple(unique))
+        else:
+            errors.append(f"Options: '{options_string}' is not a string.")
+
+        if errors:
+            raise VolumeMountError(" ".join(errors))
+
+    def to_string(self) -> str:
+        """Render the volume mount in a way that (docker|podman) understands."""
+        out = f"{self.fs_source}:{self.fs_destination}"
+        if self.options:
+            joined_opts = ",".join(o.value for o in self.options)
+            out += f":{joined_opts}"
+        return out
+
+
+# The following are ordered to build up to a Mode
+
+
+class Mode(Enum):
+    """An enum to restrict mode type."""
+
+    STDOUT: str = "stdout"
+    INTERACTIVE: str = "interactive"
+
+
+@dataclass
+class ModeChangeRequest:
+    """Data structure to contain a mode change request by a settings entry."""
+
+    entry: str
+    """The entry making the request"""
+    mode: Mode
+    """The desired mode"""
