@@ -1,5 +1,6 @@
-"""initialization helpers that are used early in application
-initialization and are specific to ansible_navigator
+"""Initialization helpers that are used early in application initialization.
+
+These helpers are specific to ansible_navigator.
 """
 import logging
 import os
@@ -15,27 +16,31 @@ from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
-from .utils import ExitMessage
-from .utils import ExitPrefix
-from .utils import LogMessage
-from .utils import environment_variable_is_file_path
-from .utils import find_settings_file
+from .utils.functions import ExitMessage
+from .utils.functions import ExitPrefix
+from .utils.functions import LogMessage
+from .utils.functions import environment_variable_is_file_path
+from .utils.functions import find_settings_file
 from .utils.key_value_store import KeyValueStore
 
 
 def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
-    """get out of here fast"""
+    """Exit the application early.
+
+    :param exit_messages: List of all exit messages to be printed
+    """
     for exit_msg in exit_messages:
         print(exit_msg)
     sys.exit(1)
 
 
-def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str], C]:
-    """
-    Find a configuration file, logging each step.
-    Return (log messages, path).
+def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str], C]:
+    """Find a configuration file, logging each step.
+
     If the config can't be found/loaded, use default settings.
     If it's found but empty or not well formed, bail out.
+
+    :returns: All log messages and config path
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
@@ -81,9 +86,12 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]
 def get_and_check_collection_doc_cache(
     collection_doc_cache_path: str,
 ) -> Tuple[List[LogMessage], List[ExitMessage], Optional[KeyValueStore]]:
-    """ensure the collection doc cache
-    has the current version of the application
-    as a safeguard, always delete and rebuild if not
+    """Ensure the collection doc cache has current application version as a safeguard.
+
+    Always delete and rebuild if not.
+
+    :param collection_doc_cache_path: Path for collection documentation cache
+    :returns: All messages and collection cache or None
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
@@ -137,18 +145,19 @@ def parse_and_update(
     params: List,
     args: ApplicationConfiguration,
     apply_previous_cli_entries: Union[C, List[str]] = C.NONE,
-    initial: bool = False,
     attach_cdc=False,
 ) -> Tuple[List[LogMessage], List[ExitMessage]]:
-    """Build a configuration
+    """Build a configuration.
 
+    Return after the CDC is mounted, even if exit messages are generated, the CDC may still
+    be needed. e.g. ``:collections --ee NotBool``.
+
+    :param params: A list of parameters e.g. ['-x', 'value']
     :param args: The application args
     :param apply_previous_cli_entries: Should previous params from the CLI be applied
-    :param initial: Is this the initial (first) configuration
     :param attach_cdc: Should the collection doc cache be attached to the args.internals
-
+    :returns: Log and exit messages
     """
-
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
 
@@ -167,14 +176,11 @@ def parse_and_update(
         params=params,
         application_configuration=args,
         apply_previous_cli_entries=apply_previous_cli_entries,
-        initial=initial,
     )
 
     new_messages, new_exit_messages = configurator.configure()
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
-    if exit_messages:
-        return messages, exit_messages
 
     if args.internals.collection_doc_cache is C.NOT_SET:
         mount_collection_cache = True
@@ -187,13 +193,14 @@ def parse_and_update(
     else:
         mount_collection_cache = False
 
-    if mount_collection_cache:
+    if mount_collection_cache and isinstance(args.collection_doc_cache_path, str):
         new_messages, new_exit_messages, cache = get_and_check_collection_doc_cache(
             args.collection_doc_cache_path,
         )
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
-        if exit_messages or cache is None:
+        if cache is None:
+            # There's nothing to be done here, it cannot be attached.
             return messages, exit_messages
         if attach_cdc:
             args.internals.collection_doc_cache = cache
@@ -202,6 +209,9 @@ def parse_and_update(
         else:
             message = "Collection doc cache not attached to args.internals"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
+
+    if exit_messages:
+        return messages, exit_messages
 
     for entry in args.entries:
         message = f"Running with {entry.name} as '{entry.value.current}'"

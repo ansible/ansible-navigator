@@ -60,26 +60,22 @@ stdout_tests = (
         present=["usage: ansible-inventory [-h]"],
     ),
     ShellCommand(
-        comment="inventory help-inventory fail with interactive with ee",
+        comment="inventory help-inventory with interactive with ee",
         user_input=StdoutCommand(
             cmdline="--help-inventory",
             mode="interactive",
             execution_environment=True,
         ).join(),
-        present=[
-            "--hi or --help-inventory is valid only when 'mode' argument is set to 'stdout'",
-        ],
+        present=["usage: ansible-inventory [-h]"],
     ),
     ShellCommand(
-        comment="inventory help-inventory fail with interactive without ee",
+        comment="inventory help-inventory with interactive without ee",
         user_input=StdoutCommand(
             cmdline="--help-inventory",
             mode="interactive",
             execution_environment=False,
         ).join(),
-        present=[
-            "--hi or --help-inventory is valid only when 'mode' argument is set to 'stdout'",
-        ],
+        present=["usage: ansible-inventory [-h]"],
     ),
 )
 

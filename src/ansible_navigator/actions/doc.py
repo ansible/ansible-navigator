@@ -19,6 +19,7 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants as C
 from ..runner import AnsibleDoc
 from ..runner import Command
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -47,31 +48,27 @@ class Action(ActionBase):
 
         :param _obj: The content going to be shown
         :param screen_w: The current screen width
-        :return: The heading
+        :returns: The heading
         """
         plugin_str = f"{self._plugin_name} ({self._plugin_type})"
         empty_str = " " * (screen_w - len(plugin_str) + 1)
         heading_str = (plugin_str + empty_str).upper()
 
-        heading = (
-            (
-                CursesLinePart(
-                    column=0,
-                    string=heading_str,
-                    color=0,
-                    decoration=curses.A_UNDERLINE | curses.A_BOLD,
-                ),
-            ),
+        line_part = CursesLinePart(
+            column=0,
+            string=heading_str,
+            color=0,
+            decoration=curses.A_UNDERLINE | curses.A_BOLD,
         )
 
-        return heading
+        return CursesLines((CursesLine((line_part,)),))
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``doc`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("doc requested in interactive")
@@ -145,7 +142,7 @@ class Action(ActionBase):
         _out, error, return_code = response
         return RunStdoutReturn(message=error, return_code=return_code)
 
-    def _run_runner(self) -> Union[None, dict, Tuple[str, str, int]]:
+    def _run_runner(self) -> Optional[Union[dict, Tuple[str, str, int]]]:
         # pylint: disable=too-many-branches
         # pylint: disable=no-else-return
         """Use the runner subsystem to retrieve the configuration.
@@ -249,7 +246,7 @@ class Action(ActionBase):
 
         :param out: The output from runner
         :param err: Any runner errors
-        :return: The plugin's doc or errors
+        :returns: The plugin's doc or errors
         """
         # pylint: disable=too-many-branches
         plugin_doc = {}

@@ -1,0 +1,37 @@
+{
+    "name": "test[3-:0-app settings details]",
+    "index": 3,
+    "comment": "app settings details",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "App (current value/default value: welcome)",
+        " 0│---                                                                                                                                                                                                                                                                                                     ▒",
+        " 1│choices:                                                                                                                                                                                                                                                                                                ▒",
+        " 2│- builder                                                                                                                                                                                                                                                                                               ▒",
+        " 3│- collections                                                                                                                                                                                                                                                                                           ▒",
+        " 4│- config                                                                                                                                                                                                                                                                                                ▒",
+        " 5│- doc                                                                                                                                                                                                                                                                                                   ▒",
+        " 6│- exec                                                                                                                                                                                                                                                                                                  ▒",
+        " 7│- images                                                                                                                                                                                                                                                                                                ▒",
+        " 8│- inventory                                                                                                                                                                                                                                                                                             ▒",
+        " 9│- replay                                                                                                                                                                                                                                                                                                ▒",
+        "10│- run                                                                                                                                                                                                                                                                                                   ▒",
+        "11│- settings                                                                                                                                                                                                                                                                                              ▒",
+        "12│- welcome                                                                                                                                                                                                                                                                                               ▒",
+        "13│cli_parameters:                                                                                                                                                                                                                                                                                         ▒",
+        "14│  long: No long CLI parameter",
+        "15│  short: No short CLI parameter",
+        "16│current_settings_file: None",
+        "17│current_value: welcome",
+        "18│default: true",
+        "19│default_value: welcome",
+        "20│description: Subcommands",
+        "21│env_var: ANSIBLE_NAVIGATOR_APP",
+        "22│name: App",
+        "^f/PgUp page up                          ^b/PgDn page down                          ↑↓ scroll                          esc back                          - previous                          + next                          [0-9] goto                          :help help"
+    ]
+}

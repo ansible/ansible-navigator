@@ -7,6 +7,7 @@ import warnings
 
 from timeit import default_timer as timer
 from typing import List
+from typing import Optional
 from typing import Union
 
 import libtmux
@@ -196,7 +197,7 @@ class TmuxSession:
     def interaction(
         self,
         value,
-        search_within_response: Union[None, List, str] = None,
+        search_within_response: Optional[Union[List, str]] = None,
         ignore_within_response=None,
         timeout=300,
     ):
@@ -319,6 +320,11 @@ class TmuxSession:
                     fh.writelines("\n".join(showing))
                 self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
                 return showing
+
+        # Clear the screen in case subsequent tests produce the same output
+        # This ensures the pre_send capture will be different.
+        if mode == "shell":
+            self._pane.send_keys("clear")
 
         return showing
 

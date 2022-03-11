@@ -1,18 +1,18 @@
-"""Tests related to the yaml abstraction layer.
-"""
+"""Tests related to the yaml abstraction layer."""
 
 import pytest
 
 from yaml import Dumper
 
-import ansible_navigator._yaml as yaml_import
+from ansible_navigator.ui_framework import ContentView
+from ansible_navigator.utils import serialize
 
 
 def test_check_yaml_imports():
     """Ensure yaml, Dumper, and Loader are imported without error."""
-    assert yaml_import.yaml is not None
-    assert yaml_import.Dumper is not None
-    assert yaml_import.Loader is not None
+    assert serialize.yaml is not None
+    assert serialize.SafeDumper is not None
+    assert serialize.Loader is not None
 
 
 @pytest.fixture(name="aliases_allowed")
@@ -25,7 +25,7 @@ def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReq
     """
     if request.param:  # type: ignore[attr-defined] # github.com/pytest-dev/pytest/issues/8073
         monkeypatch.setattr(
-            "ansible_navigator._yaml.HumanDumper.ignore_aliases",
+            "ansible_navigator.utils.serialize.HumanDumper.ignore_aliases",
             Dumper.ignore_aliases,
         )
     return request.param  # type: ignore[attr-defined]
@@ -44,7 +44,11 @@ def test_anchor_alias(aliases_allowed: bool):
     """
     data = {"integer": 42}
     many_data = [data, data, data]
-    yaml_string = yaml_import.human_dump(many_data)
+    yaml_string = serialize.serialize(
+        content=many_data,
+        content_view=ContentView.NORMAL,
+        serialization_format=serialize.SerializationFormat.YAML,
+    )
     assert isinstance(yaml_string, str), "Unexpected value from human_dump"
     found_alias = "&id" in yaml_string
     assert found_alias is aliases_allowed

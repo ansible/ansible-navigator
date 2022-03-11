@@ -1,6 +1,5 @@
-"""Herewithin lies the ability for ansible-runner
-to run the ansible-doc command
-"""
+"""Herein lies the ability for ansible-runner to run the ansible-doc command."""
+
 from typing import Any
 from typing import Dict
 from typing import List
@@ -8,7 +7,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from ansible_runner import get_plugin_docs  # type: ignore[import]
+from ansible_runner import get_plugin_docs
 
 from .base import Base
 
@@ -26,7 +25,7 @@ class AnsibleDoc(Base):
         playbook_dir: Optional[str] = None,
         module_path: Optional[str] = None,
     ) -> Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]:
-        """Run ``ansible-doc`` command and get the plugin docs related details
+        """Run ``ansible-doc`` command and get the plugin docs related details.
 
         :param plugin_names: The name of the plugins to get docs
         :param plugin_type: The type of the plugin mentioned in plugins_names
@@ -36,12 +35,12 @@ class AnsibleDoc(Base):
         :param response_format: The output format for response. Valid values can be one of
             ``json`` or ``human`` and the response is either json string or plain text in human
             readable format. Defaults to ``json``.
-        :param snippet: Show playbook snippet for specified plugin(s). Defaults to ``None``.
+        :param snippet: Show playbook snippet for specified plugin(s)
         :param playbook_dir: This parameter is used to sets the relative path to handle playbook
-            adjacent installed plugins. Defaults to ``None``.
+            adjacent installed plugins
         :param module_path: This parameter is prepend colon-separated path(s) to module library
             (default=~/.ansible/plugins/modules: /usr/share/ansible/plugins/modules).
-        :return: A tuple of response and error string. If the value of ``response_format`` is
+        :returns: A tuple of response and error string. If the value of ``response_format`` is
             ``json`` it returns a python dictionary object.
         """
         return get_plugin_docs(

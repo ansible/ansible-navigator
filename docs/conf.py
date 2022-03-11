@@ -1,4 +1,4 @@
-# cspell:ignore ansiblefest, cyaml, fchainmap, linkify, toctree
+# cspell:ignore ansiblefest, cyaml, DONT, fchainmap, linkify, toctree
 # pylint: disable=invalid-name
 # Ref: https://www.sphinx-doc.org/en/master/usage/configuration.html
 """Configuration file for the Sphinx docs."""
@@ -8,12 +8,37 @@ from pathlib import Path
 from sys import path
 
 from setuptools_scm import get_version
+from setuptools_scm.git import fetch_on_shallow
+from setuptools_scm.git import parse
 
+
+# -- Special accommodations for RTD ------------------------------------------
+
+
+def parse_with_fetch(*args, **kwargs) -> str:
+    """If the repo is found to be shallow, fetch a full.
+
+    By default, RTD does a fetch --limit 50, if a tag is not
+    present in the last 50 commits, the version reported by setuptools_scm
+    will be incorrect and appears as ``v0.1.dev...`` in the towncrier changelog.
+    Another approach is to enable ``DONT_SHALLOW_CLONE`` for the repo
+    https://docs.readthedocs.io/en/stable/feature-flags.html#feature-flags
+    This was done for ansible-navigator on the day of this commit.
+
+    :param args: The arguments
+    :param kwargs: The keyword arguments
+    :returns: The parsed version
+    """
+    assert "pre_parse" not in kwargs
+    return parse(*args, pre_parse=fetch_on_shallow, **kwargs)
+
+
+get_scm_version = partial(get_version, parse=parse_with_fetch)
 
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
-get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
+get_scm_version = partial(get_scm_version, root=PROJECT_ROOT_DIR)
 
 # Make in-tree extension importable in non-tox setups/envs, like RTD.
 # Refs:
@@ -36,13 +61,8 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-# fmt: off
 # The short X.Y version
-version = ".".join(
-    get_scm_version(
-        local_scheme="no-local-version",
-    ).split(".")[:3],
-)
+version = ".".join(get_scm_version(local_scheme="no-local-version").split(".")[:3])
 
 # The full version, including alpha/beta/rc tags
 release = get_scm_version()
@@ -84,17 +104,25 @@ pygments_style = "ansible"
 nitpicky = True
 nitpick_ignore = [
     ("py:class", "_Rule"),
+    (
+        "py:class",
+        "ansible_navigator.configuration_subsystem.defs_presentable.PresentableSettingsEntries",
+    ),
+    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TCli"),
+    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TEnt"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
-    ("py:class", "ansible_navigator.tm_tokenize.utils.T"),
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse._SubParsersAction"),
     ("py:class", "Captures"),
     ("py:class", "CompiledRegsetRule"),
     ("py:class", "CompiledRule"),
     ("py:class", "Compiler"),
+    ("py:class", "ContentBase"),
+    ("py:class", "ContentView"),
     ("py:class", "CursesLine"),
     ("py:class", "CursesLines"),
+    ("py:class", "dataclasses.InitVar"),
     ("py:class", "Entry"),
     ("py:class", "FieldButton"),
     ("py:class", "FieldChecks"),
@@ -104,6 +132,7 @@ nitpick_ignore = [
     ("py:class", "Form"),
     ("py:class", "Grammar"),
     ("py:class", "Grammars"),
+    ("py:class", "Internals"),
     ("py:class", "IO"),
     ("py:class", "Match"),
     ("py:class", "multiprocessing.context.BaseContext.Queue"),
@@ -116,10 +145,15 @@ nitpick_ignore = [
     ("py:class", "State"),
     ("py:class", "WhileRule"),
     ("py:class", "Window"),
-    ("py:class", "yaml.cyaml.CDumper"),
+    ("py:class", "yaml.cyaml.CSafeDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
+]
+
+nitpick_ignore_regex = [
+    # Any single letter TypeVar, class or object
+    ("py:(class|obj)", r"^.*\.[A-Z]$"),
 ]
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -143,7 +177,7 @@ extensions = [
 
 # Conditional third-party extensions:
 try:
-    import sphinxcontrib.spelling as _sphinxcontrib_spelling  # type: ignore[import]
+    import sphinxcontrib.spelling as _sphinxcontrib_spelling
 except ImportError:
     extensions.append("spelling_stub_ext")
 else:
@@ -279,8 +313,8 @@ myst_enable_extensions = [
     "substitution",  # replace common ASCII shortcuts into their symbols
 ]
 myst_substitutions = {
-  "project": project,
-  "release": release,
-  "release_l": f"`v{release}`",
-  "version": version,
+    "project": project,
+    "release": release,
+    "release_l": f"`v{release}`",
+    "version": version,
 }

@@ -3,6 +3,7 @@
 import shlex
 
 from copy import deepcopy
+from pathlib import Path
 from typing import NamedTuple
 
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
@@ -11,6 +12,7 @@ from unittest.mock import patch
 import pytest
 
 from ansible_navigator.cli import NavigatorConfiguration
+from ansible_navigator.cli import main
 from ansible_navigator.cli import parse_and_update
 from ..defaults import FIXTURES_DIR
 
@@ -96,7 +98,8 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
 
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     args = deepcopy(NavigatorConfiguration)
-    _messages, exit_msgs = parse_and_update(params=given, args=args, initial=True)
+    args.internals.initializing = True
+    _messages, exit_msgs = parse_and_update(params=given, args=args)
     assert not exit_msgs
     result = args.entry(argname)
     assert result.value.current == expected, result
@@ -110,7 +113,8 @@ def test_editor_command_default(_mf1, monkeypatch):
         f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml",
     )
     args = deepcopy(NavigatorConfiguration)
-    _messages, exit_msgs = parse_and_update(params=[], args=args, initial=True)
+    args.internals.initializing = True
+    _messages, exit_msgs = parse_and_update(params=[], args=args)
     assert not exit_msgs
     assert args.editor_command == "vi +{line_number} {filename}"
 
@@ -136,8 +140,6 @@ tst_hint_data = [
     TstHint(command=r"--cdcp {locked_directory}/foo.db", expected="without '--cdcp'", set_ce=True),
     TstHint(command="--econ not_bool", expected="with '--econ true'"),
     TstHint(command="--ee not_bool", expected="with '--ee true'"),
-    TstHint(command="config --help-config --mode interactive", expected="with '-m stdout'"),
-    TstHint(command="doc --help-doc --mode interactive", expected="with '-m stdout'"),
     TstHint(command="inventory", expected="with '-i <path to inventory>'"),
     TstHint(command="--la not_bool", expected="with '--la true'"),
     TstHint(
@@ -162,12 +164,13 @@ def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
         f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml",
     )
     args = deepcopy(NavigatorConfiguration)
+    args.internals.initializing = True
     command = data.command.format(locked_directory=locked_directory)
     params = shlex.split(command)
     if data.set_ce:
         params += ["--ce", valid_container_engine]
 
-    _messages, exit_msgs = parse_and_update(params=params, args=args, initial=True)
+    _messages, exit_msgs = parse_and_update(params=params, args=args)
     expected = f"{data.prefix} {data.expected}"
     exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
@@ -177,10 +180,42 @@ def test_no_term(monkeypatch):
     """test for err and hint w/o TERM"""
     monkeypatch.delenv("TERM")
     args = deepcopy(NavigatorConfiguration)
+    args.internals.initializing = True
     params = []
-    _messages, exit_msgs = parse_and_update(params=params, args=args, initial=True)
+    _messages, exit_msgs = parse_and_update(params=params, args=args)
     exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
     expected = "TERM environment variable must be set"
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
     expected = "Try again after setting the TERM environment variable"
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
+
+
+def test_for_version_logged(
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+    tmp_path: Path,
+):
+    """Ensure the version is captured in the log.
+
+    :param monkeypatch: The monkey patch fixture
+    :param caplog: The log capture fixture
+    :param tmp_path: A temporary director for this test
+    """
+    logfile = tmp_path / "log.txt"
+    command_line = [
+        "ansible-navigator",
+        "exec",
+        "ls",
+        "--ll",
+        "debug",
+        "--lf",
+        str(logfile),
+        "--pp",
+        "never",
+    ]
+    monkeypatch.setattr("sys.argv", command_line)
+    with pytest.raises(SystemExit):
+        # A SystemExit happens here because the container vanishes quickly
+        main()
+    assert "ansible-navigator==" in caplog.text
+    assert "ansible-runner==" in caplog.text

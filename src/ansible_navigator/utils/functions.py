@@ -6,6 +6,7 @@ import html
 import logging
 import os
 import re
+import shlex
 import shutil
 import sys
 import sysconfig
@@ -14,6 +15,7 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from typing import Iterable
 from typing import List
 from typing import Mapping
 from typing import NamedTuple
@@ -173,7 +175,7 @@ def escape_moustaches(obj: Mapping) -> Mapping:
     """escape moustaches
 
     :param obj: something
-    :return: the obj with replacements made
+    :returns: the obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     return dispatch(obj, replacements)
@@ -208,7 +210,7 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     """find the settings file as
     ./ansible-navigator.(.yml,.yaml,.json)
     ~/.ansible-navigator.(.yml,.yaml,.json)
@@ -260,7 +262,7 @@ def flatten_list(data_list) -> List:
     return [data_list]
 
 
-def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     # pylint: disable=too-many-return-statements
     """
     returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
@@ -437,10 +439,23 @@ def round_half_up(number: Union[float, int]) -> int:
     This will always round based on distance from zero. (e.g round(2.5) = 3, round(3.5) = 4).
 
     :param number: The number to round
-    :return: The rounded number as an it
+    :returns: The rounded number as an it
     """
     rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
+
+
+def shlex_join(tokens: Iterable[str]) -> str:
+    """Concatenate the tokens of a list and return a string.
+
+    ``shlex.join`` was new in version 3.8
+
+    :param tokens: The iterable of strings to join
+    :returns: The iterable joined with spaces
+    """
+    if sys.version_info >= (3, 8):
+        return shlex.join(split_command=tokens)
+    return " ".join(shlex.quote(token) for token in tokens)
 
 
 def str2bool(value: Any) -> bool:
@@ -465,7 +480,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
 
     :param string: The template string
     :param template_vars: The vars used to render the template
-    :return: A list of errors and either the result of templating or original string
+    :returns: A list of errors and either the result of templating or original string
     """
     errors = []
     # hide the jinja that may be in the template_vars
@@ -498,7 +513,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     return errors, result
 
 
-def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
+def to_list(thing: Optional[Union[str, List, Tuple, Set]]) -> List:
     """convert something to a list if necessary"""
     if isinstance(thing, (list, tuple, set)):
         converted_value = list(thing)
@@ -513,7 +528,7 @@ def unescape_moustaches(obj: Any) -> Mapping:
     """unescape moustaches
 
     :param obj: something
-    :return: the obj with replacements made
+    :returns: the obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)

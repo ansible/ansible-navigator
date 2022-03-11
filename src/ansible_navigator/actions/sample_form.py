@@ -1,11 +1,11 @@
 """``:sample_form`` command implementation."""
-from .._yaml import yaml
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
+from ..utils.serialize import yaml
 from . import _actions as actions
 
 
@@ -101,7 +101,7 @@ class Action(ActionBase):
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
         """
         self._logger.debug("sample form requested")
         self._prepare_to_run(app, interaction)

@@ -11,20 +11,24 @@ from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem import Constants
 from ..runner import Command
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
-from ..utils import path_is_relative_to
+from ..utils.functions import path_is_relative_to
+from ..utils.key_value_store import KeyValueStore
 from . import _actions as actions
 from . import run_action
 
@@ -40,42 +44,34 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     """
     if entry.get("__shadowed") is True:
         return 8, 0
-    if entry.get("__deprecated") is True:
+    if entry.get("__deprecated") == "True":
         return 9, 0
     return 2, 0
 
 
-def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """Create a heading for collection content.
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
-    :return: The heading
+    :returns: The heading
     """
-    heading = []
     string = f"{obj['full_name'].upper()}: {obj['__description']}"
     string = string + (" " * (screen_w - len(string) + 1))
-
-    heading.append(
-        tuple(
-            [
-                CursesLinePart(
-                    column=0,
-                    string=string,
-                    color=2,
-                    decoration=curses.A_UNDERLINE,
-                ),
-            ],
-        ),
+    line_part = CursesLinePart(
+        column=0,
+        string=string,
+        color=2,
+        decoration=curses.A_UNDERLINE,
     )
-    return tuple(heading)
+    return CursesLines((CursesLine((line_part,)),))
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
-    :param obj: The object from which keys should be removed.
-    :returns: The object with keys removed.
+    :param obj: The object from which keys should be removed
+    :returns: The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
@@ -93,7 +89,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
-        self._collection_cache: Dict
+        self._collection_cache: Union[Constants, KeyValueStore]
         self._collection_cache_path: str
         self._collection_scanned_paths: List = []
         self._collections: List = []
@@ -103,12 +99,12 @@ class Action(ActionBase):
         """Request calling app update, no collection update is required."""
         self._calling_app.update()
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``collections`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("collections requested")
@@ -127,8 +123,21 @@ class Action(ActionBase):
         )
 
         self._update_args(params=params, attach_cdc=True)
+
         self._collection_cache = self._args.internals.collection_doc_cache
         self._collection_cache_path = self._args.collection_doc_cache_path
+
+        if not isinstance(self._collection_cache, KeyValueStore):
+            notification = warning_notification(
+                messages=[
+                    "Something has gone really wrong, the collection document cache is not",
+                    "available.  This should not have happened. Please log an issue, and",
+                    "include the contents of the log file.",
+                ],
+            )
+            interaction.ui.show(notification)
+            self._prepare_to_exit(interaction)
+            return None
 
         self._run_runner()
 
@@ -195,12 +204,12 @@ class Action(ActionBase):
         return Step(
             name="all_collections",
             columns=columns,
-            select_func=self._build_plugin_menu,
+            select_func=self._build_collection_content_menu,
             step_type="menu",
             value=self._collections,
         )
 
-    def _build_plugin_menu(self):
+    def _build_collection_content_menu(self):
         """Build the menu of plugins.
 
         :returns: The plugin menu definition
@@ -208,7 +217,7 @@ class Action(ActionBase):
         self._collection_cache.open()
         selected_collection = self._collections[self.steps.current.index]
         collection_name = f"__{selected_collection['known_as']}"
-        plugins = []
+        collection_contents = []
         for plugin_checksum, details in selected_collection["plugin_checksums"].items():
             try:
                 plugin_json = self._collection_cache[plugin_checksum]
@@ -232,38 +241,51 @@ class Action(ActionBase):
                     plugin["__description"] = plugin["doc"]["short_description"]
 
                     runtime_section = "modules" if details["type"] == "module" else details["type"]
-                    plugin["__deprecated"] = False
+                    plugin["__deprecated"] = "False"
                     try:
                         routing_info = selected_collection["runtime"]["plugin_routing"]
                         runtime_info = routing_info[runtime_section][short_name]
                         plugin["additional_information"] = runtime_info
                         if "deprecation" in runtime_info:
-                            plugin["__deprecated"] = True
+                            plugin["__deprecated"] = "True"
                     except KeyError:
                         plugin["additional_information"] = {}
 
-                    plugins.append(plugin)
+                    collection_contents.append(plugin)
             except (KeyError, JSONDecodeError) as exc:
                 self._logger.error("error loading plugin doc %s", details)
                 self._logger.debug("error was %s", str(exc))
-        plugins = sorted(plugins, key=lambda i: i[collection_name])
+
         self._collection_cache.close()
 
+        for role in selected_collection["roles"]:
+            role[collection_name] = role["short_name"]
+            try:
+                role["__description"] = role["info"]["galaxy_info"]["description"]
+            except KeyError:
+                role["__description"] = ""
+            role["__deprecated"] = "Unknown"
+            role["__added"] = "Unknown"
+            role["__type"] = "role"
+            collection_contents.append(role)
+
+        collection_contents = sorted(collection_contents, key=lambda i: i[collection_name])
+
         return Step(
-            name="all_plugins",
+            name="all_collection_content",
             columns=[collection_name, "__type", "__added", "__deprecated", "__description"],
-            select_func=self._build_plugin_content,
+            select_func=self._build_collection_content,
             step_type="menu",
-            value=plugins,
+            value=collection_contents,
         )
 
-    def _build_plugin_content(self):
+    def _build_collection_content(self):
         """Build the content for one plugin.
 
         :returns: The plugin's content
         """
         return Step(
-            name="plugin_content",
+            name="collection_content",
             step_type="content",
             value=self.steps.current.value,
             index=self.steps.current.index,

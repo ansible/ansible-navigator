@@ -78,22 +78,22 @@ stdout_tests = (
         present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
-        comment="config helpconfig fail with interactive with ee",
+        comment="config helpconfig with interactive with ee",
         user_input=StdoutCommand(
             cmdline="--help-config",
             mode="interactive",
             execution_environment=True,
         ).join(),
-        present=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
+        present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
-        comment="config helpconfig fail with interactive without ee",
+        comment="config helpconfig with interactive without ee",
         user_input=StdoutCommand(
             cmdline="--help-config",
             mode="interactive",
             execution_environment=False,
         ).join(),
-        present=["--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"],
+        present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
         comment="config specified configuration file with ee",

@@ -2,31 +2,24 @@
 """
 import pytest
 
+from ..._interactions import Command
+from ..._interactions import UiTestStep
+from ..._interactions import add_indices
+from ..._interactions import step_id_padded
 from .base import BaseClass
+from .base import base_steps
 
 
-CLI = "ansible-navigator collections --execution-environment false"
-
-testdata = [
-    (0, CLI, "ansible-navigator collections browse window"),
-    (1, ":0", "Browse company_name.coll_1 plugins window"),
-    (2, ":0", "lookup_1 plugin docs window"),
-    (3, ":back", "Back to browse company_name.coll_1 plugins window"),
-    (4, ":1", "mod_1 plugin docs window"),
-    (5, ":back", "Back to browse company_name.coll_1 plugins window"),
-    (6, ":back", "Back to ansible-navigator collections browse window"),
-    (7, ":1", "Browse company_name.coll_2 plugins window"),
-    (8, ":0", "lookup_2 plugin docs window"),
-    (9, ":back", "Back to browse company_name.coll_2 plugins window"),
-    (10, ":1", "mod_2 plugin docs window"),
-    (11, ":back", "Back to browse company_name.coll_2 plugins window"),
-    (12, ":back", "Back to ansible-navigator collections browse window"),
-]
+CLI = Command(subcommand="collections", execution_environment=False).join()
 
 
-@pytest.mark.parametrize("index, user_input, comment", testdata)
+initial_steps = (UiTestStep(user_input=CLI, comment="ansible-navigator collections top window"),)
+
+steps = add_indices(initial_steps + base_steps)
+
+
+@pytest.mark.parametrize("step", steps, ids=step_id_padded)
 class Test(BaseClass):
-    """Run the tests for collections from CLI, interactive, without an EE."""
+    """Run the tests for ``collections`` from CLI, interactive, with an EE."""
 
-    TEST_FOR_MODE = "interactive"
-    UPDATE_FIXTURES = False
+    update_fixtures = False

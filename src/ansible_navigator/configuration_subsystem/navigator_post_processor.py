@@ -6,26 +6,30 @@ import os
 import shlex
 import shutil
 
-from dataclasses import dataclass
-from dataclasses import field
-from enum import Enum
+from functools import partialmethod
+from itertools import chain
+from itertools import repeat
 from pathlib import Path
 from typing import List
 from typing import Tuple
 
-from ..utils import ExitMessage
-from ..utils import ExitPrefix
-from ..utils import LogMessage
-from ..utils import abs_user_path
-from ..utils import check_for_ansible
-from ..utils import flatten_list
-from ..utils import oxfordcomma
-from ..utils import str2bool
-from ..utils import to_list
+from ..utils.functions import ExitMessage
+from ..utils.functions import ExitPrefix
+from ..utils.functions import LogMessage
+from ..utils.functions import abs_user_path
+from ..utils.functions import check_for_ansible
+from ..utils.functions import flatten_list
+from ..utils.functions import oxfordcomma
+from ..utils.functions import str2bool
+from ..utils.functions import to_list
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
+from .definitions import Mode
+from .definitions import ModeChangeRequest
 from .definitions import SettingsEntry
+from .definitions import VolumeMount
+from .definitions import VolumeMountError
 
 
 def _post_processor(func):
@@ -49,51 +53,6 @@ def _post_processor(func):
     return wrapper
 
 
-class VolumeMountOption(Enum):
-    """Options that can be tagged on to the end of volume mounts.
-
-    Usually these are used for things like selinux relabeling, but there are
-    some other valid options as well, which can and should be added here as
-    needed. See ``man podman-run`` and ``man docker-run`` for valid choices and
-    keep in mind that we support both runtimes.
-    """
-
-    # Relabel as private
-    Z = "Z"
-
-    # Relabel as shared.
-    z = "z"  # pylint: disable=invalid-name
-
-
-@dataclass
-class VolumeMount:
-    """Describes EE volume mounts."""
-
-    #: The name of the config option requiring this volume mount.
-    calling_option: str
-
-    #: The source path of the volume mount.
-    src: str
-
-    #: The destination path in the container for the volume mount.
-    dest: str
-
-    #: Options for the bind mount.
-    options: List[VolumeMountOption] = field(default_factory=list)
-
-    def exists(self) -> bool:
-        """Determine if the volume mount source exists."""
-        return Path(self.src).exists()
-
-    def to_string(self) -> str:
-        """Render the volume mount in a way that (docker|podman) understands."""
-        out = f"{self.src}:{self.dest}"
-        if self.options:
-            joined_opts = ",".join(o.value for o in self.options)
-            out += f":{joined_opts}"
-        return out
-
-
 PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
 
 
@@ -107,6 +66,7 @@ class NavigatorPostProcessor:
         #: These get processed towards the end, in the (delayed)
         #: :meth:`.execution_environment_volume_mounts` post-processor.
         self.extra_volume_mounts: List[VolumeMount] = []
+        self._requested_mode: List[ModeChangeRequest] = []
 
     @staticmethod
     def _true_or_false(
@@ -213,6 +173,7 @@ class NavigatorPostProcessor:
             for choice in choices:
                 if shutil.which(str(choice)):
                     entry.value.current = choice
+                    entry.value.source = C.AUTO
                     break
         return messages, exit_messages
 
@@ -335,86 +296,105 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
+        """Post process set_environment_variable.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :return: An instance of the standard post process return object
+        """
         # pylint: disable=unused-argument
         # pylint: disable=too-many-branches
-        """Post process set_environment_variable"""
+        # pylint: disable=too-many-locals
+
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if entry.value.source in [
-            C.ENVIRONMENT_VARIABLE,
-            C.USER_CLI,
-        ]:
-            volume_mounts = flatten_list(entry.value.current)
-            for mount_path in volume_mounts:
-                parts = mount_path.split(":")
-                if len(parts) > 3:
+        entry_name = entry.settings_file_path(prefix="")
+        entry_source = entry.value.source
+        volume_mounts: List[VolumeMount] = []
+
+        if entry_source in (C.ENVIRONMENT_VARIABLE, C.USER_CLI):
+            hint = (
+                "Try again with format <source-path>:<destination-path>:<options>'."
+                " Note: options is optional."
+            )
+            mount_strings = flatten_list(entry.value.current)
+            for mount_str in mount_strings:
+                src, dest, options, *left_overs = chain(mount_str.split(":"), repeat("", 3))
+                if any(left_overs):
                     exit_msg = (
-                        "The following execution-environment-volume-mounts"
-                        f" entry could not be parsed: {mount_path}"
+                        f"The following {entry_name} entry could not be parsed:"
+                        f" {mount_str} ({entry_source.value})"
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
-                    if entry.cli_parameters:
-                        exit_msg = (
-                            "Try again with format "
-                            + f"'{entry.cli_parameters.short}"
-                            + " <source-path>:<destination-path>:<label(Z or z)>'."
-                            + " Note: label is optional."
-                        )
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                    return messages, exit_messages
-
-            entry.value.current = volume_mounts
-
-        elif entry.value.current is not C.NOT_SET:
-            parsed_volume_mounts = []
-            volume_mounts = to_list(entry.value.current)
-            for mount_obj in volume_mounts:
-                if not isinstance(mount_obj, dict):
-                    exit_msg = (
-                        "The following execution-environment.volume-mounts"
-                        f" entry could not be parsed: {mount_obj}"
-                    )
-                    exit_messages.append(ExitMessage(message=exit_msg))
-                    if entry.cli_parameters:
-                        exit_msg = (
-                            "The value of execution-environment.volume-mounts"
-                            + "should be list of dictionaries"
-                            + " and valid keys are 'src', 'dest' and 'label'."
-                        )
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                    return messages, exit_messages
+                    exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
 
                 try:
-                    mount_path = f"{mount_obj['src']}:{mount_obj['dest']}"
-                    if mount_obj.get("label"):
-                        mount_path += f":{mount_obj['label']}"
-                    parsed_volume_mounts.append(mount_path)
-                except KeyError as exc:
+                    volume_mounts.append(
+                        VolumeMount(
+                            fs_source=src,
+                            fs_destination=dest,
+                            options_string=options,
+                            settings_entry=entry_name,
+                            source=entry_source,
+                        ),
+                    )
+                except VolumeMountError as exc:
                     exit_msg = (
-                        f"Failed to parse following execution-environment.volume-mounts"
-                        f" entry: '{mount_obj}'. Value of '{str(exc)}' key not provided."
+                        f"The following {entry_name} entry could not be parsed:"
+                        f" {mount_str} ({entry.value.source.value}). Errors were found: {str(exc)}"
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
-                    exit_hint_msg = (
-                        " Valid keys are 'src', 'dest' and 'label'. Note: label key is optional."
-                    )
-                    exit_messages.append(ExitMessage(message=exit_hint_msg, prefix=ExitPrefix.HINT))
+                    exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
 
-                    return messages, exit_messages
-
-            entry.value.current = parsed_volume_mounts
-
-        if self.extra_volume_mounts and entry.value.current is C.NOT_SET:
-            entry.value.current = []
-
-        for mount in self.extra_volume_mounts:
-            if not mount.exists():
-                exit_msg = (
-                    f"The volume mount source path '{mount.src}', needed by "
-                    f"{mount.calling_option}, does not exist."
-                )
+        elif entry.value.source is C.USER_CFG:
+            hint = (
+                "The value of execution-environment.volume-mounts should be a list"
+                " of dictionaries and valid keys are 'src', 'dest' and 'options'."
+            )
+            if not isinstance(entry.value.current, list):
+                exit_msg = f"{entry_name} entries could not be parsed. ({entry_source.value})"
                 exit_messages.append(ExitMessage(message=exit_msg))
-            entry.value.current.append(mount.to_string())
+                exit_msg = hint
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            else:
+                for volume_mount in entry.value.current:
+                    try:
+                        volume_mounts.append(
+                            VolumeMount(
+                                fs_source=volume_mount.get("src"),
+                                fs_destination=volume_mount.get("dest"),
+                                options_string=volume_mount.get("options", ""),
+                                settings_entry=entry_name,
+                                source=entry_source,
+                            ),
+                        )
+                    except (AttributeError, VolumeMountError) as exc:
+                        exit_msg = (
+                            f"The following {entry_name} entry could not be parsed:  {volume_mount}"
+                            f" ({entry_source.value}). Errors were found: {str(exc)}"
+                        )
+                        exit_messages.append(ExitMessage(message=exit_msg))
+                        exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+
+        # Get out fast if we had any errors
+        if exit_messages:
+            return messages, exit_messages
+
+        # New mounts were provided
+        if volume_mounts:
+            entry.value.current = [v.to_string() for v in volume_mounts]
+
+        # Extra mounts were requested, these get added to either
+        # new_mounts, C.PREVIOUS_CLI or C.NOT_SET
+        if self.extra_volume_mounts:
+            if not isinstance(entry.value.current, list):
+                entry.value.current = set()
+            entry.value.current.extend(v.to_string() for v in self.extra_volume_mounts)
+
+        # Finally, ensure the list has no duplicates
+        if isinstance(entry.value.current, list):
+            entry.value.current = sorted(set(entry.value.current), key=entry.value.current.index)
+
         return messages, exit_messages
 
     @staticmethod
@@ -443,144 +423,38 @@ class NavigatorPostProcessor:
 
         :param entry: The current settings entry
         :param config: The full application configuration
-        :return: An instance of the standard post process return object
+        :returns: An instance of the standard post process return object
         """
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def help_builder(
+    def _help_for_command(
         self,
         entry: SettingsEntry,
         config: ApplicationConfiguration,
+        subcommand: str,
     ) -> PostProcessorReturn:
-        """Post process help_builder"""
+        """Post process help_xxxx
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :param subcommand: The applicable subcommand
+        :returns: An instance of the standard post process return object
+        """
         messages, exit_messages = self._true_or_false(entry, config)
 
-        help_builder_is_set = entry.value.current is True
-        builder_app_selected = config.app == "builder"
-        app_run_in_interactive_mode = config.mode == "interactive"
-
-        builder_help_in_interactive_mode = (
-            help_builder_is_set and builder_app_selected and app_run_in_interactive_mode
-        )
-
-        if builder_help_in_interactive_mode:
-            if entry.cli_parameters:
-                long_hc = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hc}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+        if entry.value.current is True and config.app == subcommand:
+            mode = Mode.STDOUT
+            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+            message = message = f"`{entry.name} requesting mode {mode.value}"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
-    @_post_processor
-    def help_config(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_config"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "config", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hc = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hc}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_doc(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_doc"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "doc", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hd = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hd}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_inventory(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_inventory"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all(
-            (entry.value.current is True, config.app == "inventory", config.mode == "interactive"),
-        ):
-            if entry.cli_parameters:
-                long_hd = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hd}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
-
-    @_post_processor
-    def help_playbook(
-        self,
-        entry: SettingsEntry,
-        config: ApplicationConfiguration,
-    ) -> PostProcessorReturn:
-        """Post process help_playbook"""
-        messages, exit_messages = self._true_or_false(entry, config)
-        if all((entry.value.current is True, config.app == "run", config.mode == "interactive")):
-            if entry.cli_parameters:
-                long_hp = entry.cli_parameters.long_override or entry.name_dashed
-                exit_msg = (
-                    f"{entry.cli_parameters.short} or --{long_hp}"
-                    " is valid only when 'mode' argument is set to 'stdout'"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                mode_cli = config.entry("mode").cli_parameters
-                if mode_cli:
-                    m_short = mode_cli.short
-                    if m_short:
-                        exit_msg = f"Try again with '{m_short} stdout'"
-                        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
-        return messages, exit_messages
+    help_builder = partialmethod(_help_for_command, subcommand="builder")
+    help_config = partialmethod(_help_for_command, subcommand="config")
+    help_doc = partialmethod(_help_for_command, subcommand="doc")
+    help_inventory = partialmethod(_help_for_command, subcommand="inventory")
+    help_playbook = partialmethod(_help_for_command, subcommand="run")
 
     @staticmethod
     @_post_processor
@@ -589,10 +463,7 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "inventory" and entry.value.current is C.NOT_SET:
-            if not (
-                config.entry("help_inventory").value.current
-                and config.entry("mode").value.current == "stdout"
-            ):
+            if config.entry("help_inventory").value.current is False:
                 exit_msg = "An inventory is required when using the inventory subcommand"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 if entry.cli_parameters:
@@ -671,15 +542,25 @@ class NavigatorPostProcessor:
                 exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
-    @staticmethod
     @_post_processor
-    def mode(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=too-many-statements
-        """Post process mode"""
+    def mode(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        # pylint: disable=too-many-locals
+        """Post process mode
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :raises ValueError: When more than 2 mode changes requests are present, shouldn't happen
+        :returns: An instance of the standard post process return object
+        """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         subcommand_action = None
         subcommand_name = config.subcommand(config.app).name
+
+        # Post initialization of mode processing is not needed since switching modes after
+        # is not supported
+        if not config.internals.initializing:
+            return messages, exit_messages
 
         for action_package_name in config.internals.action_packages:
             try:
@@ -713,35 +594,37 @@ class NavigatorPostProcessor:
             )
             exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
-        subcommand_modes = []
+        # Check if the mode interactive is available for the subcommand
+        # mode stdout is always available since the action base class has a `run_stdout`
+        subcommand_stdout_only = not hasattr(subcommand_action, "run")
+        if entry.value.current == "interactive" and subcommand_stdout_only:
+            subcommand_mode_change_msgs = (
+                f"Subcommand '{config.app}' does not support mode 'interactive'.",
+                "Mode set to 'interactive'",
+            )
+            messages.extend(
+                LogMessage(level=logging.INFO, message=msg) for msg in subcommand_mode_change_msgs
+            )
+            entry.value.current = "stdout"
+            entry.value.source = C.AUTO
 
-        try:
-            getattr(subcommand_action, "run_stdout")
-        except AttributeError:
-            pass
-        else:
-            subcommand_modes.append("stdout")
-
-        try:
-            getattr(subcommand_action, "run")
-        except AttributeError:
-            pass
-        else:
-            subcommand_modes.append("interactive")
-
-        if entry.value.current not in subcommand_modes:
-            exit_msg = f"Subcommand '{config.app}' does not support mode '{entry.value.current}'."
-            exit_msg += f" Supported modes: {oxfordcomma(subcommand_modes, 'and')}."
-            exit_messages.append(ExitMessage(message=exit_msg))
-            mode_cli = config.entry("mode").cli_parameters
-            if mode_cli:
-                other = [
-                    f"{mode_cli.short} {mode}"
-                    for mode in subcommand_modes
-                    if mode != entry.value.current
-                ]
-                exit_msg = f"Try again with {oxfordcomma(other, 'or')}"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+        # Check if any other entry has requested a mode change different than current
+        mode_set = set(request.mode for request in self._requested_mode)
+        if len(mode_set) == 1:
+            requested = self._requested_mode[0]
+            auto_mode = requested.mode.value
+            if auto_mode != entry.value.current:
+                entry_mode_change_msgs = (
+                    f"Parameter '{requested.entry}' required mode '{auto_mode!s}'.",
+                    f"Mode will be set to '{auto_mode}'",
+                )
+                messages.extend(
+                    LogMessage(level=logging.INFO, message=msg) for msg in entry_mode_change_msgs
+                )
+                entry.value.current = auto_mode
+                entry.value.source = C.AUTO
+        elif len(mode_set) > 1:
+            raise ValueError(f"Conflicting mode requests: {self._requested_mode}")
         return messages, exit_messages
 
     @_post_processor
@@ -755,19 +638,13 @@ class NavigatorPostProcessor:
         """Post process plugin_name"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if all(
-            (
-                config.app == "doc",
-                entry.value.current is C.NOT_SET,
-                config.help_doc is False,
-                config.mode != "stdout",
-            ),
-        ):
-            exit_msg = "A plugin name is required when using the doc subcommand"
-            exit_messages.append(ExitMessage(message=exit_msg))
-            exit_msg = "Try again with 'doc <plugin_name>'"
-            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-            return messages, exit_messages
+        if config.app == "doc" and entry.value.current is C.NOT_SET:
+            if config.entry("help_doc").value.current is False:
+                exit_msg = "A plugin name is required when using the doc subcommand"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = "Try again with 'doc <plugin_name>'"
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                return messages, exit_messages
         return messages, exit_messages
 
     @staticmethod
@@ -791,10 +668,7 @@ class NavigatorPostProcessor:
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:
-            if not (
-                config.entry("help_playbook").value.current
-                and config.entry("mode").value.current == "stdout"
-            ):
+            if config.entry("help_playbook").value.current is False:
                 exit_msg = "A playbook is required when using the run subcommand"
                 exit_messages.append(ExitMessage(message=exit_msg))
                 exit_msg = "Try again with 'run <playbook name>'"
@@ -841,6 +715,27 @@ class NavigatorPostProcessor:
                 exit_msg = "Try again with 'replay <valid path to playbook artifact>'"
                 exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
                 return messages, exit_messages
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
+    def pull_arguments(
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process ``pull_arguments``
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        if entry.value.source == C.ENVIRONMENT_VARIABLE:
+            entry.value.current = to_list(entry.value.current)
+        if entry.value.current is not C.NOT_SET:
+            entry.value.current = flatten_list(entry.value.current)
         return messages, exit_messages
 
     @staticmethod

@@ -15,21 +15,23 @@ from datetime import datetime
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import Dict
 from typing import Generator
 from typing import List
 from typing import Tuple
+from typing import Union
 
 import yaml
 
-from ansible.utils.plugin_docs import get_docstring  # type: ignore
+from ansible.utils.plugin_docs import get_docstring
 from yaml.error import YAMLError
 
 
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import SafeLoader  # type: ignore
+    from yaml import SafeLoader  # type: ignore[misc]
 
 # Import from the source tree whenever possible. When running
 # in an execution environment, and therefore not type checking
@@ -96,6 +98,101 @@ class CollectionCatalog:
                     file_checksums,
                     collection,
                 )
+
+    def _catalog_roles(self, collection: Dict[str, Any]) -> None:
+        """Catalog the roles within a collection.
+
+        :param collection: Details describing the collection
+        """
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
+
+        collection_name: str = collection["known_as"]
+        collection["roles"] = []
+        roles_directory = Path(collection["path"], "roles")
+        if not roles_directory.is_dir():
+            return
+
+        for role_directory in roles_directory.iterdir():
+            role: Dict[str, Union[str, Dict[str, Any]]] = {
+                "short_name": role_directory.name,
+                "full_name": f"{collection_name}.{role_directory.name}",
+            }
+            error_cataloging_role = False
+
+            # Argument spec cataloging, it is not required
+            argspec_name = "argument_specs.yml"
+            argspec_path = role_directory / "meta" / argspec_name
+            role["argument_specs"] = {}
+            role["argument_specs_path"] = ""
+            error = {"path": str(argspec_path)}
+            try:
+                with argspec_path.open(encoding="utf-8") as fh:
+                    role["argument_specs"] = yaml.load(fh, Loader=SafeLoader)["argument_specs"]
+                    role["argument_specs_path"] = str(argspec_path)
+            except KeyError:
+                error["error"] = f"Malformed {argspec_name} for role in {collection_name}."
+                self._errors.append(error)
+            except FileNotFoundError:
+                error["error"] = f"Failed to find {argspec_name} for role in {collection_name}."
+                self._errors.append(error)
+            except YAMLError:
+                error["error"] = f"Failed to load {argspec_name} for role in {collection_name}."
+                self._errors.append(error)
+
+            # Defaults cataloging, it is not required
+            defaults_name = "main.yml"
+            defaults_path = role_directory / "defaults" / defaults_name
+            role["defaults"] = {}
+            role["defaults_path"] = ""
+            error = {"path": str(defaults_path)}
+            try:
+                with defaults_path.open(encoding="utf-8") as fh:
+                    role["defaults"] = yaml.load(fh, Loader=SafeLoader)
+                    role["defaults_path"] = str(defaults_path)
+            except FileNotFoundError:
+                pass
+            except YAMLError:
+                error["error"] = f"Failed to load {defaults_name} for role in {collection_name}."
+                self._errors.append(error)
+                error_cataloging_role = True
+
+            # Meta/main.yml cataloging, it is required
+            meta_name = "main.yml"
+            meta_path = role_directory / "meta" / meta_name
+            role["info"] = {}
+            role["info_path"] = ""
+            error = {"path": str(meta_path)}
+            try:
+                with meta_path.open(encoding="utf-8") as fh:
+                    role["info"] = yaml.load(fh, Loader=SafeLoader)
+                    role["info_path"] = str(meta_path)
+            except FileNotFoundError:
+                error["error"] = f"Failed to find {meta_name} for role in {collection_name}."
+                self._errors.append(error)
+                error_cataloging_role = True
+            except YAMLError:
+                error["error"] = f"Failed to load {meta_name} for role in {collection_name}."
+                self._errors.append(error)
+                error_cataloging_role = True
+
+            # Readme.md cataloging, it is required
+            readme_name = "README.md"
+            readme_path = role_directory / readme_name
+            role["readme"] = ""
+            role["readme_path"] = ""
+            error = {"path": str(readme_path)}
+            try:
+                with readme_path.open(encoding="utf-8") as fh:
+                    role["readme"] = fh.read()
+                    role["readme_path"] = str(readme_path)
+            except FileNotFoundError:
+                error["error"] = f"Failed to find {readme_name} for role in {collection_name}."
+                self._errors.append(error)
+                error_cataloging_role = True
+
+            if not error_cataloging_role:
+                collection["roles"].append(role)
 
     @staticmethod
     def _generate_checksum(file_path: Path, relative_path: Path) -> Dict:
@@ -229,6 +326,7 @@ class CollectionCatalog:
                 self._one_path(collection_directory)
         for _collection_path, collection in self._collections.items():
             self._catalog_plugins(collection)
+            self._catalog_roles(collection)
         self._find_shadows()
         return self._collections, self._errors
 
@@ -242,7 +340,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
     # pylint: disable=import-outside-toplevel
 
     # load the fragment_loader _after_ the path is set
-    from ansible.plugins.loader import fragment_loader  # type: ignore
+    from ansible.plugins.loader import fragment_loader
 
     while True:
         entry = pending_queue.get()

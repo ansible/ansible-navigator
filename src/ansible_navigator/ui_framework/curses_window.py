@@ -5,7 +5,7 @@ import json
 import logging
 
 from typing import TYPE_CHECKING
-from typing import Union
+from typing import Optional
 
 from .colorize import hex_to_rgb_curses
 from .curses_defs import CursesLine
@@ -67,7 +67,7 @@ class CursesWindow:
     def _screen_width(self) -> int:
         """return the screen width
 
-        :return: the current screen width
+        :returns: the current screen width
         """
         return self._screen.getmaxyx()[1]
 
@@ -75,7 +75,7 @@ class CursesWindow:
     def _screen_height(self) -> int:
         """return the screen height, or notify if too small
 
-        :return: the current screen height
+        :returns: the current screen height
         """
         while True:
             if self._screen.getmaxyx()[0] >= self._screen_min_height:
@@ -84,7 +84,7 @@ class CursesWindow:
             curses.beep()
             self._screen.refresh()
 
-    def _color_pair_or_none(self, color: int) -> Union[None, int]:
+    def _color_pair_or_none(self, color: int) -> Optional[int]:
         """
         Returns 0 if colors are disabled.
         Otherwise returns the curses color pair by
@@ -109,7 +109,7 @@ class CursesWindow:
         window: Window,
         lineno: int,
         line: CursesLine,
-        prefix: Union[str, None] = None,
+        prefix: Optional[str] = None,
     ) -> None:
         """add a line to a window
 

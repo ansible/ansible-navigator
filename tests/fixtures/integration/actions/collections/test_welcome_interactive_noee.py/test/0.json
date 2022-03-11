@@ -1,7 +1,12 @@
 {
-    "name": "test[0-ansible-navigator --execution-environment false-ansible-navigator welcome screen]",
+    "name": "test[00-ansible-navigator --ee False --ll debug --mode interactive-welcome screen]",
     "index": 0,
-    "comment": "ansible-navigator welcome screen",
+    "comment": "welcome screen",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
     "output": [
         " 0│## Welcome",
         " 1│----------------------------------------------------------------------------------------------------------",

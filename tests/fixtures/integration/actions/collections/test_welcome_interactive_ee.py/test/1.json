@@ -1,7 +1,12 @@
 {
-    "name": "test[1-:collections-ansible-navigator collections top window]",
+    "name": "test[01-:collections-enter collections from welcome screen]",
     "index": 1,
-    "comment": "ansible-navigator collections top window",
+    "comment": "enter collections from welcome screen",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
     "output": [
         "  NAME                       VERSION    SHADOWED    TYPE           PATH",
         "0│company_name.coll_1        1.0.0         False    bind_mount     FIXTURES_COLLECTION_DIR/test_welcome_interactive_ee.py/collections/ansible_collections/company_name/coll_1",

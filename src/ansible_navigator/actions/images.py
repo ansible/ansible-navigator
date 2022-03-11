@@ -7,8 +7,8 @@ from functools import partial
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic
@@ -16,6 +16,7 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..image_manager import inspect_all
 from ..runner import Command
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -93,7 +94,7 @@ class Action(ActionBase):
         :param obj: The content going to be shown
         :param screen_w: The current screen width
         :param name: The name of the images menu
-        :return: The heading
+        :returns: The heading
         """
         if name == "image_menu":
             text = (
@@ -112,24 +113,20 @@ class Action(ActionBase):
 
         empty_str = " " * (screen_w - len(text) + 1)
         heading_str = (text + empty_str).upper()
-        heading = (
-            (
-                CursesLinePart(
-                    column=0,
-                    string=heading_str,
-                    color=color,
-                    decoration=curses.A_UNDERLINE | curses.A_BOLD,
-                ),
-            ),
+        line_part = CursesLinePart(
+            column=0,
+            string=heading_str,
+            color=color,
+            decoration=curses.A_UNDERLINE | curses.A_BOLD,
         )
-        return heading
+        return CursesLines((CursesLine((line_part,)),))
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``images`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("images requested")
@@ -450,7 +447,7 @@ class Action(ActionBase):
             return False
         return True
 
-    def _parse(self, output) -> Union[Dict, None]:
+    def _parse(self, output) -> Optional[Dict]:
         """Load and process the ``json`` output from the image introspection process.
 
         :param output: The output from the image introspection process

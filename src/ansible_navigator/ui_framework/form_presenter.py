@@ -5,8 +5,8 @@ import curses
 from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
 from typing import List
+from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -115,6 +115,8 @@ class FormPresenter(CursesWindow):
         ]
         for form_field in body_fields:
 
+            # pylint: disable=not-an-iterable
+            # https://github.com/PyCQA/pylint/issues/2296
             if isinstance(form_field, FieldInformation):
                 information_lines = self._generate_information(form_field)
                 for line in information_lines:
@@ -126,20 +128,26 @@ class FormPresenter(CursesWindow):
                 for line in message_lines:
                     lines.append((self._line_number, line))
                     self._line_number += 1
+            # pylint: enable=not-an-iterable
 
             elif isinstance(form_field, FieldText):
                 prompt = self._generate_prompt(form_field)
-                lines.append((self._line_number, prompt + self._generate_field_text(form_field)))
+                line = CursesLine((tuple(prompt + [self._generate_field_text(form_field)])))
+                lines.append((self._line_number, line))
                 self._line_number += 1
 
             elif isinstance(form_field, (FieldChecks, FieldRadio)):
                 prompt = self._generate_prompt(form_field)
                 option_lines = self._generate_field_options(form_field)
-                lines.append((self._line_number, prompt + tuple([option_lines[0]])))
+                # although option_lines[0] is a CursesLine, only it's first line part is needed
+                # because the prompt needs to be prepended to it
+                first_option_line_part = option_lines[0][0]
+                line = CursesLine((tuple(prompt + [first_option_line_part])))
+                lines.append((self._line_number, line))
                 self._line_number += 1
 
                 for option_line in option_lines[1:]:
-                    lines.append((self._line_number, tuple([option_line])))
+                    lines.append((self._line_number, CursesLine((option_line))))
                     self._line_number += 1
 
             error = self._generate_error(form_field)
@@ -170,19 +178,18 @@ class FormPresenter(CursesWindow):
                 color = 8
             else:
                 color = form_field.color
-            clp = CursesLinePart(far_right, string, color, 0)
-            line_parts.append(clp)
+            line_part = CursesLinePart(far_right, string, color, 0)
+            line_parts.append(line_part)
             far_right -= 1
-        return tuple(line_parts)
+        return CursesLine(tuple(line_parts))
 
-    def _generate_error(self, form_field) -> Union[CursesLine, None]:
+    def _generate_error(self, form_field) -> Optional[CursesLine]:
         if form_field.current_error:
-            clp = CursesLinePart(self._input_start, form_field.current_error, 9, 0)
-            return (clp,)
+            line_part = CursesLinePart(self._input_start, form_field.current_error, 9, 0)
+            return CursesLine((line_part,))
         return None
 
-    def _generate_field_options(self, form_field) -> CursesLine:
-        lines = []
+    def _generate_field_options(self, form_field) -> CursesLines:
         window = curses.newwin(
             len(form_field.options),
             self._field_win_width,
@@ -191,15 +198,16 @@ class FormPresenter(CursesWindow):
         )
         window.keypad(True)
         form_field.win = window
+        lines = []
         for option in form_field.options:
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
             text = f"{option_code} {str(option.text)}"
-            clp = CursesLinePart(self._input_start, text, color, 0)
-            lines.append((clp))
-        return tuple(lines)
+            line_part = CursesLinePart(self._input_start, text, color, 0)
+            lines.append(CursesLine((line_part,)))
+        return CursesLines(tuple(lines))
 
-    def _generate_field_text(self, form_field) -> CursesLine:
+    def _generate_field_text(self, form_field) -> CursesLinePart:
         window = curses.newwin(1, self._field_win_width, self._line_number, self._field_win_start)
         window.keypad(True)
         form_field.win = window
@@ -210,24 +218,25 @@ class FormPresenter(CursesWindow):
         else:
             text = str(form_field.value)
             color = 0
-        clp = CursesLinePart(self._input_start, text, color, 0)
-        return (clp,)
+        return CursesLinePart(self._input_start, text, color, 0)
 
     def _generate_horizontal_line(self) -> CursesLine:
-        clp = CursesLinePart(0, "\u2500" * self._form_width, 8, 0)
-        return (clp,)
+        line_part = CursesLinePart(0, "\u2500" * self._form_width, 8, 0)
+        return CursesLine((line_part,))
 
     @staticmethod
     def _generate_information(form_field) -> CursesLines:
-        lines = tuple((CursesLinePart(0, line, 0, 0),) for line in form_field.information)
-        return lines
+        lines = tuple(
+            CursesLine((CursesLinePart(0, line, 0, 0),)) for line in form_field.information
+        )
+        return CursesLines(lines)
 
     @staticmethod
     def _generate_messages(form_field) -> CursesLines:
-        lines = tuple((CursesLinePart(0, line, 0, 0),) for line in form_field.messages)
-        return lines
+        lines = tuple(CursesLine((CursesLinePart(0, line, 0, 0),)) for line in form_field.messages)
+        return CursesLines(lines)
 
-    def _generate_prompt(self, form_field) -> CursesLine:
+    def _generate_prompt(self, form_field) -> List[CursesLinePart]:
         prompt_start = self._prompt_end - len(form_field.full_prompt)
         if form_field.valid is True:
             color = 10
@@ -242,12 +251,11 @@ class FormPresenter(CursesWindow):
             0,
         )
         cl_separator = CursesLinePart(self._prompt_end, self._separator, color, 0)
-        line_parts = (cl_prompt, cl_default, cl_separator)
-        return line_parts
+        return [cl_prompt, cl_default, cl_separator]
 
     def _generate_title(self) -> CursesLine:
-        clp = CursesLinePart(0, self._form.title.upper(), self._form.title_color, 0)
-        return (clp,)
+        line_part = CursesLinePart(0, self._form.title.upper(), self._form.title_color, 0)
+        return CursesLine((line_part,))
 
     def present(self) -> "Form":
         """present the form to the user"""

@@ -2,5 +2,5 @@
 - hosts: localhost
   gather_facts: False
   tasks:
-  - ansible.builtin.debug:
-      msg: "test"
+    - ansible.builtin.debug:
+        msg: "test"

@@ -29,7 +29,7 @@ def _find_all_importables(pkg: ModuleType) -> List[str]:
     """Find all importables in the project.
 
     :param pkg: The package in which importables will be found
-    :return: A sorted list of the importables
+    :returns: A sorted list of the importables
     """
     return sorted(
         set(

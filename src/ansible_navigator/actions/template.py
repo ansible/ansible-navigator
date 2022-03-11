@@ -5,15 +5,15 @@ Processor of a template request at the single line prompt. e.g. {{ }}
 import html
 
 from collections.abc import Mapping
-from typing import Union
+from typing import Optional
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..ui_framework import warning_notification
-from ..utils import remove_dbl_un
-from ..utils import templar
+from ..utils.functions import remove_dbl_un
+from ..utils.functions import templar
 from . import _actions as actions
 
 
@@ -30,12 +30,12 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="template")
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the templating request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("template requested '%s'", interaction.action.value)

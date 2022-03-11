@@ -47,6 +47,7 @@ class ColorSchema:
 
         :param schema: The color scheme, theme to use
         """
+        self._logger = logging.getLogger(__name__)
         self._schema = schema
 
     @functools.lru_cache(maxsize=None)
@@ -54,7 +55,7 @@ class ColorSchema:
         """Get a color from the schema, from most specific to least.
 
         :param scope: The scope, aka format
-        :return: The color in RGB format or nothing
+        :returns: The color in RGB format or nothing
         """
         for name in reversed(scope):
             for parts in range(0, len(name.split("."))):
@@ -72,7 +73,13 @@ class ColorSchema:
                 )
                 if color:
                     foreground = color.get("settings", {}).get("foreground", None)
-                    return hex_to_rgb(foreground)
+                    # Without decoration support, continue resolving to a until we find a
+                    # foreground color or ultimately return None. This currently completely
+                    # ignores font styles.
+                    # e.g. color={'scope': 'strong', 'settings': {'fontStyle': 'bold'}}
+                    if foreground is not None:
+                        return hex_to_rgb(foreground)
+                    self._logger.debug("Color resolution continued: %s", color)
         return None
 
 
@@ -102,10 +109,10 @@ class Colorize:
         """Convert ansi colored text into curses lines.
 
         :param doc: The text to convert
-        :return: Lines ready to present using the TUI
+        :returns: Lines ready to present using the TUI
         """
         lines = tuple(ansi_to_curses(line) for line in doc.splitlines())
-        return lines
+        return CursesLines(lines)
 
     @functools.lru_cache(maxsize=100)
     def render(self, doc: str, scope: str) -> List[List[SimpleLinePart]]:
@@ -113,7 +120,7 @@ class Colorize:
 
         :param doc: The string to split, tokenize and color
         :param scope: The scope, aka the format of the string
-        :return: A list of lines, each a list of dicts
+        :returns: A list of lines, each a list of dicts
         """
         try:
             compiler = self._grammars.compiler_for_scope(scope)
@@ -160,7 +167,7 @@ def scope_to_list(scope: Union[str, List]) -> List:
     but just in case return an empty list if not
 
     :param scope: The scope
-    :return: Scope as list
+    :returns: Scope as list
     """
     if isinstance(scope, list):
         return scope
@@ -198,7 +205,7 @@ def hex_to_rgb_curses(value: str) -> RgbTuple:
     """Convert a hex color to RGB scaled for curses.
 
     :param value: an RGB color
-    :return: The colors scaled to 1000
+    :returns: The colors scaled to 1000
     """
     red, green, blue = hex_to_rgb(value)
     return (scale_for_curses(red), scale_for_curses(green), scale_for_curses(blue))
@@ -294,7 +301,7 @@ def ansi_to_curses(line: str) -> CursesLine:
     """Convert ansible color codes to curses colors.
 
     :param line: A string with ansi colors
-    :return: A line ready for presentation in the TUI
+    :returns: A line ready for presentation in the TUI
     """
     printable = []
     ansi_regex = re.compile(r"(\x1b\[[\d;]*m)")
@@ -346,4 +353,4 @@ def ansi_to_curses(line: str) -> CursesLine:
                 colno += len(part)
                 color = 0
                 style = 0
-    return tuple(printable)
+    return CursesLine(tuple(printable))
