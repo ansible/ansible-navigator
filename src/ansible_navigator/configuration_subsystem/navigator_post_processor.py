@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import List
 from typing import Tuple
 
+from ..utils.compatibility import zoneinfo
 from ..utils.functions import ExitMessage
 from ..utils.functions import ExitPrefix
 from ..utils.functions import LogMessage
@@ -770,4 +771,35 @@ class NavigatorPostProcessor:
             entry.value.current = set_envs
         if entry.value.source is not C.NOT_SET:
             entry.value.current = {k: str(v) for k, v in entry.value.current.items()}
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
+    def time_zone(
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process ``time_zone``
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        available_timezones = sorted(zoneinfo.available_timezones())
+        if entry.value.current in available_timezones:
+            return messages, exit_messages
+
+        msg = (
+            f"The specified time zone is not available: '{entry.value.current}'."
+            f" The default value '{entry.value.default}' will be used instead."
+        )
+        messages.append(LogMessage(level=logging.ERROR, message=msg))
+
+        entry.value.current = entry.value.default
+        entry.value.source = C.AUTO
+        msg = f"Available time zones include {oxfordcomma(available_timezones, 'and')}"
+        messages.append(LogMessage(level=logging.DEBUG, message=msg))
         return messages, exit_messages

@@ -250,6 +250,7 @@ ENV_VAR_DATA = [
     ("pull_arguments", "--tls-verify=false", ["--tls-verify=false"]),
     ("pull_policy", "never", "never"),
     ("set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}),
+    ("time_zone", "Japan", "Japan"),
     ("workdir", "/tmp/", "/tmp/"),
 ]
 
