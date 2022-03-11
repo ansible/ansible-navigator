@@ -55,20 +55,39 @@ class Action:
         self._args = args
         self._logger = logging.getLogger(__name__)
 
-    def _menu(self, menu: Menu, menu_filter: Callable) -> List[Dict[Any, Any]]:
+    def _menu(
+        self,
+        menu: Menu,
+        menu_filter: Callable,
+        serialization_format=Optional[SerializationFormat],
+    ) -> List[Dict[Any, Any]]:
         """Convert a menu into structured data.
 
         :param menu: The current menu showing
         :param menu_filter: The effective menu filter
+        :param serialization_format: The current serialization format
         :returns: The menu converted to a structured data
         """
         self._logger.debug("menu is showing, open that")
-        obj = [
-            {remove_dbl_un(k): v for k, v in c.items() if k in menu.columns} for c in menu.current
+        menu_entries = []
+        for entry in menu.current:
+            if isinstance(entry, ContentBase):
+                entry = entry.asdict(
+                    content_view=ContentView.FULL,
+                    serialization_format=serialization_format,
+                )
+            menu_entries.append(entry)
+
+        menu_entries = [
+            {remove_dbl_un(k): v for k, v in c.items() if k in menu.columns} for c in menu_entries
         ]
         if menu_filter():
-            obj = [e for e in obj if menu_filter().search(" ".join(str(v) for v in e.values()))]
-        return obj
+            menu_entries = [
+                e
+                for e in menu_entries
+                if menu_filter().search(" ".join(str(v) for v in e.values()))
+            ]
+        return menu_entries
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=too-many-branches
@@ -84,6 +103,13 @@ class Action:
         filename: Optional[Path] = None
         line_number = 0
 
+        if interaction.ui.serialization_format() == "source.yaml":
+            serialization_format = SerializationFormat.YAML
+        elif interaction.ui.serialization_format() == "source.json":
+            serialization_format = SerializationFormat.JSON
+        else:
+            serialization_format = None
+
         something = interaction.action.match.groupdict()["something"]
         if something:
             parts = something.rsplit(":", 1)
@@ -97,7 +123,11 @@ class Action:
             if interaction.content:
                 obj = interaction.content.showing
             elif interaction.menu:
-                obj = self._menu(menu=interaction.menu, menu_filter=interaction.ui.menu_filter)
+                obj = self._menu(
+                    menu=interaction.menu,
+                    menu_filter=interaction.ui.menu_filter,
+                    serialization_format=serialization_format,
+                )
             else:
                 return None
 
@@ -111,11 +141,11 @@ class Action:
                 ) as file_like:
                     filename = Path(file_like.name)
                     file_like.write(obj)
-            elif content_format.value.serialization:
+            elif serialization_format:
                 filename = serialize_write_temp_file(
                     content=obj,
                     content_view=ContentView.NORMAL,
-                    serialization_format=content_format.value.serialization,
+                    serialization_format=serialization_format,
                 )
             else:
                 with tempfile.NamedTemporaryFile(

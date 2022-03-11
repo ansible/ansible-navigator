@@ -1,14 +1,11 @@
 {
-    "name": "test[9-:f-clear filter, full list]",
-    "index": 9,
-    "comment": "clear filter, full list",
+    "name": "test[11-:q!-quit vi]",
+    "index": 11,
+    "comment": "quit vi",
     "additional_information": {
-        "present": [
-            "Ansible runner artifact dir",
-            "Help playbook"
-        ],
+        "present": [],
         "absent": [],
-        "compared_fixture": false
+        "compared_fixture": true
     },
     "output": [
         "   NAME                                                 DEFAULT    SOURCE                             CURRENT",
@@ -27,7 +24,7 @@
         "12│Editor console                                          True    Defaults                           True                                                                                                                                                                                                 ▒",
         "13│Exec command                                            True    Defaults                           /bin/bash",
         "14│Exec shell                                              True    Defaults                           True",
-        "15│Execution environment                                   True    Command line                       True",
+        "15│Execution environment                                  False    Command line                       False",
         "16│Execution environment image                             True    Defaults                           quay.io/ansible/creator-ee:v0.2.0",
         "17│Execution environment volume mounts                     True    Not set                            Not set",
         "18│Help builder                                            True    Defaults                           False",
