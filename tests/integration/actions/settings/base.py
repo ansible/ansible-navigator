@@ -41,7 +41,11 @@ base_steps = (
         search_within_response="---",
         mask=True,
     ),
-    UiTestStep(user_input=":q!", comment="quit vi"),
+    UiTestStep(
+        user_input=":q!",
+        comment="quit vi",
+        present=["Ansible runner artifact dir", "Help playbook"],
+    ),
 )
 
 
