@@ -1,14 +1,11 @@
 {
-    "name": "test[9-:f-clear filter, full list]",
-    "index": 9,
-    "comment": "clear filter, full list",
+    "name": "test[11-:q!-quit vi]",
+    "index": 11,
+    "comment": "quit vi",
     "additional_information": {
-        "present": [
-            "Ansible runner artifact dir",
-            "Help playbook"
-        ],
+        "present": [],
         "absent": [],
-        "compared_fixture": false
+        "compared_fixture": true
     },
     "output": [
         "   NAME                                                 DEFAULT    SOURCE                             CURRENT",

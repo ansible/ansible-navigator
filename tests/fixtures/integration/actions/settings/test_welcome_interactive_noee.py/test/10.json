@@ -1,0 +1,39 @@
+{
+    "name": "test[10-:open-open menu in vi]",
+    "index": 10,
+    "comment": "open menu in vi",
+    "additional_information": {
+        "present": [
+            "---"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "---",
+        "- current: Not set",
+        "  default: true",
+        "  name: Ansible runner artifact dir",
+        "  source: Not set",
+        "- current: Not set",
+        "  default: true",
+        "  name: Ansible runner rotate artifacts count",
+        "  source: Not set",
+        "- current: '42'",
+        "  default: false",
+        "  name: Ansible runner timeout",
+        "  source: Environment variable",
+        "- current: welcome",
+        "  default: true",
+        "  name: App",
+        "  source: Defaults",
+        "- current: Not set",
+        "  default: true",
+        "  name: Cmdline",
+        "  source: Not set",
+        "- current: /home/user/github/ansible-navigator/.test_logs/tests/integration/actions/settings/test_welcome_interactive_noee.py/collection_doc_cache.db",
+        "  default: false",
+        "  name: Collection doc cache path",
+        "\"/tmp/tmpacn91ysp.YAML\" 165L, 3724B                                                                                                                                                                                                                                                       1,1           Top"
+    ]
+}

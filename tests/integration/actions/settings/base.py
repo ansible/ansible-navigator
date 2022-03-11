@@ -34,6 +34,14 @@ base_steps = (
         present=["Ansible runner artifact dir", "Help playbook"],
         mask=True,
     ),
+    UiTestStep(
+        user_input=":open",
+        comment="open menu in vi",
+        present=["---"],
+        search_within_response="---",
+        mask=True,
+    ),
+    UiTestStep(user_input=":q!", comment="quit vi"),
 )
 
 
@@ -70,14 +78,13 @@ class BaseClass:
         :param request: Used for generating test id
         :param tmux_session: tmux_session object
         :param step: UiTestStep object
-        :raises ValueError: If HELP or PROMPT aren't found
         """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         else:
-            raise ValueError("test mode not set")
+            search_within_response = step.search_within_response
 
         received_output = tmux_session.interaction(
             value=step.user_input,

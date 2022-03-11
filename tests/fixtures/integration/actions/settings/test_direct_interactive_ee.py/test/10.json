@@ -1,21 +1,18 @@
 {
-    "name": "test[9-:f-clear filter, full list]",
-    "index": 9,
-    "comment": "clear filter, full list",
+    "name": "test[10-:q!-quit vi]",
+    "index": 10,
+    "comment": "quit vi",
     "additional_information": {
-        "present": [
-            "Ansible runner artifact dir",
-            "Help playbook"
-        ],
+        "present": [],
         "absent": [],
-        "compared_fixture": false
+        "compared_fixture": true
     },
     "output": [
         "   NAME                                                 DEFAULT    SOURCE                             CURRENT",
         " 0│Ansible runner artifact dir                             True    Not set                            Not set                                                                                                                                                                                              ▒",
         " 1│Ansible runner rotate artifacts count                   True    Not set                            Not set                                                                                                                                                                                              ▒",
         " 2│Ansible runner timeout                                 False    Environment variable               42                                                                                                                                                                                                   ▒",
-        " 3│App                                                     True    Defaults                           XXXXXXX",
+        " 3│App                                                    False    Command line                       XXXXXXX",
         " 4│Cmdline                                                 True    Not set                            Not set                                                                                                                                                                                              ▒",
         " 5│Collection doc cache path                              False    Environment variable               XXXXXXX",
         " 6│Config                                                  True    Not set                            Not set                                                                                                                                                                                              ▒",

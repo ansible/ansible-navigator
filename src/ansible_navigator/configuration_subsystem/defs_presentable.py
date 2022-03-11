@@ -1,6 +1,7 @@
 """Object definitions for the presentable transformation of the settings."""
 
 from dataclasses import dataclass
+from typing import Any
 from typing import ClassVar
 from typing import Dict
 from typing import List
@@ -11,6 +12,8 @@ from typing import Type
 from typing import TypeVar
 from typing import Union
 
+from ansible_navigator.ui_framework import ContentView
+from ansible_navigator.utils.serialize import SerializationFormat
 from ..ui_framework import ContentBase
 from .definitions import CliParameters
 from .definitions import Constants as C
@@ -85,6 +88,27 @@ class PresentableSettingsEntry(ContentBase):
     """A list of subcommands where this entry is available"""
     cli_parameters: PresentableCliParameters = PresentableCliParameters()
     """The CLI parameters, long and short"""
+
+    def asdict(
+        self,
+        content_view: ContentView,
+        serialization_format: SerializationFormat,
+    ) -> Dict[str, Union[bool, str, Dict[str, Any]]]:
+        """Convert thy self into a dictionary.
+
+        Call super and add current if ContentView.FULL
+
+        :param content_view: The content view
+        :param serialization_format: The serialization format
+        :returns: A dictionary created from self
+        """
+        dictionary = super().asdict(
+            content_view=content_view,
+            serialization_format=serialization_format,
+        )
+        if content_view is ContentView.FULL:
+            dictionary["current"] = self.current
+        return dictionary
 
     @property
     def current(self) -> str:
