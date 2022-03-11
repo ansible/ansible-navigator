@@ -867,9 +867,9 @@ class UserInterface(CursesWindow):
             form_result = self._show_form(obj)
             return form_result
 
-        if index is not None and isinstance(obj, list):
+        if index is not None and isinstance(obj, (list, tuple)):
             result = self._show_obj_from_list(obj, index, await_input)
-        elif columns and isinstance(obj, list):
+        elif columns and isinstance(obj, (list, tuple)):
             result = self._show_menu(obj, columns, await_input)
         else:
             result = self._show_obj_from_list([obj], 0, await_input)
