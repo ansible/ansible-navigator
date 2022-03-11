@@ -48,8 +48,8 @@ def config_post_process(expected, path):
         volume_mounts = expected["ansible-navigator"]["execution-environment"]["volume-mounts"]
         for volume_mount in volume_mounts:
             mount_path = f"{volume_mount['src']}:{volume_mount['dest']}"
-            if volume_mount.get("label"):
-                mount_path += f":{volume_mount['label']}"
+            if volume_mount.get("options"):
+                mount_path += f":{volume_mount['options']}"
             parsed_volume_mounts.append(mount_path)
         expected["ansible-navigator"]["execution-environment"][
             "volume-mounts"

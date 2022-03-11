@@ -5,6 +5,7 @@ import os
 
 from dataclasses import dataclass
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -87,9 +88,11 @@ class Internals:
 
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
+    initializing: bool = False
+    """This is an initial run (app starting for the first time)"""
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
-    settings_file_path: Union[None, str] = None
+    settings_file_path: Optional[str] = None
     settings_source: C = C.NOT_SET
     share_directory: str = generate_share_directory()
 
@@ -160,6 +163,10 @@ navigator_subcommands = [
             " For more information about these, try "
             " 'ansible-navigator run --help-playbook --mode stdout'"
         ),
+    ),
+    SubCommand(
+        name="settings",
+        description="Review the current ansible-navigator settings",
     ),
     SubCommand(name="welcome", description="Start at the welcome page"),
 ]
@@ -302,6 +309,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="execution_environment_volume_mounts",
             cli_parameters=CliParameters(action="append", nargs="+", short="--eev"),
             delay_post_process=True,
+            environment_variable_split_char=";",
             settings_file_path_override="execution-environment.volume-mounts",
             short_description=(
                 "Specify volume to be bind mounted within an execution environment"
@@ -396,6 +404,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         SettingsEntry(
             name="mode",
             change_after_initial=False,
+            delay_post_process=True,
             choices=["stdout", "interactive"],
             cli_parameters=CliParameters(short="-m"),
             short_description="Specify the user-interface mode",

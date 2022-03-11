@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from typing import Any
 from typing import Callable
+from typing import Optional
 from typing import Union
 
 from .curses_window import Window
@@ -26,7 +27,7 @@ class FieldText:
     valid: Union[bool, Unknown] = unknown
     validator: Callable = FieldValidators.none
     value: Any = unknown
-    win: Union[Window, None] = None
+    win: Optional[Window] = None
 
     @property
     def formatted_default(self) -> str:

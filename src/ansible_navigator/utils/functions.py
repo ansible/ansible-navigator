@@ -1,6 +1,7 @@
 """some utilities that are specific to ansible_navigator
 """
 import ast
+import datetime
 import decimal
 import html
 import logging
@@ -27,6 +28,8 @@ from typing import Union
 from jinja2 import Environment
 from jinja2 import StrictUndefined
 from jinja2 import TemplateError
+
+from .compatibility import zoneinfo
 
 
 logger = logging.getLogger(__name__)
@@ -175,7 +178,7 @@ def escape_moustaches(obj: Mapping) -> Mapping:
     """escape moustaches
 
     :param obj: something
-    :return: the obj with replacements made
+    :returns: the obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     return dispatch(obj, replacements)
@@ -210,7 +213,7 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     """find the settings file as
     ./ansible-navigator.(.yml,.yaml,.json)
     ~/.ansible-navigator.(.yml,.yaml,.json)
@@ -262,7 +265,7 @@ def flatten_list(data_list) -> List:
     return [data_list]
 
 
-def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Union[None, str]]:
+def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     # pylint: disable=too-many-return-statements
     """
     returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
@@ -369,6 +372,21 @@ def human_time(seconds: Union[int, float]) -> str:
     return f"{sign_string!s}{seconds:d}s"
 
 
+def now_iso(time_zone: str) -> str:
+    """Return the current time as an ISO 8601 formatted string, given a time zone.
+
+    :params time_zone: The IANA timezone name or local.
+    :returns: The ISO 8601 formatted time zone string
+    """
+    if time_zone == "local":
+        return datetime.datetime.now(tz=datetime.timezone.utc).astimezone().isoformat()
+    try:
+        return datetime.datetime.now(tz=zoneinfo.ZoneInfo(time_zone)).isoformat()
+    except zoneinfo.ZoneInfoNotFoundError:
+        logger.error("The time zone '%s' could not be found. Using UTC.", time_zone)
+        return datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+
+
 PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
 
 
@@ -439,7 +457,7 @@ def round_half_up(number: Union[float, int]) -> int:
     This will always round based on distance from zero. (e.g round(2.5) = 3, round(3.5) = 4).
 
     :param number: The number to round
-    :return: The rounded number as an it
+    :returns: The rounded number as an it
     """
     rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
@@ -480,7 +498,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
 
     :param string: The template string
     :param template_vars: The vars used to render the template
-    :return: A list of errors and either the result of templating or original string
+    :returns: A list of errors and either the result of templating or original string
     """
     errors = []
     # hide the jinja that may be in the template_vars
@@ -513,7 +531,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     return errors, result
 
 
-def to_list(thing: Union[str, List, Tuple, Set, None]) -> List:
+def to_list(thing: Optional[Union[str, List, Tuple, Set]]) -> List:
     """convert something to a list if necessary"""
     if isinstance(thing, (list, tuple, set)):
         converted_value = list(thing)
@@ -528,7 +546,7 @@ def unescape_moustaches(obj: Any) -> Mapping:
     """unescape moustaches
 
     :param obj: something
-    :return: the obj with replacements made
+    :returns: the obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)

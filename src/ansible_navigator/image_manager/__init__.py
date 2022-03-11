@@ -1,4 +1,4 @@
-"""image manager"""
+"""Image manager."""
 
 from .inspector import inspect_all
 from .puller import ImagePuller

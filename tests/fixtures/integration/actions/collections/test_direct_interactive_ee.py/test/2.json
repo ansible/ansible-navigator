@@ -1,7 +1,12 @@
 {
-    "name": "test[2-:0-lookup_1 plugin docs window]",
+    "name": "test[02-:0-lookup_1 plugin docs window]",
     "index": 2,
     "comment": "lookup_1 plugin docs window",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
     "output": [
         "COMPANY_NAME.COLL_1.LOOKUP_1: This is test lookup plugin",
         " 0│---",

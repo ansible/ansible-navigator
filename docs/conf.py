@@ -61,13 +61,8 @@ project = "Ansible Navigator"
 author = f"{project} project contributors"
 copyright = author  # pylint:disable=redefined-builtin
 
-# fmt: off
 # The short X.Y version
-version = ".".join(
-    get_scm_version(
-        local_scheme="no-local-version",
-    ).split(".")[:3],
-)
+version = ".".join(get_scm_version(local_scheme="no-local-version").split(".")[:3])
 
 # The full version, including alpha/beta/rc tags
 release = get_scm_version()
@@ -109,17 +104,25 @@ pygments_style = "ansible"
 nitpicky = True
 nitpick_ignore = [
     ("py:class", "_Rule"),
+    (
+        "py:class",
+        "ansible_navigator.configuration_subsystem.defs_presentable.PresentableSettingsEntries",
+    ),
+    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TCli"),
+    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TEnt"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
-    ("py:class", "ansible_navigator.tm_tokenize.utils.T"),
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse._SubParsersAction"),
     ("py:class", "Captures"),
     ("py:class", "CompiledRegsetRule"),
     ("py:class", "CompiledRule"),
     ("py:class", "Compiler"),
+    ("py:class", "ContentBase"),
+    ("py:class", "ContentView"),
     ("py:class", "CursesLine"),
     ("py:class", "CursesLines"),
+    ("py:class", "dataclasses.InitVar"),
     ("py:class", "Entry"),
     ("py:class", "FieldButton"),
     ("py:class", "FieldChecks"),
@@ -142,10 +145,15 @@ nitpick_ignore = [
     ("py:class", "State"),
     ("py:class", "WhileRule"),
     ("py:class", "Window"),
-    ("py:class", "yaml.cyaml.CDumper"),
+    ("py:class", "yaml.cyaml.CSafeDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
     ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
+]
+
+nitpick_ignore_regex = [
+    # Any single letter TypeVar, class or object
+    ("py:(class|obj)", r"^.*\.[A-Z]$"),
 ]
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -305,8 +313,8 @@ myst_enable_extensions = [
     "substitution",  # replace common ASCII shortcuts into their symbols
 ]
 myst_substitutions = {
-  "project": project,
-  "release": release,
-  "release_l": f"`v{release}`",
-  "version": version,
+    "project": project,
+    "release": release,
+    "release_l": f"`v{release}`",
+    "version": version,
 }

@@ -1,7 +1,12 @@
 {
-    "name": "test[0-cd /tmp && ansible-navigator collections --execution-environment true --eev $ANSIBLE_COLLECTIONS_PATH/collections:/tmp/collections_to_volmount:Z --senv ANSIBLE_COLLECTIONS_PATH=/tmp/collections_to_volmount-ansible-navigator collections browse window]",
+    "name": "test[00-cd /tmp && ansible-navigator collections --ee True --ll debug --mode interactive --eev $ANSIBLE_COLLECTIONS_PATH/collections:/tmp/collections_to_volmount:Z --senv ANSIBLE_COLLECTIONS_PATH=/tmp/collections_to_volmount-ansible-navigator collections top window]",
     "index": 0,
-    "comment": "ansible-navigator collections browse window",
+    "comment": "ansible-navigator collections top window",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
     "output": [
         "  NAME                              VERSION      SHADOWED       TYPE               PATH",
         "0│company_name.coll_1               1.0.0           False       bind_mount         /tmp/collections_to_volmount/ansible_collections/company_name/coll_1",

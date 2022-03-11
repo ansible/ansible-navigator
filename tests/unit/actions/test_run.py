@@ -4,12 +4,12 @@ import logging
 import os
 
 from copy import deepcopy
+from pathlib import Path
 from queue import Queue
 from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Optional
-from typing import Union
 
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest.mock import mock_open
@@ -28,7 +28,7 @@ class ArtifactTstData(NamedTuple):
     """The artifact files test data object."""
 
     name: str
-    filename: Union[None, str]
+    filename: Optional[str]
     playbook: str
     expected: str
     help_playbook: bool = False
@@ -85,10 +85,9 @@ artifact_test_data = [
 
 @patch.dict("os.environ", {"HOME": "/home/test_user"})
 @patch("os.makedirs", return_value=True)
-@patch("builtins.open", new_callable=mock_open)
 @patch("ansible_navigator.actions.run.Action._get_status", return_value=(0, 0))
 @pytest.mark.parametrize("data", artifact_test_data, ids=id_from_data)
-def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog, data):
+def test_artifact_path(_mocked_get_status, _mocked_makedirs, caplog, data):
     """Test the building of the artifact filename given a filename or playbook"""
     caplog.set_level(logging.DEBUG)
 
@@ -106,13 +105,20 @@ def test_artifact_path(_mocked_get_status, mocked_open, _mocked_makedirs, caplog
     args.entry("playbook_artifact_enable").value.current = True
 
     run = action(args=args)
-    run.write_artifact(filename=data.filename)
+
+    opener = mock_open()
+
+    def mocked_open(self, *args, **kwargs):
+        return opener(self, *args, **kwargs)
+
+    with patch.object(Path, "open", mocked_open):
+        run.write_artifact(filename=data.filename)
 
     if data.help_playbook is not True:
-        open_filename = mocked_open.call_args[0][0]
+        open_filename = str(opener.call_args[0][0])
         assert open_filename.startswith(data.expected), caplog.text
     else:
-        mocked_open.assert_not_called()
+        opener.assert_not_called()
 
 
 class RunRunnerTstData(NamedTuple):

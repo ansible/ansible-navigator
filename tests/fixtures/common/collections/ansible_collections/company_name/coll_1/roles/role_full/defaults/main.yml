@@ -1,0 +1,4 @@
+---
+role_full_bool: True
+role_full_int: 42
+role_full_str: Test string

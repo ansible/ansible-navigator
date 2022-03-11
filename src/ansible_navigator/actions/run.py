@@ -1,7 +1,6 @@
 """:run
 """
 import curses
-import datetime
 import json
 import logging
 import os
@@ -12,6 +11,7 @@ import time
 import uuid
 
 from math import floor
+from pathlib import Path
 from queue import Queue
 from typing import Any
 from typing import Callable
@@ -19,14 +19,15 @@ from typing import Dict
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Union
 
+from ansible_navigator.ui_framework.content_defs import ContentView
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import CommandAsync
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -36,9 +37,11 @@ from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import abs_user_path
 from ..utils.functions import human_time
+from ..utils.functions import now_iso
 from ..utils.functions import remove_ansi
 from ..utils.functions import round_half_up
-from ..utils.serialize import json_dump
+from ..utils.serialize import SerializationFormat
+from ..utils.serialize import serialize_write_file
 from . import _actions as actions
 from . import run_action
 
@@ -102,26 +105,26 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, i
     return color, decoration
 
 
-def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """create a heading for some piece of content showing
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
-    :return: The heading
+    :returns: The heading
     """
 
     if isinstance(obj, dict) and "task" in obj:
-        heading = []
         detail = f"PLAY [{obj['play']}:{obj['__number']}] "
         stars = "*" * (screen_w - len(detail))
-        heading.append(
-            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)]),
+
+        line_1 = CursesLine(
+            (CursesLinePart(column=0, string=detail + stars, color=0, decoration=0),),
         )
 
         detail = f"TASK [{obj['task']}] "
         stars = "*" * (screen_w - len(detail))
-        heading.append(
-            tuple([CursesLinePart(column=0, string=detail + stars, color=0, decoration=0)]),
+        line_2 = CursesLine(
+            (CursesLinePart(column=0, string=detail + stars, color=0, decoration=0),),
         )
 
         if obj["__changed"] is True:
@@ -138,19 +141,11 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
         string = f"{res}: [{obj['__host']}] {msg}"
         string = string + (" " * (screen_w - len(string) + 1))
-        heading.append(
-            tuple(
-                [
-                    CursesLinePart(
-                        column=0,
-                        string=string,
-                        color=color,
-                        decoration=curses.A_UNDERLINE,
-                    ),
-                ],
-            ),
+        line_3 = CursesLine(
+            (CursesLinePart(column=0, string=string, color=color, decoration=curses.A_UNDERLINE),),
         )
-        return tuple(heading)
+
+        return CursesLines((line_1, line_2, line_3))
     return None
 
 
@@ -270,12 +265,12 @@ class Action(ActionBase):
             )
         return RunStdoutReturn(message="", return_code=return_code)
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """run :run or :replay
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending interaction or none
+        :returns: The pending interaction or none
         """
 
         self._prepare_to_run(app, interaction)
@@ -747,7 +742,7 @@ class Action(ActionBase):
         """Looks like we're headed out of here
 
         :param interaction: the quit interaction
-        :return: a bool indicating whether of not it's safe to exit
+        :returns: a bool indicating whether of not it's safe to exit
         """
         self.update()
         if self.runner is not None and not self.runner.finished:
@@ -766,7 +761,7 @@ class Action(ActionBase):
     def _task_list_for_play(self) -> Step:
         """generate a menu of task for the currently selected play
 
-        :return: The menu step
+        :returns: The menu step
         """
         value = self.steps.current.selected["tasks"]
         step = Step(
@@ -781,7 +776,7 @@ class Action(ActionBase):
     def _task_from_task_list(self) -> Step:
         """generate task content for the selected task
 
-        :return: content which show a task
+        :returns: content which show a task
         """
         value = self.steps.current.value
         index = self.steps.current.index
@@ -807,7 +802,7 @@ class Action(ActionBase):
     def _get_status(self) -> Tuple[str, int]:
         """Get the status and color
 
-        :return: status string, status color
+        :returns: status string, status color
         """
         status = ""
         status_color = 0
@@ -847,7 +842,7 @@ class Action(ActionBase):
             filename = filename.format(
                 playbook_dir=os.path.dirname(self._args.playbook),
                 playbook_name=os.path.splitext(os.path.basename(self._args.playbook))[0],
-                ts_utc=datetime.datetime.now(tz=datetime.timezone.utc).isoformat(),
+                ts_utc=now_iso(time_zone="UTC"),
             )
             self._logger.debug("Formatted artifact file name set to %s", filename)
             filename = abs_user_path(filename)
@@ -857,16 +852,21 @@ class Action(ActionBase):
 
             try:
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
-                with open(filename, "w", encoding="utf-8") as fh:
-                    artifact = {
-                        "version": "1.0.0",
-                        "plays": self._plays.value,
-                        "stdout": self.stdout,
-                        "status": status,
-                        "status_color": status_color,
-                    }
-                    json_dump(artifact, fh)
-                    self._logger.info("Saved artifact as %s", filename)
+                artifact = {
+                    "version": "1.0.0",
+                    "plays": self._plays.value,
+                    "stdout": self.stdout,
+                    "status": status,
+                    "status_color": status_color,
+                }
+                serialize_write_file(
+                    content=artifact,
+                    content_view=ContentView.NORMAL,
+                    file_mode="w",
+                    file=Path(filename),
+                    serialization_format=SerializationFormat.JSON,
+                )
+                self._logger.info("Saved artifact as %s", filename)
 
             except (IOError, OSError) as exc:
                 error = (

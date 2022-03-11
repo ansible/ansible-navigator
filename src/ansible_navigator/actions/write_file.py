@@ -3,12 +3,15 @@ import logging
 import os
 import re
 
+from pathlib import Path
+
+from ansible_navigator.ui_framework.content_defs import ContentView
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..utils.functions import remove_dbl_un
-from ..utils.serialize import human_dump
-from ..utils.serialize import json_dump
+from ..utils.serialize import SerializationFormat
+from ..utils.serialize import serialize_write_file
 from . import _actions as actions
 
 
@@ -83,11 +86,20 @@ class Action:
             with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
                 fh.write(obj)
         elif write_as == "yaml":
-            human_dump(obj=obj, filename=filename, file_mode=file_mode)
+            serialize_write_file(
+                content=obj,
+                content_view=ContentView.NORMAL,
+                file=Path(filename),
+                file_mode=file_mode,
+                serialization_format=SerializationFormat.YAML,
+            )
         elif write_as == "json":
-            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
-                json_dump(obj, fh)
-                fh.write("\n")
-
+            serialize_write_file(
+                content=obj,
+                content_view=ContentView.NORMAL,
+                file=Path(filename),
+                file_mode=file_mode,
+                serialization_format=SerializationFormat.JSON,
+            )
         self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, file_mode, write_as)
         return None

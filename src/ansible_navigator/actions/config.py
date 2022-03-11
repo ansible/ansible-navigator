@@ -19,6 +19,7 @@ from ..configuration_subsystem import ApplicationConfiguration
 from ..runner import AnsibleConfig
 from ..runner import Command
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -44,14 +45,13 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return 2, 0
 
 
-def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """Create a heading for config content.
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
-    :return: The heading
+    :returns: The heading
     """
-    heading = []
     string = obj["option"].replace("_", " ")
     if obj["__default"] is False:
         string += f" (current: {obj['__current_value']})  (default: {obj['default']})"
@@ -62,19 +62,13 @@ def content_heading(obj: Any, screen_w: int) -> Union[CursesLines, None]:
 
     string = string + (" " * (screen_w - len(string) + 1))
 
-    heading.append(
-        tuple(
-            [
-                CursesLinePart(
-                    column=0,
-                    string=string,
-                    color=color,
-                    decoration=curses.A_UNDERLINE,
-                ),
-            ],
-        ),
+    line_part = CursesLinePart(
+        column=0,
+        string=string,
+        color=color,
+        decoration=curses.A_UNDERLINE,
     )
-    return tuple(heading)
+    return CursesLines((CursesLine((line_part,)),))
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
@@ -99,15 +93,15 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="config")
 
-        self._config: Union[List[Any], None] = None
+        self._config: Optional[List[Any]] = None
         self._runner: Union[AnsibleConfig, Command]
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``config`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
-        :return: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("config requested in interactive mode")

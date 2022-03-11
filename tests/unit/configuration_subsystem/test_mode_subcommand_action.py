@@ -40,6 +40,7 @@ def test_import_error():
             ),
         ],
     )
+    test_config.internals.initializing = True
     configurator = Configurator(params=[], application_configuration=test_config)
     configurator._post_process()
     message = "Unable to load action package: '__ansible_navigator.__actions':"
@@ -72,6 +73,7 @@ def test_subcommand_not_found():
             ),
         ],
     )
+    test_config.internals.initializing = True
     configurator = Configurator(params=[], application_configuration=test_config)
     configurator._post_process()
     exit_msg = "Unable to find an action for '__test_action', tried: 'ansible_navigator.actions'"

@@ -1,4 +1,4 @@
-"""command runner"""
+"""Definitions for the command runner."""
 import multiprocessing
 import subprocess
 
@@ -7,7 +7,7 @@ from dataclasses import field
 from queue import Queue
 from typing import Callable
 from typing import List
-from typing import Union
+from typing import Optional
 
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
@@ -31,7 +31,10 @@ class Command:
 
 
 def run_command(command: Command) -> None:
-    """run a command"""
+    """Run a command.
+
+    :param command: Command to be run
+    """
     try:
         proc_out = subprocess.run(
             command.command,
@@ -43,11 +46,16 @@ def run_command(command: Command) -> None:
         )
         command.stdout = proc_out.stdout
     except subprocess.CalledProcessError as exc:
+        command.stdout = str(exc.stdout)
         command.stderr = str(exc.stderr)
 
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
-    """read pending, run, post process, place in completed"""
+    """Read pending, run, post process, and place in completed.
+
+    :param pending_queue: All pending commands
+    :param completed_queue: All completed commands
+    """
     while True:
         command = pending_queue.get()
         if command is None:
@@ -58,12 +66,12 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
 
 class CommandRunner:
-    """I run commands"""
+    """Functionality for running commands."""
 
     def __init__(self):
         """Initialize the command runner."""
-        self._completed_queue: Union[Queue, None] = None
-        self._pending_queue: Union[Queue, None] = None
+        self._completed_queue: Optional[Queue] = None
+        self._pending_queue: Optional[Queue] = None
 
     @staticmethod
     def run_single_proccess(commands: List[Command]):
@@ -101,7 +109,10 @@ class CommandRunner:
         return results
 
     def start_workers(self, jobs):
-        """start the workers"""
+        """Start the workers.
+
+        :param jobs: List of commands to be run
+        """
         worker_count = min(len(jobs), PROCESSES)
         processes = []
         for _proc in range(worker_count):

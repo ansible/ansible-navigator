@@ -56,7 +56,7 @@ class TestDocHelpWithoutEE(BaseClass):
 
 
 # ansible-doc help failed check in interactive mode
-CLI_DOC_HELP_WITH_EE_WRONG_MODE = (
+CLI_DOC_HELP_WITH_EE_INTERACTIVE_MODE = (
     "ansible-navigator doc company_name.coll_1.mod_1 --help-doc -m interactive"
     " --execution-environment true"
 )
@@ -64,23 +64,23 @@ CLI_DOC_HELP_WITH_EE_WRONG_MODE = (
 testdata_3: List = [
     (
         0,
-        CLI_DOC_HELP_WITH_EE_WRONG_MODE,
-        "ansible-navigator doc help with ee in wrong mode",
+        CLI_DOC_HELP_WITH_EE_INTERACTIVE_MODE,
+        "ansible-navigator doc help with ee in interactive mode",
         "doc_help_with_ee_wrong_mode",
-        ["--hd or --help-doc is valid only when 'mode' argument is set to 'stdout'"],
+        ["usage: ansible-doc [-h]"],
     ),
 ]
 
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_3)
-class TestDocHelpWithEEWrongMode(BaseClass):
+class TestDocHelpWithEEInteractiveMode(BaseClass):
     """Run the tests for doc help from CLI, stdout, with an EE, wrong mode."""
 
     TEST_FOR_MODE = "stdout"
 
 
 # ansible-doc help failed check in interactive mode
-CLI_DOC_HELP_WITHOUT_EE_WRONG_MODE = (
+CLI_DOC_HELP_WITHOUT_EE_INTERACTIVE_MODE = (
     "ansible-navigator doc company_name.coll_1.mod_1 --help-doc -m interactive"
     " --execution-environment false"
 )
@@ -88,16 +88,16 @@ CLI_DOC_HELP_WITHOUT_EE_WRONG_MODE = (
 testdata_4: List = [
     (
         0,
-        CLI_DOC_HELP_WITHOUT_EE_WRONG_MODE,
+        CLI_DOC_HELP_WITHOUT_EE_INTERACTIVE_MODE,
         "ansible-navigator doc help without ee in wrong mode",
         "doc_help_with_ee_wrong_mode",
-        ["--hd or --help-doc is valid only when 'mode' argument is set to 'stdout'"],
+        ["usage: ansible-doc [-h]"],
     ),
 ]
 
 
 @pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_4)
-class TestDocHelpWithoutEEWrongMode(BaseClass):
+class TestDocHelpWithoutEEInteractiveMode(BaseClass):
     """Run the tests for doc help from CLI, stdout, without an EE, wrong mode."""
 
     TEST_FOR_MODE = "stdout"

@@ -1,6 +1,4 @@
-"""Herewithin lies the ability for ansible-runner
-to run the ansible-config command
-"""
+"""Herein lies the ability for ansible-runner to run the ansible-config command."""
 
 from typing import Optional
 from typing import Tuple
@@ -11,7 +9,7 @@ from .base import Base
 
 
 class AnsibleConfig(Base):
-    """abstraction for ansible-config command-line"""
+    """Abstraction for ansible-config command-line."""
 
     def fetch_ansible_config(
         self,
@@ -30,7 +28,7 @@ class AnsibleConfig(Base):
         :param only_changed: The boolean value when set to ``True`` returns only the
             configurations that have changed from the default. This parameter is applicable only
             when ``action`` is set to ``dump``. Defaults to `None`.
-        :return: A tuple of response and error string (if any).
+        :returns: A tuple of response and error string (if any)
         """
         return get_ansible_config(
             action,

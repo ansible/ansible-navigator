@@ -3,11 +3,13 @@ import logging
 
 from copy import deepcopy
 from typing import List
+from typing import Optional
 from typing import Pattern
 from typing import Tuple
 from typing import Union
 
 from ansible_navigator.actions import kegexes
+from .action_defs import RunStdoutReturn
 from .app_public import AppPublic
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants as C
@@ -17,6 +19,7 @@ from .ui_framework import Interaction
 from .ui_framework import ui
 from .ui_framework import warning_notification
 from .utils.functions import ExitMessage
+from .utils.functions import ExitPrefix
 from .utils.functions import LogMessage
 
 
@@ -37,7 +40,7 @@ class ActionBase:
         self._calling_app: AppPublic
         self._interaction: Interaction
         self._name = name
-        self._previous_filter: Union[Pattern, None]
+        self._previous_filter: Optional[Pattern]
         self._previous_scroll: int
         self.stdout: List = []
         self.steps = Steps()
@@ -47,7 +50,7 @@ class ActionBase:
         """Attempt to match the user input against the regex provided by each action.
 
         :param entry: the user input
-        :return: The name and matching action or not
+        :returns: The name and matching action or not
         """
         for kegex in kegexes():
             match = kegex.kegex.match(entry)
@@ -62,7 +65,7 @@ class ActionBase:
         This will be passed to other actions to limit the scope of
         what can be mutated internally.
 
-        :return: An instance of AppPublic for the current instance of the action
+        :returns: An instance of AppPublic for the current instance of the action
         :raises AttributeError: If the args have not been initialized
         """
         if self._args:
@@ -103,7 +106,7 @@ class ActionBase:
         in parse and update
 
         :param args: the current application configuration
-        :return: A copy of the current application configuration
+        :returns: A copy of the current application configuration
         """
         args.internals.collection_doc_cache = C.NOT_SET
         return deepcopy(args)
@@ -142,6 +145,19 @@ class ActionBase:
 
         Defined in the child class if necessary.
         """
+
+    def run_stdout(self) -> RunStdoutReturn:
+        """Provide a message saying subcommand does not support mode stdout.
+
+        :returns: Message suggesting mode interactive, return code of 1
+        """
+        messages = []
+        message = f"Subcommand '{self._name}' does not support mode 'stdout'."
+        messages.append(ExitMessage(message=message))
+        message = "Try again with '--mode interactive'"
+        messages.append(ExitMessage(message=message, prefix=ExitPrefix.HINT))
+        message = "\n".join(str(message) for message in messages)
+        return RunStdoutReturn(message=message, return_code=1)
 
     def update(self) -> None:
         """Update the action.

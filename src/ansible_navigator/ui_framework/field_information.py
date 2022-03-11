@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from typing import Callable
 from typing import List
+from typing import Optional
 from typing import Union
 
 from .curses_window import Window
@@ -22,7 +23,7 @@ class FieldInformation:
     window_handler = FormHandlerInformation
     valid: Union[bool, Unknown] = unknown
     validator: Callable = FieldValidators.null
-    win: Union[Window, None] = None
+    win: Optional[Window] = None
 
     @property
     def full_prompt(self) -> str:

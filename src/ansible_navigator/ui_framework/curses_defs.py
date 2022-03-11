@@ -3,6 +3,7 @@
 
 from dataclasses import dataclass
 from typing import NamedTuple
+from typing import NewType
 from typing import Optional
 from typing import Tuple
 
@@ -22,8 +23,11 @@ class CursesLinePart(NamedTuple):
     decoration: int
 
 
-CursesLine = Tuple[CursesLinePart, ...]
-CursesLines = Tuple[CursesLine, ...]
+CursesLine = NewType("CursesLine", Tuple[CursesLinePart, ...])
+"""One line of text ready for curses."""
+
+CursesLines = NewType("CursesLines", Tuple[CursesLine, ...])
+"""One or more lines of text ready for curses."""
 
 
 RgbTuple = Tuple[int, int, int]

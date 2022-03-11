@@ -16,15 +16,17 @@ from typing import Dict
 from typing import List
 from typing import Match
 from typing import NamedTuple
+from typing import Optional
 from typing import Pattern
 from typing import Tuple
 from typing import Union
 
 from ..utils.functions import templar
-from ..utils.serialize import human_dump
-from ..utils.serialize import json_dumps
+from ..utils.serialize import SerializationFormat
+from ..utils.serialize import serialize
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
+from .content_defs import ContentView
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -86,8 +88,8 @@ class Interaction(NamedTuple):
     name: str
     action: Action
     ui: Ui
-    content: Union[Content, None] = None
-    menu: Union[Menu, None] = None
+    content: Optional[Content] = None
+    menu: Optional[Menu] = None
 
 
 class UserInterface(CursesWindow):
@@ -120,7 +122,7 @@ class UserInterface(CursesWindow):
             grammar_dir=self._ui_config.grammar_dir,
             theme_path=self._ui_config.theme_path,
         )
-        self._content_heading: Callable[[Any, int], Union[CursesLines, None]]
+        self._content_heading: Callable[[Any, int], Optional[CursesLines]]
         self._default_colors = None
         self._default_pairs = None
         self._default_obj_serialization = "source.yaml"
@@ -128,7 +130,7 @@ class UserInterface(CursesWindow):
         self._hide_keys = True
         self._kegexes = kegexes
         self._logger = logging.getLogger(__name__)
-        self._menu_filter: Union[Pattern, None] = None
+        self._menu_filter: Optional[Pattern] = None
         self._menu_indices: Tuple[int, ...] = tuple()
 
         self._progress_bar_width = progress_bar_width
@@ -168,11 +170,11 @@ class UserInterface(CursesWindow):
         self._status = status
         self._status_color = status_color
 
-    def menu_filter(self, value: Union[str, None] = "") -> Union[Pattern, None]:
+    def menu_filter(self, value: Optional[str] = "") -> Optional[Pattern]:
         """Set or return the menu filter.
 
         :param value: None or the menu_filter regex to set
-        :return: the current menu filter
+        :returns: the current menu filter
         """
         if value != "":
             if value is None:
@@ -186,12 +188,12 @@ class UserInterface(CursesWindow):
                     self._logger.exception(exc)
         return self._menu_filter
 
-    def scroll(self, value: Union[int, None] = None) -> int:
+    def scroll(self, value: Optional[int] = None) -> int:
         """Set or return the current scroll
 
         :param value: the value to set the scroll to
         :type value: int
-        :return: the current scroll
+        :returns: the current scroll
         """
         if value is not None:
             if not isinstance(value, int):
@@ -199,12 +201,12 @@ class UserInterface(CursesWindow):
             self._scroll = value
         return self._scroll
 
-    def serialization_format(self, value: Union[str, None] = None, default: bool = False) -> str:
+    def serialization_format(self, value: Optional[str] = None, default: bool = False) -> str:
         """Set or return the current serialization format
 
         :param value: the value to set the serialization format to
         :type value: str or None
-        :return: the current serialization format
+        :returns: the current serialization format
         """
         if value is not None:
             self._serialization_format = value
@@ -216,7 +218,7 @@ class UserInterface(CursesWindow):
     def _ui(self) -> Ui:
         """Limit the callables the actions can access
 
-        :return: A tuple of available functions
+        :returns: A tuple of available functions
         """
         res = Ui(
             clear=self.clear,
@@ -234,7 +236,7 @@ class UserInterface(CursesWindow):
 
         :param key_dict: the keys and their description
         :type key_dict: dict
-        :return: The footer line
+        :returns: The footer line
         """
         column_widths = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
         if self._status:
@@ -283,7 +285,7 @@ class UserInterface(CursesWindow):
                     decoration=curses.A_REVERSE,
                 ),
             )
-        return tuple(footer)
+        return CursesLine(tuple(footer))
 
     def _scroll_bar(
         self,
@@ -316,19 +318,27 @@ class UserInterface(CursesWindow):
             self._add_line(
                 window=self._screen,
                 lineno=min(lineno, viewport_height + len_heading),
-                line=tuple([line_part]),
+                line=CursesLine(
+                    ((line_part,)),
+                ),
             )
 
     def _get_input_line(self) -> str:
         """get one line of input from the user
 
-        :return: the lines
+        :returns: the lines
         """
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
-        clp = CursesLinePart(column=0, string=":", color=0, decoration=0)
+        line_part = CursesLinePart(column=0, string=":", color=0, decoration=0)
         input_at = self._screen_height - 1  # screen y is zero based
-        self._add_line(window=self._screen, lineno=input_at, line=tuple([clp]))
+        self._add_line(
+            window=self._screen,
+            lineno=input_at,
+            line=CursesLine(
+                ((line_part,)),
+            ),
+        )
         self._screen.refresh()
         self._one_line_input.win = curses.newwin(1, self._screen_width, input_at, 1)
         self._one_line_input.win.keypad(True)
@@ -348,7 +358,7 @@ class UserInterface(CursesWindow):
         self,
         lines: CursesLines,
         line_numbers: Tuple[int, ...],
-        heading: Union[CursesLines, None],
+        heading: Optional[CursesLines],
         indent_heading: int,
         key_dict: dict,
         await_input: bool,
@@ -367,9 +377,9 @@ class UserInterface(CursesWindow):
         :type key_dict: dict
         :param await_input: Should we wait for a key
         :type await_input: bool
-        :return: the key pressed
+        :returns: the key pressed
         """
-        heading = heading or ()
+        heading = heading or CursesLines(tuple())
         heading_len = len(heading)
         footer = self._footer(dict(**STANDARD_KEYS, **key_dict, **END_KEYS))
         footer_at = self._screen_height - 1  # screen is 0 based index
@@ -496,15 +506,25 @@ class UserInterface(CursesWindow):
 
         :param obj: the object to color
         :type obj: Any
-        :return: The generated lines
+        :returns: The generated lines
         """
 
         if self.serialization_format() == "source.ansi":
             return self._colorizer.render_ansi(doc=obj)
+
+        content_view = ContentView.NORMAL if self._hide_keys else ContentView.FULL
         if self.serialization_format() == "source.yaml":
-            string = human_dump(obj)
+            string = serialize(
+                content_view=content_view,
+                content=obj,
+                serialization_format=SerializationFormat.YAML,
+            )
         elif self.serialization_format() == "source.json":
-            string = json_dumps(obj)
+            string = serialize(
+                content_view=content_view,
+                content=obj,
+                serialization_format=SerializationFormat.JSON,
+            )
         else:
             string = obj
 
@@ -523,7 +543,7 @@ class UserInterface(CursesWindow):
 
         :params lines: The lines to transform
             Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
-        :return: the lines ready for curses
+        :returns: the lines ready for curses
         """
         if curses.COLORS > 16 and self._term_osc4_support:
             unique_colors = list(
@@ -559,9 +579,9 @@ class UserInterface(CursesWindow):
         """Color each of the lines.
 
         :params lines: The lines to transform
-        :return: All lines colored
+        :returns: All lines colored
         """
-        return tuple(self._colored_line(line) for line in lines)
+        return CursesLines(tuple(self._colored_line(line) for line in lines))
 
     def _colored_line(self, line: List[SimpleLinePart]) -> CursesLine:
         """Color one line.
@@ -569,7 +589,9 @@ class UserInterface(CursesWindow):
         :param line: The line to color
         :returns: One line colored
         """
-        return tuple(self._colored_line_part(line_part) for line_part in line)
+        return CursesLine(
+            tuple(self._colored_line_part(line_part) for line_part in line),
+        )
 
     def _colored_line_part(self, line_part: SimpleLinePart) -> CursesLinePart:
         """Color one line part.
@@ -592,12 +614,12 @@ class UserInterface(CursesWindow):
             decoration=0,
         )
 
-    def _filter_and_serialize(self, obj: Any) -> Tuple[Union[CursesLines, None], CursesLines]:
+    def _filter_and_serialize(self, obj: Any) -> Tuple[Optional[CursesLines], CursesLines]:
         """filter an obj and serialize
 
         :param obj: the obj to serialize
         :type obj: Any
-        :return: the serialize lines ready for display
+        :returns: the serialize lines ready for display
         """
         heading = self._content_heading(obj, self._screen_width)
         filtered_obj = self._filter_content_keys(obj) if self._hide_keys else obj
@@ -616,7 +638,7 @@ class UserInterface(CursesWindow):
 
         :param objs: A list of one or more object
         :param await_input: Should we wait for user input before returning
-        :return: interaction with the user
+        :returns: interaction with the user
         """
         heading, lines = self._filter_and_serialize(objs[index])
         while True:
@@ -647,7 +669,7 @@ class UserInterface(CursesWindow):
             line_numbers = tuple(range(first_line_idx, last_line_idx + 1))
 
             entry = self._display(
-                lines=lines[first_line_idx : last_line_idx + 1],
+                lines=CursesLines(lines[first_line_idx : last_line_idx + 1]),
                 line_numbers=line_numbers,
                 heading=heading,
                 indent_heading=False,
@@ -713,7 +735,7 @@ class UserInterface(CursesWindow):
 
         :param obj: The dict to check
         :param columns: The dicts keys to check
-        :return: True if a match else False
+        :returns: True if a match else False
         """
         for key in columns:
             if self._search_value(self.menu_filter(), obj.get(key)):
@@ -722,7 +744,7 @@ class UserInterface(CursesWindow):
 
     @staticmethod
     @lru_cache(maxsize=None)
-    def _search_value(regex: Pattern, value: str) -> Union[Match, None]:
+    def _search_value(regex: Pattern, value: str) -> Optional[Match]:
         """check a str against a regex
         lru_cache enabled because this is hit during resize
 
@@ -730,7 +752,7 @@ class UserInterface(CursesWindow):
         :type regex: Pattern
         :param value: the string to check
         :type value: str
-        :return: the match if made
+        :returns: the match if made
         """
         return regex.search(str(value))
 
@@ -744,7 +766,7 @@ class UserInterface(CursesWindow):
 
         :param current: A dict
         :param columns: The keys from the dictionary to use as columns
-        :return: The heading and menu items
+        :returns: The heading and menu items
         """
         menu_builder = MenuBuilder(
             progress_bar_width=self._progress_bar_width,
@@ -762,7 +784,7 @@ class UserInterface(CursesWindow):
         :param current: A dict
         :param columns: The keys from the dictionary to use as columns
         :param await_input: Should we wait for user input?
-        :return: Interaction with the user
+        :returns: Interaction with the user
         """
 
         while True:
@@ -819,8 +841,8 @@ class UserInterface(CursesWindow):
         self,
         obj: Union[List, Dict, str, bool, int, float],
         serialization_format: str = "",
-        index: int = None,
-        columns: List = None,
+        index: Optional[int] = None,
+        columns: Optional[List] = None,
         await_input: bool = True,
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
@@ -833,7 +855,7 @@ class UserInterface(CursesWindow):
         :param index: When obj is a list, show this entry
         :param columns: When obj is a list of dicts, use these keys for menu columns
         :param await_input: Should we wait for user input?
-        :return: interaction with the user
+        :returns: interaction with the user
         """
         self._color_menu_item = color_menu_item
         self._content_heading = content_heading
@@ -845,9 +867,9 @@ class UserInterface(CursesWindow):
             form_result = self._show_form(obj)
             return form_result
 
-        if index is not None and isinstance(obj, list):
+        if index is not None and isinstance(obj, (list, tuple)):
             result = self._show_obj_from_list(obj, index, await_input)
-        elif columns and isinstance(obj, list):
+        elif columns and isinstance(obj, (list, tuple)):
             result = self._show_menu(obj, columns, await_input)
         else:
             result = self._show_obj_from_list([obj], 0, await_input)

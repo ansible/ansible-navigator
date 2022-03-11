@@ -54,11 +54,11 @@ def _generate_config(params=None, setting_file_name=None, initial=True) -> Gener
 
     # make a deep copy here to ensure we do not modify the original
     application_configuration = deepcopy(NavigatorConfiguration)
+    application_configuration.internals.initializing = initial
     application_configuration.internals.settings_file_path = settings_file_path or None
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params,
-        initial=initial,
     )
     messages, exit_messages = configurator.configure()
     return GenerateConfigResponse(

@@ -11,6 +11,7 @@ from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Union
 
 
@@ -77,8 +78,8 @@ class CommandRunner:
 
     def __init__(self):
         """Initialize the command runner."""
-        self._completed_queue: Union[Queue, None] = None
-        self._pending_queue: Union[Queue, None] = None
+        self._completed_queue: Optional[Queue] = None
+        self._pending_queue: Optional[Queue] = None
 
     @staticmethod
     def run_single_proccess(command_classes: Any):
@@ -153,8 +154,8 @@ class CmdParser:
     def _strip(value: str) -> str:
         """Remove quotes, leading and trailing whitespace.
 
-        :param value: The string to act on.
-        :returns: The string after removing quotes, leading and trailing whitespace.
+        :param value: The string to act on
+        :returns: The string after removing quotes, leading and trailing whitespace
         """
         return value.strip('"').strip("'").strip()
 

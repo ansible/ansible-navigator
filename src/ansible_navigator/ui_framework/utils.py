@@ -3,28 +3,50 @@
 import functools
 import re
 
+from dataclasses import is_dataclass
 from math import floor
+from typing import Any
+from typing import Dict
 from typing import List
+from typing import Union
+
+from .content_defs import ContentBase
 
 
-def convert_percentage(data_dict: dict, keys: List, progress_bar_width: int) -> None:
-    """convert a string % to a little progress bar
-    not recursive
-    80% = 80%|XXXXXXXX  |
+def convert_percentage(
+    content: Union[Dict[str, Any], ContentBase],
+    columns: List[str],
+    progress_bar_width: int,
+) -> None:
+    """Convert an attribute or value to a progress bar formatted for the TUI in place.
 
-    :param data_dict: The dictionary to update
-    :param keys: The keys to convert in each dictionary
-    :param progress_bar_width: The width of the progress bar
+    :param content: The content for which the progress bar will be generated
+    :param columns: The menu columns, only make progress bars for columns
+    :param progress_bar_width: The target width of the progress bar
     """
-    for key in keys:
-        value = data_dict.get(key)
+    for column in columns:
+        value = content.get(column)
         if value and is_percent(str(value)):
-            if value == "100%":
-                data_dict[key] = "COMPLETE".center(progress_bar_width, " ")
-            else:
-                chars_in_progress_bar = floor(progress_bar_width / 100 * int(value[0:-1]))
-                data_dict["_" + key] = value
-                data_dict[key] = ("\u2587" * chars_in_progress_bar).ljust(progress_bar_width)
+            new_value = _string_to_progress(value, progress_bar_width)
+            if isinstance(content, dict):
+                content["_" + column] = value
+                content[column] = new_value
+            elif is_dataclass(content):
+                setattr(content, f"_{column}", value)
+                setattr(content, column, new_value)
+
+
+def _string_to_progress(value: str, progress_bar_width: int) -> str:
+    """Convert a string to a progress bar or text string indicating complete.
+
+    :param value: The percent string
+    :param progress_bar_width: The target width of the progress bar
+    :returns: The resulting progress bar or text string
+    """
+    if value == "100%":
+        return "COMPLETE".center(progress_bar_width, " ")
+    chars_in_progress_bar = floor(progress_bar_width / 100 * int(value[0:-1]))
+    return ("\u2587" * chars_in_progress_bar).ljust(progress_bar_width)
 
 
 @functools.lru_cache(maxsize=None)

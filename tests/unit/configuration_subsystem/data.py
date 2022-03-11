@@ -223,7 +223,11 @@ ENV_VAR_DATA = [
     ("exec_shell", "false", False),
     ("execution_environment", "false", False),
     ("execution_environment_image", "test_image:latest", "test_image:latest"),
-    ("execution_environment_volume_mounts", "/test1:/test1:Z", ["/test1:/test1:Z"]),
+    (
+        "execution_environment_volume_mounts",
+        "/tmp:/test1:Z;/tmp:/test2:z",
+        ["/tmp:/test1:Z", "/tmp:/test2:z"],
+    ),
     ("help_builder", "false", False),
     ("help_config", "false", False),
     ("help_doc", "false", False),

@@ -1,22 +1,26 @@
 {
-    "name": "test[builder help-builder fail with interactive without ee  clear && ansible-navigator builder --help-builder --ee False --ll debug --mode interactive]",
+    "name": "test[builder help-builder with interactive without ee  clear && ansible-navigator builder --help-builder --ee False --ll debug --mode interactive]",
     "index": 3,
-    "comment": "builder help-builder fail with interactive without ee",
+    "comment": "builder help-builder with interactive without ee",
     "additional_information": {
         "present": [
-            "--hb or --help-builder is valid only when 'mode' argument is set to 'stdout'"
+            "usage: ansible-builder [-h]"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "[ERROR]: Command provided: 'builder --help-builder --ee False --ll debug --mode interactive'",
-        "[ERROR]: --hb or --help-builder is valid only when 'mode' argument is set to 'stdout'",
-        " [HINT]: Try again with '-m stdout'",
-        "[ERROR]: Subcommand 'builder' does not support mode 'interactive'. Supported modes: 'stdout'.",
-        " [HINT]: Try again with '-m stdout'",
-        "[ERROR]: Configuration failed, using default log file location: /home/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
-        " [HINT]: Review the hints and log file to see what went wrong: /home/user/github/ansible-navigator/ansible-navigator.log",
+        "usage: ansible-builder [-h] [--version] {create,build,introspect} ...",
+        "Tooling to help build container images for running Ansible content. Get started by looking at the help text for one of the subcommands.",
+        "positional arguments:",
+        "  {create,build,introspect}",
+        "                        The command to invoke.",
+        "    create              Creates a build context, which can be used by podman to build an image.",
+        "    build               Builds a container image.",
+        "    introspect          Introspects collections in folder.",
+        "options:",
+        "  -h, --help            show this help message and exit",
+        "  --version             Print ansible-builder version and exit.",
         "(venv) bash-5.1$"
     ]
 }

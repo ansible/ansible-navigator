@@ -46,9 +46,9 @@ ansible-navigator:
         - "--tls-verify=false"
       policy: never
     volume-mounts:
-      - src: "/test1"
+      - src: "/tmp"
         dest: "/test1"
-        label: "Z"
+        options: "Z"
     container-options:
       - "--net=host"
   help-builder: False

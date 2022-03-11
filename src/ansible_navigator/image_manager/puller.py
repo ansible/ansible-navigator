@@ -1,4 +1,4 @@
-"""image puller"""
+"""Image puller."""
 import logging
 import shlex
 import subprocess
@@ -29,7 +29,7 @@ class ImageAssessment:
 
 class ImagePuller:
     # pylint: disable=too-many-instance-attributes
-    """Image puller"""
+    """Image puller."""
 
     def __init__(
         self,
@@ -62,7 +62,7 @@ class ImagePuller:
         self._pull_required: bool = False
 
     def assess(self):
-        """assess need to pull"""
+        """Assess the need to pull."""
         self._extract_tag()
         self._check_for_image()
         self._determine_pull()
@@ -85,7 +85,10 @@ class ImagePuller:
 
     @property
     def assessment(self):
-        """return am image assessment"""
+        """Return an image assessment.
+
+        :returns: Image assessment
+        """
         return self._assessment
 
     def _check_for_image(self):
@@ -145,7 +148,7 @@ class ImagePuller:
         self._logger.log(level=level, msg=message)
 
     def prologue_stdout(self):
-        """print a little value added information"""
+        """Print a little value added information about the execution environment."""
         messages = [("Execution environment image name:", self._image)]
         messages.append(("Execution environment image tag:", self._image_tag))
         arguments = shlex_join(self._arguments) or None

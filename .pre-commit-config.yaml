@@ -187,6 +187,7 @@ repos:
           - pytest
           - sphinx
           - types-docutils
+          - types-setuptools # Needed logging version
           - types-PyYAML
         args:
           - --python-version=3.10
@@ -200,9 +201,12 @@ repos:
           - libtmux
           - pytest
           - sphinx
+          - types-backports # Needed for checking py3.6 with a later interpreter
           - types-dataclasses # Needed for checking py3.6 with a later interpreter
           - types-docutils
           - types-PyYAML
+          - types-setuptools # Needed for logging version
+          - types-typed-ast # Needed for checking py3.6 with a later interpreter
         args:
           - --python-version=3.6
 

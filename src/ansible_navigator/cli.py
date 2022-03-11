@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import List
 from typing import Union
 
+from pkg_resources import working_set
+
 from .action_defs import ActionReturn
 from .action_defs import RunInteractiveReturn
 from .action_defs import RunReturn
@@ -42,6 +44,17 @@ APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
 
 logger = logging.getLogger(PKG_NAME)
+
+
+def log_dependencies() -> List[LogMessage]:
+    """Retrieve installed packages and log as debug.
+
+    :returns: All packages, version and location
+    """
+    # pylint: disable=not-an-iterable
+    installed_packages_list = sorted([f"{i.key}=={i.version} {i.location}" for i in working_set])
+    messages = [LogMessage(level=logging.DEBUG, message=pkg) for pkg in installed_packages_list]
+    return messages
 
 
 def pull_image(args):
@@ -92,7 +105,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
     """Run the appropriate subcommand.
 
     :param args: The current application settings
-    :returns: A message to display and a return code.
+    :returns: A message to display and a return code
     """
     if args.mode == "stdout":
         try:
@@ -116,18 +129,19 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
 
 def main():
     """start here"""
-    messages: List[LogMessage] = []
+    messages: List[LogMessage] = log_dependencies()
     exit_messages: List[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
     args.application_version = __version__
+    args.internals.initializing = True
     messages.extend(args.internals.initialization_messages)
     exit_messages.extend(args.internals.initialization_exit_messages)
 
     # may have exit messages e.g., share directory
     # from instantiation of NavigatorConfiguration
     if not exit_messages:
-        new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args, initial=True)
+        new_messages, new_exit_messages = parse_and_update(sys.argv[1:], args=args)
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
 
@@ -170,6 +184,7 @@ def main():
     run_message = f"{run_return.message}\n"
     if run_return.return_code != 0 and run_return.message:
         sys.stderr.write(run_message)
+        sys.exit(run_return.return_code)
     elif run_return.message:
         sys.stdout.write(run_message)
 
