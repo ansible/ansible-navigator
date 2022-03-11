@@ -1,5 +1,7 @@
 """Conditional imports related to python versions."""
 
+# pylint: disable=unused-import
+
 import sys
 
 from typing import TYPE_CHECKING
@@ -11,3 +13,9 @@ if TYPE_CHECKING:
         from typing import TypeAlias
     else:
         from typing_extensions import TypeAlias
+
+
+if sys.version_info < (3, 9):
+    from backports import zoneinfo
+else:
+    import zoneinfo
