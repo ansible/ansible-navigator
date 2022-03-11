@@ -32,6 +32,7 @@ class Action:
         if interaction.ui is not None:
             interaction.ui.scroll(0)
             serialization_format = interaction.ui.serialization_format(
-                "text.html.markdown", default=True
+                "text.html.markdown",
+                default=True,
             )
             self._logger.debug("Serialization set to %s", serialization_format)
