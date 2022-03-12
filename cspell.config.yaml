@@ -36,6 +36,7 @@ ignorePaths:
   - test-requirements.txt
   # All fixture files in the tests directory
   - tests/fixtures/integration/actions/**/*.json
+  - tests/fixtures/integration/actions/**/*.ansi
   # The tox configuration file
   - tox.ini
 
