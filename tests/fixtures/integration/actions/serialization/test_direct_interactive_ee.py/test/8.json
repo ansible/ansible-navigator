@@ -1,7 +1,7 @@
 {
-    "name": "test[08-:markdown-mod_1 examples, markdown]",
+    "name": "test[08-:json-mod_1 examples, json]",
     "index": 8,
-    "comment": "mod_1 examples, markdown",
+    "comment": "mod_1 examples, json",
     "additional_information": {
         "present": [],
         "absent": [],
@@ -9,7 +9,7 @@
     },
     "output": [
         "0│",
-        "1│\u001b[36m-\u001b[39m name: test task-1",
+        "1│- name: test task-1",
         "2│  company_name.coll_1.mod_1:",
         "3│    foo: somevalue",
         "4│    bar: candidate",

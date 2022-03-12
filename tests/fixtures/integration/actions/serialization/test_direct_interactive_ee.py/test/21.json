@@ -1,18 +1,21 @@
 {
-    "name": "test[21-:back-coll_1 content, menu]",
+    "name": "test[21-:yaml-role_full readme, yaml]",
     "index": 21,
-    "comment": "coll_1 content, menu",
+    "comment": "role_full readme, yaml",
     "additional_information": {
         "present": [],
         "absent": [],
         "compared_fixture": true
     },
     "output": [
-        "  \u001b[4mCOMPANY NAME.COLL 1\u001b[0m\u001b[39m\u001b[49m                                   \u001b[4mTYPE\u001b[0m\u001b[39m\u001b[49m               \u001b[4mADDED\u001b[0m\u001b[39m\u001b[49m                 \u001b[4mDEPRECATED\u001b[0m\u001b[39m\u001b[49m                    \u001b[4mDESCRIPTION\u001b[0m\u001b[39m\u001b[49m",
-        "0│\u001b[32mlookup_1\u001b[39m                                              \u001b[32mlookup\u001b[39m             \u001b[32m1.0.0\u001b[39m                 \u001b[32mFalse\u001b[39m                         \u001b[32mThis is test lookup plugin\u001b[39m",
-        "1│\u001b[32mmod_1\u001b[39m                                                 \u001b[32mmodule\u001b[39m             \u001b[32m1.0.0\u001b[39m                 \u001b[32mFalse\u001b[39m                         \u001b[32mThis is a test module\u001b[39m",
-        "2│\u001b[32mrole_full\u001b[39m                                             \u001b[32mrole\u001b[39m               \u001b[32mUnknown\u001b[39m               \u001b[32mUnknown\u001b[39m                       \u001b[32mComplete sample role.\u001b[39m",
-        "3│\u001b[32mrole_minimum\u001b[39m                                          \u001b[32mrole\u001b[39m               \u001b[32mUnknown\u001b[39m               \u001b[32mUnknown\u001b[39m                       \u001b[32mMinimal sample role.\u001b[39m",
-        "\u001b[7m^f/PgUp\u001b[0m\u001b[39m\u001b[49m page up                     \u001b[7m^b/PgDn\u001b[0m\u001b[39m\u001b[49m page down                     \u001b[7m↑↓\u001b[0m\u001b[39m\u001b[49m scroll                     \u001b[7mesc\u001b[0m\u001b[39m\u001b[49m back                     \u001b[7m[0-9]\u001b[0m\u001b[39m\u001b[49m goto                     \u001b[7m:help\u001b[0m\u001b[39m\u001b[49m help"
+        "0│# Role full",
+        "1│",
+        "2│This is a role with:",
+        "3│",
+        "4│- defaults/main.yml",
+        "5│- meta/argument_spec.yml",
+        "6│- meta/main.yml",
+        "7│- README.md",
+        "\u001b[7m^f/PgUp\u001b[0m\u001b[39m\u001b[49m page up                            \u001b[7m^b/PgDn\u001b[0m\u001b[39m\u001b[49m page down                            \u001b[7m↑↓\u001b[0m\u001b[39m\u001b[49m scroll                            \u001b[7mesc\u001b[0m\u001b[39m\u001b[49m back                            \u001b[7m:help\u001b[0m\u001b[39m\u001b[49m help"
     ]
 }

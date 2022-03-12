@@ -20,6 +20,10 @@ class SerUiTestStep(UiTestStep):
 
     search_within_response: str = ":help"
 
+# Note the order here: yaml, markdown, json, markdown, yaml
+# This was done to ensure there was a screen change for each step
+# json and yaml will render a string the same, markdown with provide some
+# highlighting
 
 base_steps = (
     SerUiTestStep(user_input=":0", comment="coll_1 content, menu"),
@@ -28,16 +32,18 @@ base_steps = (
     SerUiTestStep(user_input=":markdown", comment="mod_1 full, markdown"),
     SerUiTestStep(user_input=":yaml", comment="mod_1 full, yaml"),
     SerUiTestStep(user_input=":{{ examples }}", comment="mod_1 examples, yaml"),
+    SerUiTestStep(user_input=":markdown", comment="mod_1 examples, markdown"),
     SerUiTestStep(user_input=":json", comment="mod_1 examples, json"),
     SerUiTestStep(user_input=":markdown", comment="mod_1 examples, markdown"),
     SerUiTestStep(user_input=":yaml", comment="mod_1 examples, yaml"),
     SerUiTestStep(user_input=":back", comment="mod_1 full, yaml"),
     SerUiTestStep(user_input=":back", comment="coll_1 content, menu"),
     SerUiTestStep(user_input=":2", comment="role_full details, yaml"),
-    SerUiTestStep(user_input=":json", comment="role_full details, json"),
     SerUiTestStep(user_input=":markdown", comment="role_full details, markdown"),
+    SerUiTestStep(user_input=":json", comment="role_full details, json"),
     SerUiTestStep(user_input=":yaml", comment="role_full details, yaml"),
     SerUiTestStep(user_input=":{{ readme }}", comment="role_full readme, yaml"),
+    SerUiTestStep(user_input=":markdown", comment="role_full readme, markdown"),
     SerUiTestStep(user_input=":json", comment="role_full readme, json"),
     SerUiTestStep(user_input=":markdown", comment="role_full readme, markdown"),
     SerUiTestStep(user_input=":yaml", comment="role_full readme, yaml"),

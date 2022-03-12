@@ -1,7 +1,7 @@
 {
-    "name": "test[09-:yaml-mod_1 examples, yaml]",
+    "name": "test[09-:markdown-mod_1 examples, markdown]",
     "index": 9,
-    "comment": "mod_1 examples, yaml",
+    "comment": "mod_1 examples, markdown",
     "additional_information": {
         "present": [],
         "absent": [],
@@ -9,7 +9,7 @@
     },
     "output": [
         "0│",
-        "1│- name: test task-1",
+        "1│\u001b[36m-\u001b[39m name: test task-1",
         "2│  company_name.coll_1.mod_1:",
         "3│    foo: somevalue",
         "4│    bar: candidate",

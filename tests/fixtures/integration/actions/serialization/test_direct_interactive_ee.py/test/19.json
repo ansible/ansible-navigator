@@ -1,7 +1,7 @@
 {
-    "name": "test[19-:yaml-role_full readme, yaml]",
+    "name": "test[19-:json-role_full readme, json]",
     "index": 19,
-    "comment": "role_full readme, yaml",
+    "comment": "role_full readme, json",
     "additional_information": {
         "present": [],
         "absent": [],
