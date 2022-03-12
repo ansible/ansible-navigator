@@ -15,28 +15,34 @@ from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
+class SerUiTestStep(UiTestStep):
+    """Custom test step for capturing with escape codes."""
+
+    search_within_response: str = ":help"
+
+
 base_steps = (
-    UiTestStep(user_input=":0", comment="coll_1 content, menu"),
-    UiTestStep(user_input=":1", comment="mod_1 full, yaml"),
-    UiTestStep(user_input=":json", comment="mod_1 full, json"),
-    UiTestStep(user_input=":markdown", comment="mod_1 full, markdown"),
-    UiTestStep(user_input=":yaml", comment="mod_1 full, yaml"),
-    UiTestStep(user_input=":{{ examples }}", comment="mod_1 examples, yaml"),
-    UiTestStep(user_input=":json", comment="mod_1 examples, json"),
-    UiTestStep(user_input=":markdown", comment="mod_1 examples, markdown"),
-    UiTestStep(user_input=":yaml", comment="mod_1 examples, yaml"),
-    UiTestStep(user_input=":back", comment="mod_1 full, yaml"),
-    UiTestStep(user_input=":back", comment="coll_1 content, menu"),
-    UiTestStep(user_input=":2", comment="role_full details, yaml"),
-    UiTestStep(user_input=":json", comment="role_full details, json"),
-    UiTestStep(user_input=":markdown", comment="role_full details, markdown"),
-    UiTestStep(user_input=":yaml", comment="role_full details, yaml"),
-    UiTestStep(user_input=":{{ readme }}", comment="role_full readme, yaml"),
-    UiTestStep(user_input=":json", comment="role_full readme, json"),
-    UiTestStep(user_input=":markdown", comment="role_full readme, markdown"),
-    UiTestStep(user_input=":yaml", comment="role_full readme, yaml"),
-    UiTestStep(user_input=":back", comment="role_full , yaml"),
-    UiTestStep(user_input=":back", comment="coll_1 content, menu"),
+    SerUiTestStep(user_input=":0", comment="coll_1 content, menu"),
+    SerUiTestStep(user_input=":1", comment="mod_1 full, yaml"),
+    SerUiTestStep(user_input=":json", comment="mod_1 full, json"),
+    SerUiTestStep(user_input=":markdown", comment="mod_1 full, markdown"),
+    SerUiTestStep(user_input=":yaml", comment="mod_1 full, yaml"),
+    SerUiTestStep(user_input=":{{ examples }}", comment="mod_1 examples, yaml"),
+    SerUiTestStep(user_input=":json", comment="mod_1 examples, json"),
+    SerUiTestStep(user_input=":markdown", comment="mod_1 examples, markdown"),
+    SerUiTestStep(user_input=":yaml", comment="mod_1 examples, yaml"),
+    SerUiTestStep(user_input=":back", comment="mod_1 full, yaml"),
+    SerUiTestStep(user_input=":back", comment="coll_1 content, menu"),
+    SerUiTestStep(user_input=":2", comment="role_full details, yaml"),
+    SerUiTestStep(user_input=":json", comment="role_full details, json"),
+    SerUiTestStep(user_input=":markdown", comment="role_full details, markdown"),
+    SerUiTestStep(user_input=":yaml", comment="role_full details, yaml"),
+    SerUiTestStep(user_input=":{{ readme }}", comment="role_full readme, yaml"),
+    SerUiTestStep(user_input=":json", comment="role_full readme, json"),
+    SerUiTestStep(user_input=":markdown", comment="role_full readme, markdown"),
+    SerUiTestStep(user_input=":yaml", comment="role_full readme, yaml"),
+    SerUiTestStep(user_input=":back", comment="role_full , yaml"),
+    SerUiTestStep(user_input=":back", comment="coll_1 content, menu"),
 )
 
 
@@ -67,6 +73,7 @@ class BaseClass:
             dirs_exist_ok=True,
         )
         params = {
+            "capture_escape": True,
             "setup_commands": [
                 f"cd {tmp_coll_dir}",
                 f"export ANSIBLE_COLLECTIONS_PATH={tmp_coll_dir}",
@@ -85,7 +92,7 @@ class BaseClass:
         self,
         os_independent_tmp: str,
         request: pytest.FixtureRequest,
-        step: UiTestStep,
+        step: SerUiTestStep,
         tmux_session: TmuxSession,
     ):
         """Run the tests for serialization, mode and ``ee`` set in child class.
@@ -94,14 +101,13 @@ class BaseClass:
         :param request: The request for this fixture
         :param step: The UI test step
         :param tmux_session: A tmux session
-        :raises ValueError: When test mode is not set
         """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         else:
-            raise ValueError("test mode not set")
+            search_within_response = step.search_within_response
 
         received_output = tmux_session.interaction(
             value=step.user_input,

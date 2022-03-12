@@ -13,6 +13,6 @@
         "2│  company_name.coll_1.mod_1:",
         "3│    foo: somevalue",
         "4│    bar: candidate",
-        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+        "\u001b[7m^f/PgUp\u001b[0m\u001b[39m\u001b[49m page up                            \u001b[7m^b/PgDn\u001b[0m\u001b[39m\u001b[49m page down                            \u001b[7m↑↓\u001b[0m\u001b[39m\u001b[49m scroll                            \u001b[7mesc\u001b[0m\u001b[39m\u001b[49m back                            \u001b[7m:help\u001b[0m\u001b[39m\u001b[49m help"
     ]
 }

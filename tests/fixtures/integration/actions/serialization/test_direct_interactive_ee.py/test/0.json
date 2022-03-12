@@ -8,9 +8,9 @@
         "compared_fixture": true
     },
     "output": [
-        "  NAME                       VERSION    SHADOWED    TYPE           PATH",
-        "0│company_name.coll_1        1.0.0         False    bind_mount     FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1",
-        "1│company_name.coll_2        2.0.0         False    bind_mount     FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_2",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "  \u001b[4mNAME\u001b[0m\u001b[39m\u001b[49m                       \u001b[4mVERSION\u001b[0m\u001b[39m\u001b[49m    \u001b[4mSHADOWED\u001b[0m\u001b[39m\u001b[49m    \u001b[4mTYPE\u001b[0m\u001b[39m\u001b[49m           \u001b[4mPATH\u001b[0m\u001b[39m\u001b[49m",
+        "0│\u001b[32mcompany_name.coll_1\u001b[39m        \u001b[32m1.0.0\u001b[39m         \u001b[32mFalse\u001b[39m    \u001b[32mbind_mount\u001b[39m     \u001b[32mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1\u001b[39m",
+        "1│\u001b[32mcompany_name.coll_2\u001b[39m        \u001b[32m2.0.0\u001b[39m         \u001b[32mFalse\u001b[39m    \u001b[32mbind_mount\u001b[39m     \u001b[32mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_2\u001b[39m",
+        "\u001b[7m^f/PgUp\u001b[0m\u001b[39m\u001b[49m page up                     \u001b[7m^b/PgDn\u001b[0m\u001b[39m\u001b[49m page down                     \u001b[7m↑↓\u001b[0m\u001b[39m\u001b[49m scroll                     \u001b[7mesc\u001b[0m\u001b[39m\u001b[49m back                     \u001b[7m[0-9]\u001b[0m\u001b[39m\u001b[49m goto                     \u001b[7m:help\u001b[0m\u001b[39m\u001b[49m help"
     ]
 }

@@ -24,6 +24,7 @@ class TmuxSession:
     def __init__(
         self,
         unique_test_id,
+        capture_escape: bool = False,
         config_path=None,
         cwd=None,
         pane_height=20,
@@ -46,6 +47,7 @@ class TmuxSession:
             issuing commands in the tmux session
         """
         self.cli_prompt: str
+        self._capture_escape = capture_escape
         self._config_path = config_path
         self._cwd = cwd
         self._fail_remaining: List = []
@@ -84,6 +86,14 @@ class TmuxSession:
                 if count == tries:
                     raise
                 count += 1
+
+    def _capture_pane(self) -> List[str]:
+        """Capture the pane, possibly with escape codes."""
+        if self._capture_escape:
+            content = self._pane.cmd("capture-pane", "-p", "-e").stdout
+        else:
+            content = self._pane.capture_pane()
+        return content
 
     def __enter__(self):
         # pylint: disable=attribute-defined-outside-init
@@ -148,7 +158,7 @@ class TmuxSession:
         self._pane.send_keys(set_up_command)
         prompt_showing = False
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
             # find the prompt in the last line of a full screen
             # or at least a screen as big as the list of environment variables
             # because the environment variables were dumped
@@ -168,14 +178,14 @@ class TmuxSession:
             time.sleep(0.1)
 
         # capture the setup screen
-        self._setup_capture = self._pane.capture_pane()
+        self._setup_capture = self._capture_pane()
 
         # clear the screen, wait for prompt in line 0
         start_time = timer()
         self._pane.send_keys("clear")
         prompt_showing = False
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
             # the screen has been cleared, wait for prompt in first line
             if showing:
                 prompt_showing = self.cli_prompt in showing[0]
@@ -219,7 +229,7 @@ class TmuxSession:
         # if presently at command prompt or in TUI
         mode = None
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
             if showing:
                 if self.cli_prompt in showing[-1]:
                     mode = "shell"
@@ -242,11 +252,11 @@ class TmuxSession:
         # for the TUI, ensure the screen has changed
         # this risk here is if the shell command is instant and returns to a prompt
         # before we get the screen this will result in a timeout
-        pre_send = self._pane.capture_pane()
+        pre_send = self._capture_pane()
         self._pane.send_keys(value)
         command_executed = False
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
             if showing and showing != pre_send:
                 if mode == "shell":
                     command_executed = value not in showing[-1]
@@ -271,7 +281,7 @@ class TmuxSession:
         err_message = "RESPONSE"
         while True:
 
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
 
             if showing:
                 if isinstance(search_within_response, str):
@@ -292,7 +302,7 @@ class TmuxSession:
             if ok_to_return:
                 screens = [showing]
                 while True:
-                    screens.append(self._pane.capture_pane())
+                    screens.append(self._capture_pane())
                     if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
                         showing = screens[-1]
                         break
@@ -335,7 +345,7 @@ class TmuxSession:
         self._pane.send_keys("clear && env -i bash --noprofile --norc")
         bash_prompt_visible = False
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
             if showing:
                 bash_prompt_visible = showing[-1].startswith("bash")
             if bash_prompt_visible:
