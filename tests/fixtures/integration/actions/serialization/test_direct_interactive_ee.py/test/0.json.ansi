@@ -1,0 +1,4 @@
+  [4mNAME[0m[39m[49m                       [4mVERSION[0m[39m[49m    [4mSHADOWED[0m[39m[49m    [4mTYPE[0m[39m[49m           [4mPATH[0m[39m[49m
+0│[32mcompany_name.coll_1[39m        [32m1.0.0[39m         [32mFalse[39m    [32mbind_mount[39m     [32mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1[39m
+1│[32mcompany_name.coll_2[39m        [32m2.0.0[39m         [32mFalse[39m    [32mbind_mount[39m     [32mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_2[39m
+[7m^f/PgUp[0m[39m[49m page up                     [7m^b/PgDn[0m[39m[49m page down                     [7m↑↓[0m[39m[49m scroll                     [7mesc[0m[39m[49m back                     [7m[0-9][0m[39m[49m goto                     [7m:help[0m[39m[49m help

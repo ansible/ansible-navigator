@@ -1,0 +1,6 @@
+  [4mCOMPANY NAME.COLL 1[0m[39m[49m                                   [4mTYPE[0m[39m[49m               [4mADDED[0m[39m[49m                 [4mDEPRECATED[0m[39m[49m                    [4mDESCRIPTION[0m[39m[49m
+0│[32mlookup_1[39m                                              [32mlookup[39m             [32m1.0.0[39m                 [32mFalse[39m                         [32mThis is test lookup plugin[39m
+1│[32mmod_1[39m                                                 [32mmodule[39m             [32m1.0.0[39m                 [32mFalse[39m                         [32mThis is a test module[39m
+2│[32mrole_full[39m                                             [32mrole[39m               [32mUnknown[39m               [32mUnknown[39m                       [32mComplete sample role.[39m
+3│[32mrole_minimum[39m                                          [32mrole[39m               [32mUnknown[39m               [32mUnknown[39m                       [32mMinimal sample role.[39m
+[7m^f/PgUp[0m[39m[49m page up                     [7m^b/PgDn[0m[39m[49m page down                     [7m↑↓[0m[39m[49m scroll                     [7mesc[0m[39m[49m back                     [7m[0-9][0m[39m[49m goto                     [7m:help[0m[39m[49m help

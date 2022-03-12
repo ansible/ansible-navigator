@@ -1,0 +1,67 @@
+[4m[32mCOMPANY_NAME.COLL_1.ROLE_FULL: Complete sample role.
+[0m[39m[49m 0│{
+ 1│    [37m"argument_specs"[39m: {
+ 2│        [37m"alternate"[39m: {
+ 3│            [37m"options"[39m: {
+ 4│                [37m"role_full_int"[39m: {
+ 5│                    [37m"default"[39m: [37m1024[39m,
+ 6│                    [37m"description"[39m: [33m"The integer value, defaulting to 1024."[39m,
+ 7│                    [37m"required"[39m: [36mfalse[39m,
+ 8│                    [37m"type"[39m: [33m"int"[39m
+ 9│                }
+10│            },
+11│            [37m"short_description"[39m: [33m"The alternate entry point for the role_full role."[39m
+12│        },
+13│        [37m"main"[39m: {
+14│            [37m"options"[39m: {
+15│                [37m"role_full_int"[39m: {
+16│                    [37m"default"[39m: [37m42[39m,
+17│                    [37m"description"[39m: [33m"The integer value, defaulting to 42."[39m,
+18│                    [37m"required"[39m: [36mfalse[39m,
+19│                    [37m"type"[39m: [33m"int"[39m
+20│                },
+21│                [37m"role_full_str"[39m: {
+22│                    [37m"description"[39m: [33m"The string value"[39m,
+23│                    [37m"required"[39m: [36mtrue[39m,
+24│                    [37m"type"[39m: [33m"str"[39m
+25│                }
+26│            },
+27│            [37m"short_description"[39m: [33m"The main entry point for the role_full role."[39m
+28│        }
+29│    },
+30│    [37m"argument_specs_path"[39m: [33m"FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/meta/argument_specs.yml"[39m,
+31│    [37m"defaults"[39m: {
+32│        [37m"role_full_bool"[39m: [36mtrue[39m,
+33│        [37m"role_full_int"[39m: [37m42[39m,
+34│        [37m"role_full_str"[39m: [33m"Test string"[39m
+35│    },
+36│    [37m"defaults_path"[39m: [33m"FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/defaults/main.yml"[39m,
+37│    [37m"full_name"[39m: [33m"company_name.coll_1.role_full"[39m,
+38│    [37m"info"[39m: {
+39│        [37m"dependencies"[39m: [],
+40│        [37m"galaxy_info"[39m: {
+41│            [37m"author"[39m: [33m"Ansible team (ansible-navigator)"[39m,
+42│            [37m"company"[39m: [33m"Ansible"[39m,
+43│            [37m"description"[39m: [33m"Complete sample role."[39m,
+44│            [37m"galaxy_tags"[39m: [
+45│                [33m"tag_1"[39m,
+46│                [33m"tag_2"[39m
+47│            ],
+48│            [37m"license"[39m: [33m"LICENSE"[39m,
+49│            [37m"min_ansible_version"[39m: [33m"2.9.0"[39m,
+50│            [37m"platforms"[39m: [
+51│                {
+52│                    [37m"name"[39m: [33m"eos"[39m,
+53│                    [37m"versions"[39m: [
+54│                        [33m"all"[39m
+55│                    ]
+56│                }
+57│            ]
+58│        }
+59│    },
+60│    [37m"info_path"[39m: [33m"FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/meta/main.yml"[39m,
+61│    [37m"readme"[39m: [33m"# Role full\n\nThis is a role with:\n\n- defaults/main.yml\n- meta/argument_spec.yml\n- meta/main.yml\n- README.md\n"[39m,
+62│    [37m"readme_path"[39m: [33m"FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/README.md"[39m,
+63│    [37m"short_name"[39m: [33m"role_full"[39m
+64│}
+[7m^f/PgUp[0m[39m[49m page up              [7m^b/PgDn[0m[39m[49m page down              [7m↑↓[0m[39m[49m scroll              [7mesc[0m[39m[49m back              [7m-[0m[39m[49m previous              [7m+[0m[39m[49m next              [7m[0-9][0m[39m[49m goto              [7m:help[0m[39m[49m help

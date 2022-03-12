@@ -1,0 +1,55 @@
+[4m[32mCOMPANY_NAME.COLL_1.MOD_1: This is a test module
+[0m[39m[49m 0│---
+ 1│[36madditional_information[39m: {}
+ 2│[36mcollection_info[39m:
+ 3│  [36mauthors[39m:
+ 4│  - [33mAnsible team (ansible-navigator)[39m
+ 5│  [36mlicense_file[39m: [33mLICENSE[39m
+ 6│  [36mname[39m: [33mcompany_name.coll_1[39m
+ 7│  [36mnamespace[39m: [33mcompany_name[39m
+ 8│  [36mpath[39m: [33mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1[39m
+ 9│  [36mreadme[39m: [33mREADME.md[39m
+10│  [36mshadowed_by[39m: []
+11│  [36mversion[39m: [37m1.0.0[39m
+12│[36mdoc[39m:
+13│  [36mauthor[39m:
+14│  - [33mtest[39m
+15│  [36mdescription[39m:
+16│  - [33mThis is a test module[39m
+17│  [36mmodule[39m: [33mmod_1[39m
+18│  [36mnotes[39m:
+19│  - [33mThis is a dummy module[39m
+20│  [36moptions[39m:
+21│    [36mbar[39m:
+22│      [36maliases[39m:
+23│      - [33mbam[39m
+24│      [36mchoices[39m:
+25│      - [33mcandidate[39m
+26│      - [33mrunning[39m
+27│      [36mdefault[39m: [33mcandidate[39m
+28│      [36mdescription[39m:
+29│      - [33mDummy option I(bar)[39m
+30│      [36mtype[39m: [33mstr[39m
+31│    [36mfoo[39m:
+32│      [36mdescription[39m:
+33│      - [33mDummy option I(foo)[39m
+34│      [36mtype[39m: [33mstr[39m
+35│  [36mshort_description[39m: [33mThis is a test module[39m
+36│  [36mversion_added[39m: [37m1.0.0[39m
+37│  [36mversion_added_collection[39m: [33mcompany_name.coll_1
+[39m38│[36mexamples[39m: [36m|-[39m
+39│[33m  - name: test task-1[39m
+40│[33m    company_name.coll_1.mod_1:[39m
+41│[33m      foo: somevalue[39m
+42│[33m      bar: candidate[39m
+43│[36mfull_name[39m: [33mcompany_name.coll_1.mod_1[39m
+44│[36mmetadata[39m: [36mnull[39m
+45│[36mreturndocs[39m:
+46│  [36mbaz[39m:
+47│    [36mdescription[39m: [33mtest return 1[39m
+48│    [36mreturned[39m: [33msuccess[39m
+49│    [36msample[39m:
+50│    - [33ma[39m
+51│    - [33mb[39m
+52│    [36mtype[39m: [33mlist[39m
+[7m^f/PgUp[0m[39m[49m page up              [7m^b/PgDn[0m[39m[49m page down              [7m↑↓[0m[39m[49m scroll              [7mesc[0m[39m[49m back              [7m-[0m[39m[49m previous              [7m+[0m[39m[49m next              [7m[0-9][0m[39m[49m goto              [7m:help[0m[39m[49m help

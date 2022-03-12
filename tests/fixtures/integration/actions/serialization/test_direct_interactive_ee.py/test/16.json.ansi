@@ -1,0 +1,58 @@
+[4m[32mCOMPANY_NAME.COLL_1.ROLE_FULL: Complete sample role.
+[0m[39m[49m 0│---
+ 1│[36margument_specs[39m:
+ 2│  [36malternate[39m:
+ 3│    [36moptions[39m:
+ 4│      [36mrole_full_int[39m:
+ 5│        [36mdefault[39m: [37m1024[39m
+ 6│        [36mdescription[39m: [33mThe integer value, defaulting to 1024.[39m
+ 7│        [36mrequired[39m: [36mfalse[39m
+ 8│        [36mtype[39m: [33mint[39m
+ 9│    [36mshort_description[39m: [33mThe alternate entry point for the role_full role.[39m
+10│  [36mmain[39m:
+11│    [36moptions[39m:
+12│      [36mrole_full_int[39m:
+13│        [36mdefault[39m: [37m42[39m
+14│        [36mdescription[39m: [33mThe integer value, defaulting to 42.[39m
+15│        [36mrequired[39m: [36mfalse[39m
+16│        [36mtype[39m: [33mint[39m
+17│      [36mrole_full_str[39m:
+18│        [36mdescription[39m: [33mThe string value[39m
+19│        [36mrequired[39m: [36mtrue[39m
+20│        [36mtype[39m: [33mstr[39m
+21│    [36mshort_description[39m: [33mThe main entry point for the role_full role.[39m
+22│[36margument_specs_path[39m: [33mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/meta/argument_specs.yml[39m
+23│[36mdefaults[39m:
+24│  [36mrole_full_bool[39m: [36mtrue[39m
+25│  [36mrole_full_int[39m: [37m42[39m
+26│  [36mrole_full_str[39m: [33mTest string[39m
+27│[36mdefaults_path[39m: [33mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/defaults/main.yml[39m
+28│[36mfull_name[39m: [33mcompany_name.coll_1.role_full[39m
+29│[36minfo[39m:
+30│  [36mdependencies[39m: []
+31│  [36mgalaxy_info[39m:
+32│    [36mauthor[39m: [33mAnsible team (ansible-navigator)[39m
+33│    [36mcompany[39m: [33mAnsible[39m
+34│    [36mdescription[39m: [33mComplete sample role.[39m
+35│    [36mgalaxy_tags[39m:
+36│    - [33mtag_1[39m
+37│    - [33mtag_2[39m
+38│    [36mlicense[39m: [33mLICENSE[39m
+39│    [36mmin_ansible_version[39m: [37m2.9.0[39m
+40│    [36mplatforms[39m:
+41│    - [36mname[39m: [33meos[39m
+42│      [36mversions[39m:
+43│      - [33mall[39m
+44│[36minfo_path[39m: [33mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/meta/main.yml[39m
+45│[36mreadme[39m: [36m|-[39m
+46│[33m  # Role full[39m
+47│
+48│[33m  This is a role with:[39m
+49│
+50│[33m  - defaults/main.yml[39m
+51│[33m  - meta/argument_spec.yml[39m
+52│[33m  - meta/main.yml[39m
+53│[33m  - README.md[39m
+54│[36mreadme_path[39m: [33mFIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_full/README.md[39m
+55│[36mshort_name[39m: [33mrole_full[39m
+[7m^f/PgUp[0m[39m[49m page up              [7m^b/PgDn[0m[39m[49m page down              [7m↑↓[0m[39m[49m scroll              [7mesc[0m[39m[49m back              [7m-[0m[39m[49m previous              [7m+[0m[39m[49m next              [7m[0-9][0m[39m[49m goto              [7m:help[0m[39m[49m help

@@ -20,6 +20,7 @@ class SerUiTestStep(UiTestStep):
 
     search_within_response: str = ":help"
 
+
 # Note the order here: yaml, markdown, json, markdown, yaml
 # This was done to ensure there was a screen change for each step
 # json and yaml will render a string the same, markdown with provide some
@@ -119,6 +120,7 @@ class BaseClass:
             value=step.user_input,
             search_within_response=search_within_response,
         )
+
         received_output = [
             line.replace(os_independent_tmp, "FIXTURES_COLLECTION_DIR") for line in received_output
         ]
@@ -138,6 +140,7 @@ class BaseClass:
                     "absent": step.absent,
                     "compared_fixture": not any((step.present, step.absent)),
                 },
+                ansi_sidecar=True,
             )
 
         page = " ".join(received_output)

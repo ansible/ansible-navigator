@@ -1,0 +1,6 @@
+0│
+1│[36m-[39m name: test task-1
+2│  company_name.coll_1.mod_1:
+3│    foo: somevalue
+4│    bar: candidate
+[7m^f/PgUp[0m[39m[49m page up                            [7m^b/PgDn[0m[39m[49m page down                            [7m↑↓[0m[39m[49m scroll                            [7mesc[0m[39m[49m back                            [7m:help[0m[39m[49m help

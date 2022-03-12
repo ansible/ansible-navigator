@@ -50,6 +50,7 @@ def update_fixtures(
     index,
     received_output,
     comment,
+    ansi_sidecar=False,
     testname=None,
     additional_information=None,
 ):
@@ -73,6 +74,10 @@ def update_fixtures(
     with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as fh:
         json.dump(fixture, fh, indent=4, ensure_ascii=False, sort_keys=False)
         fh.write("\n")
+    if ansi_sidecar:
+        with open(f"{dir_path}/{file_name}.ansi", "w", encoding="utf8") as fh:
+            fh.write("\n".join(received_output))
+            fh.write("\n")
 
 
 def fixture_path_from_request(request, index, testname=None):
