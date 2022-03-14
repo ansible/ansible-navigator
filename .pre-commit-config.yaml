@@ -53,7 +53,7 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v5.8.4
+    rev: v5.9.0
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -164,7 +164,7 @@ repos:
           - manual
 
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v0.931
+    rev: v0.940
     hooks:
       # NOTE: Here MyPy is executed twice -- once for the highest and once
       # NOTE: for the lowest supported version. They are hardcoded in the
