@@ -125,7 +125,8 @@ def test_runner_args(mocker: MockerFixture, data: TestData):
 
     TestRunnerException = Exception
     command_async = mocker.patch(
-        "ansible_navigator.actions.run.CommandAsync", side_effect=TestRunnerException
+        "ansible_navigator.actions.run.CommandAsync",
+        side_effect=TestRunnerException,
     )
 
     run = action(args=args)

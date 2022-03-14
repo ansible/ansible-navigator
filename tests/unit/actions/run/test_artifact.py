@@ -138,7 +138,8 @@ def test_artifact_path(
     monkeypatch.setattr(action, "_get_status", get_status)
 
     mocked_write = mocker.patch(
-        "ansible_navigator.actions.run.serialize_write_file", return_value=None
+        "ansible_navigator.actions.run.serialize_write_file",
+        return_value=None,
     )
 
     args = deepcopy(NavigatorConfiguration)
