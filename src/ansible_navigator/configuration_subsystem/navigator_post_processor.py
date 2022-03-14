@@ -729,7 +729,7 @@ class NavigatorPostProcessor:
         """Post process playbook_artifact_save_as"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        # literal_text, fname, _format_spec, conversion
+        # literal_text, fname, format_spec, conversion
         found = set(f for _, f, _, _ in Formatter().parse(entry.value.current) if f)
         available = set(f for _, f, _, _ in Formatter().parse(entry.value.default) if f)
         unknown = found - available
