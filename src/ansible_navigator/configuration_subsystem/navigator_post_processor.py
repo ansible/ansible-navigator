@@ -10,6 +10,7 @@ from functools import partialmethod
 from itertools import chain
 from itertools import repeat
 from pathlib import Path
+from string import Formatter
 from typing import List
 from typing import Tuple
 
@@ -716,6 +717,32 @@ class NavigatorPostProcessor:
                 exit_msg = "Try again with 'replay <valid path to playbook artifact>'"
                 exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
                 return messages, exit_messages
+        return messages, exit_messages
+
+    @staticmethod
+    @_post_processor
+    def playbook_artifact_save_as(
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process playbook_artifact_save_as"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+        # literal_text, fname, _format_spec, conversion
+        found = set(f for _, f, _, _ in Formatter().parse(entry.value.current) if f)
+        available = set(f for _, f, _, _ in Formatter().parse(entry.value.default) if f)
+        unknown = found - available
+        if not unknown:
+            return messages, exit_messages
+        exit_msg = (
+            f"The playbook artifact file name '{entry.value.current}', set by"
+            f" {entry.value.source.value.lower()}, has unrecognized variables:"
+            f" {oxfordcomma(unknown, 'and')}"
+        )
+        exit_messages.append(ExitMessage(message=exit_msg))
+        exit_msg = f"Try again with only {oxfordcomma(available, 'and/or')}"
+        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
     @staticmethod
