@@ -69,3 +69,4 @@ ansible-navigator:
     enable: True
     replay: /tmp/test_artifact.json
     save-as: /tmp/test_artifact.json
+  time-zone: Japan

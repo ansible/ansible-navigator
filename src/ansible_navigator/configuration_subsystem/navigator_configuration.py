@@ -521,6 +521,15 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(),
         ),
         SettingsEntry(
+            name="time_zone",
+            cli_parameters=CliParameters(short="--tz"),
+            environment_variable_override="TZ",
+            short_description=(
+                "Specify the IANA time zone to use or 'local' to use the system time zone."
+            ),
+            value=SettingsEntryValue(default="UTC"),
+        ),
+        SettingsEntry(
             name="workdir",
             cli_parameters=CliParameters(short="--bwd"),
             settings_file_path_override="ansible-builder.workdir",
