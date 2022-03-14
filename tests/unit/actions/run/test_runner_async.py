@@ -1,5 +1,6 @@
 """Test settings through to runner."""
 
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from queue import Queue
@@ -105,7 +106,7 @@ def test_runner_args(mocker: MockerFixture, data: TestData):
     :param mocker: The mocker fixture
     :param data: The test data
     """
-    args = NavigatorConfiguration
+    args = deepcopy(NavigatorConfiguration)
     args.entry("container_engine").value.current = data.container_engine
     args.entry("container_options").value.current = data.container_options
     args.entry("execution_environment_image").value.current = data.execution_environment_image
