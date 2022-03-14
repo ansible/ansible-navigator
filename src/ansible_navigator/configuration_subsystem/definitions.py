@@ -208,6 +208,11 @@ class SettingsEntry:
         :param prefix: The prefix for the settings file path
         :returns: Settings file path
         """
+        if prefix:
+            prefix_str = f"{prefix}."
+        else:
+            prefix_str = prefix
+            
         if self.settings_file_path_override is not None:
             sfp = f"{prefix_str}{self.settings_file_path_override}"
         else:
