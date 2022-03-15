@@ -141,12 +141,12 @@ ContentType = Union[ContentTypeSingle, ContentTypeSequence]
 
 @dataclass(frozen=True)
 class CFormat:
-    """A single instance fo a content format."""
+    """A single instance for a content format."""
 
     scope: str
     """The scope, used for tokenization"""
     file_extention: str
-    """The file extention, with a ."""
+    """The file extension, with a ."""
     serialization: Optional[SerializationFormat]
     """If needed the serialization format"""
 

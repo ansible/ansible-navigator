@@ -18,7 +18,6 @@ from typing import Match
 from typing import NamedTuple
 from typing import Optional
 from typing import Pattern
-from typing import Protocol
 from typing import Sequence
 from typing import Tuple
 from typing import Union
@@ -27,6 +26,7 @@ from ..content_defs import ContentFormat
 from ..content_defs import ContentType
 from ..content_defs import ContentTypeSequence
 from ..content_defs import ContentView
+from ..utils.compatibility import Protocol
 from ..utils.functions import templar
 from ..utils.serialize import serialize
 from .colorize import Colorize
