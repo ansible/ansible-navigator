@@ -20,11 +20,11 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from ansible_navigator.content_defs import ContentView
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentView
 from ..content_defs import SerializationFormat
 from ..runner import CommandAsync
 from ..steps import Step
