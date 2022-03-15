@@ -119,6 +119,9 @@ def serialize_write_temp_file(
         if serialization_format == SerializationFormat.YAML:
             _yaml_dump(dumpable=dumpable, file_handle=file_like)
             return Path(file_like.name)
+        _text_dump(dumpable=str(dumpable), file_handle=file_like)
+        return Path(file_like.name)
+
     raise ValueError("Unknown serialization format")
 
 
@@ -210,6 +213,17 @@ def _json_dumps(dumpable: ContentType) -> str:
         )
         logger.error(error_message)
         return error_message
+
+
+def _text_dump(dumpable: str, file_handle: IO) -> None:
+    """Write text to a file.
+
+    :param dumpable: The text to write
+    :param file_handle: The file handle to write to
+    """
+    file_handle.write(dumpable)
+    if not dumpable.endswith("\n"):
+        file_handle.write("\n")
 
 
 class YamlStyle(NamedTuple):
