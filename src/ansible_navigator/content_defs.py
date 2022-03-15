@@ -4,15 +4,18 @@ from dataclasses import asdict
 from dataclasses import dataclass
 from enum import Enum
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import Dict
 from typing import Generic
+from typing import List
+from typing import Optional
+from typing import Sequence
 from typing import TypeVar
-
-from ..utils.serialize import SerializationFormat
+from typing import Union
 
 
 if TYPE_CHECKING:
-    from ..utils.compatibility import TypeAlias
+    from .utils.compatibility import TypeAlias
 
 
 class ContentView(Enum):
@@ -24,6 +27,13 @@ class ContentView(Enum):
 
 T = TypeVar("T")  # pylint:disable=invalid-name # https://github.com/PyCQA/pylint/pull/5221
 DictType: "TypeAlias" = Dict[str, T]
+
+
+class SerializationFormat(Enum):
+    """The serialization format."""
+
+    YAML = "YAML"
+    JSON = "JSON"
 
 
 @dataclass
@@ -112,3 +122,50 @@ class ContentBase(Generic[T]):
         :returns: The gotten attribute
         """
         return getattr(self, attribute)
+
+    def items(self):
+        """Allow this dataclass to be treated like a dictionary.
+
+        This is a work around until the UI fully supports dataclasses
+        at which time this can be removed.
+
+        :returns: Tuples of attribute value pairs
+        """
+        return asdict(self).items()
+
+
+ContentTypeSingle = Union[bool, float, int, str, Dict[str, Any], ContentBase]
+ContentTypeSequence = Union[List[Any], Sequence[ContentBase]]
+ContentType = Union[ContentTypeSingle, ContentTypeSequence]
+
+
+@dataclass(frozen=True)
+class CFormat:
+    """A single instance fo a content format."""
+
+    scope: str
+    """The scope, used for tokenization"""
+    file_extention: str
+    """The file extention, with a ."""
+    serialization: Optional[SerializationFormat]
+    """If needed the serialization format"""
+
+
+class ContentFormat(Enum):
+    """All content formats."""
+
+    value: CFormat
+    ANSI = CFormat(scope="source.ansi", file_extention=".ansi", serialization=None)
+    JSON = CFormat(
+        scope="source.json",
+        file_extention=".json",
+        serialization=SerializationFormat.JSON,
+    )
+    LOG = CFormat(scope="text.log", file_extention=".log", serialization=None)
+    MARKDOWN = CFormat(scope="text.html.markdown", file_extention=".md", serialization=None)
+    TXT = CFormat(scope="source.txt", file_extention=".txt", serialization=None)
+    YAML = CFormat(
+        scope="source.yaml",
+        file_extention=".yml",
+        serialization=SerializationFormat.YAML,
+    )

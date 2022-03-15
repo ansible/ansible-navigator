@@ -112,7 +112,7 @@ class Action(ActionBase):
                 "Collecting the ansible configuration, this may take a minute...",
             ],
         )
-        interaction.ui.show(notification)
+        interaction.ui.show_form(notification)
 
         self._update_args(
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
@@ -269,7 +269,7 @@ class Action(ActionBase):
                 if not list_output or not dump_output:
                     warn_msg.append("The configuration could not be gathered.")
                 warning = warning_notification(warn_msg)
-                self._interaction.ui.show(warning)
+                self._interaction.ui.show_form(warning)
             else:
                 self._parse_and_merge(list_output, dump_output)
         else:

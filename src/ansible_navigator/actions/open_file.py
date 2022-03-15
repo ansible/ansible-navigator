@@ -11,13 +11,13 @@ from typing import Dict
 from typing import List
 from typing import Optional
 
+from ansible_navigator.content_defs import ContentFormat
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..ui_framework import ContentView
+from ..content_defs import ContentView
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 from ..utils.functions import remove_dbl_un
-from ..utils.serialize import SerializationFormat
 from ..utils.serialize import serialize_write_temp_file
 from . import _actions as actions
 
@@ -102,7 +102,8 @@ class Action:
                 return None
 
         if not filename:
-            if interaction.ui.serialization_format() == "text.html.markdown":
+            content_format = interaction.ui.content_format()
+            if content_format is ContentFormat.MARKDOWN:
                 with tempfile.NamedTemporaryFile(
                     suffix=".md",
                     delete=False,
@@ -110,17 +111,11 @@ class Action:
                 ) as file_like:
                     filename = Path(file_like.name)
                     file_like.write(obj)
-            elif interaction.ui.serialization_format() == "source.yaml":
+            elif content_format.value.serialization:
                 filename = serialize_write_temp_file(
                     content=obj,
                     content_view=ContentView.NORMAL,
-                    serialization_format=SerializationFormat.YAML,
-                )
-            elif interaction.ui.serialization_format() == "source.json":
-                filename = serialize_write_temp_file(
-                    content=obj,
-                    content_view=ContentView.NORMAL,
-                    serialization_format=SerializationFormat.JSON,
+                    serialization_format=content_format.value.serialization,
                 )
             else:
                 with tempfile.NamedTemporaryFile(

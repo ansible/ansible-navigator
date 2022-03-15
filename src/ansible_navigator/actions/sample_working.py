@@ -34,7 +34,7 @@ class Action(ActionBase):
         messages = ["Please wait, this won't take long, about 3 seconds, really."]
 
         form = nonblocking_notification(messages)
-        interaction.ui.show(form)
+        interaction.ui.show_form(form)
         time.sleep(3)
 
         self._prepare_to_exit(interaction)

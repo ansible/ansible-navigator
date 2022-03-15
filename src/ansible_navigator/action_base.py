@@ -95,7 +95,7 @@ class ActionBase:
                 f"      e.g. 'ansible-navigator {self._name} --mode stdout",
             ],
         )
-        interaction.ui.show(warning)
+        interaction.ui.show_form(warning)
 
     @staticmethod
     def _copy_args(args: ApplicationConfiguration) -> ApplicationConfiguration:

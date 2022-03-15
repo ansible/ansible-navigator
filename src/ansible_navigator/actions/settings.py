@@ -9,16 +9,16 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import PresentableSettingsEntries
 from ..configuration_subsystem import PresentableSettingsEntry
 from ..configuration_subsystem import to_presentable
+from ..content_defs import ContentView
+from ..content_defs import SerializationFormat
 from ..steps import StepType
 from ..steps import TypedStep
 from ..ui_framework import Color
-from ..ui_framework import ContentView
 from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Decoration
 from ..ui_framework import Interaction
-from ..utils.serialize import SerializationFormat
 from ..utils.serialize import serialize
 from . import _actions as actions
 from . import run_action

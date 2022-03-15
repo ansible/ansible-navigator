@@ -1,6 +1,7 @@
 """``:help`` command implementation."""
 import os
 
+from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -40,7 +41,7 @@ class Action(ActionBase):
         while True:
             interaction = interaction.ui.show(
                 obj=help_md,
-                serialization_format="text.html.markdown",
+                content_format=ContentFormat.MARKDOWN,
             )
             app.update()
             if interaction.name != "refresh":

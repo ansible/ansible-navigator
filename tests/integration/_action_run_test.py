@@ -6,6 +6,7 @@ import tempfile
 
 from copy import deepcopy
 from typing import Any
+from typing import Callable
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -15,8 +16,11 @@ from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.content_defs import ContentType
 from ansible_navigator.steps import Steps
 from ansible_navigator.ui_framework.ui import Action as Ui_action
+from ansible_navigator.ui_framework.ui import Form
 from ansible_navigator.ui_framework.ui import Interaction
 from ansible_navigator.ui_framework.ui import Ui
 
@@ -91,6 +95,29 @@ class ActionRunTest:
     def callable_pass(self, **kwargs):
         """a do nothing callable"""
 
+    def content_format(
+        self,
+        value: Optional[ContentFormat] = None,
+        default: bool = False,
+    ) -> ContentFormat:
+        """A do nothing content format callable."""
+
+    def show(
+        self,
+        obj: ContentType,
+        content_format: Optional[ContentFormat] = None,
+        index: Optional[int] = None,
+        columns: Optional[List] = None,
+        await_input: bool = True,
+        filter_content_keys: Callable = lambda x: x,
+        color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
+        content_heading: Callable = lambda *args, **kwargs: None,
+    ) -> "Interaction":
+        """me"""
+
+    def show_form(self, form: Form) -> Form:
+        """A do nothing show form callable."""
+
     def run_action_interactive(self) -> Any:
         """run the action
         The return type is set to Any here since not all actions
@@ -119,9 +146,10 @@ class ActionRunTest:
             clear=self.callable_pass,
             menu_filter=self.callable_pass_one_arg,
             scroll=self.callable_pass_one_arg,
-            show=self.callable_pass,
+            show=self.show,
+            show_form=self.show_form,
             update_status=self.callable_pass,
-            serialization_format=self.callable_pass,
+            content_format=self.content_format,
         )
         match = re.match(self._app_action.Action.KEGEX, self._action_name)
         if not match:

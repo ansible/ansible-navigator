@@ -10,7 +10,7 @@ from typing import Dict
 from typing import List
 from typing import Union
 
-from .content_defs import ContentBase
+from ..content_defs import ContentBase
 
 
 def convert_percentage(
