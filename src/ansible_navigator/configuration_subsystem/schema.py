@@ -31,7 +31,7 @@ PARTIAL_SCHEMA: Dict = {
                     "properties": {
                         "workdir": {
                             "type": "string",
-                        }
+                        },
                     },
                 },
                 "ansible-runner": {
@@ -81,7 +81,7 @@ PARTIAL_SCHEMA: Dict = {
                                 },
                             },
                             "type": "object",
-                        }
+                        },
                     },
                     "type": "object",
                 },
@@ -225,7 +225,7 @@ PARTIAL_SCHEMA: Dict = {
                 },
             },
             "additionalProperties": False,
-        }
+        },
     },
     "required": ["ansible-navigator"],
     "title": "ansible-navigator settings file schema",
