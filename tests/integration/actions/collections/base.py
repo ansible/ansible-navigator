@@ -28,22 +28,46 @@ base_steps = (
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
     UiTestStep(user_input=":3", comment="role_minimal details window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
-    UiTestStep(user_input=":back", comment="Back to ansible-navigator collections browse window", present=EXPECTED_COLLECTIONS),
+    UiTestStep(
+        user_input=":back",
+        comment="Back to ansible-navigator collections browse window",
+        present=EXPECTED_COLLECTIONS,
+    ),
     UiTestStep(user_input=":2", comment="Browse company_name.coll_2 plugins window"),
     UiTestStep(user_input=":0", comment="lookup_2 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_2 plugins window"),
     UiTestStep(user_input=":1", comment="mod_2 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_2 plugins window"),
-    UiTestStep(user_input=":back", comment="Back to ansible-navigator collections browse window", present=EXPECTED_COLLECTIONS),
+    UiTestStep(
+        user_input=":back",
+        comment="Back to ansible-navigator collections browse window",
+        present=EXPECTED_COLLECTIONS,
+    ),
     # Try some things that should not work but not fail (#1061 and #1062)
-    UiTestStep(user_input=":collections --ee FFFFF", comment="Provide an invalid ee value", present=EXPECTED_COLLECTIONS),
+    UiTestStep(
+        user_input=":collections --ee FFFFF",
+        comment="Provide an invalid ee value",
+        present=EXPECTED_COLLECTIONS,
+    ),
     # and repeat some basic browsing
     UiTestStep(user_input=":1", comment="Browse company_name.coll_1 plugins window"),
     UiTestStep(user_input=":0", comment="lookup_1 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
-    UiTestStep(user_input=":back", comment="Back to ansible-navigator collections browse window", present=EXPECTED_COLLECTIONS),
-    UiTestStep(user_input=":0", comment="Browse ansible.builtin plugins window"),
-    UiTestStep(user_input=":0", comment="Browse ansible.builtin.add_host module", present=["ANSIBLE.BUILTIN.ADD_HOST"]),
+    UiTestStep(
+        user_input=":back",
+        comment="Back to ansible-navigator collections browse window",
+        present=EXPECTED_COLLECTIONS,
+    ),
+    UiTestStep(
+        user_input=":0",
+        comment="Browse ansible.builtin plugins window",
+        present=["yum_repository"],
+    ),
+    UiTestStep(
+        user_input=":0",
+        comment="Browse ansible.builtin.add_host module",
+        present=["ANSIBLE.BUILTIN.ADD_HOST"],
+    ),
 )
 
 
