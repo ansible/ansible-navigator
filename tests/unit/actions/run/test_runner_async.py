@@ -17,7 +17,7 @@ from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 
 
 @dataclass
-class TestData:
+class Scenario:
     """The runner test data object."""
 
     # pylint: disable=too-many-instance-attributes
@@ -51,7 +51,7 @@ class TestData:
 TEST_QUEUE: Queue = Queue()
 
 test_data = [
-    TestData(
+    Scenario(
         name="Validate args passed to runner API",
         container_engine="docker",
         container_options=["--net=host"],
@@ -99,7 +99,7 @@ test_data = [
 
 
 @pytest.mark.parametrize("data", test_data, ids=str)
-def test_runner_args(mocker: MockerFixture, data: TestData):
+def test_runner_args(mocker: MockerFixture, data: Scenario):
     """Test the arguments passed to runner API.
 
     :param mocker: The mocker fixture
