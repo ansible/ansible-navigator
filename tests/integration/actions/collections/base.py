@@ -15,6 +15,7 @@ from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
+
 EXPECTED_COLLECTIONS = ["ansible.builtin", "company_name.coll_1", "company_name.coll_2"]
 
 base_steps = (
