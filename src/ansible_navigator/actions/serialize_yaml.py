@@ -1,6 +1,7 @@
 """``:yaml`` command implementation."""
 import logging
 
+from ansible_navigator.content_defs import ContentFormat
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
@@ -31,5 +32,5 @@ class Action:
         self._logger.debug("yaml requested")
         if interaction.ui is not None:
             interaction.ui.scroll(0)
-            serialization_format = interaction.ui.serialization_format("source.yaml", default=True)
-            self._logger.debug("Serialization set to %s", serialization_format)
+            content_format = interaction.ui.content_format(ContentFormat.YAML, default=True)
+            self._logger.debug("Serialization set to %s", content_format)

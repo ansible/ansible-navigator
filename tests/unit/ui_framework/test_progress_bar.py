@@ -1,7 +1,7 @@
 """Test for the conversion of percent string to progress bars."""
 from dataclasses import dataclass
 
-from ansible_navigator.ui_framework.content_defs import ContentBase
+from ansible_navigator.content_defs import ContentBase
 from ansible_navigator.ui_framework.utils import convert_percentage
 
 

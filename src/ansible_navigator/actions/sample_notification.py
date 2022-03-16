@@ -54,7 +54,7 @@ class Action(ActionBase):
 
         form_data = yaml.safe_load(FORM)
         form = dict_to_form(form_data["form"])
-        interaction.ui.show(form)
+        interaction.ui.show_form(form)
         as_dict = form_to_dict(form)
         self._logger.debug("form response: %s", as_dict)
 

@@ -9,7 +9,10 @@ from typing import Callable
 from typing import Dict
 from typing import List
 from typing import Tuple
+from typing import Union
 
+from ..content_defs import ContentBase
+from ..content_defs import ContentTypeSequence
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -44,11 +47,21 @@ class MenuBuilder:
         self._color_menu_item = color_menu_item
         self._ui_config = ui_config
 
-    def build(self, dicts: List, cols: List, indices) -> Tuple[CursesLines, CursesLines]:
+    def build(
+        self,
+        dicts: ContentTypeSequence,
+        cols: List[str],
+        indices,
+    ) -> Tuple[CursesLines, CursesLines]:
         """main entry point for menu builder"""
         return self._menu(dicts, cols, indices)
 
-    def _menu(self, dicts: List, cols: List[str], indices) -> Tuple[CursesLines, CursesLines]:
+    def _menu(
+        self,
+        dicts: ContentTypeSequence,
+        cols: List[str],
+        indices,
+    ) -> Tuple[CursesLines, CursesLines]:
         """Build a text menu from a list of dicts given columns(root keys)
 
         :param dicts: A list of dicts
@@ -130,7 +143,12 @@ class MenuBuilder:
             decoration=curses.A_UNDERLINE,
         )
 
-    def _menu_lines(self, dicts: List[Dict], menu_layout: Tuple[List, ...], indices) -> CursesLines:
+    def _menu_lines(
+        self,
+        dicts: ContentTypeSequence,
+        menu_layout: Tuple[List, ...],
+        indices,
+    ) -> CursesLines:
         """Generate all the menu lines
 
         :params dicts: A list of dicts from which the menu will be generated
@@ -144,7 +162,11 @@ class MenuBuilder:
         """
         return CursesLines(tuple(self._menu_line(dicts[idx], menu_layout) for idx in indices))
 
-    def _menu_line(self, menu_entry: dict, menu_layout: Tuple[List, ...]) -> CursesLine:
+    def _menu_line(
+        self,
+        menu_entry: Union[Dict[str, Any], ContentBase],
+        menu_layout: Tuple[List, ...],
+    ) -> CursesLine:
         """Generate one the menu line
 
         :param menu_entry: One dict from which the menu line will be generated
@@ -168,7 +190,7 @@ class MenuBuilder:
         self,
         colno: int,
         coltext: Any,
-        menu_entry: dict,
+        menu_entry: Union[Dict[str, Any], ContentBase],
         menu_layout: Tuple[List, ...],
     ) -> CursesLinePart:
         """Generate one menu line part

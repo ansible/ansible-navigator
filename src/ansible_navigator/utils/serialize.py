@@ -6,34 +6,21 @@ import re
 import tempfile
 
 from dataclasses import is_dataclass
-from enum import Enum
 from pathlib import Path
 from typing import IO
-from typing import TYPE_CHECKING
 from typing import Any
-from typing import Dict
-from typing import List
 from typing import NamedTuple
 from typing import Optional
-from typing import Union
 
 import yaml
 
+from ..content_defs import ContentBase
+from ..content_defs import ContentType
+from ..content_defs import ContentView
+from ..content_defs import SerializationFormat
+
 
 logger = logging.getLogger(__name__)
-
-
-class SerializationFormat(Enum):
-    """The serialization format."""
-
-    YAML = "YAML"
-    JSON = "JSON"
-
-
-if TYPE_CHECKING:
-    from ..ui_framework import ContentBase
-    from ..ui_framework import ContentView
-
 
 # pylint: disable=unused-import
 try:
@@ -49,21 +36,10 @@ except ImportError:
     from yaml import SafeLoader  # type: ignore[misc] # noqa: F401
 # pylint: enable=unused-import
 
-ContentType = Union[
-    List["ContentBase"],
-    "ContentBase",
-    bool,
-    Dict[str, Any],
-    float,
-    int,
-    List[Any],
-    str,
-]
-
 
 def serialize(
     content: ContentType,
-    content_view: "ContentView",
+    content_view: ContentView,
     serialization_format: SerializationFormat,
 ) -> str:
     """Serialize a dataclass based on format and view.
@@ -88,7 +64,7 @@ def serialize(
 
 def serialize_write_file(
     content: ContentType,
-    content_view: "ContentView",
+    content_view: ContentView,
     file_mode: str,
     file: Path,
     serialization_format: SerializationFormat,
@@ -119,7 +95,7 @@ def serialize_write_file(
 
 def serialize_write_temp_file(
     content: ContentType,
-    content_view: "ContentView",
+    content_view: ContentView,
     serialization_format: SerializationFormat,
 ) -> Path:
     """Serialize and write content to a premanent temporary file.
@@ -171,7 +147,7 @@ def _prepare_content(
         return content
     if isinstance(content, (bool, dict, float, int, str)):
         return content
-    if is_dataclass(content):
+    if isinstance(content, ContentBase):
         return content.asdict(
             content_view=content_view,
             serialization_format=serialization_format,
