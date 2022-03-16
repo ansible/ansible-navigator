@@ -1,4 +1,5 @@
 """``:log`` command implementation."""
+from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
@@ -39,7 +40,7 @@ class Action(ActionBase):
             if auto_scroll:
                 interaction.ui.scroll(new_scroll)
 
-            interaction = interaction.ui.show(obj=log_contents, serialization_format="text.log")
+            interaction = interaction.ui.show(obj=log_contents, content_format=ContentFormat.LOG)
             if interaction.name != "refresh":
                 break
 

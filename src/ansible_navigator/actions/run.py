@@ -20,11 +20,12 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from ansible_navigator.ui_framework.content_defs import ContentView
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentView
+from ..content_defs import SerializationFormat
 from ..runner import CommandAsync
 from ..steps import Step
 from ..ui_framework import CursesLine
@@ -40,7 +41,6 @@ from ..utils.functions import human_time
 from ..utils.functions import now_iso
 from ..utils.functions import remove_ansi
 from ..utils.functions import round_half_up
-from ..utils.serialize import SerializationFormat
 from ..utils.serialize import serialize_write_file
 from . import _actions as actions
 from . import run_action
@@ -299,7 +299,7 @@ class Action(ActionBase):
         if self._subaction_type == "run":
             messages = ["Preparing for automation, please wait..."]
             notification = nonblocking_notification(messages=messages)
-            interaction.ui.show(notification)
+            interaction.ui.show_form(notification)
             while not self._first_message_received:
                 self.update()
 
@@ -458,7 +458,7 @@ class Action(ActionBase):
         }
         form_dict["fields"].append(form_field)
         form = dict_to_form(form_dict)
-        self._interaction.ui.show(form)
+        self._interaction.ui.show_form(form)
         populated_form = form_to_dict(form, key_on_name=True)
         return populated_form
 
@@ -515,7 +515,7 @@ class Action(ActionBase):
         }
         form_dict["fields"].append(form_field)
         form = dict_to_form(form_dict)
-        self._interaction.ui.show(form)
+        self._interaction.ui.show_form(form)
         populated_form = form_to_dict(form, key_on_name=True)
         return populated_form
 
@@ -906,4 +906,4 @@ class Action(ActionBase):
         warn_msg += ["[HINT] To see the full error message try ':stdout'"]
         warn_msg += ["[HINT] After it's fixed, try to ':rerun' the playbook"]
         warning = warning_notification(warn_msg)
-        self._interaction.ui.show(warning)
+        self._interaction.ui.show_form(warning)

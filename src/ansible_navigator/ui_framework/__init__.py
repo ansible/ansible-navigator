@@ -1,8 +1,6 @@
 """ui_framework
 """
 
-from .content_defs import ContentBase
-from .content_defs import ContentView
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -26,8 +24,6 @@ __all__ = (
     "Action",
     "Color",
     "Content",
-    "ContentBase",
-    "ContentView",
     "CursesLine",
     "CursesLinePart",
     "CursesLines",

@@ -5,12 +5,12 @@ import re
 
 from pathlib import Path
 
-from ansible_navigator.ui_framework.content_defs import ContentView
+from ansible_navigator.content_defs import ContentView
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import SerializationFormat
 from ..ui_framework import Interaction
 from ..utils.functions import remove_dbl_un
-from ..utils.serialize import SerializationFormat
 from ..utils.serialize import serialize_write_file
 from . import _actions as actions
 
@@ -73,19 +73,19 @@ class Action:
                 ]
 
         if isinstance(obj, str):
-            write_as = "text"
+            write_as = ".txt"
         else:
             if re.match(r"^.*\.y(?:a)?ml$", filename):
-                write_as = "yaml"
+                write_as = ".yaml"
             elif filename.endswith(".json"):
-                write_as = "json"
+                write_as = ".json"
             else:
-                write_as = interaction.ui.serialization_format()
+                write_as = interaction.ui.content_format().value.file_extention
 
-        if write_as == "text":
+        if write_as == ".txt":
             with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
                 fh.write(obj)
-        elif write_as == "yaml":
+        elif write_as == ".yaml":
             serialize_write_file(
                 content=obj,
                 content_view=ContentView.NORMAL,
@@ -93,7 +93,7 @@ class Action:
                 file_mode=file_mode,
                 serialization_format=SerializationFormat.YAML,
             )
-        elif write_as == "json":
+        elif write_as == ".json":
             serialize_write_file(
                 content=obj,
                 content_view=ContentView.NORMAL,

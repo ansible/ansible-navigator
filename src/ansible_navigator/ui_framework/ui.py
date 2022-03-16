@@ -18,15 +18,19 @@ from typing import Match
 from typing import NamedTuple
 from typing import Optional
 from typing import Pattern
+from typing import Sequence
 from typing import Tuple
 from typing import Union
 
+from ..content_defs import ContentFormat
+from ..content_defs import ContentType
+from ..content_defs import ContentTypeSequence
+from ..content_defs import ContentView
+from ..utils.compatibility import Protocol
 from ..utils.functions import templar
-from ..utils.serialize import SerializationFormat
 from ..utils.serialize import serialize
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
-from .content_defs import ContentView
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -67,8 +71,37 @@ class Content(NamedTuple):
 class Menu(NamedTuple):
     """details about the currently showing menu"""
 
-    current: List
-    columns: List
+    current: ContentTypeSequence
+    columns: List[str]
+
+
+class ContentFormatCallable(Protocol):
+    """Protocol definition for the Ui.content_format callable."""
+
+    def __call__(
+        self,
+        value: Optional[ContentFormat] = None,
+        default: bool = False,
+    ) -> ContentFormat:
+        """Refer to and keep in sync with UserInterface.content_format"""
+
+
+class ShowCallable(Protocol):
+    """Protocol definition for the Ui.show callable."""
+
+    # pylint: disable=too-many-arguments
+    def __call__(
+        self,
+        obj: ContentType,
+        content_format: Optional[ContentFormat] = None,
+        index: Optional[int] = None,
+        columns: Optional[List] = None,
+        await_input: bool = True,
+        filter_content_keys: Callable = lambda x: x,
+        color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
+        content_heading: Callable = lambda *args, **kwargs: None,
+    ) -> "Interaction":
+        """Refer to and keep in sync with UserInterface.show"""
 
 
 class Ui(NamedTuple):
@@ -77,9 +110,10 @@ class Ui(NamedTuple):
     clear: Callable
     menu_filter: Callable
     scroll: Callable
-    show: Callable
+    show: ShowCallable
+    show_form: Callable[[Form], Form]
     update_status: Callable
-    serialization_format: Callable
+    content_format: ContentFormatCallable
 
 
 class Interaction(NamedTuple):
@@ -125,7 +159,7 @@ class UserInterface(CursesWindow):
         self._content_heading: Callable[[Any, int], Optional[CursesLines]]
         self._default_colors = None
         self._default_pairs = None
-        self._default_obj_serialization = "source.yaml"
+        self._default_content_format = ContentFormat.YAML
         self._filter_content_keys: Callable[[Any], Dict[Any, Any]]
         self._hide_keys = True
         self._kegexes = kegexes
@@ -140,7 +174,7 @@ class UserInterface(CursesWindow):
         self._rgb_to_curses_color_idx: Dict[RgbTuple, int] = {}
         self._screen_min_height = screen_min_height
         self._scroll = 0
-        self._serialization_format = self._default_obj_serialization
+        self._content_format = self._default_content_format
         self._status = ""
         self._status_color = 0
         self._screen: Window = curses.initscr()
@@ -201,18 +235,21 @@ class UserInterface(CursesWindow):
             self._scroll = value
         return self._scroll
 
-    def serialization_format(self, value: Optional[str] = None, default: bool = False) -> str:
-        """Set or return the current serialization format
+    def content_format(
+        self,
+        value: Optional[ContentFormat] = None,
+        default: bool = False,
+    ) -> ContentFormat:
+        """Set or return the current content format
 
-        :param value: the value to set the serialization format to
-        :type value: str or None
-        :returns: the current serialization format
+        :param value: The value to set the content format to
+        :returns: The current content format
         """
         if value is not None:
-            self._serialization_format = value
+            self._content_format = value
             if default:
-                self._default_obj_serialization = value
-        return self._serialization_format
+                self._default_content_format = value
+        return self._content_format
 
     @property
     def _ui(self) -> Ui:
@@ -225,8 +262,9 @@ class UserInterface(CursesWindow):
             menu_filter=self.menu_filter,
             scroll=self.scroll,
             show=self.show,
+            show_form=self.show_form,
             update_status=self.update_status,
-            serialization_format=self.serialization_format,
+            content_format=self.content_format,
         )
         return res
 
@@ -509,28 +547,23 @@ class UserInterface(CursesWindow):
         :returns: The generated lines
         """
 
-        if self.serialization_format() == "source.ansi":
+        if self.content_format() is ContentFormat.ANSI:
             return self._colorizer.render_ansi(doc=obj)
 
         content_view = ContentView.NORMAL if self._hide_keys else ContentView.FULL
-        if self.serialization_format() == "source.yaml":
+        current_format = self.content_format()
+        if current_format.value.serialization:
             string = serialize(
                 content_view=content_view,
                 content=obj,
-                serialization_format=SerializationFormat.YAML,
-            )
-        elif self.serialization_format() == "source.json":
-            string = serialize(
-                content_view=content_view,
-                content=obj,
-                serialization_format=SerializationFormat.JSON,
+                serialization_format=current_format.value.serialization,
             )
         else:
             string = obj
 
         scope = "no_color"
         if self._ui_config.color:
-            scope = self.serialization_format()
+            scope = self.content_format().value.scope
 
         rendered = self._colorizer.render(doc=string, scope=scope)
         return self._color_lines_for_term(rendered)
@@ -630,7 +663,12 @@ class UserInterface(CursesWindow):
         res = obj.present(screen=self._screen, ui_config=self._ui_config)
         return res
 
-    def _show_obj_from_list(self, objs: List[Any], index: int, await_input: bool) -> Interaction:
+    def _show_obj_from_list(
+        self,
+        objs: ContentTypeSequence,
+        index: int,
+        await_input: bool,
+    ) -> Interaction:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
@@ -758,7 +796,7 @@ class UserInterface(CursesWindow):
 
     def _get_heading_menu_items(
         self,
-        current: List,
+        current: Sequence[Any],
         columns: List,
         indices,
     ) -> Tuple[CursesLines, CursesLines]:
@@ -778,7 +816,7 @@ class UserInterface(CursesWindow):
         menu_heading, menu_items = menu_builder.build(current, columns, indices)
         return menu_heading, menu_items
 
-    def _show_menu(self, current: List, columns: List, await_input: bool) -> Interaction:
+    def _show_menu(self, current: Sequence[Any], columns: List, await_input: bool) -> Interaction:
         """Show a menu on the screen
 
         :param current: A dict
@@ -839,19 +877,19 @@ class UserInterface(CursesWindow):
 
     def show(
         self,
-        obj: Union[List, Dict, str, bool, int, float],
-        serialization_format: str = "",
+        obj: ContentType,
+        content_format: Optional[ContentFormat] = None,
         index: Optional[int] = None,
         columns: Optional[List] = None,
         await_input: bool = True,
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
-    ) -> Union[Interaction, Form]:
+    ) -> Interaction:
         """Show something on the screen
 
         :param obj: The inbound object
-        :param serialization_format: Set the serialization format
+        :param content_format: Set the content format
         :param index: When obj is a list, show this entry
         :param columns: When obj is a list of dicts, use these keys for menu columns
         :param await_input: Should we wait for user input?
@@ -861,11 +899,7 @@ class UserInterface(CursesWindow):
         self._content_heading = content_heading
         self._filter_content_keys = filter_content_keys
         columns = columns or []
-        self.serialization_format(serialization_format or self._default_obj_serialization)
-
-        if isinstance(obj, Form):
-            form_result = self._show_form(obj)
-            return form_result
+        self.content_format(content_format or self._default_content_format)
 
         if index is not None and isinstance(obj, (list, tuple)):
             result = self._show_obj_from_list(obj, index, await_input)
@@ -874,3 +908,12 @@ class UserInterface(CursesWindow):
         else:
             result = self._show_obj_from_list([obj], 0, await_input)
         return result
+
+    def show_form(self, form: Form) -> Form:
+        """Show a form on using the user interface.
+
+        :param form: The form to show
+        :returns: The form populated with the response
+        """
+        form_result = self._show_form(form)
+        return form_result

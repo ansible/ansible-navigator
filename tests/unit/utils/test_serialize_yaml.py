@@ -4,7 +4,7 @@ import pytest
 
 from yaml import Dumper
 
-from ansible_navigator.ui_framework import ContentView
+from ansible_navigator.content_defs import ContentView
 from ansible_navigator.utils import serialize
 
 
