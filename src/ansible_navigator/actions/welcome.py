@@ -4,6 +4,7 @@ import os
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentFormat
 from ..ui_framework import Interaction
 from . import _actions as actions
 
@@ -46,7 +47,7 @@ class Action(ActionBase):
             self._calling_app.update()
             interaction = interaction.ui.show(
                 obj=welcome_md,
-                serialization_format="text.html.markdown",
+                content_format=ContentFormat.MARKDOWN,
             )
             app.update()
             if interaction.name != "refresh":

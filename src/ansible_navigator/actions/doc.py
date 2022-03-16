@@ -109,7 +109,7 @@ class Action(ActionBase):
 
         plugin_doc = self._run_runner()
 
-        if not plugin_doc:
+        if not isinstance(plugin_doc, dict):
             self._prepare_to_exit(interaction)
             return None
 

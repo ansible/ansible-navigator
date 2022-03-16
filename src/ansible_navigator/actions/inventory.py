@@ -12,6 +12,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
+from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
@@ -203,7 +204,7 @@ class Action(ActionBase):
             while True:
                 interaction = self._interaction.ui.show(
                     self._inventory_error,
-                    serialization_format="source.ansi",
+                    content_format=ContentFormat.ANSI,
                 )
                 if interaction.name != "refresh":
                     break
@@ -472,7 +473,7 @@ class Action(ActionBase):
                 form_dict["fields"].append(form_field)
 
             form = dict_to_form(form_dict)
-            self._interaction.ui.show(form)
+            self._interaction.ui.show_form(form)
 
             if form.cancelled:
                 return
@@ -516,7 +517,7 @@ class Action(ActionBase):
         self._logger.error(" ".join(warn_msg))
         if "ERROR!" in inventory_err or "Error" in inventory_err:
             warning = warning_notification(warn_msg)
-            self._interaction.ui.show(warning)
+            self._interaction.ui.show_form(warning)
         else:
             self._extract_inventory(inventory_output)
 

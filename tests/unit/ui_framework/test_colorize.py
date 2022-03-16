@@ -6,8 +6,8 @@ from typing import Dict
 from typing import NamedTuple
 from unittest.mock import patch
 
+from ansible_navigator.content_defs import ContentView
 from ansible_navigator.ui_framework.colorize import Colorize
-from ansible_navigator.ui_framework.content_defs import ContentView
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
 
