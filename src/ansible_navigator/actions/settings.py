@@ -3,6 +3,7 @@
 from dataclasses import asdict
 from typing import Tuple
 
+from ansible_navigator.configuration_subsystem.transform import to_schema
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
@@ -116,6 +117,11 @@ class Action(ActionBase):
         :returns: RunStdoutReturn
         """
         self._logger.debug("settings requested in stdout mode")
+        if self._args.json_schema:
+            schema = to_schema(self._args)
+            print(schema)
+            return RunStdoutReturn(message="", return_code=0)
+
         self._settings = to_presentable(self._args)
         info_dump = serialize(
             content=list(self._settings),
