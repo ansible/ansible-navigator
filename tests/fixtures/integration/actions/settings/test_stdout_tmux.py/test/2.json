@@ -1,0 +1,39 @@
+{
+    "name": "test[print json schema to stdout  clear && ansible-navigator settings --json-schema --ee False --ll debug --mode stdout]",
+    "index": 2,
+    "comment": "print json schema to stdout",
+    "additional_information": {
+        "present": [
+            "ansible-navigator settings file schema"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "                            \"default\": false,",
+        "                            \"description\": \"Generate a json schema for the settings file\",",
+        "                            \"enum\": [",
+        "                                true,",
+        "                                false",
+        "                            ],",
+        "                            \"type\": \"boolean\"",
+        "                        }",
+        "                    }",
+        "                },",
+        "                \"time-zone\": {",
+        "                    \"default\": \"UTC\",",
+        "                    \"description\": \"Specify the IANA time zone to use or 'local' to use the system time zone.\",",
+        "                    \"type\": \"string\"",
+        "                }",
+        "            }",
+        "        }",
+        "    },",
+        "    \"required\": [",
+        "        \"ansible-navigator\"",
+        "    ],",
+        "    \"title\": \"ansible-navigator settings file schema\",",
+        "    \"type\": \"object\"",
+        "}",
+        "(venv) bash-5.1$"
+    ]
+}

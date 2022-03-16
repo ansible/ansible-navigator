@@ -235,6 +235,7 @@ ENV_VAR_DATA = [
     ("help_playbook", "false", False),
     ("inventory", "/tmp/test1.yaml,/tmp/test2.yml", ["/tmp/test1.yaml", "/tmp/test2.yml"]),
     ("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"]),
+    ("json_schema", "false", False),
     ("log_append", "false", False),
     ("log_file", "/tmp/app.log", "/tmp/app.log"),
     ("log_level", "info", "info"),

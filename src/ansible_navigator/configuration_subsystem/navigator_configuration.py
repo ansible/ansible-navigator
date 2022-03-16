@@ -379,7 +379,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="json_schema",
             choices=[True, False],
             cli_parameters=CliParameters(short="--js", action="store_true"),
-            settings_file_path_override="settings.json_schema",
+            settings_file_path_override="settings.json-schema",
             short_description="Generate a json schema for the settings file",
             subcommands=["settings"],
             value=SettingsEntryValue(default=False),

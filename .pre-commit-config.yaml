@@ -231,6 +231,7 @@ repos:
           - astroid == 2.9.0
           - ansible-runner
           - jinja2
+          - jsonschema
           - libtmux
           - onigurumacffi
           - pytest

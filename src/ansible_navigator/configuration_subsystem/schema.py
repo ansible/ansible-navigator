@@ -130,7 +130,6 @@ PARTIAL_SCHEMA: Dict = {
                                     "type": "array",
                                 },
                                 "set": {
-                                    "additionalProperties": {"type": "string"},
                                     "type": "object",
                                 },
                             },
