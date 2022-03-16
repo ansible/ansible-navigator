@@ -67,6 +67,9 @@ enable = [
 
 ]
 
+[tool.pytest.ini_options]
+python_classes = "!TestData"
+
 [tool.setuptools_scm]
 write_to = "src/ansible_navigator/_version.py"
 

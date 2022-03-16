@@ -17,7 +17,7 @@ from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 
 
 @dataclass
-class TstData:
+class TestData:
     """The artifact files test data object."""
 
     name: str
@@ -45,62 +45,62 @@ class TstData:
 
 
 test_data = [
-    TstData(
+    TestData(
         name="Filename absolute",
         filename="/tmp/artifact.json",
         playbook="site.yml",
         starts_with="/tmp/artifact.json",
     ),
-    TstData(
+    TestData(
         name="Filename with .",
         filename="./artifact.json",
         playbook="site.yml",
         starts_with=f"{os.path.abspath('.')}/artifact.json",
     ),
-    TstData(
+    TestData(
         name="Filename with ..",
         filename="../artifact.json",
         playbook="site.yml",
         starts_with=f"{os.path.abspath('..')}/artifact.json",
     ),
-    TstData(
+    TestData(
         name="Filename with ~",
         filename="~/artifact.json",
         playbook="/tmp/site.yaml",
         starts_with="/home/test_user/artifact.json",
     ),
-    TstData(
+    TestData(
         name="Playbook absolute",
         filename=None,
         playbook="/tmp/site.yaml",
         starts_with="/tmp/site-artifact",
     ),
-    TstData(
+    TestData(
         name="Playbook with .",
         filename=None,
         playbook="./site.yaml",
         starts_with=f"{os.path.abspath('.')}/site-artifact",
     ),
-    TstData(
+    TestData(
         name="Playbook with ..",
         filename=None,
         playbook="../site.yaml",
         starts_with=f"{os.path.abspath('..')}/site-artifact",
     ),
-    TstData(
+    TestData(
         name="Playbook with ~",
         filename=None,
         playbook="~/site.yaml",
         starts_with="/home/test_user/site-artifact",
     ),
-    TstData(
+    TestData(
         name="help_playbook enabled",
         filename=None,
         playbook="~/site.yaml",
         starts_with="/home/test_user/site-artifact",
         help_playbook=True,
     ),
-    TstData(
+    TestData(
         name="Filename timezone",
         filename="/tmp/{time_stamp}.json",
         playbook="site.yml",
@@ -115,7 +115,7 @@ def test_artifact_path(
     monkeypatch: pytest.MonkeyPatch,
     mocker: MockerFixture,
     caplog: pytest.LogCaptureFixture,
-    data: TstData,
+    data: TestData,
 ):
     """Test the building of the artifact filename given a filename or playbook.
 
