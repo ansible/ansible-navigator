@@ -7,8 +7,10 @@ import shutil
 import sys
 
 from pathlib import Path
+from typing import Dict
 from typing import List
 from typing import Optional
+from typing import Union
 
 import pytest
 
@@ -38,25 +40,39 @@ def retrieve_fixture_for_step(
     :param test_name: A test name to add to the fixture path if needed
     :returns: The specific test step fixture
     """
-    dir_path, file_name = fixture_path_from_request(request, step_index, test_name)
-    fixture_path = Path(dir_path, file_name)
-    with open(file=fixture_path, encoding="utf-8") as fh:
+    fixture_path = fixture_path_from_request(request, step_index, test_name)
+    with fixture_path.open(encoding="utf-8") as fh:
         expected_output = json.load(fh)["output"]
     return expected_output
 
 
 def update_fixtures(
-    request,
-    index,
-    received_output,
-    comment,
-    testname=None,
-    additional_information=None,
+    request: pytest.FixtureRequest,
+    index: int,
+    received_output: List[str],
+    comment: str,
+    testname: Optional[str] = None,
+    additional_information: Optional[Dict[str, Union[List[str], bool]]] = None,
+    zfill_index: int = 1,
 ):
     # pylint: disable=too-many-arguments
-    """Used by action plugins to generate the fixtures"""
-    dir_path, file_name = fixture_path_from_request(request, index, testname=testname)
-    os.makedirs(dir_path, exist_ok=True)
+    """Write out a test fixture.
+
+    :param request: Test request
+    :param index: The test index
+    :param received_output: Tmux screen contents
+    :param comment: Comment to add to the fixture
+    :param testname: Test name
+    :param additional_information: Additional information to include in the fixture
+    :param zfill_index: Pad the index with zeros
+    """
+    fixture_path = fixture_path_from_request(
+        request=request,
+        index=index,
+        testname=testname,
+        zfill_index=zfill_index,
+    )
+    fixture_path.parent.mkdir(parents=True, exist_ok=True)
     regex = "(/Users|/home).*?/tests/fixtures"
     name = re.sub(regex, "/tests/fixtures", request.node.name)
     name.replace("docker", "podman")
@@ -70,20 +86,34 @@ def update_fixtures(
         if additional_information.get("present"):
             received_output = sanitize_output(received_output)
     fixture["output"] = received_output
-    with open(f"{dir_path}/{file_name}", "w", encoding="utf8") as fh:
+    with fixture_path.open(mode="w", encoding="utf8") as fh:
         json.dump(fixture, fh, indent=4, ensure_ascii=False, sort_keys=False)
         fh.write("\n")
 
 
-def fixture_path_from_request(request, index, testname=None):
-    """build a directory and file path for a test"""
-    path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
-    dir_path = os.path.join(defaults.FIXTURES_DIR, path_in_fixture_dir, request.node.originalname)
-    if testname:
-        dir_path = os.path.join(dir_path, testname)
+def fixture_path_from_request(
+    request: pytest.FixtureRequest,
+    index: int,
+    testname: Optional[str] = None,
+    suffix: str = ".json",
+    zfill_index: int = 1,
+) -> Path:
+    """Build a fixture path for a test.
 
-    file_name = f"{index}.json"
-    return dir_path, file_name
+    :param request: Test request
+    :param index: Test index
+    :param testname: Test name, used as a subdirectory
+    :param suffix: The fixture file suffix
+    :param zfill_index: Pad the index with zeros
+    :returns: The path to the fixture
+    """
+    path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
+    dir_path = Path(defaults.FIXTURES_DIR, path_in_fixture_dir, request.node.originalname)
+    if testname:
+        dir_path = dir_path / testname
+
+    file_name = Path(str(index).zfill(zfill_index) + suffix)
+    return dir_path / file_name
 
 
 def generate_test_log_dir(unique_test_id):
