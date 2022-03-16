@@ -116,7 +116,7 @@ class Action(ActionBase):
                 "Collecting collection content, this may take a minute the first time...",
             ],
         )
-        interaction.ui.show(notification)
+        interaction.ui.show_form(notification)
 
         params = [self._name] + shlex.split(
             self._interaction.action.match.groupdict()["params"] or "",
@@ -135,7 +135,7 @@ class Action(ActionBase):
                     "include the contents of the log file.",
                 ],
             )
-            interaction.ui.show(notification)
+            interaction.ui.show_form(notification)
             self._prepare_to_exit(interaction)
             return None
 

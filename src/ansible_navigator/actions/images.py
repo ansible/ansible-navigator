@@ -139,7 +139,7 @@ class Action(ActionBase):
         notification = nonblocking_notification(
             messages=["Collecting available images, this may take a minute..."],
         )
-        interaction.ui.show(notification)
+        interaction.ui.show_form(notification)
 
         self._collect_image_list()
         if not self._images.value:
@@ -148,7 +148,7 @@ class Action(ActionBase):
             ]
             messages.append("Please check the log (:log) for errors.")
             warning = warning_notification(messages=messages)
-            interaction.ui.show(warning)
+            interaction.ui.show_form(warning)
             self._logger.error(messages[0])
             return None
 
@@ -221,7 +221,7 @@ class Action(ActionBase):
         if not self._images.selected["__introspected"]:
             message = "Collecting image details, this may take a minute..."
             notification = nonblocking_notification(messages=[message])
-            self._interaction.ui.show(notification)
+            self._interaction.ui.show_form(notification)
             introspection_success = self._introspect_image()
             if introspection_success is False:
                 return self.steps.previous

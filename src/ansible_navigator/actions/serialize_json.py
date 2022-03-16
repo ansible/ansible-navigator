@@ -3,6 +3,7 @@ import logging
 
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentFormat
 from ..ui_framework import Interaction
 from . import _actions as actions
 
@@ -31,5 +32,5 @@ class Action:
         self._logger.debug("json requested")
         if interaction.ui is not None:
             interaction.ui.scroll(0)
-            serialization_format = interaction.ui.serialization_format("source.json", default=True)
-            self._logger.debug("Serialization set to %s", serialization_format)
+            content_format = interaction.ui.content_format(ContentFormat.JSON, default=True)
+            self._logger.debug("Content format set to %s", content_format)

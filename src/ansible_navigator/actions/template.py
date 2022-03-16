@@ -10,6 +10,7 @@ from typing import Optional
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentFormat
 from ..ui_framework import Interaction
 from ..ui_framework import warning_notification
 from ..utils.functions import remove_dbl_un
@@ -78,7 +79,7 @@ class Action(ActionBase):
         if errors:
             msgs = ["Errors encountered while templating input"] + errors
             msgs.extend(type_msgs)
-            interaction.ui.show(warning_notification(msgs))
+            interaction.ui.show_form(warning_notification(msgs))
             return None
 
         if isinstance(templated, str):
@@ -86,10 +87,10 @@ class Action(ActionBase):
 
         while True:
             app.update()
-            serialization_format = "source.txt" if isinstance(templated, str) else ""
+            serialization_format = ContentFormat.TXT if isinstance(templated, str) else None
             next_interaction: Interaction = interaction.ui.show(
                 obj=templated,
-                serialization_format=serialization_format,
+                content_format=serialization_format,
             )
             if next_interaction.name != "refresh":
                 break
