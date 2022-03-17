@@ -61,7 +61,10 @@ def test_content_heading_false() -> None:
     assert len(heading[0]) == 1
     assert isinstance(heading[0][0], CursesLinePart)
     assert len(heading[0][0].string) == line_length + 1
-    assert f"Test option (current: {current_value})  (default: {default_value})" in heading[0][0].string
+    assert (
+        f"Test option (current: {current_value})  (default: {default_value})"
+        in heading[0][0].string
+    )
     assert heading[0][0].color == curses.COLOR_YELLOW
     assert heading[0][0].column == 0
 
