@@ -46,8 +46,8 @@ test_data = (
     ),
     Scenario(
         comment="Unrecognized key",
-        messages=("'empty' was unexpected",),
-        settings_file=TEST_FIXTURE_DIR / "ansible-navigator_empty.yml",
+        messages=("'unknown' was unexpected",),
+        settings_file=TEST_FIXTURE_DIR / "ansible-navigator_unknown_key.yml",
     ),
     Scenario(
         comment="Unrecognized app",
