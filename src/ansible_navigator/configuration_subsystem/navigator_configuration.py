@@ -530,7 +530,9 @@ NavigatorConfiguration = ApplicationConfiguration(
                 nargs="?",
             ),
             settings_file_path_override="settings.schema",
-            short_description="Generate a schema for the settings file",
+            short_description=(
+                "Generate a schema for the settings file. ('json'= draft-07 JSON Schema)"
+            ),
             subcommands=["settings"],
             value=SettingsEntryValue(default="json"),
         ),
