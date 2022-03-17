@@ -2,7 +2,6 @@ ansible-core
 darglint
 flake8-docstrings
 flake8-quotes
-jsonschema
 libtmux
 lxml
 pre-commit
