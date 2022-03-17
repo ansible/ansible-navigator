@@ -13,11 +13,13 @@ from ..utils.functions import ExitPrefix
 from ..utils.functions import LogMessage
 from ..utils.functions import oxfordcomma
 from ..utils.functions import shlex_join
+from ..utils.json_schema import validate
 from ..utils.serialize import SafeLoader
 from ..utils.serialize import yaml
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 from .parser import Parser
+from .transform import to_schema
 
 
 class Configurator:
@@ -137,12 +139,15 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_settings_file(self) -> None:
+        # pylint: disable=too-many-locals
         settings_filesystem_path = self._config.internals.settings_file_path
         if isinstance(settings_filesystem_path, str):
             with open(settings_filesystem_path, "r", encoding="utf-8") as fh:
                 try:
                     config = yaml.load(fh, Loader=SafeLoader)
-                except (yaml.scanner.ScannerError, yaml.parser.ParserError) as exc:
+                    if config is None:
+                        raise ValueError("Settings file cannot be empty.")
+                except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                     exit_msg = (
                         f"Settings file found {settings_filesystem_path}, but failed to load it."
                     )
@@ -157,6 +162,31 @@ class Configurator:
                         ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
                     )
                     return
+
+            schema = to_schema(settings=self._config)
+            errors = validate(schema=schema, data=config)
+            if errors:
+                msg = (
+                    "The following errors were found in the settings file"
+                    f" ({settings_filesystem_path}):"
+                )
+                self._exit_messages.append(ExitMessage(message=msg))
+                self._exit_messages.extend(error.to_exit_message() for error in errors)
+                hint = "Check the settings file and compare it to the current version."
+                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+                hint = (
+                    "The current version can be found here:"
+                    " (https://ansible-navigator.readthedocs.io/en/latest/settings/"
+                    "#ansible-navigator-settings)"
+                )
+                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+                hint = (
+                    "The schema used for validation can be seen with"
+                    " 'ansible-navigator settings --schema'"
+                )
+                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+                return
+
             for entry in self._config.entries:
                 settings_file_path = entry.settings_file_path(self._config.application_name)
                 path_parts = settings_file_path.split(".")
