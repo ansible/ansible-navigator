@@ -14,7 +14,7 @@ from ansible_navigator import cli
 
 
 @dataclass
-class TestData:
+class Scenario:
     """Data for time zone support in the logs."""
 
     re_match: Pattern
@@ -41,17 +41,17 @@ class TestData:
 
 
 test_data = (
-    TestData(re_match=re.compile(r"^.*\+00:00$")),
-    TestData(re_match=re.compile(r"^.*-0[78]:00$"), time_zone="America/Los_Angeles"),
-    TestData(re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"),
-    TestData(re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
-    TestData(re_match=re.compile(r"^.*\+00:00$"), time_zone="does_not_exist", will_exit=True),
+    Scenario(re_match=re.compile(r"^.*\+00:00$")),
+    Scenario(re_match=re.compile(r"^.*-0[78]:00$"), time_zone="America/Los_Angeles"),
+    Scenario(re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"),
+    Scenario(re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
+    Scenario(re_match=re.compile(r"^.*\+00:00$"), time_zone="does_not_exist", will_exit=True),
 )
 
 
 @pytest.mark.parametrize("data", test_data, ids=str)
 def test(
-    data: TestData,
+    data: Scenario,
     caplog: pytest.LogCaptureFixture,
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
