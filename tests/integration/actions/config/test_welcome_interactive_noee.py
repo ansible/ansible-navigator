@@ -17,7 +17,7 @@ initial_steps = (
     UiTestStep(
         user_input=":config",
         comment="enter config from welcome screen",
-        present=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        present=["Action warnings", "Callbacks enabled"],
     ),
 )
 

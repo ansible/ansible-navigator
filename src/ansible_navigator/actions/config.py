@@ -40,7 +40,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     :param entry: The menu entry
     :returns: The color and decoration
     """
-    if entry["__default"] is False:
+    if entry["default"] is False:
         return 3, 0
     return 2, 0
 
@@ -52,12 +52,12 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     :param screen_w: The current screen width
     :returns: The heading
     """
-    string = obj["option"].replace("_", " ")
-    if obj["__default"] is False:
-        string += f" (current: {obj['__current_value']})  (default: {obj['default']})"
+    string = obj["name"]
+    if obj["default"] is False:
+        string += f" (current: {obj['current_value']})  (default: {obj['default']})"
         color = 3
     else:
-        string += f" (current/default: {obj['__current_value']})"
+        string += f" (current/default: {obj['current_value']})"
         color = 2
 
     string = string + (" " * (screen_w - len(string) + 1))
@@ -190,7 +190,7 @@ class Action(ActionBase):
         """
         return Step(
             name="all_options",
-            columns=["option", "__default", "source", "via", "__current_value"],
+            columns=["name", "default", "source", "__current"],
             select_func=self._build_option_content,
             step_type="menu",
             value=self._config,
@@ -335,8 +335,15 @@ class Action(ActionBase):
                     else:
                         parsed[variable]["source"] = source
                         parsed[variable]["via"] = source
-                    parsed[variable]["current"] = current
-                    parsed[variable]["__current_value"] = extracted.groupdict()["current"]
+                    current_as_str = str(current)
+
+                    target_screen_w = int(100 / 2)  # half a wide screen
+                    if len(current_as_str) > target_screen_w:
+                        more_indicator = "..."
+                        text_width = target_screen_w - len(more_indicator)
+                        current_as_str = f"{current_as_str[0:text_width]}{more_indicator}"
+                    parsed[variable]["__current"] = current_as_str
+                    parsed[variable]["current_value"] = current
                 except KeyError:
                     self._logger.error("variable '%s' not found in list output")
                     return None
@@ -346,10 +353,12 @@ class Action(ActionBase):
 
         for key, value in parsed.items():
             value["option"] = key
+            value["name"] = key.replace("_", " ").capitalize()
+            value["default_value"] = value.get("default", "None")
             if value["source"] == "default":
-                value["__default"] = True
+                value["default"] = True
             else:
-                value["__default"] = False
+                value["default"] = False
 
         self._config = list(parsed.values())
         self._logger.debug("parsed and merged list and dump successfully")
