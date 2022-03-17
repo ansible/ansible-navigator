@@ -8,7 +8,7 @@
         "compared_fixture": true
     },
     "output": [
-        "Cache plugin timeout (current: 42)  (default: False)",
+        "Cache plugin timeout (current: 42)  (default: 86400)",
         " 0│---",
         " 1│current_value: 42",
         " 2│default: false",

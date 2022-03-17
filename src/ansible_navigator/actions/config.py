@@ -54,7 +54,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     """
     string = obj["name"]
     if obj["default"] is False:
-        string += f" (current: {obj['current_value']})  (default: {obj['default']})"
+        string += f" (current: {obj['current_value']})  (default: {obj['default_value']})"
         color = 3
     else:
         string += f" (current/default: {obj['current_value']})"

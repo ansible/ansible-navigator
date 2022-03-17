@@ -1,7 +1,7 @@
 {
-    "name": "test[6-:0-YAML_FILENAME_EXTENSIONS details]",
+    "name": "test[6-:0-Yaml filename extensions details]",
     "index": 6,
-    "comment": "YAML_FILENAME_EXTENSIONS details",
+    "comment": "Yaml filename extensions details",
     "additional_information": {
         "present": [],
         "absent": [],
