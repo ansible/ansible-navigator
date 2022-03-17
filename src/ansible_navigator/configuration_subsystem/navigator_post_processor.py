@@ -430,13 +430,13 @@ class NavigatorPostProcessor:
         return self._true_or_false(entry, config)
 
     @_post_processor
-    def _help_for_command(
+    def _forced_stdout(
         self,
         entry: SettingsEntry,
         config: ApplicationConfiguration,
         subcommand: str,
     ) -> PostProcessorReturn:
-        """Post process help_xxxx
+        """Force mode stdout for a settings parameter.
 
         :param entry: The current settings entry
         :param config: The full application configuration
@@ -452,11 +452,11 @@ class NavigatorPostProcessor:
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
-    help_builder = partialmethod(_help_for_command, subcommand="builder")
-    help_config = partialmethod(_help_for_command, subcommand="config")
-    help_doc = partialmethod(_help_for_command, subcommand="doc")
-    help_inventory = partialmethod(_help_for_command, subcommand="inventory")
-    help_playbook = partialmethod(_help_for_command, subcommand="run")
+    help_builder = partialmethod(_forced_stdout, subcommand="builder")
+    help_config = partialmethod(_forced_stdout, subcommand="config")
+    help_doc = partialmethod(_forced_stdout, subcommand="doc")
+    help_inventory = partialmethod(_forced_stdout, subcommand="inventory")
+    help_playbook = partialmethod(_forced_stdout, subcommand="run")
 
     @staticmethod
     @_post_processor
@@ -764,6 +764,28 @@ class NavigatorPostProcessor:
             entry.value.current = to_list(entry.value.current)
         if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
+        return messages, exit_messages
+
+    @_post_processor
+    def settings_schema(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        """Force mode stdout for schema parameter.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+
+        if entry.value.source is not C.DEFAULT_CFG and config.app == "settings":
+            mode = Mode.STDOUT
+            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+            message = message = f"`{entry.name} requesting mode {mode.value}"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
     @staticmethod

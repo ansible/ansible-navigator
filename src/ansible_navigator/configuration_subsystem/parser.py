@@ -53,6 +53,8 @@ class Parser:
             kwargs["dest"] = entry.name
             if entry.cli_parameters.nargs is not None:
                 kwargs["nargs"] = entry.cli_parameters.nargs
+            if entry.cli_parameters.const is not None:
+                kwargs["const"] = entry.cli_parameters.const
 
         if entry.cli_parameters.metavar is not None:
             kwargs["metavar"] = entry.cli_parameters.metavar

@@ -40,6 +40,22 @@ stdout_tests = (
         ).join(),
         present=["workdir"],
     ),
+    ShellCommand(
+        comment="print json schema to stdout, default json, mode auto",
+        user_input=StdoutCommand(
+            cmdline="--schema",
+            execution_environment=False,
+        ).join(),
+        present=["ansible-navigator settings file schema"],
+    ),
+    ShellCommand(
+        comment="print json schema to stdout, specify json, mode auto",
+        user_input=StdoutCommand(
+            cmdline="--schema json",
+            execution_environment=False,
+        ).join(),
+        present=["ansible-navigator settings file schema"],
+    ),
 )
 
 steps = add_indices(stdout_tests)

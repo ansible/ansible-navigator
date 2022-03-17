@@ -521,6 +521,22 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(),
         ),
         SettingsEntry(
+            name="settings_schema",
+            choices=["json"],
+            cli_parameters=CliParameters(
+                short="--ss",
+                long_override="--schema",
+                const="json",
+                nargs="?",
+            ),
+            settings_file_path_override="settings.schema",
+            short_description=(
+                "Generate a schema for the settings file. ('json'= draft-07 JSON Schema)"
+            ),
+            subcommands=["settings"],
+            value=SettingsEntryValue(default="json"),
+        ),
+        SettingsEntry(
             name="time_zone",
             cli_parameters=CliParameters(short="--tz"),
             environment_variable_override="TZ",

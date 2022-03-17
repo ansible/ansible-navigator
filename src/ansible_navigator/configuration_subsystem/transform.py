@@ -1,8 +1,15 @@
 """Methods of transforming the settings."""
 
+from typing import Dict
+
+from ..content_defs import ContentView
+from ..utils.serialize import SerializationFormat
+from ..utils.serialize import serialize
 from .definitions import ApplicationConfiguration
+from .definitions import Constants
 from .defs_presentable import PresentableSettingsEntries
 from .defs_presentable import PresentableSettingsEntry
+from .schema import PARTIAL_SCHEMA
 
 
 def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEntries:
@@ -34,3 +41,27 @@ def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEnt
 
     settings_list.sort()
     return PresentableSettingsEntries(tuple(settings_list))
+
+
+def to_schema(settings: ApplicationConfiguration) -> str:
+    """Build a json schema from the settings using the stub schema.
+
+    :param settings: The application settings
+    :returns: The json schema
+    """
+    for entry in settings.entries:
+        subschema: Dict = PARTIAL_SCHEMA["properties"]
+        dot_parts = entry.settings_file_path(prefix=settings.application_name_dashed).split(".")
+        for part in dot_parts[:-1]:
+            if isinstance(subschema, dict):
+                subschema = subschema.get(part, {}).get("properties")
+        subschema[dot_parts[-1]]["description"] = entry.short_description
+        if entry.choices:
+            subschema[dot_parts[-1]]["enum"] = entry.choices
+        if entry.value.default is not Constants.NOT_SET:
+            subschema[dot_parts[-1]]["default"] = entry.value.default
+    return serialize(
+        content=PARTIAL_SCHEMA,
+        content_view=ContentView.NORMAL,
+        serialization_format=SerializationFormat.JSON,
+    )
