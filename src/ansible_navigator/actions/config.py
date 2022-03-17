@@ -308,6 +308,8 @@ class Action(ActionBase):
         :param dump_output: The output from config dump
         :returns: Nothing
         """
+        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
         try:
             parsed = yaml.load(list_output, Loader=Loader)
             self._logger.debug("yaml loading list output succeeded")

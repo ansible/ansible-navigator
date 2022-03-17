@@ -80,7 +80,7 @@ class BaseClass:
                 "Cache plugin connection",
                 "Collections paths",
                 "Default callback plugin path",
-                "Default local tmp"
+                "Default local tmp",
             ]
             # Determine if a menu is showing
             mask_column_name = "CURRENT"
