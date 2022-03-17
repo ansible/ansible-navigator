@@ -21,7 +21,15 @@ PARTIAL_SCHEMA: Dict = {
                             "items": {"type": "string"},
                             "type": "array",
                         },
-                        "playbook": {"type": "string"},
+                        "playbook": {
+                            "additionalProperties": False,
+                            "properties": {
+                                "path": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+
                     },
                     "type": "object",
                 },
