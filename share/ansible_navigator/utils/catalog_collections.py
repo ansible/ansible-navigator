@@ -24,6 +24,8 @@ from typing import Union
 
 import yaml
 
+from ansible import __version__ as ansible_version
+from ansible import plugins
 from ansible.utils.plugin_docs import get_docstring
 from yaml.error import YAMLError
 
@@ -87,6 +89,10 @@ class CollectionCatalog:
                 for plugin_dir in plugin_directory.iterdir()
                 if plugin_dir.is_dir() and plugin_dir.name not in exempt
             ]
+            # builting modules are found in a sibling of the plugin directory
+            if collection["known_as"] == "ansible.builtin":
+                plugin_dirs.append(Path(collection["path"], "modules"))
+
             for plugin_dir in plugin_dirs:
                 plugin_type = plugin_dir.name
                 if plugin_type == "modules":
@@ -230,7 +236,7 @@ class CollectionCatalog:
         :param collection: The details of the collection
         """
         for filename in filenames:
-            if str(filename).startswith("__"):
+            if str(filename.name).startswith("__"):
                 continue
 
             relative_path = Path(filename).relative_to(collection["path"])
@@ -324,11 +330,26 @@ class CollectionCatalog:
             collection_directory = directory / "ansible_collections"
             if collection_directory.exists():
                 self._one_path(collection_directory)
+        self.add_pseudo_builtin()
         for _collection_path, collection in self._collections.items():
             self._catalog_plugins(collection)
             self._catalog_roles(collection)
         self._find_shadows()
         return self._collections, self._errors
+
+    def add_pseudo_builtin(self) -> None:
+        """Add the pseudo builtin collection."""
+        collection: Dict[str, Union[str, List, Dict]] = {}
+        collection["known_as"] = "ansible.builtin"
+        collection["plugins"] = []
+        collection["plugin_checksums"] = {}
+        collection["path"] = str(Path(plugins.__file__).parents[1])
+        collection["runtime"] = {}
+        collection["meta_source"] = "None"
+        collection["collection_info"] = {"version": ansible_version}
+        self._collections[str(collection["path"])] = collection
+        msg = f"Added ansible.builtin from: {collection['path']}"
+        self._messages.append(msg)
 
 
 def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
@@ -349,11 +370,17 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
         collection_name, checksum, plugin_path = entry
 
         try:
-            (doc, examples, returndocs, metadata) = get_docstring(
-                filename=str(plugin_path),
-                fragment_loader=fragment_loader,
-                collection_name=collection_name,
-            )
+            if ansible_version.startswith("2.9"):
+                (doc, examples, returndocs, metadata) = get_docstring(
+                    filename=str(plugin_path),
+                    fragment_loader=fragment_loader,
+                )
+            else:
+                (doc, examples, returndocs, metadata) = get_docstring(
+                    filename=str(plugin_path),
+                    fragment_loader=fragment_loader,
+                    collection_name=collection_name,
+                )
 
         except Exception as exc:  # pylint: disable=broad-except
             err_message = f"{type(exc).__name__} (get_docstring): {str(exc)}"
