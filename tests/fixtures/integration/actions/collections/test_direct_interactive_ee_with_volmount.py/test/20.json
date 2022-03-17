@@ -1,7 +1,7 @@
 {
-    "name": "test[02-:1-Browse company_name.coll_1 plugins window]",
-    "index": 2,
-    "comment": "Browse company_name.coll_1 plugins window",
+    "name": "test[20-:back-Back to browse company_name.coll_1 plugins window]",
+    "index": 20,
+    "comment": "Back to browse company_name.coll_1 plugins window",
     "additional_information": {
         "present": [],
         "absent": [],
