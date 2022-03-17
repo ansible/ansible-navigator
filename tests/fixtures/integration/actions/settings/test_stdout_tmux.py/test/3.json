@@ -1,7 +1,7 @@
 {
-    "name": "test[print json schema to stdout, default json, mode auto  clear && ansible-navigator settings --schema --ee False --ll debug --mode interactive]",
-    "index": 2,
-    "comment": "print json schema to stdout, default json, mode auto",
+    "name": "test[print json schema to stdout, specify json, mode auto  clear && ansible-navigator settings --schema json --ee False --ll debug --mode interactive]",
+    "index": 3,
+    "comment": "print json schema to stdout, specify json, mode auto",
     "additional_information": {
         "present": [
             "ansible-navigator settings file schema"

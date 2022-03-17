@@ -220,7 +220,7 @@ PARTIAL_SCHEMA: Dict = {
                 },
                 "settings": {
                     "additionalProperties": False,
-                    "properties": {"json-schema": {"type": "boolean"}},
+                    "properties": {"schema": {"type": "string"}},
                 },
             },
             "additionalProperties": False,

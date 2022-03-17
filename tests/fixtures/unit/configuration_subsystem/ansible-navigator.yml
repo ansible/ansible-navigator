@@ -70,5 +70,5 @@ ansible-navigator:
     replay: /tmp/test_artifact.json
     save-as: /tmp/test_artifact.json
   settings:
-    json-schema: True
+    schema: json
   time-zone: Japan

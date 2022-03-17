@@ -54,6 +54,7 @@ class CliParameters:
     """An object to hold the CLI parameters."""
 
     action: Optional[str] = None
+    const: Optional[Union[bool, str]] = None
     long_override: Optional[str] = None
     nargs: Optional[str] = None
     positional: bool = False

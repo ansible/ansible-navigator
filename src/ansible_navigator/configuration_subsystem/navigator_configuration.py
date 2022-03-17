@@ -376,15 +376,6 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(),
         ),
         SettingsEntry(
-            name="json_schema",
-            choices=[True, False],
-            cli_parameters=CliParameters(short="--js", action="store_true"),
-            settings_file_path_override="settings.json-schema",
-            short_description="Generate a json schema for the settings file",
-            subcommands=["settings"],
-            value=SettingsEntryValue(default=False),
-        ),
-        SettingsEntry(
             name="log_append",
             choices=[True, False],
             cli_parameters=CliParameters(short="--la"),
@@ -528,6 +519,20 @@ NavigatorConfiguration = ApplicationConfiguration(
                 " execution environment (--senv MY_VAR=42)"
             ),
             value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
+            name="settings_schema",
+            choices=["json"],
+            cli_parameters=CliParameters(
+                short="--ss",
+                long_override="--schema",
+                const="json",
+                nargs="?",
+            ),
+            settings_file_path_override="settings.schema",
+            short_description="Generate a schema for the settings file",
+            subcommands=["settings"],
+            value=SettingsEntryValue(default="json"),
         ),
         SettingsEntry(
             name="time_zone",

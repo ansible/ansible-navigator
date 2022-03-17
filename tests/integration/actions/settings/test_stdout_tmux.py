@@ -41,10 +41,17 @@ stdout_tests = (
         present=["workdir"],
     ),
     ShellCommand(
-        comment="print json schema to stdout",
+        comment="print json schema to stdout, default json, mode auto",
         user_input=StdoutCommand(
-            cmdline="--json-schema",
-            mode="stdout",
+            cmdline="--schema",
+            execution_environment=False,
+        ).join(),
+        present=["ansible-navigator settings file schema"],
+    ),
+    ShellCommand(
+        comment="print json schema to stdout, specify json, mode auto",
+        user_input=StdoutCommand(
+            cmdline="--schema json",
             execution_environment=False,
         ).join(),
         present=["ansible-navigator settings file schema"],
