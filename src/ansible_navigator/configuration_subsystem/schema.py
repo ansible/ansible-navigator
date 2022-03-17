@@ -23,13 +23,8 @@ PARTIAL_SCHEMA: Dict = {
                         },
                         "playbook": {
                             "additionalProperties": False,
-                            "properties": {
-                                "path": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-
+                            "properties": {"path": {"type": "string"}},
+                        },
                     },
                     "type": "object",
                 },
