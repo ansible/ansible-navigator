@@ -1,6 +1,5 @@
 # cspell:ignore getpid, gmtime, msecs
-"""start here
-"""
+"""Navigator entry point."""
 import datetime
 import logging
 import os
@@ -60,7 +59,10 @@ def log_dependencies() -> List[LogMessage]:
 
 
 def pull_image(args):
-    """pull the image if required"""
+    """Pull the image if required.
+
+    :param args: Copy of NavigatorConfiguration
+    """
     image_puller = ImagePuller(
         container_engine=args.container_engine,
         image=args.execution_environment_image,
@@ -109,7 +111,7 @@ class Formatter(logging.Formatter):
 
 
 def setup_logger(args: ApplicationConfiguration) -> None:
-    """set up the logger
+    """Set up the logger.
 
     :param args: The CLI args
     """
@@ -166,7 +168,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
 
 
 def main():
-    """start here"""
+    """Start application here."""
     messages: List[LogMessage] = log_dependencies()
     exit_messages: List[ExitMessage] = []
 
