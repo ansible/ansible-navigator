@@ -21,6 +21,7 @@ from .defaults import TEST_FIXTURE_DIR
 @pytest.fixture(name="schema_dict")
 def _schema_dict():
     settings = NavigatorConfiguration
+    settings.application_version = "test"
     schema = to_schema(settings)
     as_dict = json.loads(schema)
     return as_dict
