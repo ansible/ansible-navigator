@@ -27,6 +27,7 @@ from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner.command import Command
@@ -151,7 +152,7 @@ class Action(ActionBase):
 
         if self.is_interactive:
             notification = error_notification(messages=[msg])
-            self._interaction.ui.show(notification)
+            self._interaction.ui.show_form(notification)
         else:
             raise RuntimeError(msg)
 
@@ -208,7 +209,7 @@ class Action(ActionBase):
         """Run in oldschool mode, just stdout."""
         self._logger.debug("lint requested in stdout mode")
         _, _, rc = self._run_runner()  # pylint: disable=invalid-name
-        return rc
+        return RunStdoutReturn(message="", return_code=rc)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
         """Handle :lint
@@ -263,7 +264,7 @@ class Action(ActionBase):
                     "Could not parse 'ansible-lint' output.",
                 ],
             )
-            self._interaction.ui.show(notification)
+            self._interaction.ui.show_form(notification)
             return None
 
         if not raw_issues:
