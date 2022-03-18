@@ -424,7 +424,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             environment_variable_override="ansible_navigator_pass_environment_variables",
             settings_file_path_override="execution-environment.environment-variables.pass",
             short_description=(
-                "Specify an exiting environment variable to be passed through"
+                "Specify an existing environment variable to be passed through"
                 " to and set within the execution environment (--penv MY_VAR)"
             ),
             value=SettingsEntryValue(),
@@ -433,7 +433,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="playbook",
             cli_parameters=CliParameters(positional=True),
             short_description="Specify the playbook name",
-            settings_file_path_override="ansible.playbook",
+            settings_file_path_override="ansible.playbook.path",
             subcommands=["run"],
             value=SettingsEntryValue(),
         ),

@@ -29,6 +29,7 @@ def test_settings_file_path_file_system(monkeypatch):
     settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file)
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
+    args.application_version = "test"
 
     def getcwd():
         return TEST_FIXTURE_DIR
@@ -50,6 +51,7 @@ def test_settings_file_path_environment_variable(monkeypatch):
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", settings_file_path)
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
+    args.application_version = "test"
     parse_and_update(params=[], args=args)
     assert args.internals.settings_file_path == settings_file_path
     assert args.internals.settings_source == Constants.ENVIRONMENT_VARIABLE
