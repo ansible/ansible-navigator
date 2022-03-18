@@ -424,7 +424,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             environment_variable_override="ansible_navigator_pass_environment_variables",
             settings_file_path_override="execution-environment.environment-variables.pass",
             short_description=(
-                "Specify an exiting environment variable to be passed through"
+                "Specify an existing environment variable to be passed through"
                 " to and set within the execution environment (--penv MY_VAR)"
             ),
             value=SettingsEntryValue(),

@@ -60,6 +60,8 @@ def to_schema(settings: ApplicationConfiguration) -> str:
             subschema[dot_parts[-1]]["enum"] = entry.choices
         if entry.value.default is not Constants.NOT_SET:
             subschema[dot_parts[-1]]["default"] = entry.value.default
+
+    PARTIAL_SCHEMA["version"] = settings.application_version
     return serialize(
         content=PARTIAL_SCHEMA,
         content_view=ContentView.NORMAL,

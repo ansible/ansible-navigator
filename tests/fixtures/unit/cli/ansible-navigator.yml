@@ -1,17 +1,20 @@
 ---
 ansible-navigator:
+  documentation:
+    plugin:
+      type: become
   editor:
     command: emacs -nw +{line_number} {filename}
     console: False
-  doc-plugin-type: become
   execution-environment:
     container-engine: podman
-    enable: False
+    enabled: False
     image: quay.io/ansible/creator-ee:v0.2.0
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type
     - ansible_connection
-  osc4: True
+  color:
+    osc4: True
   logging:
     level: critical

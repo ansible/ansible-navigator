@@ -6,9 +6,9 @@ import os
 def test_broken_settings_file(generate_config):
     """Ensure exit_messages generated for broken settings file"""
     response = generate_config(setting_file_name="ansible-navigator_broken.yml")
-    assert len(response.exit_messages) == 3, response.exit_messages
-    error = "Errors encountered when loading settings file:"
-    assert response.exit_messages[1].message.startswith(error)
+    assert len(response.exit_messages) == 4, response.exit_messages
+    error = "Settings file cannot be empty."
+    assert error in response.exit_messages[2].message
 
 
 def test_garbage_settings_file(generate_config):
