@@ -11,13 +11,13 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from ansible_navigator.content_defs import ContentBase
-from ansible_navigator.content_defs import ContentType
-from ansible_navigator.content_defs import SerializationFormat
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentBase
 from ..content_defs import ContentFormat
+from ..content_defs import ContentType
 from ..content_defs import ContentView
+from ..content_defs import SerializationFormat
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
 from ..utils.functions import remove_dbl_un
