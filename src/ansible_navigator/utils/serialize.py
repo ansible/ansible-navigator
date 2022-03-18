@@ -15,6 +15,7 @@ from typing import Optional
 import yaml
 
 from ..content_defs import ContentBase
+from ..content_defs import ContentFormat
 from ..content_defs import ContentType
 from ..content_defs import ContentView
 from ..content_defs import SerializationFormat
@@ -96,27 +97,28 @@ def serialize_write_file(
 def serialize_write_temp_file(
     content: ContentType,
     content_view: ContentView,
-    serialization_format: SerializationFormat,
+    content_format: ContentFormat,
 ) -> Path:
     """Serialize and write content to a premanent temporary file.
 
     :param content: The content to serialize
     :param content_view: The content view
-    :param serialization_format: The serialization format
+    :param content_format: The content format
     :raises ValueError: When serialization format is not recognized
     :returns: A ``Path`` to the file written to
     """
+    serialization_format = content_format.value.serialization
     dumpable = _prepare_content(
         content=content,
         content_view=content_view,
         serialization_format=serialization_format,
     )
-    suffix = f".{serialization_format.value!s}"
+    suffix = content_format.value.file_extention
     with tempfile.NamedTemporaryFile(suffix=suffix, delete=False, mode="w+t") as file_like:
-        if serialization_format == SerializationFormat.JSON:
+        if content_format == ContentFormat.JSON:
             _json_dump(dumpable=dumpable, file_handle=file_like)
             return Path(file_like.name)
-        if serialization_format == SerializationFormat.YAML:
+        if content_format == ContentFormat.YAML:
             _yaml_dump(dumpable=dumpable, file_handle=file_like)
             return Path(file_like.name)
         _text_dump(dumpable=str(dumpable), file_handle=file_like)
@@ -135,8 +137,8 @@ SERIALIZATION_FAILURE_MSG = (
 
 def _prepare_content(
     content: ContentType,
-    content_view: "ContentView",
-    serialization_format: SerializationFormat,
+    content_view: ContentView,
+    serialization_format: Optional[SerializationFormat],
 ) -> ContentType:
     if isinstance(content, list):
         if all(is_dataclass(c) for c in content):
@@ -164,7 +166,7 @@ def _prepare_content(
     error = SERIALIZATION_FAILURE_MSG.format(
         content=str(content),
         exception_str=value_error,
-        serialization_format=serialization_format.value,
+        serialization_format=serialization_format,
     )
     error += f"Content view: {content_view}\n"
     return error

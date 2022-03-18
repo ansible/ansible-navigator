@@ -58,7 +58,7 @@ class ContentBase(Generic[T]):
     def asdict(
         self,
         content_view: ContentView,
-        serialization_format: SerializationFormat,
+        serialization_format: Optional[SerializationFormat],
     ) -> DictType:
         """Convert thy self into a dictionary.
 
@@ -66,6 +66,9 @@ class ContentBase(Generic[T]):
         :param serialization_format: The serialization format
         :returns: A dictionary created from self
         """
+        if serialization_format is None:
+            return asdict(self)
+
         converter_map = {
             (ContentView.FULL, SerializationFormat.JSON): self.serialize_json_full,
             (ContentView.FULL, SerializationFormat.YAML): self.serialize_yaml_full,

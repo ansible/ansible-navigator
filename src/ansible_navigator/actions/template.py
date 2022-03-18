@@ -3,8 +3,6 @@
 Processor of a template request at the single line prompt. e.g. {{ }}
 """
 import html
-import re
-import textwrap
 
 from collections.abc import Mapping
 from typing import Optional
@@ -32,17 +30,6 @@ class Action(ActionBase):
         :param args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="template")
-
-    @staticmethod
-    def _string_format(value: str) -> str:
-        template_str = re.match(r"{{\s*(?P<word>\S+)\s*}}", value)
-        if template_str:
-            match_dict = template_str.groupdict()
-            if match_dict["word"] == "readme":
-                return "text.html.markdown"
-            if match_dict["word"] == "examples":
-                return "source.yaml"
-        return "source.txt"
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the templating request for mode interactive.
@@ -97,11 +84,6 @@ class Action(ActionBase):
 
         if isinstance(templated, str):
             templated = html.unescape(templated)
-            templated = templated.strip()
-            templated = textwrap.dedent(templated)
-            serialization_format = self._string_format(str(interaction.action.value))
-        else:
-            serialization_format = ""
 
         while True:
             app.update()

@@ -1,8 +1,5 @@
 ---
 ansible-navigator:
-  ansible:
-    inventories:
-      - ./inventory
   editor:
     command: code -g {filename}:{line_number}
     console: false

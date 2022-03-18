@@ -11,9 +11,12 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.content_defs import ContentBase
+from ansible_navigator.content_defs import ContentType
+from ansible_navigator.content_defs import SerializationFormat
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentFormat
 from ..content_defs import ContentView
 from ..ui_framework import Interaction
 from ..ui_framework import Menu
@@ -108,7 +111,11 @@ class Action:
         return None, None
 
     def _open_a_file(
-        self, file_name: Path, line_number: int, editor_console: bool, editor_command: str
+        self,
+        file_name: Path,
+        line_number: int,
+        editor_console: bool,
+        editor_command: str,
     ):
         """Open a file using the editor.
 
@@ -128,17 +135,17 @@ class Action:
                 os.system(command)
 
     @staticmethod
-    def _persist_content(content: ContentType, serialization_format: SerializationFormat) -> Path:
+    def _persist_content(content: ContentType, content_format: ContentFormat) -> Path:
         """Write content to a temporary file.
 
         :param content: the content to write
-        :param serialization_format: The format of the content
+        :param content_format: The format of the content
         :returns: The path to the file
         """
         file_name = serialize_write_temp_file(
             content=content,
             content_view=ContentView.NORMAL,
-            serialization_format=serialization_format,
+            content_format=content_format,
         )
         return file_name
 
@@ -155,9 +162,8 @@ class Action:
         editor_command = self._args.editor_command
         editor_console = self._args.editor_console
         requested = interaction.action.match.groupdict()["requested"]
-        serialization_format = SerializationFormat.from_string(
-            interaction.ui.serialization_format()
-        )
+        content_format = interaction.ui.content_format()
+        serialization_format = content_format.value.serialization
 
         if requested:
             requested_file_name, requested_line_number = self._assess_requested_is_file(requested)
@@ -170,7 +176,7 @@ class Action:
                 )
                 return None
 
-            temp_file_name = self._persist_content(requested, serialization_format)
+            temp_file_name = self._persist_content(content=requested, content_format=content_format)
             temp_line_number = 0
             self._open_a_file(
                 file_name=temp_file_name,
@@ -191,7 +197,7 @@ class Action:
         else:
             return None
 
-        content_file_name = self._persist_content(content, serialization_format)
+        content_file_name = self._persist_content(content=content, content_format=content_format)
         content_line_number = 0
         self._open_a_file(
             file_name=content_file_name,
