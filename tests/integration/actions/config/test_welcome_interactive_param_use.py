@@ -16,13 +16,13 @@ steps = (
     UiTestStep(
         user_input=":config",
         comment="enter config from welcome screen",
-        present=["ANSIBLE_CACHE_PLUGIN_TIMEOUT", "42"],
+        present=["Cache plugin timeout", "42"],
     ),
     UiTestStep(user_input=":back", comment="return to welcome screen"),
     UiTestStep(
         user_input=":config --ee True",
         comment="enter config from welcome screen",
-        present=["ANSIBLE_CACHE_PLUGIN_TIMEOUT", "42"],
+        present=["Cache plugin timeout", "42"],
     ),
 )
 

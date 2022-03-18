@@ -3,12 +3,14 @@
 from dataclasses import asdict
 from typing import Tuple
 
+from ansible_navigator.configuration_subsystem.definitions import Constants
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import PresentableSettingsEntries
 from ..configuration_subsystem import PresentableSettingsEntry
 from ..configuration_subsystem import to_presentable
+from ..configuration_subsystem import to_schema
 from ..content_defs import ContentView
 from ..content_defs import SerializationFormat
 from ..steps import StepType
@@ -116,6 +118,12 @@ class Action(ActionBase):
         :returns: RunStdoutReturn
         """
         self._logger.debug("settings requested in stdout mode")
+        if self._args.entry("settings_schema").value.source is not Constants.DEFAULT_CFG:
+            if self._args.settings_schema == "json":
+                schema = to_schema(self._args)
+                print(schema)
+            return RunStdoutReturn(message="", return_code=0)
+
         self._settings = to_presentable(self._args)
         info_dump = serialize(
             content=list(self._settings),

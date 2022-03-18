@@ -99,6 +99,7 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
+    args.application_version = "test"
     _messages, exit_msgs = parse_and_update(params=given, args=args)
     assert not exit_msgs
     result = args.entry(argname)
@@ -114,6 +115,7 @@ def test_editor_command_default(_mf1, monkeypatch):
     )
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
+    args.application_version = "test"
     _messages, exit_msgs = parse_and_update(params=[], args=args)
     assert not exit_msgs
     assert args.editor_command == "vi +{line_number} {filename}"
@@ -165,6 +167,7 @@ def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
     )
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
+    args.application_version = "test"
     command = data.command.format(locked_directory=locked_directory)
     params = shlex.split(command)
     if data.set_ce:

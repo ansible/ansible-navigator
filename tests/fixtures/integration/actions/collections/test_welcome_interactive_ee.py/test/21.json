@@ -1,0 +1,18 @@
+{
+    "name": "test[21-:back-Back to browse company_name.coll_1 plugins window]",
+    "index": 21,
+    "comment": "Back to browse company_name.coll_1 plugins window",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "  COMPANY NAME.COLL 1                                   TYPE               ADDED                 DEPRECATED                    DESCRIPTION",
+        "0│lookup_1                                              lookup             1.0.0                 False                         This is test lookup plugin",
+        "1│mod_1                                                 module             1.0.0                 False                         This is a test module",
+        "2│role_full                                             role               Unknown               Unknown                       Complete sample role.",
+        "3│role_minimum                                          role               Unknown               Unknown                       Minimal sample role.",
+        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+    ]
+}

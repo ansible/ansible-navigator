@@ -2,11 +2,14 @@
 ---
 ansible-navigator:
   ansible:
-    config: /tmp/ansible.cfg
+    config:
+      path: /tmp/ansible.cfg
     cmdline: "--forks 15"
-    inventories:
-      - /tmp/test_inventory.yml
-    playbook: /tmp/test_playbook.yml
+    inventory:
+      paths:
+        - /tmp/test_inventory.yml
+    playbook:
+      path: /tmp/test_playbook.yml
   ansible-builder:
     workdir: /tmp/
   ansible-runner:
@@ -69,4 +72,6 @@ ansible-navigator:
     enable: True
     replay: /tmp/test_artifact.json
     save-as: /tmp/test_artifact.json
+  settings:
+    schema: json
   time-zone: Japan

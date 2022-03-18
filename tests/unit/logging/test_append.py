@@ -10,7 +10,7 @@ from ansible_navigator import cli
 
 
 @dataclass
-class TestData:
+class Scenario:
     """Data for the log append tests."""
 
     log_append: bool
@@ -43,13 +43,13 @@ class TestData:
 
 
 test_data = (
-    TestData(log_append=True, session_count=5),
-    TestData(log_append=False, session_count=1),
+    Scenario(log_append=True, session_count=5),
+    Scenario(log_append=False, session_count=1),
 )
 
 
 @pytest.mark.parametrize("data", test_data, ids=str)
-def test(data: TestData, monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+def test(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     """Start with the CLI, create log messages and count.
 
     :param data: The test data

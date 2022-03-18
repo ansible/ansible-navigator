@@ -227,7 +227,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="config",
             cli_parameters=CliParameters(short="-c", metavar="CONFIG_FILE"),
             environment_variable_override="ansible_config",
-            settings_file_path_override="ansible.config",
+            settings_file_path_override="ansible.config.path",
             short_description="Specify the path to the ansible configuration file",
             subcommands=["config"],
             value=SettingsEntryValue(),
@@ -361,7 +361,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
             environment_variable_override="ansible_navigator_inventories",
-            settings_file_path_override="ansible.inventories",
+            settings_file_path_override="ansible.inventory.paths",
             short_description="Specify an inventory file path or comma separated host list",
             subcommands=["inventory", "run"],
             value=SettingsEntryValue(),
@@ -424,7 +424,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             environment_variable_override="ansible_navigator_pass_environment_variables",
             settings_file_path_override="execution-environment.environment-variables.pass",
             short_description=(
-                "Specify an exiting environment variable to be passed through"
+                "Specify an existing environment variable to be passed through"
                 " to and set within the execution environment (--penv MY_VAR)"
             ),
             value=SettingsEntryValue(),
@@ -433,7 +433,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="playbook",
             cli_parameters=CliParameters(positional=True),
             short_description="Specify the playbook name",
-            settings_file_path_override="ansible.playbook",
+            settings_file_path_override="ansible.playbook.path",
             subcommands=["run"],
             value=SettingsEntryValue(),
         ),
@@ -519,6 +519,22 @@ NavigatorConfiguration = ApplicationConfiguration(
                 " execution environment (--senv MY_VAR=42)"
             ),
             value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
+            name="settings_schema",
+            choices=["json"],
+            cli_parameters=CliParameters(
+                short="--ss",
+                long_override="--schema",
+                const="json",
+                nargs="?",
+            ),
+            settings_file_path_override="settings.schema",
+            short_description=(
+                "Generate a schema for the settings file. ('json'= draft-07 JSON Schema)"
+            ),
+            subcommands=["settings"],
+            value=SettingsEntryValue(default="json"),
         ),
         SettingsEntry(
             name="time_zone",
