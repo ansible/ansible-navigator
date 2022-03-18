@@ -9,6 +9,7 @@ from .form_utils import dict_to_form
 from .form_utils import error_notification
 from .form_utils import form_to_dict
 from .form_utils import nonblocking_notification
+from .form_utils import success_notification
 from .form_utils import warning_notification
 from .ui import Action
 from .ui import Content
@@ -35,6 +36,7 @@ __all__ = (
     "Interaction",
     "Menu",
     "nonblocking_notification",
+    "success_notification",
     "UIConfig",
     "UserInterface",
     "warning_notification",

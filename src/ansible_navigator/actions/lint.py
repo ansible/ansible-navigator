@@ -36,6 +36,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import error_notification
 from ..ui_framework import nonblocking_notification
+from ..ui_framework import success_notification
 from ..utils.functions import abs_user_path
 from . import _actions as actions
 from . import run_action
@@ -263,6 +264,11 @@ class Action(ActionBase):
                 ],
             )
             self._interaction.ui.show(notification)
+            return None
+
+        if not raw_issues:
+            notification = success_notification(messages=["Congratulations, no lint issues found!"])
+            interaction.ui.show_form(notification)
             return None
 
         issues = [massage_issue(issue) for issue in raw_issues]
