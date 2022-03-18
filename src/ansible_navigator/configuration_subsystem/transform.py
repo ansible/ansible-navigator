@@ -3,6 +3,7 @@
 from typing import Dict
 
 from ..content_defs import ContentView
+from ..utils.compatibility import importlib_resources
 from ..utils.serialize import SerializationFormat
 from ..utils.serialize import serialize
 from .definitions import ApplicationConfiguration
@@ -67,3 +68,19 @@ def to_schema(settings: ApplicationConfiguration) -> str:
         content_view=ContentView.NORMAL,
         serialization_format=SerializationFormat.JSON,
     )
+
+
+def to_sample(settings: ApplicationConfiguration) -> str:
+    """Load and clean the settings sample.
+
+    :param settings: The application settings
+    :returns: The settings sample with a trailing newline
+    """
+    with importlib_resources.open_text(
+        "ansible_navigator.package_data", "settings-sample.yml"
+    ) as fh:
+
+        sample = fh.read().splitlines()
+    # Remove anything before the `---`
+    yaml_doc_start = sample.index("---")
+    return "\n".join(sample[yaml_doc_start:]) + "\n"

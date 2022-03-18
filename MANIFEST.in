@@ -1,1 +1,1 @@
-include src/ansible_navigator/configuration_subsystem/settings-sample.yml
+recursive-include src/ansible_navigator/package_data *
