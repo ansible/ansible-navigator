@@ -2,7 +2,8 @@
 ---
 ansible-navigator:
   ansible:
-    config: /tmp/ansible.cfg
+    config:
+      path: /tmp/ansible.cfg
     cmdline: "--forks 15"
     inventories:
       - /tmp/test_inventory.yml

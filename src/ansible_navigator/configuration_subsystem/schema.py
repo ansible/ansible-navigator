@@ -15,7 +15,8 @@ PARTIAL_SCHEMA: Dict = {
                             "type": "string",
                         },
                         "config": {
-                            "type": "string",
+                            "additionalProperties": False,
+                            "properties": {"path": {"type": "string"}},
                         },
                         "inventories": {
                             "items": {"type": "string"},
