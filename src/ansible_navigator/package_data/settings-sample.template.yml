@@ -14,6 +14,14 @@ ansible-navigator:
       path: ./ansible.cfg
     # {{ ansible.cmdline }}
     cmdline: "--forks 15"
+    doc:
+      # {{ ansible.doc.help }}
+      help: False
+      plugin:
+        # {{ ansible.doc.plugin.name }}
+        name: debug
+        # {{ ansible.doc.plugin.type }}
+        type: module
     inventory:
       # {{ ansible.inventory.help }}
       help: True
@@ -46,14 +54,6 @@ ansible-navigator:
     enable: True
     # {{ color.osc4 }}
     osc4: True
-  documentation:
-    # {{ documentation.help }}
-    help: False
-    plugin:
-      # {{ documentation.plugin.name }}
-      name: debug
-      # {{ documentation.plugin.type }}
-      type: module
   editor:
     # {{ editor.command }}
     command: vim_from_setting
