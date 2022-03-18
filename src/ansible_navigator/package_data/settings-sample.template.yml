@@ -30,12 +30,12 @@ ansible-navigator:
         - inventory.yml
     playbook:
       # {{ ansible.playbook.help }}
-      help-playbook: False
+      help: False
       # {{ ansible.playbook.path }}
       path: site.yml
   ansible-builder:
     # {{ ansible-builder.help }}
-    help-builder: False
+    help: False
     # {{ ansible-builder.workdir }}
     workdir: /tmp/
   ansible-runner:
