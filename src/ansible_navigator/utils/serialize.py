@@ -108,12 +108,17 @@ def serialize_write_temp_file(
     :returns: A ``Path`` to the file written to
     """
     serialization_format = content_format.value.serialization
-    dumpable = _prepare_content(
-        content=content,
-        content_view=content_view,
-        serialization_format=serialization_format,
-    )
     suffix = content_format.value.file_extention
+
+    if serialization_format is not None:
+        dumpable = _prepare_content(
+            content=content,
+            content_view=content_view,
+            serialization_format=serialization_format,
+        )
+    else:
+        dumpable = content
+
     with tempfile.NamedTemporaryFile(suffix=suffix, delete=False, mode="w+t") as file_like:
         if content_format == ContentFormat.JSON:
             _json_dump(dumpable=dumpable, file_handle=file_like)
@@ -138,7 +143,7 @@ SERIALIZATION_FAILURE_MSG = (
 def _prepare_content(
     content: ContentType,
     content_view: ContentView,
-    serialization_format: Optional[SerializationFormat],
+    serialization_format: SerializationFormat,
 ) -> ContentType:
     if isinstance(content, list):
         if all(is_dataclass(c) for c in content):
@@ -166,7 +171,7 @@ def _prepare_content(
     error = SERIALIZATION_FAILURE_MSG.format(
         content=str(content),
         exception_str=value_error,
-        serialization_format=serialization_format,
+        serialization_format=serialization_format.value,
     )
     error += f"Content view: {content_view}\n"
     return error
