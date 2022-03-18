@@ -1,0 +1,1 @@
+include src/ansible_navigator/configuration_subsystem/settings-sample.yml
