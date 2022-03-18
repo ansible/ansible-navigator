@@ -24,7 +24,7 @@ PARTIAL_SCHEMA: Dict = {
                                 "paths": {
                                     "items": {"type": "string"},
                                     "type": "array",
-                                }
+                                },
                             },
                         },
                         "playbook": {
