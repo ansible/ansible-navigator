@@ -433,7 +433,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="playbook",
             cli_parameters=CliParameters(positional=True),
             short_description="Specify the playbook name",
-            settings_file_path_override="ansible.playbook",
+            settings_file_path_override="ansible.playbook.path",
             subcommands=["run"],
             value=SettingsEntryValue(),
         ),

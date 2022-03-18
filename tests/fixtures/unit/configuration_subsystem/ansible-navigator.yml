@@ -6,7 +6,8 @@ ansible-navigator:
     cmdline: "--forks 15"
     inventories:
       - /tmp/test_inventory.yml
-    playbook: /tmp/test_playbook.yml
+    playbook:
+      path: /tmp/test_playbook.yml
   ansible-builder:
     workdir: /tmp/
   ansible-runner:
