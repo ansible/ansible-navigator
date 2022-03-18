@@ -17,13 +17,13 @@ steps = (
     UiTestStep(
         user_input=":config",
         comment="enter config from welcome screen (no ee)",
-        present=["YAML_FILENAME_EXTENSIONS", "['.yml', '.yaml', '.json']"],
+        present=["Yaml filename extensions", "['.yml', '.yaml', '.json']"],
     ),
     UiTestStep(user_input=":back", comment="return to welcome screen"),
     UiTestStep(
         user_input=":config -c " + CONFIG_FIXTURE,
         comment="enter config from welcome screen, custom config, (no ee)",
-        present=["YAML_FILENAME_EXTENSIONS", "['.os2']"],
+        present=["Yaml filename extensions", "['.os2']"],
     ),
 )
 

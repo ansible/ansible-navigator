@@ -16,7 +16,7 @@ initial_steps = (
     UiTestStep(
         user_input=CLI,
         comment="ansible-navigator config command top window",
-        present=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        present=["Action warnings", "Callbacks enabled"],
     ),
 )
 

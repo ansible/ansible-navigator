@@ -1,20 +1,26 @@
 {
-    "name": "test[config helpconfig fail with interactive with ee  clear && ansible-navigator config --help-config --ee True --ll debug --mode interactive]",
+    "name": "test[config helpconfig with interactive with ee  clear && ansible-navigator config --help-config --ee True --ll debug --mode interactive]",
     "index": 6,
-    "comment": "config helpconfig fail with interactive with ee",
+    "comment": "config helpconfig with interactive with ee",
     "additional_information": {
         "present": [
-            "--hc or --help-config is valid only when 'mode' argument is set to 'stdout'"
+            "usage: ansible-config [-h]"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "[ERROR]: Command provided: 'config --help-config --ee True --ll debug --mode interactive'",
-        "[ERROR]: --hc or --help-config is valid only when 'mode' argument is set to 'stdout'",
-        " [HINT]: Try again with '-m stdout'",
-        "[ERROR]: Configuration failed, using default log file location: /home/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
-        " [HINT]: Review the hints and log file to see what went wrong: /home/user/github/ansible-navigator/ansible-navigator.log",
+        "usage: ansible-config [-h] [--version] [-v] {list,dump,view} ...",
+        "View ansible configuration.",
+        "positional arguments:",
+        "  {list,dump,view}",
+        "    list            Print all config options",
+        "    dump            Dump configuration",
+        "    view            View configuration file",
+        "optional arguments:",
+        "  --version         show program's version number, config file location, configured module search path, module location, executable location and exit",
+        "  -h, --help        show this help message and exit",
+        "  -v, --verbose     verbose mode (-vvv for more, -vvvv to enable connection debugging)",
         "(venv) bash-5.1$"
     ]
 }

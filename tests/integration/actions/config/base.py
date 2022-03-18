@@ -17,22 +17,22 @@ CONFIG_FIXTURE = os.path.join(FIXTURES_DIR, "integration", "actions", "config", 
 
 
 base_steps = (
-    UiTestStep(user_input=":f CACHE_PLUGIN_TIMEOUT", comment="filter for cache plugin timeout"),
+    UiTestStep(user_input=":f Cache plugin timeout", comment="filter for cache plugin timeout"),
     UiTestStep(user_input=":0", comment="cache plugin details"),
     UiTestStep(user_input=":back", comment="return to filtered list"),
     UiTestStep(
         user_input=":f",
         comment="clear filter, full list",
-        present=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        present=["Action warnings", "Callbacks enabled"],
         mask=True,
     ),
-    UiTestStep(user_input=":f yaml", comment="filter off screen value"),
-    UiTestStep(user_input=":3", comment="YAML_FILENAME_EXTENSIONS details"),
+    UiTestStep(user_input=":f Yaml filename extensions", comment="filter off screen value"),
+    UiTestStep(user_input=":0", comment="Yaml filename extensions details"),
     UiTestStep(user_input=":back", comment="return to filtered list"),
     UiTestStep(
         user_input=":f",
         comment="clear filter, full list",
-        present=["ACTION_WARNINGS", "CALLBACKS_ENABLED"],
+        present=["Action warnings", "Callbacks enabled"],
         mask=True,
     ),
 )
@@ -76,14 +76,14 @@ class BaseClass:
         if step.mask:
             # mask out some configuration that is subject to change each run
             maskables = [
-                "BECOME_PLUGIN_PATH",
-                "CACHE_PLUGIN_CONNECTION",
-                "COLLECTIONS_PATHS",
-                "DEFAULT_CALLBACK_PLUGIN_PATH",
-                "DEFAULT_LOCAL_TMP",
+                "Become plugin path",
+                "Cache plugin connection",
+                "Collections paths",
+                "Default callback plugin path",
+                "Default local tmp",
             ]
             # Determine if a menu is showing
-            mask_column_name = "CURRENT VALUE"
+            mask_column_name = "CURRENT"
             column_start = received_output[0].find(mask_column_name)
             column_exists = column_start != -1
             if column_exists:
