@@ -1,5 +1,4 @@
-""":run
-"""
+"""The `run` command implementation."""
 import curses
 import json
 import logging
@@ -62,11 +61,12 @@ get_color = lambda word: next(  # noqa: E731
 
 def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=too-many-branches
-    """Find matching color for word
+    """Find matching color for word.
 
-    :param colname: A word to match
+    :param colname: The column name
+    :param entry: The menu entry
+    :returns: The color and decoration
     """
-
     colval = entry[colname]
     color = 0
     decoration = 0
@@ -106,13 +106,12 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, i
 
 
 def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
-    """create a heading for some piece of content showing
+    """Create a heading for some piece of content showing.
 
     :param obj: The content going to be shown
     :param screen_w: The current screen width
     :returns: The heading
     """
-
     if isinstance(obj, dict) and "task" in obj:
         detail = f"PLAY [{obj['play']}:{obj['__number']}] "
         stars = "*" * (screen_w - len(detail))
@@ -150,7 +149,11 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
-    """when showing content, filter out some keys"""
+    """Filter out some keys when showing collection content.
+
+    :param obj: The object from which keys should be removed
+    :returns: The object with keys removed
+    """
     return {k: v for k, v in obj.items() if not (k.startswith("_") or k.endswith("uuid"))}
 
 
@@ -182,7 +185,7 @@ TASK_LIST_COLUMNS = [
 class Action(ActionBase):
 
     # pylint: disable=too-many-instance-attributes
-    """:run"""
+    """Run command implementation."""
 
     KEGEX = r"""(?x)
             ^
@@ -219,8 +222,12 @@ class Action(ActionBase):
 
     @property
     def mode(self):
-        """if mode == stdout and playbook artifact creation is enabled
-        run in interactive mode, but print stdout"""
+        """Determine the mode and if playbook artifact creation is enabled.
+
+        If so, run in interactive mode, but print stdout.
+
+        :returns: If stdout and artifact creation, return a str statement as such, else return mode
+        """
         if all(
             (
                 self._args.mode == "stdout",
@@ -235,7 +242,7 @@ class Action(ActionBase):
         """Execute the ``inventory`` request for mode stdout.
 
         :returns: The return code from the runner invocation, along with a message to review the
-            logs if not 0.
+            logs if not 0
         """
         if self._args.app == "replay":
             successful: bool = self._init_replay()
@@ -266,13 +273,12 @@ class Action(ActionBase):
         return RunStdoutReturn(message="", return_code=return_code)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
-        """run :run or :replay
+        """Run :run or :replay.
 
         :param interaction: The interaction from the user
         :param app: The app instance
         :returns: The pending interaction or none
         """
-
         self._prepare_to_run(app, interaction)
 
         if interaction.action.match.groupdict().get("run"):
@@ -334,8 +340,10 @@ class Action(ActionBase):
 
     # pylint: disable=too-many-branches
     def _init_run(self) -> bool:
-        """in the case of :run, check the user input"""
+        """In the case of :run, check the user input.
 
+        :returns: True
+        """
         # Ensure the playbook and inventory are valid
 
         self._update_args(
@@ -375,10 +383,11 @@ class Action(ActionBase):
         return True
 
     def _init_replay(self) -> bool:
-        """in the case of :replay, replay the artifact
-        check for a version, to be safe
-        copy the calling app args as our our so the can be updated safely
-        with a uuid attached to the name
+        """In the case of :replay, replay the artifact.
+
+        Check for a version and process artifact file.
+
+        :returns: True if replay completes, False if there is an error
         """
         self._logger.debug("Starting replay artifact request with mode %s", self.mode)
 
@@ -439,8 +448,11 @@ class Action(ActionBase):
         return True
 
     def _prompt_for_artifact(self, artifact_file: str) -> Dict[Any, Any]:
-        """prompt for a valid artifact file"""
+        """Prompt for a valid artifact file.
 
+        :param artifact_file: Artifact file
+        :returns: Dict with artifact detail entries
+        """
         if not isinstance(artifact_file, str):
             artifact_file = ""
 
@@ -463,8 +475,10 @@ class Action(ActionBase):
         return populated_form
 
     def _prompt_for_playbook(self) -> Dict[Any, Any]:
-        """prepopulate a form to confirm the playbook details"""
+        """Prepopulate a form to confirm the playbook details.
 
+        :returns: Dict with playbook and inventory detail entries
+        """
         self._logger.debug("Inventory/Playbook not set, provided, or valid, prompting")
 
         if isinstance(self._args.playbook, str):
@@ -520,8 +534,7 @@ class Action(ActionBase):
         return populated_form
 
     def _take_step(self) -> None:
-        """run the current step on the stack"""
-
+        """Run the current step on the stack."""
         result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(self.steps.current.name, self.app, self.steps.current)
@@ -561,7 +574,10 @@ class Action(ActionBase):
             self.steps.append(result)
 
     def _run_runner(self) -> None:
-        """spin up runner"""
+        """Spin up runner.
+
+        :raises RuntimeError: If no ansible-playbook executable
+        """
         executable_cmd: Optional[str]
 
         if self.mode == "stdout_w_artifact":
@@ -624,7 +640,7 @@ class Action(ActionBase):
         self._logger.debug("runner requested to start")
 
     def _dequeue(self) -> None:
-        """Drain the runner queue"""
+        """Drain the runner queue."""
         drain_count = 0
         while not self._queue.empty():
             if not self._first_message_received:
@@ -639,7 +655,7 @@ class Action(ActionBase):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-nested-blocks
         # pylint: disable=too-many-statements
-        """Handle a runner message
+        """Handle a runner message.
 
         :param message: The message from runner
         :type message: dict
@@ -713,9 +729,7 @@ class Action(ActionBase):
                     self._plays.value[play_id]["tasks"].append(task)
 
     def _play_stats(self) -> None:
-        """Calculate the play's stats based
-        on it's tasks
-        """
+        """Calculate the play's stats based on it's tasks."""
         for idx, play in enumerate(self._plays.value):
             total = ["__ok", "__skipped", "__failed", "__unreachable", "__ignored", "__in_progress"]
             self._plays.value[idx].update(
@@ -739,10 +753,10 @@ class Action(ActionBase):
                 self._plays.value[idx]["__progress"] = "0%"
 
     def _prepare_to_quit(self, interaction: Interaction) -> bool:
-        """Looks like we're headed out of here
+        """Pre-quit tasks.
 
-        :param interaction: the quit interaction
-        :returns: a bool indicating whether of not it's safe to exit
+        :param interaction: The quit interaction
+        :returns: A bool indicating whether or not it's safe to exit
         """
         self.update()
         if self.runner is not None and not self.runner.finished:
@@ -759,7 +773,7 @@ class Action(ActionBase):
         return True
 
     def _task_list_for_play(self) -> Step:
-        """generate a menu of task for the currently selected play
+        """Generate a menu of tasks for the currently selected play.
 
         :returns: The menu step
         """
@@ -774,9 +788,9 @@ class Action(ActionBase):
         return step
 
     def _task_from_task_list(self) -> Step:
-        """generate task content for the selected task
+        """Generate task content for the selected task.
 
-        :returns: content which show a task
+        :returns: Content which shows a task
         """
         value = self.steps.current.value
         index = self.steps.current.index
@@ -784,8 +798,7 @@ class Action(ActionBase):
         return step
 
     def update(self) -> None:
-        """Drain the queue, set the status and write the artifact if needed"""
-
+        """Drain the queue, set the status and write the artifact if needed."""
         # let the calling app update as well
         self._calling_app.update()
 
@@ -800,7 +813,7 @@ class Action(ActionBase):
                 self._runner_finished = True
 
     def _get_status(self) -> Tuple[str, int]:
-        """Get the status and color
+        """Get the runner status and color for status message.
 
         :returns: status string, status color
         """
@@ -823,12 +836,12 @@ class Action(ActionBase):
         return status, status_color
 
     def _set_status(self) -> None:
-        """Set the UI status"""
+        """Set the UI status."""
         status, status_color = self._get_status()
         self._interaction.ui.update_status(status, status_color)
 
     def write_artifact(self, filename: Optional[str] = None) -> None:
-        """Write the artifact
+        """Write the artifact.
 
         :param filename: The file to write to
         :type filename: str
@@ -875,9 +888,10 @@ class Action(ActionBase):
                 self._logger.error(error)
 
     def rerun(self) -> None:
-        """rerun the current playbook
-        since we're not reinstating run,
-        drain the queue, clear the steps, reset the index, etc
+        """Rerun the current playbook.
+
+        Since we're not reinstating run,
+        drain the queue, clear the steps, reset the index, etc.
         """
         if self._subaction_type == "run":
             if self.runner.finished:
@@ -898,7 +912,10 @@ class Action(ActionBase):
             self._logger.error("sub-action type '%s' is invalid", self._subaction_type)
 
     def _notify_error(self, message: str):
-        """show a blocking warning"""
+        """Show a blocking warning.
+
+        :param message: Message for warning
+        """
         warn_msg = ["Errors were encountered while running the playbook:"]
         messages = remove_ansi(message).splitlines()
         messages[-1] += "..."
