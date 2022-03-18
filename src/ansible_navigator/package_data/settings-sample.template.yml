@@ -3,75 +3,116 @@
 ansible-navigator:
   ansible:
     config:
-      # <ansible.config.path>
+      # {{ ansible.config.path }}
       path: /tmp/ansible.cfg
+    # {{ ansible.cmdline }}
     cmdline: "--forks 15"
+    # {{ ansible.inventories }}
     inventories:
       - /tmp/test_inventory.yml
     playbook:
+      # {{ ansible.playbook.path }}
       path: /tmp/test_playbook.yml
   ansible-builder:
+    # {{ ansible-builder.workdir }}
     workdir: /tmp/
   ansible-runner:
+    # {{ ansible-runner.artifact-dir }}
     artifact-dir: /tmp/test1
+    # {{ ansible-runner.rotate-artifacts-count }}
     rotate-artifacts-count: 10
+    # {{ ansible-runner.timeout }}
     timeout: 300
+  # {{ app }}
   app: run
+  # {{ collection-doc-cache-path }}
   collection-doc-cache-path: /tmp/cache.db
   color:
+    # {{ color.enable }}
     enable: False
+    # {{ color.osc4 }}
     osc4: False
   documentation:
     plugin:
+      # {{ documentation.plugin.name }}
       name: shell
+      # {{ documentation.plugin.type }}
       type: become
   editor:
+    # {{ editor.command }}
     command: vim_from_setting
+    # {{ editor.console }}
     console: False
   exec:
+    # {{ exec.shell }}
     shell: False
+    # {{ exec.command }}
     command: /bin/foo
   execution-environment:
+    # {{ execution-environment.container-engine }}
     container-engine: podman
+    # {{ execution-environment.container-options }}
+    container-options:
+      - "--net=host"
+    # {{ execution-environment.enabled }}
     enabled: False
     environment-variables:
+      # {{ execution-environment.environment-variables.pass }}
       pass:
         - ONE
         - TWO
         - THREE
+      # {{ execution-environment.environment-variables.set }}
       set:
         KEY1: VALUE1
         KEY2: VALUE2
         KEY3: VALUE3
+    # {{ execution-environment.image }}
     image: test_image:latest
     pull:
+      # {{ execution-environment.pull.arguments }}
       arguments:
         - "--tls-verify=false"
+      # {{ execution-environment.pull.policy }}
       policy: never
+    # {{ execution-environment.volume-mounts }}
     volume-mounts:
       - src: "/tmp"
         dest: "/test1"
         options: "Z"
-    container-options:
-      - "--net=host"
+  # {{ help-builder }}
   help-builder: False
+  # {{ help-config }}
   help-config: True
+  # {{ help-doc }}
   help-doc: True
+  # {{ help-inventory }}
   help-inventory: True
+  # {{ help-playbook }}
   help-playbook: False
+  # {{ inventory-columns }}
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type
     - ansible_connection
   logging:
+    # {{ logging.level }}
     level: critical
+    # {{ logging.append }}
     append: False
+    # {{ logging.file }}
     file: /tmp/log.txt
+  # {{ mode }}
   mode: stdout
   playbook-artifact:
+    # {{ playbook-artifact.enable }}
     enable: True
+    # {{ playbook-artifact.replay }}
     replay: /tmp/test_artifact.json
+    # {{ playbook-artifact.save-as }}
     save-as: /tmp/test_artifact.json
   settings:
+    # {{ settings.schema }}
     schema: json
+  # {{ time-zone }}
   time-zone: Japan

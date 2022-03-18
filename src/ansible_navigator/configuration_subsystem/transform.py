@@ -1,6 +1,8 @@
 """Methods of transforming the settings."""
 
 from typing import Dict
+from typing import List
+from typing import Tuple
 
 from ..content_defs import ContentView
 from ..utils.compatibility import importlib_resources
@@ -8,6 +10,7 @@ from ..utils.serialize import SerializationFormat
 from ..utils.serialize import serialize
 from .definitions import ApplicationConfiguration
 from .definitions import Constants
+from .definitions import SettingsEntry
 from .defs_presentable import PresentableSettingsEntries
 from .defs_presentable import PresentableSettingsEntry
 from .schema import PARTIAL_SCHEMA
@@ -77,18 +80,25 @@ def to_sample(settings: ApplicationConfiguration) -> str:
     :returns: The settings sample with a trailing newline
     """
     with importlib_resources.open_text(
-        "ansible_navigator.package_data", "settings-sample.yml"
+        "ansible_navigator.package_data", "settings-sample.template.yml"
     ) as fh:
 
         sample = fh.read().splitlines()
+
     # Remove anything before the `---`
     yaml_doc_start = sample.index("---")
+
     cleaned = sample[yaml_doc_start:]
+
+    indices: List[Tuple[str, int, SettingsEntry]] = []
     for entry in settings.entries:
-        dot_path = entry.settings_file_path()
-        comment_line = cleaned.index(f"# {dot_path}")
-        pass
+        dot_path = entry.settings_file_path(prefix="")
+        indent = "  " * len(dot_path.split("."))  # indent 2 spaces for each part
+        comment_index = cleaned.index(f"{indent}# {{{{ {dot_path} }}}}")
+        indices.append((indent, comment_index, entry))
 
+    sorted_entries = sorted(indices, key=lambda t: -t[1])
+    for indent, comment_index, entry in sorted_entries:
+        cleaned[comment_index] = f"{indent}# {entry.short_description}"
 
-        
-
+    pass
