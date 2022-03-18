@@ -34,7 +34,8 @@ def test_basic(schema_dict: Dict[str, Any]):
     """
     assert schema_dict["$schema"] == "http://json-schema.org/draft-07/schema"
     assert isinstance(schema_dict["properties"]["ansible-navigator"]["properties"], dict)
-    assert len(schema_dict["properties"]["ansible-navigator"]["properties"]) >= 21
+    # This checks for a number of root keys in the settings file
+    assert len(schema_dict["properties"]["ansible-navigator"]["properties"]) >= 16
 
 
 def test_additional_properties(schema_dict: Dict[str, Any]):
