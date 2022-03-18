@@ -3,6 +3,7 @@
 ansible-navigator:
   ansible:
     config:
+      # <ansible.config.path>
       path: /tmp/ansible.cfg
     cmdline: "--forks 15"
     inventories:

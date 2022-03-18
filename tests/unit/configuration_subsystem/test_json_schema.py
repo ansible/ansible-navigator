@@ -109,9 +109,8 @@ def test_schema_sample_full_package_data(schema_dict: Dict[str, Any]):
     """
     settings = NavigatorConfiguration
     settings_file = to_sample(settings=settings)
-    # with settings_file.open(encoding="utf-8") as fh:
-    #     settings_contents = yaml.load(fh, Loader=Loader)
-    validate(instance=settings_contents, schema=schema_dict)
+    settings_dict = yaml.load(settings_file, Loader=Loader)
+    validate(instance=settings_dict, schema=schema_dict)
 
 
 def test_schema_sample_wrong(schema_dict: Dict[str, Any]):

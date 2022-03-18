@@ -83,4 +83,12 @@ def to_sample(settings: ApplicationConfiguration) -> str:
         sample = fh.read().splitlines()
     # Remove anything before the `---`
     yaml_doc_start = sample.index("---")
-    return "\n".join(sample[yaml_doc_start:]) + "\n"
+    cleaned = sample[yaml_doc_start:]
+    for entry in settings.entries:
+        dot_path = entry.settings_file_path()
+        comment_line = cleaned.index(f"# {dot_path}")
+        pass
+
+
+        
+
