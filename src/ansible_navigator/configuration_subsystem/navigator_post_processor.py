@@ -390,7 +390,7 @@ class NavigatorPostProcessor:
         # new_mounts, C.PREVIOUS_CLI or C.NOT_SET
         if self.extra_volume_mounts:
             if not isinstance(entry.value.current, list):
-                entry.value.current = set()
+                entry.value.current = []
             entry.value.current.extend(v.to_string() for v in self.extra_volume_mounts)
 
         # Finally, ensure the list has no duplicates
@@ -526,8 +526,23 @@ class NavigatorPostProcessor:
                 )
 
         if isinstance(entry.value.current, str) and config.app == "lint":
-            mount = VolumeMount("lintables", entry.value.current, entry.value.current)
-            self.extra_volume_mounts.append(mount)
+            entry_name = entry.settings_file_path(prefix="")
+            entry_source = entry.value.source
+            source = abs_user_path(entry.value.current)
+            try:
+                mount = VolumeMount(
+                    fs_source=source,
+                    fs_destination=source,
+                    settings_entry=entry_name,
+                    source=entry_source,
+                    options_string="",
+                )
+            except VolumeMountError as e:
+                exit_messages.append(
+                    ExitMessage(message=f"Error mounting lintable into execution environment: {e}"),
+                )
+            else:
+                self.extra_volume_mounts.append(mount)
 
         return messages, exit_messages
 

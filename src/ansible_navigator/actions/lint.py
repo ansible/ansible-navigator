@@ -26,7 +26,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..app import App
+from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner.command import Command
@@ -36,7 +36,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import error_notification
 from ..ui_framework import nonblocking_notification
-from ..utils import abs_user_path
+from ..utils.functions import abs_user_path
 from . import _actions as actions
 from . import run_action
 
@@ -132,7 +132,7 @@ def massage_issue(issue: Dict) -> Dict:
 
 
 @actions.register
-class Action(App):
+class Action(ActionBase):
     """:lint"""
 
     KEGEX = r"^lint(\s(?P<params>.*))?$"
@@ -236,8 +236,9 @@ class Action(App):
         self.stdout = self._calling_app.stdout
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
-        interaction.ui.show(notification)
+        interaction.ui.show_form(notification)
         out, _, rc = self._run_runner()  # pylint: disable=invalid-name
+        self._logger.debug("Output from ansible-lint run (rc=%d): %s", rc, out)
 
         # Quick sanity check, make sure we actually have a result to parse.
         if rc != 0 and "ansible-lint: No such file or directory" in out:
@@ -256,7 +257,6 @@ class Action(App):
             raw_issues = json.loads(out)
         except json.JSONDecodeError as exc:
             self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(exc))
-            self._logger.error("Output was: %s", out)
             notification = error_notification(
                 messages=[
                     "Could not parse 'ansible-lint' output.",
