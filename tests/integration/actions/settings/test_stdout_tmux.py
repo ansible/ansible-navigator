@@ -56,6 +56,14 @@ stdout_tests = (
         ).join(),
         present=["ansible-navigator settings file schema"],
     ),
+    ShellCommand(
+        comment="print a settings sample to stdout,, mode auto",
+        user_input=StdoutCommand(
+            cmdline="--sample",
+            execution_environment=False,
+        ).join(),
+        present=["#   time-zone: UTC"],
+    ),
 )
 
 steps = add_indices(stdout_tests)
@@ -74,4 +82,5 @@ def step_id(value) -> str:
 class Test(BaseClass):
     """Run the tests for ``settings`` from CLI, mode stdout."""
 
+    PANE_HEIGHT = 200
     UPDATE_FIXTURES = False

@@ -526,6 +526,17 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(),
         ),
         SettingsEntry(
+            name="settings_sample",
+            cli_parameters=CliParameters(
+                short="--gs",
+                long_override="--sample",
+                action="store_true",
+            ),
+            settings_file_path_override="settings.sample",
+            short_description=("Generate a sample settings file."),
+            value=SettingsEntryValue(default=False),
+        ),
+        SettingsEntry(
             name="settings_schema",
             choices=["json"],
             cli_parameters=CliParameters(

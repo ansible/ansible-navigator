@@ -237,7 +237,14 @@ PARTIAL_SCHEMA: Dict = {
                 },
                 "settings": {
                     "additionalProperties": False,
-                    "properties": {"schema": {"type": "string"}},
+                    "properties": {
+                        "sample": {
+                            "type": "boolean",
+                        },
+                        "schema": {
+                            "type": "string",
+                        },
+                    },
                 },
             },
             "additionalProperties": False,

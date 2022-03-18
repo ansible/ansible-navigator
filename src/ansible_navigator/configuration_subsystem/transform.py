@@ -1,5 +1,7 @@
 """Methods of transforming the settings."""
 
+import textwrap
+
 from typing import Dict
 from typing import List
 from typing import Tuple
@@ -73,32 +75,52 @@ def to_schema(settings: ApplicationConfiguration) -> str:
     )
 
 
-def to_sample(settings: ApplicationConfiguration) -> str:
+def to_sample(settings: ApplicationConfiguration) -> Tuple[str, str]:
     """Load and clean the settings sample.
 
     :param settings: The application settings
-    :returns: The settings sample with a trailing newline
+    :returns: One selectively commented sample, one uncommented
     """
+    # pylint: disable=too-many-locals
     with importlib_resources.open_text(
-        "ansible_navigator.package_data", "settings-sample.template.yml"
+        "ansible_navigator.package_data",
+        "settings-sample.template.yml",
     ) as fh:
 
-        sample = fh.read().splitlines()
+        file_contents = fh.read().splitlines()
 
     # Remove anything before the `---`
-    yaml_doc_start = sample.index("---")
+    yaml_doc_start = file_contents.index("---")
 
-    cleaned = sample[yaml_doc_start:]
+    template_lines = file_contents[yaml_doc_start:]
 
+    # Find all anchors
     indices: List[Tuple[str, int, SettingsEntry]] = []
     for entry in settings.entries:
         dot_path = entry.settings_file_path(prefix="")
         indent = "  " * len(dot_path.split("."))  # indent 2 spaces for each part
-        comment_index = cleaned.index(f"{indent}# {{{{ {dot_path} }}}}")
+        comment_index = template_lines.index(f"{indent}# {{{{ {dot_path} }}}}")
         indices.append((indent, comment_index, entry))
 
+    # Replace anchors with the short description
     sorted_entries = sorted(indices, key=lambda t: -t[1])
     for indent, comment_index, entry in sorted_entries:
-        cleaned[comment_index] = f"{indent}# {entry.short_description}"
+        description = [f"{indent}# {line}" for line in textwrap.wrap(entry.short_description)]
+        template_lines = (
+            template_lines[0:comment_index] + description + template_lines[comment_index + 1 :]
+        )
 
-    pass
+    populated_lines = template_lines
+
+    no_comment = ["---", "ansible-navigator:", "logging:", "level: debug", "append: False"]
+    commented_lines = []
+    for line in populated_lines:
+        if any(entry in line for entry in no_comment):
+            commented_lines.append(line)
+        else:
+            commented_lines.append(f"# {line}")
+
+    commented = "\n".join(commented_lines) + "\n"
+    uncommented = "\n".join(populated_lines) + "\n"
+
+    return commented, uncommented

@@ -108,8 +108,10 @@ def test_schema_sample_full_package_data(schema_dict: Dict[str, Any]):
     :param schema_dict: The json schema as a dictionary
     """
     settings = NavigatorConfiguration
-    settings_file = to_sample(settings=settings)
-    settings_dict = yaml.load(settings_file, Loader=Loader)
+    commented, uncommented = to_sample(settings=settings)
+    settings_dict = yaml.load(commented, Loader=Loader)
+    validate(instance=settings_dict, schema=schema_dict)
+    settings_dict = yaml.load(uncommented, Loader=Loader)
     validate(instance=settings_dict, schema=schema_dict)
 
 

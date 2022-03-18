@@ -1,43 +1,59 @@
 # cspell:ignore cmdline, workdir
+# 1) Most of these lines will get commented out before being printed to
+# stdout, see transform.to_sample.
+# 2) Everything above the --- will be removed as well
+# 3) Please use sane or default values
+# 4) The settings entry's path is used as the anchor
 ---
 ansible-navigator:
   ansible:
     config:
+      # {{ ansible.config.help }}
+      help: False
       # {{ ansible.config.path }}
-      path: /tmp/ansible.cfg
+      path: ./ansible.cfg
     # {{ ansible.cmdline }}
     cmdline: "--forks 15"
-    # {{ ansible.inventories }}
-    inventories:
-      - /tmp/test_inventory.yml
+    inventory:
+      # {{ ansible.inventory.help }}
+      help: True
+      # {{ ansible.inventory.paths }}
+      paths:
+        - inventory.yml
     playbook:
+      # {{ ansible.playbook.help }}
+      help-playbook: False
       # {{ ansible.playbook.path }}
-      path: /tmp/test_playbook.yml
+      path: site.yml
   ansible-builder:
+    # {{ ansible-builder.help }}
+    help-builder: False
     # {{ ansible-builder.workdir }}
     workdir: /tmp/
   ansible-runner:
     # {{ ansible-runner.artifact-dir }}
-    artifact-dir: /tmp/test1
+    artifact-dir: ./runner-artifacts
     # {{ ansible-runner.rotate-artifacts-count }}
     rotate-artifacts-count: 10
     # {{ ansible-runner.timeout }}
     timeout: 300
   # {{ app }}
-  app: run
+  app: welcome
   # {{ collection-doc-cache-path }}
-  collection-doc-cache-path: /tmp/cache.db
+  collection-doc-cache-path: $HOME/.cache/ansible-navigator/collection_doc_cache.db
   color:
     # {{ color.enable }}
-    enable: False
+    enable: True
     # {{ color.osc4 }}
-    osc4: False
+    osc4: True
   documentation:
+    # {{ documentation.help }}
+    help: False
     plugin:
       # {{ documentation.plugin.name }}
-      name: shell
+      name: debug
       # {{ documentation.plugin.type }}
-      type: become
+      type: module
   editor:
     # {{ editor.command }}
     command: vim_from_setting
@@ -45,17 +61,17 @@ ansible-navigator:
     console: False
   exec:
     # {{ exec.shell }}
-    shell: False
+    shell: True
     # {{ exec.command }}
-    command: /bin/foo
+    command: /bin/bash
   execution-environment:
     # {{ execution-environment.container-engine }}
-    container-engine: podman
+    container-engine: auto
     # {{ execution-environment.container-options }}
     container-options:
       - "--net=host"
     # {{ execution-environment.enabled }}
-    enabled: False
+    enabled: True
     environment-variables:
       # {{ execution-environment.environment-variables.pass }}
       pass:
@@ -68,28 +84,18 @@ ansible-navigator:
         KEY2: VALUE2
         KEY3: VALUE3
     # {{ execution-environment.image }}
-    image: test_image:latest
+    image: quay.io/ansible/creator-ee:latest
     pull:
       # {{ execution-environment.pull.arguments }}
       arguments:
         - "--tls-verify=false"
       # {{ execution-environment.pull.policy }}
-      policy: never
+      policy: tag
     # {{ execution-environment.volume-mounts }}
     volume-mounts:
-      - src: "/tmp"
-        dest: "/test1"
+      - src: "/tmp/directory"
+        dest: "/tmp/directory"
         options: "Z"
-  # {{ help-builder }}
-  help-builder: False
-  # {{ help-config }}
-  help-config: True
-  # {{ help-doc }}
-  help-doc: True
-  # {{ help-inventory }}
-  help-inventory: True
-  # {{ help-playbook }}
-  help-playbook: False
   # {{ inventory-columns }}
   inventory-columns:
     - ansible_network_os
@@ -97,22 +103,24 @@ ansible-navigator:
     - ansible_connection
   logging:
     # {{ logging.level }}
-    level: critical
+    level: debug
     # {{ logging.append }}
     append: False
     # {{ logging.file }}
-    file: /tmp/log.txt
+    file: $PWD/ansible-navigator.log
   # {{ mode }}
-  mode: stdout
+  mode: interactive
   playbook-artifact:
     # {{ playbook-artifact.enable }}
     enable: True
     # {{ playbook-artifact.replay }}
     replay: /tmp/test_artifact.json
     # {{ playbook-artifact.save-as }}
-    save-as: /tmp/test_artifact.json
+    save-as: "{playbook_dir}/{playbook_name}-artifact-{time_stamp}.json"
   settings:
+    # {{ settings.sample }}
+    sample: False
     # {{ settings.schema }}
     schema: json
   # {{ time-zone }}
-  time-zone: Japan
+  time-zone: UTC

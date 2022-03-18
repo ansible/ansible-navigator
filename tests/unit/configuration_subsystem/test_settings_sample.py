@@ -1,34 +1,42 @@
 """Tests for the transformation of settings to a json schema."""
 
-import json
 
-from pathlib import Path
-from typing import Any
-from typing import Dict
+from typing import Tuple
 
 import pytest
-
-from jsonschema import validate
-from jsonschema.exceptions import ValidationError
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
-from .defaults import TEST_FIXTURE_DIR
 
 
-@pytest.fixture(name="settings_sample")
-def _settings_sample():
+@pytest.fixture(name="settings_samples")
+def _settings_samples() -> Tuple[str, str]:
     settings = NavigatorConfiguration
-    settings_file = to_sample(settings=settings)
-    return settings_file
+    commented, uncommented = to_sample(settings=settings)
+    return commented, uncommented
 
 
-def test_valid_yaml(settings_sample: str):
+def test_valid_yaml(settings_samples: Tuple[str, str]):
     """Simple test to ensure the sample is valid yaml.
 
-    :param settings_sample: The sample settings file
+    :param settings_samples: The sample setting
     """
-    settings_contents = yaml.load(settings_sample, Loader=Loader)
+    commented, uncommented = settings_samples
+    settings_contents = yaml.load(commented, Loader=Loader)
     assert settings_contents
+    settings_contents = yaml.load(uncommented, Loader=Loader)
+    assert settings_contents
+
+
+def test_no_un_templated(settings_samples: Tuple[str, str]):
+    """Simple test to ensure the sample is valid yaml.
+
+    :param settings_samples: The sample settings
+    """
+    commented, uncommented = settings_samples
+    assert "{{" not in commented
+    assert "{{" not in uncommented
+    assert "}}" not in commented
+    assert "}}" not in uncommented
