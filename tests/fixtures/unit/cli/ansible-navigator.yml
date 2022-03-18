@@ -1,8 +1,9 @@
 ---
 ansible-navigator:
-  documentation:
-    plugin:
-      type: become
+  ansible:
+    doc:
+      plugin:
+        type: become
   editor:
     command: emacs -nw +{line_number} {filename}
     console: False
