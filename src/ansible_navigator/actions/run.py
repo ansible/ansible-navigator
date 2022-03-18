@@ -890,8 +890,8 @@ class Action(ActionBase):
     def rerun(self) -> None:
         """Rerun the current playbook.
 
-        Since we're not reinstating run,
-        drain the queue, clear the steps, reset the index, etc.
+        Since we're not reinstating run, drain the queue, 
+        clear the steps, reset the index, etc.
         """
         if self._subaction_type == "run":
             if self.runner.finished:
