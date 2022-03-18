@@ -3,14 +3,18 @@
 ansible-navigator:
   ansible:
     config:
+      help: False
       path: /tmp/ansible.cfg
     cmdline: "--forks 15"
     inventory:
+      help: False
       paths:
         - /tmp/test_inventory.yml
     playbook:
+      help: False
       path: /tmp/test_playbook.yml
   ansible-builder:
+    help: False
     workdir: /tmp/
   ansible-runner:
     artifact-dir: /tmp/test1
@@ -22,6 +26,7 @@ ansible-navigator:
     enable: False
     osc4: False
   documentation:
+    help: False
     plugin:
       name: shell
       type: become
@@ -54,11 +59,6 @@ ansible-navigator:
         options: "Z"
     container-options:
       - "--net=host"
-  help-builder: False
-  help-config: True
-  help-doc: True
-  help-inventory: True
-  help-playbook: False
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type
