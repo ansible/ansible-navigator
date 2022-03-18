@@ -1,6 +1,5 @@
 # cspell:ignore getpid, gmtime, msecs
-"""start here
-"""
+"""Navigator entry point."""
 import logging
 import os
 import signal
@@ -58,7 +57,10 @@ def log_dependencies() -> List[LogMessage]:
 
 
 def pull_image(args):
-    """pull the image if required"""
+    """Pull the image if required.
+
+    :param args: Copy of NavigatorConfiguration
+    """
     image_puller = ImagePuller(
         container_engine=args.container_engine,
         image=args.execution_environment_image,
@@ -102,7 +104,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
 
 
 def main():
-    """start here"""
+    """Start application here."""
     messages: List[LogMessage] = log_dependencies()
     exit_messages: List[ExitMessage] = []
 

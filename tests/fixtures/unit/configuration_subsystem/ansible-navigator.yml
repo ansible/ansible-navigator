@@ -6,6 +6,11 @@ ansible-navigator:
       help: False
       path: /tmp/ansible.cfg
     cmdline: "--forks 15"
+    doc:
+      help: False
+      plugin:
+        name: shell
+        type: become
     inventory:
       help: False
       paths:
@@ -25,11 +30,6 @@ ansible-navigator:
   color:
     enable: False
     osc4: False
-  documentation:
-    help: False
-    plugin:
-      name: shell
-      type: become
   editor:
     command: vim_from_setting
     console: False
