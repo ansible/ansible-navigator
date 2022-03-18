@@ -16,11 +16,21 @@ PARTIAL_SCHEMA: Dict = {
                         },
                         "config": {
                             "additionalProperties": False,
-                            "properties": {"path": {"type": "string"}},
+                            "properties": {
+                                "help": {
+                                    "type": "boolean",
+                                },
+                                "path": {
+                                    "type": "string",
+                                },
+                            },
                         },
                         "inventory": {
                             "additionalProperties": False,
                             "properties": {
+                                "help": {
+                                    "type": "boolean",
+                                },
                                 "paths": {
                                     "items": {"type": "string"},
                                     "type": "array",
@@ -29,7 +39,14 @@ PARTIAL_SCHEMA: Dict = {
                         },
                         "playbook": {
                             "additionalProperties": False,
-                            "properties": {"path": {"type": "string"}},
+                            "properties": {
+                                "help": {
+                                    "type": "boolean",
+                                },
+                                "path": {
+                                    "type": "string",
+                                },
+                            },
                         },
                     },
                     "type": "object",
@@ -38,6 +55,9 @@ PARTIAL_SCHEMA: Dict = {
                     "additionalProperties": False,
                     "type": "object",
                     "properties": {
+                        "help": {
+                            "type": "boolean",
+                        },
                         "workdir": {
                             "type": "string",
                         },
@@ -79,6 +99,9 @@ PARTIAL_SCHEMA: Dict = {
                 "documentation": {
                     "additionalProperties": False,
                     "properties": {
+                        "help": {
+                            "type": "boolean",
+                        },
                         "plugin": {
                             "additionalProperties": False,
                             "properties": {
@@ -171,21 +194,6 @@ PARTIAL_SCHEMA: Dict = {
                         },
                     },
                     "type": "object",
-                },
-                "help-builder": {
-                    "type": "boolean",
-                },
-                "help-config": {
-                    "type": "boolean",
-                },
-                "help-doc": {
-                    "type": "boolean",
-                },
-                "help-inventory": {
-                    "type": "boolean",
-                },
-                "help-playbook": {
-                    "type": "boolean",
                 },
                 "inventory-columns": {
                     "items": {"type": "string"},
