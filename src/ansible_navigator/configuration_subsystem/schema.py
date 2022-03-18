@@ -25,6 +25,27 @@ PARTIAL_SCHEMA: Dict = {
                                 },
                             },
                         },
+                        "doc": {
+                            "additionalProperties": False,
+                            "properties": {
+                                "help": {
+                                    "type": "boolean",
+                                },
+                                "plugin": {
+                                    "additionalProperties": False,
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                        },
+                                    },
+                                    "type": "object",
+                                },
+                            },
+                            "type": "object",
+                        },
                         "inventory": {
                             "additionalProperties": False,
                             "properties": {
@@ -92,27 +113,6 @@ PARTIAL_SCHEMA: Dict = {
                         },
                         "osc4": {
                             "type": "boolean",
-                        },
-                    },
-                    "type": "object",
-                },
-                "documentation": {
-                    "additionalProperties": False,
-                    "properties": {
-                        "help": {
-                            "type": "boolean",
-                        },
-                        "plugin": {
-                            "additionalProperties": False,
-                            "properties": {
-                                "name": {
-                                    "type": "string",
-                                },
-                                "type": {
-                                    "type": "string",
-                                },
-                            },
-                            "type": "object",
                         },
                     },
                     "type": "object",
