@@ -1,0 +1,23 @@
+{
+    "name": "test[run playbook with inventory from ansible.cfg with ee  clear && cd /tests/fixtures/integration/actions/run/using_ansible_cfg &&  ansible-navigator run site.yml --ee True --ll debug --mode stdout]",
+    "index": 7,
+    "comment": "run playbook with inventory from ansible.cfg with ee",
+    "additional_information": {
+        "present": [
+            "from.ansible.cfg",
+            "ok=1"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "PLAY [all] *********************************************************************",
+        "TASK [debug] *******************************************************************",
+        "ok: [from.ansible.cfg] => {",
+        "    \"inventory_hostname\": \"from.ansible.cfg\"",
+        "}",
+        "PLAY RECAP *********************************************************************",
+        "from.ansible.cfg           : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
+}
