@@ -10,6 +10,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import PresentableSettingsEntries
 from ..configuration_subsystem import PresentableSettingsEntry
 from ..configuration_subsystem import to_presentable
+from ..configuration_subsystem import to_sample
 from ..configuration_subsystem import to_schema
 from ..content_defs import ContentView
 from ..content_defs import SerializationFormat
@@ -122,6 +123,11 @@ class Action(ActionBase):
             if self._args.settings_schema == "json":
                 schema = to_schema(self._args)
                 print(schema)
+            return RunStdoutReturn(message="", return_code=0)
+
+        if self._args.settings_sample:
+            commented, _uncommented = to_sample(self._args)
+            print(commented)
             return RunStdoutReturn(message="", return_code=0)
 
         self._settings = to_presentable(self._args)
