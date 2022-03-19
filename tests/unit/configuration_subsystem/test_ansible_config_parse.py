@@ -10,7 +10,9 @@ from ansible_navigator.configuration_subsystem.utils import parse_ansible_cfg
 
 
 ee_states = pytest.mark.parametrize(
-    argnames="ee_enabled", argvalues=(True, False), ids=("ee_true", "ee_false")
+    argnames="ee_enabled",
+    argvalues=(True, False),
+    ids=("ee_true", "ee_false"),
 )
 
 ANSIBLE_CFG_VALID = """
@@ -37,7 +39,7 @@ def test_valid(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
 
     assert parsed_cfg.config.contents == {
-        "defaults": {"cow_selection": "milk", "inventory": "inventory.yml"}
+        "defaults": {"cow_selection": "milk", "inventory": "inventory.yml"},
     }
     assert parsed_cfg.config.path == cfg_path
     assert parsed_cfg.config.text == ANSIBLE_CFG_VALID.splitlines()
@@ -65,7 +67,7 @@ def test_valid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.Monk
     configurator.configure()
 
     assert application_configuration.internals.ansible_configuration.contents == {
-        "defaults": {"cow_selection": "milk", "inventory": "inventory.yml"}
+        "defaults": {"cow_selection": "milk", "inventory": "inventory.yml"},
     }
     assert application_configuration.internals.ansible_configuration.path == cfg_path
     assert (
@@ -100,7 +102,7 @@ def test_valid_home(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
         assert not parsed_cfg.config.text
     else:
         assert parsed_cfg.config.contents == {
-            "defaults": {"cow_selection": "milk", "inventory": "inventory.yml"}
+            "defaults": {"cow_selection": "milk", "inventory": "inventory.yml"},
         }
         assert parsed_cfg.config.path == cfg_path
         assert parsed_cfg.config.text == ANSIBLE_CFG_VALID.splitlines()

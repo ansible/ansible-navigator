@@ -77,6 +77,7 @@ def test_all_entries_reflect_cli_given_env_vars(
             if entry.name not in expected:
                 assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry.name
 
+
 @pytest.mark.usefixtures("use_venv")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
@@ -190,6 +191,7 @@ def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
         else:
             assert configured_entry.value.source is C.DEFAULT_CFG, configured_entry
             assert configured_entry.value.current == entry.value.default, configured_entry
+
 
 @pytest.mark.usefixtures("use_venv")
 @patch("shutil.which", return_value="/path/to/container_engine")

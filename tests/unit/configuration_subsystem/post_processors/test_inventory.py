@@ -10,7 +10,9 @@ from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 
 
 ee_states = pytest.mark.parametrize(
-    argnames="ee_enabled", argvalues=(True, False), ids=("ee_true", "ee_false")
+    argnames="ee_enabled",
+    argvalues=(True, False),
+    ids=("ee_true", "ee_false"),
 )
 
 ANSIBLE_CFG_VALID = """
