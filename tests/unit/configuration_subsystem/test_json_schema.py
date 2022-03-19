@@ -12,6 +12,7 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.configuration_subsystem import to_schema
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
@@ -90,7 +91,7 @@ def test_no_extras(schema_dict: Dict[str, Any]):
     assert only_in_settings == ["ansible-navigator.execution-environment.volume-mounts"]
 
 
-def test_schema_sample_full(schema_dict: Dict[str, Any]):
+def test_schema_sample_full_tests(schema_dict: Dict[str, Any]):
     """Check the full settings file against the schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -99,6 +100,19 @@ def test_schema_sample_full(schema_dict: Dict[str, Any]):
     with settings_file.open(encoding="utf-8") as fh:
         settings_contents = yaml.load(fh, Loader=Loader)
     validate(instance=settings_contents, schema=schema_dict)
+
+
+def test_schema_sample_full_package_data(schema_dict: Dict[str, Any]):
+    """Check the settings file used as a sample against the schema.
+
+    :param schema_dict: The json schema as a dictionary
+    """
+    settings = NavigatorConfiguration
+    commented, uncommented = to_sample(settings=settings)
+    settings_dict = yaml.load(commented, Loader=Loader)
+    validate(instance=settings_dict, schema=schema_dict)
+    settings_dict = yaml.load(uncommented, Loader=Loader)
+    validate(instance=settings_dict, schema=schema_dict)
 
 
 def test_schema_sample_wrong(schema_dict: Dict[str, Any]):
