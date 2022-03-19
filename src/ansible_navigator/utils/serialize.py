@@ -15,6 +15,7 @@ from typing import Optional
 import yaml
 
 from ..content_defs import ContentBase
+from ..content_defs import ContentFormat
 from ..content_defs import ContentType
 from ..content_defs import ContentView
 from ..content_defs import SerializationFormat
@@ -96,29 +97,38 @@ def serialize_write_file(
 def serialize_write_temp_file(
     content: ContentType,
     content_view: ContentView,
-    serialization_format: SerializationFormat,
+    content_format: ContentFormat,
 ) -> Path:
     """Serialize and write content to a premanent temporary file.
 
     :param content: The content to serialize
     :param content_view: The content view
-    :param serialization_format: The serialization format
+    :param content_format: The content format
     :raises ValueError: When serialization format is not recognized
     :returns: A ``Path`` to the file written to
     """
-    dumpable = _prepare_content(
-        content=content,
-        content_view=content_view,
-        serialization_format=serialization_format,
-    )
-    suffix = f".{serialization_format.value!s}"
+    serialization_format = content_format.value.serialization
+    suffix = content_format.value.file_extention
+
+    if serialization_format is not None:
+        dumpable = _prepare_content(
+            content=content,
+            content_view=content_view,
+            serialization_format=serialization_format,
+        )
+    else:
+        dumpable = content
+
     with tempfile.NamedTemporaryFile(suffix=suffix, delete=False, mode="w+t") as file_like:
-        if serialization_format == SerializationFormat.JSON:
+        if content_format == ContentFormat.JSON:
             _json_dump(dumpable=dumpable, file_handle=file_like)
             return Path(file_like.name)
-        if serialization_format == SerializationFormat.YAML:
+        if content_format == ContentFormat.YAML:
             _yaml_dump(dumpable=dumpable, file_handle=file_like)
             return Path(file_like.name)
+        _text_dump(dumpable=str(dumpable), file_handle=file_like)
+        return Path(file_like.name)
+
     raise ValueError("Unknown serialization format")
 
 
@@ -132,7 +142,7 @@ SERIALIZATION_FAILURE_MSG = (
 
 def _prepare_content(
     content: ContentType,
-    content_view: "ContentView",
+    content_view: ContentView,
     serialization_format: SerializationFormat,
 ) -> ContentType:
     if isinstance(content, list):
@@ -210,6 +220,17 @@ def _json_dumps(dumpable: ContentType) -> str:
         )
         logger.error(error_message)
         return error_message
+
+
+def _text_dump(dumpable: str, file_handle: IO) -> None:
+    """Write text to a file.
+
+    :param dumpable: The text to write
+    :param file_handle: The file handle to write to
+    """
+    file_handle.write(dumpable)
+    if not dumpable.endswith("\n"):
+        file_handle.write("\n")
 
 
 class YamlStyle(NamedTuple):
