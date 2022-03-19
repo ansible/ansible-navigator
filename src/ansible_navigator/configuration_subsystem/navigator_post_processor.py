@@ -464,15 +464,17 @@ class NavigatorPostProcessor:
         """Post process inventory"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if config.app == "inventory" and entry.value.current is C.NOT_SET:
-            if config.entry("help_inventory").value.current is False:
-                exit_msg = "An inventory is required when using the inventory subcommand"
-                exit_messages.append(ExitMessage(message=exit_msg))
-                if entry.cli_parameters:
-                    exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
-                    exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
-        if entry.value.current is not C.NOT_SET:
+
+        if entry.value.current is C.NOT_SET:
+            # Try the ansible.cfg file
+            ansible_cfg = config.internals.ansible_configuration.contents
+            if isinstance(ansible_cfg, dict):
+                ansible_cfg_entry = ansible_cfg.get("defaults", {}).get("inventory")
+                if isinstance(ansible_cfg_entry, str):
+                    entry.value.current = [abs_user_path(i) for i in ansible_cfg_entry.split(",")]
+                    entry.value.source = C.ANSIBLE_CFG
+        else:
+            # Use the specified
             flattened = flatten_list(entry.value.current)
             entry.value.current = []
             for inv_entry in flattened:
@@ -482,6 +484,17 @@ class NavigatorPostProcessor:
                 else:
                     # file path
                     entry.value.current.append(abs_user_path(inv_entry))
+
+        # Something may be required
+        if config.app == "inventory" and entry.value.current is C.NOT_SET:
+            if config.entry("help_inventory").value.current is False:
+                exit_msg = "An inventory is required when using the inventory subcommand"
+                exit_messages.append(ExitMessage(message=exit_msg))
+                if entry.cli_parameters:
+                    exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
+                    exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+                return messages, exit_messages
+
         return messages, exit_messages
 
     @staticmethod

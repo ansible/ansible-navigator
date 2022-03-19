@@ -22,6 +22,7 @@ from .definitions import SettingsEntry
 from .definitions import SettingsEntryValue
 from .definitions import SubCommand
 from .navigator_post_processor import NavigatorPostProcessor
+from .utils import AnsibleConfiguration
 
 
 APP_NAME = "ansible_navigator"
@@ -86,6 +87,7 @@ class Internals:
     from application initiation to the rest of the app
     """
 
+    ansible_configuration: AnsibleConfiguration = AnsibleConfiguration()
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
     initializing: bool = False
