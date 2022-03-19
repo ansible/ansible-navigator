@@ -8,6 +8,7 @@ from .defs_presentable import PresentableSettingsEntries
 from .defs_presentable import PresentableSettingsEntry
 from .navigator_configuration import NavigatorConfiguration
 from .transform import to_presentable
+from .transform import to_sample
 from .transform import to_schema
 
 
@@ -20,5 +21,6 @@ __all__ = (
     "PresentableSettingsEntries",
     "SettingsEntry",
     "to_presentable",
+    "to_sample",
     "to_schema",
 )

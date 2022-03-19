@@ -72,6 +72,10 @@ class UiTestStep(NamedTuple):
     #: Find this before returning from the tmux session to the test
     search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
 
+    def __str__(self):
+        """Produce a test id for this step."""
+        return f"{self.comment}  {self.user_input}"
+
 
 def add_indices(steps):
     """update the index of each"""

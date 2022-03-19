@@ -766,6 +766,8 @@ class NavigatorPostProcessor:
             entry.value.current = flatten_list(entry.value.current)
         return messages, exit_messages
 
+    settings_sample = partialmethod(_forced_stdout, subcommand="settings")
+
     @_post_processor
     def settings_schema(
         self,

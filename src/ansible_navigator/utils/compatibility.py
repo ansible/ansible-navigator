@@ -28,3 +28,8 @@ if sys.version_info < (3, 9):
     from backports import zoneinfo
 else:
     import zoneinfo
+
+if sys.version_info < (3, 9):
+    import importlib_resources
+else:
+    import importlib.resources as importlib_resources
