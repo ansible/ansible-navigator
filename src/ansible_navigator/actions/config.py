@@ -114,9 +114,12 @@ class Action(ActionBase):
         )
         interaction.ui.show_form(notification)
 
-        self._update_args(
+        args_updated = self._update_args(
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
         )
+        if not args_updated:
+            self._prepare_to_exit(interaction)
+            return None
 
         self._run_runner()
         if self._config is None:

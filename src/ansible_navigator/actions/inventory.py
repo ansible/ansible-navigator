@@ -186,8 +186,17 @@ class Action(ActionBase):
         :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
+        # pylint: disable=too-many-branches
         self._logger.debug("inventory requested in interactive mode")
         self._prepare_to_run(app, interaction)
+
+        args_updated = self._update_args(
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
+        )
+        if not args_updated:
+            self._prepare_to_exit(interaction)
+            return None
+
         self.stdout = self._calling_app.stdout
 
         self._build_inventory_list()
@@ -436,10 +445,6 @@ class Action(ActionBase):
 
     def _build_inventory_list(self) -> None:
         """Build the list of inventory sources."""
-        self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
-        )
-
         if isinstance(self._args.inventory, list):
             inventories = self._args.inventory
             inventories_valid = not self._inventory_error
