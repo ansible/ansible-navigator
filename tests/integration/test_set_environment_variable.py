@@ -2,12 +2,20 @@
 import os
 import shlex
 
+from pathlib import Path
+from typing import TYPE_CHECKING
+from typing import Dict
+
 import pytest
 
 from ansible_navigator import cli
 from ..defaults import FIXTURES_DIR
 from ._cli2runner import Cli2Runner
+from ._cli2runner import RunnerTestException
 
+
+if TYPE_CHECKING:
+    from unittest.mock import MagicMock  # pylint: disable=preferred-module
 
 test_data = [
     ("not set", "", "ansible-navigator_empty.yml", {}),
@@ -47,7 +55,7 @@ class Test(Cli2Runner):
     """Test the use of ``set-environment-variable`` through to runner."""
 
     TEST_DIR_NAME = os.path.basename(__file__).replace("test_", "").replace(".py", "")
-    TEST_FIXTURE_DIR = f"{FIXTURES_DIR}/integration/{TEST_DIR_NAME}"
+    TEST_FIXTURE_DIR = Path(FIXTURES_DIR) / "integration" / TEST_DIR_NAME
 
     STDOUT = {
         "config": "config dump",
@@ -61,20 +69,27 @@ class Test(Cli2Runner):
         "run": f"run {TEST_FIXTURE_DIR}/site.yml",
     }
 
-    def run_test(self, mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected):
+    def run_test(
+        self,
+        mocked_runner: "MagicMock",
+        monkeypatch: pytest.MonkeyPatch,
+        tmp_path: Path,
+        cli_entry: str,
+        config_fixture: str,
+        expected: Dict[str, str],
+    ):
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
 
         :param mocked_runner: A patched instance of runner
         :param monkeypatch: The monkey patch fixture
-        :param tmpdir: A fixture generating a unique temporary directory
+        :param tmp_path: A test specific temporary path
         :param cli_entry: The CLI entry to set as ``sys.argv``
         :param config_fixture: The settings fixture
         :param expected: the expected return value
         """
-        mocked_runner.side_effect = Exception("called")
         cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
-        coll_cache_path = os.path.join(tmpdir, "collection_doc_cache.db")
+        coll_cache_path = tmp_path / "collection_doc_cache.db"
 
         assert os.path.exists(cfg_path)
 
@@ -82,10 +97,12 @@ class Test(Cli2Runner):
 
         monkeypatch.setattr("sys.argv", params)
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", cfg_path)
-        monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", coll_cache_path)
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", str(coll_cache_path))
 
-        with pytest.raises(Exception, match="called"):
+        try:
             cli.main()
+        except RunnerTestException:
+            pass
 
         _args, kwargs = mocked_runner.call_args
 
