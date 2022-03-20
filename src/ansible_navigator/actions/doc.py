@@ -39,8 +39,8 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="doc")
 
-        self._plugin_name: Optional[str]
-        self._plugin_type: Optional[str]
+        self._plugin_name: Optional[str] = None
+        self._plugin_type: Optional[str] = None
         self._runner: Union[Command, AnsibleDoc]
 
     def generate_content_heading(self, _obj: Dict, screen_w: int) -> CursesLines:
@@ -74,38 +74,27 @@ class Action(ActionBase):
         self._logger.debug("doc requested in interactive")
         self._prepare_to_run(app, interaction)
 
-        args_updated = self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
-        )
-        if not args_updated:
-            self._prepare_to_exit(interaction)
-            return None
+        colon_prompt = self._interaction.action.match.groupdict()["params"]
 
-        plugin_name_source = self._args.entry("plugin_name").value.source
+        # Nothing provided at colon prompt and content is showing, get the task action
+        if interaction.content and not colon_prompt:
+            try:
+                self._plugin_name = interaction.content.showing["task_action"]
+                self._plugin_type = self._args.entry("plugin_type").value.default
+                source = "task action"
 
-        if plugin_name_source is C.USER_CLI:
-            self._plugin_name = self._args.plugin_name
-            self._plugin_type = self._args.plugin_type
-            source = plugin_name_source.value
-        elif plugin_name_source is C.NOT_SET:
-            if interaction.content:
-                try:
-                    self._plugin_name = interaction.content.showing["task_action"]
-                    self._plugin_type = self._args.entry("plugin_type").value.default
-                    source = "task action"
-                except (KeyError, AttributeError, TypeError):
-                    self._logger.info("No plugin name found in current content")
-                    return None
-            else:
+            except (KeyError, AttributeError, TypeError):
+                self._logger.info("No plugin name found in current content")
+
+        # Process the colon prompt and allow update args to identify missing entries
+        if self._plugin_name is None:
+            args_updated = self._update_args([self._name] + shlex.split(colon_prompt or ""))
+            if not args_updated:
+                self._prepare_to_exit(interaction)
                 return None
-        elif plugin_name_source is not C.NOT_SET:
+            source = self._args.entry("plugin_name").value.source.value
             self._plugin_name = self._args.plugin_name
             self._plugin_type = self._args.plugin_type
-            source = plugin_name_source.value
-        else:
-            self._logger.info("No plugin provided or found, not showing content")
-            self._prepare_to_exit(interaction)
-            return None
 
         self._logger.debug("Plugin name used from %s: %s", source, self._plugin_name)
         self._logger.debug("Plugin type used from %s: %s", source, self._plugin_type)
