@@ -93,6 +93,7 @@ class Test(Cli2Runner):
         monkeypatch.setattr("sys.argv", params)
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", cfg_path)
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", str(coll_cache_path))
+        monkeypatch.chdir(tmp_path)
 
         try:
             cli.main()

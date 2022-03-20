@@ -11,7 +11,9 @@ from pytest_mock import MockerFixture
 if TYPE_CHECKING:
     from unittest.mock import MagicMock  # pylint: disable=preferred-module
 
-RunnerTestException = RuntimeError
+
+class RunnerTestException(Exception):
+    """Custom exception for runner to throw."""
 
 
 @pytest.mark.usefixtures("patch_show_form")
