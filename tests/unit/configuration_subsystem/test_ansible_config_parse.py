@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pytest
 
+from ansible_navigator.command_runner import Command
+from ansible_navigator.command_runner.command_runner import run_command
 from ansible_navigator.configuration_subsystem import Configurator
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.utils import parse_ansible_cfg
@@ -25,7 +27,7 @@ inventory = inventory.yml
 
 @pytest.mark.usefixtures("use_venv")
 @ee_states
-def test_valid(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_valid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm a valid ansible.cfg is parsed.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -117,7 +119,7 @@ ANSIBLE_CFG_INVALID = """
 
 @pytest.mark.usefixtures("use_venv")
 @ee_states
-def test_invalid(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_invalid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm a invalid ansible.cfg raises errors.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -161,3 +163,57 @@ def test_invalid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.Mo
     assert not application_configuration.internals.ansible_configuration.path
     assert not application_configuration.internals.ansible_configuration.text
     assert "12345" in exit_messages[2].message
+
+
+@pytest.mark.usefixtures("ansible_version")
+@ee_states
+def test_config_none(ee_enabled):
+    """Confirm a invalid ansible.cfg raises errors.
+
+    :param ee_enabled: Indicate if EE support is enabled
+    """
+    parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
+
+    assert not parsed_cfg.config.contents
+    assert not parsed_cfg.config.path
+    assert not parsed_cfg.config.text
+    if ee_enabled:
+        assert (
+            "no 'ansible.cfg' found in current working directory." in parsed_cfg.messages[1].message
+        )
+    else:
+        assert "'ansible --version' reports no config file" in parsed_cfg.messages[2].message
+
+
+@ee_states
+def test_invalid_path(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """Confirm an invalid path to ansible.cfg is handled.
+
+    :param ee_enabled: Indicate if EE support is enabled
+    :param tmp_path: The path to a test temporary directory
+    :param monkeypatch: The monkeypatch fixture
+    """
+    original_run_command = run_command
+
+    def static_ansible_version(command: Command):
+        if command.command == "ansible --version":
+            command.return_code = 0
+            command.stdout = f"ansible [core 2.12.3]\nconfig file = {(tmp_path / 'ansible.cfg')!s}"
+        else:
+            original_run_command(command)
+
+    monkeypatch.setattr(
+        "ansible_navigator.command_runner.command_runner.run_command",
+        static_ansible_version,
+    )
+
+    parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
+    assert not parsed_cfg.config.contents
+    assert not parsed_cfg.config.path
+    assert not parsed_cfg.config.text
+    if ee_enabled:
+        assert (
+            "no 'ansible.cfg' found in current working directory." in parsed_cfg.messages[1].message
+        )
+    else:
+        assert "does not exist" in parsed_cfg.messages[2].message

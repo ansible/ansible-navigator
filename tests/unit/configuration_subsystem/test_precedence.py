@@ -38,7 +38,7 @@ from .utils import id_for_settings
 # pylint: disable=too-many-arguments
 
 
-@pytest.mark.usefixtures("use_venv")
+@pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
@@ -78,7 +78,7 @@ def test_all_entries_reflect_cli_given_env_vars(
                 assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry.name
 
 
-@pytest.mark.usefixtures("use_venv")
+@pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
@@ -124,7 +124,7 @@ def test_all_entries_reflect_cli_given_settings(
                 assert entry.value.source is C.USER_CFG, entry.name
 
 
-@pytest.mark.usefixtures("use_venv")
+@pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
@@ -171,7 +171,7 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
                 assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry.name
 
 
-@pytest.mark.usefixtures("use_venv")
+@pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
@@ -193,7 +193,7 @@ def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
             assert configured_entry.value.current == entry.value.default, configured_entry
 
 
-@pytest.mark.usefixtures("use_venv")
+@pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
@@ -235,6 +235,7 @@ def test_all_entries_reflect_env_var_given_settings(
                 assert other_entry.value.source is C.USER_CFG, entry.name
 
 
+@pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)

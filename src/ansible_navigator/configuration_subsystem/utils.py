@@ -102,15 +102,28 @@ def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:
     :param ee_enabled: Indicates if EE support is enabled
     :returns: The ansible.cfg contents
     """
+    # pylint: disable=too-many-return-statements
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
 
     if ee_enabled:
-        cfg_path = Path.cwd() / "ansible.cfg"
-        msg = f"EE support enabled, trying '$CWD': {cfg_path!s}"
+        msg = "EE support enabled: using current working directory for 'ansible.cfg'"
         messages.append(LogMessage(level=logging.DEBUG, message=msg))
+        cfg_path = Path.cwd() / "ansible.cfg"
+        if not cfg_path.exists():
+            msg = (
+                "EE support enabled: no 'ansible.cfg' found in current working directory."
+                f" Tried {cfg_path!s}"
+            )
+            messages.append(LogMessage(level=logging.INFO, message=msg))
+
+            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
+        msg = "EE support enabled: found 'ansible.cfg' in current working directory."
+        messages.append(LogMessage(level=logging.INFO, message=msg))
 
     else:
+        msg = "EE support disabled: using 'ansible --version' for 'ansible.cfg'"
+        messages.append(LogMessage(level=logging.DEBUG, message=msg))
         new_messages, new_exit_messages, version_details = parse_ansible_verison()
         messages.extend(new_messages)
         exit_messages.extend(new_exit_messages)
@@ -119,17 +132,19 @@ def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:
 
         cfg_file_name = version_details.get("config file")
         if cfg_file_name is None:
-            msg = "No 'config file' in 'ansible --version'"
+            msg = "EE support disabled: no 'config file' in 'ansible --version'"
             messages.append(LogMessage(level=logging.DEBUG, message=msg))
             return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
+        if cfg_file_name == "None":
+            msg = "EE support disabled: 'ansible --version' reports no config file"
+            messages.append(LogMessage(level=logging.INFO, message=msg))
+            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
         cfg_path = Path(cfg_file_name)
-        msg = f"EE support disabled, trying 'ansible --version': {cfg_path}"
-        messages.append(LogMessage(level=logging.DEBUG, message=msg))
+        if not cfg_path.exists():
+            msg = f"EE support disabled: {cfg_path!s} does not exist"
+            messages.append(LogMessage(level=logging.DEBUG, message=msg))
+            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
 
-    if not cfg_path.exists():
-        msg = "{cfg_path} does not exist"
-        messages.append(LogMessage(level=logging.DEBUG, message=msg))
-        return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
     parser = ConfigParser()
     try:
         parser.read(str(cfg_path))
