@@ -14,6 +14,7 @@ class SearchFor(Enum):
 
     HELP = "search for help"
     PROMPT = "search for the shell prompt"
+    WARNING = "search for a blocking warning notification"
 
 
 class Command(NamedTuple):

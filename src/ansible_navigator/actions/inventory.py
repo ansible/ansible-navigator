@@ -26,7 +26,6 @@ from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Decoration
 from ..ui_framework import Interaction
-from ..ui_framework import dict_to_form
 from ..ui_framework import warning_notification
 from . import _actions as actions
 from . import run_action
@@ -188,12 +187,17 @@ class Action(ActionBase):
         """
         self._logger.debug("inventory requested in interactive mode")
         self._prepare_to_run(app, interaction)
-        self.stdout = self._calling_app.stdout
 
-        self._build_inventory_list()
-        if not self._inventories:
+        args_updated = self._update_args(
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
+        )
+        if not args_updated:
             self._prepare_to_exit(interaction)
             return None
+
+        self.stdout = self._calling_app.stdout
+        self._inventories = self._args.inventory
+        self._set_inventories_mtime()
 
         self._collect_inventory_details()
         if not self._inventory:
@@ -224,9 +228,7 @@ class Action(ActionBase):
             if current_mtime != self._inventories_mtime:
                 self._logger.debug("inventory changed")
 
-                self._build_inventory_list()
-                if not self._inventories:
-                    break
+                self._set_inventories_mtime()
 
                 self._collect_inventory_details()
                 if not self._inventory:
@@ -433,63 +435,6 @@ class Action(ActionBase):
         if self.steps.current.selected["__type"] == "host":
             return self._build_host_content()
         raise TypeError("unknown step type")
-
-    def _build_inventory_list(self) -> None:
-        """Build the list of inventory sources."""
-        self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
-        )
-
-        if isinstance(self._args.inventory, list):
-            inventories = self._args.inventory
-            inventories_valid = not self._inventory_error
-        else:
-            inventories = ["", "", ""]
-            inventories_valid = False
-
-        if not inventories_valid:
-            FType = Dict[str, Any]
-            form_dict: FType = {
-                "title": "One or more inventory sources could not be found",
-                "fields": [],
-            }
-            if inventories:
-                for idx, inv in enumerate(inventories):
-                    form_field = {
-                        "name": f"inv_{idx}",
-                        "pre_populate": inv,
-                        "prompt": f"{idx}. Inventory source",
-                        "type": "text_input",
-                        "validator": {"name": "none"},
-                    }
-                    form_dict["fields"].append(form_field)
-            else:
-                form_field = {
-                    "name": "inv_0",
-                    "prompt": "0. Inventory source",
-                    "type": "text_input",
-                    "validator": {"name": "none"},
-                }
-                form_dict["fields"].append(form_field)
-
-            form = dict_to_form(form_dict)
-            self._interaction.ui.show_form(form)
-
-            if form.cancelled:
-                return
-
-            inventories = [
-                field.value
-                for field in form.fields
-                if hasattr(field, "value") and field.value != ""
-            ]
-            # pylint: enable=not-an-iterable
-            if not inventories:
-                return
-
-        self._inventories = inventories
-        self._set_inventories_mtime()
-        return
 
     def _collect_inventory_details_interactive(
         self,

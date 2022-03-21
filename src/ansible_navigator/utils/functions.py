@@ -84,9 +84,13 @@ class ExitMessage:
             return logging.INFO
         raise ValueError("Missing logging level mapping")
 
+    def plain_text(self):
+        """Provide the error messages without ansi color."""
+        return f"{self.prefix}{self.message}"
+
     def __str__(self):
         if "NO_COLOR" in os.environ:
-            return f"{self.prefix}{self.message}"
+            return self.plain_text()
         return f"{self.color}{self.prefix}{self.message}{Colors.END.value}"
 
 

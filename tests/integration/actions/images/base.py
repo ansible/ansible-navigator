@@ -61,6 +61,8 @@ class BaseClass:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
+        elif step.search_within_response is SearchFor.WARNING:
+            search_within_response = "WARNING"
         else:
             raise ValueError("test mode not set")
 
