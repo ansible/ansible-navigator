@@ -23,8 +23,8 @@ from enum import IntEnum
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
@@ -218,7 +218,7 @@ class Action(ActionBase):
         _, _, rc = self._run_runner()  # pylint: disable=invalid-name
         return RunStdoutReturn(message="", return_code=rc)
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Union[Interaction, None]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Handle :lint
 
         :param interaction: The interaction from the user
