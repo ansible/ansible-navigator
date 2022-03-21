@@ -1,4 +1,4 @@
-"""The `run` command implementation."""
+"""Run subcommand implementation."""
 import curses
 import json
 import logging
