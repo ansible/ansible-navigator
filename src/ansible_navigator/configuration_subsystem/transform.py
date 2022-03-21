@@ -1,5 +1,6 @@
 """Methods of transforming the settings."""
 
+import json
 import textwrap
 
 from typing import Dict
@@ -15,7 +16,6 @@ from .definitions import Constants
 from .definitions import SettingsEntry
 from .defs_presentable import PresentableSettingsEntries
 from .defs_presentable import PresentableSettingsEntry
-from .schema import PARTIAL_SCHEMA
 
 
 def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEntries:
@@ -55,8 +55,16 @@ def to_schema(settings: ApplicationConfiguration) -> str:
     :param settings: The application settings
     :returns: The json schema
     """
+    with importlib_resources.open_text(
+        "ansible_navigator.package_data",
+        "settings-schema.partial.json",
+    ) as fh:
+        file_contents = fh.read()
+
+    partial_schema = json.loads(file_contents)
+
     for entry in settings.entries:
-        subschema: Dict = PARTIAL_SCHEMA["properties"]
+        subschema: Dict = partial_schema["properties"]
         dot_parts = entry.settings_file_path(prefix=settings.application_name_dashed).split(".")
         for part in dot_parts[:-1]:
             if isinstance(subschema, dict):
@@ -73,7 +81,7 @@ def to_schema(settings: ApplicationConfiguration) -> str:
         PARTIAL_SCHEMA["version"] = settings.application_version
 
     return serialize(
-        content=PARTIAL_SCHEMA,
+        content=partial_schema,
         content_view=ContentView.NORMAL,
         serialization_format=SerializationFormat.JSON,
     )

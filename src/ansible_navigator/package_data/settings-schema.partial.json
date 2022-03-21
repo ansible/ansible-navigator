@@ -1,0 +1,273 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "additionalProperties": false,
+    "properties": {
+        "ansible-navigator": {
+            "properties": {
+                "ansible": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "cmdline": {
+                            "type": "string"
+                        },
+                        "config": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "help": {
+                                    "type": "boolean"
+                                },
+                                "path": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "doc": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "help": {
+                                    "type": "boolean"
+                                },
+                                "plugin": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "inventory": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "help": {
+                                    "type": "boolean"
+                                },
+                                "paths": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "playbook": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "help": {
+                                    "type": "boolean"
+                                },
+                                "path": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "type": "object"
+                },
+                "ansible-builder": {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "help": {
+                            "type": "boolean"
+                        },
+                        "workdir": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "ansible-runner": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "artifact-dir": {
+                            "type": "string"
+                        },
+                        "rotate-artifacts-count": {
+                            "type": "integer"
+                        },
+                        "timeout": {
+                            "type": "integer"
+                        }
+                    },
+                    "type": "object"
+                },
+                "app": {
+                    "type": "string"
+                },
+                "collection-doc-cache-path": {
+                    "type": "string"
+                },
+                "color": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "enable": {
+                            "type": "boolean"
+                        },
+                        "osc4": {
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "editor": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "command": {
+                            "type": "string"
+                        },
+                        "console": {
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "exec": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "command": {
+                            "type": "string"
+                        },
+                        "shell": {
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "execution-environment": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "container-engine": {
+                            "type": "string"
+                        },
+                        "container-options": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "environment-variables": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "pass": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "set": {
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "image": {
+                            "type": "string"
+                        },
+                        "pull": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "arguments": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "policy": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "volume-mounts": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "dest": {
+                                    "type": "string"
+                                },
+                                "label": {
+                                    "type": "string"
+                                },
+                                "options": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "src",
+                                "dest"
+                            ],
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                },
+                "inventory-columns": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "logging": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "append": {
+                            "type": "boolean"
+                        },
+                        "file": {
+                            "type": "string"
+                        },
+                        "level": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "playbook-artifact": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "enable": {
+                            "type": "boolean"
+                        },
+                        "replay": {
+                            "type": "string"
+                        },
+                        "save-as": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "time-zone": {
+                    "type": "string"
+                },
+                "settings": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "sample": {
+                            "type": "boolean"
+                        },
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "ansible-navigator"
+    ],
+    "title": "ansible-navigator settings file schema",
+    "type": "object"
+}
