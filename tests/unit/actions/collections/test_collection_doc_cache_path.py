@@ -33,7 +33,6 @@ class DuplicateMountException(RuntimeError):
 
 @pytest.mark.parametrize("doc_cache_path", DOC_CACHE_PATHS, ids=_id_description)
 @pytest.mark.usefixtures("patch_curses")
-@pytest.mark.usefixtures("patch_show_form")
 def test_for_duplicates_sources(
     doc_cache_path,
     monkeypatch: pytest.MonkeyPatch,
@@ -50,11 +49,9 @@ def test_for_duplicates_sources(
     working_dir = tmp_path / "working_dir"
     working_dir.mkdir()
     cdc_full_path = working_dir / doc_cache_path.path
-    log_path = tmp_path / "ansible-navigator.log"
-    command = (
-        f"ansible-navigator collections '--cdcp={cdc_full_path!s}' --pp never --lf {log_path!s}"
-    )
+    command = f"ansible-navigator collections '--cdcp={cdc_full_path!s}' --pp never"
     monkeypatch.setattr("sys.argv", shlex.split(command))
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
     run_cmd_mocked = mocker.patch(
         "ansible_navigator.runner.command.run_command",
         side_effect=DuplicateMountException,
@@ -63,8 +60,6 @@ def test_for_duplicates_sources(
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
     with pytest.raises(DuplicateMountException):
         cli.main()
-    except DuplicateMountException:
-        pass
     _args, kwargs = run_cmd_mocked.call_args
     host_cwd = Path(kwargs["host_cwd"])
     mounts = kwargs["container_volume_mounts"]

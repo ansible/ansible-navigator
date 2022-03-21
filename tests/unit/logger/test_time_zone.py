@@ -77,7 +77,6 @@ def test(
     args = data.args(log_file=log_file)
     monkeypatch.setattr("sys.argv", args)
     monkeypatch.setattr("ansible_navigator.cli.wrapper", return_none)
-    monkeypatch.chdir(tmp_path)
 
     if data.will_exit:
         with pytest.raises(SystemExit):
@@ -87,4 +86,4 @@ def test(
     # This is a conservative number based on debug logging, it should be closer to 200
     # but this assertion is here to ensure many records were retrieved.
     assert len(caplog.records) > 100
-    assert all(data.re_match.match(record.asctime) for record in caplog.records), caplog.records
+    assert all(data.re_match.match(record.asctime) for record in caplog.records)
