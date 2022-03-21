@@ -262,8 +262,41 @@ class Action(ActionBase):
             )
             return None
 
+        out_without_warnings = []
+        ansible_warning_in_output = False
+        for line in out.splitlines():
+            if not line:
+                continue
+            # This is a hacky way to see if we're getting a warning from
+            # Ansible. We can't just check for line starting with '[WARNING]:'
+            # because the warnings get split into multiple lines. Each line,
+            # however, starts with the escape code.
+            if line.startswith("\033[1;35m"):
+                if not ansible_warning_in_output:
+                    # Only log it once, even if multiple warnings.
+                    msg = (
+                        "ansible-lint output contained a warning from ansible. "
+                        "This is an ansible-lint bug, ansible-lint -qq should "
+                        "ignore such warnings."
+                    )
+                    self._logger.debug(msg)
+                    ansible_warning_in_output = True
+                continue
+            out_without_warnings.append(line)
+
+        if len(out_without_warnings) > 1:
+            self._fatal(
+                "ansible-lint JSON output had more than one line and should "
+                "not have. This is a bug. Please report it.")
+            return None
+
+        if len(out_without_warnings) == 0:
+            notification = success_notification(messages=["Congratulations, no lint issues found!"])
+            interaction.ui.show_form(notification)
+            return None
+
         try:
-            raw_issues = json.loads(out)
+            raw_issues = json.loads(out_without_warnings[0])
         except json.JSONDecodeError as exc:
             self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(exc))
             notification = error_notification(
@@ -272,11 +305,6 @@ class Action(ActionBase):
                 ],
             )
             self._interaction.ui.show_form(notification)
-            return None
-
-        if not raw_issues:
-            notification = success_notification(messages=["Congratulations, no lint issues found!"])
-            interaction.ui.show_form(notification)
             return None
 
         issues = [massage_issue(issue) for issue in raw_issues]
