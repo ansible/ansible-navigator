@@ -338,9 +338,11 @@ class Action(ActionBase):
 
         # Ensure the playbook and inventory are valid
 
-        self._update_args(
+        args_updated = self._update_args(
             ["run"] + shlex.split(self._interaction.action.match.groupdict()["params_run"] or ""),
         )
+        if not args_updated:
+            return False
 
         if isinstance(self._args.playbook, str):
             playbook_valid = os.path.exists(self._args.playbook)
@@ -368,7 +370,9 @@ class Action(ActionBase):
                 new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
 
             # Parse as if provided from the cmdline
-            self._update_args(new_cmd)
+            args_updated = self._update_args(new_cmd)
+            if not args_updated:
+                return False
 
         self._run_runner()
         self._logger.info("Run initialized and playbook started.")
@@ -383,10 +387,12 @@ class Action(ActionBase):
         self._logger.debug("Starting replay artifact request with mode %s", self.mode)
 
         if self.mode == "interactive":
-            self._update_args(
+            args_updated = self._update_args(
                 ["replay"]
                 + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or ""),
             )
+            if not args_updated:
+                return False
 
         artifact_file = self._args.playbook_artifact_replay
 

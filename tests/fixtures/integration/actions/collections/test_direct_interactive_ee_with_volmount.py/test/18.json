@@ -1,18 +1,21 @@
 {
-    "name": "test[18-:1-Browse company_name.coll_1 plugins window]",
+    "name": "test[18-Enter-ansible-navigator collections browse window]",
     "index": 18,
-    "comment": "Browse company_name.coll_1 plugins window",
+    "comment": "ansible-navigator collections browse window",
     "additional_information": {
-        "present": [],
+        "present": [
+            "ansible.builtin",
+            "company_name.coll_1",
+            "company_name.coll_2"
+        ],
         "absent": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
-        "  COMPANY NAME.COLL 1                                   TYPE               ADDED                 DEPRECATED                    DESCRIPTION",
-        "0│lookup_1                                              lookup             1.0.0                 False                         This is test lookup plugin",
-        "1│mod_1                                                 module             1.0.0                 False                         This is a test module",
-        "2│role_full                                             role               Unknown               Unknown                       Complete sample role.",
-        "3│role_minimum                                          role               Unknown               Unknown                       Minimal sample role.",
+        "  NAME                            VERSION              SHADOWED       TYPE              PATH",
+        "0│ansible.builtin                 2.11.6.post0            False       contained         /usr/local/lib/python3.8/site-packages/ansible",
+        "1│company_name.coll_1             1.0.0                   False       bind_mount        /tmp/collections_to_volmount/ansible_collections/company_name/coll_1",
+        "2│company_name.coll_2             2.0.0                   False       bind_mount        /tmp/collections_to_volmount/ansible_collections/company_name/coll_2",
         "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
