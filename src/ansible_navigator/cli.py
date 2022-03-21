@@ -25,7 +25,7 @@ from .configuration_subsystem import NavigatorConfiguration
 from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
-from .logging import setup_logger
+from .logger import setup_logger
 from .utils.functions import ExitMessage
 from .utils.functions import ExitPrefix
 from .utils.functions import LogMessage
