@@ -103,10 +103,8 @@ class Test(Cli2Runner):
         for env_var, value in expected.items():
             monkeypatch.setenv(env_var, value)
 
-        try:
+        with pytest.raises(RunnerTestException):
             cli.main()
-        except RunnerTestException:
-            pass
 
         _args, kwargs = mocked_runner.call_args
 

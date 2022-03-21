@@ -95,10 +95,8 @@ class Test(Cli2Runner):
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", str(coll_cache_path))
         monkeypatch.chdir(tmp_path)
 
-        try:
+        with pytest.raises(RunnerTestException):
             cli.main()
-        except RunnerTestException:
-            pass
 
         _args, kwargs = mocked_runner.call_args
 
