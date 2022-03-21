@@ -1,6 +1,7 @@
 """Tests for the transformation of settings to a json schema."""
 
 
+from copy import deepcopy
 from typing import Tuple
 
 import pytest
@@ -13,7 +14,7 @@ from ansible_navigator.utils.serialize import yaml
 
 @pytest.fixture(name="settings_samples")
 def _settings_samples() -> Tuple[str, str]:
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     commented, uncommented = to_sample(settings=settings)
     return commented, uncommented
 
