@@ -117,7 +117,7 @@ def content_heading(obj: Dict, screen_w: int) -> CursesLines:
                     ),
                 ),
             ),
-        )
+        ),
     )
 
 
@@ -287,7 +287,8 @@ class Action(ActionBase):
         if len(out_without_warnings) > 1:
             self._fatal(
                 "ansible-lint JSON output had more than one line and should "
-                "not have. This is a bug. Please report it.")
+                "not have. This is a bug. Please report it.",
+            )
             return None
 
         if len(out_without_warnings) == 0:
