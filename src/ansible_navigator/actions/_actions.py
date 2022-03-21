@@ -4,7 +4,6 @@
 import functools
 import importlib
 import logging
-import os
 import re
 import sys
 
@@ -17,7 +16,6 @@ from typing import List
 from typing import Tuple
 
 from ..action_defs import RunStdoutReturn
-from ..ui_framework import error_notification
 
 
 # ``mypy``/``pylint`` idiom for py36 compatibility
@@ -159,22 +157,7 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     if not supports_interactive:
         logger.error("Subcommand '%s' does not support mode interactive", action)
     run_action = app_action.run if supports_interactive else app_action.no_interactive_mode
-
-    # Allow tracebacks to bring down the UI, used in tests
-    if os.getenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK") == "true":
-        return run_action(app=app, interaction=interaction)
-
-    # Capture and show a UI notification
-    try:
-        return run_action(app=app, interaction=interaction)
-    except Exception:  # pylint: disable=broad-except
-        logger.critical("Subcommand '%s' encountered a fatal error.", action)
-        logger.exception("Logging an uncaught exception")
-        warn_msg = [f"Unexpected errors were encountered while running '{action}'."]
-        warn_msg.append("Please log an issue with the log file contents.")
-        warning = error_notification(warn_msg)
-        interaction.ui.show_form(warning)
-        return None
+    return run_action(app=app, interaction=interaction)
 
 
 def run_interactive_factory(package: str) -> Callable:

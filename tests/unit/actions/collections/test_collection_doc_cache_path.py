@@ -51,7 +51,6 @@ def test_for_duplicates_sources(
     cdc_full_path = working_dir / doc_cache_path.path
     command = f"ansible-navigator collections '--cdcp={cdc_full_path!s}' --pp never"
     monkeypatch.setattr("sys.argv", shlex.split(command))
-    monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
     run_cmd_mocked = mocker.patch(
         "ansible_navigator.runner.command.run_command",
         side_effect=DuplicateMountException,
