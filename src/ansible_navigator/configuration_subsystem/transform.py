@@ -67,7 +67,11 @@ def to_schema(settings: ApplicationConfiguration) -> str:
         if entry.value.default is not Constants.NOT_SET:
             subschema[dot_parts[-1]]["default"] = entry.value.default
 
-    PARTIAL_SCHEMA["version"] = settings.application_version
+    if isinstance(settings.application_version, Constants):
+        PARTIAL_SCHEMA["version"] = settings.application_version.value
+    else:
+        PARTIAL_SCHEMA["version"] = settings.application_version
+
     return serialize(
         content=PARTIAL_SCHEMA,
         content_view=ContentView.NORMAL,
