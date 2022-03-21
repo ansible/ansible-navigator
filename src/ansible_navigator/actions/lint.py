@@ -32,6 +32,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner.command import Command
 from ..steps import Step
+from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
@@ -87,30 +88,36 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return (severity_to_color(entry["severity"]), 0)
 
 
-def content_heading(obj: Dict, screen_w: int) -> Union[CursesLines, None]:
+def content_heading(obj: Dict, screen_w: int) -> CursesLines:
     """Generate the content heading."""
     check_name = obj["check_name"]
     check_name = check_name + (" " * (screen_w - len(check_name)))
     path_line = f"PATH: {abs_user_path(obj['location']['path'])}"
     check_name_line = f"MESSAGE: {check_name}"
 
-    return (
+    return CursesLines(
         (
-            CursesLinePart(
-                column=0,
-                string=path_line,
-                color=0,
-                decoration=curses.A_BOLD,
+            CursesLine(
+                (
+                    CursesLinePart(
+                        column=0,
+                        string=path_line,
+                        color=0,
+                        decoration=curses.A_BOLD,
+                    ),
+                ),
             ),
-        ),
-        (
-            CursesLinePart(
-                column=0,
-                string=check_name_line,
-                color=severity_to_color(obj["severity"]),
-                decoration=curses.A_UNDERLINE,
+            CursesLine(
+                (
+                    CursesLinePart(
+                        column=0,
+                        string=check_name_line,
+                        color=severity_to_color(obj["severity"]),
+                        decoration=curses.A_UNDERLINE,
+                    ),
+                ),
             ),
-        ),
+        )
     )
 
 
