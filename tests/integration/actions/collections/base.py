@@ -47,6 +47,13 @@ base_steps = (
     UiTestStep(
         user_input=":collections --ee FFFFF",
         comment="Provide an invalid ee value",
+        present=["Errors were encountered while parsing the last command"],
+        search_within_response=SearchFor.WARNING,
+    ),
+    # Dismiss the warning
+    UiTestStep(
+        user_input="Enter",
+        comment="ansible-navigator collections browse window",
         present=EXPECTED_COLLECTIONS,
     ),
     # and repeat some basic browsing
@@ -131,6 +138,8 @@ class BaseClass:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
+        elif step.search_within_response is SearchFor.WARNING:
+            search_within_response = "WARNING"
         else:
             raise ValueError("test mode not set")
 

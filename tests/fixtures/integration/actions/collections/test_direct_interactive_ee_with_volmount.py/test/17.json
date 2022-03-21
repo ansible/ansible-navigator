@@ -4,18 +4,20 @@
     "comment": "Provide an invalid ee value",
     "additional_information": {
         "present": [
-            "ansible.builtin",
-            "company_name.coll_1",
-            "company_name.coll_2"
+            "Errors were encountered while parsing the last command"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  NAME                            VERSION              SHADOWED       TYPE              PATH",
-        "0│ansible.builtin                 2.11.6.post0            False       contained         /usr/local/lib/python3.8/site-packages/ansible",
-        "1│company_name.coll_1             1.0.0                   False       bind_mount        /tmp/collections_to_volmount/ansible_collections/company_name/coll_1",
-        "2│company_name.coll_2             2.0.0                   False       bind_mount        /tmp/collections_to_volmount/ansible_collections/company_name/coll_2",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "                                        WARNING",
+        "                                        ───────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                        Errors were encountered while parsing the last command.",
+        "                                        [ERROR]: Command provided: 'collections --ee FFFFF'",
+        "                                        [ERROR]: execution_environment could not be converted to a boolean value, value was 'FFFFF' (str)",
+        "                                        [ERROR]: execution-environment must be one of 'true' or 'false', but set as 'FFFFF' in Command line",
+        "                                         [HINT]: Try again with '--ee true' or '--ee false'",
+        "                                        ───────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                                      Ok"
     ]
 }
