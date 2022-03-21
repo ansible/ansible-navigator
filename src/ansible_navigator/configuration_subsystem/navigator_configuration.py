@@ -365,7 +365,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         SettingsEntry(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
-            environment_variable_override="ansible_navigator_inventories",
+            environment_variable_override="ansible_inventory",
             settings_file_path_override="ansible.inventory.paths",
             short_description="Specify an inventory file path or comma separated host list",
             subcommands=["inventory", "run"],
