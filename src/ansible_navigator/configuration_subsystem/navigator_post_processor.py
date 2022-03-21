@@ -486,14 +486,16 @@ class NavigatorPostProcessor:
                     entry.value.current.append(abs_user_path(inv_entry))
 
         # Something may be required
-        if config.app == "inventory" and entry.value.current is C.NOT_SET:
-            if config.entry("help_inventory").value.current is False:
-                exit_msg = "An inventory is required when using the inventory subcommand"
-                exit_messages.append(ExitMessage(message=exit_msg))
-                if entry.cli_parameters:
-                    exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
-                    exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
+        app_match = config.app == "inventory"
+        current_not_set = entry.value.current is C.NOT_SET
+        not_help_inventory = config.entry("help_inventory").value.current is False
+
+        if app_match and current_not_set and not_help_inventory:
+            exit_msg = "An inventory is required when using the inventory subcommand"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            if entry.cli_parameters:
+                exit_msg = f"Try again with '{entry.cli_parameters.short} <path to inventory>'"
+                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
         return messages, exit_messages
 
