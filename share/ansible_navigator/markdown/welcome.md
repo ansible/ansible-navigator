@@ -12,6 +12,7 @@ Some things you can try from here:
 - `:open`                                                 Open current page in the editor
 - `:replay`                                               Explore a previous run using a playbook artifact
 - `:run <playbook> -i <inventory>`                        Run a playbook in interactive mode
+- `:settings`                                             Review the current ansible-navigator settings
 - `:quit`                                                 Quit the application
 
 happy automating,
