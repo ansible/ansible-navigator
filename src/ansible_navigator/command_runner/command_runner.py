@@ -9,6 +9,8 @@ from typing import Callable
 from typing import List
 from typing import Optional
 
+from ..utils.functions import LogMessage
+
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
@@ -21,13 +23,32 @@ class Command:
     ``stdout`` or ``stderr``.
     """
 
+    # pylint: disable=too-many-instance-attributes
     identity: str
     command: str
     post_process: Callable
+    return_code: Optional[int] = None
     stdout: str = ""
     stderr: str = ""
     details: List = field(default_factory=list)
     errors: str = ""
+    messages: List[LogMessage] = field(default_factory=list)
+
+    @property
+    def stderr_lines(self):
+        """Produce a list of stderr lines.
+
+        :returns: A list of stderr lines
+        """
+        return self.stderr.splitlines()
+
+    @property
+    def stdout_lines(self):
+        """Produce a list of stdout lines.
+
+        :returns: A list of stdout lines
+        """
+        return self.stdout.splitlines()
 
 
 def run_command(command: Command) -> None:
@@ -44,8 +65,10 @@ def run_command(command: Command) -> None:
             universal_newlines=True,
             shell=True,
         )
+        command.return_code = proc_out.returncode
         command.stdout = proc_out.stdout
     except subprocess.CalledProcessError as exc:
+        command.return_code = exc.returncode
         command.stdout = str(exc.stdout)
         command.stderr = str(exc.stderr)
 

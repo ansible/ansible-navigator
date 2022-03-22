@@ -289,6 +289,13 @@ def test_apply_cli_subset_none():
                 short_description="the z parameter",
                 value=SettingsEntryValue(),
             ),
+            SettingsEntry(
+                name="execution_environment",
+                apply_to_subsequent_cli=C.NONE,
+                cli_parameters=CliParameters(short="-e"),
+                short_description="the e parameter",
+                value=SettingsEntryValue(),
+            ),
         ],
     )
     configurator = Configurator(

@@ -1,0 +1,17 @@
+{
+    "name": "test[1-:1-visit host from inventory specified in ansible.cfg]",
+    "index": 1,
+    "comment": "visit host from inventory specified in ansible.cfg",
+    "additional_information": {
+        "present": [
+            "from.ansible.cfg"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  INVENTORY HOSTNAME                                                                                            ANSIBLE NETWORK OS                                                                                            ANSIBLE NETWORK CLI SSH TYPE                                                                                                                                           ANSIBLE CONNECTION",
+        "0│from.ansible.cfg                                                                                              None                                                                                                          None                                                                                                                                                                   None",
+        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
+    ]
+}

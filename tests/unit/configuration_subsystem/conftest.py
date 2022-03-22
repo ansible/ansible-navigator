@@ -9,6 +9,8 @@ from typing import NamedTuple
 
 import pytest
 
+from ansible_navigator.command_runner import Command
+from ansible_navigator.command_runner.command_runner import run_command
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 from ansible_navigator.configuration_subsystem.definitions import (
     ApplicationConfiguration,
@@ -74,3 +76,24 @@ def _generate_config(params=None, setting_file_name=None, initial=True) -> Gener
 def fixture_generate_config():
     """generate a configuration"""
     return _generate_config
+
+
+@pytest.fixture
+def ansible_version(monkeypatch):
+    """Path the ansible --version call to avoid the subprocess calls
+
+    :param monkeypatch: Fixture for patching
+    """
+    original_run_command = run_command
+
+    def static_ansible_version(command: Command):
+        if command.command == "ansible --version":
+            command.return_code = 0
+            command.stdout = "ansible [core 2.12.3]\nconfig file = None"
+        else:
+            original_run_command(command)
+
+    monkeypatch.setattr(
+        "ansible_navigator.command_runner.command_runner.run_command",
+        static_ansible_version,
+    )
