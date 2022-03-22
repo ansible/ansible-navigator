@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:replay /tests/fixtures/integration/actions/replay/playbook-artifact.json-Play list-search_within_response1]",
+    "name": "test[1-:replay /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/replay/playbook-artifact.json-Play list-search_within_response1]",
     "index": 1,
     "comment": "Play list",
     "output": [

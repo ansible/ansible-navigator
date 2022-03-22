@@ -21,6 +21,9 @@ ansible-navigator:
   ansible-builder:
     help: False
     workdir: /tmp/
+  ansible-lint:
+    config: ~/ansible-lint.yml
+    lintables: ~/myproject/
   ansible-runner:
     artifact-dir: /tmp/test1
     rotate-artifacts-count: 10

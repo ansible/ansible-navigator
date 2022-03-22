@@ -38,6 +38,11 @@ ansible-navigator:
     help: False
     # {{ ansible-builder.workdir }}
     workdir: /tmp/
+  ansible-lint:
+    # {{ ansible-lint.config }}
+    config: ~/lint-config.yml
+    # {{ ansible-lint.lintables }}
+    lintables: ~/myproject/
   ansible-runner:
     # {{ ansible-runner.artifact-dir }}
     artifact-dir: ./runner-artifacts

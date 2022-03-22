@@ -82,6 +82,18 @@
             }
           }
         },
+        "ansible-lint": {
+          "additionalProperties": false,
+          "properties": {
+            "config": {
+              "type": "string"
+            },
+            "lintables": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
         "ansible-runner": {
           "additionalProperties": false,
           "properties": {
