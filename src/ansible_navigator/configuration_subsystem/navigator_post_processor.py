@@ -540,7 +540,7 @@ class NavigatorPostProcessor:
             except VolumeMountError as ex:
                 exit_messages.append(
                     ExitMessage(
-                        message=f"Error mounting lintable into execution environment: {ex}"
+                        message=f"Error mounting lintable into execution environment: {ex}",
                     ),
                 )
             else:
