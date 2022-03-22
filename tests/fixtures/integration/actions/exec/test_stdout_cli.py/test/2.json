@@ -1,0 +1,16 @@
+{
+    "name": "test[exec echo check path via shell  clear && ansible-navigator exec 'echo $PATH' --ee True --ll debug --mode stdout]",
+    "index": 2,
+    "comment": "exec echo check path via shell",
+    "additional_information": {
+        "present": [
+            "/sbin"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "(py38) bash-5.1$"
+    ]
+}
