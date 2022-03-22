@@ -22,11 +22,12 @@
         "11│- `:open`                                                 Open current page in the editor",
         "12│- `:replay`                                               Explore a previous run using a playbook artifact",
         "13│- `:run <playbook> -i <inventory>`                        Run a playbook in interactive mode",
-        "14│- `:quit`                                                 Quit the application",
-        "15│",
-        "16│happy automating,",
-        "17│",
-        "18│-winston",
+        "14│- `:settings`                                             Review the current ansible-navigator settings",
+        "15│- `:quit`                                                 Quit the application",
+        "16│",
+        "17│happy automating,",
+        "18│",
+        "19│-winston",
         "^f/PgUp page up                                                ^b/PgDn page down                                                ↑↓ scroll                                                esc back                                                :help help"
     ]
 }
