@@ -218,6 +218,51 @@ class Action(ActionBase):
         _, _, rc = self._run_runner()  # pylint: disable=invalid-name
         return RunStdoutReturn(message="", return_code=rc)
 
+    def _pull_out_json_or_fatal(self, stdout: str) -> Optional[str]:
+        """
+        Attempt to pull out JSON line from ansible-lint raw output.
+
+        Note that stdout and stderr get munged together by docker/podman, so we
+        need to do some trickery to try to figure out the actual JSON line vs,
+        say, ansible warnings.
+        """
+        out_without_warnings = []
+        ansible_warning_in_output = False
+        for line in stdout.splitlines():
+            if not line:
+                continue
+
+            # This is a hacky way to see if we're getting a warning from
+            # Ansible. We can't just check for line starting with '[WARNING]:'
+            # because the warnings get split into multiple lines. Each line,
+            # however, starts with the escape code.
+            if line.startswith("\033[1;35m"):
+                if not ansible_warning_in_output:
+                    # Only log it once, even if multiple warnings.
+                    msg = (
+                        "ansible-lint output contained a warning from ansible. "
+                        "This is an ansible-lint bug, ansible-lint -qq should "
+                        "ignore such warnings."
+                    )
+                    self._logger.debug(msg)
+                    ansible_warning_in_output = True
+                continue
+            out_without_warnings.append(line)
+
+        if len(out_without_warnings) > 1:
+            self._fatal(
+                "ansible-lint JSON output had more than one line and should "
+                "not have. This is a bug. Please report it.",
+            )
+            return None
+
+        if len(out_without_warnings) == 0:
+            notification = success_notification(messages=["Congratulations, no lint issues found!"])
+            self._interaction.ui.show_form(notification)
+            return None
+
+        return out_without_warnings[0]
+
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Handle :lint
 
@@ -262,42 +307,12 @@ class Action(ActionBase):
             )
             return None
 
-        out_without_warnings = []
-        ansible_warning_in_output = False
-        for line in out.splitlines():
-            if not line:
-                continue
-            # This is a hacky way to see if we're getting a warning from
-            # Ansible. We can't just check for line starting with '[WARNING]:'
-            # because the warnings get split into multiple lines. Each line,
-            # however, starts with the escape code.
-            if line.startswith("\033[1;35m"):
-                if not ansible_warning_in_output:
-                    # Only log it once, even if multiple warnings.
-                    msg = (
-                        "ansible-lint output contained a warning from ansible. "
-                        "This is an ansible-lint bug, ansible-lint -qq should "
-                        "ignore such warnings."
-                    )
-                    self._logger.debug(msg)
-                    ansible_warning_in_output = True
-                continue
-            out_without_warnings.append(line)
-
-        if len(out_without_warnings) > 1:
-            self._fatal(
-                "ansible-lint JSON output had more than one line and should "
-                "not have. This is a bug. Please report it.",
-            )
-            return None
-
-        if len(out_without_warnings) == 0:
-            notification = success_notification(messages=["Congratulations, no lint issues found!"])
-            interaction.ui.show_form(notification)
+        out_without_warnings = self._pull_out_json_or_fatal(out)
+        if out_without_warnings is None:
             return None
 
         try:
-            raw_issues = json.loads(out_without_warnings[0])
+            raw_issues = json.loads(out_without_warnings)
         except json.JSONDecodeError as exc:
             self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(exc))
             notification = error_notification(
