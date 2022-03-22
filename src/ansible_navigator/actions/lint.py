@@ -245,15 +245,16 @@ class Action(ActionBase):
         """
 
         self._logger.debug("lint requested")
+
+        # Set up interaction
+        self._prepare_to_run(app, interaction)
+
         updated = self._update_args(
             ["lint"] + shlex.split(interaction.action.match.groupdict()["params"] or ""),
         )
 
         if not updated:
             return None
-
-        # Set up interaction
-        self._prepare_to_run(app, interaction)
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
         interaction.ui.show_form(notification)
