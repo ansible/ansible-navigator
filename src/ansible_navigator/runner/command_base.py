@@ -8,12 +8,10 @@ import sys
 from typing import List
 from typing import Optional
 
-from ..utils.functions import shlex_join
 from .base import Base
 
 
 class CommandBase(Base):
-    # pylint: disable=too-many-arguments
     """Base class for runner command interaction."""
 
     def __init__(
