@@ -16,9 +16,12 @@ from typing import Tuple
 from typing import Union
 
 from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants
+from ..content_defs import ContentView
+from ..content_defs import SerializationFormat
 from ..runner import Command
 from ..steps import Step
 from ..ui_framework import CursesLine
@@ -28,7 +31,9 @@ from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import path_is_relative_to
+from ..utils.functions import remove_dbl_un
 from ..utils.key_value_store import KeyValueStore
+from ..utils.serialize import serialize
 from . import _actions as actions
 from . import run_action
 
@@ -163,6 +168,49 @@ class Action(ActionBase):
 
         self._prepare_to_exit(interaction)
         return None
+
+    def run_stdout(self) -> RunStdoutReturn:
+        """Execute the ``collection`` request for mode stdout.
+
+        :returns: The return code or 1. If the response from the runner invocation is None,
+            indicates there is no console output to display, so assume an issue and return 1
+            along with a message to review the logs.
+        """
+        collections_info: Dict = {
+            "collections": [],
+            "stats": {},
+        }
+        self._logger.debug("collection requested in stdout mode")
+        self._collection_cache = self._args.internals.collection_doc_cache
+        self._collection_cache_path = self._args.collection_doc_cache_path
+        self._run_runner()
+        if not self._collections:
+            msg = (
+                "Failed to catalog collections, "
+                + "Please review the ansible-navigator log file for errors."
+            )
+            return RunStdoutReturn(message=msg, return_code=1)
+
+        collections_info_exclude = ["plugin_checksums", "file_manifest_file"]
+        for collection in self._collections:
+            collections_info["collections"].append(
+                {
+                    remove_dbl_un(k): v
+                    for k, v in collection.items()
+                    if k not in collections_info_exclude
+                },
+            )
+
+        collections_info["stats"].update(self._stats)
+
+        print(
+            serialize(
+                content=collections_info,
+                content_view=ContentView.NORMAL,
+                serialization_format=SerializationFormat.YAML,
+            ),
+        )
+        return RunStdoutReturn(message="", return_code=0)
 
     def _take_step(self) -> None:
         """Take a step based on the current step or step back."""
