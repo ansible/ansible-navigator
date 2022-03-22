@@ -2,6 +2,7 @@
 .git/
 .tox/
 .mypy_cache/
+build/
 
 # Environments
 .env
