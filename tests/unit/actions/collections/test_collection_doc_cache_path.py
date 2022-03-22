@@ -56,6 +56,7 @@ def test_for_duplicates_sources(
         side_effect=DuplicateMountException,
     )
     monkeypatch.chdir(working_dir)
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
     with pytest.raises(DuplicateMountException):
         cli.main()
     _args, kwargs = run_cmd_mocked.call_args
