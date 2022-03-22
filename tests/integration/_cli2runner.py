@@ -55,6 +55,7 @@ class Cli2Runner:
     ):
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["config"], cli_entry, "interactive")
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command.run_command")
@@ -71,6 +72,7 @@ class Cli2Runner:
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.STDOUT["config"], cli_entry, "stdout")
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.ansible_inventory.get_inventory")
@@ -87,6 +89,7 @@ class Cli2Runner:
     ):
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["inventory"], cli_entry, "interactive")
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command.run_command")
@@ -103,6 +106,7 @@ class Cli2Runner:
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.STDOUT["inventory"], cli_entry, "stdout")
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command_async.run_command_async")
@@ -120,6 +124,7 @@ class Cli2Runner:
         # pylint: disable=unused-argument
         """test use of set_environment_variable"""
         cli_entry = self.cli_entry.format(self.INTERACTIVE["run"], cli_entry, "interactive")
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         self.run_test(mocked_runner, monkeypatch, tmpdir, cli_entry, config_fixture, expected)
 
     @mock.patch("ansible_navigator.runner.command_async.run_command_async")
