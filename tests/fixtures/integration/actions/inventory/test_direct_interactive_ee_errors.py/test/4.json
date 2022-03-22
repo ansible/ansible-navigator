@@ -10,12 +10,13 @@
         "compared_fixture": false
     },
     "output": [
-        "                                                                                                                                        WARNING",
-        "                                                                                                                                        ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                                                                                                                        Errors were encountered while gathering the inventory:",
-        "                                                                                                                                        [WARNING]: Unable to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.ini as an inventory source",
-        "                                                                                                                                        [WARNING]: No inventory was parsed, only implicit localhost is available",
-        "                                                                                                                                        ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                                                                                                                                                                                                                                                                                 Ok"
+        "                                                                                                                        WARNING",
+        "                                                                                                                        ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                        Errors were encountered while gathering the inventory:",
+        "                                                                                                                        [WARNING]:  * Failed to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.ini with ini plugin: host range must be begin:end or begin:end:step",
+        "                                                                                                                        [WARNING]: Unable to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.ini as an inventory source",
+        "                                                                                                                        [WARNING]: No inventory was parsed, only implicit localhost is available",
+        "                                                                                                                        ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                                                                                                                                                                                                                           Ok"
     ]
 }
