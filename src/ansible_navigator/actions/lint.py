@@ -212,7 +212,7 @@ class Action(ActionBase):
         runner = Command(executable_cmd="ansible-lint", **kwargs)
         return runner.run()
 
-    def run_stdout(self) -> int:
+    def run_stdout(self) -> RunStdoutReturn:
         """Run in oldschool mode, just stdout."""
         self._logger.debug("lint requested in stdout mode")
         _, _, rc = self._run_runner()  # pylint: disable=invalid-name
