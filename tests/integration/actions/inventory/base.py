@@ -101,7 +101,6 @@ class BaseClass:
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-            and not any((step.present, step.absent))
         )
         if fixtures_update_requested:
             update_fixtures(
