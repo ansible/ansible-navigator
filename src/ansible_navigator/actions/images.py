@@ -11,8 +11,11 @@ from typing import Optional
 from typing import Tuple
 
 from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..content_defs import ContentView
+from ..content_defs import SerializationFormat
 from ..image_manager import inspect_all
 from ..runner import Command
 from ..steps import Step
@@ -22,6 +25,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
+from ..utils.serialize import serialize
 from . import _actions as actions
 from . import run_action
 
@@ -121,6 +125,32 @@ class Action(ActionBase):
         )
         return CursesLines((CursesLine((line_part,)),))
 
+    def run_stdout(self) -> RunStdoutReturn:
+        """Handle settings in mode stdout.
+
+        :returns: RunStdoutReturn
+        """
+        self._logger.debug("images requested in stdout mode")
+        self._collect_image_list()
+        if not self._images.value:
+            msg = "No images were found, or the configured container engine was not available."
+            return RunStdoutReturn(message=msg, return_code=1)
+        filtered = []
+        for image in self._images.value:
+            if image["execution_environment"] is False:
+                continue
+            image["name_tag"] = image["__name_tag"]
+            image["full_name"] = image["__full_name"]
+            filtered.append(filter_content_keys(image))
+        print(
+            serialize(
+                content=filtered,
+                content_view=ContentView.NORMAL,
+                serialization_format=SerializationFormat.YAML,
+            ),
+        )
+        return RunStdoutReturn(message="", return_code=0)
+
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``images`` request for mode interactive.
 
@@ -132,9 +162,12 @@ class Action(ActionBase):
         self._logger.debug("images requested")
         self._prepare_to_run(app, interaction)
 
-        self._update_args(
+        args_updated = self._update_args(
             [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
         )
+        if not args_updated:
+            self._prepare_to_exit(interaction)
+            return None
 
         notification = nonblocking_notification(
             messages=["Collecting available images, this may take a minute..."],

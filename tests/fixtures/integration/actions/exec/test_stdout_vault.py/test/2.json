@@ -11,6 +11,6 @@
     },
     "output": [
         "ERROR! The vault password file /home/user/github/ansible-navigator/a_password_file was not found",
-        "(venv) bash-5.1$"
+        "(py38) bash-5.1$"
     ]
 }

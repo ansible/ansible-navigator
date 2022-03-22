@@ -1,5 +1,5 @@
 {
-    "name": "test[3-:config -c /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/config/ansible.cfg-enter config from welcome screen, custom config, (no ee)]",
+    "name": "test[3-:config -c /tests/fixtures/integration/actions/config/ansible.cfg-enter config from welcome screen, custom config, (no ee)]",
     "index": 3,
     "comment": "enter config from welcome screen, custom config, (no ee)",
     "additional_information": {

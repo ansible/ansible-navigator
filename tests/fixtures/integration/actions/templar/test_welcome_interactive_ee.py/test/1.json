@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:run /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/run/site.yaml -i /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/run/inventory-ansible-navigator run playbook]",
+    "name": "test[1-:run /tests/fixtures/integration/actions/run/site.yaml -i /tests/fixtures/integration/actions/run/inventory-ansible-navigator run playbook]",
     "index": 1,
     "comment": "ansible-navigator run playbook",
     "additional_information": {

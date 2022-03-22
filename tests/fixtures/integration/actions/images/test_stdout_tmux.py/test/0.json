@@ -1,0 +1,22 @@
+{
+    "name": "test[print image to stdout  clear && ansible-navigator images --ee True --ll debug --mode stdout  | grep creator]",
+    "index": 0,
+    "comment": "print image to stdout",
+    "additional_information": {
+        "present": [
+            "repository: quay.io/ansible/creator-ee"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  full_name: quay.io/ansible/creator-ee:v0.2.0",
+        "      - quay.io/ansible/creator-ee:v0.2.0",
+        "      - quay.io/ansible/creator-ee@sha256:2a20360ae5ee0c6a45d248babdeba3a1268ff7ffbc24ce22a76c8e1574ebcd49",
+        "      - quay.io/ansible/creator-ee:v0.2.0",
+        "  name: creator-ee",
+        "  name_tag: creator-ee:v0.2.0 (primary)",
+        "  repository: quay.io/ansible/creator-ee",
+        "(py38) bash-5.1$"
+    ]
+}

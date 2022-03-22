@@ -20,6 +20,7 @@ from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 from .parser import Parser
 from .transform import to_schema
+from .utils import parse_ansible_cfg
 
 
 class Configurator:
@@ -94,6 +95,7 @@ class Configurator:
 
         self._apply_previous_cli_to_current()
 
+        self._retrieve_ansible_cfg()
         self._post_process()
         self._check_choices()
         if self._exit_messages:
@@ -185,6 +187,11 @@ class Configurator:
                     " 'ansible-navigator settings --schema'"
                 )
                 self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+                hint = (
+                    "A sample settings file can be created with"
+                    " 'ansible-navigator settings --sample'"
+                )
+                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
                 return
 
             for entry in self._config.entries:
@@ -225,7 +232,10 @@ class Configurator:
             set_env_var = os.environ.get(entry.environment_variable(self._config.application_name))
             if set_env_var is not None:
                 if self._config.internals.initializing or entry.change_after_initial:
-                    if entry.cli_parameters is not None and entry.cli_parameters.nargs == "+":
+                    if entry.cli_parameters is not None and entry.cli_parameters.nargs in [
+                        "+",
+                        "*",
+                    ]:
                         entry.value.current = [
                             value.strip()
                             for value in set_env_var.split(entry.environment_variable_split_char)
@@ -349,3 +359,17 @@ class Configurator:
 
             current_entry.value.current = previous_entry.value.current
             current_entry.value.source = C.PREVIOUS_CLI
+
+    def _retrieve_ansible_cfg(self):
+        """Retrieve the ansible.cfg file.
+
+        EE support is needed early on here so the post processors
+        can have access to the ansible.cfg file contents as a fallback to
+        navigators settings sources. The value won't be set but it is needed to
+        determine where the ansible.cfg file should be pulled from
+        """
+        ee_enabled = str(self._config.execution_environment).lower() == "true"
+        parsed_ansible_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
+        self._messages.extend(parsed_ansible_cfg.messages)
+        self._exit_messages.extend(parsed_ansible_cfg.exit_messages)
+        self._config.internals.ansible_configuration = parsed_ansible_cfg.config

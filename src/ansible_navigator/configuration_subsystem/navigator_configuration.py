@@ -22,6 +22,7 @@ from .definitions import SettingsEntry
 from .definitions import SettingsEntryValue
 from .definitions import SubCommand
 from .navigator_post_processor import NavigatorPostProcessor
+from .utils import AnsibleConfiguration
 
 
 APP_NAME = "ansible_navigator"
@@ -86,6 +87,7 @@ class Internals:
     from application initiation to the rest of the app
     """
 
+    ansible_configuration: AnsibleConfiguration = AnsibleConfiguration()
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
     initializing: bool = False
@@ -349,7 +351,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="help_doc",
             choices=[True, False],
             cli_parameters=CliParameters(short="--hd", action="store_true"),
-            settings_file_path_override="documentation.help",
+            settings_file_path_override="ansible.doc.help",
             short_description="Help options for ansible-doc command in stdout mode",
             subcommands=["doc"],
             value=SettingsEntryValue(default=False),
@@ -374,8 +376,8 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="inventory",
-            cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
-            environment_variable_override="ansible_navigator_inventories",
+            cli_parameters=CliParameters(action="append", nargs="*", short="-i"),
+            environment_variable_override="ansible_inventory",
             settings_file_path_override="ansible.inventory.paths",
             short_description="Specify an inventory file path or comma separated host list",
             subcommands=["inventory", "run"],
@@ -501,7 +503,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         SettingsEntry(
             name="plugin_name",
             cli_parameters=CliParameters(positional=True),
-            settings_file_path_override="documentation.plugin.name",
+            settings_file_path_override="ansible.doc.plugin.name",
             short_description="Specify the plugin name",
             subcommands=["doc"],
             value=SettingsEntryValue(),
@@ -510,7 +512,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="plugin_type",
             choices=PLUGIN_TYPES,
             cli_parameters=CliParameters(short="-t", long_override="--type"),
-            settings_file_path_override="documentation.plugin.type",
+            settings_file_path_override="ansible.doc.plugin.type",
             short_description=f"Specify the plugin type, {oxfordcomma(PLUGIN_TYPES, 'or')}",
             subcommands=["doc"],
             value=SettingsEntryValue(default="module"),
@@ -551,6 +553,17 @@ NavigatorConfiguration = ApplicationConfiguration(
                 " execution environment (--senv MY_VAR=42)"
             ),
             value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
+            name="settings_sample",
+            cli_parameters=CliParameters(
+                short="--gs",
+                long_override="--sample",
+                action="store_true",
+            ),
+            settings_file_path_override="settings.sample",
+            short_description=("Generate a sample settings file."),
+            value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
             name="settings_schema",

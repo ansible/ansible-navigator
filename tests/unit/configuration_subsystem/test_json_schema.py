@@ -2,6 +2,7 @@
 
 import json
 
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 from typing import Dict
@@ -12,6 +13,7 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.configuration_subsystem import to_schema
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
@@ -20,7 +22,7 @@ from .defaults import TEST_FIXTURE_DIR
 
 @pytest.fixture(name="schema_dict")
 def _schema_dict():
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     settings.application_version = "test"
     schema = to_schema(settings)
     as_dict = json.loads(schema)
@@ -35,7 +37,7 @@ def test_basic(schema_dict: Dict[str, Any]):
     assert schema_dict["$schema"] == "http://json-schema.org/draft-07/schema"
     assert isinstance(schema_dict["properties"]["ansible-navigator"]["properties"], dict)
     # This checks for a number of root keys in the settings file
-    assert len(schema_dict["properties"]["ansible-navigator"]["properties"]) >= 16
+    assert len(schema_dict["properties"]["ansible-navigator"]["properties"]) >= 15
 
 
 def test_additional_properties(schema_dict: Dict[str, Any]):
@@ -58,7 +60,7 @@ def test_no_extras(schema_dict: Dict[str, Any]):
 
     :param schema_dict: The json schema as a dictionary
     """
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     all_paths = [
         setting.settings_file_path(prefix=settings.application_name_dashed)
         for setting in settings.entries
@@ -90,7 +92,7 @@ def test_no_extras(schema_dict: Dict[str, Any]):
     assert only_in_settings == ["ansible-navigator.execution-environment.volume-mounts"]
 
 
-def test_schema_sample_full(schema_dict: Dict[str, Any]):
+def test_schema_sample_full_tests(schema_dict: Dict[str, Any]):
     """Check the full settings file against the schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -99,6 +101,19 @@ def test_schema_sample_full(schema_dict: Dict[str, Any]):
     with settings_file.open(encoding="utf-8") as fh:
         settings_contents = yaml.load(fh, Loader=Loader)
     validate(instance=settings_contents, schema=schema_dict)
+
+
+def test_schema_sample_full_package_data(schema_dict: Dict[str, Any]):
+    """Check the settings file used as a sample against the schema.
+
+    :param schema_dict: The json schema as a dictionary
+    """
+    settings = deepcopy(NavigatorConfiguration)
+    commented, uncommented = to_sample(settings=settings)
+    settings_dict = yaml.load(commented, Loader=Loader)
+    validate(instance=settings_dict, schema=schema_dict)
+    settings_dict = yaml.load(uncommented, Loader=Loader)
+    validate(instance=settings_dict, schema=schema_dict)
 
 
 def test_schema_sample_wrong(schema_dict: Dict[str, Any]):

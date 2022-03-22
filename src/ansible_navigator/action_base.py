@@ -170,7 +170,7 @@ class ActionBase:
         params: List,
         apply_previous_cli_entries: C = C.ALL,
         attach_cdc: bool = False,
-    ) -> Tuple[List[LogMessage], List[ExitMessage]]:
+    ) -> bool:
         """Update the current args.
 
         Pass the params through the configuration subsystem
@@ -181,6 +181,7 @@ class ActionBase:
         :param params: a sys.argv like list of parameters
         :param apply_previous_cli_entries: Should previous params from the CLI be applied
         :param attach_cdc: Should the collection doc cache be attached to the args.internals
+        :returns: Indication if the args update succeeded or failed
         """
         messages: List[LogMessage]
         exit_messages: List[ExitMessage]
@@ -201,7 +202,13 @@ class ActionBase:
             else:
                 self._logger.log(level=exit_msg.level, msg=exit_msg.message)
 
-        return messages, exit_messages
+        if exit_messages:
+            warn_msg = ["Errors were encountered while parsing the last command."]
+            warn_msg.extend([f"{message.plain_text()}" for message in exit_messages])
+            warning = warning_notification(warn_msg)
+            self._interaction.ui.show_form(warning)
+            return False
+        return True
 
     def write_artifact(self, filename: str) -> None:
         """Write an artifact file.

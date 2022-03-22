@@ -82,6 +82,8 @@ class BaseClass:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
+        elif step.search_within_response is SearchFor.WARNING:
+            search_within_response = "WARNING"
         else:
             raise ValueError("test mode not set")
 
@@ -99,7 +101,6 @@ class BaseClass:
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
-            and not any((step.present, step.absent))
         )
         if fixtures_update_requested:
             update_fixtures(

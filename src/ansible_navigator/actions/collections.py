@@ -122,7 +122,10 @@ class Action(ActionBase):
             self._interaction.action.match.groupdict()["params"] or "",
         )
 
-        self._update_args(params=params, attach_cdc=True)
+        args_updated = self._update_args(params=params, attach_cdc=True)
+        if not args_updated:
+            self._prepare_to_exit(interaction)
+            return None
 
         self._collection_cache = self._args.internals.collection_doc_cache
         self._collection_cache_path = self._args.collection_doc_cache_path

@@ -14,6 +14,7 @@ class SearchFor(Enum):
 
     HELP = "search for help"
     PROMPT = "search for the shell prompt"
+    WARNING = "search for a blocking warning notification"
 
 
 class Command(NamedTuple):
@@ -71,6 +72,10 @@ class UiTestStep(NamedTuple):
     step_index: int = 0
     #: Find this before returning from the tmux session to the test
     search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
+
+    def __str__(self):
+        """Produce a test id for this step."""
+        return f"{self.comment}  {self.user_input}"
 
 
 def add_indices(steps):

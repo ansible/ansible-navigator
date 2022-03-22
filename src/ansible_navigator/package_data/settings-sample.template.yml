@@ -1,0 +1,126 @@
+# cspell:ignore cmdline, workdir
+# 1) Most of these lines will get commented out before being printed to
+# stdout, see transform.to_sample.
+# 2) Everything above the --- will be removed as well
+# 3) Please use sane or default values
+# 4) The settings entry's path is used as the anchor
+---
+ansible-navigator:
+  ansible:
+    config:
+      # {{ ansible.config.help }}
+      help: False
+      # {{ ansible.config.path }}
+      path: ./ansible.cfg
+    # {{ ansible.cmdline }}
+    cmdline: "--forks 15"
+    doc:
+      # {{ ansible.doc.help }}
+      help: False
+      plugin:
+        # {{ ansible.doc.plugin.name }}
+        name: debug
+        # {{ ansible.doc.plugin.type }}
+        type: module
+    inventory:
+      # {{ ansible.inventory.help }}
+      help: True
+      # {{ ansible.inventory.paths }}
+      paths:
+        - inventory.yml
+    playbook:
+      # {{ ansible.playbook.help }}
+      help: False
+      # {{ ansible.playbook.path }}
+      path: site.yml
+  ansible-builder:
+    # {{ ansible-builder.help }}
+    help: False
+    # {{ ansible-builder.workdir }}
+    workdir: /tmp/
+  ansible-runner:
+    # {{ ansible-runner.artifact-dir }}
+    artifact-dir: ./runner-artifacts
+    # {{ ansible-runner.rotate-artifacts-count }}
+    rotate-artifacts-count: 10
+    # {{ ansible-runner.timeout }}
+    timeout: 300
+  # {{ app }}
+  app: welcome
+  # {{ collection-doc-cache-path }}
+  collection-doc-cache-path: $HOME/.cache/ansible-navigator/collection_doc_cache.db
+  color:
+    # {{ color.enable }}
+    enable: True
+    # {{ color.osc4 }}
+    osc4: True
+  editor:
+    # {{ editor.command }}
+    command: vim_from_setting
+    # {{ editor.console }}
+    console: False
+  exec:
+    # {{ exec.shell }}
+    shell: True
+    # {{ exec.command }}
+    command: /bin/bash
+  execution-environment:
+    # {{ execution-environment.container-engine }}
+    container-engine: auto
+    # {{ execution-environment.container-options }}
+    container-options:
+      - "--net=host"
+    # {{ execution-environment.enabled }}
+    enabled: True
+    environment-variables:
+      # {{ execution-environment.environment-variables.pass }}
+      pass:
+        - ONE
+        - TWO
+        - THREE
+      # {{ execution-environment.environment-variables.set }}
+      set:
+        KEY1: VALUE1
+        KEY2: VALUE2
+        KEY3: VALUE3
+    # {{ execution-environment.image }}
+    image: quay.io/ansible/creator-ee:latest
+    pull:
+      # {{ execution-environment.pull.arguments }}
+      arguments:
+        - "--tls-verify=false"
+      # {{ execution-environment.pull.policy }}
+      policy: tag
+    # {{ execution-environment.volume-mounts }}
+    volume-mounts:
+      - src: "/tmp/directory"
+        dest: "/tmp/directory"
+        options: "Z"
+  # {{ inventory-columns }}
+  inventory-columns:
+    - ansible_network_os
+    - ansible_network_cli_ssh_type
+    - ansible_connection
+  logging:
+    # {{ logging.level }}
+    level: debug
+    # {{ logging.append }}
+    append: False
+    # {{ logging.file }}
+    file: $PWD/ansible-navigator.log
+  # {{ mode }}
+  mode: interactive
+  playbook-artifact:
+    # {{ playbook-artifact.enable }}
+    enable: True
+    # {{ playbook-artifact.replay }}
+    replay: /tmp/test_artifact.json
+    # {{ playbook-artifact.save-as }}
+    save-as: "{playbook_dir}/{playbook_name}-artifact-{time_stamp}.json"
+  settings:
+    # {{ settings.sample }}
+    sample: False
+    # {{ settings.schema }}
+    schema: json
+  # {{ time-zone }}
+  time-zone: UTC
