@@ -1,0 +1,21 @@
+{
+    "name": "test[0-cd /tests/fixtures/integration/actions/inventory  &&  ansible-navigator inventory -i not_a_real_inventory.yml --ee False --ll debug --mode interactive-ansible-navigator inventory command top window]",
+    "index": 0,
+    "comment": "ansible-navigator inventory command top window",
+    "additional_information": {
+        "present": [
+            "Unable to parse"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "                                                                                                                                       WARNING",
+        "                                                                                                                                       ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                                       Errors were encountered while gathering the inventory:",
+        "                                                                                                                                       [WARNING]: Unable to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/not_a_real_inventory.yml as an inventory source",
+        "                                                                                                                                       [WARNING]: No inventory was parsed, only implicit localhost is available",
+        "                                                                                                                                       ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                                                                                                                                                                                                    Ok"
+    ]
+}
