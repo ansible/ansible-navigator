@@ -3,6 +3,8 @@ import os
 import shutil
 import subprocess
 
+from pathlib import Path
+
 import pytest
 
 from .defaults import PULLABLE_IMAGE
@@ -41,3 +43,18 @@ def patch_curses(monkeypatch):
     monkeypatch.setattr("curses.cbreak", lambda: None)
     monkeypatch.setattr("curses.nocbreak", lambda: None)
     monkeypatch.setattr("curses.endwin", lambda: None)
+
+
+@pytest.fixture
+def use_venv(monkeypatch: pytest.MonkeyPatch):
+    """Set the path such that it includes the virtual environment
+
+    :param monkeypatch: Fixture for patching
+    """
+    venv_path = os.environ.get("VIRTUAL_ENV")
+    if venv_path is None:
+        raise AssertionError(
+            "VIRTUAL_ENV environment variable was not set but tox should have set it.",
+        )
+    path_prepend = Path.cwd() / venv_path / "bin"
+    monkeypatch.setenv("PATH", str(path_prepend), prepend=os.pathsep)
