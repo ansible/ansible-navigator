@@ -1,4 +1,5 @@
 """Tests for the time zone post processor."""
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import Dict
 from typing import Optional
@@ -108,7 +109,7 @@ def test_pp_direct(data: Scenario):
 
     :param data: The test data
     """
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     entry = settings.entry("time_zone")
 
     entry.value.current = data.current
@@ -135,7 +136,7 @@ def test_env_var(monkeypatch: pytest.MonkeyPatch, data: Scenario):
     :param monkeypatch: The monkey patch fixture
     :param data: The test data
     """
-    application_configuration = NavigatorConfiguration
+    application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = True
     configurator = Configurator(application_configuration=application_configuration, params=[])
 

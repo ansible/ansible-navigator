@@ -2,6 +2,7 @@
 
 import json
 
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 from typing import Dict
@@ -21,7 +22,7 @@ from .defaults import TEST_FIXTURE_DIR
 
 @pytest.fixture(name="schema_dict")
 def _schema_dict():
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     settings.application_version = "test"
     schema = to_schema(settings)
     as_dict = json.loads(schema)
@@ -59,7 +60,7 @@ def test_no_extras(schema_dict: Dict[str, Any]):
 
     :param schema_dict: The json schema as a dictionary
     """
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     all_paths = [
         setting.settings_file_path(prefix=settings.application_name_dashed)
         for setting in settings.entries
@@ -107,7 +108,7 @@ def test_schema_sample_full_package_data(schema_dict: Dict[str, Any]):
 
     :param schema_dict: The json schema as a dictionary
     """
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     commented, uncommented = to_sample(settings=settings)
     settings_dict = yaml.load(commented, Loader=Loader)
     validate(instance=settings_dict, schema=schema_dict)

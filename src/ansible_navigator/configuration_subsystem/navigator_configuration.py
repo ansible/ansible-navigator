@@ -22,6 +22,7 @@ from .definitions import SettingsEntry
 from .definitions import SettingsEntryValue
 from .definitions import SubCommand
 from .navigator_post_processor import NavigatorPostProcessor
+from .utils import AnsibleConfiguration
 
 
 APP_NAME = "ansible_navigator"
@@ -86,6 +87,7 @@ class Internals:
     from application initiation to the rest of the app
     """
 
+    ansible_configuration: AnsibleConfiguration = AnsibleConfiguration()
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
     initializing: bool = False
@@ -364,7 +366,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="inventory",
-            cli_parameters=CliParameters(action="append", nargs="+", short="-i"),
+            cli_parameters=CliParameters(action="append", nargs="*", short="-i"),
             environment_variable_override="ansible_inventory",
             settings_file_path_override="ansible.inventory.paths",
             short_description="Specify an inventory file path or comma separated host list",

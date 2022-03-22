@@ -8,6 +8,7 @@ from ..._interactions import add_indices
 from .base import BaseClass
 from .base import inventory_path
 from .base import playbook_path
+from .base import run_fixture_dir
 
 
 class StdoutCommand(Command):
@@ -77,6 +78,26 @@ stdout_tests = (
             execution_environment=False,
         ).join(),
         present=["usage: ansible-playbook [-h]"],
+    ),
+    ShellCommand(
+        comment="run playbook with inventory from ansible.cfg without ee",
+        user_input=StdoutCommand(
+            cmdline="site.yml",
+            execution_environment=False,
+            mode="stdout",
+            precommand=f"cd {run_fixture_dir}/using_ansible_cfg && ",
+        ).join(),
+        present=["from.ansible.cfg", "ok=1"],
+    ),
+    ShellCommand(
+        comment="run playbook with inventory from ansible.cfg with ee",
+        user_input=StdoutCommand(
+            cmdline="site.yml",
+            execution_environment=True,
+            mode="stdout",
+            precommand=f"cd {run_fixture_dir}/using_ansible_cfg && ",
+        ).join(),
+        present=["from.ansible.cfg", "ok=1"],
     ),
 )
 

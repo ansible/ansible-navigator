@@ -1,4 +1,5 @@
 """Tests for the playbook artifact save as post processor."""
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import Optional
 
@@ -64,7 +65,7 @@ def test(data: Scenario):
 
     :param data: The test data
     """
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     entry = settings.entry("playbook_artifact_save_as")
 
     if data.current is None:

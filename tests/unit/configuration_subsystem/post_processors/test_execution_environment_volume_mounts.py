@@ -1,5 +1,6 @@
 """Tests for the execution environment volume mount post processor."""
 from collections.abc import Iterable
+from copy import deepcopy
 from dataclasses import dataclass
 from itertools import repeat
 from typing import Dict
@@ -173,7 +174,7 @@ def test(data: Scenario):
 
     :param data: The test data
     """
-    settings = NavigatorConfiguration
+    settings = deepcopy(NavigatorConfiguration)
     entry = settings.entry("execution_environment_volume_mounts")
 
     entry.value.current = data.current

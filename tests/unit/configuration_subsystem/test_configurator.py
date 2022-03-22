@@ -2,6 +2,8 @@
 """
 import os
 
+from copy import deepcopy
+
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
 from unittest import mock
 from unittest.mock import patch
@@ -20,7 +22,7 @@ def test_mutual_exclusivity_for_configuration_init():
     """Ensure the configuration cannot be initiated with both
     apply_previous_cli_entries and initial"""
     with pytest.raises(ValueError, match="cannot be used while initializing"):
-        application_configuration = NavigatorConfiguration
+        application_configuration = deepcopy(NavigatorConfiguration)
         application_configuration.internals.initializing = True
         Configurator(
             params=None,
@@ -32,11 +34,11 @@ def test_mutual_exclusivity_for_configuration_init():
 def test_apply_before_initial_saved():
     """Ensure the apply_previous_cli_entries can't be used before initial"""
     with pytest.raises(ValueError, match="enabled prior to"):
-        application_configuration = NavigatorConfiguration
+        application_configuration = deepcopy(NavigatorConfiguration)
         application_configuration.internals.initializing = False
         Configurator(
             params=None,
-            application_configuration=NavigatorConfiguration,
+            application_configuration=application_configuration,
             apply_previous_cli_entries=C.ALL,
         ).configure()
 
