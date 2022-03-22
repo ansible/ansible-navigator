@@ -20,6 +20,7 @@ arrow up, arrow down                                  Scroll up/down
 :r, :run <playbook> -i <inventory>                    Run a playbook in interactive mode
 :rr, :rerun                                           Rerun the playbook
 :s, :save <file>                                      Save current plays as an artifact
+:se, :settings                                        Review the current ansible-navigator settings
 :st, :stdout                                          Watch playbook results real time
 :welcome                                              Revisit the welcome page
 :w, :write <file>                                     Write current page to a new file

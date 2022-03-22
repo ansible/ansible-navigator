@@ -70,6 +70,6 @@
         "Successfully built d371b0950769",
         "Successfully tagged test_ee:latest",
         "Complete! The build context can be found at: /home/user/github/ansible-navigator/tests/fixtures/common/builder/test_ee/context",
-        "(venv) bash-5.1$"
+        "(py38) bash-5.1$"
     ]
 }
