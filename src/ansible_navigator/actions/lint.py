@@ -147,6 +147,7 @@ class Action(ActionBase):
     KEGEX = r"^lint(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        self._issues: List[Dict[str, Any]] = []
         super().__init__(args=args, logger_name=__name__, name="lint")
 
     @property
@@ -316,8 +317,8 @@ class Action(ActionBase):
             return None
 
         issues = [massage_issue(issue) for issue in raw_issues]
-        issues = sorted(issues, key=lambda i: Severity[i["severity"].upper()], reverse=True)
-        self.steps.append(self._build_main_menu(issues))
+        self._issues = sorted(issues, key=lambda i: Severity[i["severity"].upper()], reverse=True)
+        self.steps.append(self._build_main_menu())
 
         while True:
             self.update()
@@ -362,7 +363,7 @@ class Action(ActionBase):
         else:
             self.steps.append(result)
 
-    def _build_main_menu(self, issues: List[Dict]):
+    def _build_main_menu(self):
         columns = [
             "severity",
             "__message",
@@ -374,14 +375,14 @@ class Action(ActionBase):
             name="lint_result",
             columns=columns,
             step_type="menu",
-            value=issues,
-            select_func=lambda: self._build_lint_result(issues),
+            value=self._issues,
+            select_func=self._build_lint_result,
         )
 
-    def _build_lint_result(self, issues: List[Dict]):
+    def _build_lint_result(self):
         return Step(
             name="singular_lint_result",
             step_type="content",
-            value=issues,
+            value=self._issues,
             index=self.steps.current.index,
         )
