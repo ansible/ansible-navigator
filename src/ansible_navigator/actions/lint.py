@@ -271,23 +271,15 @@ class Action(ActionBase):
         """
 
         self._logger.debug("lint requested")
-        _, exit_messages = self._update_args(
+        updated = self._update_args(
             ["lint"] + shlex.split(interaction.action.match.groupdict()["params"] or ""),
         )
 
-        # Set up interaction
-        self._prepare_to_run(app, interaction)
-
-        # ...but then if there were config errors after parsing our args, fatal on them.
-        if exit_messages:
-            # Configurator injects the "Command provided: ..." message as an exit message.
-            # However, for showing a fatal modal, we don't need it. So nuke it if it's there.
-            if len(exit_messages) > 1 and exit_messages[0].message.startswith("Command provided: "):
-                exit_messages = exit_messages[1:]
-            self._fatal("; ".join(msg.message for msg in exit_messages))
+        if not updated:
             return None
 
-        self.stdout = self._calling_app.stdout
+        # Set up interaction
+        self._prepare_to_run(app, interaction)
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
         interaction.ui.show_form(notification)
