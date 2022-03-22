@@ -229,42 +229,13 @@ class Action(ActionBase):
         need to do some trickery to try to figure out the actual JSON line vs,
         say, ansible warnings.
         """
-        out_without_warnings = []
-        ansible_warning_in_output = False
-        for line in stdout.splitlines():
+
+        # We want the last (non empty) line of output. This should hopefully be
+        # the JSON we need.
+        for line in reversed(stdout.splitlines()):
             if not line:
                 continue
-
-            # This is a hacky way to see if we're getting a warning from
-            # Ansible. We can't just check for line starting with '[WARNING]:'
-            # because the warnings get split into multiple lines. Each line,
-            # however, starts with the escape code.
-            if line.startswith("\033[1;35m"):
-                if not ansible_warning_in_output:
-                    # Only log it once, even if multiple warnings.
-                    msg = (
-                        "ansible-lint output contained a warning from ansible. "
-                        "This is an ansible-lint bug, ansible-lint -qq should "
-                        "ignore such warnings."
-                    )
-                    self._logger.debug(msg)
-                    ansible_warning_in_output = True
-                continue
-            out_without_warnings.append(line)
-
-        if len(out_without_warnings) > 1:
-            self._fatal(
-                "ansible-lint JSON output had more than one line and should "
-                "not have. This is a bug. Please report it.",
-            )
-            return None
-
-        if len(out_without_warnings) == 0:
-            notification = success_notification(messages=["Congratulations, no lint issues found!"])
-            self._interaction.ui.show_form(notification)
-            return None
-
-        return out_without_warnings[0]
+            return line
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Handle :lint
