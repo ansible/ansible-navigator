@@ -280,12 +280,17 @@ class Action(ActionBase):
         try:
             raw_issues = json.loads(out_without_warnings)
         except json.JSONDecodeError as exc:
-            self._logger.debug("Failed to parse 'ansible-lint' JSON respnose: %s", str(exc))
+            self._logger.debug("Failed to parse 'ansible-lint' JSON response: %s", str(exc))
             notification = error_notification(
                 messages=[
                     "Could not parse 'ansible-lint' output.",
                 ],
             )
+            self._interaction.ui.show_form(notification)
+            return None
+
+        if len(raw_issues) == 0:
+            notification = success_notification(messages=["Congratulations, no lint issues found!"])
             self._interaction.ui.show_form(notification)
             return None
 
