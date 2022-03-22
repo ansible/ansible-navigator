@@ -537,9 +537,11 @@ class NavigatorPostProcessor:
                     source=entry_source,
                     options_string="",
                 )
-            except VolumeMountError as e:
+            except VolumeMountError as ex:
                 exit_messages.append(
-                    ExitMessage(message=f"Error mounting lintable into execution environment: {e}"),
+                    ExitMessage(
+                        message=f"Error mounting lintable into execution environment: {ex}"
+                    ),
                 )
             else:
                 self.extra_volume_mounts.append(mount)
