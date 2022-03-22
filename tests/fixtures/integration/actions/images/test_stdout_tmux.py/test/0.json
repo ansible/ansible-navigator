@@ -17,6 +17,6 @@
         "  name: creator-ee",
         "  name_tag: creator-ee:v0.2.0 (primary)",
         "  repository: quay.io/ansible/creator-ee",
-        "(venv) bash-5.1$"
+        "(py38) bash-5.1$"
     ]
 }

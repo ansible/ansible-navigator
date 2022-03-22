@@ -207,8 +207,8 @@
         "    ],",
         "    \"title\": \"ansible-navigator settings file schema\",",
         "    \"type\": \"object\",",
-        "    \"version\": \"0.7.4.dev416+g0d0dc5c9.d20220314\"",
+        "    \"version\": \"2.0.0a1.dev11+gf963184f\"",
         "}",
-        "(venv) bash-5.1$"
+        "(py38) bash-5.1$"
     ]
 }
