@@ -194,6 +194,8 @@ class Action(ActionBase):
                 "-f",
                 "codeclimate",
             ]
+        elif not self._args.display_color:
+            cmd_args.append("--nocolor")
 
         if isinstance(self._args.lint_config, str):
             cmd_args += [
