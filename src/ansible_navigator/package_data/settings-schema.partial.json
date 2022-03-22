@@ -48,7 +48,7 @@
                 "help": {
                   "type": "boolean"
                 },
-                "paths": {
+                "entries": {
                   "items": {
                     "type": "string"
                   },

@@ -13,7 +13,7 @@ ansible-navigator:
         type: become
     inventory:
       help: False
-      paths:
+      entries:
         - /tmp/test_inventory.yml
     playbook:
       help: False
