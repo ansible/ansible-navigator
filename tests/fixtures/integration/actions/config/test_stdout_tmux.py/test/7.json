@@ -18,10 +18,10 @@
         "    dump                Dump configuration",
         "    view                View configuration file",
         "    init                Create initial configuration",
-        "options:",
+        "optional arguments:",
         "  --version             show program's version number, config file location, configured module search path, module location, executable location and exit",
         "  -h, --help            show this help message and exit",
         "  -v, --verbose         verbose mode (-vvv for more, -vvvv to enable connection debugging)",
-        "(venv) bash-5.1$"
+        "(py38) bash-5.1$"
     ]
 }

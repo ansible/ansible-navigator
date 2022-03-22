@@ -10,12 +10,12 @@
         "compared_fixture": false
     },
     "output": [
-        "  name: Plugin type",
         "  settings_file_sample:",
         "    ansible-navigator:",
-        "      documentation:",
-        "        plugin:",
-        "          type: <------",
+        "      ansible:",
+        "        doc:",
+        "          plugin:",
+        "            type: <------",
         "  source: Defaults",
         "  subcommands:",
         "  - doc",
@@ -208,6 +208,6 @@
         "  source: Defaults",
         "  subcommands:",
         "  - builder",
-        "(venv) bash-5.1$"
+        "(py38) bash-5.1$"
     ]
 }
