@@ -237,6 +237,7 @@ class Action(ActionBase):
             if not line:
                 continue
             return line
+        return None
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         # pylint: disable=too-many-return-statements
