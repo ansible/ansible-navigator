@@ -390,7 +390,7 @@ class NavigatorPostProcessor:
         # new_mounts, C.PREVIOUS_CLI or C.NOT_SET
         if self.extra_volume_mounts:
             if not isinstance(entry.value.current, list):
-                entry.value.current = set()
+                entry.value.current = []
             entry.value.current.extend(v.to_string() for v in self.extra_volume_mounts)
 
         # Finally, ensure the list has no duplicates
@@ -511,6 +511,56 @@ class NavigatorPostProcessor:
         exit_messages: List[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
+        return messages, exit_messages
+
+    def lintables(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        """Post-process lintables."""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+
+        # If not using an EE, check for ansible-lint before we even pass off to
+        # the lint action.
+        if config.app == "lint" and not config.execution_environment:
+            ansible_lint_location = shutil.which("ansible-lint")
+            if ansible_lint_location is None:
+                exit_messages.append(
+                    ExitMessage(message="ansible-lint command could not be found."),
+                )
+                exit_messages.append(
+                    ExitMessage(
+                        message=(
+                            "Try 'pip install ansible-lint' or consider using an execution "
+                            "environment which provides ansible-lint."
+                        ),
+                        prefix=ExitPrefix.HINT,
+                    ),
+                )
+
+        if isinstance(entry.value.current, str) and config.app == "lint":
+            entry_name = entry.settings_file_path(prefix="")
+            entry_source = entry.value.source
+            source = abs_user_path(entry.value.current)
+            try:
+                mount = VolumeMount(
+                    fs_source=source,
+                    fs_destination=source,
+                    settings_entry=entry_name,
+                    source=entry_source,
+                    options_string="",
+                )
+            except VolumeMountError as ex:
+                exit_messages.append(
+                    ExitMessage(
+                        message=f"Error mounting lintable into execution environment: {ex}",
+                    ),
+                )
+            else:
+                self.extra_volume_mounts.append(mount)
+
         return messages, exit_messages
 
     @_post_processor
@@ -681,7 +731,7 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def playbook(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        """Post process pass_environment_variable"""
+        """Post process playbook"""
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:
