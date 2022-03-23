@@ -315,7 +315,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--eei"),
             settings_file_path_override="execution-environment.image",
             short_description="Specify the name of the execution environment image",
-            value=SettingsEntryValue(default="quay.io/ansible/creator-ee:v0.2.0"),
+            value=SettingsEntryValue(default="quay.io/ansible/creator-ee:v0.4.0"),
         ),
         SettingsEntry(
             name="execution_environment_volume_mounts",

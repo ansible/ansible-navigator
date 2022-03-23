@@ -10,7 +10,6 @@
         "compared_fixture": false
     },
     "output": [
-        "PERSISTENT_CONTROL_PATH_DIR(default) = /home/runner/.ansible/pc",
         "PLAYBOOK_DIR(default) = None",
         "PLAYBOOK_VARS_ROOT(default) = top",
         "PLUGIN_FILTERS_CFG(default) = None",
@@ -28,12 +27,13 @@
         "TASK_TIMEOUT(default) = 0",
         "TRANSFORM_INVALID_GROUP_CHARS(default) = never",
         "USE_PERSISTENT_CONNECTIONS(default) = False",
+        "VALIDATE_ACTION_GROUP_METADATA(default) = True",
         "VARIABLE_PLUGINS_ENABLED(default) = ['host_group_vars']",
         "VARIABLE_PRECEDENCE(default) = ['all_inventory', 'groups_inventory', 'all_plugins_inventory', 'all_plugins_play', 'groups_plugins_inventory', 'groups_plugins_play']",
         "VERBOSE_TO_STDERR(default) = False",
         "WIN_ASYNC_STARTUP_TIMEOUT(default) = 5",
         "WORKER_SHUTDOWN_POLL_COUNT(default) = 0",
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
-        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json'](py38) bash-5.1$"
+        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json'](venv) bash-5.1$"
     ]
 }

@@ -10,17 +10,18 @@
         "compared_fixture": false
     },
     "output": [
-        "usage: ansible-config [-h] [--version] [-v] {list,dump,view} ...",
+        "usage: ansible-config [-h] [--version] [-v] {list,dump,view,init} ...",
         "View ansible configuration.",
         "positional arguments:",
-        "  {list,dump,view}",
-        "    list            Print all config options",
-        "    dump            Dump configuration",
-        "    view            View configuration file",
+        "  {list,dump,view,init}",
+        "    list                Print all config options",
+        "    dump                Dump configuration",
+        "    view                View configuration file",
+        "    init                Create initial configuration",
         "optional arguments:",
-        "  --version         show program's version number, config file location, configured module search path, module location, executable location and exit",
-        "  -h, --help        show this help message and exit",
-        "  -v, --verbose     verbose mode (-vvv for more, -vvvv to enable connection debugging)",
-        "(py38) bash-5.1$"
+        "  --version             show program's version number, config file location, configured module search path, module location, executable location and exit",
+        "  -h, --help            show this help message and exit",
+        "  -v, --verbose         verbose mode (-vvv for more, -vvvv to enable connection debugging)",
+        "(venv) bash-5.1$"
     ]
 }

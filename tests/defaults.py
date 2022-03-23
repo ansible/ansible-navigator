@@ -10,6 +10,6 @@ FIXTURES_COLLECTION_DIR = os.path.abspath(
 
 # every attempt should be made for these images to share as many layers as possible
 # or really small
-DEFAULT_CONTAINER_IMAGE = "quay.io/ansible/creator-ee:v0.2.0"
+DEFAULT_CONTAINER_IMAGE = "quay.io/ansible/creator-ee:v0.4.0"
 SMALL_TEST_IMAGE = "quay.io/ansible/python-base:latest"
 PULLABLE_IMAGE = "registry.hub.docker.com/library/alpine:latest"
