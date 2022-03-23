@@ -357,13 +357,7 @@ class Action(ActionBase):
         else:
             playbook_valid = False
 
-        if isinstance(self._args.inventory, list):
-            inventory_valid = all((os.path.exists(inv) for inv in self._args.inventory))
-        else:
-            # Permit running without an inventory
-            inventory_valid = True
-
-        if not all((playbook_valid, inventory_valid)):
+        if not playbook_valid:
 
             populated_form = self._prompt_for_playbook()
             if populated_form["cancelled"]:
@@ -371,9 +365,7 @@ class Action(ActionBase):
 
             new_cmd = ["run"]
             new_cmd.append(populated_form["fields"]["playbook"]["value"])
-            for field in populated_form["fields"].values():
-                if field["name"].startswith("inv_") and field["value"] != "":
-                    new_cmd.extend(["-i", field["value"]])
+
             if populated_form["fields"]["cmdline"]["value"]:
                 new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
 
@@ -492,11 +484,6 @@ class Action(ActionBase):
         else:
             playbook = ""
 
-        if isinstance(self._args.inventory, list):
-            inventory = self._args.inventory
-        else:
-            inventory = ["", "", ""]
-
         if isinstance(self._args.cmdline, list):
             cmdline = " ".join(self._args.cmdline)
         else:
@@ -504,7 +491,7 @@ class Action(ActionBase):
 
         FType = Dict[str, Any]
         form_dict: FType = {
-            "title": "Inventory and/or playbook not found, please confirm the following",
+            "title": "Playbook not found, please confirm the following",
             "fields": [],
         }
         form_field = {
@@ -515,16 +502,6 @@ class Action(ActionBase):
             "validator": {"name": "valid_file_path"},
         }
         form_dict["fields"].append(form_field)
-
-        for idx, inv in enumerate(inventory):
-            form_field = {
-                "name": f"inv_{idx}",
-                "pre_populate": inv,
-                "prompt": "Inventory source",
-                "type": "text_input",
-                "validator": {"name": "none"},
-            }
-            form_dict["fields"].append(form_field)
 
         form_field = {
             "name": "cmdline",
