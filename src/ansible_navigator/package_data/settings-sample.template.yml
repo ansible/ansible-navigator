@@ -25,8 +25,10 @@ ansible-navigator:
     inventory:
       # {{ ansible.inventory.help }}
       help: True
-      # {{ ansible.inventory.paths }}
-      paths:
+      # {{ ansible.inventory.entries }}
+      entries:
+        - host1,
+        - router1,router2
         - inventory.yml
     playbook:
       # {{ ansible.playbook.help }}
