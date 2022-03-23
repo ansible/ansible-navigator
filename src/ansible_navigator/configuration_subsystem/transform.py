@@ -3,14 +3,12 @@
 import json
 import textwrap
 
+from typing import Any
 from typing import Dict
 from typing import List
 from typing import Tuple
 
-from ..content_defs import ContentView
 from ..utils.compatibility import importlib_resources
-from ..utils.serialize import SerializationFormat
-from ..utils.serialize import serialize
 from .definitions import ApplicationConfiguration
 from .definitions import Constants
 from .definitions import SettingsEntry
@@ -49,7 +47,7 @@ def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEnt
     return PresentableSettingsEntries(tuple(settings_list))
 
 
-def to_schema(settings: ApplicationConfiguration) -> str:
+def to_schema(settings: ApplicationConfiguration) -> Dict[str, Any]:
     """Build a json schema from the settings using the stub schema.
 
     :param settings: The application settings
@@ -80,11 +78,7 @@ def to_schema(settings: ApplicationConfiguration) -> str:
     else:
         partial_schema["version"] = settings.application_version
 
-    return serialize(
-        content=partial_schema,
-        content_view=ContentView.NORMAL,
-        serialization_format=SerializationFormat.JSON,
-    )
+    return partial_schema
 
 
 def to_sample(settings: ApplicationConfiguration) -> Tuple[str, str]:

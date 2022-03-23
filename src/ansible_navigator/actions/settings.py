@@ -1,7 +1,10 @@
 """The ``settings`` subcommand action."""
 
 from dataclasses import asdict
+from typing import Any
+from typing import Dict
 from typing import Tuple
+from typing import Union
 
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ..action_base import ActionBase
@@ -12,8 +15,7 @@ from ..configuration_subsystem import PresentableSettingsEntry
 from ..configuration_subsystem import to_presentable
 from ..configuration_subsystem import to_sample
 from ..configuration_subsystem import to_schema
-from ..content_defs import ContentView
-from ..content_defs import SerializationFormat
+from ..content_defs import ContentFormat
 from ..steps import StepType
 from ..steps import TypedStep
 from ..ui_framework import Color
@@ -22,7 +24,7 @@ from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Decoration
 from ..ui_framework import Interaction
-from ..utils.serialize import serialize
+from ..utils.print import print_to_stdout
 from . import _actions as actions
 from . import run_action
 
@@ -119,30 +121,26 @@ class Action(ActionBase):
         :returns: RunStdoutReturn
         """
         self._logger.debug("settings requested in stdout mode")
+
+        content: Union[str, Dict[str, Any], PresentableSettingsEntries]
         if self._args.entry("settings_schema").value.source is not Constants.DEFAULT_CFG:
+            content = to_schema(self._args)
             if self._args.settings_schema == "json":
-                schema = to_schema(self._args)
-                print(schema)
-            return RunStdoutReturn(message="", return_code=0)
+                content_format = ContentFormat.JSON
+        elif self._args.settings_sample:
+            content, _uncommented = to_sample(self._args)
+            content_format = ContentFormat.YAML_TXT
+        else:
+            content = to_presentable(self._args)
+            content_format = ContentFormat.YAML
 
-        if self._args.settings_sample:
-            commented, _uncommented = to_sample(self._args)
-            print(commented)
-            return RunStdoutReturn(message="", return_code=0)
-
-        self._settings = to_presentable(self._args)
-        info_dump = serialize(
-            content=list(self._settings),
-            content_view=ContentView.NORMAL,
-            serialization_format=SerializationFormat.YAML,
+        print_to_stdout(
+            content=content,
+            content_format=content_format,
+            share_directory=self._args.internals.share_directory,
+            use_color=self._args.display_color,
         )
-        if isinstance(info_dump, str):
-            print(info_dump)
-            return RunStdoutReturn(message="", return_code=0)
-        return RunStdoutReturn(
-            message="Settings could not be retrieved, please log an issue.",
-            return_code=1,
-        )
+        return RunStdoutReturn(message="", return_code=0)
 
     def _build_main_menu(self) -> TypedStep:
         """Build the main menu of settings.

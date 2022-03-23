@@ -10,7 +10,6 @@
         "compared_fixture": false
     },
     "output": [
-        "                        \"container-engine\": {",
         "                            \"default\": \"auto\",",
         "                            \"description\": \"Specify the container engine (auto=podman then docker)\",",
         "                            \"enum\": [",
@@ -207,8 +206,8 @@
         "    ],",
         "    \"title\": \"ansible-navigator settings file schema\",",
         "    \"type\": \"object\",",
-        "    \"version\": \"2.0.0a1.dev11+gf963184f\"",
+        "    \"version\": \"2.0.0a1.dev19+gc72d8f13.d20220323\"",
         "}",
-        "(py38) bash-5.1$"
+        "(venv) bash-5.1$"
     ]
 }
