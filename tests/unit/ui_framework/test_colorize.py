@@ -36,16 +36,16 @@ SAMPLE_YAML = Sample(serialization_format=SerializationFormat.YAML)._asdict()
 def test_basic_success_json():
     """Ensure the json string is returned as 1 lines, 5 parts and can be reassembled
     to the json string"""
-    sample = serialize(**SAMPLE_JSON)
+    sample = serialize(**SAMPLE_JSON) + "\n"
     colorized = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.json",
     )
     assert len(colorized) == 3
-    serialized_lines = '{\n    "test": "data"\n}'.splitlines()
+    serialized_lines = sample.splitlines(keepends=True)
     colorized_lines = ["".join(part.chars for part in line) for line in colorized]
     assert serialized_lines == colorized_lines
-    assert "\n".join(serialized_lines) == sample
+    assert "".join(serialized_lines) == sample
 
 
 def test_basic_success_yaml():
@@ -60,9 +60,11 @@ def test_basic_success_yaml():
     )
     assert len(result) == 2
     assert len(result[0]) == 1
-    assert result[0][0].chars == sample.splitlines()[0]
-    assert len(result[1]) == 3
-    assert "".join(line_part.chars for line_part in result[1]) == sample.splitlines()[1]
+    assert result[0][0].chars == sample.splitlines(keepends=True)[0]
+    assert len(result[1]) == 4
+    assert (
+        "".join(line_part.chars for line_part in result[1]) == sample.splitlines(keepends=True)[1]
+    )
 
 
 def test_basic_success_log():
@@ -70,7 +72,7 @@ def test_basic_success_log():
 
     Also ensure the parts can be reassembled to match the string.
     """
-    sample = "1 ERROR text 42"
+    sample = "1 ERROR text 42\n"
 
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
@@ -79,7 +81,7 @@ def test_basic_success_log():
     assert len(result) == 1
     first_line = result[0]
     line_parts = tuple(p.chars for p in first_line)
-    assert line_parts == ("1", " ", "ERROR", " text ", "42")
+    assert line_parts == ("1", " ", "ERROR", " text ", "42", "\n")
     assert "".join(line_parts) == sample
 
 
