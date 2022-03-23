@@ -30,7 +30,7 @@ def color_bits() -> int:
 
 
 def color_lines(term_color_bits, tokenized) -> str:
-    """Tranform tokenized lines to ANSI lines.
+    """Transform tokenized lines to ANSI lines.
 
     :param term_color_bits: The number of color bits the terminal supports
     :param tokenized: The tokenized content
