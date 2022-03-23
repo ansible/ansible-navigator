@@ -54,7 +54,7 @@
         "                            \"type\": \"object\"",
         "                        },",
         "                        \"image\": {",
-        "                            \"default\": \"quay.io/ansible/creator-ee:v0.2.0\",",
+        "                            \"default\": \"quay.io/ansible/creator-ee:v0.4.0\",",
         "                            \"description\": \"Specify the name of the execution environment image\",",
         "                            \"type\": \"string\"",
         "                        },",
