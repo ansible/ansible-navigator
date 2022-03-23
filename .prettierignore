@@ -2,6 +2,7 @@
 .git/
 .tox/
 .mypy_cache/
+build/
 
 # Environments
 .env
@@ -18,8 +19,8 @@ share/ansible_navigator/grammar/**/*.json
 share/ansible_navigator/themes/**/*.json
 
 # Tracked but manually formatted
-share/ansible_navigator/markdown/help.md
-share/ansible_navigator/markdown/welcome.md
+src/ansible_navigator/package_data/help.md
+src/ansible_navigator/package_data/welcome.md
 
 # WIP
 docs/changelog-fragments.d/README.md
