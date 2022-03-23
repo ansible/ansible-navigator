@@ -82,6 +82,18 @@
             }
           }
         },
+        "ansible-lint": {
+          "additionalProperties": false,
+          "properties": {
+            "config": {
+              "type": "string"
+            },
+            "lintables": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
         "ansible-runner": {
           "additionalProperties": false,
           "properties": {
@@ -263,6 +275,6 @@
     }
   },
   "required": ["ansible-navigator"],
-  "title": "ansible-navigator settings file schema",
+  "title": "ansible-navigator settings v{version}",
   "type": "object"
 }

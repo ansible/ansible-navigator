@@ -27,7 +27,7 @@
         "15│      image: <------                                                                                                                                                                                                                                                                                    ▒",
         "16│source: Defaults                                                                                                                                                                                                                                                                                        ▒",
         "17│subcommands:                                                                                                                                                                                                                                                                                            ▒",
-        "18│- builder                                                                                                                                                                                                                                                                                               ▒",
+        "18│- builder",
         "19│- collections",
         "20│- config",
         "21│- doc",

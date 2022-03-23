@@ -4,7 +4,7 @@
     "comment": "print json schema to stdout, specify json, mode auto",
     "additional_information": {
         "present": [
-            "ansible-navigator settings file schema"
+            "ansible-navigator settings"
         ],
         "absent": [],
         "compared_fixture": false
@@ -204,7 +204,7 @@
         "    \"required\": [",
         "        \"ansible-navigator\"",
         "    ],",
-        "    \"title\": \"ansible-navigator settings file schema\",",
+        "    \"title\": \"ansible-navigator settings v2.0.0a1.dev19+gc72d8f13.d20220323\",",
         "    \"type\": \"object\",",
         "    \"version\": \"2.0.0a1.dev19+gc72d8f13.d20220323\"",
         "}",

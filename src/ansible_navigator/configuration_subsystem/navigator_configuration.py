@@ -155,6 +155,16 @@ navigator_subcommands = [
             " 'ansible-navigator inventory --help-inventory --mode stdout'"
         ),
     ),
+    SubCommand(
+        name="lint",
+        description="Lint a file or directory for common errors and issues",
+        epilog=(
+            "Note: Defaults to the current working directory."
+            " If using an execution environment, ansible-lint must be installed"
+            " in it. If not using an execution environment, ansible-lint must"
+            " be installed on your system."
+        ),
+    ),
     SubCommand(name="replay", description="Explore a previous run using a playbook artifact"),
     SubCommand(
         name="run",
@@ -380,6 +390,23 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="inventory-columns",
             short_description="Specify a host attribute to show in the inventory view",
             subcommands=["inventory", "run"],
+            value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
+            name="lint_config",
+            cli_parameters=CliParameters(short="--lic", metavar="LINT_CONFIG_FILE"),
+            environment_variable_override="ansible_lint_config",
+            settings_file_path_override="ansible-lint.config",
+            short_description="Specify the path to the ansible-lint configuration file",
+            subcommands=["lint"],
+            value=SettingsEntryValue(),
+        ),
+        SettingsEntry(
+            name="lintables",
+            cli_parameters=CliParameters(positional=True),
+            short_description="Path to files on which to run ansible-lint",
+            settings_file_path_override="ansible-lint.lintables",
+            subcommands=["lint"],
             value=SettingsEntryValue(),
         ),
         SettingsEntry(

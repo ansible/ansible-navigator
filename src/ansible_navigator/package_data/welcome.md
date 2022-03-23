@@ -9,6 +9,7 @@ Some things you can try from here:
 - `:images`                                               Explore execution environment images
 - `:inventory -i <inventory>`                             Explore an inventory
 - `:log`                                                  Review the application log
+- `:lint <file or directory>`                             Lint Ansible/YAML files (experimental)
 - `:open`                                                 Open current page in the editor
 - `:replay`                                               Explore a previous run using a playbook artifact
 - `:run <playbook> -i <inventory>`                        Run a playbook in interactive mode
