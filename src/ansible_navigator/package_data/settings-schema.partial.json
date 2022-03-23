@@ -275,6 +275,6 @@
     }
   },
   "required": ["ansible-navigator"],
-  "title": "ansible-navigator settings file schema",
+  "title": "ansible-navigator settings v{version}",
   "type": "object"
 }
