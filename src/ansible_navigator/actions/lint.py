@@ -222,6 +222,7 @@ class Action(ActionBase):
         return RunStdoutReturn(message="", return_code=rc)
 
     def _pull_out_json_or_fatal(self, stdout: str) -> Optional[str]:
+        # pylint: disable=no-self-use
         """
         Attempt to pull out JSON line from ansible-lint raw output.
 
@@ -238,6 +239,7 @@ class Action(ActionBase):
             return line
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
+        # pylint: disable=too-many-return-statements
         """Handle :lint
 
         :param interaction: The interaction from the user
@@ -254,6 +256,7 @@ class Action(ActionBase):
         )
 
         if not updated:
+            self._prepare_to_exit(interaction)
             return None
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
@@ -272,10 +275,12 @@ class Action(ActionBase):
                 "ansible-lint executable could not be found. Ensure 'ansible-lint' "
                 f"is {installed_or_ee} and try again.",
             )
+            self._prepare_to_exit(interaction)
             return None
 
         out_without_warnings = self._pull_out_json_or_fatal(out)
         if out_without_warnings is None:
+            self._prepare_to_exit(interaction)
             return None
 
         try:
@@ -288,11 +293,13 @@ class Action(ActionBase):
                 ],
             )
             self._interaction.ui.show_form(notification)
+            self._prepare_to_exit(interaction)
             return None
 
         if len(raw_issues) == 0:
             notification = success_notification(messages=["Congratulations, no lint issues found!"])
             self._interaction.ui.show_form(notification)
+            self._prepare_to_exit(interaction)
             return None
 
         issues = [massage_issue(issue) for issue in raw_issues]
