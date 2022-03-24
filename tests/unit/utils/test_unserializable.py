@@ -1,4 +1,5 @@
 """Tests for content that cannot be serialized."""
+from collections import deque
 from typing import Tuple
 
 import pytest
@@ -52,7 +53,7 @@ def test_custom_class(
 
 @serialization_formats
 @content_views
-def test_tuple(
+def test_deque(
     content_view: Tuple[str, ContentView],
     serialization_format: Tuple[str, SerializationFormat],
 ):
@@ -63,7 +64,7 @@ def test_tuple(
     :param content_view: The content view
     :param serialization_format: The serialization format
     """
-    content = (1, 2, 3)
+    content = deque([1, 2, 3])
     serialized = serialize(
         content=content,  # type:ignore[arg-type]
         content_view=content_view[1],

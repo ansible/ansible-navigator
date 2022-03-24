@@ -1,6 +1,5 @@
 """Tests for the transformation of settings to a json schema."""
 
-import json
 
 from copy import deepcopy
 from pathlib import Path
@@ -25,8 +24,7 @@ def _schema_dict():
     settings = deepcopy(NavigatorConfiguration)
     settings.application_version = "test"
     schema = to_schema(settings)
-    as_dict = json.loads(schema)
-    return as_dict
+    return schema
 
 
 def test_basic(schema_dict: Dict[str, Any]):

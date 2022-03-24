@@ -10,7 +10,6 @@
         "compared_fixture": false
     },
     "output": [
-        "                        \"container-engine\": {",
         "                            \"default\": \"auto\",",
         "                            \"description\": \"Specify the container engine (auto=podman then docker)\",",
         "                            \"enum\": [",
