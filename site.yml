@@ -1,6 +1,0 @@
-- hosts: all
-  gather_facts: False
-  tasks:
-    - name: foo
-      ansible.builtin.debug:
-        var: inventory_hostname
