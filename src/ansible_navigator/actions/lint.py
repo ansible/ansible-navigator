@@ -40,6 +40,7 @@ from ..ui_framework import error_notification
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import success_notification
 from ..utils.functions import abs_user_path
+from ..utils.functions import remove_ansi
 from ..utils.functions import time_stamp_for_file
 from . import _actions as actions
 from . import run_action
@@ -325,7 +326,8 @@ class Action(ActionBase):
                 break
 
             self._interaction.ui.update_status(
-                status=f"Issues: {self._current_issue_count}", status_color=self._max_severity_color
+                status=f"Issues: {self._current_issue_count}",
+                status_color=self._max_severity_color,
             )
 
             self._take_step()
@@ -407,11 +409,13 @@ class Action(ActionBase):
                 "ansible-lint executable could not be found. Ensure 'ansible-lint' "
                 f"is {installed_or_ee} and try again.",
             )
+            self._current_issue_count = 0
             return
 
         # Could not extract json from response
         out_without_warnings = self._pull_out_json_or_fatal(output)
         if out_without_warnings is None:
+            self._current_issue_count = 0
             return
 
         # De-serialization of json failed
@@ -420,9 +424,11 @@ class Action(ActionBase):
         except json.JSONDecodeError as exc:
             self._logger.debug("Failed to parse 'ansible-lint' JSON response: %s", str(exc))
             messages = ["Could not parse 'ansible-lint' output."]
-            messages.extend(output.splitlines())
+            without_ansi = remove_ansi(output)
+            messages.extend(without_ansi.splitlines())
             notification = error_notification(messages)
             self._interaction.ui.show_form(notification)
+            self._current_issue_count = 0
             return
 
         # No issues were found
@@ -434,12 +440,14 @@ class Action(ActionBase):
         issues = [massage_issue(issue) for issue in raw_issues]
         self._current_issue_count = len(issues)
         self._issues_menu.value = sorted(
-            issues, key=lambda i: Severity[i["severity"].upper()], reverse=True
+            issues,
+            key=lambda i: Severity[i["severity"].upper()],
+            reverse=True,
         )
 
         # Update new content timestamps
         _rerun_lint = self._rerun_needed()
-        return True
+        return
 
     def _build_issue_content(self):
         """Build the content for one plugin.
@@ -454,7 +462,7 @@ class Action(ActionBase):
         )
 
     def _rerun_needed(self) -> bool:
-        """Add a modifiation timestamp to each issue, check for changes.
+        """Add a modification timestamp to each issue, check for changes.
 
         :returns: Indication if lint should be rerun
         """
