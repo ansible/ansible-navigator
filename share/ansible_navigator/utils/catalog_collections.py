@@ -284,7 +284,6 @@ class CollectionCatalog:
                 collection_name = f"{collection['collection_info']['namespace']}"
                 collection_name += f".{collection['collection_info']['name']}"
                 collection["known_as"] = collection_name
-                collection["plugins"] = []
                 collection["plugin_checksums"] = {}
                 collection["path"] = str(directory_path)
 
@@ -341,7 +340,6 @@ class CollectionCatalog:
         """Add the pseudo builtin collection."""
         collection: Dict[str, Union[str, List, Dict]] = {}
         collection["known_as"] = "ansible.builtin"
-        collection["plugins"] = []
         collection["plugin_checksums"] = {}
         collection["path"] = str(Path(plugins.__file__).parents[1])
         collection["runtime"] = {}
