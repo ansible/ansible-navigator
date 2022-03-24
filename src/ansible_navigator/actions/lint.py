@@ -12,17 +12,15 @@ The full specification for ansible-lint's use of JSON (for the codeclimate
 formatter) can be found in src/ansiblelint/formatters/__init__.py in the
 ansible-lint codebase.
 """
-
-import curses
 import json
 import os
 import shlex
 
 from collections.abc import Mapping
+from datetime import datetime
 from enum import IntEnum
 from typing import Any
 from typing import Dict
-from typing import List
 from typing import Optional
 from typing import Tuple
 
@@ -36,11 +34,14 @@ from ..ui_framework import Color
 from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
+from ..ui_framework import Decoration
 from ..ui_framework import Interaction
 from ..ui_framework import error_notification
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import success_notification
 from ..utils.functions import abs_user_path
+from ..utils.functions import remove_ansi
+from ..utils.functions import time_stamp_for_file
 from . import _actions as actions
 from . import run_action
 
@@ -107,35 +108,24 @@ def content_heading(obj: Dict, screen_w: int) -> CursesLines:
     :param screen_w: The current screen width
     :returns: The content heading
     """
-    check_name = obj["check_name"]
-    check_name = check_name + (" " * (screen_w - len(check_name)))
-    path_line = f"PATH: {abs_user_path(obj['location']['path'])}"
-    check_name_line = f"MESSAGE: {check_name}"
+    check_line = f"MESSAGE: {obj['check_name']}"
+    location = f"LOCATION: {obj['issue_path']}"
+    fill_characters = screen_w - len(location) + 1
+    location_line = f"{location}{' ' * fill_characters}"
 
-    return CursesLines(
-        (
-            CursesLine(
-                (
-                    CursesLinePart(
-                        column=0,
-                        string=path_line,
-                        color=Color.BLACK,
-                        decoration=curses.A_BOLD,
-                    ),
-                ),
-            ),
-            CursesLine(
-                (
-                    CursesLinePart(
-                        column=0,
-                        string=check_name_line,
-                        color=severity_to_color(obj["severity"]),
-                        decoration=curses.A_UNDERLINE,
-                    ),
-                ),
-            ),
-        ),
+    line_1_part_1 = CursesLinePart(
+        column=0,
+        string=check_line,
+        color=severity_to_color(obj["severity"]),
+        decoration=Decoration.NORMAL,
     )
+    line_2_part_1 = CursesLinePart(
+        column=0,
+        string=location_line,
+        color=Color.GREY,
+        decoration=Decoration.UNDERLINE,
+    )
+    return CursesLines((CursesLine((line_1_part_1,)), CursesLine((line_2_part_1,))))
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
@@ -165,6 +155,14 @@ def massage_issue(issue: Dict) -> Dict:
     return massaged
 
 
+MENU_COLUMNS = [
+    "severity",
+    "__message",
+    "__path",
+    "__line",
+]
+
+
 @actions.register
 class Action(ActionBase):
     """Run the lint subcommand."""
@@ -176,7 +174,16 @@ class Action(ActionBase):
 
         :param args: The current application configuration
         """
-        self._issues: List[Dict[str, Any]] = []
+        self._modification_times_last_updated: datetime
+        self._success_notification_shown: bool = False
+        self._issues_menu = Step(
+            name="issues_menu",
+            step_type="menu",
+            columns=MENU_COLUMNS,
+            value=[],
+            select_func=self._build_issue_content,
+        )
+        self._current_issue_count = 0
         super().__init__(args=args, logger_name=__name__, name="lint")
 
     @property
@@ -284,7 +291,6 @@ class Action(ActionBase):
         return None
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
-        # pylint: disable=too-many-return-statements
         """Execute the ``lint`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -293,8 +299,6 @@ class Action(ActionBase):
             :data:`None`
         """
         self._logger.debug("lint requested")
-
-        # Set up interaction
         self._prepare_to_run(app, interaction)
 
         updated = self._update_args(
@@ -307,53 +311,25 @@ class Action(ActionBase):
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
         interaction.ui.show_form(notification)
-        output, _error, return_code = self._run_runner()
-        self._logger.debug("Output from ansible-lint run (rc=%d): %s", return_code, output)
 
-        # Quick sanity check, make sure we actually have a result to parse.
-        if return_code != 0 and "ansible-lint: No such file or directory" in output:
-            installed_or_ee = (
-                "in the execution environment you are using"
-                if self._args.execution_environment
-                else "installed"
-            )
-            self._fatal(
-                "ansible-lint executable could not be found. Ensure 'ansible-lint' "
-                f"is {installed_or_ee} and try again.",
-            )
+        self._build_issues_menu()
+        if self._current_issue_count == 0:
             self._prepare_to_exit(interaction)
             return None
 
-        out_without_warnings = self._pull_out_json_or_fatal(output)
-        if out_without_warnings is None:
-            self._prepare_to_exit(interaction)
-            return None
-
-        try:
-            raw_issues = json.loads(out_without_warnings)
-        except json.JSONDecodeError as exc:
-            self._logger.debug("Failed to parse 'ansible-lint' JSON response: %s", str(exc))
-            notification = error_notification(
-                messages=[
-                    "Could not parse 'ansible-lint' output.",
-                ],
-            )
-            self._interaction.ui.show_form(notification)
-            self._prepare_to_exit(interaction)
-            return None
-
-        if len(raw_issues) == 0:
-            notification = success_notification(messages=["Congratulations, no lint issues found!"])
-            self._interaction.ui.show_form(notification)
-            self._prepare_to_exit(interaction)
-            return None
-
-        issues = [massage_issue(issue) for issue in raw_issues]
-        self._issues = sorted(issues, key=lambda i: Severity[i["severity"].upper()], reverse=True)
-        self.steps.append(self._build_main_menu())
+        self.steps.append(self._issues_menu)
 
         while True:
             self.update()
+
+            if self._current_issue_count == 0:
+                break
+
+            self._interaction.ui.update_status(
+                status=f"Issues: {self._current_issue_count}",
+                status_color=self._max_severity_color,
+            )
+
             self._take_step()
 
             if not self.steps:
@@ -364,6 +340,25 @@ class Action(ActionBase):
 
         self._prepare_to_exit(interaction)
         return None
+
+    def update(self):
+        """Request calling app update, and update modification time if needed."""
+        self._calling_app.update()
+
+        # Do this only every 2 seconds
+        if (datetime.now() - self._modification_times_last_updated).total_seconds() > 2:
+            rerun_lint = self._rerun_needed()
+            if rerun_lint:
+                self._build_issues_menu()
+
+    @property
+    def _max_severity_color(self):
+        """Determine the color of the maximum severity issue.
+
+        :returns: The color
+        """
+        max_severity = max([Severity[i["severity"].upper()].value for i in self._issues_menu.value])
+        return severity_to_color(Severity(max_severity).name.lower())
 
     def _take_step(self) -> None:
         """Take a step based on the current step or step back."""
@@ -395,34 +390,114 @@ class Action(ActionBase):
         else:
             self.steps.append(result)
 
-    def _build_main_menu(self) -> Step:
-        """Build the menu of issues.
+    def _build_issues_menu(self):
+        """Build the menu of all issues.
 
-        :returns: The issues menu definition
+        :returns: Indication of success
         """
-        columns = [
-            "severity",
-            "__message",
-            "__path",
-            "__line",
-        ]
+        output, _error, return_code = self._run_runner()
+        self._logger.debug("Output from ansible-lint run (rc=%d): %s", return_code, output)
 
-        return Step(
-            name="lint_result",
-            columns=columns,
-            step_type="menu",
-            value=self._issues,
-            select_func=self._build_lint_result,
+        # ansible-lint failed
+        if return_code != 0 and "ansible-lint: No such file or directory" in output:
+            installed_or_ee = (
+                "in the execution environment you are using"
+                if self._args.execution_environment
+                else "installed"
+            )
+            self._fatal(
+                "ansible-lint executable could not be found. Ensure 'ansible-lint' "
+                f"is {installed_or_ee} and try again.",
+            )
+            self._current_issue_count = 0
+            return
+
+        # Could not extract json from response
+        out_without_warnings = self._pull_out_json_or_fatal(output)
+        if out_without_warnings is None:
+            self._current_issue_count = 0
+            return
+
+        # De-serialization of json failed
+        try:
+            raw_issues = json.loads(out_without_warnings)
+        except json.JSONDecodeError as exc:
+            self._logger.debug("Failed to parse 'ansible-lint' JSON response: %s", str(exc))
+            messages = ["Could not parse 'ansible-lint' output."]
+            without_ansi = remove_ansi(output)
+            messages.extend(without_ansi.splitlines())
+            notification = error_notification(messages)
+            self._interaction.ui.show_form(notification)
+            self._current_issue_count = 0
+            return
+
+        # No issues were found
+        if len(raw_issues) == 0:
+            notification = success_notification(messages=["Congratulations, no lint issues found!"])
+            self._interaction.ui.show_form(notification)
+
+        # Update menu
+        issues = [massage_issue(issue) for issue in raw_issues]
+        self._current_issue_count = len(issues)
+        self._issues_menu.value = sorted(
+            issues,
+            key=lambda i: Severity[i["severity"].upper()],
+            reverse=True,
         )
 
-    def _build_lint_result(self) -> Step:
-        """Build the lint result step.
+        # Update new content timestamps
+        _rerun_lint = self._rerun_needed()
+        return
 
-        :returns: The lint result
+    def _build_issue_content(self):
+        """Build the content for one plugin.
+
+        :returns: The plugin's content
         """
         return Step(
-            name="singular_lint_result",
+            name="issue_content",
             step_type="content",
-            value=self._issues,
+            value=self.steps.current.value,
             index=self.steps.current.index,
         )
+
+    def _rerun_needed(self) -> bool:
+        """Add a modification timestamp to each issue, check for changes.
+
+        :returns: Indication if lint should be rerun
+        """
+        rerun_lint = False
+        checked_paths = []
+        for outer_issue in self._issues_menu.value:
+            outer_path = outer_issue["__path"]
+            if outer_path in checked_paths:
+                continue
+            checked_paths.append(outer_path)
+            unix_ts, iso_ts = time_stamp_for_file(outer_path, self._args.time_zone)
+            # Set all issues for the same file
+            for inner_issue in self._issues_menu.value:
+                inner_path = inner_issue["__path"]
+                if inner_path != outer_path:
+                    continue
+
+                previous_ts = inner_issue.get("__last_modified")
+                inner_issue["last_modified"] = iso_ts
+                inner_issue["__last_modified"] = unix_ts
+
+                # The file may be gone or non existent
+                if unix_ts is None:
+                    continue
+
+                # The may be a first run
+                if previous_ts is None:
+                    rerun_lint = True
+                    continue
+
+                # Has the file changed
+                if unix_ts > previous_ts:
+                    rerun_lint = True
+
+        self._modification_times_last_updated = datetime.now()
+        if rerun_lint:
+            self._logger.debug("Files modified")
+        return rerun_lint
