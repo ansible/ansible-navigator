@@ -1,0 +1,14 @@
+{
+    "name": "test[2-:0-select redhatinsights.insights]",
+    "index": 2,
+    "comment": "select redhatinsights.insights",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "  REDHATINSIGHTS.INSIGHTS                                                                                                                                                                                       TYPE                                       ADDED                                              DEPRECATED                                                                                    DESCRIPTION",
+        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
+    ]
+}

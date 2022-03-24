@@ -131,6 +131,7 @@ class Colorize:
             state = compiler.root_state
             lines = []
             for line_idx, line in enumerate(doc.splitlines()):
+                line += "\n"
                 first_line = line_idx == 0
                 try:
                     state, regions = tokenize(compiler, state, line, first_line)
