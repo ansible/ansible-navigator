@@ -364,6 +364,7 @@ class Action(ActionBase):
                 value["default"] = True
             else:
                 value["default"] = False
+            value["current_config_file"] = str(self._args.internals.ansible_configuration.path)
 
         self._config = list(parsed.values())
         self._logger.debug("parsed and merged list and dump successfully")

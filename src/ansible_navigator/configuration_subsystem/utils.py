@@ -16,6 +16,7 @@ from ..command_runner import Command
 from ..command_runner import CommandRunner
 from ..utils.functions import ExitMessage
 from ..utils.functions import LogMessage
+from .definitions import Constants
 
 
 SettingsFileSample = Dict[str, Union[Dict, str]]
@@ -72,11 +73,14 @@ def ansible_verison_parser(command: Command):
 class AnsibleConfiguration:
     """Data structure for an ansible.cfg file."""
 
-    contents: Optional[Dict[str, Dict[str, Union[bool, int, float, str]]]] = None
+    contents: Union[
+        Constants,
+        Dict[str, Dict[str, Union[bool, int, float, str]]],
+    ] = Constants.NOT_SET
     """The parsed contents of the file"""
-    text: Optional[List[str]] = None
+    text: Union[Constants, List[str]] = Constants.NOT_SET
     """The text from the file"""
-    path: Optional[Path] = None
+    path: Union[Constants, Path] = Constants.NOT_SET
     """The path to the file"""
 
 
@@ -103,66 +107,63 @@ def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:
     :returns: The ansible.cfg contents
     """
     # pylint: disable=too-many-return-statements
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    response = ParseAnsibleCfgResponse(messages=[], exit_messages=[])
+    response.config.path = Constants.NONE
+    response.config.text = Constants.NONE
+    response.config.contents = Constants.NONE
 
     if ee_enabled:
         msg = "EE support enabled: using current working directory for 'ansible.cfg'"
-        messages.append(LogMessage(level=logging.DEBUG, message=msg))
+        response.messages.append(LogMessage(level=logging.DEBUG, message=msg))
         cfg_path = Path.cwd() / "ansible.cfg"
         if not cfg_path.exists():
             msg = (
                 "EE support enabled: no 'ansible.cfg' found in current working directory."
                 f" Tried {cfg_path!s}"
             )
-            messages.append(LogMessage(level=logging.INFO, message=msg))
+            response.messages.append(LogMessage(level=logging.INFO, message=msg))
+            return response
 
-            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
         msg = "EE support enabled: found 'ansible.cfg' in current working directory."
-        messages.append(LogMessage(level=logging.INFO, message=msg))
+        response.messages.append(LogMessage(level=logging.INFO, message=msg))
 
     else:
         msg = "EE support disabled: using 'ansible --version' for 'ansible.cfg'"
-        messages.append(LogMessage(level=logging.DEBUG, message=msg))
+        response.messages.append(LogMessage(level=logging.DEBUG, message=msg))
         new_messages, new_exit_messages, version_details = parse_ansible_verison()
-        messages.extend(new_messages)
-        exit_messages.extend(new_exit_messages)
-        if exit_messages or version_details is None:
-            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
+        response.messages.extend(new_messages)
+        response.exit_messages.extend(new_exit_messages)
+        if response.exit_messages or version_details is None:
+            return response
 
         cfg_file_name = version_details.get("config file")
         if cfg_file_name is None:
             msg = "EE support disabled: no 'config file' in 'ansible --version'"
-            messages.append(LogMessage(level=logging.DEBUG, message=msg))
-            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
+            response.messages.append(LogMessage(level=logging.DEBUG, message=msg))
+            return response
         if cfg_file_name == "None":
             msg = "EE support disabled: 'ansible --version' reports no config file"
-            messages.append(LogMessage(level=logging.INFO, message=msg))
-            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
+            response.messages.append(LogMessage(level=logging.INFO, message=msg))
+            return response
         cfg_path = Path(cfg_file_name)
         if not cfg_path.exists():
             msg = f"EE support disabled: {cfg_path!s} does not exist"
-            messages.append(LogMessage(level=logging.DEBUG, message=msg))
-            return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
+            response.messages.append(LogMessage(level=logging.DEBUG, message=msg))
+            return response
 
     parser = ConfigParser()
     try:
         parser.read(str(cfg_path))
     except ParsingError as exc:
         exit_msg = f"The ansible configuration file '{cfg_path!s}' could not be parsed."
-        exit_messages.append(ExitMessage(message=exit_msg))
-        exit_messages.append(ExitMessage(message=str(exc)))
-        return ParseAnsibleCfgResponse(messages=messages, exit_messages=exit_messages)
+        response.exit_messages.append(ExitMessage(message=exit_msg))
+        response.exit_messages.append(ExitMessage(message=str(exc)))
+        return response
 
-    return ParseAnsibleCfgResponse(
-        messages=messages,
-        exit_messages=exit_messages,
-        config=AnsibleConfiguration(
-            contents=parser.__dict__.get("_sections", {}),
-            path=cfg_path,
-            text=cfg_path.read_text(encoding="utf-8").splitlines(),
-        ),
-    )
+    response.config.contents = parser.__dict__.get("_sections", {})
+    response.config.path = cfg_path
+    response.config.text = cfg_path.read_text(encoding="utf-8").splitlines()
+    return response
 
 
 def parse_ansible_verison() -> Tuple[List[LogMessage], List[ExitMessage], Optional[Dict[str, Any]]]:
