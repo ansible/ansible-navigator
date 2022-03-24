@@ -1,7 +1,9 @@
 """Print pretty colors."""
+import logging
 import math
 import os
 
+from sys import stdout
 from typing import List
 
 from ansible_navigator.content_defs import ContentFormat
@@ -11,6 +13,9 @@ from ansible_navigator.ui_framework.colorize import Colorize
 from ansible_navigator.ui_framework.colorize import rgb_to_ansi
 from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 from ansible_navigator.utils.serialize import serialize
+
+
+logger = logging.getLogger(__name__)
 
 
 def color_bits() -> int:
@@ -105,6 +110,11 @@ def print_to_stdout(
         output = serialized
     else:
         output = str(content)
+
+    if use_color and not stdout.isatty():
+        logger.debug("Color requested, but device is not a TTY")
+        use_color = False
+
     if use_color:
         tokenized = tokenize(
             content_format=content_format,

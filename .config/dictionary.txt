@@ -12,3 +12,4 @@ Kolkata
 lintables
 myproject
 workdir
+isatty
