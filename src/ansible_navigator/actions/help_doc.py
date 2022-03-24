@@ -1,11 +1,11 @@
 """``:help`` command implementation."""
-import os
 
 from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..ui_framework import Interaction
+from ..utils.compatibility import importlib_resources
 from . import _actions as actions
 
 
@@ -32,10 +32,7 @@ class Action(ActionBase):
         self._logger.debug("help requested")
         self._prepare_to_run(app, interaction)
 
-        with open(
-            os.path.join(self._args.internals.share_directory, "markdown", "help.md"),
-            encoding="utf-8",
-        ) as fh:
+        with importlib_resources.open_text("ansible_navigator.package_data", "help.md") as fh:
             help_md = fh.read()
 
         while True:

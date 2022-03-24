@@ -1,0 +1,17 @@
+{
+    "name": "test[4-:f compliance-filter content]",
+    "index": 4,
+    "comment": "filter content",
+    "additional_information": {
+        "present": [
+            "compliance"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  REDHATINSIGHTS.INSIGHTS                                                                                                        TYPE                      ADDED                                     DEPRECATED                                                DESCRIPTION",
+        "0│compliance                                                                                                                     role                      Unknown                                   Unknown                                                   Install and configure Red Hat Insights Client",
+        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
+    ]
+}

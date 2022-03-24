@@ -9,4 +9,6 @@ mqueue              # https://github.com/ansible/ansible-runner/issues/984
 
 astimezone
 Kolkata
+lintables
+myproject
 workdir
