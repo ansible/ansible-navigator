@@ -145,7 +145,7 @@ def _prepare_content(
     content_view: ContentView,
     serialization_format: SerializationFormat,
 ) -> ContentType:
-    if isinstance(content, list):
+    if isinstance(content, (tuple, list)):
         if all(is_dataclass(c) for c in content):
             return [
                 c.asdict(

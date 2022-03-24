@@ -267,7 +267,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--dc"),
             environment_variable_override="no_color",
             settings_file_path_override="color.enable",
-            short_description="Enable the use of color in the display",
+            short_description="Enable the use of color for mode interactive and stdout",
             value=SettingsEntryValue(default=True),
         ),
         SettingsEntry(
