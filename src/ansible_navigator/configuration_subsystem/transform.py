@@ -70,7 +70,7 @@ def to_schema(settings: ApplicationConfiguration) -> Dict[str, Any]:
         subschema[dot_parts[-1]]["description"] = entry.short_description
         if entry.choices:
             # choice may be a tuple, so make a list
-            choices = entry.choices
+            choices = list(entry.choices)
             if subschema[dot_parts[-1]].get("type") == "array":
                 # A list of items
                 subschema[dot_parts[-1]]["items"]["enum"] = choices
