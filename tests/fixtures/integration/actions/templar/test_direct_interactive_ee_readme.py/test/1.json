@@ -11,7 +11,7 @@
     },
     "output": [
         "  NAME                                                                                          VERSION                         SHADOWED                           TYPE                                   PATH",
-        "0│redhatinsights.insights                                                                       1.0.5                              False                           contained                              /usr/share/ansible/collections/ansible_collections/redhatinsights/insights",
+        "0│redhatinsights.insights                                                                       1.0.7                              False                           contained                              /usr/share/ansible/collections/ansible_collections/redhatinsights/insights",
         "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }
