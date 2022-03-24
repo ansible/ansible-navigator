@@ -22,7 +22,7 @@ from . import _actions as actions
 class Action(ActionBase):
     """Template command implementation."""
 
-    KEGEX = r"^{{.*}}$"
+    KEGEX = r"^{{\s*(?P<params>.*?)\s*}}$"
 
     def __init__(self, args: ApplicationConfiguration):
         """Initialize the template action.
@@ -39,6 +39,7 @@ class Action(ActionBase):
         :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
+        # pylint: disable=too-many-branches
         self._logger.debug("template requested '%s'", interaction.action.value)
         self._prepare_to_run(app, interaction)
 
@@ -85,12 +86,21 @@ class Action(ActionBase):
         if isinstance(templated, str):
             templated = html.unescape(templated)
 
+        requested = self._interaction.action.match.groupdict()["params"]
+        if requested == "examples":
+            content_format = ContentFormat.YAML_TXT
+        elif requested == "readme":
+            content_format = ContentFormat.MARKDOWN
+        elif isinstance(templated, str):
+            content_format = ContentFormat.TXT
+        else:
+            content_format = None
+
         while True:
             app.update()
-            serialization_format = ContentFormat.TXT if isinstance(templated, str) else None
             next_interaction: Interaction = interaction.ui.show(
                 obj=templated,
-                content_format=serialization_format,
+                content_format=content_format,
             )
             if next_interaction.name != "refresh":
                 break

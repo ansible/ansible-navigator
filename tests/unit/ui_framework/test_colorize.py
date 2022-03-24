@@ -4,10 +4,12 @@ import os
 
 from typing import Dict
 from typing import NamedTuple
-from unittest.mock import patch
+from unittest.mock import patch  # pylint: disable=preferred-module  # FIXME: GH-872
 
+from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.ui_framework.colorize import Colorize
+from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
 
@@ -34,16 +36,16 @@ SAMPLE_YAML = Sample(serialization_format=SerializationFormat.YAML)._asdict()
 def test_basic_success_json():
     """Ensure the json string is returned as 1 lines, 5 parts and can be reassembled
     to the json string"""
-    sample = serialize(**SAMPLE_JSON)
+    sample = serialize(**SAMPLE_JSON) + "\n"
     colorized = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.json",
     )
     assert len(colorized) == 3
-    serialized_lines = '{\n    "test": "data"\n}'.splitlines()
+    serialized_lines = sample.splitlines(keepends=True)
     colorized_lines = ["".join(part.chars for part in line) for line in colorized]
     assert serialized_lines == colorized_lines
-    assert "\n".join(serialized_lines) == sample
+    assert "".join(serialized_lines) == sample
 
 
 def test_basic_success_yaml():
@@ -58,9 +60,11 @@ def test_basic_success_yaml():
     )
     assert len(result) == 2
     assert len(result[0]) == 1
-    assert result[0][0].chars == sample.splitlines()[0]
-    assert len(result[1]) == 3
-    assert "".join(line_part.chars for line_part in result[1]) == sample.splitlines()[1]
+    assert result[0][0].chars == sample.splitlines(keepends=True)[0]
+    assert len(result[1]) == 4
+    assert (
+        "".join(line_part.chars for line_part in result[1]) == sample.splitlines(keepends=True)[1]
+    )
 
 
 def test_basic_success_log():
@@ -68,7 +72,7 @@ def test_basic_success_log():
 
     Also ensure the parts can be reassembled to match the string.
     """
-    sample = "1 ERROR text 42"
+    sample = "1 ERROR text 42\n"
 
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
@@ -77,7 +81,7 @@ def test_basic_success_log():
     assert len(result) == 1
     first_line = result[0]
     line_parts = tuple(p.chars for p in first_line)
-    assert line_parts == ("1", " ", "ERROR", " text ", "42")
+    assert line_parts == ("1", " ", "ERROR", " text ", "42", "\n")
     assert "".join(line_parts) == sample
 
 
@@ -104,3 +108,56 @@ def test_graceful_failure(mocked_func, caplog):
         scope="source.json",
     )
     assert "rendered without color" in caplog.text
+
+
+YAML_TXT = """
+- ansible.builtin.debug:
+    var: before
+
+# this is a comment
+
+- ansible.builtin.debug:
+    var: after
+"""
+
+YAML_TXT_EXPECTED = [
+    [SimpleLinePart(chars="\n", column=0, color=None)],
+    [
+        SimpleLinePart(chars="- ", column=0, color=None),
+        SimpleLinePart(chars="ansible.builtin.debug", column=2, color=(86, 156, 214)),
+        SimpleLinePart(chars=":\n", column=23, color=None),
+    ],
+    [
+        SimpleLinePart(chars="    ", column=0, color=None),
+        SimpleLinePart(chars="var", column=4, color=(86, 156, 214)),
+        SimpleLinePart(chars=": ", column=7, color=None),
+        SimpleLinePart(chars="before", column=9, color=(206, 145, 120)),
+        SimpleLinePart(chars="\n", column=15, color=None),
+    ],
+    [SimpleLinePart(chars="\n", column=0, color=None)],
+    [SimpleLinePart(chars="# this is a comment\n", column=0, color=(106, 153, 85))],
+    [SimpleLinePart(chars="\n", column=0, color=None)],
+    [
+        SimpleLinePart(chars="- ", column=0, color=None),
+        SimpleLinePart(chars="ansible.builtin.debug", column=2, color=(86, 156, 214)),
+        SimpleLinePart(chars=":\n", column=23, color=None),
+    ],
+    [
+        SimpleLinePart(chars="    ", column=0, color=None),
+        SimpleLinePart(chars="var", column=4, color=(86, 156, 214)),
+        SimpleLinePart(chars=": ", column=7, color=None),
+        SimpleLinePart(chars="after", column=9, color=(206, 145, 120)),
+        SimpleLinePart(chars="\n", column=14, color=None),
+    ],
+]
+
+
+def test_basic_success_yaml_text():
+    """Ensure the yaml string is returned matche the expected tokens."""
+    content_format = ContentFormat.YAML_TXT
+
+    result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
+        doc=YAML_TXT,
+        scope=content_format.value.scope,
+    )
+    assert result == YAML_TXT_EXPECTED
