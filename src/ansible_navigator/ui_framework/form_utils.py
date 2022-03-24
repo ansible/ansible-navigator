@@ -160,3 +160,15 @@ def error_notification(messages: List[str]) -> Form:
         "type": "notification",
     }
     return dict_to_form(form)
+
+
+def success_notification(messages: List[str]) -> Form:
+    """generate a std success notification"""
+    messages = break_long_lines(messages)
+    form = {
+        "title": "SUCCESS",
+        "title_color": 2,
+        "fields": [{"name": "info", "information": messages, "type": "information"}],
+        "type": "notification",
+    }
+    return dict_to_form(form)

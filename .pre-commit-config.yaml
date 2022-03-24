@@ -108,7 +108,7 @@ repos:
                 installation
               )|
               README|
-              share/ansible_navigator/markdown/(help|welcome)
+              src/ansible_navigator/package_data/(help|welcome)
             )\.md
           $
 

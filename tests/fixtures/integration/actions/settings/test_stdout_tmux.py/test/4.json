@@ -147,6 +147,6 @@
         "#   # Specify the IANA time zone to use or 'local' to use the system time",
         "#   # zone.",
         "#   time-zone: UTC",
-        "(py38) bash-5.1$"
+        "(venv) bash-5.1$"
     ]
 }

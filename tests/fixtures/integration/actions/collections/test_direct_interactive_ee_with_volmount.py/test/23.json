@@ -109,7 +109,7 @@
         " 95│sh                           shell         historical    False         POSIX shell (/bin/sh)",
         " 96│shell                        module        0.2           False         Execute shell commands on targets",
         " 97│slurp                        module        historical    False         Slurps a file from remote nodes",
-        " 98│ssh                          connection    historical    False         connect via ssh client binary",
+        " 98│ssh                          connection    historical    False         connect via SSH client binary",
         " 99│stat                         module        1.3           False         Retrieve file or file system status",
         "100│su                           become        2.8           False         Substitute User",
         "101│subelements                  lookup        1.4           False         traverse nested key from a list of dictionaries",

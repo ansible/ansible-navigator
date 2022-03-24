@@ -13,7 +13,7 @@ ansible-navigator:
         type: become
     inventory:
       help: False
-      paths:
+      entries:
         - /tmp/test_inventory.yml
     playbook:
       help: False
@@ -21,6 +21,9 @@ ansible-navigator:
   ansible-builder:
     help: False
     workdir: /tmp/
+  ansible-lint:
+    config: ~/ansible-lint.yml
+    lintables: ~/myproject/
   ansible-runner:
     artifact-dir: /tmp/test1
     rotate-artifacts-count: 10

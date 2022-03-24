@@ -38,7 +38,7 @@ from ..defaults import FIXTURES_DIR
         (
             ["config"],
             "execution_environment_image",
-            "quay.io/ansible/creator-ee:v0.2.0",
+            "quay.io/ansible/creator-ee:v0.4.0",
         ),
         (
             ["config"],
