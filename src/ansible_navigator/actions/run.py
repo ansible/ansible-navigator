@@ -43,6 +43,7 @@ from ..utils.functions import round_half_up
 from ..utils.serialize import serialize_write_file
 from . import _actions as actions
 from . import run_action
+from .stdout import Action as stdout_action
 
 
 RESULT_TO_COLOR = [
@@ -794,6 +795,7 @@ class Action(ActionBase):
                 self._logger.info("Playbook complete")
                 self.write_artifact()
                 self._runner_finished = True
+                self._notify_no_tasks_redirect()
 
     def _get_status(self) -> Tuple[str, int]:
         """Get the runner status and color for status message.
@@ -907,3 +909,16 @@ class Action(ActionBase):
         warn_msg += ["[HINT] After it's fixed, try to ':rerun' the playbook"]
         warning = warning_notification(warn_msg)
         self._interaction.ui.show_form(warning)
+
+    def _notify_no_tasks_redirect(self):
+        """In the case the playbook finished but without tasks, show a warning, send to stdout."""
+        total_tasks = sum(len(play["tasks"]) for play in self._plays.value)
+        # At least one task, no need to redirect
+        if total_tasks:
+            return
+
+        message = ["The playbook completed without tasks. Redirecting to ':stdout' for review."]
+        warning = warning_notification(message)
+
+        self._interaction.ui.show_form(warning)
+        self.steps.append(Interaction(name="stdout", action=stdout_action, ui=self._interaction.ui))
