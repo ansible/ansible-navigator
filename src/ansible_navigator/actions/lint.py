@@ -119,7 +119,7 @@ def content_heading(obj: Dict, screen_w: int) -> CursesLines:
                     CursesLinePart(
                         column=0,
                         string=path_line,
-                        color=0,
+                        color=Color.BLACK,
                         decoration=curses.A_BOLD,
                     ),
                 ),
@@ -395,7 +395,11 @@ class Action(ActionBase):
         else:
             self.steps.append(result)
 
-    def _build_main_menu(self):
+    def _build_main_menu(self) -> Step:
+        """Build the menu of issues.
+
+        :returns: The issues menu definition
+        """
         columns = [
             "severity",
             "__message",
@@ -411,7 +415,11 @@ class Action(ActionBase):
             select_func=self._build_lint_result,
         )
 
-    def _build_lint_result(self):
+    def _build_lint_result(self) -> Step:
+        """Build the lint result step.
+
+        :returns: The lint result
+        """
         return Step(
             name="singular_lint_result",
             step_type="content",
