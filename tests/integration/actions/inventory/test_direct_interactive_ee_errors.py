@@ -26,6 +26,7 @@ initial_steps = (
         user_input="ls",
         comment="exit",
         search_within_response=SearchFor.PROMPT,
+        present=["ls"]
     ),
     UiTestStep(
         user_input=Command(
@@ -42,6 +43,7 @@ initial_steps = (
         user_input="ls",
         comment="exit",
         search_within_response=SearchFor.PROMPT,
+        present=["ls"]
     ),
     UiTestStep(
         user_input=Command(
