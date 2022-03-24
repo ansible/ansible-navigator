@@ -3,6 +3,7 @@ import curses
 import json
 import shlex
 
+from copy import deepcopy
 from functools import partial
 from typing import Any
 from typing import Dict
@@ -14,6 +15,7 @@ from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem import Constants
 from ..content_defs import ContentView
 from ..content_defs import SerializationFormat
 from ..image_manager import inspect_all
@@ -131,6 +133,11 @@ class Action(ActionBase):
         :returns: RunStdoutReturn
         """
         self._logger.debug("images requested in stdout mode")
+
+        details_source = self._args.entry("images_details").value.source
+        if details_source is not Constants.DEFAULT_CFG:
+            return self.run_stdout_details()
+
         self._collect_image_list()
         if not self._images.value:
             msg = "No images were found, or the configured container engine was not available."
@@ -149,6 +156,41 @@ class Action(ActionBase):
                 serialization_format=SerializationFormat.YAML,
             ),
         )
+        return RunStdoutReturn(message="", return_code=0)
+
+    def run_stdout_details(self) -> RunStdoutReturn:
+        """Execute the ``images --details`` request for mode stdout.
+
+        :returns: A message and return code
+        """
+        image_name = self._args.execution_environment_image
+
+        output, error, return_code = self._run_runner(image_name=image_name)
+        if error or return_code:
+            return RunStdoutReturn(message=error, return_code=return_code)
+
+        details = self._parse(output)
+        if details is None:
+            message = "Image introspection failed, please check the logs and log an issue."
+            return RunStdoutReturn(message=message, return_code=1)
+
+        details.pop("errors")
+        sections = self._args.entry("images_details").value.current
+        for section_name, section in deepcopy(details).items():
+            if section_name not in sections and "everything" not in sections:
+                details.pop(section_name)
+            else:
+                for key in section:
+                    if key.startswith("__"):
+                        details[section_name].pop(key)
+
+        details["image_name"] = image_name
+        serialized = serialize(
+            content=details,
+            content_view=ContentView.NORMAL,
+            serialization_format=SerializationFormat.YAML,
+        )
+        print(serialized)
         return RunStdoutReturn(message="", return_code=0)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
@@ -420,27 +462,11 @@ class Action(ActionBase):
             return False
 
         self._images.selected["__introspected"] = True
-        share_directory = self._args.internals.share_directory
-        container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
-        python_exec_path = "python3"
 
-        kwargs = {
-            "cmdline": [f"{share_directory}/utils/image_introspect.py"],
-            "container_engine": self._args.container_engine,
-            "container_volume_mounts": container_volume_mounts,
-            "execution_environment_image": self._images.selected["__full_name"],
-            "execution_environment": True,
-            "navigator_mode": "interactive",
-        }
-
-        if isinstance(self._args.container_options, list):
-            kwargs.update({"container_options": self._args.container_options})
-
-        self._logger.debug(
-            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}",
+        output, error, _return_code = self._run_runner(
+            image_name=self._images.selected["__full_name"],
         )
-        _runner = Command(executable_cmd=python_exec_path, **kwargs)
-        output, error, _ = _runner.run()
+
         if error:
             self._logger.error(
                 "Image introspection failed (runner), the return value was: %s",
@@ -450,10 +476,6 @@ class Action(ActionBase):
             return False
         parsed = self._parse(output)
         if parsed is None:
-            self._logger.error(
-                "Image introspection failed (parsed), the return value was: %s",
-                output[0:1000],
-            )
             self.notify_failed()
             return False
 
@@ -498,11 +520,44 @@ class Action(ActionBase):
             self._logger.error("Unable to extract introspection from stdout")
             self._logger.debug("error json loading output: '%s'", str(exc))
             self._logger.debug(output)
+            self._logger.error(
+                "Image introspection failed (parsed), the return value was: %s",
+                output[0:1000],
+            )
             return None
 
         for error in parsed["errors"]:
             self._logger.error("%s %s", error["path"], error["error"])
         return parsed
+
+    def _run_runner(self, image_name: str) -> Tuple[str, str, int]:
+        """Run runner to collect image details.
+
+        :param image_name: The full image name
+        :returns: Output, errors and the return code
+        """
+        share_directory = self._args.internals.share_directory
+        container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
+        python_exec_path = "python3"
+
+        kwargs = {
+            "cmdline": [f"{share_directory}/utils/image_introspect.py"],
+            "container_engine": self._args.container_engine,
+            "container_volume_mounts": container_volume_mounts,
+            "execution_environment_image": image_name,
+            "execution_environment": True,
+            "navigator_mode": "interactive",
+        }
+
+        if isinstance(self._args.container_options, list):
+            kwargs.update({"container_options": self._args.container_options})
+
+        self._logger.debug(
+            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}",
+        )
+        _runner = Command(executable_cmd=python_exec_path, **kwargs)
+        output, error, return_code = _runner.run()
+        return output, error, return_code
 
     def notify_failed(self):
         """Notify image introspection failed."""

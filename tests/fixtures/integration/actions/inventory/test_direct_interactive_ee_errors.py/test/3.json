@@ -1,0 +1,19 @@
+{
+    "name": "test[3-echo exited-exit]",
+    "index": 3,
+    "comment": "exit",
+    "additional_information": {
+        "present": [
+            "exited"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " echo exited",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "exited",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
+}

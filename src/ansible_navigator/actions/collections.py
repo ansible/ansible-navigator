@@ -14,11 +14,15 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
+from typing import cast
 
 from ..action_base import ActionBase
+from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants
+from ..content_defs import ContentView
+from ..content_defs import SerializationFormat
 from ..runner import Command
 from ..steps import Step
 from ..ui_framework import CursesLine
@@ -28,7 +32,9 @@ from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import path_is_relative_to
+from ..utils.functions import remove_dbl_un
 from ..utils.key_value_store import KeyValueStore
+from ..utils.serialize import serialize
 from . import _actions as actions
 from . import run_action
 
@@ -163,6 +169,67 @@ class Action(ActionBase):
 
         self._prepare_to_exit(interaction)
         return None
+
+    def run_stdout(self) -> RunStdoutReturn:
+        """Execute the ``collection`` request for mode stdout.
+
+        :returns: The return code or 1. If the response from the runner invocation is None,
+            indicates there is no console output to display, so assume an issue and return 1
+            along with a message to review the logs.
+        """
+
+        self._logger.debug("collection requested in stdout mode")
+
+        args_updated = self._update_args(params=[], attach_cdc=True)
+        if not args_updated or not isinstance(
+            self._args.internals.collection_doc_cache,
+            KeyValueStore,
+        ):
+            msg = (
+                "Failed to create collections cache, "
+                + "Please review the ansible-navigator log file for errors."
+            )
+            return RunStdoutReturn(message=msg, return_code=1)
+
+        self._collection_cache = self._args.internals.collection_doc_cache
+        self._collection_cache_path = self._args.collection_doc_cache_path
+
+        self._run_runner()
+        if not self._collections:
+            msg = (
+                "Failed to catalog collections, "
+                + "Please review the ansible-navigator log file for errors."
+            )
+            return RunStdoutReturn(message=msg, return_code=1)
+
+        collections_info = self._parse_collection_info_stdout()
+
+        print(
+            serialize(
+                content=collections_info,
+                content_view=ContentView.NORMAL,
+                serialization_format=SerializationFormat.YAML,
+            ),
+        )
+        return RunStdoutReturn(message="", return_code=0)
+
+    def notify_none(self):
+        """Notify no collections were found."""
+        msgs = ["humph. no collections were found in the following paths:"]
+        paths = []
+        for path in self._collection_scanned_paths:
+            if path.startswith(self._args.internals.share_directory):
+                continue
+            if self._args.execution_environment:
+                if path.startswith(self._adjacent_collection_dir):
+                    paths.append(f"- {path} (bind_mount)")
+                else:
+                    paths.append(f"- {path} (contained)")
+            else:
+                paths.append(f"- {path}")
+        closing = ["[HINT] Try installing some or try a different execution environment"]
+        warning = warning_notification(messages=msgs + paths + closing)
+        self._interaction.ui.show(warning)
 
     def _take_step(self) -> None:
         """Take a step based on the current step or step back."""
@@ -485,20 +552,85 @@ class Action(ActionBase):
 
         return None
 
-    def notify_none(self):
-        """Notify no collections were found."""
-        msgs = ["humph. no collections were found in the following paths:"]
-        paths = []
-        for path in self._collection_scanned_paths:
-            if path.startswith(self._args.internals.share_directory):
-                continue
-            if self._args.execution_environment:
-                if path.startswith(self._adjacent_collection_dir):
-                    paths.append(f"- {path} (bind_mount)")
+    def _get_collection_plugins_details(self, selected_collection: Dict) -> Dict:
+        """Get plugin details for the given collection.
+
+        :param severity: The cached collection data from which plugin information is to
+                         be retrieved.
+        :returns: The plugin details like full-name, type and short description.
+        """
+        plugins_details: Dict = {}
+        self._collection_cache = cast(KeyValueStore, self._collection_cache)
+
+        for plugin_checksum, plugin_info in selected_collection["plugin_checksums"].items():
+
+            plugin_type = plugin_info.get("type")
+            if plugin_type not in plugins_details:
+                plugins_details[plugin_type] = []
+
+            plugin_json = self._collection_cache[plugin_checksum]
+            loaded = json.loads(plugin_json)
+
+            plugin = loaded.get("plugin")
+            plugin_docs = {}
+            if plugin and plugin["doc"] is not None:
+                if "name" in plugin["doc"]:
+                    short_name = plugin["doc"]["name"]
                 else:
-                    paths.append(f"- {path} (contained)")
-            else:
-                paths.append(f"- {path}")
-        closing = ["[HINT] Try installing some or try a different execution environment"]
-        warning = warning_notification(messages=msgs + paths + closing)
-        self._interaction.ui.show(warning)
+                    short_name = plugin["doc"][plugin_type]
+                plugin_docs["full_name"] = f"{selected_collection['known_as']}.{short_name}"
+
+                if "short_description" in plugin["doc"]:
+                    plugin_docs["short_description"] = plugin["doc"]["short_description"]
+
+            plugins_details[plugin_type].append(plugin_docs)
+
+        return plugins_details
+
+    def _parse_collection_info_stdout(self) -> Dict:
+        # pylint: disable=too-many-nested-blocks
+
+        """Parse collection information from catalog collection cache.
+
+        :returns: The collection information to be displayed on stdout
+        """
+        collections_info: Dict = {
+            "collections": [],
+        }
+        collection_exclude_keys = [
+            "file_manifest_file",
+            "format",
+            "meta_source",
+            "plugin_checksums",
+            "runtime",
+        ]
+        roles_exclude_keys = ["readme"]
+        self._collection_cache = cast(KeyValueStore, self._collection_cache)
+
+        self._collection_cache.open()
+        for collection in self._collections:
+            plugins_details = self._get_collection_plugins_details(collection)
+
+            collection_stdout: Dict = {}
+            for info_name, info_value in collection.items():
+                info_name = remove_dbl_un(info_name)
+                if info_name in collection_exclude_keys:
+                    continue
+
+                if info_name == "roles":
+                    collection_stdout["roles"] = []
+                    for role in info_value:
+                        updated_role_info = {}
+                        for role_info_key, role_info_value in role.items():
+                            if role_info_key in roles_exclude_keys:
+                                continue
+                            updated_role_info[role_info_key] = role_info_value
+                        collection_stdout["roles"].append(updated_role_info)
+                else:
+                    collection_stdout[info_name] = info_value
+
+            collection_stdout["plugins"] = plugins_details
+            collections_info["collections"].append(collection_stdout)
+        self._collection_cache.close()
+
+        return collections_info
