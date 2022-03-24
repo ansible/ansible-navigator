@@ -23,7 +23,10 @@ initial_steps = (
         search_within_response=SearchFor.WARNING,
     ),
     UiTestStep(
-        user_input="ls", comment="exit", search_within_response=SearchFor.PROMPT, present=["ls"]
+        user_input="ls",
+        comment="exit",
+        search_within_response=SearchFor.PROMPT,
+        present=["ls"],
     ),
     UiTestStep(
         user_input=Command(
@@ -37,7 +40,10 @@ initial_steps = (
         search_within_response=SearchFor.WARNING,
     ),
     UiTestStep(
-        user_input="ls", comment="exit", search_within_response=SearchFor.PROMPT, present=["ls"]
+        user_input="ls",
+        comment="exit",
+        search_within_response=SearchFor.PROMPT,
+        present=["ls"],
     ),
     UiTestStep(
         user_input=Command(
