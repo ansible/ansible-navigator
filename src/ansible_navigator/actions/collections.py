@@ -182,7 +182,8 @@ class Action(ActionBase):
 
         args_updated = self._update_args(params=[], attach_cdc=True)
         if not args_updated or not isinstance(
-            self._args.internals.collection_doc_cache, KeyValueStore,
+            self._args.internals.collection_doc_cache,
+            KeyValueStore,
         ):
             msg = (
                 "Failed to create collections cache, "
