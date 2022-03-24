@@ -48,7 +48,7 @@
                 "help": {
                   "type": "boolean"
                 },
-                "paths": {
+                "entries": {
                   "items": {
                     "type": "string"
                   },
@@ -81,6 +81,18 @@
               "type": "string"
             }
           }
+        },
+        "ansible-lint": {
+          "additionalProperties": false,
+          "properties": {
+            "config": {
+              "type": "string"
+            },
+            "lintables": {
+              "type": "string"
+            }
+          },
+          "type": "object"
         },
         "ansible-runner": {
           "additionalProperties": false,
@@ -263,6 +275,6 @@
     }
   },
   "required": ["ansible-navigator"],
-  "title": "ansible-navigator settings file schema",
+  "title": "ansible-navigator settings v{version}",
   "type": "object"
 }

@@ -46,7 +46,7 @@ stdout_tests = (
             cmdline="--schema",
             execution_environment=False,
         ).join(),
-        present=["ansible-navigator settings file schema"],
+        present=["ansible-navigator settings"],
     ),
     ShellCommand(
         comment="print json schema to stdout, specify json, mode auto",
@@ -54,7 +54,7 @@ stdout_tests = (
             cmdline="--schema json",
             execution_environment=False,
         ).join(),
-        present=["ansible-navigator settings file schema"],
+        present=["ansible-navigator settings"],
     ),
     ShellCommand(
         comment="print a settings sample to stdout,, mode auto",

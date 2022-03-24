@@ -25,8 +25,10 @@ ansible-navigator:
     inventory:
       # {{ ansible.inventory.help }}
       help: True
-      # {{ ansible.inventory.paths }}
-      paths:
+      # {{ ansible.inventory.entries }}
+      entries:
+        - host1,
+        - router1,router2
         - inventory.yml
     playbook:
       # {{ ansible.playbook.help }}
@@ -38,6 +40,11 @@ ansible-navigator:
     help: False
     # {{ ansible-builder.workdir }}
     workdir: /tmp/
+  ansible-lint:
+    # {{ ansible-lint.config }}
+    config: ~/lint-config.yml
+    # {{ ansible-lint.lintables }}
+    lintables: ~/myproject/
   ansible-runner:
     # {{ ansible-runner.artifact-dir }}
     artifact-dir: ./runner-artifacts
