@@ -535,6 +535,47 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     return errors, result
 
 
+def timestamp_to_iso(timestamp: float, time_zone: str) -> Optional[str]:
+    """Generate an ISO 8601 date time string from a timestamp.
+
+    :param timestamp: The unix timestamp
+    :param time_zone: The time zone
+    :returns: The ISO string
+    """
+    try:
+        if time_zone == "local":
+            return (
+                datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc)
+                .astimezone()
+                .isoformat()
+            )
+        return datetime.datetime.fromtimestamp(
+            timestamp,
+            tz=zoneinfo.ZoneInfo(time_zone),
+        ).isoformat()
+    except zoneinfo.ZoneInfoNotFoundError:
+        logger.error("The time zone '%s' could not be found. Returning None", time_zone)
+        return None
+
+
+def time_stamp_for_file(path: str, time_zone: str) -> Tuple[Optional[float], Optional[str]]:
+    """Get a timestamp for a file path
+
+    :param path: The file path
+    :returns: The UNIX timestamp and an ISO 8601 string
+    """
+    try:
+        modified = os.path.getmtime(path)
+    except FileNotFoundError:
+        # It may have been mounted to a different location in the execution environment
+        modified = None
+    if modified is not None:
+        iso_stamp = timestamp_to_iso(timestamp=modified, time_zone=time_zone)
+    else:
+        iso_stamp = None
+    return modified, iso_stamp
+
+
 def to_list(thing: Optional[Union[str, List, Tuple, Set]]) -> List:
     """convert something to a list if necessary"""
     if isinstance(thing, (list, tuple, set)):
