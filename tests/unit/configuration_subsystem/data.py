@@ -233,6 +233,7 @@ ENV_VAR_DATA = [
     ("help_doc", "false", False),
     ("help_inventory", "false", False),
     ("help_playbook", "false", False),
+    ("images_details", "ansible_version,python_version", ["ansible_version", "python_version"]),
     ("inventory", "/tmp/test1.yaml,/tmp/test2.yml", ["/tmp/test1.yaml", "/tmp/test2.yml"]),
     ("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"]),
     ("lint_config", "/tmp/ansible-lint-config.yml", "/tmp/ansible-lint-config.yml"),

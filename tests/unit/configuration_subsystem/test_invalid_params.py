@@ -127,7 +127,7 @@ def test_poor_choices(_mocked_func, generate_config, entry):
     if entry.cli_parameters and entry.cli_parameters.action == "store_true":
         pass
     elif entry.cli_parameters:
-        look_for = "must be one of"
+        look_for = "must be one"
         # ansible-navigator choice error
         test(subcommand, entry.cli_parameters.short, look_for)
         test(

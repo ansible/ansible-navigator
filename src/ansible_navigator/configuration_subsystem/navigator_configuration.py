@@ -375,6 +375,31 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
+            name="images_details",
+            choices=[
+                "ansible_collections",
+                "ansible_version",
+                "everything",
+                "os_release",
+                "python_packages",
+                "python_version",
+                "redhat_release",
+                "system_packages",
+            ],
+            cli_parameters=CliParameters(
+                action="append",
+                nargs="*",
+                short="-d",
+                long_override="--details",
+            ),
+            settings_file_path_override="images.details",
+            short_description=(
+                "Provide detailed information about the selected execution environment image"
+            ),
+            subcommands=["images"],
+            value=SettingsEntryValue(default=["everything"]),
+        ),
+        SettingsEntry(
             name="inventory",
             cli_parameters=CliParameters(action="append", nargs="*", short="-i"),
             environment_variable_override="ansible_inventory",

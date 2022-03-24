@@ -1,0 +1,26 @@
+{
+    "name": "test[print all details to stdout  clear && ansible-navigator images -d ansible_collections -d ansible_version --ee True --ll debug --mode stdout  | grep '^[a-z]']",
+    "index": 2,
+    "comment": "print all details to stdout",
+    "additional_information": {
+        "present": [
+            "ansible_collections",
+            "ansible_version",
+            "image_name: quay.io/ansible/creator-ee"
+        ],
+        "absent": [
+            "os_release",
+            "python_packages",
+            "python_version",
+            "redhat_release",
+            "system_packages"
+        ],
+        "compared_fixture": false
+    },
+    "output": [
+        "ansible_collections:",
+        "ansible_version:",
+        "image_name: quay.io/ansible/creator-ee:v0.2.0",
+        "(venv) bash-5.1$"
+    ]
+}

@@ -161,16 +161,22 @@ class SettingsEntry:
     def invalid_choice(self) -> str:
         """Generate an invalid choice message for this entry"""
         name = self.name.replace("_", "-")
-        if self.value.source is not Constants.NOT_SET:
-            choices = [str(choice).lower() for choice in self.choices]
-            msg = (
-                f"{name} must be one of "
-                + oxfordcomma(choices, "or")
-                + f", but set as '{self.value.current}' in "
-                + self.value.source.value
-            )
-            return msg
-        raise ValueError(f"Current source not set for {self.name}")
+        if self.value.source is Constants.NOT_SET:
+            raise ValueError(f"Current source not set for {self.name}")
+
+        choices = [str(choice).lower() for choice in self.choices]
+        current = self.value.current
+        if isinstance(current, list):
+            choices_str = oxfordcomma(choices, "and/or")
+            current = oxfordcomma(current, "and")
+            prefix = f"{name} must be one or more of"
+        else:
+            choices_str = oxfordcomma(choices, "or")
+            prefix = f"{name} must be one of"
+
+        source = self.value.source.value
+        msg = f"{prefix} {choices_str}, but set as {current} in {source}"
+        return msg
 
     @property
     def name_dashed(self) -> str:

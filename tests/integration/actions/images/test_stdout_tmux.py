@@ -32,6 +32,57 @@ stdout_tests = (
         ).join(),
         present=["repository: quay.io/ansible/creator-ee"],
     ),
+    ShellCommand(
+        comment="print all details to stdout",
+        user_input=StdoutCommand(
+            cmdline="--details",
+            mode="stdout",
+            execution_environment=True,
+            raw_append=" | grep '^[a-z]'",
+        ).join(),
+        present=[
+            "ansible_collections",
+            "ansible_version",
+            "image_name: quay.io/ansible/creator-ee",
+            "os_release",
+            "python_packages",
+            "python_version",
+            "redhat_release",
+            "system_packages",
+        ],
+    ),
+    ShellCommand(
+        comment="print all details to stdout",
+        user_input=StdoutCommand(
+            cmdline="-d ansible_collections -d ansible_version",
+            mode="stdout",
+            execution_environment=True,
+            raw_append=" | grep '^[a-z]'",
+        ).join(),
+        present=[
+            "ansible_collections",
+            "ansible_version",
+            "image_name: quay.io/ansible/creator-ee",
+        ],
+        absent=[
+            "os_release",
+            "python_packages",
+            "python_version",
+            "redhat_release",
+            "system_packages",
+        ],
+    ),
+    ShellCommand(
+        comment="print all details to stdout",
+        user_input=StdoutCommand(
+            cmdline="-d foo -d bar",
+            mode="stdout",
+            execution_environment=True,
+        ).join(),
+        present=[
+            "must be one or more of",
+        ],
+    ),
 )
 
 steps = add_indices(stdout_tests)
