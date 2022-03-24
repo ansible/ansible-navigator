@@ -217,6 +217,17 @@
           },
           "type": "object"
         },
+        "images": {
+          "additionalProperties": false,
+          "properties": {
+            "details": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        },
         "inventory-columns": {
           "items": {
             "type": "string"

@@ -18,6 +18,7 @@ from ..utils.serialize import SafeLoader
 from ..utils.serialize import yaml
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
+from .definitions import SettingsEntry
 from .parser import Parser
 from .transform import to_schema
 from .utils import parse_ansible_cfg
@@ -293,16 +294,28 @@ class Configurator:
     def _check_choices(self) -> None:
         for entry in self._config.entries:
             if entry.cli_parameters and entry.choices:
-                if entry.value.current not in entry.choices:
-                    self._exit_messages.append(ExitMessage(message=entry.invalid_choice))
-                    choices = [
-                        f"{entry.cli_parameters.short} {str(choice).lower()}"
-                        for choice in entry.choices
-                    ]
-                    exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
-                    self._exit_messages.append(
-                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
-                    )
+                if isinstance(entry.value.current, list):
+                    for value in entry.value.current:
+                        logged = self._check_choice(entry=entry, value=value)
+                        if logged:
+                            break
+                else:
+                    self._check_choice(entry=entry, value=entry.value.current)
+
+    def _check_choice(self, entry: SettingsEntry, value: Union[bool, str]):
+        if entry.cli_parameters and entry.choices:
+            if value not in entry.choices:
+                self._exit_messages.append(ExitMessage(message=entry.invalid_choice))
+                choices = [
+                    f"{entry.cli_parameters.short} {str(choice).lower()}"
+                    for choice in entry.choices
+                ]
+                exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
+                self._exit_messages.append(
+                    ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
+                )
+                return True
+        return False
 
     def _apply_previous_cli_to_current(self) -> None:
         """Apply eligible previous CLI values to current not set by the CLI"""

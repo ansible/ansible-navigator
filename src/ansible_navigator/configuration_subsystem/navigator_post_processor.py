@@ -458,6 +458,31 @@ class NavigatorPostProcessor:
     help_inventory = partialmethod(_forced_stdout, subcommand="inventory")
     help_playbook = partialmethod(_forced_stdout, subcommand="run")
 
+    @_post_processor
+    def images_details(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        # pylint: disable=unused-argument
+        """Post process execution_environment_image_details"""
+        messages: List[LogMessage] = []
+        exit_messages: List[ExitMessage] = []
+
+        entry.value.current = flatten_list(entry.value.current)
+        # In the case --default was provided, set it to everything
+        if not entry.value.current:
+            entry.value.current = entry.value.default
+
+        # Only force mode stdout if from the CLI so the values can be kept in settings
+        # or in an environment variable and used with only --mode stdout
+        if entry.value.source is C.USER_CLI:
+            mode = Mode.STDOUT
+            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+            message = message = f"`{entry.name} requesting mode {mode.value}"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
+        return messages, exit_messages
+
     @staticmethod
     @_post_processor
     def inventory(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
