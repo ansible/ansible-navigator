@@ -104,6 +104,11 @@ ansible-navigator:
         dest: "/tmp/directory"
         options: "Z"
   # {{ inventory-columns }}
+  images:
+    # {{ images.details }}
+    details:
+      - ansible_collections
+      - ansible_version
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type

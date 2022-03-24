@@ -1,0 +1,17 @@
+{
+    "name": "test[3-ls-exit]",
+    "index": 3,
+    "comment": "exit",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " ls",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "ansible_inventory  ansible-navigator.yml  broken_inventory.ini  broken_inventory.yml  test_direct_interactive_ee_errors.py  test_direct_interactive_ee.py  test_direct_interactive_ee_using_cfg.py  test_direct_interactive_noee_errors.py  test_direct_interactive_noee.py  test_direct_interactive_noee_using_cfg.py  test_stdout_tmux.py  test_welcome_interactive_ee.py  test_welcome_interactive_noee.py  using_ansible_cfg",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
+}
