@@ -1,0 +1,29 @@
+{
+    "name": "test[0-ansible-navigator collections --ee True --ll debug --mode interactive-ansible-navigator collections]",
+    "index": 0,
+    "comment": "ansible-navigator collections",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "   NAME                                                                                     VERSION                                                    SHADOWED                         TYPE                                 PATH",
+        " 0│amazon.aws                                                                               3.1.1                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/amazon/aws",
+        " 1│ansible.builtin                                                                          2.12.4rc1.post0                                               False                         contained                            /usr/local/lib/python3.8/site-packages/ansible",
+        " 2│ansible.posix                                                                            1.3.0                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/ansible/posix",
+        " 3│ansible.windows                                                                          1.9.0                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/ansible/windows",
+        " 4│awx.awx                                                                                  20.0.1                                                        False                         contained                            /usr/share/ansible/collections/ansible_collections/awx/awx",
+        " 5│azure.azcollection                                                                       1.12.0                                                        False                         contained                            /usr/share/ansible/collections/ansible_collections/azure/azcollection",
+        " 6│community.docker                                                                         2.2.1                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/community/docker",
+        " 7│community.vmware                                                                         2.1.0                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/community/vmware",
+        " 8│containers.podman                                                                        1.9.2                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/containers/podman",
+        " 9│google.cloud                                                                             1.0.2                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/google/cloud",
+        "10│kubernetes.core                                                                          2.3.0                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/kubernetes/core",
+        "11│openstack.cloud                                                                          1.7.2                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/openstack/cloud",
+        "12│ovirt.ovirt                                                                              1.6.6                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/ovirt/ovirt",
+        "13│redhatinsights.insights                                                                  1.0.7                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/redhatinsights/insights",
+        "14│theforeman.foreman                                                                       3.2.0                                                         False                         contained                            /usr/share/ansible/collections/ansible_collections/theforeman/foreman",
+        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
+    ]
+}

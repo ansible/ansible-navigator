@@ -169,3 +169,9 @@ class ContentFormat(Enum):
         file_extention=".yml",
         serialization=SerializationFormat.YAML,
     )
+    # YAML as string, already serialized
+    YAML_TXT = CFormat(
+        scope="source.yaml",
+        file_extention=".yml",
+        serialization=None,
+    )
