@@ -1,0 +1,24 @@
+{
+    "name": "test[2-cd /tests/fixtures/integration/actions/inventory  &&  ansible-navigator inventory -i broken_inventory.yml --ee True --ll debug --mode interactive-ansible-navigator inventory command top window]",
+    "index": 2,
+    "comment": "ansible-navigator inventory command top window",
+    "additional_information": {
+        "present": [
+            "Unable to parse"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "                                                                WARNING",
+        "                                                                ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                Errors were encountered while gathering the inventory:",
+        "                                                                [WARNING]:  * Failed to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml with auto plugin: no root 'plugin' key found, '/home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml' is not a valid YAML inventory plugin config file",
+        "                                                                [WARNING]:  * Failed to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml with yaml plugin: YAML inventory has invalid structure, it should be a dictionary, got: <class 'ansible.parsing.yaml.objects.AnsibleSequence'>",
+        "                                                                [WARNING]:  * Failed to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml with ini plugin: /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml:1: Expected key=value host variable assignment, got: hosts:",
+        "                                                                [WARNING]: Unable to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml as an inventory source",
+        "                                                                [WARNING]: No inventory was parsed, only implicit localhost is available",
+        "                                                                ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                                                                                                                                                                                                                                                                                                               Ok"
+    ]
+}

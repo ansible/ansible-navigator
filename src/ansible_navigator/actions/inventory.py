@@ -457,11 +457,18 @@ class Action(ActionBase):
                 inventory_output = "{" + parts[1]
             else:
                 inventory_output = ""
-        warn_msg = ["Errors were encountered while gathering the inventory:"]
-        warn_msg += inventory_err.splitlines()
-        self._logger.error(" ".join(warn_msg))
-        if "ERROR!" in inventory_err or "Error" in inventory_err:
-            warning = warning_notification(warn_msg)
+        preface = ["Errors were encountered while gathering the inventory:"]
+        notify = ("ERROR!", "Error", "Unable to parse")
+        if any(string in inventory_err for string in notify):
+            if "[WARNING]" in inventory_err:
+                parts = inventory_err.split("[WARNING]")
+                messages = [part.replace("\n", " ").strip() for part in parts if part]
+                present = preface + [f"[WARNING]{message}" for message in messages]
+            else:
+                present = preface + inventory_err.splitlines()
+            for line in present:
+                self._logger.error(line)
+            warning = warning_notification(present)
             self._interaction.ui.show_form(warning)
         else:
             self._extract_inventory(inventory_output)
