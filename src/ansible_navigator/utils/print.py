@@ -23,6 +23,7 @@ def color_bits() -> int:
         return 24
     term = os.environ.get("TERM", "").strip().lower()
     _term_name, _hyphen, colors = term.rpartition("-")
+    colors = colors.replace("color", "")
     try:
         return int(math.log2(int(colors)))
     except (ValueError, TypeError):
