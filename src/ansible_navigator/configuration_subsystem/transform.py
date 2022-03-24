@@ -69,7 +69,12 @@ def to_schema(settings: ApplicationConfiguration) -> Dict[str, Any]:
                 subschema = subschema.get(part, {}).get("properties")
         subschema[dot_parts[-1]]["description"] = entry.short_description
         if entry.choices:
-            subschema[dot_parts[-1]]["enum"] = list(entry.choices)  # may be a tuple
+            if subschema[dot_parts[-1]].get("type") == "array":
+                # A list of items
+                subschema[dot_parts[-1]]["items"]["enum"] = entry.choices
+            else:
+                # A single item
+                subschema[dot_parts[-1]]["enum"] = entry.choices
         if entry.value.default is not Constants.NOT_SET:
             subschema[dot_parts[-1]]["default"] = entry.value.default
 

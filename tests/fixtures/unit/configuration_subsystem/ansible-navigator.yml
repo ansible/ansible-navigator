@@ -62,6 +62,10 @@ ansible-navigator:
         options: "Z"
     container-options:
       - "--net=host"
+  images:
+    details:
+      - ansible_version
+      - python_version
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type
