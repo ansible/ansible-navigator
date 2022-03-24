@@ -1,5 +1,5 @@
-"""
-This action provides ansible-lint results through ansible-navigator.
+"""This action provides ansible-lint results through ansible-navigator.
+
 Internally, it works by using ansible-runner to execute ansible-lint (optionally
 in an execution environment). When running ansible-lint, it passes
 ``-f codeclimate`` which requests JSON output on stdout. The JSON output contains
@@ -32,6 +32,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..runner.command import Command
 from ..steps import Step
+from ..ui_framework import Color
 from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
@@ -45,8 +46,8 @@ from . import run_action
 
 
 class Severity(IntEnum):
-    """
-    A mapping from ansible-lint severity to an integer represented internally.
+    """A mapping from ansible-lint severity to an integer represented internally.
+
     Primarily used for sorting.
     """
 
@@ -62,34 +63,50 @@ class Severity(IntEnum):
 
     @classmethod
     def _missing_(cls, value):
-        """
-        If ansible-lint ever gives us something we don't expect return something
-        that tells us.
+        """Return unknown if ansible-lint ever returns something unexpected.
+
+        :param value: The value
+        :returns: A severity unknown
         """
         return Severity.UNKNOWN
 
 
 def severity_to_color(severity: str) -> int:
-    """Convert severity to curses colors."""
+    """Convert severity to curses colors.
+
+    :param severity: The severity to convert to a color
+    :returns: A color for the severity
+    """
     if severity == "minor":
-        return 5
+        return Color.MAGENTA
     if severity == "major":
-        return 3
+        return Color.YELLOW
     if severity in ("critical", "blocker"):
-        return 1
+        return Color.RED
     if severity == "info":
-        return 6
-    return 0
+        return Color.CYAN
+    return Color.BLACK
 
 
 def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
     # pylint: disable=unused-argument
-    """Color the menu."""
-    return (severity_to_color(entry["severity"]), 0)
+    """Color the menu.
+
+    :param colno: The column number
+    :param colname: The column name
+    :param entry: The current content entry
+    :returns: The foreground and background color
+    """
+    return (severity_to_color(entry["severity"]), Color.BLACK)
 
 
 def content_heading(obj: Dict, screen_w: int) -> CursesLines:
-    """Generate the content heading."""
+    """Generate the content heading.
+
+    :param obj: The content for which the heading will be generated
+    :param screen_w: The current screen width
+    :returns: The content heading
+    """
     check_name = obj["check_name"]
     check_name = check_name + (" " * (screen_w - len(check_name)))
     path_line = f"PATH: {abs_user_path(obj['location']['path'])}"
@@ -122,13 +139,21 @@ def content_heading(obj: Dict, screen_w: int) -> CursesLines:
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
-    """when showing content, filter out some keys"""
+    """Filter out internal keys.
+
+    :param obj: The content from which the content keys will be filtered
+    :returns: The content without the internal keys
+    """
     ignored_keys = ("fingerprint",)
     return {k: v for k, v in obj.items() if not k.startswith("__") and k not in ignored_keys}
 
 
 def massage_issue(issue: Dict) -> Dict:
-    """Massage an issue by injecting some useful keys with strings for rendering."""
+    """Massage an issue by injecting some useful keys with strings for rendering.
+
+    :param issue: The issue reported
+    :returns: The issue reformatted
+    """
     massaged = issue.copy()
     massaged["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
     massaged["__path"] = abs_user_path(issue["location"]["path"])
@@ -142,20 +167,32 @@ def massage_issue(issue: Dict) -> Dict:
 
 @actions.register
 class Action(ActionBase):
-    """:lint"""
+    """Run the lint subcommand."""
 
     KEGEX = r"^lint(\s(?P<params>.*))?$"
 
     def __init__(self, args: ApplicationConfiguration):
+        """Initialize the action.
+
+        :param args: The current application configuration
+        """
         self._issues: List[Dict[str, Any]] = []
         super().__init__(args=args, logger_name=__name__, name="lint")
 
     @property
     def is_interactive(self):
-        """are we interactive?"""
+        """Determine if interactive.
+
+        :returns: An indication is running in interactive mode
+        """
         return self._args.mode == "interactive"
 
     def _fatal(self, msg: str) -> None:
+        """Show a notification if a fatal error has occurred.
+
+        :param msg: The message to display
+        :raises RuntimeError: A runtime error if not mode interactive
+        """
         self._logger.error(msg)
 
         if self.is_interactive:
@@ -165,8 +202,10 @@ class Action(ActionBase):
             raise RuntimeError(msg)
 
     def _run_runner(self) -> Tuple[str, str, int]:
-        """Spin up runner to run ansible-lint, either in an exec env or not."""
+        """Spin up runner to run ansible-lint, either in an exec env or not.
 
+        :returns: The output, errors and return code
+        """
         kwargs = {
             "container_engine": self._args.container_engine,
             "execution_environment_image": self._args.execution_environment_image,
@@ -216,21 +255,26 @@ class Action(ActionBase):
         return runner.run()
 
     def run_stdout(self) -> RunStdoutReturn:
-        """Run in oldschool mode, just stdout."""
-        self._logger.debug("lint requested in stdout mode")
-        _, _, rc = self._run_runner()  # pylint: disable=invalid-name
-        return RunStdoutReturn(message="", return_code=rc)
+        """Execute the ``doc`` request for mode stdout.
 
-    def _pull_out_json_or_fatal(self, stdout: str) -> Optional[str]:
-        # pylint: disable=no-self-use
+        :returns: A message and return code
+        """
+        self._logger.debug("lint requested in stdout mode")
+        _output, _error, return_code = self._run_runner()
+        return RunStdoutReturn(message="", return_code=return_code)
+
+    @staticmethod
+    def _pull_out_json_or_fatal(stdout: str) -> Optional[str]:
         """
         Attempt to pull out JSON line from ansible-lint raw output.
 
         Note that stdout and stderr get munged together by docker/podman, so we
         need to do some trickery to try to figure out the actual JSON line vs,
         say, ansible warnings.
-        """
 
+        :param stdout: The stdout from the lint invocation
+        :returns: The json string
+        """
         # We want the last (non empty) line of output. This should hopefully be
         # the JSON we need.
         for line in reversed(stdout.splitlines()):
@@ -241,12 +285,13 @@ class Action(ActionBase):
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         # pylint: disable=too-many-return-statements
-        """Handle :lint
+        """Execute the ``lint`` request for mode interactive.
 
         :param interaction: The interaction from the user
         :param app: The app instance
+        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+            :data:`None`
         """
-
         self._logger.debug("lint requested")
 
         # Set up interaction
@@ -262,11 +307,11 @@ class Action(ActionBase):
 
         notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
         interaction.ui.show_form(notification)
-        out, _, rc = self._run_runner()  # pylint: disable=invalid-name
-        self._logger.debug("Output from ansible-lint run (rc=%d): %s", rc, out)
+        output, _error, return_code = self._run_runner()
+        self._logger.debug("Output from ansible-lint run (rc=%d): %s", return_code, output)
 
         # Quick sanity check, make sure we actually have a result to parse.
-        if rc != 0 and "ansible-lint: No such file or directory" in out:
+        if return_code != 0 and "ansible-lint: No such file or directory" in output:
             installed_or_ee = (
                 "in the execution environment you are using"
                 if self._args.execution_environment
@@ -279,7 +324,7 @@ class Action(ActionBase):
             self._prepare_to_exit(interaction)
             return None
 
-        out_without_warnings = self._pull_out_json_or_fatal(out)
+        out_without_warnings = self._pull_out_json_or_fatal(output)
         if out_without_warnings is None:
             self._prepare_to_exit(interaction)
             return None
@@ -321,7 +366,7 @@ class Action(ActionBase):
         return None
 
     def _take_step(self) -> None:
-        """take one step"""
+        """Take a step based on the current step or step back."""
         result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(self.steps.current.name, self.app, self.steps.current)
