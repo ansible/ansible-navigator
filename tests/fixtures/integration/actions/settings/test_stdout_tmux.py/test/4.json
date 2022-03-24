@@ -60,7 +60,7 @@
         "#   # The path to collection doc cache",
         "#   collection-doc-cache-path: $HOME/.cache/ansible-navigator/collection_doc_cache.db",
         "#   color:",
-        "#     # Enable the use of color in the display",
+        "#     # Enable the use of color for mode interactive and stdout",
         "#     enable: True",
         "#     # Enable or disable terminal color changing support with OSC 4",
         "#     osc4: True",

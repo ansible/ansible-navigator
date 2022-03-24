@@ -46,6 +46,10 @@ class Constants(Enum):
     USER_CFG = "Settings file"
     USER_CLI = "Command line"
 
+    def __str__(self) -> str:
+        """Use the value when presented as a string."""
+        return str(self.value)
+
 
 # The following are ordered to build up to an ApplicationConfiguration
 
