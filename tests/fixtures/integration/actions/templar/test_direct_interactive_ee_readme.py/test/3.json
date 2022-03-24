@@ -1,0 +1,21 @@
+{
+    "name": "test[3-:f-unfiltered]",
+    "index": 3,
+    "comment": "unfiltered",
+    "additional_information": {
+        "present": [
+            "compliance"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  REDHATINSIGHTS.INSIGHTS                                                                     TYPE                                   ADDED                          DEPRECATED                                DESCRIPTION",
+        "0│compliance                                                                                  role                                   Unknown                        Unknown                                   Install and configure Red Hat Insights Client",
+        "1│insights                                                                                    inventory                              None                           False                                     insights inventory source",
+        "2│insights_client                                                                             role                                   Unknown                        Unknown                                   Install and configure Red Hat Insights Client",
+        "3│insights_config                                                                             module                                 None                           False                                     This module handles initial configuration of the insights client on install",
+        "4│insights_register                                                                           module                                 None                           False                                     This module registers the insights client",
+        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
+    ]
+}
