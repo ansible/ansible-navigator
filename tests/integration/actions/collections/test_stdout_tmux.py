@@ -27,7 +27,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        present=["- collection_info:", "  name: ansible.builtin", "stats:"],
+        present=["- collection_info:", "  name: ansible.builtin"],
     ),
     ShellCommand(
         comment="collections without ee",
@@ -35,7 +35,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        present=["- collection_info:", "    namespace: company_name", "stats:"],
+        present=["- collection_info:", "    namespace: company_name"],
     ),
 )
 
