@@ -7,6 +7,7 @@ import pytest
 from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner.command_runner import run_command
 from ansible_navigator.configuration_subsystem import Configurator
+from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.utils import parse_ansible_cfg
 
@@ -99,9 +100,9 @@ def test_valid_home(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
 
     if ee_enabled:
-        assert not parsed_cfg.config.contents
-        assert not parsed_cfg.config.path
-        assert not parsed_cfg.config.text
+        assert parsed_cfg.config.contents is Constants.NONE
+        assert parsed_cfg.config.path is Constants.NONE
+        assert parsed_cfg.config.text is Constants.NONE
     else:
         assert parsed_cfg.config.contents == {
             "defaults": {"cow_selection": "milk", "inventory": "inventory.yml"},
@@ -132,9 +133,9 @@ def test_invalid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPa
     monkeypatch.chdir(tmp_path)
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
 
-    assert not parsed_cfg.config.contents
-    assert not parsed_cfg.config.path
-    assert not parsed_cfg.config.text
+    assert parsed_cfg.config.contents is Constants.NONE
+    assert parsed_cfg.config.path is Constants.NONE
+    assert parsed_cfg.config.text is Constants.NONE
     assert "12345" in parsed_cfg.exit_messages[1].message
 
 
@@ -159,9 +160,9 @@ def test_invalid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.Mo
     )
     _messages, exit_messages = configurator.configure()
 
-    assert not application_configuration.internals.ansible_configuration.contents
-    assert not application_configuration.internals.ansible_configuration.path
-    assert not application_configuration.internals.ansible_configuration.text
+    assert application_configuration.internals.ansible_configuration.contents is Constants.NONE
+    assert application_configuration.internals.ansible_configuration.path is Constants.NONE
+    assert application_configuration.internals.ansible_configuration.text is Constants.NONE
     assert "12345" in exit_messages[2].message
 
 
@@ -174,9 +175,9 @@ def test_config_none(ee_enabled):
     """
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
 
-    assert not parsed_cfg.config.contents
-    assert not parsed_cfg.config.path
-    assert not parsed_cfg.config.text
+    assert parsed_cfg.config.contents is Constants.NONE
+    assert parsed_cfg.config.path is Constants.NONE
+    assert parsed_cfg.config.text is Constants.NONE
     if ee_enabled:
         assert (
             "no 'ansible.cfg' found in current working directory." in parsed_cfg.messages[1].message
@@ -208,9 +209,9 @@ def test_invalid_path(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     )
 
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
-    assert not parsed_cfg.config.contents
-    assert not parsed_cfg.config.path
-    assert not parsed_cfg.config.text
+    assert parsed_cfg.config.contents is Constants.NONE
+    assert parsed_cfg.config.path is Constants.NONE
+    assert parsed_cfg.config.text is Constants.NONE
     if ee_enabled:
         assert (
             "no 'ansible.cfg' found in current working directory." in parsed_cfg.messages[1].message
