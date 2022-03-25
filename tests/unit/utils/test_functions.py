@@ -2,6 +2,7 @@
 import os
 import re
 
+from collections import deque
 from pathlib import Path
 from typing import List
 from typing import NamedTuple
@@ -251,3 +252,52 @@ def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str):
     if time_zone == "bogus":
         assert matched["timezone"] == "+00:00"
         assert "The time zone 'bogus' could not be found. Using UTC." in caplog.text
+
+
+def test_dict_merge_in_place_list_replace_basic():
+    """Test the dict_merge_in_place_list_replace function, basic case."""
+    left = {"a": 1, "b": 2}
+    right = {"b": 3, "c": 4}
+    functions.dict_merge_in_place_list_replace(left, right)
+    assert left == {"a": 1, "b": 3, "c": 4}
+
+
+def test_dict_merge_in_place_list_replace_list():
+    """Test the dict_merge_in_place_list_replace function, list case."""
+    left = {"a": 1, "b": [0, 1, 2]}
+    right = {"b": ["a", "b", "c"], "c": 4}
+    functions.dict_merge_in_place_list_replace(left, right)
+    assert left == {"a": 1, "b": ["a", "b", "c"], "c": 4}
+
+
+def test_dict_merge_in_place_list_replace_nested():
+    """Test the dict_merge_in_place_list_replace function, list case."""
+    left = {"a": {"a": {"a": {"a": "left", "b": "left"}}}}
+    right = {"a": {"a": {"a": {"a": "right"}}}}
+    functions.dict_merge_in_place_list_replace(left, right)
+    assert left == {"a": {"a": {"a": {"a": "right", "b": "left"}}}}
+
+
+def test_dict_merge_in_place_list_replace_primitive():
+    """Test the dict_merge_in_place_list_replace function, primitive case."""
+    left = {"a": True}
+    right = {"a": "b"}
+    functions.dict_merge_in_place_list_replace(left, right)
+    assert left == {"a": "b"}
+
+
+def test_dict_merge_in_place_list_replace_right_not_dict():
+    """Test the dict_merge_in_place_list_replace function, non-dict right."""
+    left = {"a": {}}
+    right = {"a": True}
+    with pytest.raises(functions.DictMergeError):
+        functions.dict_merge_in_place_list_replace(left, right)
+
+
+def test_dict_merge_in_place_list_replace_left_off():
+    """Test the dict_merge_in_place_list_replace function, non-dict right."""
+
+    left = {"a": deque([1, 2, 3])}
+    right = {"a": True}
+    with pytest.raises(functions.DictMergeError):
+        functions.dict_merge_in_place_list_replace(left, right)

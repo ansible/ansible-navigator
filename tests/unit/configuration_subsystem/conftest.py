@@ -3,24 +3,33 @@
 import os
 
 from copy import deepcopy
+from pathlib import Path
 from typing import Dict
 from typing import List
 from typing import NamedTuple
+from typing import Tuple
 
 import pytest
 
 from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner.command_runner import run_command
+from ansible_navigator.configuration_subsystem import to_sample
+from ansible_navigator.configuration_subsystem import to_schema
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 from ansible_navigator.configuration_subsystem.definitions import (
     ApplicationConfiguration,
 )
+from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
+from ansible_navigator.configuration_subsystem.definitions import SettingsSchemaType
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
 )
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.utils.functions import ExitMessage
 from ansible_navigator.utils.functions import LogMessage
 from ansible_navigator.utils.serialize import Loader
+from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
 from ...defaults import FIXTURES_DIR
 
@@ -97,3 +106,72 @@ def ansible_version(monkeypatch):
         "ansible_navigator.command_runner.command_runner.run_command",
         static_ansible_version,
     )
+
+
+@pytest.fixture(name="schema_dict")
+def _schema_dict() -> SettingsSchemaType:
+    """Provide the json schema as a dictionary.
+
+    :returns: the json schema as a dictionary
+    """
+    settings = deepcopy(NavigatorConfiguration)
+    settings.application_version = "test"
+    schema = to_schema(settings)
+    return SettingsSchemaType(schema)
+
+
+@pytest.fixture()
+def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaType:
+    """Provide the json schema as a dictionary.
+
+    Like schema_dict but in this case all properties will be required
+
+    :returns: the json schema as a dictionary
+    """
+
+    def property_dive(subschema: Dict):
+        if "properties" in subschema:
+            subschema["required"] = list(subschema["properties"].keys())
+            for value in subschema["properties"].values():
+                property_dive(subschema=value)
+
+    property_dive(schema_dict)
+    return schema_dict
+
+
+@pytest.fixture(name="settings_samples")
+def _settings_samples() -> Tuple[str, str]:
+    """Provide the full settings samples
+
+    :returns: The commented and uncommented samples
+    """
+    settings = deepcopy(NavigatorConfiguration)
+    commented, uncommented = to_sample(settings=settings)
+    return commented, uncommented
+
+
+@pytest.fixture()
+def settings_env_var_to_full(
+    settings_samples: Tuple[str, str],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> Tuple[Path, SettingsFileType]:
+    """Set the settings environment variable to a full sample settings file in a tmp path."""
+    _commented, uncommented = settings_samples
+    settings_contents = yaml.load(uncommented, Loader=Loader)
+    settings_path = tmp_path / "ansible-navigator.yml"
+    serialize_write_file(
+        content=settings_contents,
+        content_view=ContentView.NORMAL,
+        file_mode="w",
+        file=settings_path,
+        serialization_format=SerializationFormat.YAML,
+    )
+    # The sample has volume mounts, so let's not exit because they doesn't exit
+    root = settings_contents["ansible-navigator"]
+    ee_root = root["execution-environment"]
+    for volume_mount in ee_root["volume-mounts"]:
+        Path(volume_mount["src"]).mkdir(exist_ok=True)
+
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", str(settings_path))
+    return settings_path, settings_contents
