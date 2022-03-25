@@ -6,9 +6,9 @@ import importlib
 import logging
 import os
 import re
-import sys
 
 from collections import namedtuple
+from importlib import resources
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -18,14 +18,6 @@ from typing import Tuple
 
 from ..action_defs import RunStdoutReturn
 from ..ui_framework import error_notification
-
-
-# ``mypy``/``pylint`` idiom for py36 compatibility
-# https://github.com/python/typeshed/issues/3500#issuecomment-560958608
-if sys.version_info >= (3, 7):
-    from importlib import resources
-else:
-    import importlib_resources as resources
 
 
 logger = logging.getLogger(__name__)

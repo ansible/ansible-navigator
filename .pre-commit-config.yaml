@@ -194,23 +194,20 @@ repos:
           - --python-version=3.10
         pass_filenames: false
       - <<: *_base-mypy-setup-map
-        alias: mypy-py36
-        name: MyPy, for Python 3.6
+        alias: mypy-py38
+        name: MyPy, for Python 3.8
         additional_dependencies:
-          - importlib_resources # Needed for checking py3.6 with a later interpreter
+          - importlib-resources # < 3.9
           - jinja2
           - libtmux
           - pytest
           - pytest-mock
           - sphinx
-          - types-backports # Needed for checking py3.6 with a later interpreter
-          - types-dataclasses # Needed for checking py3.6 with a later interpreter
           - types-docutils
+          - types-setuptools # Needed logging version
           - types-PyYAML
-          - types-setuptools # Needed for logging version
-          - types-typed-ast # Needed for checking py3.6 with a later interpreter
         args:
-          - --python-version=3.6
+          - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
     rev: v2.12.2
