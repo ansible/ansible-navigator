@@ -34,7 +34,7 @@ class Configurator:
         apply_previous_cli_entries: Union[List, C] = C.NONE,
     ):
         """Initialize the configuration variables.
-        
+
         :param params: A list of parameters e.g. ['-x', 'value']
         :param application_configuration: An application specific Config object
         :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
@@ -57,9 +57,7 @@ class Configurator:
                 raise ValueError("'apply_previous_cli' enabled prior to an initialization")
 
     def _roll_back(self) -> None:
-        """In the case of a rollback, log the configuration state
-        prior to roll back.
-        """
+        """In the case of a rollback, log the configuration state prior to roll back."""
         message = "Configuration errors encountered, rolling back to previous configuration."
         self._messages.append(LogMessage(level=logging.WARNING, message=message))
         for entry in self._config.entries:
@@ -79,7 +77,7 @@ class Configurator:
 
         Save the original entries, if an error is encountered
         restore them.
-        
+
         :returns: Log messages
         """
         self._config.original_command = self._params
@@ -320,7 +318,6 @@ class Configurator:
 
     def _apply_previous_cli_to_current(self) -> None:
         """Apply eligible previous CLI values to current not set by the CLI."""
-
         # _apply_previous_cli_entries must be ALL or a list of entries
         if self._apply_previous_cli_entries is not C.ALL and not isinstance(
             self._apply_previous_cli_entries,
