@@ -211,7 +211,10 @@
                   "type": "string"
                 }
               },
-              "required": ["src", "dest"],
+              "required": [
+                "src",
+                "dest"
+              ],
               "type": "array"
             }
           },
@@ -273,11 +276,17 @@
         "settings": {
           "additionalProperties": false,
           "properties": {
+            "effective": {
+              "type": "boolean"
+            },
             "sample": {
               "type": "boolean"
             },
             "schema": {
               "type": "string"
+            },
+            "sources": {
+              "type": "boolean"
             }
           }
         }
@@ -285,7 +294,9 @@
       "additionalProperties": false
     }
   },
-  "required": ["ansible-navigator"],
+  "required": [
+    "ansible-navigator"
+  ],
   "title": "ansible-navigator settings v{version}",
   "type": "object"
 }

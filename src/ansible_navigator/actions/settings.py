@@ -1,6 +1,7 @@
 """The ``settings`` subcommand action."""
 
 from dataclasses import asdict
+from functools import partial
 from typing import Any
 from typing import Dict
 from typing import Tuple
@@ -123,23 +124,32 @@ class Action(ActionBase):
         self._logger.debug("settings requested in stdout mode")
 
         content: Union[str, Dict[str, Any], PresentableSettingsEntries]
-        if self._args.entry("settings_schema").value.source is not Constants.DEFAULT_CFG:
-            content = to_schema(self._args)
-            if self._args.settings_schema == "json":
-                content_format = ContentFormat.JSON
-        elif self._args.settings_sample:
-            content, _uncommented = to_sample(self._args)
-            content_format = ContentFormat.YAML_TXT
-        else:
-            content = to_presentable(self._args)
-            content_format = ContentFormat.YAML
-
-        print_to_stdout(
-            content=content,
-            content_format=content_format,
+        dump = partial(
+            print_to_stdout,
             share_directory=self._args.internals.share_directory,
             use_color=self._args.display_color,
         )
+        dumped = True
+        if self._args.entry("settings_schema").value.source is not Constants.DEFAULT_CFG:
+            dump(content=to_schema(self._args), content_format=ContentFormat.JSON)
+            return RunStdoutReturn(message="", return_code=0)
+
+        if self._args.settings_effective:
+            content = "effective"
+            dump(content=content, content_format=ContentFormat.YAML)
+            dumped = True
+        if self._args.settings_sample:
+            content, _uncommented = to_sample(self._args)
+            dump(content=content, content_format=ContentFormat.YAML_TXT)
+            dumped = True
+        if self._args.settings_sample:
+            content = "sources"
+            dump(content=content, content_format=ContentFormat.YAML)
+            dumped = True
+        if dumped:
+            return RunStdoutReturn(message="", return_code=0)
+
+        dump(content=to_presentable(self._args), content_format=ContentFormat.YAML)
         return RunStdoutReturn(message="", return_code=0)
 
     def _build_main_menu(self) -> TypedStep:
