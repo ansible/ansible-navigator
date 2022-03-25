@@ -57,12 +57,28 @@ stdout_tests = (
         present=["ansible-navigator settings"],
     ),
     ShellCommand(
-        comment="print a settings sample to stdout,, mode auto",
+        comment="print a settings sample to stdout, mode auto",
         user_input=StdoutCommand(
             cmdline="--sample",
             execution_environment=False,
         ).join(),
         present=["#   time-zone: UTC"],
+    ),
+    ShellCommand(
+        comment="print effective settings to stdout, mode auto",
+        user_input=StdoutCommand(
+            cmdline="--effective --ll debug",
+            execution_environment=False,
+        ).join(),
+        present=["effective: true"],
+    ),
+    ShellCommand(
+        comment="print settings sources to stdout,, mode auto",
+        user_input=StdoutCommand(
+            cmdline="--sources --ll debug",
+            execution_environment=False,
+        ).join(),
+        present=["ansible-navigator.settings.sources: Command line"],
     ),
 )
 

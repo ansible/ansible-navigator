@@ -130,9 +130,13 @@ ansible-navigator:
     # {{ playbook-artifact.save-as }}
     save-as: "{playbook_dir}/{playbook_name}-artifact-{time_stamp}.json"
   settings:
+    # {{ settings.effective }}
+    effective: False
     # {{ settings.sample }}
     sample: False
     # {{ settings.schema }}
     schema: json
+    # {{ settings.sources }}
+    sources: False
   # {{ time-zone }}
   time-zone: UTC

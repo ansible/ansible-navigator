@@ -586,6 +586,20 @@ NavigatorConfiguration = ApplicationConfiguration(
             value=SettingsEntryValue(),
         ),
         SettingsEntry(
+            name="settings_effective",
+            cli_parameters=CliParameters(
+                short="--se",
+                long_override="--effective",
+                action="store_true",
+            ),
+            settings_file_path_override="settings.effective",
+            short_description=(
+                "Show the effective settings. Defaults, CLI parameters, environment variables,"
+                " and the settings file will be combined"
+            ),
+            value=SettingsEntryValue(default=False),
+        ),
+        SettingsEntry(
             name="settings_sample",
             cli_parameters=CliParameters(
                 short="--gs",
@@ -611,6 +625,17 @@ NavigatorConfiguration = ApplicationConfiguration(
             ),
             subcommands=["settings"],
             value=SettingsEntryValue(default="json"),
+        ),
+        SettingsEntry(
+            name="settings_sources",
+            cli_parameters=CliParameters(
+                short="--so",
+                long_override="--sources",
+                action="store_true",
+            ),
+            settings_file_path_override="settings.sources",
+            short_description=("Show the source of each current settings entry."),
+            value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
             name="time_zone",

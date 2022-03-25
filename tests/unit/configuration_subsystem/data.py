@@ -253,8 +253,10 @@ ENV_VAR_DATA = [
     ("pull_arguments", "--tls-verify=false", ["--tls-verify=false"]),
     ("pull_policy", "never", "never"),
     ("set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}),
+    ("settings_effective", "false", False),
     ("settings_sample", "false", False),
     ("settings_schema", "json", "json"),
+    ("settings_sources", "false", False),
     ("time_zone", "Japan", "Japan"),
     ("workdir", "/tmp/", "/tmp/"),
 ]
