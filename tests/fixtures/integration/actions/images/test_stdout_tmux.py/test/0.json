@@ -10,13 +10,13 @@
         "compared_fixture": false
     },
     "output": [
-        "  full_name: quay.io/ansible/creator-ee:v0.2.0",
-        "      - quay.io/ansible/creator-ee:v0.2.0",
-        "      - quay.io/ansible/creator-ee@sha256:2a20360ae5ee0c6a45d248babdeba3a1268ff7ffbc24ce22a76c8e1574ebcd49",
-        "      - quay.io/ansible/creator-ee:v0.2.0",
+        "  full_name: quay.io/ansible/creator-ee:v0.4.0",
+        "      - quay.io/ansible/creator-ee:v0.4.0",
+        "      - quay.io/ansible/creator-ee@sha256:2a7b4a5c398660b87b7cf9f237cd5eac5e58cf40478f07470cfca48034891fdb",
+        "      - quay.io/ansible/creator-ee:v0.4.0",
         "  name: creator-ee",
-        "  name_tag: creator-ee:v0.2.0 (primary)",
+        "  name_tag: creator-ee:v0.4.0 (primary)",
         "  repository: quay.io/ansible/creator-ee",
-        "(py38) bash-5.1$"
+        "(venv) bash-5.1$"
     ]
 }

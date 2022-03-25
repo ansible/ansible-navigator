@@ -1,5 +1,5 @@
 {
-    "name": "test[print all details to stdout  clear && ansible-navigator images --details --ee True --ll debug --mode stdout  | grep '^[a-z]']",
+    "name": "test[print all details to stdout  clear && ansible-navigator images --details --display-color false --ee True --ll debug --mode stdout  | grep '^[a-z]']",
     "index": 1,
     "comment": "print all details to stdout",
     "additional_information": {
@@ -19,7 +19,7 @@
     "output": [
         "ansible_collections:",
         "ansible_version:",
-        "image_name: quay.io/ansible/creator-ee:v0.2.0",
+        "image_name: quay.io/ansible/creator-ee:v0.4.0",
         "os_release:",
         "python_packages:",
         "python_version:",
