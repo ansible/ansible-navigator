@@ -26,7 +26,7 @@ def test_defaults():
 
 
 def test_cli():
-    """Test the source of effective settings given some cli paramters."""
+    """Test the source of effective settings given some cli parameters."""
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
 

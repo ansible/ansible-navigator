@@ -54,7 +54,7 @@ def test_settings_env_var_to_full(
 
 
 def test_cli():
-    """Test the round trip generation of effective settings given some cli paramters."""
+    """Test the round trip generation of effective settings given some cli parameters."""
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
 
