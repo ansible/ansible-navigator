@@ -7,13 +7,67 @@ from typing import Any
 from typing import Dict
 from typing import List
 from typing import Tuple
+from typing import Union
 
 from ..utils.compatibility import importlib_resources
+from ..utils.dict_merge import in_place_list_replace
+from ..utils.functions import shlex_join
 from .definitions import ApplicationConfiguration
 from .definitions import Constants
 from .definitions import SettingsEntry
+from .definitions import SettingsFileType
 from .defs_presentable import PresentableSettingsEntries
 from .defs_presentable import PresentableSettingsEntry
+from .utils import create_settings_file_sample
+
+
+def to_effective(
+    settings: ApplicationConfiguration,
+) -> SettingsFileType:
+    """Transform the current settings into a settings file.
+
+    :param settings: The current settings
+    :returns: The settings represented as settings file
+    """
+    rebuilt: Dict = {}
+    for entry in settings.entries:
+        path = entry.settings_file_path(prefix=settings.application_name_dashed)
+        if not isinstance(entry.value.current, Constants):
+            current: Union[bool, int, str, Dict, List] = entry.value.current
+            # It is necessary to un post-process here
+            if path == "ansible-navigator.ansible.cmdline":
+                # post-processed into a list
+                current = shlex_join(entry.value.current)
+            elif path == "ansible-navigator.execution-environment.volume-mounts":
+                current = []
+                for mount in entry.value.current:
+                    parts = mount.split(":")
+                    v_mount = {"src": parts[0], "dest": parts[1]}
+                    if len(parts) == 3:
+                        v_mount["options"] = parts[2]
+                    current.append(v_mount)
+
+            partial = create_settings_file_sample(
+                settings_path=path,
+                placeholder=current,
+            )
+            in_place_list_replace(rebuilt, partial)
+    return SettingsFileType(rebuilt)
+
+
+def to_sources(settings: ApplicationConfiguration) -> Dict[str, str]:
+    """Transform the current settings into representation of sources.
+
+    :param settings: The current settings
+    :returns: The settings sourced represented as a dictionary of path, source
+    """
+    sources = {}
+    for entry in settings.entries:
+        path = entry.settings_file_path(prefix=settings.application_name_dashed)
+        sources[path] = str(entry.value.source)
+    sources["settings_file_path"] = str(settings.internals.settings_file_path)
+    sources["settings_file_source"] = str(settings.internals.settings_source)
+    return sources
 
 
 def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEntries:

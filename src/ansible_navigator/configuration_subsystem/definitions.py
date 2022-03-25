@@ -9,8 +9,10 @@ from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Dict
 from typing import Iterable
 from typing import List
+from typing import NewType
 from typing import Optional
 from typing import Tuple
 from typing import TypeVar
@@ -402,3 +404,15 @@ class ModeChangeRequest:
     """The entry making the request"""
     mode: Mode
     """The desired mode"""
+
+
+# and some common ones
+
+# A type used for the settings as a dictionary
+SettingsFileType = NewType("SettingsFileType", Dict[str, Union[bool, Dict, int, str, List]])
+
+# A type used to describe a schema file for the settings
+SettingsSchemaType = NewType(
+    "SettingsSchemaType",
+    Dict[str, Dict[str, Union[bool, Dict, int, str, List]]],
+)
