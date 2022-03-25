@@ -273,11 +273,17 @@
         "settings": {
           "additionalProperties": false,
           "properties": {
+            "effective": {
+              "type": "boolean"
+            },
             "sample": {
               "type": "boolean"
             },
             "schema": {
               "type": "string"
+            },
+            "sources": {
+              "type": "boolean"
             }
           }
         }
