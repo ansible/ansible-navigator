@@ -4,7 +4,7 @@
     "comment": "print all details to stdout",
     "additional_information": {
         "present": [
-            "must be one or more"
+            "must be one or more of"
         ],
         "absent": [],
         "compared_fixture": false

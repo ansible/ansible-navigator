@@ -16,8 +16,7 @@ from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants
-from ..content_defs import ContentView
-from ..content_defs import SerializationFormat
+from ..content_defs import ContentFormat
 from ..image_manager import inspect_all
 from ..runner import Command
 from ..steps import Step
@@ -27,7 +26,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
-from ..utils.serialize import serialize
+from ..utils.print import print_to_stdout
 from . import _actions as actions
 from . import run_action
 
@@ -149,12 +148,11 @@ class Action(ActionBase):
             image["name_tag"] = image["__name_tag"]
             image["full_name"] = image["__full_name"]
             filtered.append(filter_content_keys(image))
-        print(
-            serialize(
-                content=filtered,
-                content_view=ContentView.NORMAL,
-                serialization_format=SerializationFormat.YAML,
-            ),
+        print_to_stdout(
+            content=filtered,
+            content_format=ContentFormat.YAML,
+            share_directory=self._args.internals.share_directory,
+            use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
 
@@ -185,12 +183,12 @@ class Action(ActionBase):
                         details[section_name].pop(key)
 
         details["image_name"] = image_name
-        serialized = serialize(
+        print_to_stdout(
             content=details,
-            content_view=ContentView.NORMAL,
-            serialization_format=SerializationFormat.YAML,
+            content_format=ContentFormat.YAML,
+            share_directory=self._args.internals.share_directory,
+            use_color=self._args.display_color,
         )
-        print(serialized)
         return RunStdoutReturn(message="", return_code=0)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
