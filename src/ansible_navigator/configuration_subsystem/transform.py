@@ -10,7 +10,7 @@ from typing import Tuple
 from typing import Union
 
 from ..utils.compatibility import importlib_resources
-from ..utils.functions import dict_merge_in_place_list_replace as dict_merge
+from ..utils.dict_merge import in_place_list_replace
 from ..utils.functions import shlex_join
 from .definitions import ApplicationConfiguration
 from .definitions import Constants
@@ -51,7 +51,7 @@ def to_effective(
                 settings_path=path,
                 placeholder=current,
             )
-            dict_merge(rebuilt, partial)
+            in_place_list_replace(rebuilt, partial)
     return SettingsFileType(rebuilt)
 
 
