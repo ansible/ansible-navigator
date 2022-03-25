@@ -1,5 +1,4 @@
-"""the ansible-navigator configuration
-"""
+"""The ansible-navigator configuration."""
 import logging
 import os
 
@@ -48,7 +47,10 @@ PLUGIN_TYPES = (
 
 
 def generate_editor_command() -> str:
-    """Generate a default for editor_command if EDITOR is set"""
+    """Generate a default for editor_command if EDITOR is set.
+
+    :returns: command to be run by specific editor
+    """
     editor = os.environ.get("EDITOR")
     if editor is None:
         message = "EDITOR environment variable not set"
@@ -64,7 +66,10 @@ def generate_editor_command() -> str:
 
 
 def generate_cache_path():
-    """Generate a path for the collection cache"""
+    """Generate a path for the collection cache.
+
+    :returns: Collection cache path
+    """
     file_name = "collection_doc_cache.db"
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
     cache_path = os.path.join(cache_home, APP_NAME.replace("_", "-"), file_name)
@@ -74,7 +79,10 @@ def generate_cache_path():
 
 
 def generate_share_directory():
-    """Generate a share director"""
+    """Generate a share director.
+
+    :returns: Share directory path
+    """
     messages, exit_messages, share_directory = get_share_directory(APP_NAME)
     initialization_messages.extend(messages)
     initialization_exit_messages.extend(exit_messages)
@@ -83,15 +91,13 @@ def generate_share_directory():
 
 @dataclass
 class Internals:
-    """a place to hold object that need to be carried
-    from application initiation to the rest of the app
-    """
+    """Place to hold an object that needs to be used from app initiation through whole app."""
 
     ansible_configuration: AnsibleConfiguration = AnsibleConfiguration()
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
     initializing: bool = False
-    """This is an initial run (app starting for the first time)"""
+    """This is an initial run (app starting for the first time)."""
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
     settings_file_path: Optional[str] = None
