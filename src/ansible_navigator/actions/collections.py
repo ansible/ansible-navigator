@@ -13,16 +13,13 @@ from typing import Dict
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Union
 from typing import cast
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..configuration_subsystem import Constants
-from ..content_defs import ContentView
-from ..content_defs import SerializationFormat
+from ..content_defs import ContentFormat
 from ..runner import Command
 from ..steps import Step
 from ..ui_framework import CursesLine
@@ -34,7 +31,7 @@ from ..ui_framework import warning_notification
 from ..utils.functions import path_is_relative_to
 from ..utils.functions import remove_dbl_un
 from ..utils.key_value_store import KeyValueStore
-from ..utils.serialize import serialize
+from ..utils.print import print_to_stdout
 from . import _actions as actions
 from . import run_action
 
@@ -95,7 +92,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
-        self._collection_cache: Union[Constants, KeyValueStore]
+        self._collection_cache: KeyValueStore
         self._collection_cache_path: str
         self._collection_scanned_paths: List = []
         self._collections: List = []
@@ -133,10 +130,7 @@ class Action(ActionBase):
             self._prepare_to_exit(interaction)
             return None
 
-        self._collection_cache = self._args.internals.collection_doc_cache
-        self._collection_cache_path = self._args.collection_doc_cache_path
-
-        if not isinstance(self._collection_cache, KeyValueStore):
+        if not isinstance(self._args.internals.collection_doc_cache, KeyValueStore):
             notification = warning_notification(
                 messages=[
                     "Something has gone really wrong, the collection document cache is not",
@@ -147,6 +141,9 @@ class Action(ActionBase):
             interaction.ui.show_form(notification)
             self._prepare_to_exit(interaction)
             return None
+
+        self._collection_cache = self._args.internals.collection_doc_cache
+        self._collection_cache_path = self._args.collection_doc_cache_path
 
         self._run_runner()
 
@@ -177,7 +174,6 @@ class Action(ActionBase):
             indicates there is no console output to display, so assume an issue and return 1
             along with a message to review the logs.
         """
-
         self._logger.debug("collection requested in stdout mode")
 
         args_updated = self._update_args(params=[], attach_cdc=True)
@@ -204,12 +200,11 @@ class Action(ActionBase):
 
         collections_info = self._parse_collection_info_stdout()
 
-        print(
-            serialize(
-                content=collections_info,
-                content_view=ContentView.NORMAL,
-                serialization_format=SerializationFormat.YAML,
-            ),
+        print_to_stdout(
+            content=collections_info,
+            content_format=ContentFormat.YAML,
+            share_directory=self._args.internals.share_directory,
+            use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
 
@@ -555,12 +550,10 @@ class Action(ActionBase):
     def _get_collection_plugins_details(self, selected_collection: Dict) -> Dict:
         """Get plugin details for the given collection.
 
-        :param severity: The cached collection data from which plugin information is to
-                         be retrieved.
+        :param selected_collection: The selected collection
         :returns: The plugin details like full-name, type and short description.
         """
         plugins_details: Dict = {}
-        self._collection_cache = cast(KeyValueStore, self._collection_cache)
 
         for plugin_checksum, plugin_info in selected_collection["plugin_checksums"].items():
 
@@ -589,7 +582,6 @@ class Action(ActionBase):
 
     def _parse_collection_info_stdout(self) -> Dict:
         # pylint: disable=too-many-nested-blocks
-
         """Parse collection information from catalog collection cache.
 
         :returns: The collection information to be displayed on stdout
