@@ -104,6 +104,7 @@ pygments_style = "ansible"
 nitpicky = True
 nitpick_ignore = [
     ("py:class", "_Rule"),
+    ("py:class", "ansible_navigator.configuration_subsystem.definitions.SettingsFileType"),
     (
         "py:class",
         "ansible_navigator.configuration_subsystem.defs_presentable.PresentableSettingsEntries",
