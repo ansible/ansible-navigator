@@ -594,7 +594,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             ),
             settings_file_path_override="settings.effective",
             short_description=(
-                "Show the effective settings. CLI paramters, environment variables,"
+                "Show the effective settings. Defaults, CLI parameters, environment variables,"
                 " and the settings file will be combined"
             ),
             value=SettingsEntryValue(default=False),
@@ -634,7 +634,7 @@ NavigatorConfiguration = ApplicationConfiguration(
                 action="store_true",
             ),
             settings_file_path_override="settings.sources",
-            short_description=("Show the source of each current setting."),
+            short_description=("Show the source of each current settings entry."),
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
