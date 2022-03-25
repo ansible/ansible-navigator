@@ -23,9 +23,10 @@ initial_steps = (
         search_within_response=SearchFor.WARNING,
     ),
     UiTestStep(
-        user_input="ls",
+        user_input="echo exited",
         comment="exit",
         search_within_response=SearchFor.PROMPT,
+        present=["exited"],
     ),
     UiTestStep(
         user_input=Command(
@@ -39,9 +40,10 @@ initial_steps = (
         search_within_response=SearchFor.WARNING,
     ),
     UiTestStep(
-        user_input="ls",
+        user_input="echo exited",
         comment="exit",
         search_within_response=SearchFor.PROMPT,
+        present=["exited"],
     ),
     UiTestStep(
         user_input=Command(
