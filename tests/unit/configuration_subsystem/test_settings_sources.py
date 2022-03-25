@@ -71,9 +71,12 @@ def test_env(monkeypatch: pytest.MonkeyPatch):
         )
 
 
-@pytest.mark.usefixture("settings_env_var_to_full")
-def test_full():
-    """Test the source of effective settings given a full config."""
+def test_full(settings_env_var_to_full):
+    """Test the source of effective settings given a full config.
+
+    :param settings_env_var_to_full: The pytest fixture to provide a full config
+    """
+    # pylint: disable=unused-argument
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
     _messages, _exit_messages = parse_and_update(params=[], args=settings)
