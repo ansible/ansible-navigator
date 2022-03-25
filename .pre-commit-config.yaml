@@ -203,9 +203,12 @@ repos:
           - pytest
           - pytest-mock
           - sphinx
+          - types-backports
           - types-docutils
-          - types-setuptools # Needed logging version
+          - types-mock
           - types-PyYAML
+          - types-setuptools # Needed logging version
+          - types-typed-ast
         args:
           - --python-version=3.8
 
