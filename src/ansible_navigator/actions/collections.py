@@ -19,8 +19,7 @@ from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
-from ..content_defs import ContentView
-from ..content_defs import SerializationFormat
+from ..content_defs import ContentFormat
 from ..runner import Command
 from ..steps import Step
 from ..ui_framework import CursesLine
@@ -32,7 +31,7 @@ from ..ui_framework import warning_notification
 from ..utils.functions import path_is_relative_to
 from ..utils.functions import remove_dbl_un
 from ..utils.key_value_store import KeyValueStore
-from ..utils.serialize import serialize
+from ..utils.print import print_to_stdout
 from . import _actions as actions
 from . import run_action
 
@@ -201,12 +200,11 @@ class Action(ActionBase):
 
         collections_info = self._parse_collection_info_stdout()
 
-        print(
-            serialize(
-                content=collections_info,
-                content_view=ContentView.NORMAL,
-                serialization_format=SerializationFormat.YAML,
-            ),
+        print_to_stdout(
+            content=collections_info,
+            content_format=ContentFormat.YAML,
+            share_directory=self._args.internals.share_directory,
+            use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
 
