@@ -35,7 +35,7 @@ stdout_tests = (
     ShellCommand(
         comment="print all details to stdout",
         user_input=StdoutCommand(
-            cmdline="--details",
+            cmdline="--details --display-color false",
             mode="stdout",
             execution_environment=True,
             raw_append=" | grep '^[a-z]'",
@@ -54,7 +54,7 @@ stdout_tests = (
     ShellCommand(
         comment="print all details to stdout",
         user_input=StdoutCommand(
-            cmdline="-d ansible_collections -d ansible_version",
+            cmdline="-d ansible_collections -d ansible_version --display-color false",
             mode="stdout",
             execution_environment=True,
             raw_append=" | grep '^[a-z]'",
