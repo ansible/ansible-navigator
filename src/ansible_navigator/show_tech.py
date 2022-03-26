@@ -1,5 +1,4 @@
 """Produce a diagnostics report in json format."""
-import importlib.util
 import json
 import sys
 import traceback
@@ -11,12 +10,13 @@ from typing import List
 
 from pkg_resources import working_set
 
-from .actions.images import Action as ImagesAction
 from .command_runner import Command
 from .command_runner import CommandRunner
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import to_effective
 from .configuration_subsystem import to_sources
+from .image_manager import introspect
+from .image_manager import introspector
 from .utils.functions import ExitMessage
 from .utils.functions import LogMessage
 from .utils.functions import now_iso
@@ -82,7 +82,9 @@ def working(message: str):
 
 
 def run(
-    args: ApplicationConfiguration, messages: List[LogMessage], exit_messages=List[ExitMessage]
+    args: ApplicationConfiguration,
+    messages: List[LogMessage],
+    exit_messages=List[ExitMessage],
 ):
     """Collect as much information as possible about everything and dump to a json file.
 
@@ -104,7 +106,7 @@ def run(
 
 
 def _run(
-    args: ApplicationConfiguration, messages: List[LogMessage], exit_messages=List[ExitMessage]
+    args: "ApplicationConfiguration", messages: List[LogMessage], exit_messages=List[ExitMessage]
 ):
     """Collect as much information as possible about everything and dump to a json file.
 
@@ -157,31 +159,22 @@ def _run(
 
     info_type = "execution_environment"
     collecting(info_type)
-    image_action = ImagesAction(args)
-    errors, return_code, details = image_action.collect_stdout_details()
+    details, errors, return_code = introspector.run(
+        image_name=args.execution_environment_image,
+        container_engine=args.container_engine,
+    )
     details = {"details": details, "errors": errors, "return_code": return_code}
     full_details["execution_environment"] = details
     finish(info_type)
 
     info_type = "local_system"
     collecting(info_type)
-    spec = importlib.util.spec_from_file_location(
-        "image_introspect",
-        Path(args.internals.share_directory) / "utils" / "image_introspect.py",
-    )
-    if spec:
-        introspector = importlib.util.module_from_spec(spec)
-        loader = spec.loader
-        if loader is None:
-            full_details["local"] = {"errors": ["Could not load introspector"]}
-        else:
-            loader.exec_module(introspector)
-            results = introspector.main(serialize=False, process_model="multi_thread")
-            full_details["local"] = {"errors": results.pop("errors")}
-            for section, information in results.items():
-                full_details["local"][section] = information["details"]
-    else:
-        full_details["local"] = {"errors": ["Could not import and run image_introspect"]}
+    results = introspect.main(serialize=False, process_model="multi_thread")
+    if results:
+        full_details["local"] = {"errors": results.pop("errors")}
+        for section, information in results.items():
+            # pylint: disable=invalid-sequence-index
+            full_details["local"][section] = information["details"]
     finish(info_type)
 
     info_type = "python_dependencies"

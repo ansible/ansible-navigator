@@ -8,7 +8,6 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from .. import show_tech
 from ..utils.functions import ExitMessage
 from ..utils.functions import ExitPrefix
 from ..utils.functions import LogMessage
@@ -33,6 +32,7 @@ class Configurator:
         params: List[str],
         application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: Union[List, C] = C.NONE,
+        skip_roll_back: bool = False,
     ):
         """Initialize the configuration variables.
 
@@ -41,6 +41,7 @@ class Configurator:
         :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
                                            is not a USER_CLI sourced value, a list of entry names
                                            ['all'] will apply all previous
+        :param skip_roll_back: Skip roll back on error
         """
         self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
@@ -48,6 +49,7 @@ class Configurator:
         self._messages: List[LogMessage] = []
         self._params = params
         self._sanity_check()
+        self._skip_rollback = skip_roll_back
         self._unaltered_entries = deepcopy(self._config.entries)
 
     def _sanity_check(self) -> None:
@@ -59,6 +61,8 @@ class Configurator:
 
     def _roll_back(self) -> None:
         """In the case of a rollback, log the configuration state prior to roll back."""
+        if self._skip_rollback:
+            return
         message = "Configuration errors encountered, rolling back to previous configuration."
         self._messages.append(LogMessage(level=logging.WARNING, message=message))
         for entry in self._config.entries:
@@ -101,13 +105,6 @@ class Configurator:
         self._retrieve_ansible_cfg()
         self._post_process()
         self._check_choices()
-
-        if "--show-tech" in self._config.original_command:
-            show_tech.run(
-                args=self._config,
-                messages=self._messages,
-                exit_messages=self._exit_messages,
-            )
 
         if self._exit_messages:
             self._exit_messages.insert(0, ExitMessage(message=cmd_message))

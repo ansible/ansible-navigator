@@ -12,6 +12,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
+from . import show_tech
 from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
@@ -141,6 +142,24 @@ def get_and_check_collection_doc_cache(
     return messages, exit_messages, collection_cache
 
 
+# pylint: disable=inconsistent-return-statements
+def _do_show_tech(
+    args,
+    exit_messages,
+    messages,
+    should_show_tech,
+):
+
+    if should_show_tech:
+        show_tech.run(args=args, messages=messages, exit_messages=exit_messages)
+
+    else:
+        return messages, exit_messages
+
+
+# pylint: enable=inconsistent-return-statements
+
+
 def parse_and_update(
     params: List,
     args: ApplicationConfiguration,
@@ -161,6 +180,11 @@ def parse_and_update(
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
 
+    if "--show-tech" in params:
+        should_show_tech = True
+    else:
+        should_show_tech = False
+
     (
         new_messages,
         new_exit_messages,
@@ -170,12 +194,18 @@ def parse_and_update(
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
     if exit_messages:
-        return messages, exit_messages
+        return _do_show_tech(
+            args=args,
+            exit_messages=exit_messages,
+            messages=messages,
+            should_show_tech=should_show_tech,
+        )
 
     configurator = Configurator(
         params=params,
         application_configuration=args,
         apply_previous_cli_entries=apply_previous_cli_entries,
+        skip_roll_back=should_show_tech,
     )
 
     new_messages, new_exit_messages = configurator.configure()
@@ -201,7 +231,12 @@ def parse_and_update(
         exit_messages.extend(new_exit_messages)
         if cache is None:
             # There's nothing to be done here, it cannot be attached.
-            return messages, exit_messages
+            return _do_show_tech(
+                args=args,
+                exit_messages=exit_messages,
+                messages=messages,
+                should_show_tech=should_show_tech,
+            )
         if attach_cdc:
             args.internals.collection_doc_cache = cache
             message = "Collection doc cache attached to args.internals"
@@ -211,11 +246,21 @@ def parse_and_update(
             messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     if exit_messages:
-        return messages, exit_messages
+        return _do_show_tech(
+            args=args,
+            exit_messages=exit_messages,
+            messages=messages,
+            should_show_tech=should_show_tech,
+        )
 
     for entry in args.entries:
         message = f"Running with {entry.name} as '{entry.value.current}'"
         message += f" ({type(entry.value.current).__name__}/{entry.value.source.value})"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-    return messages, exit_messages
+    return _do_show_tech(
+        args=args,
+        exit_messages=exit_messages,
+        messages=messages,
+        should_show_tech=should_show_tech,
+    )

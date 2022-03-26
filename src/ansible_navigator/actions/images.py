@@ -4,7 +4,6 @@ import json
 import shlex
 
 from copy import deepcopy
-from datetime import datetime
 from functools import partial
 from typing import Any
 from typing import Dict
@@ -136,16 +135,7 @@ class Action(ActionBase):
 
         details_source = self._args.entry("images_details").value.source
         if details_source is not Constants.DEFAULT_CFG:
-            error, return_code, details = self.collect_stdout_details()
-            if error or return_code:
-                return RunStdoutReturn(message=error, return_code=return_code)
-            print_to_stdout(
-                content=details,
-                content_format=ContentFormat.YAML,
-                share_directory=self._args.internals.share_directory,
-                use_color=self._args.display_color,
-            )
-            return RunStdoutReturn(message="", return_code=0)
+            return self.run_stdout_details()
 
         self._collect_image_list()
         if not self._images.value:
@@ -166,8 +156,8 @@ class Action(ActionBase):
         )
         return RunStdoutReturn(message="", return_code=0)
 
-    def collect_stdout_details(self) -> Tuple[str, int, Dict]:
-        """Collect the ``images --details``.
+    def run_stdout_details(self) -> RunStdoutReturn:
+        """Execute the ``images --details`` request for mode stdout.
 
         :returns: A message and return code
         """
@@ -175,12 +165,12 @@ class Action(ActionBase):
 
         output, error, return_code = self._run_runner(image_name=image_name)
         if error or return_code:
-            return error, return_code, {}
+            return RunStdoutReturn(message=error, return_code=return_code)
 
         details = self._parse(output)
         if details is None:
             message = "Image introspection failed, please check the logs and log an issue."
-            return message, 1, {}
+            return RunStdoutReturn(message=message, return_code=1)
 
         details.pop("errors")
         sections = self._args.entry("images_details").value.current
@@ -193,7 +183,13 @@ class Action(ActionBase):
                         details[section_name].pop(key)
 
         details["image_name"] = image_name
-        return "", 0, details
+        print_to_stdout(
+            content=details,
+            content_format=ContentFormat.YAML,
+            share_directory=self._args.internals.share_directory,
+            use_color=self._args.display_color,
+        )
+        return RunStdoutReturn(message="", return_code=0)
 
     def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
         """Execute the ``images`` request for mode interactive.
@@ -465,12 +461,9 @@ class Action(ActionBase):
 
         self._images.selected["__introspected"] = True
 
-        start = datetime.now()
         output, error, _return_code = self._run_runner(
             image_name=self._images.selected["__full_name"],
         )
-        elapsed = (datetime.now() - start).total_seconds()
-        self._logger.debug("introspecting image took %s seconds", elapsed)
 
         if error:
             self._logger.error(
