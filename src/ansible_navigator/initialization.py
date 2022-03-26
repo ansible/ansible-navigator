@@ -144,15 +144,21 @@ def get_and_check_collection_doc_cache(
 
 # pylint: disable=inconsistent-return-statements
 def _do_show_tech(
-    args,
-    exit_messages,
-    messages,
-    should_show_tech,
+    args: ApplicationConfiguration,
+    exit_messages: List[ExitMessage],
+    messages: List[LogMessage],
+    should_show_tech: bool,
 ):
+    """Direct to the diagnostic information writer or return.
 
+    :param args: Application configuration
+    :param exit_messages: List of exit messages
+    :param messages: List of log messages
+    :param should_show_tech: Whether to show tech info
+    :returns: All messages and exit messages
+    """
     if should_show_tech:
         show_tech.run(args=args, messages=messages, exit_messages=exit_messages)
-
     else:
         return messages, exit_messages
 
@@ -179,11 +185,7 @@ def parse_and_update(
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
-
-    if "--show-tech" in params:
-        should_show_tech = True
-    else:
-        should_show_tech = False
+    should_show_tech = "--show-tech" in params
 
     (
         new_messages,
