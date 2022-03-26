@@ -211,8 +211,8 @@ def test_artifact_contents(monkeypatch: pytest.MonkeyPatch, mocker: MockerFixtur
     run_action = action(args=settings)
     run_action.write_artifact(filename="artifact.json")
 
-    settings_entries = mocked_write.call_args.kwargs["content"]["settings_entries"]
+    settings_entries = mocked_write.call_args[1]["content"]["settings_entries"]
     assert settings_entries["ansible-navigator"]["app"] == "run"
 
-    settings_sources = mocked_write.call_args.kwargs["content"]["settings_sources"]
+    settings_sources = mocked_write.call_args[1]["content"]["settings_sources"]
     assert settings_sources["ansible-navigator.app"] == Constants.USER_CLI.value
