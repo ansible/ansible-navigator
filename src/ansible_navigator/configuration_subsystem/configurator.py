@@ -8,6 +8,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
+from .. import show_tech
 from ..utils.functions import ExitMessage
 from ..utils.functions import ExitPrefix
 from ..utils.functions import LogMessage
@@ -100,6 +101,14 @@ class Configurator:
         self._retrieve_ansible_cfg()
         self._post_process()
         self._check_choices()
+
+        if "--show-tech" in self._config.original_command:
+            show_tech.run(
+                args=self._config,
+                messages=self._messages,
+                exit_messages=self._exit_messages,
+            )
+
         if self._exit_messages:
             self._exit_messages.insert(0, ExitMessage(message=cmd_message))
             self._roll_back()
