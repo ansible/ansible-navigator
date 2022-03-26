@@ -105,7 +105,6 @@ class Configurator:
         self._retrieve_ansible_cfg()
         self._post_process()
         self._check_choices()
-
         if self._exit_messages:
             self._exit_messages.insert(0, ExitMessage(message=cmd_message))
             self._roll_back()
