@@ -46,7 +46,7 @@ def test(
 
     assert diagnostics["settings_file"]["contents"] == settings_file
     assert diagnostics["local_system"]["environment_variables"]["ANSIBLE_NAVIGATOR_CONFIG"] == str(
-        settings_path
+        settings_path,
     )
     for _section_name, section in diagnostics.items():
         assert not section.get("errors")

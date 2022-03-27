@@ -107,6 +107,18 @@ def register(collector: Collector):
 DIAGNOSTIC_FAILURES = 0
 
 
+class FailedCollection(Exception):
+    """Exception for a failed collection."""
+
+    def __init__(self, errors):
+        """Initialize the exception.
+
+        :param errors: The errors
+        """
+        super().__init__()
+        self.errors = errors
+
+
 def diagnostic_runner(func):
     """Wrap and run a collector.
 
@@ -130,7 +142,14 @@ def diagnostic_runner(func):
             result = func(*args, **kwargs)
             duration = (datetime.datetime.now() - start).total_seconds()
             collector.finish(color=color, duration=duration)
+        except FailedCollection as error:
+            # A collector exception, has data
+            result = error.errors
+            duration = (datetime.datetime.now() - start).total_seconds()
+            collector.fail(color=color, duration=duration)
+            DIAGNOSTIC_FAILURES += 1
         except Exception as error:  # pylint: disable=broad-except
+            # Any other exception, has no data
             result = {"error": str(error) + "\n" + traceback.format_exc()}
             duration = (datetime.datetime.now() - start).total_seconds()
             collector.fail(color=color, duration=duration)
@@ -248,6 +267,7 @@ class DiagnosticsCollector:
     def _execution_environment(self) -> Dict[str, JSONTypes]:
         """Add execution environment information.
 
+        :raises FailedCollection: If the collection process fails
         :returns: The execution environment information
         """
         details, errors, return_code = introspector.run(
@@ -255,6 +275,8 @@ class DiagnosticsCollector:
             container_engine=self._args.container_engine,
         )
         details = {"details": details, "errors": errors, "return_code": return_code}
+        if errors or not details:
+            raise FailedCollection(details)
         return details
 
     @diagnostic_runner
@@ -275,16 +297,20 @@ class DiagnosticsCollector:
         # pylint:disable=no-self-use
         """Add local system information.
 
+        :raises FailedCollection: If the collection process fails
         :returns: The local system information
         """
         results = introspect.main(serialize=False)
-        if results:
-            sections = {"errors": results.pop("errors")}
-            for section, information in results.items():
-                # pylint: disable=invalid-sequence-index
-                sections[section] = information["details"]
-            return sections
-        return {}
+        if not results:
+            raise FailedCollection(results)
+        if results.get("errors"):
+            raise FailedCollection(results["errors"])
+
+        sections = {"errors": results.pop("errors")}
+        for section, information in results.items():
+            # pylint: disable=invalid-sequence-index
+            sections[section] = information["details"]
+        return sections
 
     @diagnostic_runner
     @register(Collector(name="python packages"))
