@@ -12,11 +12,11 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from . import show_tech
 from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
+from .diagnostics import DiagnosticsCollector
 from .utils.functions import ExitMessage
 from .utils.functions import ExitPrefix
 from .utils.functions import LogMessage
@@ -143,22 +143,22 @@ def get_and_check_collection_doc_cache(
 
 
 # pylint: disable=inconsistent-return-statements
-def _do_show_tech(
+def _diagnose(
     args: ApplicationConfiguration,
     exit_messages: List[ExitMessage],
     messages: List[LogMessage],
-    should_show_tech: bool,
+    should_diagnose: bool,
 ):
     """Direct to the diagnostic information writer or return.
 
     :param args: Application configuration
     :param exit_messages: List of exit messages
     :param messages: List of log messages
-    :param should_show_tech: Whether to show tech info
+    :param should_diagnose: Whether to show tech info
     :returns: All messages and exit messages
     """
-    if should_show_tech:
-        show_tech.ShowTech(args=args, messages=messages, exit_messages=exit_messages).run()
+    if should_diagnose:
+        DiagnosticsCollector(args=args, messages=messages, exit_messages=exit_messages).run()
     else:
         return messages, exit_messages
 
@@ -185,7 +185,7 @@ def parse_and_update(
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
-    should_show_tech = "--show-tech" in params
+    should_diagnose = "--diagnostics" in params
 
     (
         new_messages,
@@ -196,18 +196,18 @@ def parse_and_update(
     messages.extend(new_messages)
     exit_messages.extend(new_exit_messages)
     if exit_messages:
-        return _do_show_tech(
+        return _diagnose(
             args=args,
             exit_messages=exit_messages,
             messages=messages,
-            should_show_tech=should_show_tech,
+            should_diagnose=should_diagnose,
         )
 
     configurator = Configurator(
         params=params,
         application_configuration=args,
         apply_previous_cli_entries=apply_previous_cli_entries,
-        skip_roll_back=should_show_tech,
+        skip_roll_back=should_diagnose,
     )
 
     new_messages, new_exit_messages = configurator.configure()
@@ -233,11 +233,11 @@ def parse_and_update(
         exit_messages.extend(new_exit_messages)
         if cache is None:
             # There's nothing to be done here, it cannot be attached.
-            return _do_show_tech(
+            return _diagnose(
                 args=args,
                 exit_messages=exit_messages,
                 messages=messages,
-                should_show_tech=should_show_tech,
+                should_diagnose=should_diagnose,
             )
         if attach_cdc:
             args.internals.collection_doc_cache = cache
@@ -248,11 +248,11 @@ def parse_and_update(
             messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     if exit_messages:
-        return _do_show_tech(
+        return _diagnose(
             args=args,
             exit_messages=exit_messages,
             messages=messages,
-            should_show_tech=should_show_tech,
+            should_diagnose=should_diagnose,
         )
 
     for entry in args.entries:
@@ -260,9 +260,9 @@ def parse_and_update(
         message += f" ({type(entry.value.current).__name__}/{entry.value.source.value})"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-    return _do_show_tech(
+    return _diagnose(
         args=args,
         exit_messages=exit_messages,
         messages=messages,
-        should_show_tech=should_show_tech,
+        should_diagnose=should_diagnose,
     )

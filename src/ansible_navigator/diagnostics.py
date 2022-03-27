@@ -179,8 +179,8 @@ def diagnostic_runner(func):
     return wrapper
 
 
-class ShowTech:
-    """Show tech."""
+class DiagnosticsCollector:
+    """The diagnostics collector."""
 
     WARNING = "The following output may contain sensitive data, please review it carefully."
 
