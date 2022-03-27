@@ -158,7 +158,7 @@ def _do_show_tech(
     :returns: All messages and exit messages
     """
     if should_show_tech:
-        show_tech.run(args=args, messages=messages, exit_messages=exit_messages)
+        show_tech.ShowTech(args=args, messages=messages, exit_messages=exit_messages).run()
     else:
         return messages, exit_messages
 
