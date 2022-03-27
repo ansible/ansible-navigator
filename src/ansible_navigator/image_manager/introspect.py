@@ -1,6 +1,5 @@
 """Introspect an execution environment image."""
 import json
-import multiprocessing
 import os
 import re
 import subprocess
@@ -17,8 +16,6 @@ from typing import Union
 
 
 # pylint: disable=broad-except
-
-PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
 class Command(SimpleNamespace):
@@ -53,7 +50,7 @@ def run_command(command: Command) -> None:
         command.errors = [str(exc.stderr)]
 
 
-def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
+def worker(pending_queue: Queue, completed_queue: Queue) -> None:
     """Run a command from pending, parse, and place in completed.
 
     :param pending_queue: A queue with plugins to process
