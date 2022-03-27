@@ -7,6 +7,7 @@ import traceback
 from dataclasses import asdict
 from dataclasses import dataclass
 from pathlib import Path
+from sys import stdout
 from typing import Callable
 from typing import Dict
 from typing import Iterator
@@ -22,6 +23,7 @@ from .configuration_subsystem import to_effective
 from .configuration_subsystem import to_sources
 from .image_manager import introspect
 from .image_manager import introspector
+from .utils import ansi
 from .utils.functions import ExitMessage
 from .utils.functions import LogMessage
 from .utils.functions import now_iso
@@ -30,53 +32,7 @@ from .utils.serialize import Loader
 from .utils.serialize import yaml
 
 
-class C:  # pylint: disable=invalid-name
-    """Color constants."""
-
-    GREY = "\033[90m"
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    YELLOW = "\033[93m"
-    BLUE = "\033[94m"
-    MAGENTA = "\033[95m"
-    CYAN = "\033[96m"
-    WHITE = "\033[97m"
-    END = "\033[0m"
-
-
 JSONTypes = Union[bool, int, str, Dict, List]
-
-
-def failed(message: str):
-    """Output failure information to the console.
-
-    :param message: The message to output
-    """
-    print(f"{C.RED}{message}{C.END}")
-
-
-def success(message: str):
-    """Output success information to the console.
-
-    :param message: The message to output
-    """
-    print(f"{C.GREEN}{message}{C.END}")
-
-
-def warning(message: str):
-    """Output warning information to the console.
-
-    :param message: The message to output
-    """
-    print(f"{C.YELLOW}{message}{C.END}")
-
-
-def working(message: str):
-    """Output working information to the console.
-
-    :param message: The message to output
-    """
-    print(f"{C.GREY}{message}{C.END}", end="", flush=True)
 
 
 @dataclass
@@ -85,26 +41,31 @@ class Collector:
 
     name: str
 
-    def start(self):
-        """Output information to the console."""
+    def start(self, color: bool):
+        """Output start information to the console.
+
+        :param color: Whether to color the message
+        """
         information = f"Collecting {self.name} information".ljust(50, ".")
-        working(information)
+        ansi.working(color=color, message=information)
 
-    def fail(self, duration: float) -> None:
-        """Output information to the console.
+    def fail(self, color: bool, duration: float) -> None:
+        """Output fail information to the console.
 
+        :param color: Whether to color the message
         :param duration: The duration of the collection
         """
-        information = f"\rCollecting {self.name} failed ({duration:.2f}s)\033[K"
-        failed(information)
+        information = f"Collecting {self.name} failed ({duration:.2f}s)"
+        ansi.failed(color=color, message=information)
 
-    def finish(self, duration: float) -> None:
-        """Output information to the console.
+    def finish(self, color: bool, duration: float) -> None:
+        """Output finish information to the console.
 
+        :param color: Whether to color the message
         :param duration: The duration of the collection
         """
-        information = f"\r{self.name.capitalize()} information collected. ({duration:.2f}s)\033[K"
-        success(information)
+        information = f"{self.name.capitalize()} information collected. ({duration:.2f}s)"
+        ansi.success(color=color, message=information)
 
 
 @dataclass
@@ -162,16 +123,17 @@ def diagnostic_runner(func):
         """
         global DIAGNOSTIC_FAILURES  # pylint: disable=global-statement
         start = datetime.datetime.now()
+        color = args[0].color
         collector = func.__collector__
-        collector.start()
+        collector.start(color=color)
         try:
             result = func(*args, **kwargs)
             duration = (datetime.datetime.now() - start).total_seconds()
-            collector.finish(duration=duration)
+            collector.finish(color=color, duration=duration)
         except Exception as error:  # pylint: disable=broad-except
             result = {"error": str(error) + "\n" + traceback.format_exc()}
             duration = (datetime.datetime.now() - start).total_seconds()
-            collector.fail(duration=duration)
+            collector.fail(color=color, duration=duration)
             DIAGNOSTIC_FAILURES += 1
         result["duration"] = duration
         return result
@@ -197,6 +159,7 @@ class DiagnosticsCollector:
         :param exit_messages: The exit messages to log
         """
         self._args = args
+        self.color = args.display_color and stdout.isatty()
         self._messages = messages
         self._exit_messages = exit_messages
 
@@ -210,7 +173,7 @@ class DiagnosticsCollector:
 
     def run(self) -> None:
         """Collect as much information as possible about everything and dump to a json file."""
-        warning(self.WARNING)
+        ansi.warning(color=self.color, message=self.WARNING)
         diagnostics = Diagnostics(
             __WARNING__=self._warning(),
             basics=self._basics(),
@@ -223,13 +186,13 @@ class DiagnosticsCollector:
             settings_file=self._settings_file(),
         )
         time = now_iso("local")
-        path = Path(f"show_tech_{time}.json")
+        path = Path(f"diagnostics_{time}.json")
         path.write_text(json.dumps(asdict(diagnostics), indent=4, sort_keys=True), encoding="utf-8")
-        message = f"\nDiagnostics written to: {path}."
+        message = f"\nDiagnostics written to: {path}"
         if DIAGNOSTIC_FAILURES > 0:
-            warning(message)
+            ansi.warning(color=self.color, message=message)
         else:
-            success(message)
+            ansi.success(color=self.color, message=message)
         sys.exit(0)
 
     @diagnostic_runner
@@ -306,10 +269,10 @@ class DiagnosticsCollector:
             "exit_messages": [msg.message for msg in self._exit_messages],
         }
 
-    @staticmethod
     @diagnostic_runner
     @register(Collector(name="local system"))
-    def _local_system() -> Dict[str, JSONTypes]:
+    def _local_system(self) -> Dict[str, JSONTypes]:
+        # pylint:disable=no-self-use
         """Add local system information.
 
         :returns: The local system information
@@ -323,10 +286,10 @@ class DiagnosticsCollector:
             return sections
         return {}
 
-    @staticmethod
     @diagnostic_runner
     @register(Collector(name="python packages"))
-    def _python_packages() -> Dict[str, JSONTypes]:
+    def _python_packages(self) -> Dict[str, JSONTypes]:
+        # pylint: disable=no-self-use
         """Add python packages information.
 
         :returns: The python packages information
@@ -355,7 +318,8 @@ class DiagnosticsCollector:
 
         :returns: The settings file information
         """
+        contents: Dict[str, JSONTypes] = {}
         if self._args.internals.settings_file_path:
-            contents = Path(self._args.internals.settings_file_path).read_text(encoding="utf-8")
-            return yaml.load(contents, Loader=Loader)
-        return {}
+            text = Path(self._args.internals.settings_file_path).read_text(encoding="utf-8")
+            contents = yaml.load(text, Loader=Loader)
+        return {"contents": contents}
