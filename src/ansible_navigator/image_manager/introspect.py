@@ -9,7 +9,6 @@ import threading
 
 from queue import Queue
 from types import SimpleNamespace
-from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
@@ -83,26 +82,6 @@ class CommandRunner:
         self._completed_queue: Optional[Queue] = None
         self._pending_queue: Optional[Queue] = None
 
-    @staticmethod
-    def run_single_process(command_classes: Any):
-        """Run commands with a single process.
-
-        :param command_classes: All command classes to be run
-        :returns: The results from running all commands
-        """
-        all_commands = tuple(
-            command for command_class in command_classes for command in command_class.commands
-        )
-        results = []
-        for command in all_commands:
-            run_command(command)
-            try:
-                command.parse(command)
-            except Exception as exc:
-                command.errors = command.errors + [str(exc)]
-            results.append(command)
-        return results
-
     def run_multi_thread(self, command_classes):
         """Run commands with multiple threads.
 
@@ -121,58 +100,13 @@ class CommandRunner:
         all_commands = tuple(
             command for command_class in command_classes for command in command_class.commands
         )
-        self.start_workers_multi_thread(all_commands)
+        self.start_workers(all_commands)
         results = []
         while len(results) != len(all_commands):
             results.append(self._completed_queue.get())
         return results
 
-    def run_multi_process(self, command_classes):
-        """Run commands with multiple processes.
-
-        Workers are started to read from pending queue.
-        Exit when the number of results is equal to the number
-        of commands needing to be run.
-
-        :param command_classes: All command classes to be run
-        :returns: The results from running all commands
-        """
-        if self._completed_queue is None:
-            self._completed_queue = multiprocessing.Manager().Queue()
-        if self._pending_queue is None:
-            self._pending_queue = multiprocessing.Manager().Queue()
-        results = {}
-        all_commands = tuple(
-            command for command_class in command_classes for command in command_class.commands
-        )
-        self.start_workers_multi_process(all_commands)
-        results = []
-        while len(results) != len(all_commands):
-            results.append(self._completed_queue.get())
-        return results
-
-    def start_workers_multi_process(self, jobs):
-        """Start workers and submit jobs to pending queue.
-
-        :param jobs: The jobs to be run
-        """
-        worker_count = min(len(jobs), PROCESSES)
-        processes = []
-        for _proc in range(worker_count):
-            proc = multiprocessing.Process(
-                target=worker,
-                args=(self._pending_queue, self._completed_queue),
-            )
-            processes.append(proc)
-            proc.start()
-        for job in jobs:
-            self._pending_queue.put(job)
-        for _proc in range(worker_count):
-            self._pending_queue.put(None)
-        for proc in processes:
-            proc.join()
-
-    def start_workers_multi_thread(self, jobs):
+    def start_workers(self, jobs):
         """Start workers and submit jobs to pending queue.
 
         :param jobs: The jobs to be run
@@ -437,11 +371,10 @@ class SystemPackages(CmdParser):
         command.details = parsed
 
 
-def main(serialize: bool = True, process_model: str = "multi_process") -> Optional[Dict]:
+def main(serialize: bool = True) -> Optional[Dict]:
     """Enter the image introspection process.
 
     :param serialize: Whether to serialize the results
-    :param process_model: The processing model to use
     :returns: The collected data or none if serialize is False
     """
     response: Dict = {"errors": []}
@@ -457,12 +390,9 @@ def main(serialize: bool = True, process_model: str = "multi_process") -> Option
             PythonPackages(),
             SystemPackages(),
         ]
-        if process_model == "multi_process":
-            results = command_runner.run_multi_process(commands)
-        elif process_model == "multi_thread":
-            results = command_runner.run_multi_thread(commands)
-        else:
-            results = command_runner.run_single_process(commands)
+
+        results = command_runner.run_multi_thread(commands)
+
         for result in results:
             result_as_dict = vars(result)
             result_as_dict.pop("parse")

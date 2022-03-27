@@ -314,7 +314,7 @@ class ShowTech:
 
         :returns: The local system information
         """
-        results = introspect.main(serialize=False, process_model="multi_thread")
+        results = introspect.main(serialize=False)
         if results:
             sections = {"errors": results.pop("errors")}
             for section, information in results.items():
