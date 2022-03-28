@@ -564,11 +564,7 @@ def main() -> Dict:
     stats["collection_count"] = len(collections)
 
     collection_cache_path = Path(args.collection_cache_path).resolve().expanduser()
-    # compatibility with py36, pass string to sqlite3.connect
-    if sys.version_info >= (3, 7):
-        collection_cache = KeyValueStore(collection_cache_path)
-    else:
-        collection_cache = KeyValueStore(str(collection_cache_path))
+    collection_cache = KeyValueStore(collection_cache_path)
 
     handled, missing, plugin_count = identify_missing(collections, collection_cache)
     stats["plugin_count"] = plugin_count
