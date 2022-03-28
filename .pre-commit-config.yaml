@@ -18,7 +18,7 @@ repos:
         name: Sort import statements using isort
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v2.6.0"
+    rev: "v2.6.1"
     hooks:
       - id: prettier
         # Original hook implementation is flaky due to *several* bugs described
@@ -164,7 +164,7 @@ repos:
           - manual
 
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v0.941
+    rev: v0.942
     hooks:
       # NOTE: Here MyPy is executed twice -- once for the highest and once
       # NOTE: for the lowest supported version. They are hardcoded in the
@@ -213,7 +213,7 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.12.2
+    rev: v2.13.2
     hooks:
       - id: pylint
         args:
