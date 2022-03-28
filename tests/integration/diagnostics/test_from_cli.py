@@ -37,7 +37,7 @@ def test(
         universal_newlines=True,
     )
     stdout_lines = proc_out.stdout.splitlines()
-    assert "Diagnostics written to: diagnostics_" in stdout_lines[-1]
+    assert "Diagnostics written to: " in stdout_lines[-1]
 
     file_name = remove_ansi(stdout_lines[-1].split(":", 1)[-1].strip())
     full_path = tmp_path / file_name
