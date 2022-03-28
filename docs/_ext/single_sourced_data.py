@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-# Requires Python 3.6+
+# Requires Python 3.8+
 # fmt: off
 """Sphinx extension for generating the rules table document."""
 
