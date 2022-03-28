@@ -45,8 +45,7 @@ def _import_all(package: str) -> None:
 
     :param package: The name of the package
     """
-    # The following ignore can be removed when python 3.6 support is not required.
-    files = resources.contents(package)  # type: ignore[attr-defined]
+    files = resources.contents(package)
     actions = [
         f[:-3] for f in files if f.endswith(".py") and f[0] != "_" and not f.startswith(".#")
     ]
