@@ -17,15 +17,13 @@ from ..command_runner import CommandRunner
 from ..utils.functions import ExitMessage
 from ..utils.functions import LogMessage
 from .definitions import Constants
-
-
-SettingsFileSample = Dict[str, Union[Dict, str]]
+from .definitions import SettingsFileType
 
 
 def create_settings_file_sample(
     settings_path: str,
-    placeholder: str = "",
-) -> SettingsFileSample:
+    placeholder: Union[bool, int, str, Dict, List] = "",
+) -> SettingsFileType:
     """Generate a settings file sample.
 
     :param settings_path: The dot delimited settings file path for a settings entry
@@ -33,9 +31,9 @@ def create_settings_file_sample(
     :returns: A sample of the settings file
     """
     if "." not in settings_path:
-        return {settings_path: placeholder}
+        return SettingsFileType({settings_path: placeholder})
     key, remainder = settings_path.split(".", 1)
-    return {key: create_settings_file_sample(remainder, placeholder)}
+    return SettingsFileType({key: create_settings_file_sample(remainder, placeholder)})
 
 
 def ansible_verison_parser(command: Command):

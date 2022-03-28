@@ -23,7 +23,7 @@
         " 8│Container options                                       True    Not set                            Not set                                                                                                                                                                                              ▒",
         " 9│Current settings file                                   True    None                               XXXXXXX",
         "10│Display color                                           True    Defaults                           True                                                                                                                                                                                                 ▒",
-        "11│Editor command                                          True    Defaults                           vi +{line_number} {filename}                                                                                                                                                                         ▒",
+        "11│Editor command                                          True    Defaults                           vi +{line_number} {filename}",
         "12│Editor console                                          True    Defaults                           True",
         "13│Exec command                                            True    Defaults                           /bin/bash",
         "14│Exec shell                                              True    Defaults                           True",
