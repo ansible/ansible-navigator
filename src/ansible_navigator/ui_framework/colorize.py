@@ -396,7 +396,7 @@ def strip_markdown(lines: List[List[SimpleLinePart]]) -> List[List[SimpleLinePar
                     lines.insert(line_idx + 1, full_dash_line)
                 continue
 
-            if part.chars.startswith("---"):
+            if part.chars == "---":
                 # Replace all dash line with no-break dashes
                 lines[line_idx] = full_dash_line
                 continue
