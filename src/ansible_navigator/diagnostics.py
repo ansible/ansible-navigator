@@ -19,6 +19,7 @@ from pkg_resources import working_set
 from .command_runner import Command
 from .command_runner import CommandRunner
 from .configuration_subsystem import ApplicationConfiguration
+from .configuration_subsystem import Constants
 from .configuration_subsystem import to_effective
 from .configuration_subsystem import to_sources
 from .image_manager import introspect
@@ -277,6 +278,9 @@ class DiagnosticsCollector:
         :raises FailedCollection: If the collection process fails
         :returns: The execution environment information
         """
+        if self._args.entry("container_engine").value.source is Constants.DEFAULT_CFG:
+            return {"errors": "No container engine available or found"}
+
         details, errors, return_code = introspector.run(
             image_name=self._args.execution_environment_image,
             container_engine=self._args.container_engine,
@@ -340,12 +344,7 @@ class DiagnosticsCollector:
             raise FailedCollection(results)
         if results.get("errors"):
             raise FailedCollection(results["errors"])
-
-        sections = {"errors": results.pop("errors")}
-        for section, information in results.items():
-            # pylint: disable=invalid-sequence-index
-            sections[section] = information["details"]
-        return sections
+        return {"details": results}
 
     @diagnostic_runner
     @register(Collector(name="python packages"))

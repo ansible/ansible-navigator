@@ -17,6 +17,8 @@ from typing import Union
 
 # pylint: disable=broad-except
 
+JSONTypes = Union[bool, int, str, Dict, List]
+
 
 class Command(SimpleNamespace):
     """Abstraction for a details about a shell command."""
@@ -368,7 +370,7 @@ class SystemPackages(CmdParser):
         command.details = parsed
 
 
-def main(serialize: bool = True) -> Optional[Dict]:
+def main(serialize: bool = True) -> Optional[Dict[str, JSONTypes]]:
     """Enter the image introspection process.
 
     :param serialize: Whether to serialize the results
