@@ -10,15 +10,15 @@
         "compared_fixture": false
     },
     "output": [
-        "CREATOR-EE:LATEST (INFORMATION COLLECTED FROM IMAGE INSPECTION)",
+        "CREATOR-EE:V0.4.0 (PRIMARY) (INFORMATION COLLECTED FROM IMAGE INSPECTION)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations:",
-        "  3│    org.opencontainers.image.base.digest: sha256:916783759be5ba862688284050a665060de12e43a6e358eecae8087223b5ac2f",
+        "  3│    org.opencontainers.image.base.digest: sha256:a03a7067ebd6674260f060bbc3c1e08ae61ac1ca30958d600526d699e0ebba04",
         "  4│    org.opencontainers.image.base.name: quay.io/ansible/ansible-runner:latest",
         "  5│  architecture: amd64",
         "  6│  author: ''",
-        "  7│  comment: ''",
+        "  7│  comment: Imported from -",
         "  8│  config:",
         "  9│    cmd:",
         " 10│    - ansible-runner",
@@ -28,7 +28,7 @@
         " 14│    - entrypoint",
         " 15│    env:",
         " 16│    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-        " 17│    - HOME=/home/runner",
+        " 17│    - container=oci",
         "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

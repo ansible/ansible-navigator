@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:inventory -i /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
+    "name": "test[1-:inventory -i /tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
     "index": 1,
     "comment": "ansible-navigator inventory command top window",
     "additional_information": {

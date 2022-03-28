@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "  CREATOR-EE:LATEST                                                            DESCRIPTION",
+        "  CREATOR-EE:V0.4.0 (PRIMARY)                                                  DESCRIPTION",
         "0│Image information                                                            Information collected from image inspection",
         "1│General information                                                          OS and python version information",
         "2│Ansible version and collections                                              Information about ansible and ansible collections",

@@ -35,7 +35,7 @@
         "19│    stdout: |-",
         "20│      航海家",
         "21│    stdout_lines:",
-        "22│    - 航海家",
+        "22│    - 航海",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "24│task: Debug the output",
         "25│task_action: debug",

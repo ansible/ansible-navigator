@@ -31,7 +31,7 @@
         "15│  stdout: |-",
         "16│    航海家",
         "17│  stdout_lines:",
-        "18│  - 航海家",
+        "18│  - 航海",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "20│task: Raw with unicode arg and output",
         "21│task_action: raw",

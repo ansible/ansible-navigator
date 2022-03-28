@@ -14,11 +14,11 @@
         "ANSIBLE_NAVIGATOR_LOG_LEVEL=debug",
         "ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH=./.test_logs/tests/integration/actions/exec/test_stdout_file.py/collection_doc_cache.db",
         "AWX_ISOLATED_DATA_DIR=/runner/artifacts/00000000-0000-0000-0000-000000000000",
-        "HOSTNAME=c41ceb8ab931",
+        "HOSTNAME=75f4be5408f5",
         "ANSIBLE_CACHE_PLUGIN_CONNECTION=/runner/artifacts/00000000-0000-0000-0000-000000000000/fact_cache",
         "ANSIBLE_CACHE_PLUGIN=jsonfile",
         "ANSIBLE_UNSAFE_WRITES=1",
-        "container=podman",
+        "container=oci",
         "PWD=/home/user/github/ansible-navigator",
         "HOME=/home/runner",
         "ANSIBLE_RETRY_FILES_ENABLED=False",
@@ -33,6 +33,6 @@
         "ANSIBLE_NAVIGATOR_LOG_FILE=./.test_logs/tests/integration/actions/exec/test_stdout_file.py/ansible-navigator.log",
         "ANSIBLE_CALLBACK_PLUGINS=/usr/local/lib/python3.8/site-packages/ansible_runner/callbacks",
         "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-        "(py38) bash-5.1$"
+        "(venv) bash-5.1$"
     ]
 }

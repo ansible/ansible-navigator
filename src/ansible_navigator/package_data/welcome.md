@@ -1,5 +1,4 @@
-## Welcome
-----------------------------------------------------------------------------------------------------------
+# Welcome
 
 Some things you can try from here:
 - `:collections`                                          Explore available collections
