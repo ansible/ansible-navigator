@@ -46,7 +46,8 @@ class Collector:
 
         :param color: Whether to color the message
         """
-        information = f"Collecting {self.name} information".ljust(50, ".")
+        message = f"Collecting {self.name} information"
+        information = f"{message:.<60}"
         ansi.working(color=color, message=information)
 
     def fail(self, color: bool, duration: float) -> None:
@@ -55,7 +56,8 @@ class Collector:
         :param color: Whether to color the message
         :param duration: The duration of the collection
         """
-        information = f"Collecting {self.name} failed ({duration:.2f}s)"
+        message = f"{self.name.capitalize()} information collection failed"
+        information = f"{message:.<60}{duration:.2f}s"
         ansi.failed(color=color, message=information)
 
     def finish(self, color: bool, duration: float) -> None:
@@ -64,7 +66,10 @@ class Collector:
         :param color: Whether to color the message
         :param duration: The duration of the collection
         """
-        information = f"{self.name.capitalize()} information collected. ({duration:.2f}s)"
+        message = f"{self.name.capitalize()} information collected"
+        information = f"{message:.<60}{duration:.2f}s"
+
+        # information = f"{message:<.50}{duration_message:>.7}"
         ansi.success(color=color, message=information)
 
 
@@ -80,6 +85,7 @@ class Diagnostics:
     execution_environment: Dict[str, JSONTypes]
     initialization: Dict[str, JSONTypes]
     local_system: Dict[str, JSONTypes]
+    logs: Dict[str, JSONTypes]
     python_packages: Dict[str, JSONTypes]
     settings: Dict[str, JSONTypes]
     settings_file: Dict[str, JSONTypes]
@@ -154,7 +160,7 @@ def diagnostic_runner(func):
             duration = (datetime.datetime.now() - start).total_seconds()
             collector.fail(color=color, duration=duration)
             DIAGNOSTIC_FAILURES += 1
-        result["duration"] = duration
+        result["duration"] = round(duration)
         return result
 
     return wrapper
@@ -200,14 +206,15 @@ class DiagnosticsCollector:
             execution_environment=self._execution_environment(),
             initialization=self._initialization(),
             local_system=self._local_system(),
+            logs=self._log_collector(),
             python_packages=self._python_packages(),
             settings=self._settings(),
             settings_file=self._settings_file(),
         )
         time = now_iso("local")
-        path = Path(f"diagnostics_{time}.json")
+        path = Path(f"diagnostics-{time}.json")
         path.write_text(json.dumps(asdict(diagnostics), indent=4, sort_keys=True), encoding="utf-8")
-        message = f"\nDiagnostics written to: {path}"
+        message = f"\nDiagnostics written to: {path.resolve()}"
         if DIAGNOSTIC_FAILURES > 0:
             ansi.warning(color=self.color, message=message)
         else:
@@ -290,6 +297,34 @@ class DiagnosticsCollector:
             "messages": [msg.message for msg in self._messages],
             "exit_messages": [msg.message for msg in self._exit_messages],
         }
+
+    @diagnostic_runner
+    @register(Collector(name="log"))
+    def _log_collector(self) -> Dict[str, JSONTypes]:
+        """Add log collector information.
+
+        :returns: The log collector information
+        """
+        logs: List[JSONTypes] = []
+        cwd_log = Path("./ansible-navigator.log")
+        if cwd_log.exists():
+            contents = cwd_log.read_text(encoding="utf-8").splitlines()
+            log = {
+                "name": str(cwd_log),
+                "contents": contents,
+                "date": cwd_log.stat().st_mtime,
+            }
+            logs.append(log)
+        settings_log = Path(self._args.log_file)
+        if cwd_log != settings_log and settings_log.exists():
+            contents = settings_log.read_text(encoding="utf-8").splitlines()
+            log = {
+                "name": str(settings_log),
+                "contents": contents,
+                "date": settings_log.stat().st_mtime,
+            }
+            logs.append(log)
+        return {"found": bool(logs), "logs": logs}
 
     @diagnostic_runner
     @register(Collector(name="local system"))
