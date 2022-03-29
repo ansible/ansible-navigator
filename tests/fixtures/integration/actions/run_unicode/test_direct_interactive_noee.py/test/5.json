@@ -10,12 +10,12 @@
         "compared_fixture": false
     },
     "output": [
-        "PLAY [Simple unicode output test:1] ********************************************************************************************************************************************************************",
-        "TASK [Debug the output] ********************************************************************************************************************************************************************************",
-        "OK: [localhost]",
+        "Play name: Simple unicode output test:1",
+        "Task name: Debug the output",
+        "Ok: localhost",
         " 0│{",
-        " 1│    \"duration\": 0.016364,",
-        " 2│    \"end\": \"2022-03-28T19:21:12.074413\",",
+        " 1│    \"duration\": 0.024362,",
+        " 2│    \"end\": \"2022-03-29T22:04:49.624530\",",
         " 3│    \"event_loop\": null,",
         " 4│    \"host\": \"localhost\",",
         " 5│    \"play\": \"Simple unicode output test\",",
@@ -38,12 +38,12 @@
         "22│            ]",
         "23│        }",
         "24│    },",
-        "25│    \"start\": \"2022-03-28T19:21:12.058049\",",
+        "25│    \"start\": \"2022-03-29T22:04:49.600168\",",
         "26│    \"task\": \"Debug the output\",",
         "27│    \"task_action\": \"debug\",",
         "28│    \"task_args\": \"\",",
         "29│    \"task_path\": \"/home/user/github/ansible-navigator/tests/fixtures/integration/actions/run_unicode/site.yaml:9\"",
         "30│}",
-        "^f/PgUp page up             ^b/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            SUCCESSFUL"
+        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Successful"
     ]
 }

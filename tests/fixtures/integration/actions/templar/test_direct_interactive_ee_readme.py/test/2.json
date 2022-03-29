@@ -8,7 +8,7 @@
         "compared_fixture": true
     },
     "output": [
-        "  REDHATINSIGHTS.INSIGHTS                                                                                                                                                                                       TYPE                                       ADDED                                              DEPRECATED                                                                                    DESCRIPTION",
-        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
+        "  Redhatinsights.insights                                                                                                                                                                                       Type                                       Added                                              Deprecated                                                                                    Description",
+        "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

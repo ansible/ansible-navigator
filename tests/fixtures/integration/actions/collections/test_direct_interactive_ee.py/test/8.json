@@ -8,7 +8,8 @@
         "compared_fixture": true
     },
     "output": [
-        "COMPANY_NAME.COLL_1.ROLE_MINIMUM: Minimal sample role.",
+        "Image: company_name.coll_1.role_minimum",
+        "Description: Minimal sample role.",
         " 0│---",
         " 1│argument_specs: {}",
         " 2│argument_specs_path: ''",
@@ -45,6 +46,6 @@
         "33│  - meta/argument_spec.yml",
         "34│readme_path: FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1/roles/role_minimum/README.md",
         "35│short_name: role_minimum",
-        "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
+        "^b/PgUp page up              ^f/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
     ]
 }

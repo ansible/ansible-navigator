@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "    NAME                                            VERSION          SUMMARY",
+        "    Name                                            Version          Summary",
         "  0│acl                                             2.2.53           Access control list utilities                                                                                                     ▒",
         "  1│audit-libs                                      3.0.7            Dynamic library for libaudit                                                                                                      ▒",
         "  2│basesystem                                      11               The skeleton package which defines a simple Red Hat Enterprise Linux system",
@@ -29,6 +29,6 @@
         " 15│containernetworking-plugins                     1.1.1            CNI network plugins",
         " 16│containers-common                               1                Common configuration and documentation for containers",
         " 17│coreutils-single                                8.30             coreutils multicall binary",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

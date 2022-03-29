@@ -10,9 +10,9 @@
         "compared_fixture": false
     },
     "output": [
-        "PLAY [Simple unicode output test:0] ********************************************************************************************************************************************************************",
-        "TASK [Raw with unicode arg and output] *****************************************************************************************************************************************************************",
-        "CHANGED: [localhost]",
+        "Play name: Simple unicode output test:0",
+        "Task name: Raw with unicode arg and output",
+        "CHANGED: localhost",
         " 0│---",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -37,6 +37,6 @@
         "21│task_action: raw",
         "22│task_args: ''",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "^f/PgUp page up             ^b/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            SUCCESSFUL"
+        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Successful"
     ]
 }

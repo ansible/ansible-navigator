@@ -8,7 +8,8 @@
         "compared_fixture": true
     },
     "output": [
-        "COMPANY_NAME.COLL_1.ROLE_FULL: Complete sample role.",
+        "Image: company_name.coll_1.role_full",
+        "Description: Complete sample role.",
         " 0│---",
         " 1│argument_specs:",
         " 2│  alternate:",
@@ -65,6 +66,6 @@
         "53│  - README.md",
         "54│readme_path: /tmp/collections_to_volmount/ansible_collections/company_name/coll_1/roles/role_full/README.md",
         "55│short_name: role_full",
-        "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
+        "^b/PgUp page up              ^f/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
     ]
 }

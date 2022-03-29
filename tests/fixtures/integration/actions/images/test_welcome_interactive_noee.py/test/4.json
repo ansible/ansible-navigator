@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "CREATOR-EE:V0.4.0 (PRIMARY) (INFORMATION COLLECTED FROM IMAGE INSPECTION)",
+        "Image: creator-ee:v0.4.0 (primary) (Information collected from image inspection)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations:",
@@ -29,6 +29,6 @@
         " 15│    env:",
         " 16│    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
         " 17│    - container=oci",
-        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+        "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

@@ -35,6 +35,6 @@
         "22│    msg:",
         "23│    - \"Provisioning based on YOUR_KEY which is: {{ lookup('env', 'YOUR_KEY') }}\"",
         "24│    - \"These servers were built using the password of '{{ password_used }}'. Please retain this for later use.\"",
-        "^f/PgUp page up                                                                                      ^b/PgDn page down                                                                                      ↑↓ scroll                                                                                      esc back                                                                                      :help help                                                                                     SUCCESSFUL"
+        "^b/PgUp page up                                                                                      ^f/PgDn page down                                                                                      ↑↓ scroll                                                                                      esc back                                                                                      :help help                                                                                     Successful"
     ]
 }

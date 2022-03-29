@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "                                                                WARNING",
+        "                                                                Warning",
         "                                                                ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
         "                                                                Errors were encountered while gathering the inventory:",
         "                                                                [WARNING]:  * Failed to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml with auto plugin: no root 'plugin' key found, '/home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/broken_inventory.yml' is not a valid YAML inventory plugin config file",

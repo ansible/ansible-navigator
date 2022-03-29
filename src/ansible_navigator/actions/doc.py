@@ -50,15 +50,15 @@ class Action(ActionBase):
         :param screen_w: The current screen width
         :returns: The heading
         """
-        plugin_str = f"{self._plugin_name} ({self._plugin_type})"
+        plugin_str = f"Name: {self._plugin_name} ({self._plugin_type})"
         empty_str = " " * (screen_w - len(plugin_str) + 1)
-        heading_str = (plugin_str + empty_str).upper()
+        heading_str = (plugin_str + empty_str).capitalize()
 
         line_part = CursesLinePart(
             column=0,
             string=heading_str,
             color=0,
-            decoration=curses.A_UNDERLINE | curses.A_BOLD,
+            decoration=curses.A_UNDERLINE,
         )
 
         return CursesLines((CursesLine((line_part,)),))

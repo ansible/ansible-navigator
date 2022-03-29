@@ -44,7 +44,7 @@ def _string_to_progress(value: str, progress_bar_width: int) -> str:
     :returns: The resulting progress bar or text string
     """
     if value == "100%":
-        return "COMPLETE".center(progress_bar_width, " ")
+        return "Complete".center(progress_bar_width, " ")
     chars_in_progress_bar = floor(progress_bar_width / 100 * int(value[0:-1]))
     return ("\u2587" * chars_in_progress_bar).ljust(progress_bar_width)
 

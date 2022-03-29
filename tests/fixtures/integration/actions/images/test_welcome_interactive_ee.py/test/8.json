@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "CREATOR-EE:V0.4.0 (PRIMARY) (INFORMATION ABOUT ANSIBLE AND ANSIBLE COLLECTIONS)",
+        "Image: creator-ee:v0.4.0 (primary) (Information about ansible and ansible collections)",
         " 0│---                                                                                                                                                                                                 ▒",
         " 1│ansible:                                                                                                                                                                                            ▒",
         " 2│  collections:                                                                                                                                                                                      ▒",
@@ -29,6 +29,6 @@
         "15│      ovirt.ovirt: 1.6.6                                                                                                                                                                            ▒",
         "16│      redhatinsights.insights: 1.0.7                                                                                                                                                                ▒",
         "17│      theforeman.foreman: 3.2.0",
-        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+        "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

@@ -127,7 +127,7 @@ class MenuBuilder:
         col_starts, cols, adjusted_column_widths = menu_layout
         coltext = re.sub("^__", "", cols[colno])
         coltext = re.sub("_", " ", coltext)
-        adj_entry = coltext[0 : adjusted_column_widths[colno]].upper()
+        adj_entry = coltext[0 : adjusted_column_widths[colno]].capitalize()
         # right justify header if progress
         if cols[colno] == "__progress":
             return CursesLinePart(
@@ -193,6 +193,7 @@ class MenuBuilder:
         menu_entry: Union[Dict[str, Any], ContentBase],
         menu_layout: Tuple[List, ...],
     ) -> CursesLinePart:
+        # pylint: disable=too-many-locals
         """Generate one menu line part
 
         :param colno: The column number of the line part
@@ -211,12 +212,20 @@ class MenuBuilder:
         color, decoration = self._color_menu_item(colno, cols[colno], menu_entry)
 
         text = str(coltext)[0 : adjusted_column_widths[colno]]
-        if (isinstance(coltext, (int, bool, float)) and not isinstance(coltext, enum.Enum)) or cols[
-            colno
-        ].lower() == "__duration":
-            # right justify on header if int, bool, float or "duration"
+
+        is_bool = isinstance(coltext, bool)
+        is_number = isinstance(coltext, (int, float))
+        is_enum = isinstance(coltext, enum.Enum)
+        is_duration = cols[colno].lower() == "__duration"
+        is_progress = cols[colno].lower() == "__progress"
+
+        if is_bool:
+            # booleans are left justified
+            print_at = column_starts[colno]
+        elif is_number and not is_enum or is_duration:
+            # right justify on header if int, float or "duration"
             print_at = column_starts[colno] + len(header[colno][1]) - len(text)
-        elif cols[colno].lower() == "__progress":
+        elif is_progress:
             # right justify in column if progress indicator
             print_at = column_starts[colno] + adjusted_column_widths[colno] - len(text)
         else:

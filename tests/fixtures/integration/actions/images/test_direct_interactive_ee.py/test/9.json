@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "    NAME                VERSION         SUMMARY",
+        "    Name                Version         Summary",
         "  0│adal                1.2.7           Note: This library is already replaced by MSAL Python, available here: https://pypi.org/project/msal/ .ADAL Python remains available here as a legacy. The ADAL▒",
         "  1│ansible-compat      2.0.2           Ansible compatibility goodies                                                                                                                                  ▒",
         "  2│ansible-core        2.12.4rc1.post0 Radically simple IT automation",
@@ -29,6 +29,6 @@
         " 15│azure-graphrbac     0.61.1          Microsoft Azure Graph RBAC Client Library for Python",
         " 16│azure-identity      1.7.0           Microsoft Azure Identity Library for Python",
         " 17│azure-keyvault      1.0.0a1         Microsoft Azure Key Vault Client Library for Python",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

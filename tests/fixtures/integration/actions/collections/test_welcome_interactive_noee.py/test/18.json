@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "                                        WARNING",
+        "                                        Warning",
         "                                        ───────────────────────────────────────────────────────────────────────────────────────────────────",
         "                                        Errors were encountered while parsing the last command.",
         "                                        [ERROR]: Command provided: 'collections --ee FFFFF'",

@@ -59,15 +59,22 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     :param screen_w: The current screen width
     :returns: The heading
     """
-    string = f"{obj['full_name'].upper()}: {obj['__description']}"
-    string = string + (" " * (screen_w - len(string) + 1))
-    line_part = CursesLinePart(
+    name = f"Image: {obj['full_name']}"
+    description = f"Description: {obj['__description']}"
+    padding = " " * (screen_w - len(description) + 1)
+    line_1_part_1 = CursesLinePart(
         column=0,
-        string=string,
-        color=2,
+        string=name,
+        color=0,
+        decoration=curses.A_NORMAL,
+    )
+    line_2_part_1 = CursesLinePart(
+        column=0,
+        string=description + padding,
+        color=0,
         decoration=curses.A_UNDERLINE,
     )
-    return CursesLines((CursesLine((line_part,)),))
+    return CursesLines((CursesLine((line_1_part_1,)), CursesLine((line_2_part_1,))))
 
 
 def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:

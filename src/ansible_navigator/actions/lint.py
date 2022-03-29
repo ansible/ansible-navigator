@@ -108,8 +108,8 @@ def content_heading(obj: Dict, screen_w: int) -> CursesLines:
     :param screen_w: The current screen width
     :returns: The content heading
     """
-    check_line = f"MESSAGE: {obj['check_name']}"
-    location = f"LOCATION: {obj['issue_path']}"
+    check_line = f"Message: {obj['check_name']}"
+    location = f"Location: {obj['issue_path']}"
     fill_characters = screen_w - len(location) + 1
     location_line = f"{location}{' ' * fill_characters}"
 
@@ -122,7 +122,7 @@ def content_heading(obj: Dict, screen_w: int) -> CursesLines:
     line_2_part_1 = CursesLinePart(
         column=0,
         string=location_line,
-        color=Color.GREY,
+        color=severity_to_color(obj["severity"]),
         decoration=Decoration.UNDERLINE,
     )
     return CursesLines((CursesLine((line_1_part_1,)), CursesLine((line_2_part_1,))))
@@ -145,6 +145,7 @@ def massage_issue(issue: Dict) -> Dict:
     :returns: The issue reformatted
     """
     massaged = issue.copy()
+    massaged["__severity"] = massaged["severity"].capitalize()
     massaged["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
     massaged["__path"] = abs_user_path(issue["location"]["path"])
     if isinstance(issue["location"]["lines"]["begin"], Mapping):
@@ -156,7 +157,7 @@ def massage_issue(issue: Dict) -> Dict:
 
 
 MENU_COLUMNS = [
-    "severity",
+    "__severity",
     "__message",
     "__path",
     "__line",

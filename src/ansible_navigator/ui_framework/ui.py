@@ -48,8 +48,8 @@ from .ui_constants import Decoration
 
 
 STANDARD_KEYS = {
-    "^f/PgUp": "page up",
-    "^b/PgDn": "page down",
+    "^b/PgUp": "page up",
+    "^f/PgDn": "page down",
     "\u2191\u2193": "scroll",
     "esc": "back",
 }
@@ -297,7 +297,7 @@ class UserInterface(CursesWindow):
                     column=col_starts[idx],
                     string=left,
                     color=0,
-                    decoration=curses.A_REVERSE,
+                    decoration=curses.A_BOLD,
                 ),
             )
             footer.append(
@@ -311,11 +311,11 @@ class UserInterface(CursesWindow):
         if self._status:
             # place the status to the far right -1 for the scrollbar
             # center place the uneven extra on the right, so flip it twice
-            status = self._status[0 : self._status_width - 1]  # max
+            status = self._status.capitalize()
+            status = status[0 : self._status_width - 1]  # max
             status = status[::-1]  # reverse
             status = status.center(self._status_width)  # pad
             status = status[::-1]  # reverse
-            status = status.upper()  # upper
             footer.append(
                 CursesLinePart(
                     column=self._screen_width - self._status_width - 1,
@@ -536,7 +536,7 @@ class UserInterface(CursesWindow):
                 return kegex.name, Action(match=match, value=entry)
 
         msgs = [f"Could not find a match for ':{entry}'"]
-        msgs.append("[HINT] Try ':help' for a list of available commands.")
+        msgs.append("[Hint] Try ':help' for a list of available commands.")
         self._show_form(warning_notification(msgs))
         return None, None
 

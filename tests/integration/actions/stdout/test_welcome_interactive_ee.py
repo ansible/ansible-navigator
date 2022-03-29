@@ -10,7 +10,7 @@ CLI = "ansible-navigator --execution-environment true"
 
 testdata = [
     (0, CLI, "welcome", ":help help"),
-    (1, f":run {ANSIBLE_PLAYBOOK}", "Play list", "SUCCESSFUL"),
+    (1, f":run {ANSIBLE_PLAYBOOK}", "Play list", "Successful"),
     (2, ":st", "Check stdout", ":help help"),
     (3, ":back", "Return to play list", ":help help"),
     (4, ":stdout", "Check stdout", ":help help"),

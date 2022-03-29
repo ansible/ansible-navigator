@@ -3,7 +3,7 @@
     "index": 0,
     "comment": "ansible-navigator doc module plugin display",
     "output": [
-        "COMPANY_NAME.COLL_1.MOD_1 (MODULE)",
+        "Name: company_name.coll_1.mod_1 (module)",
         " 0│---",
         " 1│doc:",
         " 2│  author:",
@@ -49,6 +49,6 @@
         "42│    - b",
         "43│    type: list",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "^f/PgUp page up                            ^b/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+        "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

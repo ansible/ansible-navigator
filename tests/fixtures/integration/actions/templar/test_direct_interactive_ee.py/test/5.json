@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "DEBUG (MODULE)",
+        "Name: debug (module)",
         "  0│---",
         "  1│doc:",
         "  2│  attributes:",
@@ -121,6 +121,6 @@
         "107│metadata: null",
         "108│return: null",
         "109│warnings: []",
-        "^f/PgUp page up                                                                                      ^b/PgDn page down                                                                                      ↑↓ scroll                                                                                      esc back                                                                                      :help help                                                                                     SUCCESSFUL"
+        "^b/PgUp page up                                                                                      ^f/PgDn page down                                                                                      ↑↓ scroll                                                                                      esc back                                                                                      :help help                                                                                     Successful"
     ]
 }
