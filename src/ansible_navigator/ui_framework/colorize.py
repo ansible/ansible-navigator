@@ -253,6 +253,7 @@ def columns_and_colors(
     lines: List[Tuple[Regions, str]],
     schema: ColorSchema,
 ) -> List[List[SimpleLinePart]]:
+    # pylint: disable=too-many-branches
     """Convert to colors and columns.
 
     :param lines: Lines of text and their regions

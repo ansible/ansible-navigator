@@ -179,7 +179,10 @@ def test_styled_markdown():
     assert result == [
         [
             SimpleLinePart(
-                chars="# This is a header\n", column=0, color=(86, 156, 214), style="bold",
+                chars="# This is a header\n",
+                column=0,
+                color=(86, 156, 214),
+                style="bold",
             ),
         ],
     ]
