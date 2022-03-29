@@ -121,33 +121,33 @@ YAML_TXT = """
 """
 
 YAML_TXT_EXPECTED = [
-    [SimpleLinePart(chars="\n", column=0, color=None)],
+    [SimpleLinePart(chars="\n", column=0, color=None, style=None)],
     [
-        SimpleLinePart(chars="- ", column=0, color=None),
-        SimpleLinePart(chars="ansible.builtin.debug", column=2, color=(86, 156, 214)),
-        SimpleLinePart(chars=":\n", column=23, color=None),
+        SimpleLinePart(chars="- ", column=0, color=None, style=None),
+        SimpleLinePart(chars="ansible.builtin.debug", column=2, color=(86, 156, 214), style=None),
+        SimpleLinePart(chars=":\n", column=23, color=None, style=None),
     ],
     [
-        SimpleLinePart(chars="    ", column=0, color=None),
-        SimpleLinePart(chars="var", column=4, color=(86, 156, 214)),
-        SimpleLinePart(chars=": ", column=7, color=None),
-        SimpleLinePart(chars="before", column=9, color=(206, 145, 120)),
-        SimpleLinePart(chars="\n", column=15, color=None),
+        SimpleLinePart(chars="    ", column=0, color=None, style=None),
+        SimpleLinePart(chars="var", column=4, color=(86, 156, 214), style=None),
+        SimpleLinePart(chars=": ", column=7, color=None, style=None),
+        SimpleLinePart(chars="before", column=9, color=(206, 145, 120), style=None),
+        SimpleLinePart(chars="\n", column=15, color=None, style=None),
     ],
-    [SimpleLinePart(chars="\n", column=0, color=None)],
-    [SimpleLinePart(chars="# this is a comment\n", column=0, color=(106, 153, 85))],
-    [SimpleLinePart(chars="\n", column=0, color=None)],
+    [SimpleLinePart(chars="\n", column=0, color=None, style=None)],
+    [SimpleLinePart(chars="# this is a comment\n", column=0, color=(106, 153, 85), style=None)],
+    [SimpleLinePart(chars="\n", column=0, color=None, style=None)],
     [
-        SimpleLinePart(chars="- ", column=0, color=None),
-        SimpleLinePart(chars="ansible.builtin.debug", column=2, color=(86, 156, 214)),
-        SimpleLinePart(chars=":\n", column=23, color=None),
+        SimpleLinePart(chars="- ", column=0, color=None, style=None),
+        SimpleLinePart(chars="ansible.builtin.debug", column=2, color=(86, 156, 214), style=None),
+        SimpleLinePart(chars=":\n", column=23, color=None, style=None),
     ],
     [
-        SimpleLinePart(chars="    ", column=0, color=None),
-        SimpleLinePart(chars="var", column=4, color=(86, 156, 214)),
-        SimpleLinePart(chars=": ", column=7, color=None),
-        SimpleLinePart(chars="after", column=9, color=(206, 145, 120)),
-        SimpleLinePart(chars="\n", column=14, color=None),
+        SimpleLinePart(chars="    ", column=0, color=None, style=None),
+        SimpleLinePart(chars="var", column=4, color=(86, 156, 214), style=None),
+        SimpleLinePart(chars=": ", column=7, color=None, style=None),
+        SimpleLinePart(chars="after", column=9, color=(206, 145, 120), style=None),
+        SimpleLinePart(chars="\n", column=14, color=None, style=None),
     ],
 ]
 
@@ -161,3 +161,25 @@ def test_basic_success_yaml_text():
         scope=content_format.value.scope,
     )
     assert result == YAML_TXT_EXPECTED
+
+
+STYLED_MARKDOWN = """\
+# This is a header
+"""
+
+
+def test_styled_markdown():
+    """Ensure style is captured from markdown correctly."""
+    content_format = ContentFormat.MARKDOWN
+
+    result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
+        doc=STYLED_MARKDOWN,
+        scope=content_format.value.scope,
+    )
+    assert result == [
+        [
+            SimpleLinePart(
+                chars="# This is a header\n", column=0, color=(86, 156, 214), style="bold",
+            ),
+        ],
+    ]

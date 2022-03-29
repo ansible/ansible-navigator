@@ -2,6 +2,7 @@
 import curses
 
 from enum import IntEnum
+from typing import Optional
 
 
 class Color(IntEnum):
@@ -47,7 +48,25 @@ class Decoration(IntEnum):
     These are rarely used within the interface.
     """
 
+    BOLD = curses.A_BOLD
+    """2097152"""
+    ITALIC = curses.A_ITALIC
+    """2147483648"""
     NORMAL = curses.A_NORMAL
     """0"""
     UNDERLINE = curses.A_UNDERLINE
     """131072"""
+
+    @classmethod
+    def get_best(cls, name: Optional[str]) -> int:
+        """Return the default value for a missing value.
+
+        :param name: The name of the value
+        :return: The match or default value
+        """
+        if isinstance(name, str):
+            try:
+                return cls[name.upper()]
+            except KeyError:
+                return cls.NORMAL
+        return cls.NORMAL

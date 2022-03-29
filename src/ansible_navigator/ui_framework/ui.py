@@ -44,6 +44,7 @@ from .form_handler_text import FormHandlerText
 from .form_utils import warning_notification
 from .menu_builder import MenuBuilder
 from .ui_config import UIConfig
+from .ui_constants import Decoration
 
 
 STANDARD_KEYS = {
@@ -566,17 +567,16 @@ class UserInterface(CursesWindow):
             scope = self.content_format().value.scope
 
         rendered = self._colorizer.render(doc=string, scope=scope)
-        return self._color_lines_for_term(rendered)
+        self._cache_init_colors(rendered)
+        return self._color_decorate_lines(rendered)
 
-    def _color_lines_for_term(self, lines: List) -> CursesLines:
-        """Give a list of dicts from tokenized lines
-        transform them into lines for curses
-        add colors as needed, maintain a mapping of RGB colors
+    def _cache_init_colors(self, lines: List):
+        """Cache and init the unique colors for future use
+
+        Maintain a mapping of RGB colors
         to curses colors in self._rgb_to_curses_color_idx
 
-        :params lines: The lines to transform
-            Lines[LinePart[{"color": RGB, "chars": text, "column": n},...]]
-        :returns: the lines ready for curses
+        :param lines: The from which colors will be cached and initialized
         """
         if curses.COLORS > 16 and self._term_osc4_support:
             unique_colors = list(
@@ -605,29 +605,25 @@ class UserInterface(CursesWindow):
                         curses.color_content(curses_colors_idx),
                     )
                     curses.init_pair(curses_colors_idx, curses_colors_idx, -1)
-        colored_lines = self._colored_lines(lines)
-        return colored_lines
 
-    def _colored_lines(self, lines: List[List[SimpleLinePart]]) -> CursesLines:
-        """Color each of the lines.
+    def _color_decorate_lines(self, lines: List[List[SimpleLinePart]]) -> CursesLines:
+        """Color and decorate each of the lines.
 
         :params lines: The lines to transform
         :returns: All lines colored
         """
-        return CursesLines(tuple(self._colored_line(line) for line in lines))
+        return CursesLines(tuple(self._color_decorate_line(line) for line in lines))
 
-    def _colored_line(self, line: List[SimpleLinePart]) -> CursesLine:
-        """Color one line.
+    def _color_decorate_line(self, line: List[SimpleLinePart]) -> CursesLine:
+        """Color and decorate one line.
 
         :param line: The line to color
         :returns: One line colored
         """
-        return CursesLine(
-            tuple(self._colored_line_part(line_part) for line_part in line),
-        )
+        return CursesLine(tuple(self._color_decorate_line_part(line_part) for line_part in line))
 
-    def _colored_line_part(self, line_part: SimpleLinePart) -> CursesLinePart:
-        """Color one line part.
+    def _color_decorate_line_part(self, line_part: SimpleLinePart) -> CursesLinePart:
+        """Color and decorate one line part.
 
         :param line_part: One line part
         :returns: One line part colored
@@ -640,11 +636,13 @@ class UserInterface(CursesWindow):
                 color = rgb_to_ansi(red, green, blue, curses.COLORS)
         else:
             color = 0
+
+        decoration = Decoration.get_best(line_part.style)
         return CursesLinePart(
             column=line_part.column,
             string=line_part.chars,
             color=color,
-            decoration=0,
+            decoration=decoration,
         )
 
     def _filter_and_serialize(self, obj: Any) -> Tuple[Optional[CursesLines], CursesLines]:

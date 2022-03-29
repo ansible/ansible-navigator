@@ -51,13 +51,15 @@ class ColorSchema:
         self._schema = schema
 
     @functools.lru_cache(maxsize=None)
-    def get_color(self, scope: str) -> Optional[RgbTuple]:
-        """Get a color from the schema, from most specific to least.
+    def get_color_and_style(self, scope: str) -> Tuple[Optional[RgbTuple], Optional[str]]:
+        """Get a color from the schema, traverse all to aggregate color and style.
 
         :param scope: The scope, aka format
         :returns: The color in RGB format or nothing
         """
-        for name in reversed(scope):
+        found_color = None
+        found_style = None
+        for name in scope:
             for parts in range(0, len(name.split("."))):
                 prop = name.split()[-1].rsplit(".", parts)[0]
                 color = next(
@@ -72,15 +74,11 @@ class ColorSchema:
                     None,
                 )
                 if color:
-                    foreground = color.get("settings", {}).get("foreground", None)
-                    # Without decoration support, continue resolving to a until we find a
-                    # foreground color or ultimately return None. This currently completely
-                    # ignores font styles.
-                    # e.g. color={'scope': 'strong', 'settings': {'fontStyle': 'bold'}}
-                    if foreground is not None:
-                        return hex_to_rgb(foreground)
-                    self._logger.debug("Color resolution continued: %s", color)
-        return None
+                    found_color = color.get("settings", {}).get("foreground", None)
+                    found_style = color.get("settings", {}).get("fontStyle", None)
+        if found_color:
+            found_color = hex_to_rgb(found_color)
+        return found_color, found_style
 
 
 class Colorize:
@@ -156,7 +154,8 @@ class Colorize:
                 return columns_and_colors(lines, self._schema)
 
         res = [
-            [SimpleLinePart(column=0, chars=doc_line, color=None)] for doc_line in doc.splitlines()
+            [SimpleLinePart(column=0, chars=doc_line, color=None, style=None)]
+            for doc_line in doc.splitlines()
         ]
         return res
 
@@ -265,28 +264,32 @@ def columns_and_colors(
     for line in lines:
         # Break the into 1 character parts, temporarily set the column to 0
         line_parts = [
-            SimpleLinePart(chars=character, color=None, column=0) for character in line[1]
+            SimpleLinePart(chars=character, color=None, column=0, style=None)
+            for character in line[1]
         ]
 
         # Replace the color with the RgbTuple
         for region in line[0]:
-            color = schema.get_color(region.scope)
+            color, style = schema.get_color_and_style(region.scope)
             if color:
                 for idx in range(region.start, region.end):
                     line_parts[idx].color = color
+            if style:
+                for idx in range(region.start, region.end):
+                    line_parts[idx].style = style
 
-        # Compress the line, grouping characters of like color
+        # Compress the line, grouping characters of like color and decoration
         if line_parts:
             grouped = [line_parts.pop(0)]
             while line_parts:
                 entry = line_parts.pop(0)
-                if entry.color == grouped[-1].color:
+                if entry.color == grouped[-1].color and entry.style == grouped[-1].style:
                     grouped[-1].chars += entry.chars
                 else:
                     grouped.append(entry)
             results.append(grouped)
         else:
-            results.append([SimpleLinePart(chars=line[1], color=None, column=0)])
+            results.append([SimpleLinePart(chars=line[1], color=None, column=0, style=None)])
 
     # Update the column in each line part, based on the total of the preceding text lengths
     for result in results:
