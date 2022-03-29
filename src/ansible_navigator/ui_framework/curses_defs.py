@@ -43,3 +43,5 @@ class SimpleLinePart:
     column: int
     #: The color for these characters
     color: Optional[RgbTuple]
+    #: The style for these characters
+    style: Optional[str]
