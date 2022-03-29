@@ -363,7 +363,6 @@ def ansi_to_curses(line: str) -> CursesLine:
                 color = 0
                 style = 0
     return CursesLine(tuple(printable))
-<<<<<<< HEAD
 
 
 def strip_markdown(lines: List[List[SimpleLinePart]]) -> List[List[SimpleLinePart]]:
@@ -425,49 +424,3 @@ def strip_markdown(lines: List[List[SimpleLinePart]]) -> List[List[SimpleLinePar
                 lines[line_idx][part_idx].chars = re.sub(r"\*(.*)\*", r"\1", part.chars)
 
     return lines
-||||||| parent of b9d668ad (MD remove)
-=======
-
-
-def strip_markdown(lines: List[List[SimpleLinePart]]) -> List[List[SimpleLinePart]]:
-    """Strip some markdown from the regions.
-
-    This is not a complete removal of markdown, but it removes some of the
-    common markdown that is in use.
-
-    :param lines: Lines of text and their parts
-    :returns: Lines of text and their parts without some markdown
-    """
-    full_dash_line = [SimpleLinePart(chars=f"{'—'*132}\n", column=0, color=(128, 128, 128))]
-    in_a_code_block = False
-    for line_idx, line in reversed(list(enumerate(copy.deepcopy(lines)))):
-        for part_idx, part in enumerate(line):
-            if part.chars.startswith("```"):
-                # Remove ```x from a line
-                lines[line_idx][part_idx].chars = "\n"
-                in_a_code_block = not in_a_code_block
-                continue
-
-            if in_a_code_block:
-                # Don't modify inside a code block
-                continue
-
-            if part.chars.startswith("#"):
-                # Remove # headings
-                lines[line_idx][part_idx].chars = re.sub(r"^(#{1,6}\s)(.*$)", r"\2", part.chars)
-                if part.chars.startswith("# "):
-                    # Insert a full line after a heading 1
-                    lines.insert(line_idx + 1, full_dash_line)
-                continue
-
-            if part.chars.startswith("---"):
-                # Replace all dash line with no-break dashes
-                lines[line_idx] = full_dash_line
-                continue
-
-            if "`" in part.chars:
-                # Remove `` from code blocks
-                lines[line_idx][part_idx].chars = re.sub(r"`(.*)`", r"\1", part.chars)
-
-    return lines
->>>>>>> b9d668ad (MD remove)
