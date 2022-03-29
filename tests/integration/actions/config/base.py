@@ -86,7 +86,7 @@ class BaseClass:
                 "Default local tmp",
             ]
             # Determine if a menu is showing
-            mask_column_name = "CURRENT"
+            mask_column_name = "Current"
             column_start = received_output[0].find(mask_column_name)
             column_exists = column_start != -1
             if column_exists:

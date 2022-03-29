@@ -26,15 +26,15 @@
         " 11│Any errors fatal                                                                                              True                  default               False",
         " 12│Become allow same user                                                                                        True                  default               False",
         " 13│Become password file                                                                                          True                  default               None",
-        " 14│Become plugin path                                                                                            True                  default               ['/home/user/.ansible/plugins/become', '/us...",
+        " 14│Become plugin path                                                                                            True                  default               XXXXXXX",
         " 15│Cache plugin                                                                                                  False                 env                   jsonfile",
-        " 16│Cache plugin connection                                                                                       False                 env                   /tmp/ansible-navigator_eu7hdkxt/artifacts/207bc...",
+        " 16│Cache plugin connection                                                                                       False                 env                   XXXXXXX",
         " 17│Cache plugin prefix                                                                                           True                  default               ansible_facts",
         " 18│Cache plugin timeout                                                                                          False                 env                   42",
         " 19│Callable accept list                                                                                          True                  default               []",
         " 20│Callbacks enabled                                                                                             True                  default               []",
         " 21│Collections on ansible version mismatch                                                                       True                  default               warning",
-        " 22│Collections paths                                                                                             True                  default               ['/home/user/.ansible/collections', '/usr/s...",
+        " 22│Collections paths                                                                                             True                  default               XXXXXXX",
         "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }
