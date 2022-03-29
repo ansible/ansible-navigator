@@ -303,7 +303,7 @@ class VolumeMountOption(Enum):
     z = "z"  # pylint: disable=invalid-name
 
 
-V = TypeVar("V", bound="VolumeMount")  # pylint: disable=invalid-name
+V = TypeVar("V", bound="VolumeMount")
 
 
 class VolumeMountError(Exception):

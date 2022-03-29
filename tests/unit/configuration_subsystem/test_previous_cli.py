@@ -43,7 +43,7 @@ def test_apply_previous_cli_all():
         params=params.split(),
     )
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
     for expect in expected:
@@ -57,7 +57,7 @@ def test_apply_previous_cli_all():
         apply_previous_cli_entries=C.ALL,
     )
     _messages, exit_messages = configurator.configure()
-    assert exit_messages == []
+    assert not exit_messages
 
     expected = [
         ("app", "doc", C.USER_CLI),
