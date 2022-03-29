@@ -25,7 +25,7 @@ class ContentView(Enum):
     NORMAL = "normal"
 
 
-T = TypeVar("T")  # pylint:disable=invalid-name # https://github.com/PyCQA/pylint/pull/5221
+T = TypeVar("T")
 DictType: "TypeAlias" = Dict[str, T]
 
 

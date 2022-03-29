@@ -43,7 +43,7 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/psf/black.git
-    rev: 22.1.0
+    rev: 22.3.0
     hooks:
       - id: black
         language_version: python3
@@ -213,7 +213,7 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.12.2
+    rev: v2.13.2
     hooks:
       - id: pylint
         args:
@@ -224,11 +224,7 @@ repos:
           - tests/
         additional_dependencies:
           - ansible-core
-          # astroid is a transitive dep for pylint, > 2.9.0 introduces false no-name-in-module and no-member errors
-          # attempt to remove this when astroid 2.9.4 or later is released
-          # related: https://github.com/PyCQA/pylint/issues/5131
-          # related: https://github.com/ansible/ansible-navigator/issues/772
-          - astroid == 2.9.0
+          - astroid
           - ansible-runner
           - jinja2
           - jsonschema
