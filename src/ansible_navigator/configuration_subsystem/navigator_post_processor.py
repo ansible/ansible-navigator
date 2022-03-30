@@ -787,36 +787,43 @@ class NavigatorPostProcessor:
         """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        subcommand = "doc"
 
-        extra_args_provided = config.entry("cmdline").value.current is not C.NOT_SET
-        is_help = config.entry("help_doc").value.current is True
-        is_initial = config.initial is None
-        is_not_mode_stdout = config.entry("mode").value.current != "stdout"
-        is_not_subcommand_match = config.entry("app").value.current != subcommand
-        is_set = entry.value.current is not C.NOT_SET
-
+        is_not_subcommand_match = config.entry("app").value.current != "doc"
         if is_not_subcommand_match:
-            # subcommand is different
+            # Subcommand is different
             return messages, exit_messages
 
-        if all((extra_args_provided, is_initial, is_not_mode_stdout)):
-            # if extra args are provided, is the initial config, default to mode stdout
-            mode = Mode.STDOUT
-            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
-            message = message = f"`{entry.name} requesting mode {mode.value}"
-            messages.append(LogMessage(level=logging.DEBUG, message=message))
+        is_help = config.entry("help_doc").value.current is True
+        if is_help:
+            # Help is requested
             return messages, exit_messages
 
-        if is_set or is_help:
-            # value is set or help is requested
-            return messages, exit_messages
+        # Determine if mode stdout should be set
+        if config.initial is None:
+            force_stdout_for = {
+                "-l",  # List plugins
+                "--list",  # List plugins
+                "-F",  # List plugin files
+                "--list_files",  # List plugin files
+                "-s",  # Print a snippet
+                "--snippet",  # Print a snippet
+                "--metadata-dump",  # Print a metadata dump
+            }
+            cmdline = config.entry("cmdline").value.current
+            if isinstance(cmdline, list) and force_stdout_for.intersection(cmdline):
+                mode = Mode.STDOUT
+                self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+                message = message = f"`{entry.name} requesting mode {mode.value}"
+                messages.append(LogMessage(level=logging.DEBUG, message=message))
+                return messages, exit_messages
 
-        # A plugin name is required
-        exit_msg = "A plugin name is required when using the doc subcommand"
-        exit_messages.append(ExitMessage(message=exit_msg))
-        exit_msg = "Try again with 'doc <plugin_name>'"
-        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+        is_not_set = entry.value.current is C.NOT_SET
+        if is_not_set:
+            # A plugin name is required
+            exit_msg = "A plugin name or other parameter is required when using the doc subcommand"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = "Try again with 'doc <plugin_name>'"
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
     @staticmethod
