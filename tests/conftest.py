@@ -3,10 +3,22 @@ import os
 import shutil
 import subprocess
 
+from copy import deepcopy
 from pathlib import Path
+from typing import Tuple
 
 import pytest
 
+from ansible_navigator.configuration_subsystem import to_sample
+from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
+from ansible_navigator.configuration_subsystem.navigator_configuration import (
+    NavigatorConfiguration,
+)
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
+from ansible_navigator.utils.serialize import Loader
+from ansible_navigator.utils.serialize import serialize_write_file
+from ansible_navigator.utils.serialize import yaml
 from .defaults import PULLABLE_IMAGE
 
 
@@ -58,3 +70,41 @@ def use_venv(monkeypatch: pytest.MonkeyPatch):
         )
     path_prepend = Path.cwd() / venv_path / "bin"
     monkeypatch.setenv("PATH", str(path_prepend), prepend=os.pathsep)
+
+
+@pytest.fixture(name="settings_samples")
+def _settings_samples() -> Tuple[str, str]:
+    """Provide the full settings samples
+
+    :returns: The commented and uncommented samples
+    """
+    settings = deepcopy(NavigatorConfiguration)
+    commented, uncommented = to_sample(settings=settings)
+    return commented, uncommented
+
+
+@pytest.fixture()
+def settings_env_var_to_full(
+    settings_samples: Tuple[str, str],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> Tuple[Path, SettingsFileType]:
+    """Set the settings environment variable to a full sample settings file in a tmp path."""
+    _commented, uncommented = settings_samples
+    settings_contents = yaml.load(uncommented, Loader=Loader)
+    settings_path = tmp_path / "ansible-navigator.yml"
+    serialize_write_file(
+        content=settings_contents,
+        content_view=ContentView.NORMAL,
+        file_mode="w",
+        file=settings_path,
+        serialization_format=SerializationFormat.YAML,
+    )
+    # The sample has volume mounts, so let's not exit because they doesn't exit
+    root = settings_contents["ansible-navigator"]
+    ee_root = root["execution-environment"]
+    for volume_mount in ee_root["volume-mounts"]:
+        Path(volume_mount["src"]).mkdir(exist_ok=True)
+
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", str(settings_path))
+    return settings_path, settings_contents
