@@ -177,5 +177,5 @@ def test_styled_markdown():
         scope=content_format.value.scope,
     )
     assert result == [
-        [SimpleLinePart(chars="This is a header\n", column=0, color=(86, 156, 214), style="bold")]
+        [SimpleLinePart(chars="This is a header\n", column=0, color=(86, 156, 214), style="bold")],
     ]
