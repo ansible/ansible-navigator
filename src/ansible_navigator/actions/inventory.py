@@ -441,6 +441,7 @@ class Action(ActionBase):
         self,
         kwargs: Dict[str, Any],
     ) -> None:
+        # pylint: disable=too-many-branches
         """Use the runner subsystem to collect inventory details for mode interactive.
 
         :param kwargs: The arguments for the runner call
@@ -450,6 +451,7 @@ class Action(ActionBase):
             index = self._args.cmdline.index("--playbook-dir")
             playbook_dir = self._args.cmdline[index + 1]
             source = "user provided"
+        # Constants don't have an index, may go past end of list, param not found
         except (AttributeError, IndexError, ValueError):
             if isinstance(self._args.playbook, str):
                 # or use the parent of the currently set playbook
