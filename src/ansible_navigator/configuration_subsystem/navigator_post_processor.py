@@ -773,9 +773,12 @@ class NavigatorPostProcessor:
     # Post process osc4.
     osc4 = _true_or_false
 
-    @staticmethod
     @_post_processor
-    def plugin_name(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
+    def plugin_name(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
         """Post process plugin_name.
 
         :param entry: The current settings entry
@@ -784,13 +787,36 @@ class NavigatorPostProcessor:
         """
         messages: List[LogMessage] = []
         exit_messages: List[ExitMessage] = []
-        if config.app == "doc" and entry.value.current is C.NOT_SET:
-            if config.entry("help_doc").value.current is False:
-                exit_msg = "A plugin name is required when using the doc subcommand"
-                exit_messages.append(ExitMessage(message=exit_msg))
-                exit_msg = "Try again with 'doc <plugin_name>'"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
+        subcommand = "doc"
+
+        extra_args_provided = config.entry("cmdline").value.current is not C.NOT_SET
+        is_help = config.entry("help_doc").value.current is True
+        is_initial = config.initial is None
+        is_not_mode_stdout = config.entry("mode").value.current != "stdout"
+        is_not_subcommand_match = config.entry("app").value.current != subcommand
+        is_set = entry.value.current is not C.NOT_SET
+
+        if is_not_subcommand_match:
+            # subcommand is different
+            return messages, exit_messages
+
+        if all((extra_args_provided, is_initial, is_not_mode_stdout)):
+            # if extra args are provided, is the initial config, default to mode stdout
+            mode = Mode.STDOUT
+            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+            message = message = f"`{entry.name} requesting mode {mode.value}"
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
+            return messages, exit_messages
+
+        if is_set or is_help:
+            # value is set or help is requested
+            return messages, exit_messages
+
+        # A plugin name is required
+        exit_msg = "A plugin name is required when using the doc subcommand"
+        exit_messages.append(ExitMessage(message=exit_msg))
+        exit_msg = "Try again with 'doc <plugin_name>'"
+        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
     @staticmethod
