@@ -23,6 +23,8 @@ from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
 from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem import to_effective
+from ..configuration_subsystem import to_sources
 from ..content_defs import ContentView
 from ..content_defs import SerializationFormat
 from ..runner import CommandAsync
@@ -418,7 +420,7 @@ class Action(ActionBase):
             return False
 
         version = data.get("version", "")
-        if version.startswith("1."):
+        if version.startswith("1.") or version.startswith("2."):
             try:
                 stdout = data["stdout"]
                 if self.mode == "interactive":
@@ -851,11 +853,13 @@ class Action(ActionBase):
             try:
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
                 artifact = {
-                    "version": "1.0.0",
+                    "version": "2.0.0",
                     "plays": self._plays.value,
                     "stdout": self.stdout,
                     "status": status,
                     "status_color": status_color,
+                    "settings_entries": to_effective(self._args),
+                    "settings_sources": to_sources(self._args),
                 }
                 serialize_write_file(
                     content=artifact,

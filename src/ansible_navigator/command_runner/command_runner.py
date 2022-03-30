@@ -27,7 +27,7 @@ class Command:
     identity: str
     command: str
     post_process: Callable
-    return_code: Optional[int] = None
+    return_code: int = 0
     stdout: str = ""
     stderr: str = ""
     details: List = field(default_factory=list)
