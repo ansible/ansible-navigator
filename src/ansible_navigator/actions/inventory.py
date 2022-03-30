@@ -5,6 +5,7 @@ import os
 import shlex
 import shutil
 
+from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import List
@@ -444,8 +445,28 @@ class Action(ActionBase):
 
         :param kwargs: The arguments for the runner call
         """
+        try:
+            # Extract the playbook dir the user may have provided
+            index = self._args.cmdline.index("--playbook-dir")
+            playbook_dir = self._args.cmdline[index + 1]
+            source = "user provided"
+        except (AttributeError, IndexError, ValueError):
+            if isinstance(self._args.playbook, str):
+                # or use the parent of the currently set playbook
+                playbook_dir = str(Path(self._args.playbook).resolve().parent)
+                source = "derived from playbook"
+            else:
+                # or the current working directory
+                playbook_dir = os.getcwd()
+                source = "CWD"
+        self._logger.info("--playbook-directory for inventory from (%s): %s", source, playbook_dir)
+
         self._runner = AnsibleInventory(**kwargs)
-        inventory_output, inventory_err = self._runner.fetch_inventory("list", self._inventories)
+        inventory_output, inventory_err = self._runner.fetch_inventory(
+            action="list",
+            inventories=self._inventories,
+            playbook_dir=playbook_dir,
+        )
         if inventory_output:
             parts = inventory_output.split("{", 1)
             if inventory_err:
