@@ -1,4 +1,4 @@
-"""Form defintion and form rendering."""
+"""Form definition and form rendering."""
 import curses
 
 from curses import ascii as curses_ascii
