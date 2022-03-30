@@ -115,7 +115,7 @@ def test(
     monkeypatch.setenv("PAGER", "cat")
     monkeypatch.setenv("NO_COLOR", "true")
     command = shlex_join(
-        data.command + ("--lf", log_file, "--ee", str(exec_env), "--set-env", "PAGER=cat")
+        data.command + ("--lf", log_file, "--ee", str(exec_env), "--set-env", "PAGER=cat"),
     )
     proc_out = subprocess.run(
         command,
