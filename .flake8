@@ -71,9 +71,6 @@ per-file-ignores =
   src/ansible_navigator/tm_tokenize/state.py: D100, D101, D102
   src/ansible_navigator/tm_tokenize/tokenize.py: D100, D201, D400, D403, DAR101, DAR201
   src/ansible_navigator/tm_tokenize/utils.py: D100, D400, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/__init__.py: D200, D400
-  src/ansible_navigator/ui_framework/colorize.py: D200, D205, D400, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/curses_defs.py: D200, D400
   src/ansible_navigator/ui_framework/curses_window.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/field_button.py: D200, D205, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/field_checks.py: D200, D204, D205, D400, D403, DAR101, DAR201
