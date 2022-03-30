@@ -1,5 +1,4 @@
-"""ui_framework
-"""
+"""Initialization file for the ui_framework."""
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
