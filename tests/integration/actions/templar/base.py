@@ -46,9 +46,9 @@ base_steps = (
     UiTestStep(user_input=":back", comment="show task"),
     UiTestStep(
         user_input=":open {{ task_path }}",
-        comment="goto vi",
-        search_within_response="name: run integration test play-1",
-        present=["name: run integration test play-1"],
+        comment="goto vi, look for localhost since it is not in the task",
+        search_within_response="hosts: localhost",
+        present=["hosts: localhost"],
     ),
     UiTestStep(user_input=":q!", comment="exit vi"),
 )
