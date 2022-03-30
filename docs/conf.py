@@ -102,17 +102,9 @@ show_authors = True
 pygments_style = "ansible"
 
 nitpicky = True
+root = "ansible_navigator"
 nitpick_ignore = [
     ("py:class", "_Rule"),
-    ("py:class", "ansible_navigator.configuration_subsystem.definitions.SettingsFileType"),
-    (
-        "py:class",
-        "ansible_navigator.configuration_subsystem.defs_presentable.PresentableSettingsEntries",
-    ),
-    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TCli"),
-    ("py:class", "ansible_navigator.configuration_subsystem.defs_presentable.TEnt"),
-    ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
-    ("py:class", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse._SubParsersAction"),
     ("py:class", "Captures"),
@@ -148,8 +140,16 @@ nitpick_ignore = [
     ("py:class", "Window"),
     ("py:class", "yaml.cyaml.CSafeDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
-    ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TKey"),
-    ("py:obj", "ansible_navigator.tm_tokenize.fchainmap.TValue"),
+    ("py:class", f"{root}.configuration_subsystem.definitions.SettingsFileType"),
+    ("py:class", f"{root}.configuration_subsystem.defs_presentable.PresentableSettingsEntries"),
+    ("py:class", f"{root}.configuration_subsystem.defs_presentable.TCli"),
+    ("py:class", f"{root}.configuration_subsystem.defs_presentable.TEnt"),
+    ("py:class", f"{root}.tm_tokenize.fchainmap.TKey"),
+    ("py:class", f"{root}.tm_tokenize.fchainmap.TValue"),
+    ("py:class", f"{root}.ui_framework.curses_defs.CursesLine"),
+    ("py:class", f"{root}.ui_framework.curses_defs.CursesLines"),
+    ("py:obj", f"{root}.tm_tokenize.fchainmap.TKey"),
+    ("py:obj", f"{root}.tm_tokenize.fchainmap.TValue"),
 ]
 
 nitpick_ignore_regex = [
