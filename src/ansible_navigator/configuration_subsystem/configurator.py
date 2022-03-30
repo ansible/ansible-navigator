@@ -255,7 +255,9 @@ class Configurator:
             return
         args, cmdline = parser_response
         if cmdline:
-            self._config.entry("cmdline").value.current = cmdline
+            # In the case a subcommand is not a positional, remove the --
+            additional_args = [arg for arg in cmdline if arg != "--"]
+            self._config.entry("cmdline").value.current = additional_args
             self._config.entry("cmdline").value.source = C.USER_CLI
         for param, value in vars(args).items():
             if self._config.entry(param).subcommand_value is True and value is None:
