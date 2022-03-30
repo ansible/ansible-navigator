@@ -1,5 +1,4 @@
-"""for def
-"""
+"""Form defintion and form rendering."""
 import curses
 
 from curses import ascii as curses_ascii
@@ -309,7 +308,7 @@ class FormPresenter(CursesWindow):
         line_part = CursesLinePart(0, self._form.title.upper(), self._form.title_color, 0)
         return CursesLine((line_part,))
 
-    def present(self) -> "Form":
+    def present(self) -> Form:
         """present the form to the user"""
         self._screen.clear()
         self._screen.refresh()
