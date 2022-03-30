@@ -14,6 +14,28 @@ from pytest_mock import MockerFixture
 
 from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem.definitions import Constants
+from ansible_navigator.initialization import parse_and_update
+
+
+def make_dirs(*_args, **_kwargs):
+    """Mock make_dirs.
+
+    :param _args: The positional arguments
+    :param _kwargs: The keyword arguments
+    :returns: Indication of directory creation success
+    """
+    return True
+
+
+def get_status(*_args, **_kwargs):
+    """Mock run.get_status.
+
+    :param _args: The positional arguments
+    :param _kwargs: The keyword arguments
+    :returns: The runner status
+    """
+    return (0, 0)
 
 
 @dataclass
@@ -126,17 +148,8 @@ def test_artifact_path(
     """
     caplog.set_level(logging.DEBUG)
     monkeypatch.setenv("HOME", "/home/test_user")
-
-    def make_dirs(*_args, **_kwargs):
-        return True
-
     monkeypatch.setattr(os, "makedirs", make_dirs)
-
-    def get_status(*_args, **_kwargs):
-        return (0, 0)
-
     monkeypatch.setattr(action, "_get_status", get_status)
-
     mocked_write = mocker.patch(
         "ansible_navigator.actions.run.serialize_write_file",
         return_value=None,
@@ -175,3 +188,31 @@ def test_artifact_path(
             assert data.re_match.match(opened_filename), caplog.text
     else:
         mocked_write.assert_not_called()
+
+
+def test_artifact_contents(monkeypatch: pytest.MonkeyPatch, mocker: MockerFixture):
+    """Test the artifact contents for settings information.
+
+    :param monkeypatch: The monkeypatch fixture
+    :param mocker: The mocker fixture
+    """
+    monkeypatch.setattr(os, "makedirs", make_dirs)
+    monkeypatch.setattr(action, "_get_status", get_status)
+    mocked_write = mocker.patch(
+        "ansible_navigator.actions.run.serialize_write_file",
+        return_value=None,
+    )
+
+    settings = deepcopy(NavigatorConfiguration)
+    settings.internals.initializing = True
+    _messages, exit_messages = parse_and_update(params=["run", "site.yaml"], args=settings)
+    assert not exit_messages
+
+    run_action = action(args=settings)
+    run_action.write_artifact(filename="artifact.json")
+
+    settings_entries = mocked_write.call_args[1]["content"]["settings_entries"]
+    assert settings_entries["ansible-navigator"]["app"] == "run"
+
+    settings_sources = mocked_write.call_args[1]["content"]["settings_sources"]
+    assert settings_sources["ansible-navigator.app"] == Constants.USER_CLI.value
