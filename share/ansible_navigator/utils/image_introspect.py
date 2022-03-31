@@ -224,6 +224,9 @@ class AnsibleCollections(CmdParser):
 
         :param command: The result of running the command
         """
+        if "invalid choice: 'list'" in command.stderr:
+            command.details = "This command is not supported with ansible 2.9."
+            return
         collections = {}
         for line in command.stdout.splitlines():
             parts = line.split()
@@ -249,7 +252,7 @@ class AnsibleVersion(CmdParser):
 
         :param command: The result of running the command
         """
-        version = command.stdout.splitlines()[0].split(" ", 1)[1].strip()[1:-1]
+        version = command.stdout.splitlines()[0]
         command.details = version
 
 
