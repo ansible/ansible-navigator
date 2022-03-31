@@ -192,7 +192,6 @@ $ ansible-navigator run site.yml
 
 Additional information about `ansible-vault` can be found [here](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
 
-
 ## Other
 
 ### Something didn't work, how can I troubleshoot it?
@@ -213,4 +212,3 @@ $ ansible-navigator exec -- ansible --version | head -n 1 | awk -F '\\[|\\]|\\s'
 Although the `/dev/mqueue` directory is not used by ansible-navigator, it is currently required when using podman. Not all operating systems have a `/dev/mqueue` directory by default.
 
 Please reference the documentation for your operating system related to POSIX message queues, or simply create the directory.
-
