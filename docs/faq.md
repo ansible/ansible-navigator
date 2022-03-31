@@ -194,10 +194,6 @@ Additional information about `ansible-vault` can be found [here](https://docs.an
 
 ## Other
 
-### Something didn't work, how can I troubleshoot it?
-
-`ansible-navigator` has reasonable logging messages, debug logging can be enabled with `--log-level debug`. If you think you might have found a bug, please log an issue and include the details from the log file.
-
 ### How can complex commands be run inside an execution-environment?
 
 The easiest way to pass complex commands to an execution environment is by using the `--` delimiter. Everything after the `--` will be passed into the execution-environment.
@@ -212,3 +208,7 @@ $ ansible-navigator exec -- ansible --version | head -n 1 | awk -F '\\[|\\]|\\s'
 Although the `/dev/mqueue` directory is not used by `ansible-navigator`, it is currently required when using `podman`. Not all operating systems have a `/dev/mqueue` directory by default.
 
 Please reference the documentation for your operating system related to POSIX message queues, or simply create the directory.
+
+### Something didn't work, how can I troubleshoot it?
+
+`ansible-navigator` has reasonable logging messages, debug logging can be enabled with `--log-level debug`. If you think you might have found a bug, please [log an issue](https://github.com/ansible/ansible-navigator/issues/new/choose) and include the details from the log file.
