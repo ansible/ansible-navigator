@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "    ANSIBLE.BUILTIN              TYPE          ADDED         DEPRECATED    DESCRIPTION",
+        "    Ansible.builtin              Type          Added         Deprecated    Description",
         "  0│add_host                     module        0.9           False         Add a host (and alternatively a group) to the ansible-playbook in-memory inventory",
         "  1│advanced_host_list           inventory     2.4           False         Parses a 'host list' with ranges",
         "  2│apt                          module        0.0.2         False         Manages apt-packages",
@@ -137,6 +137,6 @@
         "123│yaml                         inventory     2.4           False         Uses a specific YAML file as an inventory source.",
         "124│yum                          module        historical    False         Manages packages with the I(yum) package manager",
         "125│yum_repository               module        2.1           False         Add or remove YUM repositories",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

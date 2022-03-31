@@ -8,8 +8,8 @@
         "compared_fixture": true
     },
     "output": [
-        "  NAME                                      DEFAULT                                                             SOURCE                                                                                                        CURRENT",
-        "0│App                                         False                                                             Command line                                                                                                  XXXXXXX",
-        "^f/PgUp page up                                      ^b/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
+        "  Name                                      Default                                                             Source                                                                                                        Current",
+        "0│App                                       False                                                               Command line                                                                                                  XXXXXXX",
+        "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }

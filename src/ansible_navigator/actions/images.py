@@ -65,7 +65,7 @@ class Action(ActionBase):
         self._images = Step(
             name="images",
             step_type="menu",
-            columns=["__name", "tag", "execution_environment", "created", "size"],
+            columns=["__image", "tag", "execution_environment", "created", "size"],
             value=[],
             select_func=self._build_image_menu,
         )
@@ -103,11 +103,11 @@ class Action(ActionBase):
         """
         if name == "image_menu":
             text = (
-                self.steps.previous.selected["image_name"]
-                + f" ({self.steps.previous.selected['description']})"
+                f"{self.steps.previous.selected['first_column']}"
+                f" ({self.steps.previous.selected['description']})"
             )
         elif name in ["python_package_list", "system_package_list"]:
-            text = f"{obj['name']} ({obj['version']})"
+            text = f"Name: {obj['name']} ({obj['version']})"
 
         color = 2
         if self._images.selected:
@@ -117,12 +117,12 @@ class Action(ActionBase):
                 color = 8
 
         empty_str = " " * (screen_w - len(text) + 1)
-        heading_str = (text + empty_str).upper()
+        heading_str = text + empty_str
         line_part = CursesLinePart(
             column=0,
             string=heading_str,
             color=color,
-            decoration=curses.A_UNDERLINE | curses.A_BOLD,
+            decoration=curses.A_UNDERLINE,
         )
         return CursesLines((CursesLine((line_part,)),))
 
@@ -354,43 +354,43 @@ class Action(ActionBase):
             # an image should always be selected by now
             return self.steps.previous
 
-        image_name = f"{self._images.selected['__name_tag']}"
+        first_column = f"Image: {self._images.selected['__name_tag']}"
         menu = [
             {
-                image_name: "Image information",
+                first_column: "Image information",
                 "description": "Information collected from image inspection",
             },
         ]
         if self.steps.current.selected["execution_environment"]:
             menu.append(
                 {
-                    image_name: "General information",
+                    first_column: "General information",
                     "description": "OS and python version information",
                 },
             )
             menu.append(
                 {
-                    image_name: "Ansible version and collections",
+                    first_column: "Ansible version and collections",
                     "description": "Information about ansible and ansible collections",
                 },
             )
             menu.append(
                 {
-                    image_name: "Python packages",
+                    first_column: "Python packages",
                     "description": "Information about python and python packages",
                 },
             )
             menu.append(
                 {
-                    image_name: "Operating system packages",
+                    first_column: "Operating system packages",
                     "description": "Information about operating system packages",
                 },
             )
-            menu.append({image_name: "Everything", "description": "All image information"})
+            menu.append({first_column: "Everything", "description": "All image information"})
         for menu_entry in menu:
-            menu_entry["image_name"] = image_name
+            menu_entry["first_column"] = first_column
 
-        columns = [image_name, "description"]
+        columns = [first_column, "description"]
         step = Step(
             columns=columns,
             name="image_menu",
@@ -435,6 +435,7 @@ class Action(ActionBase):
         for image in images:
             image["__introspected"] = False
             image["name"] = image["repository"].split("/")[-1]
+            image["__image"] = image["name"]
             image["__name_tag"] = f"{image['name']}:{image['tag']}"
             image["__full_name"] = f"{image['repository']}:{image['tag']}"
             image["__name"] = image["name"]

@@ -4,13 +4,14 @@
     "comment": "Browse ansible.builtin.add_host module",
     "additional_information": {
         "present": [
-            "ANSIBLE.BUILTIN.ADD_HOST"
+            "ansible.builtin.add_host"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "ANSIBLE.BUILTIN.ADD_HOST: Add a host (and alternatively a group) to the ansible-playbook in-memory inventory",
+        "Image: ansible.builtin.add_host",
+        "Description: Add a host (and alternatively a group) to the ansible-playbook in-memory inventory",
         "  0│---",
         "  1│additional_information: {}",
         "  2│collection_info:",
@@ -165,6 +166,6 @@
         "151│full_name: ansible.builtin.add_host",
         "152│metadata: null",
         "153│returndocs: null",
-        "^f/PgUp page up              ^b/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
+        "^b/PgUp page up              ^f/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
     ]
 }

@@ -13,9 +13,9 @@
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "3│host: localhost",
         "4│number: 0",
-        "5│result: OK",
+        "5│result: Ok",
         "6│task: debug print play-1 task-1",
         "7│task_action: debug",
-        "^f/PgUp page up                                                                                      ^b/PgDn page down                                                                                      ↑↓ scroll                                                                                      esc back                                                                                      :help help                                                                                     SUCCESSFUL"
+        "^b/PgUp page up                                                                                      ^f/PgDn page down                                                                                      ↑↓ scroll                                                                                      esc back                                                                                      :help help                                                                                     Successful"
     ]
 }

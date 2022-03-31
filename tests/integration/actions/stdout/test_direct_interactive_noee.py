@@ -9,7 +9,7 @@ from .base import BaseClass
 CLI = "ansible-navigator" f" run {ANSIBLE_PLAYBOOK}" " --execution-environment false"
 
 testdata = [
-    (0, CLI, "run top window", "SUCCESSFUL"),
+    (0, CLI, "run top window", "Successful"),
     (1, ":st", "Check stdout", ":help help"),
     (2, ":back", "Return to play list", ":help help"),
     (3, ":stdout", "Check stdout", ":help help"),

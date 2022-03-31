@@ -77,7 +77,7 @@ class BaseClass:
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         elif step.search_within_response is SearchFor.WARNING:
-            search_within_response = "WARNING"
+            search_within_response = "Warning"
         else:
             raise ValueError("test mode not set")
 
@@ -93,7 +93,7 @@ class BaseClass:
                 "Current settings file",
             ]
             # Determine if a menu is showing
-            mask_column_name = "CURRENT"
+            mask_column_name = "Current"
             column_start = received_output[0].find(mask_column_name)
             column_exists = column_start != -1
             if column_exists:

@@ -68,7 +68,7 @@ class BaseClass:
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         elif step.search_within_response is SearchFor.WARNING:
-            search_within_response = "WARNING"
+            search_within_response = "Warning"
         else:
             search_within_response = step.search_within_response
 

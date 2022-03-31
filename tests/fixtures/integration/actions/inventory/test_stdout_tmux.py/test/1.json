@@ -3,11 +3,11 @@
     "index": 1,
     "comment": "inventory list without ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "_meta",
             "group03"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [

@@ -16,7 +16,7 @@
         "Rewriting Containerfile to capture collection requirements",
         "Running command:",
         "  docker build -f context/Dockerfile -t test_ee context",
-        "Sending build context to Docker daemon  4.096kB",
+        "Sending build context to Docker daemon   5.12kB",
         "Step 1/19 : ARG EE_BASE_IMAGE=quay.io/ansible/ansible-runner:latest",
         "Step 2/19 : ARG EE_BUILDER_IMAGE=quay.io/ansible/ansible-builder:latest",
         "Step 3/19 : FROM $EE_BASE_IMAGE as galaxy",
@@ -70,6 +70,6 @@
         "Successfully built d371b0950769",
         "Successfully tagged test_ee:latest",
         "Complete! The build context can be found at: /home/user/github/ansible-navigator/tests/fixtures/common/builder/test_ee/context",
-        "(py38) bash-5.1$"
+        "(venv) bash-5.1$"
     ]
 }

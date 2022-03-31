@@ -116,17 +116,15 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     :returns: The heading
     """
     if isinstance(obj, dict) and "task" in obj:
-        detail = f"PLAY [{obj['play']}:{obj['__number']}] "
-        stars = "*" * (screen_w - len(detail))
+        detail = f"Play name: {obj['play']}:{obj['__number']}"
 
         line_1 = CursesLine(
-            (CursesLinePart(column=0, string=detail + stars, color=0, decoration=0),),
+            (CursesLinePart(column=0, string=detail, color=0, decoration=0),),
         )
 
-        detail = f"TASK [{obj['task']}] "
-        stars = "*" * (screen_w - len(detail))
+        detail = f"Task name: {obj['task']}"
         line_2 = CursesLine(
-            (CursesLinePart(column=0, string=detail + stars, color=0, decoration=0),),
+            (CursesLinePart(column=0, string=detail, color=0, decoration=0),),
         )
 
         if obj["__changed"] is True:
@@ -141,7 +139,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
         else:
             msg = ""
 
-        string = f"{res}: [{obj['__host']}] {msg}"
+        string = f"{res}: {obj['__host']} {msg}"
         string = string + (" " * (screen_w - len(string) + 1))
         line_3 = CursesLine(
             (CursesLinePart(column=0, string=string, color=color, decoration=curses.A_UNDERLINE),),
@@ -683,7 +681,7 @@ class Action(ActionBase):
                     else:
                         result = runner_event
                     task["__task"] = task["task"]
-                    task["__result"] = result.upper()
+                    task["__result"] = result.capitalize()
                     task["__changed"] = task.get("res", {}).get("changed", False)
                     if isinstance(task["duration"], (int, float)):
                         task["__duration"] = human_time(seconds=round_half_up(task["duration"]))

@@ -17,7 +17,7 @@ def test_dictionary_complete() -> None:
     """Test the conversion of a string within a dictionary to a progress bar when complete."""
     test_data = {"progress": "100%", "other": "test value"}
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)
-    expected = {"progress": " COMPLETE ", "other": "test value", "_progress": "100%"}
+    expected = {"progress": " Complete ", "other": "test value", "_progress": "100%"}
     assert test_data == expected
 
 
@@ -58,6 +58,6 @@ def test_dataclass_complete() -> None:
     """Test the conversion of a string within a dataclass to a progress bar when not complete."""
     test_data = ContentTest(progress="100%")
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)
-    assert test_data.progress == " COMPLETE "
+    assert test_data.progress == " Complete "
     assert test_data._progress == "100%"  # pylint: disable=protected-access
     assert test_data.other == "test_value"

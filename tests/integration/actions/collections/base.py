@@ -73,7 +73,7 @@ base_steps = (
     UiTestStep(
         user_input=":0",
         comment="Browse ansible.builtin.add_host module",
-        present=["ANSIBLE.BUILTIN.ADD_HOST"],
+        present=["ansible.builtin.add_host"],
     ),
 )
 
@@ -139,7 +139,7 @@ class BaseClass:
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         elif step.search_within_response is SearchFor.WARNING:
-            search_within_response = "WARNING"
+            search_within_response = "Warning"
         else:
             raise ValueError("test mode not set")
 

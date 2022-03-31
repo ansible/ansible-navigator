@@ -3,10 +3,10 @@
     "index": 2,
     "comment": "inventory help with ee",
     "additional_information": {
-        "look_fors": [
+        "present": [
             "usage: ansible-inventory [-h]"
         ],
-        "look_nots": [],
+        "absent": [],
         "compared_fixture": false
     },
     "output": [
