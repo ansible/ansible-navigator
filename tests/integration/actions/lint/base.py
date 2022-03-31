@@ -9,7 +9,6 @@ from ....defaults import FIXTURES_DIR
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
