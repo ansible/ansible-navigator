@@ -1,5 +1,4 @@
-"""commonly used definitions
-"""
+"""Commonly used definitions."""
 
 from dataclasses import dataclass
 from typing import NamedTuple
@@ -9,7 +8,7 @@ from typing import Tuple
 
 
 class CursesLinePart(NamedTuple):
-    """One chunk of a line of text
+    """One chunk of a line of text.
 
     :param column: the column at which the text should start
     :param string: the text to be displayed
