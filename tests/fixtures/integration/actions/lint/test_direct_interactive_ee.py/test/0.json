@@ -1,0 +1,25 @@
+{
+    "name": "test[0-ansible-navigator lint /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint --ee True --ll debug --mode interactive-ansible-navigator lint top window]",
+    "index": 0,
+    "comment": "ansible-navigator lint top window",
+    "additional_information": {
+        "present": [
+            "All tasks should be named"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  Severity  Message                                                         Path                                                                                                                 Line",
+        "0│Critical  Commands should not change things if nothing needs doing.       /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/playbook.yml                              6",
+        "1│Critical  Commands should not change things if nothing needs doing.       /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml                  1",
+        "2│Major     Use fqcn for builtin actions.                                   /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/playbook.yml                              6",
+        "3│Major     All tasks should be named.                                      /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/playbook.yml                              6",
+        "4│Major     Use fqcn for builtin actions.                                   /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/roles/uh-huh/tasks/main.yml               1",
+        "5│Major     Use fqcn for builtin actions.                                   /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml                  1",
+        "6│Major     All tasks should be named.                                      /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml                  1",
+        "7│Major     Use fqcn for builtin actions.                                   /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml                  4",
+        "8│Major     All tasks should be named.                                      /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml                  4",
+        "^b/PgUp page up                    ^f/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                    Issues: 9"
+    ]
+}

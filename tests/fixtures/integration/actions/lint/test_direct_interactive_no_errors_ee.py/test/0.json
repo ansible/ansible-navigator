@@ -1,0 +1,19 @@
+{
+    "name": "test[0-ansible-navigator lint /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode interactive-ansible-navigator lint top window]",
+    "index": 0,
+    "comment": "ansible-navigator lint top window",
+    "additional_information": {
+        "present": [
+            "no lint issues"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "                                                                Success",
+        "                                                                ────────────────────────────────────────",
+        "                                                                Congratulations, no lint issues found!",
+        "                                                                ────────────────────────────────────────",
+        "                                                                                                   Ok"
+    ]
+}
