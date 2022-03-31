@@ -10,7 +10,8 @@
         "compared_fixture": false
     },
     "output": [
-        "REDHATINSIGHTS.INSIGHTS.COMPLIANCE: Install and configure Red Hat Insights Client",
+        "Image: redhatinsights.insights.compliance",
+        "Description: Install and configure Red Hat Insights Client",
         " 0│---",
         " 1│argument_specs: {}",
         " 2│argument_specs_path: ''",
@@ -60,6 +61,6 @@
         "46│  \\     tasks_from: run\\n```\"",
         "47│readme_path: /usr/share/ansible/collections/ansible_collections/redhatinsights/insights/roles/compliance/README.md",
         "48│short_name: compliance",
-        "^f/PgUp page up                                                   ^b/PgDn page down                                                   ↑↓ scroll                                                   esc back                                                   - previous                                                   + next                                                   [0-9] goto                                                   :help help"
+        "^b/PgUp page up                                                   ^f/PgDn page down                                                   ↑↓ scroll                                                   esc back                                                   - previous                                                   + next                                                   [0-9] goto                                                   :help help"
     ]
 }

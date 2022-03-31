@@ -10,16 +10,18 @@
         "compared_fixture": false
     },
     "output": [
-        "  NAME                                                                                              TAG           EXECUTION ENVIRONMENT                      CREATED                   SIZE",
-        "0│ansible-automation-platform-21-ee-29-rhel8                                                        latest                         True                      7 weeks ago               787 MB",
-        "1│ansible-automation-platform-21-ee-minimal-rhel8                                                   latest                         True                      6 weeks ago               399 MB",
-        "2│ansible-automation-platform-21-ee-supported-rhel8                                                 latest                         True                      3 weeks ago               1.18 GB",
-        "3│ansible-builder                                                                                   latest                        False                      6 weeks ago               781 MB",
-        "4│ansible-navigator-demo-ee                                                                         0.6.0                          True                      7 months ago              1.35 GB",
-        "5│creator-ee (primary)                                                                              v0.2.0                         True                      4 months ago              1.33 GB",
-        "6│ee-minimal-rhel8                                                                                  latest                         True                      2 months ago              399 MB",
-        "7│network_archive_ee                                                                                latest                         True                      6 weeks ago               484 MB",
-        "8│python-base                                                                                       latest                        False                      23 hours ago              546 MB",
-        "^f/PgUp page up                     ^b/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "   Image                                                                                             Tag           Execution environment                      Created                  Size",
+        " 0│ansible-automation-platform-21-ee-29-rhel8                                                        latest        True                                       2 months ago             787 MB",
+        " 1│ansible-automation-platform-21-ee-minimal-rhel8                                                   latest        True                                       7 weeks ago              399 MB",
+        " 2│ansible-automation-platform-21-ee-supported-rhel8                                                 latest        True                                       4 weeks ago              1.18 GB",
+        " 3│ansible-builder                                                                                   latest        False                                      7 weeks ago              781 MB",
+        " 4│ansible-execution-env                                                                             latest        True                                       4 hours ago              1.29 GB",
+        " 5│ansible-navigator-demo-ee                                                                         latest        True                                       7 months ago             1.35 GB",
+        " 6│creator-ee                                                                                        v0.4.0        True                                       6 days ago               2.34 GB",
+        " 7│ee-minimal-rhel8                                                                                  latest        True                                       2 months ago             399 MB",
+        " 8│ee-supported-rhel8                                                                                latest        True                                       7 days ago               1.17 GB",
+        " 9│network_archive_ee                                                                                latest        True                                       7 weeks ago              484 MB",
+        "10│python-base                                                                                       latest        False                                      5 days ago               546 MB",
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

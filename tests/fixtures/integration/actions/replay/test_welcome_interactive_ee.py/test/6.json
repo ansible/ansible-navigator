@@ -3,9 +3,9 @@
     "index": 6,
     "comment": "Return to task list",
     "output": [
-        "  RESULT                 HOST                             NUMBER                  CHANGED                    TASK                TASK ACTION                             DURATION",
-        "0│OK                     localhost                             0                    False                    debug               debug                                         0s",
-        "1│OK                     localhost                             1                    False                    debug               debug                                         0s",
-        "^f/PgUp page up                    ^b/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                   SUCCESSFUL"
+        "  Result                 Host                             Number                  Changed                    Task                Task action                             Duration",
+        "0│OK                     localhost                             0                  False                      debug               debug                                         0s",
+        "1│OK                     localhost                             1                  False                      debug               debug                                         0s",
+        "^b/PgUp page up                    ^f/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                   Successful"
     ]
 }

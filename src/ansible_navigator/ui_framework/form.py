@@ -305,7 +305,7 @@ class FormPresenter(CursesWindow):
         return [cl_prompt, cl_default, cl_separator]
 
     def _generate_title(self) -> CursesLine:
-        line_part = CursesLinePart(0, self._form.title.upper(), self._form.title_color, 0)
+        line_part = CursesLinePart(0, self._form.title.capitalize(), self._form.title_color, 0)
         return CursesLine((line_part,))
 
     def present(self) -> Form:

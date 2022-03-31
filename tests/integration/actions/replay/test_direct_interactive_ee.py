@@ -9,7 +9,7 @@ from .base import BaseClass
 CLI = "ansible-navigator" f" replay {PLAYBOOK_ARTIFACT}" " --execution-environment true --ll debug"
 
 testdata = [
-    (0, CLI, "run top window", ["COMPLETE", "SUCCESSFUL"]),
+    (0, CLI, "run top window", ["Complete", "Successful"]),
     (1, ":0", "Task list", ":help help"),
     (2, ":0", "Task 1", ":help help"),
     (3, ":stdout", "Check stdout", ":help help"),

@@ -187,7 +187,7 @@ class SettingsEntry:
             prefix = f"{name} must be one of"
 
         source = self.value.source.value
-        msg = f"{prefix} {choices_str}, but set as {current} in {source}"
+        msg = f"{prefix} {choices_str}, but set as '{current}' in {source}"
         return msg
 
     @property

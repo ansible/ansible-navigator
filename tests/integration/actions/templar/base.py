@@ -46,9 +46,9 @@ base_steps = (
     UiTestStep(user_input=":back", comment="show task"),
     UiTestStep(
         user_input=":open {{ task_path }}",
-        comment="goto vi",
-        search_within_response="name: run integration test play-1",
-        present=["name: run integration test play-1"],
+        comment="goto vi, look for localhost since it is not in the task",
+        search_within_response="hosts: localhost",
+        present=["hosts: localhost"],
     ),
     UiTestStep(user_input=":q!", comment="exit vi"),
 )
@@ -89,7 +89,7 @@ class BaseClass:
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         elif step.search_within_response is SearchFor.WARNING:
-            search_within_response = "WARNING"
+            search_within_response = "Warning"
         else:
             search_within_response = step.search_within_response
 

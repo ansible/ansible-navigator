@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:inventory -i /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
+    "name": "test[1-:inventory -i /tests/fixtures/integration/actions/inventory/ansible_inventory/inventory.yml-ansible-navigator inventory command top window]",
     "index": 1,
     "comment": "ansible-navigator inventory command top window",
     "additional_information": {
@@ -8,9 +8,9 @@
         "compared_fixture": true
     },
     "output": [
-        "  TITLE                                                                                                DESCRIPTION",
+        "  Title                                                                                                Description",
         "0│Browse groups                                                                                        Explore each inventory group and group members members",
         "1│Browse hosts                                                                                         Explore the inventory with a list of all hosts",
-        "^f/PgUp page up                                                                       ^b/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
+        "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

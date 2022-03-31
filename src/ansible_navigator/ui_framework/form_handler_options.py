@@ -38,7 +38,7 @@ class FormHandlerOptions(CursesWindow):
             clp_option_code = CursesLinePart(0, option_code, color, 0)
             if self._ui_config.color is False:
                 if idx == active:
-                    text = f"[{option.text.upper()}]"
+                    text = f"[{option.text.capitalize()}]"
                 else:
                     text = option.text + "  "  # clear the []
             else:

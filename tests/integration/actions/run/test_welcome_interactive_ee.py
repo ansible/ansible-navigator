@@ -20,7 +20,7 @@ initial_steps = (
     UiTestStep(
         user_input=cmdline,
         comment="ansible-navigator run playbook",
-        search_within_response=["COMPLETE", "SUCCESSFUL"],
+        search_within_response=["Complete", "Successful"],
     ),
 )
 

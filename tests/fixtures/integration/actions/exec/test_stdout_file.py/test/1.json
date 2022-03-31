@@ -11,6 +11,6 @@
     },
     "output": [
         "$PATH",
-        "(py38) bash-5.1$"
+        "(venv) bash-5.1$"
     ]
 }

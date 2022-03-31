@@ -170,7 +170,7 @@
         "                    \"properties\": {",
         "                        \"effective\": {",
         "                            \"default\": false,",
-        "                            \"description\": \"Show the effective settings. Defaults, CLI paramters, environment variables, and the settings file will be combined\",",
+        "                            \"description\": \"Show the effective settings. Defaults, CLI parameters, environment variables, and the settings file will be combined\",",
         "                            \"type\": \"boolean\"",
         "                        },",
         "                        \"sample\": {",

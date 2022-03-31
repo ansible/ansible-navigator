@@ -152,7 +152,7 @@
         "#     # Specify the name for artifacts created from completed playbooks",
         "#     save-as: \"{playbook_dir}/{playbook_name}-artifact-{time_stamp}.json\"",
         "#   settings:",
-        "#     # Show the effective settings. Defaults, CLI paramters, environment",
+        "#     # Show the effective settings. Defaults, CLI parameters, environment",
         "#     # variables, and the settings file will be combined",
         "#     effective: False",
         "#     # Generate a sample settings file.",

@@ -10,9 +10,9 @@
         "compared_fixture": false
     },
     "output": [
-        "PLAY [Simple unicode output test:1] ********************************************************************************************************************************************************************",
-        "TASK [Debug the output] ********************************************************************************************************************************************************************************",
-        "OK: [localhost]",
+        "Play name: Simple unicode output test:1",
+        "Task name: Debug the output",
+        "Ok: localhost",
         " 0│---",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -35,12 +35,12 @@
         "19│    stdout: |-",
         "20│      航海家",
         "21│    stdout_lines:",
-        "22│    - 航海家",
+        "22│    - 航海",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "24│task: Debug the output",
         "25│task_action: debug",
         "26│task_args: ''",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "^f/PgUp page up             ^b/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            SUCCESSFUL"
+        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Successful"
     ]
 }
