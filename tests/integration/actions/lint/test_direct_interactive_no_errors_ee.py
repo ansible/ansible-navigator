@@ -25,7 +25,7 @@ steps = (
         user_input=CLI,
         comment="ansible-navigator lint top window",
         present=["no lint issues"],
-        search_within_response="SUCCESS",
+        search_within_response="Success",
     ),
 )
 
@@ -34,6 +34,6 @@ steps = add_indices(steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for images from CLI, interactive, with an EE."""
+    """Run the tests for lint from CLI, interactive, with an EE."""
 
     UPDATE_FIXTURES = False
