@@ -209,6 +209,6 @@ $ ansible-navigator exec -- ansible --version | head -n 1 | awk -F '\\[|\\]|\\s'
 
 ### Why did I get an error about `/dev/mqueue` missing?
 
-Although the `/dev/mqueue` directory is not used by ansible-navigator, it is currently required when using podman. Not all operating systems have a `/dev/mqueue` directory by default.
+Although the `/dev/mqueue` directory is not used by `ansible-navigator`, it is currently required when using `podman`. Not all operating systems have a `/dev/mqueue` directory by default.
 
 Please reference the documentation for your operating system related to POSIX message queues, or simply create the directory.
