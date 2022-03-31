@@ -11,7 +11,14 @@ from .base import LINT_FIXTURES
 from .base import BaseClass
 
 
-CLI = Command(subcommand="lint", cmdline=os.path.join(LINT_FIXTURES, "no_errors",), execution_environment=True).join()
+CLI = Command(
+    subcommand="lint",
+    cmdline=os.path.join(
+        LINT_FIXTURES,
+        "no_errors",
+    ),
+    execution_environment=True,
+).join()
 
 steps = (
     UiTestStep(
