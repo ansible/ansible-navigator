@@ -1,0 +1,21 @@
+{
+    "name": "test[0-ansible-navigator lint /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode interactive-ansible-navigator lint top window]",
+    "index": 0,
+    "comment": "ansible-navigator lint top window",
+    "additional_information": {
+        "present": [
+            "no lint issues"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "******** ERROR: TMUX 'RESPONSE' TIMEOUT @ {elapsed}s @ {time_stamp} ********",
+        "******** Captured to: ./.test_logs/tests/integration/actions/lint/test_direct_interactive_no_errors_ee.py/showing_timeout.txt",
+        "                                                                Success",
+        "                                                                ────────────────────────────────────────",
+        "                                                                Congratulations, no lint issues found!",
+        "                                                                ────────────────────────────────────────",
+        "                                                                                                   Ok"
+    ]
+}

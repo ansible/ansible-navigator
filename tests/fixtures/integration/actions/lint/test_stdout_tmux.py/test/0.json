@@ -1,0 +1,27 @@
+{
+    "name": "test[lint stdout with errors  clear && cd /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/.. ;  ansible-navigator lint /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint --ee True --ll debug --mode stdout]",
+    "index": 0,
+    "comment": "lint stdout with errors",
+    "additional_information": {
+        "present": [
+            "Commands should not change things"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "fqcn-builtins: Use FQCN for builtin actions.",
+        "lint/borked/roles/uh-huh/tasks/main.yml:1 Task/Handler: demo",
+        "fqcn-builtins: Use FQCN for builtin actions.",
+        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command  echo 'oh no, no name'",
+        "no-changed-when: Commands should not change things if nothing needs doing.",
+        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command  echo 'oh no, no name'",
+        "unnamed-task: All tasks should be named.",
+        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command  echo 'oh no, no name'",
+        "fqcn-builtins: Use FQCN for builtin actions.",
+        "lint/borked/roles/yep/tasks/main.yml:4 Task/Handler: debug msg=boo!",
+        "unnamed-task: All tasks should be named.",
+        "lint/borked/roles/yep/tasks/main.yml:4 Task/Handler: debug msg=boo!",
+        "(py310) bash-5.1$"
+    ]
+}

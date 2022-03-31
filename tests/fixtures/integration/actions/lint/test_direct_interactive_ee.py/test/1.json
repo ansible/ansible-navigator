@@ -1,0 +1,33 @@
+{
+    "name": "test[1-:2-lint result content page]",
+    "index": 1,
+    "comment": "lint result content page",
+    "additional_information": {
+        "present": [
+            "issue_path:"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "Message: [fqcn-builtins] Use FQCN for builtin actions.",
+        "Location: /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/playbook.yml:6",
+        " 0│---",
+        " 1│categories:",
+        " 2│- formatting",
+        " 3│check_name: '[fqcn-builtins] Use FQCN for builtin actions.'",
+        " 4│content:",
+        " 5│  body: 'Task/Handler: command  echo ''nameless task oh no!'''",
+        " 6│description: Check whether the long version starting with ``ansible.builtin`` is used",
+        " 7│  in the playbook",
+        " 8│issue_path: /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/borked/playbook.yml:6",
+        " 9│last_modified: '2022-03-24T16:28:16.394109+00:00'",
+        "10│location:",
+        "11│  lines:",
+        "12│    begin: 6",
+        "13│  path: tests/fixtures/integration/actions/lint/borked/playbook.yml",
+        "14│severity: major",
+        "15│type: issue",
+        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help             Issues: 9"
+    ]
+}

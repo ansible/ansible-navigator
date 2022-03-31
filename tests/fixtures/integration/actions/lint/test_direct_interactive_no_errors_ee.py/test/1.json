@@ -1,0 +1,13 @@
+{
+    "name": "test[1--close the dialog]",
+    "index": 1,
+    "comment": "close the dialog",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "******** PREVIOUS TEST FAILURE ********"
+    ]
+}
