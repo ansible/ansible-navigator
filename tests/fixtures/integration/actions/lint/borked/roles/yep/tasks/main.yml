@@ -1,0 +1,3 @@
+- command: echo 'oh no, no name'
+
+- debug: msg="boo!"
