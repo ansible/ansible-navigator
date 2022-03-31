@@ -53,7 +53,7 @@ RESULT_TO_COLOR = [
     ("(?i)^ok$", 10),
     ("(?i)^ignored$", 13),
     ("(?i)^skipped$", 14),
-    ("(?i)^in_progress$", 8),
+    ("(?i)^in progress$", 8),
 ]
 
 get_color = lambda word: next(  # noqa: E731
@@ -93,7 +93,7 @@ def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, i
             decoration = curses.A_BOLD
 
     elif "task" in entry:
-        if entry["__result"].lower() == "__in_progress":
+        if entry["__result"].lower() == "in progress":
             color = get_color(entry["__result"])
         elif colname in ["__result", "__host", "__number", "__task", "__task_action"]:
             color = get_color(entry["__result"])
@@ -166,7 +166,7 @@ PLAY_COLUMNS = [
     "__failed",
     "__skipped",
     "__ignored",
-    "__in_progress",
+    "__in progress",
     "__task_count",
     "__progress",
 ]
@@ -704,9 +704,9 @@ class Action(ActionBase):
 
                 elif runner_event == "start":
                     task["__host"] = task["host"]
-                    task["__result"] = "IN_PROGRESS"
+                    task["__result"] = "In progress"
                     task["__changed"] = "unknown"
-                    task["__duration"] = None
+                    task["__duration"] = "Pending"
                     task["__number"] = len(self._plays.value[play_id]["tasks"])
                     task["__task"] = task["task"]
                     task["__task_action"] = task["task_action"]
@@ -715,7 +715,7 @@ class Action(ActionBase):
     def _play_stats(self) -> None:
         """Calculate the play's stats based on it's tasks."""
         for idx, play in enumerate(self._plays.value):
-            total = ["__ok", "__skipped", "__failed", "__unreachable", "__ignored", "__in_progress"]
+            total = ["__ok", "__skipped", "__failed", "__unreachable", "__ignored", "__in progress"]
             self._plays.value[idx].update(
                 {
                     tot: len([t for t in play["tasks"] if t["__result"].lower() == tot[2:]])
@@ -727,7 +727,7 @@ class Action(ActionBase):
             )
             task_count = len(play["tasks"])
             self._plays.value[idx]["__task_count"] = task_count
-            completed = task_count - self._plays.value[idx]["__in_progress"]
+            completed = task_count - self._plays.value[idx]["__in progress"]
             if completed:
                 new = floor((completed / task_count * 100))
                 current = self._plays.value[idx].get("__percent_complete", 0)
