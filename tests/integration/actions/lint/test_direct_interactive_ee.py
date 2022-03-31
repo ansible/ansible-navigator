@@ -35,6 +35,6 @@ steps = add_indices(steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id)
 class Test(BaseClass):
-    """Run the tests for images from CLI, interactive, with an EE."""
+    """Run the tests for lint from CLI, interactive, with an EE."""
 
     UPDATE_FIXTURES = False

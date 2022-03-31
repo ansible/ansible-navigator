@@ -21,7 +21,7 @@ LINT_FIXTURES = os.path.join(
 
 
 class BaseClass:
-    """Base class for interactive images tests."""
+    """Base class for interactive lint tests."""
 
     UPDATE_FIXTURES = False
 
