@@ -1,0 +1,6 @@
+- hosts: localhost
+  roles:
+    - yep
+    - uh-huh
+  tasks:
+    - command: echo 'nameless task oh no!'

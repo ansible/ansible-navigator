@@ -1,0 +1,5 @@
+---
+- name: A properly named task
+  ansible.builtin.assert:
+    that:
+      - true
