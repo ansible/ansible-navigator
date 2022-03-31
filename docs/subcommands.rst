@@ -24,6 +24,12 @@ Some ansible-navigator commands map to ansible commands. The table below provide
   * - ansible command
     - ansible-navigator command
     - ansible-navigator colon command
+  * - ``ansible``
+    - ``ansible-navigator exec -- ansible``
+    - N/A
+  * - ``ansible-builder``
+    - ``ansible-navigator builder``
+    - N/A
   * - ``ansible-config``
     - ``ansible-navigator config``
     - ``:config``
@@ -33,6 +39,18 @@ Some ansible-navigator commands map to ansible commands. The table below provide
   * - ``ansible-inventory``
     - ``ansible-navigator inventory``
     - ``:inventory``
+  * - ``ansible-galaxy``
+    - ``ansible-navigator exec -- ansible-galaxy ...``
+    - N/A
+  * - ``ansible-lint``
+    - ``ansible-navigator lint``
+    - ``:lint``
   * - ``ansible-playbook``
     - ``ansible-navigator run``
     - ``:run``
+  * - ``ansible-test``
+    - ``ansible-navigator exec -- ansible-test ...``
+    - N/A
+  * - ``ansible-vault``
+    - ``ansible-navigator exec -- ansible-vault ...``
+    - N/A
