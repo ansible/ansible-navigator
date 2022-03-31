@@ -36,15 +36,15 @@ Some ansible-navigator commands map to ansible commands. The table below provide
   * - ``ansible-config``
     - ``ansible-navigator config``
     - ``:config``
-    - 
+    -
   * - ``ansible-doc``
     - ``ansible-navigator doc``
     - ``:doc``
-    - 
+    -
   * - ``ansible-inventory``
     - ``ansible-navigator inventory``
     - ``:inventory``
-    - 
+    -
   * - ``ansible-galaxy``
     - ``ansible-navigator exec -- ansible-galaxy ...``
     - N/A
@@ -56,7 +56,7 @@ Some ansible-navigator commands map to ansible commands. The table below provide
   * - ``ansible-playbook``
     - ``ansible-navigator run``
     - ``:run``
-    - 
+    -
   * - ``ansible-test``
     - ``ansible-navigator exec -- ansible-test ...``
     - N/A
@@ -65,4 +65,3 @@ Some ansible-navigator commands map to ansible commands. The table below provide
     - ``ansible-navigator exec -- ansible-vault ...``
     - N/A
     -  The ``exec`` subcommand requires execution environment support.
-
