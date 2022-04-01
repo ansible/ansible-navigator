@@ -1,4 +1,4 @@
-"""Object defintions related to utils."""
+"""Object definitions related to utils."""
 
 import logging
 import textwrap
