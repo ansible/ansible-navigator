@@ -1,5 +1,4 @@
-"""Get one line of text input
-"""
+"""Get one line of text input."""
 import curses
 
 from curses import ascii as curses_ascii
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class FormHandlerButton(CursesWindow):
-    """handle form button"""
+    """Handle form button."""
 
     def __init__(self, screen, ui_config):
         """Initialize the handler for a form button.
@@ -30,7 +29,7 @@ class FormHandlerButton(CursesWindow):
         self._screen = screen
 
     def populate(self):
-        """populate the window with the button"""
+        """Populate the window with the button."""
         if self._form_field.disabled is True:
             color = 8
         else:
@@ -45,7 +44,12 @@ class FormHandlerButton(CursesWindow):
         self._add_line(self.win, 0, ([clp_button]))
 
     def handle(self, idx, form_fields: List) -> Tuple["FieldButton", int]:
-        """handle the check box field"""
+        """Handle the check box field.
+
+        :param form_fields: List of fields
+        :param idx: Index to retrieve specific field
+        :returns: Field and input from said field
+        """
         self._form_fields = form_fields
         self._form_field = form_fields[idx]
         self.populate()
