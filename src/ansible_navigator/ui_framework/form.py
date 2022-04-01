@@ -15,6 +15,7 @@ from .curses_defs import CursesLines
 from .curses_window import CursesWindow
 from .field_button import FieldButton
 from .field_checks import FieldChecks
+from .field_curses_information import FieldCursesInformation
 from .field_information import FieldInformation
 from .field_radio import FieldRadio
 from .field_text import FieldText
@@ -35,7 +36,7 @@ class Form:
     cancelled: bool = False
     fields: List = field(default_factory=list)
     submitted: bool = False
-    title = ""
+    title: str = ""
     title_color: int = 0
 
     _dict: Dict = field(default_factory=dict)
@@ -140,7 +141,7 @@ class FormPresenter(CursesWindow):
 
         height = 2  # title + horizontal line
         for form_field in self._form.fields:
-            if isinstance(form_field, FieldInformation):
+            if isinstance(form_field, (FieldCursesInformation, FieldInformation)):
                 height += len(form_field.information)
             if isinstance(form_field, (FieldWorking)):
                 height += len(form_field.messages)
@@ -168,7 +169,13 @@ class FormPresenter(CursesWindow):
 
             # pylint: disable=not-an-iterable
             # https://github.com/PyCQA/pylint/issues/2296
-            if isinstance(form_field, FieldInformation):
+
+            if isinstance(form_field, (FieldCursesInformation)):
+                for line in form_field.information:
+                    lines.append((self._line_number, line))
+                    self._line_number += 1
+
+            elif isinstance(form_field, FieldInformation):
                 information_lines = self._generate_information(form_field)
                 for line in information_lines:
                     lines.append((self._line_number, line))
@@ -305,7 +312,10 @@ class FormPresenter(CursesWindow):
         return [cl_prompt, cl_default, cl_separator]
 
     def _generate_title(self) -> CursesLine:
-        line_part = CursesLinePart(0, self._form.title.capitalize(), self._form.title_color, 0)
+        title = self._form.title
+        if title.isupper() or not title[0].isupper():
+            title = title.capitalize()
+        line_part = CursesLinePart(0, title, self._form.title_color, 0)
         return CursesLine((line_part,))
 
     def present(self) -> Form:

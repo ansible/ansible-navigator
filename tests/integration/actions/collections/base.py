@@ -47,7 +47,7 @@ base_steps = (
     UiTestStep(
         user_input=":collections --ee FFFFF",
         comment="Provide an invalid ee value",
-        present=["Errors were encountered while parsing the last command"],
+        present=["Issues were found when applying the settings"],
         search_within_response=SearchFor.WARNING,
     ),
     # Dismiss the warning
