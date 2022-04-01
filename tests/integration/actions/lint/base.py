@@ -1,7 +1,9 @@
-"""Base class for lint interactive tests.
-"""
+"""Base class for lint interactive tests."""
 import difflib
 import os
+
+from typing import List
+from typing import Union
 
 import pytest
 
@@ -9,6 +11,7 @@ from ....defaults import FIXTURES_DIR
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
+from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
@@ -27,17 +30,26 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request):
-        """tmux fixture for this module"""
+    def fixture_tmux_session(request: pytest.FixtureRequest):
+        """Tmux fixture for this module.
+
+        :param request: Pytest request object
+        :yields: TmuxSession object
+        """
         params = {
             "unique_test_id": request.node.nodeid,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_session, step):
-        """Run the tests for lint, mode and ``ee`` set in child class."""
+    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep):
+        """Run the tests for lint, mode and ``ee`` set in child class.
 
+        :param request: Pytest request object
+        :param tmux_session: TmuxSession fixture
+        :param step: UiTestStep object
+        """
+        search_within_response: Union[str, List[str]]
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
