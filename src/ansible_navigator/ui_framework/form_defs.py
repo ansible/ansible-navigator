@@ -12,7 +12,7 @@ FieldValidationStates = List[FieldValidationState]
 
 
 class FormType(Enum):
-    """Used indicate the form type."""
+    """Indicates the form type."""
 
     FORM = "A full input form"
     NOTIFICATION = "A text box with a dismiss button"
