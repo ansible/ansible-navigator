@@ -79,14 +79,11 @@ per-file-ignores =
   src/ansible_navigator/ui_framework/field_radio.py: D200, D204, D205, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/field_text.py: D200, D204, D205, D400, D401, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/field_working.py: D200, D204, D205, D400, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/form_defs.py: D200, D400
-  src/ansible_navigator/ui_framework/form_handler_button.py: D200, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/form_handler_information.py: D200, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/form_handler_options.py: D200, D201, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/form_handler_text.py: D200, D205, D300, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/form_handler_working.py: D205, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/form_utils.py: D200, D205, D400, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/form.py: D200, D205, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/menu_builder.py: D200, D400, D401, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/sentinels.py: D102, D105, D205, D400
   src/ansible_navigator/ui_framework/ui.py: D200, D202, D205, D211, D400, D403, DAR101, DAR201, DAR401

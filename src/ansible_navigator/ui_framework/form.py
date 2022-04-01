@@ -1,4 +1,5 @@
 """Form definition and form rendering."""
+
 import curses
 
 from curses import ascii as curses_ascii
@@ -28,9 +29,7 @@ from .validators import FormValidators
 
 @dataclass
 class Form:
-    """simple abstraction to hold the fields of the form
-    and a convenience method to present it
-    """
+    """Simple abstraction to hold the fields of the form and a convenience method to present it."""
 
     type: FormType
     cancelled: bool = False
@@ -42,7 +41,12 @@ class Form:
     _dict: Dict = field(default_factory=dict)
 
     def present(self, screen, ui_config):
-        """present the form the to user and return the results"""
+        """Present the form the to user and return the results.
+
+        :returns: Results from the form
+        :param screen: A curses window
+        :param ui_config: The current user interface configuration
+        """
         if self.type is FormType.FORM:
             self.fields.append(
                 FieldButton(
@@ -86,7 +90,7 @@ BUTTON_SPACE = 10
 
 
 class FormPresenter(CursesWindow):
-    """present the form to the user"""
+    """Present the form to the user."""
 
     # pylint: disable=too-many-instance-attributes
     def __init__(self, form, screen, ui_config):
@@ -319,7 +323,10 @@ class FormPresenter(CursesWindow):
         return CursesLine((line_part,))
 
     def present(self) -> Form:
-        """present the form to the user"""
+        """Present the form to the user.
+
+        :returns: Form to be shown to the user
+        """
         self._screen.clear()
         self._screen.refresh()
         idx = 0
