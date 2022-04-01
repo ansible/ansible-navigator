@@ -4,7 +4,7 @@
     "comment": "Provide an invalid ee value",
     "additional_information": {
         "present": [
-            "Issues were found when applying the settings"
+            "Issues were found while applying the settings"
         ],
         "absent": [],
         "compared_fixture": false
