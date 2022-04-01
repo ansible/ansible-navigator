@@ -1,5 +1,4 @@
-"""common form definitions
-"""
+"""Common form definitions."""
 
 from enum import Enum
 from typing import List
@@ -13,7 +12,7 @@ FieldValidationStates = List[FieldValidationState]
 
 
 class FormType(Enum):
-    """used indicate the form type"""
+    """Used indicate the form type."""
 
     FORM = "A full input form"
     NOTIFICATION = "A text box with a dismiss button"
