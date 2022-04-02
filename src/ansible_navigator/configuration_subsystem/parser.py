@@ -66,9 +66,6 @@ class Parser:
             if entry.cli_parameters.const is not None:
                 kwargs["const"] = entry.cli_parameters.const
 
-        if entry.cli_parameters.action not in ("store_true", "store_false"):
-            kwargs["metavar"] = ""
-
         if entry.cli_parameters.action is not None:
             kwargs["action"] = entry.cli_parameters.action
 
