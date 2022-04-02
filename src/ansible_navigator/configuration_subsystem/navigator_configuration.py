@@ -243,7 +243,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="config",
-            cli_parameters=CliParameters(short="-c", metavar="CONFIG_FILE"),
+            cli_parameters=CliParameters(short="-c"),
             environment_variable_override="ansible_config",
             settings_file_path_override="ansible.config.path",
             short_description="Specify the path to the ansible configuration file",
@@ -425,7 +425,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="lint_config",
-            cli_parameters=CliParameters(short="--lic", metavar="LINT_CONFIG_FILE"),
+            cli_parameters=CliParameters(short="--lic"),
             environment_variable_override="ansible_lint_config",
             settings_file_path_override="ansible-lint.config",
             short_description="Specify the path to the ansible-lint configuration file",
@@ -597,6 +597,7 @@ NavigatorConfiguration = ApplicationConfiguration(
                 "Show the effective settings. Defaults, CLI parameters, environment variables,"
                 " and the settings file will be combined"
             ),
+            subcommands=["settings"],
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
@@ -608,6 +609,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             ),
             settings_file_path_override="settings.sample",
             short_description=("Generate a sample settings file."),
+            subcommands=["settings"],
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
@@ -635,6 +637,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             ),
             settings_file_path_override="settings.sources",
             short_description=("Show the source of each current settings entry."),
+            subcommands=["settings"],
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(

@@ -1,13 +1,14 @@
 """Build the argument parser."""
 
+
 from argparse import SUPPRESS
 from argparse import ArgumentParser
+from argparse import HelpFormatter
 from argparse import _SubParsersAction
 from typing import Any
 from typing import Dict
 from typing import Tuple
 
-from ..utils.functions import oxfordcomma
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 
@@ -21,9 +22,15 @@ class Parser:
         :param config: The current settings for the application
         """
         self._config = config
-        self._base_parser = ArgumentParser(add_help=False)
+        self._base_parser = ArgumentParser(
+            add_help=False,
+        )
         self._configure_base()
-        self.parser = ArgumentParser(parents=[self._base_parser])
+        self.parser = ArgumentParser(
+            parents=[self._base_parser],
+            formatter_class=CustomHelpFormatter,
+            add_help=False,
+        )
         self._subparsers = self._add_subcommand_holder()
         self._configure_subparsers()
 
@@ -38,9 +45,9 @@ class Parser:
         help_strings = [entry.short_description]
         if entry.choices:
             lower_choices = (str(choice).lower() for choice in entry.choices)
-            help_strings.append(f"(choices: {oxfordcomma(lower_choices, 'or')})")
+            help_strings.append(f"({'|'.join(lower_choices)})")
         if entry.value.default is not C.NOT_SET:
-            help_strings.append(f"(default: '{str(entry.value.default).lower()}')")
+            help_strings.append(f"(default '{str(entry.value.default).lower()}')")
         kwargs["help"] = " ".join(help_strings)
 
         kwargs["default"] = SUPPRESS
@@ -59,23 +66,33 @@ class Parser:
             if entry.cli_parameters.const is not None:
                 kwargs["const"] = entry.cli_parameters.const
 
-        if entry.cli_parameters.metavar is not None:
-            kwargs["metavar"] = entry.cli_parameters.metavar
+        if entry.cli_parameters.action not in ("store_true", "store_false"):
+            kwargs["metavar"] = ""
 
         if entry.cli_parameters.action is not None:
             kwargs["action"] = entry.cli_parameters.action
 
         return entry.cli_parameters.short, long, kwargs
 
-    def _add_parser(self, parser, entry) -> None:
+    def _add_parser(self, group, entry) -> None:
+        """Add a parser to the subparsers.
+
+        :param group: The group to add the parser to
+        :param entry: The entry to add
+        """
         if entry.cli_parameters:
             short, long, kwargs = self.generate_argument(entry)
             if not all((short, long)):
-                parser.add_argument(entry.name, **kwargs)
+                group.add_argument(entry.name, **kwargs)
             else:
-                parser.add_argument(short, long, **kwargs)
+                group.add_argument(short, long, **kwargs)
 
     def _add_subcommand_holder(self) -> _SubParsersAction:
+        """Add the subparsers holder.
+
+        :raises ValueError: if zero or more than one subcommand is found
+        :returns: The subparsers action
+        """
         subcommand_value = [
             entry for entry in self._config.entries if entry.subcommand_value is True
         ]
@@ -91,21 +108,33 @@ class Parser:
         )
 
     def _configure_base(self) -> None:
+        """Configure the base parser."""
+        group = self._base_parser.add_argument_group("Options (global)")
+        group.add_argument(
+            "-h",
+            "--help",
+            action="help",
+            default=SUPPRESS,
+            help="Show this help message and exit",
+        )
+
         if isinstance(self._config.application_version, C):
             version = self._config.application_version.value
         else:
             version = self._config.application_version
-        self._base_parser.add_argument(
+        group.add_argument(
             "--version",
             action="version",
+            help="Show the application version and exit",
             version="%(prog)s " + version,
         )
 
         for entry in self._config.entries:
             if entry.subcommands is C.ALL:
-                self._add_parser(self._base_parser, entry)
+                self._add_parser(group=group, entry=entry)
 
     def _configure_subparsers(self) -> None:
+        """Configure the subparsers."""
         for subcommand in self._config.subcommands:
             parser = self._subparsers.add_parser(
                 subcommand.name,
@@ -113,7 +142,63 @@ class Parser:
                 help=subcommand.description,
                 description=f"{subcommand.name}: {subcommand.description}",
                 parents=[self._base_parser],
+                formatter_class=CustomHelpFormatter,
+                add_help=False,
             )
+            group = parser.add_argument_group(f"Options ({subcommand.name} subcommand)")
             for entry in self._config.entries:
                 if isinstance(entry.subcommands, list) and subcommand.name in entry.subcommands:
-                    self._add_parser(parser, entry)
+                    self._add_parser(group=group, entry=entry)
+
+
+class CustomHelpFormatter(HelpFormatter):
+    """A custom help formatter."""
+
+    def __init__(self, prog):
+        """Initialize the help formatter.
+
+        :param prog: The program name
+        """
+        long_string = "--rac  --ansible-runner-rotate-artifacts-count"
+        # 3 here accounts for the spaces in the ljust(6) below
+        HelpFormatter.__init__(
+            self,
+            prog=prog,
+            indent_increment=1,
+            max_help_position=len(long_string) + 3,
+        )
+
+    def _format_action_invocation(self, action):
+        """Format the action invocation.
+
+        :param action: The action to format
+        :raises ValueError: If more than 2 options are given
+        :returns: The formatted action invocation
+        """
+        if not action.option_strings:
+            default = self._get_default_metavar_for_positional(action)
+            (metavar,) = self._metavar_formatter(action, default)(1)
+            return metavar
+
+        if len(action.option_strings) == 1:
+            return action.option_strings[0]
+
+        if len(action.option_strings) == 2:
+            # Account for a --1234 --long-option-name
+            return f"{action.option_strings[0].ljust(6)} {action.option_strings[1]}"
+
+        raise ValueError("Too many option strings")
+
+    def _format_usage(self, usage, actions, groups, prefix):
+        """Format the usage.
+
+        :param usage: The usage
+        :param actions: The actions
+        :param groups: The groups
+        :param prefix: The prefix
+        :returns: The formatted usage
+        """
+        if prefix is None:
+            prefix = "Usage:"
+        options = "[options]" if actions else ""
+        return " ".join((prefix, self._prog, options)) + "\n\n"
