@@ -107,6 +107,7 @@ nitpick_ignore = [
     ("py:class", "_Rule"),
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse._SubParsersAction"),
+    ("py:class", "argparse.HelpFormatter"),
     ("py:class", "Captures"),
     ("py:class", "CompiledRegsetRule"),
     ("py:class", "CompiledRule"),
