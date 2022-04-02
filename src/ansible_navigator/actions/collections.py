@@ -573,6 +573,11 @@ class Action(ActionBase):
 
             plugin = loaded.get("plugin")
             plugin_docs = {}
+            plugin_path = os.path.join(
+                selected_collection.get("path", ""),
+                plugin_info.get("path", ""),
+            )
+            plugin_docs["path"] = plugin_path
             if plugin and plugin["doc"] is not None:
                 if "name" in plugin["doc"]:
                     short_name = plugin["doc"]["name"]
