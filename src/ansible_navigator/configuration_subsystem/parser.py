@@ -42,8 +42,11 @@ class Parser:
         if entry.choices:
             lower_choices = (str(choice).lower() for choice in entry.choices)
             help_strings.append(f"({'|'.join(lower_choices)})")
-        if entry.value.default is not C.NOT_SET:
-            help_strings.append(f"(default '{str(entry.value.default).lower()}')")
+
+        has_default = entry.value.default is not C.NOT_SET
+        not_store = entry.cli_parameters.action not in ("store_true", "store_false")
+        if has_default and not_store:
+            help_strings.append(f"(default: {str(entry.value.default).lower()})")
         kwargs["help"] = " ".join(help_strings)
 
         kwargs["default"] = SUPPRESS
@@ -191,7 +194,6 @@ class CustomHelpFormatter(HelpFormatter):
         :param prefix: The prefix
         :returns: The formatted usage
         """
-        if prefix is None:
-            prefix = "Usage:"
+        prefix = "Usage:" if prefix is None else ""
         options = "[options]" if actions else ""
-        return " ".join((prefix, self._prog, options)) + "\n\n"
+        return " ".join(p for p in (prefix, self._prog, options) if p != "") + "\n\n"
