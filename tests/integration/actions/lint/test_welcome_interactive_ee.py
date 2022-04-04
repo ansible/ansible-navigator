@@ -1,5 +1,4 @@
-"""Tests for lint from welcome, interactive, with an EE.
-"""
+"""Tests for lint from welcome, interactive, with an EE."""
 import pytest
 
 from ..._interactions import Command
