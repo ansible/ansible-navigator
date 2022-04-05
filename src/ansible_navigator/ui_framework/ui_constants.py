@@ -50,7 +50,7 @@ class Decoration(IntEnum):
 
     BOLD = curses.A_BOLD
     """2097152"""
-    # Fix for missing curses.A_UNDERLINE on macOS
+    # Fix for missing curses.A_ITALIC on macOS
     ITALIC = getattr(curses, "A_ITALIC", curses.A_BOLD)
     """2147483648"""
     NORMAL = curses.A_NORMAL
