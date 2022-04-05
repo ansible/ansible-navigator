@@ -1,0 +1,65 @@
+---
+ansible-navigator:
+  ansible:
+    cmdline: --forks 15
+    config:
+      help: true
+      path: /tmp/ansible.cfg
+    doc:
+      help: true
+      plugin:
+        name: shell
+        type: become
+    inventory:
+      entries:
+      - /tmp/test_inventory.yml
+      help: true
+    playbook:
+      help: false
+      path: /tmp/test_playbook.yml
+  ansible-runner:
+    artifact-dir: /tmp/test1
+    rotate-artifacts-count: 10
+    timeout: 300
+  app: run
+  collection-doc-cache-path: /tmp/cache.db
+  color:
+    enable: false
+    osc4: false
+  editor:
+    command: vim_from_setting
+    console: false
+  execution-environment:
+    container-engine: podman
+    container-options:
+    - --net=host
+    enabled: false
+    environment-variables:
+      pass:
+      - ONE
+      - TWO
+      - THREE
+      set:
+        KEY1: VALUE1
+        KEY2: VALUE2
+        KEY3: VALUE3
+    image: test_image:latest
+    pull:
+      policy: never
+    volume-mounts:
+    - dest: /test1
+      options: Z
+      src: /test1
+  inventory-columns:
+  - ansible_network_os
+  - ansible_network_cli_ssh_type
+  - ansible_connection
+  logging:
+    append: false
+    file: /tmp/log.txt
+    level: critical
+  mode: stdout
+  playbook-artifact:
+    enable: true
+    replay: /tmp/test_artifact.json
+    save-as: /tmp/test_artifact.json

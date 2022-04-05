@@ -11,6 +11,18 @@ IS_TTY = stdout.isatty()
 COLOR = "NO_COLOR" not in os.environ and IS_TTY
 
 
+def changed(color: bool, message: str):
+    """Output changed information to the console.
+
+    :param color: Whether to color the message
+    :param message: The message to output
+    """
+    if color:
+        print(f"\r{Color.YELLOW}{message}{Color.END}\033[K")
+    else:
+        print(message)
+
+
 def failed(color: bool, message: str):
     """Output failure information to the console.
 
@@ -35,8 +47,8 @@ def info(color: bool, message: str):
         print(message)
 
 
-def insignificant(color: bool, message: str):
-    """Output insignificant information to the console.
+def subtle(color: bool, message: str):
+    """Output subtle information to the console.
 
     :param color: Whether to color the message
     :param message: The message to output
@@ -51,7 +63,6 @@ def prompt_any(message: str):
     """Output prompt information to the console.
 
     :param message: The message to output
-    :return: The user input
     """
     try:
         input(f"{message}: ")
@@ -59,7 +70,7 @@ def prompt_any(message: str):
         sys.exit(0)
 
 
-def prompt_yn(message: str):
+def prompt_yn(message: str) -> bool:
     """Output prompt information to the console.
 
     :param message: The message to output

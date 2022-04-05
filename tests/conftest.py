@@ -19,6 +19,7 @@ from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
+from .defaults import FIXTURES_DIR
 from .defaults import PULLABLE_IMAGE
 
 
@@ -108,3 +109,13 @@ def settings_env_var_to_full(
 
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", str(settings_path))
     return settings_path, settings_contents
+
+
+@pytest.fixture
+def test_dir_fixture_dir(request):
+    """Provide the fixture directory for a given test directory.
+
+    :param request: The pytest request object
+    """
+    test_dir = Path(FIXTURES_DIR) / request.path.parent.relative_to(Path(__file__).parent)
+    return test_dir

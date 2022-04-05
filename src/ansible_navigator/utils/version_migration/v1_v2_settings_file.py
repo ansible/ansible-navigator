@@ -1,13 +1,12 @@
 """The v1 to v2 settings file migration."""
 
 
-from dataclasses import dataclass
-from dataclasses import field
 from typing import Dict
 
 from ...content_defs import ContentView
 from ...content_defs import SerializationFormat
 from ..ansi import COLOR
+from ..ansi import changed
 from ..ansi import info
 from ..dot_paths import MergeBehaviors
 from ..dot_paths import check_path
@@ -17,12 +16,11 @@ from ..dot_paths import place_at_path
 from ..serialize import Loader
 from ..serialize import serialize_write_file
 from ..serialize import yaml
-from .defintions import Migration
-from .defintions import MigrationStep
-from .defintions import MigrationType
+from .definitions import Migration
+from .definitions import MigrationStep
+from .definitions import MigrationType
 
 
-@dataclass
 class V1V2SettingsFile(Migration):
     """The v1 to v2 settings file migration.
 
@@ -30,9 +28,13 @@ class V1V2SettingsFile(Migration):
     It ensures that the migrations are run in the correct order.
     """
 
-    content: Dict = field(default_factory=dict)
     name = "Version 1 to Version 2 settings file format migration"
     migration_type: MigrationType = MigrationType.SETTINGS_FILE
+
+    def __init__(self):
+        """Initialize the v1 to v2 settings file migration."""
+        super().__init__()
+        self.content: Dict = {}
 
     def run(self, *args, **kwargs) -> None:
         """Perform the v1 to v2 migration.
@@ -40,29 +42,51 @@ class V1V2SettingsFile(Migration):
         :param args: Positional arguments
         :param kwargs: Keyword arguments
         """
-        with self.settings_file_path.open("r", encoding="utf-8") as f:
-            self.content = yaml.load(f, Loader=Loader)
+        if not self.content:
+            with self.settings_file_path.open("r", encoding="utf-8") as f:
+                try:
+                    self.content = yaml.load(f, Loader=Loader)
+                except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+                    return
 
+        if not self.content:
+            return
+
+        # Check if any of the migrations are needed
         if self.check:
             self.run_steps()
             self.was_needed = self.needed_now
             return
 
+        # Not check and wasn't needed
+        if not self.was_needed:
+            return
+
         self.run_steps()
 
-        # Not check mode and no migration needed, write file
-        if self.was_needed and not self.needed_now:
-            # Backup the settings file
-            backup = self.settings_file_path.rename(self.settings_file_path.with_suffix(".v1"))
-            info(color=COLOR, message=f"Backup {backup}")
-            serialize_write_file(
-                content=self.content,
-                content_view=ContentView.NORMAL,
-                file_mode="w",
-                file=self.settings_file_path,
-                serialization_format=SerializationFormat.YAML,
-            )
-            info(color=COLOR, message=f"Updated: {self.settings_file_path}")
+        # Something may have gone wrong
+        if self.needed_now:
+            return
+
+        # Back up the current
+        backup = self.settings_file_path.rename(self.settings_file_path.with_suffix(".v1"))
+        info(color=COLOR, message=f"Backup: {backup}")
+
+        # Write the new file
+        if self.settings_file_path.suffix in (".yml", ".yaml"):
+            serialization_format = SerializationFormat.YAML
+        elif self.settings_file_path.suffix == ".json":
+            serialization_format = SerializationFormat.JSON
+
+        serialize_write_file(
+            content=self.content,
+            content_view=ContentView.NORMAL,
+            file_mode="w",
+            file=self.settings_file_path,
+            serialization_format=serialization_format,
+        )
+        changed(color=COLOR, message=f"Updated: {self.settings_file_path}")
+
         return
 
     @MigrationStep.register(MigrationStep(name="config path"))
@@ -86,10 +110,10 @@ class V1V2SettingsFile(Migration):
             return True
 
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -103,18 +127,14 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.ansible.doc"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
+        if self.check or not exists:
             return exists
 
-        if not exists:
-            return False
-
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -139,10 +159,10 @@ class V1V2SettingsFile(Migration):
             return True
 
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -156,18 +176,14 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.ansible-builder.help"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
+        if self.check or not exists:
             return exists
 
-        if not exists:
-            return False
-
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -181,18 +197,14 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.ansible.config.help"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
+        if self.check or not exists:
             return exists
 
-        if not exists:
-            return False
-
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -206,18 +218,14 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.ansible.doc.help"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
+        if self.check or not exists:
             return exists
 
-        if not exists:
-            return False
-
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -231,18 +239,14 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.ansible.inventory.help"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
+        if self.check or not exists:
             return exists
 
-        if not exists:
-            return False
-
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -256,18 +260,14 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.ansible.playbook.help"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
-            return check_path(self.content, old_path)
-
-        if not exists:
-            return False
+        if self.check or not exists:
+            return exists
 
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 
@@ -281,26 +281,22 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.ansible.inventory.entries"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
+        if self.check or not exists:
             return exists
 
-        if not exists:
-            return False
-
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=(
                 MergeBehaviors.LIST_APPEND,
                 MergeBehaviors.LIST_SORT,
                 MergeBehaviors.LIST_UNIQUE,
             ),
+            content=self.content,
+            old_path=old_path,
+            new_path=new_path,
         )
         return False
 
-    @MigrationStep.register(MigrationStep(name="playbook artifact"))
+    @MigrationStep.register(MigrationStep(name="playbook artifact timestamp"))
     def playbook_artifact(self) -> bool:
         """Migrate the playbook artifact entry.
 
@@ -340,18 +336,14 @@ class V1V2SettingsFile(Migration):
         new_path = "ansible-navigator.execution-environment.pull.policy"
 
         exists = check_path(self.content, old_path)
-
-        if self.check:
+        if self.check or not exists:
             return exists
 
-        if not exists:
-            return False
-
         self.content = move_to_path(
-            content=self.content,
-            old_path=old_path,
-            new_path=new_path,
             behaviors=tuple(),
+            content=self.content,
+            new_path=new_path,
+            old_path=old_path,
         )
         return False
 

@@ -153,99 +153,96 @@ class Configurator:
     def _apply_settings_file(self) -> None:
         # pylint: disable=too-many-locals
         settings_filesystem_path = self._config.internals.settings_file_path
-        if isinstance(settings_filesystem_path, str):
-            with open(settings_filesystem_path, "r", encoding="utf-8") as fh:
-                try:
-                    config = yaml.load(fh, Loader=SafeLoader)
-                    if config is None:
-                        raise ValueError("Settings file cannot be empty.")
-                except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
-                    exit_msg = (
-                        f"Settings file found {settings_filesystem_path}, but failed to load it."
-                    )
-                    self._exit_messages.append(ExitMessage(message=exit_msg))
-                    exit_msg = f"  error was: '{' '.join(str(exc).splitlines())}'"
-                    self._exit_messages.append(ExitMessage(message=exit_msg))
-                    exit_msg = (
-                        f"Try checking the settings file '{settings_filesystem_path}'"
-                        "and ensure it is properly formatted"
-                    )
-                    self._exit_messages.append(
-                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
-                    )
-                    return
 
-            schema = to_schema(settings=self._config)
-            errors = validate(schema=schema, data=config)
-            if errors:
-                run_all_migrations(
-                    settings_file_str=settings_filesystem_path,
-                    migration_types=(MigrationType.SETTINGS_FILE,),
-                )
-                with open(settings_filesystem_path, "r", encoding="utf-8") as fh:
-                    config = yaml.load(fh, Loader=SafeLoader)
+        if not isinstance(settings_filesystem_path, str):
+            return
 
-                errors = validate(schema=schema, data=config)
+        run_all_migrations(
+            settings_file_str=settings_filesystem_path,
+            migration_types=(MigrationType.SETTINGS_FILE,),
+        )
 
-            if errors:
-                msg = (
-                    "The following errors were found in the settings file"
-                    f" ({settings_filesystem_path}):"
+        with open(settings_filesystem_path, "r", encoding="utf-8") as fh:
+            try:
+                config = yaml.load(fh, Loader=SafeLoader)
+                if config is None:
+                    raise ValueError("Settings file cannot be empty.")
+            except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
+                exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
+                self._exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = f"  error was: '{' '.join(str(exc).splitlines())}'"
+                self._exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = (
+                    f"Try checking the settings file '{settings_filesystem_path}'"
+                    "and ensure it is properly formatted"
                 )
-                self._exit_messages.append(ExitMessage(message=msg))
-                self._exit_messages.extend(error.to_exit_message() for error in errors)
-                hint = "Check the settings file and compare it to the current version."
-                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
-                hint = (
-                    "The current version can be found here:"
-                    " (https://ansible-navigator.readthedocs.io/en/latest/settings/"
-                    "#ansible-navigator-settings)"
+                self._exit_messages.append(
+                    ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
                 )
-                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
-                hint = (
-                    "The schema used for validation can be seen with"
-                    " 'ansible-navigator settings --schema'"
-                )
-                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
-                hint = (
-                    "A sample settings file can be created with"
-                    " 'ansible-navigator settings --sample'"
-                )
-                self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
                 return
 
-            for entry in self._config.entries:
-                settings_file_path = entry.settings_file_path(self._config.application_name)
-                path_parts = settings_file_path.split(".")
-                data = config
-                try:
-                    for key in path_parts:
-                        data = data[key]
-                    if self._config.internals.initializing or entry.change_after_initial:
-                        entry.value.current = data
-                        entry.value.source = C.USER_CFG
-                    else:
-                        message = f"'{entry.name}' cannot be reconfigured. (settings file)"
-                        self._messages.append(LogMessage(level=logging.INFO, message=message))
-                except TypeError as exc:
-                    exit_msg = (
-                        "Errors encountered when loading settings file:"
-                        f" {settings_filesystem_path}"
-                        f" while loading entry {entry.name}, attempted: {settings_file_path}."
-                        f"The resulting error was {str(exc)}"
-                    )
-                    self._exit_messages.append(ExitMessage(message=exit_msg))
-                    exit_msg = (
-                        f"Try checking the settings file '{settings_filesystem_path}'"
-                        "and ensure it is properly formatted"
-                    )
-                    self._exit_messages.append(
-                        ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
-                    )
-                    return
-                except KeyError:
-                    message = f"{settings_file_path} not found in settings file"
-                    self._messages.append(LogMessage(level=logging.DEBUG, message=message))
+        schema = to_schema(settings=self._config)
+        errors = validate(schema=schema, data=config)
+
+        if errors:
+            msg = (
+                "The following errors were found in the settings file"
+                f" ({settings_filesystem_path}):"
+            )
+            self._exit_messages.append(ExitMessage(message=msg))
+            self._exit_messages.extend(error.to_exit_message() for error in errors)
+            hint = "Check the settings file and compare it to the current version."
+            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+            hint = (
+                "The current version can be found here:"
+                " (https://ansible-navigator.readthedocs.io/en/latest/settings/"
+                "#ansible-navigator-settings)"
+            )
+            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+            hint = (
+                "The schema used for validation can be seen with"
+                " 'ansible-navigator settings --schema'"
+            )
+            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+            hint = (
+                "A sample settings file can be created with"
+                " 'ansible-navigator settings --sample'"
+            )
+            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+            return
+
+        for entry in self._config.entries:
+            settings_file_path = entry.settings_file_path(self._config.application_name)
+            path_parts = settings_file_path.split(".")
+            data = config
+            try:
+                for key in path_parts:
+                    data = data[key]
+                if self._config.internals.initializing or entry.change_after_initial:
+                    entry.value.current = data
+                    entry.value.source = C.USER_CFG
+                else:
+                    message = f"'{entry.name}' cannot be reconfigured. (settings file)"
+                    self._messages.append(LogMessage(level=logging.INFO, message=message))
+            except TypeError as exc:
+                exit_msg = (
+                    "Errors encountered when loading settings file:"
+                    f" {settings_filesystem_path}"
+                    f" while loading entry {entry.name}, attempted: {settings_file_path}."
+                    f"The resulting error was {str(exc)}"
+                )
+                self._exit_messages.append(ExitMessage(message=exit_msg))
+                exit_msg = (
+                    f"Try checking the settings file '{settings_filesystem_path}'"
+                    "and ensure it is properly formatted"
+                )
+                self._exit_messages.append(
+                    ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
+                )
+                return
+            except KeyError:
+                message = f"{settings_file_path} not found in settings file"
+                self._messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     def _apply_environment_variables(self) -> None:
         for entry in self._config.entries:

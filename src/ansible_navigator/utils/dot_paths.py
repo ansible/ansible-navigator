@@ -100,13 +100,14 @@ def place_at_path(
     content: Dict,
     path: str,
     value: Union[bool, int, list, float, str, List, Dict],
-):
+) -> Dict:
     """Place a value at a path in a dictionary.
 
     :param behaviors: The merge behaviors
     :param content: The content of the settings file
     :param path: The path to the value
     :param value: The value to place
+    :return: The updated content
     """
     # pylint: disable=too-many-branches
     copied_content = copy.deepcopy(content)
@@ -150,8 +151,8 @@ def place_at_path(
 def move_to_path(
     behaviors: Tuple[MergeBehaviors, ...],
     content: Dict,
-    old_path: str,
     new_path: str,
+    old_path: str,
 ) -> Dict:
     """Move a value to a path in a dictionary.
 

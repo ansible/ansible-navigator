@@ -12,14 +12,14 @@ from ..ansi import prompt_any
 from ..ansi import prompt_yn
 from ..ansi import success
 from ..ansi import warning
-from .defintions import MigrationType
-from .defintions import migrations
+from .definitions import MigrationType
+from .definitions import migrations
 
 
 # isort: off
 # pylint: disable=unused-import
 # Migrations will run in the order they are imported
-from . import v1_v2_settings_file
+from .v1_v2_settings_file import V1V2SettingsFile
 
 # isort: on
 
@@ -35,15 +35,15 @@ def run_all_migrations(migration_types: Tuple[MigrationType], settings_file_str:
 
 
 def run_migrations(settings_file_str: str, migration_type: MigrationType) -> None:
-    """Run migrations of a specifc type.
+    """Run migrations of a specific type.
 
     :param settings_file_str: Path to the settings file
     :param migration_type: Type of migration
     """
     # pylint: disable=too-many-branches
-    migrations_to_run = tuple(
+    migrations_to_run = [
         migration() for migration in migrations if migration.migration_type == migration_type
-    )
+    ]
 
     for migration in migrations_to_run:
         migration.check = True
@@ -57,7 +57,7 @@ def run_migrations(settings_file_str: str, migration_type: MigrationType) -> Non
         tense = "are" if IS_TTY else "were"
 
         blank_line()
-        warning(color=COLOR, message=f"The following version migrations {tense} available:")
+        warning(color=COLOR, message=f"The following version migrations {tense} required:")
         for migration in migrations_to_run:
             if migration.needed_now:
                 info(color=COLOR, message=f"  - {migration.name}")
@@ -70,7 +70,7 @@ def run_migrations(settings_file_str: str, migration_type: MigrationType) -> Non
         if prompt_yn(message="Do you want to run them all?"):
             for migration in migrations_to_run:
                 blank_line()
-                warning(color=COLOR, message=f"{migration.name}:")
+                info(color=COLOR, message=f"{migration.name}:")
                 migration.check = False
                 migration.run()
             if not any(migration.needed_now for migration in migrations_to_run):
@@ -78,7 +78,10 @@ def run_migrations(settings_file_str: str, migration_type: MigrationType) -> Non
                 success(color=COLOR, message="Migration complete")
             else:
                 blank_line()
-                warning(color=COLOR, message="The following migrations could not be completed:")
+                warning(
+                    color=COLOR,
+                    message="The following version migrations could not be completed:",
+                )
                 for migration in migrations_to_run:
                     if migration.needed_now:
                         info(color=COLOR, message=f" - {migration.name}")

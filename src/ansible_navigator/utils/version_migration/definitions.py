@@ -1,6 +1,5 @@
 """Common defintions for a version migration."""
 
-import time
 
 from dataclasses import dataclass
 from enum import Enum
@@ -14,9 +13,9 @@ from typing import Type
 from typing import TypeVar
 
 from ..ansi import COLOR
+from ..ansi import changed
 from ..ansi import failed
-from ..ansi import insignificant
-from ..ansi import success
+from ..ansi import subtle
 from ..ansi import working
 
 
@@ -41,37 +40,31 @@ class MigrationStep(Generic[T]):
     function_name: Optional[str] = None
     """The name of the function to call."""
 
-    def start(self):
+    def print_start(self):
         """Output start information to the console."""
         message = f"Migrating '{self.name}'"
         information = f"{message:.<60}"
         working(color=COLOR, message=information)
 
-    def fail(self) -> None:
-        """Output fail information to the console.
-
-        :param duration: The duration of the collection
-        """
+    def print_failed(self) -> None:
+        """Output fail information to the console."""
         message = f"Migration of '{self.name}'"
         information = f"{message:.<60}Failed"
         failed(color=COLOR, message=information)
 
-    def finish(self) -> None:
-        """Output finish information to the console.
-
-        :param duration: The duration of the collection
-        """
+    def print_updated(self) -> None:
+        """Output updated information to the console."""
         message = f"Migration of '{self.name}'"
-        information = f"{message:.<60}Completed"
+        information = f"{message:.<60}Updated"
 
-        success(color=COLOR, message=information)
+        changed(color=COLOR, message=information)
 
-    def not_needed(self) -> None:
+    def print_not_needed(self) -> None:
         """Output not needed information to the console."""
         message = f"Migration of '{self.name}'"
         information = f"{message:.<60}Not needed"
 
-        insignificant(color=COLOR, message=information)
+        subtle(color=COLOR, message=information)
 
     @classmethod
     def register(cls: T, migration_step: T) -> Callable:
@@ -94,20 +87,22 @@ class MigrationStep(Generic[T]):
         return wrapper
 
 
-@dataclass
 class Migration:
     """Data class for a migration."""
 
-    check: bool = False
-    """Whether the migration is needed."""
     name = "Migration base class"
     """The name of the migration."""
     migration_type: MigrationType = MigrationType.UNKNOWN
     """The type of migration."""
-    settings_file_path: Path = Path()
-    """The path to the settings file."""
-    was_needed: bool = False
-    """Whether the migration was needed."""
+
+    def __init__(self) -> None:
+        """Initialize the migration."""
+        self.check: bool = False
+        """Whether the migration is needed."""
+        self.settings_file_path: Path
+        """The path of the settings file."""
+        self.was_needed: bool = False
+        """Whether the migration was needed."""
 
     def __init_subclass__(cls, *args, **kwargs):
         """Register the migration steps.
@@ -167,16 +162,19 @@ class Migration:
             return
 
         if not step.needed:
-            step.not_needed()
+            step.print_not_needed()
             return
 
-        step.start()
+        step.print_start()
         try:
             step.needed = function(*args, **kwargs)
         except Exception:
-            step.fail()
-            return
-        step.finish()
+            pass
+        if step.needed:
+            step.print_failed()
+        else:
+            step.print_updated()
+        return
 
     def run_steps(self, *args, **kwargs) -> None:
         """Run all registered migration steps.
