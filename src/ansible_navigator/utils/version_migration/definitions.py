@@ -1,4 +1,4 @@
-"""Common defintions for a version migration."""
+"""Common definitions for a version migration."""
 
 
 from dataclasses import dataclass
