@@ -51,7 +51,7 @@ class PartialCommand:
 
 PartialCommands = (
     PartialCommand(params="--help", find="Start at the welcome page"),
-    PartialCommand(params="settings --help", find="Generate a sample settings file"),
+    PartialCommand(params="settings --help", find="Options (settings subcommand)"),
     PartialCommand(params="builder --help-builder", find="Print ansible-builder version"),
     PartialCommand(params="config list --mode stdout", find="Valid YAML extensions"),
     PartialCommand(params="doc debug --mode stdout", find="ansible.builtin.debug"),
