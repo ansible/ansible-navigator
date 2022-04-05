@@ -6,18 +6,20 @@
         "present": [
             "bash",
             "test_data_from_cli",
-            "ERROR",
+            "Error",
             "requires execution environment support"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "[ERROR]: Command provided: 'exec 'echo test_data_from_cli' --ee False --ll debug --mode stdout'",
-        "[ERROR]: The 'exec' subcommand requires execution environment support.",
-        " [HINT]: Try again with '--ee true' to enable the use of an execution environment.",
-        "[ERROR]: Configuration failed, using default log file location: /home/user/github/ansible-navigator/ansible-navigator.log. Log level set to debug",
-        " [HINT]: Review the hints and log file to see what went wrong: /home/user/github/ansible-navigator/ansible-navigator.log",
+        "Warning: Issues were found while applying the settings.",
+        "   Hint: Command provided: 'exec 'echo test_data_from_cli' --ee False --ll debug --mode stdout'",
+        "  Error: The 'exec' subcommand requires execution environment support.",
+        "   Hint: Try again with '--ee true' to enable the use of an execution environment.",
+        "   Note: Configuration failed, using default log file location. (/home/user/github/ansible-navigator/ansible-navigator.log) Log",
+        "         level set to debug",
+        "   Hint: Review the hints and log file to see what went wrong.",
         "(venv) bash-5.1$"
     ]
 }

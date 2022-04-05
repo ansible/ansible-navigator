@@ -145,6 +145,6 @@ def test_env_var(monkeypatch: pytest.MonkeyPatch, data: Scenario):
     _messages, exit_messages = configurator.configure()
 
     if data.exit_message_substr:
-        assert data.exit_message_substr in exit_messages[1].message
+        assert data.exit_message_substr in exit_messages[2].message
     else:
         assert application_configuration.entry("time_zone").value.current == data.expected

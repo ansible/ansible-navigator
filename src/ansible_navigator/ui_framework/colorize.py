@@ -25,6 +25,8 @@ from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
 from .curses_defs import RgbTuple
 from .curses_defs import SimpleLinePart
+from .ui_constants import Color
+from .ui_constants import Decoration
 
 
 CURSES_STYLES = {
@@ -312,6 +314,16 @@ def ansi_to_curses(line: str) -> CursesLine:
     :param line: A string with ansi colors
     :returns: A line ready for presentation in the TUI
     """
+    # pylint: disable=too-many-locals
+    if line == "":
+        line_part = CursesLinePart(
+            column=0,
+            string="",
+            color=Color.BLACK,
+            decoration=Decoration.NORMAL,
+        )
+        return CursesLine((line_part,))
+
     printable = []
     ansi_regex = re.compile(r"(\x1b\[[\d;]*m)")
     color_regex = re.compile(

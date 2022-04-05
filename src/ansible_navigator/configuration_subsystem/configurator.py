@@ -8,9 +8,9 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from ..utils.functions import ExitMessage
-from ..utils.functions import ExitPrefix
-from ..utils.functions import LogMessage
+from ..utils.definitions import ExitMessage
+from ..utils.definitions import ExitPrefix
+from ..utils.definitions import LogMessage
 from ..utils.functions import oxfordcomma
 from ..utils.functions import shlex_join
 from ..utils.json_schema import validate
@@ -89,6 +89,9 @@ class Configurator:
         shlex_joined = shlex_join(self._config.original_command)
         cmd_message = f"Command provided: '{shlex_joined}'"
         self._messages.append(LogMessage(level=logging.DEBUG, message=cmd_message))
+        warn_message = "Issues were found while applying the settings."
+        warning = ExitMessage(message=warn_message, prefix=ExitPrefix.WARNING)
+        command = ExitMessage(message=cmd_message, prefix=ExitPrefix.HINT)
 
         self._restore_original()
         self._apply_defaults()
@@ -96,7 +99,7 @@ class Configurator:
         self._apply_environment_variables()
         self._apply_cli_params()
         if self._exit_messages:
-            self._exit_messages.insert(0, ExitMessage(message=cmd_message))
+            self._exit_messages[0:0] = [warning, command]
             self._roll_back()
             return self._messages, self._exit_messages
 
@@ -106,7 +109,7 @@ class Configurator:
         self._post_process()
         self._check_choices()
         if self._exit_messages:
-            self._exit_messages.insert(0, ExitMessage(message=cmd_message))
+            self._exit_messages[0:0] = [warning, command]
             self._roll_back()
             return self._messages, self._exit_messages
 

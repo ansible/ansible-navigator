@@ -163,7 +163,7 @@ def test_invalid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.Mo
     assert application_configuration.internals.ansible_configuration.contents is Constants.NONE
     assert application_configuration.internals.ansible_configuration.path is Constants.NONE
     assert application_configuration.internals.ansible_configuration.text is Constants.NONE
-    assert "12345" in exit_messages[2].message
+    assert "12345" in exit_messages[3].message
 
 
 @pytest.mark.usefixtures("ansible_version")

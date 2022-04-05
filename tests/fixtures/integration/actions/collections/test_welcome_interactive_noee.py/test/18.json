@@ -4,20 +4,18 @@
     "comment": "Provide an invalid ee value",
     "additional_information": {
         "present": [
-            "Errors were encountered while parsing the last command"
+            "Issues were found while applying the settings"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "                                        Warning",
-        "                                        ───────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                        Errors were encountered while parsing the last command.",
-        "                                        [ERROR]: Command provided: 'collections --ee FFFFF'",
-        "                                        [ERROR]: execution_environment could not be converted to a boolean value, value was 'FFFFF' (str)",
-        "                                        [ERROR]: execution-environment must be one of 'true' or 'false', but set as 'FFFFF' in Command line",
-        "                                         [HINT]: Try again with '--ee true' or '--ee false'",
-        "                                        ───────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                                                                                                                      Ok"
+        "                                  Warning: Issues were found while applying the settings.",
+        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                     Hint: Command provided: 'collections --ee FFFFF'",
+        "                                    Error: The setting 'execution-environment' must be one of 'true' or 'false', but set as 'FFFFF'. (Command line)",
+        "                                     Hint: Try again with '--ee true' or '--ee false'",
+        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                                                Ok"
     ]
 }
