@@ -16,6 +16,8 @@ from ..utils.functions import shlex_join
 from ..utils.json_schema import validate
 from ..utils.serialize import SafeLoader
 from ..utils.serialize import yaml
+from ..utils.version_migration.migrate import MigrationType
+from ..utils.version_migration.migrate import run_all_migrations
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
 from .definitions import SettingsEntry
@@ -175,6 +177,16 @@ class Configurator:
 
             schema = to_schema(settings=self._config)
             errors = validate(schema=schema, data=config)
+            if errors:
+                run_all_migrations(
+                    settings_file_str=settings_filesystem_path,
+                    migration_types=(MigrationType.SETTINGS_FILE,),
+                )
+                with open(settings_filesystem_path, "r", encoding="utf-8") as fh:
+                    config = yaml.load(fh, Loader=SafeLoader)
+
+                errors = validate(schema=schema, data=config)
+
             if errors:
                 msg = (
                     "The following errors were found in the settings file"
