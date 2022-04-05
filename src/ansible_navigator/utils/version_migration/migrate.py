@@ -8,6 +8,7 @@ from ..ansi import COLOR
 from ..ansi import IS_TTY
 from ..ansi import blank_line
 from ..ansi import info
+from ..ansi import prompt_any
 from ..ansi import prompt_yn
 from ..ansi import success
 from ..ansi import warning
@@ -85,3 +86,4 @@ def run_migrations(settings_file_str: str, migration_type: MigrationType) -> Non
             blank_line()
             warning(color=COLOR, message="Migration cancelled")
         blank_line()
+        prompt_any(message="Press any key to continue")

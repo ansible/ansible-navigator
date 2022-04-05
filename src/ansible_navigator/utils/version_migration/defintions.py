@@ -15,6 +15,7 @@ from typing import TypeVar
 
 from ..ansi import COLOR
 from ..ansi import failed
+from ..ansi import insignificant
 from ..ansi import success
 from ..ansi import working
 
@@ -46,24 +47,31 @@ class MigrationStep(Generic[T]):
         information = f"{message:.<60}"
         working(color=COLOR, message=information)
 
-    def fail(self, duration: float) -> None:
+    def fail(self) -> None:
         """Output fail information to the console.
 
         :param duration: The duration of the collection
         """
-        message = f"Migration of '{self.name}' failed"
-        information = f"{message:.<60}{duration:.2f}s"
+        message = f"Migration of '{self.name}'"
+        information = f"{message:.<60}Failed"
         failed(color=COLOR, message=information)
 
-    def finish(self, duration: float) -> None:
+    def finish(self) -> None:
         """Output finish information to the console.
 
         :param duration: The duration of the collection
         """
-        message = f"Migration of '{self.name}' completed"
-        information = f"{message:.<60}{duration:.2f}s"
+        message = f"Migration of '{self.name}'"
+        information = f"{message:.<60}Completed"
 
         success(color=COLOR, message=information)
+
+    def not_needed(self) -> None:
+        """Output not needed information to the console."""
+        message = f"Migration of '{self.name}'"
+        information = f"{message:.<60}Not needed"
+
+        insignificant(color=COLOR, message=information)
 
     @classmethod
     def register(cls: T, migration_step: T) -> Callable:
@@ -147,19 +155,28 @@ class Migration:
         :param args: The positional arguments
         :param kwargs: The keyword arguments
         """
-        if isinstance(step.function_name, str):
-            if not self.check:
-                step.start()
-                start = time.time()
+        # pylint: disable=broad-except
+        if not isinstance(step.function_name, str):
+            return
+        function = getattr(self, step.function_name)
+        if self.check:
             try:
-                step.needed = getattr(self, step.function_name)(*args, **kwargs)
-            except Exception:  # pylint: disable=broad-except
-                raise
-                if not self.check:
-                    step.fail(time.time() - start)
-                    return
-            if not self.check:
-                step.finish(time.time() - start)
+                step.needed = function(*args, **kwargs)
+            except Exception:
+                step.needed = False
+            return
+
+        if not step.needed:
+            step.not_needed()
+            return
+
+        step.start()
+        try:
+            step.needed = function(*args, **kwargs)
+        except Exception:
+            step.fail()
+            return
+        step.finish()
 
     def run_steps(self, *args, **kwargs) -> None:
         """Run all registered migration steps.

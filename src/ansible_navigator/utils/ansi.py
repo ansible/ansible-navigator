@@ -1,13 +1,14 @@
 """ANSI color codes and functions for terminal output."""
 import os
+import sys
 
 from sys import stdout
+
+from .definitions import Color
 
 
 IS_TTY = stdout.isatty()
 COLOR = "NO_COLOR" not in os.environ and IS_TTY
-
-from .definitions import Color
 
 
 def failed(color: bool, message: str):
@@ -34,16 +35,43 @@ def info(color: bool, message: str):
         print(message)
 
 
+def insignificant(color: bool, message: str):
+    """Output insignificant information to the console.
+
+    :param color: Whether to color the message
+    :param message: The message to output
+    """
+    if color:
+        print(f"{Color.GREY}{message}{Color.END}")
+    else:
+        print(message)
+
+
+def prompt_any(message: str):
+    """Output prompt information to the console.
+
+    :param message: The message to output
+    :return: The user input
+    """
+    try:
+        input(f"{message}: ")
+    except KeyboardInterrupt:
+        sys.exit(0)
+
+
 def prompt_yn(message: str):
     """Output prompt information to the console.
 
     :param message: The message to output
     :return: Whether the user answered yes
     """
-    reply = None
-    while reply not in ("", "y", "n"):
-        reply = input(f"{message} (Y/n): ").lower()
-    return reply in ("", "y")
+    try:
+        reply = None
+        while reply not in ("", "y", "n"):
+            reply = input(f"{message} (Y/n): ").lower()
+        return reply in ("", "y")
+    except KeyboardInterrupt:
+        sys.exit(0)
 
 
 def success(color: bool, message: str):
