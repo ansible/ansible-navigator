@@ -21,6 +21,7 @@ ansible-navigator:
   execution-environment:
     pull:
       policy: always
+
     volume-mounts:
       - dest: /tmp/foo
         options: Z
