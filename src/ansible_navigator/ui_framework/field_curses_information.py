@@ -14,7 +14,7 @@ from .validators import FieldValidators
 
 @dataclass
 class FieldCursesInformation:
-    """An information field mad of curses lines."""
+    """An information field made of curses lines."""
 
     name: str
     information: CursesLines
