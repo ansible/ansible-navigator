@@ -9,7 +9,7 @@ from typing import Callable
 from typing import List
 from typing import Optional
 
-from ..utils.functions import LogMessage
+from ..utils.definitions import LogMessage
 
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1

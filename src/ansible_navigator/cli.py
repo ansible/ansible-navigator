@@ -26,9 +26,9 @@ from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
 from .logger import setup_logger
-from .utils.functions import ExitMessage
-from .utils.functions import ExitPrefix
-from .utils.functions import LogMessage
+from .utils.definitions import ExitMessage
+from .utils.definitions import ExitPrefix
+from .utils.definitions import LogMessage
 from .utils.functions import clear_screen
 
 
@@ -127,10 +127,10 @@ def main():
     if exit_messages:
         args.entry("log_file").value.current = args.entry("log_file").value.default
         args.entry("log_level").value.current = "debug"
-        exit_msg = f"Configuration failed, using default log file location: {args.log_file}."
+        exit_msg = f"Configuration failed, using default log file location. ({args.log_file})"
         exit_msg += f" Log level set to {args.log_level}"
-        exit_messages.append(ExitMessage(message=exit_msg))
-        exit_msg = f"Review the hints and log file to see what went wrong: {args.log_file}"
+        exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.NOTE))
+        exit_msg = "Review the hints and log file to see what went wrong."
         exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
 
     try:

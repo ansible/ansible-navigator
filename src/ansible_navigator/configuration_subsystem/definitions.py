@@ -181,13 +181,13 @@ class SettingsEntry:
         if isinstance(current, list):
             choices_str = oxfordcomma(choices, "and/or")
             current = oxfordcomma(current, "and")
-            prefix = f"{name} must be one or more of"
+            prefix = f"The setting '{name}' must be one or more of"
         else:
             choices_str = oxfordcomma(choices, "or")
-            prefix = f"{name} must be one of"
+            prefix = f"The setting '{name}' must be one of"
 
         source = self.value.source.value
-        msg = f"{prefix} {choices_str}, but set as '{current}' in {source}"
+        msg = f"{prefix} {choices_str}, but set as '{current}'. ({source})"
         return msg
 
     @property

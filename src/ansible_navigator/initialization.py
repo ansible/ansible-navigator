@@ -17,9 +17,11 @@ from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
 from .diagnostics import DiagnosticsCollector
-from .utils.functions import ExitMessage
-from .utils.functions import ExitPrefix
-from .utils.functions import LogMessage
+from .utils.definitions import ExitMessage
+from .utils.definitions import ExitMessages
+from .utils.definitions import ExitPrefix
+from .utils.definitions import LogMessage
+from .utils.functions import console_width
 from .utils.functions import environment_variable_is_file_path
 from .utils.functions import find_settings_file
 from .utils.key_value_store import KeyValueStore
@@ -30,8 +32,9 @@ def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
 
     :param exit_messages: List of all exit messages to be printed
     """
-    for exit_msg in exit_messages:
-        print(exit_msg)
+    color = "NO_COLOR" not in os.environ
+    printable = ExitMessages(messages=exit_messages).to_strings(color=color, width=console_width())
+    print("\n".join(printable), file=sys.stderr)
     sys.exit(1)
 
 

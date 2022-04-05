@@ -8,7 +8,14 @@ from functools import partial
 from typing import Dict
 from typing import List
 
+from ansible_navigator.utils.definitions import ExitMessage
+from ansible_navigator.utils.definitions import ExitMessages
+from ansible_navigator.utils.definitions import ExitPrefix
+from ..utils.functions import console_width
+from .colorize import ansi_to_curses
+from .curses_defs import CursesLines
 from .field_checks import FieldChecks
+from .field_curses_information import FieldCursesInformation
 from .field_information import FieldInformation
 from .field_option import FieldOption
 from .field_radio import FieldRadio
@@ -16,6 +23,7 @@ from .field_text import FieldText
 from .field_working import FieldWorking
 from .form import Form
 from .form import FormType
+from .ui_constants import Color
 from .validators import FieldValidators
 
 
@@ -136,6 +144,36 @@ def nonblocking_notification(messages: List[str]) -> Form:
         "type": "working",
     }
     return dict_to_form(form)
+
+
+def settings_notification(color: bool, messages: List[ExitMessage]) -> Form:
+    """Generate a warning notification for settings errors.
+
+    :param messages: List of messages to display
+    :returns: The form to display
+    """
+    # Take the initial warning if there is one
+    if messages[0].prefix is ExitPrefix.WARNING:
+        title = messages.pop(0).to_lines(color=False, width=console_width(), with_prefix=True)[0]
+    else:
+        title = "Warning"
+
+    formatted = ExitMessages(messages).to_strings(color=color, width=console_width())
+    formatted_curses = CursesLines(
+        tuple(ansi_to_curses(line) for line in formatted),
+    )
+    form = Form(
+        FormType.NOTIFICATION,
+        title=title,
+        title_color=Color.YELLOW,
+        fields=[
+            FieldCursesInformation(
+                name="settings_warning",
+                information=formatted_curses,
+            ),
+        ],
+    )
+    return form
 
 
 def warning_notification(messages: List[str]) -> Form:

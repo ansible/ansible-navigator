@@ -31,7 +31,7 @@ stdout_tests = (
             execution_environment=True,
         ).join(),
         present=["bash", "test_data_from_cli"],
-        absent=["ERROR"],
+        absent=["Error"],
     ),
     ShellCommand(
         comment="exec echo without ee",
@@ -39,7 +39,7 @@ stdout_tests = (
             cmdline="'echo test_data_from_cli'",
             execution_environment=False,
         ).join(),
-        present=["bash", "test_data_from_cli", "ERROR", "requires execution environment support"],
+        present=["bash", "test_data_from_cli", "Error", "requires execution environment support"],
     ),
     ShellCommand(
         comment="exec echo check path via shell",
