@@ -201,7 +201,7 @@ navigator_subcommands = [
     SubCommand(
         name="settings",
         description="Review the current ansible-navigator settings",
-        version_added="v1.0",
+        version_added="v2.0",
     ),
     SubCommand(
         name="welcome",
