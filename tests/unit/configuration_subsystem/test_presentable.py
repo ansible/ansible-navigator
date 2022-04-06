@@ -56,6 +56,7 @@ def _settings_file_dict():
         "source": "Not set",
         "subcommands": ["subcommand_1"],
         "cli_parameters": {"long": "No long CLI parameter", "short": "No short CLI parameter"},
+        "version_added": "v1.0",
     }
 
 
@@ -111,5 +112,6 @@ def test_settings_entry(sample_settings, settings_file_dict):
         "source": "Environment variable",
         "subcommands": ["subcommand_1"],
         "cli_parameters": {"long": "--se-1", "short": "-se1"},
+        "version_added": "v0.0",
     }
     assert asdict(presentable[1]) == entry_dict
