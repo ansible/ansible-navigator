@@ -243,7 +243,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="config",
-            cli_parameters=CliParameters(short="-c", metavar="CONFIG_FILE"),
+            cli_parameters=CliParameters(short="-c"),
             environment_variable_override="ansible_config",
             settings_file_path_override="ansible.config.path",
             short_description="Specify the path to the ansible configuration file",
@@ -304,7 +304,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=[True, False],
             cli_parameters=CliParameters(short="--exshell"),
             settings_file_path_override="exec.shell",
-            short_description="Specify the exec command should be run in a shell.",
+            short_description="Specify the exec command should be run in a shell",
             subcommands=["exec"],
             value=SettingsEntryValue(default=True),
         ),
@@ -425,7 +425,7 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="lint_config",
-            cli_parameters=CliParameters(short="--lic", metavar="LINT_CONFIG_FILE"),
+            cli_parameters=CliParameters(short="--lic"),
             environment_variable_override="ansible_lint_config",
             settings_file_path_override="ansible-lint.config",
             short_description="Specify the path to the ansible-lint configuration file",
@@ -565,7 +565,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--pp"),
             settings_file_path_override="execution-environment.pull.policy",
             short_description=(
-                "Specify the image pull policy."
+                "Specify the image pull policy"
                 " always:Always pull the image,"
                 " missing:Pull if not locally available,"
                 " never:Never pull the image,"
@@ -597,6 +597,7 @@ NavigatorConfiguration = ApplicationConfiguration(
                 "Show the effective settings. Defaults, CLI parameters, environment variables,"
                 " and the settings file will be combined"
             ),
+            subcommands=["settings"],
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
@@ -607,7 +608,8 @@ NavigatorConfiguration = ApplicationConfiguration(
                 action="store_true",
             ),
             settings_file_path_override="settings.sample",
-            short_description=("Generate a sample settings file."),
+            short_description=("Generate a sample settings file"),
+            subcommands=["settings"],
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
@@ -621,7 +623,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             ),
             settings_file_path_override="settings.schema",
             short_description=(
-                "Generate a schema for the settings file. ('json'= draft-07 JSON Schema)"
+                "Generate a schema for the settings file ('json'= draft-07 JSON Schema)"
             ),
             subcommands=["settings"],
             value=SettingsEntryValue(default="json"),
@@ -634,7 +636,8 @@ NavigatorConfiguration = ApplicationConfiguration(
                 action="store_true",
             ),
             settings_file_path_override="settings.sources",
-            short_description=("Show the source of each current settings entry."),
+            short_description=("Show the source of each current settings entry"),
+            subcommands=["settings"],
             value=SettingsEntryValue(default=False),
         ),
         SettingsEntry(
@@ -642,7 +645,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--tz"),
             environment_variable_override="TZ",
             short_description=(
-                "Specify the IANA time zone to use or 'local' to use the system time zone."
+                "Specify the IANA time zone to use or 'local' to use the system time zone"
             ),
             value=SettingsEntryValue(default="UTC"),
         ),
