@@ -28,7 +28,7 @@ def test_import_error():
             SubCommand(
                 name="subcommand1",
                 description="subcommand1",
-                version_added="0.0",
+                version_added="v0.0",
             ),
         ],
         entries=[
@@ -36,13 +36,13 @@ def test_import_error():
                 name="app",
                 short_description="test_app",
                 value=SettingsEntryValue(current="subcommand1"),
-                version_added="0.0",
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="mode",
                 short_description="mode",
                 value=SettingsEntryValue(),
-                version_added="0.0",
+                version_added="v0.0",
             ),
         ],
     )
@@ -67,7 +67,7 @@ def test_subcommand_not_found():
             SubCommand(
                 name="__test_action",
                 description="test_action",
-                version_added="0.0",
+                version_added="v0.0",
             ),
         ],
         entries=[
@@ -75,13 +75,13 @@ def test_subcommand_not_found():
                 name="app",
                 short_description="test_app",
                 value=SettingsEntryValue(current="__test_action"),
-                version_added="0.0",
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="mode",
                 short_description="mode",
                 value=SettingsEntryValue(),
-                version_added="0.0",
+                version_added="v0.0",
             ),
         ],
     )
