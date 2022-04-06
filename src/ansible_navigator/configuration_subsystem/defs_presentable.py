@@ -135,7 +135,7 @@ class PresentableSettingsEntry(ContentBase):
             settings_file_sample="Not applicable",
             source=internals.settings_source.value,
             subcommands=all_subcommands,
-            version_added="1.0.0",
+            version_added="v1.0",
         )
 
     @classmethod
