@@ -14,8 +14,8 @@ from typing import Union
 
 from ..command_runner import Command
 from ..command_runner import CommandRunner
-from ..utils.functions import ExitMessage
-from ..utils.functions import LogMessage
+from ..utils.definitions import ExitMessage
+from ..utils.definitions import LogMessage
 from .definitions import Constants
 from .definitions import SettingsFileType
 

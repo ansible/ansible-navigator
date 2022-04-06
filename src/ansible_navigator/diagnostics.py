@@ -25,8 +25,8 @@ from .configuration_subsystem import to_sources
 from .image_manager import introspect
 from .image_manager import introspector
 from .utils import ansi
-from .utils.functions import ExitMessage
-from .utils.functions import LogMessage
+from .utils.definitions import ExitMessage
+from .utils.definitions import LogMessage
 from .utils.functions import now_iso
 from .utils.functions import shlex_join
 from .utils.serialize import Loader

@@ -15,9 +15,9 @@ from typing import List
 from typing import Tuple
 
 from ..utils.compatibility import zoneinfo
-from ..utils.functions import ExitMessage
-from ..utils.functions import ExitPrefix
-from ..utils.functions import LogMessage
+from ..utils.definitions import ExitMessage
+from ..utils.definitions import ExitPrefix
+from ..utils.definitions import LogMessage
 from ..utils.functions import abs_user_path
 from ..utils.functions import check_for_ansible
 from ..utils.functions import flatten_list
@@ -81,9 +81,9 @@ class NavigatorPostProcessor:
         try:
             entry.value.current = str2bool(entry.value.current)
         except ValueError:
-            exit_msg = f"{entry.name} could not be converted to a boolean value,"
-            exit_msg += f" value was '{entry.value.current}' ({type(entry.value.current).__name__})"
-            exit_messages.append(ExitMessage(message=exit_msg))
+            # No error message here because the schema and/or choices will catch it
+            pass
+
         return messages, exit_messages
 
     @staticmethod
