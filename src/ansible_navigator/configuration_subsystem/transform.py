@@ -131,7 +131,9 @@ def to_schema(settings: ApplicationConfiguration) -> Dict[str, Any]:
             else:
                 # A single item
                 subschema[dot_parts[-1]]["enum"] = choices
-        if entry.value.default is not Constants.NOT_SET:
+        if entry.value.schema_default is not Constants.NOT_SET:
+            subschema[dot_parts[-1]]["default"] = entry.value.schema_default
+        elif entry.value.default is not Constants.NOT_SET:
             subschema[dot_parts[-1]]["default"] = entry.value.default
 
     if isinstance(settings.application_version, Constants):

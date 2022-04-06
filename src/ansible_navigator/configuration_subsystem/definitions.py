@@ -88,6 +88,8 @@ class SettingsEntryValue:
     default: Any = Constants.NOT_SET
     #: The current, effective value for the entry
     current: Any = Constants.NOT_SET
+    #: Provide a specific default value to be used in the schema
+    schema_default: Union[str, Constants] = Constants.NOT_SET
     #: Indicates where the current value came from
     source: Constants = Constants.NOT_SET
 
