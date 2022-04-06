@@ -319,7 +319,6 @@ NavigatorConfiguration = ApplicationConfiguration(
                 default=generate_editor_command(),
                 schema_default="vi +{line_number} {filename}",
             ),
-            value=SettingsEntryValue(default=generate_editor_command()),
             version_added="v1.0",
         ),
         SettingsEntry(
@@ -516,7 +515,6 @@ NavigatorConfiguration = ApplicationConfiguration(
                 default=abs_user_path("./ansible-navigator.log"),
                 schema_default="./ansible-navigator.log",
             ),
-            value=SettingsEntryValue(default=abs_user_path("./ansible-navigator.log")),
             version_added="v1.0",
         ),
         SettingsEntry(
@@ -645,7 +643,7 @@ NavigatorConfiguration = ApplicationConfiguration(
                 " otherwise pull if not locally available"
             ),
             value=SettingsEntryValue(default="tag"),
-            version_added="v2.0",
+            version_added="v1.0",
         ),
         SettingsEntry(
             name="set_environment_variable",
@@ -738,7 +736,6 @@ NavigatorConfiguration = ApplicationConfiguration(
                 default=os.getcwd(),
                 schema_default=".",
             ),
-            value=SettingsEntryValue(default=os.getcwd()),
             version_added="v2.0",
         ),
     ],

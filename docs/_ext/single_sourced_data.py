@@ -6,7 +6,6 @@
 from copy import copy
 from pathlib import Path
 from re import match
-from typing import Any
 from typing import Dict
 from typing import List
 from typing import Tuple
@@ -24,7 +23,6 @@ from docutils import statemachine  # isort: skip
 
 # isort: split
 
-import yaml
 
 from ansible_navigator._version import version as __version__
 from ansible_navigator.configuration_subsystem import Constants as C
@@ -55,7 +53,6 @@ SUBCOMMAND_TABLE_HEADER = [
 DOCS_DIR = Path(__file__).parents[1].resolve()
 PROJECT_DIR = DOCS_DIR.parent
 
-PARAMS_SCHEMA_PATH = DOCS_DIR / "param_details.yml"
 TEST_SETTINGS_FIXTURE = (
     PROJECT_DIR
     / "tests"
@@ -116,10 +113,9 @@ def _rst_generate_row(row: Tuple) -> List:
     return data
 
 
-def _params_generate_tables(param_details: Dict) -> List:
+def _params_generate_tables() -> List:
     """Generate a table for each subcommand's settings parameters.
 
-    :param param_details: A dictionary of the settings parameters details
     :returns: A list of tables, one each for each subcommand
     """
     tables = []
@@ -132,7 +128,6 @@ def _params_generate_tables(param_details: Dict) -> List:
         if not isinstance(entry.subcommands, list):
             row = _params_row_for_entry(
                 entry=entry,
-                param_details=param_details,
             )
             table.extend(_rst_generate_row(row))
     tables.extend(table)
@@ -154,7 +149,6 @@ def _params_generate_tables(param_details: Dict) -> List:
             for entry in entries:
                 row = _params_row_for_entry(
                     entry=entry,
-                    param_details=param_details,
                 )
                 table.extend(_rst_generate_row(row))
             tables.extend(table)
@@ -162,41 +156,11 @@ def _params_generate_tables(param_details: Dict) -> List:
     return tables
 
 
-def _params_get_param_file_entry(
-        param_details: Dict, path: str,
-) -> Union[None, Dict[Any, Any]]:
-    """Retrieve one settings parameter's details from settings data.
-
-    :param param_details: The full settings data
-    :param path: The dot delimited path for the settings parameter to retrieve
-    :returns: The settings parameter's details if present in the data
-    """
-    path_parts = path.split(".")
-    data = param_details
-    try:
-        for key in path_parts:
-            data = data[key]
-        return data
-    except KeyError:
-        return None
-
-
-def _params_retrieve_details(filename: str) -> Dict:
-    """Load the settings file.
-
-    :param filename: The path to the settings file to load
-    :return: The deserialized contents of the file
-    """
-    with open(filename, encoding="utf-8") as fh:
-        return yaml.load(fh, Loader=yaml.SafeLoader)
-
-
-def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
+def _params_row_for_entry(entry: SettingsEntry) -> Tuple:
     # pylint: disable=too-many-branches
     """Create a row entry for one settings parameter.
 
     :param entry: The settings entry for which the row will be generated
-    :param param_details: The details for the settings parameter
     :return: A tuple describing the settings parameter
     """
     if entry.cli_parameters is None:
@@ -228,6 +192,7 @@ def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
     env_var = entry.environment_variable(APP.replace("-", "_"))
 
     settings = []
+    settings.append(f"**Added in version:** {entry.version_added}")
     if choices:
         settings.append(f"**Choices:** {choices}")
     if default is not None:
@@ -323,13 +288,7 @@ class AnsibleNavigatorParametersTablesDirective(SphinxDirective):
 
         :returns: A list of nodes generated from the RST content for all settings parameter tables
         """
-        params_schema_path_str = str(PARAMS_SCHEMA_PATH)
-
-        # make sphinx discard doctree cache on file changes
-        self.env.note_dependency(params_schema_path_str)
-
-        param_details = _params_retrieve_details(params_schema_path_str)
-        tables = _params_generate_tables(param_details)
+        tables = _params_generate_tables()
         rst_tables = "\n".join(tables)
 
         return _nodes_from_rst(state=self.state, rst_source=rst_tables)

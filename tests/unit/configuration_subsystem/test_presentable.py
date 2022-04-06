@@ -27,7 +27,11 @@ def _sample_settings():
         internals=Internals(settings_file_path="/test/path"),
         post_processor=NavigatorPostProcessor(),
         subcommands=[
-            SubCommand(name="subcommand_1", description="subcommand_1"),
+            SubCommand(
+                name="subcommand_1",
+                description="subcommand_1",
+                version_added="0.0",
+            ),
         ],
         entries=[],
     )
@@ -85,6 +89,7 @@ def test_settings_entry(sample_settings, settings_file_dict):
             default="default",
             source=Constants.ENVIRONMENT_VARIABLE,
         ),
+        version_added="0.0",
     )
     sample_settings.entries = [entry]
     configurator = Configurator(params=[], application_configuration=sample_settings)
