@@ -1,7 +1,5 @@
 """Common definitions for a version migration."""
 
-
-from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Callable
@@ -29,16 +27,20 @@ class MigrationType(Enum):
 T = TypeVar("T")
 
 
-@dataclass
 class MigrationStep(Generic[T]):
     """Data class for a migration step."""
 
-    name: str
-    """The name of the migration step."""
-    needed: bool = False
-    """Whether the migration is needed."""
-    function_name: Optional[str] = None
-    """The name of the function to call."""
+    def __init__(self, name: str) -> None:
+        """Initialize a migration step.
+
+        :param name: The name of the migration step
+        """
+        self.name: str = name
+        """The name of the migration step"""
+        self.needed: bool = False
+        """Whether the migration step is needed"""
+        self.function_name: Optional[str] = None
+        """The name of the function to call"""
 
     def print_start(self):
         """Output start information to the console."""
