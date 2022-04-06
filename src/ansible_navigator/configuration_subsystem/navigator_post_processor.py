@@ -481,7 +481,7 @@ class NavigatorPostProcessor:
         if entry.value.current is True and config.app == subcommand:
             mode = Mode.STDOUT
             self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
-            message = message = f"`{entry.name} requesting mode {mode.value}"
+            message = f"`{entry.name} requesting mode {mode.value}"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
@@ -517,7 +517,7 @@ class NavigatorPostProcessor:
         if entry.value.source is C.USER_CLI:
             mode = Mode.STDOUT
             self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
-            message = message = f"`{entry.name} requesting mode {mode.value}"
+            message = f"`{entry.name} requesting mode {mode.value}"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
