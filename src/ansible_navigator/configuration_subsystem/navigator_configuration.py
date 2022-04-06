@@ -239,7 +239,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="collection_doc_cache_path",
             cli_parameters=CliParameters(short="--cdcp"),
             short_description="The path to collection doc cache",
-            value=SettingsEntryValue(default=generate_cache_path()),
+            value=SettingsEntryValue(
+                default=generate_cache_path(),
+                schema_default="~/.cache/ansible-navigator/collection_doc_cache.db",
+            ),
         ),
         SettingsEntry(
             name="config",
@@ -281,7 +284,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--ecmd"),
             settings_file_path_override="editor.command",
             short_description="Specify the editor command",
-            value=SettingsEntryValue(default=generate_editor_command()),
+            value=SettingsEntryValue(
+                default=generate_editor_command(),
+                schema_default="vi +{line_number} {filename}",
+            ),
         ),
         SettingsEntry(
             name="editor_console",
@@ -456,7 +462,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--lf"),
             short_description="Specify the full path for the ansible-navigator log file",
             settings_file_path_override="logging.file",
-            value=SettingsEntryValue(default=abs_user_path("./ansible-navigator.log")),
+            value=SettingsEntryValue(
+                default=abs_user_path("./ansible-navigator.log"),
+                schema_default="./ansible-navigator.log",
+            ),
         ),
         SettingsEntry(
             name="log_level",
@@ -655,7 +664,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="ansible-builder.workdir",
             short_description="Specify the path that contains ansible-builder manifest files",
             subcommands=["builder"],
-            value=SettingsEntryValue(default=os.getcwd()),
+            value=SettingsEntryValue(
+                default=os.getcwd(),
+                schema_default=".",
+            ),
         ),
     ],
 )
