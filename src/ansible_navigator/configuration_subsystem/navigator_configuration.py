@@ -158,7 +158,7 @@ navigator_subcommands = [
     SubCommand(
         name="images",
         description="Explore execution environment images",
-        version_added="v2.0",
+        version_added="v1.0",
     ),
     SubCommand(
         name="inventory",
