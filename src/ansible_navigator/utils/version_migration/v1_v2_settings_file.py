@@ -375,7 +375,7 @@ class V1V2SettingsFile(Migration):
                 item["options"] = item.pop("label")
 
         self.content = place_at_path(
-            behaviors=tuple(),
+            behaviors=(MergeBehaviors.LIST_LIST_REPLACE,),
             content=self.content,
             path=path,
             value=value,

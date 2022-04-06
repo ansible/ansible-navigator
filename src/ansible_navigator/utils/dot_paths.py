@@ -20,8 +20,8 @@ class MergeBehaviors(Enum):
     LIST_REPLACE = "replace list"
     LIST_SORT = "sort resulting list"
     LIST_UNIQUE = "only unique values in resulting list"
-    DICT_DICT_MERGE = "merge dicts"
-    DICT_DICT_REPLACE = "replace dicts"
+    DICT_DICT_UPDATE = "update left dict with right dict"
+    DICT_DICT_REPLACE = "replace left dict with right dict"
 
 
 def get_with_path(content: MutableMapping, path: str):
@@ -44,7 +44,7 @@ def check_path(content: MutableMapping, path: str):
     try:
         get_with_path(content, path)
         return True
-    except KeyError:
+    except (KeyError, TypeError):
         return False
 
 
@@ -107,11 +107,31 @@ def place_at_path(
     :param content: The content of the settings file
     :param path: The path to the value
     :param value: The value to place
+    :raises ValueError: If something can't be done
     :return: The updated content
     """
     # pylint: disable=too-many-branches
+    if (
+        MergeBehaviors.DICT_DICT_REPLACE in behaviors
+        and MergeBehaviors.DICT_DICT_UPDATE in behaviors
+    ):
+        raise ValueError("Can't use both DICT_DICT_REPLACE and DICT_DICT_UPDATE behaviors")
+    if (
+        MergeBehaviors.LIST_LIST_EXTEND in behaviors
+        and MergeBehaviors.LIST_LIST_REPLACE in behaviors
+    ):
+        raise ValueError("Can't use both LIST_LIST_EXTEND and LIST_LIST_REPLACE behaviors")
+
     copied_content = copy.deepcopy(content)
     nested = copied_content
+    if path in ("", None):
+        if isinstance(value, dict):
+            if MergeBehaviors.DICT_DICT_REPLACE in behaviors:
+                return value
+            if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
+                return {**nested, **value}
+        raise ValueError("Cannot place non dict at root of dict")
+
     for part in path.split("."):
         if part == path.rsplit(".", maxsplit=1)[-1]:
             if isinstance(nested.get(part), list):
@@ -120,27 +140,33 @@ def place_at_path(
                         nested[part].extend(value)
                     elif MergeBehaviors.LIST_LIST_REPLACE in behaviors:
                         nested[part] = value
+                    else:
+                        raise ValueError("No behavior specified for LIST_LIST")
                 else:
                     if MergeBehaviors.LIST_APPEND in behaviors:
                         nested[part].append(value)
                     elif MergeBehaviors.LIST_REPLACE in behaviors:
-                        nested[part] = [value]
+                        nested[part] = value
+                        continue
+                    else:
+                        raise ValueError("No behavior specified for LIST_*")
 
                 if MergeBehaviors.LIST_UNIQUE in behaviors:
-                    nested[part] = list(set(nested))
+                    nested[part] = list(dict.fromkeys(nested[part]))
                 if MergeBehaviors.LIST_SORT in behaviors:
                     nested[part].sort()
                 continue
 
             if isinstance(nested.get(part), dict):
                 if isinstance(value, dict):
-                    if MergeBehaviors.DICT_DICT_MERGE in behaviors:
+                    if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
                         nested[part].update(value)
                     elif MergeBehaviors.DICT_DICT_REPLACE in behaviors:
                         nested[part] = value
-                else:
-                    nested[part] = value
-                continue
+                    else:
+                        raise ValueError("No behavior specified for DICT_DICT")
+                    continue
+
             nested[part] = value
         elif part not in nested:
             nested[part] = {}
@@ -163,6 +189,9 @@ def move_to_path(
     :return: The updated content
     """
     copied_content = copy.deepcopy(content)
+    if new_path == old_path:
+        return copied_content
+
     value = get_with_path(content=copied_content, path=old_path)
     delete_with_path(content=copied_content, path=old_path)
     updated_content = place_at_path(
