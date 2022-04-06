@@ -12,14 +12,11 @@ import shutil
 import sys
 import sysconfig
 
-from dataclasses import dataclass
-from enum import Enum
 from pathlib import Path
 from typing import Any
 from typing import Iterable
 from typing import List
 from typing import Mapping
-from typing import NamedTuple
 from typing import Optional
 from typing import Set
 from typing import Tuple
@@ -30,75 +27,12 @@ from jinja2 import StrictUndefined
 from jinja2 import TemplateError
 
 from .compatibility import zoneinfo
+from .definitions import GOLDEN_RATIO
+from .definitions import ExitMessage
+from .definitions import LogMessage
 
 
 logger = logging.getLogger(__name__)
-
-
-class Colors(Enum):
-    """ANSI color codes"""
-
-    RED = "\033[0;31m"
-    YELLOW = "\033[33m"
-    END = "\033[0m"
-
-
-class ExitPrefix(Enum):
-    """An exit message prefix"""
-
-    ERROR = "ERROR"
-    HINT = "HINT"
-
-    @classmethod
-    def _longest(cls):
-        return max(len(member) for member in cls.__members__)
-
-    def __str__(self):
-        return f"{' ' * (self._longest() - len(self.name))}[{self.name}]: "
-
-
-@dataclass
-class ExitMessage:
-    """An object to hold a message to present when exiting."""
-
-    #: The message that will be presented
-    message: str
-    #: The prefix for the message, used for formatting
-    prefix: ExitPrefix = ExitPrefix.ERROR
-
-    @property
-    def color(self):
-        """return a color for the prefix"""
-        if self.prefix is ExitPrefix.ERROR:
-            return Colors.RED.value
-        if self.prefix is ExitPrefix.HINT:
-            return Colors.YELLOW.value
-        raise ValueError("Missing color mapping")
-
-    @property
-    def level(self):
-        """return a log level"""
-        if self.prefix is ExitPrefix.ERROR:
-            return logging.ERROR
-        if self.prefix is ExitPrefix.HINT:
-            return logging.INFO
-        raise ValueError("Missing logging level mapping")
-
-    def plain_text(self):
-        """Provide the error messages without ansi color."""
-        return f"{self.prefix}{self.message}"
-
-    def __str__(self):
-        if "NO_COLOR" in os.environ:
-            return self.plain_text()
-        return f"{self.color}{self.prefix}{self.message}{Colors.END.value}"
-
-
-class LogMessage(NamedTuple):
-    """An object to hold a message destined for the logger"""
-
-    level: int
-    message: str
 
 
 def oxfordcomma(listed, condition):
@@ -157,6 +91,19 @@ def clear_screen() -> None:
     if os.environ.get("TERM_PROGRAM") in affected_terminals:
         for _line in range(shutil.get_terminal_size().lines):
             print()
+
+
+def console_width() -> int:
+    """Get a console width based on common screen widths.
+
+    :returns: The console width
+    """
+    width = shutil.get_terminal_size().columns
+    if width <= 80:
+        return width
+    if width <= 132:
+        return max(80, round_half_up(width / GOLDEN_RATIO))
+    return 132
 
 
 # TODO: Replace this with something type-safe.

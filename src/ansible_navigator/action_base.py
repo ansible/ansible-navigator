@@ -18,9 +18,10 @@ from .steps import Steps
 from .ui_framework import Interaction
 from .ui_framework import ui
 from .ui_framework import warning_notification
-from .utils.functions import ExitMessage
-from .utils.functions import ExitPrefix
-from .utils.functions import LogMessage
+from .ui_framework.form_utils import settings_notification
+from .utils.definitions import ExitMessage
+from .utils.definitions import ExitPrefix
+from .utils.definitions import LogMessage
 
 
 class ActionBase:
@@ -203,9 +204,7 @@ class ActionBase:
                 self._logger.log(level=exit_msg.level, msg=exit_msg.message)
 
         if exit_messages:
-            warn_msg = ["Errors were encountered while parsing the last command."]
-            warn_msg.extend([f"{message.plain_text()}" for message in exit_messages])
-            warning = warning_notification(warn_msg)
+            warning = settings_notification(color=self._args.display_color, messages=exit_messages)
             self._interaction.ui.show_form(warning)
             return False
         return True

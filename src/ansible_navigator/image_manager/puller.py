@@ -8,9 +8,9 @@ from typing import List
 from typing import Union
 
 from ..configuration_subsystem import Constants
-from ..utils.functions import ExitMessage
-from ..utils.functions import ExitPrefix
-from ..utils.functions import LogMessage
+from ..utils.definitions import ExitMessage
+from ..utils.definitions import ExitPrefix
+from ..utils.definitions import LogMessage
 from ..utils.functions import shlex_join
 
 

@@ -8,7 +8,7 @@
             "test_data_from_cli"
         ],
         "absent": [
-            "ERROR"
+            "Error"
         ],
         "compared_fixture": false
     },

@@ -8,8 +8,8 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from ..utils.functions import ExitMessage
-from ..utils.functions import LogMessage
+from ..utils.definitions import ExitMessage
+from ..utils.definitions import LogMessage
 from ..utils.functions import abs_user_path
 from ..utils.functions import get_share_directory
 from ..utils.functions import oxfordcomma

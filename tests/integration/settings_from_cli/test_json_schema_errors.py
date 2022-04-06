@@ -94,6 +94,9 @@ def test(data: Scenario, subtests: Any, tmp_path: Path):
         stdout=subprocess.PIPE,
         universal_newlines=True,
     )
+    long_stderr = "".join(
+        [line.strip(" ").replace("\n", " ") for line in proc_out.stderr.splitlines(keepends=True)],
+    )
     for value in data.messages:
         with subtests.test(msg=value, value=value):
-            assert value in proc_out.stdout
+            assert value in long_stderr
