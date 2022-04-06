@@ -47,7 +47,7 @@ RST_NL_CELL_FIRST = "    - | {}"
 RST_NL_IN_CELL = "      | {}"
 SUBCOMMAND_TABLE_HEADER = [
     ".. list-table:: {}",
-    "  :widths: 1 3 3 1",
+    "  :widths: 1 3 3 1 1",
     "  :header-rows: 1",
 ]
 
@@ -217,23 +217,12 @@ def _params_row_for_entry(entry: SettingsEntry, param_details: Dict) -> Tuple:
         yaml_like.append(f"{(2*idx+12) * ' '}{path_part}:")
     yaml_like.append("")
 
-    path = entry.settings_file_path(APP) + ".default-value-override"
-    default_override = _params_get_param_file_entry(
-        param_details=param_details,
-        path=path,
-    )
-    logger.debug(
-        "%s: default_value_override: %s",
-        entry.name,
-        default_override,
-    )
-    if isinstance(default_override, str):
-        default = default_override
+    if entry.value.schema_default is not C.NOT_SET:
+        default = entry.value.schema_default
+    elif entry.value.default is not C.NOT_SET:
+        default = entry.value.default
     else:
-        if entry.value.default is C.NOT_SET:
-            default = "No default value set"
-        else:
-            default = entry.value.default
+        default = "No default value set"
 
     choices = oxfordcomma(entry.choices, "or")
     env_var = entry.environment_variable(APP.replace("-", "_"))
@@ -264,7 +253,7 @@ def _subcommands_generate_tables() -> List:
     table.append("")
     table.extend(
         _rst_generate_row(
-            ("Name", "Description", "CLI Example", "Colon command"),
+            ("Name", "Description", "CLI Example", "Colon command", "Version added"),
         ),
     )
     for subcommand in NavigatorConfiguration.subcommands:
@@ -273,6 +262,7 @@ def _subcommands_generate_tables() -> List:
             subcommand.description,
             f"ansible-navigator {subcommand.name} --help",
             f":{subcommand.name}",
+            subcommand.version_added,
         )
         table.extend(_rst_generate_row(subcommand_details))
     return table
