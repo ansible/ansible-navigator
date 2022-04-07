@@ -26,6 +26,9 @@ share/ansible_navigator/themes/**/*.json
 src/ansible_navigator/package_data/help.md
 src/ansible_navigator/package_data/welcome.md
 
+# generated
+src/ansible_navigator/data/ansible-navigator.json
+
 # WIP
 docs/changelog-fragments.d/README.md
 CHANGELOG.md
