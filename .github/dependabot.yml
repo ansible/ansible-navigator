@@ -1,0 +1,23 @@
+---
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - dependabot-deps-updates
+      - skip-changelog
+    versioning-strategy: lockfile-only
+    open-pull-requests-limit: 2
+    allow:
+      # Only important dependencies, for the rest we do it manually and in
+      # bulk, via `tox -e deps`
+      - dependency-name: ansible-*
+      - dependency-name: jinja2
+      - dependency-name: jsonschema
+      - dependency-name: onigurumacffi
+      - dependency-name: packaging
+      - dependency-name: pytest
+      - dependency-name: pyyaml
