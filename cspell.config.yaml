@@ -32,8 +32,8 @@ ignorePaths:
   - share/ansible_navigator/themes/*.json
   # Anything in the vendored tokenization directory
   - src/ansible_navigator/tm_tokenize/*
-  # test requirements
-  - test-requirements.txt
+  # requirements.txt is generated
+  - requirements.txt
   # All fixture files in the tests directory
   - tests/fixtures/integration/actions/**/*.json
   # The tox configuration file
