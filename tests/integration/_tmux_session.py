@@ -200,6 +200,7 @@ class TmuxSession:
         search_within_response: Optional[Union[List, str]] = None,
         ignore_within_response=None,
         timeout=300,
+        send_clear: bool = True,
     ):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
@@ -323,7 +324,7 @@ class TmuxSession:
 
         # Clear the screen in case subsequent tests produce the same output
         # This ensures the pre_send capture will be different.
-        if mode == "shell":
+        if mode == "shell" and send_clear:
             self._pane.send_keys("clear")
 
         return showing

@@ -1,0 +1,26 @@
+ansible-navigator:
+  ansible:
+    config: ./ansible.cfg
+    inventories:
+      - ./inventory.yaml
+    playbook: site.yml
+  documentation:
+    plugin:
+      name: debug
+      type: module
+  execution-environment:
+    pull-policy: never
+    volume-mounts:
+      - dest: /tmp/foo
+        label: Z
+        src: /tmp/foo
+  help-builder: true
+  help-config: true
+  help-doc: true
+  help-inventory: true
+  help-playbook: true
+  logging:
+    append: false
+    level: debug
+  playbook-artifact:
+    save-as: "{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"
