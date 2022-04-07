@@ -15,4 +15,3 @@ workdir
 isatty
 netconf
 httpapi
-willforce
