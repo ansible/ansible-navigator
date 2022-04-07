@@ -15,6 +15,10 @@ venv.bak/
 
 # Tracked but not manually edited
 tests/fixtures/integration/actions/**/*.json
+tests/fixtures/integration/version_migration/*.json
+tests/fixtures/integration/version_migration/*.yml
+tests/fixtures/integration/version_migration/*.yaml
+
 share/ansible_navigator/grammar/**/*.json
 share/ansible_navigator/themes/**/*.json
 

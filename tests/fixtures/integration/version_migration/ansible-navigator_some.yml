@@ -1,0 +1,12 @@
+ansible-navigator:
+  execution-environment:
+    pull:
+      policy: never
+    volume-mounts:
+      - dest: /tmp/foo
+        label: Z
+        src: /tmp/foo
+  help-builder: true
+  help-config: true
+  playbook-artifact:
+    save-as: "{playbook_dir}/{playbook_name}-artifact-{ts_utc}.json"
