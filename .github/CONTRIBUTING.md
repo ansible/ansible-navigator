@@ -48,7 +48,7 @@ Prerequisites:
    ```shell-session
    $ tox -e lint
    lint create: .tox/lint
-   lint installdeps: -rrequirements.txt, -rtest-requirements.txt
+   lint installdeps: .[test]
    lint installed: ...
    lint run-test-pre: PYTHONHASHSEED='4242713142'
    lint run-test: commands[0] | pylint ansible_navigator tests ...
