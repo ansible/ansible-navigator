@@ -200,18 +200,22 @@
             },
             "volume-mounts": {
               "additionalProperties": false,
-              "properties": {
-                "dest": {
-                  "type": "string"
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "dest": {
+                    "type": "string"
+                  },
+                  "src": {
+                    "type": "string"
+                  },
+                  "options": {
+                    "type": "string"
+                  }
                 },
-                "label": {
-                  "type": "string"
-                },
-                "options": {
-                  "type": "string"
-                }
+                "required": ["src", "dest"],
+                "type": "object"
               },
-              "required": ["src", "dest"],
               "type": "array"
             }
           },
