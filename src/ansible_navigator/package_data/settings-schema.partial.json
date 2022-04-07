@@ -213,10 +213,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "src",
-                  "dest"
-                ],
+                "required": ["src", "dest"],
                 "type": "object"
               },
               "type": "array"
@@ -298,9 +295,7 @@
       "additionalProperties": false
     }
   },
-  "required": [
-    "ansible-navigator"
-  ],
+  "required": ["ansible-navigator"],
   "title": "ansible-navigator settings v{version}",
   "type": "object"
 }
