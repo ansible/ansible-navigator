@@ -59,13 +59,10 @@ def subtle(color: bool, message: str):
         print(message)
 
 
-def prompt_any(message: str):
-    """Output prompt information to the console.
-
-    :param message: The message to output
-    """
+def prompt_enter():
+    """Output prompt information to the console."""
     try:
-        input(f"{message}: ")
+        input("Press Enter to continue: ")
     except KeyboardInterrupt:
         sys.exit(0)
 

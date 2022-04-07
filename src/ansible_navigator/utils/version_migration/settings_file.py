@@ -12,14 +12,12 @@ from ..serialize import Loader
 from ..serialize import serialize_write_file
 from ..serialize import yaml
 from .definitions import Migration
-from .definitions import MigrationType
 
 
 class SettingsFile(Migration):
     """The settings file migration base class."""
 
     name = "Settings file migration base class"
-    migration_type: MigrationType = MigrationType.SETTINGS_FILE
 
     def __init__(self):
         """Initialize the settings file migration."""
