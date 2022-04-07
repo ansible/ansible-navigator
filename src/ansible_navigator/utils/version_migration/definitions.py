@@ -21,7 +21,7 @@ class MigrationType(Enum):
     """Enum for the type of migration."""
 
     SETTINGS_FILE = "settings"
-    UNKNOWN = "unknown"
+    """Migration of the settings file."""
 
 
 T = TypeVar("T")
@@ -94,8 +94,6 @@ class Migration:
 
     name = "Migration base class"
     """The name of the migration."""
-    migration_type: MigrationType = MigrationType.UNKNOWN
-    """The type of migration."""
 
     def __init__(self) -> None:
         """Initialize the migration."""

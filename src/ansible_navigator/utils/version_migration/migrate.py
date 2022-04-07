@@ -8,7 +8,7 @@ from ..ansi import COLOR
 from ..ansi import IS_TTY
 from ..ansi import blank_line
 from ..ansi import info
-from ..ansi import prompt_any
+from ..ansi import prompt_enter
 from ..ansi import prompt_yn
 from ..ansi import success
 from ..ansi import warning
@@ -42,12 +42,14 @@ def run_migrations(settings_file_str: str, migration_type: MigrationType) -> Non
     """
     # pylint: disable=too-many-branches
     migrations_to_run = [
-        migration() for migration in migrations if migration.migration_type == migration_type
+        migration()
+        for migration in migrations
+        if getattr(migration, "migration_type", None) == migration_type
     ]
 
     for migration in migrations_to_run:
         migration.check = True
-        if migration.migration_type == MigrationType.SETTINGS_FILE:
+        if getattr(migration, "migration_type", None) == MigrationType.SETTINGS_FILE:
             migration.settings_file_path = Path(settings_file_str)
         migration.run()
 
@@ -89,4 +91,4 @@ def run_migrations(settings_file_str: str, migration_type: MigrationType) -> Non
             blank_line()
             warning(color=COLOR, message="Migration cancelled")
         blank_line()
-        prompt_any(message="Press any key to continue")
+        prompt_enter()
