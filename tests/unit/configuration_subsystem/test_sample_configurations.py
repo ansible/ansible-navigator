@@ -30,13 +30,18 @@ def test_cmdline_source_not_set():
         internals=Internals(),
         post_processor=NavigatorPostProcessor(),
         subcommands=[
-            SubCommand(name="subcommand1", description="subcommand1"),
+            SubCommand(
+                name="subcommand1",
+                description="subcommand1",
+                version_added="v0.0",
+            ),
         ],
         entries=[
             SettingsEntry(
                 name="cmdline",
                 short_description="cmdline",
                 value=SettingsEntryValue(),
+                version_added="v0.0",
             ),
         ],
     )
@@ -54,7 +59,11 @@ def test_no_subcommand():
         internals=Internals(),
         post_processor=None,
         subcommands=[
-            SubCommand(name="subcommand1", description="subcommand1"),
+            SubCommand(
+                name="subcommand1",
+                description="subcommand1",
+                version_added="v0.0",
+            ),
         ],
         entries=[],
     )
@@ -70,7 +79,11 @@ def test_many_subcommand():
         internals=Internals(),
         post_processor=None,
         subcommands=[
-            SubCommand(name="subcommand1", description="subcommand1"),
+            SubCommand(
+                name="subcommand1",
+                description="subcommand1",
+                version_added="v0.0",
+            ),
         ],
         entries=[
             SettingsEntry(
@@ -78,12 +91,14 @@ def test_many_subcommand():
                 short_description="Subcommands",
                 subcommand_value=True,
                 value=SettingsEntryValue(default="welcome"),
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="sb2",
                 short_description="Subcommands",
                 subcommand_value=True,
                 value=SettingsEntryValue(default="welcome"),
+                version_added="v0.0",
             ),
         ],
     )
@@ -99,7 +114,11 @@ def test_invalid_choice_not_set():
         internals=Internals(),
         post_processor=None,
         subcommands=[
-            SubCommand(name="subcommand1", description="subcommand1"),
+            SubCommand(
+                name="subcommand1",
+                description="subcommand1",
+                version_added="v0.0",
+            ),
         ],
         entries=[
             SettingsEntry(
@@ -107,11 +126,13 @@ def test_invalid_choice_not_set():
                 short_description="Subcommands",
                 subcommand_value=True,
                 value=SettingsEntryValue(default="welcome"),
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="e1",
                 short_description="ex1",
                 value=SettingsEntryValue(),
+                version_added="v0.0",
             ),
         ],
     )
@@ -127,7 +148,11 @@ def test_custom_nargs_for_positional():
         internals=Internals(),
         post_processor=None,
         subcommands=[
-            SubCommand(name="subcommand1", description="subcommand1"),
+            SubCommand(
+                name="subcommand1",
+                description="subcommand1",
+                version_added="v0.0",
+            ),
         ],
         entries=[
             SettingsEntry(
@@ -135,6 +160,7 @@ def test_custom_nargs_for_positional():
                 short_description="Subcommands",
                 subcommand_value=True,
                 value=SettingsEntryValue(default="welcome"),
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="e1",
@@ -142,6 +168,7 @@ def test_custom_nargs_for_positional():
                 short_description="ex1",
                 value=SettingsEntryValue(),
                 subcommands=["subcommand1"],
+                version_added="v0.0",
             ),
         ],
     )

@@ -1,6 +1,6 @@
 """Configuration definitions."""
-
 import copy
+import re
 
 from dataclasses import InitVar
 from dataclasses import dataclass
@@ -24,6 +24,16 @@ from ..utils.functions import oxfordcomma
 if TYPE_CHECKING:
     from .navigator_configuration import Internals
     from .navigator_post_processor import NavigatorPostProcessor
+
+
+def version_added_sanity_check(version: str):
+    """Check if a version string is valid.
+
+    :param version: The version string to check
+    :raises AssertionError: If the version string is invalid
+    """
+    re_version = re.compile(r"^v\d+\.\d+$")
+    assert re_version.match(version) is not None, "Version must be in the form of v{major}.{minor}"
 
 
 class Constants(Enum):
@@ -88,6 +98,8 @@ class SettingsEntryValue:
     default: Any = Constants.NOT_SET
     #: The current, effective value for the entry
     current: Any = Constants.NOT_SET
+    #: Provide a specific default value to be used in the schema
+    schema_default: Union[str, Constants] = Constants.NOT_SET
     #: Indicates where the current value came from
     source: Constants = Constants.NOT_SET
 
@@ -131,6 +143,8 @@ class SettingsEntry:
     short_description: str
     #: The value for the entry
     value: SettingsEntryValue
+    #: Version added
+    version_added: str
     #: Indicates if this should be applied to future CLIs parsed
     apply_to_subsequent_cli: Constants = Constants.ALL
     #: Indicates if this can be changed after initialization
@@ -151,6 +165,10 @@ class SettingsEntry:
     subcommands: Union[List[str], Constants] = Constants.ALL
     #: Does this hold the name of the active subcommand
     subcommand_value: bool = False
+
+    def __post_init__(self):
+        """Perform post initialization actions."""
+        version_added_sanity_check(self.version_added)
 
     def environment_variable(self, prefix: str = "") -> str:
         """Generate an effective environment variable for this entry.
@@ -223,7 +241,12 @@ class SubCommand:
 
     name: str
     description: str
+    version_added: str
     epilog: Optional[str] = None
+
+    def __post_init__(self):
+        """Perform post initialization actions."""
+        version_added_sanity_check(self.version_added)
 
 
 @dataclass
