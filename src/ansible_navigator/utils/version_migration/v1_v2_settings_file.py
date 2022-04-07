@@ -9,6 +9,7 @@ from ..dot_paths import get_with_path
 from ..dot_paths import move_to_path
 from ..dot_paths import place_at_path
 from .definitions import MigrationStep
+from .definitions import MigrationType
 from .settings_file import SettingsFile
 
 
@@ -20,6 +21,7 @@ class V1V2SettingsFile(SettingsFile):
     """
 
     name = "Version 1 to Version 2 settings file format migration"
+    migration_type: MigrationType = MigrationType.SETTINGS_FILE
 
     def __init__(self):
         """Initialize the v1 to v2 settings file migration."""

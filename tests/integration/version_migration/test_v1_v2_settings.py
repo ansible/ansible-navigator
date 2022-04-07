@@ -56,7 +56,7 @@ def test_all(
         )
         session.interaction(
             value="y\n",
-            search_within_response="Press any key to continue:",
+            search_within_response="Press Enter to continue:",
             send_clear=False,
         )
         result = session.interaction(
