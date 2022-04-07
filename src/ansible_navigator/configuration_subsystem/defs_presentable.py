@@ -83,6 +83,8 @@ class PresentableSettingsEntry(ContentBase):
     """The source of the current value"""
     subcommands: List
     """A list of subcommands where this entry is available"""
+    version_added: str
+    """The version this entry was added in"""
     cli_parameters: PresentableCliParameters = PresentableCliParameters()
     """The CLI parameters, long and short"""
 
@@ -133,6 +135,7 @@ class PresentableSettingsEntry(ContentBase):
             settings_file_sample="Not applicable",
             source=internals.settings_source.value,
             subcommands=all_subcommands,
+            version_added="v1.0",
         )
 
     @classmethod
@@ -184,6 +187,7 @@ class PresentableSettingsEntry(ContentBase):
             settings_file_sample=settings_file_sample,
             source=entry.value.source.value,
             subcommands=subcommands,
+            version_added=entry.version_added,
         )
         return result
 

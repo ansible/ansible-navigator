@@ -272,8 +272,16 @@ def test_apply_cli_subset_none():
         internals=Internals(initializing=True),
         post_processor=None,
         subcommands=[
-            SubCommand(name="list", description="list"),
-            SubCommand(name="run", description="run"),
+            SubCommand(
+                name="list",
+                description="list",
+                version_added="v0.0",
+            ),
+            SubCommand(
+                name="run",
+                description="run",
+                version_added="v0.0",
+            ),
         ],
         entries=[
             SettingsEntry(
@@ -281,6 +289,7 @@ def test_apply_cli_subset_none():
                 short_description="Subcommands",
                 subcommand_value=True,
                 value=SettingsEntryValue(default="run"),
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="z",
@@ -288,6 +297,7 @@ def test_apply_cli_subset_none():
                 cli_parameters=CliParameters(short="-z"),
                 short_description="the z parameter",
                 value=SettingsEntryValue(),
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="execution_environment",
@@ -295,6 +305,7 @@ def test_apply_cli_subset_none():
                 cli_parameters=CliParameters(short="-e"),
                 short_description="the e parameter",
                 value=SettingsEntryValue(),
+                version_added="v0.0",
             ),
         ],
     )

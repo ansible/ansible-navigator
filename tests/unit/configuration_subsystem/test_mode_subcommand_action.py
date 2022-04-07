@@ -25,18 +25,24 @@ def test_import_error():
         internals=Internals(action_packages=["__ansible_navigator.__actions"]),
         post_processor=NavigatorPostProcessor(),
         subcommands=[
-            SubCommand(name="subcommand1", description="subcommand1"),
+            SubCommand(
+                name="subcommand1",
+                description="subcommand1",
+                version_added="v0.0",
+            ),
         ],
         entries=[
             SettingsEntry(
                 name="app",
                 short_description="test_app",
                 value=SettingsEntryValue(current="subcommand1"),
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="mode",
                 short_description="mode",
                 value=SettingsEntryValue(),
+                version_added="v0.0",
             ),
         ],
     )
@@ -58,18 +64,24 @@ def test_subcommand_not_found():
         internals=Internals(action_packages=["ansible_navigator.actions"]),
         post_processor=NavigatorPostProcessor(),
         subcommands=[
-            SubCommand(name="__test_action", description="test_action"),
+            SubCommand(
+                name="__test_action",
+                description="test_action",
+                version_added="v0.0",
+            ),
         ],
         entries=[
             SettingsEntry(
                 name="app",
                 short_description="test_app",
                 value=SettingsEntryValue(current="__test_action"),
+                version_added="v0.0",
             ),
             SettingsEntry(
                 name="mode",
                 short_description="mode",
                 value=SettingsEntryValue(),
+                version_added="v0.0",
             ),
         ],
     )
