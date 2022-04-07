@@ -61,7 +61,7 @@ class SettingsFile(Migration):
 
         # Back up the current
         backup = self.settings_file_path.rename(
-            self.settings_file_path.with_suffix(self._backup_suffix)
+            self.settings_file_path.with_suffix(self._backup_suffix),
         )
         info(color=COLOR, message=f"Backup: {backup}")
 
