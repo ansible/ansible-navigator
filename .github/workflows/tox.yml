@@ -23,7 +23,7 @@ jobs:
       matrix:
         tox_env:
           - lint
-          - build-docs
+          - docs
         python-version:
           - "3.10"
         include:
