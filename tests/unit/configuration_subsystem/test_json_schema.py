@@ -72,17 +72,7 @@ def test_no_extras(schema_dict: SettingsSchemaType):
             json_paths.append(path)
 
     dive(schema_dict)
-
-    # The difference below are because we do not have settings entries for the individual
-    # keys but instead the full dict
-    only_in_json = [p for p in json_paths if p not in all_paths]
-    assert only_in_json == [
-        "ansible-navigator.execution-environment.volume-mounts.dest",
-        "ansible-navigator.execution-environment.volume-mounts.label",
-        "ansible-navigator.execution-environment.volume-mounts.options",
-    ]
-    only_in_settings = [p for p in all_paths if p not in json_paths]
-    assert only_in_settings == ["ansible-navigator.execution-environment.volume-mounts"]
+    assert sorted(all_paths) == sorted(json_paths)
 
 
 def test_schema_sample_full_tests(schema_dict: SettingsSchemaType):
