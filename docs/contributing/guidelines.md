@@ -21,24 +21,24 @@ the process locally by executing:
 <!-- cspell:disable -->
 
 ```shell-session
-$ tox -e build-docs
-build-docs create: .tox/build-docs
-build-docs installdeps: -rdocs/requirements.txt
+$ tox -e docs
+docs create: .tox/docs
+docs installdeps: --editable .[docs]
 ...
 
 ========================================================================================================================
 
 Documentation available under:
 
-    file://.tox/build-docs/docs_out/index.html
+    file://.tox/docs/docs_out/index.html
 
 To serve docs, use
 
-    $ python3 -m http.server --directory  ".tox/build-docs/docs_out" 0
+    $ python3 -m http.server --directory  ".tox/docs/docs_out" 0
 
 ========================================================================================================================
 _______________________________________________________ summary ________________________________________________________
-  build-docs: commands succeeded
+  docs: commands succeeded
   congratulations :)
 ```
 

@@ -11,9 +11,12 @@ formats: all
 
 python:
   install:
+    # We also defined PIP_CONSTRAINTS=requirements.txt on
+    # https://readthedocs.org/dashboard/ansible-navigator/environmentvariables/
     - method: pip
       path: .
-    - requirements: docs/requirements.in
+      extra_requirements:
+        - docs
   system_packages: false
 
 # Build documentation in the docs/ directory with Sphinx
