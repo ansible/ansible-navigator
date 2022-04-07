@@ -239,8 +239,9 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="ansible_runner_timeout",
             cli_parameters=CliParameters(short="--rt"),
             settings_file_path_override="ansible-runner.timeout",
-            short_description="The timeout value after which ansible-runner will"
-            "force stop the execution",
+            short_description=(
+                "The timeout value after which ansible-runner will forcefully stop the execution"
+            ),
             value=SettingsEntryValue(),
             version_added="v1.0",
         ),
