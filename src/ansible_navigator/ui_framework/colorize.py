@@ -53,7 +53,7 @@ class ColorSchema:
         self._logger = logging.getLogger(__name__)
         self._schema = schema
 
-    @functools.lru_cache(maxsize=None)
+    @functools.lru_cache
     def get_color_and_style(self, scope: str) -> Tuple[Optional[RgbTuple], Optional[str]]:
         """Get a color from the schema, traverse all to aggregate color and style.
 
