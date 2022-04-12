@@ -323,6 +323,18 @@ def human_time(seconds: Union[int, float]) -> str:
     return f"{sign_string!s}{seconds:d}s"
 
 
+def is_jinja(string: str) -> bool:
+    """Determine if a string is a Jinja2 template.
+
+    :param string: The string to check.
+    :return: True if the string is a Jinja2 template, False otherwise.
+    """
+    try:
+        return string.index("{{") < string.index("}}")
+    except ValueError:
+        return False
+
+
 def now_iso(time_zone: str) -> str:
     """Return the current time as an ISO 8601 formatted string, given a time zone.
 

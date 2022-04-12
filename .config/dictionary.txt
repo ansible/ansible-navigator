@@ -13,3 +13,5 @@ lintables
 myproject
 workdir
 isatty
+netconf
+httpapi
