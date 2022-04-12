@@ -145,7 +145,6 @@ repos:
         additional_dependencies:
           - flake8-2020 >= 1.6.0
           - flake8-isort >= 4.1.1
-          - flake8-quotes >= 3.3.1
       - id: flake8
         alias: flake8-rule-candidates
         name: Help improve our developer documentation. Try "tox -e lint-candidates" (optional)
