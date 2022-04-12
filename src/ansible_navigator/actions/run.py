@@ -749,7 +749,7 @@ class Action(ActionBase):
             {
                 "__changed": event_data.get("res", {}).get("changed", False),
                 "__duration": duration,
-                "__result": "ignored" if modify_result else runner_event,
+                "__result": ("ignored" if modify_result else runner_event).capitalize(),
             },
         )
 
