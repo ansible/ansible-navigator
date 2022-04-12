@@ -642,6 +642,8 @@ class Action(ActionBase):
     def _handle_message(self, message: dict) -> None:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-return-statements
         """Handle a runner message.
 
         :param message: The message from runner
@@ -714,7 +716,7 @@ class Action(ActionBase):
                     "__result": "In progress",
                     "__task_action": event_data["task_action"],
                     "__task": previous_name if use_previous else event_data["task"],
-                }
+                },
             )
             play["tasks"].append(event_data)
             return
@@ -748,7 +750,7 @@ class Action(ActionBase):
                 "__changed": event_data.get("res", {}).get("changed", False),
                 "__duration": duration,
                 "__result": "ignored" if modify_result else runner_event,
-            }
+            },
         )
 
         # Find the best name for the task
