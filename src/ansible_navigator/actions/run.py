@@ -721,6 +721,7 @@ class Action(ActionBase):
             play["tasks"].append(event_data)
             return
 
+        # The runner event indicates a task has finished
         # Find the task in the play
         match = ("task_uuid", "host")
         try:
