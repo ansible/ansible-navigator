@@ -1,5 +1,4 @@
-"""some utilities that are specific to ansible_navigator
-"""
+"""Some utilities that are specific to ansible_navigator."""
 import ast
 import datetime
 import decimal
@@ -36,7 +35,12 @@ logger = logging.getLogger(__name__)
 
 
 def oxfordcomma(listed, condition):
-    """Format a list into a sentence"""
+    """Format a list into a sentence.
+
+    :param listed: List of string entries to modify
+    :param condition: String to splice into string, usually 'and'
+    :returns: Modified string
+    """
     listed = [f"'{str(entry)}'" for entry in listed]
     if len(listed) == 0:
         return ""
@@ -48,13 +52,18 @@ def oxfordcomma(listed, condition):
 
 
 def abs_user_path(file_path: str) -> str:
-    """Resolve a path"""
+    """Resolve a path.
+
+    :param file_path: The file path to resolve
+    :returns: Resolved file path
+    """
     return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))
 
 
 def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
-    """check for the ansible-playbook command, runner will need it
-    returns exit messages if not found, messages if found
+    """Check for the ansible-playbook command, runner will need it.
+
+    :returns: Exit messages if not found, messages if found
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
@@ -79,10 +88,10 @@ def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
 
 
 def clear_screen() -> None:
-    """print blank lines on the screen, preserving scrollback
+    """Print blank lines on the screen, preserving scrollback.
 
     Note: In certain cases, xterm.js based terminals show stdout
-    under the initial curses output, this was found with vscode
+    under the initial curses output.
 
     Rather than issuing :command:`clear`, print blank lines to
     preserve the user's scrollback buffer.
@@ -108,12 +117,11 @@ def console_width() -> int:
 
 # TODO: Replace this with something type-safe.
 def dispatch(obj, replacements):
-    """make the replacement based on type
+    """Make the replacement based on type.
 
-    :param obj: an obj in which replacements will be made
-    :type obj: Any
-    :param replacements: the things to replace
-    :type replacements: Tuple[Tuple[Any]]
+    :param obj: An obj in which replacements will be made
+    :param replacements: The things to replace
+    :returns: Variable obj
     """
     if isinstance(obj, dict):
         obj = {k: dispatch(v, replacements) for k, v in obj.items()}
@@ -126,10 +134,10 @@ def dispatch(obj, replacements):
 
 
 def escape_moustaches(obj: Mapping) -> Mapping:
-    """escape moustaches
+    """Escape moustaches.
 
-    :param obj: something
-    :returns: the obj with replacements made
+    :param obj: Variable that may contain moustaches
+    :returns: The obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     return dispatch(obj, replacements)
@@ -139,7 +147,13 @@ def environment_variable_is_file_path(
     env_var: str,
     kind: str,
 ) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
-    """check if a given environment var is a viable file path, if so return that path"""
+    """Check if a given environment variable is a viable file path, and if so, return that path.
+
+    :param env_var: Environment variable to check for a file path
+    :param kind: Type of file
+    :returns: Log messages and file path
+
+    """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
     file_path = None
@@ -165,11 +179,13 @@ def environment_variable_is_file_path(
 
 
 def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
-    """find the settings file as
-    ./ansible-navigator.(.yml,.yaml,.json)
-    ~/.ansible-navigator.(.yml,.yaml,.json)
-    """
+    """Find the settings file.
 
+    Find the file at ./ansible-navigator.(.yml,.yaml,.json),
+    or ~/.ansible-navigator.(.yml,.yaml,.json).
+
+    :returns: Log messages and correct settings file to use
+    """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
     allowed_extensions = ["yml", "yaml", "json"]
@@ -210,7 +226,11 @@ def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[
 
 
 def flatten_list(data_list) -> List:
-    """flatten a list of lists"""
+    """Flatten a list of lists.
+
+    :param data_list: List to flatten
+    :returns: Flattened list
+    """
     if isinstance(data_list, list):
         return [a for i in data_list for a in flatten_list(i)]
     return [data_list]
@@ -218,9 +238,12 @@ def flatten_list(data_list) -> List:
 
 def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
     # pylint: disable=too-many-return-statements
-    """
-    returns datadir (e.g. /usr/share/ansible_nagivator) to use for the
-    ansible-launcher data files. First found wins.
+    """Return datadir to use for the ansible-launcher data files. First found wins.
+
+    Example datadir: /usr/share/ansible_navigator
+
+    :param app_name: Name of application - currently ansible_navigator
+    :returns: Log messages and full datadir path
     """
     messages: List[LogMessage] = []
     exit_messages: List[ExitMessage] = []
@@ -302,13 +325,22 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
 
 
 def divmod_int(numerator: Union[int, float], denominator: Union[int, float]) -> Tuple[int, int]:
-    """Return the result of divmod, as a tuple of integers."""
+    """Return the result of divmod, as a tuple of integers.
+
+    :param numerator: Numerator for divmod
+    :param denominator: Denominator for divmod
+    :returns: Quotient and remainder of divmod
+    """
     quotient, remainder = divmod(numerator, denominator)
     return int(quotient), int(remainder)
 
 
 def human_time(seconds: Union[int, float]) -> str:
-    """Convert seconds into human readable 00d00h00m00s format."""
+    """Convert seconds into human readable 00d00h00m00s format.
+
+    :param seconds: Time in seconds
+    :returns: Human readable conversion of seconds
+    """
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))
     days, seconds = divmod_int(seconds, 86400)
@@ -338,7 +370,7 @@ def is_jinja(string: str) -> bool:
 def now_iso(time_zone: str) -> str:
     """Return the current time as an ISO 8601 formatted string, given a time zone.
 
-    :params time_zone: The IANA timezone name or local.
+    :param time_zone: The IANA timezone name or local
     :returns: The ISO 8601 formatted time zone string
     """
     if time_zone == "local":
@@ -354,8 +386,10 @@ PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
 
 
 def pascal_to_snake(obj):
-    """convert a pascal cased object
-    into a snake cased object recursively
+    """Convert a pascal cased object into a snake cased object recursively.
+
+    :param obj: Pascal cased object
+    :returns: Snake cased object
     """
     if isinstance(obj, list):
         working = [pascal_to_snake(x) for x in obj]
@@ -386,7 +420,11 @@ def path_is_relative_to(child: Path, parent: Path) -> bool:
 
 
 def remove_ansi(string):
-    """strip ansi code from a str"""
+    """Strip ansi code from a str.
+
+    :param string: String to strip ansi code from
+    :returns: String without ansi code
+    """
     ansi_escape = re.compile(
         r"""
             \x1B  # ESC
@@ -405,7 +443,11 @@ def remove_ansi(string):
 
 
 def remove_dbl_un(string):
-    """remove a __ from the beginning of a string"""
+    """Remove a __ from the beginning of a string.
+
+    :param string: String to remove __ from
+    :returns: String without __
+    """
     if string.startswith("__"):
         return string.replace("__", "", 1)
     return string
@@ -440,8 +482,11 @@ def shlex_join(tokens: Iterable[str]) -> str:
 
 
 def str2bool(value: Any) -> bool:
-    """Convert some commonly used values
-    to a boolean
+    """Convert some commonly used values to a boolean.
+
+    :param value: Value to convert to boolean
+    :raises ValueError: If value is not a boolean or string
+    :returns: New converted boolean
     """
     if isinstance(value, bool):
         return value
@@ -456,8 +501,7 @@ def str2bool(value: Any) -> bool:
 # TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
 #       returns Any. Need to find a better solution... "Any" isn't it.
 def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
-    """template some string with jinja2
-    always to and from json so we return an object if it is
+    """Template some string with jinja2 always to and from json.
 
     :param string: The template string
     :param template_vars: The vars used to render the template
@@ -518,9 +562,10 @@ def timestamp_to_iso(timestamp: float, time_zone: str) -> Optional[str]:
 
 
 def time_stamp_for_file(path: str, time_zone: str) -> Tuple[Optional[float], Optional[str]]:
-    """Get a timestamp for a file path
+    """Get a timestamp for a file path.
 
     :param path: The file path
+    :param time_zone: Time zone
     :returns: The UNIX timestamp and an ISO 8601 string
     """
     try:
@@ -536,7 +581,11 @@ def time_stamp_for_file(path: str, time_zone: str) -> Tuple[Optional[float], Opt
 
 
 def to_list(thing: Optional[Union[str, List, Tuple, Set]]) -> List:
-    """convert something to a list if necessary"""
+    """Convert something to a list if necessary.
+
+    :param thing: Item to convert to a list
+    :returns: Item as a list
+    """
     if isinstance(thing, (list, tuple, set)):
         converted_value = list(thing)
     elif thing is not None:
@@ -547,10 +596,10 @@ def to_list(thing: Optional[Union[str, List, Tuple, Set]]) -> List:
 
 
 def unescape_moustaches(obj: Any) -> Mapping:
-    """unescape moustaches
+    """Unescape moustaches.
 
-    :param obj: something
-    :returns: the obj with replacements made
+    :param obj: Variable that needs to contain moustaches
+    :returns: The obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     return dispatch(obj, replacements)
