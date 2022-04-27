@@ -1,6 +1,4 @@
-"""working handler, instant 1112065
-utf-8 max = 112064
-"""
+"""Working handler, instant 1112065, utf-8 max = 112064."""
 
 from typing import TYPE_CHECKING
 from typing import List
@@ -14,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class FormHandlerWorking(CursesWindow):
-    """handle form button"""
+    """Handle form button."""
 
     def __init__(self, screen, ui_config):
         """Initialize the handler for a form working notification.
@@ -27,5 +25,10 @@ class FormHandlerWorking(CursesWindow):
 
     @staticmethod
     def handle(idx, form_fields: List) -> Tuple["FieldWorking", int]:
-        """handle the information field, immediate return"""
+        """Handle the information field, immediate return.
+
+        :param idx: Index to retrieve specific field
+        :param form_fields: List of fields from a form
+        :returns: Indexed form fields
+        """
         return form_fields[idx], 112065
