@@ -1,5 +1,4 @@
-"""information handler, instant enter
-"""
+"""Information handler, instant enter."""
 
 from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
@@ -14,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class FormHandlerInformation(CursesWindow):
-    """handle form button"""
+    """Handle form button."""
 
     def __init__(self, screen, ui_config):
         """Initialize the handler for a informational notification.
@@ -27,5 +26,10 @@ class FormHandlerInformation(CursesWindow):
 
     @staticmethod
     def handle(idx, form_fields: List) -> Tuple["FieldInformation", int]:
-        """handle the information field, immediate return"""
+        """Handle the information field, immediate return.
+
+        :param idx: Index to retrieve specific field
+        :param form_fields: List of fields
+        :returns: Indexed form fields
+        """
         return form_fields[idx], curses_ascii.NL
