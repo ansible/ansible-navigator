@@ -1,5 +1,4 @@
-"""individual check and the form field checks and radio
-"""
+"""Individual check and the form field checks for radios."""
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -17,7 +16,7 @@ from .validators import Validation
 
 @dataclass
 class FieldRadio:
-    """a form filed containing radios"""
+    """A form field containing radios."""
 
     prompt: str
     name: str
@@ -28,24 +27,34 @@ class FieldRadio:
 
     @property
     def checked(self):
-        """conveniently return just checked"""
+        """Conveniently return just checked options.
+
+        :returns: Checked options
+        """
         return tuple(option.name for option in self.options if option.checked)
 
     @property
     def formatted_default(self) -> str:
-        """check don't have a default to show in the
-        prompt
+        """Format the field prompt with an empty string.
+
+        :returns: Empty string
         """
         return ""
 
     @property
     def full_prompt(self) -> str:
-        """no default to add into the prompt for checkbox"""
+        """Format the prompt.
+
+        :returns: Prompt
+        """
         return self.prompt
 
     @property
     def validator(self) -> Callable:
-        """based on form type, provide a validator"""
+        """Provide a validator based on form type.
+
+        :returns: Validation of checked entries
+        """
         return partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
 
     def _validate(self, response: "FieldRadio") -> Validation:
@@ -57,13 +66,17 @@ class FieldRadio:
         return validation
 
     def validate(self, response: "FieldRadio") -> None:
-        """validate this instance"""
+        """Validate this FieldRadio instance.
+
+        :param response: Instance to check and verify options are valid
+        """
         validation = self._validate(response)
         self.current_error = validation.error_msg
 
     def conditional_validation(self, response: "FieldRadio") -> None:
-        """conditional validation used for
-        tab
+        """Conditional validation for a FieldRadio instance.
+
+        :param response: Instance to check and verify options are valid
         """
         self._validate(response)
         self.current_error = ""

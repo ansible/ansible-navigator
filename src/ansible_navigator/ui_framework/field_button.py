@@ -1,5 +1,4 @@
-"""a text input field
-"""
+"""A text input field."""
 from dataclasses import dataclass
 from typing import Callable
 from typing import Optional
@@ -12,7 +11,7 @@ from .validators import FieldValidators
 
 @dataclass
 class FieldButton:
-    """a text input field"""
+    """A text input field."""
 
     name: str
     text: str
@@ -25,11 +24,17 @@ class FieldButton:
 
     @property
     def full_prompt(self) -> str:
-        """no default to add into the prompt for checkbox"""
+        """No default to add into the prompt for checkbox.
+
+        :returns: Empty string
+        """
         return ""
 
     def validate(self, response: FieldValidationStates) -> None:
-        """validate this instance"""
+        """Validate this instance.
+
+        :param response: List of field states for validation.
+        """
         validation = self.validator(response)
         if validation.error_msg:
             self.disabled = True
@@ -37,7 +42,8 @@ class FieldButton:
             self.disabled = False
 
     def conditional_validation(self, response: FieldValidationStates) -> None:
-        """conditional validation used for
-        tab
+        """Conditional validation used for form validation.
+
+        :param response: List of field states for validation.
         """
         self.validate(response)
