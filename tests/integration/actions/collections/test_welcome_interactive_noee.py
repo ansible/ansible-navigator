@@ -1,5 +1,4 @@
-"""Tests for collections from welcome, interactive, without an EE.
-"""
+"""Tests for collections from welcome, interactive, without an EE."""
 import pytest
 
 from ..._interactions import Command

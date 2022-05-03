@@ -1,5 +1,5 @@
-"""Base class for collections interactive tests.
-"""
+"""Base class for collections interactive tests."""
+
 import difflib
 import os
 
@@ -132,8 +132,8 @@ class BaseClass:
         :param request: The request for this fixture
         :param step: The UI test step
         :param tmux_session: A tmux session
+        :raises ValueError: If test mode is not set
         """
-
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
