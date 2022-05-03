@@ -1,5 +1,4 @@
-"""Tests for collections from CLI, interactive, with an EE.
-"""
+"""Tests for collections from CLI, interactive, with an EE."""
 import pytest
 
 from ..._interactions import Command
