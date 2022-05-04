@@ -1,5 +1,4 @@
-"""Get one line of text input
-"""
+"""Get one line of text input."""
 
 import curses
 
@@ -14,7 +13,7 @@ from .sentinels import unknown
 
 
 class FormHandlerText(CursesWindow, Textbox):
-    """Get one line of text input"""
+    """Get one line of text input."""
 
     def __init__(self, screen, ui_config):
         """Initialize the handler for a form text field.
@@ -30,15 +29,18 @@ class FormHandlerText(CursesWindow, Textbox):
         self.stripspaces = True
         self._screen = screen
 
-    def _paint_from_line_cache(self) -> None:
-        """put the text from the line cache in the text input window"""
+    def _paint_from_line_cache(
+        self,
+    ) -> None:
+        """Put the text from the line cache in the text input window."""
         line_part = CursesLinePart(0, self.input_line_cache[self.input_line_pointer], 0, 0)
         self._add_line(self.win, 0, CursesLine((line_part,)))
         self.win.clrtoeol()
 
     def _adjust_line_pointer(self, amount: int) -> None:
-        """increase the current position in the
-        line cache
+        """Increase the current position in the line cache.
+
+        :param amount: The number to increase by
         """
         self.input_line_pointer = (self.input_line_pointer + amount) % len(self.input_line_cache)
 
@@ -63,7 +65,7 @@ class FormHandlerText(CursesWindow, Textbox):
                     self._arrowing = True
                 else:
                     self._adjust_line_pointer(1)
-                self._paint_from_line_cache()
+                    self._paint_from_line_cache()
             ret = 1
         elif char in (curses_ascii.DLE, curses.KEY_UP):
             if self.input_line_cache:
@@ -72,7 +74,7 @@ class FormHandlerText(CursesWindow, Textbox):
                     self._arrowing = True
                 else:
                     self._adjust_line_pointer(-1)
-                self._paint_from_line_cache()
+                    self._paint_from_line_cache()
             ret = 1
         elif char == curses_ascii.TAB:
             ret = 0
@@ -82,7 +84,12 @@ class FormHandlerText(CursesWindow, Textbox):
         return ret
 
     def handle(self, idx, form_fields) -> Tuple[str, int]:
-        """Edit in the widget window and collect the results."""
+        """Edit in the widget window and collect the results.
+
+        :param idx: Index to retrieve specific field
+        :param form_fields: List of fields
+        :returns: Results from line and char edit
+        """
         form_field = form_fields[idx]
 
         if form_field.response is not unknown:

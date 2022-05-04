@@ -1,5 +1,4 @@
-"""an information field
-"""
+"""An information field."""
 from dataclasses import dataclass
 from typing import Callable
 from typing import List
@@ -15,7 +14,7 @@ from .validators import FieldValidators
 
 @dataclass
 class FieldInformation:
-    """a text input field"""
+    """A text input field."""
 
     name: str
     information: List[str]
@@ -27,17 +26,26 @@ class FieldInformation:
 
     @property
     def full_prompt(self) -> str:
-        """return the max width information since
-        windows width and : placement is based on
-        the largest 'prompt'
+        """Return the max width information.
+
+        Windows width and : placement is based on
+        the largest 'prompt'.
+
+        :returns: Max width information
         """
         return max(self.information)
 
     def validate(self, response: str) -> None:
         # pylint: disable=unused-argument
-        """no validation required for information field"""
+        """No validation required for information field.
+
+        :param response: Field data
+        """
         self.valid = True
 
     def conditional_validation(self, response: str) -> None:
-        """no conditional validation"""
+        """No conditional validation required.
+
+        :param response: Field data
+        """
         self.validate(response)

@@ -1,5 +1,4 @@
-"""Get one line of text input
-"""
+"""Get one line of text input."""
 import curses
 
 from curses import ascii as curses_ascii
@@ -18,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class FormHandlerOptions(CursesWindow):
-    """handle form checkbox field"""
+    """Handle form checkbox field."""
 
     def __init__(self, screen, ui_config):
         """Initialize the handler for either form checkboxes or radio buttons.
@@ -30,7 +29,11 @@ class FormHandlerOptions(CursesWindow):
         self._screen = screen
 
     def populate(self, form_field, active):
-        """populate the window with the checkboxes"""
+        """Populate the window with the checkboxes.
+
+        :param form_field: Field from a form
+        :param active: Track active checkbox/option
+        """
         for idx, option in enumerate(form_field.options):
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
@@ -48,8 +51,12 @@ class FormHandlerOptions(CursesWindow):
 
     def handle(self, idx, form_fields: List) -> Tuple[Union["FieldChecks", "FieldRadio"], int]:
         # pylint: disable=too-many-nested-blocks
+        """Handle the check box field.
 
-        """handle the check box field"""
+        :param form_fields: List of fields
+        :param idx: Index to retrieve specific field
+        :returns: Field from form and characters
+        """
         form_field = form_fields[idx]
         active = 0
 

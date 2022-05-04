@@ -1,5 +1,4 @@
-"""simple utils for working with forms
-"""
+"""Simple utils for working with forms."""
 import copy
 import shutil
 import textwrap
@@ -29,7 +28,11 @@ from .validators import FieldValidators
 
 def dict_to_form(form_data: Dict) -> Form:
     # pylint: disable=too-many-branches
-    """convert a python dict to a form"""
+    """Convert a python dict to a form.
+
+    :param form_data: Form data
+    :returns: Object containing fields from form
+    """
     if form_data.get("type") == "notification":
         form = Form(type=FormType.NOTIFICATION)
     elif form_data.get("type") == "working":
@@ -93,8 +96,11 @@ def dict_to_form(form_data: Dict) -> Form:
 
 
 def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
-    """populate the original _dict of the form
-    with the results
+    """Populate the original _dict of the form with the results.
+
+    :param form: Holding place for form fields
+    :param key_on_name: Bool used to filter via name
+    :returns: form as type dict
     """
     res = form._dict  # pylint: disable=protected-access
     res["cancelled"] = form.cancelled
@@ -125,7 +131,11 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
 
 
 def break_long_lines(messages):
-    """break lines such that the form width !> 80%"""
+    """Break lines such that the form width !> 80%.
+
+    :param messages: Lines of the form
+    :returns: Resulting messages split if needed
+    """
     width = int(shutil.get_terminal_size().columns * 0.8)
     result = []
     for message in messages:
@@ -135,7 +145,11 @@ def break_long_lines(messages):
 
 
 def nonblocking_notification(messages: List[str]) -> Form:
-    """generate a std nonblocking notification"""
+    """Generate a std nonblocking notification.
+
+    :param messages: List of messages to display
+    :returns: Form to display as type dict
+    """
     messages = break_long_lines(messages)
     form = {
         "title": "Working on it...",
@@ -150,6 +164,7 @@ def settings_notification(color: bool, messages: List[ExitMessage]) -> Form:
     """Generate a warning notification for settings errors.
 
     :param messages: List of messages to display
+    :param color: Bool to reflect if color is transferred or not
     :returns: The form to display
     """
     # Take the initial warning if there is one
@@ -177,7 +192,11 @@ def settings_notification(color: bool, messages: List[ExitMessage]) -> Form:
 
 
 def warning_notification(messages: List[str]) -> Form:
-    """generate a std warning notification"""
+    """Generate a std warning notification.
+
+    :param messages: List of warning messages to be displayed
+    :returns: Form to display as type dict
+    """
     messages = break_long_lines(messages)
     form = {
         "title": "WARNING",
@@ -189,7 +208,11 @@ def warning_notification(messages: List[str]) -> Form:
 
 
 def error_notification(messages: List[str]) -> Form:
-    """generate a std error notification"""
+    """Generate a std error notification.
+
+    :param messages: List of error messages to display
+    :returns: Form to display as type dict
+    """
     messages = break_long_lines(messages)
     form = {
         "title": "ERROR",
@@ -201,7 +224,11 @@ def error_notification(messages: List[str]) -> Form:
 
 
 def success_notification(messages: List[str]) -> Form:
-    """generate a std success notification"""
+    """Generate a std success notification.
+
+    :param messages: List of success messages to display
+    :returns: Form to display as type dict
+    """
     messages = break_long_lines(messages)
     form = {
         "title": "SUCCESS",

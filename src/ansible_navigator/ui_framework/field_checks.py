@@ -1,5 +1,4 @@
-"""individual check and the form field checks and radio
-"""
+"""Individual field check, the form field checks and radio check."""
 import sys
 
 from dataclasses import dataclass
@@ -19,7 +18,7 @@ from .validators import Validation
 
 @dataclass
 class FieldChecks:
-    """a form filed containing checks"""
+    """A form field containing checks."""
 
     prompt: str
     name: str
@@ -32,24 +31,34 @@ class FieldChecks:
 
     @property
     def checked(self) -> Tuple[bool, ...]:
-        """conveniently return just checked"""
+        """Conveniently return just checked fields.
+
+        :returns: Name of every checked field
+        """
         return tuple(option.name for option in self.options if option.checked)
 
     @property
     def formatted_default(self) -> str:
-        """check don't have a default to show in the
-        prompt
+        """Format the checked field prompt with an empty string.
+
+        :returns: Empty string
         """
         return ""
 
     @property
     def full_prompt(self) -> str:
-        """no default to add into the prompt for checkbox"""
+        """Format the checkbox prompt.
+
+        :returns: Checkbox prompt
+        """
         return self.prompt
 
     @property
     def validator(self) -> Callable:
-        """based on form type, provide a validator"""
+        """Provide a validator based on form type.
+
+        :returns: Validation of checked entries
+        """
         return partial(
             FieldValidators.some_of_or_none,
             max_selected=self.max_selected,
@@ -65,7 +74,10 @@ class FieldChecks:
         return validation
 
     def validate(self, response: "FieldChecks") -> None:
-        """validate this instance"""
+        """Validate this FieldChecks instance.
+
+        :param response: Instance to check and verify options are valid
+        """
         if self.max_selected == sys.maxsize:
             self.max_selected = len(self.options)
 
@@ -73,8 +85,9 @@ class FieldChecks:
         self.current_error = validation.error_msg
 
     def conditional_validation(self, response: "FieldChecks") -> None:
-        """conditional validation used for
-        tab
+        """Conditional validation for a Fieldchecks instance.
+
+        :param response: Instance to check and verify options are valid
         """
         self._validate(response)
         self.current_error = ""
