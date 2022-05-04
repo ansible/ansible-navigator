@@ -1,5 +1,4 @@
-"""a text input field
-"""
+"""A text input field."""
 from dataclasses import dataclass
 from typing import Any
 from typing import Callable
@@ -17,7 +16,8 @@ from .validators import FieldValidators
 @dataclass
 class FieldText:
     # pylint: disable=too-many-instance-attributes
-    """a text input field"""
+    """A text input field."""
+
     name: str
     prompt: str
     current_error: str = ""
@@ -31,25 +31,37 @@ class FieldText:
 
     @property
     def formatted_default(self) -> str:
-        """return the default value"""
+        """Return the default value.
+
+        :returns: Default value or empty string
+        """
         if self.default is nonexistent:
             return ""
         return f" ({self.default})"
 
     @property
     def full_prompt(self) -> str:
-        """the full prompt includes the default"""
+        """Return the full prompt with the default.
+
+        :returns: Prompt with default text
+        """
         return self.prompt + self.formatted_default
 
     def pre_populate(self, value: str) -> None:
-        """prepopulate this text input
-        with a value, this is different that a default
-        in that it will populate the text input field
+        """Prepopulate this text input with a value.
+
+        This is different from a default
+        in that it will populate the text input field.
+
+        :param value: Item to populate the input field
         """
         self.conditional_validation(str(value))
 
     def validate(self, response: str) -> None:
-        """validate the response"""
+        """Validate the response.
+
+        :param response: Text input response
+        """
         if response == "" and self.default is not nonexistent:
             response = str(self.default)
 
@@ -63,8 +75,11 @@ class FieldText:
             self.value = validation.value
 
     def conditional_validation(self, response: str) -> None:
-        """conditional validation used for tab,
-        only accept the value if it validates, otherwise move along
+        """Conditional validation used for tab.
+
+        Only accept the value if it validates, otherwise move along.
+
+        :param response: Text input response
         """
         if response == "" and self.default is not nonexistent:
             response = str(self.default)
