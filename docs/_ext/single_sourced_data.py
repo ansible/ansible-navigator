@@ -225,8 +225,8 @@ def _subcommands_generate_tables() -> List:
         subcommand_details = (
             subcommand.name,
             subcommand.description,
-            f"ansible-navigator {subcommand.name} --help",
-            f":{subcommand.name}",
+            f"``ansible-navigator {subcommand.name} --help``",
+            f"``:{subcommand.name}``",
             subcommand.version_added,
         )
         table.extend(_rst_generate_row(subcommand_details))
