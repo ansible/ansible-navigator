@@ -49,3 +49,6 @@ ignoreRegExpList:
   - "curses\\.\\w+" # curses functions e.g. curses.doupdate
   - "monkeypatch\\.\\w+" # monkeypatch functions e.g. monkeypatch.setenv
   - "request\\.node\\.\\w+" # pytest request  e.g. request.node.nodeid
+languageSettings:
+  - languageId: python
+    allowCompoundWords: true
