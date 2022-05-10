@@ -166,6 +166,10 @@ class Configurator:
             try:
                 config = yaml.load(fh, Loader=SafeLoader)
                 if config is None:
+                    # In the case of ansible-navigator settings --sample > ansible-navigator.yml
+                    # the file will be empty, but we shouldn't exit.
+                    if self._params in (["settings", "--sample"], ["settings", "--gs"]):
+                        return
                     raise ValueError("Settings file cannot be empty.")
             except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                 exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
