@@ -152,6 +152,7 @@ class Configurator:
 
     def _apply_settings_file(self) -> None:
         # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         settings_filesystem_path = self._config.internals.settings_file_path
 
         if not isinstance(settings_filesystem_path, str):
