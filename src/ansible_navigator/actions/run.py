@@ -886,17 +886,18 @@ class Action(ActionBase):
             or self._args.playbook_artifact_enable is True
             and self._args.help_playbook is not True
         ):
+            status, status_color = self._get_status()
+
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
                 playbook_dir=os.path.dirname(self._args.playbook),
                 playbook_name=os.path.splitext(os.path.basename(self._args.playbook))[0],
+                playbook_status=status,
                 time_stamp=now_iso(self._args.time_zone),
             )
             self._logger.debug("Formatted artifact file name set to %s", filename)
             filename = abs_user_path(filename)
             self._logger.debug("Resolved artifact file name set to %s", filename)
-
-            status, status_color = self._get_status()
 
             try:
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
