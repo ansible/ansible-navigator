@@ -6,6 +6,7 @@ standard out and error from the command run and populates the
 queue with messages.
 """
 
+from copy import deepcopy
 from queue import Queue
 
 from ansible_runner import run_command_async
@@ -30,7 +31,8 @@ class CommandAsync(CommandBase):
 
     def _event_handler(self, event):
         self._logger.debug("ansible-runner event handle: %s", event)
-        self._queue.put(event)
+        new_event = deepcopy(event)
+        self._queue.put(new_event)
 
     def run(self):
         """Initiate the execution of the runner command in async mode.
