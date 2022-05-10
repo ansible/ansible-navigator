@@ -163,7 +163,7 @@ repos:
           - manual
 
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v0.942
+    rev: v0.950
     hooks:
       # NOTE: Here MyPy is executed twice -- once for the highest and once
       # NOTE: for the lowest supported version. They are hardcoded in the
@@ -212,7 +212,7 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.13.5
+    rev: v2.13.8
     hooks:
       - id: pylint
         args:
