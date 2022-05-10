@@ -11,6 +11,9 @@ dictionaries:
   - "!backwards-compatibility"
   - "!cryptocurrencies"
   - "!cpp"
+languageSettings:
+  - languageId: python
+    allowCompoundWords: true
 ignorePaths:
   # All dot files in the root
   - \.*

@@ -35,7 +35,7 @@ def get_status(*_args, **_kwargs):
     :param _kwargs: The keyword arguments
     :returns: The runner status
     """
-    return (0, 0)
+    return ("successful", 0)
 
 
 @dataclass
@@ -128,6 +128,12 @@ test_data = [
         playbook="site.yml",
         time_zone="America/Los_Angeles",
         re_match=re.compile("^/tmp/.*-0[7,8]:00"),
+    ),
+    Scenario(
+        name="With status",
+        playbook="site.yml",
+        filename="/tmp/{playbook_status}/{playbook_name}.json",
+        starts_with="/tmp/successful/site.json",
     ),
 ]
 

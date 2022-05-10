@@ -923,6 +923,9 @@ class NavigatorPostProcessor:
         # literal_text, fname, format_spec, conversion
         found = set(f for _, f, _, _ in Formatter().parse(entry.value.current) if f)
         available = set(f for _, f, _, _ in Formatter().parse(entry.value.default) if f)
+        non_defaults_also_available = {"playbook_status"}
+
+        available.update(non_defaults_also_available)
         unknown = found - available
         if not unknown:
             return messages, exit_messages
