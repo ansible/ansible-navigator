@@ -121,12 +121,6 @@ per-file-ignores =
   tests/integration/actions/replay/test_direct_interactive_noee.py: D200, D400
   tests/integration/actions/replay/test_welcome_interactive_ee.py: D200, D400
   tests/integration/actions/replay/test_welcome_interactive_noee.py: D200, D400
-  tests/integration/actions/stdout/__init__.py: D104
-  tests/integration/actions/stdout/base.py: D200, D201, D400, D403, DAR101, DAR301
-  tests/integration/actions/stdout/test_direct_interactive_ee.py: D200, D400
-  tests/integration/actions/stdout/test_direct_interactive_noee.py: D200, D400
-  tests/integration/actions/stdout/test_welcome_interactive_ee.py: D200, D400
-  tests/integration/actions/stdout/test_welcome_interactive_noee.py: D200, D400
   tests/integration/actions/templar/__init__.py: D104
   tests/integration/actions/templar/base.py: D200, D202, D400, D403, DAR101, DAR301
   tests/integration/actions/templar/test_direct_interactive_ee.py: D200, D400
