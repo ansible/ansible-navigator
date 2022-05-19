@@ -1,5 +1,4 @@
-"""base class for templar interactive tests
-"""
+"""Base class for templar interactive tests."""
 import difflib
 import os
 
@@ -55,7 +54,7 @@ base_steps = (
 
 
 class BaseClass:
-    """base class for interactive templar tests"""
+    """Base class for interactive templar tests."""
 
     UPDATE_FIXTURES = False
     TEST_FOR_MODE: Optional[str] = None
@@ -66,6 +65,8 @@ class BaseClass:
         """Return a new tmux session.
 
         The EDITOR is set here such that vim will not create swap files.
+        :param request: A fixture providing details about the test caller
+        :yields: A tmux session
         """
         params = {
             "pane_height": "1000",
@@ -82,8 +83,12 @@ class BaseClass:
 
     def test(self, request, tmux_session, step):
         # pylint: disable=too-many-branches
-        """test interactive and ``stdout`` mode ``config``"""
+        """Test interactive and ``stdout`` mode ``config``.
 
+        :param request: A fixture providing details about the test caller
+        :param tmux_session: The tmux session to use
+        :param step: The commands to issue and content to look for
+        """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
