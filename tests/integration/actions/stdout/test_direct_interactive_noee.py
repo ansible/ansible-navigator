@@ -1,5 +1,4 @@
-"""Tests for ``stdout`` from CLI, interactive, without an EE.
-"""
+"""Tests for ``stdout`` from CLI, interactive, without an EE."""
 import pytest
 
 from .base import ANSIBLE_PLAYBOOK

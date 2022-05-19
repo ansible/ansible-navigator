@@ -1,5 +1,4 @@
-"""Base class for stdout interactive tests.
-"""
+"""Base class for stdout interactive tests."""
 import difflib
 import os
 
@@ -24,7 +23,11 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(request):
-        """tmux fixture for this module"""
+        """Tmux fixture for this module.
+
+        :param request: A fixture providing details about the test caller
+        :yields: Tmux session
+        """
         params = {
             "config_path": TEST_CONFIG_FILE,
             "pane_height": "100",
@@ -39,7 +42,15 @@ class BaseClass:
 
     def test(self, request, tmux_session, index, user_input, comment, search_within_response):
         # pylint:disable=too-many-arguments
-        """Run the tests for stdout, mode and EE set in child class."""
+        """Run the tests for stdout, mode and EE set in child class.
+
+        :param request: A fixture providing details about the test caller
+        :param tmux_session: The tmux session to use
+        :param index: The test index
+        :param user_input: Value to send to the tmux session
+        :param comment: Comment to add to the fixture
+        :param search_within_response: A list of strings or string to find
+        """
         assert os.path.exists(ANSIBLE_PLAYBOOK)
         assert os.path.exists(TEST_CONFIG_FILE)
 
