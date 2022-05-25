@@ -1,5 +1,4 @@
-"""Tests for templar from welcome, interactive, with an EE.
-"""
+"""Tests for templar from welcome, interactive, with an EE."""
 import pytest
 
 from ..._interactions import Command
