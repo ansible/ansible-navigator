@@ -1,5 +1,4 @@
-"""Tests for replay from CLI, interactive, without an EE.
-"""
+"""Tests for replay from CLI, interactive, without an EE."""
 import pytest
 
 from .base import PLAYBOOK_ARTIFACT

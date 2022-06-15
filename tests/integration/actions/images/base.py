@@ -1,5 +1,4 @@
-"""Base class for images interactive tests.
-"""
+"""Base class for images interactive tests."""
 import difflib
 import os
 
@@ -47,7 +46,11 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(request):
-        """tmux fixture for this module"""
+        """Tmux fixture for this module.
+
+        :param request: A fixture providing details about the test caller
+        :yields: Tmux session
+        """
         params = {
             "unique_test_id": request.node.nodeid,
         }
@@ -55,8 +58,13 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        """Run the tests for images, mode and ``ee`` set in child class."""
+        """Run the tests for images, mode and ``ee`` set in child class.
 
+        :param request: A fixture providing details about the test caller
+        :param tmux_session: The tmux session to use
+        :param step: Step index to use
+        :raises ValueError: When the test mode is not set
+        """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:

@@ -1,5 +1,4 @@
-"""Base class for ``config`` interactive/stdout tests.
-"""
+"""Base class for ``config`` interactive/stdout tests."""
 import difflib
 import os
 
@@ -48,7 +47,11 @@ class BaseClass:
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(self, request):
-        """tmux fixture for this module"""
+        """Generate a tmux fixture for this module.
+
+        :param request: A fixture providing details about the test caller
+        :yields: A tmux session
+        """
         params = {
             "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42", "export PAGER=cat"],
             "unique_test_id": request.node.nodeid,
@@ -60,8 +63,13 @@ class BaseClass:
 
     def test(self, request, tmux_session, step):
         # pylint: disable=too-many-locals
-        """Run the tests for ``config``, mode and ``ee`` set in child class."""
+        """Run the tests for ``config``, mode and ``ee`` set in child class.
 
+        :param request: A fixture providing details about the test caller
+        :param tmux_session: The tmux session to use
+        :param step: The commands to issue and content to look for
+        :raises ValueError: When the test mode is not set
+        """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:

@@ -1,5 +1,4 @@
-"""Tests for doc from CLI, stdout.
-"""
+"""Tests for doc from CLI, stdout."""
 from typing import List
 
 import pytest

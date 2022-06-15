@@ -1,5 +1,4 @@
-"""Tests for ``config`` from welcome, interactive, specify configuration.
-"""
+"""Tests for ``config`` from welcome, interactive, specify configuration."""
 import pytest
 
 from ..._interactions import Command
