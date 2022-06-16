@@ -1,5 +1,4 @@
-"""Tests for inventory from welcome, interactive, without an EE.
-"""
+"""Tests for inventory from welcome, interactive, without an EE."""
 import pytest
 
 from ..._interactions import Command

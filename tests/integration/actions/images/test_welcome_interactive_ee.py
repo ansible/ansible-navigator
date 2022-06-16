@@ -1,5 +1,4 @@
-"""Tests for images from welcome, interactive, with an EE.
-"""
+"""Tests for images from welcome, interactive, with an EE."""
 import pytest
 
 from ..._interactions import Command
