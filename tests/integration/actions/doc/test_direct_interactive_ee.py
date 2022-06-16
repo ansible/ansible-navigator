@@ -1,5 +1,4 @@
-"""Tests for doc from CLI, interactive, with an EE.
-"""
+"""Tests for doc from CLI, interactive, with an EE."""
 from typing import List
 
 import pytest
@@ -56,7 +55,7 @@ class TestModuleDoc(BaseClass):
     testdata_lookup_doc,
 )
 class TestLookUpDoc(BaseClass):
-    """run the tests"""
+    """Run the tests."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
@@ -67,7 +66,7 @@ class TestLookUpDoc(BaseClass):
     testdata_module_doc_not_exist,
 )
 class TestModuleDocNotExist(BaseClass):
-    """run the tests"""
+    """Run the tests."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
