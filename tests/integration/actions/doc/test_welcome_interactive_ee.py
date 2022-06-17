@@ -1,5 +1,4 @@
-"""Tests for doc from welcome, interactive, with an EE.
-"""
+"""Tests for doc from welcome, interactive, with an EE."""
 from typing import List
 
 import pytest

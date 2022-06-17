@@ -1,5 +1,4 @@
-"""Tests for ``config`` from CLI, interactive, without an EE.
-"""
+"""Tests for ``config`` from CLI, interactive, without an EE."""
 import pytest
 
 from ..._interactions import Command

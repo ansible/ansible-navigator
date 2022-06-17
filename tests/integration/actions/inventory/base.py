@@ -1,5 +1,4 @@
-"""Base class for inventory interactive/stdout tests.
-"""
+"""Base class for inventory interactive/stdout tests."""
 import difflib
 import os
 
@@ -51,14 +50,18 @@ base_steps = (
 
 
 class BaseClass:
-    """base class for inventory interactive/stdout tests"""
+    """Base class for inventory interactive/stdout tests."""
 
     UPDATE_FIXTURES = False
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(request):
-        """tmux fixture for this module"""
+        """Tmux fixture for this module.
+
+        :param request: A fixture providing details about the test caller
+        :yields: Tmux session
+        """
         params = {
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
@@ -74,7 +77,13 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        """Run the tests for inventory, mode and ``ee`` set in child class."""
+        """Run the tests for inventory, mode and ``ee`` set in child class.
+
+        :param request: A fixture providing details about the test caller
+        :param tmux_session: The tmux session to use
+        :param step: Step index to use
+        :raises ValueError: When the test mode is not set
+        """
         assert os.path.exists(ANSIBLE_INVENTORY_FIXTURE_DIR)
         assert os.path.exists(TEST_CONFIG_FILE)
 

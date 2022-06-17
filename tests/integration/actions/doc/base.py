@@ -1,5 +1,4 @@
-"""Base class for doc interactive/stdout tests.
-"""
+"""Base class for doc interactive/stdout tests."""
 import difflib
 import os
 
@@ -22,7 +21,11 @@ class BaseClass:
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_doc_session")
     def fixture_tmux_doc_session(request):
-        """Tmux fixture for this module."""
+        """Tmux fixture for this module.
+
+        :param request: A fixture providing details about the test caller
+        :yields: Tmux session
+        """
         params = {
             "pane_height": "2000",
             "pane_width": "200",
@@ -49,7 +52,17 @@ class BaseClass:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-branches
-        """Run the tests for collections, mode and ``ee`` set in child class."""
+        """Run the tests for ``doc``, mode and ``ee`` set in child class.
+
+        :param request: A fixture providing details about the test caller
+        :param tmux_doc_session: The tmux session to use
+        :param index: Step index
+        :param user_input: Value to send to the tmux session
+        :param comment: Comment to add to the fixture
+        :param testname: Name of test
+        :param expected_in_output: A list of strings or string to find
+        :raises ValueError: When the test mode is not set
+        """
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"
         elif self.TEST_FOR_MODE == "stdout":
