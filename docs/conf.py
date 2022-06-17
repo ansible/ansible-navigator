@@ -261,11 +261,11 @@ root_doc = master_doc = "index"  # Sphinx 4+ / 3-
 
 # -- Options for extlinks extension ---------------------------------------
 extlinks = {
-    "issue": (f"{github_repo_url}/issues/%s", "#"),  # noqa: WPS323
-    "pr": (f"{github_repo_url}/pull/%s", "PR #"),  # noqa: WPS323
-    "commit": (f"{github_repo_url}/commit/%s", ""),  # noqa: WPS323
-    "gh": (f"{github_url}/%s", "GitHub: "),  # noqa: WPS323
-    "user": (f"{github_sponsors_url}/%s", "@"),  # noqa: WPS323
+    "issue": (f"{github_repo_url}/issues/%s", "#%s"),  # noqa: WPS323
+    "pr": (f"{github_repo_url}/pull/%s", "PR #%s"),  # noqa: WPS323
+    "commit": (f"{github_repo_url}/commit/%s", "%s"),  # noqa: WPS323
+    "gh": (f"{github_url}/%s", "GitHub: %s"),  # noqa: WPS323
+    "user": (f"{github_sponsors_url}/%s", "@%s"),  # noqa: WPS323
 }
 
 # -- Options for intersphinx extension ---------------------------------------
