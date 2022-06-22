@@ -43,7 +43,6 @@ class Cli2Runner:
         config_fixture: str,
         expected: Dict[str, str],
     ):
-        # pylint: disable=no-self-use
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
 

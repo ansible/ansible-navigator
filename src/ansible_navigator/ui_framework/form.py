@@ -121,7 +121,7 @@ class FormPresenter(CursesWindow):
         return self._screen_width - self._field_win_start
 
     def _dimensions(self):
-        self._prompt_end = max([len(form_field.full_prompt) for form_field in self._form.fields])
+        self._prompt_end = max(len(form_field.full_prompt) for form_field in self._form.fields)
         self._input_start = self._prompt_end + len(self._separator)
 
         widths = []
@@ -133,9 +133,9 @@ class FormPresenter(CursesWindow):
                     (len(option.text) + self._input_start for option in form_field.options)
                 )
             if hasattr(form_field, "information"):
-                widths.append(max([len(info) for info in form_field.information]))
+                widths.append(max(len(info) for info in form_field.information))
             if hasattr(form_field, "messages"):
-                widths.append(max([len(msg) for msg in form_field.messages]))
+                widths.append(max(len(msg) for msg in form_field.messages))
             widths.append(len(form_field.validator(hint=True)) + self._input_start)
 
         if self._form.type is FormType.FORM:

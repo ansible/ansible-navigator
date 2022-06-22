@@ -365,7 +365,6 @@ class Action(ActionBase):
 
     def _run_runner(self) -> None:
         # pylint: disable=too-many-branches
-        # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
         """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
