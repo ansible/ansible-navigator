@@ -70,11 +70,11 @@ per-file-ignores =
   src/ansible_navigator/tm_tokenize/state.py: D100, D101, D102
   src/ansible_navigator/tm_tokenize/tokenize.py: D100, D201, D400, D403, DAR101, DAR201
   src/ansible_navigator/tm_tokenize/utils.py: D100, D400, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/curses_window.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/menu_builder.py: D200, D400, D401, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/sentinels.py: D102, D105, D205, D400
+#  src/ansible_navigator/ui_framework/curses_window.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201
+#  src/ansible_navigator/ui_framework/menu_builder.py: D200, D400, D401, D403, DAR101, DAR201
+#  src/ansible_navigator/ui_framework/sentinels.py: D102, D105, D205, D400
   src/ansible_navigator/ui_framework/ui.py: D200, D202, D205, D211, D400, D403, DAR101, DAR201, DAR401
-  src/ansible_navigator/ui_framework/utils.py: D200, D205, D400, D403, DAR101, DAR201
+#  src/ansible_navigator/ui_framework/utils.py: D200, D205, D400, D403, DAR101, DAR201
   src/ansible_navigator/ui_framework/validators.py: D200, D400, D401, D403, DAR101, DAR201, DAR401
   tests/__init__.py: D104
   tests/conftest.py: D210, D400, D401, D403, DAR101, DAR201, DAR301, DAR401

@@ -1,26 +1,34 @@
-"""a couple singleton sentinels for convenience to avoid
-use of None
-"""
+"""A couple singleton sentinels for convenience to avoid the use of None."""
 
 from typing import Any
 from typing import Dict
 
 
 class Singleton(type):
-    """one of a kind"""
+    """One of a kind."""
 
     _instances: Dict[Any, "Singleton"] = {}
 
     def __call__(cls, *args, **kwargs):
+        """Determine if the instance is one of a kind.
+
+        :param *args: Arbitrary arguments
+        :param **kwargs: Dict of Keyword Args
+        :returns: The type
+        """
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
 class Unknown(metaclass=Singleton):
-    """something that should eventually be known"""
+    """Something that should eventually be known."""
 
     def __repr__(self):
+        """Return the type of the object.
+
+        :returns: The type of the object.
+        """
         return type(self).__name__
 
 
@@ -28,9 +36,13 @@ unknown = Unknown()
 
 
 class Nonexistent(metaclass=Singleton):
-    """something that does not exist"""
+    """Something that does not exist."""
 
     def __repr__(self):
+        """Return the type of the object.
+
+        :returns: The type of the object
+        """
         return type(self).__name__
 
 

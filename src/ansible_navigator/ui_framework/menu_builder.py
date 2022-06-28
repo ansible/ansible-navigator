@@ -1,5 +1,4 @@
-"""build a menu
-"""
+"""Build a menu."""
 import curses
 import enum
 import re
@@ -22,7 +21,7 @@ from .utils import distribute
 
 
 class MenuBuilder:
-    """build a menu from list of dicts"""
+    """Build a menu from list of dicts."""
 
     def __init__(
         self,
@@ -53,7 +52,13 @@ class MenuBuilder:
         cols: List[str],
         indices,
     ) -> Tuple[CursesLines, CursesLines]:
-        """main entry point for menu builder"""
+        """Build menu main entry point.
+
+        :param cols: he columns (keys) to use in the dicts
+        :param dicts: A list of dicts
+        :param indices: A range of what's showing in the UI
+        :returns: The heading and body of a menu
+        """
         return self._menu(dicts, cols, indices)
 
     def _menu(
@@ -62,7 +67,7 @@ class MenuBuilder:
         cols: List[str],
         indices,
     ) -> Tuple[CursesLines, CursesLines]:
-        """Build a text menu from a list of dicts given columns(root keys)
+        """Build a text menu from a list of dicts given columns(root keys).
 
         :param dicts: A list of dicts
         :param cols: The columns (keys) to use in the dicts
@@ -97,7 +102,7 @@ class MenuBuilder:
         return CursesLines(tuple([header])), menu_lines
 
     def _menu_header_line(self, menu_layout: Tuple[List, ...]) -> CursesLine:
-        """Generate the menu header line
+        """Generate the menu header line.
 
         :param menu_layout: A tuple of menu details:
 
@@ -114,7 +119,7 @@ class MenuBuilder:
 
     @staticmethod
     def _menu_header_line_part(colno: int, menu_layout: Tuple[List, ...]) -> CursesLinePart:
-        """Generate one part of the menu header line
+        """Generate one part of the menu header line.
 
         :param colno: The column number
         :param menu_layout: A tuple of menu details:
@@ -149,9 +154,10 @@ class MenuBuilder:
         menu_layout: Tuple[List, ...],
         indices,
     ) -> CursesLines:
-        """Generate all the menu lines
+        """Generate all the menu lines.
 
-        :params dicts: A list of dicts from which the menu will be generated
+        :param dicts: A list of dicts from which the menu will be generated
+        :param indices: A range of what's showing in the UI
         :param menu_layout: A tuple of menu details:
 
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
@@ -167,7 +173,7 @@ class MenuBuilder:
         menu_entry: Union[Dict[str, Any], ContentBase],
         menu_layout: Tuple[List, ...],
     ) -> CursesLine:
-        """Generate one the menu line
+        """Generate one the menu line.
 
         :param menu_entry: One dict from which the menu line will be generated
         :param menu_layout: A tuple of menu details:
@@ -194,7 +200,7 @@ class MenuBuilder:
         menu_layout: Tuple[List, ...],
     ) -> CursesLinePart:
         # pylint: disable=too-many-locals
-        """Generate one menu line part
+        """Generate one menu line part.
 
         :param colno: The column number of the line part
         :param coltext: The text to be placed at the given column

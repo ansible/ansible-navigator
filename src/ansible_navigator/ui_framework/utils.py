@@ -1,5 +1,4 @@
-"""some UI specific utils
-"""
+"""Some UI specific utils."""
 import functools
 import re
 
@@ -51,7 +50,11 @@ def _string_to_progress(value: str, progress_bar_width: int) -> str:
 
 @functools.lru_cache(maxsize=None)
 def is_percent(string):
-    """is a string a percent?"""
+    """Determine if a string is a percentage.
+
+    :param string: The string to check
+    :returns: Boolean of comparison
+    """
     if string.endswith("%"):
         if re.match(r"^\d{1,3}%$", string):
             return True
@@ -59,13 +62,13 @@ def is_percent(string):
 
 
 def distribute(available, weights):
-    """distribute some available fairly
-    across a list of numbers
+    """Distribute some available fairly across a list of numbers.
 
     :param available: the total
     :type available: int
     :param weights: numbers
     :type weights: List[int]
+    :returns: List of distributed amounts available
     """
     total = sum(weights)
     if available < total:
