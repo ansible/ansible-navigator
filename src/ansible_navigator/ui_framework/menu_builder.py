@@ -76,7 +76,7 @@ class MenuBuilder:
 
         lines = [[str(dicts[idx].get(c)) for c in cols] for idx in indices]
         column_widths = [
-            max([len(str(v)) for v in c])
+            max(len(str(v)) for v in c)
             for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]])
         ]
         # add a space

@@ -333,7 +333,6 @@ class DiagnosticsCollector:
     @diagnostic_runner
     @register(Collector(name="local system"))
     def _local_system(self) -> Dict[str, JSONTypes]:
-        # pylint:disable=no-self-use
         """Add local system information.
 
         :raises FailedCollection: If the collection process fails
@@ -349,7 +348,6 @@ class DiagnosticsCollector:
     @diagnostic_runner
     @register(Collector(name="python packages"))
     def _python_packages(self) -> Dict[str, JSONTypes]:
-        # pylint: disable=no-self-use
         """Add python packages information.
 
         :returns: The python packages information

@@ -202,7 +202,7 @@ class Base:
             value = os.environ.get(env_var)
             if value is None:
                 self._logger.warning(
-                    "Pass through environment variable `%s`" " not currently set, discarded",
+                    "Pass through environment variable `%s` not currently set, discarded",
                     env_var,
                 )
             else:

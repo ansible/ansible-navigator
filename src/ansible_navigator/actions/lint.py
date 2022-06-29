@@ -358,7 +358,7 @@ class Action(ActionBase):
 
         :returns: The color
         """
-        max_severity = max([Severity[i["severity"].upper()].value for i in self._issues_menu.value])
+        max_severity = max(Severity[i["severity"].upper()].value for i in self._issues_menu.value)
         return severity_to_color(Severity(max_severity).name.lower())
 
     def _take_step(self) -> None:
