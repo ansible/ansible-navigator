@@ -1,5 +1,5 @@
-"""type for curses window
-"""
+"""Type for curses window."""
+
 import curses
 import json
 import logging
@@ -44,7 +44,7 @@ COLOR_MAP = {
 
 class CursesWindow:
     # pylint: disable=too-many-instance-attributes
-    """abstraction for a curses window"""
+    """Abstraction for a curses window."""
 
     def __init__(self, ui_config: UIConfig):
         """Initialize a curses window.
@@ -65,7 +65,7 @@ class CursesWindow:
 
     @property
     def _screen_width(self) -> int:
-        """return the screen width
+        """Return the screen width.
 
         :returns: the current screen width
         """
@@ -73,7 +73,7 @@ class CursesWindow:
 
     @property
     def _screen_height(self) -> int:
-        """return the screen height, or notify if too small
+        """Return the screen height, or notify if too small.
 
         :returns: the current screen height
         """
@@ -85,11 +85,10 @@ class CursesWindow:
             self._screen.refresh()
 
     def _color_pair_or_none(self, color: int) -> Optional[int]:
-        """
-        Returns 0 if colors are disabled.
-        Otherwise returns the curses color pair by
-        taking mod (available colors)
-        and passing that.
+        """Return 0 if colors are disabled, otherwise returns the curses color pair.
+
+        :param color: Int for specific curses color
+        :returns: Curses color pair
         """
         if not self._ui_config.color or curses.COLORS == 0:
             return None
@@ -97,8 +96,10 @@ class CursesWindow:
         return curses.color_pair(color_arg)
 
     def _curs_set(self, value: int):
-        """in the case of a TERM with limited capabilities
-        log an error"""
+        """Log an error in the case of a TERM with limited capabilities.
+
+        :param value: TERM value
+        """
         try:
             curses.curs_set(value)
         except curses.error:
@@ -111,7 +112,7 @@ class CursesWindow:
         line: CursesLine,
         prefix: Optional[str] = None,
     ) -> None:
-        """add a line to a window
+        """Add a line to a window.
 
         :param window: A curses window
         :type window: Window
@@ -168,8 +169,7 @@ class CursesWindow:
                             )
 
     def _set_colors(self) -> None:
-        """Set the colors for curses"""
-
+        """Set the colors for curses."""
         # curses colors may have already been initialized
         # with another instance of curses window
         if self._ui_config.colors_initialized is True:
