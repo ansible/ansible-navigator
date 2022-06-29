@@ -58,10 +58,17 @@ RESULT_TO_COLOR = [
     ("(?i)^in progress$", 8),
 ]
 
-get_color = lambda word: next(  # noqa: E731
-    (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)),
-    0,
-)
+
+def get_color(word):
+    """Retrieve color value matching the keyword.
+
+    :param word: Keyword to match color.
+    :returns: Color value
+    """
+    return next(  # noqa: E731
+        (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)),
+        0,
+    )
 
 
 def color_menu(_colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
