@@ -53,13 +53,13 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.0.0
+    rev: latest
     hooks:
       - id: cspell
         name: Spell check with cspell
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.2.0
+    rev: v1.3.0
     hooks:
       - id: remove-tabs
         exclude: |
@@ -129,7 +129,7 @@ repos:
           $
 
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.26.3
+    rev: v1.27.1
     hooks:
       - id: yamllint
         args:
