@@ -10,11 +10,13 @@ import pytest
 @pytest.mark.parametrize("is_dir", [True, False], ids=["is_dir-True", "is_dir-False"])
 @pytest.mark.parametrize("ee_support", [True, False], ids=["ee_support-True", "ee_support-False"])
 @pytest.mark.parametrize("engine", ["podman", "docker"], ids=["engine-podman", "engine-docker"])
+@pytest.mark.parametrize("platform", ["linux", "darwin"], ids=["platform-linux", "platform-darwin"])
 def test_posix_message_queue_ee(
     monkeypatch: pytest.MonkeyPatch,
     is_dir: bool,
     ee_support: bool,
     engine: str,
+    platform: str,
     generate_config: Callable,
 ):
     """Confirm error messages related to missing ``/dev/mqueue/`` and ``podman``.
@@ -43,8 +45,10 @@ def test_posix_message_queue_ee(
         return unpatched_is_dir(path)
 
     monkeypatch.setattr("pathlib.Path.is_dir", mock_is_dir)
+    monkeypatch.setattr("sys.platform", platform)
+
     response = generate_config(params=["--ce", engine, "--ee", str(ee_support)])
-    should_error = ee_support and engine == "podman" and not is_dir
+    should_error = ee_support and engine == "podman" and not is_dir and platform != "darwin"
     message_queue_msg_exists = any(
         exit_msg.message == message_queue_msg for exit_msg in response.exit_messages
     )

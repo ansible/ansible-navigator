@@ -285,7 +285,7 @@ class NavigatorPostProcessor:
             # https://github.com/ansible/ansible-navigator/issues/610
             # except on Darwin (macOS)
             message_queue_path = "/dev/mqueue/"
-            mqueue_is_not_dir = not os.path.isdir(message_queue_path)
+            mqueue_is_not_dir = not Path(message_queue_path).is_dir()
             os_is_not_mac = sys.platform != "darwin"
             ce_is_podman = config.container_engine == "podman"
             if all((ce_is_podman, mqueue_is_not_dir, os_is_not_mac)):
