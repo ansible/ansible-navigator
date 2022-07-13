@@ -238,6 +238,7 @@ class NavigatorPostProcessor:
     def execution_environment(self, entry: SettingsEntry, config) -> PostProcessorReturn:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         """Post process execution_environment.
 
         :param entry: The current settings entry
@@ -285,7 +286,7 @@ class NavigatorPostProcessor:
             # except on Darwin (macOS)
             message_queue_path = "/dev/mqueue/"
             mqueue_is_not_dir = not os.path.isdir(message_queue_path)
-            os_is_not_mac = not sys.platform == "darwin"
+            os_is_not_mac = sys.platform != "darwin"
             ce_is_podman = config.container_engine == "podman"
             if all((ce_is_podman, mqueue_is_not_dir, os_is_not_mac)):
                 exit_msg = (
