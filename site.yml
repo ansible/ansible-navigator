@@ -1,0 +1,14 @@
+- hosts: localhost
+  gather_facts: false
+  vars_prompt:
+    - name: ready
+      prompt: ready
+      private: no
+  tasks:
+  - ansible.builtin.set_fact:
+      result: "{{ value }}"
+    vars:
+      str_one: This is string one
+      str_two: This is string two
+      value: "{{ str_one|ansible.utils.if('defined', foo, str_two) }}"
+      

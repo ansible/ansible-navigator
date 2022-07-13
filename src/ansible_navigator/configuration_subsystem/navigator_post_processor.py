@@ -281,11 +281,12 @@ class NavigatorPostProcessor:
 
             # check for ``/dev/mqueue/`` when using podman because runner passes ipc=host
             # https://github.com/ansible/ansible-navigator/issues/610
+            # except on Darwin (macOS)
             message_queue_path = "/dev/mqueue/"
-            podman_no_message_queue_dir = (
-                config.container_engine == "podman" and not Path(message_queue_path).is_dir()
-            )
-            if podman_no_message_queue_dir:
+            mqueue_is_not_dir = not os.path.isdir(message_queue_path)
+            os_is_not_mac = not sys.platform == "darwin"
+            ce_is_podman = config.container_engine == "podman"
+            if all((ce_is_podman, mqueue_is_not_dir, os_is_not_mac)):
                 exit_msg = (
                     "Execution environment support while using podman requires a"
                     f" '{message_queue_path}' directory."
