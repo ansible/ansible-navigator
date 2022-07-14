@@ -29,6 +29,7 @@ def test_posix_message_queue_ee(
     :param engine: The value to set for ``--ce``
     :param generate_config: The configuration generator fixture
     """
+    # pylint: disable=too-many-arguments
     message_queue_msg = (
         "Execution environment support while using podman requires a '/dev/mqueue/' directory."
     )
