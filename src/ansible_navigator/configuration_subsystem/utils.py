@@ -4,6 +4,7 @@ import logging
 from configparser import ConfigParser
 from configparser import ParsingError
 from dataclasses import dataclass
+from dataclasses import field
 from pathlib import Path
 from typing import Any
 from typing import Dict
@@ -90,7 +91,7 @@ class ParseAnsibleCfgResponse:
     """Log messages"""
     exit_messages: List[ExitMessage]
     """Exit messages"""
-    config: AnsibleConfiguration = AnsibleConfiguration()
+    config: AnsibleConfiguration = field(default_factory=AnsibleConfiguration)
     """An ansible configuration"""
 
 

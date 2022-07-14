@@ -3,6 +3,7 @@ import logging
 import os
 
 from dataclasses import dataclass
+from dataclasses import field
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -93,7 +94,7 @@ def generate_share_directory():
 class Internals:
     """Place to hold an object that needs to be used from app initiation through whole app."""
 
-    ansible_configuration: AnsibleConfiguration = AnsibleConfiguration()
+    ansible_configuration: AnsibleConfiguration = field(default_factory=AnsibleConfiguration)
     action_packages: Tuple[str] = ("ansible_navigator.actions",)
     collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
     initializing: bool = False
