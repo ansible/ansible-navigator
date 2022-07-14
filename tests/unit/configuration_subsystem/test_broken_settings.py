@@ -1,5 +1,4 @@
-"""test using broken settings files
-"""
+"""Tests using broken settings files."""
 import os
 
 

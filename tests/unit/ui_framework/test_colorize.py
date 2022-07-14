@@ -1,5 +1,4 @@
-"""tests for colorize
-"""
+"""Tests for colorize."""
 import os
 
 from typing import Dict

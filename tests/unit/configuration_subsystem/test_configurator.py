@@ -1,5 +1,4 @@
-"""Some tests directly for ``Configurator``
-"""
+"""Some tests directly for ``Configurator``."""
 import os
 
 from copy import deepcopy

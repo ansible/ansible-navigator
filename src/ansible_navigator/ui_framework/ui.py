@@ -1,6 +1,5 @@
 # cspell:ignore KEY_NPAGE, KEY_PPAGE
-"""the main UI renderer
-"""
+"""The main UI renderer."""
 import curses
 import logging
 import re
@@ -547,7 +546,6 @@ class UserInterface(CursesWindow):
         :type obj: Any
         :returns: The generated lines
         """
-
         if self.content_format() is ContentFormat.ANSI:
             return self._colorizer.render_ansi(doc=obj)
 
@@ -822,7 +820,6 @@ class UserInterface(CursesWindow):
         :param await_input: Should we wait for user input?
         :returns: Interaction with the user
         """
-
         while True:
 
             if self.scroll() == 0:

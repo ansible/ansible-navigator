@@ -118,7 +118,6 @@ def test_apply_previous_cli_specified():
 
 def test_apply_previous_cli_mixed():
     """Ensure a mixed configuration passes"""
-
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = True

@@ -1,5 +1,4 @@
-"""Tests related to the auto detection of the container engine.
-"""
+"""Tests related to the auto detection of the container engine."""
 import shutil
 
 

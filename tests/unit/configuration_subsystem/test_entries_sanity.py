@@ -1,5 +1,4 @@
-"""perform some sanity and syntax checking of the navigator configuration
-"""
+"""Some sanity and syntax checking of the navigator configuration."""
 from collections import Counter
 
 import pytest

@@ -1,5 +1,4 @@
-"""Some test using invalid parameters
-"""
+"""Tests using invalid parameters."""
 import tempfile
 
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
@@ -96,7 +95,6 @@ def test_badly_formatted_env_var(_mocked_func, generate_config):
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_not_a_bool(_mocked_func, generate_config):
     """Ensure exit_messages generated for wrong type of value"""
-
     response = generate_config(setting_file_name="ansible-navigator_not_bool.yml")
     exit_msg = "In 'ansible-navigator.execution-environment.enabled': 5 is not of type 'boolean'."
     assert exit_msg in [exit_msg.message for exit_msg in response.exit_messages]

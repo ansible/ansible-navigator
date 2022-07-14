@@ -1,5 +1,4 @@
-"""some common functions for the tests
-"""
+"""Common functions for the tests."""
 import json
 import os
 import re
