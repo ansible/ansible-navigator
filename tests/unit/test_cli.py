@@ -1,5 +1,4 @@
-"""tests for CLI
-"""
+"""Tests using the CLi directly."""
 import shlex
 
 from copy import deepcopy
@@ -95,7 +94,6 @@ from ..defaults import FIXTURES_DIR
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     """test the parse and update function"""
-
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True

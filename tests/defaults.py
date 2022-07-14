@@ -1,5 +1,4 @@
-"""Constants with default values used throughout the tests.
-"""
+"""Constants with default values used throughout the tests."""
 import os
 
 

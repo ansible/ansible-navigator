@@ -27,6 +27,7 @@ def test_posix_message_queue_ee(
     :param is_dir: The return value to set for ``pathlib.Path.is_dir``
     :param ee_support: The value to set for ``--ee``
     :param engine: The value to set for ``--ce``
+    :param platform: The system platform to mock
     :param generate_config: The configuration generator fixture
     """
     # pylint: disable=too-many-arguments

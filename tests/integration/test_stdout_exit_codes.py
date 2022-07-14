@@ -1,5 +1,4 @@
-"""check return codes from mode ``stdout``
-"""
+"""Check return codes from mode ``stdout``."""
 import os
 import subprocess
 

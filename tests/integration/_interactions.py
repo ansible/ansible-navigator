@@ -1,5 +1,4 @@
-"""common classes to handle user interactions
-"""
+"""Common classes to handle user interactions."""
 import shlex
 
 from enum import Enum

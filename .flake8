@@ -57,9 +57,7 @@ per-file-ignores =
   # S101: Allow the use of assert within the tests directory, since tests require it.
   tests/**.py: S101
 
-  # The following were present during the initial implementation.
-  # They are expected to be fixed and unignored over time.
-  src/ansible_navigator/app_public.py: D204, D205, D211, D400
+  # The tokenization code is vendored and not a priority for docstrings.
   src/ansible_navigator/tm_tokenize/__init__.py: D104
   src/ansible_navigator/tm_tokenize/compiler.py: D100, D101, D102
   src/ansible_navigator/tm_tokenize/fchainmap.py: D100, D101, D105
@@ -70,53 +68,44 @@ per-file-ignores =
   src/ansible_navigator/tm_tokenize/state.py: D100, D101, D102
   src/ansible_navigator/tm_tokenize/tokenize.py: D100, D201, D400, D403, DAR101, DAR201
   src/ansible_navigator/tm_tokenize/utils.py: D100, D400, D403, DAR101, DAR201
-#  src/ansible_navigator/ui_framework/curses_window.py: D200, D202, D205, D209, D400, D401, D403, DAR101, DAR201
-#  src/ansible_navigator/ui_framework/menu_builder.py: D200, D400, D401, D403, DAR101, DAR201
-#  src/ansible_navigator/ui_framework/sentinels.py: D102, D105, D205, D400
-  src/ansible_navigator/ui_framework/ui.py: D200, D202, D205, D211, D400, D403, DAR101, DAR201, DAR401
-#  src/ansible_navigator/ui_framework/utils.py: D200, D205, D400, D403, DAR101, DAR201
-  src/ansible_navigator/ui_framework/validators.py: D200, D400, D401, D403, DAR101, DAR201, DAR401
-  tests/__init__.py: D104
+
+  # The following were present during the initial implementation.
+  # They are expected to be fixed and unignored over time.
+  src/ansible_navigator/ui_framework/ui.py: D205, D211, D400, D403, DAR101, DAR201, DAR401
+  src/ansible_navigator/ui_framework/validators.py: D400, D401, D403, DAR101, DAR201, DAR401
   tests/conftest.py: D210, D400, D401, D403, DAR101, DAR201, DAR301, DAR401
-  tests/defaults.py: D200
-  tests/integration/__init__.py: D104
   tests/integration/_action_run_test.py: D205, D400, D401, D403, DAR101, DAR201, DAR401
-  tests/integration/_cli2runner.py: D200, D400, D401, D403, DAR101, DAR401
-  tests/integration/_common.py: D103, D200, D400, D401, D403, DAR101, DAR201, DAR401
-  tests/integration/_interactions.py: D200, D204, D400, D403, DAR101, DAR201
+  tests/integration/_cli2runner.py: D400, D401, D403, DAR101, DAR401
+  tests/integration/_common.py: D103, D400, D401, D403, DAR101, DAR201, DAR401
+  tests/integration/_interactions.py: D204, D400, D403, DAR101, DAR201
   tests/integration/_tmux_session.py: D105, D205, D400, D403, DAR101, DAR201, DAR401
-  tests/integration/actions/__init__.py: D104
   tests/integration/conftest.py: D205, D400, D401, D403, DAR101, DAR201, DAR301
-  tests/integration/test_stdout_exit_codes.py: D200, D400, D403, DAR101, DAR201
-  tests/unit/__init__.py: D104
-  tests/unit/actions/__init__.py: D104
+  tests/integration/test_stdout_exit_codes.py: D400, D403, DAR101, DAR201
   tests/unit/actions/collections/test_collection_doc_cache_path.py: D400, DAR101, DAR102, DAR201
-  tests/unit/actions/test_config.py: D200, D400, D403
-  tests/unit/actions/test_inventory.py: D200, D400, D403
-  tests/unit/actions/test_run.py: D200, D400, DAR101, DAR201
-  tests/unit/configuration_subsystem/__init__.py: D104
-  tests/unit/configuration_subsystem/conftest.py: D200, D400, D403, DAR101, DAR201
+  tests/unit/actions/test_config.py: D400, D403
+  tests/unit/actions/test_inventory.py: D400, D403
+  tests/unit/actions/test_run.py: D400, DAR101, DAR201
+  tests/unit/configuration_subsystem/conftest.py: D400, D403, DAR101, DAR201
   tests/unit/configuration_subsystem/data.py: D205, D400, D403, DAR101, DAR201
-  tests/unit/configuration_subsystem/defaults.py: D200, D400
-  tests/unit/configuration_subsystem/test_broken_settings.py: D200, D400, DAR101
-  tests/unit/configuration_subsystem/test_configurator.py: D200, D205, D209, D400, DAR101
-  tests/unit/configuration_subsystem/test_container_engine_auto.py: D200, DAR101
-  tests/unit/configuration_subsystem/test_entries_sanity.py: D200, D400, DAR101
+  tests/unit/configuration_subsystem/defaults.py: D400
+  tests/unit/configuration_subsystem/test_broken_settings.py: D400, DAR101
+  tests/unit/configuration_subsystem/test_configurator.py: D205, D209, D400, DAR101
+  tests/unit/configuration_subsystem/test_container_engine_auto.py: DAR101
+  tests/unit/configuration_subsystem/test_entries_sanity.py: D400, DAR101
   tests/unit/configuration_subsystem/test_fixture_sanity.py: D205, D400
-  tests/unit/configuration_subsystem/test_invalid_params.py: D200, D202, D400, DAR101
+  tests/unit/configuration_subsystem/test_invalid_params.py: D400, DAR101
   tests/unit/configuration_subsystem/test_mode_subcommand_action.py: D205, D400
   tests/unit/configuration_subsystem/test_precedence.py: D205, D400, DAR101
-  tests/unit/configuration_subsystem/test_previous_cli.py: D202, D205, D400
+  tests/unit/configuration_subsystem/test_previous_cli.py: D205, D400
   tests/unit/configuration_subsystem/test_sample_configurations.py: D205, D400
-  tests/unit/configuration_subsystem/utils.py: D200, D400, DAR101, DAR201
-  tests/unit/image_manager/__init__.py: D104
+  tests/unit/configuration_subsystem/utils.py: D400, DAR101, DAR201
   tests/unit/image_manager/test_image_puller.py: D400, D403, DAR101, DAR201
-  tests/unit/runner/test_api.py: D200, D202, D400, D403, DAR101
-  tests/unit/test_cli.py: D200, D202, D205, D400, D403, DAR101, DAR201
-  tests/unit/test_image_introspection.py: D200, D400, D403, DAR101, DAR201
-  tests/unit/test_log_append.py: D200, D400, D403, DAR101
-  tests/unit/ui_framework/test_colorize.py: D200, D205, D209, D400, DAR101
-  tests/unit/utils/test_functions.py: D200, D202, D400, D403, DAR101
+  tests/unit/runner/test_api.py: D400, D403, DAR101
+  tests/unit/test_cli.py: D205, D400, D403, DAR101, DAR201
+  tests/unit/test_image_introspection.py: D400, D403, DAR101, DAR201
+  tests/unit/test_log_append.py: D400, D403, DAR101
+  tests/unit/ui_framework/test_colorize.py: D205, D209, D400, DAR101
+  tests/unit/utils/test_functions.py: D400, D403, DAR101
 
 # Count the number of occurrences of each error/warning code and print a report:
 statistics = true

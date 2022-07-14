@@ -18,7 +18,6 @@ EXTENSIONS = [".yml", ".yaml", ".json"]
 
 def test_find_many_settings_home(monkeypatch) -> None:
     """test more than one in home"""
-
     paths = [
         os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENSIONS
     ]
@@ -34,7 +33,6 @@ def test_find_many_settings_home(monkeypatch) -> None:
 
 def test_find_many_settings_cwd(monkeypatch) -> None:
     """test more than one in CWD"""
-
     paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
     def check_path_exists(arg):
@@ -48,7 +46,6 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
 
 def test_find_many_settings_precedence(monkeypatch) -> None:
     """test more than one in CWD"""
-
     expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
     paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
 

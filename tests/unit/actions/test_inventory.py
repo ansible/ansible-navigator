@@ -1,5 +1,4 @@
-"""Unit tests for the inventory action.
-"""
+"""Unit tests for the inventory action."""
 import curses
 
 from ansible_navigator.actions.inventory import color_menu

@@ -1,5 +1,4 @@
-"""predefined form field validators
-"""
+"""Predefined form field validators."""
 
 import os
 
