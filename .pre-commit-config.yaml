@@ -140,10 +140,11 @@ repos:
     rev: 4.0.1
     hooks:
       - id: flake8
-        alias: flake8-enforced
         language_version: python3
         additional_dependencies:
+          - darglint
           - flake8-2020 >= 1.6.0
+          - flake8-docstrings # uses pydocstyle
           - flake8-isort >= 4.1.1
 
   - repo: https://github.com/pre-commit/mirrors-mypy.git
