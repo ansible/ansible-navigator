@@ -1,0 +1,12 @@
+tmux
+
+# needed to compile onigurumacffi on py311:
+oniguruma-devel [platform:rpm]
+libonig-dev [platform:deb]
+
+# py311
+python3.11-full [test] [platform:deb]
+python3.11-dev [test] [platform:deb]
+python3.11-devel [test] [platform:rpm]
+libffi-devel [platform:rpm]
+libffi-dev [platform:deb]
