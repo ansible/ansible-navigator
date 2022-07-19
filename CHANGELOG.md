@@ -1,4 +1,4 @@
-<!-- markdownlint-disable no-duplicate-heading no-multiple-blanks -->
+<!-- markdownlint-disable no-duplicate-heading no-multiple-blanks link-image-reference-definitions -->
 # Changelog
 
 All notable changes to Ansible Navigator will be documented in this file.
