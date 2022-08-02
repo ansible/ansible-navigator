@@ -181,7 +181,7 @@ navigator_subcommands = [
             " in it. If not using an execution environment, ansible-lint must"
             " be installed on your system."
         ),
-        version_added="v1.0",
+        version_added="v2.0",
     ),
     SubCommand(
         name="replay",
