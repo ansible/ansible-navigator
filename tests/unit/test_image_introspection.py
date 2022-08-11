@@ -47,7 +47,10 @@ which contains NET-SNMP utilities.
 
 @pytest.fixture(scope="module", name="imported_ii")
 def image_introspection():
-    """import the image introspection script using the share directory"""
+    """Import the image introspection script using the share directory.
+
+    :returns: Image introspect module
+    """
     _log_messages, _exit_messages, share_dir = get_share_directory(
         app_name="ansible_navigator",
     )
@@ -59,7 +62,10 @@ def image_introspection():
 
 
 def test_system_packages_parse_one(imported_ii):
-    """test parsing one package"""
+    """Test parsing one package.
+
+    :param imported_ii: Image introspection
+    """
     command = imported_ii.Command(id="test", parse=lambda x: x, stdout=RPM_OUTPUT)
     imported_ii.SystemPackages().parse(command)
     assert len(command.details) == 1
@@ -73,7 +79,10 @@ def test_system_packages_parse_one(imported_ii):
 
 
 def test_system_packages_parse_many(imported_ii):
-    """test parsing many packages"""
+    """Test parsing many packages.
+
+    :param imported_ii: Image introspection
+    """
     count = 10
 
     command = imported_ii.Command(id="test", parse=lambda x: x, stdout=RPM_OUTPUT * count)

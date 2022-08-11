@@ -33,8 +33,11 @@ SAMPLE_YAML = Sample(serialization_format=SerializationFormat.YAML)._asdict()
 
 
 def test_basic_success_json():
-    """Ensure the json string is returned as 1 lines, 5 parts and can be reassembled
-    to the json string"""
+    """Ensure the json string is as expected.
+
+    Test that the json string is returned as 1 line, 5 parts and can be
+    reassembled to the json string.
+    """
     sample = serialize(**SAMPLE_JSON) + "\n"
     colorized = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
@@ -48,7 +51,9 @@ def test_basic_success_json():
 
 
 def test_basic_success_yaml():
-    """Ensure the yaml string is returned as 2 lines, with 1 and 3 parts
+    """Ensure the yaml string is returned as expected.
+
+    Check that the yaml string is returned as 2 lines, with 1 and 3 parts
     respectively, ensure the parts of the second line can be reassembled to
     the second line of the yaml string
     """
@@ -96,8 +101,12 @@ def test_basic_success_no_color():
 
 @patch("ansible_navigator.ui_framework.colorize.tokenize")
 def test_graceful_failure(mocked_func, caplog):
-    """Ensure a tokenization error returns the original one line json string
-    w/o color and the log reflects the critical error
+    """Test for correct error format.
+
+    Ensure a tokenization error returns the original one line json string
+    w/o color and the log reflects the critical error.
+    :param mocked_func: Mocked fixture
+    :param caplog: Capture log
     """
     mocked_func.side_effect = ValueError()
     sample = serialize(**SAMPLE_JSON)

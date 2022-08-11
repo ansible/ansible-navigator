@@ -17,7 +17,10 @@ EXTENSIONS = [".yml", ".yaml", ".json"]
 
 
 def test_find_many_settings_home(monkeypatch) -> None:
-    """test more than one in home"""
+    """Test more than one in home.
+
+    :param monkeypatch: The monkeypatch fixture
+    """
     paths = [
         os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENSIONS
     ]
@@ -32,7 +35,10 @@ def test_find_many_settings_home(monkeypatch) -> None:
 
 
 def test_find_many_settings_cwd(monkeypatch) -> None:
-    """test more than one in CWD"""
+    """Test more than one in CWD.
+
+    :param monkeypatch: The monkeypatch fixture
+    """
     paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
     def check_path_exists(arg):
@@ -45,7 +51,10 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
 
 
 def test_find_many_settings_precedence(monkeypatch) -> None:
-    """test more than one in CWD"""
+    """Test more than one in CWD.
+
+    :param monkeypatch: The monkeypatch fixture
+    """
     expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
     paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
 
@@ -76,7 +85,13 @@ def test_env_var_is_file_path(
     file_path: str,
     anticpated_result: Optional[str],
 ) -> None:
-    """test environment variable is a file path"""
+    """Test environment variable is a file path.
+
+    :param monkeypatch: The monkeypatch fixture
+    :param set_env: To set or not to set the env var
+    :param file_path: File path to set env var to
+    :param anticpated_result: Expected outcome for assertion
+    """
     env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
         monkeypatch.setenv(env_var, file_path)
@@ -101,7 +116,11 @@ def test_env_var_is_file_path(
     ],
 )
 def test_flatten_list(value: List, anticpated_result: List) -> None:
-    """test for flatten list"""
+    """Test for flatten list.
+
+    :param value: List to be flattened
+    :param anticpated_result: Expected outcome for assertion
+    """
     actual_result = functions.flatten_list(value)
     assert list(actual_result) == anticpated_result
 
@@ -131,6 +150,8 @@ def test_human_time_integer(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (integer passed).
 
     Ensure the integer passed is correctly transformed into a human readable time string.
+
+    :param data: Time data in human-readable format
     """
     result = functions.human_time(data.value)
     assert result == data.expected
@@ -141,6 +162,8 @@ def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (negative integer passed).
 
     Ensure the negative integer passed is correctly transformed into a human readable time string.
+
+    :param data: Time data in human-readable format
     """
     result = functions.human_time(-data.value)
     assert result == f"-{data.expected}"
@@ -151,6 +174,8 @@ def test_human_time_float(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (float passed).
 
     Ensure the float passed is correctly transformed into a human readable time string.
+
+    :param data: Time data in human-readable format
     """
     result = functions.human_time(float(data.value))
     assert result == data.expected
@@ -161,6 +186,8 @@ def test_human_time_negative_float(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (negative float passed).
 
     Ensure the negative float passed is correctly transformed into a human readable time string.
+
+    :param data: Time data in human-readable format
     """
     result = functions.human_time(-float(data.value))
     assert result == f"-{data.expected}"
@@ -192,6 +219,8 @@ def test_round_half_up(data: RoundHalfUpTestData) -> None:
 
     Ensure the number passed is consistently rounded to the nearest
     integer with ties going away from zero.
+
+    :param data: Test object
     """
     result = functions.round_half_up(data.value)
     assert result == data.expected

@@ -81,10 +81,6 @@ per-file-ignores =
   tests/integration/_tmux_session.py: D105, D205, D400, D403, DAR101, DAR201, DAR401
   tests/integration/conftest.py: D205, D400, D401, D403, DAR101, DAR201, DAR301
   tests/integration/test_stdout_exit_codes.py: D400, D403, DAR101, DAR201
-  tests/unit/actions/collections/test_collection_doc_cache_path.py: D400, DAR101, DAR102, DAR201
-  tests/unit/actions/test_config.py: D400, D403
-  tests/unit/actions/test_inventory.py: D400, D403
-  tests/unit/actions/test_run.py: D400, DAR101, DAR201
   tests/unit/configuration_subsystem/conftest.py: D400, D403, DAR101, DAR201
   tests/unit/configuration_subsystem/data.py: D205, D400, D403, DAR101, DAR201
   tests/unit/configuration_subsystem/defaults.py: D400
@@ -99,13 +95,6 @@ per-file-ignores =
   tests/unit/configuration_subsystem/test_previous_cli.py: D205, D400
   tests/unit/configuration_subsystem/test_sample_configurations.py: D205, D400
   tests/unit/configuration_subsystem/utils.py: D400, DAR101, DAR201
-  tests/unit/image_manager/test_image_puller.py: D400, D403, DAR101, DAR201
-  tests/unit/runner/test_api.py: D400, D403, DAR101
-  tests/unit/test_cli.py: D205, D400, D403, DAR101, DAR201
-  tests/unit/test_image_introspection.py: D400, D403, DAR101, DAR201
-  tests/unit/test_log_append.py: D400, D403, DAR101
-  tests/unit/ui_framework/test_colorize.py: D205, D209, D400, DAR101
-  tests/unit/utils/test_functions.py: D400, D403, DAR101
 
 # Count the number of occurrences of each error/warning code and print a report:
 statistics = true

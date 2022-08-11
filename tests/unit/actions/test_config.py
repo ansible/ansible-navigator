@@ -8,19 +8,19 @@ from ansible_navigator.ui_framework.curses_defs import CursesLinePart
 
 
 def test_color_menu_true():
-    """test color menu for a val set to the default"""
+    """Test color menu for a val set to the default."""
     entry = {"default": True}
     assert color_menu(0, "", entry) == (2, 0)
 
 
 def test_color_menu_false():
-    """test color menu for a val not set to default"""
+    """Test color menu for a val not set to default."""
     entry = {"default": False}
     assert color_menu(0, "", entry) == (3, 0)
 
 
 def test_content_heading_true():
-    """test menu generation for a defaulted value"""
+    """Test menu generation for a defaulted value."""
     curses.initscr()
     curses.start_color()
     line_length = 100
@@ -42,7 +42,7 @@ def test_content_heading_true():
 
 
 def test_content_heading_false() -> None:
-    """test menu generation for a value not default"""
+    """Test menu generation for a value not default."""
     curses.initscr()
     curses.start_color()
     line_length = 100
@@ -69,7 +69,7 @@ def test_content_heading_false() -> None:
 
 
 def test_filter_content_keys() -> None:
-    """test filtering keys"""
+    """Test filtering keys."""
     obj = {"__key": "value", "key": "value"}
     ret = {"key": "value"}
     assert filter_content_keys(obj) == ret
