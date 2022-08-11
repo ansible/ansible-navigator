@@ -18,8 +18,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import (
 
 
 def test_mutual_exclusivity_for_configuration_init():
-    """Ensure the configuration cannot be initiated with both
-    apply_previous_cli_entries and initial"""
+    """Ensure the configuration cannot be initiated with apply_previous_cli_entries and initial."""
     with pytest.raises(ValueError, match="cannot be used while initializing"):
         application_configuration = deepcopy(NavigatorConfiguration)
         application_configuration.internals.initializing = True
@@ -31,7 +30,7 @@ def test_mutual_exclusivity_for_configuration_init():
 
 
 def test_apply_before_initial_saved():
-    """Ensure the apply_previous_cli_entries can't be used before initial"""
+    """Ensure the apply_previous_cli_entries can't be used before initial."""
     with pytest.raises(ValueError, match="enabled prior to"):
         application_configuration = deepcopy(NavigatorConfiguration)
         application_configuration.internals.initializing = False
@@ -44,7 +43,10 @@ def test_apply_before_initial_saved():
 
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_editor_command_from_editor(_mocked_func, generate_config):
-    """Ensure the editor_command defaults to EDITOR if set"""
+    """Ensure the editor_command defaults to EDITOR if set.
+
+    :param generate_config: The configuration generator fixture
+    """
     with mock.patch.dict(os.environ, {"EDITOR": "nano"}):
         # since this was already loaded, force it
         NavigatorConfiguration.entry("editor_command").value.default = generate_editor_command()

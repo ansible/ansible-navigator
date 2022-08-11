@@ -81,12 +81,25 @@ per-file-ignores =
   tests/integration/_tmux_session.py: D105, D205, D400, D403, DAR101, DAR201, DAR401
   tests/integration/conftest.py: D205, D400, D401, D403, DAR101, DAR201, DAR301
   tests/integration/test_stdout_exit_codes.py: D400, D403, DAR101, DAR201
+<<<<<<< HEAD
   tests/unit/configuration_subsystem/conftest.py: D400, D403, DAR101, DAR201
   tests/unit/configuration_subsystem/data.py: D205, D400, D403, DAR101, DAR201
   tests/unit/configuration_subsystem/defaults.py: D400
   tests/unit/configuration_subsystem/test_broken_settings.py: D400, DAR101
   tests/unit/configuration_subsystem/test_configurator.py: D205, D209, D400, DAR101
   tests/unit/configuration_subsystem/test_container_engine_auto.py: DAR101
+=======
+  tests/unit/actions/collections/test_collection_doc_cache_path.py: D400, DAR101, DAR102, DAR201
+  tests/unit/actions/test_config.py: D400, D403
+  tests/unit/actions/test_inventory.py: D400, D403
+  tests/unit/actions/test_run.py: D400, DAR101, DAR201
+  #tests/unit/configuration_subsystem/conftest.py: D400, D403, DAR101, DAR201
+  #tests/unit/configuration_subsystem/data.py: D205, D400, D403, DAR101, DAR201
+  #tests/unit/configuration_subsystem/defaults.py: D400
+  #tests/unit/configuration_subsystem/test_broken_settings.py: D400, DAR101
+  #tests/unit/configuration_subsystem/test_configurator.py: D205, D209, D400, DAR101
+  #tests/unit/configuration_subsystem/test_container_engine_auto.py: DAR101
+>>>>>>> 490df4a (doc strings for some unit tests for config subsystem)
   tests/unit/configuration_subsystem/test_entries_sanity.py: D400, DAR101
   tests/unit/configuration_subsystem/test_fixture_sanity.py: D205, D400
   tests/unit/configuration_subsystem/test_invalid_params.py: D400, DAR101

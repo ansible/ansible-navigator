@@ -30,7 +30,7 @@ TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
 
 
 class GenerateConfigResponse(NamedTuple):
-    """obj for generate_config_response"""
+    """Object for generate_config_response."""
 
     messages: List[LogMessage]
     exit_messages: List[ExitMessage]
@@ -39,7 +39,13 @@ class GenerateConfigResponse(NamedTuple):
 
 
 def _generate_config(params=None, setting_file_name=None, initial=True) -> GenerateConfigResponse:
-    """Generate a configuration given a settings file"""
+    """Generate a configuration given a settings file.
+
+    :param initial: Bool for if this is the first run
+    :param setting_file_name: Name of settings file name
+    :param params: Configuration parameters
+    :returns: Generated config response object
+    """
     if params is None:
         params = []
 
@@ -75,13 +81,16 @@ def _generate_config(params=None, setting_file_name=None, initial=True) -> Gener
 
 @pytest.fixture(name="generate_config")
 def fixture_generate_config():
-    """generate a configuration"""
+    """Generate a configuration.
+
+    :returns: A generated config
+    """
     return _generate_config
 
 
 @pytest.fixture
 def ansible_version(monkeypatch):
-    """Path the ansible --version call to avoid the subprocess calls
+    """Path the ansible --version call to avoid the subprocess calls.
 
     :param monkeypatch: Fixture for patching
     """
@@ -114,10 +123,9 @@ def _schema_dict() -> SettingsSchemaType:
 
 @pytest.fixture()
 def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaType:
-    """Provide the json schema as a dictionary.
+    """Provide the json schema as a dictionary with all properties required.
 
-    Like schema_dict but in this case all properties will be required
-
+    :param schema_dict: The schema dictionary
     :returns: the json schema as a dictionary
     """
 
