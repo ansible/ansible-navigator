@@ -93,7 +93,13 @@ from ..defaults import FIXTURES_DIR
 )
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
-    """test the parse and update function"""
+    """Test the parse and update function.
+
+    :param monkeypatch: The monkeypatch fixture
+    :param given: Exit message params
+    :param argname: Name of the entry
+    :param expected: Expected value of the entry
+    """
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
@@ -106,7 +112,10 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
 
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_editor_command_default(_mf1, monkeypatch):
-    """test editor with default"""
+    """Test editor with default.
+
+    :param monkeypatch: The monkeypatch fixture
+    """
     monkeypatch.setenv(
         "ANSIBLE_NAVIGATOR_CONFIG",
         f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml",
@@ -120,15 +129,19 @@ def test_editor_command_default(_mf1, monkeypatch):
 
 
 def id_for_hint_test(value):
-    """generate an id for the hint test
-    the spaces here help with zsh
+    """Generate an id for the hint test.
+
+    The spaces here help with zsh
     https://github.com/microsoft/vscode-python/issues/10398
+
+    :param value: Test identifier
+    :returns: Test descriptor
     """
     return f" {value.command} "
 
 
 class TstHint(NamedTuple):
-    """obj for hint test data"""
+    """Obj for hint test data."""
 
     command: str
     expected: str
@@ -158,7 +171,13 @@ tst_hint_data = [
 
 @pytest.mark.parametrize("data", tst_hint_data, ids=id_for_hint_test)
 def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
-    """test the hints don't generate a traceback"""
+    """Test the hints don't generate a traceback.
+
+    :param monkeypatch: The monkeypatch fixture
+    :param locked_directory: Locked directory
+    :param valid_container_engine: Container engine
+    :param data: Test object
+    """
     monkeypatch.setenv(
         "ANSIBLE_NAVIGATOR_CONFIG",
         f"{FIXTURES_DIR}/unit/cli/ansible-navigator_empty.yml",
@@ -178,7 +197,10 @@ def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
 
 
 def test_no_term(monkeypatch):
-    """test for err and hint w/o TERM"""
+    """Test for err and hint w/o TERM.
+
+    :param monkeypatch: The monkeypatch fixture
+    """
     monkeypatch.delenv("TERM")
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True

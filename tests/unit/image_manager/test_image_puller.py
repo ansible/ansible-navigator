@@ -1,4 +1,4 @@
-"""unit tests for image puller"""
+"""Unit tests for image puller."""
 
 import shlex
 import uuid
@@ -14,14 +14,18 @@ from ...defaults import SMALL_TEST_IMAGE
 
 
 class TstPullPolicy(NamedTuple):
-    """test object"""
+    """Test object."""
 
     pull_policy: str
     pull_required: bool
 
 
 def id_from_data(value):
-    """return the name from the test data object"""
+    """Return the name from the test data object.
+
+    :param value: Test object
+    :returns: Test object name
+    """
     return f" {value.pull_policy} "
 
 
@@ -36,7 +40,11 @@ data_do_have = [
 
 @pytest.mark.parametrize("data", data_do_have, ids=id_from_data)
 def test_do_have(valid_container_engine, data):
-    """test using an image local"""
+    """Test using an image local.
+
+    :param valid_container_engine: Container engine identifier
+    :param data: Test object
+    """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
         image=DEFAULT_CONTAINER_IMAGE,
@@ -58,7 +66,11 @@ data_do_have_but_latest = [
 
 @pytest.mark.parametrize("data", data_do_have_but_latest, ids=id_from_data)
 def test_do_have_but_latest(valid_container_engine, data):
-    """test using an image local"""
+    """Test using an image local.
+
+    :param valid_container_engine: Container engine identifier
+    :param data: Test object
+    """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
         image=SMALL_TEST_IMAGE,
@@ -79,7 +91,11 @@ data_missing_locally = [
 
 @pytest.mark.parametrize("data", data_missing_locally, ids=id_from_data)
 def test_missing_locally(valid_container_engine, data):
-    """test using an image not local"""
+    """Test using an image not local.
+
+    :param valid_container_engine: Container engine identifier
+    :param data: Test object
+    """
     uuid_str = str(uuid.uuid4())
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
@@ -103,7 +119,12 @@ data_will_have = [
 
 @pytest.mark.parametrize("data", data_will_have, ids=id_from_data)
 def test_will_have(valid_container_engine, pullable_image, data):
-    """test using an image not local"""
+    """Test using an image not local.
+
+    :param valid_container_engine: Container engine identifier
+    :param pullable_image: Container image
+    :param data: Test object
+    """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
         image=pullable_image,
@@ -135,7 +156,11 @@ data_image_tag = [
     ],
 )
 def test_tag_parsing(image, expected_tag):
-    """test that we parse image tags in a reasonable way"""
+    """Test that we parse image tags in a reasonable way.
+
+    :param image: Test image
+    :param expected_tag: Expected tag for assertion
+    """
     image_puller = ImagePuller(
         container_engine="podman",
         image=image,

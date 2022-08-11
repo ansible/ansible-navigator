@@ -23,7 +23,11 @@ DOC_CACHE_PATHS = (
 
 
 def _id_description(value):
-    """Generate id for a test"""
+    """Generate id for a test.
+
+    :param value: Test identifier
+    :returns: Test ID descriptor
+    """
     return value.description
 
 
@@ -42,9 +46,9 @@ def test_for_duplicates_sources(
     """Ensure duplicate volume mounts are not passed to runner.
 
     :param doc_cache_path: The test data
-    :param patch_curses: Fixture to patch curses so it doesn't traceback
     :param monkeypatch: The monkeypatch fixture
-    :param arg_collector: The fixture used to collect argument passed to a function
+    :param tmp_path: The tmp directory
+    :param mocker: The mocker fixture
     """
     working_dir = tmp_path / "working_dir"
     working_dir.mkdir()
