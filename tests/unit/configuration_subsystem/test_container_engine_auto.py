@@ -3,7 +3,11 @@ import shutil
 
 
 def test_ce_auto_podman(monkeypatch, generate_config):
-    """Ensure podman is the result."""
+    """Ensure podman is the result.
+
+    :param monkeypatch: The monkeypatch fixture
+    :param generate_config: The configuration generator fixture
+    """
 
     def which(arg):
         return arg == "podman"
@@ -15,7 +19,11 @@ def test_ce_auto_podman(monkeypatch, generate_config):
 
 
 def test_ce_auto_docker(monkeypatch, generate_config):
-    """Ensure docker is the result."""
+    """Ensure docker is the result.
+
+    :param monkeypatch: The monkeypatch fixture
+    :param generate_config: The configuration generator fixture
+    """
 
     def which(arg):
         return arg == "docker"
@@ -27,7 +35,11 @@ def test_ce_auto_docker(monkeypatch, generate_config):
 
 
 def test_ce_auto_none(monkeypatch, generate_config):
-    """Ensure error is the result."""
+    """Ensure error is the result.
+
+    :param monkeypatch: The monkeypatch fixture
+    :param generate_config: The configuration generator fixture
+    """
 
     def which(_arg):
         return False

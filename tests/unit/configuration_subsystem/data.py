@@ -1,4 +1,4 @@
-"""data used by the adjacent tests
+"""Data used by the adjacent tests.
 
 Note: Some of these are defined as dictionaries for ease but all should be frozen
 before use so they are immutable within the tests
@@ -6,8 +6,10 @@ before use so they are immutable within the tests
 
 
 def d2t(dictionary):
-    """turn the data dictionary into a frozen set
-    so they are immutable
+    """Turn the data dictionary into a frozen set so they are immutable.
+
+    :param dictionary: Data to be a tuple
+    :returns: Data dict as a tuple
     """
     return tuple(dictionary.items())
 
@@ -190,7 +192,10 @@ CLI_DATA_RUN = [
 
 
 def cli_data():
-    """turn them all into tuples"""
+    """Turn them all into tuples.
+
+    :returns: CLI data in tuples
+    """
     aggregated = (
         CLI_DATA_COLLECTIONS
         + CLI_DATA_CONFIG
