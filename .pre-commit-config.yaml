@@ -53,7 +53,7 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.5.0
+    rev: v6.6.0
     hooks:
       - id: cspell
         name: Spell check with cspell
