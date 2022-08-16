@@ -1,4 +1,6 @@
 """Configuration definitions."""
+from __future__ import annotations
+
 import copy
 import re
 
@@ -256,7 +258,7 @@ class ApplicationConfiguration:
 
     application_version: Union[Constants, str]
     entries: List[SettingsEntry]
-    internals: "Internals"
+    internals: Internals
     post_processor: "NavigatorPostProcessor"
     subcommands: List[SubCommand]
 
