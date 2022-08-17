@@ -1,4 +1,6 @@
 """Test the use of ``set-environment-variable`` through to runner."""
+from __future__ import annotations
+
 import os
 import shlex
 
@@ -71,7 +73,7 @@ class Test(Cli2Runner):
 
     def run_test(
         self,
-        mocked_runner: "MagicMock",
+        mocked_runner: MagicMock,
         monkeypatch: pytest.MonkeyPatch,
         tmp_path: Path,
         cli_entry: str,

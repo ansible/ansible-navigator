@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 import re
 
@@ -79,9 +81,9 @@ class _RegSet:
 def do_regset(
     idx: int,
     match: Optional[Match[str]],
-    rule: "CompiledRegsetRule",
-    compiler: "Compiler",
-    state: "State",
+    rule: CompiledRegsetRule,
+    compiler: Compiler,
+    state: State,
     pos: int,
 ) -> Optional[Tuple["State", int, bool, "Regions"]]:
     if match is None:
