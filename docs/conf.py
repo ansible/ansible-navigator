@@ -140,6 +140,7 @@ nitpick_ignore = [
     ("py:class", "WhileRule"),
     ("py:class", "Window"),
     ("py:class", "yaml.cyaml.CSafeDumper"),
+    ("py:class", "yaml.dumper.SafeDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
     ("py:class", f"{root}.configuration_subsystem.definitions.SettingsFileType"),
     ("py:class", f"{root}.configuration_subsystem.defs_presentable.PresentableSettingsEntries"),
