@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 
 from typing import TYPE_CHECKING
@@ -24,7 +26,7 @@ if TYPE_CHECKING:
 
 
 class Compiler:
-    def __init__(self, grammar: "Grammar", grammars: "Grammars") -> None:
+    def __init__(self, grammar: Grammar, grammars: Grammars) -> None:
         """Initialize the grammar compiler.
 
         :param grammar: The grammar to compile, a text mate language file
@@ -37,7 +39,7 @@ class Compiler:
         root = self._compile_root(grammar)
         self.root_state = State.root(Entry(root.name, root, ("", 0)))
 
-    def _visit_rule(self, grammar: "Grammar", rule: "_Rule") -> "_Rule":
+    def _visit_rule(self, grammar: Grammar, rule: _Rule) -> "_Rule":
         self._rule_to_grammar[rule] = grammar
         return rule
 
