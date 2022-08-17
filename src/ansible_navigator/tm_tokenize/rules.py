@@ -28,7 +28,7 @@ if TYPE_CHECKING:
     from .compiler import Compiler
     from .region import Scope
 
-Captures = Tuple[Tuple[int, "_Rule"], ...]
+Captures = Tuple[Tuple[int, "_Rule"], ...]  # declared later
 
 
 def _split_name(s: Optional[str]) -> Tuple[str, ...]:
@@ -145,7 +145,7 @@ class EndRule(NamedTuple):
     end_captures: Captures
     end: str
     regset: _RegSet
-    u_rules: Tuple["_Rule", ...]
+    u_rules: Tuple[_Rule, ...]
 
     def start(
         self,
@@ -238,7 +238,7 @@ class MatchRule(NamedTuple):
 class PatternRule(NamedTuple):
     name: Tuple[str, ...]
     regset: _RegSet
-    u_rules: Tuple["_Rule", ...]
+    u_rules: Tuple[_Rule, ...]
 
     def start(
         self,
@@ -367,7 +367,7 @@ class WhileRule(NamedTuple):
     while_captures: Captures
     while_: str
     regset: _RegSet
-    u_rules: Tuple["_Rule", ...]
+    u_rules: Tuple[_Rule, ...]
 
     def start(
         self,

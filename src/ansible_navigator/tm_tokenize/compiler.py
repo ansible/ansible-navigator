@@ -35,11 +35,11 @@ class Compiler:
         self._root_scope = grammar.scope_name
         self._grammars = grammars
         self._rule_to_grammar: Dict["_Rule", "Grammar"] = {}
-        self._c_rules: Dict["_Rule", "CompiledRule"] = {}
+        self._c_rules: Dict[_Rule, "CompiledRule"] = {}
         root = self._compile_root(grammar)
         self.root_state = State.root(Entry(root.name, root, ("", 0)))
 
-    def _visit_rule(self, grammar: Grammar, rule: _Rule) -> "_Rule":
+    def _visit_rule(self, grammar: Grammar, rule: _Rule) -> _Rule:
         self._rule_to_grammar[rule] = grammar
         return rule
 
@@ -47,9 +47,9 @@ class Compiler:
     def _include(
         self,
         grammar: Grammar,
-        repository: FChainMap[str, "_Rule"],
+        repository: FChainMap[str, _Rule],
         s: str,
-    ) -> Tuple[List[str], Tuple["_Rule", ...]]:
+    ) -> Tuple[List[str], Tuple[_Rule, ...]]:
         if s == "$self":
             return self._patterns(grammar, grammar.patterns)
         elif s == "$base":
@@ -69,10 +69,10 @@ class Compiler:
     def _patterns(
         self,
         grammar: Grammar,
-        rules: Tuple["_Rule", ...],
-    ) -> Tuple[List[str], Tuple["_Rule", ...]]:
+        rules: Tuple[_Rule, ...],
+    ) -> Tuple[List[str], Tuple[_Rule, ...]]:
         ret_regs = []
-        ret_rules: List["_Rule"] = []
+        ret_rules: List[_Rule] = []
         for rule in rules:
             if rule.include is not None:
                 tmp_regs, tmp_rules = self._include(grammar, rule.repository, rule.include)
