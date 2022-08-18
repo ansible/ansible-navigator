@@ -1,4 +1,6 @@
 """Test from the CLI up to to the invocation of runner."""
+from __future__ import annotations
+
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Dict
@@ -36,7 +38,7 @@ class Cli2Runner:
 
     def run_test(
         self,
-        mocked_runner: "MagicMock",
+        mocked_runner: MagicMock,
         monkeypatch: pytest.MonkeyPatch,
         tmp_path: Path,
         cli_entry: str,
