@@ -85,7 +85,7 @@ def do_regset(
     compiler: Compiler,
     state: State,
     pos: int,
-) -> Optional[Tuple["State", int, bool, "Regions"]]:
+) -> Optional[Tuple[State, int, bool, Regions]]:
     if match is None:
         return None
 

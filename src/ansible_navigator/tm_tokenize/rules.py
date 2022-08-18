@@ -48,7 +48,7 @@ class CompiledRule(Protocol):
         compiler: Compiler,
         match: Match[str],
         state: State,
-    ) -> Tuple["State", bool, Regions]:
+    ) -> Tuple[State, bool, Regions]:
         ...
 
     def search(
@@ -152,7 +152,7 @@ class EndRule(NamedTuple):
         compiler: Compiler,
         match: Match[str],
         state: State,
-    ) -> Tuple["State", bool, "Regions"]:
+    ) -> Tuple[State, bool, Regions]:
         scope = state.cur.scope + self.name
         next_scope = scope + self.content_name
 
@@ -169,7 +169,7 @@ class EndRule(NamedTuple):
         state: State,
         pos: int,
         m: Match[str],
-    ) -> Tuple["State", int, bool, "Regions"]:
+    ) -> Tuple[State, int, bool, Regions]:
         ret = []
         if m.start() > pos:
             ret.append(Region(pos, m.start(), state.cur.scope))
@@ -218,7 +218,7 @@ class MatchRule(NamedTuple):
         compiler: Compiler,
         match: Match[str],
         state: State,
-    ) -> Tuple["State", bool, "Regions"]:
+    ) -> Tuple[State, bool, Regions]:
         scope = state.cur.scope + self.name
         return state, False, _captures(compiler, scope, match, self.captures)
 
@@ -245,7 +245,7 @@ class PatternRule(NamedTuple):
         compiler: Compiler,
         match: Match[str],
         state: State,
-    ) -> Tuple["State", bool, "Regions"]:
+    ) -> Tuple[State, bool, Regions]:
         raise AssertionError(f"unreachable {self}")
 
     def search(
@@ -374,7 +374,7 @@ class WhileRule(NamedTuple):
         compiler: Compiler,
         match: Match[str],
         state: State,
-    ) -> Tuple["State", bool, "Regions"]:
+    ) -> Tuple[State, bool, Regions]:
         scope = state.cur.scope + self.name
         next_scope = scope + self.content_name
 

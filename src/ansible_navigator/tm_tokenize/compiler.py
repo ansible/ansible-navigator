@@ -34,8 +34,8 @@ class Compiler:
         """
         self._root_scope = grammar.scope_name
         self._grammars = grammars
-        self._rule_to_grammar: Dict["_Rule", "Grammar"] = {}
-        self._c_rules: Dict[_Rule, "CompiledRule"] = {}
+        self._rule_to_grammar: Dict[_Rule, Grammar] = {}
+        self._c_rules: Dict[_Rule, CompiledRule] = {}
         root = self._compile_root(grammar)
         self.root_state = State.root(Entry(root.name, root, ("", 0)))
 
@@ -92,14 +92,14 @@ class Compiler:
                 raise AssertionError(f"unreachable {rule}")
         return ret_regs, tuple(ret_rules)
 
-    def _captures_ref(self, grammar: Grammar, captures: Captures) -> "Captures":
+    def _captures_ref(self, grammar: Grammar, captures: Captures) -> Captures:
         return tuple((n, self._visit_rule(grammar, r)) for n, r in captures)
 
-    def _compile_root(self, grammar: Grammar) -> "PatternRule":
+    def _compile_root(self, grammar: Grammar) -> PatternRule:
         regs, rules = self._patterns(grammar, grammar.patterns)
         return PatternRule((grammar.scope_name,), make_regset(*regs), rules)
 
-    def _compile_rule(self, grammar: Grammar, rule: _Rule) -> "CompiledRule":
+    def _compile_rule(self, grammar: Grammar, rule: _Rule) -> CompiledRule:
         assert rule.include is None, rule
         if rule.match is not None:
             captures_ref = self._captures_ref(grammar, rule.captures)
@@ -130,7 +130,7 @@ class Compiler:
             regs, rules = self._patterns(grammar, rule.patterns)
             return PatternRule(rule.name, make_regset(*regs), rules)
 
-    def compile_rule(self, rule: _Rule) -> "CompiledRule":
+    def compile_rule(self, rule: _Rule) -> CompiledRule:
         try:
             return self._c_rules[rule]
         except KeyError:
