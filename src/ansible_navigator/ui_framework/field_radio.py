@@ -1,4 +1,5 @@
 """Individual check and the form field checks for radios."""
+from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -57,7 +58,7 @@ class FieldRadio:
         """
         return partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
 
-    def _validate(self, response: "FieldRadio") -> Validation:
+    def _validate(self, response: FieldRadio) -> Validation:
         validation = self.validator(choices=response.options)
         if validation.error_msg:
             self.valid = False
@@ -65,7 +66,7 @@ class FieldRadio:
             self.valid = True
         return validation
 
-    def validate(self, response: "FieldRadio") -> None:
+    def validate(self, response: FieldRadio) -> None:
         """Validate this FieldRadio instance.
 
         :param response: Instance to check and verify options are valid
@@ -73,7 +74,7 @@ class FieldRadio:
         validation = self._validate(response)
         self.current_error = validation.error_msg
 
-    def conditional_validation(self, response: "FieldRadio") -> None:
+    def conditional_validation(self, response: FieldRadio) -> None:
         """Conditional validation for a FieldRadio instance.
 
         :param response: Instance to check and verify options are valid

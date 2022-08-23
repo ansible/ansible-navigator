@@ -1,4 +1,5 @@
 """Definitions of UI content objects."""
+from __future__ import annotations
 
 from dataclasses import asdict
 from dataclasses import dataclass
@@ -26,7 +27,7 @@ class ContentView(Enum):
 
 
 T = TypeVar("T")
-DictType: "TypeAlias" = Dict[str, T]
+DictType: TypeAlias = Dict[str, T]
 
 
 class SerializationFormat(Enum):

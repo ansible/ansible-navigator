@@ -1,4 +1,6 @@
 """Individual field check, the form field checks and radio check."""
+from __future__ import annotations
+
 import sys
 
 from dataclasses import dataclass
@@ -65,7 +67,7 @@ class FieldChecks:
             min_selected=self.min_selected,
         )
 
-    def _validate(self, response: "FieldChecks") -> Validation:
+    def _validate(self, response: FieldChecks) -> Validation:
         validation = self.validator(choices=response.options)
         if validation.error_msg:
             self.valid = False
@@ -73,7 +75,7 @@ class FieldChecks:
             self.valid = True
         return validation
 
-    def validate(self, response: "FieldChecks") -> None:
+    def validate(self, response: FieldChecks) -> None:
         """Validate this FieldChecks instance.
 
         :param response: Instance to check and verify options are valid
@@ -84,7 +86,7 @@ class FieldChecks:
         validation = self._validate(response)
         self.current_error = validation.error_msg
 
-    def conditional_validation(self, response: "FieldChecks") -> None:
+    def conditional_validation(self, response: FieldChecks) -> None:
         """Conditional validation for a Fieldchecks instance.
 
         :param response: Instance to check and verify options are valid

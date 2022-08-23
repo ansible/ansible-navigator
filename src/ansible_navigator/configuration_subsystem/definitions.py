@@ -259,7 +259,7 @@ class ApplicationConfiguration:
     application_version: Union[Constants, str]
     entries: List[SettingsEntry]
     internals: Internals
-    post_processor: "NavigatorPostProcessor"
+    post_processor: NavigatorPostProcessor
     subcommands: List[SubCommand]
 
     application_name: str = ""

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 
 from typing import TYPE_CHECKING
@@ -24,7 +26,7 @@ if TYPE_CHECKING:
 
 
 class Compiler:
-    def __init__(self, grammar: "Grammar", grammars: "Grammars") -> None:
+    def __init__(self, grammar: Grammar, grammars: Grammars) -> None:
         """Initialize the grammar compiler.
 
         :param grammar: The grammar to compile, a text mate language file
@@ -32,22 +34,22 @@ class Compiler:
         """
         self._root_scope = grammar.scope_name
         self._grammars = grammars
-        self._rule_to_grammar: Dict["_Rule", "Grammar"] = {}
-        self._c_rules: Dict["_Rule", "CompiledRule"] = {}
+        self._rule_to_grammar: Dict[_Rule, Grammar] = {}
+        self._c_rules: Dict[_Rule, CompiledRule] = {}
         root = self._compile_root(grammar)
         self.root_state = State.root(Entry(root.name, root, ("", 0)))
 
-    def _visit_rule(self, grammar: "Grammar", rule: "_Rule") -> "_Rule":
+    def _visit_rule(self, grammar: Grammar, rule: _Rule) -> _Rule:
         self._rule_to_grammar[rule] = grammar
         return rule
 
     @functools.lru_cache(maxsize=None)
     def _include(
         self,
-        grammar: "Grammar",
-        repository: FChainMap[str, "_Rule"],
+        grammar: Grammar,
+        repository: FChainMap[str, _Rule],
         s: str,
-    ) -> Tuple[List[str], Tuple["_Rule", ...]]:
+    ) -> Tuple[List[str], Tuple[_Rule, ...]]:
         if s == "$self":
             return self._patterns(grammar, grammar.patterns)
         elif s == "$base":
@@ -66,11 +68,11 @@ class Compiler:
     @functools.lru_cache(maxsize=None)
     def _patterns(
         self,
-        grammar: "Grammar",
-        rules: Tuple["_Rule", ...],
-    ) -> Tuple[List[str], Tuple["_Rule", ...]]:
+        grammar: Grammar,
+        rules: Tuple[_Rule, ...],
+    ) -> Tuple[List[str], Tuple[_Rule, ...]]:
         ret_regs = []
-        ret_rules: List["_Rule"] = []
+        ret_rules: List[_Rule] = []
         for rule in rules:
             if rule.include is not None:
                 tmp_regs, tmp_rules = self._include(grammar, rule.repository, rule.include)
@@ -90,14 +92,14 @@ class Compiler:
                 raise AssertionError(f"unreachable {rule}")
         return ret_regs, tuple(ret_rules)
 
-    def _captures_ref(self, grammar: "Grammar", captures: "Captures") -> "Captures":
+    def _captures_ref(self, grammar: Grammar, captures: Captures) -> Captures:
         return tuple((n, self._visit_rule(grammar, r)) for n, r in captures)
 
-    def _compile_root(self, grammar: "Grammar") -> "PatternRule":
+    def _compile_root(self, grammar: Grammar) -> PatternRule:
         regs, rules = self._patterns(grammar, grammar.patterns)
         return PatternRule((grammar.scope_name,), make_regset(*regs), rules)
 
-    def _compile_rule(self, grammar: "Grammar", rule: "_Rule") -> "CompiledRule":
+    def _compile_rule(self, grammar: Grammar, rule: _Rule) -> CompiledRule:
         assert rule.include is None, rule
         if rule.match is not None:
             captures_ref = self._captures_ref(grammar, rule.captures)
@@ -128,7 +130,7 @@ class Compiler:
             regs, rules = self._patterns(grammar, rule.patterns)
             return PatternRule(rule.name, make_regset(*regs), rules)
 
-    def compile_rule(self, rule: "_Rule") -> "CompiledRule":
+    def compile_rule(self, rule: _Rule) -> CompiledRule:
         try:
             return self._c_rules[rule]
         except KeyError:

@@ -104,10 +104,6 @@ pygments_style = "ansible"
 nitpicky = True
 root = "ansible_navigator"
 nitpick_ignore = [
-    ("py:class", "_Rule"),
-    ("py:class", "ansible_runner.runner.Runner"),
-    ("py:class", "argparse._SubParsersAction"),
-    ("py:class", "argparse.HelpFormatter"),
     ("py:class", "Captures"),
     ("py:class", "CompiledRegsetRule"),
     ("py:class", "CompiledRule"),
@@ -116,7 +112,6 @@ nitpick_ignore = [
     ("py:class", "ContentView"),
     ("py:class", "CursesLine"),
     ("py:class", "CursesLines"),
-    ("py:class", "dataclasses.InitVar"),
     ("py:class", "Entry"),
     ("py:class", "FieldButton"),
     ("py:class", "FieldChecks"),
@@ -126,10 +121,10 @@ nitpick_ignore = [
     ("py:class", "Form"),
     ("py:class", "Grammar"),
     ("py:class", "Grammars"),
-    ("py:class", "Internals"),
     ("py:class", "IO"),
+    ("py:class", "InitVar"),  # needed by py310 or lower
+    ("py:class", "Internals"),
     ("py:class", "Match"),
-    ("py:class", "multiprocessing.context.BaseContext.Queue"),
     ("py:class", "NavigatorPostProcessor"),
     ("py:class", "Pattern"),
     ("py:class", "PatternRule"),
@@ -139,7 +134,14 @@ nitpick_ignore = [
     ("py:class", "State"),
     ("py:class", "WhileRule"),
     ("py:class", "Window"),
+    ("py:class", "_Rule"),
+    ("py:class", "ansible_runner.runner.Runner"),
+    ("py:class", "argparse.HelpFormatter"),
+    ("py:class", "argparse._SubParsersAction"),
+    ("py:class", "dataclass.InitVar"),  # needed by py311
+    ("py:class", "multiprocessing.context.BaseContext.Queue"),
     ("py:class", "yaml.cyaml.CSafeDumper"),
+    ("py:class", "yaml.dumper.SafeDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
     ("py:class", f"{root}.configuration_subsystem.definitions.SettingsFileType"),
     ("py:class", f"{root}.configuration_subsystem.defs_presentable.PresentableSettingsEntries"),
