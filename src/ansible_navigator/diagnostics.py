@@ -1,4 +1,6 @@
 """Produce a diagnostics report in json format."""
+from __future__ import annotations
+
 import datetime
 import json
 import sys

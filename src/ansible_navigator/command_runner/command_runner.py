@@ -1,4 +1,6 @@
 """Definitions for the command runner."""
+from __future__ import annotations
+
 import multiprocessing
 import subprocess
 

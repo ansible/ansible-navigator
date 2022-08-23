@@ -12,6 +12,8 @@ The full specification for ansible-lint's use of JSON (for the codeclimate
 formatter) can be found in src/ansiblelint/formatters/__init__.py in the
 ansible-lint codebase.
 """
+from __future__ import annotations
+
 import json
 import os
 import shlex

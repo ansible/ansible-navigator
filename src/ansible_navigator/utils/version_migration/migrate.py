@@ -1,5 +1,6 @@
 """The ability to perform migrations."""
 
+from __future__ import annotations
 
 from pathlib import Path
 from typing import Tuple

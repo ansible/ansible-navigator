@@ -1,5 +1,7 @@
 # cspell:ignore KEY_NPAGE, KEY_PPAGE
 """The main UI renderer."""
+from __future__ import annotations
+
 import curses
 import logging
 import re

@@ -1,4 +1,6 @@
 """Some utilities that are specific to ansible_navigator."""
+from __future__ import annotations
+
 import ast
 import datetime
 import decimal

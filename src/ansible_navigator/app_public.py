@@ -2,6 +2,8 @@
 
 This will be shared with other actions and is immutable.
 """
+from __future__ import annotations
+
 from typing import Callable
 from typing import List
 from typing import NamedTuple

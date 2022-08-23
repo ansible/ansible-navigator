@@ -1,5 +1,7 @@
 """Tests ensuring only requirements.txt are needed."""
 
+from __future__ import annotations
+
 import os
 import shutil
 import tempfile

@@ -1,5 +1,7 @@
 """Some simple tests for exec command and param generation."""
 
+from __future__ import annotations
+
 from typing import List
 from typing import NamedTuple
 

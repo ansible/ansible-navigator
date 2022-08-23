@@ -1,5 +1,7 @@
 """Predefined form field validators."""
 
+from __future__ import annotations
+
 import os
 
 from collections.abc import Iterable

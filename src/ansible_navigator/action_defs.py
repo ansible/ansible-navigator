@@ -1,5 +1,6 @@
 """Pre-defined objects used by actions."""
 
+from __future__ import annotations
 
 from typing import NamedTuple
 from typing import Union

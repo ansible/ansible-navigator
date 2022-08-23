@@ -1,4 +1,5 @@
 """Common definitions for a version migration."""
+from __future__ import annotations
 
 from enum import Enum
 from pathlib import Path

@@ -1,4 +1,6 @@
 """Constants for use with the user interface."""
+from __future__ import annotations
+
 import curses
 
 from enum import IntEnum

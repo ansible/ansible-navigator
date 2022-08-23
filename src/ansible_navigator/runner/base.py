@@ -3,7 +3,7 @@
 
 Attributes common to all ansible-runner calls are defined within the base class.
 """
-
+from __future__ import annotations
 
 import logging
 import os
