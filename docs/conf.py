@@ -138,7 +138,7 @@ nitpick_ignore = [
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse.HelpFormatter"),
     ("py:class", "argparse._SubParsersAction"),
-    ("py:class", "dataclass.InitVar"),  # needed by py311
+    ("py:class", "dataclasses.InitVar"),
     ("py:class", "multiprocessing.context.BaseContext.Queue"),
     ("py:class", "yaml.cyaml.CSafeDumper"),
     ("py:class", "yaml.dumper.SafeDumper"),
