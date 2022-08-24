@@ -104,6 +104,7 @@ pygments_style = "ansible"
 nitpicky = True
 root = "ansible_navigator"
 nitpick_ignore = [
+    ("py:class", "ContentTypeSequence"),
     ("py:class", "Captures"),
     ("py:class", "CompiledRegsetRule"),
     ("py:class", "CompiledRule"),
