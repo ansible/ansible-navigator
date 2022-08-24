@@ -111,7 +111,7 @@ class Ui(NamedTuple):
     menu_filter: Callable
     scroll: Callable
     show: ShowCallable
-    show_form: Callable[[Form], Form]
+    show_form: "Callable[[Form], Form]"
     update_status: Callable
     content_format: ContentFormatCallable
 
@@ -655,7 +655,7 @@ class UserInterface(CursesWindow):
         lines = self._serialize_color(filtered_obj)
         return heading, lines
 
-    def _show_form(self, obj: Form) -> Form:
+    def _show_form(self, obj: "Form") -> "Form":
         res = obj.present(screen=self._screen, ui_config=self._ui_config)
         return res
 
