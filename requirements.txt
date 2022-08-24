@@ -5,10 +5,10 @@
 #    pip-compile --extra=docs --extra=test --no-annotate --output-file=requirements.txt --strip-extras setup.cfg
 #
 alabaster==0.7.12
-ansible-builder==1.0.1
+ansible-builder==1.1.0
 ansible-core==2.12.4
 ansible-pygments==0.1.1
-ansible-runner==2.1.3
+ansible-runner==2.2.1
 attrs==21.4.0
 babel==2.9.1
 backports-zoneinfo==0.2.1 ; python_version < "3.9.0"
