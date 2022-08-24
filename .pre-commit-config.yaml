@@ -18,7 +18,7 @@ repos:
         name: Sort import statements using isort
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v2.7.1"
+    rev: "v3.0.0-alpha.0"
     hooks:
       - id: prettier
         # Original hook implementation is flaky due to *several* bugs described
@@ -53,13 +53,13 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.6.0
+    rev: v6.8.0
     hooks:
       - id: cspell
         name: Spell check with cspell
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.3.0
+    rev: v1.3.1
     hooks:
       - id: remove-tabs
         exclude: |
@@ -94,7 +94,7 @@ repos:
       - id: debug-statements
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.32.1
+    rev: v0.32.2
     hooks:
       - id: markdownlint
         exclude: >
@@ -113,7 +113,7 @@ repos:
           $
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+    rev: v2.2.1
     hooks:
       - id: codespell
         # NOTE: dout is part of the stdout action regex
