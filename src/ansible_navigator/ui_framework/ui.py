@@ -113,7 +113,7 @@ class Ui(NamedTuple):
     menu_filter: Callable
     scroll: Callable
     show: ShowCallable
-    show_form: Callable[[Form], Form]
+    show_form: "Callable[[Form], Form]"
     update_status: Callable
     content_format: ContentFormatCallable
 
