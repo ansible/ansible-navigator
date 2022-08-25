@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12
 ansible-builder==1.1.0
-ansible-core==2.13.3
+ansible-core==2.12.4
 ansible-pygments==0.1.1
 ansible-runner==2.2.1
 attrs==22.1.0
