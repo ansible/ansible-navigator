@@ -77,7 +77,7 @@ pytz==2022.2.1
 pyyaml==6.0
 requests==2.28.1
 requirements-parser==0.5.0
-resolvelib==0.8.1
+resolvelib==0.5.4
 setuptools-scm==7.0.5
 six==1.16.0
 snowballstemmer==2.2.0
