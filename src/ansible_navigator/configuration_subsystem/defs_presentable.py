@@ -1,5 +1,7 @@
 """Object definitions for the presentable transformation of the settings."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import ClassVar
 from typing import Dict

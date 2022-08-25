@@ -1,4 +1,6 @@
 """``:open`` command implementation."""
+from __future__ import annotations
+
 import curses
 import logging
 import os

@@ -1,5 +1,7 @@
 # cspell:ignore KEY_NPAGE, KEY_PPAGE
 """The main UI renderer."""
+from __future__ import annotations
+
 import curses
 import logging
 import re
@@ -111,7 +113,7 @@ class Ui(NamedTuple):
     menu_filter: Callable
     scroll: Callable
     show: ShowCallable
-    show_form: Callable[[Form], Form]
+    show_form: Callable[["Form"], "Form"]
     update_status: Callable
     content_format: ContentFormatCallable
 

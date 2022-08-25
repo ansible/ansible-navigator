@@ -1,5 +1,6 @@
 """The v1 to v2 settings file migration."""
 
+from __future__ import annotations
 
 from typing import Dict
 

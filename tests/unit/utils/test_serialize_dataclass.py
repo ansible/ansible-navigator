@@ -1,4 +1,6 @@
 """Tests for serializing a dataclass."""
+from __future__ import annotations
+
 from dataclasses import asdict
 from dataclasses import dataclass
 from functools import partial

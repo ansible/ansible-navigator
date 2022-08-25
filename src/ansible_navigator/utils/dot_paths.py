@@ -1,4 +1,6 @@
 """Utilities for working with dictionaries using paths."""
+from __future__ import annotations
+
 import copy
 import operator
 

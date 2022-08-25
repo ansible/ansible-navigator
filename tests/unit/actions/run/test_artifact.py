@@ -1,4 +1,6 @@
 """Unit tests for artifact creation. in the run action."""
+from __future__ import annotations
+
 import logging
 import os
 import re

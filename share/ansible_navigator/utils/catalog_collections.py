@@ -1,5 +1,7 @@
 # cspell:ignore ftype, chksum
 """Catalog collections within the execution environment."""
+from __future__ import annotations
+
 import argparse
 import hashlib
 import json
@@ -89,7 +91,7 @@ class CollectionCatalog:
                 for plugin_dir in plugin_directory.iterdir()
                 if plugin_dir.is_dir() and plugin_dir.name not in exempt
             ]
-            # builting modules are found in a sibling of the plugin directory
+            # builtin modules are found in a sibling of the plugin directory
             if collection["known_as"] == "ansible.builtin":
                 plugin_dirs.append(Path(collection["path"], "modules"))
 
