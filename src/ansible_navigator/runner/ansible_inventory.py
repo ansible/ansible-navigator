@@ -1,5 +1,7 @@
 """Herein lies the ability for ansible-runner to run the ansible-inventory command."""
 
+from __future__ import annotations
+
 from typing import List
 from typing import Optional
 from typing import Tuple

@@ -1,5 +1,7 @@
 """Commonly used definitions."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import NamedTuple
 from typing import NewType

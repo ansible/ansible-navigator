@@ -1,5 +1,7 @@
 """Working handler, instant 1112065, utf-8 max = 112064."""
 
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 from typing import List
 from typing import Tuple

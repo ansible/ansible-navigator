@@ -1,4 +1,6 @@
 """Tests for the playbook artifact save as post processor."""
+from __future__ import annotations
+
 from copy import deepcopy
 from dataclasses import dataclass
 from typing import Optional

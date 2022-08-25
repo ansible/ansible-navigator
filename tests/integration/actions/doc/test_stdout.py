@@ -1,4 +1,6 @@
 """Tests for doc from CLI, stdout."""
+from __future__ import annotations
+
 from typing import List
 
 import pytest

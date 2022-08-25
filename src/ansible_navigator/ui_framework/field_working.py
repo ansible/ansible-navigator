@@ -1,4 +1,6 @@
 """A field with a 'working on it message'."""
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Callable
 from typing import List

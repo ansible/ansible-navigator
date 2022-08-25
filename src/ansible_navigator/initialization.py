@@ -2,6 +2,8 @@
 
 These helpers are specific to ansible_navigator.
 """
+from __future__ import annotations
+
 import logging
 import os
 import sys

@@ -1,4 +1,6 @@
 """Build the argument parser."""
+from __future__ import annotations
+
 from argparse import SUPPRESS
 from argparse import ArgumentParser
 from argparse import HelpFormatter

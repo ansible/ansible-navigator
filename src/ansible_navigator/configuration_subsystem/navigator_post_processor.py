@@ -1,5 +1,7 @@
 # pylint: disable=too-many-lines
 """Post processing of ansible-navigator configuration."""
+from __future__ import annotations
+
 import importlib
 import logging
 import os

@@ -1,4 +1,6 @@
 """Test the functions exposed in the :mod:`~ansible_navigator.utils.functions` subpackage."""
+from __future__ import annotations
+
 import os
 import re
 

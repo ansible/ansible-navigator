@@ -1,5 +1,7 @@
 """Tests for doc from CLI, interactive, without an EE."""
 
+from __future__ import annotations
+
 from typing import List
 
 import pytest
