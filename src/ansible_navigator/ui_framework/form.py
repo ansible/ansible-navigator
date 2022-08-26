@@ -1,4 +1,5 @@
 """Form definition and form rendering."""
+from __future__ import annotations
 
 import curses
 

@@ -1,4 +1,6 @@
 """Fixtures for configuration subsystem tests."""
+from __future__ import annotations
+
 import os
 
 from copy import deepcopy

@@ -1,4 +1,5 @@
 """Methods of transforming the settings."""
+from __future__ import annotations
 
 import json
 import textwrap

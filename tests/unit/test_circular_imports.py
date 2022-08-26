@@ -9,6 +9,8 @@ This module is based on an idea that ``pytest`` uses for self-testing:
 * https://twitter.com/codewithanthony/status/1229445110510735361
 * https://github.com/aio-libs/aiohttp/blob/master/tests/test_circular_imports.py
 """  # noqa: E501
+from __future__ import annotations
+
 import os
 import pkgutil
 import subprocess  # noqa: S404 Required due to the nature of this test

@@ -3,6 +3,8 @@
 # fmt: off
 """Sphinx extension for generating the rules table document."""
 
+from __future__ import annotations
+
 from copy import copy
 from pathlib import Path
 from re import match

@@ -1,4 +1,5 @@
 """Functionality to perform json schema validation."""
+from __future__ import annotations
 
 import json
 

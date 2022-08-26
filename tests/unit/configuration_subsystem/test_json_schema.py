@@ -1,5 +1,5 @@
 """Tests for the transformation of settings to a json schema."""
-
+from __future__ import annotations
 
 from copy import deepcopy
 from pathlib import Path

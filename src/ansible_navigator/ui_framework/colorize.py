@@ -1,6 +1,8 @@
 # cspell:ignore A_INVIS
 """Tokenize and color text."""
 
+from __future__ import annotations
+
 import colorsys
 import copy
 import curses

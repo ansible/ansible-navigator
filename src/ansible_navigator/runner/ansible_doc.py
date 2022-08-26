@@ -1,5 +1,7 @@
 """Herein lies the ability for ansible-runner to run the ansible-doc command."""
 
+from __future__ import annotations
+
 from typing import Any
 from typing import Dict
 from typing import List

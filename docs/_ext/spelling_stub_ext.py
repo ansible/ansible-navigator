@@ -1,6 +1,8 @@
 # fmt: off
 """Sphinx extension for making the spelling directive noop."""
 
+from __future__ import annotations
+
 from typing import Dict
 from typing import List
 from typing import Union

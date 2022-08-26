@@ -1,4 +1,6 @@
 """Utilities related to the configuration subsystem."""
+from __future__ import annotations
+
 import logging
 
 from configparser import ConfigParser

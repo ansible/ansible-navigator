@@ -1,4 +1,6 @@
 """A text input field."""
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Callable
 from typing import Optional
