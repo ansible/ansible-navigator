@@ -18,11 +18,7 @@ from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Dict
 from typing import Generator
-from typing import List
-from typing import Tuple
-from typing import Union
 
 import yaml
 
@@ -91,7 +87,7 @@ class CollectionCatalog:
                 for plugin_dir in plugin_directory.iterdir()
                 if plugin_dir.is_dir() and plugin_dir.name not in exempt
             ]
-            # builting modules are found in a sibling of the plugin directory
+            # builtin modules are found in a sibling of the plugin directory
             if collection["known_as"] == "ansible.builtin":
                 plugin_dirs.append(Path(collection["path"], "modules"))
 

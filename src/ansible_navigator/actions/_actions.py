@@ -11,10 +11,7 @@ from collections import namedtuple
 from importlib import resources
 from typing import Any
 from typing import Callable
-from typing import Dict
 from typing import Generator
-from typing import List
-from typing import Tuple
 
 from ..action_defs import RunStdoutReturn
 from ..ui_framework import error_notification

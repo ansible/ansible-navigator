@@ -5,8 +5,6 @@ import re
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
-from typing import Optional
 from typing import Pattern
 
 import pytest

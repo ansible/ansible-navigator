@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import os
 
-from typing import Dict
 from typing import NamedTuple
 from unittest.mock import patch  # pylint: disable=preferred-module  # FIXME: GH-872
 

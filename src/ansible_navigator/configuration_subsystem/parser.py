@@ -6,8 +6,6 @@ from argparse import ArgumentParser
 from argparse import HelpFormatter
 from argparse import _SubParsersAction
 from typing import Any
-from typing import Dict
-from typing import Tuple
 
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C

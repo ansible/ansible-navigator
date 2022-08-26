@@ -4,12 +4,15 @@ This will be shared with other actions and is immutable.
 """
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import Callable
-from typing import List
 from typing import NamedTuple
 
-from .configuration_subsystem import ApplicationConfiguration
 from .steps import Steps
+
+
+if TYPE_CHECKING:
+    from .configuration_subsystem import ApplicationConfiguration
 
 
 class AppPublic(NamedTuple):
@@ -18,6 +21,7 @@ class AppPublic(NamedTuple):
     This will be shared with other actions and is immutable.
     """
 
+    # Quoted due to https://github.com/sphinx-doc/sphinx/issues/10400
     args: ApplicationConfiguration
     name: str
     rerun: Callable

@@ -8,8 +8,6 @@ from dataclasses import dataclass
 from dataclasses import field
 from queue import Queue
 from typing import Callable
-from typing import List
-from typing import Optional
 
 from ..utils.definitions import LogMessage
 

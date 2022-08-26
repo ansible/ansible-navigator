@@ -6,7 +6,6 @@ import math
 import os
 
 from sys import stdout
-from typing import List
 
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentType

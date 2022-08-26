@@ -6,8 +6,6 @@ import shlex
 import subprocess
 
 from dataclasses import dataclass
-from typing import List
-from typing import Union
 
 from ..configuration_subsystem import Constants
 from ..utils.definitions import ExitMessage

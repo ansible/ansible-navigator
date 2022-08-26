@@ -4,10 +4,7 @@ from __future__ import annotations
 import shlex
 
 from enum import Enum
-from typing import List
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 
 class SearchFor(Enum):

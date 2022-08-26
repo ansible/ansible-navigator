@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
-from typing import Optional
-from typing import Tuple
-
 from ansible_runner import get_inventory
 
 from .base import Base

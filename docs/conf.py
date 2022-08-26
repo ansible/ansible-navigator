@@ -104,6 +104,7 @@ pygments_style = "ansible"
 nitpicky = True
 root = "ansible_navigator"
 nitpick_ignore = [
+    ("py:class", "ContentTypeSequence"),
     ("py:class", "Captures"),
     ("py:class", "CompiledRegsetRule"),
     ("py:class", "CompiledRule"),
@@ -118,7 +119,6 @@ nitpick_ignore = [
     ("py:class", "FieldInformation"),
     ("py:class", "FieldRadio"),
     ("py:class", "FieldWorking"),
-    ("py:class", "Form"),
     ("py:class", "Grammar"),
     ("py:class", "Grammars"),
     ("py:class", "IO"),
@@ -138,7 +138,7 @@ nitpick_ignore = [
     ("py:class", "ansible_runner.runner.Runner"),
     ("py:class", "argparse.HelpFormatter"),
     ("py:class", "argparse._SubParsersAction"),
-    ("py:class", "dataclass.InitVar"),  # needed by py311
+    ("py:class", "dataclasses.InitVar"),
     ("py:class", "multiprocessing.context.BaseContext.Queue"),
     ("py:class", "yaml.cyaml.CSafeDumper"),
     ("py:class", "yaml.dumper.SafeDumper"),

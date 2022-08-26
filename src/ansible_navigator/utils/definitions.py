@@ -8,7 +8,6 @@ import textwrap
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
-from typing import List
 from typing import NamedTuple
 
 

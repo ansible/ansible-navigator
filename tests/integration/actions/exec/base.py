@@ -7,7 +7,6 @@ import os
 
 from pathlib import Path
 from typing import Generator
-from typing import Optional
 
 import pytest
 

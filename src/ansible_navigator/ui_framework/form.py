@@ -6,10 +6,6 @@ import curses
 from curses import ascii as curses_ascii
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart

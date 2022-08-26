@@ -13,11 +13,6 @@ import os
 import re
 
 from itertools import chain
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
 
 from ..tm_tokenize.grammars import Grammars
 from ..tm_tokenize.region import Regions

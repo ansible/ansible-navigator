@@ -6,9 +6,6 @@ import json
 from dataclasses import dataclass
 from typing import Any
 from typing import Deque
-from typing import Dict
-from typing import List
-from typing import Union
 
 from jsonschema import SchemaError
 from jsonschema import ValidationError

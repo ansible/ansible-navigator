@@ -8,9 +8,6 @@ from __future__ import annotations
 import os
 import shutil
 
-from typing import Optional
-from typing import Tuple
-
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..configuration_subsystem import ApplicationConfiguration

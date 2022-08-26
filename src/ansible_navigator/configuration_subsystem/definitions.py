@@ -15,8 +15,6 @@ from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import NewType
-from typing import Optional
-from typing import Tuple
 from typing import TypeVar
 from typing import Union
 

@@ -7,8 +7,6 @@ import sys
 from pathlib import Path
 from typing import Iterator
 from typing import MutableMapping
-from typing import Tuple
-from typing import Union
 
 
 if sys.version_info >= (3, 9):

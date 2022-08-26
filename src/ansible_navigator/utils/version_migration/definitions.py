@@ -6,8 +6,6 @@ from pathlib import Path
 from typing import Callable
 from typing import Generic
 from typing import List
-from typing import Optional
-from typing import Tuple
 from typing import Type
 from typing import TypeVar
 

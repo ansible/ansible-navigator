@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from functools import partial
-from typing import Tuple
 
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ..action_base import ActionBase

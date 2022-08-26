@@ -8,10 +8,6 @@ import shlex
 from copy import deepcopy
 from functools import partial
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn

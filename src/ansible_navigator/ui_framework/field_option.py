@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Union
 
 from .field_checks import FieldChecks
 from .field_radio import FieldRadio

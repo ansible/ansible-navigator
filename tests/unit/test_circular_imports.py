@@ -20,7 +20,6 @@ from itertools import chain
 from pathlib import Path
 from types import ModuleType
 from typing import Generator
-from typing import List
 
 import pytest
 

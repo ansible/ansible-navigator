@@ -10,8 +10,6 @@ import sys
 from copy import deepcopy
 from curses import wrapper
 from pathlib import Path
-from typing import List
-from typing import Union
 
 from pkg_resources import working_set
 

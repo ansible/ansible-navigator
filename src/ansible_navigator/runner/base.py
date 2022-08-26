@@ -12,9 +12,6 @@ import sys
 import tempfile
 
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
 
 from ansible_runner import Runner
 

@@ -6,8 +6,6 @@ import operator
 from copy import deepcopy
 from functools import reduce
 from pathlib import Path
-from typing import Dict
-from typing import Tuple
 
 import pytest
 

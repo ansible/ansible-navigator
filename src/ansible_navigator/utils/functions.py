@@ -16,12 +16,7 @@ import sysconfig
 from pathlib import Path
 from typing import Any
 from typing import Iterable
-from typing import List
 from typing import Mapping
-from typing import Optional
-from typing import Set
-from typing import Tuple
-from typing import Union
 
 from jinja2 import Environment
 from jinja2 import StrictUndefined
@@ -478,7 +473,8 @@ def shlex_join(tokens: Iterable[str]) -> str:
     :param tokens: The iterable of strings to join
     :returns: The iterable joined with spaces
     """
-    return shlex.join(split_command=tokens)
+    if sys.version_info >= (3, 8):
+        return shlex.join(split_command=tokens)
     return " ".join(shlex.quote(token) for token in tokens)
 
 

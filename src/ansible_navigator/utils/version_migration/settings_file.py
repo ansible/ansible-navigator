@@ -1,8 +1,6 @@
 """The settings file migration base class."""
 from __future__ import annotations
 
-from typing import Dict
-
 from ...content_defs import ContentView
 from ...content_defs import SerializationFormat
 from ..ansi import COLOR

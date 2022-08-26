@@ -4,8 +4,6 @@ from __future__ import annotations
 import os
 
 from copy import deepcopy
-from typing import Dict
-from typing import List
 from typing import NamedTuple
 
 import pytest

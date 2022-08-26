@@ -7,7 +7,6 @@ from __future__ import annotations
 import html
 
 from collections.abc import Mapping
-from typing import Optional
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic

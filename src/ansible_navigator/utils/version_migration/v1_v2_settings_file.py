@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Dict
-
 from ..dot_paths import MergeBehaviors
 from ..dot_paths import check_path
 from ..dot_paths import get_with_path

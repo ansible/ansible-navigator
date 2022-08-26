@@ -6,7 +6,6 @@ import json
 import logging
 
 from typing import TYPE_CHECKING
-from typing import Optional
 
 from .colorize import hex_to_rgb_curses
 from .curses_defs import CursesLine

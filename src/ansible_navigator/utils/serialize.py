@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import IO
 from typing import Any
 from typing import NamedTuple
-from typing import Optional
 
 import yaml
 

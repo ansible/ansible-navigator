@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Tuple
-
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
 

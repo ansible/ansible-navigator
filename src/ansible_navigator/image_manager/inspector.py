@@ -4,9 +4,6 @@ from __future__ import annotations
 import json
 import re
 
-from typing import List
-from typing import Tuple
-
 from ..command_runner import Command
 from ..command_runner import CommandRunner
 from ..utils.functions import pascal_to_snake
