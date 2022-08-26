@@ -1,9 +1,7 @@
 """An ansible test module."""
 
-from __future__ import absolute_import, division, print_function
 
 # pylint: disable=invalid-name
-__metaclass__ = type
 # pylint: enable=invalid-name
 
 

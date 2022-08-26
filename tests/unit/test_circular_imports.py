@@ -27,7 +27,7 @@ import pytest
 import ansible_navigator
 
 
-def _find_all_importables(pkg: ModuleType) -> List[str]:
+def _find_all_importables(pkg: ModuleType) -> list[str]:
     """Find all importables in the project.
 
     :param pkg: The package in which importables will be found

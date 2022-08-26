@@ -29,7 +29,7 @@ from .utils.functions import find_settings_file
 from .utils.key_value_store import KeyValueStore
 
 
-def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
+def error_and_exit_early(exit_messages: list[ExitMessage]) -> NoReturn:
     """Exit the application early.
 
     :param exit_messages: List of all exit messages to be printed
@@ -40,7 +40,7 @@ def error_and_exit_early(exit_messages: List[ExitMessage]) -> NoReturn:
     sys.exit(1)
 
 
-def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str], C]:
+def find_config() -> tuple[list[LogMessage], list[ExitMessage], str | None, C]:
     """Find a configuration file, logging each step.
 
     If the config can't be found/loaded, use default settings.
@@ -48,8 +48,8 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str], C
 
     :returns: All log messages and config path
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
     config_path = None
     settings_source = C.NONE
 
@@ -91,7 +91,7 @@ def find_config() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str], C
 
 def get_and_check_collection_doc_cache(
     collection_doc_cache_path: str,
-) -> Tuple[List[LogMessage], List[ExitMessage], Optional[KeyValueStore]]:
+) -> tuple[list[LogMessage], list[ExitMessage], KeyValueStore | None]:
     """Ensure the collection doc cache has current application version as a safeguard.
 
     Always delete and rebuild if not.
@@ -99,8 +99,8 @@ def get_and_check_collection_doc_cache(
     :param collection_doc_cache_path: Path for collection documentation cache
     :returns: All messages and collection cache or None
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
     message = f"Collection doc cache: 'path' is '{collection_doc_cache_path}'"
     messages.append(LogMessage(level=logging.DEBUG, message=message))
 
@@ -150,8 +150,8 @@ def get_and_check_collection_doc_cache(
 # pylint: disable=inconsistent-return-statements
 def _diagnose(
     args: ApplicationConfiguration,
-    exit_messages: List[ExitMessage],
-    messages: List[LogMessage],
+    exit_messages: list[ExitMessage],
+    messages: list[LogMessage],
     should_diagnose: bool,
 ):
     """Direct to the diagnostic information writer or return.
@@ -172,11 +172,11 @@ def _diagnose(
 
 
 def parse_and_update(
-    params: List,
+    params: list,
     args: ApplicationConfiguration,
-    apply_previous_cli_entries: Union[C, List[str]] = C.NONE,
+    apply_previous_cli_entries: C | list[str] = C.NONE,
     attach_cdc=False,
-) -> Tuple[List[LogMessage], List[ExitMessage]]:
+) -> tuple[list[LogMessage], list[ExitMessage]]:
     """Build a configuration.
 
     Return after the CDC is mounted, even if exit messages are generated, the CDC may still
@@ -188,8 +188,8 @@ def parse_and_update(
     :param attach_cdc: Should the collection doc cache be attached to the args.internals
     :returns: Log and exit messages
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
     should_diagnose = "--diagnostics" in params
 
     (

@@ -33,7 +33,7 @@ class Parser:
         self._configure_subparsers()
 
     @staticmethod
-    def generate_argument(entry) -> Tuple[Any, Any, Dict[str, Any]]:
+    def generate_argument(entry) -> tuple[Any, Any, dict[str, Any]]:
         """Generate an argparse argument.
 
         :param entry: Single settings entry

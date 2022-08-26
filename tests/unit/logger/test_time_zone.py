@@ -19,7 +19,7 @@ class Scenario:
     """Data for time zone support in the logs."""
 
     re_match: Pattern
-    time_zone: Optional[str] = None
+    time_zone: str | None = None
     will_exit: bool = False
 
     def __str__(self):
@@ -29,7 +29,7 @@ class Scenario:
         """
         return f"{self.time_zone}"
 
-    def args(self, log_file: Path) -> List[str]:
+    def args(self, log_file: Path) -> list[str]:
         """Provide an argument list for the CLI.
 
         :param log_file: The path to the lgo file

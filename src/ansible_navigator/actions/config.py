@@ -33,7 +33,7 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
+def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     # pylint: disable=unused-argument
     """Provide a color for a collections menu entry in one column.
 
@@ -47,7 +47,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return 2, 0
 
 
-def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
+def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
     """Create a heading for config content.
 
     :param obj: The content going to be shown
@@ -73,7 +73,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     return CursesLines((CursesLine((line_part,)),))
 
 
-def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
+def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
     :param obj: The object from which keys should be removed
@@ -95,10 +95,10 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="config")
 
-        self._config: Optional[List[Any]] = None
-        self._runner: Union[AnsibleConfig, Command]
+        self._config: list[Any] | None = None
+        self._runner: AnsibleConfig | Command
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``config`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -213,7 +213,7 @@ class Action(ActionBase):
             index=self.steps.current.index,
         )
 
-    def _run_runner(self) -> Optional[Tuple]:
+    def _run_runner(self) -> tuple | None:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
         """Use the runner subsystem to retrieve the configuration.
@@ -266,7 +266,7 @@ class Action(ActionBase):
                 msg = f"Error occurred while fetching ansible config (dump): '{dump_output_err}'"
                 self._logger.error(msg)
 
-            err_msg = "\n".join(set((list_output_err, dump_output_err)))
+            err_msg = "\n".join({list_output_err, dump_output_err})
             if "ERROR!" in err_msg or not list_output or not dump_output:
                 warn_msg = ["Errors were encountered while gathering the configuration:"]
                 if err_msg:

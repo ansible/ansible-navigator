@@ -65,7 +65,7 @@ class Action:
         menu: Menu,
         menu_filter: Callable,
         serialization_format=Optional[SerializationFormat],
-    ) -> List[Dict[Any, Any]]:
+    ) -> list[dict[Any, Any]]:
         """Convert a menu into structured data.
 
         :param menu: The current menu showing
@@ -95,7 +95,7 @@ class Action:
         return menu_entries
 
     @staticmethod
-    def _assess_requested_is_file(requested: str) -> Tuple[Optional[Path], Optional[int]]:
+    def _assess_requested_is_file(requested: str) -> tuple[Path | None, int | None]:
         """Determine is the user requested string is a file.
 
         :param requested: The string requested at the ``:`` prompt

@@ -30,7 +30,7 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, colname: str, entry: PresentableSettingsEntry) -> Tuple[int, int]:
+def color_menu(colno: int, colname: str, entry: PresentableSettingsEntry) -> tuple[int, int]:
     # pylint: disable=unused-argument
     """Color the menu.
 

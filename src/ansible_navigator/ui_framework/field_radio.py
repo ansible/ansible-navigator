@@ -22,8 +22,8 @@ class FieldRadio:
     prompt: str
     name: str
     current_error: str = ""
-    valid: Union[Unknown, bool] = unknown
-    options: List = field(default_factory=list)
+    valid: Unknown | bool = unknown
+    options: list = field(default_factory=list)
     window_handler = FormHandlerOptions
 
     @property

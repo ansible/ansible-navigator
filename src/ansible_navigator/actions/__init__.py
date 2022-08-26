@@ -40,7 +40,7 @@ run_action_stdout: Callable[
 
 run_action: Callable[
     [str, AppPublic, Interaction],
-    Optional[Interaction],
+    Interaction | None,
 ] = actions.run_interactive_factory(__package__)
 
 

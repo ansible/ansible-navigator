@@ -51,7 +51,7 @@ class FormHandlerOptions(CursesWindow):
             clp_text = CursesLinePart(len(option_code) + 1, text, color, decoration)
             self._add_line(self.win, idx, ([clp_option_code, clp_text]))
 
-    def handle(self, idx, form_fields: List) -> Tuple[Union["FieldChecks", "FieldRadio"], int]:
+    def handle(self, idx, form_fields: list) -> tuple[FieldChecks | FieldRadio, int]:
         # pylint: disable=too-many-nested-blocks
         """Handle the check box field.
 

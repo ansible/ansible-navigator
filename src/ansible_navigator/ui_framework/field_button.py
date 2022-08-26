@@ -22,7 +22,7 @@ class FieldButton:
     color: int = 0
     window_handler = FormHandlerButton
     validator: Callable = FieldValidators.none
-    win: Optional[Window] = None
+    win: Window | None = None
 
     @property
     def full_prompt(self) -> str:

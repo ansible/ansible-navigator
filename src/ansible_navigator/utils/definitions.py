@@ -115,7 +115,7 @@ class ExitMessage:
         }
         return mapping[self.prefix]
 
-    def to_lines(self, color: bool, width: int, with_prefix: bool) -> List[str]:
+    def to_lines(self, color: bool, width: int, with_prefix: bool) -> list[str]:
         """Output exit message to the console.
 
         :param color: Whether to color the message
@@ -149,9 +149,9 @@ class ExitMessage:
 class ExitMessages:
     """A mechanism to store multiple exit messages."""
 
-    messages: List[ExitMessage] = field(default_factory=list)
+    messages: list[ExitMessage] = field(default_factory=list)
 
-    def to_strings(self, color: bool, width: int) -> List[str]:
+    def to_strings(self, color: bool, width: int) -> list[str]:
         """Output exit messages to the console.
 
         :param color: Whether to color the message

@@ -85,7 +85,7 @@ def test_env_var_is_file_path(
     monkeypatch,
     set_env: bool,
     file_path: str,
-    anticpated_result: Optional[str],
+    anticpated_result: str | None,
 ) -> None:
     """Test environment variable is a file path.
 
@@ -117,7 +117,7 @@ def test_env_var_is_file_path(
         "list detailed",
     ],
 )
-def test_flatten_list(value: List, anticpated_result: List) -> None:
+def test_flatten_list(value: list, anticpated_result: list) -> None:
     """Test for flatten list.
 
     :param value: List to be flattened
@@ -131,7 +131,7 @@ class HumanTimeTestData(NamedTuple):
     """Data for human time test."""
 
     id: str
-    value: Union[int, float]
+    value: int | float
     expected: str
 
 
@@ -199,7 +199,7 @@ class RoundHalfUpTestData(NamedTuple):
     """Data for round half up tests."""
 
     id: str
-    value: Union[int, float]
+    value: int | float
     expected: int
 
 

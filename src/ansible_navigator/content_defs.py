@@ -148,7 +148,7 @@ class CFormat:
     """The scope, used for tokenization"""
     file_extention: str
     """The file extension, with a ."""
-    serialization: Optional[SerializationFormat]
+    serialization: SerializationFormat | None
     """If needed the serialization format"""
 
 

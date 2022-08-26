@@ -95,7 +95,7 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
 
     @staticmethod
     def _custom_dict_factory(
-        kv_pairs: List[Tuple[str, OverrideAllValuesT]],
+        kv_pairs: list[tuple[str, OverrideAllValuesT]],
         suffix: str,
     ) -> OverrideDictReturn:
         """Create a dictionary with suffixed values from a list of key-value pairs.
@@ -115,7 +115,7 @@ parametrize_serialization_format = pytest.mark.parametrize(**ParametrizeFormat()
 @parametrize_content_views
 def test_content_to_dict(
     content_view: ContentView,
-    serialization_tuple: Tuple[str, SerializationFormat],
+    serialization_tuple: tuple[str, SerializationFormat],
 ):
     """Test the conversion of the dataclass to a dict.
 
@@ -167,7 +167,7 @@ def test_content_to_yaml(content_view: ContentView):
 def test_content_to_dict_override(
     subtests: Any,
     content_view: ContentView,
-    serialization_tuple: Tuple[str, SerializationFormat],
+    serialization_tuple: tuple[str, SerializationFormat],
 ):
     """Test the conversion of the dataclass with overrides to a ``dict``.
 

@@ -120,7 +120,7 @@ def test_schema_dict_all_required(
     :param schema_dict_all_required: The json schema as a dictionary, everything required
     """
 
-    def property_dive(subschema: Dict[str, Any]):
+    def property_dive(subschema: dict[str, Any]):
         if "properties" in subschema:
             assert subschema["required"] == list(subschema["properties"].keys())
             for value in subschema["properties"].values():

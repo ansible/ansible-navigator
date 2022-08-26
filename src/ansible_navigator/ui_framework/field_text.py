@@ -25,11 +25,11 @@ class FieldText:
     current_error: str = ""
     default: Any = nonexistent
     window_handler = FormHandlerText
-    response: Union[str, Unknown] = unknown
-    valid: Union[bool, Unknown] = unknown
+    response: str | Unknown = unknown
+    valid: bool | Unknown = unknown
     validator: Callable = FieldValidators.none
     value: Any = unknown
-    win: Optional[Window] = None
+    win: Window | None = None
 
     @property
     def formatted_default(self) -> str:

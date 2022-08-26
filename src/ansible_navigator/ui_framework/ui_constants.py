@@ -61,7 +61,7 @@ class Decoration(IntEnum):
     """131072"""
 
     @classmethod
-    def get_best(cls, name: Optional[str]) -> int:
+    def get_best(cls, name: str | None) -> int:
         """Return the default value for a missing value.
 
         :param name: The name of the value

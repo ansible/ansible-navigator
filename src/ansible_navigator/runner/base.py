@@ -26,19 +26,19 @@ class Base:
     # pylint: disable=too-many-instance-attributes
     def __init__(
         self,
-        private_data_dir: Optional[str] = None,
-        container_engine: Optional[str] = None,
-        execution_environment: Optional[bool] = False,
-        execution_environment_image: Optional[str] = None,
-        navigator_mode: Optional[str] = None,
-        container_volume_mounts: Optional[List] = None,
-        container_options: Optional[List] = None,
-        container_workdir: Optional[str] = None,
-        set_environment_variable: Optional[Dict] = None,
-        pass_environment_variable: Optional[List] = None,
-        host_cwd: Optional[str] = None,
-        rotate_artifacts: Optional[int] = None,
-        timeout: Optional[int] = None,
+        private_data_dir: str | None = None,
+        container_engine: str | None = None,
+        execution_environment: bool | None = False,
+        execution_environment_image: str | None = None,
+        navigator_mode: str | None = None,
+        container_volume_mounts: list | None = None,
+        container_options: list | None = None,
+        container_workdir: str | None = None,
+        set_environment_variable: dict | None = None,
+        pass_environment_variable: list | None = None,
+        host_cwd: str | None = None,
+        rotate_artifacts: int | None = None,
+        timeout: int | None = None,
     ) -> None:
         """Handle the common argument for the ansible-runner interface class.
 
@@ -75,10 +75,10 @@ class Base:
         self._ee = execution_environment
         self._eei = execution_environment_image
         self._navigator_mode = navigator_mode
-        self._set_environment_variable: Dict[str, Any] = (
+        self._set_environment_variable: dict[str, Any] = (
             set_environment_variable if isinstance(set_environment_variable, dict) else {}
         )
-        self._pass_environment_variable: List[str] = (
+        self._pass_environment_variable: list[str] = (
             pass_environment_variable if isinstance(pass_environment_variable, list) else []
         )
         self._host_cwd = host_cwd
@@ -87,9 +87,9 @@ class Base:
         self.ansible_runner_instance: Runner
         self.cancelled: bool = False
         self.finished: bool = False
-        self.status: Optional[str] = None
-        self._runner_args: Dict = {}
-        self._runner_artifact_dir: Optional[str] = None
+        self.status: str | None = None
+        self._runner_args: dict = {}
+        self._runner_artifact_dir: str | None = None
         if self._ee:
             self._runner_args.update(
                 {
@@ -149,7 +149,7 @@ class Base:
         """
         return tempfile.mkdtemp(prefix="ansible-navigator_")
 
-    def _set_private_data_directory(self, provided: Optional[str]) -> None:
+    def _set_private_data_directory(self, provided: str | None) -> None:
         """Set the private data directory to the provided, the username, or a uuid.
 
         :param provided: Data directory path

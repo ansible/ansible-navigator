@@ -23,9 +23,9 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 class Scenario:
     """Data structure for EEV post processor tests."""
 
-    current: Union[bool, str, List, Dict]
+    current: bool | str | list | dict
     source: C
-    expected: Optional[List[str]] = None
+    expected: list[str] | None = None
     exit_message_substr: str = ""
     index: int = 0
 

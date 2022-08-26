@@ -29,7 +29,7 @@ class BaseClass:
     update_fixtures = False
     pane_height = 25
     pane_width = 300
-    config_file: Optional[Path] = None
+    config_file: Path | None = None
 
     @pytest.fixture(scope="module", name="tmux_session")
     def fixture_tmux_session(

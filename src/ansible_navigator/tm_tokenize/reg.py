@@ -52,10 +52,10 @@ class _Reg:
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self._pattern!r})"
 
-    def search(self, line: str, pos: int, first_line: bool, boundary: bool) -> Optional[Match[str]]:
+    def search(self, line: str, pos: int, first_line: bool, boundary: bool) -> Match[str] | None:
         return self._reg.search(line, pos, flags=_FLAGS[first_line, boundary])
 
-    def match(self, line: str, pos: int, first_line: bool, boundary: bool) -> Optional[Match[str]]:
+    def match(self, line: str, pos: int, first_line: bool, boundary: bool) -> Match[str] | None:
         return self._reg.match(line, pos, flags=_FLAGS[first_line, boundary])
 
 
@@ -74,18 +74,18 @@ class _RegSet:
         pos: int,
         first_line: bool,
         boundary: bool,
-    ) -> Tuple[int, Optional[Match[str]]]:
+    ) -> tuple[int, Match[str] | None]:
         return self._set.search(line, pos, flags=_FLAGS[first_line, boundary])
 
 
 def do_regset(
     idx: int,
-    match: Optional[Match[str]],
+    match: Match[str] | None,
     rule: CompiledRegsetRule,
     compiler: Compiler,
     state: State,
     pos: int,
-) -> Optional[Tuple[State, int, bool, Regions]]:
+) -> tuple[State, int, bool, Regions] | None:
     if match is None:
         return None
 

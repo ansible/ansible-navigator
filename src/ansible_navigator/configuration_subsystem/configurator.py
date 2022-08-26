@@ -33,9 +33,9 @@ class Configurator:
 
     def __init__(
         self,
-        params: List[str],
+        params: list[str],
         application_configuration: ApplicationConfiguration,
-        apply_previous_cli_entries: Union[List, C] = C.NONE,
+        apply_previous_cli_entries: list | C = C.NONE,
         skip_roll_back: bool = False,
     ):
         """Initialize the configuration variables.
@@ -49,8 +49,8 @@ class Configurator:
         """
         self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
-        self._exit_messages: List[ExitMessage] = []
-        self._messages: List[LogMessage] = []
+        self._exit_messages: list[ExitMessage] = []
+        self._messages: list[LogMessage] = []
         self._params = params
         self._sanity_check()
         self._skip_rollback = skip_roll_back
@@ -81,7 +81,7 @@ class Configurator:
         message = "Configuration rollback complete."
         self._messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-    def configure(self) -> Tuple[List[LogMessage], List[ExitMessage]]:
+    def configure(self) -> tuple[list[LogMessage], list[ExitMessage]]:
         """Perform the configuration.
 
         Save the original entries, if an error is encountered
@@ -165,7 +165,7 @@ class Configurator:
             migration_types=(MigrationType.SETTINGS_FILE,),
         )
 
-        with open(settings_filesystem_path, "r", encoding="utf-8") as fh:
+        with open(settings_filesystem_path, encoding="utf-8") as fh:
             try:
                 config = yaml.load(fh, Loader=SafeLoader)
                 if config is None:
@@ -327,7 +327,7 @@ class Configurator:
                 else:
                     self._check_choice(entry=entry, value=entry.value.current)
 
-    def _check_choice(self, entry: SettingsEntry, value: Union[bool, str]):
+    def _check_choice(self, entry: SettingsEntry, value: bool | str):
         if entry.cli_parameters and entry.choices:
             if value not in entry.choices:
                 self._exit_messages.append(ExitMessage(message=entry.invalid_choice))

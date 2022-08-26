@@ -43,13 +43,13 @@ class ActionBase:
         self._calling_app: AppPublic
         self._interaction: Interaction
         self._name = name
-        self._previous_filter: Optional[Pattern]
+        self._previous_filter: Pattern | None
         self._previous_scroll: int
-        self.stdout: List = []
+        self.stdout: list = []
         self.steps = Steps()
 
     @staticmethod
-    def _action_match(entry: str) -> Union[Tuple[str, ui.Action], Tuple[None, None]]:
+    def _action_match(entry: str) -> tuple[str, ui.Action] | tuple[None, None]:
         """Attempt to match the user input against the regex provided by each action.
 
         :param entry: the user input
@@ -170,7 +170,7 @@ class ActionBase:
 
     def _update_args(
         self,
-        params: List,
+        params: list,
         apply_previous_cli_entries: C = C.ALL,
         attach_cdc: bool = False,
     ) -> bool:
@@ -186,8 +186,8 @@ class ActionBase:
         :param attach_cdc: Should the collection doc cache be attached to the args.internals
         :returns: Indication if the args update succeeded or failed
         """
-        messages: List[LogMessage]
-        exit_messages: List[ExitMessage]
+        messages: list[LogMessage]
+        exit_messages: list[ExitMessage]
 
         messages, exit_messages = parse_and_update(
             params=params,

@@ -29,7 +29,7 @@ class FieldValidators:
     """a box in which field validators are put"""
 
     @staticmethod
-    def http(text: str = "", hint: bool = False) -> Union[Validation, str]:
+    def http(text: str = "", hint: bool = False) -> Validation | str:
         """http or https"""
         msg = "Please enter a valid URL"
         if hint:
@@ -41,7 +41,7 @@ class FieldValidators:
         return Validation(value=text, error_msg=msg)
 
     @staticmethod
-    def masked_or_none(text="", hint: bool = False) -> Union[Validation, str]:
+    def masked_or_none(text="", hint: bool = False) -> Validation | str:
         """no validation"""
         if hint:
             return "Please provide a value (optional)"
@@ -53,23 +53,23 @@ class FieldValidators:
 
     @staticmethod
     def none(
-        text: Union[FieldValidationStates, str] = "",
+        text: FieldValidationStates | str = "",
         hint: bool = False,
-    ) -> Union[Validation, str]:
+    ) -> Validation | str:
         """no validation"""
         if hint:
             return "Please provide a value (optional)"
         return Validation(value=text, error_msg="")
 
     @staticmethod
-    def null(text="", hint: bool = False) -> Union[Validation, str]:
+    def null(text="", hint: bool = False) -> Validation | str:
         """no validation, no message"""
         if hint:
             return ""
         return Validation(value=text, error_msg="")
 
     @staticmethod
-    def one_of(choices: List = [], text: str = "", hint: bool = False) -> Union[Validation, str]:
+    def one_of(choices: list = [], text: str = "", hint: bool = False) -> Validation | str:
         # pylint: disable=dangerous-default-value
         """validate that some text is one of choices"""
         if choices:
@@ -89,11 +89,11 @@ class FieldValidators:
 
     @staticmethod
     def some_of_or_none(
-        choices: Union[Unknown, List] = unknown,
-        min_selected: Union[Unknown, int] = unknown,
-        max_selected: Union[Unknown, int] = unknown,
+        choices: Unknown | list = unknown,
+        min_selected: Unknown | int = unknown,
+        max_selected: Unknown | int = unknown,
         hint: bool = False,
-    ) -> Union[Validation, str]:
+    ) -> Validation | str:
         """validation for a checkbox"""
         if min_selected == max_selected:
             word = "entry" if min_selected == 1 else "entries"
@@ -118,7 +118,7 @@ class FieldValidators:
         raise TypeError
 
     @staticmethod
-    def something(text: str = "", hint: bool = False) -> Union[Validation, str]:
+    def something(text: str = "", hint: bool = False) -> Validation | str:
         """validate that the text is not an empty string"""
         msg = "Please provide a value (required)"
         if hint:
@@ -128,7 +128,7 @@ class FieldValidators:
         return Validation(value=text, error_msg=msg)
 
     @staticmethod
-    def true_false(text: str = "", hint: bool = False) -> Union[Validation, str]:
+    def true_false(text: str = "", hint: bool = False) -> Validation | str:
         """true or false"""
         msg = "Please enter true or false"
         if hint:
@@ -146,7 +146,7 @@ class FieldValidators:
         return Validation(value=text, error_msg=msg)
 
     @staticmethod
-    def valid_file_path(text: str = "", hint=False) -> Union[Validation, str]:
+    def valid_file_path(text: str = "", hint=False) -> Validation | str:
         """validate that a file path is a real file"""
         msg = "Please enter a valid file path"
         if hint:
@@ -159,7 +159,7 @@ class FieldValidators:
         return Validation(value=value, error_msg=msg)
 
     @staticmethod
-    def valid_path(text: str = "", hint=False) -> Union[Validation, str]:
+    def valid_path(text: str = "", hint=False) -> Validation | str:
         """validate that a path is real"""
         msg = "Please enter a valid file or directory path"
         if hint:
@@ -172,7 +172,7 @@ class FieldValidators:
         return Validation(value=value, error_msg=msg)
 
     @staticmethod
-    def valid_path_or_none(text: str = "", hint=False) -> Union[Validation, str]:
+    def valid_path_or_none(text: str = "", hint=False) -> Validation | str:
         """validate that a path is real"""
         msg = "Please enter a valid path or leave blank"
         if hint:
@@ -190,7 +190,7 @@ class FieldValidators:
         return Validation(value=value, error_msg=msg)
 
     @staticmethod
-    def yes_no(text: str = "", hint: bool = False) -> Union[Validation, str]:
+    def yes_no(text: str = "", hint: bool = False) -> Validation | str:
         """yes or no"""
         msg = "Please enter yes or no"
         value = text
@@ -210,7 +210,7 @@ class FormValidators:
     """Validators for a form"""
 
     @staticmethod
-    def all_true(response: Optional[List] = None, hint: bool = False) -> Union[Validation, str]:
+    def all_true(response: list | None = None, hint: bool = False) -> Validation | str:
         """validate all in list are true"""
         msg = "Please ensure all values are true"
         if hint:
@@ -222,9 +222,9 @@ class FormValidators:
 
     @staticmethod
     def no_validation(
-        response: Optional[List] = None,
+        response: list | None = None,
         hint: bool = False,
-    ) -> Union[Validation, str]:
+    ) -> Validation | str:
         """no validation"""
         msg = ""
         if hint:

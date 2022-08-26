@@ -21,7 +21,7 @@ class AppPublic(NamedTuple):
     args: ApplicationConfiguration
     name: str
     rerun: Callable
-    stdout: List[str]
+    stdout: list[str]
     steps: Steps
     update: Callable
     write_artifact: Callable

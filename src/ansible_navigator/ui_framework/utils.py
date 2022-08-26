@@ -15,8 +15,8 @@ from ..content_defs import ContentBase
 
 
 def convert_percentage(
-    content: Union[Dict[str, Any], ContentBase],
-    columns: List[str],
+    content: dict[str, Any] | ContentBase,
+    columns: list[str],
     progress_bar_width: int,
 ) -> None:
     """Convert an attribute or value to a progress bar formatted for the TUI in place.

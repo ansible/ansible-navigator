@@ -47,7 +47,7 @@ class Action(ActionBase):
         _out, error, return_code = response
         return RunStdoutReturn(message=error, return_code=return_code)
 
-    def _run_runner(self) -> Optional[Tuple]:
+    def _run_runner(self) -> tuple | None:
         """Spin up runner.
 
         :raises RuntimeError: When ansible-builder can not be found

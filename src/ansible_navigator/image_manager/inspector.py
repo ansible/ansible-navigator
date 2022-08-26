@@ -25,7 +25,7 @@ class ImagesInspect:
         self._image_ids = ids
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Generate image inspection commands.
 
         :returns: List of image inspection command objects
@@ -61,7 +61,7 @@ class ImagesList:
         self._container_engine = container_engine
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Generate image lister commands.
 
         :returns: List of the image lister commands
@@ -89,7 +89,7 @@ class ImagesList:
             command.details = valid_images
 
 
-def inspect_all(container_engine: str) -> Tuple[List, str]:
+def inspect_all(container_engine: str) -> tuple[list, str]:
     """Run inspect against all images in the list.
 
     :param container_engine: Name of the container engine

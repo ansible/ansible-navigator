@@ -37,7 +37,7 @@ def test_defaults(schema_dict: SettingsSchemaType):
 
 
 def test_settings_env_var_to_full(
-    settings_env_var_to_full: Tuple[Path, SettingsFileType],
+    settings_env_var_to_full: tuple[Path, SettingsFileType],
 ):
     """Confirm the fixture writes the file and environment variable.
 
@@ -96,20 +96,20 @@ def test_env(monkeypatch: pytest.MonkeyPatch):
 
 
 def test_full(
-    settings_env_var_to_full: Tuple[Path, SettingsFileType],
+    settings_env_var_to_full: tuple[Path, SettingsFileType],
 ):
     """Test the round trip generation of effective settings given a full settings file.
 
     :param settings_env_var_to_full: The env var and file writing fixture
     """
-    sample: Dict = settings_env_var_to_full[1]
+    sample: dict = settings_env_var_to_full[1]
 
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
     _messages, _exit_messages = parse_and_update(params=[], args=settings)
 
     # Build the effective settings
-    effective: Dict = to_effective(settings)
+    effective: dict = to_effective(settings)
 
     # Compare the effective against the settings sample
     type_check_only = [
