@@ -473,8 +473,7 @@ def shlex_join(tokens: Iterable[str]) -> str:
     :param tokens: The iterable of strings to join
     :returns: The iterable joined with spaces
     """
-    if sys.version_info >= (3, 8):
-        return shlex.join(split_command=tokens)
+    return shlex.join(split_command=tokens)
     return " ".join(shlex.quote(token) for token in tokens)
 
 
