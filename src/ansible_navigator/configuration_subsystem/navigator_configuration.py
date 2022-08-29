@@ -29,8 +29,8 @@ from .utils import AnsibleConfiguration
 
 APP_NAME = "ansible_navigator"
 
-initialization_messages: List[LogMessage] = []
-initialization_exit_messages: List[ExitMessage] = []
+initialization_messages: list[LogMessage] = []
+initialization_exit_messages: list[ExitMessage] = []
 
 PLUGIN_TYPES = (
     "become",
@@ -97,13 +97,13 @@ class Internals:
     """Place to hold an object that needs to be used from app initiation through whole app."""
 
     ansible_configuration: AnsibleConfiguration = field(default_factory=AnsibleConfiguration)
-    action_packages: Tuple[str] = ("ansible_navigator.actions",)
-    collection_doc_cache: Union[C, KeyValueStore] = C.NOT_SET
+    action_packages: tuple[str] = ("ansible_navigator.actions",)
+    collection_doc_cache: C | KeyValueStore = C.NOT_SET
     initializing: bool = False
     """This is an initial run (app starting for the first time)."""
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
-    settings_file_path: Optional[str] = None
+    settings_file_path: str | None = None
     settings_source: C = C.NOT_SET
     share_directory: str = generate_share_directory()
 

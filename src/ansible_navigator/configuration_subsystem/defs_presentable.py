@@ -41,8 +41,8 @@ class PresentableCliParameters:
 
     @classmethod
     def from_cli_params(
-        cls: Type[TCli],
-        cli_parameters: Optional[CliParameters],
+        cls: type[TCli],
+        cli_parameters: CliParameters | None,
         name_dashed: str,
     ) -> TCli:
         """Create an ``_HRCliParameters`` based on an entry's cli parameters.
@@ -63,7 +63,7 @@ class PresentableSettingsEntry(ContentBase):
     # pylint: disable=too-many-instance-attributes
     """A settings entry in a presentable structure."""
 
-    choices: List
+    choices: list
     """The possible values"""
     current_settings_file: str
     """The path to the current settings file"""
@@ -79,11 +79,11 @@ class PresentableSettingsEntry(ContentBase):
     """The environment variable"""
     name: str
     """The name"""
-    settings_file_sample: Union[str, Dict]
+    settings_file_sample: str | dict
     """A sample settings file snippet"""
     source: str
     """The source of the current value"""
-    subcommands: List
+    subcommands: list
     """A list of subcommands where this entry is available"""
     version_added: str
     """The version this entry was added in"""
@@ -108,8 +108,8 @@ class PresentableSettingsEntry(ContentBase):
 
     @classmethod
     def for_settings_file(
-        cls: Type[TEnt],
-        all_subcommands: List,
+        cls: type[TEnt],
+        all_subcommands: list,
         application_name: str,
         internals: Internals,
     ) -> TEnt:
@@ -142,8 +142,8 @@ class PresentableSettingsEntry(ContentBase):
 
     @classmethod
     def from_settings_entry(
-        cls: Type[TEnt],
-        all_subcommands: List,
+        cls: type[TEnt],
+        all_subcommands: list,
         application_name_dashed: str,
         entry: SettingsEntry,
         settings_file_path: str,

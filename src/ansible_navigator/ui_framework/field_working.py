@@ -19,12 +19,12 @@ class FieldWorking:
     """A text input field."""
 
     name: str
-    messages: List[str]
+    messages: list[str]
     current_error: str = ""
     window_handler = FormHandlerWorking
-    valid: Union[bool, Unknown] = unknown
+    valid: bool | Unknown = unknown
     validator: Callable = FieldValidators.null
-    win: Optional[Window] = None
+    win: Window | None = None
 
     @property
     def full_prompt(self) -> str:

@@ -40,7 +40,7 @@ class BaseClass:
     """Base class for run interactive/stdout tests, with unicode."""
 
     UPDATE_FIXTURES = False
-    TEST_FOR_MODE: Optional[str] = None
+    TEST_FOR_MODE: str | None = None
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
@@ -74,7 +74,7 @@ class BaseClass:
         :param tmux_session: The tmux session
         :param step: A step within a series of tests
         """
-        search_within_response: Union[str, List[str]]
+        search_within_response: str | list[str]
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:

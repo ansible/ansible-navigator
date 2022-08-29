@@ -42,7 +42,7 @@ class BaseClass:
     """Base class for run interactive/stdout tests."""
 
     UPDATE_FIXTURES = False
-    TEST_FOR_MODE: Optional[str] = None
+    TEST_FOR_MODE: str | None = None
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")

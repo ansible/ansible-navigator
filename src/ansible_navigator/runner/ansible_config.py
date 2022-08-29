@@ -15,9 +15,9 @@ class AnsibleConfig(Base):
     def fetch_ansible_config(
         self,
         action: str,
-        config_file: Optional[str] = None,
-        only_changed: Optional[bool] = None,
-    ) -> Tuple[str, str]:
+        config_file: str | None = None,
+        only_changed: bool | None = None,
+    ) -> tuple[str, str]:
         """Run ansible-config command and get the configuration related details.
 
         :param action: The configuration fetch action to perform. Valid values are one of

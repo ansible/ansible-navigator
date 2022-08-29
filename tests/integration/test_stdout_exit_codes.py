@@ -44,7 +44,7 @@ class StdoutTest(NamedTuple):
     #: The name of the action
     action_name: str
     #: Parameters for the action
-    action_params: Tuple[Tuple, ...]
+    action_params: tuple[tuple, ...]
     #: Text to search for
     present: str
     #: Expected return code
@@ -128,7 +128,7 @@ class StdoutCliTest(NamedTuple):
 
     comment: str
     """Description of the test"""
-    params: List[str]
+    params: list[str]
     """Parameters for the subcommand"""
     return_code: int
     """Expected return code"""
@@ -150,7 +150,7 @@ class StdoutCliTest(NamedTuple):
         return self.comment
 
     @property
-    def command(self) -> List[str]:
+    def command(self) -> list[str]:
         """Provide the constructed command"""
         return ["ansible-navigator", self.subcommand] + self.params + ["--mode", self.mode]
 
@@ -211,10 +211,9 @@ def test_run_through_cli(tmp_path: Path, data: StdoutCliTest, exec_env: bool, pa
     bash_wrapped = f"/bin/bash -c 'source {venv!s} && {shlex_join(command)}'"
     proc_out = subprocess.run(
         bash_wrapped,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=False,
-        universal_newlines=True,
+        text=True,
         shell=True,
     )
 

@@ -25,9 +25,9 @@ class StdoutCliTest:
 
     comment: str
     """Description of the test"""
-    params: Tuple[str, ...]
+    params: tuple[str, ...]
     """Parameters for the subcommand"""
-    expected: Tuple[str, ...] = BUILTINS
+    expected: tuple[str, ...] = BUILTINS
     """Expected output"""
     subcommand: str = "doc"
 
@@ -39,7 +39,7 @@ class StdoutCliTest:
         return self.comment
 
     @property
-    def command(self) -> Tuple[str, ...]:
+    def command(self) -> tuple[str, ...]:
         """Provide the constructed command.
 
         :returns: The constructed command
@@ -121,10 +121,9 @@ def test(
     )
     proc_out = subprocess.run(
         command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=False,
-        universal_newlines=True,
+        text=True,
         shell=True,
     )
-    assert all((d in proc_out.stdout for d in data.expected))
+    assert all(d in proc_out.stdout for d in data.expected)

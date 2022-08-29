@@ -299,7 +299,7 @@ class HumanDumper(SafeDumper):
         self,
         tag: str,
         value: str,
-        style: Optional[str] = None,
+        style: str | None = None,
     ) -> yaml.nodes.ScalarNode:
         """Represent all multiline strings as block scalars to improve readability for humans.
 

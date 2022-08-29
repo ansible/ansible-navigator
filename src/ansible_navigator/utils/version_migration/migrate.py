@@ -25,7 +25,7 @@ from .v1_v2_settings_file import V1V2SettingsFile
 # isort: on
 
 
-def run_all_migrations(migration_types: Tuple[MigrationType], settings_file_str: str = "") -> None:
+def run_all_migrations(migration_types: tuple[MigrationType], settings_file_str: str = "") -> None:
     """Run all migrations.
 
     :param migration_types: Type of migration

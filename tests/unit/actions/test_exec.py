@@ -18,7 +18,7 @@ class CommandTestData(NamedTuple):
     command: str
     use_shell: bool
     result_command: str
-    result_params: List
+    result_params: list
 
 
 def id_from_data(test_value):

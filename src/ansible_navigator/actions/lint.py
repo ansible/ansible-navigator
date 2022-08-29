@@ -91,7 +91,7 @@ def severity_to_color(severity: str) -> int:
     return Color.BLACK
 
 
-def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
+def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     # pylint: disable=unused-argument
     """Color the menu.
 
@@ -103,7 +103,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return (severity_to_color(entry["severity"]), Color.BLACK)
 
 
-def content_heading(obj: Dict, screen_w: int) -> CursesLines:
+def content_heading(obj: dict, screen_w: int) -> CursesLines:
     """Generate the content heading.
 
     :param obj: The content for which the heading will be generated
@@ -130,7 +130,7 @@ def content_heading(obj: Dict, screen_w: int) -> CursesLines:
     return CursesLines((CursesLine((line_1_part_1,)), CursesLine((line_2_part_1,))))
 
 
-def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
+def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out internal keys.
 
     :param obj: The content from which the content keys will be filtered
@@ -140,7 +140,7 @@ def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
     return {k: v for k, v in obj.items() if not k.startswith("__") and k not in ignored_keys}
 
 
-def massage_issue(issue: Dict) -> Dict:
+def massage_issue(issue: dict) -> dict:
     """Massage an issue by injecting some useful keys with strings for rendering.
 
     :param issue: The issue reported
@@ -211,7 +211,7 @@ class Action(ActionBase):
         else:
             raise RuntimeError(msg)
 
-    def _run_runner(self) -> Tuple[str, str, int]:
+    def _run_runner(self) -> tuple[str, str, int]:
         """Spin up runner to run ansible-lint, either in an exec env or not.
 
         :returns: The output, errors and return code
@@ -274,7 +274,7 @@ class Action(ActionBase):
         return RunStdoutReturn(message="", return_code=return_code)
 
     @staticmethod
-    def _pull_out_json_or_fatal(stdout: str) -> Optional[str]:
+    def _pull_out_json_or_fatal(stdout: str) -> str | None:
         """
         Attempt to pull out JSON line from ansible-lint raw output.
 
@@ -293,7 +293,7 @@ class Action(ActionBase):
             return line
         return None
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``lint`` request for mode interactive.
 
         :param interaction: The interaction from the user

@@ -72,7 +72,7 @@ def tokenize(
     content_format: ContentFormat,
     serialized: str,
     share_directory: str,
-) -> List[List[SimpleLinePart]]:
+) -> list[list[SimpleLinePart]]:
     """Serialize and tokenize an object.
 
     :param content_format: The format type

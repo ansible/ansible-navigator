@@ -147,7 +147,12 @@ repos:
           - flake8-docstrings # uses pydocstyle
           - flake8-future-annotations>=0.0.3
           - flake8-isort >= 4.1.1
-
+  - repo: https://github.com/asottile/pyupgrade
+    # keep it after flake8
+    rev: v2.37.3
+    hooks:
+      - id: pyupgrade
+        args: ["--py38-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
     rev: v0.971
     hooks:

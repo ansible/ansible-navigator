@@ -29,11 +29,11 @@ class Step:
         self,
         name: str,
         step_type: str,
-        value: List[Dict[str, str]],
-        columns: Optional[List[str]] = None,
-        index: Optional[int] = None,
-        select_func: Optional[Callable[[], "Step"]] = None,
-        show_func: Optional[Callable[[], None]] = None,
+        value: list[dict[str, str]],
+        columns: list[str] | None = None,
+        index: int | None = None,
+        select_func: Callable[[], Step] | None = None,
+        show_func: Callable[[], None] | None = None,
     ) -> None:
         """Initialize the instance of a step.
 
@@ -77,7 +77,7 @@ class Step:
         self._value_changed = value
 
     @property
-    def index(self) -> Optional[int]:
+    def index(self) -> int | None:
         """Return the index.
 
         :returns: Index (should be ``int``)
@@ -96,7 +96,7 @@ class Step:
         self._index = index
 
     @property
-    def selected(self) -> Optional[Dict[str, Any]]:
+    def selected(self) -> dict[str, Any] | None:
         """Return the selected item.
 
         :returns: The selected item.
@@ -106,7 +106,7 @@ class Step:
         return self._value[self._index % len(self._value)]
 
     @property
-    def value(self) -> List[Dict[str, Any]]:
+    def value(self) -> list[dict[str, Any]]:
         """Return the value.
 
         :returns: The value
@@ -114,7 +114,7 @@ class Step:
         return self._value
 
     @value.setter
-    def value(self, value: List[Dict[str, Any]]) -> None:
+    def value(self, value: list[dict[str, Any]]) -> None:
         """Set the value and changed is needed.
 
         :param value: List of dicts
@@ -125,7 +125,7 @@ class Step:
         self._value = value
 
     @staticmethod
-    def _value_check(value: Any, want: Union[type, Tuple[type, ...]]) -> None:
+    def _value_check(value: Any, want: type | tuple[type, ...]) -> None:
         """Check some expected type against a value's type.
 
         :param value: Some value for comparison
@@ -158,12 +158,12 @@ class TypedStep(Generic[T]):
     name: str
     step_type: StepType
     _index_changed: bool = False
-    _index: Optional[int] = None
+    _index: int | None = None
     _value_changed: bool = False
     _value: Sequence[T] = field(default_factory=list)
-    columns: Optional[List[str]] = None
-    select_func: Optional[Callable[[], "TypedStep"]] = None
-    show_func: Optional[Callable[[], None]] = None
+    columns: list[str] | None = None
+    select_func: Callable[[], TypedStep] | None = None
+    show_func: Callable[[], None] | None = None
 
     @property
     def changed(self) -> bool:
@@ -183,7 +183,7 @@ class TypedStep(Generic[T]):
         self._value_changed = value
 
     @property
-    def index(self) -> Optional[int]:
+    def index(self) -> int | None:
         """Return the index.
 
         :returns: The index
@@ -200,7 +200,7 @@ class TypedStep(Generic[T]):
         self._index = index
 
     @property
-    def selected(self) -> Optional[T]:
+    def selected(self) -> T | None:
         """Return the selected item.
 
         :returns: The selected item

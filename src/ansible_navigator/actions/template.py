@@ -33,7 +33,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="template")
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the templating request for mode interactive.
 
         :param interaction: The interaction from the user

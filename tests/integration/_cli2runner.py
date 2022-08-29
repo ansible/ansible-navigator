@@ -43,7 +43,7 @@ class Cli2Runner:
         tmp_path: Path,
         cli_entry: str,
         config_fixture: str,
-        expected: Dict[str, str],
+        expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
@@ -66,7 +66,7 @@ class Cli2Runner:
         comment: str,
         cli_entry: str,
         config_fixture: str,
-        expected: Dict[str, str],
+        expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=unused-argument
@@ -96,7 +96,7 @@ class Cli2Runner:
         comment: str,
         cli_entry: str,
         config_fixture: str,
-        expected: Dict[str, str],
+        expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=unused-argument
@@ -126,7 +126,7 @@ class Cli2Runner:
         comment: str,
         cli_entry: str,
         config_fixture: str,
-        expected: Dict[str, str],
+        expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=unused-argument
@@ -156,7 +156,7 @@ class Cli2Runner:
         comment: str,
         cli_entry: str,
         config_fixture: str,
-        expected: Dict[str, str],
+        expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=unused-argument
@@ -186,7 +186,7 @@ class Cli2Runner:
         comment: str,
         cli_entry: str,
         config_fixture: str,
-        expected: Dict[str, str],
+        expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=unused-argument
@@ -216,7 +216,7 @@ class Cli2Runner:
         comment: str,
         cli_entry: str,
         config_fixture: str,
-        expected: Dict[str, str],
+        expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=unused-argument

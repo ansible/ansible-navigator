@@ -18,13 +18,13 @@ class AnsibleInventory(Base):
     def fetch_inventory(
         self,
         action: str,
-        inventories: List,
-        response_format: Optional[str] = None,
-        host: Optional[str] = None,
-        playbook_dir: Optional[str] = None,
-        vault_ids: Optional[str] = None,
-        vault_password_file: Optional[str] = None,
-    ) -> Tuple[str, str]:
+        inventories: list,
+        response_format: str | None = None,
+        host: str | None = None,
+        playbook_dir: str | None = None,
+        vault_ids: str | None = None,
+        vault_password_file: str | None = None,
+    ) -> tuple[str, str]:
         """Run ansible-inventory command and get the inventory related details.
 
         :param action: Valid values are one of ``graph``, ``host``, ``list``, ``graph`` create

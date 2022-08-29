@@ -36,7 +36,7 @@ class KVSValuesView(ValuesView[str]):
 class KeyValueStore(MutableMapping[str, str]):
     """An interface to use a sqlite database as a key-value store."""
 
-    def __init__(self, filename: Union[str, Path]):
+    def __init__(self, filename: str | Path):
         """Initialize the key-value store.
 
         :param filename: The full path to the sqlite database file
@@ -94,7 +94,7 @@ class KeyValueStore(MutableMapping[str, str]):
         for row in cursor.execute("SELECT value FROM kv"):
             yield row[0]
 
-    def iteritems(self) -> Iterator[Tuple[str, str]]:
+    def iteritems(self) -> Iterator[tuple[str, str]]:
         """Yield items from the key-value store one by one.
 
         :yields: The key-value store as items (key, value)

@@ -33,7 +33,7 @@ from . import _actions as actions
 from . import run_action
 
 
-def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
+def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing image content.
 
     :param obj: The object from which keys should be removed
@@ -63,7 +63,7 @@ class Action(ActionBase):
         :param args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="images")
-        self._image_list: List = []
+        self._image_list: list = []
         self._images = Step(
             name="images",
             step_type="menu",
@@ -72,7 +72,7 @@ class Action(ActionBase):
             select_func=self._build_image_menu,
         )
 
-    def color_menu(self, colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
+    def color_menu(self, colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
         # pylint: disable=unused-argument
         """Provide a color for a images menu entry in one column.
 
@@ -95,7 +95,7 @@ class Action(ActionBase):
                 return 12, 0
         return 2, 0
 
-    def generate_content_heading(self, obj: Dict, screen_w: int, name: str = "") -> CursesLines:
+    def generate_content_heading(self, obj: dict, screen_w: int, name: str = "") -> CursesLines:
         """Create a heading for image content.
 
         :param obj: The content going to be shown
@@ -193,7 +193,7 @@ class Action(ActionBase):
         )
         return RunStdoutReturn(message="", return_code=0)
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``images`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -503,7 +503,7 @@ class Action(ActionBase):
             return False
         return True
 
-    def _parse(self, output) -> Optional[Dict]:
+    def _parse(self, output) -> dict | None:
         """Load and process the ``json`` output from the image introspection process.
 
         :param output: The output from the image introspection process
@@ -531,7 +531,7 @@ class Action(ActionBase):
             self._logger.error("%s %s", error["path"], error["error"])
         return parsed
 
-    def _run_runner(self, image_name: str) -> Tuple[str, str, int]:
+    def _run_runner(self, image_name: str) -> tuple[str, str, int]:
         """Run runner to collect image details.
 
         :param image_name: The full image name

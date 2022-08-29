@@ -18,7 +18,7 @@ from . import introspect
 logger = logging.getLogger(__name__)
 
 
-def run(image_name: str, container_engine: str) -> Tuple[Dict, List[str], int]:
+def run(image_name: str, container_engine: str) -> tuple[dict, list[str], int]:
     """Run runner to collect image details.
 
     :param image_name: The full image name
@@ -50,7 +50,7 @@ def run(image_name: str, container_engine: str) -> Tuple[Dict, List[str], int]:
     return parsed, errors, return_code
 
 
-def parse(output) -> Tuple[List[str], Dict]:
+def parse(output) -> tuple[list[str], dict]:
     """Load and process the ``json`` output from the image introspection process.
 
     :param output: The output from the image introspection process

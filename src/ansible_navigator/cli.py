@@ -34,7 +34,7 @@ from .utils.definitions import LogMessage
 from .utils.functions import clear_screen
 
 
-__version__: Union[Constants, str]
+__version__: Constants | str
 try:
     from ._version import version as __version__
 except ImportError:
@@ -47,13 +47,13 @@ PKG_NAME = "ansible_navigator"
 logger = logging.getLogger(PKG_NAME)
 
 
-def log_dependencies() -> List[LogMessage]:
+def log_dependencies() -> list[LogMessage]:
     """Retrieve installed packages and log as debug.
 
     :returns: All packages, version and location
     """
     # pylint: disable=not-an-iterable
-    installed_packages_list = sorted([f"{i.key}=={i.version} {i.location}" for i in working_set])
+    installed_packages_list = sorted(f"{i.key}=={i.version} {i.location}" for i in working_set)
     messages = [LogMessage(level=logging.DEBUG, message=pkg) for pkg in installed_packages_list]
     return messages
 
@@ -107,8 +107,8 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
 
 def main():
     """Start application here."""
-    messages: List[LogMessage] = log_dependencies()
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = log_dependencies()
+    exit_messages: list[ExitMessage] = []
 
     args = deepcopy(NavigatorConfiguration)
     args.application_version = __version__

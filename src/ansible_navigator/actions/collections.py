@@ -38,7 +38,7 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
+def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     # pylint: disable=unused-argument
     """Provide a color for a collections menu entry in one column.
 
@@ -54,7 +54,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return 2, 0
 
 
-def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
+def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
     """Create a heading for collection content.
 
     :param obj: The content going to be shown
@@ -79,7 +79,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     return CursesLines((CursesLine((line_1_part_1,)), CursesLine((line_2_part_1,))))
 
 
-def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
+def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
     :param obj: The object from which keys should be removed
@@ -103,15 +103,15 @@ class Action(ActionBase):
         self._adjacent_collection_dir: str
         self._collection_cache: KeyValueStore
         self._collection_cache_path: str
-        self._collection_scanned_paths: List = []
-        self._collections: List = []
-        self._stats: Dict = {}
+        self._collection_scanned_paths: list = []
+        self._collections: list = []
+        self._stats: dict = {}
 
     def update(self) -> None:
         """Request calling app update, no collection update is required."""
         self._calling_app.update()
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``collections`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -555,13 +555,13 @@ class Action(ActionBase):
 
         return None
 
-    def _get_collection_plugins_details(self, selected_collection: Dict) -> Dict:
+    def _get_collection_plugins_details(self, selected_collection: dict) -> dict:
         """Get plugin details for the given collection.
 
         :param selected_collection: The selected collection
         :returns: The plugin details like full-name, type and short description.
         """
-        plugins_details: Dict = {}
+        plugins_details: dict = {}
 
         for plugin_checksum, plugin_info in selected_collection["plugin_checksums"].items():
 
@@ -593,13 +593,13 @@ class Action(ActionBase):
 
         return plugins_details
 
-    def _parse_collection_info_stdout(self) -> Dict:
+    def _parse_collection_info_stdout(self) -> dict:
         # pylint: disable=too-many-nested-blocks
         """Parse collection information from catalog collection cache.
 
         :returns: The collection information to be displayed on stdout
         """
-        collections_info: Dict = {
+        collections_info: dict = {
             "collections": [],
         }
         collection_exclude_keys = [
@@ -616,7 +616,7 @@ class Action(ActionBase):
         for collection in self._collections:
             plugins_details = self._get_collection_plugins_details(collection)
 
-            collection_stdout: Dict = {}
+            collection_stdout: dict = {}
             for info_name, info_value in collection.items():
                 info_name = remove_dbl_un(info_name)
                 if info_name in collection_exclude_keys:

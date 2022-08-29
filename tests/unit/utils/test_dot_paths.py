@@ -83,12 +83,12 @@ base_dict = {"root": {"dict": {"a": "b"}, "list": [1, 2, 3]}}
 class Scenario:
     """Test data."""
 
-    behaviors: Tuple[MergeBehaviors, ...]
+    behaviors: tuple[MergeBehaviors, ...]
     comment: str
     path: str
-    expected: Optional[MutableMapping]
-    value: Union[bool, int, list, float, str, List, Dict] = ""
-    content: Dict = field(default_factory=lambda: base_dict)
+    expected: MutableMapping | None
+    value: bool | int | list | float | str | list | dict = ""
+    content: dict = field(default_factory=lambda: base_dict)
     new_path: str = ""
 
     def __str__(self):

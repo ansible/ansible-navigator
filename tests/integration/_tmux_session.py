@@ -50,13 +50,13 @@ class TmuxSession:
         self.cli_prompt: str
         self._config_path = config_path
         self._cwd = cwd
-        self._fail_remaining: List = []
+        self._fail_remaining: list = []
         self._pane_height = pane_height
         self._pane_width = pane_width
         self._pull_policy = pull_policy
         self._session: libtmux.Session
         self._session_name = os.path.splitext(unique_test_id)[0]
-        self._setup_capture: List
+        self._setup_capture: list
         self._setup_commands = setup_commands or []
         self._shell_prompt_timeout = shell_prompt_timeout
         self._test_log_dir = generate_test_log_dir(unique_test_id)
@@ -199,7 +199,7 @@ class TmuxSession:
     def interaction(
         self,
         value,
-        search_within_response: Optional[Union[List, str]] = None,
+        search_within_response: list | str | None = None,
         ignore_within_response=None,
         timeout=300,
         send_clear: bool = True,

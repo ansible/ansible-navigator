@@ -26,7 +26,7 @@ class Sample(NamedTuple):
     """Sample data for colorize tests."""
 
     serialization_format: SerializationFormat
-    content: Dict[str, str] = {"test": "data"}
+    content: dict[str, str] = {"test": "data"}
     content_view: ContentView = ContentView.NORMAL
 
 

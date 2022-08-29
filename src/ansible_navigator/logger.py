@@ -27,7 +27,7 @@ class Formatter(logging.Formatter):
         self._time_zone = kwargs.pop("time_zone")
         super().__init__(*args, **kwargs)
 
-    def formatTime(self, record: logging.LogRecord, _datefmt: Optional[str] = None) -> str:
+    def formatTime(self, record: logging.LogRecord, _datefmt: str | None = None) -> str:
         """Format the log timestamp.
 
         :param record: The log record

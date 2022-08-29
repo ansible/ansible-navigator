@@ -25,14 +25,14 @@ class FieldChecks:
     prompt: str
     name: str
     current_error: str = ""
-    valid: Union[Unknown, bool] = unknown
-    options: List = field(default_factory=list)
+    valid: Unknown | bool = unknown
+    options: list = field(default_factory=list)
     max_selected: int = sys.maxsize
     min_selected: int = 1
     window_handler = FormHandlerOptions
 
     @property
-    def checked(self) -> Tuple[bool, ...]:
+    def checked(self) -> tuple[bool, ...]:
         """Conveniently return just checked fields.
 
         :returns: Name of every checked field

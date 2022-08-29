@@ -45,7 +45,7 @@ class FormHandlerButton(CursesWindow):
         clp_button = CursesLinePart(0, text, color, curses.A_STANDOUT)
         self._add_line(self.win, 0, ([clp_button]))
 
-    def handle(self, idx, form_fields: List) -> Tuple["FieldButton", int]:
+    def handle(self, idx, form_fields: list) -> tuple[FieldButton, int]:
         """Handle the check box field.
 
         :param form_fields: List of fields

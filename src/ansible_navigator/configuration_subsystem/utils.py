@@ -25,7 +25,7 @@ from .definitions import SettingsFileType
 
 def create_settings_file_sample(
     settings_path: str,
-    placeholder: Union[bool, int, str, Dict, List] = "",
+    placeholder: bool | int | str | dict | list = "",
 ) -> SettingsFileType:
     """Generate a settings file sample.
 
@@ -47,7 +47,7 @@ def ansible_verison_parser(command: Command):
     if command.return_code:
         return
 
-    messages: List[LogMessage] = []
+    messages: list[LogMessage] = []
 
     details = {}
     # First line contains the version
@@ -74,14 +74,14 @@ def ansible_verison_parser(command: Command):
 class AnsibleConfiguration:
     """Data structure for an ansible.cfg file."""
 
-    contents: Union[
-        Constants,
-        Dict[str, Dict[str, Union[bool, int, float, str]]],
-    ] = Constants.NOT_SET
+    contents: (
+        Constants |
+        dict[str, dict[str, bool | int | float | str]]
+    ) = Constants.NOT_SET
     """The parsed contents of the file"""
-    text: Union[Constants, List[str]] = Constants.NOT_SET
+    text: Constants | list[str] = Constants.NOT_SET
     """The text from the file"""
-    path: Union[Constants, Path] = Constants.NOT_SET
+    path: Constants | Path = Constants.NOT_SET
     """The path to the file"""
 
 
@@ -89,9 +89,9 @@ class AnsibleConfiguration:
 class ParseAnsibleCfgResponse:
     """Data structure for the response of parse_ansible_cfg."""
 
-    messages: List[LogMessage]
+    messages: list[LogMessage]
     """Log messages"""
-    exit_messages: List[ExitMessage]
+    exit_messages: list[ExitMessage]
     """Exit messages"""
     config: AnsibleConfiguration = field(default_factory=AnsibleConfiguration)
     """An ansible configuration"""
@@ -167,13 +167,13 @@ def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:
     return response
 
 
-def parse_ansible_verison() -> Tuple[List[LogMessage], List[ExitMessage], Optional[Dict[str, Any]]]:
+def parse_ansible_verison() -> tuple[list[LogMessage], list[ExitMessage], dict[str, Any] | None]:
     """Parse the output of the ansible --version command.
 
     :returns: Log messages, exit messages, and the stdout as a dictionary
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
 
     command = Command(
         identity="ansible_version",
