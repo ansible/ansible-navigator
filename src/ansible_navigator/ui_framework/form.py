@@ -126,9 +126,7 @@ class FormPresenter(CursesWindow):
             if hasattr(form_field, "value") and form_field.value is not unknown:
                 widths.append(len(str(form_field.value)) + self._input_start)
             if hasattr(form_field, "options"):
-                widths.extend(
-                    len(option.text) + self._input_start for option in form_field.options
-                )
+                widths.extend(len(option.text) + self._input_start for option in form_field.options)
             if hasattr(form_field, "information"):
                 widths.append(max(len(info) for info in form_field.information))
             if hasattr(form_field, "messages"):

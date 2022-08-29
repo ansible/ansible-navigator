@@ -69,10 +69,7 @@ def ansible_verison_parser(command: Command):
 class AnsibleConfiguration:
     """Data structure for an ansible.cfg file."""
 
-    contents: (
-        Constants |
-        dict[str, dict[str, bool | int | float | str]]
-    ) = Constants.NOT_SET
+    contents: (Constants | dict[str, dict[str, bool | int | float | str]]) = Constants.NOT_SET
     """The parsed contents of the file"""
     text: Constants | list[str] = Constants.NOT_SET
     """The text from the file"""
