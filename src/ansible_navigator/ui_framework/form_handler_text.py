@@ -6,7 +6,6 @@ import curses
 
 from curses import ascii as curses_ascii
 from curses.textpad import Textbox
-from typing import Tuple
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart

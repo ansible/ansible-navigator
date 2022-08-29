@@ -7,10 +7,7 @@ import os
 from collections.abc import Iterable
 from random import randrange
 from typing import Any
-from typing import List
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 from urllib.parse import urlparse
 
 from .form_defs import FieldValidationStates

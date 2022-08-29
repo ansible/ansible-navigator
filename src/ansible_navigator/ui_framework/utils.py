@@ -7,9 +7,6 @@ import re
 from dataclasses import is_dataclass
 from math import floor
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Union
 
 from ..content_defs import ContentBase
 

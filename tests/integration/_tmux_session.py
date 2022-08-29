@@ -8,9 +8,6 @@ import time
 import warnings
 
 from timeit import default_timer as timer
-from typing import List
-from typing import Optional
-from typing import Union
 
 import libtmux
 

@@ -6,8 +6,6 @@ import shutil
 import textwrap
 
 from functools import partial
-from typing import Dict
-from typing import List
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitMessages

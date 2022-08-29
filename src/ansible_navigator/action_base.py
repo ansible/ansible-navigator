@@ -4,11 +4,7 @@ from __future__ import annotations
 import logging
 
 from copy import deepcopy
-from typing import List
-from typing import Optional
 from typing import Pattern
-from typing import Tuple
-from typing import Union
 
 from ansible_navigator.actions import kegexes
 from .action_defs import RunStdoutReturn

@@ -7,7 +7,6 @@ import re
 
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Optional
 from typing import Pattern
 
 import pytest

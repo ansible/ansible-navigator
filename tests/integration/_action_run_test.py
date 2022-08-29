@@ -9,10 +9,6 @@ import tempfile
 from copy import deepcopy
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic

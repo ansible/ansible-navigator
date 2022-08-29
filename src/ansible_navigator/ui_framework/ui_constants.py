@@ -4,7 +4,6 @@ from __future__ import annotations
 import curses
 
 from enum import IntEnum
-from typing import Optional
 
 
 class Color(IntEnum):

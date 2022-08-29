@@ -13,16 +13,11 @@ from math import ceil
 from math import floor
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
 from typing import Match
 from typing import NamedTuple
-from typing import Optional
 from typing import Pattern
 from typing import Protocol
 from typing import Sequence
-from typing import Tuple
-from typing import Union
 
 from ..content_defs import ContentFormat
 from ..content_defs import ContentType

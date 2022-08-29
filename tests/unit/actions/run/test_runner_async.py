@@ -5,9 +5,6 @@ from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from queue import Queue
-from typing import Dict
-from typing import List
-from typing import Optional
 
 import pytest
 

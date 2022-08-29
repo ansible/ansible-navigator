@@ -5,7 +5,6 @@ import difflib
 import os
 
 from copy import copy
-from typing import Optional
 
 import pytest
 

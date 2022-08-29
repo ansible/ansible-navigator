@@ -5,10 +5,6 @@ import json
 import textwrap
 
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Tuple
-from typing import Union
 
 from ..utils.compatibility import importlib_resources
 from ..utils.dict_merge import in_place_list_replace

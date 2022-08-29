@@ -7,9 +7,7 @@ from typing import ClassVar
 from typing import Dict
 from typing import List
 from typing import NewType
-from typing import Optional
 from typing import Tuple
-from typing import Type
 from typing import TypeVar
 from typing import Union
 

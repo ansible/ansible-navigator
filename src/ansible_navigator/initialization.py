@@ -8,11 +8,7 @@ import logging
 import os
 import sys
 
-from typing import List
 from typing import NoReturn
-from typing import Optional
-from typing import Tuple
-from typing import Union
 
 from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import ApplicationConfiguration

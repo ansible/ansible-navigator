@@ -5,10 +5,6 @@ from collections.abc import Iterable
 from copy import deepcopy
 from dataclasses import dataclass
 from itertools import repeat
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
 
 import pytest
 

@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import NamedTuple
 from typing import NewType
-from typing import Optional
 from typing import Tuple
 
 

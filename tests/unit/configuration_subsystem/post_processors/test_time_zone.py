@@ -3,9 +3,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Dict
-from typing import Optional
-from typing import Union
 
 import pytest
 

@@ -5,10 +5,7 @@ import os
 import re
 
 from pathlib import Path
-from typing import List
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 import pytest
 

@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Callable
-from typing import List
 from typing import NamedTuple
 
 from .steps import Steps

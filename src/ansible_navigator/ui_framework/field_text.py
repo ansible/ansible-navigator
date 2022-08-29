@@ -4,8 +4,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 from typing import Callable
-from typing import Optional
-from typing import Union
 
 from .curses_window import Window
 from .form_handler_text import FormHandlerText

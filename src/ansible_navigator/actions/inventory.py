@@ -9,11 +9,6 @@ import shutil
 
 from pathlib import Path
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
 
 from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase

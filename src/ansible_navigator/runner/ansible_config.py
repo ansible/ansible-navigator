@@ -1,9 +1,6 @@
 """Herein lies the ability for ansible-runner to run the ansible-config command."""
 from __future__ import annotations
 
-from typing import Optional
-from typing import Tuple
-
 from ansible_runner import get_ansible_config
 
 from .base import Base

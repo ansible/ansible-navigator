@@ -6,11 +6,7 @@ import operator
 
 from enum import Enum
 from functools import reduce
-from typing import Dict
-from typing import List
 from typing import MutableMapping
-from typing import Tuple
-from typing import Union
 
 
 class MergeBehaviors(Enum):
