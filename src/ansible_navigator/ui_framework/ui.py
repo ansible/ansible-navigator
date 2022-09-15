@@ -243,7 +243,6 @@ class UserInterface(CursesWindow):
         """Set or return the current scroll.
 
         :param value: the value to set the scroll to
-        :type value: int
         :raises TypeError: raise exception here
         :returns: the current scroll
         """
@@ -291,7 +290,6 @@ class UserInterface(CursesWindow):
         """Build a footer from the key dict spread the columns out evenly.
 
         :param key_dict: the keys and their description
-        :type key_dict: dict
         :returns: The footer line
         """
         column_widths = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
@@ -426,15 +424,11 @@ class UserInterface(CursesWindow):
         """Show something on the screen.
 
         :param lines: The lines to show
-        :type lines: CursesLines
         :param line_numbers: The number of lines to show
         :param heading: The headers to show
-        :type heading: CursesLines or None
         :param indent_heading: The indentation of heading
         :param key_dict: any supplemental key to show
-        :type key_dict: dict
         :param await_input: Should we wait for a key
-        :type await_input: bool
         :param count: The count to show
         :returns: the key pressed
         """
@@ -564,7 +558,6 @@ class UserInterface(CursesWindow):
         """Serialize, if necessary and color an obj.
 
         :param obj: the object to color
-        :type obj: Any
         :returns: The generated lines
         """
         if self.content_format() is ContentFormat.ANSI:
@@ -668,7 +661,6 @@ class UserInterface(CursesWindow):
         """Filter an obj and serialize.
 
         :param obj: the obj to serialize
-        :type obj: Any
         :returns: the serialize lines ready for display
         """
         heading = self._content_heading(obj, self._screen_width)
@@ -806,9 +798,7 @@ class UserInterface(CursesWindow):
         lru_cache enabled because this is hit during resize
 
         :param regex: the compiled regex
-        :type regex: Pattern
         :param value: the string to check
-        :type value: str
         :returns: the match if made
         """
         return regex.search(str(value))
