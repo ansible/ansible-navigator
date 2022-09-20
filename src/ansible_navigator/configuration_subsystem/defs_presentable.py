@@ -107,7 +107,7 @@ class PresentableSettingsEntry(ContentBase):
     @classmethod
     def for_settings_file(
         cls: Type[EntT],
-        all_subcommands: List,
+        all_subcommands: list,
         application_name: str,
         internals: Internals,
     ) -> EntT:
@@ -141,7 +141,7 @@ class PresentableSettingsEntry(ContentBase):
     @classmethod
     def from_settings_entry(
         cls: Type[EntT],
-        all_subcommands: List,
+        all_subcommands: list,
         application_name_dashed: str,
         entry: SettingsEntry,
         settings_file_path: str,

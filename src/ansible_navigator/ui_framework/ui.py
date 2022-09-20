@@ -101,7 +101,7 @@ class ShowCallable(Protocol):
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
-    ) -> "Interaction":
+    ) -> Interaction:
         """Refer to and keep in sync with UserInterface.show.
 
         :param obj: The inbound object
