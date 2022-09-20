@@ -53,20 +53,20 @@ END_KEYS = {":help": "help"}
 
 
 class Action(NamedTuple):
-    """the user's input"""
+    """the user's input."""
 
     value: str | int
     match: Match
 
 
 class Content(NamedTuple):
-    """what's on the screen, when showing content"""
+    """what's on the screen, when showing content."""
 
     showing: Any
 
 
 class Menu(NamedTuple):
-    """details about the currently showing menu"""
+    """details about the currently showing menu."""
 
     current: ContentTypeSequence
     columns: list[str]
@@ -80,7 +80,11 @@ class ContentFormatCallable(Protocol):
         value: ContentFormat | None = None,
         default: bool = False,
     ) -> ContentFormat:
-        """Refer to and keep in sync with UserInterface.content_format"""
+        """Refer to and keep in sync with UserInterface.content_format.
+
+        :param value: The value refers to the UI content format
+        :param default: The default UI content format
+        """
 
 
 class ShowCallable(Protocol):
@@ -98,11 +102,21 @@ class ShowCallable(Protocol):
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
     ) -> Interaction:
-        """Refer to and keep in sync with UserInterface.show"""
+        """Refer to and keep in sync with UserInterface.show.
+
+        :param obj: The inbound object
+        :param content_format: Refers to the content format
+        :param index: The indices of objects
+        :param columns: Refers to the menu column
+        :param await_input: Should we wait for user input?
+        :param filter_content_keys: The filter content keys
+        :param color_menu_item: To color the menu item
+        :param content_heading: Refers to the content heading
+        """
 
 
 class Ui(NamedTuple):
-    """select functions that can be called from an action"""
+    """select functions that can be called from an action."""
 
     clear: Callable
     menu_filter: Callable
@@ -114,7 +128,7 @@ class Ui(NamedTuple):
 
 
 class Interaction(NamedTuple):
-    """wrapper for what is sent back to the calling app"""
+    """wrapper for what is sent back to the calling app."""
 
     name: str
     action: Action
@@ -126,8 +140,7 @@ class Interaction(NamedTuple):
 class UserInterface(CursesWindow):
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-arguments
-
-    """The main UI class"""
+    """The main UI class."""
 
     def __init__(
         self,
@@ -143,7 +156,7 @@ class UserInterface(CursesWindow):
         :param screen_min_height: The minimum screen height
         :param kegexes: A callable producing a list of action regular expressions to match against
         :param refresh: The screen refresh time is ms
-        :param ui_config: the current UI configuration
+        :param ui_config: The current UI configuration
         :param progress_bar_width: The width of the progress bar
         :param status_width: The width of the status indicator
         """
@@ -179,25 +192,27 @@ class UserInterface(CursesWindow):
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
 
     def clear(self) -> None:
-        """clear the screen"""
+        """Clear the screen."""
         self._screen.clear()
         self._screen.refresh()
 
     def disable_refresh(self) -> None:
-        """Disable the screen refresh"""
+        """Disable the screen refresh."""
         self._refresh.append(self._refresh[-1])
         self._refresh.append(-1)
         self._screen.timeout(-1)
 
     def restore_refresh(self) -> None:
-        """Restore the screen refresh
-        to the previous value
-        """
+        """Restore the screen refresh to the previous value."""
         self._refresh.pop()
         self._screen.timeout(self._refresh.pop())
 
     def update_status(self, status: str = "", status_color: int = 0) -> None:
-        """update the status"""
+        """Update the status.
+
+        :param status: The string of status information
+        :param status_color: The color of status
+        """
         self._status = status
         self._status_color = status_color
 
@@ -220,10 +235,10 @@ class UserInterface(CursesWindow):
         return self._menu_filter
 
     def scroll(self, value: int | None = None) -> int:
-        """Set or return the current scroll
+        """Set or return the current scroll.
 
         :param value: the value to set the scroll to
-        :type value: int
+        :raises TypeError: raise exception here
         :returns: the current scroll
         """
         if value is not None:
@@ -237,9 +252,10 @@ class UserInterface(CursesWindow):
         value: ContentFormat | None = None,
         default: bool = False,
     ) -> ContentFormat:
-        """Set or return the current content format
+        """Set or return the current content format.
 
         :param value: The value to set the content format to
+        :param default: The default content format
         :returns: The current content format
         """
         if value is not None:
@@ -250,7 +266,7 @@ class UserInterface(CursesWindow):
 
     @property
     def _ui(self) -> Ui:
-        """Limit the callables the actions can access
+        """Limit the callables the actions can access.
 
         :returns: A tuple of available functions
         """
@@ -266,11 +282,9 @@ class UserInterface(CursesWindow):
         return res
 
     def _footer(self, key_dict: dict) -> CursesLine:
-        """build a footer from the key dict
-        spread the columns out evenly
+        """Build a footer from the key dict spread the columns out evenly.
 
         :param key_dict: the keys and their description
-        :type key_dict: dict
         :returns: The footer line
         """
         column_widths = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
@@ -332,7 +346,7 @@ class UserInterface(CursesWindow):
     ) -> None:
         """Add a scroll bar if the length of the content is longer than the viewport height.
 
-        :param viewport_height: The height if the viewport
+        :param viewport_height: The height of the viewport
         :param len_heading: The height of the heading
         :param menu_size: The number of lines in the content
         :param body_start: Where we are in the body
@@ -359,7 +373,7 @@ class UserInterface(CursesWindow):
             )
 
     def _get_input_line(self) -> str:
-        """get one line of input from the user
+        """Get one line of input from the user.
 
         :returns: the lines
         """
@@ -402,16 +416,15 @@ class UserInterface(CursesWindow):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
-        """show something on the screen
+        """Show something on the screen.
 
         :param lines: The lines to show
-        :type lines: CursesLines
-        :param heading: the headers to show
-        :type heading: CursesLines or None
+        :param line_numbers: The number of lines to show
+        :param heading: The headers to show
+        :param indent_heading: The indentation of heading
         :param key_dict: any supplemental key to show
-        :type key_dict: dict
         :param await_input: Should we wait for a key
-        :type await_input: bool
+        :param count: The count to show
         :returns: the key pressed
         """
         heading = heading or CursesLines(tuple())
@@ -537,10 +550,9 @@ class UserInterface(CursesWindow):
         return None, None
 
     def _serialize_color(self, obj: Any) -> CursesLines:
-        """Serialize, if necessary and color an obj
+        """Serialize, if necessary and color an obj.
 
         :param obj: the object to color
-        :type obj: Any
         :returns: The generated lines
         """
         if self.content_format() is ContentFormat.ANSI:
@@ -566,7 +578,7 @@ class UserInterface(CursesWindow):
         return self._color_decorate_lines(rendered)
 
     def _cache_init_colors(self, lines: list):
-        """Cache and init the unique colors for future use
+        """Cache and init the unique colors for future use.
 
         Maintain a mapping of RGB colors
         to curses colors in self._rgb_to_curses_color_idx
@@ -604,7 +616,7 @@ class UserInterface(CursesWindow):
     def _color_decorate_lines(self, lines: list[list[SimpleLinePart]]) -> CursesLines:
         """Color and decorate each of the lines.
 
-        :params lines: The lines to transform
+        :param lines: The lines to transform
         :returns: All lines colored
         """
         return CursesLines(tuple(self._color_decorate_line(line) for line in lines))
@@ -641,10 +653,9 @@ class UserInterface(CursesWindow):
         )
 
     def _filter_and_serialize(self, obj: Any) -> tuple[CursesLines | None, CursesLines]:
-        """filter an obj and serialize
+        """Filter an obj and serialize.
 
         :param obj: the obj to serialize
-        :type obj: Any
         :returns: the serialize lines ready for display
         """
         heading = self._content_heading(obj, self._screen_width)
@@ -665,9 +676,10 @@ class UserInterface(CursesWindow):
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
-        """Show an object on the display
+        """Show an object on the display.
 
         :param objs: A list of one or more object
+        :param index: The index associated with an object
         :param await_input: Should we wait for user input before returning
         :returns: interaction with the user
         """
@@ -762,7 +774,7 @@ class UserInterface(CursesWindow):
                 return Interaction(name=name, action=action, content=content, ui=self._ui)
 
     def _obj_match_filter(self, obj: dict, columns: list) -> bool:
-        """Check columns in a dictionary against a regex
+        """Check columns in a dictionary against a regex.
 
         :param obj: The dict to check
         :param columns: The dicts keys to check
@@ -776,13 +788,12 @@ class UserInterface(CursesWindow):
     @staticmethod
     @lru_cache(maxsize=None)
     def _search_value(regex: Pattern, value: str) -> Match | None:
-        """check a str against a regex
+        """Check a str against a regex.
+
         lru_cache enabled because this is hit during resize
 
         :param regex: the compiled regex
-        :type regex: Pattern
         :param value: the string to check
-        :type value: str
         :returns: the match if made
         """
         return regex.search(str(value))
@@ -793,10 +804,11 @@ class UserInterface(CursesWindow):
         columns: list,
         indices,
     ) -> tuple[CursesLines, CursesLines]:
-        """build the menu
+        """Build the menu.
 
         :param current: A dict
         :param columns: The keys from the dictionary to use as columns
+        :param indices: The indices associated with items
         :returns: The heading and menu items
         """
         menu_builder = MenuBuilder(
@@ -810,7 +822,7 @@ class UserInterface(CursesWindow):
         return menu_heading, menu_items
 
     def _show_menu(self, current: Sequence[Any], columns: list, await_input: bool) -> Interaction:
-        """Show a menu on the screen
+        """Show a menu on the screen.
 
         :param current: A dict
         :param columns: The keys from the dictionary to use as columns
@@ -878,13 +890,16 @@ class UserInterface(CursesWindow):
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
     ) -> Interaction:
-        """Show something on the screen
+        """Show something on the screen.
 
         :param obj: The inbound object
         :param content_format: Set the content format
         :param index: When obj is a list, show this entry
         :param columns: When obj is a list of dicts, use these keys for menu columns
         :param await_input: Should we wait for user input?
+        :param filter_content_keys: To show the filter content keys
+        :param color_menu_item: To show the colored menu item
+        :param content_heading: Show the content heading
         :returns: interaction with the user
         """
         self._color_menu_item = color_menu_item

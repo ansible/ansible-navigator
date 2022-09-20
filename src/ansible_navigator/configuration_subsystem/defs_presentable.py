@@ -21,8 +21,8 @@ from .utils import create_settings_file_sample
 
 PresentableSettingsEntryValue = Union[bool, Dict, str, List]
 
-TCli = TypeVar("TCli", bound="PresentableCliParameters")
-TEnt = TypeVar("TEnt", bound="PresentableSettingsEntry")
+CliT = TypeVar("CliT", bound="PresentableCliParameters")
+EntT = TypeVar("EntT", bound="PresentableSettingsEntry")
 
 
 @dataclass(frozen=True)
@@ -39,10 +39,10 @@ class PresentableCliParameters:
 
     @classmethod
     def from_cli_params(
-        cls: type[TCli],
+        cls: type[CliT],
         cli_parameters: CliParameters | None,
         name_dashed: str,
-    ) -> TCli:
+    ) -> CliT:
         """Create an ``_HRCliParameters`` based on an entry's cli parameters.
 
         :param cli_parameters: The entry's cli parameters
@@ -106,11 +106,11 @@ class PresentableSettingsEntry(ContentBase):
 
     @classmethod
     def for_settings_file(
-        cls: type[TEnt],
+        cls: type[EntT],
         all_subcommands: list,
         application_name: str,
         internals: Internals,
-    ) -> TEnt:
+    ) -> EntT:
         """Create an ``PresentableSettingsEntry`` containing the details for the settings file.
 
         :param all_subcommands: All application subcommands
@@ -140,12 +140,12 @@ class PresentableSettingsEntry(ContentBase):
 
     @classmethod
     def from_settings_entry(
-        cls: type[TEnt],
+        cls: type[EntT],
         all_subcommands: list,
         application_name_dashed: str,
         entry: SettingsEntry,
         settings_file_path: str,
-    ) -> TEnt:
+    ) -> EntT:
         """Create an ``PresentableSettingsEntry`` containing the details for one settings entry.
 
         :param application_name_dashed: The application name, dashed
