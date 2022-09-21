@@ -1,8 +1,6 @@
 """Herein lies the ability to have ansible-runner run a command in a synchronous manner."""
 from __future__ import annotations
 
-from typing import Tuple
-
 from ansible_runner import run_command
 
 from .command_base import CommandBase
@@ -11,7 +9,7 @@ from .command_base import CommandBase
 class Command(CommandBase):
     """A runner wrapper."""
 
-    def run(self) -> Tuple[str, str, int]:
+    def run(self) -> tuple[str, str, int]:
         """Run command.
 
         :returns: Output, error, and error code

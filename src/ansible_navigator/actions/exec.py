@@ -8,7 +8,6 @@ import shlex
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Union
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
@@ -26,7 +25,7 @@ logger = logging.getLogger(__name__)
 def _generate_command(
     exec_command: str,
     exec_shell: bool,
-    extra_args: Union[Constants, List[str]],
+    extra_args: Constants | list[str],
 ) -> GeneratedCommand:
     """Generate the command and args.
 
@@ -86,7 +85,7 @@ class Action(ActionBase):
         _out, error, return_code = response
         return RunStdoutReturn(message=error, return_code=return_code)
 
-    def _run_runner(self) -> Optional[Tuple]:
+    def _run_runner(self) -> tuple | None:
         """Spin up runner.
 
         :returns: The stdout, stderr and return code from runner

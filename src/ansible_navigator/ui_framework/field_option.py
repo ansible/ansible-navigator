@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Union
 
 from .field_checks import FieldChecks
 from .field_radio import FieldRadio
@@ -17,7 +16,7 @@ class FieldOption:
     checked: bool = False
     disabled: bool = False
 
-    def ansi_code(self, form_field: Union[FieldChecks, FieldRadio]) -> str:
+    def ansi_code(self, form_field: FieldChecks | FieldRadio) -> str:
         """Return our icon based on the form provided.
 
         :param form_field: Form with check or radio field

@@ -4,10 +4,7 @@ from __future__ import annotations
 import shlex
 
 from enum import Enum
-from typing import List
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 
 class SearchFor(Enum):
@@ -22,16 +19,16 @@ class Command(NamedTuple):
     """command details"""
 
     execution_environment: bool
-    cmdline: Optional[str] = None
+    cmdline: str | None = None
     command: str = "ansible-navigator"
     log_level: str = "debug"
     mode: str = "interactive"
-    pass_environment_variables: List = []
+    pass_environment_variables: list = []
     preclear: bool = False
     precommand: str = ""
     raw_append: str = ""
     """Anything raw that should be appended, and not shlex quoted"""
-    subcommand: Optional[str] = None
+    subcommand: str | None = None
 
     def join(self):
         """create CLI command"""
@@ -64,15 +61,15 @@ class UiTestStep(NamedTuple):
     #: Explanation of what is being sent or done
     comment: str
     #: Search for in the response
-    present: List[str] = []
+    present: list[str] = []
     #: Ensure not in the response
-    absent: List[str] = []
+    absent: list[str] = []
     #: Should the output be masked prior to writing a fixture
     mask: bool = True
     #: The index of the step with the list of all steps
     step_index: int = 0
     #: Find this before returning from the tmux session to the test
-    search_within_response: Union[SearchFor, str, List] = SearchFor.HELP
+    search_within_response: SearchFor | str | list = SearchFor.HELP
 
     def __str__(self):
         """Produce a test id for this step."""

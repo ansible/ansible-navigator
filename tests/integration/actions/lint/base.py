@@ -4,9 +4,6 @@ from __future__ import annotations
 import difflib
 import os
 
-from typing import List
-from typing import Union
-
 import pytest
 
 from ....defaults import FIXTURES_DIR
@@ -51,7 +48,7 @@ class BaseClass:
         :param tmux_session: TmuxSession fixture
         :param step: UiTestStep object
         """
-        search_within_response: Union[str, List[str]]
+        search_within_response: str | list[str]
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:

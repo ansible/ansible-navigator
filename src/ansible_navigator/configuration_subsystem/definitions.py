@@ -15,8 +15,6 @@ from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import NewType
-from typing import Optional
-from typing import Tuple
 from typing import TypeVar
 from typing import Union
 
@@ -74,13 +72,13 @@ class Constants(Enum):
 class CliParameters:
     """An object to hold the CLI parameters."""
 
-    action: Optional[str] = None
-    const: Optional[Union[bool, str]] = None
-    long_override: Optional[str] = None
-    nargs: Optional[str] = None
+    action: str | None = None
+    const: bool | str | None = None
+    long_override: str | None = None
+    nargs: str | None = None
     positional: bool = False
-    short: Optional[str] = None
-    metavar: Optional[str] = None
+    short: str | None = None
+    metavar: str | None = None
 
     def long(self, name_dashed: str) -> str:
         """Provide a cli long parameter.
@@ -101,7 +99,7 @@ class SettingsEntryValue:
     #: The current, effective value for the entry
     current: Any = Constants.NOT_SET
     #: Provide a specific default value to be used in the schema
-    schema_default: Union[str, Constants] = Constants.NOT_SET
+    schema_default: str | Constants = Constants.NOT_SET
     #: Indicates where the current value came from
     source: Constants = Constants.NOT_SET
 
@@ -152,19 +150,19 @@ class SettingsEntry:
     #: Indicates if this can be changed after initialization
     change_after_initial: bool = True
     #: The possible values for this entry
-    choices: Iterable[Union[bool, str]] = field(default_factory=list)
+    choices: Iterable[bool | str] = field(default_factory=list)
     #: Argparse specific params
-    cli_parameters: Optional[CliParameters] = None
+    cli_parameters: CliParameters | None = None
     #: Post process in normal (alphabetical) order or wait until after first pass
     delay_post_process: bool = False
     #: Override the default, generated environment variable
-    environment_variable_override: Optional[str] = None
+    environment_variable_override: str | None = None
     #: Over the default settings file path, dot delimited representation in tree
     environment_variable_split_char: str = ","
     #: The character used to split an environment variable value into a list
-    settings_file_path_override: Optional[str] = None
+    settings_file_path_override: str | None = None
     #: Subcommand this should this be used for
-    subcommands: Union[List[str], Constants] = Constants.ALL
+    subcommands: list[str] | Constants = Constants.ALL
     #: Does this hold the name of the active subcommand
     subcommand_value: bool = False
 
@@ -244,7 +242,7 @@ class SubCommand:
     name: str
     description: str
     version_added: str
-    epilog: Optional[str] = None
+    epilog: str | None = None
 
     def __post_init__(self):
         """Perform post initialization actions."""
@@ -256,14 +254,14 @@ class ApplicationConfiguration:
     # pylint: disable=too-many-instance-attributes
     """The main object for storing an application config."""
 
-    application_version: Union[Constants, str]
-    entries: List[SettingsEntry]
+    application_version: Constants | str
+    entries: list[SettingsEntry]
     internals: Internals
     post_processor: NavigatorPostProcessor
-    subcommands: List[SubCommand]
+    subcommands: list[SubCommand]
 
     application_name: str = ""
-    original_command: List[str] = field(default_factory=list)
+    original_command: list[str] = field(default_factory=list)
 
     initial: Any = None
 
@@ -349,7 +347,7 @@ class VolumeMount:
     """The settings source for this volume mount"""
     options_string: InitVar[str]
     """Comma delimited options"""
-    options: Tuple[VolumeMountOption, ...] = ()
+    options: tuple[VolumeMountOption, ...] = ()
     """Options for the bind mount"""
 
     def __post_init__(self, options_string):

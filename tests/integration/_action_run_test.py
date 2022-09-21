@@ -9,10 +9,6 @@ import tempfile
 from copy import deepcopy
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic
@@ -35,16 +31,16 @@ class ActionRunTest:
     def __init__(
         self,
         action_name,
-        container_engine: Optional[str] = None,
-        container_options: Optional[List] = None,
-        execution_environment: Optional[str] = None,
-        execution_environment_image: Optional[str] = None,
-        host_cwd: Optional[List] = None,
-        set_environment_variable: Optional[Dict] = None,
-        pass_environment_variable: Optional[List] = None,
-        private_data_dir: Optional[str] = None,
-        rotate_artifacts: Optional[int] = None,
-        timeout: Optional[int] = None,
+        container_engine: str | None = None,
+        container_options: list | None = None,
+        execution_environment: str | None = None,
+        execution_environment_image: str | None = None,
+        host_cwd: list | None = None,
+        set_environment_variable: dict | None = None,
+        pass_environment_variable: list | None = None,
+        private_data_dir: str | None = None,
+        rotate_artifacts: int | None = None,
+        timeout: int | None = None,
     ) -> None:
         """Initialize the test runner for an action.
 
@@ -99,7 +95,7 @@ class ActionRunTest:
 
     def content_format(
         self,
-        value: Optional[ContentFormat] = None,
+        value: ContentFormat | None = None,
         default: bool = False,
     ) -> ContentFormat:
         """A do nothing content format callable."""
@@ -107,14 +103,14 @@ class ActionRunTest:
     def show(
         self,
         obj: ContentType,
-        content_format: Optional[ContentFormat] = None,
-        index: Optional[int] = None,
-        columns: Optional[List] = None,
+        content_format: ContentFormat | None = None,
+        index: int | None = None,
+        columns: list | None = None,
         await_input: bool = True,
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
-    ) -> "Interaction":
+    ) -> Interaction:
         """me"""
 
     def show_form(self, form: Form) -> Form:
@@ -165,7 +161,7 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, **kwargs) -> Tuple[RunStdoutReturn, str, str]:
+    def run_action_stdout(self, **kwargs) -> tuple[RunStdoutReturn, str, str]:
         # pylint: disable=too-many-locals
         """run the action"""
         self._app_args.update({"mode": "stdout"})

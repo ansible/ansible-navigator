@@ -16,12 +16,7 @@ import sysconfig
 from pathlib import Path
 from typing import Any
 from typing import Iterable
-from typing import List
 from typing import Mapping
-from typing import Optional
-from typing import Set
-from typing import Tuple
-from typing import Union
 
 from jinja2 import Environment
 from jinja2 import StrictUndefined
@@ -62,13 +57,13 @@ def abs_user_path(file_path: str) -> str:
     return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))
 
 
-def check_for_ansible() -> Tuple[List[LogMessage], List[ExitMessage]]:
+def check_for_ansible() -> tuple[list[LogMessage], list[ExitMessage]]:
     """Check for the ansible-playbook command, runner will need it.
 
     :returns: Exit messages if not found, messages if found
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
     ansible_location = shutil.which("ansible-playbook")
     if not ansible_location:
         msg_parts = [
@@ -148,7 +143,7 @@ def escape_moustaches(obj: Mapping) -> Mapping:
 def environment_variable_is_file_path(
     env_var: str,
     kind: str,
-) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
+) -> tuple[list[LogMessage], list[ExitMessage], str | None]:
     """Check if a given environment variable is a viable file path, and if so, return that path.
 
     :param env_var: Environment variable to check for a file path
@@ -156,8 +151,8 @@ def environment_variable_is_file_path(
     :returns: Log messages and file path
 
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
     file_path = None
     candidate_path = os.environ.get(env_var)
     if candidate_path is None:
@@ -180,7 +175,7 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
+def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | None]:
     """Find the settings file.
 
     Find the file at ./ansible-navigator.(.yml,.yaml,.json),
@@ -188,11 +183,11 @@ def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[
 
     :returns: Log messages and correct settings file to use
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
     allowed_extensions = ["yml", "yaml", "json"]
-    potential_paths: List[List[str]] = []
-    found_files: List[str] = []
+    potential_paths: list[list[str]] = []
+    found_files: list[str] = []
 
     potential_paths.append([os.path.expanduser("~"), ".ansible-navigator"])
     potential_paths.append([os.getcwd(), "ansible-navigator"])
@@ -227,7 +222,7 @@ def find_settings_file() -> Tuple[List[LogMessage], List[ExitMessage], Optional[
     return messages, exit_messages, use
 
 
-def flatten_list(data_list) -> List:
+def flatten_list(data_list) -> list:
     """Flatten a list of lists.
 
     :param data_list: List to flatten
@@ -238,7 +233,7 @@ def flatten_list(data_list) -> List:
     return [data_list]
 
 
-def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], Optional[str]]:
+def get_share_directory(app_name) -> tuple[list[LogMessage], list[ExitMessage], str | None]:
     # pylint: disable=too-many-return-statements
     """Return datadir to use for the ansible-launcher data files. First found wins.
 
@@ -247,8 +242,8 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     :param app_name: Name of application - currently ansible_navigator
     :returns: Log messages and full datadir path
     """
-    messages: List[LogMessage] = []
-    exit_messages: List[ExitMessage] = []
+    messages: list[LogMessage] = []
+    exit_messages: list[ExitMessage] = []
     share_directory = None
 
     def debug_log(directory: str, found: bool, description: str):
@@ -326,7 +321,7 @@ def get_share_directory(app_name) -> Tuple[List[LogMessage], List[ExitMessage], 
     return messages, exit_messages, None
 
 
-def divmod_int(numerator: Union[int, float], denominator: Union[int, float]) -> Tuple[int, int]:
+def divmod_int(numerator: int | float, denominator: int | float) -> tuple[int, int]:
     """Return the result of divmod, as a tuple of integers.
 
     :param numerator: Numerator for divmod
@@ -337,7 +332,7 @@ def divmod_int(numerator: Union[int, float], denominator: Union[int, float]) -> 
     return int(quotient), int(remainder)
 
 
-def human_time(seconds: Union[int, float]) -> str:
+def human_time(seconds: int | float) -> str:
     """Convert seconds into human readable 00d00h00m00s format.
 
     :param seconds: Time in seconds
@@ -455,7 +450,7 @@ def remove_dbl_un(string):
     return string
 
 
-def round_half_up(number: Union[float, int]) -> int:
+def round_half_up(number: float | int) -> int:
     """Round a number to the nearest integer with ties going away from zero.
 
     This is different the round() where exact halfway cases are rounded to the nearest
@@ -478,9 +473,7 @@ def shlex_join(tokens: Iterable[str]) -> str:
     :param tokens: The iterable of strings to join
     :returns: The iterable joined with spaces
     """
-    if sys.version_info >= (3, 8):
-        return shlex.join(split_command=tokens)
-    return " ".join(shlex.quote(token) for token in tokens)
+    return shlex.join(split_command=tokens)
 
 
 def str2bool(value: Any) -> bool:
@@ -502,7 +495,7 @@ def str2bool(value: Any) -> bool:
 
 # TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
 #       returns Any. Need to find a better solution... "Any" isn't it.
-def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
+def templar(string: str, template_vars: Mapping) -> tuple[list[str], Any]:
     """Template some string with jinja2 always to and from json.
 
     :param string: The template string
@@ -540,7 +533,7 @@ def templar(string: str, template_vars: Mapping) -> Tuple[List[str], Any]:
     return errors, result
 
 
-def timestamp_to_iso(timestamp: float, time_zone: str) -> Optional[str]:
+def timestamp_to_iso(timestamp: float, time_zone: str) -> str | None:
     """Generate an ISO 8601 date time string from a timestamp.
 
     :param timestamp: The unix timestamp
@@ -563,7 +556,7 @@ def timestamp_to_iso(timestamp: float, time_zone: str) -> Optional[str]:
         return None
 
 
-def time_stamp_for_file(path: str, time_zone: str) -> Tuple[Optional[float], Optional[str]]:
+def time_stamp_for_file(path: str, time_zone: str) -> tuple[float | None, str | None]:
     """Get a timestamp for a file path.
 
     :param path: The file path
@@ -582,7 +575,7 @@ def time_stamp_for_file(path: str, time_zone: str) -> Tuple[Optional[float], Opt
     return modified, iso_stamp
 
 
-def to_list(thing: Optional[Union[str, List, Tuple, Set]]) -> List:
+def to_list(thing: str | list | tuple | set | None) -> list:
     """Convert something to a list if necessary.
 
     :param thing: Item to convert to a list

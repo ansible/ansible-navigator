@@ -4,8 +4,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 from typing import Callable
-from typing import Optional
-from typing import Union
 
 from .curses_window import Window
 from .form_handler_text import FormHandlerText
@@ -25,11 +23,11 @@ class FieldText:
     current_error: str = ""
     default: Any = nonexistent
     window_handler = FormHandlerText
-    response: Union[str, Unknown] = unknown
-    valid: Union[bool, Unknown] = unknown
+    response: str | Unknown = unknown
+    valid: bool | Unknown = unknown
     validator: Callable = FieldValidators.none
     value: Any = unknown
-    win: Optional[Window] = None
+    win: Window | None = None
 
     @property
     def formatted_default(self) -> str:

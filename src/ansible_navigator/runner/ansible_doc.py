@@ -3,11 +3,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
 
 from ansible_runner import get_plugin_docs
 
@@ -20,13 +15,13 @@ class AnsibleDoc(Base):
 
     def fetch_plugin_doc(
         self,
-        plugin_names: List,
-        plugin_type: Optional[str] = None,
-        response_format: Optional[str] = "json",
-        snippet: Optional[bool] = None,
-        playbook_dir: Optional[str] = None,
-        module_path: Optional[str] = None,
-    ) -> Tuple[Union[Dict[Any, Any], str], Union[Dict[Any, Any], str]]:
+        plugin_names: list,
+        plugin_type: str | None = None,
+        response_format: str | None = "json",
+        snippet: bool | None = None,
+        playbook_dir: str | None = None,
+        module_path: str | None = None,
+    ) -> tuple[dict[Any, Any] | str, dict[Any, Any] | str]:
         """Run ``ansible-doc`` command and get the plugin docs related details.
 
         :param plugin_names: The name of the plugins to get docs

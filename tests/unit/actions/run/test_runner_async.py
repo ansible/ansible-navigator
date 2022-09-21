@@ -5,9 +5,6 @@ from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from queue import Queue
-from typing import Dict
-from typing import List
-from typing import Optional
 
 import pytest
 
@@ -23,23 +20,23 @@ class Scenario:
 
     # pylint: disable=too-many-instance-attributes
     name: str
-    container_engine: Optional[str]
-    container_options: Optional[List]
-    execution_environment_image: Optional[str]
-    execution_environment: Optional[bool]
-    inventory: Optional[List]
+    container_engine: str | None
+    container_options: list | None
+    execution_environment_image: str | None
+    execution_environment: bool | None
+    inventory: list | None
     playbook_artifact_enable: bool
-    mode: Optional[str]
-    pass_environment_variable: Optional[List]
-    set_environment_variable: Optional[Dict]
-    playbook: Optional[str]
-    container_volume_mounts: Optional[List]
+    mode: str | None
+    pass_environment_variable: list | None
+    set_environment_variable: dict | None
+    playbook: str | None
+    container_volume_mounts: list | None
     help_playbook: bool
-    cmdline: Optional[List]
-    private_data_dir: Optional[str]
-    rotate_artifacts: Optional[int]
-    timeout: Optional[int]
-    expected: Dict
+    cmdline: list | None
+    private_data_dir: str | None
+    rotate_artifacts: int | None
+    timeout: int | None
+    expected: dict
 
     def __str__(self):
         """Provide the test id.

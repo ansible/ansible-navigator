@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
 from typing import NamedTuple
 
 import pytest
@@ -18,7 +17,7 @@ class CommandTestData(NamedTuple):
     command: str
     use_shell: bool
     result_command: str
-    result_params: List
+    result_params: list
 
 
 def id_from_data(test_value):

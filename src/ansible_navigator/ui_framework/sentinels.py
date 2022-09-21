@@ -2,13 +2,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Dict
 
 
 class Singleton(type):
     """One of a kind."""
 
-    _instances: Dict[Any, "Singleton"] = {}
+    _instances: dict[Any, Singleton] = {}
 
     def __call__(cls, *args, **kwargs):
         """Determine if the instance is one of a kind.
@@ -18,7 +17,7 @@ class Singleton(type):
         :returns: The type
         """
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
 

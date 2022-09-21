@@ -7,7 +7,6 @@ import re
 
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Optional
 from typing import Pattern
 
 import pytest
@@ -45,10 +44,10 @@ class Scenario:
     """The artifact files test data object."""
 
     name: str
-    filename: Optional[str]
+    filename: str | None
     playbook: str
-    starts_with: Optional[str] = None
-    re_match: Optional[Pattern] = None
+    starts_with: str | None = None
+    re_match: Pattern | None = None
     help_playbook: bool = False
     time_zone: str = "UTC"
 

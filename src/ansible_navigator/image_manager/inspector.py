@@ -4,9 +4,6 @@ from __future__ import annotations
 import json
 import re
 
-from typing import List
-from typing import Tuple
-
 from ..command_runner import Command
 from ..command_runner import CommandRunner
 from ..utils.functions import pascal_to_snake
@@ -25,7 +22,7 @@ class ImagesInspect:
         self._image_ids = ids
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Generate image inspection commands.
 
         :returns: List of image inspection command objects
@@ -61,7 +58,7 @@ class ImagesList:
         self._container_engine = container_engine
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Generate image lister commands.
 
         :returns: List of the image lister commands
@@ -89,7 +86,7 @@ class ImagesList:
             command.details = valid_images
 
 
-def inspect_all(container_engine: str) -> Tuple[List, str]:
+def inspect_all(container_engine: str) -> tuple[list, str]:
     """Run inspect against all images in the list.
 
     :param container_engine: Name of the container engine

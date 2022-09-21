@@ -9,7 +9,6 @@ from typing import Any
 from typing import Dict
 from typing import Generic
 from typing import List
-from typing import Optional
 from typing import Sequence
 from typing import TypeVar
 from typing import Union
@@ -148,7 +147,7 @@ class CFormat:
     """The scope, used for tokenization"""
     file_extention: str
     """The file extension, with a ."""
-    serialization: Optional[SerializationFormat]
+    serialization: SerializationFormat | None
     """If needed the serialization format"""
 
 

@@ -27,15 +27,15 @@ T = TypeVar("T")
 class Grammar(NamedTuple):
     scope_name: str
     repository: FChainMap[str, _Rule]
-    patterns: Tuple[_Rule, ...]
+    patterns: tuple[_Rule, ...]
 
     @classmethod
-    def make(cls, data: Dict[str, Any]) -> "Grammar":
+    def make(cls, data: dict[str, Any]) -> Grammar:
         scope_name = data["scopeName"]
         if "repository" in data:
             # this looks odd, but it's so we can have a self-referential
             # immutable-after-construction chain map
-            repository_dct: Dict[str, _Rule] = {}
+            repository_dct: dict[str, _Rule] = {}
             repository = FChainMap(repository_dct)
             for k, dct in data["repository"].items():
                 repository_dct[k] = Rule.make(dct, repository)
@@ -61,12 +61,12 @@ class Grammars:
 
         unknown_grammar = {"scopeName": "source.unknown", "patterns": []}
         self._raw = {"source.unknown": unknown_grammar}
-        self._file_types: List[Tuple[FrozenSet[str], str]] = []
-        self._first_line: List[Tuple[_Reg, str]] = []
-        self._parsed: Dict[str, Grammar] = {}
-        self._compiled: Dict[str, Compiler] = {}
+        self._file_types: list[tuple[frozenset[str], str]] = []
+        self._first_line: list[tuple[_Reg, str]] = []
+        self._parsed: dict[str, Grammar] = {}
+        self._compiled: dict[str, Compiler] = {}
 
-    def _raw_for_scope(self, scope: str) -> Dict[str, Any]:
+    def _raw_for_scope(self, scope: str) -> dict[str, Any]:
         try:
             return self._raw[scope]
         except KeyError:

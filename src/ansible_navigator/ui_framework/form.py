@@ -6,10 +6,6 @@ import curses
 from curses import ascii as curses_ascii
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -34,12 +30,12 @@ class Form:
 
     type: FormType
     cancelled: bool = False
-    fields: List = field(default_factory=list)
+    fields: list = field(default_factory=list)
     submitted: bool = False
     title: str = ""
     title_color: int = 0
 
-    _dict: Dict = field(default_factory=dict)
+    _dict: dict = field(default_factory=dict)
 
     def present(self, screen, ui_config):
         """Present the form the to user and return the results.
@@ -130,9 +126,7 @@ class FormPresenter(CursesWindow):
             if hasattr(form_field, "value") and form_field.value is not unknown:
                 widths.append(len(str(form_field.value)) + self._input_start)
             if hasattr(form_field, "options"):
-                widths.extend(
-                    (len(option.text) + self._input_start for option in form_field.options)
-                )
+                widths.extend(len(option.text) + self._input_start for option in form_field.options)
             if hasattr(form_field, "information"):
                 widths.append(max(len(info) for info in form_field.information))
             if hasattr(form_field, "messages"):
@@ -160,7 +154,7 @@ class FormPresenter(CursesWindow):
         self._pad_top = max(int((self._screen_height - self._form_height) * TOP_PAD_RATIO), 0)
         self._pad_left = max(int((self._screen_width - self._form_width) * LEFT_PAD_RATIO), 0)
 
-    def _generate_form(self) -> Tuple[Tuple[int, CursesLine], ...]:
+    def _generate_form(self) -> tuple[tuple[int, CursesLine], ...]:
         lines = []
         lines.append((self._line_number, self._generate_title()))
         self._line_number += 1
@@ -195,7 +189,7 @@ class FormPresenter(CursesWindow):
 
             elif isinstance(form_field, FieldText):
                 prompt = self._generate_prompt(form_field)
-                line = CursesLine((tuple(prompt + [self._generate_field_text(form_field)])))
+                line = CursesLine(tuple(prompt + [self._generate_field_text(form_field)]))
                 lines.append((self._line_number, line))
                 self._line_number += 1
 
@@ -205,12 +199,12 @@ class FormPresenter(CursesWindow):
                 # although option_lines[0] is a CursesLine, only it's first line part is needed
                 # because the prompt needs to be prepended to it
                 first_option_line_part = option_lines[0][0]
-                line = CursesLine((tuple(prompt + [first_option_line_part])))
+                line = CursesLine(tuple(prompt + [first_option_line_part]))
                 lines.append((self._line_number, line))
                 self._line_number += 1
 
                 for option_line in option_lines[1:]:
-                    lines.append((self._line_number, CursesLine((option_line))))
+                    lines.append((self._line_number, CursesLine(option_line)))
                     self._line_number += 1
 
             error = self._generate_error(form_field)
@@ -246,7 +240,7 @@ class FormPresenter(CursesWindow):
             far_right -= 1
         return CursesLine(tuple(line_parts))
 
-    def _generate_error(self, form_field) -> Optional[CursesLine]:
+    def _generate_error(self, form_field) -> CursesLine | None:
         if form_field.current_error:
             line_part = CursesLinePart(self._input_start, form_field.current_error, 9, 0)
             return CursesLine((line_part,))
@@ -299,7 +293,7 @@ class FormPresenter(CursesWindow):
         lines = tuple(CursesLine((CursesLinePart(0, line, 0, 0),)) for line in form_field.messages)
         return CursesLines(lines)
 
-    def _generate_prompt(self, form_field) -> List[CursesLinePart]:
+    def _generate_prompt(self, form_field) -> list[CursesLinePart]:
         prompt_start = self._prompt_end - len(form_field.full_prompt)
         if form_field.valid is True:
             color = 10
@@ -332,7 +326,7 @@ class FormPresenter(CursesWindow):
         self._screen.refresh()
         idx = 0
         pad = curses.newpad(MAX_FORM_HEIGHT, MAX_FORM_WIDTH)
-        shared_input_line_cache: List[str] = []
+        shared_input_line_cache: list[str] = []
         for form_field in self._form.fields:
             form_field.window_handler = form_field.window_handler(
                 screen=self._screen,

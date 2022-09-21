@@ -18,11 +18,7 @@ from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Dict
 from typing import Generator
-from typing import List
-from typing import Tuple
-from typing import Union
 
 import yaml
 
@@ -55,17 +51,17 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 class CollectionCatalog:
     """A collection cataloger."""
 
-    def __init__(self, directories: List[Path]):
+    def __init__(self, directories: list[Path]):
         """Initialize the collection cataloger.
 
         :param directories: A list of directories that may contain collections
         """
-        self._directories: List[Path] = directories
-        self._collections: OrderedDict[str, Dict] = OrderedDict()
-        self._errors: List[Dict[str, str]] = []
-        self._messages: List[str] = []
+        self._directories: list[Path] = directories
+        self._collections: OrderedDict[str, dict] = OrderedDict()
+        self._errors: list[dict[str, str]] = []
+        self._messages: list[str] = []
 
-    def _catalog_plugins(self, collection: Dict) -> None:
+    def _catalog_plugins(self, collection: dict) -> None:
         """Catalog the plugins within a collection.
 
         :param collection: Details describing the collection
@@ -107,7 +103,7 @@ class CollectionCatalog:
                     collection,
                 )
 
-    def _catalog_roles(self, collection: Dict[str, Any]) -> None:
+    def _catalog_roles(self, collection: dict[str, Any]) -> None:
         """Catalog the roles within a collection.
 
         :param collection: Details describing the collection
@@ -122,7 +118,7 @@ class CollectionCatalog:
             return
 
         for role_directory in roles_directory.iterdir():
-            role: Dict[str, Union[str, Dict[str, Any]]] = {
+            role: dict[str, str | dict[str, Any]] = {
                 "short_name": role_directory.name,
                 "full_name": f"{collection_name}.{role_directory.name}",
             }
@@ -203,7 +199,7 @@ class CollectionCatalog:
                 collection["roles"].append(role)
 
     @staticmethod
-    def _generate_checksum(file_path: Path, relative_path: Path) -> Dict:
+    def _generate_checksum(file_path: Path, relative_path: Path) -> dict:
         """Generate a standard checksum for a file.
 
         :param file_path: The path to the file to generate a checksum for
@@ -227,8 +223,8 @@ class CollectionCatalog:
         self,
         plugin_type: str,
         filenames: Generator[Path, None, None],
-        file_checksums: Dict[str, Dict],
-        collection: Dict,
+        file_checksums: dict[str, dict],
+        collection: dict,
     ) -> None:
         """Process each plugin within one plugin directory.
 
@@ -322,7 +318,7 @@ class CollectionCatalog:
                             i_collection["path"],
                         )
 
-    def process_directories(self) -> Tuple[Dict, List]:
+    def process_directories(self) -> tuple[dict, list]:
         """Process each parent directory.
 
         :returns: All collections found and any errors
@@ -340,7 +336,7 @@ class CollectionCatalog:
 
     def add_pseudo_builtin(self) -> None:
         """Add the pseudo builtin collection."""
-        collection: Dict[str, Union[str, List, Dict]] = {}
+        collection: dict[str, str | list | dict] = {}
         collection["known_as"] = "ansible.builtin"
         collection["plugin_checksums"] = {}
         collection["path"] = str(Path(plugins.__file__).parents[1])
@@ -403,7 +399,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
             completed_queue.put(("error", (checksum, plugin_path, err_message)))
 
 
-def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tuple[set, List, int]:
+def identify_missing(collections: dict, collection_cache: KeyValueStore) -> tuple[set, list, int]:
     """Identify plugins missing from the cache.
 
     :param collections: All plugins found across all collections
@@ -429,7 +425,7 @@ def identify_missing(collections: Dict, collection_cache: KeyValueStore) -> Tupl
     return handled, missing, plugin_count
 
 
-def parse_args() -> Tuple[argparse.Namespace, List[Path]]:
+def parse_args() -> tuple[argparse.Namespace, list[Path]]:
     """Parse the arguments from the command line.
 
     :returns: The parsed arguments and all directories to search
@@ -469,7 +465,7 @@ def parse_args() -> Tuple[argparse.Namespace, List[Path]]:
     return parsed_args, resolved
 
 
-def retrieve_collections_paths() -> Dict:
+def retrieve_collections_paths() -> dict:
     """Retrieve the currently set collection paths.
 
     :returns: Errors or the configured collection directories
@@ -491,9 +487,9 @@ def retrieve_collections_paths() -> Dict:
 
 def retrieve_docs(
     collection_cache: KeyValueStore,
-    errors: List,
-    missing: List,
-    stats: Dict,
+    errors: list,
+    missing: list,
+    stats: dict,
 ) -> None:
     # pylint: disable=too-many-locals
     """Extract the docs from the plugins.
@@ -531,7 +527,7 @@ def retrieve_docs(
             stats["cache_added_errors"] += 1
 
 
-def run_command(cmd: List) -> Dict:
+def run_command(cmd: list) -> dict:
     """Run a command using subprocess.
 
     :param cmd: The command to run, split
@@ -540,10 +536,9 @@ def run_command(cmd: List) -> Dict:
     try:
         proc_out = subprocess.run(
             " ".join(cmd),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             check=True,
-            universal_newlines=True,
+            text=True,
             shell=True,
         )
         return {"stdout": proc_out.stdout}
@@ -551,7 +546,7 @@ def run_command(cmd: List) -> Dict:
         return {"error": str(exc)}
 
 
-def main() -> Dict:
+def main() -> dict:
     # pylint: disable=protected-access
     """Run the collection catalog process.
 

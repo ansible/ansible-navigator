@@ -7,7 +7,6 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from typing import Tuple
 
 import pytest
 
@@ -26,10 +25,10 @@ class Scenario:
     """The comment for the test"""
     settings_file: Path
     """The settings file path"""
-    messages: Tuple[str, ...]
+    messages: tuple[str, ...]
     """Messages expected to be found"""
 
-    command: Tuple[str, ...] = ("ansible-navigator", "-m", "stdout")
+    command: tuple[str, ...] = ("ansible-navigator", "-m", "stdout")
     """The command to run"""
 
     def __str__(self):
@@ -92,9 +91,8 @@ def test(data: Scenario, subtests: Any, tmp_path: Path):
         check=False,
         env=env,
         shell=True,
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        universal_newlines=True,
+        capture_output=True,
+        text=True,
     )
     long_stderr = "".join(
         [line.strip(" ").replace("\n", " ") for line in proc_out.stderr.splitlines(keepends=True)],

@@ -6,8 +6,6 @@ import shutil
 import textwrap
 
 from functools import partial
-from typing import Dict
-from typing import List
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitMessages
@@ -28,7 +26,7 @@ from .ui_constants import Color
 from .validators import FieldValidators
 
 
-def dict_to_form(form_data: Dict) -> Form:
+def dict_to_form(form_data: dict) -> Form:
     # pylint: disable=too-many-branches
     """Convert a python dict to a form.
 
@@ -97,7 +95,7 @@ def dict_to_form(form_data: Dict) -> Form:
     return form
 
 
-def form_to_dict(form: Form, key_on_name: bool = False) -> Dict:
+def form_to_dict(form: Form, key_on_name: bool = False) -> dict:
     """Populate the original _dict of the form with the results.
 
     :param form: Holding place for form fields
@@ -146,7 +144,7 @@ def break_long_lines(messages):
     return result
 
 
-def nonblocking_notification(messages: List[str]) -> Form:
+def nonblocking_notification(messages: list[str]) -> Form:
     """Generate a std nonblocking notification.
 
     :param messages: List of messages to display
@@ -162,7 +160,7 @@ def nonblocking_notification(messages: List[str]) -> Form:
     return dict_to_form(form)
 
 
-def settings_notification(color: bool, messages: List[ExitMessage]) -> Form:
+def settings_notification(color: bool, messages: list[ExitMessage]) -> Form:
     """Generate a warning notification for settings errors.
 
     :param messages: List of messages to display
@@ -193,7 +191,7 @@ def settings_notification(color: bool, messages: List[ExitMessage]) -> Form:
     return form
 
 
-def warning_notification(messages: List[str]) -> Form:
+def warning_notification(messages: list[str]) -> Form:
     """Generate a std warning notification.
 
     :param messages: List of warning messages to be displayed
@@ -209,7 +207,7 @@ def warning_notification(messages: List[str]) -> Form:
     return dict_to_form(form)
 
 
-def error_notification(messages: List[str]) -> Form:
+def error_notification(messages: list[str]) -> Form:
     """Generate a std error notification.
 
     :param messages: List of error messages to display
@@ -225,7 +223,7 @@ def error_notification(messages: List[str]) -> Form:
     return dict_to_form(form)
 
 
-def success_notification(messages: List[str]) -> Form:
+def success_notification(messages: list[str]) -> Form:
     """Generate a std success notification.
 
     :param messages: List of success messages to display

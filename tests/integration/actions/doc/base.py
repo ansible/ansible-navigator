@@ -4,8 +4,6 @@ from __future__ import annotations
 import difflib
 import os
 
-from typing import Optional
-
 import pytest
 
 from ....defaults import FIXTURES_COLLECTION_DIR
@@ -18,7 +16,7 @@ class BaseClass:
     """Base class for interactive/stdout doc tests."""
 
     UPDATE_FIXTURES = False
-    TEST_FOR_MODE: Optional[str] = None
+    TEST_FOR_MODE: str | None = None
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_doc_session")

@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 
 class State(NamedTuple):
-    entries: Tuple["Entry", ...]
-    while_stack: Tuple[Tuple["WhileRule", int], ...]
+    entries: tuple[Entry, ...]
+    while_stack: tuple[tuple[WhileRule, int], ...]
 
     @classmethod
     def root(cls, entry: Entry) -> State:

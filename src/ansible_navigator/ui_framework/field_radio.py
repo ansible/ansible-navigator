@@ -5,8 +5,6 @@ from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
 from typing import Callable
-from typing import List
-from typing import Union
 
 from .form_handler_options import FormHandlerOptions
 from .sentinels import Unknown
@@ -22,8 +20,8 @@ class FieldRadio:
     prompt: str
     name: str
     current_error: str = ""
-    valid: Union[Unknown, bool] = unknown
-    options: List = field(default_factory=list)
+    valid: Unknown | bool = unknown
+    options: list = field(default_factory=list)
     window_handler = FormHandlerOptions
 
     @property

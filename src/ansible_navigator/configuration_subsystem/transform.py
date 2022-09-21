@@ -5,10 +5,6 @@ import json
 import textwrap
 
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Tuple
-from typing import Union
 
 from ..utils.compatibility import importlib_resources
 from ..utils.dict_merge import in_place_list_replace
@@ -30,11 +26,11 @@ def to_effective(
     :param settings: The current settings
     :returns: The settings represented as settings file
     """
-    rebuilt: Dict = {}
+    rebuilt: dict = {}
     for entry in settings.entries:
         path = entry.settings_file_path(prefix=settings.application_name_dashed)
         if not isinstance(entry.value.current, Constants):
-            current: Union[bool, int, str, Dict, List] = entry.value.current
+            current: bool | int | str | dict | list = entry.value.current
             # It is necessary to un post-process here
             if path == "ansible-navigator.ansible.cmdline":
                 # post-processed into a list
@@ -56,7 +52,7 @@ def to_effective(
     return SettingsFileType(rebuilt)
 
 
-def to_sources(settings: ApplicationConfiguration) -> Dict[str, str]:
+def to_sources(settings: ApplicationConfiguration) -> dict[str, str]:
     """Transform the current settings into representation of sources.
 
     :param settings: The current settings
@@ -79,7 +75,7 @@ def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEnt
     """
     settings_list = []
 
-    all_subcommands = sorted([subcommand.name for subcommand in settings.subcommands])
+    all_subcommands = sorted(subcommand.name for subcommand in settings.subcommands)
 
     settings_file_entry = PresentableSettingsEntry.for_settings_file(
         all_subcommands=all_subcommands,
@@ -102,7 +98,7 @@ def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEnt
     return PresentableSettingsEntries(tuple(settings_list))
 
 
-def to_schema(settings: ApplicationConfiguration) -> Dict[str, Any]:
+def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
     """Build a json schema from the settings using the stub schema.
 
     :param settings: The application settings
@@ -117,7 +113,7 @@ def to_schema(settings: ApplicationConfiguration) -> Dict[str, Any]:
     partial_schema = json.loads(file_contents)
 
     for entry in settings.entries:
-        subschema: Dict = partial_schema["properties"]
+        subschema: dict = partial_schema["properties"]
         dot_parts = entry.settings_file_path(prefix=settings.application_name_dashed).split(".")
         for part in dot_parts[:-1]:
             if isinstance(subschema, dict):
@@ -150,7 +146,7 @@ def to_schema(settings: ApplicationConfiguration) -> Dict[str, Any]:
     return partial_schema
 
 
-def to_sample(settings: ApplicationConfiguration) -> Tuple[str, str]:
+def to_sample(settings: ApplicationConfiguration) -> tuple[str, str]:
     """Load and clean the settings sample.
 
     :param settings: The application settings
@@ -170,7 +166,7 @@ def to_sample(settings: ApplicationConfiguration) -> Tuple[str, str]:
     template_lines = file_contents[yaml_doc_start:]
 
     # Find all anchors
-    indices: List[Tuple[str, int, SettingsEntry]] = []
+    indices: list[tuple[str, int, SettingsEntry]] = []
     for entry in settings.entries:
         dot_path = entry.settings_file_path(prefix="")
         indent = "  " * len(dot_path.split("."))  # indent 2 spaces for each part

@@ -8,9 +8,6 @@ from __future__ import annotations
 import os
 import shutil
 
-from typing import Optional
-from typing import Tuple
-
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..configuration_subsystem import ApplicationConfiguration
@@ -47,7 +44,7 @@ class Action(ActionBase):
         _out, error, return_code = response
         return RunStdoutReturn(message=error, return_code=return_code)
 
-    def _run_runner(self) -> Optional[Tuple]:
+    def _run_runner(self) -> tuple | None:
         """Spin up runner.
 
         :raises RuntimeError: When ansible-builder can not be found

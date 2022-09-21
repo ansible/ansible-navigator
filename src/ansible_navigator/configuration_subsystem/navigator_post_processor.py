@@ -70,8 +70,8 @@ class NavigatorPostProcessor:
         #: Volume mounts accumulated from post processing various config entries.
         #: These get processed towards the end, in the (delayed)
         #: :meth:`.execution_environment_volume_mounts` post-processor.
-        self.extra_volume_mounts: List[VolumeMount] = []
-        self._requested_mode: List[ModeChangeRequest] = []
+        self.extra_volume_mounts: list[VolumeMount] = []
+        self._requested_mode: list[ModeChangeRequest] = []
 
     @staticmethod
     def _true_or_false(
@@ -79,8 +79,8 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         try:
             entry.value.current = str2bool(entry.value.current)
         except ValueError:
@@ -102,8 +102,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
             entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages
@@ -121,8 +121,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
             try:
                 entry.value.current = int(entry.value.current)
@@ -144,8 +144,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
             try:
                 entry.value.current = int(entry.value.current)
@@ -167,8 +167,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages
 
@@ -182,8 +182,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if isinstance(entry.value.current, str):
             entry.value.current = shlex.split(entry.value.current)
         return messages, exit_messages
@@ -201,8 +201,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.current == "auto":
             choices = filter(lambda x: x != "auto", entry.choices)
             for choice in choices:
@@ -224,8 +224,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.source == C.ENVIRONMENT_VARIABLE:
             entry.value.current = False
             message = f"{entry.environment_variable()} was set, set to {entry.value.current}"
@@ -330,8 +330,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if ":" not in entry.value.current:
             entry.value.current = f"{entry.value.current}:latest"
         return messages, exit_messages
@@ -352,11 +352,11 @@ class NavigatorPostProcessor:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
 
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         entry_name = entry.settings_file_path(prefix="")
         entry_source = entry.value.source
-        volume_mounts: List[VolumeMount] = []
+        volume_mounts: list[VolumeMount] = []
 
         if entry_source in (C.ENVIRONMENT_VARIABLE, C.USER_CLI):
             hint = (
@@ -456,8 +456,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.source == C.ENVIRONMENT_VARIABLE:
             entry.value.current = to_list(entry.value.current)
         if entry.value.current is not C.NOT_SET:
@@ -509,8 +509,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
 
         entry.value.current = flatten_list(entry.value.current)
         # In the case --default was provided, set it to everything
@@ -535,8 +535,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
 
         if entry.value.current is C.NOT_SET:
             # Try the ansible.cfg file
@@ -585,8 +585,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
         return messages, exit_messages
@@ -602,8 +602,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
 
         # If not using an EE, check for ansible-lint before we even pass off to
         # the lint action.
@@ -663,13 +663,13 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         entry.value.current = abs_user_path(entry.value.current)
         try:
             os.makedirs(os.path.dirname(entry.value.current), exist_ok=True)
             Path(entry.value.current).touch()
-        except (IOError, OSError, FileNotFoundError) as exc:
+        except (OSError, FileNotFoundError) as exc:
             exit_msgs = [
                 (
                     f"Failed to create log file {entry.value.current}"
@@ -700,8 +700,8 @@ class NavigatorPostProcessor:
         :raises ValueError: When more than 2 mode changes requests are present, shouldn't happen
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         subcommand_action = None
         subcommand_name = config.subcommand(config.app).name
 
@@ -757,7 +757,7 @@ class NavigatorPostProcessor:
             entry.value.source = C.AUTO
 
         # Check if any other entry has requested a mode change different than current
-        mode_set = set(request.mode for request in self._requested_mode)
+        mode_set = {request.mode for request in self._requested_mode}
         if len(mode_set) == 1:
             requested = self._requested_mode[0]
             auto_mode = requested.mode.value
@@ -790,8 +790,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
 
         is_not_subcommand_match = config.entry("app").value.current != "doc"
         if is_not_subcommand_match:
@@ -844,8 +844,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
         return messages, exit_messages
@@ -859,8 +859,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if config.app == "run" and entry.value.current is C.NOT_SET:
             if config.entry("help_playbook").value.current is False:
                 exit_msg = "A playbook is required when using the run subcommand"
@@ -887,8 +887,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if config.app == "replay" and entry.value.current is C.NOT_SET:
             exit_msg = "An playbook artifact file is required when using the replay subcommand"
             exit_messages.append(ExitMessage(message=exit_msg))
@@ -923,11 +923,11 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         # literal_text, fname, format_spec, conversion
-        found = set(f for _, f, _, _ in Formatter().parse(entry.value.current) if f)
-        available = set(f for _, f, _, _ in Formatter().parse(entry.value.default) if f)
+        found = {f for _, f, _, _ in Formatter().parse(entry.value.current) if f}
+        available = {f for _, f, _, _ in Formatter().parse(entry.value.default) if f}
         non_defaults_also_available = {"playbook_status"}
 
         available.update(non_defaults_also_available)
@@ -957,8 +957,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.source == C.ENVIRONMENT_VARIABLE:
             entry.value.current = to_list(entry.value.current)
         if entry.value.current is not C.NOT_SET:
@@ -981,8 +981,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
 
         if entry.value.source is not C.DEFAULT_CFG and config.app == "settings":
             mode = Mode.STDOUT
@@ -1004,8 +1004,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
         if entry.value.source in [
             C.ENVIRONMENT_VARIABLE,
             C.USER_CLI,
@@ -1043,8 +1043,8 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :returns: An instance of the standard post process return object
         """
-        messages: List[LogMessage] = []
-        exit_messages: List[ExitMessage] = []
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
 
         exit_msg = (
             f"The specified time zone '{entry.value.current}', set by"

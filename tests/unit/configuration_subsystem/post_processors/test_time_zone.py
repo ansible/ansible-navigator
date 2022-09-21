@@ -3,9 +3,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Dict
-from typing import Optional
-from typing import Union
 
 import pytest
 
@@ -21,10 +18,10 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 class Scenario:
     """Data structure for the time zone post processor tests."""
 
-    current: Union[bool, str, Dict]
+    current: bool | str | dict
     source: C
     exit_message_substr: str = ""
-    expected: Optional[str] = None
+    expected: str | None = None
     index: int = 0
 
     def __post_init__(self):

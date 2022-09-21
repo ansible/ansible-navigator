@@ -6,8 +6,6 @@ from argparse import ArgumentParser
 from argparse import HelpFormatter
 from argparse import _SubParsersAction
 from typing import Any
-from typing import Dict
-from typing import Tuple
 
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
@@ -33,7 +31,7 @@ class Parser:
         self._configure_subparsers()
 
     @staticmethod
-    def generate_argument(entry) -> Tuple[Any, Any, Dict[str, Any]]:
+    def generate_argument(entry) -> tuple[Any, Any, dict[str, Any]]:
         """Generate an argparse argument.
 
         :param entry: Single settings entry

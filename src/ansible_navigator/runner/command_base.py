@@ -7,9 +7,6 @@ from __future__ import annotations
 
 import sys
 
-from typing import List
-from typing import Optional
-
 from .base import Base
 
 
@@ -19,9 +16,9 @@ class CommandBase(Base):
     def __init__(
         self,
         executable_cmd: str,
-        cmdline: Optional[List] = None,
-        playbook: Optional[str] = None,
-        inventory: Optional[List] = None,
+        cmdline: list | None = None,
+        playbook: str | None = None,
+        inventory: list | None = None,
         **kwargs,
     ):
         """Handle common arguments of ``run_command`` interface for ``ansible-runner``.
@@ -33,9 +30,9 @@ class CommandBase(Base):
         :param kwargs: The arguments for the runner call
         """
         self._executable_cmd = executable_cmd
-        self._cmdline: List[str] = cmdline if isinstance(cmdline, list) else []
+        self._cmdline: list[str] = cmdline if isinstance(cmdline, list) else []
         self._playbook = playbook
-        self._inventory: List[str] = inventory if isinstance(inventory, list) else []
+        self._inventory: list[str] = inventory if isinstance(inventory, list) else []
         super().__init__(**kwargs)
 
     def generate_run_command_args(self) -> None:

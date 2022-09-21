@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import NamedTuple
 from typing import NewType
-from typing import Optional
 from typing import Tuple
 
 
@@ -43,6 +42,6 @@ class SimpleLinePart:
     #: The column where the characters start, the sum of all previous characters in the line
     column: int
     #: The color for these characters
-    color: Optional[RgbTuple]
+    color: RgbTuple | None
     #: The style for these characters
-    style: Optional[str]
+    style: str | None

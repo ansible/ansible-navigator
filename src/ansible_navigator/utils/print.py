@@ -6,7 +6,6 @@ import math
 import os
 
 from sys import stdout
-from typing import List
 
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentType
@@ -72,7 +71,7 @@ def tokenize(
     content_format: ContentFormat,
     serialized: str,
     share_directory: str,
-) -> List[List[SimpleLinePart]]:
+) -> list[list[SimpleLinePart]]:
     """Serialize and tokenize an object.
 
     :param content_format: The format type

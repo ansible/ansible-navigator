@@ -1,8 +1,6 @@
 """Tests for doc from CLI, stdout."""
 from __future__ import annotations
 
-from typing import List
-
 import pytest
 
 from .base import BaseClass
@@ -14,7 +12,7 @@ CLI_DOC_HELP_WITH_EE = (
     " --execution-environment true"
 )
 
-testdata_1: List = [
+testdata_1: list = [
     (
         0,
         CLI_DOC_HELP_WITH_EE,
@@ -38,7 +36,7 @@ CLI_DOC_HELP_WITHOUT_EE = (
     " --help-doc -m stdout --execution-environment false"
 )
 
-testdata_2: List = [
+testdata_2: list = [
     (
         0,
         CLI_DOC_HELP_WITHOUT_EE,
@@ -62,7 +60,7 @@ CLI_DOC_HELP_WITH_EE_INTERACTIVE_MODE = (
     " --execution-environment true"
 )
 
-testdata_3: List = [
+testdata_3: list = [
     (
         0,
         CLI_DOC_HELP_WITH_EE_INTERACTIVE_MODE,
@@ -86,7 +84,7 @@ CLI_DOC_HELP_WITHOUT_EE_INTERACTIVE_MODE = (
     " --execution-environment false"
 )
 
-testdata_4: List = [
+testdata_4: list = [
     (
         0,
         CLI_DOC_HELP_WITHOUT_EE_INTERACTIVE_MODE,
@@ -109,7 +107,7 @@ CLI_MODULE_DOC_WITHOUT_EE = (
     "ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment false"
 )
 
-testdata_5: List = [
+testdata_5: list = [
     (
         0,
         CLI_MODULE_DOC_WITHOUT_EE,
@@ -133,7 +131,7 @@ CLI_MODULE_DOC_WITH_EE = (
     "ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment true"
 )
 
-testdata_6: List = [
+testdata_6: list = [
     (
         0,
         CLI_MODULE_DOC_WITH_EE,
@@ -158,7 +156,7 @@ CLI_LOOKUP_DOC_WITHOUT_EE = (
     " --execution-environment false"
 )
 
-testdata_7: List = [
+testdata_7: list = [
     (
         0,
         CLI_LOOKUP_DOC_WITHOUT_EE,
@@ -183,7 +181,7 @@ CLI_LOOKUP_DOC_WITH_EE = (
     " --execution-environment true"
 )
 
-testdata_8: List = [
+testdata_8: list = [
     (
         0,
         CLI_LOOKUP_DOC_WITH_EE,

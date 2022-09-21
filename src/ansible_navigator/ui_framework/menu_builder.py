@@ -7,10 +7,6 @@ import re
 
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Tuple
-from typing import Union
 
 from ..content_defs import ContentBase
 from ..content_defs import ContentTypeSequence
@@ -51,9 +47,9 @@ class MenuBuilder:
     def build(
         self,
         dicts: ContentTypeSequence,
-        cols: List[str],
+        cols: list[str],
         indices,
-    ) -> Tuple[CursesLines, CursesLines]:
+    ) -> tuple[CursesLines, CursesLines]:
         """Build menu main entry point.
 
         :param cols: he columns (keys) to use in the dicts
@@ -66,9 +62,9 @@ class MenuBuilder:
     def _menu(
         self,
         dicts: ContentTypeSequence,
-        cols: List[str],
+        cols: list[str],
         indices,
-    ) -> Tuple[CursesLines, CursesLines]:
+    ) -> tuple[CursesLines, CursesLines]:
         """Build a text menu from a list of dicts given columns(root keys).
 
         :param dicts: A list of dicts
@@ -103,7 +99,7 @@ class MenuBuilder:
         menu_lines = self._menu_lines(dicts, menu_layout, indices)
         return CursesLines(tuple([header])), menu_lines
 
-    def _menu_header_line(self, menu_layout: Tuple[List, ...]) -> CursesLine:
+    def _menu_header_line(self, menu_layout: tuple[list, ...]) -> CursesLine:
         """Generate the menu header line.
 
         :param menu_layout: A tuple of menu details:
@@ -120,7 +116,7 @@ class MenuBuilder:
         return CursesLine(line_parts)
 
     @staticmethod
-    def _menu_header_line_part(colno: int, menu_layout: Tuple[List, ...]) -> CursesLinePart:
+    def _menu_header_line_part(colno: int, menu_layout: tuple[list, ...]) -> CursesLinePart:
         """Generate one part of the menu header line.
 
         :param colno: The column number
@@ -153,7 +149,7 @@ class MenuBuilder:
     def _menu_lines(
         self,
         dicts: ContentTypeSequence,
-        menu_layout: Tuple[List, ...],
+        menu_layout: tuple[list, ...],
         indices,
     ) -> CursesLines:
         """Generate all the menu lines.
@@ -172,8 +168,8 @@ class MenuBuilder:
 
     def _menu_line(
         self,
-        menu_entry: Union[Dict[str, Any], ContentBase],
-        menu_layout: Tuple[List, ...],
+        menu_entry: dict[str, Any] | ContentBase,
+        menu_layout: tuple[list, ...],
     ) -> CursesLine:
         """Generate one the menu line.
 
@@ -198,8 +194,8 @@ class MenuBuilder:
         self,
         colno: int,
         coltext: Any,
-        menu_entry: Union[Dict[str, Any], ContentBase],
-        menu_layout: Tuple[List, ...],
+        menu_entry: dict[str, Any] | ContentBase,
+        menu_layout: tuple[list, ...],
     ) -> CursesLinePart:
         # pylint: disable=too-many-locals
         """Generate one menu line part.

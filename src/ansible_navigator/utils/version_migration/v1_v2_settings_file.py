@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Dict
-
 from ..dot_paths import MergeBehaviors
 from ..dot_paths import check_path
 from ..dot_paths import get_with_path
@@ -27,7 +25,7 @@ class V1V2SettingsFile(SettingsFile):
     def __init__(self):
         """Initialize the v1 to v2 settings file migration."""
         super().__init__()
-        self.content: Dict = {}
+        self.content: dict = {}
         self._backup_suffix = ".v1"
 
     @MigrationStep.register(MigrationStep(name="config path"))
@@ -309,7 +307,7 @@ class V1V2SettingsFile(SettingsFile):
             return False
 
         if self.check:
-            return any(("label" in item for item in value))
+            return any("label" in item for item in value)
 
         for item in value:
             if "label" in item:

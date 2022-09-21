@@ -1,8 +1,6 @@
 """The settings file migration base class."""
 from __future__ import annotations
 
-from typing import Dict
-
 from ...content_defs import ContentView
 from ...content_defs import SerializationFormat
 from ..ansi import COLOR
@@ -22,7 +20,7 @@ class SettingsFile(Migration):
     def __init__(self):
         """Initialize the settings file migration."""
         super().__init__()
-        self.content: Dict = {}
+        self.content: dict = {}
         self._backup_suffix = ".v0"
 
     def run(self, *args, **kwargs) -> None:

@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import List
-from typing import Tuple
 
 from .curses_window import CursesWindow
 
@@ -26,7 +24,7 @@ class FormHandlerWorking(CursesWindow):
         self._screen = screen
 
     @staticmethod
-    def handle(idx, form_fields: List) -> Tuple["FieldWorking", int]:
+    def handle(idx, form_fields: list) -> tuple[FieldWorking, int]:
         """Handle the information field, immediate return.
 
         :param idx: Index to retrieve specific field

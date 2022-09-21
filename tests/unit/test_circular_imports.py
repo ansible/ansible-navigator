@@ -20,14 +20,13 @@ from itertools import chain
 from pathlib import Path
 from types import ModuleType
 from typing import Generator
-from typing import List
 
 import pytest
 
 import ansible_navigator
 
 
-def _find_all_importables(pkg: ModuleType) -> List[str]:
+def _find_all_importables(pkg: ModuleType) -> list[str]:
     """Find all importables in the project.
 
     :param pkg: The package in which importables will be found

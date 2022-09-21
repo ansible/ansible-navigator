@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from collections import deque
-from typing import Tuple
 
 import pytest
 
@@ -27,8 +26,8 @@ serialization_formats = pytest.mark.parametrize(
 @serialization_formats
 @content_views
 def test_custom_class(
-    content_view: Tuple[str, ContentView],
-    serialization_format: Tuple[str, SerializationFormat],
+    content_view: tuple[str, ContentView],
+    serialization_format: tuple[str, SerializationFormat],
 ):
     """Ensure an error is provided when something can't be serialized.
 
@@ -56,8 +55,8 @@ def test_custom_class(
 @serialization_formats
 @content_views
 def test_deque(
-    content_view: Tuple[str, ContentView],
-    serialization_format: Tuple[str, SerializationFormat],
+    content_view: tuple[str, ContentView],
+    serialization_format: tuple[str, SerializationFormat],
 ):
     """Ensure an error is provided when something can't be serialized.
 

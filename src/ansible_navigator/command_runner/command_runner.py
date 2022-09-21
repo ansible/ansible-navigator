@@ -8,8 +8,6 @@ from dataclasses import dataclass
 from dataclasses import field
 from queue import Queue
 from typing import Callable
-from typing import List
-from typing import Optional
 
 from ..utils.definitions import LogMessage
 
@@ -32,9 +30,9 @@ class Command:
     return_code: int = 0
     stdout: str = ""
     stderr: str = ""
-    details: List = field(default_factory=list)
+    details: list = field(default_factory=list)
     errors: str = ""
-    messages: List[LogMessage] = field(default_factory=list)
+    messages: list[LogMessage] = field(default_factory=list)
 
     @property
     def stderr_lines(self):
@@ -61,10 +59,9 @@ def run_command(command: Command) -> None:
     try:
         proc_out = subprocess.run(
             command.command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             check=True,
-            universal_newlines=True,
+            text=True,
             shell=True,
         )
         command.return_code = proc_out.returncode
@@ -95,24 +92,24 @@ class CommandRunner:
 
     def __init__(self):
         """Initialize the command runner."""
-        self._completed_queue: Optional[Queue] = None
-        self._pending_queue: Optional[Queue] = None
+        self._completed_queue: Queue | None = None
+        self._pending_queue: Queue | None = None
 
     @staticmethod
-    def run_single_proccess(commands: List[Command]):
+    def run_single_proccess(commands: list[Command]):
         """Run commands with a single process.
 
         :param commands: All commands to be run
         :returns: The results from running all commands
         """
-        results: List[Command] = []
+        results: list[Command] = []
         for command in commands:
             run_command(command)
             command.post_process(command)
             results.append(command)
         return results
 
-    def run_multi_proccess(self, commands: List[Command]) -> List[Command]:
+    def run_multi_proccess(self, commands: list[Command]) -> list[Command]:
         """Run commands with multiple processes.
 
         Workers are started to read from pending queue.
@@ -128,7 +125,7 @@ class CommandRunner:
             self._pending_queue = multiprocessing.Manager().Queue()
 
         self.start_workers(commands)
-        results: List[Command] = []
+        results: list[Command] = []
         while len(results) != len(commands):
             results.append(self._completed_queue.get())
         return results

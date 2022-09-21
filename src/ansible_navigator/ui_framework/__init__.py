@@ -3,7 +3,6 @@
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
-from .form import Form
 from .form_utils import dict_to_form
 from .form_utils import error_notification
 from .form_utils import form_to_dict
@@ -31,7 +30,6 @@ __all__ = (
     "dict_to_form",
     "error_notification",
     "form_to_dict",
-    "Form",
     "Interaction",
     "Menu",
     "nonblocking_notification",

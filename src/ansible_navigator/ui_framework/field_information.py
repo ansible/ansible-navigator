@@ -3,9 +3,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Callable
-from typing import List
-from typing import Optional
-from typing import Union
 
 from .curses_window import Window
 from .form_handler_information import FormHandlerInformation
@@ -19,12 +16,12 @@ class FieldInformation:
     """A text input field."""
 
     name: str
-    information: List[str]
+    information: list[str]
     current_error: str = ""
     window_handler = FormHandlerInformation
-    valid: Union[bool, Unknown] = unknown
+    valid: bool | Unknown = unknown
     validator: Callable = FieldValidators.null
-    win: Optional[Window] = None
+    win: Window | None = None
 
     @property
     def full_prompt(self) -> str:

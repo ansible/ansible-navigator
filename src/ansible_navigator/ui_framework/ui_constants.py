@@ -4,7 +4,6 @@ from __future__ import annotations
 import curses
 
 from enum import IntEnum
-from typing import Optional
 
 
 class Color(IntEnum):
@@ -61,7 +60,7 @@ class Decoration(IntEnum):
     """131072"""
 
     @classmethod
-    def get_best(cls, name: Optional[str]) -> int:
+    def get_best(cls, name: str | None) -> int:
         """Return the default value for a missing value.
 
         :param name: The name of the value

@@ -8,10 +8,6 @@ import shutil
 import sys
 
 from pathlib import Path
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
 
 import pytest
 
@@ -32,8 +28,8 @@ def get_executable_path(name):
 def retrieve_fixture_for_step(
     request: pytest.FixtureRequest,
     step_index: int,
-    test_name: Optional[str] = None,
-) -> List[str]:
+    test_name: str | None = None,
+) -> list[str]:
     """Retrieve a fixture based on the test request and step index.
 
     :param request: The current test request
@@ -50,10 +46,10 @@ def retrieve_fixture_for_step(
 def update_fixtures(
     request: pytest.FixtureRequest,
     index: int,
-    received_output: List[str],
+    received_output: list[str],
     comment: str,
-    testname: Optional[str] = None,
-    additional_information: Optional[Dict[str, Union[List[str], bool]]] = None,
+    testname: str | None = None,
+    additional_information: dict[str, list[str] | bool] | None = None,
     zfill_index: int = 1,
 ):
     # pylint: disable=too-many-arguments
@@ -95,7 +91,7 @@ def update_fixtures(
 def fixture_path_from_request(
     request: pytest.FixtureRequest,
     index: int,
-    testname: Optional[str] = None,
+    testname: str | None = None,
     suffix: str = ".json",
     zfill_index: int = 1,
 ) -> Path:
@@ -210,7 +206,7 @@ def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
         # continue with other files
         except Error as err:
             errors.extend(err.args[0])
-        except EnvironmentError as why:
+        except OSError as why:
             errors.append((source_path, destination_path, str(why)))
     try:
         shutil.copystat(src, dst)

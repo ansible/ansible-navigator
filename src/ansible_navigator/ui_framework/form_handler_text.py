@@ -6,7 +6,6 @@ import curses
 
 from curses import ascii as curses_ascii
 from curses.textpad import Textbox
-from typing import Tuple
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -85,7 +84,7 @@ class FormHandlerText(CursesWindow, Textbox):
             self._arrowing = 0
         return ret
 
-    def handle(self, idx, form_fields) -> Tuple[str, int]:
+    def handle(self, idx, form_fields) -> tuple[str, int]:
         """Edit in the widget window and collect the results.
 
         :param idx: Index to retrieve specific field

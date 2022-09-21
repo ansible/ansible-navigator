@@ -6,8 +6,6 @@ import shlex
 import subprocess
 
 from dataclasses import dataclass
-from typing import List
-from typing import Union
 
 from ..configuration_subsystem import Constants
 from ..utils.definitions import ExitMessage
@@ -24,8 +22,8 @@ class ImageAssessment:
     with the determination of whether or not a pull is required.
     """
 
-    messages: List[LogMessage]
-    exit_messages: List[ExitMessage]
+    messages: list[LogMessage]
+    exit_messages: list[ExitMessage]
     pull_required: bool
 
 
@@ -37,7 +35,7 @@ class ImagePuller:
         self,
         container_engine: str,
         image: str,
-        arguments: Union[Constants, List[str]],
+        arguments: Constants | list[str],
         pull_policy: str,
     ):
         """Initialize the container image puller.
@@ -54,12 +52,12 @@ class ImagePuller:
 
         self._assessment = ImageAssessment
         self._container_engine: str = container_engine
-        self._exit_messages: List[ExitMessage] = []
+        self._exit_messages: list[ExitMessage] = []
         self._image: str = image
         self._image_present: bool
         self._image_tag: str
         self._logger = logging.getLogger(__name__)
-        self._messages: List[LogMessage] = []
+        self._messages: list[LogMessage] = []
         self._pull_policy: str = pull_policy
         self._pull_required: bool = False
 
@@ -98,8 +96,7 @@ class ImagePuller:
             subprocess.run(
                 [self._container_engine, "image", "inspect", self._image],
                 check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                capture_output=True,
             )
             self._image_present = True
 
@@ -158,11 +155,11 @@ class ImagePuller:
         messages.append(("Execution environment pull policy:", self._pull_policy))
         messages.append(("Execution environment pull needed:", self._pull_required))
 
-        width = max((len(m[0]) + len(str(m[1])) + 2 for m in messages))
+        width = max(len(m[0]) + len(str(m[1])) + 2 for m in messages)
         print("\u002d" * width)
         print("Execution environment image and pull policy overview")
         print("\u002d" * width)
-        column_width = max((len(m[0]) for m in messages))
+        column_width = max(len(m[0]) for m in messages)
         for msg, value in messages:
             print(f"{msg.ljust(column_width)} {value!s}")
             self._log_message(message=f"{msg!s}: {value!s}", level=logging.INFO)
@@ -170,7 +167,7 @@ class ImagePuller:
         print("Updating the execution environment")
         print("\u002d" * width)
 
-    def _generate_pull_command(self) -> List[str]:
+    def _generate_pull_command(self) -> list[str]:
         """Generate the pull command.
 
         :returns: The list of command parts

@@ -4,8 +4,6 @@ from __future__ import annotations
 import os
 
 from copy import deepcopy
-from typing import Dict
-from typing import List
 from typing import NamedTuple
 
 import pytest
@@ -34,10 +32,10 @@ TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
 class GenerateConfigResponse(NamedTuple):
     """Object for generate_config_response."""
 
-    messages: List[LogMessage]
-    exit_messages: List[ExitMessage]
+    messages: list[LogMessage]
+    exit_messages: list[ExitMessage]
     application_configuration: ApplicationConfiguration
-    settings_contents: Dict
+    settings_contents: dict
 
 
 def _generate_config(params=None, setting_file_name=None, initial=True) -> GenerateConfigResponse:
@@ -131,7 +129,7 @@ def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaT
     :returns: the json schema as a dictionary
     """
 
-    def property_dive(subschema: Dict):
+    def property_dive(subschema: dict):
         if "properties" in subschema:
             subschema["required"] = list(subschema["properties"].keys())
             for value in subschema["properties"].values():

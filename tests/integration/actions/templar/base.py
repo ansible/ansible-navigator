@@ -5,7 +5,6 @@ import difflib
 import os
 
 from copy import copy
-from typing import Optional
 
 import pytest
 
@@ -59,7 +58,7 @@ class BaseClass:
     """Base class for interactive templar tests."""
 
     UPDATE_FIXTURES = False
-    TEST_FOR_MODE: Optional[str] = None
+    TEST_FOR_MODE: str | None = None
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")

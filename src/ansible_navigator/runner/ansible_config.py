@@ -1,9 +1,6 @@
 """Herein lies the ability for ansible-runner to run the ansible-config command."""
 from __future__ import annotations
 
-from typing import Optional
-from typing import Tuple
-
 from ansible_runner import get_ansible_config
 
 from .base import Base
@@ -15,9 +12,9 @@ class AnsibleConfig(Base):
     def fetch_ansible_config(
         self,
         action: str,
-        config_file: Optional[str] = None,
-        only_changed: Optional[bool] = None,
-    ) -> Tuple[str, str]:
+        config_file: str | None = None,
+        only_changed: bool | None = None,
+    ) -> tuple[str, str]:
         """Run ansible-config command and get the configuration related details.
 
         :param action: The configuration fetch action to perform. Valid values are one of

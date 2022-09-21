@@ -5,10 +5,6 @@ from collections.abc import Iterable
 from copy import deepcopy
 from dataclasses import dataclass
 from itertools import repeat
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
 
 import pytest
 
@@ -23,9 +19,9 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 class Scenario:
     """Data structure for EEV post processor tests."""
 
-    current: Union[bool, str, List, Dict]
+    current: bool | str | list | dict
     source: C
-    expected: Optional[List[str]] = None
+    expected: list[str] | None = None
     exit_message_substr: str = ""
     index: int = 0
 

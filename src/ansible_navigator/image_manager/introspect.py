@@ -13,7 +13,6 @@ from types import SimpleNamespace
 from typing import Callable
 from typing import Dict
 from typing import List
-from typing import Optional
 from typing import Union
 
 
@@ -30,8 +29,8 @@ class Command(SimpleNamespace):
     parse: Callable
     stdout: str = ""
     stderr: str = ""
-    details: Union[List, Dict, str] = ""
-    errors: List = []
+    details: list | dict | str = ""
+    errors: list = []
 
 
 def run_command(command: Command) -> None:
@@ -42,10 +41,9 @@ def run_command(command: Command) -> None:
     try:
         proc_out = subprocess.run(
             command.command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             check=True,
-            universal_newlines=True,
+            text=True,
             shell=True,
         )
         command.stdout = proc_out.stdout
@@ -80,8 +78,8 @@ class CommandRunner:
 
     def __init__(self):
         """Initialize the command runner."""
-        self._completed_queue: Optional[Queue] = None
-        self._pending_queue: Optional[Queue] = None
+        self._completed_queue: Queue | None = None
+        self._pending_queue: Queue | None = None
 
     def run_multi_thread(self, command_classes):
         """Run commands with multiple threads.
@@ -221,7 +219,7 @@ class AnsibleVersion(CmdParser):
     """Ansible version collector."""
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Define the ansible command to get the version.
 
         :returns: The defined command
@@ -242,7 +240,7 @@ class OsRelease(CmdParser):
     """OS release information collector."""
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Define the command to collect os release information.
 
         :returns: The defined command
@@ -262,7 +260,7 @@ class PythonPackages(CmdParser):
     """Python package collector."""
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Define the pip command to list installed pip packages.
 
         :returns: The defined command
@@ -303,7 +301,7 @@ class RedhatRelease(CmdParser):
     """Red Hat release collector."""
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Define the command to get the redhat release information.
 
         :returns: The defined command
@@ -324,7 +322,7 @@ class SystemPackages(CmdParser):
     """System packages collector."""
 
     @property
-    def commands(self) -> List[Command]:
+    def commands(self) -> list[Command]:
         """Define the command to list system packages.
 
         :returns: The defined command
@@ -375,13 +373,13 @@ class SystemPackages(CmdParser):
         command.details = parsed
 
 
-def main(serialize: bool = True) -> Optional[Dict[str, JSONTypes]]:
+def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     """Enter the image introspection process.
 
     :param serialize: Whether to serialize the results
     :returns: The collected data or none if serialize is False
     """
-    response: Dict = {"errors": []}
+    response: dict = {"errors": []}
     response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}
     response["environment_variables"] = {"details": dict(os.environ)}
     try:

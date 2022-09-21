@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Optional
 
 import pytest
 
@@ -18,8 +17,8 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 class Scenario:
     """Data structure for PAS post processor tests."""
 
-    current: Optional[str] = None
-    expected: Optional[str] = None
+    current: str | None = None
+    expected: str | None = None
     exit_message_substr: str = ""
 
     def __post_init__(self):

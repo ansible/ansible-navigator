@@ -9,11 +9,6 @@ import shutil
 
 from pathlib import Path
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
 
 from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase
@@ -34,7 +29,7 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, int]:
+def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Provide a color for a inventory menu entry in one column.
 
     :param colno: The column number
@@ -64,7 +59,7 @@ def color_menu(colno: int, colname: str, entry: Dict[str, Any]) -> Tuple[int, in
     return colors[colno % len(colors)], Decoration.NORMAL
 
 
-def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
+def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
     """Create a heading for inventory content.
 
     :param obj: The content going to be shown
@@ -84,7 +79,7 @@ def content_heading(obj: Any, screen_w: int) -> Optional[CursesLines]:
     return CursesLines((CursesLine((line_part,)),))
 
 
-def filter_content_keys(obj: Dict[Any, Any]) -> Dict[Any, Any]:
+def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing inventory content.
 
     :param obj: The object from which keys should be removed
@@ -116,15 +111,15 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="inventory")
 
-        self.__inventory: Dict[Any, Any] = {}
-        self._host_vars: Dict[str, Dict[Any, Any]]
-        self._inventories_mtime: Optional[float]
-        self._inventories: List[str] = []
+        self.__inventory: dict[Any, Any] = {}
+        self._host_vars: dict[str, dict[Any, Any]]
+        self._inventories_mtime: float | None
+        self._inventories: list[str] = []
         self._inventory_error: str = ""
-        self._runner: Union[Command, AnsibleInventory]
+        self._runner: Command | AnsibleInventory
 
     @property
-    def _inventory(self) -> Dict[Any, Any]:
+    def _inventory(self) -> dict[Any, Any]:
         """Return the inventory.
 
         :returns: The inventory details
@@ -132,7 +127,7 @@ class Action(ActionBase):
         return self.__inventory
 
     @_inventory.setter
-    def _inventory(self, value: Dict) -> None:
+    def _inventory(self, value: dict) -> None:
         """Set the inventory and hostvars.
 
         :param value: The inventory data
@@ -149,7 +144,7 @@ class Action(ActionBase):
                 self._host_vars[host] = {"inventory_hostname": host}
 
     @property
-    def _show_columns(self) -> List:
+    def _show_columns(self) -> list:
         """Return the columns to show for an inventory menu.
 
         :returns: The columns to show
@@ -180,7 +175,7 @@ class Action(ActionBase):
         """Request calling app update, inventory update checked in ``run()``."""
         self._calling_app.update()
 
-    def run(self, interaction: Interaction, app: AppPublic) -> Optional[Interaction]:
+    def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``inventory`` request for mode interactive.
 
         :param interaction: The interaction from the user
@@ -441,7 +436,7 @@ class Action(ActionBase):
 
     def _collect_inventory_details_interactive(
         self,
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
     ) -> None:
         # pylint: disable=too-many-branches
         """Use the runner subsystem to collect inventory details for mode interactive.
@@ -500,8 +495,8 @@ class Action(ActionBase):
 
     def _collect_inventory_details_automated(
         self,
-        kwargs: Dict[str, Any],
-    ) -> Tuple[Optional[str], Optional[str], Optional[int]]:
+        kwargs: dict[str, Any],
+    ) -> tuple[str | None, str | None, int | None]:
         """Use the runner subsystem to collect inventory details for mode stdout.
 
         :param kwargs: The arguments for the runner call
@@ -534,7 +529,7 @@ class Action(ActionBase):
 
     def _collect_inventory_details(
         self,
-    ) -> Tuple[Optional[str], Optional[str], Optional[int]]:
+    ) -> tuple[str | None, str | None, int | None]:
         """Use the runner subsystem to collect inventory details for either mode.
 
         :returns: For mode interactive nothing. For mode stdout, the output, errors and return

@@ -7,7 +7,6 @@ import subprocess
 
 from copy import deepcopy
 from pathlib import Path
-from typing import Tuple
 
 import pytest
 
@@ -76,7 +75,7 @@ def use_venv(monkeypatch: pytest.MonkeyPatch):
 
 
 @pytest.fixture(name="settings_samples")
-def _settings_samples() -> Tuple[str, str]:
+def _settings_samples() -> tuple[str, str]:
     """Provide the full settings samples
 
     :returns: The commented and uncommented samples
@@ -88,10 +87,10 @@ def _settings_samples() -> Tuple[str, str]:
 
 @pytest.fixture()
 def settings_env_var_to_full(
-    settings_samples: Tuple[str, str],
+    settings_samples: tuple[str, str],
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
-) -> Tuple[Path, SettingsFileType]:
+) -> tuple[Path, SettingsFileType]:
     """Set the settings environment variable to a full sample settings file in a tmp path."""
     _commented, uncommented = settings_samples
     settings_contents = yaml.load(uncommented, Loader=Loader)

@@ -6,9 +6,6 @@ import json
 from dataclasses import dataclass
 from typing import Any
 from typing import Deque
-from typing import Dict
-from typing import List
-from typing import Union
 
 from jsonschema import SchemaError
 from jsonschema import ValidationError
@@ -51,7 +48,7 @@ class JsonSchemaError:
     json_path: str
     schema_path: str
     relative_schema: str
-    expected: Union[bool, int, str]
+    expected: bool | int | str
     validator: str
     found: str
 
@@ -70,14 +67,14 @@ class JsonSchemaError:
         return ExitMessage(message=self.to_friendly())
 
 
-def validate(schema: Union[str, Dict[str, Any]], data: Dict[str, Any]) -> List[JsonSchemaError]:
+def validate(schema: str | dict[str, Any], data: dict[str, Any]) -> list[JsonSchemaError]:
     """Validate some data against a JSON schema.
 
     :param schema: the JSON schema to use for validation
     :param data: The data to validate
     :returns: Any errors encountered
     """
-    errors: List[JsonSchemaError] = []
+    errors: list[JsonSchemaError] = []
 
     if isinstance(schema, str):
         schema = json.loads(schema)
