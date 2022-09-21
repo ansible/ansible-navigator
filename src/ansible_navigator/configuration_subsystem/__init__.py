@@ -17,7 +17,6 @@ from .transform import to_sources
 
 
 __all__ = (
-    "ApplicationConfiguration",
     "Configurator",
     "Constants",
     "NavigatorConfiguration",
