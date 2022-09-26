@@ -4,7 +4,7 @@ default_language_version:
   python: python3.10
 repos:
   - repo: https://github.com/asottile/add-trailing-comma.git
-    rev: v2.2.3
+    rev: v2.3.0
     hooks:
       - id: add-trailing-comma
         args:
@@ -53,7 +53,7 @@ repos:
           - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.9.0
+    rev: v6.10.0
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -149,7 +149,7 @@ repos:
           - flake8-isort >= 4.1.1
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v2.37.3
+    rev: v2.38.2
     hooks:
       - id: pyupgrade
         args: ["--py38-plus"]
