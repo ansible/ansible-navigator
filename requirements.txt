@@ -62,8 +62,8 @@ pycodestyle==2.8.0
 pycparser==2.21
 pydocstyle==6.1.1
 pyflakes==2.4.0
-pyparsing==3.0.7
 pygments==2.13.0
+pyparsing==3.0.7
 pyrsistent==0.18.1
 pytest==7.1.1
 pytest-cov==3.0.0
@@ -95,10 +95,10 @@ sphinxcontrib-serializinghtml==1.1.5
 sphinxcontrib-towncrier==0.3.0a0
 toml==0.10.2
 tomli==2.0.1
-tzdata==2022.1
 towncrier==22.8.0
 types-setuptools==65.3.0
 typing-extensions==4.3.0 ; python_version < "3.10.0"
+tzdata==2022.1
 uc-micro-py==1.0.1
 urllib3==1.26.9
 virtualenv==20.14.0
