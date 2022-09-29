@@ -26,7 +26,7 @@ from typing import Any
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..runner.command import Command
 from ..steps import Step
 from ..ui_framework import Color

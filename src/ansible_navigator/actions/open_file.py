@@ -11,7 +11,7 @@ from typing import Callable
 from typing import Optional
 
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..content_defs import ContentBase
 from ..content_defs import ContentFormat
 from ..content_defs import ContentType

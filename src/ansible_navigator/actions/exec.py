@@ -11,7 +11,7 @@ from typing import Tuple
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..configuration_subsystem.definitions import Constants
 from ..runner import Command
 from . import _actions as actions

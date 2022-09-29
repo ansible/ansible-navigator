@@ -12,8 +12,8 @@ from typing import Any
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
 from ..configuration_subsystem import Constants
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..content_defs import ContentFormat
 from ..image_manager import inspect_all
 from ..runner import Command

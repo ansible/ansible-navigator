@@ -10,7 +10,7 @@ from collections.abc import Mapping
 
 from ..action_base import ActionBase
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..content_defs import ContentFormat
 from ..ui_framework import Interaction
 from ..ui_framework import warning_notification

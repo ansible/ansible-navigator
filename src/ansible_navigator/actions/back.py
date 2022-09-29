@@ -5,7 +5,7 @@ Additionally triggered by the escape key.
 import logging
 
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..steps import Step
 from ..ui_framework import Interaction
 from . import _actions as actions

@@ -20,10 +20,10 @@ from pkg_resources import working_set
 
 from .command_runner import Command
 from .command_runner import CommandRunner
-from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants
 from .configuration_subsystem import to_effective
 from .configuration_subsystem import to_sources
+from .configuration_subsystem.definitions import ApplicationConfiguration
 from .image_manager import introspect
 from .image_manager import introspector
 from .utils import ansi

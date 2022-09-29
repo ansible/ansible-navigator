@@ -7,7 +7,7 @@ or entry at the single line prompt. e.g ``:42``
 import logging
 
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..ui_framework import Interaction
 from . import _actions as actions
 

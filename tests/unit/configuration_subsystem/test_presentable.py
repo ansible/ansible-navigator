@@ -4,12 +4,14 @@ from dataclasses import asdict
 
 import pytest
 
-from ansible_navigator.configuration_subsystem import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem import Configurator
 from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.configuration_subsystem import PresentableSettingsEntry
 from ansible_navigator.configuration_subsystem import SettingsEntry
 from ansible_navigator.configuration_subsystem import to_presentable
+from ansible_navigator.configuration_subsystem.definitions import (
+    ApplicationConfiguration,
+)
 from ansible_navigator.configuration_subsystem.definitions import CliParameters
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntryValue
 from ansible_navigator.configuration_subsystem.definitions import SubCommand

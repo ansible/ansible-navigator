@@ -5,8 +5,8 @@ import datetime
 import logging
 import os
 
-from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants
+from .configuration_subsystem.definitions import ApplicationConfiguration
 from .utils.compatibility import zoneinfo
 
 
