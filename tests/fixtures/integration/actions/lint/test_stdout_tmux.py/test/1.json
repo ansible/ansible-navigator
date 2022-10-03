@@ -1,5 +1,5 @@
 {
-    "name": "test[lint stdout with no errors  ansible-navigator lint /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout]",
+    "name": "test[lint stdout with no errors  ansible-navigator lint /tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout]",
     "index": 1,
     "comment": "lint stdout with no errors",
     "additional_information": {
@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "(py310) bash-5.1$  ansible-navigator lint /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout",
+        "(venv) bash-5.1$  ansible-navigator lint /home/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout",
         "WARNING: PATH altered to include /usr/bin"
     ]
 }

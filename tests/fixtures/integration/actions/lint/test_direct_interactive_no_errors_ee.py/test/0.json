@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator lint /nvme/rick/dev/ansible/winston/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode interactive-ansible-navigator lint top window]",
+    "name": "test[0-ansible-navigator lint /tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode interactive-ansible-navigator lint top window]",
     "index": 0,
     "comment": "ansible-navigator lint top window",
     "additional_information": {

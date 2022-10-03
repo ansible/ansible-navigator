@@ -12,10 +12,10 @@
         "compared_fixture": false
     },
     "output": [
-        "  Name                      Version             Shadowed    Type          Path",
-        "0│ansible.builtin           2.12.4rc1.post0     False       contained     /usr/local/lib/python3.8/site-packages/ansible",
-        "1│company_name.coll_1       1.0.0               False       bind_mount    FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1",
-        "2│company_name.coll_2       2.0.0               False       bind_mount    FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_2",
+        "  Name                      Version          Shadowed    Type          Path",
+        "0│ansible.builtin           2.12.4.post0     False       contained     /usr/local/lib/python3.8/site-packages/ansible",
+        "1│company_name.coll_1       1.0.0            False       bind_mount    FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_1",
+        "2│company_name.coll_2       2.0.0            False       bind_mount    FIXTURES_COLLECTION_DIR/test_direct_interactive_ee.py/collections/ansible_collections/company_name/coll_2",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
