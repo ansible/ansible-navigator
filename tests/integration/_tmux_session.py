@@ -326,6 +326,11 @@ class TmuxSession:
         if mode == "shell" and send_clear:
             self._pane.send_keys("clear")
 
+        # Prior to libtmux v15, all empty lines were removed
+        # from the captured pane. For fixture readability, remove them here
+        # https://github.com/tmux-python/libtmux/pull/405/files
+        showing = [line for line in showing if line != ""]
+
         return showing
 
     def _get_cli_prompt(self):
