@@ -73,7 +73,7 @@ fixture_test_data = (
     StdoutTest(
         action_name="doc",
         action_params=(("cmdline", ["--json"]),),
-        # cspelldisable-next
+        # cspell:disable-next-line
         present="ncorrect options passed",
         return_code=5,
     ),
