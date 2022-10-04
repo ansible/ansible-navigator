@@ -12,7 +12,7 @@
         "compared_fixture": false
     },
     "output": [
-        "(venv) bash-5.1$  ansible-navigator collections --ee True --ll debug --mode stdout",
+        "(venv) bash-5.1$ ansible-navigator collections --ee True --ll debug --mode stdout",
         "---",
         "collections:",
         "- collection_info:",

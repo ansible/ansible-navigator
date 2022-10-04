@@ -25,10 +25,11 @@
         "11│  _ansible_verbose_always: true",
         "12│  changed: false",
         "13│  msg: This is play-1 task-2",
+        "14│resolved_action: ansible.builtin.debug",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "15│task: debug print play-1 task-2",
-        "16│task_action: debug",
-        "17│task_args: ''",
+        "16│task: debug print play-1 task-2",
+        "17│task_action: debug",
+        "18│task_args: ''",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "^b/PgUp page up                                                  ^f/PgDn page down                                                  ↑↓ scroll                                                  esc back                                                  - previous                                                  + next                                                  [0-9] goto                                                  :help help                                                     Successful"
     ]
