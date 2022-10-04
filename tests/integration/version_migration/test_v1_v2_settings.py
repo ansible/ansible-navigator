@@ -68,6 +68,6 @@ def test_all(
     if os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true":
         shutil.copy(destination, corrected)
 
-    assert "ansible-navigator 2." in result[-3]
+    assert any("ansible-navigator 2." in line for line in result)
     assert filecmp.cmp(destination, corrected)
     assert filecmp.cmp(source, backup)

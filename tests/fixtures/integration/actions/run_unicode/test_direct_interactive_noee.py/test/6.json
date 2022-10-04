@@ -23,7 +23,7 @@
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         " 8│remote_addr: localhost",
         " 9│res:",
-        "10│  _ansible_no_log: false",
+        "10│  _ansible_no_log: null",
         "11│  _ansible_verbose_always: true",
         "12│  changed: false",
         "13│  output:",
@@ -36,10 +36,11 @@
         "20│      航海家",
         "21│    stdout_lines:",
         "22│    - 航海",
+        "23│resolved_action: ansible.builtin.debug",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "24│task: Debug the output",
-        "25│task_action: debug",
-        "26│task_args: ''",
+        "25│task: Debug the output",
+        "26│task_action: debug",
+        "27│task_args: ''",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Successful"
     ]
