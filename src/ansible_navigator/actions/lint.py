@@ -1,3 +1,5 @@
+# cspell:ignore fqcn,FQCN
+
 """This action provides ansible-lint results through ansible-navigator.
 
 Internally, it works by using ansible-runner to execute ansible-lint (optionally
