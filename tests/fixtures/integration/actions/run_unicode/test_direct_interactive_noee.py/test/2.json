@@ -23,7 +23,7 @@
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         " 8│remote_addr: localhost",
         " 9│res:",
-        "10│  _ansible_no_log: false",
+        "10│  _ansible_no_log: null",
         "11│  changed: true",
         "12│  rc: 0",
         "13│  stderr: ''",
@@ -32,10 +32,11 @@
         "16│    航海家",
         "17│  stdout_lines:",
         "18│  - 航海",
+        "19│resolved_action: ansible.builtin.raw",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "20│task: Raw with unicode arg and output",
-        "21│task_action: raw",
-        "22│task_args: ''",
+        "21│task: Raw with unicode arg and output",
+        "22│task_action: raw",
+        "23│task_args: ''",
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Successful"
     ]
