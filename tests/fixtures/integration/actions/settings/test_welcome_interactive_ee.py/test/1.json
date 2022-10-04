@@ -28,7 +28,7 @@
         "13│Exec command                                         True       Defaults                           /bin/bash",
         "14│Exec shell                                           True       Defaults                           True",
         "15│Execution environment                                True       Command line                       True",
-        "16│Execution environment image                          True       Defaults                           quay.io/ansible/creator-ee:v0.4.2",
+        "16│Execution environment image                          True       Defaults                           quay.io/ansible/creator-ee:v0.9.1",
         "17│Execution environment volume mounts                  True       Not set                            Not set",
         "18│Help builder                                         True       Defaults                           False",
         "19│Help config                                          True       Defaults                           False",

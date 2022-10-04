@@ -28,10 +28,10 @@
         " 16│Cache plugin connection                                                                                       False                 env                   XXXXXXX",
         " 17│Cache plugin prefix                                                                                           True                  default               ansible_facts",
         " 18│Cache plugin timeout                                                                                          False                 env                   42",
-        " 19│Callable accept list                                                                                          True                  default               []",
-        " 20│Callbacks enabled                                                                                             True                  default               []",
-        " 21│Collections on ansible version mismatch                                                                       True                  default               warning",
-        " 22│Collections paths                                                                                             True                  default               XXXXXXX",
+        " 19│Callbacks enabled                                                                                             True                  default               []",
+        " 20│Collections on ansible version mismatch                                                                       True                  default               warning",
+        " 21│Collections paths                                                                                             True                  default               XXXXXXX",
+        " 22│Collections scan sys path                                                                                     True                  default               True",
         "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }

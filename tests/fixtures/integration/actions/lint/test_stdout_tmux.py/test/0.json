@@ -10,17 +10,17 @@
         "compared_fixture": false
     },
     "output": [
-        "fqcn-builtins: Use FQCN for builtin actions.",
-        "lint/borked/roles/uh-huh/tasks/main.yml:1 Task/Handler: demo",
-        "fqcn-builtins: Use FQCN for builtin actions.",
-        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command  echo 'oh no, no name'",
-        "no-changed-when: Commands should not change things if nothing needs doing.",
-        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command  echo 'oh no, no name'",
-        "unnamed-task: All tasks should be named.",
-        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command  echo 'oh no, no name'",
-        "fqcn-builtins: Use FQCN for builtin actions.",
+        "fqcn: Use FQCN for builtin module actions (command). (fqcn[action-core])",
+        "lint/borked/roles/yep/tasks/main.yml:1 Use `ansible.builtin.command` or `ansible.legacy.command` instead.",
+        "name: All tasks should be named. (name[missing])",
+        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command echo 'oh no, no name'",
+        "no-changed-when: Commands should not change things if nothing needs doing. (no-changed-when)",
+        "lint/borked/roles/yep/tasks/main.yml:1 Task/Handler: command echo 'oh no, no name'",
+        "fqcn: Use FQCN for builtin module actions (debug). (fqcn[action-core])",
+        "lint/borked/roles/yep/tasks/main.yml:3 Use `ansible.builtin.debug` or `ansible.legacy.debug` instead.",
+        "name: All tasks should be named. (name[missing])",
         "lint/borked/roles/yep/tasks/main.yml:3 Task/Handler: debug msg=boo!",
-        "unnamed-task: All tasks should be named.",
+        "no-free-form: Avoid using free-form when calling module actions. (debug) (no-free-form)",
         "lint/borked/roles/yep/tasks/main.yml:3 Task/Handler: debug msg=boo!",
         "(venv) bash-5.1$"
     ]

@@ -21,7 +21,7 @@
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         " 8│remote_addr: localhost",
         " 9│res:",
-        "10│  _ansible_no_log: false",
+        "10│  _ansible_no_log: null",
         "11│  _ansible_verbose_always: true",
         "12│  changed: false",
         "13│  msg: This is play-2 task-1",
