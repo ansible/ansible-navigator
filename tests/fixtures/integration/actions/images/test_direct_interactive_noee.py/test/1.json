@@ -10,8 +10,8 @@
         "compared_fixture": false
     },
     "output": [
-        "  Image                                Tag                     Execution environment                                                      Created                              Size",
-        "0│creator-ee                           v0.4.2                  True                                                                       5 days ago                           2.4 GB",
+        "  Image                               Tag                    Execution environment                                                   Created                                    Size",
+        "0│creator-ee                          v0.9.1                 True                                                                    15 hours ago                               1.4 GB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

@@ -1,3 +1,5 @@
+# cspell:ignore fqcn,FQCN
+
 """This action provides ansible-lint results through ansible-navigator.
 
 Internally, it works by using ansible-runner to execute ansible-lint (optionally
@@ -145,7 +147,14 @@ def massage_issue(issue: dict) -> dict:
     """
     massaged = issue.copy()
     massaged["__severity"] = massaged["severity"].capitalize()
-    massaged["__message"] = issue["check_name"].split("] ", 1)[1].capitalize()
+    # Version 6.1 and before of ansible-lint used this syntax
+    # "check_name": "[fqcn-builtins] Use FQCN for builtin actions."
+    # Version 6.2 and later use this syntax
+    # check_name": "fqcn-builtins", "description": "Use FQCN for builtin actions."
+    if issue["check_name"].startswith("["):
+        massaged["__message"] = issue["check_name"].split("]")[1].strip()
+    else:
+        massaged["__message"] = issue["description"]
     massaged["__path"] = abs_user_path(issue["location"]["path"])
     if isinstance(issue["location"]["lines"]["begin"], Mapping):
         massaged["__line"] = issue["location"]["lines"]["begin"]["line"]

@@ -10,8 +10,8 @@
         "compared_fixture": false
     },
     "output": [
-        "  Name                                                                                          Version                         Shadowed                           Type                                   Path",
-        "0│redhatinsights.insights                                                                       1.0.7                           False                              contained                              /usr/share/ansible/collections/ansible_collections/redhatinsights/insights",
+        "  Name                                                                                           Version                         Shadowed                           Type                                   Path",
+        "0│redhatinsights.insights                                                                        1.0.7                           False                              contained                              /usr/share/ansible/collections/ansible_collections/redhatinsights/insights",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

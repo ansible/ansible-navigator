@@ -42,7 +42,7 @@
         "  execution-environment:",
         "    container-engine: podman",
         "    enabled: false",
-        "    image: quay.io/ansible/creator-ee:v0.4.2",
+        "    image: quay.io/ansible/creator-ee:v0.9.1",
         "    pull:",
         "      policy: never",
         "  images:",

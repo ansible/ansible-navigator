@@ -13,7 +13,7 @@
     },
     "output": [
         "  Name                         Version    Shadowed     Path",
-        "0│ansible.builtin              2.12.3     False        /home/user/github/ansible-navigator/venv/lib64/python3.10/site-packages/ansible",
+        "0│ansible.builtin              2.12.4     False        /home/user/github/ansible-navigator/venv/lib64/python3.10/site-packages/ansible",
         "1│company_name.coll_1          1.0.0      False        FIXTURES_COLLECTION_DIR/test_welcome_interactive_noee.py/collections/ansible_collections/company_name/coll_1",
         "2│company_name.coll_2          2.0.0      False        FIXTURES_COLLECTION_DIR/test_welcome_interactive_noee.py/collections/ansible_collections/company_name/coll_2",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
