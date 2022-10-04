@@ -21,7 +21,7 @@
         "optional arguments:",
         "  --version             show program's version number, config file location, configured module search path, module location, executable location and exit",
         "  -h, --help            show this help message and exit",
-        "  -v, --verbose         verbose mode (-vvv for more, -vvvv to enable connection debugging)",
+        "  -v, --verbose         Causes Ansible to print more debug messages. Adding multiple -v will increase the verbosity, the builtin plugins currently evaluate up to -vvvvvv. A reasonable level to start is -vvv, connection debugging might require -vvvv.",
         "(venv) bash-5.1$"
     ]
 }

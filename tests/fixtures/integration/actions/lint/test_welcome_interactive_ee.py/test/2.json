@@ -10,24 +10,21 @@
         "compared_fixture": false
     },
     "output": [
-        "Message: [fqcn-builtins] Use FQCN for builtin actions.",
-        "Location: /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml:6",
+        "Message: name[play]",
+        "Location: /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml:1",
         " 0│---",
         " 1│categories:",
-        " 2│- formatting",
-        " 3│check_name: '[fqcn-builtins] Use FQCN for builtin actions.'",
-        " 4│content:",
-        " 5│  body: 'Task/Handler: command  echo ''nameless task oh no!'''",
-        " 6│description: Check whether the long version starting with ``ansible.builtin`` is used",
-        " 7│  in the playbook",
-        " 8│issue_path: /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml:6",
-        " 9│last_modified: '2022-04-01T10:20:01.278242+00:00'",
-        "10│location:",
-        "11│  lines:",
-        "12│    begin: 6",
-        "13│  path: tests/fixtures/integration/actions/lint/borked/playbook.yml",
-        "14│severity: major",
-        "15│type: issue",
-        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help             Issues: 9"
+        " 2│- idiom",
+        " 3│check_name: name[play]",
+        " 4│description: All plays should be named.",
+        " 5│issue_path: /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml:1",
+        " 6│last_modified: '2022-04-01T10:20:01.278242+00:00'",
+        " 7│location:",
+        " 8│  lines:",
+        " 9│    begin: 1",
+        "10│  path: tests/fixtures/integration/actions/lint/borked/playbook.yml",
+        "11│severity: major",
+        "12│type: issue",
+        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Issues: 12"
     ]
 }
