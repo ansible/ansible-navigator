@@ -364,7 +364,8 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="execution-environment.image",
             short_description="Specify the name of the execution environment image",
             value=SettingsEntryValue(
-                default="quay.io/ansible/creator-ee:v0.9.1", schema_default=C.NONE
+                default="quay.io/ansible/creator-ee:v0.9.1",
+                schema_default=C.NONE,
             ),
             version_added="v1.0",
         ),
