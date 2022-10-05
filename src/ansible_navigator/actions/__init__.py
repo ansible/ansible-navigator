@@ -20,7 +20,7 @@ from typing import Optional
 
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..ui_framework import Interaction
 from . import _actions as actions
 

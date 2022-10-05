@@ -7,7 +7,7 @@ from pathlib import Path
 
 from ansible_navigator.content_defs import ContentView
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..content_defs import SerializationFormat
 from ..ui_framework import Interaction
 from ..utils.functions import remove_dbl_un

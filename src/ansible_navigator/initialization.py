@@ -11,9 +11,9 @@ import sys
 from typing import NoReturn
 
 from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
-from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
+from .configuration_subsystem.definitions import ApplicationConfiguration
 from .diagnostics import DiagnosticsCollector
 from .utils.definitions import ExitMessage
 from .utils.definitions import ExitMessages

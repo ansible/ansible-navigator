@@ -14,7 +14,7 @@ from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..runner import AnsibleInventory
 from ..runner import Command
 from ..steps import Step

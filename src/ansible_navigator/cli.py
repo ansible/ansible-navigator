@@ -19,9 +19,9 @@ from .action_defs import RunReturn
 from .action_defs import RunStdoutReturn
 from .action_runner import ActionRunner
 from .actions import run_action_stdout
-from .configuration_subsystem import ApplicationConfiguration
 from .configuration_subsystem import Constants
 from .configuration_subsystem import NavigatorConfiguration
+from .configuration_subsystem.definitions import ApplicationConfiguration
 from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update

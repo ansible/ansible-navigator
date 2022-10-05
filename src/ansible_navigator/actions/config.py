@@ -12,7 +12,7 @@ from typing import Any
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..runner import AnsibleConfig
 from ..runner import Command
 from ..steps import Step

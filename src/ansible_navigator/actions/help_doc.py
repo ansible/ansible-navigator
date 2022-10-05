@@ -3,7 +3,7 @@
 from ansible_navigator.content_defs import ContentFormat
 from ..action_base import ActionBase
 from ..app_public import AppPublic
-from ..configuration_subsystem import ApplicationConfiguration
+from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..ui_framework import Interaction
 from ..utils.compatibility import importlib_resources
 from . import _actions as actions

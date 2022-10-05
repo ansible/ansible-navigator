@@ -12,7 +12,7 @@ from .steps import Steps
 
 
 if TYPE_CHECKING:
-    from .configuration_subsystem import ApplicationConfiguration
+    from .configuration_subsystem.definitions import ApplicationConfiguration
 
 
 class AppPublic(NamedTuple):
