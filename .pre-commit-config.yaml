@@ -47,10 +47,6 @@ repos:
     hooks:
       - id: black
         language_version: python3
-        args:
-          - --diff
-          - --check
-          - .
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v6.12.0
