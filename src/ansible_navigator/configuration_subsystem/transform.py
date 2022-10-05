@@ -129,7 +129,8 @@ def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
                 # A single item
                 subschema[dot_parts[-1]]["enum"] = choices
         if entry.value.schema_default is not Constants.NOT_SET:
-            subschema[dot_parts[-1]]["default"] = entry.value.schema_default
+            if entry.value.schema_default is not Constants.NONE:
+                subschema[dot_parts[-1]]["default"] = entry.value.schema_default
         elif entry.value.default is not Constants.NOT_SET:
             subschema[dot_parts[-1]]["default"] = entry.value.default
 
