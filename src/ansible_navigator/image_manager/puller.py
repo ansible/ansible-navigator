@@ -93,8 +93,10 @@ class ImagePuller:
 
     def _check_for_image(self):
         try:
+            cmd_parts = [self._container_engine, "image", "inspect", self._image]
+            self._log_message(level=logging.DEBUG, message=f"Command: {shlex_join(cmd_parts)}")
             subprocess.run(
-                [self._container_engine, "image", "inspect", self._image],
+                cmd_parts,
                 check=True,
                 capture_output=True,
             )
@@ -102,9 +104,15 @@ class ImagePuller:
 
         except subprocess.CalledProcessError as exc:
             self._image_present = False
+            stdout = exc.stdout.decode()
+            stderr = exc.stderr.decode()
+            self._log_message(level=logging.DEBUG, message=f"stdout: {stdout}")
+            self._log_message(level=logging.DEBUG, message=f"stderr: {stderr}")
             if "no such image" not in str(exc.stderr).lower():
                 message = "Image inspection failed, image assumed to be corrupted or missing"
                 self._log_message(level=logging.WARNING, message=message)
+                self._log_message(level=logging.WARNING, message=f"stdout: {stdout}")
+                self._log_message(level=logging.WARNING, message=f"stderr: {stderr}")
 
     def _determine_pull(self):
         if self._pull_policy == "missing" and self._image_present is False:
