@@ -10,11 +10,11 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v0.9.1 (primary) (Information collected from image inspection)",
+        "Image: creator-ee:v0.9.2 (primary) (Information collected from image inspection)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations:",
-        "  3│    org.opencontainers.image.base.digest: sha256:8b3df30bf02a58245c2a3d7a4f05adce1ac23885e320eb6595f871cf3ca67ef4",
+        "  3│    org.opencontainers.image.base.digest: sha256:241649ea0d7d71cdf3a2ae1d9f31ebc0ad523231caa9554ea3b77fc1102373cc",
         "  4│    org.opencontainers.image.base.name: quay.io/ansible/ansible-runner:latest",
         "  5│  architecture: amd64",
         "  6│  author: ''",
