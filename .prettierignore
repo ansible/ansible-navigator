@@ -30,6 +30,5 @@ src/ansible_navigator/package_data/welcome.md
 src/ansible_navigator/data/ansible-navigator.json
 
 # WIP
-docs/changelog-fragments.d/README.md
 CHANGELOG.md
 README.md
