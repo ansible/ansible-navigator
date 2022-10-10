@@ -33,9 +33,6 @@ subcommands
 faq
 ```
 
-```{toctree}
-changelog
-```
 
 ```{toctree}
 :caption: Contributions

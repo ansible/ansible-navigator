@@ -93,10 +93,8 @@ sphinxcontrib-htmlhelp==2.0.0
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
-sphinxcontrib-towncrier==0.3.0a0
 toml==0.10.2
 tomli==2.0.1
-towncrier==22.8.0
 types-setuptools==65.4.0.0
 typing-extensions==4.3.0 ; python_version < "3.10.0"
 tzdata==2022.4

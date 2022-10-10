@@ -60,6 +60,3 @@ to use it.
 [read the docs]: https://readthedocs.org
 [sphinx]: https://www.sphinx-doc.org
 
-```{include} ../changelog-fragments.d/README.md
-
-```
