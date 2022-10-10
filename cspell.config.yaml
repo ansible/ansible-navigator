@@ -42,9 +42,7 @@ ignorePaths:
 ignoreRegExpList:
   - "--\\w+" # ansible-navigator long CLI parameters
   - "(window|_screen|win)\\.\\w+" # curses calls e.g. getyx
-  - "{user}`\\w+`" # usernames in changelog entry
   - "\\^.*$" # kegex regular expressions
-  - "`sentinals`" # mentioned in a changelog when corrected, here vs. list w/ ``
   - "ANSIBLE_\\w+" # ansible environment variables
   - "curses\\.\\w+" # curses functions e.g. curses.doupdate
   - "monkeypatch\\.\\w+" # monkeypatch functions e.g. monkeypatch.setenv

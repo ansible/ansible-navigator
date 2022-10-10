@@ -59,7 +59,3 @@ to use it.
 [myst parser]: https://pypi.org/project/myst-parser/
 [read the docs]: https://readthedocs.org
 [sphinx]: https://www.sphinx-doc.org
-
-```{include} ../changelog-fragments.d/README.md
-
-```
