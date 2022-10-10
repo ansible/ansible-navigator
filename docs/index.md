@@ -33,7 +33,6 @@ subcommands
 faq
 ```
 
-
 ```{toctree}
 :caption: Contributions
 :hidden:
