@@ -98,7 +98,6 @@ repos:
             (
               \.github/ISSUE_TEMPLATE/\w+|
               docs/(
-                changelog-fragments\.d/\d+\.\w+(\.\d+)?|
                 faq|
                 index|
                 installation
