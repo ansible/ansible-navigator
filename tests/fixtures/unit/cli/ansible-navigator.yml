@@ -10,7 +10,7 @@ ansible-navigator:
   execution-environment:
     container-engine: podman
     enabled: False
-    image: quay.io/ansible/creator-ee:v0.9.1
+    image: quay.io/ansible/creator-ee:v0.9.2
   inventory-columns:
     - ansible_network_os
     - ansible_network_cli_ssh_type

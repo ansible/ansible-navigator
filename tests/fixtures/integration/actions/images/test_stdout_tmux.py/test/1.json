@@ -19,7 +19,7 @@
     "output": [
         "ansible_collections:",
         "ansible_version:",
-        "image_name: quay.io/ansible/creator-ee:v0.9.1",
+        "image_name: quay.io/ansible/creator-ee:v0.9.2",
         "os_release:",
         "python_packages:",
         "python_version:",
