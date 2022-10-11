@@ -182,9 +182,9 @@ $ echo -e '#!/bin/sh\necho ${ANSIBLE_VAULT_PASSWORD}' >> ~/.vault_password.sh
 # Link the password file into the current working directory
 $ ln ~/.vault_password.sh .
 # The leading space here is necessary to keep the command out of the command history
-# (this depends on the value of the HISTCONTROL environment variable, it needs to be set to ignoreboth or ignorespace !) 
+# (this depends on the value of the HISTCONTROL environment variable, it needs to be set to ignoreboth or ignorespace !)
 # To pass environment variables to the execution environment, you need to use --penv
-# 
+#
 $ export HISTCONTROL=ignoreboth
 $  export ANSIBLE_VAULT_SECRET=my_password
 # Use vault-id to reference the script file, and pass the environment variable
