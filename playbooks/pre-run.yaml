@@ -1,6 +1,0 @@
----
-- hosts: all:!appliance
-  tasks:
-    - name: Install podman
-      include_role:
-        name: ensure-podman
