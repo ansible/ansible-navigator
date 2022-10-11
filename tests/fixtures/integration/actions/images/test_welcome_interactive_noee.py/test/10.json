@@ -13,7 +13,7 @@
         "    Name           Version    Summary",
         "  0│ansible-compat 2.2.1      Ansible compatibility goodies                                                                                                                                            ▒",
         "  1│ansible-core   2.13.4     Radically simple IT automation                                                                                                                                           ▒",
-        "  2│ansible-lint   6.8.0b3    Checks playbooks for practices and behavior that could potentially be improved                                                                                           ▒",
+        "  2│ansible-lint   6.8.0      Checks playbooks for practices and behavior that could potentially be improved                                                                                           ▒",
         "  3│ansible-runner 2.1.4.dev2 \"Consistent Ansible Python API and CLI with container and process isolation runtime capabilities                                                                         ▒",
         "  4│arrow          1.2.3      Better dates & times for Python",
         "  5│asn1crypto     1.2.0      Fast ASN.1 parser and serializer with definitions for private keys, public keys, certificates, CRL, OCSP, CMS, PKCS#3, PKCS#7, PKCS#8, PKCS#12, PKCS#5, X.509 and TSP",

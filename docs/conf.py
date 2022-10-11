@@ -12,33 +12,10 @@ from setuptools_scm.git import fetch_on_shallow
 from setuptools_scm.git import parse
 
 
-# -- Special accommodations for RTD ------------------------------------------
-
-
-def parse_with_fetch(*args, **kwargs) -> str:
-    """If the repo is found to be shallow, fetch a full.
-
-    By default, RTD does a fetch --limit 50, if a tag is not
-    present in the last 50 commits, the version reported by setuptools_scm
-    will be incorrect and appears as ``v0.1.dev...`` in the towncrier changelog.
-    Another approach is to enable ``DONT_SHALLOW_CLONE`` for the repo
-    https://docs.readthedocs.io/en/stable/feature-flags.html#feature-flags
-    This was done for ansible-navigator on the day of this commit.
-
-    :param args: The arguments
-    :param kwargs: The keyword arguments
-    :returns: The parsed version
-    """
-    assert "pre_parse" not in kwargs
-    return parse(*args, pre_parse=fetch_on_shallow, **kwargs)
-
-
-get_scm_version = partial(get_version, parse=parse_with_fetch)
-
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
-get_scm_version = partial(get_scm_version, root=PROJECT_ROOT_DIR)
+get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
 
 # Make in-tree extension importable in non-tox setups/envs, like RTD.
 # Refs:
@@ -173,7 +150,6 @@ extensions = [
     "myst_parser",
     "notfound.extension",
     "sphinxcontrib.apidoc",
-    "sphinxcontrib.towncrier",  # provides `towncrier-draft-entries` directive
     "sphinx_copybutton",
     # Tree-local extensions:
     "single_sourced_data",  # in-tree extension
@@ -198,9 +174,7 @@ language = "en"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = [
-    "changelog-fragments.d/**",  # Towncrier-managed change notes
-]
+# exclude_patterns = []
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -296,13 +270,6 @@ apidoc_toc_file = None
 # -- Options for linkcheck builder -------------------------------------------
 
 linkcheck_workers = 25
-
-# -- Options for towncrier_draft extension -----------------------------------
-
-towncrier_draft_autoversion_mode = "draft"  # or: "sphinx-version", "sphinx-release"
-towncrier_draft_include_empty = True
-towncrier_draft_working_directory = PROJECT_ROOT_DIR
-# Not yet supported: towncrier_draft_config_path = "pyproject.toml"  # relative to cwd
 
 # -- Options for myst_parser extension ---------------------------------------
 

@@ -20,7 +20,7 @@
     "output": [
         "ansible_collections:",
         "ansible_version:",
-        "image_name: quay.io/ansible/creator-ee:v0.9.1",
+        "image_name: quay.io/ansible/creator-ee:v0.9.2",
         "(venv) bash-5.1$"
     ]
 }
