@@ -19,7 +19,6 @@ def test(
     """Test diagnostics generation.
 
     :param monkeypatch: Fixture for patching
-    :param settings_env_var_to_full: The pytest subtest fixture
     :param tmp_path: The pytest tmp_path fixture
 
     :raises AssertionError: When tests fails
