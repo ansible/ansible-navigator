@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import datetime
-import json
 import sys
 import traceback
 
@@ -18,6 +17,7 @@ from typing import Union
 
 from pkg_resources import working_set
 
+from ansible_navigator.utils.write_json import write_with_permissions
 from .command_runner import Command
 from .command_runner import CommandRunner
 from .configuration_subsystem import Constants
@@ -214,10 +214,14 @@ class DiagnosticsCollector:
             settings=self._settings(),
             settings_file=self._settings_file(),
         )
+
         time = now_iso("local")
-        path = Path(f"diagnostics-{time}.json")
-        path.write_text(json.dumps(asdict(diagnostics), indent=4, sort_keys=True), encoding="utf-8")
-        message = f"\nDiagnostics written to: {path.resolve()}"
+        file_name = f"diagnostics-{time}.json"
+        path = f"{Path.home()}/{file_name}"
+        mode = 0o600
+        write_with_permissions(path, mode, asdict(diagnostics))
+        message = f"\nDiagnostics written to: {path}"
+
         if DIAGNOSTIC_FAILURES > 0:
             ansi.warning(color=self.color, message=message)
         else:
