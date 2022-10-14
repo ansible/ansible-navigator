@@ -2,14 +2,11 @@
 from __future__ import annotations
 
 import datetime
-import json
-import os
 import sys
 import traceback
 
 from dataclasses import asdict
 from dataclasses import dataclass
-from functools import partial
 from pathlib import Path
 from sys import stdout
 from typing import Callable
@@ -20,6 +17,7 @@ from typing import Union
 
 from pkg_resources import working_set
 
+from ansible_navigator.utils.write_json import write_with_permissions
 from .command_runner import Command
 from .command_runner import CommandRunner
 from .configuration_subsystem import Constants
@@ -216,38 +214,14 @@ class DiagnosticsCollector:
             settings=self._settings(),
             settings_file=self._settings_file(),
         )
+
         time = now_iso("local")
         file_name = f"diagnostics-{time}.json"
-        path = Path(file_name)
+        path = f"{Path.home()}/{file_name}"
         mode = 0o600
+        write_with_permissions(path, mode, asdict(diagnostics))
+        message = f"\nDiagnostics written to: {path}"
 
-        def opener(path: str, flags: int, mode: int) -> int:
-            """Open a file with the given path and flags.
-
-            :param path: The path of the file to open.
-            :param flags: The flags to use when opening the file.
-            :param mode: The mode to use when opening the file.
-            :return: The file descriptor of the opened file.
-            """
-            return os.open(path=path, flags=flags, mode=mode)
-
-        def write_file_with_permissions(file_name: str, mode: int) -> None:
-            """Write a file with the given name.
-
-            :param file_name: The name of the file to write.
-            :param mode: The mode to use when writing the file.
-            """
-            # Without this, the created file will have 0o777 - 0o022 (default umask) = 0o755
-            # permissions
-            oldmask = os.umask(0)
-
-            opener_func = partial(opener, mode=mode)
-            with open(file_name, "w", encoding="utf-8", opener=opener_func) as f:
-                f.write(json.dumps(asdict(diagnostics), indent=4, sort_keys=True))
-            os.umask(oldmask)
-
-        write_file_with_permissions(file_name, mode)
-        message = f"\nDiagnostics written to: {path.resolve()}"
         if DIAGNOSTIC_FAILURES > 0:
             ansi.warning(color=self.color, message=message)
         else:
