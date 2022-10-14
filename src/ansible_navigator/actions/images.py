@@ -441,12 +441,18 @@ class Action(ActionBase):
                 image["__name"] += " (primary)"
                 image["__name_tag"] += " (primary)"
 
+            details = image["inspect"]["details"]
+
             try:
-                image["execution_environment"] = (
-                    image["inspect"]["details"]["config"]["working_dir"] == "/runner"
-                )
+                legacy_check = details["config"]["working_dir"] == "/runner"
             except KeyError:
-                image["execution_environment"] = False
+                legacy_check = False
+
+            try:
+                label_check = details["labels"]["ansible-execution-environment"] == "true"
+            except KeyError:
+                label_check = False
+            image["execution_environment"] = legacy_check or label_check
         self._images.value = sorted(images, key=lambda i: i["name"])
 
     def _introspect_image(self) -> bool:
