@@ -377,8 +377,8 @@ class NavigatorPostProcessor:
                 try:
                     volume_mounts.append(
                         VolumeMount(
-                            fs_source=src,
-                            fs_destination=dest,
+                            fs_source=abs_user_path(src),
+                            fs_destination=abs_user_path(dest),
                             options_string=options,
                             settings_entry=entry_name,
                             source=entry_source,
@@ -408,8 +408,8 @@ class NavigatorPostProcessor:
                         volume_mounts.append(
                             VolumeMount(
                                 fs_source=volume_mount.get("src"),
-                                fs_destination=volume_mount.get("dest"),
-                                options_string=volume_mount.get("options", ""),
+                                fs_destination=abs_user_path(volume_mount.get("dest")),
+                                options_string=abs_user_path(volume_mount.get("options", "")),
                                 settings_entry=entry_name,
                                 source=entry_source,
                             ),
