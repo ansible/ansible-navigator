@@ -57,15 +57,6 @@ def abs_user_path(file_path: str) -> str:
     return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))
 
 
-# def expand_user(tilde_path: str):
-#     home_path = os.path.expanduser("~")
-#     if tilde_path == "~":
-#         return home_path
-#     if str(tilde_path).startswith("~/"):
-#         return tilde_path.replace("~/", f"{home_path}/")
-#     return tilde_path
-
-
 def check_for_ansible() -> tuple[list[LogMessage], list[ExitMessage]]:
     """Check for the ansible-playbook command, runner will need it.
 

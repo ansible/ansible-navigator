@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from copy import deepcopy
 from dataclasses import dataclass
 from itertools import repeat
+from pathlib import Path
 
 import pytest
 
@@ -127,6 +128,16 @@ test_data = (
     Scenario(
         current=[{"src": "/tmp", "dest": "/tmp", "options": "Z"}],
         expected=["/tmp:/tmp:Z"],
+        source=C.USER_CFG,
+    ),
+    Scenario(
+        current=[{"src": "~", "dest": "/tmp", "options": "Z"}],
+        expected=[f"{Path.home()}:/tmp:Z"],
+        source=C.USER_CFG,
+    ),
+    Scenario(
+        current=[{"src": "/tmp", "dest": "~", "options": "Z"}],
+        expected=[f"/tmp:{Path.home()}:Z"],
         source=C.USER_CFG,
     ),
     Scenario(

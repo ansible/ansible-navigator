@@ -18,6 +18,7 @@ from typing import NewType
 from typing import TypeVar
 from typing import Union
 
+from ..utils.functions import abs_user_path
 from ..utils.functions import oxfordcomma
 
 
@@ -362,8 +363,10 @@ class VolumeMount:
         if isinstance(self.fs_source, str):
             if self.fs_source == "":
                 errors.append("Source not provided.")
-            elif not Path(self.fs_source).exists():
+            elif not Path(abs_user_path(self.fs_source)).exists():
                 errors.append(f"Source: '{self.fs_source}' does not exist.")
+            elif self.fs_source.startswith("~/") or self.fs_source == "~":
+                object.__setattr__(self, "fs_source", abs_user_path(self.fs_source))
         else:
             errors.append(f"Source: '{self.fs_source}' is not a string.")
 
@@ -371,6 +374,8 @@ class VolumeMount:
         if isinstance(self.fs_destination, str):
             if self.fs_destination == "":
                 errors.append("Destination not provided.")
+            elif self.fs_destination.startswith("~/") or self.fs_destination == "~":
+                object.__setattr__(self, "fs_destination", abs_user_path(self.fs_destination))
         else:
             errors.append(f"Destination: '{self.fs_destination}' is not a string.")
 
