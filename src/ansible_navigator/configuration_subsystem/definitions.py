@@ -357,50 +357,57 @@ class VolumeMount:
         :raises VolumeMountError: When a viable VolumeMount cannot be created
         :param options_string: Option entries in as type string
         """
-        # pylint: disable=too-many-branches
         errors = []
-        # Validate the source
-        if isinstance(self.fs_source, str):
-            if self.fs_source == "":
-                errors.append("Source not provided.")
-            elif not Path(abs_user_path(self.fs_source)).exists():
-                errors.append(f"Source: '{self.fs_source}' does not exist.")
-            elif self.fs_source.startswith("~/") or self.fs_source == "~":
-                object.__setattr__(self, "fs_source", abs_user_path(self.fs_source))
-        else:
-            errors.append(f"Source: '{self.fs_source}' is not a string.")
 
-        # Validate the destination
-        if isinstance(self.fs_destination, str):
-            if self.fs_destination == "":
-                errors.append("Destination not provided.")
-            elif self.fs_destination.startswith("~/") or self.fs_destination == "~":
-                object.__setattr__(self, "fs_destination", abs_user_path(self.fs_destination))
-        else:
+        # Ensure each is a string
+        if not isinstance(self.fs_source, str):
+            errors.append(f"Source: '{self.fs_source}' is not a string.")
+        if not isinstance(self.fs_destination, str):
             errors.append(f"Destination: '{self.fs_destination}' is not a string.")
+        if not isinstance(options_string, str):
+            errors.append(f"Options: '{options_string}' is not a string.")
+
+        # Ensure source and dest are not empty
+        if self.fs_source == "":
+            errors.append("Source not provided.")
+        if self.fs_destination == "":
+            errors.append("Destination not provided.")
+
+        # Exit early for errors
+        if errors:
+            raise VolumeMountError(" ".join(errors))
+
+        # Resolve the source and destination
+        # frozen, cannot use simple assignment to initialize fields, and must use:
+        object.__setattr__(self, "fs_source", abs_user_path(self.fs_source))
+        object.__setattr__(self, "fs_destination", abs_user_path(self.fs_destination))
+
+        # Source must exist
+        if not Path(self.fs_source).exists():
+            error_msg = f"Source: '{self.fs_source}' does not exist."
+            raise VolumeMountError(error_msg)
 
         # Validate and populate _options
-        if isinstance(options_string, str):
-            if not options_string == "":
-                options = []
-                option_values = [o.value for o in VolumeMountOption]
-                for option in options_string.split(","):
-                    if option not in option_values:
-                        errors.append(
-                            f"Unrecognized option: '{option}',"
-                            f" available options include"
-                            f" {oxfordcomma(option_values, condition='and/or')}.",
-                        )
-                    else:
-                        options.append(VolumeMountOption(option))
-                unique = sorted(set(options), key=options.index)
-                # frozen, cannot use simple assignment to initialize fields, and must use:
-                object.__setattr__(self, "options", tuple(unique))
-        else:
-            errors.append(f"Options: '{options_string}' is not a string.")
+        if options_string == "":
+            return
+
+        options = []
+        option_values = [o.value for o in VolumeMountOption]
+        for option in options_string.split(","):
+            if option not in option_values:
+                errors.append(
+                    f"Unrecognized option: '{option}',"
+                    f" available options include"
+                    f" {oxfordcomma(option_values, condition='and/or')}.",
+                )
+            else:
+                options.append(VolumeMountOption(option))
 
         if errors:
             raise VolumeMountError(" ".join(errors))
+
+        unique = sorted(set(options), key=options.index)
+        object.__setattr__(self, "options", tuple(unique))
 
     def to_string(self) -> str:
         """Render the volume mount in a way that (docker|podman) understands.

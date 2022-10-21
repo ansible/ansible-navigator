@@ -47,7 +47,7 @@ test_data = (
     ),
     Scenario(
         current="abcdef",
-        exit_message_substr="Source: 'abcdef' does not exist. Destination not provided.",
+        exit_message_substr="Destination not provided.",
         source=C.USER_CLI,
     ),
     Scenario(
@@ -165,8 +165,13 @@ test_data = (
         source=C.USER_CFG,
     ),
     Scenario(
-        current=[[r"C:\WINNT\System32:/tmp"]],
+        current=[["/tmp:/tmp:/tmp"]],
         exit_message_substr="Unrecognized option: '/tmp'",
+        source=C.USER_CLI,
+    ),
+    Scenario(
+        current=[[r"C:\WINNT\System32:/tmp"]],
+        exit_message_substr="does not exist",
         source=C.USER_CLI,
     ),
     Scenario(
