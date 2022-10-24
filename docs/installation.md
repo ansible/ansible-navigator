@@ -84,10 +84,10 @@ See this [related issue][macOS podman issue #8016] for details.
    pip3 install ansible-navigator --user
    ```
 
-1. Add the installation path to the PATH:
+1. Add the installation path to the PATH, using the installed Python version:
 
    ```
-   echo 'export PATH=$HOME/Library/Python/3.8/bin:$PATH' >> ~/.zprofile
+   echo 'export PATH=$HOME/Library/Python/3.9/bin:$PATH' >> ~/.zprofile
    ```
 
 1. Refresh the PATH:
