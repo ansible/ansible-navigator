@@ -75,7 +75,7 @@ See this [related issue][macOS podman issue #8016] for details.
 1. Install the command line developer tools and proceed with the installation if prompted.
 
    ```
-   xcode-select install
+   xcode-select --install
    ```
 
 1. Install ansible-navigator:
