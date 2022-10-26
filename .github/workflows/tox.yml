@@ -74,7 +74,7 @@ jobs:
         continue-on-error: ${{ matrix.devel || false }}
         run: python3 -m tox -e no-test-deps
       - name: Upload coverage data
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           directory: .tox
           files: "coverage-*.xml"
