@@ -37,7 +37,7 @@ jobs:
             python-version: "~3.11.0-0" # see https://github.com/actions/setup-python/issues/213#issuecomment-1146676713
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # needed by setuptools-scm
 
