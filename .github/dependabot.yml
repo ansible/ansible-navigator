@@ -21,3 +21,11 @@ updates:
       - dependency-name: packaging
       - dependency-name: pytest
       - dependency-name: pyyaml
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "skip-changelog"
