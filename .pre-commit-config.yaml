@@ -18,7 +18,7 @@ repos:
         name: Sort import statements using isort
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v3.0.0-alpha.2"
+    rev: "v3.0.0-alpha.3"
     hooks:
       - id: prettier
         # Original hook implementation is flaky due to *several* bugs described
@@ -198,7 +198,7 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.15.4
+    rev: v2.15.5
     hooks:
       - id: pylint
         args:
