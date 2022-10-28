@@ -17,7 +17,6 @@ from typing import Union
 
 from pkg_resources import working_set
 
-from ansible_navigator.utils.write_json import write_with_permissions
 from .command_runner import Command
 from .command_runner import CommandRunner
 from .configuration_subsystem import Constants
@@ -32,6 +31,7 @@ from .utils.definitions import LogMessage
 from .utils.functions import now_iso
 from .utils.functions import shlex_join
 from .utils.serialize import Loader
+from .utils.serialize import write_diagnostics_json
 from .utils.serialize import yaml
 
 
@@ -219,7 +219,7 @@ class DiagnosticsCollector:
         file_name = f"diagnostics-{time}.json"
         path = f"{Path.home()}/{file_name}"
         mode = 0o600
-        write_with_permissions(path, mode, asdict(diagnostics))
+        write_diagnostics_json(path, mode, asdict(diagnostics))
         message = f"\nDiagnostics written to: {path}"
 
         if DIAGNOSTIC_FAILURES > 0:
