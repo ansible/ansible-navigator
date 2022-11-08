@@ -59,7 +59,7 @@ def setup_logger(args: ApplicationConfiguration) -> None:
         time_zone = args.entry("time_zone").value.default
 
     formatter = Formatter(
-        fmt="%(asctime)s %(level_name)s '%(name)s.%(funcName)s' %(message)s",
+        fmt="%(asctime)s %(levelname)s '%(name)s.%(funcName)s' %(message)s",
         time_zone=time_zone,
     )
     handler.setFormatter(formatter)

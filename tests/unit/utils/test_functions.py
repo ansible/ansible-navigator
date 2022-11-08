@@ -251,10 +251,10 @@ iso8601 = re.compile(
 
 
 @pytest.mark.parametrize("time_zone", ("local", "America/Los_Angeles", "UTC", "bogus"))
-def test_now_iso(cap_log: pytest.LogCaptureFixture, time_zone: str):
+def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str):
     """Test the using local as a time zone.
 
-    :param cap_log: The log capture fixture
+    :param caplog: The log capture fixture
     :param time_zone: The timezone
     """
     time_string = functions.now_iso(time_zone=time_zone)
@@ -275,4 +275,4 @@ def test_now_iso(cap_log: pytest.LogCaptureFixture, time_zone: str):
         assert matched["timezone"] == "+00:00"
     if time_zone == "bogus":
         assert matched["timezone"] == "+00:00"
-        assert "The time zone 'bogus' could not be found. Using UTC." in cap_log.text
+        assert "The time zone 'bogus' could not be found. Using UTC." in caplog.text

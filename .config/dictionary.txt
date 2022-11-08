@@ -23,6 +23,8 @@ apidoc
 argnames
 argvalues
 basesystem
+caplog
+codeclimate
 COLORTERM
 copybutton
 deflist
@@ -41,6 +43,7 @@ introspector
 jsonschema
 keepends
 kegexes
+levelname
 linkcheck
 lintable
 lightbulbs
@@ -61,6 +64,7 @@ redhatinsights
 Regset
 representer
 Representer
+returndocs
 runtimes
 Rocannon's
 SCAP

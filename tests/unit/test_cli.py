@@ -215,13 +215,13 @@ def test_no_term(monkeypatch):
 
 def test_for_version_logged(
     monkeypatch: pytest.MonkeyPatch,
-    cap_log: pytest.LogCaptureFixture,
+    caplog: pytest.LogCaptureFixture,
     tmp_path: Path,
 ):
     """Ensure the version is captured in the log.
 
     :param monkeypatch: The monkey patch fixture
-    :param cap_log: The log capture fixture
+    :param caplog: The log capture fixture
     :param tmp_path: A temporary director for this test
     """
     logfile = tmp_path / "log.txt"
@@ -240,5 +240,5 @@ def test_for_version_logged(
     with pytest.raises(SystemExit):
         # A SystemExit happens here because the container vanishes quickly
         main()
-    assert "ansible-navigator==" in cap_log.text
-    assert "ansible-runner==" in cap_log.text
+    assert "ansible-navigator==" in caplog.text
+    assert "ansible-runner==" in caplog.text

@@ -101,13 +101,13 @@ def test_basic_success_no_color():
 
 
 @patch("ansible_navigator.ui_framework.colorize.tokenize")
-def test_graceful_failure(mocked_func, cap_log):
+def test_graceful_failure(mocked_func, caplog):
     """Test for correct error format.
 
     Ensure a tokenization error returns the original one line json string
     w/o color and the log reflects the critical error.
     :param mocked_func: Mocked fixture
-    :param cap_log: Capture log
+    :param caplog: Capture log
     """
     mocked_func.side_effect = ValueError()
     sample = serialize(**SAMPLE_JSON)
@@ -116,7 +116,7 @@ def test_graceful_failure(mocked_func, cap_log):
         doc=sample,
         scope="source.json",
     )
-    assert "rendered without color" in cap_log.text
+    assert "rendered without color" in caplog.text
 
 
 YAML_TXT = """

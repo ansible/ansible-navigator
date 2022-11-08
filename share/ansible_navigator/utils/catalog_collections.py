@@ -367,12 +367,12 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
         try:
             if ansible_version.startswith("2.9"):
-                (doc, examples, return_docs, metadata) = get_docstring(
+                (doc, examples, returndocs, metadata) = get_docstring(
                     filename=str(plugin_path),
                     fragment_loader=fragment_loader,
                 )
             else:
-                (doc, examples, return_docs, metadata) = get_docstring(
+                (doc, examples, returndocs, metadata) = get_docstring(
                     filename=str(plugin_path),
                     fragment_loader=fragment_loader,
                     collection_name=collection_name,
@@ -388,7 +388,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                 "plugin": {
                     "doc": doc,
                     "examples": examples,
-                    "return_docs": return_docs,
+                    "returndocs": returndocs,
                     "metadata": metadata,
                 },
                 "timestamp": datetime.utcnow().isoformat(),

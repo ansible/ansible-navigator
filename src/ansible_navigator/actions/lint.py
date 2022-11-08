@@ -4,13 +4,13 @@
 
 Internally, it works by using ansible-runner to execute ansible-lint (optionally
 in an execution environment). When running ansible-lint, it passes
-``-f code_climate`` which requests JSON output on stdout. The JSON output contains
+``-f codeclimate`` which requests JSON output on stdout. The JSON output contains
 a list of issues which we then report in the ansible-navigator UI.
 
 We allow users to dig into an individual issue using the standard :<lineno>
 commands, to learn more about the issue.
 
-The full specification for ansible-lint's use of JSON (for the code_climate
+The full specification for ansible-lint's use of JSON (for the codeclimate
 formatter) can be found in src/ansiblelint/formatters/__init__.py in the
 ansible-lint codebase.
 """
@@ -247,7 +247,7 @@ class Action(ActionBase):
             cmd_args += [
                 "--nocolor",
                 "-f",
-                "code_climate",
+                "codeclimate",
             ]
         elif not self._args.display_color:
             cmd_args.append("--nocolor")

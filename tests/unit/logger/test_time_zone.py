@@ -51,13 +51,13 @@ test_data = (
 @pytest.mark.parametrize("data", test_data, ids=str)
 def test(
     data: Scenario,
-    cap_log: pytest.LogCaptureFixture,
+    caplog: pytest.LogCaptureFixture,
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ):
     """Start with the CLI, create log messages and match the time zone.
 
-    :param cap_log: The log capture fixture
+    :param caplog: The log capture fixture
     :param data: The test data
     :param monkeypatch: The monkeypatch fixture
     :param tmp_path: A temporary file path
@@ -84,5 +84,5 @@ def test(
         cli.main()
     # This is a conservative number based on debug logging, it should be closer to 200
     # but this assertion is here to ensure many records were retrieved.
-    assert len(cap_log.records) > 100
-    assert all(data.re_match.match(record.asctime) for record in cap_log.records)
+    assert len(caplog.records) > 100
+    assert all(data.re_match.match(record.asctime) for record in caplog.records)
