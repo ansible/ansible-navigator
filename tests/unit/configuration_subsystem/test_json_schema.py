@@ -38,11 +38,11 @@ def test_additional_properties(schema_dict: SettingsSchemaType):
     :param schema_dict: The json schema as a dictionary
     """
 
-    def property_dive(subschema: SettingsSchemaType):
-        if "properties" in subschema:
-            assert subschema["additionalProperties"] is False
-            for value in subschema["properties"].values():
-                property_dive(subschema=value)
+    def property_dive(sub_schema: SettingsSchemaType):
+        if "properties" in sub_schema:
+            assert sub_schema["additionalProperties"] is False
+            for value in sub_schema["properties"].values():
+                property_dive(sub_schema=value)
 
     property_dive(schema_dict)
 
@@ -60,9 +60,9 @@ def test_no_extras(schema_dict: SettingsSchemaType):
 
     json_paths = []
 
-    def dive(subschema, path=""):
-        if "properties" in subschema:
-            for name, prop in subschema["properties"].items():
+    def dive(sub_schema, path=""):
+        if "properties" in sub_schema:
+            for name, prop in sub_schema["properties"].items():
                 if path:
                     dive(prop, f"{path}.{name}")
                 else:
@@ -119,10 +119,10 @@ def test_schema_dict_all_required(
     :param schema_dict_all_required: The json schema as a dictionary, everything required
     """
 
-    def property_dive(subschema: dict[str, Any]):
-        if "properties" in subschema:
-            assert subschema["required"] == list(subschema["properties"].keys())
-            for value in subschema["properties"].values():
-                property_dive(subschema=value)
+    def property_dive(sub_schema: dict[str, Any]):
+        if "properties" in sub_schema:
+            assert sub_schema["required"] == list(sub_schema["properties"].keys())
+            for value in sub_schema["properties"].values():
+                property_dive(sub_schema=value)
 
     property_dive(schema_dict_all_required)

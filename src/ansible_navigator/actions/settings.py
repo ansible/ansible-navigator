@@ -29,12 +29,12 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, colname: str, entry: PresentableSettingsEntry) -> tuple[int, int]:
+def color_menu(colno: int, col_name: str, entry: PresentableSettingsEntry) -> tuple[int, int]:
     # pylint: disable=unused-argument
     """Color the menu.
 
     :param colno: Column number
-    :param colname: Column name
+    :param col_name: Column name
     :param entry: Column value
     :returns: Constants that curses uses to color a line of text
     """

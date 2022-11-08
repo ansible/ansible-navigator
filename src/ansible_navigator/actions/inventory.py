@@ -29,21 +29,21 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
+def color_menu(colno: int, col_name: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Provide a color for a inventory menu entry in one column.
 
     :param colno: The column number
-    :param colname: The column name
+    :param col_name: The column name
     :param entry: The menu entry
     :returns: The color and decoration
     """
-    if colname in ["__name", "title", "inventory_hostname"]:
+    if col_name in ["__name", "title", "inventory_hostname"]:
         return Color.BRIGHT_GREEN, Decoration.NORMAL
-    if colname == "__taxonomy":
+    if col_name == "__taxonomy":
         return Color.BRIGHT_YELLOW, Decoration.NORMAL
-    if colname == "description":
+    if col_name == "description":
         return Color.BRIGHT_BLUE, Decoration.NORMAL
-    if colname == "__type":
+    if col_name == "__type":
         if entry["__type"] == "group":
             return Color.BRIGHT_YELLOW, Decoration.NORMAL
         return Color.BRIGHT_BLUE, Decoration.NORMAL

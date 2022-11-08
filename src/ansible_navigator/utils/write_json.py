@@ -26,9 +26,9 @@ def write_with_permissions(path: str, mode: int, content: object) -> None:
     :param path: The path of the file to write.
     """
     # Without this, the created file will have 0o777 - 0o022 (default umask) = 0o755 permissions
-    oldmask = os.umask(0)
+    old_mask = os.umask(0)
 
     opener_func = partial(opener, mode=mode)
     with open(path, "w", encoding="utf-8", opener=opener_func) as f:
         f.write(json.dumps(content, indent=4, sort_keys=True))
-    os.umask(oldmask)
+    os.umask(old_mask)

@@ -22,7 +22,7 @@ from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
-from ..ui_framework import nonblocking_notification
+from ..ui_framework import non_blocking_notification
 from ..ui_framework import warning_notification
 from ..utils.print import print_to_stdout
 from . import _actions as actions
@@ -68,12 +68,12 @@ class Action(ActionBase):
             select_func=self._build_image_menu,
         )
 
-    def color_menu(self, colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
+    def color_menu(self, colno: int, col_name: str, entry: dict[str, Any]) -> tuple[int, int]:
         # pylint: disable=unused-argument
         """Provide a color for a images menu entry in one column.
 
         :param colno: The column number
-        :param colname: The column name
+        :param col_name: The column name
         :param entry: The menu entry
         :returns: The color and decoration
         """
@@ -207,7 +207,7 @@ class Action(ActionBase):
             self._prepare_to_exit(interaction)
             return None
 
-        notification = nonblocking_notification(
+        notification = non_blocking_notification(
             messages=["Collecting available images, this may take a minute..."],
         )
         interaction.ui.show_form(notification)
@@ -291,7 +291,7 @@ class Action(ActionBase):
 
         if not self._images.selected["__introspected"]:
             message = "Collecting image details, this may take a minute..."
-            notification = nonblocking_notification(messages=[message])
+            notification = non_blocking_notification(messages=[message])
             self._interaction.ui.show_form(notification)
             introspection_success = self._introspect_image()
             if introspection_success is False:

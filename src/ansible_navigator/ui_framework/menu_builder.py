@@ -128,9 +128,9 @@ class MenuBuilder:
         :returns: The menu head line
         """
         col_starts, cols, adjusted_column_widths = menu_layout
-        coltext = re.sub("^__", "", cols[colno])
-        coltext = re.sub("_", " ", coltext)
-        adj_entry = coltext[0 : adjusted_column_widths[colno]].capitalize()
+        col_text = re.sub("^__", "", cols[colno])
+        col_text = re.sub("_", " ", col_text)
+        adj_entry = col_text[0 : adjusted_column_widths[colno]].capitalize()
         # right justify header if progress
         if cols[colno] == "__progress":
             return CursesLinePart(
@@ -185,15 +185,15 @@ class MenuBuilder:
         _column_starts, cols, _adjusted_column_widths, _header = menu_layout
         menu_line = (menu_entry.get(c) for c in cols)
         line_parts = (
-            self._menu_line_part(colno, coltext, menu_entry, menu_layout)
-            for colno, coltext in enumerate(menu_line)
+            self._menu_line_part(colno, col_text, menu_entry, menu_layout)
+            for colno, col_text in enumerate(menu_line)
         )
         return CursesLine(tuple(line_parts))
 
     def _menu_line_part(
         self,
         colno: int,
-        coltext: Any,
+        col_text: Any,
         menu_entry: dict[str, Any] | ContentBase,
         menu_layout: tuple[list, ...],
     ) -> CursesLinePart:
@@ -201,7 +201,7 @@ class MenuBuilder:
         """Generate one menu line part.
 
         :param colno: The column number of the line part
-        :param coltext: The text to be placed at the given column
+        :param col_text: The text to be placed at the given column
         :param menu_entry: The dict from which the menu line will be generated
         :param menu_layout: A tuple of menu details:
 
@@ -215,11 +215,11 @@ class MenuBuilder:
 
         color, decoration = self._color_menu_item(colno, cols[colno], menu_entry)
 
-        text = str(coltext)[0 : adjusted_column_widths[colno]]
+        text = str(col_text)[0 : adjusted_column_widths[colno]]
 
-        is_bool = isinstance(coltext, bool)
-        is_number = isinstance(coltext, (int, float))
-        is_enum = isinstance(coltext, enum.Enum)
+        is_bool = isinstance(col_text, bool)
+        is_number = isinstance(col_text, (int, float))
+        is_enum = isinstance(col_text, enum.Enum)
         is_duration = cols[colno].lower() == "__duration"
         is_progress = cols[colno].lower() == "__progress"
 

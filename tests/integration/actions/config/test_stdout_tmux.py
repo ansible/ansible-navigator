@@ -60,7 +60,7 @@ stdout_tests = (
         present=["YAML_FILENAME_EXTENSIONS"],
     ),
     ShellCommand(
-        comment="config helpconfig with ee",
+        comment="config help_config with ee",
         user_input=StdoutCommand(
             cmdline="--help-config",
             mode="stdout",
@@ -69,7 +69,7 @@ stdout_tests = (
         present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
-        comment="config helpconfig without ee",
+        comment="config help_config without ee",
         user_input=StdoutCommand(
             cmdline="--help-config",
             mode="stdout",
@@ -78,7 +78,7 @@ stdout_tests = (
         present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
-        comment="config helpconfig with interactive with ee",
+        comment="config help_config with interactive with ee",
         user_input=StdoutCommand(
             cmdline="--help-config",
             mode="interactive",
@@ -87,7 +87,7 @@ stdout_tests = (
         present=["usage: ansible-config [-h]"],
     ),
     ShellCommand(
-        comment="config helpconfig with interactive without ee",
+        comment="config help_config with interactive without ee",
         user_input=StdoutCommand(
             cmdline="--help-config",
             mode="interactive",

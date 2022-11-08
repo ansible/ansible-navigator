@@ -29,7 +29,7 @@ class Formatter(logging.Formatter):
         """Format the log timestamp.
 
         :param record: The log record
-        :param _datefmt: The optiona date format
+        :param _datefmt: The optional date format
         :returns: The timestamp
         """
         if self._time_zone == "local":
@@ -59,7 +59,7 @@ def setup_logger(args: ApplicationConfiguration) -> None:
         time_zone = args.entry("time_zone").value.default
 
     formatter = Formatter(
-        fmt="%(asctime)s %(levelname)s '%(name)s.%(funcName)s' %(message)s",
+        fmt="%(asctime)s %(level_name)s '%(name)s.%(funcName)s' %(message)s",
         time_zone=time_zone,
     )
     handler.setFormatter(formatter)

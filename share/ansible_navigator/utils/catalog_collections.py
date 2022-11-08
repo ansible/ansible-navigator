@@ -125,23 +125,23 @@ class CollectionCatalog:
             error_cataloging_role = False
 
             # Argument spec cataloging, it is not required
-            argspec_name = "argument_specs.yml"
-            argspec_path = role_directory / "meta" / argspec_name
+            arg_spec_name = "argument_specs.yml"
+            arg_spec_path = role_directory / "meta" / arg_spec_name
             role["argument_specs"] = {}
             role["argument_specs_path"] = ""
-            error = {"path": str(argspec_path)}
+            error = {"path": str(arg_spec_path)}
             try:
-                with argspec_path.open(encoding="utf-8") as fh:
+                with arg_spec_path.open(encoding="utf-8") as fh:
                     role["argument_specs"] = yaml.load(fh, Loader=SafeLoader)["argument_specs"]
-                    role["argument_specs_path"] = str(argspec_path)
+                    role["argument_specs_path"] = str(arg_spec_path)
             except KeyError:
-                error["error"] = f"Malformed {argspec_name} for role in {collection_name}."
+                error["error"] = f"Malformed {arg_spec_name} for role in {collection_name}."
                 self._errors.append(error)
             except FileNotFoundError:
-                error["error"] = f"Failed to find {argspec_name} for role in {collection_name}."
+                error["error"] = f"Failed to find {arg_spec_name} for role in {collection_name}."
                 self._errors.append(error)
             except YAMLError:
-                error["error"] = f"Failed to load {argspec_name} for role in {collection_name}."
+                error["error"] = f"Failed to load {arg_spec_name} for role in {collection_name}."
                 self._errors.append(error)
 
             # Defaults cataloging, it is not required
@@ -367,12 +367,12 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
 
         try:
             if ansible_version.startswith("2.9"):
-                (doc, examples, returndocs, metadata) = get_docstring(
+                (doc, examples, return_docs, metadata) = get_docstring(
                     filename=str(plugin_path),
                     fragment_loader=fragment_loader,
                 )
             else:
-                (doc, examples, returndocs, metadata) = get_docstring(
+                (doc, examples, return_docs, metadata) = get_docstring(
                     filename=str(plugin_path),
                     fragment_loader=fragment_loader,
                     collection_name=collection_name,
@@ -388,7 +388,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                 "plugin": {
                     "doc": doc,
                     "examples": examples,
-                    "returndocs": returndocs,
+                    "return_docs": return_docs,
                     "metadata": metadata,
                 },
                 "timestamp": datetime.utcnow().isoformat(),

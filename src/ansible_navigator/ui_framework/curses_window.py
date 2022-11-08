@@ -160,7 +160,7 @@ class CursesWindow:
                                 lineno,
                             )
                             self._logger.debug(
-                                "screen_w: %s, column: %s text: %s, lentext: %s, end_col: %s",
+                                "screen_w: %s, column: %s text: %s, len_text: %s, end_col: %s",
                                 self._screen_width,
                                 column,
                                 text,

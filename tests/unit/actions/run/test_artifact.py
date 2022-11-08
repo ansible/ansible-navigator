@@ -143,17 +143,17 @@ test_data = [
 def test_artifact_path(
     monkeypatch: pytest.MonkeyPatch,
     mocker: MockerFixture,
-    caplog: pytest.LogCaptureFixture,
+    cap_log: pytest.LogCaptureFixture,
     data: Scenario,
 ):
     """Test the building of the artifact filename given a filename or playbook.
 
     :param monkeypatch: The monkeypatch fixture
     :param mocker: The mocker fixture
-    :param caplog: The log capture fixture
+    :param cap_log: The log capture fixture
     :param data: The test data
     """
-    caplog.set_level(logging.DEBUG)
+    cap_log.set_level(logging.DEBUG)
     monkeypatch.setenv("HOME", "/home/test_user")
     monkeypatch.setattr(os, "makedirs", make_dirs)
     monkeypatch.setattr(action, "_get_status", get_status)
@@ -190,9 +190,9 @@ def test_artifact_path(
     if data.help_playbook is not True:
         opened_filename = str(mocked_write.call_args[1]["file"])
         if data.starts_with is not None:
-            assert opened_filename.startswith(data.starts_with), caplog.text
+            assert opened_filename.startswith(data.starts_with), cap_log.text
         if data.re_match is not None:
-            assert data.re_match.match(opened_filename), caplog.text
+            assert data.re_match.match(opened_filename), cap_log.text
     else:
         mocked_write.assert_not_called()
 

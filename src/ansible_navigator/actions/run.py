@@ -35,7 +35,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
 from ..ui_framework import dict_to_form
 from ..ui_framework import form_to_dict
-from ..ui_framework import nonblocking_notification
+from ..ui_framework import non_blocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import abs_user_path
 from ..utils.functions import human_time
@@ -70,21 +70,21 @@ def get_color(word):
     )
 
 
-def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
+def color_menu(_colno: int, col_name: str, entry: dict[str, Any]) -> tuple[int, int]:
     # pylint: disable=too-many-branches
     """Find matching color for word.
 
-    :param colname: The column name
+    :param col_name: The column name
     :param entry: The menu entry
     :returns: The color and decoration
     """
-    colval = entry[colname]
+    col_val = entry[col_name]
     color = 0
     decoration = 0
     if "__play_name" in entry:
-        if not colval:
+        if not col_val:
             color = 8
-        elif colname in ["__task_count", "__play_name", "__progress"]:
+        elif col_name in ["__task_count", "__play_name", "__progress"]:
             failures = entry["__failed"] + entry["__unreachable"]
             if failures:
                 color = 9
@@ -92,25 +92,25 @@ def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, i
                 color = 10
             else:
                 color = 8
-        elif colname == "__changed":
+        elif col_name == "__changed":
             color = 11
         else:
-            color = get_color(colname[2:])
+            color = get_color(col_name[2:])
 
-        if colname == "__progress" and entry["__progress"].strip().lower() == "complete":
+        if col_name == "__progress" and entry["__progress"].strip().lower() == "complete":
             decoration = curses.A_BOLD
 
     elif "task" in entry:
         if entry["__result"].lower() == "in progress":
             color = get_color(entry["__result"])
-        elif colname in ["__result", "__host", "__number", "__task", "__task_action"]:
+        elif col_name in ["__result", "__host", "__number", "__task", "__task_action"]:
             color = get_color(entry["__result"])
-        elif colname == "__changed":
-            if colval is True:
+        elif col_name == "__changed":
+            if col_val is True:
                 color = 11
             else:
                 color = get_color(entry["__result"])
-        elif colname == "__duration":
+        elif col_name == "__duration":
             color = 12
 
     return color, decoration
@@ -315,7 +315,7 @@ class Action(ActionBase):
         # Show a notification until the first the first message from the queue is processed
         if self._subaction_type == "run":
             messages = ["Preparing for automation, please wait..."]
-            notification = nonblocking_notification(messages=messages)
+            notification = non_blocking_notification(messages=messages)
             interaction.ui.show_form(notification)
             while not self._first_message_received:
                 self.update()
@@ -484,7 +484,7 @@ class Action(ActionBase):
         return populated_form
 
     def _prompt_for_playbook(self) -> dict[Any, Any]:
-        """Prepopulate a form to confirm the playbook details.
+        """Pre-populate a form to confirm the playbook details.
 
         :returns: Dict with playbook and inventory detail entries
         """
@@ -549,10 +549,10 @@ class Action(ActionBase):
                 )
 
                 if self._interaction.ui.scroll() < new_scroll and self._auto_scroll:
-                    self._logger.debug("autoscroll disabled")
+                    self._logger.debug("auto_scroll disabled")
                     self._auto_scroll = False
                 elif self._interaction.ui.scroll() >= new_scroll and not self._auto_scroll:
-                    self._logger.debug("autoscroll enabled")
+                    self._logger.debug("auto_scroll enabled")
                     self._auto_scroll = True
 
             elif self.steps.current.type == "content":

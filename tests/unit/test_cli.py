@@ -17,7 +17,7 @@ from ..defaults import FIXTURES_DIR
 
 
 @pytest.mark.parametrize(
-    "given, argname, expected",
+    "given, arg_name, expected",
     (
         (
             ["doc", "-t", "callback", "oneline"],
@@ -77,12 +77,12 @@ from ..defaults import FIXTURES_DIR
         ),
     ),
     ids=[
-        "commandline overrides config file value",
+        "command-line overrides config file value",
         "config file overrides internal default value",
         "explicitly specifying the default still uses default",
         "internal default value gets picked if not overridden",
         "nested config option default",
-        "nested config option override by commandline",
+        "nested config option override by command-line",
         "check editor command",
         "simple inventory test",
         "playbook with inventory",
@@ -92,12 +92,12 @@ from ..defaults import FIXTURES_DIR
     ],
 )
 @patch("shutil.which", return_value="/path/to/container_engine")
-def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
+def test_update_args_general(_mf1, monkeypatch, given, arg_name, expected):
     """Test the parse and update function.
 
     :param monkeypatch: The monkeypatch fixture
     :param given: Exit message params
-    :param argname: Name of the entry
+    :param arg_name: Name of the entry
     :param expected: Expected value of the entry
     """
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
@@ -106,7 +106,7 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     args.application_version = "test"
     _messages, exit_msgs = parse_and_update(params=given, args=args)
     assert not exit_msgs
-    result = args.entry(argname)
+    result = args.entry(arg_name)
     assert result.value.current == expected, result
 
 
@@ -215,13 +215,13 @@ def test_no_term(monkeypatch):
 
 def test_for_version_logged(
     monkeypatch: pytest.MonkeyPatch,
-    caplog: pytest.LogCaptureFixture,
+    cap_log: pytest.LogCaptureFixture,
     tmp_path: Path,
 ):
     """Ensure the version is captured in the log.
 
     :param monkeypatch: The monkey patch fixture
-    :param caplog: The log capture fixture
+    :param cap_log: The log capture fixture
     :param tmp_path: A temporary director for this test
     """
     logfile = tmp_path / "log.txt"
@@ -240,5 +240,5 @@ def test_for_version_logged(
     with pytest.raises(SystemExit):
         # A SystemExit happens here because the container vanishes quickly
         main()
-    assert "ansible-navigator==" in caplog.text
-    assert "ansible-runner==" in caplog.text
+    assert "ansible-navigator==" in cap_log.text
+    assert "ansible-runner==" in cap_log.text
