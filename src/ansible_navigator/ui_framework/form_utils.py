@@ -144,8 +144,8 @@ def break_long_lines(messages):
     return result
 
 
-def non_blocking_notification(messages: list[str]) -> Form:
-    """Generate a std non_blocking notification.
+def nonblocking_notification(messages: list[str]) -> Form:
+    """Generate a std nonblocking notification.
 
     :param messages: List of messages to display
     :returns: Form to display as type dict

@@ -38,7 +38,7 @@ from ..ui_framework import CursesLines
 from ..ui_framework import Decoration
 from ..ui_framework import Interaction
 from ..ui_framework import error_notification
-from ..ui_framework import non_blocking_notification
+from ..ui_framework import nonblocking_notification
 from ..ui_framework import success_notification
 from ..utils.functions import abs_user_path
 from ..utils.functions import remove_ansi
@@ -90,12 +90,12 @@ def severity_to_color(severity: str) -> int:
     return Color.BLACK
 
 
-def color_menu(colno: int, col_name: str, entry: dict[str, Any]) -> tuple[int, int]:
+def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     # pylint: disable=unused-argument
     """Color the menu.
 
     :param colno: The column number
-    :param col_name: The column name
+    :param colname: The column name
     :param entry: The current content entry
     :returns: The foreground and background color
     """
@@ -318,7 +318,7 @@ class Action(ActionBase):
             self._prepare_to_exit(interaction)
             return None
 
-        notification = non_blocking_notification(messages=["Linting, this may take a minute..."])
+        notification = nonblocking_notification(messages=["Linting, this may take a minute..."])
         interaction.ui.show_form(notification)
 
         self._build_issues_menu()

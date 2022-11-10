@@ -122,7 +122,7 @@ class Configurator:
         return self._messages, self._exit_messages
 
     def _argparse_error_handler(self, message: str):
-        """Call back for arg_parser error handling.
+        """Call back for argparser error handling.
 
         :param message: A message from the parser
         :type message: str

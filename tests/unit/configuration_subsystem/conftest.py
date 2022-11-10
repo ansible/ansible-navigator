@@ -129,11 +129,11 @@ def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaT
     :returns: the json schema as a dictionary
     """
 
-    def property_dive(sub_schema: dict):
-        if "properties" in sub_schema:
-            sub_schema["required"] = list(sub_schema["properties"].keys())
-            for value in sub_schema["properties"].values():
-                property_dive(sub_schema=value)
+    def property_dive(subschema: dict):
+        if "properties" in subschema:
+            subschema["required"] = list(subschema["properties"].keys())
+            for value in subschema["properties"].values():
+                property_dive(subschema=value)
 
     property_dive(schema_dict)
     return schema_dict

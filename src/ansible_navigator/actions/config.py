@@ -20,7 +20,7 @@ from ..ui_framework import CursesLine
 from ..ui_framework import CursesLinePart
 from ..ui_framework import CursesLines
 from ..ui_framework import Interaction
-from ..ui_framework import non_blocking_notification
+from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.serialize import Loader
 from ..utils.serialize import yaml
@@ -28,12 +28,12 @@ from . import _actions as actions
 from . import run_action
 
 
-def color_menu(colno: int, col_name: str, entry: dict[str, Any]) -> tuple[int, int]:
+def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     # pylint: disable=unused-argument
     """Provide a color for a collections menu entry in one column.
 
     :param colno: The column number
-    :param col_name: The column name
+    :param colname: The column name
     :param entry: The menu entry
     :returns: The color and decoration
     """
@@ -104,7 +104,7 @@ class Action(ActionBase):
         self._logger.debug("config requested in interactive mode")
         self._prepare_to_run(app, interaction)
 
-        notification = non_blocking_notification(
+        notification = nonblocking_notification(
             messages=[
                 "Collecting the ansible configuration, this may take a minute...",
             ],

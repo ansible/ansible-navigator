@@ -85,13 +85,13 @@ def check_for_ansible() -> tuple[list[LogMessage], list[ExitMessage]]:
 
 
 def clear_screen() -> None:
-    """Print blank lines on the screen, preserving scroll_back.
+    """Print blank lines on the screen, preserving scrollback.
 
     Note: In certain cases, xterm.js based terminals show stdout
     under the initial curses output.
 
     Rather than issuing :command:`clear`, print blank lines to
-    preserve the user's scroll_back buffer.
+    preserve the user's scrollback buffer.
     """
     affected_terminals = ["vscode"]
     if os.environ.get("TERM_PROGRAM") in affected_terminals:
@@ -235,12 +235,12 @@ def flatten_list(data_list) -> list:
 
 def get_share_directory(app_name) -> tuple[list[LogMessage], list[ExitMessage], str | None]:
     # pylint: disable=too-many-return-statements
-    """Return data_dir to use for the ansible-launcher data files. First found wins.
+    """Return datadir to use for the ansible-launcher data files. First found wins.
 
-    Example data_dir: /usr/share/ansible_navigator
+    Example datadir: /usr/share/ansible_navigator
 
     :param app_name: Name of application - currently ansible_navigator
-    :returns: Log messages and full data_dir path
+    :returns: Log messages and full datadir path
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
@@ -269,10 +269,10 @@ def get_share_directory(app_name) -> tuple[list[LogMessage], list[ExitMessage], 
     debug_log(share_directory, False, description)
 
     # ~/.local/share/APP_NAME
-    user_base = sysconfig.get_config_var("user_base")
-    description = "user_base"
-    if user_base is not None:
-        share_directory = os.path.join(user_base, "share", app_name)
+    userbase = sysconfig.get_config_var("userbase")
+    description = "userbase"
+    if userbase is not None:
+        share_directory = os.path.join(userbase, "share", app_name)
         if os.path.exists(share_directory):
             debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
@@ -286,21 +286,21 @@ def get_share_directory(app_name) -> tuple[list[LogMessage], list[ExitMessage], 
         return messages, exit_messages, share_directory
     debug_log(share_directory, False, description)
 
-    # /usr/share/APP_NAME  (or what was specified as the data_root_dir when python was built)
-    data_root_dir = sysconfig.get_config_var("data_root_dir")
-    description = "data_root_dir"
-    if data_root_dir is not None:
-        share_directory = os.path.join(data_root_dir, app_name)
+    # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
+    datarootdir = sysconfig.get_config_var("datarootdir")
+    description = "datarootdir"
+    if datarootdir is not None:
+        share_directory = os.path.join(datarootdir, app_name)
         if os.path.exists(share_directory):
             debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
     debug_log(share_directory, False, description)
 
     # /Library/Python/x.y/share/APP_NAME  (common on macOS)
-    data_dir = sysconfig.get_paths().get("data")
-    description = "data_dir"
-    if data_dir is not None:
-        share_directory = os.path.join(data_dir, "share", app_name)
+    datadir = sysconfig.get_paths().get("data")
+    description = "datadir"
+    if datadir is not None:
+        share_directory = os.path.join(datadir, "share", app_name)
         if os.path.exists(share_directory):
             debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory

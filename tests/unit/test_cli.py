@@ -17,7 +17,7 @@ from ..defaults import FIXTURES_DIR
 
 
 @pytest.mark.parametrize(
-    "given, arg_name, expected",
+    "given, argname, expected",
     (
         (
             ["doc", "-t", "callback", "oneline"],
@@ -77,12 +77,12 @@ from ..defaults import FIXTURES_DIR
         ),
     ),
     ids=[
-        "command-line overrides config file value",
+        "commandline overrides config file value",
         "config file overrides internal default value",
         "explicitly specifying the default still uses default",
         "internal default value gets picked if not overridden",
         "nested config option default",
-        "nested config option override by command-line",
+        "nested config option override by commandline",
         "check editor command",
         "simple inventory test",
         "playbook with inventory",
@@ -92,12 +92,12 @@ from ..defaults import FIXTURES_DIR
     ],
 )
 @patch("shutil.which", return_value="/path/to/container_engine")
-def test_update_args_general(_mf1, monkeypatch, given, arg_name, expected):
+def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
     """Test the parse and update function.
 
     :param monkeypatch: The monkeypatch fixture
     :param given: Exit message params
-    :param arg_name: Name of the entry
+    :param argname: Name of the entry
     :param expected: Expected value of the entry
     """
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
@@ -106,7 +106,7 @@ def test_update_args_general(_mf1, monkeypatch, given, arg_name, expected):
     args.application_version = "test"
     _messages, exit_msgs = parse_and_update(params=given, args=args)
     assert not exit_msgs
-    result = args.entry(arg_name)
+    result = args.entry(argname)
     assert result.value.current == expected, result
 
 

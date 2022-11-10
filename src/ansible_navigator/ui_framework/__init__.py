@@ -6,7 +6,7 @@ from .curses_defs import CursesLines
 from .form_utils import dict_to_form
 from .form_utils import error_notification
 from .form_utils import form_to_dict
-from .form_utils import non_blocking_notification
+from .form_utils import nonblocking_notification
 from .form_utils import success_notification
 from .form_utils import warning_notification
 from .ui import Action
@@ -32,7 +32,7 @@ __all__ = (
     "form_to_dict",
     "Interaction",
     "Menu",
-    "non_blocking_notification",
+    "nonblocking_notification",
     "success_notification",
     "UIConfig",
     "UserInterface",

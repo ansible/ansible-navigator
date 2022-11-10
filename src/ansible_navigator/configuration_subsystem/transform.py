@@ -113,26 +113,26 @@ def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
     partial_schema = json.loads(file_contents)
 
     for entry in settings.entries:
-        sub_schema: dict = partial_schema["properties"]
+        subschema: dict = partial_schema["properties"]
         dot_parts = entry.settings_file_path(prefix=settings.application_name_dashed).split(".")
         for part in dot_parts[:-1]:
-            if isinstance(sub_schema, dict):
-                sub_schema = sub_schema.get(part, {}).get("properties")
-        sub_schema[dot_parts[-1]]["description"] = entry.short_description
+            if isinstance(subschema, dict):
+                subschema = subschema.get(part, {}).get("properties")
+        subschema[dot_parts[-1]]["description"] = entry.short_description
         if entry.choices:
             # choice may be a tuple, so make a list
             choices = list(entry.choices)
-            if sub_schema[dot_parts[-1]].get("type") == "array":
+            if subschema[dot_parts[-1]].get("type") == "array":
                 # A list of items
-                sub_schema[dot_parts[-1]]["items"]["enum"] = choices
+                subschema[dot_parts[-1]]["items"]["enum"] = choices
             else:
                 # A single item
-                sub_schema[dot_parts[-1]]["enum"] = choices
+                subschema[dot_parts[-1]]["enum"] = choices
         if entry.value.schema_default is not Constants.NOT_SET:
             if entry.value.schema_default is not Constants.NONE:
-                sub_schema[dot_parts[-1]]["default"] = entry.value.schema_default
+                subschema[dot_parts[-1]]["default"] = entry.value.schema_default
         elif entry.value.default is not Constants.NOT_SET:
-            sub_schema[dot_parts[-1]]["default"] = entry.value.default
+            subschema[dot_parts[-1]]["default"] = entry.value.default
 
     if isinstance(settings.application_version, Constants):
         version = settings.application_version.value

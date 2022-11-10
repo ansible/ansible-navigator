@@ -161,6 +161,8 @@ def main():
     if run_return.return_code != 0 and run_return.message:
         sys.stderr.write(run_message)
         sys.exit(run_return.return_code)
+    elif run_return.return_code != 0:
+        sys.exit(run_return.return_code)
     elif run_return.message:
         sys.stdout.write(run_message)
 

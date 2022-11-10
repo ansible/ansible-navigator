@@ -6,7 +6,7 @@ from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..ui_framework import Interaction
-from ..ui_framework import non_blocking_notification
+from ..ui_framework import nonblocking_notification
 from . import _actions as actions
 
 
@@ -33,7 +33,7 @@ class Action(ActionBase):
         self._prepare_to_run(app, interaction)
         messages = ["Please wait, this won't take long, about 3 seconds, really."]
 
-        form = non_blocking_notification(messages)
+        form = nonblocking_notification(messages)
         interaction.ui.show_form(form)
         time.sleep(3)
 
