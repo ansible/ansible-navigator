@@ -73,8 +73,6 @@ def pull_image(args):
     if image_puller.assessment.pull_required:
         image_puller.prologue_stdout()
         image_puller.pull_stdout()
-    if image_puller.assessment.exit_messages:
-        error_and_exit_early(image_puller.assessment.exit_messages)
 
 
 def run(args: ApplicationConfiguration) -> ActionReturn:
