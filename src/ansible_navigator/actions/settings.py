@@ -81,7 +81,7 @@ class Action(ActionBase):
 
     KEGEX = r"^se(?:ttings)?$"
 
-    def __init__(self, args):
+    def __init__(self, args) -> None:
         """Initialize the ``:settings`` action.
 
         :param args: The current settings for the application
