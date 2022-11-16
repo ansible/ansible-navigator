@@ -246,7 +246,7 @@ def get_share_directory(app_name) -> tuple[list[LogMessage], list[ExitMessage], 
     exit_messages: list[ExitMessage] = []
     share_directory = None
 
-    def debug_log(directory: str, found: bool, description: str):
+    def debug_log(directory: str | None, found: bool, description: str):
         template = "Share directory '{directory}' {status} ({description})"
         formatted = template.format(
             directory=directory,
@@ -291,7 +291,7 @@ def get_share_directory(app_name) -> tuple[list[LogMessage], list[ExitMessage], 
     description = "datarootdir"
     if datarootdir is not None:
         share_directory = os.path.join(datarootdir, app_name)
-        if os.path.exists(share_directory):
+        if share_directory and os.path.exists(share_directory):
             debug_log(share_directory, True, description)
             return messages, exit_messages, share_directory
     debug_log(share_directory, False, description)
