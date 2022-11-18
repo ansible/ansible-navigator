@@ -162,7 +162,7 @@ YAML_TXT_EXPECTED = [
 
 
 def test_basic_success_yaml_text():
-    """Ensure the yaml string is returned matche the expected tokens."""
+    """Ensure the yaml string is returned match the expected tokens."""
     content_format = ContentFormat.YAML_TXT
 
     result = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(

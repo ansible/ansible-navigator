@@ -48,7 +48,7 @@ class FieldText:
         return self.prompt + self.formatted_default
 
     def pre_populate(self, value: str) -> None:
-        """Prepopulate this text input with a value.
+        """Pre-populate this text input with a value.
 
         This is different from a default
         in that it will populate the text input field.

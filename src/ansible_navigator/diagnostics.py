@@ -265,7 +265,7 @@ class DiagnosticsCollector:
             Command(identity="podman", command="podman --version", post_process=lambda c: c),
             Command(identity="docker", command="docker --version", post_process=lambda c: c),
         ]
-        CommandRunner().run_single_proccess(commands)
+        CommandRunner().run_single_process(commands)
         engines: dict[str, JSONTypes] = {}
         for command in commands:
             engines[command.identity] = {

@@ -84,7 +84,7 @@ class FieldChecks:
         self.current_error = validation.error_msg
 
     def conditional_validation(self, response: FieldChecks) -> None:
-        """Conditional validation for a Fieldchecks instance.
+        """Conditional validation for a field_checks instance.
 
         :param response: Instance to check and verify options are valid
         """

@@ -109,7 +109,7 @@ def serialize_write_temp_file(
     :returns: A ``Path`` to the file written to
     """
     serialization_format = content_format.value.serialization
-    suffix = content_format.value.file_extention
+    suffix = content_format.value.file_extension
 
     if serialization_format is not None:
         dumpable = _prepare_content(
