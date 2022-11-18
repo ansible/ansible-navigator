@@ -450,7 +450,7 @@ class Action(ActionBase):
 
             try:
                 label_check = details["labels"]["ansible-execution-environment"] == "true"
-            except KeyError:
+            except (KeyError, TypeError):
                 label_check = False
             image["execution_environment"] = legacy_check or label_check
         self._images.value = sorted(images, key=lambda i: i["name"])
