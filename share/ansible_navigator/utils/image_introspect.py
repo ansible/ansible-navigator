@@ -79,7 +79,7 @@ class CommandRunner:
         self._pending_queue: Queue | None = None
 
     @staticmethod
-    def run_single_proccess(command_classes: Any):
+    def run_single_process(command_classes: Any):
         """Run commands with a single process.
 
         :param command_classes: All command classes to be run
@@ -98,7 +98,7 @@ class CommandRunner:
             results.append(command)
         return results
 
-    def run_multi_proccess(self, command_classes):
+    def run_multi_process(self, command_classes):
         """Run commands with multiple processes.
 
         Workers are started to read from pending queue.
@@ -404,7 +404,7 @@ def main():
             PythonPackages(),
             SystemPackages(),
         ]
-        results = command_runner.run_multi_proccess(commands)
+        results = command_runner.run_multi_process(commands)
         for result in results:
             result_as_dict = vars(result)
             result_as_dict.pop("parse")

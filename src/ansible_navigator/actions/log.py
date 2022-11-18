@@ -45,10 +45,10 @@ class Action(ActionBase):
                 break
 
             if interaction.ui.scroll() < new_scroll and auto_scroll:
-                self._logger.debug("autoscroll disabled")
+                self._logger.debug("auto_scroll disabled")
                 auto_scroll = False
             elif interaction.ui.scroll() >= new_scroll and not auto_scroll:
-                self._logger.debug("autoscroll enabled")
+                self._logger.debug("auto_scroll enabled")
                 auto_scroll = True
 
         self._prepare_to_exit(interaction)

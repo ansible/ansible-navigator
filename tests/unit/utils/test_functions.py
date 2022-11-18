@@ -66,7 +66,7 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
 
 
 @pytest.mark.parametrize(
-    "set_env, file_path, anticpated_result",
+    "set_env, file_path, anticipated_result",
     (
         (True, os.path.abspath(__file__), os.path.abspath(__file__)),
         (True, "", None),
@@ -82,14 +82,14 @@ def test_env_var_is_file_path(
     monkeypatch,
     set_env: bool,
     file_path: str,
-    anticpated_result: str | None,
+    anticipated_result: str | None,
 ) -> None:
     """Test environment variable is a file path.
 
     :param monkeypatch: The monkeypatch fixture
     :param set_env: To set or not to set the env var
     :param file_path: File path to set env var to
-    :param anticpated_result: Expected outcome for assertion
+    :param anticipated_result: Expected outcome for assertion
     """
     env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
@@ -98,11 +98,11 @@ def test_env_var_is_file_path(
         env_var,
         "config",
     )
-    assert result == anticpated_result
+    assert result == anticipated_result
 
 
 @pytest.mark.parametrize(
-    "value, anticpated_result",
+    "value, anticipated_result",
     (
         ([1, 2, 3], [1, 2, 3]),
         ([1, 2, [3]], [1, 2, 3]),
@@ -114,14 +114,14 @@ def test_env_var_is_file_path(
         "list detailed",
     ],
 )
-def test_flatten_list(value: list, anticpated_result: list) -> None:
+def test_flatten_list(value: list, anticipated_result: list) -> None:
     """Test for flatten list.
 
     :param value: List to be flattened
-    :param anticpated_result: Expected outcome for assertion
+    :param anticipated_result: Expected outcome for assertion
     """
     actual_result = functions.flatten_list(value)
-    assert list(actual_result) == anticpated_result
+    assert list(actual_result) == anticipated_result
 
 
 class HumanTimeTestData(NamedTuple):

@@ -484,7 +484,7 @@ class Action(ActionBase):
         return populated_form
 
     def _prompt_for_playbook(self) -> dict[Any, Any]:
-        """Prepopulate a form to confirm the playbook details.
+        """Pre-populate a form to confirm the playbook details.
 
         :returns: Dict with playbook and inventory detail entries
         """
@@ -549,10 +549,10 @@ class Action(ActionBase):
                 )
 
                 if self._interaction.ui.scroll() < new_scroll and self._auto_scroll:
-                    self._logger.debug("autoscroll disabled")
+                    self._logger.debug("auto_scroll disabled")
                     self._auto_scroll = False
                 elif self._interaction.ui.scroll() >= new_scroll and not self._auto_scroll:
-                    self._logger.debug("autoscroll enabled")
+                    self._logger.debug("auto_scroll enabled")
                     self._auto_scroll = True
 
             elif self.steps.current.type == "content":
