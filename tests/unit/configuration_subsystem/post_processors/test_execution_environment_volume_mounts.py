@@ -61,6 +61,11 @@ test_data = (
         source=C.USER_CLI,
     ),
     Scenario(
+        current=[["/tmp:/tmp:O"]],
+        expected=["/tmp:/tmp:O"],
+        source=C.USER_CLI,
+    ),
+    Scenario(
         current=[["/tmp:/tmp:Y"]],
         exit_message_substr="Unrecognized option: 'Y'",
         source=C.USER_CLI,
@@ -131,6 +136,11 @@ test_data = (
         source=C.USER_CFG,
     ),
     Scenario(
+        current=[{"src": "/tmp", "dest": "/tmp", "options": "O"}],
+        expected=["/tmp:/tmp:O"],
+        source=C.USER_CFG,
+    ),
+    Scenario(
         current=[{"src": "~", "dest": "/tmp", "options": "Z"}],
         expected=[f"{Path.home()}:/tmp:Z"],
         source=C.USER_CFG,
@@ -157,6 +167,16 @@ test_data = (
     Scenario(
         current=[{"src": "/tmp", "dest": "/tmp", "options": "Z,z"}],
         expected=["/tmp:/tmp:Z,z"],
+        source=C.USER_CFG,
+    ),
+    Scenario(
+        current=[{"src": "/tmp", "dest": "/tmp", "options": "O,z"}],
+        expected=["/tmp:/tmp:O,z"],
+        source=C.USER_CFG,
+    ),
+    Scenario(
+        current=[{"src": "/tmp", "dest": "/tmp", "options": "0,z"}],
+        exit_message_substr="Unrecognized option: '0'",
         source=C.USER_CFG,
     ),
     Scenario(

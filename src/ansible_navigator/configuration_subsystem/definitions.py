@@ -320,6 +320,15 @@ class VolumeMountOption(Enum):
     keep in mind that we support both runtimes.
     """
 
+    # Overlay
+    overlay = "O"  # pylint: disable=invalid-name
+
+    # Read Only
+    ro = "ro"  # pylint: disable=invalid-name
+
+    # Read Write
+    rw = "rw"  # pylint: disable=invalid-name
+
     # Relabel as private
     Z = "Z"
 
