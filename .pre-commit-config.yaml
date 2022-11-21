@@ -149,7 +149,7 @@ repos:
       - id: pyupgrade
         args: ["--py38-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v0.990
+    rev: v0.991
     hooks:
       # NOTE: Here MyPy is executed twice -- once for the highest and once
       # NOTE: for the lowest supported version. They are hardcoded in the
@@ -198,7 +198,7 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.15.5
+    rev: v2.15.6
     hooks:
       - id: pylint
         args:
