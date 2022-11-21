@@ -54,7 +54,7 @@ class Constants(Enum):
         " that it will only be used if the subcommand is the same"
     )
     SEARCH_PATH = "Search path"
-    SENTINEL = "Indicates a nonvalue"
+    SENTINEL = "Indicates a non value"
     USER_CFG = "Settings file"
     USER_CLI = "Command line"
 

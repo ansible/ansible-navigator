@@ -38,8 +38,8 @@ class SuspendCurses:
         :param exc_val: The type of exception
         :param traceback: Report of all information related to the exception
         """
-        newscr = curses.initscr()
-        newscr.refresh()
+        new_scr = curses.initscr()
+        new_scr.refresh()
         curses.doupdate()
 
 

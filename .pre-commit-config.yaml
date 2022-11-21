@@ -49,7 +49,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.14.0
+    rev: v6.14.1
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -144,12 +144,12 @@ repos:
           - flake8-isort >= 4.1.1
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.2.0
+    rev: v3.2.2
     hooks:
       - id: pyupgrade
         args: ["--py38-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v0.982
+    rev: v0.990
     hooks:
       # NOTE: Here MyPy is executed twice -- once for the highest and once
       # NOTE: for the lowest supported version. They are hardcoded in the

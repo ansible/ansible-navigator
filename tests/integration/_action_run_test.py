@@ -97,7 +97,7 @@ class ActionRunTest:
         self,
         value: ContentFormat | None = None,
         default: bool = False,
-    ) -> ContentFormat:
+    ):
         """A do nothing content format callable."""
 
     def show(
@@ -110,10 +110,10 @@ class ActionRunTest:
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
-    ) -> Interaction:
+    ):
         """me"""
 
-    def show_form(self, form: Form) -> Form:
+    def show_form(self, form: Form):
         """A do nothing show form callable."""
 
     def run_action_interactive(self) -> Any:
