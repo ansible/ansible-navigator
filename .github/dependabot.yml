@@ -2,6 +2,11 @@
 # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
+  - package-ecosystem: docker
+    # We use this file to load the last known good version of the image
+    directory: .config/
+    schedule:
+      interval: daily
   - package-ecosystem: pip
     directory: /
     schedule:
