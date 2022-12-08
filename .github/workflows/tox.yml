@@ -34,7 +34,7 @@ jobs:
           - tox_env: py310
             python-version: "3.10"
           - tox_env: py311
-            python-version: "~3.11.0-0" # see https://github.com/actions/setup-python/issues/213#issuecomment-1146676713
+            python-version: "3.11"
 
     steps:
       - uses: actions/checkout@v3
@@ -59,7 +59,7 @@ jobs:
           which python
       - name: Install tox
         run: |
-          python3 -m pip install --upgrade tox
+          python3 -m pip install --upgrade "tox>=4.0.2"
       - name: Log installed dists
         run: >-
           python3 -m pip freeze --all
