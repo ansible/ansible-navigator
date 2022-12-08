@@ -66,6 +66,16 @@ test_data = (
         source=C.USER_CLI,
     ),
     Scenario(
+        current=[["/tmp:/tmp:ro"]],
+        expected=["/tmp:/tmp:ro"],
+        source=C.USER_CLI,
+    ),
+    Scenario(
+        current=[["/tmp:/tmp:rw"]],
+        expected=["/tmp:/tmp:rw"],
+        source=C.USER_CLI,
+    ),
+    Scenario(
         current=[["/tmp:/tmp:Y"]],
         exit_message_substr="Unrecognized option: 'Y'",
         source=C.USER_CLI,

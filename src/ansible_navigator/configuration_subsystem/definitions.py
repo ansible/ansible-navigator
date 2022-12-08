@@ -321,7 +321,7 @@ class VolumeMountOption(Enum):
     """
 
     # Overlay
-    overlay = "O"  # pylint: disable=invalid-name
+    OVERLAY = "O"
 
     # Read Only
     ro = "ro"  # pylint: disable=invalid-name
