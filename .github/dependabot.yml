@@ -7,12 +7,15 @@ updates:
     directory: .config/
     schedule:
       interval: daily
+    labels:
+      - dependencies
+      - skip-changelog
   - package-ecosystem: pip
     directory: /
     schedule:
       interval: daily
     labels:
-      - dependabot-deps-updates
+      - dependencies
       - skip-changelog
     versioning-strategy: lockfile-only
     open-pull-requests-limit: 2
@@ -32,5 +35,5 @@ updates:
       interval: weekly
     open-pull-requests-limit: 3
     labels:
-      - "dependencies"
-      - "skip-changelog"
+      - dependencies
+      - skip-changelog
