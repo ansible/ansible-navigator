@@ -30,14 +30,14 @@ logger = logging.getLogger(__name__)
 try:
     from yaml import CSafeDumper as SafeDumper
 except ImportError:
-    from yaml import SafeDumper  # type: ignore[misc] # noqa: F401
+    from yaml import SafeDumper  # type: ignore # noqa: F401
 
 try:
     from yaml import CLoader as Loader
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import Loader  # type: ignore[misc] # noqa: F401
-    from yaml import SafeLoader  # type: ignore[misc] # noqa: F401
+    from yaml import Loader  # type: ignore # noqa: F401
+    from yaml import SafeLoader  # type: ignore # noqa: F401
 # pylint: enable=unused-import
 
 
@@ -111,7 +111,7 @@ def serialize_write_temp_file(
     :returns: A ``Path`` to the file written to
     """
     serialization_format = content_format.value.serialization
-    suffix = content_format.value.file_extention
+    suffix = content_format.value.file_extension
 
     if serialization_format is not None:
         dumpable = _prepare_content(

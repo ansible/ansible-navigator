@@ -73,8 +73,6 @@ def pull_image(args):
     if image_puller.assessment.pull_required:
         image_puller.prologue_stdout()
         image_puller.pull_stdout()
-    if image_puller.assessment.exit_messages:
-        error_and_exit_early(image_puller.assessment.exit_messages)
 
 
 def run(args: ApplicationConfiguration) -> ActionReturn:
@@ -160,6 +158,8 @@ def main():
     run_message = f"{run_return.message}\n"
     if run_return.return_code != 0 and run_return.message:
         sys.stderr.write(run_message)
+        sys.exit(run_return.return_code)
+    elif run_return.return_code != 0:
         sys.exit(run_return.return_code)
     elif run_return.message:
         sys.stdout.write(run_message)

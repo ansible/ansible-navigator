@@ -173,7 +173,7 @@ def parse_ansible_verison() -> tuple[list[LogMessage], list[ExitMessage], dict[s
         post_process=ansible_verison_parser,
     )
 
-    CommandRunner.run_single_proccess(commands=[command])
+    CommandRunner.run_single_process(commands=[command])
     if command.return_code:
         msg = "'ansible --version' reported the following errors:"
         exit_messages.append(ExitMessage(message=msg))

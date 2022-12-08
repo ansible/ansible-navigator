@@ -31,7 +31,7 @@ from yaml.error import YAMLError
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import SafeLoader  # type: ignore[misc]
+    from yaml import SafeLoader  # type: ignore
 
 # Import from the source tree whenever possible. When running
 # in an execution environment, and therefore not type checking

@@ -29,7 +29,7 @@ class Formatter(logging.Formatter):
         """Format the log timestamp.
 
         :param record: The log record
-        :param _datefmt: The optiona date format
+        :param _datefmt: The optional date format
         :returns: The timestamp
         """
         if self._time_zone == "local":

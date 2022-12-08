@@ -596,7 +596,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="playbook-artifact.save-as",
             short_description=(
                 "Specify the name for artifacts created from completed playbooks."
-                "The following placeholders are available: {playbook_dir}, {playbook_name},"
+                " The following placeholders are available: {playbook_dir}, {playbook_name},"
                 " {playbook_status}, and {time_stamp}"
             ),
             subcommands=["run"],

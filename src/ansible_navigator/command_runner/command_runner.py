@@ -96,7 +96,7 @@ class CommandRunner:
         self._pending_queue: Queue | None = None
 
     @staticmethod
-    def run_single_proccess(commands: list[Command]):
+    def run_single_process(commands: list[Command]):
         """Run commands with a single process.
 
         :param commands: All commands to be run
@@ -109,7 +109,7 @@ class CommandRunner:
             results.append(command)
         return results
 
-    def run_multi_proccess(self, commands: list[Command]) -> list[Command]:
+    def run_multi_process(self, commands: list[Command]) -> list[Command]:
         """Run commands with multiple processes.
 
         Workers are started to read from pending queue.
