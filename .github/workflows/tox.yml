@@ -41,7 +41,8 @@ jobs:
         with:
           fetch-depth: 0 # needed by setuptools-scm
 
-      - name: Cache Container images
+      - name: Cache container images
+        if: ${{ startsWith(matrix.tox_env, 'py') }}
         uses: actions/cache@v3
         with:
           path: |
@@ -82,9 +83,9 @@ jobs:
           name: ${{ matrix.tox_env }}
           verbose: true # optional (default = false)
         if: ${{ startsWith(matrix.tox_env, 'py') }}
-      - name: change accessibility for cache
+      - name: Change accessibility for cache
         if: ${{ startsWith(matrix.tox_env, 'py') }}
-        run: podman unshare chmod -R 755 ~/.local/share/containers/  
+        run: podman unshare chmod -R 755 ~/.local/share/containers/
 
   check: # This job does nothing and is only used for the branch protection
     if: always()
