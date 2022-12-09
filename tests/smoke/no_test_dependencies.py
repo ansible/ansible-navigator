@@ -108,7 +108,7 @@ class Test(unittest.TestCase):
         """Execute the smoke tests."""
         tmp_dir = self.test_dir
         commands = _generate_commands(tmp_dir)
-        command_results = CommandRunner().run_multi_proccess(commands)
+        command_results = CommandRunner().run_multi_process(commands)
         for command in command_results:
             with self.subTest():
                 print(command.command)

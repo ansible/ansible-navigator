@@ -145,7 +145,7 @@ class CFormat:
 
     scope: str
     """The scope, used for tokenization"""
-    file_extention: str
+    file_extension: str
     """The file extension, with a ."""
     serialization: SerializationFormat | None
     """If needed the serialization format"""
@@ -155,23 +155,23 @@ class ContentFormat(Enum):
     """All content formats."""
 
     value: CFormat
-    ANSI = CFormat(scope="source.ansi", file_extention=".ansi", serialization=None)
+    ANSI = CFormat(scope="source.ansi", file_extension=".ansi", serialization=None)
     JSON = CFormat(
         scope="source.json",
-        file_extention=".json",
+        file_extension=".json",
         serialization=SerializationFormat.JSON,
     )
-    LOG = CFormat(scope="text.log", file_extention=".log", serialization=None)
-    MARKDOWN = CFormat(scope="text.html.markdown", file_extention=".md", serialization=None)
-    TXT = CFormat(scope="source.txt", file_extention=".txt", serialization=None)
+    LOG = CFormat(scope="text.log", file_extension=".log", serialization=None)
+    MARKDOWN = CFormat(scope="text.html.markdown", file_extension=".md", serialization=None)
+    TXT = CFormat(scope="source.txt", file_extension=".txt", serialization=None)
     YAML = CFormat(
         scope="source.yaml",
-        file_extention=".yml",
+        file_extension=".yml",
         serialization=SerializationFormat.YAML,
     )
     # YAML as string, already serialized
     YAML_TXT = CFormat(
         scope="source.yaml",
-        file_extention=".yml",
+        file_extension=".yml",
         serialization=None,
     )

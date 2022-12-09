@@ -80,7 +80,7 @@ class Action:
             elif filename.endswith(".json"):
                 write_as = ".json"
             else:
-                write_as = interaction.ui.content_format().value.file_extention
+                write_as = interaction.ui.content_format().value.file_extension
 
         if write_as == ".txt":
             with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
