@@ -12,13 +12,14 @@ from ansible_navigator.ui_framework.colorize import Colorize
 from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
+from ansible_navigator.data import __file__ as navigator_data_file
 
 
 SHARE_DIR = os.path.abspath(
     os.path.join(os.path.basename(__file__), "..", "share", "ansible_navigator"),
 )
-THEME_PATH = os.path.join(SHARE_DIR, "themes", "dark_vs.json")
-GRAMMAR_DIR = os.path.join(SHARE_DIR, "grammar")
+THEME_PATH = os.path.join(os.path.basename(navigator_data_file), "themes", "dark_vs.json")
+GRAMMAR_DIR = os.path.join(os.path.basename(navigator_data_file), "grammar")
 
 
 class Sample(NamedTuple):
