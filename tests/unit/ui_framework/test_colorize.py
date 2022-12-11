@@ -8,11 +8,11 @@ from unittest.mock import patch  # pylint: disable=preferred-module  # FIXME: GH
 
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentView
+from ansible_navigator.data import __file__ as navigator_data_file
 from ansible_navigator.ui_framework.colorize import Colorize
 from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
-from ansible_navigator.data import __file__ as navigator_data_file
 
 
 SHARE_DIR = os.path.abspath(
