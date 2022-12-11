@@ -70,7 +70,7 @@ def color_lines(term_color_bits, tokenized) -> str:
 def tokenize(
     content_format: ContentFormat,
     serialized: str,
-    share_directory: str,
+    share_directory: str,  # pylint: disable=unused-argument
 ) -> list[list[SimpleLinePart]]:
     """Serialize and tokenize an object.
 
@@ -80,8 +80,8 @@ def tokenize(
     :returns: A list of list of line parts
     """
     colorizer = Colorize(
-        grammar_dir=os.path.join(share_directory, "grammar"),
-        theme_path=os.path.join(share_directory, "themes", "dark_vs.json"),
+        grammar_dir=os.path.join(os.path.basename(__file__), "..", "data", "grammar"),
+        theme_path=os.path.join(os.path.basename(__file__), "..", "data", "themes", "dark_vs.json"),
     )
 
     tokenized = colorizer.render(doc=serialized, scope=content_format.value.scope)

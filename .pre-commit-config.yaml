@@ -61,7 +61,7 @@ repos:
         exclude: |
           (?x)
           ^
-            share/ansible_navigator/themes/dark_vs\.json
+            src/ansible_navigator/data/themes/dark_vs\.json
           $
 
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
@@ -119,7 +119,7 @@ repos:
           (?x)^
             (
               tests/fixtures/integration/actions/.*\.json|
-              share/ansible_navigator/grammar/.*\.json
+              src/ansible_navigator/data/grammar/.*\.json
             )
           $
 

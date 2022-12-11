@@ -59,7 +59,7 @@ class ActionRunner(ActionBase):
         :type refresh: int
         """
         share_directory = self._args.internals.share_directory
-        theme_dir = os.path.join(share_directory, "themes")
+        theme_dir = os.path.join(os.path.basename(__file__), "data", "themes")
 
         config = UIConfig(
             color=self._args.display_color,
