@@ -13,13 +13,20 @@ requires = [
 [tool.black]
 line-length = 100
 
+[tool.coverage.paths]
+source = ["src", ".tox/*/site-packages"]
+
 [tool.coverage.report]
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
+skip_covered = true
 show_missing = true
 
 [tool.coverage.run]
-branch = true
+# branch = true
+concurrency = ["multiprocessing", "thread"]
+data_file = ".tox/.coverage"
+parallel = true
 source_pkgs = ["ansible_navigator"]
-source = ["share"]
 
 [tool.isort]
 force_single_line = true # Force from .. import to be 1 per line, minimizing changes at time of implementation
