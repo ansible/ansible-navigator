@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12
 ansible-builder==1.1.0
-ansible-core==2.13.4
+ansible-core==2.13.7
 ansible-pygments==0.1.1
 ansible-runner==2.2.1
 attrs==22.1.0
@@ -35,8 +35,8 @@ importlib-metadata==5.1.0
 importlib-resources==5.10.1 ; python_version < "3.9.0"
 iniconfig==1.1.1
 jinja2==3.1.2
-jsonschema==4.16.0
-libtmux==0.15.8
+jsonschema==4.17.3
+libtmux==0.16.0
 linkify-it-py==1.0.3
 lockfile==0.12.2
 markdown-it-py==2.1.0
