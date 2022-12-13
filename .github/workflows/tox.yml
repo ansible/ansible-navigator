@@ -53,39 +53,38 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: >-
-          Log the currently selected Python
-          version info (${{ matrix.python-version }})
-        run: |
-          python --version --version
-          which python
+
       - name: Install tox
+        run: python3 -m pip install --upgrade "tox>=4.0.2"
+
+      - name: Log Python info (${{ matrix.python-version }})
         run: |
-          python3 -m pip install --upgrade "tox>=4.0.2"
-      - name: Log installed dists
-        run: >-
+          command -v python
+          python --version --version
           python3 -m pip freeze --all
+
       - name: "tox -e ${{ matrix.tox_env }}"
         continue-on-error: ${{ matrix.devel || false }}
-        run: |
-          python3 -m tox
-        env:
-          TOXENV: ${{ matrix.tox_env }}
+        run: python3 -m tox -e ${{ matrix.tox_env }}
+
       - name: tox -e no-test-deps
         if: ${{ startsWith(matrix.tox_env, 'py') }}
         continue-on-error: ${{ matrix.devel || false }}
         run: python3 -m tox -e no-test-deps
+
       - name: Upload coverage data
+        if: ${{ startsWith(matrix.tox_env, 'py') }}
         uses: codecov/codecov-action@v3
         with:
-          directory: .tox
-          files: "coverage-*.xml"
           name: ${{ matrix.tox_env }}
+          fail_ci_if_error: false # see https://github.com/codecov/codecov-action/issues/598
+          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true # optional (default = false)
-        if: ${{ startsWith(matrix.tox_env, 'py') }}
       - name: Change accessibility for cache
         if: ${{ startsWith(matrix.tox_env, 'py') }}
         run: podman unshare chmod -R 755 ~/.local/share/containers/
+
+
 
   check: # This job does nothing and is only used for the branch protection
     if: always()

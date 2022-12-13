@@ -6,9 +6,9 @@
 #
 alabaster==0.7.12
 ansible-builder==1.1.0
-ansible-core==2.13.4
+ansible-core==2.13.7
 ansible-pygments==0.1.1
-ansible-runner==2.2.1
+ansible-runner==2.3.1
 attrs==22.1.0
 babel==2.11.0
 backports-zoneinfo==0.2.1 ; python_version < "3.9.0"
@@ -17,7 +17,8 @@ certifi==2022.12.7
 cffi==1.15.1
 cfgv==3.3.1
 charset-normalizer==2.1.1
-coverage==6.5.0
+coverage==7.0.0b1
+coverage-enable-subprocess==1.0
 cryptography==38.0.4
 darglint==1.8.1
 distlib==0.3.6
@@ -35,8 +36,8 @@ importlib-metadata==5.1.0
 importlib-resources==5.10.1 ; python_version < "3.9.0"
 iniconfig==1.1.1
 jinja2==3.1.2
-jsonschema==4.16.0
-libtmux==0.15.8
+jsonschema==4.17.3
+libtmux==0.16.0
 linkify-it-py==1.0.3
 lockfile==0.12.2
 markdown-it-py==2.1.0
@@ -63,7 +64,6 @@ pyflakes==3.0.1
 pygments==2.13.0
 pyrsistent==0.19.2
 pytest==7.2.0
-pytest-cov==4.0.0
 pytest-mock==3.10.0
 pytest-subtests==0.9.0
 pytest-xdist==3.1.0
