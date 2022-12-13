@@ -91,7 +91,7 @@ ansible-navigator:
         KEY2: VALUE2
         KEY3: VALUE3
     # {{ execution-environment.image }}
-    image: quay.io/ansible/creator-ee:latest
+    image: $ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE
     pull:
       # {{ execution-environment.pull.arguments }}
       arguments:

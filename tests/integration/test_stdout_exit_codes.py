@@ -10,7 +10,7 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.utils.functions import shlex_join
-from ..defaults import DEFAULT_CONTAINER_IMAGE
+from ..conftest import container_image
 from ..defaults import FIXTURES_DIR
 
 
@@ -22,7 +22,7 @@ def fixture_params(request):
     """generate parameters"""
     return {
         "execution_environment": request.param,
-        "execution_environment_image": DEFAULT_CONTAINER_IMAGE,
+        "execution_environment_image": container_image("default"),
     }
 
 

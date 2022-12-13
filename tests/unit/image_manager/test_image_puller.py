@@ -9,8 +9,7 @@ import pytest
 
 from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.image_manager import ImagePuller
-from ...defaults import DEFAULT_CONTAINER_IMAGE
-from ...defaults import SMALL_TEST_IMAGE
+from ...conftest import container_image
 
 
 class TstPullPolicy(NamedTuple):
@@ -47,7 +46,7 @@ def test_do_have(valid_container_engine, data):
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
-        image=DEFAULT_CONTAINER_IMAGE,
+        image=container_image("default"),
         arguments=Constants.NOT_SET,
         pull_policy=data.pull_policy,
     )
@@ -73,7 +72,7 @@ def test_do_have_but_latest(valid_container_engine, data):
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
-        image=SMALL_TEST_IMAGE,
+        image=container_image("small"),
         arguments=Constants.NOT_SET,
         pull_policy=data.pull_policy,
     )

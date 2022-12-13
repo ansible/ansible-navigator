@@ -13,6 +13,7 @@ import pytest
 from ansible_navigator.cli import NavigatorConfiguration
 from ansible_navigator.cli import main
 from ansible_navigator.cli import parse_and_update
+from ..conftest import container_image
 from ..defaults import FIXTURES_DIR
 
 
@@ -37,7 +38,7 @@ from ..defaults import FIXTURES_DIR
         (
             ["config"],
             "execution_environment_image",
-            "quay.io/ansible/creator-ee:v0.9.2",
+            container_image("default"),
         ),
         (
             ["config"],

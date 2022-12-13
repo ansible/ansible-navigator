@@ -364,7 +364,10 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="execution-environment.image",
             short_description="Specify the name of the execution environment image",
             value=SettingsEntryValue(
-                default="quay.io/ansible/creator-ee:v0.9.2",
+                default=os.environ.get(
+                    "ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE",
+                    "ghcr.io/ansible/creator-ee:latest",
+                ),
                 schema_default=C.NONE,
             ),
             version_added="v1.0",

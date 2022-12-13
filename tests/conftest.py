@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import subprocess
 
 from copy import deepcopy
+from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 import pytest
 
@@ -21,16 +24,66 @@ from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
 from .defaults import FIXTURES_DIR
-from .defaults import PULLABLE_IMAGE
+
+
+@pytest.fixture(scope="session", autouse=True)
+def auto_pull_images(request):
+    """Pulls test images."""
+    print("\nPulling images...")
+    # Basically during testing we always override the default ee image with
+    # the one that we have stored inside our Dockerfile, so testing is not
+    # affected by the upload of a newer image.
+    os.environ["ANSIBLE_NAVIGATOR_EXECUTION_ENVIRONMENT_IMAGE"] = container_image("default")
+    container_image("small")
+    print("\nDone")
 
 
 @pytest.fixture(scope="session", name="valid_container_engine")
 def fixture_valid_container_image():
     """returns an available container engine"""
+    return container_engine()
+
+
+@lru_cache
+def container_engine() -> str:
+    """Return which container engine should be used."""
     for engine in ("podman", "docker"):
         if shutil.which(engine):
             return engine
     raise Exception("container engine required")
+
+
+@lru_cache
+def container_image(name: Literal["default", "hello", "small"] = "default") -> str:
+    """Teturn default container image, the one that was used during testing."""
+    # these are not to be pre-pulled, as we aim to test our own pulling
+    if name == "hello":
+        return "ghcr.io/ansible/hello-world:linux"
+    if name == "small":
+        # might not be the smallest but is likely already pre-loaded as being
+        # the parent image used by creator-ee, so much faster and less disk space.
+        image = "ghcr.io/ansible/creator-ee:latest"
+    else:
+        containers_map = {"default": ".config/Dockerfile"}
+        if name not in containers_map:
+            raise NotImplementedError(f"Unknown image alias {name}")
+        with open(file=containers_map[name], encoding="utf-8") as f:
+            line = f.read()
+
+            from_re = re.compile("^FROM (.*)$")
+            match = from_re.match(line)
+            if not match:
+                raise RuntimeError("Unable to read test container image.")
+            image = match.groups()[0]
+            if not image:
+                raise RuntimeError("Unable to read test container image.")
+
+    result = subprocess.run(
+        [container_engine(), "pull", "-q", image], capture_output=False, check=False
+    )
+    if result.returncode != 0:
+        pytest.fail(f"Failed to pull container image {image}.")
+    return image
 
 
 @pytest.fixture(scope="function")
@@ -44,8 +97,8 @@ def locked_directory(tmpdir):
 @pytest.fixture(scope="session")
 def pullable_image(valid_container_engine):
     """A container that can be pulled."""
-    yield PULLABLE_IMAGE
-    subprocess.run([valid_container_engine, "image", "rm", PULLABLE_IMAGE], check=True)
+    yield container_image("hello")
+    subprocess.run([valid_container_engine, "image", "rm", container_image("hello")], check=True)
 
 
 @pytest.fixture

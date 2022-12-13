@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from ....defaults import DEFAULT_CONTAINER_IMAGE
+from ....conftest import container_image
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
@@ -12,7 +12,7 @@ from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
-IMAGE_SHORT = DEFAULT_CONTAINER_IMAGE.rsplit("/", maxsplit=1)[-1].split(":")[0]
+IMAGE_SHORT = container_image("default").rsplit("/", maxsplit=1)[-1].split(":")[0]
 
 
 step_back = UiTestStep(user_input=":back", comment="goto info menu", present=["Everything"])
