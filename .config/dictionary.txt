@@ -25,6 +25,7 @@ argparser
 argspec
 argvalues
 astimezone
+autouse             # pytest fixture parameter
 basesystem
 caplog
 codeclimate
