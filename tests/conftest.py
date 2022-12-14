@@ -28,6 +28,7 @@ from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
 from .defaults import FIXTURES_DIR
 from .defaults import PULLABLE_IMAGE
+from .defaults import SMALL_TEST_IMAGE
 
 
 def _valid_container_engine():
@@ -144,16 +145,16 @@ def test_dir_fixture_dir(request):
     return test_dir
 
 
-def pull_default_ee(valid_container_engine: str, default_ee_image_name: str):
-    """Pull the images before the tests start.
+def pull_image(valid_container_engine: str, image_name: str):
+    """Pull an image.
 
     :param valid_container_engine: The container engine to use
-    :param default_ee_image_name: The default EE image name
+    :param image_name: The default EE image name
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
-        image=default_ee_image_name,
-        arguments=[],
+        image=image_name,
+        arguments=["--quiet"],
         pull_policy="missing",
     )
     image_puller.assess()
@@ -179,7 +180,12 @@ def pytest_sessionstart(session: pytest.Session):
     """
     if getattr(session.config, "workerinput", None) is not None:
         return
-    pull_default_ee(
-        valid_container_engine=_valid_container_engine(),
-        default_ee_image_name=_default_ee_image_name(),
+    container_engine = _valid_container_engine()
+    pull_image(
+        valid_container_engine=container_engine,
+        image_name=_default_ee_image_name(),
+    )
+    pull_image(
+        valid_container_engine=container_engine,
+        image_name=SMALL_TEST_IMAGE,
     )
