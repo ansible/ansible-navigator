@@ -1,10 +1,8 @@
 # This file is structured like a multi stage build
 
-# The order here is significant, index 0 is the default EE
-FROM quay.io/ansible/creator-ee:v0.9.2
+# The names ('as') need to correspond the the ImageEntry enum in utils/package_data.py 
+FROM quay.io/ansible/creator-ee:v0.9.2 as DEFAULT_EE
 
-# Index 1 is the small image and should be a base image for the default EE
-FROM quay.io/ansible/python-base:latest
+FROM quay.io/ansible/python-base:latest as SMALL_IMAGE
 
-# Index 2 is simply a pullable image for tests
-FROM registry.hub.docker.com/library/alpine:latest
+FROM registry.hub.docker.com/library/alpine:latest as PULLABLE_IMAGE

@@ -19,9 +19,9 @@ class ImageEntry(Enum):
         :returns: The default execution environment image.
         """
         file_contents = retrieve_content(app_name=app_name, filename="images_dockerfile")
-        from_lines = [line for line in file_contents.splitlines() if line.startswith("FROM")]
+        from_line = (line for line in file_contents.splitlines() if self.name in line)
 
-        image = from_lines[self.value].split()[1]
+        image = next(from_line).split()[1]
         return image
 
 
