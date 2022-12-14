@@ -128,7 +128,7 @@ def test_dir_fixture_dir(request):
 
 @pytest.fixture(scope="session", name="default_ee_image_name")
 def _default_ee_image_name() -> str:
-    """Retreive the default EE image name."""
+    """Retrieve the default EE image name."""
     return retrieve_default_ee_image()
 
 
