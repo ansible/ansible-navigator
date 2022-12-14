@@ -15,8 +15,12 @@ from ansible_navigator.configuration_subsystem.definitions import SettingsFileTy
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
 )
+from ansible_navigator.configuration_subsystem.navigator_configuration import (
+    retrieve_default_ee_image,
+)
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
+from ansible_navigator.image_manager.puller import ImagePuller
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
@@ -25,7 +29,7 @@ from .defaults import PULLABLE_IMAGE
 
 
 @pytest.fixture(scope="session", name="valid_container_engine")
-def fixture_valid_container_image():
+def fixture_valid_container_engine():
     """returns an available container engine"""
     for engine in ("podman", "docker"):
         if shutil.which(engine):
@@ -120,3 +124,30 @@ def test_dir_fixture_dir(request):
     """
     test_dir = Path(FIXTURES_DIR) / request.path.parent.relative_to(Path(__file__).parent)
     return test_dir
+
+
+@pytest.fixture(scope="session", name="default_ee_image_name")
+def _default_ee_image_name() -> str:
+    """Retreive the default EE image name."""
+    return retrieve_default_ee_image()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def pull_default_ee(valid_container_engine: str, default_ee_image_name: str):
+    """Pull the images before the tests start.
+
+    :param valid_container_engine: The container engine to use
+    :param default_ee_image_name: The default EE image name
+    """
+    image_puller = ImagePuller(
+        container_engine=valid_container_engine,
+        image=default_ee_image_name,
+        arguments=[],
+        pull_policy="missing",
+    )
+    image_puller.assess()
+    if image_puller.assessment.exit_messages:
+        raise SystemExit("\n".join(image_puller.assessment.exit_messages))
+    if image_puller.assessment.pull_required:
+        image_puller.prologue_stdout()
+        image_puller.pull_stdout()
