@@ -160,6 +160,9 @@ def pull_default_ee(valid_container_engine: str, default_ee_image_name: str):
         raise SystemExit("\n".join(image_puller.assessment.exit_messages))
     if image_puller.assessment.pull_required:
         image_puller.prologue_stdout()
+        # ensure the output is flushed prior to the pull
+        # cleans up GH action output
+        sys.stdout.flush()
         image_puller.pull_stdout()
 
 
@@ -167,6 +170,8 @@ def pytest_sessionstart(session: pytest.Session):
     """Pull the default EE image before the tests start.
 
     Only in the main process, not the workers.
+
+    :param session: The pytest session object
     """
     workerinput = getattr(session.config, "workerinput", None)
     if workerinput is None:
