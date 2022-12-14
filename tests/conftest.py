@@ -61,7 +61,7 @@ def _small_image_name():
 @pytest.fixture(scope="session", name="small_image_name")
 def fixture_small_image_name():
     """Returns the small image name"""
-    return default_ee_image_name()
+    return _small_image_name()
 
 
 @pytest.fixture(scope="function")
