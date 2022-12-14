@@ -171,6 +171,8 @@ def pytest_sessionstart(session: pytest.Session):
 
     Only in the main process, not the workers.
     https://github.com/pytest-dev/pytest-xdist/issues/271#issuecomment-826396320
+    althought the images will be downloaded by the time the workers
+    run their session start, there is no reason from each to perform the image assesments
 
     :param session: The pytest session object
     """

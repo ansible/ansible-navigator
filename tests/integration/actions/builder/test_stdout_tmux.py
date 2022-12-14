@@ -59,16 +59,17 @@ stdout_tests = (
         ).join(),
         present=["usage: ansible-builder [-h]"],
     ),
-    ShellCommand(
-        comment="build execution-environment without ee",
-        user_input=StdoutCommand(
-            cmdline=f"build --tag test_ee --container-runtime \
-                     docker -v 3  --workdir {BUILDER_FIXTURE}",
-            mode="stdout",
-            execution_environment=False,
-        ).join(),
-        present=["Hello from EE", "The build context can be found at"],
-    ),
+    # In the interest of time, we are not testing the following:
+    # ShellCommand(
+    #     comment="build execution-environment without ee",
+    #     user_input=StdoutCommand(
+    #         cmdline=f"build --tag test_ee --container-runtime \
+    #                  docker -v 3  --workdir {BUILDER_FIXTURE}",
+    #         mode="stdout",
+    #         execution_environment=False,
+    #     ).join(),
+    #     present=["Hello from EE", "The build context can be found at"],
+    # ),
     ShellCommand(
         comment="build execution-environment with ee",
         user_input=StdoutCommand(
@@ -79,26 +80,27 @@ stdout_tests = (
         ).join(),
         present=["Hello from EE", "The build context can be found at"],
     ),
-    ShellCommand(
-        comment="build execution-environment without ee in interactive mode",
-        user_input=StdoutCommand(
-            cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
-                      --workdir {BUILDER_FIXTURE}",
-            mode="interactive",
-            execution_environment=False,
-        ).join(),
-        present=["Hello from EE", "The build context can be found at"],
-    ),
-    ShellCommand(
-        comment="build execution-environment with ee in interactive mode",
-        user_input=StdoutCommand(
-            cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
-                      --workdir {BUILDER_FIXTURE}",
-            mode="interactive",
-            execution_environment=True,
-        ).join(),
-        present=["Hello from EE", "The build context can be found at"],
-    ),
+    # In the interest of time, we are not testing the following:
+    # ShellCommand(
+    #     comment="build execution-environment without ee in interactive mode",
+    #     user_input=StdoutCommand(
+    #         cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
+    #                   --workdir {BUILDER_FIXTURE}",
+    #         mode="interactive",
+    #         execution_environment=False,
+    #     ).join(),
+    #     present=["Hello from EE", "The build context can be found at"],
+    # ),
+    # ShellCommand(
+    #     comment="build execution-environment with ee in interactive mode",
+    #     user_input=StdoutCommand(
+    #         cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
+    #                   --workdir {BUILDER_FIXTURE}",
+    #         mode="interactive",
+    #         execution_environment=True,
+    #     ).join(),
+    #     present=["Hello from EE", "The build context can be found at"],
+    # ),
 )
 
 steps = add_indices(stdout_tests)
