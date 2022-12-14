@@ -170,16 +170,13 @@ def pytest_sessionstart(session: pytest.Session):
     """Pull the default EE image before the tests start.
 
     Only in the main process, not the workers.
+    https://github.com/pytest-dev/pytest-xdist/issues/271#issuecomment-826396320
 
     :param session: The pytest session object
     """
-    workerinput = getattr(session.config, "workerinput", None)
-    if workerinput is None:
-        print("Running on Master Process, or not running in parallel at all.", file=sys.stderr)
-        print("Pulling default execution environment", file=sys.stderr)
-        pull_default_ee(
-            valid_container_engine=_valid_container_engine(),
-            default_ee_image_name=_default_ee_image_name(),
-        )
-    else:
-        print(f"\nRunning on Worker: {workerinput['workerid']}\n", file=sys.stderr)
+    if getattr(session.config, "workerinput", None) is not None:
+        return
+    pull_default_ee(
+        valid_container_engine=_valid_container_engine(),
+        default_ee_image_name=_default_ee_image_name(),
+    )
