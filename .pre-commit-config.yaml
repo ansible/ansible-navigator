@@ -1,16 +1,8 @@
 ---
 default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
-  python: python3.10
+  python: python3.11
 repos:
-  - repo: https://github.com/asottile/add-trailing-comma.git
-    rev: v2.3.0
-    hooks:
-      - id: add-trailing-comma
-        args:
-          - --py36-plus
-        stages: ["manual"]
-
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
@@ -164,8 +156,8 @@ repos:
       # NOTE: in `tox.ini` as well.
       - &_base-mypy-setup-map
         id: mypy
-        alias: mypy-py310
-        name: MyPy, for Python 3.10
+        alias: mypy-py311
+        name: mypy-py311
         additional_dependencies:
           - jinja2
           - libtmux
@@ -176,11 +168,11 @@ repos:
           - types-setuptools # Needed logging version
           - types-PyYAML
         args:
-          - --python-version=3.10
+          - --python-version=3.11
         pass_filenames: false
       - <<: *_base-mypy-setup-map
         alias: mypy-py38
-        name: MyPy, for Python 3.8
+        name: mypy-py38
         additional_dependencies:
           - importlib-resources # < 3.9
           - jinja2
@@ -202,12 +194,12 @@ repos:
     hooks:
       - id: pylint
         args:
-          # FIXME: uncomment once it doesn't have violations
-          # - docs/
+          - docs/
           - share/
           - src/
           - tests/
         additional_dependencies:
+          - dill>=0.3.6 # needed for py311
           - ansible-core
           - astroid
           - ansible-runner

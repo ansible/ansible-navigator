@@ -3,21 +3,14 @@
 version: 2
 
 build:
-  os: "ubuntu-20.04"
+  os: "ubuntu-22.04"
   tools:
-    python: "3.10"
-
+    python: "3.11"
+  jobs:
+    pre_build:
+      - pip install '.[docs]'
+      - ansible-navigator --version
 formats: all
-
-python:
-  install:
-    # We also defined PIP_CONSTRAINTS=requirements.txt on
-    # https://readthedocs.org/dashboard/ansible-navigator/environmentvariables/
-    - method: pip
-      path: .
-      extra_requirements:
-        - docs
-  system_packages: false
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
