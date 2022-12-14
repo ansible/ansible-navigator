@@ -4,6 +4,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+import sys
 
 from copy import deepcopy
 from pathlib import Path
@@ -28,13 +29,29 @@ from .defaults import FIXTURES_DIR
 from .defaults import PULLABLE_IMAGE
 
 
-@pytest.fixture(scope="session", name="valid_container_engine")
-def fixture_valid_container_engine():
-    """returns an available container engine"""
+def _valid_container_engine():
+    """Returns an available container engine."""
     for engine in ("podman", "docker"):
         if shutil.which(engine):
             return engine
     raise Exception("container engine required")
+
+
+@pytest.fixture(scope="session", name="valid_container_engine")
+def fixture_valid_container_engine():
+    """Returns an available container engine."""
+    return _valid_container_engine()
+
+
+def _default_ee_image_name():
+    """Returns the default ee image name."""
+    return retrieve_default_ee_image()
+
+
+@pytest.fixture(scope="session", name="default_ee_image_name")
+def fixture_default_image_name():
+    """Returns an available container engine"""
+    return _default_ee_image_name()
 
 
 @pytest.fixture(scope="function")
@@ -126,13 +143,6 @@ def test_dir_fixture_dir(request):
     return test_dir
 
 
-@pytest.fixture(scope="session", name="default_ee_image_name")
-def _default_ee_image_name() -> str:
-    """Retrieve the default EE image name."""
-    return retrieve_default_ee_image()
-
-
-@pytest.fixture(scope="session", autouse=True)
 def pull_default_ee(valid_container_engine: str, default_ee_image_name: str):
     """Pull the images before the tests start.
 
@@ -151,3 +161,20 @@ def pull_default_ee(valid_container_engine: str, default_ee_image_name: str):
     if image_puller.assessment.pull_required:
         image_puller.prologue_stdout()
         image_puller.pull_stdout()
+
+
+def pytest_sessionstart(session: pytest.Session):
+    """Pull the default EE image before the tests start.
+
+    Only in the main process, not the workers.
+    """
+    workerinput = getattr(session.config, "workerinput", None)
+    if workerinput is None:
+        print("Running on Master Process, or not running in parallel at all.", file=sys.stderr)
+        print("Pulling default execution environment", file=sys.stderr)
+        pull_default_ee(
+            valid_container_engine=_valid_container_engine(),
+            default_ee_image_name=_default_ee_image_name(),
+        )
+    else:
+        print(f"\nRunning on Worker: {workerinput['workerid']}\n", file=sys.stderr)
