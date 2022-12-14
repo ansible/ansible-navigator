@@ -5,7 +5,7 @@ from ..app_public import AppPublic
 from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..content_defs import ContentFormat
 from ..ui_framework import Interaction
-from ..utils.compatibility import importlib_resources
+from ..utils.packaged_data import retrieve_content
 from . import _actions as actions
 
 
@@ -37,9 +37,7 @@ class Action(ActionBase):
         self._logger.debug("welcome requested")
         self._prepare_to_run(app, interaction)
 
-        with importlib_resources.open_text("ansible_navigator.package_data", "welcome.md") as fh:
-            welcome_md = fh.read()
-
+        welcome_md = retrieve_content(filename="welcome.md")
         while True:
             self._calling_app.update()
             interaction = interaction.ui.show(
