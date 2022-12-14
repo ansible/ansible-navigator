@@ -5,7 +5,8 @@ from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._interactions import add_indices
-from .base import BUILDER_FIXTURE
+
+# from .base import BUILDER_FIXTURE
 from .base import BaseClass
 
 
@@ -59,7 +60,12 @@ stdout_tests = (
         ).join(),
         present=["usage: ansible-builder [-h]"],
     ),
-    # In the interest of time, we are not testing the following:
+    # In the interest of time, we are not testing the following
+    # until we can find a faster, more reliable way to run these
+    # they are disabled.
+    # Once caching with GHA is in place we should uncomment one and see
+    # the time it takes to run is the container has previously been built and cached
+    #
     # ShellCommand(
     #     comment="build execution-environment without ee",
     #     user_input=StdoutCommand(
@@ -70,17 +76,16 @@ stdout_tests = (
     #     ).join(),
     #     present=["Hello from EE", "The build context can be found at"],
     # ),
-    ShellCommand(
-        comment="build execution-environment with ee",
-        user_input=StdoutCommand(
-            cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
-                     --workdir {BUILDER_FIXTURE}",
-            mode="stdout",
-            execution_environment=True,
-        ).join(),
-        present=["Hello from EE", "The build context can be found at"],
-    ),
-    # In the interest of time, we are not testing the following:
+    # ShellCommand(
+    #     comment="build execution-environment with ee",
+    #     user_input=StdoutCommand(
+    #         cmdline=f"build --tag test_ee --container-runtime docker -v 3 \
+    #                  --workdir {BUILDER_FIXTURE}",
+    #         mode="stdout",
+    #         execution_environment=True,
+    #     ).join(),
+    #     present=["Hello from EE", "The build context can be found at"],
+    # ),
     # ShellCommand(
     #     comment="build execution-environment without ee in interactive mode",
     #     user_input=StdoutCommand(

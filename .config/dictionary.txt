@@ -85,6 +85,7 @@ returndocs
 runtimes
 scrollback
 sectionauthor
+sessionstart        # pytest_sessionstart
 smartquotes
 somevalue
 sphinxcontrib

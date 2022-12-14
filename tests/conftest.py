@@ -1,3 +1,4 @@
+# cspell:ignore sessionstart,workerinput
 """fixtures for all tests"""
 from __future__ import annotations
 
@@ -171,8 +172,8 @@ def pytest_sessionstart(session: pytest.Session):
 
     Only in the main process, not the workers.
     https://github.com/pytest-dev/pytest-xdist/issues/271#issuecomment-826396320
-    althought the images will be downloaded by the time the workers
-    run their session start, there is no reason from each to perform the image assesments
+    although the images will be downloaded by the time the workers
+    run their session start, there is no reason from each to perform the image assessments
 
     :param session: The pytest session object
     """
