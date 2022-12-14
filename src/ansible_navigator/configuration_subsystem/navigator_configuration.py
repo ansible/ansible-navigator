@@ -94,7 +94,7 @@ def retrieve_default_ee_image() -> str:
 
     :returns: The default execution environment image.
     """
-    file_contents = retrieve_content(APP_NAME, "default_ee_dockerfile")
+    file_contents = retrieve_content(app_name=APP_NAME, filename="default_ee_dockerfile")
     from_line = (line for line in file_contents.splitlines() if line.startswith("FROM"))
     image = next(from_line).split()[1]
     return image

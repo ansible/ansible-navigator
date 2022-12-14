@@ -12,7 +12,8 @@ def retrieve_content(app_name: str, filename: str) -> str:
     """
     data_directory = "data"
     package = f"{app_name}.{data_directory}"
-    with importlib_resources.open_text(package, filename) as fh:
+
+    with importlib_resources.files(package).joinpath(filename).open("r", encoding="utf-8") as fh:
         content = fh.read()
 
     return content
