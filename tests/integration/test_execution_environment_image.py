@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from ansible_navigator import cli
-from ..defaults import DEFAULT_CONTAINER_IMAGE
+from ..conftest import default_ee_image_name
 from ..defaults import FIXTURES_DIR
 from ._cli2runner import Cli2Runner
 from ._cli2runner import RunnerTestException
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock  # pylint: disable=preferred-module
 
 test_data = [
-    ("defaults", "", "ansible-navigator_empty.yml", {"container_image": DEFAULT_CONTAINER_IMAGE}),
+    ("defaults", "", "ansible-navigator_empty.yml", {"container_image": default_ee_image_name()}),
     (
         "set at command line",
         "--execution-environment-image quay.io/ansible/python-base",

@@ -14,21 +14,18 @@ import pytest
 
 from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
+from ansible_navigator.configuration_subsystem.navigator_configuration import APP_NAME
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
-)
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    retrieve_default_ee_image,
 )
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.image_manager.puller import ImagePuller
+from ansible_navigator.utils.packaged_data import ImageEntry
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
 from .defaults import FIXTURES_DIR
-from .defaults import PULLABLE_IMAGE
-from .defaults import SMALL_TEST_IMAGE
 
 
 def _valid_container_engine():
@@ -45,15 +42,26 @@ def fixture_valid_container_engine():
     return _valid_container_engine()
 
 
-def _default_ee_image_name():
+def default_ee_image_name():
     """Returns the default ee image name."""
-    return retrieve_default_ee_image()
+    return ImageEntry.DEFAULT_EE.get(app_name=APP_NAME)
 
 
 @pytest.fixture(scope="session", name="default_ee_image_name")
 def fixture_default_image_name():
-    """Returns an available container engine"""
-    return _default_ee_image_name()
+    """Returns the default ee image name."""
+    return default_ee_image_name()
+
+
+def _small_image_name():
+    """Returns the small image name"""
+    return ImageEntry.SMALL_IMAGE.get(app_name=APP_NAME)
+
+
+@pytest.fixture(scope="session", name="small_image_name")
+def fixture_small_image_name():
+    """Returns the small image name"""
+    return default_ee_image_name()
 
 
 @pytest.fixture(scope="function")
@@ -67,8 +75,9 @@ def locked_directory(tmpdir):
 @pytest.fixture(scope="session")
 def pullable_image(valid_container_engine):
     """A container that can be pulled."""
-    yield PULLABLE_IMAGE
-    subprocess.run([valid_container_engine, "image", "rm", PULLABLE_IMAGE], check=True)
+    image = ImageEntry.PULLABLE_IMAGE.get(app_name=APP_NAME)
+    yield image
+    subprocess.run([valid_container_engine, "image", "rm", image], check=True)
 
 
 @pytest.fixture
@@ -183,9 +192,9 @@ def pytest_sessionstart(session: pytest.Session):
     container_engine = _valid_container_engine()
     pull_image(
         valid_container_engine=container_engine,
-        image_name=_default_ee_image_name(),
+        image_name=default_ee_image_name(),
     )
     pull_image(
         valid_container_engine=container_engine,
-        image_name=SMALL_TEST_IMAGE,
+        image_name=_small_image_name(),
     )

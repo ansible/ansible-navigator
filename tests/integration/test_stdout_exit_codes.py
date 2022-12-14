@@ -10,7 +10,6 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.utils.functions import shlex_join
-from ..defaults import DEFAULT_CONTAINER_IMAGE
 from ..defaults import FIXTURES_DIR
 
 
@@ -18,11 +17,16 @@ PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.
 
 
 @pytest.fixture(name="params")
-def fixture_params(request):
-    """generate parameters"""
+def fixture_params(default_ee_image_name: str, request: pytest.FixtureRequest) -> dict[str, str]:
+    """Generate parameters.
+
+    :param default_ee_image_name: The default execution environment image name
+    :param request: The pytest request object
+    :returns: The parameters
+    """
     return {
         "execution_environment": request.param,
-        "execution_environment_image": DEFAULT_CONTAINER_IMAGE,
+        "execution_environment_image": default_ee_image_name,
     }
 
 

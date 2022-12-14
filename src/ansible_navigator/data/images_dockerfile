@@ -1,0 +1,10 @@
+# This file is structured like a multi stage build
+
+# The order here is significant, the first is the default EE
+FROM quay.io/ansible/creator-ee:v0.9.2
+
+# The second is the small image and should be a base image for the default EE
+FROM quay.io/ansible/python-base:latest
+
+# The thrid is simply a pullable image for tests
+FROM "registry.hub.docker.com/library/alpine:latest"
