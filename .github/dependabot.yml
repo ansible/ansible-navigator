@@ -4,7 +4,7 @@ version: 2
 updates:
   - package-ecosystem: docker
     # We use this file to load the last known good version of the image
-    directory: .config/
+    directory: .src/ansible_navigator/data
     schedule:
       interval: daily
     labels:

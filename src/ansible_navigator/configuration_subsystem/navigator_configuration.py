@@ -13,6 +13,7 @@ from ..utils.functions import abs_user_path
 from ..utils.functions import get_share_directory
 from ..utils.functions import oxfordcomma
 from ..utils.key_value_store import KeyValueStore
+from ..utils.packaged_data import retrieve_content
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
@@ -86,6 +87,17 @@ def generate_share_directory():
     initialization_messages.extend(messages)
     initialization_exit_messages.extend(exit_messages)
     return share_directory
+
+
+def retrieve_default_ee_image() -> str:
+    """Retrieve the default execution environment image.
+
+    :returns: The default execution environment image.
+    """
+    file_contents = retrieve_content(APP_NAME, "default_ee_dockerfile")
+    from_line = (line for line in file_contents.splitlines() if line.startswith("FROM"))
+    image = next(from_line).split()[1]
+    return image
 
 
 @dataclass
@@ -364,7 +376,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="execution-environment.image",
             short_description="Specify the name of the execution environment image",
             value=SettingsEntryValue(
-                default="quay.io/ansible/creator-ee:v0.9.2",
+                default=retrieve_default_ee_image(),
                 schema_default=C.NONE,
             ),
             version_added="v1.0",
