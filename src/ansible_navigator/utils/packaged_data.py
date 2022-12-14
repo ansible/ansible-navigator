@@ -3,7 +3,7 @@
 from .compatibility import importlib_resources
 
 
-def retrieve_content(filename: str, app_name: str = "ansible_navgiator") -> str:
+def retrieve_content(filename: str, app_name: str = "ansible_navigator") -> str:
     """Retrieve the content of a packaged data file.
 
     :param app_name: The name of the application.
