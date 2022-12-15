@@ -12,10 +12,12 @@ from pytest_mock import MockerFixture
 
 from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from tests.defaults import id_func
+from ....defaults import BaseScenario
 
 
 @dataclass
-class Scenario:
+class Scenario(BaseScenario):
     """The runner test data object."""
 
     # pylint: disable=too-many-instance-attributes
@@ -96,7 +98,7 @@ test_data = [
 ]
 
 
-@pytest.mark.parametrize("data", test_data, ids=str)
+@pytest.mark.parametrize("data", test_data, ids=id_func)
 def test_runner_args(mocker: MockerFixture, data: Scenario):
     """Test the arguments passed to runner API.
 

@@ -119,7 +119,15 @@ data_will_have = [
 ]
 
 
-@pytest.mark.parametrize("data", data_will_have, ids=id_from_data)
+@pytest.mark.parametrize(
+    "data",
+    (
+        pytest.param(TstPullPolicy(pull_policy="missing", pull_required=True), id="0"),
+        pytest.param(TstPullPolicy(pull_policy="always", pull_required=True), id="1"),
+        pytest.param(TstPullPolicy(pull_policy="never", pull_required=False), id="2"),
+        pytest.param(TstPullPolicy(pull_policy="tag", pull_required=True), id="3"),
+    ),
+)
 def test_will_have(valid_container_engine, pullable_image, data):
     """Test using an image not local.
 
@@ -151,10 +159,10 @@ data_image_tag = [
     "image, expected_tag",
     data_image_tag,
     ids=[
-        "simple image name, no tag specified",
-        "simple image name, with tag",
-        "complex image URL, with port but no tag",
-        "complex image URL, with port and tag",
+        "simple-image-name,no-tag-specified",
+        "simple-image-name,with-tag",
+        "complex-image-URL,with-port-but-no-tag",
+        "complex-image-URL,with-port-and-tag",
     ],
 )
 def test_tag_parsing(image, expected_tag):

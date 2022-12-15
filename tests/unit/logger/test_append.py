@@ -7,12 +7,15 @@ from pathlib import Path
 import pytest
 
 from ansible_navigator import cli
+from tests.defaults import id_func
+from ...defaults import BaseScenario
 
 
 @dataclass
-class Scenario:
+class Scenario(BaseScenario):
     """Data for the log append tests."""
 
+    name: str
     log_append: bool
     repeat: int = 5
     session_count: int = 1
@@ -43,12 +46,12 @@ class Scenario:
 
 
 test_data = (
-    Scenario(log_append=True, session_count=5),
-    Scenario(log_append=False, session_count=1),
+    Scenario(name="0", log_append=True, session_count=5),
+    Scenario(name="1", log_append=False, session_count=1),
 )
 
 
-@pytest.mark.parametrize("data", test_data, ids=str)
+@pytest.mark.parametrize("data", test_data, ids=id_func)
 def test(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     """Start with the CLI, create log messages and count.
 
