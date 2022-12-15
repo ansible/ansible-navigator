@@ -52,7 +52,6 @@ def generate_editor_command() -> str:
     :returns: command to be run by specific editor
     """
     editor = os.environ.get("EDITOR")
-
     if editor is None:
         message = "EDITOR environment variable not set"
         initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
