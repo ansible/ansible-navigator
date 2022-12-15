@@ -1,16 +1,20 @@
 """Functionality related to the retrieval of packaged data files."""
 
 from enum import Enum
+from enum import auto
 
 from .compatibility import importlib_resources
 
 
 class ImageEntry(Enum):
-    """A mapping of ID to sequence within the image dockerfile."""
+    """A mapping of ID to sequence within the image dockerfile.
 
-    DEFAULT_EE = 0
-    SMALL_IMAGE = 1
-    PULLABLE_IMAGE = 2
+    The values are not currenty used.
+    """
+
+    DEFAULT_EE = auto()
+    SMALL_IMAGE = auto()
+    PULLABLE_IMAGE = auto()
 
     def get(self, app_name: str) -> str:
         """Retrieve an image name from the packaged container file.
