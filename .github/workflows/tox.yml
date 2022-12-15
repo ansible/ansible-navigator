@@ -47,7 +47,7 @@ jobs:
         with:
           path: |
             ~/.local/share/containers
-          key: ${{ runner.os }}-${{ hashFiles('.config/Dockerfile') }}
+          key: ${{ runner.os }}-${{ hashFiles('src/ansible_navigator/data/images_dockerfile') }}
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
@@ -83,8 +83,6 @@ jobs:
       - name: Change accessibility for cache
         if: ${{ startsWith(matrix.tox_env, 'py') }}
         run: podman unshare chmod -R 755 ~/.local/share/containers/
-
-
 
   check: # This job does nothing and is only used for the branch protection
     if: always()
