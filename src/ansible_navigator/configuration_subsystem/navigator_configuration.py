@@ -51,9 +51,6 @@ def generate_editor_command() -> str:
 
     :returns: command to be run by specific editor
     """
-    # This is called at import time, so we need to check if pytest is loaded
-    # to avoid pulling in the user environment variable
-
     editor = os.environ.get("EDITOR")
 
     if editor is None:
