@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 
 from pathlib import Path
@@ -49,3 +50,7 @@ def test(
     assert local_env_vars["details"]["ANSIBLE_NAVIGATOR_CONFIG"] == str(settings_path)
     for _section_name, section in diagnostics.items():
         assert not section.get("errors")
+
+    # Test the file permissions as well since diagnostics takes time to run
+    status = os.stat(file_name)
+    assert oct(status.st_mode)[-3:] == str(oct(0o600))[-3:]
