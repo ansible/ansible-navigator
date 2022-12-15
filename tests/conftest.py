@@ -167,10 +167,10 @@ def pull_image(valid_container_engine: str, image_name: str):
         pull_policy="missing",
     )
     image_puller.assess()
+    image_puller.prologue_stdout()
     if image_puller.assessment.exit_messages:
         raise SystemExit("\n".join(image_puller.assessment.exit_messages))
     if image_puller.assessment.pull_required:
-        image_puller.prologue_stdout()
         # ensure the output is flushed prior to the pull
         # cleans up GH action output
         sys.stdout.flush()
