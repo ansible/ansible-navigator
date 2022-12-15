@@ -227,11 +227,9 @@ def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
             USER_ENVIRONMENT[k] = os.environ.pop(k)
         if k == "EDITOR":
             USER_ENVIRONMENT[k] = os.environ.pop(k)
-
-    environment_vars = ",".join(USER_ENVIRONMENT.keys())
-    print(
-        f"[NOTE] The environment variable(s) {environment_vars} will be restored after the test run"
-    )
+    if USER_ENVIRONMENT:
+        env_vars = ",".join(USER_ENVIRONMENT.keys())
+        print(f"[NOTE] The environment variable(s) {env_vars} will be restored after the test run")
 
     # look for ansible.cfg
     _log, errors, details = parse_ansible_verison()
