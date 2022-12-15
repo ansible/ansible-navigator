@@ -5,7 +5,7 @@ from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..ui_framework import Interaction
-from ..utils.compatibility import importlib_resources
+from ..utils.packaged_data import retrieve_content
 from . import _actions as actions
 
 
@@ -32,9 +32,7 @@ class Action(ActionBase):
         self._logger.debug("help requested")
         self._prepare_to_run(app, interaction)
 
-        with importlib_resources.open_text("ansible_navigator.package_data", "help.md") as fh:
-            help_md = fh.read()
-
+        help_md = retrieve_content(filename="help.md")
         while True:
             interaction = interaction.ui.show(
                 obj=help_md,

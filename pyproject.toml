@@ -75,4 +75,5 @@ enable = [
 ]
 
 [tool.setuptools_scm]
+local_scheme = "no-local-version"
 write_to = "src/ansible_navigator/_version.py"
