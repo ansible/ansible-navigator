@@ -9,7 +9,7 @@ from .compatibility import importlib_resources
 class ImageEntry(Enum):
     """A mapping of ID to sequence within the image dockerfile.
 
-    The values are not currenty used.
+    The values are not currently used.
     """
 
     DEFAULT_EE = auto()
