@@ -29,7 +29,7 @@ class ImageEntry(Enum):
         return image
 
 
-def retrieve_content(app_name: str, filename: str) -> str:
+def retrieve_content(filename: str, app_name: str = "ansible_navigator") -> str:
     """Retrieve the content of a packaged data file.
 
     :param app_name: The name of the application.

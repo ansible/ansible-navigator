@@ -6,9 +6,9 @@ import textwrap
 
 from typing import Any
 
-from ..utils.compatibility import importlib_resources
 from ..utils.dict_merge import in_place_list_replace
 from ..utils.functions import shlex_join
+from ..utils.packaged_data import retrieve_content
 from .definitions import ApplicationConfiguration
 from .definitions import Constants
 from .definitions import SettingsEntry
@@ -104,12 +104,7 @@ def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
     :param settings: The application settings
     :returns: The json schema
     """
-    with importlib_resources.open_text(
-        "ansible_navigator.package_data",
-        "settings-schema.partial.json",
-    ) as fh:
-        file_contents = fh.read()
-
+    file_contents = retrieve_content("settings-schema.partial.json")
     partial_schema = json.loads(file_contents)
 
     for entry in settings.entries:
@@ -154,12 +149,8 @@ def to_sample(settings: ApplicationConfiguration) -> tuple[str, str]:
     :returns: One selectively commented sample, one uncommented
     """
     # pylint: disable=too-many-locals
-    with importlib_resources.open_text(
-        "ansible_navigator.package_data",
-        "settings-sample.template.yml",
-    ) as fh:
 
-        file_contents = fh.read().splitlines()
+    file_contents = retrieve_content(filename="settings-sample.template.yml").splitlines()
 
     # Remove anything before the `---`
     yaml_doc_start = file_contents.index("---")

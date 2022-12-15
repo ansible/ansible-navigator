@@ -95,7 +95,7 @@ repos:
                 installation
               )|
               README|
-              src/ansible_navigator/package_data/(help|welcome)
+              src/ansible_navigator/data/(help|welcome)
             )\.md
           $
 
