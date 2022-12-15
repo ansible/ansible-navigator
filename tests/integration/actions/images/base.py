@@ -12,16 +12,18 @@ from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
-IMAGE_SHORT = default_ee_image_name().rsplit("/", maxsplit=1)[-1].split(":")[0]
+# Note: This filters the list of images based on image version
+# It is not bullet proof since 2 images could have the same version
+IMAGE_VERSION = default_ee_image_name().split(":")[-1]
 
 
 step_back = UiTestStep(user_input=":back", comment="goto info menu", present=["Everything"])
 
 base_steps = (
     UiTestStep(
-        user_input=f":f {IMAGE_SHORT}",
-        comment=f"filter for {IMAGE_SHORT}",
-        present=[IMAGE_SHORT],
+        user_input=f":f {IMAGE_VERSION}",
+        comment=f"filter for {IMAGE_VERSION}",
+        present=[IMAGE_VERSION],
     ),
     UiTestStep(user_input=":0", comment="goto info menu", present=["Everything"]),
     UiTestStep(user_input=":0", comment="goto Image information", present=["architecture:"]),
