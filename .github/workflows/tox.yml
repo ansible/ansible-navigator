@@ -41,11 +41,13 @@ jobs:
         with:
           fetch-depth: 0 # needed by setuptools-scm
 
-      - name: Install system dependencies
-        # oniguruma.h is needed on py311 because onigurumacffi does not yet
-        # have pre-compiled wheels for it.
-        if: contains(matrix.os, 'ubuntu')
-        run: sudo apt-get install -y libonig-dev tmux
+      - name: Cache container images
+        if: ${{ startsWith(matrix.tox_env, 'py') }}
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.local/share/containers
+          key: ${{ runner.os }}-${{ hashFiles('src/ansible_navigator/data/images_dockerfile') }}
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
@@ -78,6 +80,9 @@ jobs:
           fail_ci_if_error: false # see https://github.com/codecov/codecov-action/issues/598
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true # optional (default = false)
+      - name: Change accessibility for cache
+        if: ${{ startsWith(matrix.tox_env, 'py') }}
+        run: podman unshare chmod -R 755 ~/.local/share/containers/
 
   check: # This job does nothing and is only used for the branch protection
     if: always()
