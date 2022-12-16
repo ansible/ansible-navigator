@@ -74,6 +74,9 @@ enable = [
 
 ]
 
+[tool.pytest.ini_options]
+addopts = "-n=auto --dist=loadfile --maxfail=10 --durations=30 --showlocals"
+
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
 write_to = "src/ansible_navigator/_version.py"

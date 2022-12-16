@@ -1,4 +1,4 @@
-# cspell:ignore sessionstart,workerinput
+# cspell:ignore sessionstart,unconfigure,workerinput
 """fixtures for all tests"""
 from __future__ import annotations
 
@@ -18,9 +18,11 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import AP
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
 )
+from ansible_navigator.configuration_subsystem.utils import parse_ansible_verison
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.image_manager.puller import ImagePuller
+from ansible_navigator.utils.functions import find_settings_file
 from ansible_navigator.utils.packaged_data import ImageEntry
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import serialize_write_file
@@ -123,10 +125,21 @@ def settings_env_var_to_full(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> tuple[Path, SettingsFileType]:
-    """Set the settings environment variable to a full sample settings file in a tmp path."""
+    """Set the settings environment variable to a full sample settings file in a tmp path.
+
+    :param settings_samples: The commented and uncommented samples
+    :param tmp_path: The tmp path
+    :param monkeypatch: Fixture for patching
+    :returns: The settings path and the settings contents
+    """
     _commented, uncommented = settings_samples
     settings_contents = yaml.load(uncommented, Loader=Loader)
     settings_path = tmp_path / "ansible-navigator.yml"
+
+    # Update the sample with the actual default execution environment image to avoid a pull attempt
+    image = default_ee_image_name()
+    settings_contents["ansible-navigator"]["execution-environment"]["image"] = image
+
     serialize_write_file(
         content=settings_contents,
         content_view=ContentView.NORMAL,
@@ -198,3 +211,49 @@ def pytest_sessionstart(session: pytest.Session):
         valid_container_engine=container_engine,
         image_name=_small_image_name(),
     )
+
+
+USER_ENVIRONMENT = {}
+
+
+def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
+    """Attempt to save a contributor some troubleshooting.
+
+    :param config: The pytest config object
+    """
+    # limit an environment variables that may conflict with tests
+    for k in os.environ:
+        if k.startswith("ANSIBLE_"):
+            USER_ENVIRONMENT[k] = os.environ.pop(k)
+        if k == "EDITOR":
+            USER_ENVIRONMENT[k] = os.environ.pop(k)
+    if USER_ENVIRONMENT:
+        env_vars = ",".join(USER_ENVIRONMENT.keys())
+        print(f"[NOTE] The environment variable(s) {env_vars} will be restored after the test run")
+
+    # look for ansible.cfg
+    _log, errors, details = parse_ansible_verison()
+    if details is None:
+        err = "\n".join(error.message for error in errors)
+        pytest.exit(f"Error parsing ansible version:\n{err}")
+    config_file = details["config file"]
+    if config_file != "None":
+        pytest.exit(f"Please remove the ansible config file '{config_file}' before testing.")
+
+    # look for ansible-navigator settings file
+    _log, _errors, file_path = find_settings_file()
+    if file_path:
+        pytest.exit(f"Please remove the settings file '{file_path}' before testing.")
+
+    # ensure a virtual environment is active
+    if not os.environ.get("VIRTUAL_ENV"):
+        pytest.exit("Please activate a virtual environment before testing.")
+
+
+def pytest_unconfigure(config: pytest.Config):  # pylint: disable=unused-argument
+    """Restore the environment variables that start with ANSIBLE_.
+
+    :param config: The pytest config object
+    """
+    for key, value in USER_ENVIRONMENT.items():
+        os.environ[key] = value
