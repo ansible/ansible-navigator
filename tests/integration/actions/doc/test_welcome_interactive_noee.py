@@ -33,7 +33,7 @@ testdata_module_doc_not_exist = [
         ":doc company_name.coll_1.doesnotexist",
         "ansible-navigator doc wrong plugin name",
         "module_doc_fail",
-        ["module company_name.coll_1.doesnotexist not found in", "local_errors"],
+        ["WARNING", "module", "company_name.coll_1.doesnotexist", "not", "found", "local_errors"],
     ),
 ]
 
