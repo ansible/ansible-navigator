@@ -4,7 +4,7 @@ default_language_version:
   python: python3.11
 repos:
   - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: v5.11.3
     hooks:
       - id: isort
         name: Sort import statements using isort
@@ -190,7 +190,7 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.15.8
+    rev: v2.15.9
     hooks:
       - id: pylint
         args:
