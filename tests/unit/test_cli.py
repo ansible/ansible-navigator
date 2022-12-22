@@ -19,77 +19,76 @@ from ..defaults import FIXTURES_DIR
 @pytest.mark.parametrize(
     "given, argname, expected",
     (
-        (
+        pytest.param(
             ["doc", "-t", "callback", "oneline"],
             "plugin_type",
             "callback",
+            id="commandline overrides config file value",
         ),
-        (
+        pytest.param(
             ["doc", "sudo"],
             "plugin_name",
             "sudo",
+            id="config file overrides internal default value",
         ),
-        (
+        pytest.param(
             ["doc", "-t", "become", "sudo"],
             "plugin_type",
             "become",
+            id="explicitly specifying the default still uses default",
         ),
-        (
+        pytest.param(
             ["config"],
             "execution_environment_image",
             "quay.io/ansible/creator-ee:v0.9.2",
+            id="internal default value gets picked if not overridden",
         ),
-        (
+        pytest.param(
             ["config"],
             "log_level",
             "critical",
+            id="nested config option default",
         ),
-        (
+        pytest.param(
             ["config", "--log-level", "debug"],
             "log_level",
             "debug",
+            id="nested config option override by commandline",
         ),
-        ([], "editor_command", "emacs -nw +{line_number} {filename}"),
-        (
+        pytest.param(
+            [], "editor_command", "emacs -nw +{line_number} {filename}", id="check editor command"
+        ),
+        pytest.param(
             ["inventory", "-i", "/tmp/inventory.yaml"],
             "inventory",
             ["/tmp/inventory.yaml"],
+            id="simple inventory test",
         ),
-        (
+        pytest.param(
             ["run", "site.yaml", "-i", "/tmp/inventory.yaml"],
             "inventory",
             ["/tmp/inventory.yaml"],
+            id="playbook with inventory",
         ),
-        (
+        pytest.param(
             ["inventory", "-i", "/inv0.yaml", "-i", "/inv1.yaml"],
             "inventory",
             ["/inv0.yaml", "/inv1.yaml"],
+            id="multiple inventory",
         ),
-        (
+        pytest.param(
             ["run", "site.yaml", "-i", "/inv0.yaml", "-i", "/inv1.yaml"],
             "inventory",
             ["/inv0.yaml", "/inv1.yaml"],
+            id="run and multiple inventory",
         ),
-        (
+        pytest.param(
             ["run", "/site.yaml"],
             "playbook",
             "/site.yaml",
+            id="run, check playbook",
         ),
     ),
-    ids=[
-        "commandline overrides config file value",
-        "config file overrides internal default value",
-        "explicitly specifying the default still uses default",
-        "internal default value gets picked if not overridden",
-        "nested config option default",
-        "nested config option override by commandline",
-        "check editor command",
-        "simple inventory test",
-        "playbook with inventory",
-        "multiple inventory",
-        "run and multiple inventory",
-        "run, check playbook",
-    ],
 )
 @patch("shutil.which", return_value="/path/to/container_engine")
 def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
@@ -150,26 +149,38 @@ class TstHint(NamedTuple):
 
 
 tst_hint_data = [
-    TstHint(command=r"--cdcp {locked_directory}/foo.db", expected="without '--cdcp'", set_ce=True),
-    TstHint(command="--econ not_bool", expected="with '--econ true'"),
-    TstHint(command="--ee not_bool", expected="with '--ee true'"),
-    TstHint(command="inventory", expected="with '-i <path to inventory>'"),
-    TstHint(command="--la not_bool", expected="with '--la true'"),
-    TstHint(
-        command="--lf {locked_directory}/test.log",
-        expected="with '--lf ~/ansible-navigator.log'",
+    pytest.param(
+        TstHint(
+            command=r"--cdcp {locked_directory}/foo.db", expected="without '--cdcp'", set_ce=True
+        ),
+        id="0",
     ),
-    TstHint(command="-m stderr", expected="with '-m stdout'"),
-    TstHint(command="--osc4 not_bool", expected="with '--osc4 true'"),
-    TstHint(command="doc", expected="with 'doc <plugin_name>"),
-    TstHint(command="run", expected="with 'run <playbook name>"),
-    TstHint(command="run --pae not_bool", expected="with '--pae true"),
-    TstHint(command="replay", expected="with 'replay <path to playbook artifact>'"),
-    TstHint(command="--senv FOO:BAR", expected="with '--senv MY_VAR=my_value'"),
+    pytest.param(TstHint(command="--econ not_bool", expected="with '--econ true'"), id="1"),
+    pytest.param(TstHint(command="--ee not_bool", expected="with '--ee true'"), id="2"),
+    pytest.param(TstHint(command="inventory", expected="with '-i <path to inventory>'"), id="3"),
+    pytest.param(TstHint(command="--la not_bool", expected="with '--la true'"), id="4"),
+    pytest.param(
+        TstHint(
+            command="--lf {locked_directory}/test.log",
+            expected="with '--lf ~/ansible-navigator.log'",
+        ),
+        id="5",
+    ),
+    pytest.param(TstHint(command="-m stderr", expected="with '-m stdout'"), id="6"),
+    pytest.param(TstHint(command="--osc4 not_bool", expected="with '--osc4 true'"), id="7"),
+    pytest.param(TstHint(command="doc", expected="with 'doc <plugin_name>"), id="8"),
+    pytest.param(TstHint(command="run", expected="with 'run <playbook name>"), id="9"),
+    pytest.param(TstHint(command="run --pae not_bool", expected="with '--pae true"), id="10"),
+    pytest.param(
+        TstHint(command="replay", expected="with 'replay <path to playbook artifact>'"), id="11"
+    ),
+    pytest.param(
+        TstHint(command="--senv FOO:BAR", expected="with '--senv MY_VAR=my_value'"), id="12"
+    ),
 ]
 
 
-@pytest.mark.parametrize("data", tst_hint_data, ids=id_for_hint_test)
+@pytest.mark.parametrize("data", tst_hint_data)
 def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
     """Test the hints don't generate a traceback.
 

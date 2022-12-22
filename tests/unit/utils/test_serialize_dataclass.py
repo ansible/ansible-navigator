@@ -17,6 +17,7 @@ from ansible_navigator.content_defs import ContentBase
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
+from ...defaults import id_func
 
 
 class ParametrizeView(NamedTuple):
@@ -24,7 +25,7 @@ class ParametrizeView(NamedTuple):
 
     argnames: str = "content_view"
     argvalues: Iterable = (ContentView.NORMAL, ContentView.FULL)
-    ids: Callable = str
+    ids: Callable = id_func
 
 
 class ParametrizeFormat(NamedTuple):
@@ -32,7 +33,7 @@ class ParametrizeFormat(NamedTuple):
 
     argnames: str = "serialization_tuple"
     argvalues: Iterable = (("j", SerializationFormat.JSON), ("y", SerializationFormat.YAML))
-    ids: Callable = str
+    ids: Callable = id_func
 
 
 SimpleDictValueT = Union[bool, str, int]

@@ -25,19 +25,8 @@ def id_for_cli(val):
 def id_for_name(val):
     """Return an id based on entry name."""
     if isinstance(val, SettingsEntry):
-        return f" {val.name} "
+        return f"{val.name}"
     return ""
-
-
-def id_for_settings(val):
-    """Generate an id for a settings entry."""
-    if val in ["DEFAULT_CFG", "USER_CFG"]:
-        return f"others={val}"
-    if val == "ansible-navigator_empty.yml":
-        return "empty settings file"
-    if val == "ansible-navigator.yml":
-        return "full settings file"
-    return val
 
 
 def config_post_process(expected, path):

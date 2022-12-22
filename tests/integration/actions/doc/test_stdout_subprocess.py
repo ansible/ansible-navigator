@@ -9,6 +9,8 @@ from pathlib import Path
 import pytest
 
 from ansible_navigator.utils.functions import shlex_join
+from tests.defaults import BaseScenario
+from tests.defaults import id_func
 
 
 BUILTINS = (
@@ -19,7 +21,7 @@ BUILTINS = (
 
 
 @dataclass(frozen=True)
-class StdoutCliTest:
+class StdoutCliTest(BaseScenario):
     """Definition of a stdout cli test."""
 
     comment: str
@@ -96,7 +98,7 @@ StdoutCliTests = (
 
 
 @pytest.mark.usefixtures("use_venv")
-@pytest.mark.parametrize(argnames="data", argvalues=StdoutCliTests, ids=str)
+@pytest.mark.parametrize(argnames="data", argvalues=StdoutCliTests, ids=id_func)
 @pytest.mark.parametrize(argnames="exec_env", argvalues=(True, False), ids=("ee_true", "ee_false"))
 def test(
     monkeypatch: pytest.MonkeyPatch,

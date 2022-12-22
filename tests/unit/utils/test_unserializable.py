@@ -8,18 +8,19 @@ import pytest
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
+from ...defaults import id_func
 
 
 content_views = pytest.mark.parametrize(
     argnames="content_view",
     argvalues=ContentView.__members__.items(),
-    ids=ContentView.__members__,
+    ids=id_func,
 )
 
 serialization_formats = pytest.mark.parametrize(
     argnames="serialization_format",
     argvalues=SerializationFormat.__members__.items(),
-    ids=SerializationFormat.__members__,
+    ids=id_func,
 )
 
 

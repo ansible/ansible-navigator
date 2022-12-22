@@ -12,13 +12,15 @@ import pytest
 
 from ansible_navigator.utils.functions import shlex_join
 from ...defaults import FIXTURES_DIR
+from ...defaults import BaseScenario
+from ...defaults import id_func
 
 
 TEST_FIXTURE_DIR = Path(FIXTURES_DIR) / "unit" / "configuration_subsystem"
 
 
 @dataclass
-class Scenario:
+class Scenario(BaseScenario):
     """Data for the tests."""
 
     comment: str
@@ -63,7 +65,7 @@ test_data = (
 )
 
 
-@pytest.mark.parametrize("data", test_data, ids=str)
+@pytest.mark.parametrize("data", test_data, ids=id_func)
 def test(data: Scenario, subtests: Any, tmp_path: Path):
     """Test for json schema errors.
 

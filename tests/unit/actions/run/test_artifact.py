@@ -17,6 +17,8 @@ from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.initialization import parse_and_update
+from tests.defaults import id_func
+from ....defaults import BaseScenario
 
 
 def make_dirs(*_args, **_kwargs):
@@ -40,7 +42,7 @@ def get_status(*_args, **_kwargs):
 
 
 @dataclass
-class Scenario:
+class Scenario(BaseScenario):
     """The artifact files test data object."""
 
     name: str
@@ -139,7 +141,7 @@ test_data = [
 ]
 
 
-@pytest.mark.parametrize("data", test_data, ids=str)
+@pytest.mark.parametrize("data", test_data, ids=id_func)
 def test_artifact_path(
     monkeypatch: pytest.MonkeyPatch,
     mocker: MockerFixture,
