@@ -29,7 +29,7 @@ jobs:
           other_names: |
             lint
             docs
-  build:
+  tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
     runs-on: ubuntu-20.04
     needs: pre
