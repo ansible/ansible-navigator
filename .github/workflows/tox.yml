@@ -15,26 +15,27 @@ on:
   pull_request:
 
 jobs:
-  tox:
-    name: ${{ matrix.tox_env }} / python ${{ matrix.python-version }}
+  pre:
+    name: pre
+    runs-on: ubuntu-22.04
+    outputs:
+      matrix: ${{ steps.generate_matrix.outputs.matrix }}
+    steps:
+      - name: Determine matrix
+        id: generate_matrix
+        uses: coactions/dynamic-matrix@v1
+        with:
+          max_python: "3.11"
+          other_names: |
+            lint
+            docs
+  build:
+    name: ${{ matrix.name }} / python ${{ matrix.python_version }}
     runs-on: ubuntu-20.04
+    needs: pre
     strategy:
       fail-fast: false
-      matrix:
-        tox_env:
-          - lint
-          - docs
-        python-version:
-          - "3.11"
-        include:
-          - tox_env: py38
-            python-version: 3.8
-          - tox_env: py39
-            python-version: 3.9
-          - tox_env: py310
-            python-version: "3.10"
-          - tox_env: py311
-            python-version: "3.11"
+      matrix: ${{ fromJson(needs.pre.outputs.matrix) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -42,46 +43,46 @@ jobs:
           fetch-depth: 0 # needed by setuptools-scm
 
       - name: Cache container images
-        if: ${{ startsWith(matrix.tox_env, 'py') }}
+        if: ${{ startsWith(matrix.passed_name, 'py') }}
         uses: actions/cache@v3
         with:
           path: |
             ~/.local/share/containers
           key: ${{ runner.os }}-${{ hashFiles('src/ansible_navigator/data/images_dockerfile') }}
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python_version }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python_version }}
 
       - name: Install tox
         run: python3 -m pip install --upgrade "tox>=4.0.2"
 
-      - name: Log Python info (${{ matrix.python-version }})
+      - name: Log Python info (${{ matrix.python_version }})
         run: |
           command -v python
           python --version --version
           python3 -m pip freeze --all
 
-      - name: "tox -e ${{ matrix.tox_env }}"
+      - name: "tox -e ${{ matrix.passed_name }}"
         continue-on-error: ${{ matrix.devel || false }}
-        run: python3 -m tox -e ${{ matrix.tox_env }}
+        run: python3 -m tox -e ${{ matrix.passed_name }}
 
       - name: tox -e no-test-deps
-        if: ${{ startsWith(matrix.tox_env, 'py') }}
+        if: ${{ startsWith(matrix.passed_name, 'py') }}
         continue-on-error: ${{ matrix.devel || false }}
         run: python3 -m tox -e no-test-deps
 
       - name: Upload coverage data
-        if: ${{ startsWith(matrix.tox_env, 'py') }}
+        if: ${{ startsWith(matrix.passed_name, 'py') }}
         uses: codecov/codecov-action@v3
         with:
-          name: ${{ matrix.tox_env }}
+          name: ${{ matrix.passed_name }}
           fail_ci_if_error: false # see https://github.com/codecov/codecov-action/issues/598
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true # optional (default = false)
       - name: Change accessibility for cache
-        if: ${{ startsWith(matrix.tox_env, 'py') }}
+        if: ${{ startsWith(matrix.passed_name, 'py') }}
         run: podman unshare chmod -R 755 ~/.local/share/containers/
 
   check: # This job does nothing and is only used for the branch protection
