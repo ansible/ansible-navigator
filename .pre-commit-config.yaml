@@ -1,7 +1,4 @@
 ---
-default_language_version:
-  # ensures that we get same behavior on CI(s) as on local machines
-  python: python3.11
 repos:
   - repo: https://github.com/PyCQA/isort
     rev: v5.11.3
