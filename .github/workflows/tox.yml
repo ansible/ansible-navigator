@@ -26,6 +26,7 @@ jobs:
         uses: coactions/dynamic-matrix@v1
         with:
           max_python: "3.11"
+          default_python: "3.11" # used by jobs in other_names
           other_names: |
             lint
             docs

@@ -115,7 +115,6 @@ nitpick_ignore = [
     ("py:class", "argparse._SubParsersAction"),
     ("py:class", "dataclasses.InitVar"),
     ("py:class", "multiprocessing.context.BaseContext.Queue"),
-    ("py:class", "type"),
     ("py:class", "yaml.cyaml.CSafeDumper"),
     ("py:class", "yaml.dumper.SafeDumper"),
     ("py:class", "yaml.nodes.ScalarNode"),
