@@ -4,7 +4,7 @@
 
 A text-based user interface (TUI) for the Red Hat Ansible Automation Platform.
 
-A demo of the interface can be found [on youtube][YT demo].
+A demo of the interface can be found [on YouTube][YT demo].
 
 [YT demo]: https://www.youtube.com/watch?v=J9PBKi8ydi4
 
@@ -27,7 +27,7 @@ ansible-navigator --help
 By default, ansible-navigator uses a container runtime (`podman` or `docker`,
 whichever it finds first) and runs Ansible within an execution environment
 (a pre-built container image which includes [ansible-core] along with a set
-of Ansible collections).
+of Ansible collections.)
 
 This default behavior can be disabled by starting ansible-navigator with
 `--execution-environment false`. In this case, Ansible and any collections
@@ -55,7 +55,7 @@ A full list of key bindings can be viewed by typing `:help`.
 There are two modes in which ansible-navigator can be run:
 
 * The **interactive** mode, which provides a curses-based user interface and
-  allows you to "zoom in" on data in real-time, filter it, and navigate between
+  allows you to "zoom in" on data in real time, filter it, and navigate between
   various Ansible components; and
 * The **stdout** mode, which does *not* use curses, and simply returns the
   output to the terminal's standard output stream, as Ansible's commands
@@ -86,7 +86,7 @@ Some examples:
 * Run and explore a playbook:
   `ansible-navigator run site.yaml -i inventory.yaml`
 
-Or, using the **stdout** mode described above:
+Or using the **stdout** mode described above:
 
 * Show the current Ansible configuration:
   `ansible-navigator config dump -m stdout`
