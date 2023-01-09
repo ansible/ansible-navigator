@@ -65,3 +65,7 @@ Prerequisites:
    indicates the version of python that needs to be installed for tox to run
    locally.
    ```
+
+Use [ansible-navigator debug guide] to debug around the code base using VS Code.
+
+[ansible-navigator debug guide]: https://github.com/shatakshiiii/debuggingNavigator/blob/main/README.md
