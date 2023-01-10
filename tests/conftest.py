@@ -222,7 +222,10 @@ def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
     :param config: The pytest config object
     """
     # limit an environment variables that may conflict with tests
+    allow = ("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES",)
     for k in os.environ:
+        if k in allow:
+            continue
         if k.startswith("ANSIBLE_"):
             USER_ENVIRONMENT[k] = os.environ.pop(k)
         if k == "EDITOR":
