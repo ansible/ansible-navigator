@@ -113,9 +113,12 @@ class TmuxSession:
         # get the USER before we start a clean shell
         user = os.environ.get("USER")
         home = os.environ.get("HOME")
+   
+        # set a clean shell and predictable prompt
+        self.cli_prompt = "bash$"
+        self._pane.send_keys("clear && env -i bash --noprofile --norc")
+        self._pane.send_keys(f"export PS1={self.cli_prompt}")
 
-        # get a clean shell and predictable prompt
-        self.cli_prompt = self._get_cli_prompt()
 
         # set environment variables for this session
         tmux_common = [f". {venv}"]
@@ -243,7 +246,7 @@ class TmuxSession:
         # this risk here is if the shell command is instant and returns to a prompt
         # before we get the screen this will result in a timeout
         pre_send = self._pane.capture_pane()
-        self._pane.send_keys(value)
+        self._pane.send_keys(value)    
         command_executed = False
         while True:
             showing = self._pane.capture_pane()
@@ -333,23 +336,3 @@ class TmuxSession:
 
         return showing
 
-    def _get_cli_prompt(self):
-        """get CLI prompt"""
-        # start a fresh clean shell, set TERM
-        start_time = timer()
-        self._pane.send_keys("clear && env -i bash --noprofile --norc")
-        bash_prompt_visible = False
-        while True:
-            showing = self._pane.capture_pane()
-            if showing:
-                bash_prompt_visible = showing[-1].endswith("$")
-            if bash_prompt_visible:
-                break
-
-            elapsed = timer() - start_time
-            if elapsed > self._shell_prompt_timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX BASH TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                raise ValueError(alert)
-            time.sleep(0.1)
-        return showing[-1]
