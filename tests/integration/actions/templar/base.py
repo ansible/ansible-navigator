@@ -65,7 +65,7 @@ class BaseClass:
     def fixture_tmux_session(request):
         """Return a new tmux session.
 
-        The EDITOR is set here such that vim will not create swap files.
+        The EDITOR is set here such that vi will not create swap files.
         :param request: A fixture providing details about the test caller
         :yields: A tmux session
         """
@@ -75,7 +75,7 @@ class BaseClass:
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
-                "export EDITOR='vim -n'",
+                "export EDITOR='vi -n'",
             ],
             "unique_test_id": request.node.nodeid,
         }
