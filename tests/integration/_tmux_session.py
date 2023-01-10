@@ -113,12 +113,11 @@ class TmuxSession:
         # get the USER before we start a clean shell
         user = os.environ.get("USER")
         home = os.environ.get("HOME")
-   
+
         # set a clean shell and predictable prompt
         self.cli_prompt = "bash$"
         self._pane.send_keys("clear && env -i bash --noprofile --norc")
         self._pane.send_keys(f"export PS1={self.cli_prompt}")
-
 
         # set environment variables for this session
         tmux_common = [f". {venv}"]
@@ -246,7 +245,7 @@ class TmuxSession:
         # this risk here is if the shell command is instant and returns to a prompt
         # before we get the screen this will result in a timeout
         pre_send = self._pane.capture_pane()
-        self._pane.send_keys(value)    
+        self._pane.send_keys(value)
         command_executed = False
         while True:
             showing = self._pane.capture_pane()
@@ -335,4 +334,3 @@ class TmuxSession:
         showing = [line for line in showing if line != ""]
 
         return showing
-
