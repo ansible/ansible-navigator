@@ -103,7 +103,7 @@
         "#         KEY2: VALUE2",
         "#         KEY3: VALUE3",
         "#     # Specify the name of the execution environment image",
-        "#     image: quay.io/ansible/creator-ee:latest",
+        "#     image: quay.io/organization/custom-ee:latest",
         "#     pull:",
         "#       # Specify any additional parameters that should be added to the pull",
         "#       # command when pulling an execution environment from a container",
@@ -149,7 +149,7 @@
         "#     enable: True",
         "#     # Specify the path for the playbook artifact to replay",
         "#     replay: /tmp/test_artifact.json",
-        "#     # Specify the name for artifacts created from completed playbooks.The",
+        "#     # Specify the name for artifacts created from completed playbooks. The",
         "#     # following placeholders are available: {playbook_dir}, {playbook_name},",
         "#     # {playbook_status}, and {time_stamp}",
         "#     save-as: \"{playbook_dir}/{playbook_name}-artifact-{time_stamp}.json\"",
@@ -166,6 +166,6 @@
         "#   # Specify the IANA time zone to use or 'local' to use the system time",
         "#   # zone",
         "#   time-zone: UTC",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

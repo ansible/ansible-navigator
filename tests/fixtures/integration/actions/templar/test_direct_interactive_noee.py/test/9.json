@@ -1,5 +1,5 @@
 {
-    "name": "test[9-:open {{ task_path }}-goto vi, look for localhost since it is not in the task]",
+    "name": "test[09-:open {{ task_path }}-goto vi, look for localhost since it is not in the task]",
     "index": 9,
     "comment": "goto vi, look for localhost since it is not in the task",
     "additional_information": {

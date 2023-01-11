@@ -1,17 +1,17 @@
 {
-    "name": "test[2-:f creator-ee-filter for creator-ee]",
+    "name": "test[02-:f v0.9.2-filter for v0.9.2]",
     "index": 2,
-    "comment": "filter for creator-ee",
+    "comment": "filter for v0.9.2",
     "additional_information": {
         "present": [
-            "creator-ee"
+            "v0.9.2"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
         "  Image                               Tag                    Execution environment                                                   Created                                    Size",
-        "0│creator-ee                          v0.9.2                 True                                                                    23 hours ago                               1.4 GB",
+        "0│creator-ee                          v0.9.2                 True                                                                    3 months ago                               1.4 GB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

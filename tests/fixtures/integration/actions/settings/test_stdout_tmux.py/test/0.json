@@ -208,6 +208,6 @@
         "  subcommands:",
         "  - builder",
         "  version_added: v2.0",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

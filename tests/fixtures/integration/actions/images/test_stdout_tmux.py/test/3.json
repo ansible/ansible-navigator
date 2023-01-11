@@ -1,5 +1,5 @@
 {
-    "name": "test[print all details to stdout  clear && ansible-navigator images -d foo -d bar --ee True --ll debug --mode stdout]",
+    "name": "test[clear-&&-ansible-navigator-images--d-foo--d-bar---ee-true---ll-debug---mode-stdout-print-all-details-to-stdout-['must-be-one-or-more-of']-[]-true-3-search-for-help]",
     "index": 3,
     "comment": "print all details to stdout",
     "additional_information": {
@@ -20,6 +20,6 @@
         "   Note: Configuration failed, using default log file location. (/home/user/github/ansible-navigator/ansible-navigator.log) Log",
         "         level set to debug",
         "   Hint: Review the hints and log file to see what went wrong.",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

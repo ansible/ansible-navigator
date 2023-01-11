@@ -1,5 +1,5 @@
 {
-    "name": "test[7-:{{ examples }}-dig examples]",
+    "name": "test[07-:{{ examples }}-dig examples]",
     "index": 7,
     "comment": "dig examples",
     "additional_information": {

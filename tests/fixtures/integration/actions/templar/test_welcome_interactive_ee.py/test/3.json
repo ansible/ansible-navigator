@@ -1,5 +1,5 @@
 {
-    "name": "test[3-:{{ this[0] }}-render menu as content]",
+    "name": "test[03-:{{ this[0] }}-render menu as content]",
     "index": 3,
     "comment": "render menu as content",
     "additional_information": {

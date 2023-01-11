@@ -62,6 +62,6 @@
         "    schema: json",
         "    sources: false",
         "  time-zone: UTC",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

@@ -61,6 +61,6 @@
         "ansible-navigator.time-zone: Defaults",
         "settings_file_path: None",
         "settings_file_source: None",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }
