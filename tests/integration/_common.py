@@ -143,10 +143,11 @@ def sanitize_output(output):
         re.IGNORECASE,
     )
     re_home = re.compile("(/Users|/home)/(?!runner)[a-z,0-9]*/")
+    re_python_version = re.compile(r"python3\.\d{2}")
     for idx, line in enumerate(output):
         new_line = re.sub(re_uuid, "00000000-0000-0000-0000-000000000000", line)
-
         new_line = re.sub(re_home, "/home/user/", new_line)
+        new_line = re.sub(re_python_version, "python3.XX", new_line)
         output[idx] = new_line
     return output
 
