@@ -3,6 +3,7 @@
 # The names ('as') need to correspond the the ImageEntry enum in utils/package_data.py
 FROM quay.io/ansible/creator-ee:v0.9.2 as DEFAULT_EE
 
+# This is also hard coded in tests/fixtures/integration/execution_environment_image/ansible-navigator_set_ee_image.yml
 FROM quay.io/ansible/python-base:latest as SMALL_IMAGE
 
 FROM registry.hub.docker.com/library/alpine:latest as PULLABLE_IMAGE
