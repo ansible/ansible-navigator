@@ -10,18 +10,6 @@
         "compared_fixture": false
     },
     "output": [
-        "      - ghcr.io/ansible/creator-ee@sha256:dfd68ed41ff664b4bf018c1bd1399ca1cda3529bbb015937390191bcc5dbf71f",
-        "      - ghcr.io/ansible/creator-ee@sha256:fb6e4f4f78a84ac8765756bab68e1da285352d6d5d08a1fb7d0f686fa4d7fc24",
-        "      - quay.io/ansible/creator-ee@sha256:59b3671e4a25d6b56c20703ad55ba3dbca4daf0450b4c7e5affd6706b51e94e0",
-        "      - quay.io/ansible/creator-ee@sha256:7af85d756f1ab8fb18596c358e22f3dd4cf621e9eac175625c0fd37b09d1fa8d",
-        "      - quay.io/ansible/creator-ee@sha256:dfd68ed41ff664b4bf018c1bd1399ca1cda3529bbb015937390191bcc5dbf71f",
-        "      - quay.io/ansible/creator-ee@sha256:fb6e4f4f78a84ac8765756bab68e1da285352d6d5d08a1fb7d0f686fa4d7fc24",
-        "      - ghcr.io/ansible/creator-ee:latest",
-        "      - ghcr.io/ansible/creator-ee:v0.12.2",
-        "      - quay.io/ansible/creator-ee:v0.12.2",
-        "  name: creator-ee",
-        "  name_tag: creator-ee:v0.12.2",
-        "  repository: quay.io/ansible/creator-ee",
         "  full_name: quay.io/ansible/creator-ee:v0.9.2",
         "      - quay.io/ansible/creator-ee:v0.9.2",
         "      - quay.io/ansible/creator-ee@sha256:54c74059f9dbc8ccc2fe163c743768ff9548fbf1a960d0d459ae53726d3f3eba",
