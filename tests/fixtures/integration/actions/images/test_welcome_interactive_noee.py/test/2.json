@@ -11,7 +11,7 @@
     },
     "output": [
         "  Image                               Tag                    Execution environment                                                   Created                                    Size",
-        "0│creator-ee                          v0.9.2                 True                                                                    3 months ago                               1.4 GB",
+        "0│creator-ee                          v0.9.2                 True                                                                    some time ago                              1.4 GB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
