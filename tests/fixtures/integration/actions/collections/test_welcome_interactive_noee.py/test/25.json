@@ -16,7 +16,7 @@
         "  1│additional_information: {}",
         "  2│collection_info:",
         "  3│  name: ansible.builtin",
-        "  4│  path: /home/user/github/ansible-navigator/venv/lib64/python3.10/site-packages/ansible",
+        "  4│  path: /home/user/github/ansible-navigator/venv/lib64/python3.XX/site-packages/ansible",
         "  5│  shadowed_by: []",
         "  6│  version: 2.13.4",
         "  7│doc:",

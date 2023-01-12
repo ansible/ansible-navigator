@@ -1,6 +1,7 @@
 """Base class for images interactive tests."""
 import difflib
 import os
+import re
 
 import pytest
 
@@ -38,6 +39,16 @@ base_steps = (
     step_back,
     UiTestStep(user_input=":5", comment="goto Everything", present=["collections:"]),
 )
+
+
+def some_time_repl(match: re.Match) -> str:
+    """Replace the match string with a string of the same length.
+
+    :param match: The string matched
+    :returns: A padded replacement string
+    """
+    match_len = len(match.group())
+    return "some time ago".ljust(match_len)
 
 
 class BaseClass:
@@ -80,6 +91,12 @@ class BaseClass:
             value=step.user_input,
             search_within_response=search_within_response,
         )
+
+        # Replace images ages (e.g. 4 days ago)
+        re_time_ago = re.compile(r"(About an|\d+)\s(minute|hour|day|month)s?\sago\s+")
+        for idx, line in enumerate(received_output):
+            new_line = re.sub(re_time_ago, some_time_repl, line)
+            received_output[idx] = new_line
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES

@@ -70,6 +70,12 @@ class BaseClass:
             search_within_response=search_within_response,
         )
 
+        # Mask out the container hostname
+        for idx, line in enumerate(received_output):
+            match = "HOSTNAME="
+            if line.startswith(match):
+                received_output[idx] = f"{match}{'X' * 8}"
+
         fixtures_update_requested = (
             self.update_fixtures
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"

@@ -67,12 +67,6 @@ repos:
       - id: check-added-large-files
       - id: fix-byte-order-marker
       - id: check-case-conflict
-      - id: check-json
-        exclude: |
-          (?x)
-          ^
-            licenses/.*\.json
-          $
       - id: check-symlinks
       - id: check-yaml
       - id: detect-private-key
@@ -81,8 +75,15 @@ repos:
       - id: check-ast
       - id: debug-statements
 
+  - repo: https://gitlab.com/bmares/check-json5
+    # Allow json comments, trailing commas
+    # https://github.com/pre-commit/pre-commit-hooks/issues/395
+    rev: v1.0.0
+    hooks:
+      - id: check-json5
+
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.32.2
+    rev: v0.33.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -190,7 +191,7 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.15.9
+    rev: v2.15.10
     hooks:
       - id: pylint
         args:

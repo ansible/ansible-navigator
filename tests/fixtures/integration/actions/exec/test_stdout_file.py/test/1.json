@@ -11,6 +11,6 @@
     },
     "output": [
         "$PATH",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

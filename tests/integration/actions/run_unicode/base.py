@@ -92,7 +92,7 @@ class BaseClass:
                 if tmux_session.cli_prompt in line:
                     received_output[idx] = mask
                 else:
-                    for out in ["duration:", "playbook:", "start:", "end:", "task_path:"]:
+                    for out in ["duration", "playbook", "start", "end", "task_path"]:
                         if out in line:
                             received_output[idx] = mask
 

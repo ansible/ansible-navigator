@@ -21,6 +21,6 @@
         "options:",
         "  -h, --help            show this help message and exit",
         "  --version             Print ansible-builder version and exit.",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

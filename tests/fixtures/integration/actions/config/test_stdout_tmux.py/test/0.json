@@ -34,6 +34,6 @@
         "WIN_ASYNC_STARTUP_TIMEOUT(default) = 5",
         "WORKER_SHUTDOWN_POLL_COUNT(default) = 0",
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
-        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json'](venv) bash-5.1$"
+        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json'](venv) bash$"
     ]
 }

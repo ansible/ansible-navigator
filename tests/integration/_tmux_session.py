@@ -114,8 +114,10 @@ class TmuxSession:
         user = os.environ.get("USER")
         home = os.environ.get("HOME")
 
-        # get a clean shell and predictable prompt
-        self.cli_prompt = self._get_cli_prompt()
+        # set a clean shell and predictable prompt
+        self.cli_prompt = "bash$"
+        self._pane.send_keys("clear && env -i bash --noprofile --norc")
+        self._pane.send_keys(f"export PS1={self.cli_prompt}")
 
         # set environment variables for this session
         tmux_common = [f". {venv}"]
@@ -332,24 +334,3 @@ class TmuxSession:
         showing = [line for line in showing if line != ""]
 
         return showing
-
-    def _get_cli_prompt(self):
-        """get CLI prompt"""
-        # start a fresh clean shell, set TERM
-        start_time = timer()
-        self._pane.send_keys("clear && env -i bash --noprofile --norc")
-        bash_prompt_visible = False
-        while True:
-            showing = self._pane.capture_pane()
-            if showing:
-                bash_prompt_visible = showing[-1].endswith("$")
-            if bash_prompt_visible:
-                break
-
-            elapsed = timer() - start_time
-            if elapsed > self._shell_prompt_timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX BASH TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                raise ValueError(alert)
-            time.sleep(0.1)
-        return showing[-1]
