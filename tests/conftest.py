@@ -55,7 +55,7 @@ def fixture_default_image_name():
     return default_ee_image_name()
 
 
-def _small_image_name():
+def small_image_name():
     """Returns the small image name"""
     return ImageEntry.SMALL_IMAGE.get(app_name=APP_NAME)
 
@@ -63,7 +63,7 @@ def _small_image_name():
 @pytest.fixture(scope="session", name="small_image_name")
 def fixture_small_image_name():
     """Returns the small image name"""
-    return _small_image_name()
+    return small_image_name()
 
 
 @pytest.fixture(scope="function")
@@ -209,7 +209,7 @@ def pytest_sessionstart(session: pytest.Session):
     )
     pull_image(
         valid_container_engine=container_engine,
-        image_name=_small_image_name(),
+        image_name=small_image_name(),
     )
 
 
