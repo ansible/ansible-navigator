@@ -120,7 +120,7 @@ Drop the below configuration in launch.json
          "type": "python",
          "request": "launch",
          "module": "ansible_navigator",
-         "cwd": "${workspaceFolder}",
+         "cwd": "${workspaceFolder}/src",
          "justMyCode": false
       }
    ]
@@ -155,19 +155,29 @@ the program to debug) in our launch.json configuration file.
 
 **Example:**
 
-- To debug subcommand `ansible-navigator images`, add one more attribute as
-  `"args": ["images"]` in our previously configured launch.json.
-- To debug subcommand `ansible-navigator collections`, add one more attribute
-  as `"args": ["collections"]` in launch.json, and so on.
-- Moreover, to debug subcommands with some parameter use
-  `"args": ["subcommand-name", "--", "parameter"]`
-- For example adding an attribute as `"args": ["exec", "--", "pwd"]` in
-  launch.json will ensure to debug the command `ansible-navigator exec -- pwd`
-- While debugging any subcommand with arguments, make sure to use one _args_
-  entry at a time in our configuration (comment/remove the ones not in use).
+- Debug `ansible-navigator run` subcommand, use _args_ attribute, provide
+  absolute path to the playbook as mentioned. Following configuration will allow
+  to debug `ansible-navigator site.yml --mode stdout`.
 
-Here is an example of debugging `ansible-navigator exec -- pwd` using _args_
-attribute-
+```shell-session
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Module",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["run", "../Path/to/Playbook/site.yml", "--mode", "stdout"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
+    }
+  ]
+}
+```
+
+- Debug `ansible-navigator exec` subcommand using _args_ with some parameter.
+  Following configuration will allow to debug `ansible-navigator exec -- pwd`.
 
 ```shell-session
 {
@@ -179,14 +189,21 @@ attribute-
       "request": "launch",
       "module": "ansible_navigator",
       "args": ["exec", "--", "pwd"],
-      // "args": ["images"],
-      // "args": ["collections"],
       "cwd": "${workspaceFolder}/src",
       "justMyCode": false
     }
   ]
 }
 ```
+
+- To debug subcommand `ansible-navigator images`, add one more attribute as
+  `"args": ["images"]` in our previously configured launch.json.
+- To debug subcommand `ansible-navigator collections`, add one more attribute
+  as `"args": ["collections"]` in launch.json, and so on.
+- Moreover, to debug subcommands with some parameter use
+  `"args": ["subcommand-name", "--", "parameter"]`
+- While debugging any subcommand with arguments, make sure to use one _args_
+  entry at a time in our configuration (comment/remove the ones not in use).
 
 ### Useful Links
 
