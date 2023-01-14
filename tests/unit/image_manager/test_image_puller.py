@@ -9,8 +9,6 @@ import pytest
 
 from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.image_manager import ImagePuller
-from ...defaults import DEFAULT_CONTAINER_IMAGE
-from ...defaults import SMALL_TEST_IMAGE
 
 
 class TstPullPolicy(NamedTuple):
@@ -39,15 +37,16 @@ data_do_have = [
 
 
 @pytest.mark.parametrize("data", data_do_have, ids=id_from_data)
-def test_do_have(valid_container_engine, data):
+def test_do_have(valid_container_engine: str, default_ee_image_name: str, data: TstPullPolicy):
     """Test using an image local.
 
     :param valid_container_engine: Container engine identifier
+    :param default_ee_image_name: Default image name
     :param data: Test object
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
-        image=DEFAULT_CONTAINER_IMAGE,
+        image=default_ee_image_name,
         arguments=Constants.NOT_SET,
         pull_policy=data.pull_policy,
     )
@@ -65,15 +64,18 @@ data_do_have_but_latest = [
 
 
 @pytest.mark.parametrize("data", data_do_have_but_latest, ids=id_from_data)
-def test_do_have_but_latest(valid_container_engine, data):
+def test_do_have_but_latest(
+    valid_container_engine: str, small_image_name: str, data: TstPullPolicy
+):
     """Test using an image local.
 
     :param valid_container_engine: Container engine identifier
+    :param small_image_name: Small image name
     :param data: Test object
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
-        image=SMALL_TEST_IMAGE,
+        image=small_image_name,
         arguments=Constants.NOT_SET,
         pull_policy=data.pull_policy,
     )
@@ -117,7 +119,15 @@ data_will_have = [
 ]
 
 
-@pytest.mark.parametrize("data", data_will_have, ids=id_from_data)
+@pytest.mark.parametrize(
+    "data",
+    (
+        pytest.param(TstPullPolicy(pull_policy="missing", pull_required=True), id="0"),
+        pytest.param(TstPullPolicy(pull_policy="always", pull_required=True), id="1"),
+        pytest.param(TstPullPolicy(pull_policy="never", pull_required=False), id="2"),
+        pytest.param(TstPullPolicy(pull_policy="tag", pull_required=True), id="3"),
+    ),
+)
 def test_will_have(valid_container_engine, pullable_image, data):
     """Test using an image not local.
 
@@ -149,10 +159,10 @@ data_image_tag = [
     "image, expected_tag",
     data_image_tag,
     ids=[
-        "simple image name, no tag specified",
-        "simple image name, with tag",
-        "complex image URL, with port but no tag",
-        "complex image URL, with port and tag",
+        "simple-image-name,no-tag-specified",
+        "simple-image-name,with-tag",
+        "complex-image-URL,with-port-but-no-tag",
+        "complex-image-URL,with-port-and-tag",
     ],
 )
 def test_tag_parsing(image, expected_tag):

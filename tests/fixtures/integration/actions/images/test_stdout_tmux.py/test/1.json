@@ -1,5 +1,5 @@
 {
-    "name": "test[print all details to stdout  clear && ansible-navigator images --details --display-color false --ee True --ll debug --mode stdout  | grep '^[a-z]']",
+    "name": "test[clear-&&-ansible-navigator-images---details---display-color-false---ee-true---ll-debug---mode-stdout--|-grep-'^[a-z]'-print-all-details-to-stdout-['ansible_collections',-'ansible_version',-'image_name:-quay.io/ansible/creator-ee',-'os_release',-'python_packages',-'python_version',-'redhat_release',-'system_packages']-[]-true-1-search-for-help]",
     "index": 1,
     "comment": "print all details to stdout",
     "additional_information": {
@@ -25,6 +25,6 @@
         "python_version:",
         "redhat_release:",
         "system_packages:",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

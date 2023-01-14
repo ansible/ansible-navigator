@@ -10,4 +10,4 @@ on:
 
 jobs:
   ack:
-    uses: ansible-community/devtools/.github/workflows/push.yml@main
+    uses: ansible/devtools/.github/workflows/push.yml@main

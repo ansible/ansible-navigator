@@ -1,6 +1,7 @@
 """Tests for ``images`` from CLI, stdout."""
 import pytest
 
+from tests.defaults import id_func
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
@@ -88,7 +89,7 @@ stdout_tests = (
 steps = add_indices(stdout_tests)
 
 
-@pytest.mark.parametrize("step", steps, ids=str)
+@pytest.mark.parametrize("step", steps, ids=id_func)
 class Test(BaseClass):
     """Run the tests for ``images`` from CLI, mode stdout."""
 

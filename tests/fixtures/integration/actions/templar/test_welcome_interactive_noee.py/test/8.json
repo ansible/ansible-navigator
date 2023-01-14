@@ -1,5 +1,5 @@
 {
-    "name": "test[8-:back-show doc]",
+    "name": "test[08-:back-show doc]",
     "index": 8,
     "comment": "show doc",
     "additional_information": {
@@ -62,7 +62,7 @@
         " 48│    variables or expressions without necessarily halting the playbook.",
         " 49│  - Useful for debugging together with the 'when:' directive.",
         " 50│  - This module is also supported for Windows targets.",
-        " 51│  filename: /home/user/github/ansible-navigator/venv/lib64/python3.10/site-packages/ansible/modules/debug.py",
+        " 51│  filename: /home/user/github/ansible-navigator/venv/lib64/python3.XX/site-packages/ansible/modules/debug.py",
         " 52│  has_action: true",
         " 53│  module: debug",
         " 54│  options:",

@@ -10,7 +10,7 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.utils.functions import shlex_join
-from ..defaults import DEFAULT_CONTAINER_IMAGE
+from tests.defaults import id_func
 from ..defaults import FIXTURES_DIR
 
 
@@ -18,11 +18,16 @@ PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.
 
 
 @pytest.fixture(name="params")
-def fixture_params(request):
-    """generate parameters"""
+def fixture_params(default_ee_image_name: str, request: pytest.FixtureRequest) -> dict[str, str]:
+    """Generate parameters.
+
+    :param default_ee_image_name: The default execution environment image name
+    :param request: The pytest request object
+    :returns: The parameters
+    """
     return {
         "execution_environment": request.param,
-        "execution_environment_image": DEFAULT_CONTAINER_IMAGE,
+        "execution_environment_image": default_ee_image_name,
     }
 
 
@@ -125,6 +130,7 @@ def test(action_run_stdout, params, test_data):
 class StdoutCliTest(NamedTuple):
     """Definition of a stdout cli test."""
 
+    name: str
     comment: str
     """Description of the test"""
     params: list[str]
@@ -157,6 +163,7 @@ class StdoutCliTest(NamedTuple):
 # Intentionally not using parametrize so the behavior can be documented
 StdoutCliTests = (
     StdoutCliTest(
+        name="0",
         comment="run pass",
         subcommand="run",
         params=[PLAYBOOK],
@@ -167,6 +174,7 @@ StdoutCliTests = (
         navigator_stderr="",
     ),
     StdoutCliTest(
+        name="1",
         comment="run fail",
         subcommand="run",
         params=["no_such_playbook.yaml"],
@@ -181,7 +189,7 @@ StdoutCliTests = (
 
 @pytest.mark.parametrize(argnames="pae", argvalues=(True, False), ids=("pae_true", "pae_false"))
 @pytest.mark.parametrize(argnames="exec_env", argvalues=(True, False), ids=("ee_true", "ee_false"))
-@pytest.mark.parametrize(argnames="data", argvalues=StdoutCliTests, ids=str)
+@pytest.mark.parametrize(argnames="data", argvalues=StdoutCliTests, ids=id_func)
 def test_run_through_cli(tmp_path: Path, data: StdoutCliTest, exec_env: bool, pae: bool) -> None:
     """Test for a return code from run through a shell.
 

@@ -11,6 +11,6 @@
     },
     "output": [
         "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

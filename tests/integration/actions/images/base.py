@@ -1,10 +1,11 @@
 """Base class for images interactive tests."""
 import difflib
 import os
+import re
 
 import pytest
 
-from ....defaults import DEFAULT_CONTAINER_IMAGE
+from ....conftest import default_ee_image_name
 from ..._common import retrieve_fixture_for_step
 from ..._common import update_fixtures
 from ..._interactions import SearchFor
@@ -12,16 +13,18 @@ from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
-IMAGE_SHORT = DEFAULT_CONTAINER_IMAGE.rsplit("/", maxsplit=1)[-1].split(":")[0]
+# Note: This filters the list of images based on image version
+# It is not bullet proof since 2 images could have the same version
+IMAGE_VERSION = default_ee_image_name().split(":")[-1]
 
 
 step_back = UiTestStep(user_input=":back", comment="goto info menu", present=["Everything"])
 
 base_steps = (
     UiTestStep(
-        user_input=f":f {IMAGE_SHORT}",
-        comment=f"filter for {IMAGE_SHORT}",
-        present=[IMAGE_SHORT],
+        user_input=f":f {IMAGE_VERSION}",
+        comment=f"filter for {IMAGE_VERSION}",
+        present=[IMAGE_VERSION],
     ),
     UiTestStep(user_input=":0", comment="goto info menu", present=["Everything"]),
     UiTestStep(user_input=":0", comment="goto Image information", present=["architecture:"]),
@@ -36,6 +39,16 @@ base_steps = (
     step_back,
     UiTestStep(user_input=":5", comment="goto Everything", present=["collections:"]),
 )
+
+
+def some_time_repl(match: re.Match) -> str:
+    """Replace the match string with a string of the same length.
+
+    :param match: The string matched
+    :returns: A padded replacement string
+    """
+    match_len = len(match.group())
+    return "some time ago".ljust(match_len)
 
 
 class BaseClass:
@@ -78,6 +91,12 @@ class BaseClass:
             value=step.user_input,
             search_within_response=search_within_response,
         )
+
+        # Replace images ages (e.g. 4 days ago)
+        re_time_ago = re.compile(r"(About an|\d+)\s(minute|hour|day|month)s?\sago\s+")
+        for idx, line in enumerate(received_output):
+            new_line = re.sub(re_time_ago, some_time_repl, line)
+            received_output[idx] = new_line
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES

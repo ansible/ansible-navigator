@@ -35,6 +35,13 @@ class SerializationFormat(Enum):
     YAML = "YAML"
     JSON = "JSON"
 
+    def repr(self) -> str:
+        """Return a string representation.
+
+        :return: A string
+        """
+        return self.value
+
 
 @dataclass
 class ContentBase(Generic[T]):
@@ -154,7 +161,6 @@ class CFormat:
 class ContentFormat(Enum):
     """All content formats."""
 
-    value: CFormat
     ANSI = CFormat(scope="source.ansi", file_extension=".ansi", serialization=None)
     JSON = CFormat(
         scope="source.json",

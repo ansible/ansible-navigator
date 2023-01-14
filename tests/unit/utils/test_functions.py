@@ -10,6 +10,7 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.utils import functions
+from tests.defaults import id_func
 
 
 EXTENSIONS = [".yml", ".yaml", ".json"]
@@ -73,9 +74,9 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
         (False, None, None),
     ),
     ids=[
-        "set and valid",
-        "set and invalid",
-        "not set",
+        "set-and-valid",
+        "set-and-invalid",
+        "not-set",
     ],
 )
 def test_env_var_is_file_path(
@@ -110,8 +111,8 @@ def test_env_var_is_file_path(
     ),
     ids=[
         "simple",
-        "list with one list",
-        "list detailed",
+        "list-with-one-list",
+        "list-detailed",
     ],
 )
 def test_flatten_list(value: list, anticipated_result: list) -> None:
@@ -133,11 +134,11 @@ class HumanTimeTestData(NamedTuple):
 
 
 human_time_test_data = [
-    HumanTimeTestData(id="seconds", value=1, expected="1s"),
-    HumanTimeTestData(id="minutes seconds", value=60 + 1, expected="1m1s"),
-    HumanTimeTestData(id="hours minutes seconds", value=3600 + 60 + 1, expected="1h1m1s"),
+    HumanTimeTestData(id="s", value=1, expected="1s"),
+    HumanTimeTestData(id="m-s", value=60 + 1, expected="1m1s"),
+    HumanTimeTestData(id="h-m-s", value=3600 + 60 + 1, expected="1h1m1s"),
     HumanTimeTestData(
-        id="days hours minutes seconds",
+        id="d-h-m-s",
         value=86400 + 3600 + 60 + 1,
         expected="1d1h1m1s",
     ),
@@ -156,7 +157,7 @@ def test_human_time_integer(data: HumanTimeTestData) -> None:
     assert result == data.expected
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+@pytest.mark.parametrize("data", human_time_test_data, ids=id_func)
 def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (negative integer passed).
 
@@ -202,11 +203,11 @@ class RoundHalfUpTestData(NamedTuple):
 
 round_half_up_test_data = [
     RoundHalfUpTestData(id="integer", value=1, expected=1),
-    RoundHalfUpTestData(id="negative integer", value=-1, expected=-1),
-    RoundHalfUpTestData(id="down float", value=1.49999999, expected=1),
-    RoundHalfUpTestData(id="up float", value=1.50000001, expected=2),
-    RoundHalfUpTestData(id="negative down float", value=-1.49999999, expected=-1),
-    RoundHalfUpTestData(id="negative up float", value=-1.50000001, expected=-2),
+    RoundHalfUpTestData(id="negative-integer", value=-1, expected=-1),
+    RoundHalfUpTestData(id="down-float", value=1.49999999, expected=1),
+    RoundHalfUpTestData(id="up-float", value=1.50000001, expected=2),
+    RoundHalfUpTestData(id="negative-down-float", value=-1.49999999, expected=-1),
+    RoundHalfUpTestData(id="negative-up-float", value=-1.50000001, expected=-2),
     RoundHalfUpTestData(id="half_even", value=2.5, expected=3),
     RoundHalfUpTestData(id="half_even", value=3.5, expected=4),
 ]
@@ -250,7 +251,15 @@ iso8601 = re.compile(
 )
 
 
-@pytest.mark.parametrize("time_zone", ("local", "America/Los_Angeles", "UTC", "bogus"))
+@pytest.mark.parametrize(
+    "time_zone",
+    (
+        pytest.param("local", id="0"),
+        pytest.param("America/Los_Angeles", id="1"),
+        pytest.param("UTC", id="2"),
+        pytest.param("bogus", id="3"),
+    ),
+)
 def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str):
     """Test the using local as a time zone.
 

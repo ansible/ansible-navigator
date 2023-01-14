@@ -3,10 +3,6 @@
 
 from __future__ import annotations
 
-from typing import Dict
-from typing import List
-from typing import Union
-
 from sphinx.application import Sphinx
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.nodes import nodes

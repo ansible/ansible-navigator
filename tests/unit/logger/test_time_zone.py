@@ -10,12 +10,15 @@ from typing import Pattern
 import pytest
 
 from ansible_navigator import cli
+from ...defaults import BaseScenario
+from ...defaults import id_func
 
 
 @dataclass
-class Scenario:
+class Scenario(BaseScenario):
     """Data for time zone support in the logs."""
 
+    name: str
     re_match: Pattern
     time_zone: str | None = None
     will_exit: bool = False
@@ -40,15 +43,17 @@ class Scenario:
 
 
 test_data = (
-    Scenario(re_match=re.compile(r"^.*\+00:00$")),
-    Scenario(re_match=re.compile(r"^.*-0[78]:00$"), time_zone="America/Los_Angeles"),
-    Scenario(re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"),
-    Scenario(re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
-    Scenario(re_match=re.compile(r"^.*\+00:00$"), time_zone="does_not_exist", will_exit=True),
+    Scenario(name="0", re_match=re.compile(r"^.*\+00:00$")),
+    Scenario(name="1", re_match=re.compile(r"^.*-0[78]:00$"), time_zone="America/Los_Angeles"),
+    Scenario(name="2", re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"),
+    Scenario(name="3", re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
+    Scenario(
+        name="4", re_match=re.compile(r"^.*\+00:00$"), time_zone="does_not_exist", will_exit=True
+    ),
 )
 
 
-@pytest.mark.parametrize("data", test_data, ids=str)
+@pytest.mark.parametrize("data", test_data, ids=id_func)
 def test(
     data: Scenario,
     caplog: pytest.LogCaptureFixture,

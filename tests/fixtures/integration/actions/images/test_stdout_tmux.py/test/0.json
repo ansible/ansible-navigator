@@ -1,5 +1,5 @@
 {
-    "name": "test[print image to stdout  clear && ansible-navigator images --ee True --ll debug --mode stdout  | grep creator]",
+    "name": "test[clear-&&-ansible-navigator-images---ee-true---ll-debug---mode-stdout--|-grep-creator-print-image-to-stdout-['repository:-quay.io/ansible/creator-ee']-[]-true-0-search-for-help]",
     "index": 0,
     "comment": "print image to stdout",
     "additional_information": {
@@ -17,6 +17,6 @@
         "  name: creator-ee",
         "  name_tag: creator-ee:v0.9.2 (primary)",
         "  repository: quay.io/ansible/creator-ee",
-        "(venv) bash-5.1$"
+        "(venv) bash$"
     ]
 }

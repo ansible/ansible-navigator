@@ -8,8 +8,6 @@ from pathlib import Path
 from sys import path
 
 from setuptools_scm import get_version
-from setuptools_scm.git import fetch_on_shallow
-from setuptools_scm.git import parse
 
 
 # -- Path setup --------------------------------------------------------------

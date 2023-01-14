@@ -10,7 +10,8 @@ from typing import TYPE_CHECKING
 import pytest
 
 from ansible_navigator import cli
-from ..defaults import DEFAULT_CONTAINER_IMAGE
+from ..conftest import default_ee_image_name
+from ..conftest import small_image_name
 from ..defaults import FIXTURES_DIR
 from ._cli2runner import Cli2Runner
 from ._cli2runner import RunnerTestException
@@ -20,24 +21,24 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock  # pylint: disable=preferred-module
 
 test_data = [
-    ("defaults", "", "ansible-navigator_empty.yml", {"container_image": DEFAULT_CONTAINER_IMAGE}),
+    ("defaults", "", "ansible-navigator_empty.yml", {"container_image": default_ee_image_name()}),
     (
         "set at command line",
-        "--execution-environment-image quay.io/ansible/python-base",
+        f"--execution-environment-image {small_image_name()}",
         "ansible-navigator_empty.yml",
-        {"container_image": "quay.io/ansible/python-base:latest"},
+        {"container_image": small_image_name()},
     ),
     (
         "set in config file",
         "",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "quay.io/ansible/python-base:latest"},
+        {"container_image": small_image_name()},
     ),
     (
         "set command line and config file, command line wins",
-        "--execution-environment True --execution-environment-image quay.io/ansible/python-base",
+        f"--execution-environment True --execution-environment-image {default_ee_image_name()}",
         "ansible-navigator_set_ee_image.yml",
-        {"container_image": "quay.io/ansible/python-base:latest"},
+        {"container_image": default_ee_image_name()},
     ),
 ]
 

@@ -13,6 +13,7 @@ from ..utils.functions import abs_user_path
 from ..utils.functions import get_share_directory
 from ..utils.functions import oxfordcomma
 from ..utils.key_value_store import KeyValueStore
+from ..utils.packaged_data import ImageEntry
 from .definitions import ApplicationConfiguration
 from .definitions import CliParameters
 from .definitions import Constants as C
@@ -364,7 +365,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             settings_file_path_override="execution-environment.image",
             short_description="Specify the name of the execution environment image",
             value=SettingsEntryValue(
-                default="quay.io/ansible/creator-ee:v0.9.2",
+                default=ImageEntry.DEFAULT_EE.get(app_name=APP_NAME),
                 schema_default=C.NONE,
             ),
             version_added="v1.0",

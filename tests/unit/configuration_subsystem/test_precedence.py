@@ -22,6 +22,7 @@ from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
 )
+from tests.defaults import id_func
 from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
 from .data import BASE_SHORT_CLI
@@ -32,7 +33,6 @@ from .utils import config_post_process
 from .utils import id_for_base
 from .utils import id_for_cli
 from .utils import id_for_name
-from .utils import id_for_settings
 
 
 # pylint: disable=too-many-arguments
@@ -81,7 +81,7 @@ def test_all_entries_reflect_cli_given_env_vars(
 @pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
+@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_func)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings(
@@ -127,7 +127,7 @@ def test_all_entries_reflect_cli_given_settings(
 @pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
-@pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_for_settings)
+@pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_func)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
 @pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
 def test_all_entries_reflect_cli_given_settings_and_env_vars(
@@ -196,7 +196,7 @@ def test_all_entries_reflect_default(_mocked_func, generate_config, entry):
 @pytest.mark.usefixtures("ansible_version")
 @patch("shutil.which", return_value="/path/to/container_engine")
 @patch("os.path.isfile", return_value=True)
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_for_settings)
+@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_func)
 @pytest.mark.parametrize("entry, value, expected", ENV_VAR_DATA)
 def test_all_entries_reflect_env_var_given_settings(
     _mf1,

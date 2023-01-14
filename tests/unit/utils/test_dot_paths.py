@@ -17,6 +17,8 @@ from ansible_navigator.utils.dot_paths import get_with_path
 from ansible_navigator.utils.dot_paths import move_to_path
 from ansible_navigator.utils.dot_paths import place_at_path
 from ansible_navigator.utils.dot_paths import remove_and_delete_empty_ascendants
+from tests.defaults import id_func
+from ...defaults import BaseScenario
 
 
 def test_ascendants_from_path():
@@ -75,9 +77,10 @@ base_dict = {"root": {"dict": {"a": "b"}, "list": [1, 2, 3]}}
 
 
 @dataclass
-class Scenario:
+class Scenario(BaseScenario):  # pylint: disable=too-many-instance-attributes
     """Test data."""
 
+    name: str
     behaviors: tuple[MergeBehaviors, ...]
     comment: str
     path: str
@@ -96,6 +99,7 @@ class Scenario:
 
 scenarios_place_success = (
     Scenario(
+        name="00",
         behaviors=(MergeBehaviors.LIST_LIST_EXTEND,),
         comment="Test list list extend",
         path="root.list",
@@ -103,6 +107,7 @@ scenarios_place_success = (
         value=[4, 5, 6],
     ),
     Scenario(
+        name="01",
         behaviors=(MergeBehaviors.LIST_LIST_REPLACE,),
         comment="Test list list replace",
         path="root.list",
@@ -110,6 +115,7 @@ scenarios_place_success = (
         value=[4, 5, 6],
     ),
     Scenario(
+        name="02",
         behaviors=(MergeBehaviors.LIST_APPEND,),
         comment="Test list append",
         path="root.list",
@@ -117,6 +123,7 @@ scenarios_place_success = (
         value=True,
     ),
     Scenario(
+        name="03",
         behaviors=(MergeBehaviors.LIST_REPLACE,),
         comment="Test list replace",
         path="root.list",
@@ -124,6 +131,7 @@ scenarios_place_success = (
         value=True,
     ),
     Scenario(
+        name="04",
         behaviors=(MergeBehaviors.LIST_REPLACE, MergeBehaviors.LIST_UNIQUE),
         comment="Test list replace, unique, not list",
         path="root.list",
@@ -131,6 +139,7 @@ scenarios_place_success = (
         value=True,
     ),
     Scenario(
+        name="05",
         behaviors=(MergeBehaviors.LIST_LIST_EXTEND, MergeBehaviors.LIST_UNIQUE),
         comment="Test list list extend, unique",
         path="root.list",
@@ -138,6 +147,7 @@ scenarios_place_success = (
         value=[1, 4, 5],
     ),
     Scenario(
+        name="06",
         behaviors=(MergeBehaviors.LIST_LIST_EXTEND, MergeBehaviors.LIST_SORT),
         comment="Test list list extend, sort",
         path="root.list",
@@ -145,6 +155,7 @@ scenarios_place_success = (
         value=[1, 0, 4],
     ),
     Scenario(
+        name="07",
         behaviors=(
             MergeBehaviors.LIST_LIST_EXTEND,
             MergeBehaviors.LIST_SORT,
@@ -156,6 +167,7 @@ scenarios_place_success = (
         value=[1, 0, 4],
     ),
     Scenario(
+        name="08",
         behaviors=(MergeBehaviors.DICT_DICT_UPDATE,),
         comment="Test dict dict update",
         path="root.dict",
@@ -163,6 +175,7 @@ scenarios_place_success = (
         value={"c": "d"},
     ),
     Scenario(
+        name="09",
         behaviors=(MergeBehaviors.DICT_DICT_REPLACE,),
         comment="Test dict dict replace",
         path="root.dict",
@@ -170,6 +183,7 @@ scenarios_place_success = (
         value={"c": "d"},
     ),
     Scenario(
+        name="10",
         behaviors=(MergeBehaviors.DICT_DICT_UPDATE,),
         comment="Test place at root",
         path="",
@@ -177,6 +191,7 @@ scenarios_place_success = (
         value={"bool": True},
     ),
     Scenario(
+        name="11",
         behaviors=(MergeBehaviors.DICT_DICT_REPLACE,),
         comment="Test mass replace",
         path="",
@@ -184,6 +199,7 @@ scenarios_place_success = (
         value={"bool": True},
     ),
     Scenario(
+        name="12",
         behaviors=tuple(),
         comment="deep change str",
         content={"a": {"b": {"c": {"d": {"e": "f"}}}}},
@@ -192,6 +208,7 @@ scenarios_place_success = (
         value="g",
     ),
     Scenario(
+        name="13",
         behaviors=tuple(),
         comment="deep dict replace",
         content={"a": {"b": {"c": {"d": {"e": "f"}}}}},
@@ -200,6 +217,7 @@ scenarios_place_success = (
         value=True,
     ),
     Scenario(
+        name="14",
         behaviors=tuple(),
         comment="deep dict placement",
         path="root.dict.aa.bb",
@@ -209,7 +227,7 @@ scenarios_place_success = (
 )
 
 
-@pytest.mark.parametrize("scenario", scenarios_place_success, ids=str)
+@pytest.mark.parametrize("scenario", scenarios_place_success, ids=id_func)
 def test_place_at_path_success(scenario: Scenario):
     """Test place at path.
 
@@ -226,6 +244,7 @@ def test_place_at_path_success(scenario: Scenario):
 
 scenarios_place_raise = (
     Scenario(
+        name="0",
         behaviors=(MergeBehaviors.LIST_LIST_EXTEND, MergeBehaviors.LIST_LIST_REPLACE),
         comment="Test list list extend, list list replace",
         path="",
@@ -233,6 +252,7 @@ scenarios_place_raise = (
         value="",
     ),
     Scenario(
+        name="1",
         behaviors=(MergeBehaviors.DICT_DICT_REPLACE, MergeBehaviors.DICT_DICT_UPDATE),
         comment="Test dict dict replace, dict dict update",
         path="",
@@ -240,6 +260,7 @@ scenarios_place_raise = (
         value="",
     ),
     Scenario(
+        name="2",
         behaviors=tuple(),
         comment="Test dict_dict",
         path="root.dict",
@@ -247,6 +268,7 @@ scenarios_place_raise = (
         value={"c": "d"},
     ),
     Scenario(
+        name="3",
         behaviors=tuple(),
         comment="Test list_list behavior",
         path="root.list",
@@ -254,6 +276,7 @@ scenarios_place_raise = (
         value=[4, 5, 6],
     ),
     Scenario(
+        name="4",
         behaviors=tuple(),
         comment="Test list behavior",
         path="root.list",
@@ -261,6 +284,7 @@ scenarios_place_raise = (
         value=True,
     ),
     Scenario(
+        name="5",
         behaviors=tuple(),
         comment="Test mass replace",
         path="",
@@ -268,6 +292,7 @@ scenarios_place_raise = (
         value={"bool": True},
     ),
     Scenario(
+        name="6",
         behaviors=tuple(),
         comment="Test mass replace",
         path="",
@@ -277,7 +302,7 @@ scenarios_place_raise = (
 )
 
 
-@pytest.mark.parametrize("scenario", scenarios_place_raise, ids=str)
+@pytest.mark.parametrize("scenario", scenarios_place_raise, ids=id_func)
 def test_place_at_path_raises(scenario: Scenario):
     """Test place at path.
 
@@ -294,6 +319,7 @@ def test_place_at_path_raises(scenario: Scenario):
 
 scenarios_move = (
     Scenario(
+        name="0",
         behaviors=tuple(),
         comment="Test list move",
         path="root.list",
@@ -301,6 +327,7 @@ scenarios_move = (
         expected={"root": {"dict": {"a": "b"}, "list_moved": [1, 2, 3]}},
     ),
     Scenario(
+        name="1",
         behaviors=tuple(),
         comment="Test dict move",
         path="root.dict",
@@ -308,6 +335,7 @@ scenarios_move = (
         expected={"root": {"dict_moved": {"a": "b"}, "list": [1, 2, 3]}},
     ),
     Scenario(
+        name="2",
         behaviors=tuple(),
         comment="Test dict move and cleanup",
         path="root.dict.a",
@@ -315,6 +343,7 @@ scenarios_move = (
         expected={"root": {"dict": {"aa": "b"}, "list": [1, 2, 3]}},
     ),
     Scenario(
+        name="3",
         behaviors=tuple(),
         comment="Test move root nested",
         path="root",
@@ -322,6 +351,7 @@ scenarios_move = (
         expected={"r0": {"r1": {"r2": {"r3": {"dict": {"a": "b"}, "list": [1, 2, 3]}}}}},
     ),
     Scenario(
+        name="4",
         behaviors=tuple(),
         comment="Test move same ",
         path="root.dict",
@@ -331,7 +361,7 @@ scenarios_move = (
 )
 
 
-@pytest.mark.parametrize("scenario", scenarios_move, ids=str)
+@pytest.mark.parametrize("scenario", scenarios_move, ids=id_func)
 def test_move(scenario: Scenario):
     """Test move to path.
 

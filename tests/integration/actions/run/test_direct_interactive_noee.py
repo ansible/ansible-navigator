@@ -4,7 +4,7 @@ import pytest
 from ..._interactions import Command
 from ..._interactions import UiTestStep
 from ..._interactions import add_indices
-from ..._interactions import step_id
+from ..._interactions import step_id_padded
 from .base import BaseClass
 from .base import base_steps
 from .base import inventory_path
@@ -25,7 +25,7 @@ initial_steps = (
 steps = add_indices(initial_steps + base_steps)
 
 
-@pytest.mark.parametrize("step", steps, ids=step_id)
+@pytest.mark.parametrize("step", steps, ids=step_id_padded)
 class Test(BaseClass):
     """Run the tests for run from CLI, interactive, without an EE."""
 

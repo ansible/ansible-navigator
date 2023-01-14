@@ -1,18 +1,10 @@
 ---
 default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
-  python: python3.10
+  python: python3.11
 repos:
-  - repo: https://github.com/asottile/add-trailing-comma.git
-    rev: v2.3.0
-    hooks:
-      - id: add-trailing-comma
-        args:
-          - --py36-plus
-        stages: ["manual"]
-
   - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: 5.11.4
     hooks:
       - id: isort
         name: Sort import statements using isort
@@ -43,13 +35,13 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/psf/black.git
-    rev: 22.10.0
+    rev: 22.12.0
     hooks:
       - id: black
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.16.0
+    rev: v6.17.1
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -75,12 +67,6 @@ repos:
       - id: check-added-large-files
       - id: fix-byte-order-marker
       - id: check-case-conflict
-      - id: check-json
-        exclude: |
-          (?x)
-          ^
-            licenses/.*\.json
-          $
       - id: check-symlinks
       - id: check-yaml
       - id: detect-private-key
@@ -89,8 +75,15 @@ repos:
       - id: check-ast
       - id: debug-statements
 
+  - repo: https://gitlab.com/bmares/check-json5
+    # Allow json comments, trailing commas
+    # https://github.com/pre-commit/pre-commit-hooks/issues/395
+    rev: v1.0.0
+    hooks:
+      - id: check-json5
+
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.32.2
+    rev: v0.33.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -103,7 +96,7 @@ repos:
                 installation
               )|
               README|
-              src/ansible_navigator/package_data/(help|welcome)
+              src/ansible_navigator/data/(help|welcome)
             )\.md
           $
 
@@ -144,7 +137,7 @@ repos:
           - flake8-isort >= 4.1.1
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.3.0
+    rev: v3.3.1
     hooks:
       - id: pyupgrade
         args: ["--py38-plus"]
@@ -164,8 +157,8 @@ repos:
       # NOTE: in `tox.ini` as well.
       - &_base-mypy-setup-map
         id: mypy
-        alias: mypy-py310
-        name: MyPy, for Python 3.10
+        alias: mypy-py311
+        name: mypy-py311
         additional_dependencies:
           - jinja2
           - libtmux
@@ -176,11 +169,11 @@ repos:
           - types-setuptools # Needed logging version
           - types-PyYAML
         args:
-          - --python-version=3.10
+          - --python-version=3.11
         pass_filenames: false
       - <<: *_base-mypy-setup-map
         alias: mypy-py38
-        name: MyPy, for Python 3.8
+        name: mypy-py38
         additional_dependencies:
           - importlib-resources # < 3.9
           - jinja2
@@ -198,16 +191,16 @@ repos:
           - --python-version=3.8
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.15.8
+    rev: v2.15.10
     hooks:
       - id: pylint
         args:
-          # FIXME: uncomment once it doesn't have violations
-          # - docs/
+          - docs/
           - share/
           - src/
           - tests/
         additional_dependencies:
+          - dill>=0.3.6 # needed for py311
           - ansible-core
           - astroid
           - ansible-runner

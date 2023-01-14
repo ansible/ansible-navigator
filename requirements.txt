@@ -6,43 +6,46 @@
 #
 alabaster==0.7.12
 ansible-builder==1.1.0
-ansible-core==2.13.4
+ansible-core==2.13.7
 ansible-pygments==0.1.1
-ansible-runner==2.2.1
+ansible-runner==2.3.1
 attrs==22.1.0
-babel==2.10.3
+babel==2.11.0
 backports-zoneinfo==0.2.1 ; python_version < "3.9.0"
 bindep==2.11.0
-certifi==2022.9.24
+certifi==2022.12.7
 cffi==1.15.1
 cfgv==3.3.1
 charset-normalizer==2.1.1
-coverage==6.5.0
-cryptography==38.0.1
+coverage==7.0.0b1
+coverage-enable-subprocess==1.0
+cryptography==38.0.4
 darglint==1.8.1
 distlib==0.3.6
-distro==1.7.0
+distro==1.8.0
 docutils==0.17.1
+exceptiongroup==1.0.4
 execnet==1.9.0
 filelock==3.8.2
-flake8==5.0.4
+flake8==6.0.0
 flake8-docstrings==1.6.0
-identify==2.5.6
+identify==2.5.9
 idna==3.4
 imagesize==1.4.1
-importlib-metadata==5.0.0
-importlib-resources==5.9.0 ; python_version < "3.9.0"
+importlib-metadata==5.1.0
+importlib-resources==5.10.1 ; python_version < "3.9.0"
 iniconfig==1.1.1
 jinja2==3.1.2
-jsonschema==4.16.0
-libtmux==0.15.8
+jsonschema==4.17.3
+libtmux==0.16.1
 linkify-it-py==1.0.3
 lockfile==0.12.2
 markdown-it-py==2.1.0
 markupsafe==2.1.1
 mccabe==0.7.0
-mdit-py-plugins==0.3.1
+mdit-py-plugins==0.3.3
 mdurl==0.1.2
+more-itertools==9.0.0
 myst-parser==0.18.1
 nodeenv==1.7.0
 onigurumacffi==1.2.0
@@ -55,21 +58,19 @@ platformdirs==2.6.0
 pluggy==1.0.0
 pre-commit==2.20.0
 ptyprocess==0.7.0
-pycodestyle==2.9.1
+pycodestyle==2.10.0
 pycparser==2.21
 pydocstyle==6.1.1
-pyflakes==2.5.0
+pyflakes==3.0.1
 pygments==2.13.0
-pyparsing==3.0.9
-pyrsistent==0.18.1
+pyrsistent==0.19.2
 pytest==7.2.0
-pytest-cov==4.0.0
-pytest-forked==1.4.0
-pytest-mock==3.9.0
-pytest-subtests==0.8.0
-pytest-xdist==3.0.2
-python-daemon==2.3.1
-pytz==2022.5
+pytest-mock==3.10.0
+pytest-plus==0.2
+pytest-subtests==0.9.0
+pytest-xdist==3.1.0
+python-daemon==2.3.2
+pytz==2022.6
 pyyaml==6.0
 requests==2.28.1
 requirements-parser==0.5.0
@@ -78,10 +79,10 @@ setuptools-scm==7.0.5
 six==1.16.0
 snowballstemmer==2.2.0
 sphinx==5.3.0
-sphinx-ansible-theme==0.9.1
-sphinx-copybutton==0.5.0
+sphinx-ansible-theme==0.10.1
+sphinx-copybutton==0.5.1
 sphinx-notfound-page==0.8.3
-sphinx-rtd-theme==1.0.0
+sphinx-rtd-theme==1.1.1
 sphinxcontrib-apidoc==0.3.0
 sphinxcontrib-applehelp==1.0.2
 sphinxcontrib-devhelp==1.0.2
@@ -91,13 +92,13 @@ sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
 toml==0.10.2
 tomli==2.0.1
-types-setuptools==65.4.0.0
-typing-extensions==4.3.0 ; python_version < "3.10.0"
-tzdata==2022.4
+types-setuptools==65.6.0.2
+typing-extensions==4.4.0 ; python_version < "3.10.0"
+tzdata==2022.7
 uc-micro-py==1.0.1
-urllib3==1.26.12
+urllib3==1.26.13
 virtualenv==20.17.1
-zipp==3.10.0
+zipp==3.11.0
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

@@ -16,10 +16,12 @@ from ansible_navigator.configuration_subsystem.defs_presentable import (
 from ansible_navigator.ui_framework import Color
 from ansible_navigator.ui_framework import CursesLinePart
 from ansible_navigator.ui_framework import Decoration
+from tests.defaults import BaseScenario
+from tests.defaults import id_func
 
 
 @dataclass
-class ColorMenuTestEntry:
+class ColorMenuTestEntry(BaseScenario):
     """A test for menu coloring."""
 
     color: int
@@ -55,7 +57,7 @@ ColorMenuTestEntries = (
 )
 
 
-@pytest.mark.parametrize(argnames="data", argvalues=ColorMenuTestEntries, ids=str)
+@pytest.mark.parametrize(argnames="data", argvalues=ColorMenuTestEntries, ids=id_func)
 def test_color_menu(data: ColorMenuTestEntry):
     """Test color menu for a val set to the default.
 
@@ -80,7 +82,7 @@ def test_color_menu(data: ColorMenuTestEntry):
 
 
 @dataclass
-class ContentHeadingEntry:
+class ContentHeadingEntry(BaseScenario):
     """A test for content headings."""
 
     color: int
@@ -152,7 +154,7 @@ ContentHeadingEntries = (
 )
 
 
-@pytest.mark.parametrize(argnames="data", argvalues=ContentHeadingEntries, ids=str)
+@pytest.mark.parametrize(argnames="data", argvalues=ContentHeadingEntries, ids=id_func)
 def test_content_heading(data: ContentHeadingEntry):
     """Test menu generation.
 

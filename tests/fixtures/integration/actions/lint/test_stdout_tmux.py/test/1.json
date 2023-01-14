@@ -1,5 +1,5 @@
 {
-    "name": "test[lint stdout with no errors  ansible-navigator lint /tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout]",
+    "name": "test[ansible-navigator-lint-/tests/fixtures/integration/actions/lint/no_errors---ee-true---ll-debug---mode-stdout-lint-stdout-with-no-errors-[]-['.yml:']-true-1-search-for-the-shell-prompt]",
     "index": 1,
     "comment": "lint stdout with no errors",
     "additional_information": {
@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "(venv) bash-5.1$ ansible-navigator lint /home/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout",
-        "(venv) bash-5.1$"
+        "(venv) bash$ansible-navigator lint /home/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout",
+        "(venv) bash$"
     ]
 }

@@ -23,8 +23,8 @@ src/ansible_navigator/data/grammar/**/*.json
 src/ansible_navigator/data/themes/**/*.json
 
 # Tracked but manually formatted
-src/ansible_navigator/package_data/help.md
-src/ansible_navigator/package_data/welcome.md
+src/ansible_navigator/data/help.md
+src/ansible_navigator/data/welcome.md
 
 # generated
 src/ansible_navigator/data/ansible-navigator.json
