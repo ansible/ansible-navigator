@@ -11,7 +11,7 @@
     },
     // Configuration for pure debugging (use args attribute accordingly)
     {
-      "name": "Python: Module",
+      "name": "Debug subcommand: exec",
       "type": "python",
       "request": "launch",
       "module": "ansible_navigator",
