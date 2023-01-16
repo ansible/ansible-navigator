@@ -6,11 +6,18 @@
       "name": "Debug tests",
       "type": "python",
       "request": "launch",
-      "module": "ansible_navigator",
-      // Uncomment args attribute to debug exec subcommand with some parameter.
-      // "args": ["exec", "--", "pwd"],
       "purpose": ["debug-test"],
       "console": "integratedTerminal"
+    },
+    // Configuration for pure debugging (use args attribute accordingly)
+    {
+      "name": "Python: Module",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["exec", "--", "pwd"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
     }
   ]
 }
