@@ -1,12 +1,12 @@
 {
-    "name": "test[clear-&&-ansible-navigator-images--d-ansible_collections--d-ansible_version---display-color-false---ee-true---ll-debug---mode-stdout--|-grep-'^[a-z]'-print-all-details-to-stdout-['ansible_collections',-'ansible_version',-'image_name:-quay.io/ansible/creator-ee']-['os_release',-'python_packages',-'python_version',-'redhat_release',-'system_packages']-true-2-search-for-help]",
+    "name": "test[clear-&&-ansible-navigator-images--d-ansible_collections--d-ansible_version---display-color-false---ee-true---ll-debug---mode-stdout--|-grep-'^[a-z]'-print-all-details-to-stdout-['ansible_collections',-'ansible_version',-'image_name:-ghcr.io/ansible/creator-ee:v0.12.4']-['os_release',-'python_packages',-'python_version',-'redhat_release',-'system_packages']-true-2-search-for-help]",
     "index": 2,
     "comment": "print all details to stdout",
     "additional_information": {
         "present": [
             "ansible_collections",
             "ansible_version",
-            "image_name: quay.io/ansible/creator-ee"
+            "image_name: ghcr.io/ansible/creator-ee:v0.12.4"
         ],
         "absent": [
             "os_release",
@@ -20,7 +20,7 @@
     "output": [
         "ansible_collections:",
         "ansible_version:",
-        "image_name: quay.io/ansible/creator-ee:v0.9.2",
+        "image_name: ghcr.io/ansible/creator-ee:v0.12.4",
         "(venv) bash$"
     ]
 }

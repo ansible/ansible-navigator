@@ -8,12 +8,12 @@
         "compared_fixture": true
     },
     "output": [
-        "  Name                                                                                                                 Default                   Source                                    Current",
-        "0│Exec command                                                                                                         True                      Defaults                                  /bin/bash",
-        "1│Exec shell                                                                                                           True                      Defaults                                  True",
-        "2│Execution environment                                                                                                True                      Command line                              True",
-        "3│Execution environment image                                                                                          True                      Defaults                                  quay.io/ansible/creator-ee:v0.9.2",
-        "4│Execution environment volume mounts                                                                                  True                      Not set                                   Not set",
+        "  Name                                                                                                                Default                   Source                                    Current",
+        "0│Exec command                                                                                                        True                      Defaults                                  /bin/bash",
+        "1│Exec shell                                                                                                          True                      Defaults                                  True",
+        "2│Execution environment                                                                                               True                      Command line                              True",
+        "3│Execution environment image                                                                                         True                      Defaults                                  ghcr.io/ansible/creator-ee:v0.12.4",
+        "4│Execution environment volume mounts                                                                                 True                      Not set                                   Not set",
         "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }

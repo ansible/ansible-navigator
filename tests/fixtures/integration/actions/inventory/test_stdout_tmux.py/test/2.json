@@ -13,7 +13,7 @@
         "usage: ansible-inventory [-h] [--version] [-v] [-i INVENTORY] [--vault-id VAULT_IDS] [--ask-vault-password | --vault-password-file VAULT_PASSWORD_FILES] [--playbook-dir BASEDIR] [-e EXTRA_VARS] [--list] [--host HOST] [--graph] [-y] [--toml] [--vars] [--export] [--output OUTPUT_FILE] [host|group]",
         "positional arguments:",
         "  host|group",
-        "optional arguments:",
+        "options:",
         "  --ask-vault-password, --ask-vault-pass",
         "                        ask for vault password",
         "  --export              When doing an --list, represent in a way that is optimized for export,not as an accurate representation of how Ansible has processed it",
