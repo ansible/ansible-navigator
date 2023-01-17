@@ -6,7 +6,8 @@ from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._interactions import add_indices
-from .base import BaseClass
+from ....conftest import default_ee_image_name
+from .base import BaseClass, IMAGE_NO_VERSION
 
 
 class StdoutCommand(Command):
@@ -31,7 +32,7 @@ stdout_tests = (
             execution_environment=True,
             raw_append=" | grep creator",
         ).join(),
-        present=["repository: quay.io/ansible/creator-ee"],
+        present=[f"repository: {IMAGE_NO_VERSION}"],
     ),
     ShellCommand(
         comment="print all details to stdout",
@@ -44,7 +45,7 @@ stdout_tests = (
         present=[
             "ansible_collections",
             "ansible_version",
-            "image_name: quay.io/ansible/creator-ee",
+            f"image_name: {default_ee_image_name()}",
             "os_release",
             "python_packages",
             "python_version",
@@ -63,7 +64,7 @@ stdout_tests = (
         present=[
             "ansible_collections",
             "ansible_version",
-            "image_name: quay.io/ansible/creator-ee",
+            f"image_name: {default_ee_image_name()}",
         ],
         absent=[
             "os_release",

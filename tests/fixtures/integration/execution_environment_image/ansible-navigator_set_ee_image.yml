@@ -1,4 +1,4 @@
 ---
 ansible-navigator:
   execution-environment:
-    image: quay.io/ansible/python-base
+    image: ghcr.io/ansible/creator-base:latest
