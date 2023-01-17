@@ -13,6 +13,9 @@ from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
 
 
+# The image name w/o a version
+IMAGE_NO_VERSION = default_ee_image_name().split(":")[0]
+
 # Note: This filters the list of images based on image version
 # It is not bullet proof since 2 images could have the same version
 IMAGE_VERSION = default_ee_image_name().split(":")[-1]
