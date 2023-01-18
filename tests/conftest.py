@@ -183,12 +183,15 @@ def pull_image(valid_container_engine: str, image_name: str):
     image_puller.assess()
     image_puller.prologue_stdout()
     if image_puller.assessment.exit_messages:
-        raise SystemExit("\n".join(image_puller.assessment.exit_messages))
+        print(msg.to_lines() for msg in image_puller.assessment.exit_messages)
+        pytest.exit("Image assessment failed", 1)
     if image_puller.assessment.pull_required:
         # ensure the output is flushed prior to the pull
         # cleans up GH action output
         sys.stdout.flush()
         image_puller.pull_stdout()
+    if image_puller.assessment.pull_required:
+        pytest.exit("Image pull failed", 1)
 
 
 def pytest_sessionstart(session: pytest.Session):
