@@ -7,6 +7,7 @@ import os
 
 from sys import stdout
 
+from ansible_navigator.constants import THEME_PATH
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentType
 from ansible_navigator.content_defs import ContentView
@@ -80,8 +81,7 @@ def tokenize(
     :returns: A list of list of line parts
     """
     colorizer = Colorize(
-        grammar_dir=os.path.join(share_directory, "grammar"),
-        theme_path=os.path.join(share_directory, "themes", "dark_vs.json"),
+        grammar_dir=os.path.join(share_directory, "grammar"), theme_path=THEME_PATH
     )
 
     tokenized = colorizer.render(doc=serialized, scope=content_format.value.scope)

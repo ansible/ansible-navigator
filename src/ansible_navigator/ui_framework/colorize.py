@@ -9,7 +9,6 @@ import curses
 import functools
 import json
 import logging
-import os
 import re
 
 from itertools import chain
@@ -17,6 +16,7 @@ from itertools import chain
 from ..tm_tokenize.grammars import Grammars
 from ..tm_tokenize.region import Regions
 from ..tm_tokenize.tokenize import tokenize
+from ..utils.compatibility import importlib_resources
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -84,7 +84,7 @@ class ColorSchema:
 class Colorize:
     """Functionality for coloring."""
 
-    def __init__(self, grammar_dir: str, theme_path: str):
+    def __init__(self, grammar_dir: str, theme_path: importlib_resources.abc.Traversable):
         """Initialize the colorizer.
 
         :param grammar_dir: The directory in which the grammars reside
@@ -98,7 +98,7 @@ class Colorize:
 
     def _load(self):
         """Load the color scheme from the file system."""
-        with open(os.path.join(self._theme_path), encoding="utf-8") as fh:
+        with self._theme_path.open(mode="r", encoding="utf-8") as fh:
             self._schema = ColorSchema(json.load(fh))
 
     @staticmethod

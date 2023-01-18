@@ -195,7 +195,7 @@ class CursesWindow:
         self._logger.debug("term_osc4_support: %s", self._term_osc4_support)
 
         if self._term_osc4_support:
-            with open(self._ui_config.terminal_colors_path, encoding="utf-8") as fh:
+            with self._ui_config.terminal_colors_path.open(mode="r", encoding="utf-8") as fh:
                 colors = json.load(fh)
 
             for color_name, color_hex in colors.items():

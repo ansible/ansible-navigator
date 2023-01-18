@@ -50,11 +50,6 @@ repos:
     rev: v1.3.1
     hooks:
       - id: remove-tabs
-        exclude: |
-          (?x)
-          ^
-            share/ansible_navigator/themes/dark_vs\.json
-          $
 
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
     rev: v4.4.0
