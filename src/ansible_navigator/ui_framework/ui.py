@@ -429,7 +429,7 @@ class UserInterface(CursesWindow):
         """
         heading = heading or CursesLines(tuple())
         heading_len = len(heading)
-        footer = self._footer(dict(**STANDARD_KEYS, **key_dict, **END_KEYS))
+        footer = self._footer({**STANDARD_KEYS, **key_dict, **END_KEYS})
         footer_at = self._screen_height - 1  # screen is 0 based index
         footer_len = 1
 

@@ -35,7 +35,8 @@ def _valid_container_engine():
     for engine in ("podman", "docker"):
         if shutil.which(engine):
             return engine
-    raise Exception("container engine required")
+    pytest.exit(reason="Container engine required", returncode=1)
+    return False
 
 
 @pytest.fixture(scope="session", name="valid_container_engine")
