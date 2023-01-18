@@ -184,7 +184,7 @@ def pull_image(valid_container_engine: str, image_name: str):
     image_puller.prologue_stdout()
     if image_puller.assessment.exit_messages:
         print(msg.to_lines() for msg in image_puller.assessment.exit_messages)
-        pytest.exit("Image assesment failed", 1)
+        pytest.exit("Image assessment failed", 1)
     if image_puller.assessment.pull_required:
         # ensure the output is flushed prior to the pull
         # cleans up GH action output
