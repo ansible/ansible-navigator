@@ -81,7 +81,8 @@ def tokenize(
     :returns: A list of list of line parts
     """
     colorizer = Colorize(
-        grammar_dir=os.path.join(share_directory, "grammar"), theme_path=THEME_PATH
+        grammar_dir=os.path.join(share_directory, "grammar"),
+        theme_path=THEME_PATH,
     )
 
     tokenized = colorizer.render(doc=serialized, scope=content_format.value.scope)
