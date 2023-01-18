@@ -253,6 +253,11 @@ def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
     if not os.environ.get("VIRTUAL_ENV"):
         pytest.exit("Please activate a virtual environment before testing.")
 
+    # ensure tmux is installed
+    tmux_location = shutil.which("tmux")
+    if not tmux_location:
+        pytest.exit("Please install tmux before testing.")
+
 
 def pytest_unconfigure(config: pytest.Config):  # pylint: disable=unused-argument
     """Restore the environment variables that start with ANSIBLE_.
