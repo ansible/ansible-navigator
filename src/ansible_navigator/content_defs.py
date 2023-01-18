@@ -84,8 +84,7 @@ class ContentBase(Generic[T]):
             dump_self_as_dict = converter_map[content_view, serialization_format]
         except KeyError:
             return asdict(self)
-        else:
-            return dump_self_as_dict()
+        return dump_self_as_dict()
 
     def serialize_json_full(self) -> DictType:
         """Provide dictionary for ``JSON`` with all attributes.
