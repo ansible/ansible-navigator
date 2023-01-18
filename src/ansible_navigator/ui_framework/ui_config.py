@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from ..utils.compatibility import importlib_resources
+from ..utils.compatibility import Traversable
 
 
 @dataclass
@@ -23,6 +23,6 @@ class UIConfig:
     #: Indicates if terminal support for OSC4 is enabled
     osc4: bool
     #: The path to the 16 terminal color map
-    terminal_colors_path: importlib_resources.abc.Traversable
+    terminal_colors_path: Traversable
     #: The path to the theme file
-    theme_path: importlib_resources.abc.Traversable
+    theme_path: Traversable

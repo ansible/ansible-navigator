@@ -29,7 +29,7 @@ ignorePaths:
   # All grammar (text-mate) tokenization files
   - share/ansible_navigator/grammar/*.json
   # Theme files
-  - share/ansible_navigator/themes/*.json
+  - src/ansible_navigator/data/themes/*.json
   # Anything in the vendored tokenization directory
   - src/ansible_navigator/tm_tokenize/*
   # requirements.txt is generated

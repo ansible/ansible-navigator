@@ -16,7 +16,7 @@ from itertools import chain
 from ..tm_tokenize.grammars import Grammars
 from ..tm_tokenize.region import Regions
 from ..tm_tokenize.tokenize import tokenize
-from ..utils.compatibility import importlib_resources
+from ..utils.compatibility import Traversable
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -84,7 +84,7 @@ class ColorSchema:
 class Colorize:
     """Functionality for coloring."""
 
-    def __init__(self, grammar_dir: str, theme_path: importlib_resources.abc.Traversable):
+    def __init__(self, grammar_dir: str, theme_path: Traversable):
         """Initialize the colorizer.
 
         :param grammar_dir: The directory in which the grammars reside

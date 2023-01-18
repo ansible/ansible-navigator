@@ -20,7 +20,12 @@ if sys.version_info < (3, 9):
 else:
     import zoneinfo
 
+
 if sys.version_info < (3, 9):
     import importlib_resources
+
+    from importlib_resources.abc import Traversable
 else:
     import importlib.resources as importlib_resources
+
+    from importlib.abc import Traversable
