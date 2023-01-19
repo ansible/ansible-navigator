@@ -142,6 +142,7 @@ class TmuxSession:
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_PULL_POLICY='{self._pull_policy}'")
 
         set_up_commands = tmux_common + self._setup_commands
+        # send the setup commands
         for set_up_command in set_up_commands:
             self._pane.send_keys(set_up_command)
 
@@ -150,13 +151,13 @@ class TmuxSession:
         self._pane.send_keys("clear")
         self._pane.send_keys("echo ready")
 
-        # send setup, wait for the prompt in last line
+        # wait for the ready line
         start_time = timer()
         prompt_showing = False
         while True:
             showing = self._pane.capture_pane()
             if showing:
-                prompt_showing = showing[1] == "ready"
+                prompt_showing = "ready" in showing
             if prompt_showing:
                 break
             elapsed = timer() - start_time
