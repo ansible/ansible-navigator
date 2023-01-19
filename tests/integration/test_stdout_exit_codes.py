@@ -18,7 +18,11 @@ PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.
 
 
 @pytest.fixture(name="params")
-def fixture_params(default_ee_image_name: str, request: pytest.FixtureRequest) -> dict[str, str]:
+def fixture_params(
+    default_ee_image_name: str,
+    valid_container_engine: str,
+    request: pytest.FixtureRequest,
+) -> dict[str, str]:
     """Generate parameters.
 
     :param default_ee_image_name: The default execution environment image name
@@ -26,6 +30,7 @@ def fixture_params(default_ee_image_name: str, request: pytest.FixtureRequest) -
     :returns: The parameters
     """
     return {
+        "container_engine": valid_container_engine,
         "execution_environment": request.param,
         "execution_environment_image": default_ee_image_name,
     }
