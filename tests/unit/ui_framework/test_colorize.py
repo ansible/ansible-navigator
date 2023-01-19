@@ -1,11 +1,10 @@
 """Tests for colorize."""
 from __future__ import annotations
 
-import os
-
 from typing import NamedTuple
 from unittest.mock import patch  # pylint: disable=preferred-module  # FIXME: GH-872
 
+from ansible_navigator.constants import GRAMMAR_DIR
 from ansible_navigator.constants import THEME_PATH
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentView
@@ -13,12 +12,6 @@ from ansible_navigator.ui_framework.colorize import Colorize
 from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
-
-
-SHARE_DIR = os.path.abspath(
-    os.path.join(os.path.basename(__file__), "..", "share", "ansible_navigator"),
-)
-GRAMMAR_DIR = os.path.join(SHARE_DIR, "grammar")
 
 
 class Sample(NamedTuple):
