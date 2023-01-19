@@ -35,7 +35,8 @@ def _valid_container_engine():
     for engine in ("podman", "docker"):
         if shutil.which(engine):
             return engine
-    raise Exception("container engine required")
+    pytest.exit(reason="Container engine required", returncode=1)
+    return False
 
 
 @pytest.fixture(scope="session", name="valid_container_engine")
@@ -182,12 +183,15 @@ def pull_image(valid_container_engine: str, image_name: str):
     image_puller.assess()
     image_puller.prologue_stdout()
     if image_puller.assessment.exit_messages:
-        raise SystemExit("\n".join(image_puller.assessment.exit_messages))
+        print(msg.to_lines() for msg in image_puller.assessment.exit_messages)
+        pytest.exit("Image assessment failed", 1)
     if image_puller.assessment.pull_required:
         # ensure the output is flushed prior to the pull
         # cleans up GH action output
         sys.stdout.flush()
         image_puller.pull_stdout()
+    if image_puller.assessment.pull_required:
+        pytest.exit("Image pull failed", 1)
 
 
 def pytest_sessionstart(session: pytest.Session):
@@ -251,6 +255,11 @@ def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
     # ensure a virtual environment is active
     if not os.environ.get("VIRTUAL_ENV"):
         pytest.exit("Please activate a virtual environment before testing.")
+
+    # ensure tmux is installed
+    tmux_location = shutil.which("tmux")
+    if not tmux_location:
+        pytest.exit("Please install tmux before testing.")
 
 
 def pytest_unconfigure(config: pytest.Config):  # pylint: disable=unused-argument

@@ -6,6 +6,7 @@ import os
 from typing import NamedTuple
 from unittest.mock import patch  # pylint: disable=preferred-module  # FIXME: GH-872
 
+from ansible_navigator.constants import THEME_PATH
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.ui_framework.colorize import Colorize
@@ -17,7 +18,6 @@ from ansible_navigator.utils.serialize import serialize
 SHARE_DIR = os.path.abspath(
     os.path.join(os.path.basename(__file__), "..", "share", "ansible_navigator"),
 )
-THEME_PATH = os.path.join(SHARE_DIR, "themes", "dark_vs.json")
 GRAMMAR_DIR = os.path.join(SHARE_DIR, "grammar")
 
 

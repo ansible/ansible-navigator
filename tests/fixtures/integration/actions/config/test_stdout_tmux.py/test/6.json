@@ -18,7 +18,7 @@
         "    dump                Dump configuration",
         "    view                View configuration file",
         "    init                Create initial configuration",
-        "optional arguments:",
+        "options:",
         "  --version             show program's version number, config file location, configured module search path, module location, executable location and exit",
         "  -h, --help            show this help message and exit",
         "  -v, --verbose         Causes Ansible to print more debug messages. Adding multiple -v will increase the verbosity, the builtin plugins currently evaluate up to -vvvvvv. A reasonable level to start is -vvv, connection debugging might require -vvvv.",

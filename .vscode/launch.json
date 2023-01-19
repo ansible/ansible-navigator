@@ -8,6 +8,16 @@
       "request": "launch",
       "purpose": ["debug-test"],
       "console": "integratedTerminal"
+    },
+    // Configuration for pure debugging (use args attribute accordingly)
+    {
+      "name": "Debug subcommand: exec",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["exec", "--", "pwd"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
     }
   ]
 }

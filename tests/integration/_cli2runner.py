@@ -45,6 +45,7 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
+        # pylint: disable=unused-argument
         """Confirm execution of ``cli.main()`` produces the desired results.
 
         :param mocked_runner: A patched instance of runner
@@ -53,9 +54,8 @@ class Cli2Runner:
         :param cli_entry: The CLI entry to set as :data:`sys.argv`
         :param config_fixture: The settings fixture
         :param expected: the expected return value
-        :raises Exception: If called
         """
-        raise Exception("Override in subclass")
+        pytest.exit(reason="Override in subclass", returncode=1)
 
     def test_config_interactive(
         self,
