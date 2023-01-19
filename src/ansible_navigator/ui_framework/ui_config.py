@@ -19,7 +19,7 @@ class UIConfig:
     #: Indicates if the curses colors have been initialized
     colors_initialized: bool
     #: The path to the grammar directory
-    grammar_dir: str
+    grammar_dir: Traversable
     #: Indicates if terminal support for OSC4 is enabled
     osc4: bool
     #: The path to the 16 terminal color map

@@ -27,7 +27,7 @@ ignorePaths:
   # The setup file
   - setup.cfg
   # All grammar (text-mate) tokenization files
-  - share/ansible_navigator/grammar/*.json
+  - src/ansible_navigator/data/grammar/*.json
   # Theme files
   - src/ansible_navigator/data/themes/*.json
   # Anything in the vendored tokenization directory

@@ -7,6 +7,7 @@ import os
 
 from sys import stdout
 
+from ansible_navigator.constants import GRAMMAR_DIR
 from ansible_navigator.constants import THEME_PATH
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentType
@@ -71,17 +72,15 @@ def color_lines(term_color_bits, tokenized) -> str:
 def tokenize(
     content_format: ContentFormat,
     serialized: str,
-    share_directory: str,
 ) -> list[list[SimpleLinePart]]:
     """Serialize and tokenize an object.
 
     :param content_format: The format type
     :param serialized: The serialized content
-    :param share_directory: the current share directory
     :returns: A list of list of line parts
     """
     colorizer = Colorize(
-        grammar_dir=os.path.join(share_directory, "grammar"),
+        grammar_dir=GRAMMAR_DIR,
         theme_path=THEME_PATH,
     )
 
@@ -92,14 +91,12 @@ def tokenize(
 def print_to_stdout(
     content: ContentType,
     content_format: ContentFormat,
-    share_directory: str,
     use_color: bool,
 ) -> None:
     """Print some colored output to stdout.
 
     :param content: The content to print out.
     :param content_format: The content_format
-    :param share_directory: the current share directory
     :param use_color: Indicates if color should be used
     """
     serialization_format = content_format.value.serialization
@@ -121,7 +118,6 @@ def print_to_stdout(
         tokenized = tokenize(
             content_format=content_format,
             serialized=output,
-            share_directory=share_directory,
         )
         terminal_color_bits = color_bits()
         output = color_lines(terminal_color_bits, tokenized)

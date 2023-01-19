@@ -107,7 +107,7 @@ repos:
           (?x)^
             (
               tests/fixtures/integration/actions/.*\.json|
-              share/ansible_navigator/grammar/.*\.json
+              src/ansible_navigator/data/grammar/.*\.json
             )
           $
 
