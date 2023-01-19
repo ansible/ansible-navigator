@@ -12,7 +12,6 @@ From that point forward flow control of the application is handled
 by each action in the action stack, control returned here when
 ``:quit`` is requested by the user.
 """
-import os
 
 from typing import TYPE_CHECKING
 
@@ -20,6 +19,7 @@ from ansible_navigator.actions import kegexes
 from ansible_navigator.actions import run_action
 from .action_base import ActionBase
 from .configuration_subsystem.definitions import ApplicationConfiguration
+from .constants import GRAMMAR_DIR
 from .constants import TERMINAL_COLORS_PATH
 from .constants import THEME_PATH
 from .steps import Steps
@@ -58,16 +58,15 @@ class ActionRunner(ActionBase):
         :param refresh: The refresh for the UI
         :type refresh: int
         """
-        share_directory = self._args.internals.share_directory
-
         config = UIConfig(
             color=self._args.display_color,
             colors_initialized=False,
-            grammar_dir=os.path.join(share_directory, "grammar"),
+            grammar_dir=GRAMMAR_DIR,
             osc4=self._args.osc4,
             terminal_colors_path=TERMINAL_COLORS_PATH,
             theme_path=THEME_PATH,
         )
+        self._logger.debug("grammar path = %s", config.grammar_dir)
         self._logger.debug("theme path = %s", config.theme_path)
         self._logger.debug("terminal colors path = %s", config.terminal_colors_path)
 

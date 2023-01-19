@@ -84,7 +84,7 @@ class ColorSchema:
 class Colorize:
     """Functionality for coloring."""
 
-    def __init__(self, grammar_dir: str, theme_path: Traversable):
+    def __init__(self, grammar_dir: Traversable, theme_path: Traversable):
         """Initialize the colorizer.
 
         :param grammar_dir: The directory in which the grammars reside
@@ -92,7 +92,7 @@ class Colorize:
         """
         self._logger = logging.getLogger(__name__)
         self._schema: ColorSchema
-        self._grammars = Grammars(grammar_dir)
+        self._grammars = Grammars(str(grammar_dir))
         self._theme_path = theme_path
         self._load()
 

@@ -124,7 +124,6 @@ class Action(ActionBase):
 
         dump = partial(
             print_to_stdout,
-            share_directory=self._args.internals.share_directory,
             use_color=self._args.display_color,
         )
         if self._args.entry("settings_schema").value.source is not Constants.DEFAULT_CFG:

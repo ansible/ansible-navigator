@@ -149,7 +149,6 @@ class Action(ActionBase):
         print_to_stdout(
             content=filtered,
             content_format=ContentFormat.YAML,
-            share_directory=self._args.internals.share_directory,
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
@@ -184,7 +183,6 @@ class Action(ActionBase):
         print_to_stdout(
             content=details,
             content_format=ContentFormat.YAML,
-            share_directory=self._args.internals.share_directory,
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
