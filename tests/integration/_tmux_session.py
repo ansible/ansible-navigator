@@ -116,6 +116,7 @@ class TmuxSession:
 
         # set a clean shell and predictable prompt
         self.cli_prompt = "bash$"
+        self._pane.send_keys("bash")
         self._pane.send_keys("clear && env -i bash --noprofile --norc")
         self._pane.send_keys(f"export PS1={self.cli_prompt}")
 
@@ -139,25 +140,23 @@ class TmuxSession:
             f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH='{collection_doc_cache}'",
         )
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_PULL_POLICY='{self._pull_policy}'")
-        tmux_common.append("env")
 
         set_up_commands = tmux_common + self._setup_commands
-        set_up_command = " && ".join(set_up_commands)
+        for set_up_command in set_up_commands:
+            self._pane.send_keys(set_up_command)
+
+        self._setup_capture = self._pane.capture_pane()
+
+        self._pane.send_keys("clear")
+        self._pane.send_keys("echo ready")
 
         # send setup, wait for the prompt in last line
         start_time = timer()
-        self._pane.send_keys(set_up_command)
         prompt_showing = False
         while True:
             showing = self._pane.capture_pane()
-            # find the prompt in the last line of a full screen
-            # or at least a screen as big as the list of environment variables
-            # because the environment variables were dumped
             if showing:
-                prompt_showing = self.cli_prompt in showing[-1] and len(showing) > min(
-                    len(tmux_common),
-                    int(self._pane_height) - 1,
-                )
+                prompt_showing = showing[1] == "ready"
             if prompt_showing:
                 break
             elapsed = timer() - start_time
@@ -169,7 +168,6 @@ class TmuxSession:
             time.sleep(0.1)
 
         # capture the setup screen
-        self._setup_capture = self._pane.capture_pane()
 
         # clear the screen, wait for prompt in line 0
         start_time = timer()
