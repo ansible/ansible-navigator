@@ -1,8 +1,6 @@
 """Test doc using subprocess."""
 from __future__ import annotations
 
-import subprocess
-
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -11,6 +9,7 @@ import pytest
 from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import BaseScenario
 from tests.defaults import id_func
+from ....conftest import TCmdInTty
 
 
 BUILTINS = (
@@ -105,6 +104,7 @@ def test(
     tmp_path: Path,
     data: StdoutCliTest,
     exec_env: bool,
+    cmd_in_tty: TCmdInTty,
 ) -> None:
     """Test doc using subcommand.
 
@@ -112,6 +112,7 @@ def test(
     :param tmp_path: The temporary path to use
     :param data: The test data
     :param exec_env: Whether to use the exec environment
+    :param cmd_in_tty: The tty command runner
     :raises AssertionError: When test fails
     """
     log_file = str(tmp_path / "log.txt")
@@ -120,11 +121,6 @@ def test(
     command = shlex_join(
         data.command + ("--lf", log_file, "--ee", str(exec_env), "--set-env", "PAGER=cat"),
     )
-    proc_out = subprocess.run(
-        command,
-        capture_output=True,
-        check=False,
-        text=True,
-        shell=True,
-    )
-    assert all(d in proc_out.stdout for d in data.expected)
+    stdout, _stderr, _exit_code = cmd_in_tty(cmd=command)
+
+    assert all(d in stdout for d in data.expected)

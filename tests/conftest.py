@@ -2,13 +2,17 @@
 """fixtures for all tests"""
 from __future__ import annotations
 
+import errno
 import os
+import pty
+import select
 import shutil
 import subprocess
 import sys
 
 from copy import deepcopy
 from pathlib import Path
+from typing import Protocol
 
 import pytest
 
@@ -192,6 +196,84 @@ def pull_image(valid_container_engine: str, image_name: str):
         image_puller.pull_stdout()
     if image_puller.assessment.pull_required:
         pytest.exit("Image pull failed", 1)
+
+
+def _cmd_in_tty(cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, int]:
+    """Capture the output of cmd using a tty
+
+    Based on Andy Hayden's gist:
+    https://gist.github.com/hayd/4f46a68fc697ba8888a7b517a414583e
+
+    :param cmd: The command to run
+    :param bytes_input: Some bytes to input
+    :returns: stdout, stderr, and the exit code
+    """
+    # pylint: disable=too-many-locals
+    m_stdout, s_stdout = pty.openpty()  # provide tty to enable line-buffering
+    m_stderr, s_stderr = pty.openpty()
+    m_stdin, s_stdin = pty.openpty()
+
+    with subprocess.Popen(
+        cmd,
+        bufsize=1,
+        shell=True,
+        stdin=s_stdin,
+        stdout=s_stdout,
+        stderr=s_stderr,
+        close_fds=True,
+    ) as proc:
+        for file_d in [s_stdout, s_stderr, s_stdin]:
+            os.close(file_d)
+        if bytes_input:
+            os.write(m_stdin, bytes_input)
+
+        timeout = 0.04
+        readable = [m_stdout, m_stderr]
+        result = {m_stdout: b"", m_stderr: b""}
+        try:
+            while readable:
+                ready, _, _ = select.select(readable, [], [], timeout)
+                for file_d in ready:
+                    try:
+                        data = os.read(file_d, 512)
+                    except OSError as exc:
+                        if exc.errno != errno.EIO:
+                            raise
+                        # EIO means EOF on some systems
+                        readable.remove(file_d)
+                    else:
+                        if not data:  # EOF
+                            readable.remove(file_d)
+                        result[file_d] += data
+
+        finally:
+            for file_d in [m_stdout, m_stderr, m_stdin]:
+                os.close(file_d)
+            if proc.poll() is None:
+                proc.kill()
+            proc.wait()
+
+    return result[m_stdout].decode("utf-8"), result[m_stderr].decode("utf-8"), proc.returncode
+
+
+@pytest.fixture
+def cmd_in_tty():
+    """Provide the cmd in tty function as a fixture
+
+    :yields: The cmd_in_tty function
+    """
+    yield _cmd_in_tty
+
+
+class TCmdInTty(Protocol):
+    """Type hint for the cmd_in_tty fixture."""
+
+    def __call__(self, cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, int]:
+        """Prove the callable type hint for the cmd_in_tty fixture
+
+        :param cmd: The command to run
+        :param bytes_input: Some bytes to input
+        """
 
 
 def pytest_sessionstart(session: pytest.Session):
