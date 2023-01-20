@@ -149,7 +149,6 @@ class Action(ActionBase):
         print_to_stdout(
             content=filtered,
             content_format=ContentFormat.YAML,
-            share_directory=self._args.internals.share_directory,
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
@@ -184,7 +183,6 @@ class Action(ActionBase):
         print_to_stdout(
             content=details,
             content_format=ContentFormat.YAML,
-            share_directory=self._args.internals.share_directory,
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
@@ -448,11 +446,23 @@ class Action(ActionBase):
             except KeyError:
                 legacy_check = False
 
+            # podman has a root label
             try:
-                label_check = details["labels"]["ansible-execution-environment"] == "true"
+                root_label_check = details["labels"]["ansible-execution-environment"] == "true"
             except (KeyError, TypeError):
-                label_check = False
-            image["execution_environment"] = legacy_check or label_check
+                root_label_check = False
+
+            # docker has only a config.label
+            try:
+                config_label_check = (
+                    details["config"]["labels"]["ansible-execution-environment"] == "true"
+                )
+            except (KeyError, TypeError):
+                config_label_check = False
+
+            image["execution_environment"] = any(
+                (legacy_check, root_label_check, config_label_check)
+            )
         self._images.value = sorted(images, key=lambda i: i["name"])
 
     def _introspect_image(self) -> bool:

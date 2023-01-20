@@ -208,7 +208,6 @@ class Action(ActionBase):
         print_to_stdout(
             content=collections_info,
             content_format=ContentFormat.YAML,
-            share_directory=self._args.internals.share_directory,
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)

@@ -13,3 +13,5 @@ THEME_PATH: Traversable = THEME_DIR.joinpath(THEME_NAME)
 
 TERMINAL_COLORS: str = "terminal_colors.json"
 TERMINAL_COLORS_PATH: Traversable = THEME_DIR.joinpath(TERMINAL_COLORS)
+
+GRAMMAR_DIR: Traversable = DATA_DIR.joinpath("grammar")
