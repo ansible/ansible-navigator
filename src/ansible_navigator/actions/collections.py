@@ -517,19 +517,10 @@ class Action(ActionBase):
             tmp_list = []
             for mount in volume_mounts:
                 source_str, destination_str = mount.split(":")[0:2]
-                # the mount may be a file
                 if not Path(source_str).is_dir:
                     continue
                 dest_path = Path(destination_str)
-                # /some/dir/collections/ansible_collections
-                if dest_path.parts[-2:] == ("collections", "ansible_collections"):
-                    pass
-                # /some/dir/collections
-                elif dest_path.parts[-1] == "collections":
-                    dest_path /= "ansible_collections"
-                # /some/dir
-                else:
-                    dest_path /= "collections"
+                if dest_path.name != "ansible_collections":
                     dest_path /= "ansible_collections"
                 tmp_list.append(str(dest_path))
             dest_volmounts = tuple(tmp_list)
