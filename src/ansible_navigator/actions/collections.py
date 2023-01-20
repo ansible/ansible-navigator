@@ -485,12 +485,14 @@ class Action(ActionBase):
             self._parse(output)
 
     def _parse(self, output) -> None:
-        # pylint: disable=too-many-branches
         """Load and process the ``json`` output from the collection cataloging process.
 
         :param output: The output from the collection cataloging process
         :returns: Nothing
         """
+        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)
@@ -517,7 +519,7 @@ class Action(ActionBase):
             tmp_list = []
             for mount in volume_mounts:
                 source_str, destination_str = mount.split(":")[0:2]
-                if not Path(source_str).is_dir:
+                if not Path(source_str).is_dir():
                     continue
                 dest_path = Path(destination_str)
                 # /x/ansible_collections/co:/x/ansible_collections/co
