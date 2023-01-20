@@ -65,3 +65,106 @@ Prerequisites:
    indicates the version of python that needs to be installed for tox to run
    locally.
    ```
+
+## Debugging Ansible Navigator with VS Code
+
+Getting started:
+
+After cloning the repository, all we need is to install ansible-navigator from
+the source. Use the following command in workspace (root folder of navigator).
+This will install all the required dependencies for testing the local changes.
+
+```shell-session
+pip install -e .
+```
+
+### Configure VSCode settings
+
+Once we are inside vscode with project installed, we should see a `.vscode`
+folder in our workspace. Having a launch configuration file is beneficial
+because it allow us to configure and save debugging setup details. VS Code
+keeps debugging configuration information in a `launch.json` file located in a
+`.vscode` folder in our workspace (project root folder).
+
+Similarly, The workspace settings file `settings.json` is also located under
+the `.vscode` folder in our root folder. These are the project specific
+settings shared by all users of that project.
+
+Use the existing settings or drop in the required changes in configuration of
+these `launch.json` and `settings.json` files.
+
+Now, the final steps!
+
+- Put breakpoint(s) in the code where needed.
+- Hover to the **Run and Debug** icon in the Activity Bar to start the
+  debugger.
+
+At this point, the debugger should hit your breakpoint and start the debugging
+session.
+
+### Debug Ansible-Navigator Subcommands
+
+Ansible-Navigator comes in with bunch of [sub-commands]. To debug around any
+specific subcommand, we will need to add `args` attribute (arguments passed to
+the program to debug) in our launch.json configuration file.
+
+[sub-commands]: https://ansible-navigator.readthedocs.io/en/latest/subcommands/
+
+**Example:**
+
+- Debug `ansible-navigator run` subcommand, use _args_ attribute, provide
+  absolute path to the playbook as mentioned. Following configuration will allow
+  to debug `ansible-navigator site.yml --mode stdout`.
+
+```shell-session
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug subcommand: run",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["run", "../Path/to/Playbook/site.yml", "--mode", "stdout"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
+    }
+  ]
+}
+```
+
+- Debug `ansible-navigator exec` subcommand using _args_ with some parameter.
+  Following configuration will allow to debug `ansible-navigator exec -- pwd`.
+
+```shell-session
+{
+  "version": "0.2.0",
+  "configurations": [
+     {
+      "name": "Debug subcommand: exec",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["exec", "--", "pwd"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
+    }
+```
+
+- To debug subcommand `ansible-navigator images`, add one more attribute as
+  `"args": ["images"]` in our previously configured launch.json.
+- To debug subcommand `ansible-navigator collections`, add one more attribute
+  as `"args": ["collections"]` in launch.json, and so on.
+- Moreover, to debug subcommands with some parameter use
+  `"args": ["subcommand-name", "--", "parameter"]`
+- While debugging any subcommand with arguments, make sure to use one _args_
+  entry at a time in our configuration (comment/remove the ones not in use).
+
+### Useful Links
+
+- VS code debugging [guide].
+- Facilitate [Python Debugger] (pdb) in navigator for pure command line
+  debugging.
+
+[guide]: https://code.visualstudio.com/docs/editor/debugging
+[python debugger]: https://www.geeksforgeeks.org/python-debugger-python-pdb/
