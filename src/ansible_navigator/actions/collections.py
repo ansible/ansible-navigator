@@ -520,6 +520,13 @@ class Action(ActionBase):
                 if not Path(source_str).is_dir:
                     continue
                 dest_path = Path(destination_str)
+                # /x/ansible_collections/co:/x/ansible_collections/co
+                if dest_path.parent.name == "ansible_collections":
+                    continue
+                # /x/ansible_collections/co/ns:/x/ansible_collections/co/ns
+                if dest_path.parent.parent.name == "ansible_collections":
+                    continue
+                # /x:/x
                 if dest_path.name != "ansible_collections":
                     dest_path /= "ansible_collections"
                 tmp_list.append(str(dest_path))
