@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import os
-import subprocess
 
 from pathlib import Path
 from typing import NamedTuple
@@ -11,6 +10,7 @@ import pytest
 
 from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import id_func
+from ..conftest import TCmdInTty
 from ..defaults import FIXTURES_DIR
 
 
@@ -192,50 +192,40 @@ StdoutCliTests = (
 )
 
 
+@pytest.mark.usefixtures("use_venv")
 @pytest.mark.parametrize(argnames="pae", argvalues=(True, False), ids=("pae_true", "pae_false"))
 @pytest.mark.parametrize(argnames="exec_env", argvalues=(True, False), ids=("ee_true", "ee_false"))
 @pytest.mark.parametrize(argnames="data", argvalues=StdoutCliTests, ids=id_func)
-def test_run_through_cli(tmp_path: Path, data: StdoutCliTest, exec_env: bool, pae: bool) -> None:
+def test_run_through_cli(
+    tmp_path: Path,
+    data: StdoutCliTest,
+    exec_env: bool,
+    pae: bool,
+    cmd_in_tty: TCmdInTty,
+) -> None:
     """Test for a return code from run through a shell.
 
+    :param tmp_path: A tmp location
     :param data: The test data
+    :param exec_env: Enable/disable execution environment support
+    :param pae: Enable/disable playbook artifact creation
+    :param cmd_in_tty: The tty command runner
     :raises AssertionError: When no virtual environment found
     """
-    venv_path = os.environ.get("VIRTUAL_ENV")
-    if venv_path is None:
-        raise AssertionError(
-            "VIRTUAL_ENV environment variable was not set but tox should have set it.",
-        )
-    venv = Path(venv_path, "bin", "activate")
     log_file = str(Path(tmp_path, "log.txt"))
     artifact_file = str(Path(tmp_path, "artifact.json"))
 
-    command = data.command + [
-        "--lf",
-        log_file,
-        "--pae",
-        str(pae),
-        "--pas",
-        artifact_file,
-        "--ee",
-        str(exec_env),
-    ]
-    bash_wrapped = f"/bin/bash -c 'source {venv!s} && {shlex_join(command)}'"
-    proc_out = subprocess.run(
-        bash_wrapped,
-        capture_output=True,
-        check=False,
-        text=True,
-        shell=True,
-    )
+    common = ["--lf", log_file, "--pae", str(pae), "--pas", artifact_file, "--ee", str(exec_env)]
+    command = shlex_join(data.command + common)
+    stdout, stderr, exit_code = cmd_in_tty(command)
 
-    assert data.ansible_stdout in proc_out.stdout
+    assert data.ansible_stdout in stdout
     if not exec_env and not pae:
         # Without an EE and PAE, ansible writes to ``stderr``
-        assert data.ansible_stderr in proc_out.stderr
+        assert data.ansible_stderr in stderr
     else:
         # Everything is routed through ``stdout``
-        assert data.ansible_stderr in proc_out.stdout
-    assert data.navigator_stdout in proc_out.stdout
-    assert data.navigator_stderr in proc_out.stderr
-    assert data.return_code == proc_out.returncode
+        assert data.ansible_stderr in stdout
+    assert data.navigator_stdout in stdout
+    assert data.navigator_stderr in stderr
+    assert data.return_code == exit_code
