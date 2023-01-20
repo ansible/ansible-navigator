@@ -512,12 +512,20 @@ class Action(ActionBase):
             list(parsed["collections"].values()),
             key=lambda i: i["known_as"],
         )
+        volume_mounts = self.app.args.execution_environment_volume_mounts
+        if isinstance(volume_mounts, list):
+            dest_volmounts = tuple(mount.split(":")[1] for mount in volume_mounts)
+        else:
+            dest_volmounts = tuple()
+
         for collection in self._collections:
             collection["__name"] = collection["known_as"]
             collection["__version"] = collection["collection_info"].get("version", "missing")
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
-                if collection["path"].startswith(self._adjacent_collection_dir):
+                if collection["path"].startswith(dest_volmounts):
+                    collection["__type"] = "bind_mount"
+                elif collection["path"].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
                 elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
                     collection["__type"] = "bind_mount"
