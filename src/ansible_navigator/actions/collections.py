@@ -532,16 +532,16 @@ class Action(ActionBase):
                 if dest_path.name != "ansible_collections":
                     dest_path /= "ansible_collections"
                 tmp_list.append(str(dest_path))
-            dest_volmounts = tuple(tmp_list)
+            dest_volume_mounts = tuple(tmp_list)
         else:
-            dest_volmounts = tuple()
+            dest_volume_mounts = tuple()
 
         for collection in self._collections:
             collection["__name"] = collection["known_as"]
             collection["__version"] = collection["collection_info"].get("version", "missing")
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
-                if collection["path"].startswith(dest_volmounts):
+                if collection["path"].startswith(dest_volume_mounts):
                     collection["__type"] = "bind_mount"
                 elif collection["path"].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
