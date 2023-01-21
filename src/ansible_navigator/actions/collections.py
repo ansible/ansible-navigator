@@ -485,12 +485,14 @@ class Action(ActionBase):
             self._parse(output)
 
     def _parse(self, output) -> None:
-        # pylint: disable=too-many-branches
         """Load and process the ``json`` output from the collection cataloging process.
 
         :param output: The output from the collection cataloging process
         :returns: Nothing
         """
+        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)
@@ -512,12 +514,36 @@ class Action(ActionBase):
             list(parsed["collections"].values()),
             key=lambda i: i["known_as"],
         )
+        volume_mounts = self.app.args.execution_environment_volume_mounts
+        if isinstance(volume_mounts, list):
+            tmp_list = []
+            for mount in volume_mounts:
+                source_str, destination_str = mount.split(":")[0:2]
+                if not Path(source_str).is_dir():
+                    continue
+                dest_path = Path(destination_str)
+                # /x/ansible_collections/co:/x/ansible_collections/co
+                if dest_path.parent.name == "ansible_collections":
+                    continue
+                # /x/ansible_collections/co/ns:/x/ansible_collections/co/ns
+                if dest_path.parent.parent.name == "ansible_collections":
+                    continue
+                # /x:/x
+                if dest_path.name != "ansible_collections":
+                    dest_path /= "ansible_collections"
+                tmp_list.append(str(dest_path))
+            dest_volume_mounts = tuple(tmp_list)
+        else:
+            dest_volume_mounts = tuple()
+
         for collection in self._collections:
             collection["__name"] = collection["known_as"]
             collection["__version"] = collection["collection_info"].get("version", "missing")
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
-                if collection["path"].startswith(self._adjacent_collection_dir):
+                if collection["path"].startswith(dest_volume_mounts):
+                    collection["__type"] = "bind_mount"
+                elif collection["path"].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
                 elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
                     collection["__type"] = "bind_mount"
