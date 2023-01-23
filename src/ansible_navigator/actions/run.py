@@ -891,6 +891,7 @@ class Action(ActionBase):
             filename
             or self._args.playbook_artifact_enable is True
             and self._args.help_playbook is not True
+            and self._args.enable_prompts is not True
         ):
             status, status_color = self._get_status()
 

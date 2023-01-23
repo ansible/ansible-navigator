@@ -490,6 +490,7 @@ class NavigatorPostProcessor:
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
+    enable_prompts = partialmethod(_forced_stdout, subcommand="run")
     help_builder = partialmethod(_forced_stdout, subcommand="builder")
     help_config = partialmethod(_forced_stdout, subcommand="config")
     help_doc = partialmethod(_forced_stdout, subcommand="doc")
