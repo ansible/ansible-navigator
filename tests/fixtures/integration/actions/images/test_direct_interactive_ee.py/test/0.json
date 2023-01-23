@@ -4,15 +4,15 @@
     "comment": "ansible-navigator images top window",
     "additional_information": {
         "present": [
-            "v0.12.4"
+            "v0.13.0"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  Image                                    Tag                      Execution environment                                                Created                                 Size",
-        "0│creator-base                             latest                   False                                                                some time ago                           341 MB",
-        "1│creator-ee                               v0.12.4                  True                                                                 some time ago                           433 MB",
+        "  Image                                     Tag                       Execution environment                                                  Created                            Size",
+        "0│creator-base                              latest                    False                                                                  some time ago                      341 MB",
+        "1│creator-ee                                v0.13.0                   True                                                                   some time ago                      433 MB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

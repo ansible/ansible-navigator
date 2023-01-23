@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v0.12.4 (primary) (Information collected from image inspection)",
+        "Image: creator-ee:v0.13.0 (primary) (Information collected from image inspection)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations: {}",
