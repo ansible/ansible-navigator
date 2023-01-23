@@ -15,7 +15,7 @@
       "type": "python",
       "request": "launch",
       "module": "ansible_navigator",
-      "args": ["settings", "--schema"],
+      "args": ["exec", "--", "pwd"],
       "cwd": "${workspaceFolder}/src",
       "justMyCode": false
     }
