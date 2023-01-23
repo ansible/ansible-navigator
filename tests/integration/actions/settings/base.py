@@ -22,7 +22,7 @@ base_steps = (
     UiTestStep(
         user_input=":f",
         comment="clear filter, full list",
-        present=["Ansible runner artifact dir", "Help playbook"],
+        present=["Ansible runner artifact dir", "Help inventory"],
         mask=True,
     ),
     UiTestStep(user_input=":f Exec", comment="filter using a different index"),
@@ -31,7 +31,7 @@ base_steps = (
     UiTestStep(
         user_input=":f",
         comment="clear filter, full list",
-        present=["Ansible runner artifact dir", "Help playbook"],
+        present=["Ansible runner artifact dir", "Help inventory"],
         mask=True,
     ),
 )

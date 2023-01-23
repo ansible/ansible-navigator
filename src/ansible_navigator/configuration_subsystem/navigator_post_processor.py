@@ -17,7 +17,7 @@ from string import Formatter
 from typing import List
 from typing import Tuple
 
-from ..utils.compatibility import zoneinfo
+=from ..utils.compatibility import zoneinfo
 from ..utils.definitions import ExitMessage
 from ..utils.definitions import ExitPrefix
 from ..utils.definitions import LogMessage

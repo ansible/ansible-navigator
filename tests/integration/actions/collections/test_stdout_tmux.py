@@ -37,6 +37,15 @@ stdout_tests = (
         ).join(),
         present=["- collection_info:", "    namespace: company_name", "  roles:"],
     ),
+    ShellCommand(
+        comment="collections json output",
+        user_input=StdoutCommand(
+            format="json",
+            mode="stdout",
+            execution_environment=False,
+        ).join(),
+        present=['"name": "coll_2"'],
+    ),
 )
 
 steps = add_indices(stdout_tests)
