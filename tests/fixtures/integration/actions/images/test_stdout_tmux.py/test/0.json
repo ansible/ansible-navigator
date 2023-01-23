@@ -10,18 +10,18 @@
         "compared_fixture": false
     },
     "output": [
-        "  full_name: ghcr.io/ansible/creator-ee:v0.12.4",
+        "  full_name: ghcr.io/ansible/creator-ee:v0.13.0",
         "          org.opencontainers.image.source: https://github.com/ansible/creator-ee",
         "        created_by: '/bin/sh -c #(nop) LABEL org.opencontainers.image.source https://github.com/ansible/creator-ee/blob/main/base/Containerfile'",
         "      - comment: FROM creator-base",
         "        created_by: '/bin/sh -c #(nop) LABEL org.opencontainers.image.source https://github.com/ansible/creator-ee'",
         "        org.opencontainers.image.source: https://github.com/ansible/creator-ee",
-        "      - ghcr.io/ansible/creator-ee:v0.12.4",
-        "      - ghcr.io/ansible/creator-ee@sha256:0bbd930a4bdc0f77ebf903f388f3007a1cb5bfb254b4e2b54601ed6a2bceb7f2",
-        "      - ghcr.io/ansible/creator-ee@sha256:5acc3584db157952816388bf6e5b446f78f9de4260f62c6b18d9d089af636da3",
-        "      - ghcr.io/ansible/creator-ee:v0.12.4",
+        "      - ghcr.io/ansible/creator-ee:v0.13.0",
+        "      - ghcr.io/ansible/creator-ee@sha256:341e9bee3198244600f7553a9844698717c208080eb6d32f42d4c223dcc0bcb0",
+        "      - ghcr.io/ansible/creator-ee@sha256:b01b5f96fd07d1df1437fa34bef6dfeb960851c35e678243b5c730bfab9842ad",
+        "      - ghcr.io/ansible/creator-ee:v0.13.0",
         "  name: creator-ee",
-        "  name_tag: creator-ee:v0.12.4 (primary)",
+        "  name_tag: creator-ee:v0.13.0 (primary)",
         "  repository: ghcr.io/ansible/creator-ee",
         "(venv) bash$"
     ]

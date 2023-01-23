@@ -13,7 +13,7 @@
         "   Name                 Version    Summary",
         " 0│ansible-compat       2.2.7      Ansible compatibility goodies                                                                                                                                       ▒",
         " 1│ansible-core         2.14.1     Radically simple IT automation                                                                                                                                      ▒",
-        " 2│ansible-lint         6.10.2     Checks playbooks for practices and behavior that could potentially be improved                                                                                      ▒",
+        " 2│ansible-lint         6.11.0     Checks playbooks for practices and behavior that could potentially be improved                                                                                      ▒",
         " 3│ansible-runner       2.3.1      \"Consistent Ansible Python API and CLI with container and process isolation runtime capabilities                                                                    ▒",
         " 4│arrow                1.2.3      Better dates & times for Python                                                                                                                                     ▒",
         " 5│attrs                22.2.0     Classes Without Boilerplate                                                                                                                                         ▒",
