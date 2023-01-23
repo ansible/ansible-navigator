@@ -207,7 +207,7 @@ class Action(ActionBase):
 
         print_to_stdout(
             content=collections_info,
-            content_format=ContentFormat.YAML,
+            content_format=getattr(ContentFormat, self._args.format.upper()),
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)

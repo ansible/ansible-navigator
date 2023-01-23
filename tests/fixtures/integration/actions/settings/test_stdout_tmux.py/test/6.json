@@ -45,6 +45,7 @@
         "ansible-navigator.execution-environment.pull.arguments: Not set",
         "ansible-navigator.execution-environment.pull.policy: Environment variable",
         "ansible-navigator.execution-environment.volume-mounts: Not set",
+        "ansible-navigator.format: Defaults",
         "ansible-navigator.images.details: Defaults",
         "ansible-navigator.inventory-columns: Not set",
         "ansible-navigator.logging.append: Defaults",

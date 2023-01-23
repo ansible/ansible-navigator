@@ -45,6 +45,7 @@
         "    image: ghcr.io/ansible/creator-ee:v0.13.0",
         "    pull:",
         "      policy: never",
+        "  format: yaml",
         "  images:",
         "    details:",
         "    - everything",
