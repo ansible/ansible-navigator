@@ -27,7 +27,6 @@ def test_stdout_output(
     :param stdout_format: The output format.
     :param cli_runner: The CliRunner fixture.
     :param monkeypatch: The monkeypatch fixture.
-    :param request: The current test request.
     """
     # Either cd to the collection parent or set the env var.
     if cwd:
@@ -59,4 +58,4 @@ def test_stdout_output(
     ]
     assert len(test_collections) == 2
     if exec_env:
-        assert set(collection["type"] for collection in test_collections) == {"bind_mount"}
+        assert {collection["type"] for collection in test_collections} == {"bind_mount"}
