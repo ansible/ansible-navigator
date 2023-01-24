@@ -237,6 +237,15 @@
                     },
                     "type": "object"
                 },
+                "enable-prompts": {
+                    "default": false,
+                    "description": "Option for disabling playbook-artifact-creation and execute ansible-playbook command in stdout mode",
+                    "enum": [
+                        true,
+                        false
+                    ],
+                    "type": "boolean"
+                },
                 "exec": {
                     "additionalProperties": false,
                     "properties": {

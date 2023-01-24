@@ -335,13 +335,12 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="enable_prompts",
             choices=[True, False],
             cli_parameters=CliParameters(short="--ep", action="store_true"),
-            settings_file_path_override="prompts.enable",
             short_description="Option for disabling"
             " playbook-artifact-creation and execute ansible-playbook"
             " command in stdout mode",
             subcommands=["run"],
             value=SettingsEntryValue(default=False),
-            version_added="v2.0",
+            version_added="v2.3",
         ),
         SettingsEntry(
             name="exec_command",
