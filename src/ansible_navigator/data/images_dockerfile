@@ -1,7 +1,7 @@
 # This file is structured like a multi stage build
 
 # The names ('as') need to correspond the the ImageEntry enum in utils/package_data.py
-FROM ghcr.io/ansible/creator-ee:v0.12.4 as DEFAULT_EE
+FROM ghcr.io/ansible/creator-ee:v0.13.0 as DEFAULT_EE
 
 # This is also hard coded in tests/fixtures/integration/execution_environment_image/ansible-navigator_set_ee_image.yml
 FROM ghcr.io/ansible/creator-base:latest as SMALL_IMAGE

@@ -224,6 +224,9 @@
           },
           "type": "object"
         },
+        "format": {
+          "type": "string"
+        },
         "images": {
           "additionalProperties": false,
           "properties": {

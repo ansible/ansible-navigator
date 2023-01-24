@@ -233,6 +233,7 @@ ENV_VAR_DATA = [
         "/tmp:/test1:Z;/tmp:/test2:z",
         ["/tmp:/test1:Z", "/tmp:/test2:z"],
     ),
+    ("format", "json", "json"),
     ("help_builder", "false", False),
     ("help_config", "false", False),
     ("help_doc", "false", False),

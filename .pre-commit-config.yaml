@@ -41,13 +41,13 @@ repos:
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.17.1
+    rev: v6.19.2
     hooks:
       - id: cspell
         name: Spell check with cspell
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.3.1
+    rev: v1.4.1
     hooks:
       - id: remove-tabs
 
@@ -154,7 +154,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.16.0b0
+    rev: v2.16.0b1
     hooks:
       - id: pylint
         args:

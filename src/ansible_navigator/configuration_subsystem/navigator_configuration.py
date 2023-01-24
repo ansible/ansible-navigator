@@ -395,6 +395,15 @@ NavigatorConfiguration = ApplicationConfiguration(
             version_added="v1.0",
         ),
         SettingsEntry(
+            name="format",
+            choices=["json", "yaml"],
+            cli_parameters=CliParameters(short="--fmt"),
+            short_description="Specify the format for stdout output.",
+            subcommands=["collections"],
+            value=SettingsEntryValue(default="yaml"),
+            version_added="v2.3",
+        ),
+        SettingsEntry(
             name="help_builder",
             choices=[True, False],
             cli_parameters=CliParameters(short="--hb", action="store_true"),

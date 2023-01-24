@@ -5,7 +5,7 @@
     "additional_information": {
         "present": [
             "Ansible runner artifact dir",
-            "Help playbook"
+            "Help inventory"
         ],
         "absent": [],
         "compared_fixture": false
@@ -28,13 +28,13 @@
         "13│Exec command                                         True       Defaults                           /bin/bash",
         "14│Exec shell                                           True       Defaults                           True",
         "15│Execution environment                                True       Command line                       True",
-        "16│Execution environment image                          True       Defaults                           ghcr.io/ansible/creator-ee:v0.12.4",
+        "16│Execution environment image                          True       Defaults                           ghcr.io/ansible/creator-ee:v0.13.0",
         "17│Execution environment volume mounts                  True       Not set                            Not set",
-        "18│Help builder                                         True       Defaults                           False",
-        "19│Help config                                          True       Defaults                           False",
-        "20│Help doc                                             True       Defaults                           False",
-        "21│Help inventory                                       True       Defaults                           False",
-        "22│Help playbook                                        True       Defaults                           False",
+        "18│Format                                               True       Defaults                           yaml",
+        "19│Help builder                                         True       Defaults                           False",
+        "20│Help config                                          True       Defaults                           False",
+        "21│Help doc                                             True       Defaults                           False",
+        "22│Help inventory                                       True       Defaults                           False",
         "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }
