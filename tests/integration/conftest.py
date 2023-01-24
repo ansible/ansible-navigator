@@ -11,6 +11,7 @@ import pytest
 from ansible_navigator.configuration_subsystem.definitions import (
     ApplicationConfiguration,
 )
+from ansible_navigator.configuration_subsystem.definitions import CliParameters
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.configuration_subsystem.navigator_configuration import (
     NavigatorConfiguration,
@@ -107,7 +108,11 @@ class CliRunner:
             if entry.name == "app":
                 cli_parts.insert(1, entry.value.current)
                 continue
-            if hasattr(entry, "cli_parameters") and isinstance(entry.cli_parameters.short, str):
+            if (
+                hasattr(entry, "cli_parameters")
+                and isinstance(entry.cli_parameters, CliParameters)
+                and isinstance(entry.cli_parameters.short, str)
+            ):
                 cli_parts.append(entry.cli_parameters.short)
             else:
                 pytest.exit(f"Missing cli_parameters for {entry.name} or short isn't a string")
