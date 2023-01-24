@@ -18,10 +18,6 @@ import pytest
 from ._common import generate_test_log_dir
 
 
-if TYPE_CHECKING:
-    from typing import Required
-
-
 class TmuxSessionKwargs(TypedDict, total=False):
     """tmux session kwargs"""
 
@@ -30,7 +26,7 @@ class TmuxSessionKwargs(TypedDict, total=False):
     pane_height: int
     pane_width: int
     pull_policy: str
-    request: Required[pytest.FixtureRequest]
+    request: pytest.FixtureRequest
     setup_commands: list[str]
     shell_prompt_timeout: int
 
