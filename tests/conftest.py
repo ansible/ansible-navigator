@@ -198,7 +198,11 @@ def pull_image(valid_container_engine: str, image_name: str):
         pytest.exit("Image pull failed", 1)
 
 
-def _cmd_in_tty(cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, int]:
+def _cmd_in_tty(
+    cmd: str,
+    bytes_input: bytes | None = None,
+    cwd: Path | None = None,
+) -> tuple[str, str, int]:
     """Capture the output of cmd using a tty
 
     Based on Andy Hayden's gist:
@@ -216,6 +220,7 @@ def _cmd_in_tty(cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, i
     with subprocess.Popen(
         cmd,
         bufsize=1,
+        cwd=cwd,
         shell=True,
         stdin=s_stdin,
         stdout=s_stdout,

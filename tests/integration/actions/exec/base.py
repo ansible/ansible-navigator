@@ -16,6 +16,7 @@ from ..._common import update_fixtures
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
+from ..._tmux_session import TmuxSessionKwargs
 
 
 TEST_FIXTURE_DIR = Path(FIXTURES_DIR, "integration", "actions", "exec")
@@ -40,16 +41,16 @@ class BaseClass:
         :param request: The request for this fixture
         :yields: A tmux session
         """
-        tmux_params = {
-            "unique_test_id": request.node.nodeid,
+        params: TmuxSessionKwargs = {
+            "request": request,
             "pane_height": self.pane_height,
             "pane_width": self.pane_width,
         }
         if isinstance(self.config_file, Path):
             assert self.config_file.exists()
-            tmux_params["config_path"] = self.config_file
+            params["config_path"] = self.config_file
 
-        with TmuxSession(**tmux_params) as tmux_session:
+        with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
     def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep):

@@ -12,6 +12,7 @@ from ..._common import update_fixtures
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
+from ..._tmux_session import TmuxSessionKwargs
 
 
 # run playbook
@@ -46,13 +47,13 @@ class BaseClass:
         :param request: The request for this fixture from a test
         :yields: A tmux session
         """
-        params = {
-            "pane_height": "100",
+        params: TmuxSessionKwargs = {
+            "pane_height": 100,
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
-            "unique_test_id": request.node.nodeid,
+            "request": request,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
