@@ -10,13 +10,15 @@ import warnings
 
 from pathlib import Path
 from timeit import default_timer as timer
-from typing import Required
 from typing import TypedDict
 
 import libtmux
 import pytest
 
 from ._common import generate_test_log_dir
+
+if TYPE_CHECKING:
+    from typing import Required
 
 
 class TmuxSessionKwargs(TypedDict, total=False):
