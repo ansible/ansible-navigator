@@ -107,7 +107,7 @@ class CliRunner:
             if entry.name == "app":
                 cli_parts.insert(1, entry.value.current)
                 continue
-            if hasattr(entry, "cli_parameters") and isinstance(entry.cli_parameters, str):
+            if hasattr(entry, "cli_parameters") and isinstance(entry.cli_parameters.short, str):
                 cli_parts.append(entry.cli_parameters.short)
             else:
                 pytest.exit(f"Missing cli_parameters for {entry.name} or short isn't a string")
