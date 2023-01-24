@@ -85,14 +85,20 @@ class CliRunner:
         for parameter in self.parameters:
             self._apply_parameter(parameter)
 
-    def _apply_parameter(self, parameter: Parameter):
-        """Apply a parameter to the settings."""
+    def _apply_parameter(self, parameter: Parameter) -> None:
+        """Apply a parameter to the settings.
+
+        :param parameter: The parameter to apply.
+        """
         entry = self.settings.entry(parameter.name)
         entry.value.current = str(parameter.value)
         entry.value.source = Constants.TEST
 
-    def to_cmdline(self):
-        """Return the command line to run."""
+    def to_cmdline(self) -> str:
+        """Return the command line to run.
+
+        :return: The command line.
+        """
         self._apply_parameters()
         cli_parts = ["ansible-navigator"]
         for entry in self.settings.entries:
@@ -101,7 +107,10 @@ class CliRunner:
             if entry.name == "app":
                 cli_parts.insert(1, entry.value.current)
                 continue
-            cli_parts.append(entry.cli_parameters.short)
+            if hasattr(entry, "cli_parameters") and isinstance(entry.cli_parameters, str):
+                cli_parts.append(entry.cli_parameters.short)
+            else:
+                pytest.exit(f"Missing cli_parameters for {entry.name} or short isn't a string")
             cli_parts.append(entry.value.current)
         return shlex_join(cli_parts)
 
@@ -117,6 +126,7 @@ class CliRunner:
 def cli_runner(request) -> CliRunner:
     """Create a fixture for the cli runner.
 
+    :param request: The current test request.
     :returns: The CliRunner class.
     """
     return CliRunner(request=request)
