@@ -7,12 +7,5 @@
   "editor.formatOnSave": true,
   "python.linting.pylintEnabled": true,
   "python.linting.flake8Enabled": true,
-  "python.linting.mypyEnabled": true,
-  "isort.check": true,
-
-  "[python]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
-  }
+  "python.linting.mypyEnabled": true
 }
