@@ -17,6 +17,7 @@ import pytest
 
 from ._common import generate_test_log_dir
 
+
 if TYPE_CHECKING:
     from typing import Required
 
