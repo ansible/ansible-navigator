@@ -68,7 +68,7 @@ class BaseClass:
         :yields: Tmux session
         """
         params = {
-            "unique_test_id": request.node.nodeid,
+            "request": request,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session

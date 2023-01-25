@@ -2,6 +2,7 @@
 import os
 
 from enum import Enum
+from pathlib import Path
 from typing import Any
 
 
@@ -9,6 +10,7 @@ FIXTURES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "fixtures
 FIXTURES_COLLECTION_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections"),
 )
+FIXTURES_COLLECTION_PATH = Path(FIXTURES_COLLECTION_DIR)
 
 
 class BaseScenario:

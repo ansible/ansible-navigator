@@ -30,7 +30,7 @@ class BaseClass:
         """
         params = {
             "setup_commands": ["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42", "export PAGER=cat"],
-            "unique_test_id": request.node.nodeid,
+            "request": request,
             "pane_height": self.PANE_HEIGHT,
             "pane_width": self.PANE_WIDTH,
         }

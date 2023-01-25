@@ -55,6 +55,7 @@ class Constants(Enum):
     )
     SEARCH_PATH = "Search path"
     SENTINEL = "Indicates a non value"
+    TEST = "Indicates a value set from a test"
     USER_CFG = "Settings file"
     USER_CLI = "Command line"
 

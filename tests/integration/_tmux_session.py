@@ -5,13 +5,30 @@ import datetime
 import os
 import shlex
 import time
+import uuid
 import warnings
 
+from pathlib import Path
 from timeit import default_timer as timer
+from typing import TypedDict
 
 import libtmux
+import pytest
 
 from ._common import generate_test_log_dir
+
+
+class TmuxSessionKwargs(TypedDict, total=False):
+    """tmux session kwargs"""
+
+    config_path: Path
+    cwd: Path
+    pane_height: int
+    pane_width: int
+    pull_policy: str
+    request: pytest.FixtureRequest
+    setup_commands: list[str]
+    shell_prompt_timeout: int
 
 
 class TmuxSession:
@@ -22,18 +39,18 @@ class TmuxSession:
 
     def __init__(
         self,
-        unique_test_id,
-        config_path=None,
-        cwd=None,
-        pane_height=20,
-        pane_width=200,
+        request: pytest.FixtureRequest,
+        config_path: Path | None = None,
+        cwd: Path | None = None,
+        pane_height: int = 20,
+        pane_width: int = 200,
         pull_policy: str = "never",
-        setup_commands=None,
-        shell_prompt_timeout=10,
+        setup_commands: list | None = None,
+        shell_prompt_timeout: int = 10,
     ) -> None:
         """Initialize a tmux session.
 
-        :param unique_test_id: The unique id for this tmux session, the session name
+        :param request: The request for this fixture
         :param config_path: The path to a settings file to use
         :param cwd: The current working directory to set when starting the tmux session
         :param pane_height: The height of the tmux session in lines
@@ -52,15 +69,15 @@ class TmuxSession:
         self._pane_width = pane_width
         self._pull_policy = pull_policy
         self._session: libtmux.Session
-        self._session_name = os.path.splitext(unique_test_id)[0]
+        self._session_name = str(uuid.uuid4())
         self._setup_capture: list
         self._setup_commands = setup_commands or []
         self._shell_prompt_timeout = shell_prompt_timeout
-        self._test_log_dir = generate_test_log_dir(unique_test_id)
+        self._test_log_dir = generate_test_log_dir(request)
 
         if self._cwd is None:
             # ensure CWD is top folder of library
-            self._cwd = os.path.join(os.path.dirname(__file__), "..", "..")
+            self._cwd = Path(__file__).parent.parent.parent
 
     def _build_tmux_session(self):
         """Create a new tmux session.

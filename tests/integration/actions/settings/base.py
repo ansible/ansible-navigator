@@ -56,7 +56,7 @@ class BaseClass:
                 "export ANSIBLE_NAVIGATOR_ANSIBLE_RUNNER_TIMEOUT=42",
                 "export PAGER=cat",
             ],
-            "unique_test_id": request.node.nodeid,
+            "request": request,
             "pane_height": self.PANE_HEIGHT,
             "pane_width": self.PANE_WIDTH,
         }

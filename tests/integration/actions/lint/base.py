@@ -12,6 +12,7 @@ from ..._common import update_fixtures
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
+from ..._tmux_session import TmuxSessionKwargs
 
 
 LINT_FIXTURES = os.path.join(
@@ -35,8 +36,8 @@ class BaseClass:
         :param request: Pytest request object
         :yields: TmuxSession object
         """
-        params = {
-            "unique_test_id": request.node.nodeid,
+        params: TmuxSessionKwargs = {
+            "request": request,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
