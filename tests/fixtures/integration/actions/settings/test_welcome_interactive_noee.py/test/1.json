@@ -36,7 +36,6 @@
         "21│Help config                                          True       Defaults                           False",
         "22│Help doc                                             True       Defaults                           False",
         "23│Help inventory                                       True       Defaults                           False",
-        "22│Help inventory                                       True       Defaults                           False",
         "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }
