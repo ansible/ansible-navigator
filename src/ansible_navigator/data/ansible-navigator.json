@@ -357,6 +357,15 @@
                     },
                     "type": "object"
                 },
+                "format": {
+                    "default": "yaml",
+                    "description": "Specify the format for stdout output.",
+                    "enum": [
+                        "json",
+                        "yaml"
+                    ],
+                    "type": "string"
+                },
                 "images": {
                     "additionalProperties": false,
                     "properties": {
