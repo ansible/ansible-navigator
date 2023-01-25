@@ -1,10 +1,11 @@
-"""fixtures"""
+"""Integration test fixtures."""
 from __future__ import annotations
 
 import os
 
 from copy import deepcopy
 from pathlib import Path
+from typing import Generator
 
 import pytest
 
@@ -27,23 +28,32 @@ EXECUTION_MODES = ["interactive", "stdout"]
 
 
 @pytest.fixture(scope="function")
-def action_run_stdout():
-    """Create a fixture for ActionRunTest."""
+def action_run_stdout() -> Generator[type[ActionRunTest], None, None]:
+    """Create a fixture for ActionRunTest.
+
+    :yield: The ActionRunTest class.
+    """
     yield ActionRunTest
 
 
 @pytest.fixture(scope="session")
-def test_fixtures_dir():
-    """the test fixture directory"""
+def test_fixtures_dir() -> str:
+    """Return the test fixture directory.
+
+    :return: The test fixture directory.
+    """
     return os.path.join(os.path.dirname(__file__), "..", "fixtures")
 
 
 @pytest.fixture(scope="session")
-def os_independent_tmp():
-    """
-    this attempts to ensure the length of the ``/tmp``
+def os_independent_tmp() -> str:
+    """Return an os independent tmp directory.
+
+    This attempts to ensure the length of the ``/tmp``
     is the same between MacOS and Linux
     otherwise ansible-navigator column widths can vary
+
+    :return: The os independent tmp directory.
     """
     tmp_real = os.path.realpath("/tmp")
     if tmp_real == "/private/tmp":
@@ -71,7 +81,7 @@ class CliRunner:
         self.request: pytest.FixtureRequest = request
         self.settings: ApplicationConfiguration = deepcopy(NavigatorConfiguration)
 
-    def _apply_parameters(self):
+    def _apply_parameters(self) -> None:
         """Apply the parameters to the settings."""
         default_parameters = (
             Parameter(name="display_color", value=False),
