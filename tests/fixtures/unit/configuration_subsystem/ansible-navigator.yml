@@ -36,6 +36,7 @@ ansible-navigator:
   editor:
     command: vim_from_setting
     console: False
+  enable-prompts: False
   exec:
     shell: False
     command: /bin/foo
