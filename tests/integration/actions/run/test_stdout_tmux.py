@@ -80,6 +80,15 @@ stdout_tests = (
         present=["usage: ansible-playbook [-h]"],
     ),
     ShellCommand(
+        comment="run playbook with enable-prompts",
+        user_input=StdoutCommand(
+            cmdline=f"{playbook_path} -i {inventory_path} --enable-prompts",
+            mode="stdout",
+            execution_environment=False,
+        ).join(),
+        present=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
+    ),
+    ShellCommand(
         comment="run playbook with inventory from ansible.cfg without ee",
         user_input=StdoutCommand(
             cmdline="site.yml",
