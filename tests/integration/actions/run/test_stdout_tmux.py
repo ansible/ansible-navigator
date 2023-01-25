@@ -84,7 +84,7 @@ stdout_tests = (
         user_input=StdoutCommand(
             cmdline=f"{playbook_path} -i {inventory_path} --enable-prompts",
             mode="stdout",
-            execution_environment=False,
+            execution_environment=True,
         ).join(),
         present=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
     ),
