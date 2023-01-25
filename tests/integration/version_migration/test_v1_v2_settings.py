@@ -44,7 +44,7 @@ def test_all(
     shutil.copy(source, destination)
 
     with TmuxSession(
-        unique_test_id=request.node.name.replace(".", "-"),
+        request=request,
         config_path=destination,
         cwd=tmp_path,
     ) as session:

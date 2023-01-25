@@ -34,7 +34,7 @@ class BaseClass:
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
-            "unique_test_id": request.node.nodeid,
+            "request": request,
         }
         with TmuxSession(**params) as tmux_session:
             yield tmux_session

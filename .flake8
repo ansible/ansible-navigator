@@ -77,13 +77,11 @@ per-file-ignores =
   # The following were present during the initial implementation.
   # They are expected to be fixed and unignored over time.
   src/ansible_navigator/ui_framework/validators.py: D400, D401, D403, DAR101, DAR201, DAR401
-  tests/conftest.py: D210, D400, D401, D403, DAR101, DAR201, DAR301, DAR401
   tests/integration/_action_run_test.py: D205, D400, D401, D403, DAR101, DAR201, DAR401
   tests/integration/_cli2runner.py: D400, D401, D403, DAR101, DAR401
   tests/integration/_common.py: D103, D400, D401, D403, DAR101, DAR201, DAR401
   tests/integration/_interactions.py: D204, D400, D403, DAR101, DAR201
   tests/integration/_tmux_session.py: D105, D205, D400, D403, DAR101, DAR201, DAR401
-  tests/integration/conftest.py: D205, D400, D401, D403, DAR101, DAR201, DAR301
   tests/integration/test_stdout_exit_codes.py: D400, D403, DAR101, DAR201
   tests/unit/configuration_subsystem/defaults.py: D400
   tests/unit/configuration_subsystem/test_entries_sanity.py: D400, DAR101

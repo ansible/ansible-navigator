@@ -1,5 +1,5 @@
 # cspell:ignore sessionstart,unconfigure,workerinput
-"""fixtures for all tests"""
+"""Fixtures for all tests."""
 from __future__ import annotations
 
 import errno
@@ -12,6 +12,7 @@ import sys
 
 from copy import deepcopy
 from pathlib import Path
+from typing import Generator
 from typing import Protocol
 
 import pytest
@@ -34,8 +35,11 @@ from ansible_navigator.utils.serialize import yaml
 from .defaults import FIXTURES_DIR
 
 
-def _valid_container_engine():
-    """Returns an available container engine."""
+def _valid_container_engine() -> str:
+    """Return an available container engine.
+
+    :returns: The container engine or exits
+    """
     for engine in ("podman", "docker"):
         if shutil.which(engine):
             return engine
@@ -44,51 +48,74 @@ def _valid_container_engine():
 
 
 @pytest.fixture(scope="session", name="valid_container_engine")
-def fixture_valid_container_engine():
-    """Returns an available container engine."""
+def fixture_valid_container_engine() -> str:
+    """Return an available container engine.
+
+    :returns: The container engine or exits
+    """
     return _valid_container_engine()
 
 
-def default_ee_image_name():
-    """Returns the default ee image name."""
+def default_ee_image_name() -> str:
+    """Return the default ee image name.
+
+    :returns: The default ee image name
+    """
     return ImageEntry.DEFAULT_EE.get(app_name=APP_NAME)
 
 
 @pytest.fixture(scope="session", name="default_ee_image_name")
-def fixture_default_image_name():
-    """Returns the default ee image name."""
+def fixture_default_image_name() -> str:
+    """Return the default ee image name.
+
+    :returns: The default ee image name
+    """
     return default_ee_image_name()
 
 
-def small_image_name():
-    """Returns the small image name"""
+def small_image_name() -> str:
+    """Return the small image name.
+
+    :returns: The small image name
+    """
     return ImageEntry.SMALL_IMAGE.get(app_name=APP_NAME)
 
 
 @pytest.fixture(scope="session", name="small_image_name")
-def fixture_small_image_name():
-    """Returns the small image name"""
+def fixture_small_image_name() -> str:
+    """Return the small image name.
+
+    :returns: The small image name
+    """
     return small_image_name()
 
 
 @pytest.fixture(scope="function")
-def locked_directory(tmpdir):
-    """directory without read-write for throwing errors"""
+def locked_directory(tmpdir) -> Generator[str, None, None]:
+    """Directory without read-write for throwing errors.
+
+    :param tmpdir: Fixture for temporary directory
+    :yields: The temporary directory
+    """
     os.chmod(tmpdir, 0o000)
     yield tmpdir
     os.chmod(tmpdir, 0o777)
 
 
 @pytest.fixture(scope="session")
-def pullable_image(valid_container_engine):
-    """A container that can be pulled."""
+def pullable_image(valid_container_engine) -> Generator[str, None, None]:
+    """Return a container that can be pulled.
+
+    :param valid_container_engine: Fixture for a valid container engine
+    :yields: The image name
+    """
     image = ImageEntry.PULLABLE_IMAGE.get(app_name=APP_NAME)
     yield image
     subprocess.run([valid_container_engine, "image", "rm", image], check=True)
 
 
 @pytest.fixture
-def patch_curses(monkeypatch):
+def patch_curses(monkeypatch) -> None:
     """Patch curses so it doesn't traceback during tests.
 
     :param monkeypatch: Fixture for patching
@@ -99,10 +126,11 @@ def patch_curses(monkeypatch):
 
 
 @pytest.fixture
-def use_venv(monkeypatch: pytest.MonkeyPatch):
-    """Set the path such that it includes the virtual environment
+def use_venv(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Set the path such that it includes the virtual environment.
 
     :param monkeypatch: Fixture for patching
+    :raises AssertionError: If the virtual environment is not set
     """
     venv_path = os.environ.get("VIRTUAL_ENV")
     if venv_path is None:
@@ -115,7 +143,7 @@ def use_venv(monkeypatch: pytest.MonkeyPatch):
 
 @pytest.fixture(name="settings_samples")
 def _settings_samples() -> tuple[str, str]:
-    """Provide the full settings samples
+    """Provide the full settings samples.
 
     :returns: The commented and uncommented samples
     """
@@ -163,10 +191,11 @@ def settings_env_var_to_full(
 
 
 @pytest.fixture
-def test_dir_fixture_dir(request):
+def test_dir_fixture_dir(request) -> Path:
     """Provide the fixture directory for a given test directory.
 
     :param request: The pytest request object
+    :returns: The fixture directory
     """
     test_dir = Path(FIXTURES_DIR) / request.path.parent.relative_to(Path(__file__).parent)
     return test_dir
@@ -198,14 +227,20 @@ def pull_image(valid_container_engine: str, image_name: str):
         pytest.exit("Image pull failed", 1)
 
 
-def _cmd_in_tty(cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, int]:
-    """Capture the output of cmd using a tty
+def _cmd_in_tty(
+    cmd: str,
+    bytes_input: bytes | None = None,
+    cwd: Path | None = None,
+) -> tuple[str, str, int]:
+    """Capture the output of cmd using a tty.
 
     Based on Andy Hayden's gist:
     https://gist.github.com/hayd/4f46a68fc697ba8888a7b517a414583e
 
     :param cmd: The command to run
     :param bytes_input: Some bytes to input
+    :param cwd: The working directory
+    :raises OSError: Error if the command fails
     :returns: stdout, stderr, and the exit code
     """
     # pylint: disable=too-many-locals
@@ -216,6 +251,7 @@ def _cmd_in_tty(cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, i
     with subprocess.Popen(
         cmd,
         bufsize=1,
+        cwd=cwd,
         shell=True,
         stdin=s_stdin,
         stdout=s_stdout,
@@ -258,7 +294,7 @@ def _cmd_in_tty(cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, i
 
 @pytest.fixture
 def cmd_in_tty():
-    """Provide the cmd in tty function as a fixture
+    """Provide the cmd in tty function as a fixture.
 
     :yields: The cmd_in_tty function
     """
@@ -269,7 +305,7 @@ class TCmdInTty(Protocol):
     """Type hint for the cmd_in_tty fixture."""
 
     def __call__(self, cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, int]:
-        """Prove the callable type hint for the cmd_in_tty fixture
+        """Provide the callable type hint for the cmd_in_tty fixture.
 
         :param cmd: The command to run
         :param bytes_input: Some bytes to input

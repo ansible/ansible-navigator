@@ -1,3 +1,4 @@
+# cspell: ignore fspath
 """Common functions for the tests."""
 from __future__ import annotations
 
@@ -7,6 +8,7 @@ import re
 import shutil
 import sys
 
+from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
@@ -113,23 +115,24 @@ def fixture_path_from_request(
     return dir_path / file_name
 
 
-def generate_test_log_dir(unique_test_id):
-    """Generate a log directory for a test given it's request"""
-    user = os.environ.get("USER")
-    if user == "zuul":
-        directory = os.path.join(
-            "/",
-            "home",
-            "zuul",
-            "zuul-output",
-            "logs",
-            "ansible-navigator",
-            unique_test_id,
-        )
-    else:
-        directory = os.path.join("./", ".test_logs", unique_test_id)
-    os.makedirs(directory, exist_ok=True)
-    return directory
+def generate_test_log_dir(request):
+    """Generate a log directory for a test given it's request.
+
+    :param request: The test request
+    :returns: The path for the log file
+    """
+    test_path = Path(request.fspath)
+    test_parts = list(test_path.parts)
+    test_parts[test_parts.index("tests")] = ".test_logs"
+
+    # Clean the test name to be a valid path
+    test_name = re.sub(r"[^\w\s-]", "_", request.node.name.lower())
+    test_name = re.sub(r"[-\s]+", "-", test_name).strip("-_")
+
+    path = Path(*test_parts) / test_name
+
+    path.mkdir(parents=True, exist_ok=True)
+    return path / "ansible-navigator.log"
 
 
 class Error(EnvironmentError):
@@ -215,3 +218,14 @@ def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
         errors.append((src, dst, str(why)))
     if errors:
         raise Error(errors)
+
+
+@dataclass
+class Parameter:
+    """Simple class to contain a name and parameter.
+
+    Used with CliRunner in conftest.py
+    """
+
+    name: str
+    value: bool | str | list

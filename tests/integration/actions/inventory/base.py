@@ -70,7 +70,7 @@ class BaseClass:
             "pane_height": "2000",
             "pane_width": "500",
             "config_path": TEST_CONFIG_FILE,
-            "unique_test_id": request.node.nodeid,
+            "request": request,
         }
 
         with TmuxSession(**params) as tmux_session:

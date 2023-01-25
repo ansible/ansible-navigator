@@ -14,6 +14,7 @@ from ..._common import update_fixtures
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
 from ..._tmux_session import TmuxSession
+from ..._tmux_session import TmuxSessionKwargs
 
 
 EXPECTED_COLLECTIONS = ["ansible.builtin", "company_name.coll_1", "company_name.coll_2"]
@@ -104,7 +105,7 @@ class BaseClass:
             os.path.join(tmp_coll_dir, "collections"),
             dirs_exist_ok=True,
         )
-        params = {
+        params: TmuxSessionKwargs = {
             "setup_commands": [
                 f"cd {tmp_coll_dir}",
                 f"export ANSIBLE_COLLECTIONS_PATH={tmp_coll_dir}",
@@ -113,7 +114,7 @@ class BaseClass:
             ],
             "pane_height": self.pane_height,
             "pane_width": self.pane_width,
-            "unique_test_id": request.node.nodeid,
+            "request": request,
         }
 
         with TmuxSession(**params) as tmux_session:
