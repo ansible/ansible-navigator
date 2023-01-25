@@ -10,18 +10,23 @@ import sys
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Callable
 
 import pytest
 
 from .. import defaults
 
 
-def get_executable_path(name):
-    """get the path of an executable"""
+def get_executable_path(name: str) -> str:
+    """Get the path of an executable.
+
+    :param name: The name of the executable
+    :raises ValueError: If the executable is not found
+    :returns: The path of the executable
+    """
     if name == "python":
-        exec_path = sys.executable
-    else:
-        exec_path = shutil.which(name)
+        return sys.executable
+    exec_path = shutil.which(name)
     if not exec_path:
         raise ValueError(f"{name} executable not found")
     return exec_path
@@ -53,7 +58,7 @@ def update_fixtures(
     testname: str | None = None,
     additional_information: dict[str, list[str] | bool] | None = None,
     zfill_index: int = 1,
-):
+) -> None:
     # pylint: disable=too-many-arguments
     """Write out a test fixture.
 
@@ -83,8 +88,8 @@ def update_fixtures(
     if additional_information is not None:
         fixture["additional_information"] = additional_information
         if additional_information.get("present"):
-            received_output = sanitize_output(received_output)
-    fixture["output"] = received_output
+            received_output_list = sanitize_output(received_output)
+    fixture["output"] = received_output_list
     with fixture_path.open(mode="w", encoding="utf8") as fh:
         json.dump(fixture, fh, indent=4, ensure_ascii=False, sort_keys=False)
         fh.write("\n")
@@ -115,13 +120,13 @@ def fixture_path_from_request(
     return dir_path / file_name
 
 
-def generate_test_log_dir(request):
-    """Generate a log directory for a test given it's request.
+def generate_test_log_dir(request: pytest.FixtureRequest) -> Path:
+    """Return a log directory for a test given it's request.
 
     :param request: The test request
     :returns: The path for the log file
     """
-    test_path = Path(request.fspath)
+    test_path = Path(request.path)
     test_parts = list(test_path.parts)
     test_parts[test_parts.index("tests")] = ".test_logs"
 
@@ -136,11 +141,15 @@ def generate_test_log_dir(request):
 
 
 class Error(EnvironmentError):
-    """pass through err"""
+    """Pass through error."""
 
 
-def sanitize_output(output):
-    """Sanitize test output that may be environment specific or unique per run."""
+def sanitize_output(output: list[str]) -> list[str]:
+    """Sanitize test output that may be environment specific or unique per run.
+
+    :param output: The output to sanitize
+    :returns: The sanitized output
+    """
     re_uuid = re.compile(
         "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
         re.IGNORECASE,
@@ -155,7 +164,13 @@ def sanitize_output(output):
     return output
 
 
-def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
+def copytree(
+    src: str,
+    dst: str,
+    symlinks: bool = False,
+    ignore: Callable | None = None,
+    dirs_exist_ok: bool = False,
+):
     """Recursively copy a directory tree using copy2().
 
     The destination directory must not already exist.
@@ -177,6 +192,13 @@ def copytree(src, dst, symlinks=False, ignore=None, dirs_exist_ok=False):
     called once for each directory that is copied. It returns a
     list of names relative to the `src` directory that should
     not be copied.
+
+    :param src: Source directory
+    :param dst: Destination directory
+    :param symlinks: Copy symlinks
+    :param ignore: Callable to ignore files
+    :param dirs_exist_ok: Do not raise an exception if the destination directory exists
+    :raises Error: If an error occurs
     """
     names = os.listdir(src)
     if ignore is not None:
@@ -228,4 +250,4 @@ class Parameter:
     """
 
     name: str
-    value: bool | str | list
+    value: bool | str | list | Path
