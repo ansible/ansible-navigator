@@ -336,7 +336,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=[True, False],
             cli_parameters=CliParameters(short="--ep", action="store_true"),
             short_description="Enable prompts for password and in playbooks. This will set"
-            "mode to stdout and disable playbook artifact creation",
+            " mode to stdout and disable playbook artifact creation",
             subcommands=["run"],
             value=SettingsEntryValue(default=False),
             version_added="v2.3",
