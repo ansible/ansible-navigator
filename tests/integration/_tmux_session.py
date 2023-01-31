@@ -294,7 +294,7 @@ class TmuxSession:
             if showing:
                 if isinstance(search_within_response, str):
                     for line in showing:
-                        if search_within_response in line:
+                        if (showing[0] == "SSH password:") or (search_within_response in line):
                             ok_to_return = True
                             break
                 elif isinstance(search_within_response, list):
