@@ -99,13 +99,14 @@ stdout_tests = (
         ).join(),
         present=["from.ansible.cfg", "ok=1"],
     ),
-    ShellCommand(
+    UiTestStep(
         comment="run playbook with enable-prompts and show prompting",
         user_input=StdoutCommand(
             cmdline=f"{playbook_path} -k --enable-prompts",
             execution_environment=True,
         ).join(),
         present=["password:"],
+        search_within_response="SSH password:",
     ),
     ShellCommand(
         comment="run playbook with enable-prompts",
