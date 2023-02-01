@@ -139,6 +139,9 @@
           },
           "type": "object"
         },
+        "enable-prompts": {
+          "type": "boolean"
+        },
         "exec": {
           "additionalProperties": false,
           "properties": {

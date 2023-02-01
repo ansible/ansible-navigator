@@ -332,6 +332,16 @@ NavigatorConfiguration = ApplicationConfiguration(
             version_added="v1.0",
         ),
         SettingsEntry(
+            name="enable_prompts",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--ep", action="store_true"),
+            short_description="Enable prompts for password and in playbooks. This will set"
+            " mode to stdout and disable playbook artifact creation",
+            subcommands=["run"],
+            value=SettingsEntryValue(default=False),
+            version_added="v2.3",
+        ),
+        SettingsEntry(
             name="exec_command",
             cli_parameters=CliParameters(positional=True),
             settings_file_path_override="exec.command",
@@ -583,6 +593,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="playbook_artifact_enable",
             choices=[True, False],
             cli_parameters=CliParameters(short="--pae"),
+            delay_post_process=True,
             settings_file_path_override="playbook-artifact.enable",
             short_description="Enable or disable the creation of artifacts for"
             " completed playbooks. Note: not compatible with '--mode stdout' when playbooks"

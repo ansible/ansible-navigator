@@ -32,6 +32,7 @@ from .definitions import CliParameters
 from .definitions import Constants as C
 from .definitions import Mode
 from .definitions import ModeChangeRequest
+from .definitions import PaeChangeRequest
 from .definitions import SettingsEntry
 from .definitions import VolumeMount
 from .definitions import VolumeMountError
@@ -72,6 +73,7 @@ class NavigatorPostProcessor:
         #: :meth:`.execution_environment_volume_mounts` post-processor.
         self.extra_volume_mounts: list[VolumeMount] = []
         self._requested_mode: list[ModeChangeRequest] = []
+        self._requested_pae: list[PaeChangeRequest] = []
 
     @staticmethod
     def _true_or_false(
@@ -462,6 +464,34 @@ class NavigatorPostProcessor:
             entry.value.current = to_list(entry.value.current)
         if entry.value.current is not C.NOT_SET:
             entry.value.current = flatten_list(entry.value.current)
+        return messages, exit_messages
+
+    @_post_processor
+    def enable_prompts(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        """Post process enable_prompts.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
+        messages, exit_messages = self._true_or_false(entry, config)
+        if entry.value.current is True:
+            mode = Mode.STDOUT
+            playbook_artifact_enable = False
+            self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
+            self._requested_pae.append(
+                PaeChangeRequest(
+                    entry=entry.name, playbook_artifact_enable=playbook_artifact_enable
+                )
+            )
+            message = (
+                f"`{entry.name} requesting mode {mode.value} and pae as {playbook_artifact_enable}"
+            )
+            messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
     # Post process for exec_shell
@@ -872,8 +902,44 @@ class NavigatorPostProcessor:
             entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages
 
-    # Post processing of playbook_artifact_enable
-    playbook_artifact_enable = _true_or_false
+    @_post_processor
+    def playbook_artifact_enable(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        """Post process playbook_artifact_enable.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :raises ValueError: When more than 1 pae changes requests are present, shouldn't happen
+        :returns: An instance of the standard post process return object
+        """
+        # pylint: disable=unused-argument
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
+
+        # Check if any other entry has requested a pae change different than current
+        pae_set = {request.playbook_artifact_enable for request in self._requested_pae}
+        if len(pae_set) == 1:
+            requested = self._requested_pae[0]
+            auto_pae = requested.playbook_artifact_enable
+            if auto_pae != entry.value.current:
+                pae_change_msgs = (
+                    f"Parameter '{requested.entry}' required pae '{auto_pae!s}'.",
+                    f"Pae will be set to '{auto_pae}'",
+                )
+                messages.extend(
+                    LogMessage(level=logging.INFO, message=msg) for msg in pae_change_msgs
+                )
+                entry.value.current = auto_pae
+        elif len(pae_set) > 1:
+            raise ValueError(f"Conflicting pae requests: {self._requested_pae}")
+        try:
+            entry.value.current = str2bool(entry.value.current)
+        except ValueError:
+            pass
+        return messages, exit_messages
 
     @staticmethod
     @_post_processor

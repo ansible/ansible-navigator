@@ -451,6 +451,16 @@ class ModeChangeRequest:
     """The desired mode"""
 
 
+@dataclass
+class PaeChangeRequest:
+    """Data structure to hold playbook artifact change request by a settings entry."""
+
+    entry: str
+    """The entry making the request"""
+    playbook_artifact_enable: bool
+    """The desired value for playbook_artifact_enable"""
+
+
 # and some common ones
 
 # A type used for the settings as a dictionary

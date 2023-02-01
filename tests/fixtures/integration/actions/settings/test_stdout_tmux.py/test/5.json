@@ -36,6 +36,7 @@
         "  editor:",
         "    command: vi +{line_number} {filename}",
         "    console: true",
+        "  enable-prompts: false",
         "  exec:",
         "    command: /bin/bash",
         "    shell: true",

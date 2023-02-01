@@ -99,6 +99,24 @@ stdout_tests = (
         ).join(),
         present=["from.ansible.cfg", "ok=1"],
     ),
+    UiTestStep(
+        comment="run playbook with enable-prompts and show prompting",
+        user_input=StdoutCommand(
+            cmdline=f"{playbook_path} -k --enable-prompts",
+            execution_environment=True,
+        ).join(),
+        present=["password:"],
+        search_within_response="SSH password:",
+    ),
+    ShellCommand(
+        comment="run playbook with enable-prompts",
+        user_input=StdoutCommand(
+            cmdline=f"{playbook_path} -i {inventory_path} --enable-prompts",
+            mode="stdout",
+            execution_environment=True,
+        ).join(),
+        present=["TASK [debug print play-3 task-2]", "ok=6", "failed=0"],
+    ),
 )
 
 steps = add_indices(stdout_tests)
