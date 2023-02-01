@@ -76,7 +76,7 @@
         "#     command: vim_from_setting",
         "#     # Specify if the editor is console based",
         "#     console: False",
-        "#   # Specify enable-prompts to disable playbook-artifact creation and run playbook in mode stdout by default.",
+        "#   # Enable prompts for password and in playbooks. This will set mode to stdout and disable playbook artifact creation",
         "#   enable-prompts: True",
         "#   exec:",
         "#     # Specify the exec command should be run in a shell",
