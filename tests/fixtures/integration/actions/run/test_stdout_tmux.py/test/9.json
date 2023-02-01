@@ -1,0 +1,15 @@
+{
+    "name": "test[run playbook with enable-prompts and show prompting clear && ansible-navigator run /tests/fixtures/integration/actions/run/site.yaml -k --enable-prompts --ee True --ll debug]",
+    "index": 9,
+    "comment": "run playbook with enable-prompts and show prompting",
+    "additional_information": {
+        "look_fors": [
+            "password:"
+        ],
+        "look_nots": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "SSH password:"
+    ]
+}

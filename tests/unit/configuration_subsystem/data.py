@@ -224,6 +224,7 @@ ENV_VAR_DATA = [
     ("display_color", "yellow is the color of a banana", False),
     ("editor_command", "nano_env_var", "nano_env_var"),
     ("editor_console", "false", False),
+    ("enable_prompts", "false", False),
     ("exec_command", "/bin/foo", "/bin/foo"),
     ("exec_shell", "false", False),
     ("execution_environment", "false", False),

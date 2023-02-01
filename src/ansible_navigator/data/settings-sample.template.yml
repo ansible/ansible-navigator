@@ -66,6 +66,8 @@ ansible-navigator:
     command: vim_from_setting
     # {{ editor.console }}
     console: False
+  # {{ enable-prompts }}
+  enable-prompts: False
   exec:
     # {{ exec.shell }}
     shell: True

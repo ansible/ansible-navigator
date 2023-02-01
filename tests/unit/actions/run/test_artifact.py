@@ -45,12 +45,15 @@ def get_status(*_args, **_kwargs):
 class Scenario(BaseScenario):
     """The artifact files test data object."""
 
+    # pylint: disable=too-many-instance-attributes
+
     name: str
     filename: str | None
     playbook: str
     starts_with: str | None = None
     re_match: Pattern | None = None
     help_playbook: bool = False
+    enable_prompts: bool = False
     time_zone: str = "UTC"
 
     def __post_init__(self):
@@ -124,6 +127,13 @@ test_data = [
         playbook="~/site.yaml",
         starts_with="/home/test_user/site-artifact",
         help_playbook=True,
+    ),
+    Scenario(
+        name="Check with enable_prompts",
+        filename=None,
+        playbook="~/site.yaml",
+        starts_with="/home/test_user/site-artifact",
+        enable_prompts=True,
     ),
     Scenario(
         name="Filename timezone",

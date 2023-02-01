@@ -34,6 +34,7 @@
         "ansible-navigator.color.osc4: Defaults",
         "ansible-navigator.editor.command: Defaults",
         "ansible-navigator.editor.console: Defaults",
+        "ansible-navigator.enable-prompts: Defaults",
         "ansible-navigator.exec.command: Defaults",
         "ansible-navigator.exec.shell: Defaults",
         "ansible-navigator.execution-environment.container-engine: Automatically determined",
