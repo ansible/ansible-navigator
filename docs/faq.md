@@ -131,7 +131,7 @@ Note: When using `ansible_ssh_private_key_file` with execution environments, the
 
 ### Why does the playbook hang when `vars_prompt`, `pause/prompt` or `--ask-pass` is used?
 
-By default `ansible-navigator` runs the playbook in the same manner that ansible controller and AWX would run the playbook. This was done to help playbook developers author playbooks that would be ready for production. If the use of `vars_prompt`, `pause\prompt` or `--ask-pass` can not be avoided, use `enable-prompts` parameter that disables `playbook-artifact` creation and set `--mode stdout` causing `ansible-navigator` to run the playbook in a manner that is compatible with `ansible-playbook` and allows for user interaction.
+By default `ansible-navigator` runs the playbook in the same manner that ansible controller and AWX would run the playbook. This was done to help playbook developers author playbooks that would be ready for production. If the use of `vars_prompt`, `pause\prompt` or `--ask-pass` can not be avoided, use the `enable-prompts` parameter that disables `playbook-artifact` creation and sets the mode to `stdout` causing `ansible-navigator` to run the playbook in a manner that is compatible with `ansible-playbook` and allows for user interaction.
 
 ```bash
 $ ansible-navigator run site.yml --enable-prompts --ask-pass
