@@ -131,7 +131,6 @@ class Base:
             and self._runner_artifact_dir
             and os.path.exists(self._runner_artifact_dir)
         ):
-
             self._logger.debug(
                 "delete ansible-runner artifact directory at path %s",
                 self._runner_artifact_dir,
