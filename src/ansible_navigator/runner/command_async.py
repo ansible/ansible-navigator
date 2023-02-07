@@ -33,6 +33,7 @@ class CommandAsync(CommandBase):
         self._logger.debug("ansible-runner event handle: %s", event)
         new_event = deepcopy(event)
         self._queue.put(new_event)
+        return True
 
     def run(self):
         """Initiate the execution of the runner command in async mode.
