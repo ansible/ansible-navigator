@@ -585,7 +585,6 @@ class Action(ActionBase):
         plugins_details: dict = {}
 
         for plugin_checksum, plugin_info in selected_collection["plugin_checksums"].items():
-
             plugin_type = plugin_info.get("type")
             if plugin_type not in plugins_details:
                 plugins_details[plugin_type] = []

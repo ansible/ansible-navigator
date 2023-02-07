@@ -35,13 +35,13 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/psf/black.git
-    rev: 22.12.0
+    rev: 23.1.0
     hooks:
       - id: black
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.19.2
+    rev: v6.22.0
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -154,7 +154,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.16.0b1
+    rev: v2.16.1
     hooks:
       - id: pylint
         args:

@@ -48,7 +48,6 @@ def test_all(
         config_path=destination,
         cwd=tmp_path,
     ) as session:
-
         session.interaction(
             value="ansible-navigator --version",
             search_within_response="Do you want to run them all?",

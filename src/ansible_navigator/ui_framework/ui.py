@@ -830,7 +830,6 @@ class UserInterface(CursesWindow):
         :returns: Interaction with the user
         """
         while True:
-
             if self.scroll() == 0:
                 last_line_idx = min(len(current) - 1, self._screen_height - 3)
             else:

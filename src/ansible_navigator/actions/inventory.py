@@ -331,7 +331,6 @@ class Action(ActionBase):
             key = self.steps.current.selected["__name"]
 
         try:
-
             menu = Menu()
             taxonomy = "\u25B8".join(
                 ["all"]
