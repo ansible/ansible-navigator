@@ -288,7 +288,6 @@ class TmuxSession:
         ok_to_return = False
         err_message = "RESPONSE"
         while True:
-
             showing = self._pane.capture_pane()
 
             if showing:

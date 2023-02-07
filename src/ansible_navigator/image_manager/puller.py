@@ -150,7 +150,6 @@ class ImagePuller:
         elif hint:
             self._exit_messages.append(ExitMessage(message=message, prefix=ExitPrefix.HINT))
         else:
-
             self._messages.append(LogMessage(level=level, message=message))
         self._logger.log(level=level, msg=message)
 
