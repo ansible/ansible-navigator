@@ -52,6 +52,8 @@ ansible-navigator:
     rotate-artifacts-count: 10
     # {{ ansible-runner.timeout }}
     timeout: 300
+    # {{ ansible-runner.job-events }}
+    job-events: True
   # {{ app }}
   app: welcome
   # {{ collection-doc-cache-path }}

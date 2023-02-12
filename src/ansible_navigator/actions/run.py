@@ -248,7 +248,7 @@ class Action(ActionBase):
         return self._args.mode
 
     def run_stdout(self) -> RunStdoutReturn:
-        """Execute the ``inventory`` request for mode stdout.
+        """Execute the ``run`` request for mode stdout.
 
         :returns: The return code from the runner invocation, along with a message to review the
             logs if not 0
@@ -624,7 +624,12 @@ class Action(ActionBase):
             pass_through_arg.extend(self._args.cmdline)
         kwargs.update({"cmdline": pass_through_arg})
 
-        self.runner = CommandAsync(executable_cmd=executable_cmd, queue=self._queue, **kwargs)
+        self.runner = CommandAsync(
+            executable_cmd=executable_cmd,
+            queue=self._queue,
+            write_job_events=self._args.ansible_runner_write_job_events,
+            **kwargs,
+        )
         self.runner.run()
         self._runner_finished = False
         self._logger.debug("runner requested to start")
