@@ -86,7 +86,6 @@ class Base:
         self.finished: bool = False
         self.status: str | None = None
         self._runner_args: dict = {}
-        self._runner_artifact_dir: str | None = None
         if self._ee:
             self._runner_args.update(
                 {
@@ -105,7 +104,6 @@ class Base:
                 "quiet": True,
                 "cancel_callback": self.runner_cancelled_callback,
                 "finished_callback": self.runner_finished_callback,
-                "artifacts_handler": self.runner_artifacts_handler,
                 "timeout": self._timeout,
             },
         )
@@ -165,15 +163,6 @@ class Base:
         self._private_data_dir_is_tmp = source != "user provided"
         self._private_data_dir = private_data_directory
         self._logger.debug("private data dir %s: %s", source, self._private_data_dir)
-
-    def runner_artifacts_handler(self, artifact_dir):
-        """Ansible-runner callback to handle artifacts after each runner invocation.
-
-        :param artifact_dir: The directory path of artifact directory for current
-            runner invocation.
-        """
-        self._logger.debug("ansible-runner artifact_dir set to: '%s'", artifact_dir)
-        self._runner_artifact_dir = artifact_dir
 
     def runner_cancelled_callback(self):
         """Check by runner to see if it should cancel.
