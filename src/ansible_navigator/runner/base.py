@@ -125,17 +125,17 @@ class Base:
             )
 
     def __del__(self):
-        """Drop the artifact directory when the rotation is disabled."""
+        """Drop the private_data_dir if it is temporary."""
         if (
-            self._rotate_artifacts is not None
-            and self._runner_artifact_dir
-            and os.path.exists(self._runner_artifact_dir)
+            self._private_data_dir_is_tmp
+            and self._private_data_dir
+            and os.path.exists(self._private_data_dir)
         ):
             self._logger.debug(
-                "delete ansible-runner artifact directory at path %s",
-                self._runner_artifact_dir,
+                "delete temporary ansible-runner private_data_dir at path %s",
+                self._private_data_dir,
             )
-            shutil.rmtree(self._runner_artifact_dir, ignore_errors=True)
+            shutil.rmtree(self._private_data_dir, ignore_errors=True)
 
     @staticmethod
     def _generate_tmp_directory():
@@ -155,13 +155,14 @@ class Base:
                 private_data_directory = provided
                 source = "user provided"
             else:
-                self._logger.debug("Provided private data dir `%s` was not user writable")
+                self._logger.debug("Provided private data dir `%s` was not user writable", provided)
                 private_data_directory = self._generate_tmp_directory()
                 source = "user provided, but changed to tmp location due to permissions"
         else:
             private_data_directory = self._generate_tmp_directory()
             source = "not user provided, used tmp location"
 
+        self._private_data_dir_is_tmp = source != "user provided"
         self._private_data_dir = private_data_directory
         self._logger.debug("private data dir %s: %s", source, self._private_data_dir)
 
