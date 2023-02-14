@@ -895,6 +895,7 @@ class Action(ActionBase):
         if any(playbook.endswith(s) for s in my_list):
             playbook_path = playbook
         else:
+            playbook_path = playbook
             start_path = playbook.rsplit("/", 1)[0]
             playbook_name = playbook.split(".")[-1]
             end_paths = [f"{playbook_name}.yml", f"{playbook_name}.yaml"]
