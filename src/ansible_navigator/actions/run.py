@@ -168,20 +168,16 @@ def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     return {k: v for k, v in obj.items() if not (k.startswith("_") or k.endswith("uuid"))}
 
 
+# cspell:ignore fqcn
 def check_playbook(playbook: str) -> str:
-    """Get the full path to the playbook.
+    """Check if the playbook is provided by a collection(fqcn).
 
-    Check the extension of playbook. Whether it is a playbook with yml/
-    yaml extension or playbook provided by a collection or something else
-    and return the path accordingly.
-
-    :param playbook: Provided playbook path
-    :returns: Full playbook path
+    :param playbook: Provided playbook
+    :returns: Path to the playbook
     """
-    my_list = [".yaml", ".yml"]
-    if any(playbook.endswith(s) for s in my_list):
-        playbook_path = playbook
-    else:
+    run_parameter = playbook.split("/")[-1]
+    fqcn_playbook = re.match(r"^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+\.[a-zA-Z0-9]+$", run_parameter)
+    if fqcn_playbook:
         playbook_path = playbook
         start_path = playbook.rsplit("/", 1)[0]
         playbook_name = playbook.split(".")[-1]
@@ -191,6 +187,8 @@ def check_playbook(playbook: str) -> str:
             if len(file) != 0:
                 playbook_path = file[0]
                 break
+    else:
+        playbook_path = playbook
     return playbook_path
 
 
@@ -255,7 +253,6 @@ class Action(ActionBase):
         )
         self._task_list_columns: list[str] = TASK_LIST_COLUMNS
         self._content_key_filter: Callable = filter_content_keys
-        self._playbook_path: str = check_playbook(self._args.playbook)
         self._task_cache: dict[str, str] = {}
         """Task name storage from playbook_on_start using the task uuid as the key"""
 
@@ -392,7 +389,7 @@ class Action(ActionBase):
             return False
 
         if isinstance(self._args.playbook, str):
-            playbook_valid = os.path.exists(self._playbook_path)
+            playbook_valid = os.path.exists(check_playbook(self._args.playbook))
 
         else:
             playbook_valid = False
@@ -629,7 +626,7 @@ class Action(ActionBase):
         }
 
         if isinstance(self._args.playbook, str):
-            kwargs.update({"playbook": self._playbook_path})
+            kwargs.update({"playbook": check_playbook(self._args.playbook)})
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs.update(
@@ -924,7 +921,9 @@ class Action(ActionBase):
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
                 playbook_dir=os.path.dirname(self._args.playbook),
-                playbook_name=os.path.splitext(os.path.basename(self._playbook_path))[0],
+                playbook_name=os.path.splitext(
+                    os.path.basename(check_playbook(self._args.playbook))
+                )[0],
                 playbook_status=status,
                 time_stamp=now_iso(self._args.time_zone),
             )
