@@ -93,9 +93,9 @@ def test_no_warnings(import_path: str) -> None:
         # NOTE: but this project already aims to target Python 3.11 as well.
         # TODO: Remove this exclusion once the runner issue is addressed.
         # https://github.com/ansible/ansible-runner/issues/1101
-        "-W",
-        "ignore: 'pipes' is deprecated and slated for removal in Python 3.13:DeprecationWarning:"
-        "ansible_runner.utils",
+        # "-W",
+        # "ignore: 'pipes' is deprecated and slated for removal in Python 3.13:DeprecationWarning:"
+        # "ansible_runner.utils",
         "-c",
         f"import {import_path!s}",
     )
