@@ -1,0 +1,12 @@
+default: true
+
+# We rely on prettier to do the rewrapping of long lines.
+MD013: false
+
+# See https://github.com/prettier/prettier/issues/14515
+MD030:
+  ol_single: 2
+  ol_multi: 2
+
+# Apparently complains about use of '!!! notice'
+MD046: false
