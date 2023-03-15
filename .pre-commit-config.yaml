@@ -41,7 +41,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.22.0
+    rev: v6.26.0
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -137,7 +137,7 @@ repos:
       - id: pyupgrade
         args: ["--py38-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.0.0
+    rev: v1.0.1
     hooks:
       - id: mypy
         additional_dependencies:
@@ -154,7 +154,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.16.1
+    rev: v2.16.2
     hooks:
       - id: pylint
         args:
