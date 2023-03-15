@@ -96,6 +96,9 @@ def test_no_warnings(import_path: str) -> None:
         # "-W",
         # "ignore: 'pipes' is deprecated and slated for removal in Python 3.13:DeprecationWarning:"
         # "ansible_runner.utils",
+        "-W",
+        "ignore: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace"
+        "('sphinxcontrib')`.",
         "-c",
         f"import {import_path!s}",
     )
