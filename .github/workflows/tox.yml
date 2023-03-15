@@ -65,6 +65,11 @@ jobs:
           python --version --version
           python3 -m pip freeze --all
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          sudo: false
+
       - name: "tox -e ${{ matrix.passed_name }}"
         continue-on-error: ${{ matrix.devel || false }}
         run: python3 -m tox -e ${{ matrix.passed_name }}
