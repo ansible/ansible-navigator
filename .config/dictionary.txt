@@ -1,12 +1,3 @@
-cliconf             # Ansible network cli abstraction plugin
-kegex               # An action's regex
-netcommon           # Ansible network collection, seen in tests and README
-setuptools          # Used in _version.pyi
-Towncrier           # Changelog generator
-
-mqueue              # https://github.com/ansible/ansible-runner/issues/984
-
-
 COLORTERM
 ESCDELAY
 Kolkata
@@ -17,6 +8,7 @@ Representer
 Rocannon's
 SCAP
 SIGTERM
+Towncrier           # Changelog generator
 ansiblelint
 apidoc
 argname
@@ -25,8 +17,10 @@ argparser
 argspec
 argvalues
 astimezone
+autorefs
 basesystem
 caplog
+cliconf             # Ansible network cli abstraction plugin
 codeclimate
 colname
 coltext
@@ -42,29 +36,41 @@ dumpable
 dunder
 editables
 extlinks
+facelessuser
 fedoraproject
+fontawesome
 fromlist
+headerlink
 helpconfig
 hostvars
+hrefs
+htmlproofer
 httpapi
 importables
+inlinehilite
 intersphinx
 introspector
 isatty
 jsonschema
 keepends
+kegex               # An action's regex
 kegexes
 lentext
 levelname
 libonig
 lightbulbs
+linenums
 linkcheck
 lintable
 lintables
+magiclink
 maskables
 maxsplit
+mkdocstrings
 moduleauthor
+mqueue              # https://github.com/ansible/ansible-runner/issues/984
 myproject
+netcommon           # Ansible network collection, seen in tests and README
 netconf
 nitpicky
 nonblocking
@@ -78,19 +84,22 @@ preclear
 precommand
 premanent
 pullable
+pymdown
+pymdownx
 redhatinsights
 representer
 returndocs
 runtimes
 scrollback
 sectionauthor
+setuptools          # Used in _version.pyi
 smartquotes
 somevalue
-sphinxcontrib
 statemachine
 stripspaces
 subaction
 subschema
+superfences
 templatable
 templated
 templating
@@ -104,3 +113,4 @@ userbase
 viewcode
 volmount
 workdir
+xmss
