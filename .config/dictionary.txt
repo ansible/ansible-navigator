@@ -17,6 +17,7 @@ Representer
 Rocannon's
 SCAP
 SIGTERM
+Wignore
 ansiblelint
 apidoc
 argname
