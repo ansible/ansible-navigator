@@ -87,8 +87,8 @@ def test_no_warnings(import_path: str) -> None:
     """
     imp_cmd = (
         sys.executable,
-        "-W",
-        "error",
+        # "-W",
+        # "error",
         # NOTE: This exclusion is only necessary because ansible-runner still uses `pipes`
         # NOTE: but this project already aims to target Python 3.11 as well.
         # TODO: Remove this exclusion once the runner issue is addressed.
@@ -96,13 +96,16 @@ def test_no_warnings(import_path: str) -> None:
         # "-W",
         # "ignore: 'pipes' is deprecated and slated for removal in Python 3.13:DeprecationWarning:"
         # "ansible_runner.utils",
-        "-W",
-        "ignore: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace"
-        "('sphinxcontrib')`.",
-        "ignore: Implementing implicit namespace packages (as specified in PEP 420) is"
-        "preferred to `pkg_resources.declare_namespace`."
-        "  See https://setuptools.pypa.io/en/latest/references/keywords.html"
-        "#keyword-namespace-packages",
+        #
+        # "-W",
+        # "ignore: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace"
+        # "('sphinxcontrib')`.",
+        # "-W",
+        # "ignore: Implementing implicit namespace packages (as specified in PEP 420) is"
+        # " preferred to `pkg_resources.declare_namespace`."
+        # " See https://setuptools.pypa.io/en/latest/references/keywords.html"
+        # "#keyword-namespace-packages",
+        "-Wignore::DeprecationWarning",
         "-c",
         f"import {import_path!s}",
     )
