@@ -99,6 +99,10 @@ def test_no_warnings(import_path: str) -> None:
         "-W",
         "ignore: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace"
         "('sphinxcontrib')`.",
+        "ignore: Implementing implicit namespace packages (as specified in PEP 420) is"
+        "preferred to `pkg_resources.declare_namespace`."
+        "  See https://setuptools.pypa.io/en/latest/references/keywords.html"
+        "#keyword-namespace-packages",
         "-c",
         f"import {import_path!s}",
     )
