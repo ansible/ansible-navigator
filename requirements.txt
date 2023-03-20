@@ -5,7 +5,7 @@
 #    pip-compile --extra=docs --extra=test --no-annotate --output-file=requirements.txt --strip-extras setup.cfg
 #
 ansible-builder==1.2.0
-ansible-core==2.14.3
+ansible-core==2.13.7
 ansible-runner==2.3.2
 attrs==22.2.0
 beautifulsoup4==4.11.2
