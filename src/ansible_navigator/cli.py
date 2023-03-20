@@ -9,7 +9,6 @@ import sys
 
 from copy import deepcopy
 from curses import wrapper
-from importlib.metadata import packages_distributions
 from importlib.metadata import version
 from importlib.util import find_spec
 from pathlib import Path
@@ -27,6 +26,7 @@ from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
 from .logger import setup_logger
+from .utils.compatibility import packages_distributions
 from .utils.definitions import ExitMessage
 from .utils.definitions import ExitPrefix
 from .utils.definitions import LogMessage
