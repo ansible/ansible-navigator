@@ -13,19 +13,3 @@ if TYPE_CHECKING:
         from typing import TypeAlias
     else:
         from typing_extensions import TypeAlias
-
-
-if sys.version_info < (3, 9):
-    from backports import zoneinfo
-else:
-    import zoneinfo
-
-
-if sys.version_info < (3, 9):
-    import importlib_resources
-
-    from importlib_resources.abc import Traversable
-else:
-    import importlib.resources as importlib_resources
-
-    from importlib.abc import Traversable

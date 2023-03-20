@@ -25,7 +25,6 @@ jobs:
         id: generate_matrix
         uses: coactions/dynamic-matrix@v1
         with:
-          min_python: "3.9"
           max_python: "3.11"
           default_python: "3.11" # used by jobs in other_names
           other_names: |
