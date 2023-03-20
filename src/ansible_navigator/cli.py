@@ -9,9 +9,10 @@ import sys
 
 from copy import deepcopy
 from curses import wrapper
+from importlib.metadata import packages_distributions
+from importlib.metadata import version
+from importlib.util import find_spec
 from pathlib import Path
-
-from pkg_resources import working_set
 
 from .action_defs import ActionReturn
 from .action_defs import RunInteractiveReturn
@@ -50,9 +51,18 @@ def log_dependencies() -> list[LogMessage]:
 
     :returns: All packages, version and location
     """
-    # pylint: disable=not-an-iterable
-    installed_packages_list = sorted(f"{i.key}=={i.version} {i.location}" for i in working_set)
-    messages = [LogMessage(level=logging.DEBUG, message=pkg) for pkg in installed_packages_list]
+    pkgs = []
+    found = []
+    for python_name, pkg_names in packages_distributions().items():
+        for pkg_name in pkg_names:
+            if pkg_name not in found:
+                found.append(pkg_name)
+                _location = find_spec(python_name).origin
+                _version = version(pkg_name)
+                pkgs.append(f"{pkg_name}=={_version} {_location}")
+
+    pkgs.sort()
+    messages = [LogMessage(level=logging.DEBUG, message=pkg) for pkg in pkgs]
     return messages
 
 
