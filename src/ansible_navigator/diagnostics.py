@@ -9,7 +9,6 @@ from dataclasses import asdict
 from dataclasses import dataclass
 from importlib.metadata import distribution
 from importlib.metadata import metadata
-from importlib.metadata import packages_distributions
 from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
@@ -28,6 +27,7 @@ from .configuration_subsystem.definitions import ApplicationConfiguration
 from .image_manager import introspect
 from .image_manager import introspector
 from .utils import ansi
+from .utils.compatibility import packages_distributions
 from .utils.definitions import ExitMessage
 from .utils.definitions import LogMessage
 from .utils.functions import now_iso

@@ -29,3 +29,9 @@ else:
     import importlib.resources as importlib_resources
 
     from importlib.abc import Traversable
+
+
+if sys.version_info < (3, 10):
+    from importlib_metadata import packages_distributions
+else:
+    from importlib.metadata import packages_distributions
