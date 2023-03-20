@@ -32,6 +32,6 @@ else:
 
 
 if sys.version_info < (3, 10):
-    from importlib_metadata import packages_distributions
+    import importlib_metadata
 else:
-    from importlib.metadata import packages_distributions
+    import importlib.metadata as importlib_metadata

@@ -26,7 +26,7 @@ from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
 from .logger import setup_logger
-from .utils.compatibility import packages_distributions
+from .utils.compatibility import importlib_metadata
 from .utils.definitions import ExitMessage
 from .utils.definitions import ExitPrefix
 from .utils.definitions import LogMessage
@@ -53,11 +53,15 @@ def log_dependencies() -> list[LogMessage]:
     """
     pkgs = []
     found = []
-    for python_name, pkg_names in packages_distributions().items():
+    for python_name, pkg_names in importlib_metadata.packages_distributions().items():
         for pkg_name in pkg_names:
             if pkg_name not in found:
                 found.append(pkg_name)
-                _location = find_spec(python_name).origin
+                spec = find_spec(python_name)
+                if spec:
+                    _location = spec.origin
+                else:
+                    _location = ""
                 _version = version(pkg_name)
                 pkgs.append(f"{pkg_name}=={_version} {_location}")
 
