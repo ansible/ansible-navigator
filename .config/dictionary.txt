@@ -43,6 +43,7 @@ dunder
 editables
 extlinks
 fedoraproject
+fqcn
 fromlist
 helpconfig
 hostvars

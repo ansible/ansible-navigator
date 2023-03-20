@@ -84,6 +84,24 @@ def check_for_ansible() -> tuple[list[LogMessage], list[ExitMessage]]:
     return messages, exit_messages
 
 
+def check_playbook_type(playbook: str) -> str:
+    """Determine if given playbook is a file, fqcn playbook or something else.
+
+    Note: These checks are added to directly access a playbook provided by a collection
+    i.e. `namespace.collection.playbook_name` fqcn format.
+
+    :param playbook: given playbook
+    :returns: playbook type
+    """
+    playbook_type = "file"
+    playbook_path = str(playbook)
+    if os.path.exists(playbook_path) is False:
+        playbook_type = "missing"
+    if os.path.exists(playbook_path) is False and len(playbook_path.split(".")) >= 3:
+        playbook_type = "fqcn"
+    return playbook_type
+
+
 def clear_screen() -> None:
     """Print blank lines on the screen, preserving scrollback.
 

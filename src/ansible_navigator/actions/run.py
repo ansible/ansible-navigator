@@ -1,9 +1,7 @@
-# pylint: disable=C0302
 """Run subcommand implementation."""
 from __future__ import annotations
 
 import curses
-import glob
 import json
 import logging
 import os
@@ -40,6 +38,7 @@ from ..ui_framework import form_to_dict
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import abs_user_path
+from ..utils.functions import check_playbook_type
 from ..utils.functions import human_time
 from ..utils.functions import is_jinja
 from ..utils.functions import now_iso
@@ -168,30 +167,6 @@ def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     return {k: v for k, v in obj.items() if not (k.startswith("_") or k.endswith("uuid"))}
 
 
-# cspell:ignore fqcn
-def check_playbook(playbook: str) -> str:
-    """Check if the playbook is provided by a collection(fqcn).
-
-    :param playbook: Provided playbook
-    :returns: Path to the playbook
-    """
-    run_parameter = playbook.split("/")[-1]
-    fqcn_playbook = re.match(r"^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+\.[a-zA-Z0-9]+$", run_parameter)
-    if fqcn_playbook:
-        playbook_path = playbook
-        start_path = playbook.rsplit("/", 1)[0]
-        playbook_name = playbook.split(".")[-1]
-        end_paths = [f"{playbook_name}.yml", f"{playbook_name}.yaml"]
-        for end_path in end_paths:
-            file = glob.glob(os.path.join(start_path, "**", end_path), recursive=True)
-            if len(file) != 0:
-                playbook_path = file[0]
-                break
-    else:
-        playbook_path = playbook
-    return playbook_path
-
-
 PLAY_COLUMNS = [
     "__play_name",
     "__ok",
@@ -253,6 +228,7 @@ class Action(ActionBase):
         )
         self._task_list_columns: list[str] = TASK_LIST_COLUMNS
         self._content_key_filter: Callable = filter_content_keys
+        self._playbook_type: str = check_playbook_type(self._args.playbook)
         self._task_cache: dict[str, str] = {}
         """Task name storage from playbook_on_start using the task uuid as the key"""
 
@@ -388,27 +364,27 @@ class Action(ActionBase):
         if not args_updated:
             return False
 
-        if isinstance(self._args.playbook, str):
-            playbook_valid = os.path.exists(check_playbook(self._args.playbook))
+        if self._playbook_type == "file":
+            if isinstance(self._args.playbook, str):
+                playbook_valid = os.path.exists(self._args.playbook)
+            else:
+                playbook_valid = False
 
-        else:
-            playbook_valid = False
+            if not playbook_valid:
+                populated_form = self._prompt_for_playbook()
+                if populated_form["cancelled"]:
+                    return False
 
-        if not playbook_valid:
-            populated_form = self._prompt_for_playbook()
-            if populated_form["cancelled"]:
-                return False
+                new_cmd = ["run"]
+                new_cmd.append(populated_form["fields"]["playbook"]["value"])
 
-            new_cmd = ["run"]
-            new_cmd.append(populated_form["fields"]["playbook"]["value"])
+                if populated_form["fields"]["cmdline"]["value"]:
+                    new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
 
-            if populated_form["fields"]["cmdline"]["value"]:
-                new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
-
-            # Parse as if provided from the cmdline
-            args_updated = self._update_args(new_cmd)
-            if not args_updated:
-                return False
+                # Parse as if provided from the cmdline
+                args_updated = self._update_args(new_cmd)
+                if not args_updated:
+                    return False
 
         self._run_runner()
         self._logger.info("Run initialized and playbook started.")
@@ -626,7 +602,7 @@ class Action(ActionBase):
         }
 
         if isinstance(self._args.playbook, str):
-            kwargs.update({"playbook": check_playbook(self._args.playbook)})
+            kwargs.update({"playbook": self._args.playbook})
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs.update(
@@ -917,13 +893,11 @@ class Action(ActionBase):
             and self._args.help_playbook is not True
         ):
             status, status_color = self._get_status()
-
+            playbook = [k["playbook"] for k in self._plays.value][0]
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
-                playbook_dir=os.path.dirname(self._args.playbook),
-                playbook_name=os.path.splitext(
-                    os.path.basename(check_playbook(self._args.playbook))
-                )[0],
+                playbook_dir=os.path.dirname(playbook),
+                playbook_name=os.path.splitext(os.path.basename(playbook))[0],
                 playbook_status=status,
                 time_stamp=now_iso(self._args.time_zone),
             )
