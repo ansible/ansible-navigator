@@ -342,7 +342,7 @@ class Action(ActionBase):
             hosts = self._inventory[key].get("hosts", None)
             if hosts:
                 columns.extend(self._show_columns)
-                for host in hosts:
+                for host in sorted(hosts):
                     menu_entry = MenuEntry(**self._host_vars[host])
                     menu_entry["__name"] = menu_entry["inventory_hostname"]
                     menu_entry["__taxonomy"] = taxonomy
@@ -351,7 +351,7 @@ class Action(ActionBase):
 
             children = self._inventory[key].get("children", None)
             if children:
-                for child in children:
+                for child in sorted(children):
                     menu_entry = MenuEntry()
                     menu_entry["__name"] = child
                     menu_entry["__taxonomy"] = taxonomy

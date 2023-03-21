@@ -14,6 +14,7 @@ steps = (
     UiTestStep(
         user_input=CLI,
         comment="ansible-navigator collections",
+        present=["ansible.builtin", "ansible.posix"],
     ),
     UiTestStep(
         user_input=":f redhatinsights.insights",
