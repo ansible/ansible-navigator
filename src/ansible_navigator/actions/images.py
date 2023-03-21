@@ -148,7 +148,7 @@ class Action(ActionBase):
             filtered.append(filter_content_keys(image))
         print_to_stdout(
             content=filtered,
-            content_format=ContentFormat.YAML,
+            content_format=getattr(ContentFormat, self._args.format.upper()),
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
