@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "(venv) bash$ansible-navigator lint /home/bthornto/github/ansible-navigator/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout",
+        "(venv) bash$ansible-navigator lint /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout",
         "(venv) bash$"
     ]
 }
