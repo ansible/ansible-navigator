@@ -4,6 +4,7 @@ from __future__ import annotations
 import copy
 import re
 
+from collections.abc import Iterable
 from dataclasses import InitVar
 from dataclasses import dataclass
 from dataclasses import field
@@ -11,9 +12,6 @@ from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Dict
-from typing import Iterable
-from typing import List
 from typing import NewType
 from typing import TypeVar
 from typing import Union
@@ -464,10 +462,10 @@ class PaeChangeRequest:
 # and some common ones
 
 # A type used for the settings as a dictionary
-SettingsFileType = NewType("SettingsFileType", Dict[str, Union[bool, Dict, int, str, List]])
+SettingsFileType = NewType("SettingsFileType", dict[str, Union[bool, dict, int, str, list]])
 
 # A type used to describe a schema file for the settings
 SettingsSchemaType = NewType(
     "SettingsSchemaType",
-    Dict[str, Dict[str, Union[bool, Dict, int, str, List]]],
+    dict[str, dict[str, Union[bool, dict, int, str, list]]],
 )

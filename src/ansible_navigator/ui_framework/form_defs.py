@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List
 from typing import Union
 
 from .sentinels import Unknown
 
 
 FieldValidationState = Union[Unknown, bool]
-FieldValidationStates = List[FieldValidationState]
+FieldValidationStates = list[FieldValidationState]
 
 
 class FormType(Enum):

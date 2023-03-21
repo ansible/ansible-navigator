@@ -16,10 +16,10 @@ import pkgutil
 import subprocess  # noqa: S404 Required due to the nature of this test
 import sys
 
+from collections.abc import Generator
 from itertools import chain
 from pathlib import Path
 from types import ModuleType
-from typing import Generator
 
 import pytest
 
