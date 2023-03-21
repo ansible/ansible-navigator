@@ -2,11 +2,10 @@
 try:
     from ._version import version as __version__
 except ImportError:  # pragma: no branch
-
     try:
-        import pkg_resources
+        from importlib.metadata import version
 
-        __version__ = pkg_resources.get_distribution("ansible-navigator").version
+        __version__ = version("ansible-navigator")
     except Exception:  # pylint: disable=broad-except
         # this is the fallback SemVer version picked by setuptools_scm when tag
         # information is not available.

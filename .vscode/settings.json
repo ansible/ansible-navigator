@@ -4,7 +4,7 @@
   // Override the pyproject.toml and disable xdist to enable test debugging
   "python.testing.pytestArgs": ["-n0", "--dist", "no"],
   "python.formatting.provider": "black",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "python.linting.pylintEnabled": true,
   "python.linting.flake8Enabled": true,
   "python.linting.mypyEnabled": true,
@@ -14,5 +14,6 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
-  }
+  },
+  "prettier.enable": false
 }

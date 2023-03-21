@@ -10,7 +10,7 @@ repos:
         name: Sort import statements using isort
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v3.0.0-alpha.4"
+    rev: "v3.0.0-alpha.6"
     hooks:
       - id: prettier
         # Original hook implementation is flaky due to *several* bugs described
@@ -35,13 +35,13 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/psf/black.git
-    rev: 22.12.0
+    rev: 23.1.0
     hooks:
       - id: black
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.19.2
+    rev: v6.30.1
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -64,8 +64,13 @@ repos:
       - id: check-case-conflict
       - id: check-symlinks
       - id: check-yaml
+        exclude: >
+          (?x)^
+            (
+              mkdocs.yml
+            )
+          $
       - id: detect-private-key
-
       # Heavy checks:
       - id: check-ast
       - id: debug-statements
@@ -88,7 +93,6 @@ repos:
               docs/(
                 faq|
                 index|
-                installation
               )|
               README|
               src/ansible_navigator/data/(help|welcome)
@@ -96,7 +100,7 @@ repos:
           $
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.2
+    rev: v2.2.4
     hooks:
       - id: codespell
         # NOTE: dout is part of the stdout action regex
@@ -137,7 +141,7 @@ repos:
       - id: pyupgrade
         args: ["--py38-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v0.991
+    rev: v1.1.1
     hooks:
       - id: mypy
         additional_dependencies:
@@ -145,7 +149,6 @@ repos:
           - libtmux
           - pytest
           - pytest-mock
-          - sphinx
           - types-backports
           - types-docutils
           - types-mock
@@ -154,7 +157,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v2.16.0b1
+    rev: v2.17.0
     hooks:
       - id: pylint
         args:
@@ -174,5 +177,4 @@ repos:
           - pytest
           - pytest-mock
           - setuptools-scm
-          - sphinx
         pass_filenames: false
