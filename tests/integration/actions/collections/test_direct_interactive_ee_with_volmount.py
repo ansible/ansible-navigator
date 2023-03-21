@@ -20,7 +20,13 @@ CLI = Command(
 ).join()
 
 
-initial_steps = (UiTestStep(user_input=CLI, comment="ansible-navigator collections top window"),)
+initial_steps = (
+    UiTestStep(
+        user_input=CLI,
+        comment="ansible-navigator collections top window",
+        present=["ansible.builtin", "company_name.coll_1", "company_name.coll_2"],
+    ),
+)
 
 steps = add_indices(initial_steps + base_steps)
 

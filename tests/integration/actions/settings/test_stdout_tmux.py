@@ -98,5 +98,5 @@ def step_id(value) -> str:
 class Test(BaseClass):
     """Run the tests for ``settings`` from CLI, mode stdout."""
 
-    PANE_HEIGHT = 200
+    PANE_HEIGHT = 1000
     UPDATE_FIXTURES = False

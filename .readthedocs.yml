@@ -1,19 +1,26 @@
-# https://docs.readthedocs.io/en/stable/config-file/v2.html
 ---
 version: 2
 
+mkdocs:
+  fail_on_warning: true
+  configuration: mkdocs.yml
+
 build:
-  os: "ubuntu-22.04"
+  os: ubuntu-22.04
   tools:
     python: "3.11"
-  jobs:
-    pre_build:
-      - pip install '.[docs]'
-      - ansible-navigator --version
-formats: all
-
-# Build documentation in the docs/ directory with Sphinx
-sphinx:
-  builder: dirhtml
-  configuration: docs/conf.py
-  fail_on_warning: true
+  commands:
+    - pip install --user tox
+    - python3 -m tox -e docs -- --strict --site-dir=_readthedocs/html/
+python:
+  system_packages: false
+  install:
+    - method: pip
+      path: tox
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
+submodules:
+  include: all
+  recursive: true

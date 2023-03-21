@@ -86,6 +86,17 @@ stdout_tests = (
             "must be one or more of",
         ],
     ),
+    ShellCommand(
+        comment="print image details as json output",
+        user_input=StdoutCommand(
+            cmdline="",
+            mode="stdout",
+            format="json",
+            execution_environment=True,
+            raw_append=" | grep creator",
+        ).join(),
+        present=['"name": "creator-ee"'],
+    ),
 )
 
 steps = add_indices(stdout_tests)
