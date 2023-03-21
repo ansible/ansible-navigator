@@ -36,11 +36,11 @@ class ParametrizeFormat(NamedTuple):
     ids: Callable = id_func
 
 
-SimpleDictValueT = Union[bool, str, int]
+SimpleDictValue = Union[bool, str, int]
 
 
 @dataclass
-class ContentTestSimple(ContentBase[SimpleDictValueT]):
+class ContentTestSimple(ContentBase[SimpleDictValue]):
     """Test content, no dictionary factory overrides."""
 
     attr_01: bool = False
@@ -50,7 +50,7 @@ class ContentTestSimple(ContentBase[SimpleDictValueT]):
 
 OverrideDictValueT = str
 OverrideDictReturn = Dict[str, OverrideDictValueT]
-OverrideAllValuesT = Union[bool, int, str]
+OverrideAllValues = Union[bool, int, str]
 
 
 @dataclass
@@ -94,7 +94,7 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
 
     @staticmethod
     def _custom_dict_factory(
-        kv_pairs: list[tuple[str, OverrideAllValuesT]],
+        kv_pairs: list[tuple[str, OverrideAllValues]],
         suffix: str,
     ) -> OverrideDictReturn:
         """Create a dictionary with suffixed values from a list of key-value pairs.
