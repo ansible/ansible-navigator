@@ -226,7 +226,7 @@ using the `exec` subcommand.
 
 ```bash
 $ cd  ./collections/ansible_collections/ansible/utils/
-$ ansible-navigator exec -- ansible-test sanity --python 3.8
+$ ansible-navigator exec -- ansible-test sanity --python 3.9
 ```
 
 ### How do I use `ansible-playbook` parameters like `--forks 15`?
