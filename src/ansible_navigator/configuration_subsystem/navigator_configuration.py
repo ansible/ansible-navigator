@@ -398,7 +398,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             choices=["json", "yaml"],
             cli_parameters=CliParameters(short="--fmt"),
             short_description="Specify the format for stdout output.",
-            subcommands=["collections"],
+            subcommands=["collections", "images"],
             value=SettingsEntryValue(default="yaml"),
             version_added="v2.3",
         ),
