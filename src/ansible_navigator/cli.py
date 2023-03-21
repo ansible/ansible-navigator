@@ -53,7 +53,7 @@ def log_dependencies() -> list[LogMessage]:
     """
     pkgs = []
     found = []
-    for python_name, pkg_names in importlib_metadata.packages_distributions().items():
+    for _python_name, pkg_names in importlib_metadata.packages_distributions().items():
         for pkg_name in pkg_names:
             if pkg_name not in found:
                 found.append(pkg_name)
