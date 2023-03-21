@@ -124,7 +124,8 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
+site/
+_readthedocs/
 
 # mypy
 .mypy_cache/

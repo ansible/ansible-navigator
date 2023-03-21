@@ -370,10 +370,6 @@ def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
     if file_path:
         pytest.exit(f"Please remove the settings file '{file_path}' before testing.")
 
-    # ensure a virtual environment is active
-    if not os.environ.get("VIRTUAL_ENV"):
-        pytest.exit("Please activate a virtual environment before testing.")
-
     # ensure tmux is installed
     tmux_location = shutil.which("tmux")
     if not tmux_location:

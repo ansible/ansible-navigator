@@ -192,7 +192,6 @@ TASK_LIST_COLUMNS = [
 
 @actions.register
 class Action(ActionBase):
-
     # pylint: disable=too-many-instance-attributes
     """Run command implementation."""
 
@@ -369,7 +368,6 @@ class Action(ActionBase):
             playbook_valid = False
 
         if not playbook_valid:
-
             populated_form = self._prompt_for_playbook()
             if populated_form["cancelled"]:
                 return False
@@ -537,7 +535,6 @@ class Action(ActionBase):
                 self.steps.current.show_func()
 
             if self.steps.current.type == "menu":
-
                 new_scroll = len(self.steps.current.value)
                 if self._auto_scroll:
                     self._interaction.ui.scroll(new_scroll)
