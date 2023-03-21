@@ -3,9 +3,13 @@
     "index": 0,
     "comment": "ansible-navigator collections top window",
     "additional_information": {
-        "present": [],
+        "present": [
+            "ansible.builtin",
+            "company_name.coll_1",
+            "company_name.coll_2"
+        ],
         "absent": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
         "  Name                              Version      Shadowed       Type               Path",

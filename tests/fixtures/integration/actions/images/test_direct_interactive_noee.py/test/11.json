@@ -19,7 +19,7 @@
         "  5│basesystem                                   11                 The skeleton package which defines a simple Fedora system",
         "  6│bash                                         5.2.15             The GNU Bourne Again shell",
         "  7│bzip2-libs                                   1.0.8              Libraries for applications using bzip2",
-        "  8│ca-certificates                              2022.2.54          The Mozilla CA root certificate bundle",
+        "  8│ca-certificates                              2023.2.60          The Mozilla CA root certificate bundle",
         "  9│catatonit                                    0.1.7              A signal-forwarding process manager for containers",
         " 10│conmon                                       2.1.5              OCI container runtime monitor",
         " 11│containers-common                            1                  Common configuration and documentation for containers",
@@ -27,8 +27,8 @@
         " 13│coreutils                                    9.1                A set of basic GNU tools commonly used in shell scripts",
         " 14│coreutils-common                             9.1                coreutils common optional components",
         " 15│cracklib                                     2.9.7              A password-checking library",
-        " 16│criu                                         3.17.1             Tool for Checkpoint/Restore in User-space",
-        " 17│criu-libs                                    3.17.1             Libraries for criu",
+        " 16│cracklib-dicts                               2.9.7              The standard CrackLib dictionaries",
+        " 17│criu                                         3.17.1             Tool for Checkpoint/Restore in User-space",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
