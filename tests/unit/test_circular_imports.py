@@ -89,7 +89,6 @@ def test_no_warnings(import_path: str) -> None:
         sys.executable,
         "-W",
         "error",
-        "-Wignore::DeprecationWarning",
         "-c",
         f"import {import_path!s}",
     )
