@@ -57,7 +57,10 @@ def log_dependencies() -> list[LogMessage]:
         for pkg_name in pkg_names:
             if pkg_name not in found:
                 found.append(pkg_name)
-                spec = find_spec(python_name)
+                try:
+                    spec = find_spec(python_name)
+                except ModuleNotFoundError:
+                    spec = None
                 if spec:
                     _location = spec.origin
                 else:

@@ -365,7 +365,10 @@ class DiagnosticsCollector:
             for pkg_name in pkg_names:
                 if pkg_name not in meta:
                     meta[pkg_name] = importlib_metadata.metadata(pkg_name).json
-                    spec = find_spec(python_name)
+                    try:
+                        spec = find_spec(python_name)
+                    except ModuleNotFoundError:
+                        spec = None
                     if spec:
                         meta[pkg_name]["location"] = spec.origin
                     meta[pkg_name]["requires"] = importlib_metadata.distribution(pkg_name).requires
