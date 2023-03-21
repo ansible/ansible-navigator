@@ -43,7 +43,7 @@
         "  execution-environment:",
         "    container-engine: podman",
         "    enabled: false",
-        "    image: ghcr.io/ansible/creator-ee:v0.13.0",
+        "    image: ghcr.io/ansible/creator-ee:v0.14.1",
         "    pull:",
         "      policy: never",
         "  format: yaml",
