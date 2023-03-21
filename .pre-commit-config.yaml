@@ -41,7 +41,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.29.0
+    rev: v6.30.1
     hooks:
       - id: cspell
         name: Spell check with cspell
