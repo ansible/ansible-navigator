@@ -41,7 +41,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.28.0
+    rev: v6.30.1
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -64,8 +64,13 @@ repos:
       - id: check-case-conflict
       - id: check-symlinks
       - id: check-yaml
+        exclude: >
+          (?x)^
+            (
+              mkdocs.yml
+            )
+          $
       - id: detect-private-key
-
       # Heavy checks:
       - id: check-ast
       - id: debug-statements
@@ -88,7 +93,6 @@ repos:
               docs/(
                 faq|
                 index|
-                installation
               )|
               README|
               src/ansible_navigator/data/(help|welcome)
@@ -145,7 +149,6 @@ repos:
           - libtmux
           - pytest
           - pytest-mock
-          - sphinx
           - types-backports
           - types-docutils
           - types-mock
@@ -174,5 +177,4 @@ repos:
           - pytest
           - pytest-mock
           - setuptools-scm
-          - sphinx
         pass_filenames: false

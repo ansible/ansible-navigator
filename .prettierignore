@@ -31,3 +31,7 @@ src/ansible_navigator/data/ansible-navigator.json
 # WIP
 CHANGELOG.md
 README.md
+
+# mkdocs
+site/
+docs/.generated
