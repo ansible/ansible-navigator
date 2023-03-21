@@ -89,6 +89,11 @@ def test_no_warnings(import_path: str) -> None:
         sys.executable,
         "-W",
         "error",
+        # NOTE: This exclusion is only necessary because ansible-runner still uses `pkg_resources`
+        # NOTE: could not figure out how to ignore this warning only for ansible-runner
+        # https://github.com/ansible/ansible-runner/issues/1223
+        "-W",
+        "ignore: pkg_resources is deprecated as an API:DeprecationWarning",
         "-c",
         f"import {import_path!s}",
     )
