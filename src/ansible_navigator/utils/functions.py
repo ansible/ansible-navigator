@@ -12,6 +12,7 @@ import shlex
 import shutil
 import sys
 import sysconfig
+import zoneinfo
 
 from pathlib import Path
 from typing import Any
@@ -22,7 +23,6 @@ from jinja2 import Environment
 from jinja2 import StrictUndefined
 from jinja2 import TemplateError
 
-from .compatibility import zoneinfo
 from .definitions import GOLDEN_RATIO
 from .definitions import ExitMessage
 from .definitions import LogMessage

@@ -4,10 +4,10 @@ from __future__ import annotations
 import datetime
 import logging
 import os
+import zoneinfo
 
 from .configuration_subsystem import Constants
 from .configuration_subsystem.definitions import ApplicationConfiguration
-from .utils.compatibility import zoneinfo
 
 
 logger = logging.getLogger("ansible_navigator")

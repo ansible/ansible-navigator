@@ -1,7 +1,5 @@
 """Conditional imports related to python versions."""
 
-# pylint: disable=unused-import
-
 import sys
 
 from typing import TYPE_CHECKING
