@@ -18,7 +18,7 @@
         " 3│check_name: name[play]",
         " 4│description: All plays should be named.",
         " 5│issue_path: /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml:1",
-        " 6│last_modified: '2023-01-10T17:14:51.847154+00:00'",
+        " 6│last_modified: '2023-03-22T15:50:59.389356+00:00'",
         " 7│level: warning",
         " 8│location:",
         " 9│  lines:",
