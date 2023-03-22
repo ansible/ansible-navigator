@@ -4,9 +4,9 @@ from __future__ import annotations
 import copy
 import operator
 
+from collections.abc import MutableMapping
 from enum import Enum
 from functools import reduce
-from typing import MutableMapping
 
 
 class MergeBehaviors(Enum):

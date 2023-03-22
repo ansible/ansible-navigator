@@ -3,8 +3,8 @@ from __future__ import annotations
 import functools
 import re
 
+from re import Match
 from typing import TYPE_CHECKING
-from typing import Match
 from typing import Optional
 from typing import Tuple
 
@@ -104,6 +104,6 @@ def expand_escaped(match: Match[str], s: str) -> str:
     return _BACKREF_RE.sub(lambda m: f"{m[1]}{re.escape(match[int(m[2])])}", s)
 
 
-make_reg = functools.lru_cache(maxsize=None)(_Reg)
-make_regset = functools.lru_cache(maxsize=None)(_RegSet)
+make_reg = functools.cache(_Reg)
+make_regset = functools.cache(_RegSet)
 ERR_REG = make_reg("$ ^")

@@ -5,6 +5,7 @@ import datetime
 import sys
 import traceback
 
+from collections.abc import Iterator
 from dataclasses import asdict
 from dataclasses import dataclass
 from importlib.util import find_spec
@@ -12,9 +13,6 @@ from pathlib import Path
 from sys import stdout
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import Iterator
-from typing import List
 from typing import Union
 
 from .command_runner import Command
@@ -36,7 +34,7 @@ from .utils.serialize import write_diagnostics_json
 from .utils.serialize import yaml
 
 
-JSONTypes = Union[bool, int, str, Dict, List[Any]]
+JSONTypes = Union[bool, int, str, dict, list[Any]]
 
 
 @dataclass

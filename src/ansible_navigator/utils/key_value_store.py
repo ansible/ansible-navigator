@@ -2,21 +2,13 @@
 from __future__ import annotations
 
 import sqlite3
-import sys
 
+from collections.abc import ItemsView
+from collections.abc import Iterator
+from collections.abc import KeysView
+from collections.abc import MutableMapping
+from collections.abc import ValuesView
 from pathlib import Path
-from typing import Iterator
-from typing import MutableMapping
-
-
-if sys.version_info >= (3, 9):
-    from collections.abc import ItemsView
-    from collections.abc import KeysView
-    from collections.abc import ValuesView
-else:
-    from typing import ItemsView
-    from typing import KeysView
-    from typing import ValuesView
 
 
 class KVSKeysView(KeysView[str]):

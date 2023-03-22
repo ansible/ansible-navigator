@@ -12,17 +12,17 @@ import shlex
 import shutil
 import sys
 import sysconfig
+import zoneinfo
 
+from collections.abc import Iterable
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
-from typing import Iterable
-from typing import Mapping
 
 from jinja2 import Environment
 from jinja2 import StrictUndefined
 from jinja2 import TemplateError
 
-from .compatibility import zoneinfo
 from .definitions import GOLDEN_RATIO
 from .definitions import ExitMessage
 from .definitions import LogMessage
@@ -407,13 +407,7 @@ def path_is_relative_to(child: Path, parent: Path) -> bool:
     :param parent: The path that may be a parent
     :returns: Indicates the child is a child of the parent
     """
-    if sys.version_info >= (3, 9):
-        return child.is_relative_to(parent)
-    try:
-        child.relative_to(parent)
-        return True
-    except ValueError:
-        return False
+    return child.is_relative_to(parent)
 
 
 def remove_ansi(string):
@@ -467,8 +461,6 @@ def round_half_up(number: float | int) -> int:
 
 def shlex_join(tokens: Iterable[str]) -> str:
     """Concatenate the tokens of a list and return a string.
-
-    ``shlex.join`` was new in version 3.8
 
     :param tokens: The iterable of strings to join
     :returns: The iterable joined with spaces

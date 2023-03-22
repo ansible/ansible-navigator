@@ -17,7 +17,6 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 from typing import Callable
-from typing import Dict
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
@@ -463,7 +462,7 @@ class Action(ActionBase):
         if not isinstance(artifact_file, str):
             artifact_file = ""
 
-        FType = Dict[str, Any]
+        FType = dict[str, Any]
         form_dict: FType = {
             "title": "Artifact file not found, please confirm the following",
             "fields": [],
@@ -498,7 +497,7 @@ class Action(ActionBase):
         else:
             cmdline = ""
 
-        FType = Dict[str, Any]
+        FType = dict[str, Any]
         form_dict: FType = {
             "title": "Playbook not found, please confirm the following",
             "fields": [],

@@ -5,9 +5,7 @@ import logging
 import os
 import shlex
 
-from typing import List
 from typing import Optional
-from typing import Tuple
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
@@ -17,7 +15,7 @@ from ..runner import Command
 from . import _actions as actions
 
 
-GeneratedCommand = Tuple[str, Optional[List[str]]]
+GeneratedCommand = tuple[str, Optional[list[str]]]
 
 logger = logging.getLogger(__name__)
 
