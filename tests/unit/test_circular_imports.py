@@ -1,3 +1,4 @@
+# cspell:ignore ruamel debugpy pydevd
 """Tests for circular imports in all local packages and modules.
 
 This ensures all internal packages can be imported right away without
@@ -89,11 +90,20 @@ def test_no_warnings(import_path: str) -> None:
         sys.executable,
         "-W",
         "error",
-        # NOTE: This exclusion is only necessary because ansible-runner still uses `pkg_resources`
+        # NOTE: The following 2 exclusions are only necessary because
+        #       ansible-runner still uses `pkg_resources`
         # NOTE: could not figure out how to ignore this warning only for ansible-runner
         # https://github.com/ansible/ansible-runner/issues/1223
         "-W",
         "ignore: pkg_resources is deprecated as an API:DeprecationWarning",
+        "-W",
+        "ignore: Deprecated call to `pkg_resources.declare_namespace('ruamel'):DeprecationWarning",
+        # NOTE: The following is related to the use of pkg_resource in debugpy
+        # and triggered when running the tests with vscode in debug mode
+        # https://github.com/microsoft/debugpy/issues/1230
+        "-W",
+        "ignore: Deprecated call to `pkg_resources.declare_namespace('pydevd_plugins.extensions')"
+        ":DeprecationWarning",
         "-c",
         f"import {import_path!s}",
     )
