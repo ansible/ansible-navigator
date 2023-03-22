@@ -20,7 +20,7 @@ inventory_path = os.path.join(run_fixture_dir, "inventory")
 playbook_path = os.path.join(run_fixture_dir, "site.yaml")
 
 common_fixture_dir = os.path.join(FIXTURES_DIR, "common", "collections")
-playbook_collection = "company_name.coll_1.playbook_1"
+PLAYBOOK_COLLECTION = "company_name.coll_1.playbook_1"
 
 base_steps = (
     UiTestStep(user_input=":0", comment="play-1 details"),

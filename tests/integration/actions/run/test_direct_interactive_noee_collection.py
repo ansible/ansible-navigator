@@ -5,13 +5,13 @@ from ..._interactions import Command
 from ..._interactions import UiTestStep
 from ..._interactions import add_indices
 from ..._interactions import step_id_padded
+from .base import PLAYBOOK_COLLECTION
 from .base import BaseClass
 from .base import base_steps
 from .base import common_fixture_dir
-from .base import playbook_collection
 
 
-cmdline = f"{playbook_collection}"
+cmdline = f"{PLAYBOOK_COLLECTION}"
 CLI = Command(
     subcommand="run",
     cmdline=cmdline,
