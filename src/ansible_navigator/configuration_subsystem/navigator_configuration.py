@@ -246,6 +246,15 @@ NavigatorConfiguration = ApplicationConfiguration(
             version_added="v1.0",
         ),
         SettingsEntry(
+            name="ansible_runner_write_job_events",
+            choices=[True, False],
+            cli_parameters=CliParameters(short="--rwje", action="store_true"),
+            settings_file_path_override="ansible-runner.job-events",
+            short_description="Write ansible-runner job_events in the artifact directory",
+            value=SettingsEntryValue(default=False),
+            version_added="v2.3",
+        ),
+        SettingsEntry(
             name="app",
             apply_to_subsequent_cli=C.NONE,
             choices=[subcommand.name for subcommand in navigator_subcommands],

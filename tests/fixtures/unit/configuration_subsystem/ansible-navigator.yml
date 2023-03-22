@@ -28,6 +28,7 @@ ansible-navigator:
     artifact-dir: /tmp/test1
     rotate-artifacts-count: 10
     timeout: 300
+    job-events: False
   app: run
   collection-doc-cache-path: /tmp/cache.db
   color:

@@ -62,6 +62,8 @@
         "#     # The timeout value after which ansible-runner will forcefully stop the",
         "#     # execution",
         "#     timeout: 300",
+        "#     # Write ansible-runner job_events in the artifact directory",
+        "#     job-events: True",
         "#   # Subcommands",
         "#   app: welcome",
         "#   # The path to collection doc cache",

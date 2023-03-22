@@ -16,6 +16,7 @@
         "ansible-navigator.ansible-lint.config: Not set",
         "ansible-navigator.ansible-lint.lintables: Not set",
         "ansible-navigator.ansible-runner.artifact-dir: Not set",
+        "ansible-navigator.ansible-runner.job-events: Defaults",
         "ansible-navigator.ansible-runner.rotate-artifacts-count: Not set",
         "ansible-navigator.ansible-runner.timeout: Environment variable",
         "ansible-navigator.ansible.cmdline: Not set",

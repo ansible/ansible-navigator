@@ -17,22 +17,25 @@ from .command_base import CommandBase
 class CommandAsync(CommandBase):
     """A wrapper for the asynchronous runner."""
 
-    def __init__(self, executable_cmd: str, queue: Queue, **kwargs):
+    def __init__(self, executable_cmd: str, queue: Queue, write_job_events: bool, **kwargs):
         """Initialize the arguments for the ``run_command_async`` interface of ``ansible-runner``.
 
         For common arguments refer to the documentation of the ``CommandBase`` class.
 
         :param executable_cmd: The command to be invoked
         :param queue: The queue to post events from ``ansible-runner``
+        :param write_job_events: Allows job_events to be processed by ``ansible-runner``
         :param kwargs: The arguments for the async runner call
         """
         self._queue = queue
+        self._write_job_events = write_job_events
         super().__init__(executable_cmd, **kwargs)
 
     def _event_handler(self, event):
         self._logger.debug("ansible-runner event handle: %s", event)
         new_event = deepcopy(event)
         self._queue.put(new_event)
+        return self._write_job_events
 
     def run(self):
         """Initiate the execution of the runner command in async mode.

@@ -38,6 +38,7 @@ class Scenario(BaseScenario):
     private_data_dir: str | None
     rotate_artifacts: int | None
     timeout: int | None
+    write_job_events: bool
     expected: dict
 
     def __str__(self):
@@ -72,6 +73,7 @@ test_data = [
         private_data_dir="/tmp/test1",
         rotate_artifacts=10,
         timeout=200,
+        write_job_events=False,
         expected={
             "executable_cmd": "ansible-playbook",
             "queue": TEST_QUEUE,
@@ -93,6 +95,7 @@ test_data = [
             "private_data_dir": "/tmp/test1",
             "rotate_artifacts": 10,
             "timeout": 200,
+            "write_job_events": False,
         },
     ),
 ]
@@ -122,6 +125,7 @@ def test_runner_args(mocker: MockerFixture, data: Scenario):
     args.entry("ansible_runner_artifact_dir").value.current = data.private_data_dir
     args.entry("ansible_runner_rotate_artifacts_count").value.current = data.rotate_artifacts
     args.entry("ansible_runner_timeout").value.current = data.timeout
+    args.entry("ansible_runner_write_job_events").value.current = data.write_job_events
 
     TestRunnerException = Exception
     command_async = mocker.patch(
