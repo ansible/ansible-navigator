@@ -893,7 +893,9 @@ class Action(ActionBase):
             and self._args.help_playbook is not True
         ):
             status, status_color = self._get_status()
-            playbook = [k["playbook"] for k in self._plays.value][0]
+            playbook = self._args.playbook
+            if self._playbook_type == "fqcn" and len(self._plays.value) > 0:
+                playbook = [k["playbook"] for k in self._plays.value][0]
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
                 playbook_dir=os.path.dirname(playbook),
