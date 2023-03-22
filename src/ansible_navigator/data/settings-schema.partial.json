@@ -105,6 +105,9 @@
             },
             "timeout": {
               "type": "integer"
+            },
+            "job-events": {
+              "type": "boolean"
             }
           },
           "type": "object"

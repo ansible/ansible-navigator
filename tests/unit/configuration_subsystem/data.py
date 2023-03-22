@@ -215,6 +215,7 @@ ENV_VAR_DATA = [
     ("ansible_runner_artifact_dir", "/tmp/test1", "/tmp/test1"),
     ("ansible_runner_rotate_artifacts_count", "10", 10),
     ("ansible_runner_timeout", "300", 300),
+    ("ansible_runner_write_job_events", "false", False),
     ("app", "config", "config"),
     ("cmdline", "--forks 15", ["--forks", "15"]),
     ("collection_doc_cache_path", "/tmp/cache.db", "/tmp/cache.db"),

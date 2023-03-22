@@ -17,7 +17,7 @@ initial_steps = (
     UiTestStep(
         user_input=":settings",
         comment="enter settings from welcome screen",
-        present=["Ansible runner artifact dir", "Help doc"],
+        present=["Ansible runner artifact dir", "Help config"],
     ),
 )
 

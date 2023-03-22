@@ -132,6 +132,9 @@ class NavigatorPostProcessor:
                 exit_messages.append(ExitMessage(message=exit_msg))
         return messages, exit_messages
 
+    # Post process ansible_runner_write_job_events.
+    ansible_runner_write_job_events = _true_or_false
+
     @staticmethod
     @_post_processor
     def ansible_runner_timeout(
