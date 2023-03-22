@@ -39,6 +39,7 @@ extlinks
 facelessuser
 fedoraproject
 fontawesome
+fqcn
 fromlist
 headerlink
 helpconfig

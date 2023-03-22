@@ -37,6 +37,7 @@ from ..ui_framework import form_to_dict
 from ..ui_framework import nonblocking_notification
 from ..ui_framework import warning_notification
 from ..utils.functions import abs_user_path
+from ..utils.functions import check_playbook_type
 from ..utils.functions import human_time
 from ..utils.functions import is_jinja
 from ..utils.functions import now_iso
@@ -226,6 +227,7 @@ class Action(ActionBase):
         )
         self._task_list_columns: list[str] = TASK_LIST_COLUMNS
         self._content_key_filter: Callable = filter_content_keys
+        self._playbook_type: str = check_playbook_type(self._args.playbook)
         self._task_cache: dict[str, str] = {}
         """Task name storage from playbook_on_start using the task uuid as the key"""
 
@@ -361,26 +363,27 @@ class Action(ActionBase):
         if not args_updated:
             return False
 
-        if isinstance(self._args.playbook, str):
-            playbook_valid = os.path.exists(self._args.playbook)
-        else:
-            playbook_valid = False
+        if self._playbook_type == "file":
+            if isinstance(self._args.playbook, str):
+                playbook_valid = os.path.exists(self._args.playbook)
+            else:
+                playbook_valid = False
 
-        if not playbook_valid:
-            populated_form = self._prompt_for_playbook()
-            if populated_form["cancelled"]:
-                return False
+            if not playbook_valid:
+                populated_form = self._prompt_for_playbook()
+                if populated_form["cancelled"]:
+                    return False
 
-            new_cmd = ["run"]
-            new_cmd.append(populated_form["fields"]["playbook"]["value"])
+                new_cmd = ["run"]
+                new_cmd.append(populated_form["fields"]["playbook"]["value"])
 
-            if populated_form["fields"]["cmdline"]["value"]:
-                new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
+                if populated_form["fields"]["cmdline"]["value"]:
+                    new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
 
-            # Parse as if provided from the cmdline
-            args_updated = self._update_args(new_cmd)
-            if not args_updated:
-                return False
+                # Parse as if provided from the cmdline
+                args_updated = self._update_args(new_cmd)
+                if not args_updated:
+                    return False
 
         self._run_runner()
         self._logger.info("Run initialized and playbook started.")
@@ -890,11 +893,13 @@ class Action(ActionBase):
         """
         if filename or self._args.playbook_artifact_enable is True:
             status, status_color = self._get_status()
-
+            playbook = self._args.playbook
+            if self._playbook_type == "fqcn" and len(self._plays.value) > 0:
+                playbook = [k["playbook"] for k in self._plays.value][0]
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
-                playbook_dir=os.path.dirname(self._args.playbook),
-                playbook_name=os.path.splitext(os.path.basename(self._args.playbook))[0],
+                playbook_dir=os.path.dirname(playbook),
+                playbook_name=os.path.splitext(os.path.basename(playbook))[0],
                 playbook_status=status,
                 time_stamp=now_iso(self._args.time_zone),
             )
