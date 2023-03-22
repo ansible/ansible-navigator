@@ -16,10 +16,14 @@
     },
     "output": [
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4b09ae9a (REbase)
         "   Name                                        Default  Source                       Current",
         " 0│Ansible runner artifact dir                 True     Not set                      Not set                                                                                                                                                                                                               ▒",
         " 1│Ansible runner rotate artifacts count       True     Not set                      Not set                                                                                                                                                                                                               ▒",
         " 2│Ansible runner timeout                      False    Environment variable         42                                                                                                                                                                                                                    ▒",
+<<<<<<< HEAD
         " 3│App                                         False    Command line                 XXXXXXX",
         " 4│Cmdline                                     True     Not set                      Not set                                                                                                                                                                                                               ▒",
         " 5│Collection doc cache path                   False    Environment variable         XXXXXXX",
@@ -66,6 +70,28 @@
         "21│Help builder                                         True       Defaults                           False",
         "22│Help config                                          True       Defaults                           False",
 >>>>>>> 49441a29 (Add ansible_runner_write_job_events configuration setting to enable/disable job_events logs in the runner artifact)
+=======
+        " 3│Ansible runner write job events             True     Defaults                     False                                                                                                                                                                                                                 ▒",
+        " 4│App                                         False    Command line                 XXXXXXX",
+        " 5│Cmdline                                     True     Not set                      Not set                                                                                                                                                                                                               ▒",
+        " 6│Collection doc cache path                   False    Environment variable         XXXXXXX",
+        " 7│Config                                      True     Not set                      Not set                                                                                                                                                                                                               ▒",
+        " 8│Container engine                            False    Automatically determined     podman                                                                                                                                                                                                                ▒",
+        " 9│Container options                           True     Not set                      Not set                                                                                                                                                                                                               ▒",
+        "10│Current settings file                       True     None                         XXXXXXX",
+        "11│Display color                               True     Defaults                     True",
+        "12│Editor command                              True     Defaults                     vi +{line_number} {filename}",
+        "13│Editor console                              True     Defaults                     True",
+        "14│Enable prompts                              True     Defaults                     False",
+        "15│Exec command                                True     Defaults                     /bin/bash",
+        "16│Exec shell                                  True     Defaults                     True",
+        "17│Execution environment                       True     Command line                 True",
+        "18│Execution environment image                 True     Defaults                     ghcr.io/ansible/creator-ee:v0.14.1",
+        "19│Execution environment volume mounts         True     Not set                      Not set",
+        "20│Format                                      True     Defaults                     yaml",
+        "21│Help builder                                True     Defaults                     False",
+        "22│Help config                                 True     Defaults                     False",
+>>>>>>> 4b09ae9a (REbase)
         "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
     ]
 }

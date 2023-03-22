@@ -27,6 +27,7 @@
         "    help: false",
         "    workdir: /home/user/github/ansible-navigator",
         "  ansible-runner:",
+        "    job-events: false",
         "    timeout: 42",
         "  app: settings",
         "  collection-doc-cache-path: /home/user/github/ansible-navigator/.test_logs/integration/actions/settings/test_stdout_tmux.py/test_stdout_tmux_py/ansible-navigator.log/collection_doc_cache.db",
