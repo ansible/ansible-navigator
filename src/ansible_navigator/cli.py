@@ -2,7 +2,6 @@
 """Navigator entry point."""
 from __future__ import annotations
 
-import importlib.metadata as importlib_metadata
 import logging
 import os
 import signal
@@ -27,6 +26,7 @@ from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
 from .logger import setup_logger
+from .utils.compatibility import importlib_metadata
 from .utils.definitions import ExitMessage
 from .utils.definitions import ExitPrefix
 from .utils.definitions import LogMessage

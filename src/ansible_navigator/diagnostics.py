@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import datetime
-import importlib.metadata as importlib_metadata
 import sys
 import traceback
 
@@ -25,6 +24,7 @@ from .configuration_subsystem.definitions import ApplicationConfiguration
 from .image_manager import introspect
 from .image_manager import introspector
 from .utils import ansi
+from .utils.compatibility import importlib_metadata
 from .utils.definitions import ExitMessage
 from .utils.definitions import LogMessage
 from .utils.functions import now_iso
