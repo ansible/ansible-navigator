@@ -883,11 +883,7 @@ class Action(ActionBase):
         :param filename: The file to write to
         :type filename: str
         """
-        if (
-            filename
-            or self._args.playbook_artifact_enable is True
-            and self._args.help_playbook is not True
-        ):
+        if filename or self._args.playbook_artifact_enable is True:
             status, status_color = self._get_status()
 
             filename = filename or self._args.playbook_artifact_save_as
