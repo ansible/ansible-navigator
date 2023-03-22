@@ -1,3 +1,4 @@
+# cspell:ignore ruamel debugpy pydevd
 """Tests for circular imports in all local packages and modules.
 
 This ensures all internal packages can be imported right away without
