@@ -15,17 +15,7 @@ if TYPE_CHECKING:
         from typing_extensions import TypeAlias
 
 
-if sys.version_info < (3, 9):
-    from backports import zoneinfo
+if sys.version_info < (3, 10):
+    import importlib_metadata
 else:
-    import zoneinfo
-
-
-if sys.version_info < (3, 9):
-    import importlib_resources
-
-    from importlib_resources.abc import Traversable
-else:
-    import importlib.resources as importlib_resources
-
-    from importlib.abc import Traversable
+    import importlib.metadata as importlib_metadata

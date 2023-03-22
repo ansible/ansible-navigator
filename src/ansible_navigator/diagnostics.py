@@ -5,17 +5,15 @@ import datetime
 import sys
 import traceback
 
+from collections.abc import Iterator
 from dataclasses import asdict
 from dataclasses import dataclass
+from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
+from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import Iterator
-from typing import List
 from typing import Union
-
-from pkg_resources import working_set
 
 from .command_runner import Command
 from .command_runner import CommandRunner
@@ -26,6 +24,7 @@ from .configuration_subsystem.definitions import ApplicationConfiguration
 from .image_manager import introspect
 from .image_manager import introspector
 from .utils import ansi
+from .utils.compatibility import importlib_metadata
 from .utils.definitions import ExitMessage
 from .utils.definitions import LogMessage
 from .utils.functions import now_iso
@@ -35,7 +34,7 @@ from .utils.serialize import write_diagnostics_json
 from .utils.serialize import yaml
 
 
-JSONTypes = Union[bool, int, str, Dict, List]
+JSONTypes = Union[bool, int, str, dict, list[Any]]
 
 
 @dataclass
@@ -358,10 +357,17 @@ class DiagnosticsCollector:
 
         :returns: The python packages information
         """
-        return {
-            i.key: {"location": i.location, "name": i.key, "version": i.version}
-            for i in working_set  # pylint: disable=not-an-iterable
-        }
+        pkgs = importlib_metadata.packages_distributions()
+        meta: dict[str, Any] = {}
+        for _python_name, pkg_names in pkgs.items():
+            for pkg_name in pkg_names:
+                if pkg_name not in meta:
+                    meta[pkg_name] = importlib_metadata.metadata(pkg_name).json
+                    spec = find_spec(pkg_name)
+                    if spec:
+                        meta[pkg_name]["location"] = spec.origin
+                    meta[pkg_name]["requires"] = importlib_metadata.distribution(pkg_name).requires
+        return meta
 
     @diagnostic_runner
     @register(Collector(name="settings"))

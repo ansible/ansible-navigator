@@ -11,12 +11,12 @@ import json
 import logging
 import re
 
+from importlib.abc import Traversable
 from itertools import chain
 
 from ..tm_tokenize.grammars import Grammars
 from ..tm_tokenize.region import Regions
 from ..tm_tokenize.tokenize import tokenize
-from ..utils.compatibility import Traversable
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines

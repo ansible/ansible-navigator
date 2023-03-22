@@ -16,10 +16,10 @@ import pkgutil
 import subprocess  # noqa: S404 Required due to the nature of this test
 import sys
 
+from collections.abc import Generator
 from itertools import chain
 from pathlib import Path
 from types import ModuleType
-from typing import Generator
 
 import pytest
 
@@ -89,13 +89,11 @@ def test_no_warnings(import_path: str) -> None:
         sys.executable,
         "-W",
         "error",
-        # NOTE: This exclusion is only necessary because ansible-runner still uses `pipes`
-        # NOTE: but this project already aims to target Python 3.11 as well.
-        # TODO: Remove this exclusion once the runner issue is addressed.
-        # https://github.com/ansible/ansible-runner/issues/1101
+        # NOTE: This exclusion is only necessary because ansible-runner still uses `pkg_resources`
+        # NOTE: could not figure out how to ignore this warning only for ansible-runner
+        # https://github.com/ansible/ansible-runner/issues/1223
         "-W",
-        "ignore: 'pipes' is deprecated and slated for removal in Python 3.13:DeprecationWarning:"
-        "ansible_runner.utils",
+        "ignore: pkg_resources is deprecated as an API:DeprecationWarning",
         "-c",
         f"import {import_path!s}",
     )

@@ -8,16 +8,14 @@ import os
 import shlex
 import shutil
 import sys
+import zoneinfo
 
 from functools import partialmethod
 from itertools import chain
 from itertools import repeat
 from pathlib import Path
 from string import Formatter
-from typing import List
-from typing import Tuple
 
-from ..utils.compatibility import zoneinfo
 from ..utils.definitions import ExitMessage
 from ..utils.definitions import ExitPrefix
 from ..utils.definitions import LogMessage
@@ -60,7 +58,7 @@ def _post_processor(func):
     return wrapper
 
 
-PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
+PostProcessorReturn = tuple[list[LogMessage], list[ExitMessage]]
 
 
 class NavigatorPostProcessor:
@@ -468,12 +466,12 @@ class NavigatorPostProcessor:
         return messages, exit_messages
 
     @_post_processor
-    def enable_prompts(
+    def _disable_pae_and_enforce_stdout(
         self,
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        """Post process enable_prompts.
+        """Disable playbook artifact creation and force mode stdout for a settings parameter.
 
         :param entry: The current settings entry
         :param config: The full application configuration
@@ -494,6 +492,9 @@ class NavigatorPostProcessor:
             )
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
+
+    # Post process for enable_prompts
+    enable_prompts = _disable_pae_and_enforce_stdout
 
     # Post process for exec_shell
     exec_shell = _true_or_false
@@ -525,7 +526,9 @@ class NavigatorPostProcessor:
     help_config = partialmethod(_forced_stdout, subcommand="config")
     help_doc = partialmethod(_forced_stdout, subcommand="doc")
     help_inventory = partialmethod(_forced_stdout, subcommand="inventory")
-    help_playbook = partialmethod(_forced_stdout, subcommand="run")
+
+    # Post process for help_playbook
+    help_playbook = _disable_pae_and_enforce_stdout
 
     @_post_processor
     def images_details(

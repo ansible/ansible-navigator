@@ -17,7 +17,6 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 from typing import Callable
-from typing import Dict
 
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
@@ -466,7 +465,7 @@ class Action(ActionBase):
         if not isinstance(artifact_file, str):
             artifact_file = ""
 
-        FType = Dict[str, Any]
+        FType = dict[str, Any]
         form_dict: FType = {
             "title": "Artifact file not found, please confirm the following",
             "fields": [],
@@ -501,7 +500,7 @@ class Action(ActionBase):
         else:
             cmdline = ""
 
-        FType = Dict[str, Any]
+        FType = dict[str, Any]
         form_dict: FType = {
             "title": "Playbook not found, please confirm the following",
             "fields": [],
@@ -887,11 +886,7 @@ class Action(ActionBase):
         :param filename: The file to write to
         :type filename: str
         """
-        if (
-            filename
-            or self._args.playbook_artifact_enable is True
-            and self._args.help_playbook is not True
-        ):
+        if filename or self._args.playbook_artifact_enable is True:
             status, status_color = self._get_status()
             playbook = self._args.playbook
             if self._playbook_type == "fqcn" and len(self._plays.value) > 0:

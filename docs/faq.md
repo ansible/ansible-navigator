@@ -210,13 +210,13 @@ without the use of an execution environment.
 By default `ansible-navigator` runs the playbook in the same manner that ansible
 controller and AWX would run the playbook. This was done to help playbook
 developers author playbooks that would be ready for production. If the use of
-`vars_prompt`, `pause\prompt` or `--ask-pass` can not be avoided, disabling
-`playbook-artifact` creation and using `--mode stdout` causes
-`ansible-navigator` to run the playbook in a manner that is compatible with
-`ansible-playbook` and allows for user interaction.
+`vars_prompt`, `pause\prompt` or `--ask-pass` can not be avoided, use the
+`enable-prompts` parameter that disables `playbook-artifact` creation and sets
+the mode to `stdout` causing `ansible-navigator` to run the playbook in a manner
+that is compatible with `ansible-playbook` and allows for user interaction.
 
 ```bash
-$ ansible-navigator run site.yml --mode stdout --playbook-artifact-enable false --ask-pass
+$ ansible-navigator run site.yml --enable-prompts --ask-pass
 ```
 
 ### How can I use `ansible-test` without having it locally installed?
@@ -226,7 +226,7 @@ using the `exec` subcommand.
 
 ```bash
 $ cd  ./collections/ansible_collections/ansible/utils/
-$ ansible-navigator exec -- ansible-test sanity --python 3.8
+$ ansible-navigator exec -- ansible-test sanity --python 3.9
 ```
 
 ### How do I use `ansible-playbook` parameters like `--forks 15`?

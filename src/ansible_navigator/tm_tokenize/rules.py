@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+from re import Match
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Dict
 from typing import List
-from typing import Match
 from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
@@ -28,7 +28,7 @@ if TYPE_CHECKING:
     from .compiler import Compiler
     from .region import Scope
 
-Captures = Tuple[Tuple[int, "_Rule"], ...]  # declared later
+Captures = tuple[tuple[int, "_Rule"], ...]  # declared later
 
 
 def _split_name(s: str | None) -> tuple[str, ...]:

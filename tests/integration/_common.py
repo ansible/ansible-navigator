@@ -87,8 +87,7 @@ def update_fixtures(
     }
     if additional_information is not None:
         fixture["additional_information"] = additional_information
-        if additional_information.get("present"):
-            received_output_list = sanitize_output(received_output)
+    received_output_list = sanitize_output(received_output)
     fixture["output"] = received_output_list
     with fixture_path.open(mode="w", encoding="utf8") as fh:
         json.dump(fixture, fh, indent=4, ensure_ascii=False, sort_keys=False)

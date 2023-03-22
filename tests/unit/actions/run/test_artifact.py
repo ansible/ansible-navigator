@@ -7,7 +7,7 @@ import re
 
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Pattern
+from re import Pattern
 
 import pytest
 
@@ -54,6 +54,7 @@ class Scenario(BaseScenario):
     re_match: Pattern | None = None
     help_playbook: bool = False
     enable_prompts: bool = False
+    playbook_artifact_enable: bool = True
     time_zone: str = "UTC"
 
     def __post_init__(self):
@@ -127,6 +128,7 @@ test_data = [
         playbook="~/site.yaml",
         starts_with="/home/test_user/site-artifact",
         help_playbook=True,
+        playbook_artifact_enable=False,
     ),
     Scenario(
         name="Check with enable_prompts",
@@ -134,6 +136,7 @@ test_data = [
         playbook="~/site.yaml",
         starts_with="/home/test_user/site-artifact",
         enable_prompts=True,
+        playbook_artifact_enable=False,
     ),
     Scenario(
         name="Filename timezone",
@@ -178,7 +181,7 @@ def test_artifact_path(
     args.entry("playbook").value.current = data.playbook
     args.entry("help_playbook").value.current = data.help_playbook
     args.entry("time_zone").value.current = data.time_zone
-    args.entry("playbook_artifact_enable").value.current = True
+    args.entry("playbook_artifact_enable").value.current = data.playbook_artifact_enable
 
     save_as = args.entry("playbook_artifact_save_as")
 
@@ -199,7 +202,7 @@ def test_artifact_path(
     run_action = action(args=args)
     run_action.write_artifact(filename=data.filename)
 
-    if data.help_playbook is not True:
+    if data.playbook_artifact_enable is True:
         opened_filename = str(mocked_write.call_args[1]["file"])
         if data.starts_with is not None:
             assert opened_filename.startswith(data.starts_with), caplog.text
