@@ -1,8 +1,6 @@
 """Utilities related to the merging of dictionaries."""
 from __future__ import annotations
 
-from typing import Dict
-from typing import List
 from typing import Optional
 from typing import Union
 
@@ -14,8 +12,8 @@ class DictMergeError(Exception):
 Mergeable = Optional[
     Union[
         bool,
-        Dict,
-        List,
+        dict,
+        list,
         str,
     ]
 ]

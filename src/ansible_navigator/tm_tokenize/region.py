@@ -4,9 +4,9 @@ from typing import NamedTuple
 from typing import Tuple
 
 
-Scope = Tuple[str, ...]
+Scope = tuple[str, ...]
 
-Regions = Tuple["Region", ...]
+Regions = tuple["Region", ...]
 
 
 class Region(NamedTuple):

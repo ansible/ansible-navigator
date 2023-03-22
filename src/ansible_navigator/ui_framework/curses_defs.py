@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import NamedTuple
 from typing import NewType
-from typing import Tuple
 
 
 class CursesLinePart(NamedTuple):
@@ -23,14 +22,14 @@ class CursesLinePart(NamedTuple):
     decoration: int
 
 
-CursesLine = NewType("CursesLine", Tuple[CursesLinePart, ...])
+CursesLine = NewType("CursesLine", tuple[CursesLinePart, ...])
 """One line of text ready for curses."""
 
-CursesLines = NewType("CursesLines", Tuple[CursesLine, ...])
+CursesLines = NewType("CursesLines", tuple[CursesLine, ...])
 """One or more lines of text ready for curses."""
 
 
-RgbTuple = Tuple[int, int, int]
+RgbTuple = tuple[int, int, int]
 
 
 @dataclass

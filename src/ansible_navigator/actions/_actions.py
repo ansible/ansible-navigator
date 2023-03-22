@@ -3,18 +3,18 @@ from __future__ import annotations
 
 import functools
 import importlib
+import importlib.resources as importlib_resources
 import logging
 import os
 import re
 
 from collections import namedtuple
+from collections.abc import Generator
 from typing import Any
 from typing import Callable
-from typing import Generator
 
 from ..action_defs import RunStdoutReturn
 from ..ui_framework import error_notification
-from ..utils.compatibility import importlib_resources
 
 
 logger = logging.getLogger(__name__)

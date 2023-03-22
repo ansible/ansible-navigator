@@ -5,8 +5,6 @@ from enum import Enum
 from pathlib import Path
 from typing import Callable
 from typing import Generic
-from typing import List
-from typing import Type
 from typing import TypeVar
 
 from ..ansi import COLOR
@@ -185,5 +183,5 @@ class Migration:
             self.run_step(step, *args, **kwargs)
 
 
-Migrations = List[Type[Migration]]
+Migrations = list[type[Migration]]
 migrations: Migrations = []

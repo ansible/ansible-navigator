@@ -7,17 +7,17 @@ import logging
 import re
 
 from collections.abc import Mapping
+from collections.abc import Sequence
 from curses import ascii as curses_ascii
 from functools import lru_cache
 from math import ceil
 from math import floor
+from re import Match
+from re import Pattern
 from typing import Any
 from typing import Callable
-from typing import Match
 from typing import NamedTuple
-from typing import Pattern
 from typing import Protocol
-from typing import Sequence
 
 from ..content_defs import ContentFormat
 from ..content_defs import ContentType

@@ -13,12 +13,12 @@ import sys
 
 from collections import Counter
 from collections import OrderedDict
+from collections.abc import Generator
 from datetime import datetime
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Generator
 
 import yaml
 

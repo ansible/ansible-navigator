@@ -10,9 +10,9 @@ import shutil
 import subprocess
 import sys
 
+from collections.abc import Generator
 from copy import deepcopy
 from pathlib import Path
-from typing import Generator
 from typing import Protocol
 
 import pytest

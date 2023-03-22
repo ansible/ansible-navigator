@@ -1,13 +1,12 @@
 """Tests for serializing a dataclass."""
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import asdict
 from dataclasses import dataclass
 from functools import partial
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import Iterable
 from typing import NamedTuple
 from typing import Union
 
@@ -49,7 +48,7 @@ class ContentTestSimple(ContentBase[SimpleDictValue]):
 
 
 OverrideDictValueT = str
-OverrideDictReturn = Dict[str, OverrideDictValueT]
+OverrideDictReturn = dict[str, OverrideDictValueT]
 OverrideAllValues = Union[bool, int, str]
 
 
