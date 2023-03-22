@@ -4,10 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import ClassVar
-from typing import Dict
-from typing import List
 from typing import NewType
-from typing import Tuple
 from typing import TypeVar
 from typing import Union
 
@@ -19,7 +16,7 @@ from .navigator_configuration import Internals
 from .utils import create_settings_file_sample
 
 
-PresentableSettingsEntryValue = Union[bool, Dict, str, List]
+PresentableSettingsEntryValue = Union[bool, dict, str, list]
 
 CliT = TypeVar("CliT", bound="PresentableCliParameters")
 EntT = TypeVar("EntT", bound="PresentableSettingsEntry")
@@ -194,5 +191,5 @@ class PresentableSettingsEntry(ContentBase):
 
 PresentableSettingsEntries = NewType(
     "PresentableSettingsEntries",
-    Tuple[PresentableSettingsEntry, ...],
+    tuple[PresentableSettingsEntry, ...],
 )

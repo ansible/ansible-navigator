@@ -1,15 +1,13 @@
 """Definitions of UI content objects."""
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import asdict
 from dataclasses import dataclass
 from enum import Enum
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Dict
 from typing import Generic
-from typing import List
-from typing import Sequence
 from typing import TypeVar
 from typing import Union
 
@@ -26,7 +24,7 @@ class ContentView(Enum):
 
 
 T = TypeVar("T")
-DictType: TypeAlias = Dict[str, T]
+DictType: TypeAlias = dict[str, T]
 
 
 class SerializationFormat(Enum):
@@ -140,8 +138,8 @@ class ContentBase(Generic[T]):
         return asdict(self).items()
 
 
-ContentTypeSingle = Union[bool, float, int, str, Dict[str, Any], ContentBase]
-ContentTypeSequence = Union[List[Any], Sequence[ContentBase]]
+ContentTypeSingle = Union[bool, float, int, str, dict[str, Any], ContentBase]
+ContentTypeSequence = Union[list[Any], Sequence[ContentBase]]
 ContentType = Union[ContentTypeSingle, ContentTypeSequence]
 
 

@@ -8,16 +8,14 @@ import os
 import shlex
 import shutil
 import sys
+import zoneinfo
 
 from functools import partialmethod
 from itertools import chain
 from itertools import repeat
 from pathlib import Path
 from string import Formatter
-from typing import List
-from typing import Tuple
 
-from ..utils.compatibility import zoneinfo
 from ..utils.definitions import ExitMessage
 from ..utils.definitions import ExitPrefix
 from ..utils.definitions import LogMessage
@@ -59,7 +57,7 @@ def _post_processor(func):
     return wrapper
 
 
-PostProcessorReturn = Tuple[List[LogMessage], List[ExitMessage]]
+PostProcessorReturn = tuple[list[LogMessage], list[ExitMessage]]
 
 
 class NavigatorPostProcessor:

@@ -1,8 +1,7 @@
 """Object to hold basic UI settings."""
 
 from dataclasses import dataclass
-
-from ..utils.compatibility import Traversable
+from importlib.abc import Traversable
 
 
 @dataclass

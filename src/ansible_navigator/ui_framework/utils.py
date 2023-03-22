@@ -47,7 +47,7 @@ def _string_to_progress(value: str, progress_bar_width: int) -> str:
     return ("\u2587" * chars_in_progress_bar).ljust(progress_bar_width)
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def is_percent(string):
     """Determine if a string is a percentage.
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 
 from copy import deepcopy
-from typing import Pattern
+from re import Pattern
 
 from ansible_navigator.actions import kegexes
 from .action_defs import RunStdoutReturn

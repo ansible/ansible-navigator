@@ -1,9 +1,9 @@
 """Functionality related to the retrieval of packaged data files."""
 
+import importlib.resources as importlib_resources
+
 from enum import Enum
 from enum import auto
-
-from .compatibility import importlib_resources
 
 
 class ImageEntry(Enum):
