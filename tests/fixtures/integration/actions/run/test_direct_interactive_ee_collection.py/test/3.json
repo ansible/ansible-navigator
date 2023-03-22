@@ -1,0 +1,16 @@
+{
+    "name": "test[03-:back-play-1 details]",
+    "index": 3,
+    "comment": "play-1 details",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "  Result                                      Host                                                           Number                                      Changed                                           Task                                                                                                                                                                Task action                                                                Duration",
+        "0│Ok                                          localhost                                                           0                                      False                                             debug print play-1 task-1                                                                                                                                           debug                                                                            0s",
+        "1│Ok                                          localhost                                                           1                                      False                                             debug print play-1 task-2                                                                                                                                           debug                                                                            0s",
+        "^b/PgUp page up                                                                      ^f/PgDn page down                                                                      ↑↓ scroll                                                                      esc back                                                                      [0-9] goto                                                                      :help help                                                                     Successful"
+    ]
+}

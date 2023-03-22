@@ -1,0 +1,26 @@
+---
+- name: run integration test play-1
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: debug print play-1 task-1
+      debug:
+        msg: "This is play-1 task-1"
+
+    - name: debug print play-1 task-2
+      debug:
+        msg: "This is play-1 task-2"
+
+- name: run integration test play-2
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: debug print play-2 task-1
+      debug:
+        msg: "This is play-2 task-1"
+
+    - name: debug print play-2 task-2
+      debug:
+        msg: "This is play-2 task-2"

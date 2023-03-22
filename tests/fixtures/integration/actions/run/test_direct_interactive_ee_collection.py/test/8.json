@@ -1,0 +1,36 @@
+{
+    "name": "test[08-:0-play-2 task-1 details]",
+    "index": 8,
+    "comment": "play-2 task-1 details",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "Play name: run integration test play-2:0",
+        "Task name: debug print play-2 task-1",
+        "Ok: localhost This is play-2 task-1",
+        " 0│---",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 3│event_loop: null",
+        " 4│host: localhost",
+        " 5│play: run integration test play-2",
+        " 6│play_pattern: localhost",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 8│remote_addr: 127.0.0.1",
+        " 9│res:",
+        "10│  _ansible_no_log: null",
+        "11│  _ansible_verbose_always: true",
+        "12│  changed: false",
+        "13│  msg: This is play-2 task-1",
+        "14│resolved_action: ansible.builtin.debug",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "16│task: debug print play-2 task-1",
+        "17│task_action: debug",
+        "18│task_args: ''",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "^b/PgUp page up                                                  ^f/PgDn page down                                                  ↑↓ scroll                                                  esc back                                                  - previous                                                  + next                                                  [0-9] goto                                                  :help help                                                     Successful"
+    ]
+}
