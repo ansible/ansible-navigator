@@ -1,0 +1,16 @@
+{
+    "name": "test[06-:back-all play details]",
+    "index": 6,
+    "comment": "all play details",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        "  Play name                                                                                                                          Ok            Changed                               Unreachable                                             Failed                           Skipped                               Ignored                              In progress                                             Task count                                                                            Progress",
+        "0│run integration test play-1                                                                                                         2                  0                                         0                                                  0                                 0                                     0                                        0                                                      2                                                                            Complete",
+        "1│run integration test play-2                                                                                                         2                  0                                         0                                                  0                                 0                                     0                                        0                                                      2                                                                            Complete",
+        "^b/PgUp page up                                                                      ^f/PgDn page down                                                                      ↑↓ scroll                                                                      esc back                                                                      [0-9] goto                                                                      :help help                                                                     Successful"
+    ]
+}

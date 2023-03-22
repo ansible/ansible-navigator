@@ -21,6 +21,7 @@ from ..utils.definitions import ExitPrefix
 from ..utils.definitions import LogMessage
 from ..utils.functions import abs_user_path
 from ..utils.functions import check_for_ansible
+from ..utils.functions import check_playbook_type
 from ..utils.functions import flatten_list
 from ..utils.functions import oxfordcomma
 from ..utils.functions import str2bool
@@ -904,8 +905,9 @@ class NavigatorPostProcessor:
                 exit_msg = "Try again with 'run <playbook name>'"
                 exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
                 return messages, exit_messages
-        if isinstance(entry.value.current, str):
-            entry.value.current = abs_user_path(entry.value.current)
+        if check_playbook_type(entry.value.current) == "file":
+            if isinstance(entry.value.current, str):
+                entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages
 
     @_post_processor
