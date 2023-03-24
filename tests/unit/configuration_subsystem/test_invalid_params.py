@@ -116,7 +116,7 @@ def test_fail_log_file_dir(
 
         :param args: args
         :param kwargs: kwargs
-        :raises OSError: Indicate the mkdirs failed
+        :raises OSError: Indicate the creation of directories failed
         """
         raise OSError
 
