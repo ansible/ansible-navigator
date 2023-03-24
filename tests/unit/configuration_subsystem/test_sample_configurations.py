@@ -1,5 +1,6 @@
-"""Some tests using a alternate test configurations
-to prove code paths not covered by the ansible-navigator
+"""Some tests using a alternate test configurations.
+
+Prove code paths not covered by the ansible-navigator
 configuration
 """
 import pytest
@@ -23,7 +24,7 @@ from ansible_navigator.configuration_subsystem.parser import Parser
 
 
 def test_cmdline_source_not_set():
-    """Ensure a configuration without a ``subparser`` entry fails"""
+    """Ensure a configuration without a ``subparser`` entry fails."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         application_version="1.0",
@@ -52,7 +53,7 @@ def test_cmdline_source_not_set():
 
 
 def test_no_subcommand():
-    """Ensure a configuration without no ``subparser`` entry fails"""
+    """Ensure a configuration without no ``subparser`` entry fails."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         application_version="1.0",
@@ -72,7 +73,7 @@ def test_no_subcommand():
 
 
 def test_many_subcommand():
-    """Ensure a configuration without a ``subparser`` entry fails"""
+    """Ensure a configuration without a ``subparser`` entry fails."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         application_version="1.0",
@@ -107,7 +108,7 @@ def test_many_subcommand():
 
 
 def test_invalid_choice_not_set():
-    """Ensure an error is raised for no choice"""
+    """Ensure an error is raised for no choice."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         application_version="1.0",
@@ -141,7 +142,7 @@ def test_invalid_choice_not_set():
 
 
 def test_custom_nargs_for_positional():
-    """Ensure a ``nargs`` for a positional are carried forward"""
+    """Ensure a ``nargs`` for a positional are carried forward."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         application_version="1.0",

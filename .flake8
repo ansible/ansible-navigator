@@ -74,17 +74,6 @@ per-file-ignores =
   src/ansible_navigator/tm_tokenize/tokenize.py: D100, D201, D400, D403, DAR101, DAR201
   src/ansible_navigator/tm_tokenize/utils.py: D100, D400, D403, DAR101, DAR201
 
-  # The following were present during the initial implementation.
-  # They are expected to be fixed and unignored over time.
-  tests/unit/configuration_subsystem/defaults.py: D400
-  tests/unit/configuration_subsystem/test_entries_sanity.py: D400, DAR101
-  tests/unit/configuration_subsystem/test_fixture_sanity.py: D205, D400
-  tests/unit/configuration_subsystem/test_invalid_params.py: D400, DAR101
-  tests/unit/configuration_subsystem/test_mode_subcommand_action.py: D205, D400
-  tests/unit/configuration_subsystem/test_precedence.py: D205, D400, DAR101
-  tests/unit/configuration_subsystem/test_previous_cli.py: D205, D400
-  tests/unit/configuration_subsystem/test_sample_configurations.py: D205, D400
-  tests/unit/configuration_subsystem/utils.py: D400, DAR101, DAR201
 
 # Count the number of occurrences of each error/warning code and print a report:
 statistics = true
