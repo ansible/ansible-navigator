@@ -20,7 +20,7 @@ CLI = Command(
     execution_environment=True,
 ).join()
 
-steps = (
+steps: tuple[UiTestStep, ...] = (
     UiTestStep(
         user_input=CLI,
         comment="ansible-navigator lint top window",

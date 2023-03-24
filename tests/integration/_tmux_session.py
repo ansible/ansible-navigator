@@ -1,10 +1,11 @@
-"""the tmux session"""
+"""The tmux session."""
 from __future__ import annotations
 
 import datetime
 import os
 import shlex
 import time
+import types
 import uuid
 import warnings
 
@@ -19,7 +20,7 @@ from ._common import generate_test_log_dir
 
 
 class TmuxSessionKwargs(TypedDict, total=False):
-    """tmux session kwargs"""
+    """Tmux session kwargs."""
 
     config_path: Path
     cwd: Path
@@ -35,7 +36,7 @@ class TmuxSession:
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-locals
-    """tmux session"""
+    """Tmux session."""
 
     def __init__(
         self,
@@ -70,7 +71,7 @@ class TmuxSession:
         self._pull_policy = pull_policy
         self._session: libtmux.Session
         self._session_name = str(uuid.uuid4())
-        self._setup_capture: list
+        self._setup_capture: str | list[str]
         self._setup_commands = setup_commands or []
         self._shell_prompt_timeout = shell_prompt_timeout
         self._test_log_dir = generate_test_log_dir(request)
@@ -79,11 +80,13 @@ class TmuxSession:
             # ensure CWD is top folder of library
             self._cwd = Path(__file__).parent.parent.parent
 
-    def _build_tmux_session(self):
+    def _build_tmux_session(self) -> None:
         """Create a new tmux session.
 
         Retry here do to errors captured here:
         https://github.com/ansible/ansible-navigator/issues/812
+
+        :raises libtmux.exc.LibTmuxException: If tries are exceeded
         """
         count = 1
         tries = 3
@@ -91,7 +94,7 @@ class TmuxSession:
             try:
                 self._session = self._server.new_session(
                     session_name=self._session_name,
-                    start_directory=self._cwd,
+                    start_directory=str(self._cwd),
                     kill_session=True,
                 )
                 break
@@ -101,7 +104,13 @@ class TmuxSession:
                     raise
                 count += 1
 
-    def __enter__(self):
+    def __enter__(self) -> TmuxSession:
+        """Enter the tmux session.
+
+        :return: The tmux session
+        :raises AssertionError: If VIRTUAL_ENV environment variable was not set
+        :raises ValueError: If the time is exceeded for finding the shell prompt
+        """
         # pylint: disable=attribute-defined-outside-init
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
@@ -193,6 +202,8 @@ class TmuxSession:
         prompt_showing = False
         while True:
             showing = self._pane.capture_pane()
+            showing = [showing] if isinstance(showing, str) else showing
+
             # the screen has been cleared, wait for prompt in first line
             if showing:
                 prompt_showing = self.cli_prompt in showing[0]
@@ -207,26 +218,47 @@ class TmuxSession:
 
         return self
 
-    def __exit__(self, exc_type, exc_value, exc_traceback):
+    def __exit__(
+        self,
+        exc_type: BaseException | None,
+        exc_value: BaseException | None,
+        exc_traceback: types.TracebackType | None,
+    ) -> None:
+        """Exit the tmux session.
+
+        :param exc_type: exception type
+        :param exc_value: exception value
+        :param exc_traceback: exception traceback
+        """
         if self._server.has_session(self._session_name):
             self._session.kill_session()
 
+    def _capture_pane(self) -> list[str]:
+        """Capture the pane.
+
+        :returns: The captured pane
+        """
+        captured = self._pane.capture_pane()
+        return [captured] if isinstance(captured, str) else captured
+
     def interaction(
         self,
-        value,
+        value: str,
         search_within_response: list | str | None = None,
-        ignore_within_response=None,
-        timeout=300,
+        ignore_within_response: str | None = None,
+        timeout: int = 300,
         send_clear: bool = True,
-    ):
+    ) -> list[str]:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
         """Interact with the tmux session.
 
-        :param value: send to screen
-        :param search_within_response: a list of strings or string to find
-        :param ignore_within_response: ignore screen if this there
-        :param timeout: the amount of time is seconds to allow for completion
+        :param value: Send to screen
+        :param search_within_response: A list of strings or string to find
+        :param ignore_within_response: Ignore screen if this there
+        :param timeout: The amount of time is seconds to allow for completion
+        :param send_clear: Send a clear command before sending the value
+        :returns: The screen content
         """
         showing = None
         if self._fail_remaining:
@@ -237,7 +269,8 @@ class TmuxSession:
         # if presently at command prompt or in TUI
         mode = None
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
+
             if showing:
                 if self.cli_prompt in showing[-1]:
                     mode = "shell"
@@ -264,7 +297,8 @@ class TmuxSession:
         self._pane.send_keys(value)
         command_executed = False
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
+
             if showing and showing != pre_send:
                 if mode == "shell":
                     command_executed = value not in showing[-1]
@@ -288,7 +322,7 @@ class TmuxSession:
         ok_to_return = False
         err_message = "RESPONSE"
         while True:
-            showing = self._pane.capture_pane()
+            showing = self._capture_pane()
 
             if showing:
                 if isinstance(search_within_response, str):
@@ -309,7 +343,9 @@ class TmuxSession:
             if ok_to_return:
                 screens = [showing]
                 while True:
-                    screens.append(self._pane.capture_pane())
+                    captured = self._capture_pane()
+
+                    screens.append(captured)
                     if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
                         showing = screens[-1]
                         break

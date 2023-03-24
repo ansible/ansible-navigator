@@ -11,7 +11,7 @@ from .base import BaseClass
 
 CLI = Command(execution_environment=False).join()
 
-steps = (
+steps: tuple[UiTestStep, ...] = (
     UiTestStep(user_input=CLI, comment="welcome screen"),
     UiTestStep(
         user_input=":config",

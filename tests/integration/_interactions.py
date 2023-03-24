@@ -8,7 +8,7 @@ from typing import NamedTuple
 
 
 class SearchFor(Enum):
-    """set the test mode"""
+    """An enum for response search types."""
 
     HELP = "search for help"
     PROMPT = "search for the shell prompt"
@@ -16,7 +16,7 @@ class SearchFor(Enum):
 
 
 class Command(NamedTuple):
-    """command details"""
+    """Command details."""
 
     execution_environment: bool
     cmdline: str | None = None
@@ -31,14 +31,17 @@ class Command(NamedTuple):
     """Anything raw that should be appended, and not shlex quoted"""
     subcommand: str | None = None
 
-    def join(self):
-        """create CLI command"""
+    def join(self) -> str:
+        """Create  the CLI command.
+
+        :return: The command
+        """
         args = [self.command]
         if isinstance(self.subcommand, str):
             args.append(self.subcommand)
         if isinstance(self.cmdline, str):
             args.extend(shlex.split(self.cmdline))
-        args.extend(["--ee", self.execution_environment])
+        args.extend(["--ee", str(self.execution_environment)])
         args.extend(["--ll", self.log_level])
         args.extend(["--mode", self.mode])
         if self.format:
@@ -74,24 +77,36 @@ class UiTestStep(NamedTuple):
     #: Find this before returning from the tmux session to the test
     search_within_response: SearchFor | str | list = SearchFor.HELP
 
-    def __str__(self):
-        """Produce a test id for this step."""
+    def __str__(self) -> str:
+        """Produce a test id for this step.
+
+        :return: The test id
+        """
         return f"{self.comment}  {self.user_input}"
 
 
-def add_indices(steps):
-    """update the index of each"""
-    return (step._replace(step_index=idx) for idx, step in enumerate(steps))
+def add_indices(steps: tuple[UiTestStep, ...]) -> tuple[UiTestStep, ...]:
+    """Update the index of each.
+
+    :param steps: The list of steps
+    :return: The list of steps with the index updated
+    """
+    return tuple(step._replace(step_index=idx) for idx, step in enumerate(steps))
 
 
-def step_id(value):
-    """return the test id from the test step object"""
+def step_id(value: UiTestStep) -> str:
+    """Create a test id from the test step object.
+
+    :param value: The test value
+    :return: The test id
+    """
     return f"{value.step_index}-{value.user_input}-{value.comment}"
 
 
-def step_id_padded(value):
+def step_id_padded(value: UiTestStep) -> str:
     """Return the test id from the test step object, index padded to 2.
 
     :param value: The test value
+    :return: The test id
     """
     return f"{value.step_index:02d}-{value.user_input}-{value.comment}"

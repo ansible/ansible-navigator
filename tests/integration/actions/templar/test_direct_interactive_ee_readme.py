@@ -10,7 +10,7 @@ from .base import BaseClass
 
 CLI = Command(subcommand="collections", execution_environment=True).join()
 
-steps = (
+steps: tuple[UiTestStep, ...] = (
     UiTestStep(
         user_input=CLI,
         comment="ansible-navigator collections",
