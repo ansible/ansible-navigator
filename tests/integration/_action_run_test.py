@@ -1,4 +1,4 @@
-"""directly run an action for testing"""
+"""Directly run an action for testing."""
 from __future__ import annotations
 
 import os
@@ -87,18 +87,31 @@ class ActionRunTest:
             fromlist=["Action"],
         )
 
-    def callable_pass_one_arg(self, value=0):
-        """a do nothing callable"""
+    def callable_pass_one_arg(self, value: int = 0) -> None:
+        """Do nothing callable.
 
-    def callable_pass(self, **kwargs):
-        """a do nothing callable"""
+        :param value: The value to return
+        """
+
+    def callable_pass(self, **kwargs) -> None:
+        """Do nothing callable.
+
+        :param kwargs: The call values
+        """
 
     def content_format(
         self,
         value: ContentFormat | None = None,
         default: bool = False,
-    ):
-        """A do nothing content format callable."""
+    ) -> ContentFormat:
+        # pylint: disable=unused-argument
+        """Do nothing content format callable.
+
+        :param value: The content format value
+        :param default: A boolean indicating if the default value should be used
+        :returns: The content format value
+        """
+        return value if value else ContentFormat.YAML
 
     def show(
         self,
@@ -110,17 +123,36 @@ class ActionRunTest:
         filter_content_keys: Callable = lambda x: x,
         color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
         content_heading: Callable = lambda *args, **kwargs: None,
-    ):
-        """me"""
+    ) -> None:
+        """Show a content object, but don't really.
 
-    def show_form(self, form: Form):
-        """A do nothing show form callable."""
+        :param obj: The content object to show
+        :param content_format: The content format to use
+        :param index: The index of the content object
+        :param columns: The columns to display
+        :param await_input: A boolean indicating if input should be awaited
+        :param filter_content_keys: A callable to filter content keys
+        :param color_menu_item: A callable to color menu items
+        :param content_heading: A callable to display content headings
+        """
+
+    def show_form(self, form: Form) -> Form:
+        """Do nothing show form callable.
+
+        :param form: The form to show
+        :returns: The form to show
+        """
+        return form
 
     def run_action_interactive(self) -> Any:
-        """run the action
+        """Run the action.
+
         The return type is set to Any here since not all actions
         have the same signature, the corresponding integration test
         will be using the action internals for asserts
+
+        :returns: The action return value
+        :raises ValueError: If no action name match
         """
         self._app_args.update({"mode": "interactive"})
         args = deepcopy(NavigatorConfiguration)
@@ -144,7 +176,10 @@ class ActionRunTest:
             clear=self.callable_pass,
             menu_filter=self.callable_pass_one_arg,
             scroll=self.callable_pass_one_arg,
-            show=self.show,
+            # Ignored here because it doesn't make sens to mock up a full
+            # Interaction for the above show function, this returns
+            # None and the ShowCallable protocol returns an Interaction
+            show=self.show,  # type: ignore[arg-type]
             show_form=self.show_form,
             update_status=self.callable_pass,
             content_format=self.content_format,
@@ -163,7 +198,11 @@ class ActionRunTest:
 
     def run_action_stdout(self, **kwargs) -> tuple[RunStdoutReturn, str, str]:
         # pylint: disable=too-many-locals
-        """run the action"""
+        """Run the action, stdout.
+
+        :param kwargs: The action arguments
+        :returns: The result, stdout and stderr
+        """
         self._app_args.update({"mode": "stdout"})
         self._app_args.update(kwargs)
         args = deepcopy(NavigatorConfiguration)

@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import os
 
+from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 from typing import NamedTuple
 
 import pytest
@@ -12,6 +14,7 @@ from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import id_func
 from ..conftest import TCmdInTty
 from ..defaults import FIXTURES_DIR
+from .conftest import ActionRunTest
 
 
 PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.yml")
@@ -26,6 +29,7 @@ def fixture_params(
     """Generate parameters.
 
     :param default_ee_image_name: The default execution environment image name
+    :param valid_container_engine: The valid container engine
     :param request: The pytest request object
     :returns: The parameters
     """
@@ -36,13 +40,21 @@ def fixture_params(
     }
 
 
-def id_ee(value):
-    """generate id"""
+def id_ee(value: bool):
+    """Generate the test id.
+
+    :param value: The value of the parameter
+    :returns: The test id
+    """
     return f"execution_environment={value}"
 
 
-def id_test_data(value):
-    """generate id"""
+def id_test_data(value: StdoutTest):
+    """Generate the test id.
+
+    :param value: The value of the parameter
+    :returns: The test id
+    """
     return f"action={value.action_name} return={value.return_code}"
 
 
@@ -52,7 +64,7 @@ class StdoutTest(NamedTuple):
     #: The name of the action
     action_name: str
     #: Parameters for the action
-    action_params: tuple[tuple, ...]
+    action_params: Iterable[tuple[str, str | bool | list[str]]]
     #: Text to search for
     present: str
     #: Expected return code
@@ -116,8 +128,18 @@ fixture_test_data = (
 
 @pytest.mark.parametrize("params", (True, False), indirect=["params"], ids=id_ee)
 @pytest.mark.parametrize("test_data", fixture_test_data, ids=id_test_data)
-def test(action_run_stdout, params, test_data):
-    """test for a return code"""
+def test(
+    action_run_stdout: type[ActionRunTest],
+    params: dict[str, Any],
+    test_data: StdoutTest,
+):
+    """Test for a return code.
+
+    :param action_run_stdout: The action runner
+    :param params: The parameters
+    :param test_data: The test data
+
+    """
     action_runner = action_run_stdout(action_name=test_data.action_name, **params)
     run_stdout_return, stdout, stderr = action_runner.run_action_stdout(
         **dict(test_data.action_params),
@@ -156,12 +178,18 @@ class StdoutCliTest(NamedTuple):
     """The mode to run in"""
 
     def __str__(self) -> str:
-        """Provide a test id."""
+        """Provide a test id.
+
+        :returns: The test id
+        """
         return self.comment
 
     @property
     def command(self) -> list[str]:
-        """Provide the constructed command"""
+        """Provide the constructed command.
+
+        :returns: The command
+        """
         return ["ansible-navigator", self.subcommand] + self.params + ["--mode", self.mode]
 
 

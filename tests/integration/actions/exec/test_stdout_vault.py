@@ -36,7 +36,7 @@ variations = (
     f'{BASE_COMMAND} exec "{VAULT_COMMAND}" --mode stdout --exec-shell false',
 )
 
-stdout_tests = (
+stdout_tests = tuple(
     ShellCommand(
         comment="Vault variation",
         user_input=f"clear && {variation}",
