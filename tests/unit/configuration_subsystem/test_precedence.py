@@ -1,5 +1,7 @@
 """Tests for configuration subsystem."""
 
+from __future__ import annotations
+
 import shlex
 
 from collections.abc import Iterable
