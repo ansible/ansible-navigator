@@ -4,6 +4,7 @@ import importlib.resources as importlib_resources
 
 from enum import Enum
 from enum import auto
+from pathlib import Path
 
 
 class ImageEntry(Enum):
@@ -47,3 +48,18 @@ def retrieve_content(filename: str, app_name: str = "ansible_navigator") -> str:
         content = fh.read()
 
     return content
+
+
+def path_to_file(filename: str, app_name: str = "ansible_navigator") -> Path:
+    """Retrieve the path to a packaged data file.
+
+    :param app_name: The name of the application.
+    :param filename: The name of the file to retrieve.
+    :returns: The path to the file.
+    """
+    data_directory = "data"
+    package = f"{app_name}.{data_directory}"
+
+    path = importlib_resources.files(package).joinpath(filename)
+
+    return path

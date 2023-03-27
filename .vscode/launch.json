@@ -6,7 +6,9 @@
       "name": "Debug tests",
       "type": "python",
       "request": "launch",
-      "purpose": ["debug-test"],
+      "purpose": [
+        "debug-test"
+      ],
       "console": "integratedTerminal"
     },
     // Configuration for pure debugging (use args attribute accordingly)
@@ -15,7 +17,9 @@
       "type": "python",
       "request": "launch",
       "module": "ansible_navigator",
-      "args": ["exec", "--", "pwd"],
+      "args": [
+        "collections"
+      ],
       "cwd": "${workspaceFolder}/src",
       "justMyCode": false
     }

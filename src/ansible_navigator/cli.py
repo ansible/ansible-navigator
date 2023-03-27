@@ -2,6 +2,7 @@
 """Navigator entry point."""
 from __future__ import annotations
 
+import filecmp
 import logging
 import os
 import signal
@@ -12,6 +13,7 @@ from curses import wrapper
 from importlib.metadata import version
 from importlib.util import find_spec
 from pathlib import Path
+from shutil import copyfile
 
 from .action_defs import ActionReturn
 from .action_defs import RunInteractiveReturn
@@ -31,6 +33,8 @@ from .utils.definitions import ExitMessage
 from .utils.definitions import ExitPrefix
 from .utils.definitions import LogMessage
 from .utils.functions import clear_screen
+from .utils.functions import generate_cache_path
+from .utils.packaged_data import path_to_file
 
 
 __version__: Constants | str
@@ -44,6 +48,23 @@ APP_NAME = "ansible-navigator"
 PKG_NAME = "ansible_navigator"
 
 logger = logging.getLogger(PKG_NAME)
+
+
+def cache_scripts() -> None:
+    """Cache the scripts used to introspect the container image."""
+    scripts = ("catalog_collections.py", "image_introspect.py")
+    for script in scripts:
+        src = path_to_file(filename=script)
+        dst = generate_cache_path(app_name=APP_NAME) / script
+        message = f"No update required for {src} to {dst}"
+        try:
+            if not filecmp.cmp(src, dst):
+                copyfile(src, dst)
+                message = f"Updated {src} to {dst} (outdated)"
+        except FileNotFoundError:
+            copyfile(src, dst)
+            message = f"Copied {src} to {dst} (missing)"
+        logger.log(level=logging.DEBUG, msg=message)
 
 
 def log_dependencies() -> list[LogMessage]:
@@ -167,6 +188,7 @@ def main():
 
     if args.execution_environment:
         pull_image(args)
+        cache_scripts()
 
     run_return = run(args)
     run_message = f"{run_return.message}\n"

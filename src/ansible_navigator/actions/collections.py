@@ -217,7 +217,7 @@ class Action(ActionBase):
         msgs = ["humph. no collections were found in the following paths:"]
         paths = []
         for path in self._collection_scanned_paths:
-            if path.startswith(self._args.internals.share_directory):
+            if path.startswith(self._args.internals.cache_path):
                 continue
             if self._args.execution_environment:
                 if path.startswith(self._adjacent_collection_dir):
@@ -417,10 +417,10 @@ class Action(ActionBase):
         kwargs["host_cwd"] = playbook_dir
 
         self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")
-        share_directory = self._args.internals.share_directory
+        cache_path = self._args.internals.cache_path
 
         pass_through_arg = [
-            f"{share_directory}/utils/catalog_collections.py",
+            f"{cache_path}/catalog_collections.py",
             "-a",
             self._adjacent_collection_dir,
             "-c",
@@ -439,8 +439,8 @@ class Action(ActionBase):
             )
 
             container_volume_mounts = [
-                # share utils directory which has introspection script
-                f"{share_directory}/utils:{share_directory}/utils",
+                # cache directory which has introspection script
+                f"{cache_path}:{cache_path}",
                 # KVS library used by both Navigator and the introspection script
                 f"{utils_lib}:/opt/ansible_navigator_utils",
             ]
@@ -449,13 +449,22 @@ class Action(ActionBase):
                     f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
                 )
 
-            # The playbook directory will be mounted as host_cwd, so don't duplicate
-            if not path_is_relative_to(
-                child=Path(self._collection_cache_path),
-                parent=(Path(playbook_dir)),
+            mount_doc_cache = True
+            # Determine if the doc_cache is realtive to the cache directory
+            if path_is_relative_to(
+                child=Path(self._args.collection_doc_cache_path), parent=(cache_path)
             ):
+                mount_doc_cache = False
+
+            # The playbook directory will be mounted as host_cwd, so don't duplicate
+            if path_is_relative_to(
+                child=Path(self._args.collection_doc_cache_path), parent=(playbook_dir)
+            ):
+                mount_doc_cache = False
+
+            if mount_doc_cache:
                 container_volume_mounts.append(
-                    f"{self._collection_cache_path}:{self._collection_cache_path}:z",
+                    f"{self._args.collection_doc_cache_path}:{self._args.collection_doc_cache_path}:z",
                 )
 
             for volume_mount in container_volume_mounts:

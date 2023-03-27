@@ -4,7 +4,9 @@ import importlib
 
 import pytest
 
-from ansible_navigator.utils.functions import get_share_directory
+from ansible_navigator.cli import APP_NAME
+from ansible_navigator.cli import cache_scripts
+from ansible_navigator.utils.functions import generate_cache_path
 
 
 RPM_OUTPUT = """Name        : net-snmp
@@ -51,10 +53,9 @@ def image_introspection():
 
     :returns: Image introspect module
     """
-    _log_messages, _exit_messages, share_dir = get_share_directory(
-        app_name="ansible_navigator",
-    )
-    full_path = f"{share_dir}/utils/image_introspect.py"
+    cache_scripts()
+    cache_dir = generate_cache_path(app_name=APP_NAME)
+    full_path = f"{cache_dir}/image_introspect.py"
     spec = importlib.util.spec_from_file_location("module", full_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
