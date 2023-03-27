@@ -5,6 +5,7 @@ import os
 
 from copy import deepcopy
 from typing import NamedTuple
+from typing import Protocol
 
 import pytest
 
@@ -38,19 +39,36 @@ class GenerateConfigResponse(NamedTuple):
     settings_contents: dict
 
 
-def _generate_config(params=None, setting_file_name=None, initial=True) -> GenerateConfigResponse:
+class GenerateConfigCallable(Protocol):
+    """Protocol definition for _generate_config."""
+
+    def __call__(
+        self,
+        params: list[str] | None = None,
+        settings_file_name: str | None = None,
+        initial: bool = True,
+    ) -> GenerateConfigResponse:
+        """Generate a configuration given a settings file.
+
+        :param initial: Bool for if this is the first run
+        :param settings_file_name: Name of settings file name
+        :param params: Configuration parameters
+        """
+
+
+def _generate_config(params=None, settings_file_name=None, initial=True) -> GenerateConfigResponse:
     """Generate a configuration given a settings file.
 
     :param initial: Bool for if this is the first run
-    :param setting_file_name: Name of settings file name
+    :param settings_file_name: Name of settings file name
     :param params: Configuration parameters
     :returns: Generated config response object
     """
     if params is None:
         params = []
 
-    if setting_file_name:
-        settings_file_path = os.path.join(TEST_FIXTURE_DIR, setting_file_name)
+    if settings_file_name:
+        settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file_name)
         with open(file=settings_file_path, encoding="utf-8") as fh:
             try:
                 settings_contents = yaml.load(fh, Loader=Loader)

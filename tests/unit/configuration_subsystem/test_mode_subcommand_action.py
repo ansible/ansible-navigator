@@ -1,5 +1,6 @@
-"""test the mode post processor
-using invalid package and subcommand names
+"""Tests the mode post processor.
+
+Use invalid package and subcommand names
 """
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 from ansible_navigator.configuration_subsystem.definitions import (
@@ -18,7 +19,7 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 
 
 def test_import_error():
-    """Ensure an error for invalid action_package"""
+    """Ensure an error for invalid action_package."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         application_version="1.0",
@@ -57,7 +58,7 @@ def test_import_error():
 
 
 def test_subcommand_not_found():
-    """Ensure an error for invalid subcommand/action"""
+    """Ensure an error for invalid subcommand/action."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
         application_version="1.0",
