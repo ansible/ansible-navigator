@@ -55,8 +55,9 @@ def cache_scripts() -> None:
     scripts = ("catalog_collections.py", "image_introspect.py")
     for script in scripts:
         src = path_to_file(filename=script)
-        dst = generate_cache_path(app_name=APP_NAME) / script
-        dst.mkdir(parents=True, exist_ok=True)
+        cache_path = generate_cache_path(app_name=APP_NAME)
+        cache_path.mkdir(parents=True, exist_ok=True)
+        dst = cache_path / script
         message = f"No update required for {src} to {dst}"
         try:
             if not filecmp.cmp(src, dst):
