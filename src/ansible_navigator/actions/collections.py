@@ -363,6 +363,7 @@ class Action(ActionBase):
     def _run_runner(self) -> None:
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
+        # pylint: disable=too-many-locals
         """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
             set_environment_variable = deepcopy(self._args.set_environment_variable)
@@ -450,7 +451,7 @@ class Action(ActionBase):
                 )
 
             mount_doc_cache = True
-            # Determine if the doc_cache is realtive to the cache directory
+            # Determine if the doc_cache is relative to the cache directory
             if path_is_relative_to(
                 child=Path(self._args.collection_doc_cache_path), parent=(cache_path)
             ):
@@ -458,13 +459,14 @@ class Action(ActionBase):
 
             # The playbook directory will be mounted as host_cwd, so don't duplicate
             if path_is_relative_to(
-                child=Path(self._args.collection_doc_cache_path), parent=(playbook_dir)
+                child=Path(self._args.collection_doc_cache_path), parent=(Path(playbook_dir))
             ):
                 mount_doc_cache = False
 
             if mount_doc_cache:
                 container_volume_mounts.append(
-                    f"{self._args.collection_doc_cache_path}:{self._args.collection_doc_cache_path}:z",
+                    f"{self._args.collection_doc_cache_path}:"
+                    f"{self._args.collection_doc_cache_path}:z",
                 )
 
             for volume_mount in container_volume_mounts:

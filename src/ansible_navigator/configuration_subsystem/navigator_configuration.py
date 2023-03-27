@@ -66,7 +66,7 @@ def generate_editor_command() -> str:
     return command
 
 
-def _generate_doc_cache_path() -> Path:
+def _generate_doc_cache_path() -> str:
     """Generate a path for the collection cache.
 
     :returns: Collection cache path

@@ -56,6 +56,7 @@ def cache_scripts() -> None:
     for script in scripts:
         src = path_to_file(filename=script)
         dst = generate_cache_path(app_name=APP_NAME) / script
+        dst.mkdir(parents=True, exist_ok=True)
         message = f"No update required for {src} to {dst}"
         try:
             if not filecmp.cmp(src, dst):

@@ -1,9 +1,8 @@
 """Functionality related to the retrieval of packaged data files."""
 
-import importlib.resources as importlib_resources
-
 from enum import Enum
 from enum import auto
+from importlib import resources
 from pathlib import Path
 
 
@@ -44,7 +43,7 @@ def retrieve_content(filename: str, app_name: str = "ansible_navigator") -> str:
     data_directory = "data"
     package = f"{app_name}.{data_directory}"
 
-    with importlib_resources.files(package).joinpath(filename).open("r", encoding="utf-8") as fh:
+    with resources.files(package).joinpath(filename).open("r", encoding="utf-8") as fh:
         content = fh.read()
 
     return content
@@ -60,6 +59,6 @@ def path_to_file(filename: str, app_name: str = "ansible_navigator") -> Path:
     data_directory = "data"
     package = f"{app_name}.{data_directory}"
 
-    path = importlib_resources.files(package).joinpath(filename)
+    path = Path(str(resources.files(package).joinpath(filename)))
 
     return path
