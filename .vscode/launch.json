@@ -11,11 +11,20 @@
     },
     // Configuration for pure debugging (use args attribute accordingly)
     {
-      "name": "Debug subcommand: exec",
+      "name": "Debug subcommand: collections",
       "type": "python",
       "request": "launch",
       "module": "ansible_navigator",
       "args": ["collections"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug subcommand: exec",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["exec", "--", "pwd"],
       "cwd": "${workspaceFolder}/src",
       "justMyCode": false
     }
