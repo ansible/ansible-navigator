@@ -1,14 +1,12 @@
-"""these test specifically target variations of reapplying CLI parameters
-to subsequent configuration subsystem calls with the same configuration
+"""Test specifically target variations of reapplying CLI parameters.
+
+Apply to subsequent configuration subsystem calls with the same configuration
 grouped here because they are all similar
 """
-import os
 
 from copy import deepcopy
 
-# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
-from unittest import mock
-from unittest.mock import patch
+import pytest
 
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 from ansible_navigator.configuration_subsystem.definitions import (
@@ -26,7 +24,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import (
 
 
 def test_apply_previous_cli_all():
-    """Ensure all previous CLI parameters are applied when requested"""
+    """Ensure all previous CLI parameters are applied when requested."""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     expected = [
         ("app", "doc"),
@@ -72,7 +70,7 @@ def test_apply_previous_cli_all():
 
 
 def test_apply_previous_cli_specified():
-    """Ensure only some of the previous CLI parameters are applied when requested"""
+    """Ensure only some of the previous CLI parameters are applied when requested."""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = True
@@ -116,8 +114,11 @@ def test_apply_previous_cli_specified():
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-def test_apply_previous_cli_mixed():
-    """Ensure a mixed configuration passes"""
+def test_apply_previous_cli_mixed(monkeypatch: pytest.MonkeyPatch):
+    """Ensure a mixed configuration passes.
+
+    :param monkeypatch: pytest fixture
+    """
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = True
@@ -125,9 +126,11 @@ def test_apply_previous_cli_mixed():
         application_configuration=application_configuration,
         params=params.split(),
     )
-    with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES": "ENV1,ENV2"}):
-        _messages, exit_messages = configurator.configure()
-        assert not exit_messages
+
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_PASS_ENVIRONMENT_VARIABLES", "ENV1,ENV2")
+    _messages, exit_messages = configurator.configure()
+    assert not exit_messages
+    monkeypatch.undo()
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
@@ -149,9 +152,11 @@ def test_apply_previous_cli_mixed():
         params=params.split(),
         apply_previous_cli_entries=C.ALL,
     )
-    with mock.patch.dict(os.environ, {"ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES": "ENV1=VAL1"}):
-        _messages, exit_messages = configurator.configure()
-        assert not exit_messages
+
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_SET_ENVIRONMENT_VARIABLES", "ENV1=VAL1")
+    _messages, exit_messages = configurator.configure()
+    assert not exit_messages
+    monkeypatch.undo()
 
     expected = [
         ("app", "doc", C.USER_CLI),
@@ -168,7 +173,7 @@ def test_apply_previous_cli_mixed():
 
 
 def test_apply_previous_cli_cmdline_not_applied():
-    """Ensure the command line parameters are not carried forward"""
+    """Ensure the command line parameters are not carried forward."""
     params = "run /tmp/site.yml --ee False --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = True
@@ -215,9 +220,22 @@ def test_apply_previous_cli_cmdline_not_applied():
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-@patch("shutil.which", return_value="/path/to/container_engine")
-def test_apply_previous_cli_none(_mf1):
-    """Ensure nothing is carried forward"""
+def test_apply_previous_cli_none(monkeypatch: pytest.MonkeyPatch):
+    """Ensure nothing is carried forward.
+
+    :param monkeypatch: The monkeypatch fixture
+    """
+
+    def which(*_args, **_kwargs):
+        """Return a path to the container engine.
+
+        :param _args: The args
+        :param _kwargs: The kwargs
+        :return: The path to a container engine
+        """
+        return "/path/to/container_engine"
+
+    monkeypatch.setattr("shutil.which", which)
     params = "run /tmp/site.yml --ee False --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = True
@@ -250,21 +268,41 @@ def test_apply_previous_cli_none(_mf1):
     _messages, exit_messages = configurator.configure()
     assert not exit_messages
 
-    expected = [
-        ("app", "doc", C.USER_CLI),
-        ("cmdline", C.NOT_SET, C.NOT_SET),
-        ("playbook", C.NOT_SET, C.NOT_SET),
-        ("execution_environment", True, C.DEFAULT_CFG),
-        ("plugin_name", "shell", C.USER_CLI),
+    next_expected = [
+        (
+            "app",
+            "doc",
+            C.USER_CLI,
+        ),
+        (
+            "cmdline",
+            C.NOT_SET,
+            C.NOT_SET,
+        ),
+        (
+            "playbook",
+            C.NOT_SET,
+            C.NOT_SET,
+        ),
+        (
+            "execution_environment",
+            True,
+            C.DEFAULT_CFG,
+        ),
+        (
+            "plugin_name",
+            "shell",
+            C.USER_CLI,
+        ),
     ]
 
-    for expect in expected:
-        assert application_configuration.entry(expect[0]).value.current == expect[1]
-        assert application_configuration.entry(expect[0]).value.source is expect[2]
+    for entry, value, kind in next_expected:
+        assert application_configuration.entry(entry).value.current == value
+        assert application_configuration.entry(entry).value.source is kind
 
 
 def test_apply_cli_subset_none():
-    """Ensure subset none works for apply CLI"""
+    """Ensure subset none works for apply CLI."""
     test_config = ApplicationConfiguration(
         application_name="test_application",
         application_version="1.0",

@@ -1,4 +1,6 @@
-"""Some handy tests to ensure the fixture data has
+"""Test fixture sanity.
+
+Some handy tests to ensure the fixture data has
 entries for for all entries.
 """
 import os
@@ -11,14 +13,14 @@ from .defaults import TEST_FIXTURE_DIR
 
 
 def test_data_no_missing_env_var_data():
-    """Ensure the ENV_VAR_DATA covers all entries"""
+    """Ensure the ENV_VAR_DATA covers all entries."""
     entry_names = [entry.name for entry in NavigatorConfiguration.entries]
     data_names = [entry[0] for entry in ENV_VAR_DATA]
     assert entry_names == data_names
 
 
 def test_full_settings_file():
-    """Test using a full settings file"""
+    """Test using a full settings file."""
     settings_file_path = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
     with open(file=settings_file_path, encoding="utf-8") as fh:
         settings_contents = yaml.load(fh, Loader=Loader)
