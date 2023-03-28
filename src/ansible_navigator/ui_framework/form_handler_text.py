@@ -46,6 +46,13 @@ class FormHandlerText(CursesWindow, Textbox):
         self.input_line_pointer = (self.input_line_pointer + amount) % len(self.input_line_cache)
 
     def _do_command(self, char: int) -> int:
+        """Handle the input from the user.
+
+        :param char: The character input from the user
+        :returns: 0 if the window needs to be resized
+                  1 if the window should be repainted
+                  -1 if the window should be closed
+        """
         # pylint: disable=too-many-branches
 
         # in the case the term returns 127 instead of 263

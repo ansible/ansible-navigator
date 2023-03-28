@@ -65,6 +65,11 @@ class FieldChecks:
         )
 
     def _validate(self, response: FieldChecks) -> Validation:
+        """Validate this FieldChecks instance.
+
+        :param response: The form response from the user
+        :returns: Validation of the response
+        """
         validation = self.validator(choices=response.options)
         if validation.error_msg:
             self.valid = False

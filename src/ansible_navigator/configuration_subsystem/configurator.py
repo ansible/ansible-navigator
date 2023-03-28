@@ -54,6 +54,10 @@ class Configurator:
         self._unaltered_entries = deepcopy(self._config.entries)
 
     def _sanity_check(self) -> None:
+        """Sanity check the configuration.
+
+        :raises ValueError: If apply_previous_cli is used while initializing
+        """
         if self._apply_previous_cli_entries is not C.NONE:
             if self._config.internals.initializing:
                 raise ValueError("'apply_previous_cli' cannot be used while initializing")
@@ -140,6 +144,7 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_defaults(self) -> None:
+        """Apply the default values."""
         for entry in self._config.entries:
             if self._config.internals.initializing or entry.change_after_initial:
                 if entry.value.default is not C.NOT_SET:
@@ -152,6 +157,10 @@ class Configurator:
     def _apply_settings_file(self) -> None:
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-statements
+        """Apply the settings file.
+
+        :raises ValueError: If the settings file is empty
+        """
         settings_filesystem_path = self._config.internals.settings_file_path
 
         if not isinstance(settings_filesystem_path, str):
@@ -249,6 +258,7 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     def _apply_environment_variables(self) -> None:
+        """Apply the environment variables."""
         for entry in self._config.entries:
             set_env_var = os.environ.get(entry.environment_variable(self._config.application_name))
             if set_env_var is not None:
@@ -269,6 +279,7 @@ class Configurator:
                     self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _apply_cli_params(self) -> None:
+        """Apply the cli params."""
         parser = Parser(self._config).parser
         setattr(parser, "error", self._argparse_error_handler)
         parser_response = parser.parse_known_args(self._params)
@@ -292,6 +303,7 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _post_process(self) -> None:
+        """Post process the settings entries."""
         delayed = []
         normal = []
 
@@ -314,6 +326,7 @@ class Configurator:
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
     def _check_choices(self) -> None:
+        """Check the choices for each settings entry."""
         for entry in self._config.entries:
             if entry.cli_parameters and entry.choices:
                 if isinstance(entry.value.current, list):
@@ -325,6 +338,12 @@ class Configurator:
                     self._check_choice(entry=entry, value=entry.value.current)
 
     def _check_choice(self, entry: SettingsEntry, value: bool | str):
+        """Check the choice for a single settings entry.
+
+        :param entry: The settings entry to check.
+        :param value: The value to check.
+        :return: True if the value is invalid and an error message was logged.
+        """
         if entry.cli_parameters and entry.choices:
             if value not in entry.choices:
                 self._exit_messages.append(ExitMessage(message=entry.invalid_choice))

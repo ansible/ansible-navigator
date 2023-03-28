@@ -664,6 +664,11 @@ class UserInterface(CursesWindow):
         return heading, lines
 
     def _show_form(self, obj: Form) -> Form:
+        """Show a form on the display.
+
+        :param obj: The form to show
+        :returns: The form
+        """
         res = obj.present(screen=self._screen, ui_config=self._ui_config)
         return res
 
