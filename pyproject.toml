@@ -8,6 +8,42 @@ requires = [
   "setuptools_scm_git_archive >= 1.1",
 ]
 
+[project]
+classifiers = [
+  'Development Status :: 5 - Production/Stable',
+  'Intended Audience :: Developers',
+  'License :: OSI Approved :: Apache Software License',
+  'Operating System :: OS Independent',
+  'Topic :: Software Development :: Testing',
+  'Topic :: Software Development :: Quality Assurance',
+  'Topic :: Utilities',
+  'Programming Language :: Python',
+  'Programming Language :: Python :: 3',
+  'Programming Language :: Python :: 3 :: Only',
+  'Programming Language :: Python :: 3.9',
+  'Programming Language :: Python :: 3.10',
+  'Programming Language :: Python :: 3.11',
+  'Programming Language :: Python :: Implementation :: CPython',
+  'Programming Language :: Python :: Implementation :: PyPy',
+]
+dynamic = ["version", "dependencies", "optional-dependencies"]
+name = "ansible-navigator"
+description = "A text-based user interface (TUI) for the Red Hat Ansible Automation Platform"
+readme = "README.md"
+authors = [{ "name" = "Bradley A. Thornton", "email" = "bthornto@redhat.com" }]
+maintainers = [{ "name" = "Ansible by Red Hat", "email" = "info@ansible.com" }]
+license = { text = "Apache" }
+keywords = ["ansible"]
+
+[project.urls]
+homepage = "https://github.com/ansible/ansible-navigator"
+documentation = "https://ansible-navigator.readthedocs.io/en/latest/"
+repository = "https://github.com/ansible/ansible-navigator"
+changelog = "https://github.com/ansible/ansible-navigator/releases"
+
+[project.scripts]
+ansible-navigator = "ansible_navigator.cli:main"
+
 [tool]
 
 [tool.black]
@@ -36,7 +72,7 @@ lines_between_types = 1 # Separate import/from with 1 line, minimizing changes a
 no_lines_before = "LOCALFOLDER" # Keeps local imports bundled with first-party
 profile = "black" # Avoid conflict with black
 skip_glob = [
-  "tests/fixtures/common/collections*"
+  "tests/fixtures/common/collections*",
 ] # Skip ansible content due to ansible-test sanity ruleset
 
 [tool.pylint]
@@ -77,6 +113,12 @@ enable = [
 
 [tool.pytest.ini_options]
 addopts = "-n=auto --dist=loadfile --maxfail=10 --durations=30 --showlocals"
+
+[tool.setuptools.dynamic]
+optional-dependencies.test = { file = [".config/requirements-test.txt"] }
+optional-dependencies.lock = { file = [".config/requirements-lock.txt"] }
+optional-dependencies.docs = { file = [".config/requirements-docs.txt"] }
+dependencies = { file = [".config/requirements.in"] }
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
