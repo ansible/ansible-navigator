@@ -1,5 +1,6 @@
 """Some sanity and syntax checking of the navigator configuration."""
 from collections import Counter
+from pathlib import Path
 
 import pytest
 
@@ -96,4 +97,4 @@ def test_entries_default_value(entry: SettingsEntry):
     if isinstance(entry.value.default, C):
         assert entry.value.default is C.NOT_SET
     else:
-        assert isinstance(entry.value.default, (bool, int, str, dict, list))
+        assert isinstance(entry.value.default, (bool, int, str, dict, list, Path))

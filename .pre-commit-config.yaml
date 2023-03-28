@@ -162,7 +162,6 @@ repos:
       - id: pylint
         args:
           - docs/
-          - share/
           - src/
           - tests/
         additional_dependencies:

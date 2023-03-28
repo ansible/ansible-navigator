@@ -6,11 +6,12 @@ import os
 
 from dataclasses import dataclass
 from dataclasses import field
+from pathlib import Path
 
 from ..utils.definitions import ExitMessage
 from ..utils.definitions import LogMessage
 from ..utils.functions import abs_user_path
-from ..utils.functions import get_share_directory
+from ..utils.functions import generate_cache_path
 from ..utils.functions import oxfordcomma
 from ..utils.key_value_store import KeyValueStore
 from ..utils.packaged_data import ImageEntry
@@ -65,28 +66,17 @@ def generate_editor_command() -> str:
     return command
 
 
-def generate_cache_path():
+def _generate_doc_cache_path() -> str:
     """Generate a path for the collection cache.
 
     :returns: Collection cache path
     """
     file_name = "collection_doc_cache.db"
-    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
-    cache_path = os.path.join(cache_home, APP_NAME.replace("_", "-"), file_name)
+    cache_dir = generate_cache_path(APP_NAME.replace("_", "-"))
+    cache_path = cache_dir / file_name
     message = f"Default collection_doc_cache_path set to: {cache_path}"
     initialization_messages.append(LogMessage(level=logging.DEBUG, message=message))
-    return cache_path
-
-
-def generate_share_directory():
-    """Generate a share director.
-
-    :returns: Share directory path
-    """
-    messages, exit_messages, share_directory = get_share_directory(APP_NAME)
-    initialization_messages.extend(messages)
-    initialization_exit_messages.extend(exit_messages)
-    return share_directory
+    return str(cache_path)
 
 
 @dataclass
@@ -95,6 +85,7 @@ class Internals:
 
     ansible_configuration: AnsibleConfiguration = field(default_factory=AnsibleConfiguration)
     action_packages: tuple[str] = ("ansible_navigator.actions",)
+    cache_path: Path = generate_cache_path(APP_NAME.replace("_", "-"))
     collection_doc_cache: C | KeyValueStore = C.NOT_SET
     initializing: bool = False
     """This is an initial run (app starting for the first time)."""
@@ -102,7 +93,6 @@ class Internals:
     initialization_messages = initialization_messages
     settings_file_path: str | None = None
     settings_source: C = C.NOT_SET
-    share_directory: str = generate_share_directory()
 
 
 navigator_subcommands = [
@@ -276,7 +266,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             cli_parameters=CliParameters(short="--cdcp"),
             short_description="The path to collection doc cache",
             value=SettingsEntryValue(
-                default=generate_cache_path(),
+                default=_generate_doc_cache_path(),
                 schema_default="~/.cache/ansible-navigator/collection_doc_cache.db",
             ),
             version_added="v1.0",

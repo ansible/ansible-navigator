@@ -549,12 +549,12 @@ class Action(ActionBase):
         :param image_name: The full image name
         :returns: Output, errors and the return code
         """
-        share_directory = self._args.internals.share_directory
-        container_volume_mounts = [f"{share_directory}/utils:{share_directory}/utils"]
+        cache_path = self._args.internals.cache_path
+        container_volume_mounts = [f"{cache_path}:{cache_path}"]
         python_exec_path = "python3"
 
         kwargs = {
-            "cmdline": [f"{share_directory}/utils/image_introspect.py"],
+            "cmdline": [f"{cache_path}/image_introspect.py"],
             "container_engine": self._args.container_engine,
             "container_volume_mounts": container_volume_mounts,
             "execution_environment_image": image_name,

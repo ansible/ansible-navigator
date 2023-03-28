@@ -10,8 +10,6 @@ import os
 import re
 import shlex
 import shutil
-import sys
-import sysconfig
 import zoneinfo
 
 from collections.abc import Iterable
@@ -251,92 +249,14 @@ def flatten_list(data_list) -> list:
     return [data_list]
 
 
-def get_share_directory(app_name) -> tuple[list[LogMessage], list[ExitMessage], str | None]:
-    # pylint: disable=too-many-return-statements
-    """Return datadir to use for the ansible-launcher data files. First found wins.
-
-    Example datadir: /usr/share/ansible_navigator
+def generate_cache_path(app_name: str) -> Path:
+    """Return the path to the cache directory.
 
     :param app_name: Name of application - currently ansible_navigator
-    :returns: Log messages and full datadir path
+    :returns: Path to the cache directory
     """
-    messages: list[LogMessage] = []
-    exit_messages: list[ExitMessage] = []
-    share_directory = None
-
-    def debug_log(directory: str | None, found: bool, description: str):
-        template = "Share directory '{directory}' {status} ({description})"
-        formatted = template.format(
-            directory=directory,
-            status="found" if found else "not found",
-            description=description,
-        )
-        msg = LogMessage(level=logging.DEBUG, message=formatted)
-        messages.append(msg)
-
-    # Development path
-    # We want the share directory to resolve adjacent to the directory the code lives in
-    # as that's the layout in the source.
-    share_directory = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "..", "share", app_name),
-    )
-    description = "development path"
-    if os.path.exists(share_directory):
-        debug_log(share_directory, True, description)
-        return messages, exit_messages, share_directory
-    debug_log(share_directory, False, description)
-
-    # ~/.local/share/APP_NAME
-    userbase = sysconfig.get_config_var("userbase")
-    description = "userbase"
-    if userbase is not None:
-        share_directory = os.path.join(userbase, "share", app_name)
-        if os.path.exists(share_directory):
-            debug_log(share_directory, True, description)
-            return messages, exit_messages, share_directory
-    debug_log(share_directory, False, description)
-
-    # /usr/share/APP_NAME  (or the venv equivalent)
-    share_directory = os.path.join(sys.prefix, "share", app_name)
-    description = "sys.prefix"
-    if os.path.exists(share_directory):
-        debug_log(share_directory, True, description)
-        return messages, exit_messages, share_directory
-    debug_log(share_directory, False, description)
-
-    # /usr/share/APP_NAME  (or what was specified as the datarootdir when python was built)
-    datarootdir = sysconfig.get_config_var("datarootdir")
-    description = "datarootdir"
-    if datarootdir is not None:
-        share_directory = os.path.join(datarootdir, app_name)
-        if share_directory and os.path.exists(share_directory):
-            debug_log(share_directory, True, description)
-            return messages, exit_messages, share_directory
-    debug_log(share_directory, False, description)
-
-    # /Library/Python/x.y/share/APP_NAME  (common on macOS)
-    datadir = sysconfig.get_paths().get("data")
-    description = "datadir"
-    if datadir is not None:
-        share_directory = os.path.join(datadir, "share", app_name)
-        if os.path.exists(share_directory):
-            debug_log(share_directory, True, description)
-            return messages, exit_messages, share_directory
-    debug_log(share_directory, False, description)
-
-    # /usr/local/share/APP_NAME
-    prefix = sysconfig.get_config_var("prefix")
-    description = "prefix"
-    if prefix is not None:
-        share_directory = os.path.join(prefix, "local", "share", app_name)
-        if os.path.exists(share_directory):
-            debug_log(share_directory, True, description)
-            return messages, exit_messages, share_directory
-    debug_log(share_directory, False, description)
-
-    exit_msg = "Unable to find a viable share directory"
-    exit_messages.append(ExitMessage(message=exit_msg))
-    return messages, exit_messages, None
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    return Path(cache_home) / app_name
 
 
 def divmod_int(numerator: int | float, denominator: int | float) -> tuple[int, int]:

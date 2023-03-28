@@ -247,10 +247,11 @@ class DiagnosticsCollector:
             "application_name": self._args.application_name,
             "application_version": str(self._args.application_version),
             "action_packages": list(self._args.internals.action_packages),
+            "cache_path": str(self._args.internals.cache_path),
+            "collection_doc_cache": str(self._args.internals.collection_doc_cache),
             "original_command": shlex_join(sys.argv),
             "settings_file_path": str(self._args.internals.settings_file_path),
             "settings_source": str(self._args.internals.settings_source),
-            "share_directory": self._args.internals.share_directory,
         }
 
     @diagnostic_runner
