@@ -57,6 +57,11 @@ class FieldRadio:
         return partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
 
     def _validate(self, response: FieldRadio) -> Validation:
+        """Validate this FieldRadio instance.
+
+        :param response: The form response from the user
+        :returns: Validation of the response
+        """
         validation = self.validator(choices=response.options)
         if validation.error_msg:
             self.valid = False

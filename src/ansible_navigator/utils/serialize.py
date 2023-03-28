@@ -148,6 +148,13 @@ def _prepare_content(
     content_view: ContentView,
     serialization_format: SerializationFormat,
 ) -> ContentType:
+    """Prepare content for serialization.
+
+    :param content: The content to prepare
+    :param content_view: The content view
+    :param serialization_format: The serialization format
+    :returns: The prepared content
+    """
     if isinstance(content, (tuple, list)):
         if all(is_dataclass(c) for c in content):
             return [

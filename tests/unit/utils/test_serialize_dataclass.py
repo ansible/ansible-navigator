@@ -89,6 +89,11 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
         return self._asdict(suffix=f"_y_{ContentView.NORMAL!s}")
 
     def _asdict(self, suffix) -> OverrideDictReturn:
+        """Create a dictionary from the dataclass with suffixed values.
+
+        :param suffix: The suffix to append to values
+        :returns: The dictionary with suffixed values
+        """
         return asdict(self, dict_factory=partial(self._custom_dict_factory, suffix=suffix))
 
     @staticmethod

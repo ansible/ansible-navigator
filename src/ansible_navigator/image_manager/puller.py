@@ -92,6 +92,7 @@ class ImagePuller:
         return self._assessment
 
     def _check_for_image(self):
+        """Check for the image."""
         try:
             cmd_parts = [self._container_engine, "image", "inspect", self._image]
             self._log_message(level=logging.DEBUG, message=f"Command: {shlex_join(cmd_parts)}")
@@ -115,6 +116,7 @@ class ImagePuller:
                 self._log_message(level=logging.WARNING, message=f"stderr: {stderr}")
 
     def _determine_pull(self):
+        """Determine if a pull is required."""
         if self._pull_policy == "missing" and self._image_present is False:
             pull = True
         elif self._pull_policy == "always":
@@ -129,6 +131,7 @@ class ImagePuller:
         self._assessment.pull_required = pull
 
     def _extract_tag(self):
+        """Extract the tag from the image name."""
         image_pieces = self._image.split(":")
         self._image_tag = "latest"
         if len(image_pieces) > 1:
@@ -145,6 +148,12 @@ class ImagePuller:
         self._log_message(level=logging.INFO, message=message)
 
     def _log_message(self, message: str, level: int, hint=False):
+        """Log a message.
+
+        :param message: The message to log
+        :param level: The logging level
+        :param hint: Whether or not the message is a hint
+        """
         if level == logging.ERROR:
             self._exit_messages.append(ExitMessage(message=message))
         elif hint:

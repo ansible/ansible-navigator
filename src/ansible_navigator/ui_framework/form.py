@@ -111,13 +111,22 @@ class FormPresenter(CursesWindow):
 
     @property
     def _field_win_start(self):
+        """The window start of a field.
+
+        :returns: The window start of a field
+        """
         return self._input_start + self._pad_left
 
     @property
     def _field_win_width(self):
+        """The window width of a field.
+
+        :returns: The window width of a field
+        """
         return self._screen_width - self._field_win_start
 
     def _dimensions(self):
+        """Calculate the dimensions of the form."""
         self._prompt_end = max(len(form_field.full_prompt) for form_field in self._form.fields)
         self._input_start = self._prompt_end + len(self._separator)
 
@@ -155,6 +164,10 @@ class FormPresenter(CursesWindow):
         self._pad_left = max(int((self._screen_width - self._form_width) * LEFT_PAD_RATIO), 0)
 
     def _generate_form(self) -> tuple[tuple[int, CursesLine], ...]:
+        """Generate the form.
+
+        :returns: A tuple of tuples containing the line numbers and the lines
+        """
         lines = []
         lines.append((self._line_number, self._generate_title()))
         self._line_number += 1
@@ -217,6 +230,10 @@ class FormPresenter(CursesWindow):
         return tuple(lines)
 
     def _generate_buttons(self) -> CursesLine:
+        """Generate the buttons.
+
+        :returns: A CursesLine containing the buttons
+        """
         line_parts = []
         far_right = self._form_width
         footer_fields = [field for field in self._form.fields if field.name in ["submit", "cancel"]]
@@ -240,12 +257,22 @@ class FormPresenter(CursesWindow):
         return CursesLine(tuple(line_parts))
 
     def _generate_error(self, form_field) -> CursesLine | None:
+        """Generate the error for a field.
+
+        :param form_field: The field to generate the error for
+        :returns: A CursesLine containing the error
+        """
         if form_field.current_error:
             line_part = CursesLinePart(self._input_start, form_field.current_error, 9, 0)
             return CursesLine((line_part,))
         return None
 
     def _generate_field_options(self, form_field) -> CursesLines:
+        """Generate the options for a field.
+
+        :param form_field: The field to generate the options for
+        :returns: A CursesLines containing the options
+        """
         window = curses.newwin(
             len(form_field.options),
             self._field_win_width,
@@ -264,6 +291,11 @@ class FormPresenter(CursesWindow):
         return CursesLines(tuple(lines))
 
     def _generate_field_text(self, form_field) -> CursesLinePart:
+        """Generate the text for a field.
+
+        :param form_field: The field to generate the text for
+        :returns: A CursesLinePart containing the text
+        """
         window = curses.newwin(1, self._field_win_width, self._line_number, self._field_win_start)
         window.keypad(True)
         form_field.win = window
@@ -277,11 +309,20 @@ class FormPresenter(CursesWindow):
         return CursesLinePart(self._input_start, text, color, 0)
 
     def _generate_horizontal_line(self) -> CursesLine:
+        """Generate a horizontal line.
+
+        :returns: A CursesLine containing the horizontal line
+        """
         line_part = CursesLinePart(0, "\u2500" * self._form_width, 8, 0)
         return CursesLine((line_part,))
 
     @staticmethod
     def _generate_information(form_field) -> CursesLines:
+        """Generate an information field.
+
+        :param form_field: The field to generate the information for
+        :returns: A CursesLines containing the information
+        """
         lines = tuple(
             CursesLine((CursesLinePart(0, line, 0, 0),)) for line in form_field.information
         )
@@ -289,10 +330,20 @@ class FormPresenter(CursesWindow):
 
     @staticmethod
     def _generate_messages(form_field) -> CursesLines:
+        """Generate a messages field.
+
+        :param form_field: The field to generate the messages for
+        :returns: A CursesLines containing the messages
+        """
         lines = tuple(CursesLine((CursesLinePart(0, line, 0, 0),)) for line in form_field.messages)
         return CursesLines(lines)
 
     def _generate_prompt(self, form_field) -> list[CursesLinePart]:
+        """Generate the prompt for a field.
+
+        :param form_field: The field to generate the prompt for
+        :returns: A list of CursesLinePart containing the prompt
+        """
         prompt_start = self._prompt_end - len(form_field.full_prompt)
         if form_field.valid is True:
             color = 10
@@ -310,6 +361,10 @@ class FormPresenter(CursesWindow):
         return [cl_prompt, cl_default, cl_separator]
 
     def _generate_title(self) -> CursesLine:
+        """Generate the title for the form.
+
+        :returns: A CursesLine containing the title
+        """
         title = self._form.title
         if title.isupper() or not title[0].isupper():
             title = title.capitalize()

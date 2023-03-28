@@ -274,6 +274,13 @@ class ApplicationConfiguration:
         return self.application_name.replace("_", "-")
 
     def _get_by_name(self, name, kind):
+        """Retrieve a settings entry by name.
+
+        :param name: The name of the entry
+        :param kind: The kind of entry to retrieve
+        :returns: The settings entry
+        :raises KeyError: If the entry is not found
+        """
         try:
             return next(entry for entry in super().__getattribute__(kind) if entry.name == name)
         except StopIteration as exc:

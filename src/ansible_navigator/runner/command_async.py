@@ -32,6 +32,11 @@ class CommandAsync(CommandBase):
         super().__init__(executable_cmd, **kwargs)
 
     def _event_handler(self, event):
+        """Handle the event from ansible-runner.
+
+        :param event: The event from ansible-runner
+        :returns: The value of ``self._write_job_events``, a boolean
+        """
         self._logger.debug("ansible-runner event handle: %s", event)
         new_event = deepcopy(event)
         self._queue.put(new_event)

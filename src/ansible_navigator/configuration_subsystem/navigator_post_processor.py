@@ -38,6 +38,12 @@ from .definitions import VolumeMountError
 
 
 def _post_processor(func):
+    """Decorate a post processing function.
+
+    :param func: The function to wrap
+    :returns: The wrapped function
+    """
+
     def wrapper(*args, **kwargs):
         name = kwargs["entry"].name
         before = str(kwargs["entry"].value.current)
@@ -80,6 +86,12 @@ class NavigatorPostProcessor:
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=unused-argument
+        """Post process a boolean value.
+
+        :param entry: The current settings entry
+        :param config: The full application configuration
+        :returns: An instance of the standard post process return object
+        """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
         try:

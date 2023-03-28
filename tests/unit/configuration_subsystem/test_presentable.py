@@ -23,6 +23,10 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 
 @pytest.fixture(name="sample_settings")
 def _sample_settings():
+    """Provide sample settings.
+
+    :return: A sample settings instance
+    """
     return ApplicationConfiguration(
         application_name="app",
         application_version="1.0",
@@ -41,6 +45,10 @@ def _sample_settings():
 
 @pytest.fixture(name="settings_file_dict")
 def _settings_file_dict():
+    """Provide a sample settings file as a dictionary.
+
+    :return: A sample settings file as a dictionary
+    """
     return {
         "choices": [],
         "current_settings_file": "/test/path",
