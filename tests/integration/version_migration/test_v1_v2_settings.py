@@ -68,7 +68,7 @@ def test_all(
         shutil.copy(destination, corrected)
 
     assert any(
-        "ansible-navigator 2." in line for line in result
+        "ansible-navigator 3." in line for line in result
     ), "(Note: requires recent tags, `git fetch --all`)"
     assert filecmp.cmp(destination, corrected)
     assert filecmp.cmp(source, backup)
