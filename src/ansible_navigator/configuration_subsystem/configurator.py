@@ -283,7 +283,8 @@ class Configurator:
         parser = Parser(self._config).parser
         setattr(parser, "error", self._argparse_error_handler)
         try:
-            index = self._params.index("--")
+            # split the _params on double-dash, for run action
+            index, _index2 = self._params.index("--"), self._params.index("run")
             before, after = self._params[:index], self._params[index + 1 :]
         except ValueError:
             before, after = self._params, []
