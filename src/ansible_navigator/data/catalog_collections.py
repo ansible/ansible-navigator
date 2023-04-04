@@ -426,6 +426,7 @@ def identify_missing(collections: dict, collection_cache: KeyValueStore) -> tupl
 
 
 def parse_args() -> tuple[argparse.Namespace, list[Path]]:
+    # pylint: disable=used-before-assignment
     """Parse the arguments from the command line.
 
     :returns: The parsed arguments and all directories to search
@@ -548,6 +549,7 @@ def run_command(cmd: list) -> dict:
 
 def main() -> dict:
     # pylint: disable=protected-access
+    # pylint: disable=used-before-assignment
     """Run the collection catalog process.
 
     :returns: The results from the completed collection cataloging process
