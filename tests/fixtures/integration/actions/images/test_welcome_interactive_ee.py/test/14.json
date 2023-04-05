@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v0.14.1 (primary) (All image information)",
+        "Image: creator-ee:v0.15.0 (primary) (All image information)",
         "   0│---                                                                                                                                                                                               ▒",
         "   1│ansible:",
         "   2│  ansible:",

@@ -1,17 +1,17 @@
 {
-    "name": "test[01-:f v0.14.1-filter for v0.14.1]",
+    "name": "test[01-:f v0.15.0-filter for v0.15.0]",
     "index": 1,
-    "comment": "filter for v0.14.1",
+    "comment": "filter for v0.15.0",
     "additional_information": {
         "present": [
-            "v0.14.1"
+            "v0.15.0"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
         "  Image                               Tag                       Execution environment                                                   Created                                 Size",
-        "0│creator-ee                          v0.14.1                   True                                                                    5 weeks ago                             686 MB",
+        "0│creator-ee                          v0.15.0                   True                                                                    5 weeks ago                             686 MB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
