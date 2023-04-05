@@ -92,14 +92,14 @@ from ..defaults import FIXTURES_DIR
             ["run", "/site.yaml", "--", "-e", "foo=bar"],
             "playbook",
             "/site.yaml",
-            id="run, check with extra parameters",
+            id="run, check with extra parameters 1",
         ),
-        # pytest.param(
-        #     ["run", "--", "-e", "foo=bar"],
-        #     "after",
-        #     ["-e", "foo=bar"],
-        #     id="run, check with extra parameters 2",
-        # ),
+        pytest.param(
+            ["run", "/site.yaml", "--", "-e", "foo=bar"],
+            "cmdline",
+            ["-e", "foo=bar"],
+            id="run, check with extra parameters 2",
+        ),
     ),
 )
 @patch("shutil.which", return_value="/path/to/container_engine")
