@@ -141,7 +141,7 @@ repos:
       - id: pyupgrade
         args: ["--py39-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.1.1
+    rev: v1.2.0
     hooks:
       - id: mypy
         additional_dependencies:
