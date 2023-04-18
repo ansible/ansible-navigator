@@ -30,7 +30,7 @@
         "15│Exec command                               True     Defaults                    /bin/bash",
         "16│Exec shell                                 True     Defaults                    True",
         "17│Execution environment                      False    Command line                False",
-        "18│Execution environment image                True     Defaults                    ghcr.io/ansible/creator-ee:v0.14.1",
+        "18│Execution environment image                True     Defaults                    ghcr.io/ansible/creator-ee:v0.16.0",
         "19│Execution environment volume mounts        True     Not set                     Not set",
         "20│Format                                     True     Defaults                    yaml",
         "21│Help builder                               True     Defaults                    False",

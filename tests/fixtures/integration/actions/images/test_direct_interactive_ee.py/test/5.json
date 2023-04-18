@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v0.14.1 (primary) (OS and python version information)",
+        "Image: creator-ee:v0.16.0 (primary) (OS and python version information)",
         " 0│---                                                                                                                                                                                                 ▒",
         " 1│friendly:                                                                                                                                                                                           ▒",
         " 2│  details: |-                                                                                                                                                                                       ▒",
