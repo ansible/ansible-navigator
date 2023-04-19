@@ -31,6 +31,7 @@ jobs:
           other_names: |
             lint
             docs
+            py-devel
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
     runs-on: ubuntu-20.04
