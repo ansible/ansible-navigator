@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "  Image: creator-ee:v0.16.0 (primary)                                               Description",
+        "  Image: creator-ee:v0.17.0 (primary)                                               Description",
         "0│Image information                                                                 Information collected from image inspection",
         "1│General information                                                               OS and python version information",
         "2│Ansible version and collections                                                   Information about ansible and ansible collections",
