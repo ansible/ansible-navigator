@@ -282,10 +282,18 @@ class Configurator:
         """Apply the cli params."""
         parser = Parser(self._config).parser
         setattr(parser, "error", self._argparse_error_handler)
-        parser_response = parser.parse_known_args(self._params)
+        try:
+            # split the _params on double-dash
+            index = self._params.index("--")
+            before, after = self._params[:index], self._params[index + 1 :]
+        except ValueError:
+            before, after = self._params, []
+
+        parser_response = parser.parse_known_args(before)
         if parser_response is None:
             return
-        args, cmdline = parser_response
+        args, unknown = parser_response
+        cmdline = unknown + after
         if cmdline:
             # In the case a subcommand is not a positional, remove the --
             additional_args = [arg for arg in cmdline if arg != "--"]

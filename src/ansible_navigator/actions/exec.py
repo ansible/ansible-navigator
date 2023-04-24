@@ -24,32 +24,41 @@ def _generate_command(
     exec_command: str,
     exec_shell: bool,
     extra_args: Constants | list[str],
+    exec_command_is_default: bool,
 ) -> GeneratedCommand:
     """Generate the command and args.
 
     :param exec_command: The command to run
     :param exec_shell: Should the command be wrapped in a shell
     :param extra_args: Any unknown or extra arguments passed on the command line
+    :param exec_command_is_default: If the exec_command is set to its default value
     :returns: The command and any pass through arguments
     """
     logger.debug("exec_command: %s", exec_command)
     logger.debug("exec_shell: %s", exec_shell)
     logger.debug("extra_args: %s", extra_args)
-    if exec_shell and exec_command:
+    if exec_shell:
         command = "/bin/bash"
         # Determine if any extra args were picked up
-        _extra_args = extra_args if isinstance(extra_args, list) else ()
-        pass_command = " ".join((exec_command, *_extra_args))
+        _extra_args = []
+        if not exec_command_is_default:
+            _extra_args.append(exec_command)
+        if isinstance(extra_args, list):
+            _extra_args.extend(extra_args)
+        pass_command = " ".join(_extra_args)
         pass_through_args = ["-c", pass_command]
     else:
-        parts = shlex.split(exec_command)
-        command = parts[0]
-        if len(parts) == 1 and isinstance(extra_args, list):
-            # Use the extra arguments
-            pass_through_args = extra_args
+        if exec_command_is_default and isinstance(extra_args, list):
+            command, pass_through_args = extra_args[0], extra_args[1:]
         else:
-            # Use the leftovers or an empty list
-            pass_through_args = parts[1:]
+            parts = shlex.split(exec_command)
+            command = parts[0]
+            if len(parts) == 1 and isinstance(extra_args, list):
+                # Use the extra arguments
+                pass_through_args = extra_args
+            else:
+                # Use the leftovers or an empty list
+                pass_through_args = parts[1:]
     logger.debug("runner command: %s", command)
     logger.debug("runner passthrough: %s", pass_through_args)
     return (command, pass_through_args)
@@ -128,6 +137,8 @@ class Action(ActionBase):
             exec_command=self._args.exec_command,
             exec_shell=self._args.exec_shell,
             extra_args=self._args.cmdline,
+            exec_command_is_default=self._args.entry("exec_command").value.source
+            is Constants.DEFAULT_CFG,
         )
         if isinstance(pass_through_args, list):
             kwargs["cmdline"] = pass_through_args
