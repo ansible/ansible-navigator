@@ -16,6 +16,7 @@ class CommandTestData(NamedTuple):
     name: str
     command: str
     use_shell: bool
+    default_exec_command: bool
     result_command: str
     result_params: list
 
@@ -34,6 +35,7 @@ command_test_data = [
         name="With shell simple",
         command="echo foo",
         use_shell=True,
+        default_exec_command=False,
         result_command="/bin/bash",
         result_params=["-c", "echo foo"],
     ),
@@ -41,6 +43,7 @@ command_test_data = [
         name="Without shell simple",
         command="echo foo",
         use_shell=False,
+        default_exec_command=False,
         result_command="echo",
         result_params=["foo"],
     ),
@@ -49,6 +52,7 @@ command_test_data = [
         command="ansible-vault encrypt_string --vault-password-file"
         + " a_password_file 'foobar' --name 'the_secret'",
         use_shell=True,
+        default_exec_command=False,
         result_command="/bin/bash",
         result_params=[
             "-c",
@@ -61,6 +65,7 @@ command_test_data = [
         command="ansible-vault encrypt_string --vault-password-file"
         + " a_password_file 'foobar' --name 'the secret'",
         use_shell=False,
+        default_exec_command=False,
         result_command="ansible-vault",
         result_params=[
             "encrypt_string",
@@ -84,6 +89,7 @@ def test_command_generation(cmd_test_data: CommandTestData):
         exec_command=cmd_test_data.command,
         exec_shell=cmd_test_data.use_shell,
         extra_args=Constants.NOT_SET,
+        exec_command_is_default=cmd_test_data.default_exec_command,
     )
     comment = command_test_data, command, additional_params
     assert command == cmd_test_data.result_command, comment
