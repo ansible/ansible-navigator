@@ -1,12 +1,12 @@
 {
-    "name": "test[clear-&&-ansible-navigator-images---details---display-color-false---ee-true---ll-debug---mode-stdout--|-grep-'^[a-z]'-print-all-details-to-stdout-['ansible_collections',-'ansible_version',-'image_name:-ghcr.io/ansible/creator-ee:v0.14.1',-'os_release',-'python_packages',-'python_version',-'redhat_release',-'system_packages']-[]-true-1-search-for-help]",
+    "name": "test[clear-&&-ansible-navigator-images---details---display-color-false---ee-true---ll-debug---mode-stdout--|-grep-'^[a-z]'-print-all-details-to-stdout-['ansible_collections',-'ansible_version',-'image_name:-ghcr.io/ansible/creator-ee:v0.17.0',-'os_release',-'python_packages',-'python_version',-'redhat_release',-'system_packages']-[]-true-1-search-for-help]",
     "index": 1,
     "comment": "print all details to stdout",
     "additional_information": {
         "present": [
             "ansible_collections",
             "ansible_version",
-            "image_name: ghcr.io/ansible/creator-ee:v0.14.1",
+            "image_name: ghcr.io/ansible/creator-ee:v0.17.0",
             "os_release",
             "python_packages",
             "python_version",
@@ -19,7 +19,7 @@
     "output": [
         "ansible_collections:",
         "ansible_version:",
-        "image_name: ghcr.io/ansible/creator-ee:v0.14.1",
+        "image_name: ghcr.io/ansible/creator-ee:v0.17.0",
         "os_release:",
         "python_packages:",
         "python_version:",
