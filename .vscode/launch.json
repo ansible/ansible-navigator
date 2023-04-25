@@ -9,7 +9,7 @@
       "purpose": ["debug-test"],
       "console": "integratedTerminal"
     },
-    // Configuration for pure debugging (use args attribute accordingly)
+    // Configuration for pure debugging (use args and cwd attributes accordingly)
     {
       "name": "Debug subcommand: collections",
       "type": "python",
@@ -26,6 +26,33 @@
       "module": "ansible_navigator",
       "args": ["exec", "--", "pwd"],
       "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug subcommand: images",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["images"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug subcommand: lint",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["lint", "tests/fixtures/integration/actions/lint"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug subcommand: run",
+      "type": "python",
+      "request": "launch",
+      "module": "ansible_navigator",
+      "args": ["run", "ping.yml"],
+      "cwd": "/home/user/../path/to/the/playbook",
       "justMyCode": false
     }
   ]
