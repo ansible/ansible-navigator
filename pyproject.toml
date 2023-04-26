@@ -116,7 +116,7 @@ enable = [
 addopts = "-n=auto --dist=loadfile --maxfail=10 --durations=30 --showlocals"
 
 [tool.ruff]
-fix = false
+fix = true
 line-length = 100
 builtins = ["__"]
 select = ["ALL"]
