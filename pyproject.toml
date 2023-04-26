@@ -115,6 +115,166 @@ enable = [
 [tool.pytest.ini_options]
 addopts = "-n=auto --dist=loadfile --maxfail=10 --durations=30 --showlocals"
 
+[tool.ruff]
+fix = false
+line-length = 100
+builtins = ["__"]
+select = ["ALL"]
+ignore = [
+  'A003', # Class attribute `repr` is shadowing a python builtin
+  'ANN001', # Missing type annotation for function argument `output`
+  'ANN002', # Missing type annotation for `*args`
+  'ANN003', # Missing type annotation for `**kwargs`
+  'ANN101', # Missing type annotation for `self` in method
+  'ANN102', # Missing type annotation for `cls` in classmethod
+  'ANN201', # Missing return type annotation for public function `notify_none`
+  'ANN202', # Missing return type annotation for private function `_build_main_menu`
+  'ANN204', # [*] Missing return type annotation for special method `__init__`
+  'ANN205', # Missing return type annotation for staticmethod `run_single_process`
+  'ANN206', # Missing return type annotation for classmethod `_missing_`
+  'ANN401', # Dynamically typed expressions (typing.Any) are disallowed in `cls`
+  'ARG001', # Unused function argument: `colno`
+  'ARG002', # Unused method argument: `app`
+  'ARG003', # Unused class method argument: `value`
+  'ARG004', # Unused static method argument: `config`
+  'ARG005', # Unused lambda argument: `args`
+  'B005', # Using `.strip()` with multi-character strings is misleading the reader
+  'B006', # Do not use mutable data structures for argument defaults
+  'B010', # [*] Do not call `setattr` with a constant attribute value. It is not any safer than normal property access.
+  'B018', # Found useless attribute access. Either assign it to a variable or remove it.
+  'B019', # Use of `functools.lru_cache` or `functools.cache` on methods can lead to memory leaks
+  'B028', # No explicit `stacklevel` keyword argument found
+  'BLE001', # Do not catch blind exception: `Exception`
+  'C408', # [*] Unnecessary `tuple` call (rewrite as a literal)
+  'C409', # [*] Unnecessary `list` literal passed to `tuple()` (rewrite as a `tuple` literal)
+  'C414', # [*] Unnecessary `list` call within `sorted()`
+  'C901', # `_params_row_for_entry` is too complex (11 > 10)
+  'COM812', # [*] Trailing comma missing
+  'D100', # Missing docstring in public module
+  'D101', # Missing docstring in public class
+  'D102', # Missing docstring in public method
+  'D103', # Missing docstring in public function
+  'D104', # Missing docstring in public package
+  'D105', # Missing docstring in magic method
+  'D400', # [*] First line should end with a period
+  'D403', # [*] First word of the first line should be capitalized: `tokenize` -> `Tokenize`
+  'DTZ003', # The use of `datetime.datetime.utcnow()` is not allowed, use `datetime.datetime.now(tz=)` instead
+  'DTZ005', # The use of `datetime.datetime.now()` without `tz` argument is not allowed
+  'EM101', # Exception must not use a string literal, assign to variable first
+  'EM102', # Exception must not use an f-string literal, assign to variable first
+  'ERA001', # [*] Found commented-out code
+  'F401', # [*] `ansible_navigator.version.__version__` imported but unused
+  'FBT001', # Boolean positional arg in function definition
+  'FBT002', # Boolean default value in function definition
+  'FBT003', # Boolean positional value in function call
+  'G003', # Logging statement uses `+`
+  'I001', # [*] Import block is un-sorted or un-formatted
+  'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
+  'ISC001', # Implicitly concatenated string literals on one line
+  'ISC003', # Explicitly concatenated string should be implicitly concatenated
+  'N802', # Function name `formatTime` should be lowercase
+  'N806', # Variable `FType` in function should be lowercase
+  'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`
+  'N813', # Camelcase `Action` imported as lowercase `stdout_action`
+  'N817', # CamelCase `Constants` imported as acronym `C`
+  'N818', # Exception name `FailedCollection` should be named with an Error suffix
+  'PGH003', # Use specific rule codes when ignoring type issues
+  'PIE810', # [*] Call `startswith` once with a `tuple`
+  'PLC1901', # `self.fs_source == ""` can be simplified to `not self.fs_source` as an empty string is falsey
+  'PLR0911', # Too many return statements (8 > 6)
+  'PLR0912', # Too many branches (13 > 12)
+  'PLR0913', # Too many arguments to function call (7 > 5)
+  'PLR0915', # Too many statements (58 > 50)
+  'PLR2004', # Magic value used in comparison, consider replacing 2 with a constant variable
+  'PLR5501', # Consider using `elif` instead of `else` then `if` to remove one indentation level
+  'PLW0120', # `else` clause on loop without a `break` statement; remove the `else` and de-indent all the code inside it
+  'PLW0603', # Using the global statement to update `DIAGNOSTIC_FAILURES` is discouraged
+  'PLW2901', # `for` loop variable `info_name` overwritten by assignment target
+  'PT001', # [*] Use `@pytest.fixture()` over `@pytest.fixture`
+  'PT003', # [*] `scope='function'` is implied in `@pytest.fixture()`
+  'PT004', # Fixture `patch_curses` does not return anything, add leading underscore
+  'PT005', # Fixture `_settings_samples` returns a value, remove leading underscore
+  'PT006', # [*] Wrong name(s) type in `@pytest.mark.parametrize`, expected `tuple`
+  'PT007', # Wrong values type in `@pytest.mark.parametrize` expected `tuple` of `tuple`
+  'PT009', # [*] Use a regular `assert` instead of unittest-style `assertIn`
+  'PT011', # `pytest.raises(ValueError)` is too broad, set the `match` parameter or use a more specific exception
+  'PT012', # `pytest.raises()` block should contain a single simple statement
+  'PT019', # Fixture `_mocked_func` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
+  'PT022', # [*] No teardown in fixture `cmd_in_tty`, use `return` instead of `yield`
+  'PTH100', # `os.path.abspath()` should be replaced by `Path.resolve()`
+  'PTH101', # `os.chmod()` should be replaced by `Path.chmod()`
+  'PTH103', # `os.makedirs()` should be replaced by `Path.mkdir(parents=True)`
+  'PTH107', # `os.remove()` should be replaced by `Path.unlink()`
+  'PTH109', # `os.getcwd()` should be replaced by `Path.cwd()`
+  'PTH110', # `os.path.exists()` should be replaced by `Path.exists()`
+  'PTH111', # `os.path.expanduser()` should be replaced by `Path.expanduser()`
+  'PTH112', # `os.path.isdir()` should be replaced by `Path.is_dir()`
+  'PTH113', # `os.path.isfile()` should be replaced by `Path.is_file()`
+  'PTH114', # `os.path.islink()` should be replaced by `Path.is_symlink()`
+  'PTH115', # `os.readlink()` should be replaced by `Path.readlink()`
+  'PTH116', # `os.stat()` should be replaced by `Path.stat()`, `Path.owner()`, or `Path.group()`
+  'PTH118', # `os.path.join()` should be replaced by `Path` with `/` operator
+  'PTH119', # `os.path.basename()` should be replaced by `Path.name`
+  'PTH120', # `os.path.dirname()` should be replaced by `Path.parent`
+  'PTH122', # `os.path.splitext()` should be replaced by `Path.suffix`
+  'PTH123', # `open()` should be replaced by `Path.open()`
+  'PYI021', # Docstrings should not be included in stubs
+  'RET501', # [*] Do not explicitly `return None` in function if it is the only possible return value
+  'RET503', # [*] Missing explicit `return` at the end of function able to return non-`None` value
+  'RET504', # Unnecessary variable assignment before `return` statement
+  'RET505', # Unnecessary `else` after `return` statement
+  'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation
+  'RUF009', # Do not perform function call `PresentableCliParameters` in dataclass defaults
+  'RUF100', # [*] Unused `noqa` directive (unused: `E731`)
+  'S101', # Use of `assert` detected
+  'S103', # `os.chmod` setting a permissive mask `0o777` on file or directory
+  'S108', # Probable insecure usage of temporary file or directory: "/tmp"
+  'S110', # `try`-`except`-`pass` detected, consider logging the exception
+  'S311', # Standard pseudo-random generators are not suitable for cryptographic purposes
+  'S602', # `subprocess` call with `shell=True` identified, security issue
+  'S603', # `subprocess` call: check for execution of untrusted input
+  'S605', # Starting a process with a shell, possible injection detected
+  'S607', # Starting a process with a partial executable path
+  'SIM102', # [*] Use a single `if` statement instead of nested `if` statements
+  'SIM105', # [*] Use `contextlib.suppress(ValueError)` instead of `try`-`except`-`pass`
+  'SIM108', # [*] Use ternary operator `inventory_err = parts[0] + inventory_err if inventory_err else parts[0]` instead of `if`-`else`-block
+  'SIM110', # [*] Use `return any(self._search_value(self.menu_filter(), obj.get(key)) for key in columns)` instead of `for` loop
+  'SIM114', # Combine `if` branches using logical `or` operator
+  'SIM118', # [*] Use `group in self._inventory` instead of `group in self._inventory.keys()`
+  'SIM401', # [*] Use `cache_version = collection_cache.get("version", None)` instead of an `if` block
+  'SLF001', # Private member accessed: `_ui`
+  'T201', # `print` found
+  'TCH001', # Move application import `ansible_navigator.configuration_subsystem.definitions.SettingsEntry` into a type-checking block
+  'TCH002', # Move third-party import `ansible_runner.Runner` into a type-checking block
+  'TCH003', # Move standard library import `re.Pattern` into a type-checking block
+  'TID252', # [*] Relative imports from parent modules are banned
+  'TRY003', # Avoid specifying long messages outside the exception class
+  'TRY004', # Prefer `TypeError` exception for invalid type
+  'TRY300', # Consider moving this statement to an `else` block
+  'TRY301', # Abstract `raise` to an inner function
+  'TRY400', # Use `logging.exception` instead of `logging.error`
+  'TRY401', # Redundant exception object included in `logging.exception` call
+  'UP033', # [*] Use `@functools.cache` instead of `@functools.lru_cache(maxsize=None)`
+  'UP035', # `typing.Dict` is deprecated, use `dict` instead
+
+]
+exclude = ["tests/fixtures/**", ".git"]
+
+[tool.ruff.isort]
+force-single-line = true # Force from .. import to be 1 per line, minimizing changes at time of implementation
+known-first-party = [
+  "ansible_navigator",
+  "key_value_store"
+] # No effect at implementation, here anticipating future benefit
+lines-after-imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
+lines-between-types = 1 # Separate import/from with 1 line, minimizing changes at time of implementation
+
+[tool.ruff.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.flake8-pytest-style]
+parametrize-values-type = "tuple"
+
 [tool.setuptools.dynamic]
 optional-dependencies.test = { file = [".config/requirements-test.txt"] }
 optional-dependencies.lock = { file = [".config/requirements-lock.txt"] }
