@@ -412,7 +412,7 @@ def main():
                 if key not in ["details", "errors"]:
                     result_as_dict[f"__{key}"] = result_as_dict[key]
                     result_as_dict.pop(key)
-            response[result_as_dict["__id"]] = result_as_dict
+            response[result_as_dict["__id_"]] = result_as_dict
     except Exception as exc:
         response["errors"].append(str(exc))
     print(json.dumps(response))
