@@ -578,4 +578,4 @@ class Action(ActionBase):
         msgs.append("Details have been added to the log file")
         closing = ["[HINT] Please log an issue about this one, it shouldn't have happened"]
         warning = warning_notification(messages=msgs + closing)
-        self._interaction.ui.show(warning)
+        self._interaction.ui.show_form(warning)
