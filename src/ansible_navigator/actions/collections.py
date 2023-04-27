@@ -283,7 +283,7 @@ class Action(ActionBase):
 
         :returns: The plugin menu definition
         """
-        self._collection_cache.open()
+        self._collection_cache.open_()
         selected_collection = self._collections[self.steps.current.index]
         collection_name = f"__{selected_collection['known_as']}"
         collection_contents = []
