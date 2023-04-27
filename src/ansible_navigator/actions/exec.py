@@ -45,8 +45,12 @@ def _generate_command(
             _extra_args.append(exec_command)
         if isinstance(extra_args, list):
             _extra_args.extend(extra_args)
-        pass_command = " ".join(_extra_args)
-        pass_through_args = ["-c", pass_command]
+        if _extra_args:
+            pass_command = " ".join(_extra_args)
+            pass_through_args = ["-c", pass_command]
+        else:
+            pass_through_args = []
+
     else:
         if exec_command_is_default and isinstance(extra_args, list):
             command, pass_through_args = extra_args[0], extra_args[1:]
