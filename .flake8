@@ -36,17 +36,7 @@ extend-exclude =
 
 # IMPORTANT: avoid using ignore option, always use extend-ignore instead
 # Completely and unconditionally ignore the following errors:
-extend-ignore =
-  # Safeguard neutering of flake8-quotes : https://github.com/zheller/flake8-quotes/issues/105
-  Q,
-  # annoy black by allowing white space before : https://github.com/psf/black/issues/315
-  E203,
-  # duplicate of pylint W0611 (unused-import)
-  F401,
-  # duplicate of pylint E0602 (undefined-variable)
-  F821,
-  # duplicate of pylint W0612 (unused-variable)
-  F841,
+extend-ignore = F, E203
 
 # Accessibility/large fonts and PEP8 unfriendly:
 max-line-length = 100
@@ -59,8 +49,6 @@ per-file-ignores =
   # If other ignores are added for a specific file in the section following this,
   # these will need to be added to that line as well.
 
-  # S101: Allow the use of assert within the tests directory, since tests require it.
-  tests/**.py: S101
 
   # The tokenization code is vendored and not a priority for docstrings.
   src/ansible_navigator/tm_tokenize/__init__.py: D104

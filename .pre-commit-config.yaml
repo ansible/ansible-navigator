@@ -40,6 +40,13 @@ repos:
       - id: black
         language_version: python3
 
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.263"
+    hooks:
+      - id: ruff
+        args:
+          - "--exit-non-zero-on-fix"
+
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v6.31.0
     hooks:
@@ -130,10 +137,8 @@ repos:
         language_version: python3
         additional_dependencies:
           - darglint
-          - flake8-2020 >= 1.6.0
           - flake8-docstrings # uses pydocstyle
-          - flake8-future-annotations>=0.0.3
-          - flake8-isort >= 4.1.1
+
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
     rev: v3.3.1
