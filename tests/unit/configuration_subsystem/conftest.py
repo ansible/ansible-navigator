@@ -13,17 +13,14 @@ from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner.command_runner import run_command
 from ansible_navigator.configuration_subsystem import to_schema
 from ansible_navigator.configuration_subsystem.configurator import Configurator
-from ansible_navigator.configuration_subsystem.definitions import (
-    ApplicationConfiguration,
-)
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsSchemaType
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    NavigatorConfiguration,
-)
+from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 from ansible_navigator.utils.functions import ExitMessage
 from ansible_navigator.utils.functions import LogMessage
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
+
 from ...defaults import FIXTURES_DIR
 
 

@@ -4,6 +4,7 @@ import os
 import pytest
 
 from tests.defaults import id_func
+
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep

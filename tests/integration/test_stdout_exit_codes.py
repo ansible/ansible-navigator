@@ -12,6 +12,7 @@ import pytest
 
 from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import id_func
+
 from ..conftest import TCmdInTty
 from ..defaults import FIXTURES_DIR
 from .conftest import ActionRunTest

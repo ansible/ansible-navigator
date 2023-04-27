@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from ansible_navigator import cli
+
 from ..defaults import FIXTURES_DIR
 from ._cli2runner import Cli2Runner
 from ._cli2runner import RunnerTestException

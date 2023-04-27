@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from ansible_navigator.content_defs import ContentFormat
+
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic

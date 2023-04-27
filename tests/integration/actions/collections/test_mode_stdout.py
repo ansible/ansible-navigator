@@ -5,6 +5,7 @@ import pytest
 
 from ansible_navigator.utils.serialize import SafeLoader
 from ansible_navigator.utils.serialize import yaml
+
 from ....defaults import FIXTURES_COLLECTION_PATH
 from ..._common import Parameter
 from ...conftest import CliRunner

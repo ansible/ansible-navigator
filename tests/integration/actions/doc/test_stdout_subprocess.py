@@ -9,6 +9,7 @@ import pytest
 from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import BaseScenario
 from tests.defaults import id_func
+
 from ....conftest import TCmdInTty
 
 

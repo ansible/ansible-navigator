@@ -6,6 +6,7 @@ import re
 from pathlib import Path
 
 from ansible_navigator.content_defs import ContentView
+
 from ..app_public import AppPublic
 from ..configuration_subsystem.definitions import ApplicationConfiguration
 from ..content_defs import SerializationFormat

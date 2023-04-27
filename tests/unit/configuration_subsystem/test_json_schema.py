@@ -15,6 +15,7 @@ from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.configuration_subsystem.definitions import SettingsSchemaType
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
+
 from .defaults import TEST_FIXTURE_DIR
 
 

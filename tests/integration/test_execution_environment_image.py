@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from ansible_navigator import cli
+
 from ..conftest import default_ee_image_name
 from ..conftest import small_image_name
 from ..defaults import FIXTURES_DIR

@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING
 
 from ansible_navigator.actions import kegexes
 from ansible_navigator.actions import run_action
+
 from .action_base import ActionBase
 from .configuration_subsystem.definitions import ApplicationConfiguration
 from .constants import GRAMMAR_DIR

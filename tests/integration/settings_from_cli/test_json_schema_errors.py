@@ -11,6 +11,7 @@ from typing import Any
 import pytest
 
 from ansible_navigator.utils.functions import shlex_join
+
 from ...defaults import FIXTURES_DIR
 from ...defaults import BaseScenario
 from ...defaults import id_func
