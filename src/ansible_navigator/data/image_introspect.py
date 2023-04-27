@@ -287,7 +287,7 @@ class PythonPackages(CmdParser):
         pre.parse(pre)
         pkgs = " ".join(pkg for pkg in pre.details[0])
         return [
-            Command(id="python_packages", command=f"python3 -m pip show {pkgs}", parse=self.parse),
+            Command(id_="python_packages", command=f"python3 -m pip show {pkgs}", parse=self.parse),
         ]
 
     def parse(self, command):
