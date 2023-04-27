@@ -21,7 +21,7 @@ class Command(NamedTuple):
     execution_environment: bool
     cmdline: str | None = None
     command: str = "ansible-navigator"
-    format: str | None = None
+    format_: str | None = None
     log_level: str = "debug"
     mode: str = "interactive"
     pass_environment_variables: list = []
@@ -44,8 +44,8 @@ class Command(NamedTuple):
         args.extend(["--ee", str(self.execution_environment)])
         args.extend(["--ll", self.log_level])
         args.extend(["--mode", self.mode])
-        if self.format:
-            args.extend(["--format", self.format])
+        if self.format_:
+            args.extend(["--format", self.format_])
         if self.pass_environment_variables:
             for env_var in self.pass_environment_variables:
                 args.extend(["--penv", env_var])

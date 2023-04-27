@@ -128,24 +128,24 @@ def test_flatten_list(value: list, anticipated_result: list) -> None:
 class HumanTimeTestData(NamedTuple):
     """Data for human time test."""
 
-    id: str
+    id_: str
     value: int | float
     expected: str
 
 
 human_time_test_data = [
-    HumanTimeTestData(id="s", value=1, expected="1s"),
-    HumanTimeTestData(id="m-s", value=60 + 1, expected="1m1s"),
-    HumanTimeTestData(id="h-m-s", value=3600 + 60 + 1, expected="1h1m1s"),
+    HumanTimeTestData(id_="s", value=1, expected="1s"),
+    HumanTimeTestData(id_="m-s", value=60 + 1, expected="1m1s"),
+    HumanTimeTestData(id_="h-m-s", value=3600 + 60 + 1, expected="1h1m1s"),
     HumanTimeTestData(
-        id="d-h-m-s",
+        id_="d-h-m-s",
         value=86400 + 3600 + 60 + 1,
         expected="1d1h1m1s",
     ),
 ]
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id_)
 def test_human_time_integer(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (integer passed).
 
@@ -169,7 +169,7 @@ def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
     assert result == f"-{data.expected}"
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id_)
 def test_human_time_float(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (float passed).
 
@@ -181,7 +181,7 @@ def test_human_time_float(data: HumanTimeTestData) -> None:
     assert result == data.expected
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id)
+@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id_)
 def test_human_time_negative_float(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (negative float passed).
 
@@ -196,24 +196,24 @@ def test_human_time_negative_float(data: HumanTimeTestData) -> None:
 class RoundHalfUpTestData(NamedTuple):
     """Data for round half up tests."""
 
-    id: str
+    id_: str
     value: int | float
     expected: int
 
 
 round_half_up_test_data = [
-    RoundHalfUpTestData(id="integer", value=1, expected=1),
-    RoundHalfUpTestData(id="negative-integer", value=-1, expected=-1),
-    RoundHalfUpTestData(id="down-float", value=1.49999999, expected=1),
-    RoundHalfUpTestData(id="up-float", value=1.50000001, expected=2),
-    RoundHalfUpTestData(id="negative-down-float", value=-1.49999999, expected=-1),
-    RoundHalfUpTestData(id="negative-up-float", value=-1.50000001, expected=-2),
-    RoundHalfUpTestData(id="half_even", value=2.5, expected=3),
-    RoundHalfUpTestData(id="half_even", value=3.5, expected=4),
+    RoundHalfUpTestData(id_="integer", value=1, expected=1),
+    RoundHalfUpTestData(id_="negative-integer", value=-1, expected=-1),
+    RoundHalfUpTestData(id_="down-float", value=1.49999999, expected=1),
+    RoundHalfUpTestData(id_="up-float", value=1.50000001, expected=2),
+    RoundHalfUpTestData(id_="negative-down-float", value=-1.49999999, expected=-1),
+    RoundHalfUpTestData(id_="negative-up-float", value=-1.50000001, expected=-2),
+    RoundHalfUpTestData(id_="half_even", value=2.5, expected=3),
+    RoundHalfUpTestData(id_="half_even", value=3.5, expected=4),
 ]
 
 
-@pytest.mark.parametrize("data", round_half_up_test_data, ids=lambda data: data.id)
+@pytest.mark.parametrize("data", round_half_up_test_data, ids=lambda data: data.id_)
 def test_round_half_up(data: RoundHalfUpTestData) -> None:
     """Test for the functions.round_half_up function.
 

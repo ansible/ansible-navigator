@@ -643,7 +643,7 @@ class Action(ActionBase):
         roles_exclude_keys = ["readme"]
         self._collection_cache = cast(KeyValueStore, self._collection_cache)
 
-        self._collection_cache.open()
+        self._collection_cache.open_()
         for collection in self._collections:
             plugins_details = self._get_collection_plugins_details(collection)
 
