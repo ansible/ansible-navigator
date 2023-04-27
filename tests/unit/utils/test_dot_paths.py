@@ -18,6 +18,7 @@ from ansible_navigator.utils.dot_paths import move_to_path
 from ansible_navigator.utils.dot_paths import place_at_path
 from ansible_navigator.utils.dot_paths import remove_and_delete_empty_ascendants
 from tests.defaults import id_func
+
 from ...defaults import BaseScenario
 
 

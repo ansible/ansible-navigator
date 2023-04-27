@@ -8,6 +8,7 @@ import pytest
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
+
 from ...defaults import id_func
 
 

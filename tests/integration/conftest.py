@@ -9,15 +9,12 @@ from pathlib import Path
 
 import pytest
 
-from ansible_navigator.configuration_subsystem.definitions import (
-    ApplicationConfiguration,
-)
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import CliParameters
 from ansible_navigator.configuration_subsystem.definitions import Constants
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    NavigatorConfiguration,
-)
+from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 from ansible_navigator.utils.functions import shlex_join
+
 from ..conftest import _cmd_in_tty as cmd_in_tty
 from ._action_run_test import ActionRunTest
 from ._common import Parameter

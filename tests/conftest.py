@@ -20,9 +20,7 @@ import pytest
 from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
 from ansible_navigator.configuration_subsystem.navigator_configuration import APP_NAME
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    NavigatorConfiguration,
-)
+from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.utils import parse_ansible_verison
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
@@ -32,6 +30,7 @@ from ansible_navigator.utils.packaged_data import ImageEntry
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
+
 from .defaults import FIXTURES_DIR
 
 

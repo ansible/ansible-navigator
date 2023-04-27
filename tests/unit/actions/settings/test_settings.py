@@ -10,9 +10,7 @@ from ansible_navigator.actions.settings import CONTENT_HEADING_NOT_DEFAULT
 from ansible_navigator.actions.settings import color_menu
 from ansible_navigator.actions.settings import content_heading
 from ansible_navigator.configuration_subsystem import PresentableSettingsEntry
-from ansible_navigator.configuration_subsystem.defs_presentable import (
-    PresentableCliParameters,
-)
+from ansible_navigator.configuration_subsystem.defs_presentable import PresentableCliParameters
 from ansible_navigator.ui_framework import Color
 from ansible_navigator.ui_framework import CursesLinePart
 from ansible_navigator.ui_framework import Decoration

@@ -65,17 +65,6 @@ data_file = ".tox/.coverage"
 parallel = true
 source_pkgs = ["ansible_navigator"]
 
-[tool.isort]
-force_single_line = true # Force from .. import to be 1 per line, minimizing changes at time of implementation
-known_first_party = "ansible_navigator, key_value_store" # No effect at implementation, here anticipating future benefit
-lines_after_imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
-lines_between_types = 1 # Separate import/from with 1 line, minimizing changes at time of implementation
-no_lines_before = "LOCALFOLDER" # Keeps local imports bundled with first-party
-profile = "black" # Avoid conflict with black
-skip_glob = [
-  "tests/fixtures/common/collections*",
-] # Skip ansible content due to ansible-test sanity ruleset
-
 [tool.pylint]
 
 [tool.pylint.format]
@@ -168,7 +157,6 @@ ignore = [
   'FBT002', # Boolean default value in function definition
   'FBT003', # Boolean positional value in function call
   'G003', # Logging statement uses `+`
-  'I001', # [*] Import block is un-sorted or un-formatted
   'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
   'ISC001', # Implicitly concatenated string literals on one line
   'ISC003', # Explicitly concatenated string should be implicitly concatenated
@@ -261,13 +249,10 @@ ignore = [
 exclude = ["tests/fixtures/**", ".git"]
 
 [tool.ruff.isort]
-force-single-line = true # Force from .. import to be 1 per line, minimizing changes at time of implementation
-known-first-party = [
-  "ansible_navigator",
-  "key_value_store"
-] # No effect at implementation, here anticipating future benefit
+force-single-line = true # Force from .. import to be 1 per line
+known-first-party = ["ansible_navigator"]
 lines-after-imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
-lines-between-types = 1 # Separate import/from with 1 line, minimizing changes at time of implementation
+lines-between-types = 1 # Separate import/from with 1 line
 
 [tool.ruff.pydocstyle]
 convention = "pep257"

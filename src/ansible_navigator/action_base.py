@@ -7,6 +7,7 @@ from copy import deepcopy
 from re import Pattern
 
 from ansible_navigator.actions import kegexes
+
 from .action_defs import RunStdoutReturn
 from .app_public import AppPublic
 from .configuration_subsystem import Constants as C

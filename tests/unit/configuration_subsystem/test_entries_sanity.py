@@ -5,12 +5,9 @@ from pathlib import Path
 import pytest
 
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    NavigatorConfiguration,
-)
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    SettingsEntry,
-)
+from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem.navigator_configuration import SettingsEntry
+
 from .utils import id_for_name
 
 

@@ -8,6 +8,7 @@ import pytest
 
 from ansible_navigator import cli
 from tests.defaults import id_func
+
 from ...defaults import BaseScenario
 
 

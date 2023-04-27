@@ -2,6 +2,7 @@
 import pytest
 
 from tests.defaults import id_func
+
 from ....conftest import default_ee_image_name
 from ..._interactions import Command
 from ..._interactions import SearchFor

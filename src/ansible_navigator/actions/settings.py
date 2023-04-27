@@ -5,6 +5,7 @@ from dataclasses import asdict
 from functools import partial
 
 from ansible_navigator.configuration_subsystem.definitions import Constants
+
 from ..action_base import ActionBase
 from ..action_defs import RunStdoutReturn
 from ..app_public import AppPublic

@@ -1,6 +1,7 @@
 """``:help`` command implementation."""
 
 from ansible_navigator.content_defs import ContentFormat
+
 from ..action_base import ActionBase
 from ..app_public import AppPublic
 from ..configuration_subsystem.definitions import ApplicationConfiguration
