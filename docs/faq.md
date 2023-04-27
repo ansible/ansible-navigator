@@ -257,8 +257,9 @@ $  echo my_password >> ~/.vault_password
 # Link the password file into the current working directory
 $ ln ~/.vault_password .
 # Set the environment variable to the location of the file
-$ ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
-$ ansible-navigator run site.yml
+$ export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
+# Pass the variable into the execution-environment
+$ ansible-navigator run --pass-environment-variable ANSIBLE_VAULT_PASSWORD_FILE site.yml
 ```
 
 2. Store the vault password in an environment variable
