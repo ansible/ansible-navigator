@@ -15,7 +15,7 @@
       "type": "python",
       "request": "launch",
       "module": "ansible_navigator",
-      "args": ["collections"],
+      "args": ["collections", "--ee", "false"],
       "cwd": "${workspaceFolder}/src",
       "justMyCode": false
     },
