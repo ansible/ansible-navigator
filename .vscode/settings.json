@@ -2,11 +2,7 @@
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
   // Override the pyproject.toml and disable xdist to enable test debugging
-  "python.testing.pytestArgs": [
-    "-n0",
-    "--dist",
-    "no"
-  ],
+  "python.testing.pytestArgs": ["-n0", "--dist", "no"],
   "python.formatting.provider": "black",
   "python.linting.pylintEnabled": true,
   "python.linting.flake8Enabled": true,
@@ -15,7 +11,7 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": true
-    },
+    }
   },
   "prettier.enable": false
 }
