@@ -4,11 +4,7 @@ import json
 import os
 
 from typing import Any
-from typing import Dict
-from typing import FrozenSet
-from typing import List
 from typing import NamedTuple
-from typing import Tuple
 from typing import TypeVar
 
 from .compiler import Compiler
