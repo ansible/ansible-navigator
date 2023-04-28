@@ -243,7 +243,6 @@ ignore = [
   'TRY400', # Use `logging.exception` instead of `logging.error`
   'TRY401', # Redundant exception object included in `logging.exception` call
   'UP033', # [*] Use `@functools.cache` instead of `@functools.lru_cache(maxsize=None)`
-  'UP035', # `typing.Dict` is deprecated, use `dict` instead
 
 ]
 exclude = ["tests/fixtures/**", ".git"]
