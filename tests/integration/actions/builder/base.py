@@ -2,6 +2,8 @@
 import difflib
 import os
 
+from pathlib import Path
+
 import pytest
 
 from ....defaults import FIXTURES_DIR
@@ -11,7 +13,8 @@ from ..._interactions import SearchFor
 from ..._tmux_session import TmuxSession
 
 
-BUILDER_FIXTURE = os.path.join(FIXTURES_DIR, "common", "builder", "test_ee")
+BUILDER_FIXTURE = Path(FIXTURES_DIR) / "common" / "builder" / "test_ee"
+EE_MANIFEST = BUILDER_FIXTURE / "execution-environment.yml"
 
 
 class BaseClass:

@@ -34,7 +34,7 @@ from ansible_navigator.utils.serialize import yaml
 from .defaults import FIXTURES_DIR
 
 
-def _valid_container_engine() -> str:
+def valid_ce() -> str:
     """Return an available container engine.
 
     :returns: The container engine or exits
@@ -52,7 +52,7 @@ def fixture_valid_container_engine() -> str:
 
     :returns: The container engine or exits
     """
-    return _valid_container_engine()
+    return valid_ce()
 
 
 def default_ee_image_name() -> str:
@@ -323,7 +323,7 @@ def pytest_sessionstart(session: pytest.Session):
     """
     if getattr(session.config, "workerinput", None) is not None:
         return
-    container_engine = _valid_container_engine()
+    container_engine = valid_ce()
     pull_image(
         valid_container_engine=container_engine,
         image_name=default_ee_image_name(),

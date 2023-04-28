@@ -1,8 +1,23 @@
 ---
-version: 1
-dependencies:
-  galaxy: requirements.yml
+version: 3
 
+images:
+  base_image:
+    name: registry.fedoraproject.org/fedora:38
+
+dependencies:
+  ansible_core:
+    package_pip: ansible-core
+
+  ansible_runner:
+    package_pip: ansible-runner
+
+  galaxy: |
+    collections:
+    - ansible.utils
+
+  python:
+    - ansible-lint
 additional_build_steps:
-  append:
+  append_final:
     - RUN echo "Hello from EE"
