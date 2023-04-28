@@ -10,8 +10,6 @@ import uuid
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
-from typing import Tuple
 
 from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner import CommandRunner

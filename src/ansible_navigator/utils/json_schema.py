@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import json
 
+from collections import deque
 from dataclasses import dataclass
 from typing import Any
-from typing import Deque
 
 from jsonschema import SchemaError
 from jsonschema import ValidationError
@@ -14,7 +14,7 @@ from jsonschema.validators import validator_for
 from .functions import ExitMessage
 
 
-def to_path(schema_path: Deque[str]):
+def to_path(schema_path: deque):
     """Flatten a path to a dot delimited string.
 
     :param schema_path: The schema path
@@ -23,7 +23,7 @@ def to_path(schema_path: Deque[str]):
     return ".".join(str(index) for index in schema_path)
 
 
-def json_path(absolute_path: Deque[str]):
+def json_path(absolute_path: deque):
     """Flatten a data path to a dot delimited string.
 
     :param absolute_path: The path

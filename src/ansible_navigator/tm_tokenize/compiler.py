@@ -3,9 +3,6 @@ from __future__ import annotations
 import functools
 
 from typing import TYPE_CHECKING
-from typing import Dict
-from typing import List
-from typing import Tuple
 
 from .fchainmap import FChainMap
 from .reg import make_regset
