@@ -1,7 +1,7 @@
 """Tests for ``config`` from CLI, stdout."""
 import pytest
 
-from ....conftest import valid_container_engine as ce
+from ....conftest import valid_ce as ce
 from ..._interactions import Command
 from ..._interactions import SearchFor
 from ..._interactions import UiTestStep
