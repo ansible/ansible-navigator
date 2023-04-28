@@ -212,6 +212,14 @@ class Action(ActionBase):
         )
         return RunStdoutReturn(message="", return_code=0)
 
+    def notify_failed(self):
+        """Notify collection cataloging failed."""
+        msgs = ["humph. Something went really wrong while cataloging collections."]
+        msgs.append("Details have been added to the log file")
+        closing = ["[HINT] Please log an issue about this one, it shouldn't have happened"]
+        warning = warning_notification(messages=msgs + closing)
+        self._interaction.ui.show_form(warning)
+
     def notify_none(self):
         """Notify no collections were found."""
         msgs = ["humph. no collections were found in the following paths:"]
@@ -228,7 +236,7 @@ class Action(ActionBase):
                 paths.append(f"- {path}")
         closing = ["[HINT] Try installing some or try a different execution environment"]
         warning = warning_notification(messages=msgs + paths + closing)
-        self._interaction.ui.show(warning)
+        self._interaction.ui.show_form(warning)
 
     def _take_step(self) -> None:
         """Take a step based on the current step or step back."""
@@ -487,11 +495,14 @@ class Action(ActionBase):
             kwargs,
         )
         _runner = Command(executable_cmd=python_exec_path, **kwargs)
-        output, error, _ = _runner.run()
+        output, error, ret_code = _runner.run()
 
         if error:
             msg = f"Error while running catalog collection script: {error}"
             self._logger.error(msg)
+        if ret_code:
+            self._logger.error(output)
+            self.notify_failed()
         if output:
             self._parse(output)
 

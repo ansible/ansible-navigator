@@ -118,6 +118,8 @@ class CollectionCatalog:
             return
 
         for role_directory in roles_directory.iterdir():
+            if not role_directory.is_dir():
+                continue
             role: dict[str, str | dict[str, Any]] = {
                 "short_name": role_directory.name,
                 "full_name": f"{collection_name}.{role_directory.name}",
