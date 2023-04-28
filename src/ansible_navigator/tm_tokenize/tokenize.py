@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import List
-from typing import Tuple
 
 from .region import Region
 from .region import Regions

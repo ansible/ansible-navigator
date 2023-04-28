@@ -6,7 +6,6 @@ import re
 from re import Match
 from typing import TYPE_CHECKING
 from typing import Optional
-from typing import Tuple
 
 import onigurumacffi
 
