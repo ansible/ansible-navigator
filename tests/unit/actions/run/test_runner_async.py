@@ -12,9 +12,8 @@ from pytest_mock import MockerFixture
 
 from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
+from tests.defaults import BaseScenario
 from tests.defaults import id_func
-
-from ....defaults import BaseScenario
 
 
 @dataclass

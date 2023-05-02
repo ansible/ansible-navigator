@@ -1,11 +1,12 @@
 """Tests for ``config`` from CLI, stdout."""
 import pytest
 
-from ....conftest import valid_ce as ce
-from ..._interactions import Command
-from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
-from ..._interactions import add_indices
+from tests.conftest import valid_ce as ce
+from tests.integration._interactions import Command
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._interactions import add_indices
+
 from .base import EE_MANIFEST
 from .base import BaseClass
 

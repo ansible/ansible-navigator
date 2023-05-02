@@ -7,14 +7,14 @@ from collections.abc import Generator
 
 import pytest
 
-from ....defaults import FIXTURES_COLLECTION_DIR
-from ..._common import copytree
-from ..._common import retrieve_fixture_for_step
-from ..._common import update_fixtures
-from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
-from ..._tmux_session import TmuxSession
-from ..._tmux_session import TmuxSessionKwargs
+from tests.defaults import FIXTURES_COLLECTION_DIR
+from tests.integration._common import copytree
+from tests.integration._common import retrieve_fixture_for_step
+from tests.integration._common import update_fixtures
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._tmux_session import TmuxSession
+from tests.integration._tmux_session import TmuxSessionKwargs
 
 
 EXPECTED_COLLECTIONS = ["ansible.builtin", "company_name.coll_1", "company_name.coll_2"]

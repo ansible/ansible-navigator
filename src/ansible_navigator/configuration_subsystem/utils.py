@@ -10,10 +10,11 @@ from dataclasses import field
 from pathlib import Path
 from typing import Any
 
-from ..command_runner import Command
-from ..command_runner import CommandRunner
-from ..utils.definitions import ExitMessage
-from ..utils.definitions import LogMessage
+from ansible_navigator.command_runner import Command
+from ansible_navigator.command_runner import CommandRunner
+from ansible_navigator.utils.definitions import ExitMessage
+from ansible_navigator.utils.definitions import LogMessage
+
 from .definitions import Constants
 from .definitions import SettingsFileType
 
