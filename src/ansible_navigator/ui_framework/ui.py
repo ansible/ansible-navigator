@@ -9,7 +9,7 @@ import re
 from collections.abc import Mapping
 from collections.abc import Sequence
 from curses import ascii as curses_ascii
-from functools import lru_cache
+from functools import cache
 from math import ceil
 from math import floor
 from re import Match
@@ -791,11 +791,9 @@ class UserInterface(CursesWindow):
         return False
 
     @staticmethod
-    @lru_cache(maxsize=None)
+    @cache
     def _search_value(regex: Pattern, value: str) -> Match | None:
         """Check a str against a regex.
-
-        lru_cache enabled because this is hit during resize
 
         :param regex: the compiled regex
         :param value: the string to check
