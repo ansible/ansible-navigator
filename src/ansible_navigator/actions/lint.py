@@ -25,24 +25,25 @@ from datetime import datetime
 from enum import IntEnum
 from typing import Any
 
-from ..action_base import ActionBase
-from ..action_defs import RunStdoutReturn
-from ..app_public import AppPublic
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..runner.command import Command
-from ..steps import Step
-from ..ui_framework import Color
-from ..ui_framework import CursesLine
-from ..ui_framework import CursesLinePart
-from ..ui_framework import CursesLines
-from ..ui_framework import Decoration
-from ..ui_framework import Interaction
-from ..ui_framework import error_notification
-from ..ui_framework import nonblocking_notification
-from ..ui_framework import success_notification
-from ..utils.functions import abs_user_path
-from ..utils.functions import remove_ansi
-from ..utils.functions import time_stamp_for_file
+from ansible_navigator.action_base import ActionBase
+from ansible_navigator.action_defs import RunStdoutReturn
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.runner.command import Command
+from ansible_navigator.steps import Step
+from ansible_navigator.ui_framework import Color
+from ansible_navigator.ui_framework import CursesLine
+from ansible_navigator.ui_framework import CursesLinePart
+from ansible_navigator.ui_framework import CursesLines
+from ansible_navigator.ui_framework import Decoration
+from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.ui_framework import error_notification
+from ansible_navigator.ui_framework import nonblocking_notification
+from ansible_navigator.ui_framework import success_notification
+from ansible_navigator.utils.functions import abs_user_path
+from ansible_navigator.utils.functions import remove_ansi
+from ansible_navigator.utils.functions import time_stamp_for_file
+
 from . import _actions as actions
 from . import run_action
 

@@ -1,14 +1,15 @@
 """The settings file migration base class."""
 from __future__ import annotations
 
-from ...content_defs import ContentView
-from ...content_defs import SerializationFormat
-from ..ansi import COLOR
-from ..ansi import changed
-from ..ansi import info
-from ..serialize import Loader
-from ..serialize import serialize_write_file
-from ..serialize import yaml
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
+from ansible_navigator.utils.ansi import COLOR
+from ansible_navigator.utils.ansi import changed
+from ansible_navigator.utils.ansi import info
+from ansible_navigator.utils.serialize import Loader
+from ansible_navigator.utils.serialize import serialize_write_file
+from ansible_navigator.utils.serialize import yaml
+
 from .definitions import Migration
 
 

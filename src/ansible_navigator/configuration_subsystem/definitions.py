@@ -16,8 +16,8 @@ from typing import NewType
 from typing import TypeVar
 from typing import Union
 
-from ..utils.functions import abs_user_path
-from ..utils.functions import oxfordcomma
+from ansible_navigator.utils.functions import abs_user_path
+from ansible_navigator.utils.functions import oxfordcomma
 
 
 if TYPE_CHECKING:

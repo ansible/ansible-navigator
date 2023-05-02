@@ -10,10 +10,10 @@ from typing import TYPE_CHECKING
 import pytest
 
 from ansible_navigator import cli
+from tests.conftest import default_ee_image_name
+from tests.conftest import small_image_name
+from tests.defaults import FIXTURES_DIR
 
-from ..conftest import default_ee_image_name
-from ..conftest import small_image_name
-from ..defaults import FIXTURES_DIR
 from ._cli2runner import Cli2Runner
 from ._cli2runner import RunnerTestException
 

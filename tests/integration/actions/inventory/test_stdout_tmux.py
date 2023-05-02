@@ -1,10 +1,11 @@
 """Tests for inventory from CLI, stdout."""
 import pytest
 
-from ..._interactions import Command
-from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
-from ..._interactions import add_indices
+from tests.integration._interactions import Command
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._interactions import add_indices
+
 from .base import ANSIBLE_INVENTORY_FIXTURE_DIR
 from .base import BaseClass
 

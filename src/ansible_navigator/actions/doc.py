@@ -10,17 +10,18 @@ import shutil
 
 from typing import Any
 
-from ..action_base import ActionBase
-from ..action_defs import RunStdoutReturn
-from ..app_public import AppPublic
-from ..configuration_subsystem import Constants as C
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..runner import AnsibleDoc
-from ..runner import Command
-from ..ui_framework import CursesLine
-from ..ui_framework import CursesLinePart
-from ..ui_framework import CursesLines
-from ..ui_framework import Interaction
+from ansible_navigator.action_base import ActionBase
+from ansible_navigator.action_defs import RunStdoutReturn
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem import Constants as C
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.runner import AnsibleDoc
+from ansible_navigator.runner import Command
+from ansible_navigator.ui_framework import CursesLine
+from ansible_navigator.ui_framework import CursesLinePart
+from ansible_navigator.ui_framework import CursesLines
+from ansible_navigator.ui_framework import Interaction
+
 from . import _actions as actions
 
 

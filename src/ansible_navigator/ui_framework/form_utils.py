@@ -10,8 +10,8 @@ from functools import partial
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitMessages
 from ansible_navigator.utils.definitions import ExitPrefix
+from ansible_navigator.utils.functions import console_width
 
-from ..utils.functions import console_width
 from .colorize import ansi_to_curses
 from .curses_defs import CursesLines
 from .field_checks import FieldChecks

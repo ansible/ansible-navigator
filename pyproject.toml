@@ -235,7 +235,6 @@ ignore = [
   'TCH001', # Move application import `ansible_navigator.configuration_subsystem.definitions.SettingsEntry` into a type-checking block
   'TCH002', # Move third-party import `ansible_runner.Runner` into a type-checking block
   'TCH003', # Move standard library import `re.Pattern` into a type-checking block
-  'TID252', # [*] Relative imports from parent modules are banned
   'TRY003', # Avoid specifying long messages outside the exception class
   'TRY004', # Prefer `TypeError` exception for invalid type
   'TRY300', # Consider moving this statement to an `else` block

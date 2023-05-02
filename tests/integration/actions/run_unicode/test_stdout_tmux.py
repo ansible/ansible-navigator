@@ -1,10 +1,11 @@
 """Tests for run from CLI, stdout, with unicode."""
 import pytest
 
-from ..._interactions import Command
-from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
-from ..._interactions import add_indices
+from tests.integration._interactions import Command
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._interactions import add_indices
+
 from .base import BaseClass
 from .base import inventory_path
 from .base import playbook_path
