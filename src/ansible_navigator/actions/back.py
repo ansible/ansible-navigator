@@ -4,10 +4,11 @@ Additionally triggered by the escape key.
 """
 import logging
 
-from ..app_public import AppPublic
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..steps import Step
-from ..ui_framework import Interaction
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.steps import Step
+from ansible_navigator.ui_framework import Interaction
+
 from . import _actions as actions
 
 

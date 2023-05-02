@@ -7,11 +7,11 @@ from typing import Callable
 from typing import Generic
 from typing import TypeVar
 
-from ..ansi import COLOR
-from ..ansi import changed
-from ..ansi import failed
-from ..ansi import subtle
-from ..ansi import working
+from ansible_navigator.utils.ansi import COLOR
+from ansible_navigator.utils.ansi import changed
+from ansible_navigator.utils.ansi import failed
+from ansible_navigator.utils.ansi import subtle
+from ansible_navigator.utils.ansi import working
 
 
 class MigrationType(Enum):

@@ -8,7 +8,8 @@ import tempfile
 
 from pathlib import Path
 
-from ..runner import Command
+from ansible_navigator.runner import Command
+
 from . import introspect
 
 

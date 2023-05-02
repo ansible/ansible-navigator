@@ -13,8 +13,8 @@ from collections.abc import Generator
 from typing import Any
 from typing import Callable
 
-from ..action_defs import RunStdoutReturn
-from ..ui_framework import error_notification
+from ansible_navigator.action_defs import RunStdoutReturn
+from ansible_navigator.ui_framework import error_notification
 
 
 logger = logging.getLogger(__name__)

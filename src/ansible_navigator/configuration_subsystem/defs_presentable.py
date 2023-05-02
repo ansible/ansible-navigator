@@ -8,7 +8,8 @@ from typing import NewType
 from typing import TypeVar
 from typing import Union
 
-from ..content_defs import ContentBase
+from ansible_navigator.content_defs import ContentBase
+
 from .definitions import CliParameters
 from .definitions import Constants as C
 from .definitions import SettingsEntry

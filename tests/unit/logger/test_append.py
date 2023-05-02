@@ -7,9 +7,8 @@ from pathlib import Path
 import pytest
 
 from ansible_navigator import cli
+from tests.defaults import BaseScenario
 from tests.defaults import id_func
-
-from ...defaults import BaseScenario
 
 
 @dataclass

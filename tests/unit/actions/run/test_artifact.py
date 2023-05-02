@@ -17,9 +17,8 @@ from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.initialization import parse_and_update
+from tests.defaults import BaseScenario
 from tests.defaults import id_func
-
-from ....defaults import BaseScenario
 
 
 def make_dirs(*_args, **_kwargs):

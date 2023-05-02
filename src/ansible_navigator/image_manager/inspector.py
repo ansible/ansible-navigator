@@ -4,9 +4,9 @@ from __future__ import annotations
 import json
 import re
 
-from ..command_runner import Command
-from ..command_runner import CommandRunner
-from ..utils.functions import pascal_to_snake
+from ansible_navigator.command_runner import Command
+from ansible_navigator.command_runner import CommandRunner
+from ansible_navigator.utils.functions import pascal_to_snake
 
 
 class ImagesInspect:
