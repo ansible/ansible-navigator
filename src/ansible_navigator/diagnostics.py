@@ -115,7 +115,7 @@ def register(collector: Collector):
 DIAGNOSTIC_FAILURES = 0
 
 
-class FailedCollection(Exception):
+class FailedCollectionError(Exception):
     """Exception for a failed collection."""
 
     def __init__(self, errors):
@@ -150,7 +150,7 @@ def diagnostic_runner(func):
             result = func(*args, **kwargs)
             duration = (datetime.datetime.now() - start).total_seconds()
             collector.finish(color=color, duration=duration)
-        except FailedCollection as error:
+        except FailedCollectionError as error:
             # A collector exception, has data
             result = error.errors
             duration = (datetime.datetime.now() - start).total_seconds()
@@ -281,7 +281,7 @@ class DiagnosticsCollector:
     def _execution_environment(self) -> dict[str, JSONTypes]:
         """Add execution environment information.
 
-        :raises FailedCollection: If the collection process fails
+        :raises FailedCollectionError: If the collection process fails
         :returns: The execution environment information
         """
         if self._args.entry("container_engine").value.source is Constants.DEFAULT_CFG:
@@ -293,7 +293,7 @@ class DiagnosticsCollector:
         )
         details = {"details": details, "errors": errors, "return_code": return_code}
         if errors or not details:
-            raise FailedCollection(details)
+            raise FailedCollectionError(details)
         return details
 
     @diagnostic_runner
@@ -341,14 +341,14 @@ class DiagnosticsCollector:
     def _local_system(self) -> dict[str, JSONTypes]:
         """Add local system information.
 
-        :raises FailedCollection: If the collection process fails
+        :raises FailedCollectionError: If the collection process fails
         :returns: The local system information
         """
         results = introspect.main(serialize=False)
         if not results:
-            raise FailedCollection(results)
+            raise FailedCollectionError(results)
         if results.get("errors"):
-            raise FailedCollection(results["errors"])
+            raise FailedCollectionError(results["errors"])
         return {"details": results}
 
     @diagnostic_runner

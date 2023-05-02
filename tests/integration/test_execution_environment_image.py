@@ -15,7 +15,7 @@ from ..conftest import default_ee_image_name
 from ..conftest import small_image_name
 from ..defaults import FIXTURES_DIR
 from ._cli2runner import Cli2Runner
-from ._cli2runner import RunnerTestException
+from ._cli2runner import RunnerTestError
 
 
 if TYPE_CHECKING:
@@ -98,7 +98,7 @@ class Test(Cli2Runner):
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", str(coll_cache_path))
         monkeypatch.chdir(tmp_path)
 
-        with pytest.raises(RunnerTestException):
+        with pytest.raises(RunnerTestError):
             cli.main()
 
         _args, kwargs = mocked_runner.call_args
