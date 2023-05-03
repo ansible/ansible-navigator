@@ -22,7 +22,7 @@ JSONTypes = Union[bool, int, str, dict, list]
 class Command(SimpleNamespace):
     """Abstraction for a details about a shell command."""
 
-    id: str
+    id_: str
     command: str
     parse: Callable
     stdout: str = ""

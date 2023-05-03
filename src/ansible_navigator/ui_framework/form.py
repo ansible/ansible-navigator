@@ -28,7 +28,7 @@ from .validators import FormValidators
 class Form:
     """Simple abstraction to hold the fields of the form and a convenience method to present it."""
 
-    type: FormType
+    type_: FormType
     cancelled: bool = False
     fields: list = field(default_factory=list)
     submitted: bool = False
@@ -44,7 +44,7 @@ class Form:
         :param screen: A curses window
         :param ui_config: The current user interface configuration
         """
-        if self.type is FormType.FORM:
+        if self.type_ is FormType.FORM:
             self.fields.append(
                 FieldButton(
                     name="submit",
@@ -54,7 +54,7 @@ class Form:
                 ),
             )
             self.fields.append(FieldButton(name="cancel", text="Cancel", color=9))
-        elif self.type is FormType.NOTIFICATION:
+        elif self.type_ is FormType.NOTIFICATION:
             self.fields.append(
                 FieldButton(
                     name="submit",
@@ -63,7 +63,7 @@ class Form:
                     color=10,
                 ),
             )
-        elif self.type is FormType.WORKING:
+        elif self.type_ is FormType.WORKING:
             pass
 
         FormPresenter(form=self, screen=screen, ui_config=ui_config).present()
@@ -142,9 +142,9 @@ class FormPresenter(CursesWindow):
                 widths.append(max(len(msg) for msg in form_field.messages))
             widths.append(len(form_field.validator(hint=True)) + self._input_start)
 
-        if self._form.type is FormType.FORM:
+        if self._form.type_ is FormType.FORM:
             self._form_width = max(widths) + BUTTON_SPACE
-        elif self._form.type in (FormType.NOTIFICATION, FormType.WORKING):
+        elif self._form.type_ in (FormType.NOTIFICATION, FormType.WORKING):
             self._form_width = max(widths)
 
         height = 2  # title + horizontal line
