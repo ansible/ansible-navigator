@@ -5,12 +5,12 @@ import re
 
 import pytest
 
-from ....conftest import default_ee_image_name
-from ..._common import retrieve_fixture_for_step
-from ..._common import update_fixtures
-from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
-from ..._tmux_session import TmuxSession
+from tests.conftest import default_ee_image_name
+from tests.integration._common import retrieve_fixture_for_step
+from tests.integration._common import update_fixtures
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._tmux_session import TmuxSession
 
 
 # The image name w/o a version

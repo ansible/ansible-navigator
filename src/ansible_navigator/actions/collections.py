@@ -13,23 +13,24 @@ from pathlib import Path
 from typing import Any
 from typing import cast
 
-from ..action_base import ActionBase
-from ..action_defs import RunStdoutReturn
-from ..app_public import AppPublic
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..content_defs import ContentFormat
-from ..runner import Command
-from ..steps import Step
-from ..ui_framework import CursesLine
-from ..ui_framework import CursesLinePart
-from ..ui_framework import CursesLines
-from ..ui_framework import Interaction
-from ..ui_framework import nonblocking_notification
-from ..ui_framework import warning_notification
-from ..utils.functions import path_is_relative_to
-from ..utils.functions import remove_dbl_un
-from ..utils.key_value_store import KeyValueStore
-from ..utils.print import print_to_stdout
+from ansible_navigator.action_base import ActionBase
+from ansible_navigator.action_defs import RunStdoutReturn
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.runner import Command
+from ansible_navigator.steps import Step
+from ansible_navigator.ui_framework import CursesLine
+from ansible_navigator.ui_framework import CursesLinePart
+from ansible_navigator.ui_framework import CursesLines
+from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.ui_framework import nonblocking_notification
+from ansible_navigator.ui_framework import warning_notification
+from ansible_navigator.utils.functions import path_is_relative_to
+from ansible_navigator.utils.functions import remove_dbl_un
+from ansible_navigator.utils.key_value_store import KeyValueStore
+from ansible_navigator.utils.print import print_to_stdout
+
 from . import _actions as actions
 from . import run_action
 

@@ -2,10 +2,11 @@
 
 import pytest
 
-from ..._interactions import Command
-from ..._interactions import UiTestStep
-from ..._interactions import add_indices
-from ..._interactions import step_id
+from tests.integration._interactions import Command
+from tests.integration._interactions import UiTestStep
+from tests.integration._interactions import add_indices
+from tests.integration._interactions import step_id
+
 from .base import BaseClass
 from .base import base_steps
 

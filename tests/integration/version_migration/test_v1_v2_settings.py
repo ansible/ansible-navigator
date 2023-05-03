@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from .._tmux_session import TmuxSession
+from tests.integration._tmux_session import TmuxSession
 
 
 files = [

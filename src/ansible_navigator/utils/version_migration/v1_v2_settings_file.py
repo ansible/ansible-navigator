@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from ..dot_paths import MergeBehaviors
-from ..dot_paths import check_path
-from ..dot_paths import get_with_path
-from ..dot_paths import move_to_path
-from ..dot_paths import place_at_path
+from ansible_navigator.utils.dot_paths import MergeBehaviors
+from ansible_navigator.utils.dot_paths import check_path
+from ansible_navigator.utils.dot_paths import get_with_path
+from ansible_navigator.utils.dot_paths import move_to_path
+from ansible_navigator.utils.dot_paths import place_at_path
+
 from .definitions import MigrationStep
 from .definitions import MigrationType
 from .settings_file import SettingsFile

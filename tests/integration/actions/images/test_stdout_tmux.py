@@ -1,13 +1,13 @@
 """Tests for ``images`` from CLI, stdout."""
 import pytest
 
+from tests.conftest import default_ee_image_name
 from tests.defaults import id_func
+from tests.integration._interactions import Command
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._interactions import add_indices
 
-from ....conftest import default_ee_image_name
-from ..._interactions import Command
-from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
-from ..._interactions import add_indices
 from .base import IMAGE_NO_VERSION
 from .base import BaseClass
 

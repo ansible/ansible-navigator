@@ -8,8 +8,9 @@ import re
 from typing import Any
 from typing import Callable
 
-from ..content_defs import ContentBase
-from ..content_defs import ContentTypeSequence
+from ansible_navigator.content_defs import ContentBase
+from ansible_navigator.content_defs import ContentTypeSequence
+
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines

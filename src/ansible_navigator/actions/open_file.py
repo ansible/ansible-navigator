@@ -10,17 +10,18 @@ from typing import Any
 from typing import Callable
 from typing import Optional
 
-from ..app_public import AppPublic
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..content_defs import ContentBase
-from ..content_defs import ContentFormat
-from ..content_defs import ContentType
-from ..content_defs import ContentView
-from ..content_defs import SerializationFormat
-from ..ui_framework import Interaction
-from ..ui_framework import Menu
-from ..utils.functions import remove_dbl_un
-from ..utils.serialize import serialize_write_temp_file
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.content_defs import ContentBase
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.content_defs import ContentType
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
+from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.ui_framework import Menu
+from ansible_navigator.utils.functions import remove_dbl_un
+from ansible_navigator.utils.serialize import serialize_write_temp_file
+
 from . import _actions as actions
 
 

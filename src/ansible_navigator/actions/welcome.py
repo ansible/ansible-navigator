@@ -1,11 +1,12 @@
 """Welcome subcommand implementation."""
 
-from ..action_base import ActionBase
-from ..app_public import AppPublic
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..content_defs import ContentFormat
-from ..ui_framework import Interaction
-from ..utils.packaged_data import retrieve_content
+from ansible_navigator.action_base import ActionBase
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.utils.packaged_data import retrieve_content
+
 from . import _actions as actions
 
 

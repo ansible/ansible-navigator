@@ -8,7 +8,7 @@ from dataclasses import is_dataclass
 from math import floor
 from typing import Any
 
-from ..content_defs import ContentBase
+from ansible_navigator.content_defs import ContentBase
 
 
 def convert_percentage(

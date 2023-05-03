@@ -5,10 +5,9 @@ import pytest
 
 from ansible_navigator.utils.serialize import SafeLoader
 from ansible_navigator.utils.serialize import yaml
-
-from ....defaults import FIXTURES_COLLECTION_PATH
-from ..._common import Parameter
-from ...conftest import CliRunner
+from tests.defaults import FIXTURES_COLLECTION_PATH
+from tests.integration._common import Parameter
+from tests.integration.conftest import CliRunner
 
 
 @pytest.mark.parametrize("cwd", [True, False], ids=["adjacent", "not_adjacent"])

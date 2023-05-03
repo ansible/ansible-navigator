@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock  # pylint: disable=preferred-module
 
 
-class RunnerTestException(Exception):
+class RunnerTestError(Exception):
     """Custom exception for runner to throw."""
 
 
@@ -81,7 +81,7 @@ class Cli2Runner:
         """
         mocked_runner = mocker.patch(
             target="ansible_navigator.runner.ansible_config.get_ansible_config",
-            side_effect=RunnerTestException,
+            side_effect=RunnerTestError,
         )
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         cli_entry = self.cli_entry.format(self.INTERACTIVE["config"], cli_entry, "interactive")
@@ -111,7 +111,7 @@ class Cli2Runner:
         """
         mocked_runner = mocker.patch(
             target="ansible_navigator.runner.command.run_command",
-            side_effect=RunnerTestException,
+            side_effect=RunnerTestError,
         )
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         cli_entry = self.cli_entry.format(self.STDOUT["config"], cli_entry, "stdout")
@@ -141,7 +141,7 @@ class Cli2Runner:
         """
         mocked_runner = mocker.patch(
             target="ansible_navigator.runner.ansible_inventory.get_inventory",
-            side_effect=RunnerTestException,
+            side_effect=RunnerTestError,
         )
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         cli_entry = self.cli_entry.format(self.INTERACTIVE["inventory"], cli_entry, "interactive")
@@ -171,7 +171,7 @@ class Cli2Runner:
         """
         mocked_runner = mocker.patch(
             target="ansible_navigator.runner.command.run_command",
-            side_effect=RunnerTestException,
+            side_effect=RunnerTestError,
         )
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         cli_entry = self.cli_entry.format(self.STDOUT["inventory"], cli_entry, "stdout")
@@ -201,7 +201,7 @@ class Cli2Runner:
         """
         mocked_runner = mocker.patch(
             target="ansible_navigator.runner.command_async.run_command_async",
-            side_effect=RunnerTestException,
+            side_effect=RunnerTestError,
         )
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
         cli_entry = self.cli_entry.format(self.INTERACTIVE["run"], cli_entry, "interactive")
@@ -231,7 +231,7 @@ class Cli2Runner:
         """
         mocked_runner = mocker.patch(
             target="ansible_navigator.runner.command_async.run_command_async",
-            side_effect=RunnerTestException,
+            side_effect=RunnerTestError,
         )
         cli_entry = self.cli_entry.format(self.STDOUT["run"], cli_entry, "stdout")
         self.run_test(mocked_runner, monkeypatch, tmp_path, cli_entry, config_fixture, expected)
