@@ -292,7 +292,7 @@ class Action(ActionBase):
 
         :returns: The plugin menu definition
         """
-        self._collection_cache.open()
+        self._collection_cache.open_()
         selected_collection = self._collections[self.steps.current.index]
         collection_name = f"__{selected_collection['known_as']}"
         collection_contents = []
@@ -655,7 +655,7 @@ class Action(ActionBase):
         roles_exclude_keys = ["readme"]
         self._collection_cache = cast(KeyValueStore, self._collection_cache)
 
-        self._collection_cache.open()
+        self._collection_cache.open_()
         for collection in self._collections:
             plugins_details = self._get_collection_plugins_details(collection)
 

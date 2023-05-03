@@ -110,7 +110,6 @@ line-length = 100
 builtins = ["__"]
 select = ["ALL"]
 ignore = [
-  'A003', # Class attribute `repr` is shadowing a python builtin
   'ANN001', # Missing type annotation for function argument `output`
   'ANN002', # Missing type annotation for `*args`
   'ANN003', # Missing type annotation for `**kwargs`

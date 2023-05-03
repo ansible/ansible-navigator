@@ -92,7 +92,7 @@ stdout_tests = (
         user_input=StdoutCommand(
             cmdline="",
             mode="stdout",
-            format="json",
+            format_="json",
             execution_environment=True,
             raw_append=" | grep creator",
         ).join(),
