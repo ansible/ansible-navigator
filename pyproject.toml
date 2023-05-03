@@ -158,8 +158,6 @@ ignore = [
   'FBT003', # Boolean positional value in function call
   'G003', # Logging statement uses `+`
   'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
-  'ISC001', # Implicitly concatenated string literals on one line
-  'ISC003', # Explicitly concatenated string should be implicitly concatenated
   'N802', # Function name `formatTime` should be lowercase
   'N806', # Variable `FType` in function should be lowercase
   'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`

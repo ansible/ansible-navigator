@@ -50,20 +50,20 @@ command_test_data = [
     CommandTestData(
         name="With shell complex",
         command="ansible-vault encrypt_string --vault-password-file"
-        + " a_password_file 'foobar' --name 'the_secret'",
+        " a_password_file 'foobar' --name 'the_secret'",
         use_shell=True,
         default_exec_command=False,
         result_command="/bin/bash",
         result_params=[
             "-c",
             "ansible-vault encrypt_string --vault-password-file"
-            + " a_password_file 'foobar' --name 'the_secret'",
+            " a_password_file 'foobar' --name 'the_secret'",
         ],
     ),
     CommandTestData(
         name="Without shell complex",
         command="ansible-vault encrypt_string --vault-password-file"
-        + " a_password_file 'foobar' --name 'the secret'",
+        " a_password_file 'foobar' --name 'the secret'",
         use_shell=False,
         default_exec_command=False,
         result_command="ansible-vault",

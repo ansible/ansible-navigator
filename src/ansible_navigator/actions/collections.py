@@ -189,7 +189,7 @@ class Action(ActionBase):
         ):
             msg = (
                 "Failed to create collections cache, "
-                + "Please review the ansible-navigator log file for errors."
+                "Please review the ansible-navigator log file for errors."
             )
             return RunStdoutReturn(message=msg, return_code=1)
 
@@ -200,7 +200,7 @@ class Action(ActionBase):
         if not self._collections:
             msg = (
                 "Failed to catalog collections, "
-                + "Please review the ansible-navigator log file for errors."
+                "Please review the ansible-navigator log file for errors."
             )
             return RunStdoutReturn(message=msg, return_code=1)
 

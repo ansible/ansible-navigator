@@ -91,7 +91,7 @@ class ActionBase:
             messages=[
                 f"The '{self._name}' subcommand is not available while using interactive mode.",
                 "[HINT] Start an additional instance of ansible-navigator"
-                + " in a new terminal with mode 'stdout'.",
+                " in a new terminal with mode 'stdout'.",
                 f"      e.g. 'ansible-navigator {self._name} --mode stdout",
             ],
         )

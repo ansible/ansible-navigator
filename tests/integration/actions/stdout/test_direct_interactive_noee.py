@@ -5,7 +5,7 @@ from .base import ANSIBLE_PLAYBOOK
 from .base import BaseClass
 
 
-CLI = "ansible-navigator" f" run {ANSIBLE_PLAYBOOK}" " --execution-environment false"
+CLI = f"ansible-navigator run {ANSIBLE_PLAYBOOK} --execution-environment false"
 
 testdata = [
     (0, CLI, "run top window", "Successful"),
