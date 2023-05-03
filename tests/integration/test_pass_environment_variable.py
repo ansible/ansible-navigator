@@ -13,7 +13,7 @@ from ansible_navigator import cli
 from tests.defaults import FIXTURES_DIR
 
 from ._cli2runner import Cli2Runner
-from ._cli2runner import RunnerTestException
+from ._cli2runner import RunnerTestError
 
 
 if TYPE_CHECKING:
@@ -105,7 +105,7 @@ class Test(Cli2Runner):
         for env_var, value in expected.items():
             monkeypatch.setenv(env_var, value)
 
-        with pytest.raises(RunnerTestException):
+        with pytest.raises(RunnerTestError):
             cli.main()
 
         _args, kwargs = mocked_runner.call_args

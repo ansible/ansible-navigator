@@ -165,7 +165,6 @@ ignore = [
   'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`
   'N813', # Camelcase `Action` imported as lowercase `stdout_action`
   'N817', # CamelCase `Constants` imported as acronym `C`
-  'N818', # Exception name `FailedCollection` should be named with an Error suffix
   'PGH003', # Use specific rule codes when ignoring type issues
   'PIE810', # [*] Call `startswith` once with a `tuple`
   'PLC1901', # `self.fs_source == ""` can be simplified to `not self.fs_source` as an empty string is falsey
