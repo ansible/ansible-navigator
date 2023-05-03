@@ -7,11 +7,12 @@ import shlex
 
 from typing import Optional
 
-from ..action_base import ActionBase
-from ..action_defs import RunStdoutReturn
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..configuration_subsystem.definitions import Constants
-from ..runner import Command
+from ansible_navigator.action_base import ActionBase
+from ansible_navigator.action_defs import RunStdoutReturn
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.configuration_subsystem.definitions import Constants
+from ansible_navigator.runner import Command
+
 from . import _actions as actions
 
 

@@ -6,9 +6,10 @@ import textwrap
 
 from typing import Any
 
-from ..utils.dict_merge import in_place_list_replace
-from ..utils.functions import shlex_join
-from ..utils.packaged_data import retrieve_content
+from ansible_navigator.utils.dict_merge import in_place_list_replace
+from ansible_navigator.utils.functions import shlex_join
+from ansible_navigator.utils.packaged_data import retrieve_content
+
 from .definitions import ApplicationConfiguration
 from .definitions import Constants
 from .definitions import SettingsEntry

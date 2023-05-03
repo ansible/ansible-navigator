@@ -4,28 +4,28 @@ from __future__ import annotations
 from dataclasses import asdict
 from functools import partial
 
+from ansible_navigator.action_base import ActionBase
+from ansible_navigator.action_defs import RunStdoutReturn
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem import PresentableSettingsEntries
+from ansible_navigator.configuration_subsystem import PresentableSettingsEntry
+from ansible_navigator.configuration_subsystem import to_effective
+from ansible_navigator.configuration_subsystem import to_presentable
+from ansible_navigator.configuration_subsystem import to_sample
+from ansible_navigator.configuration_subsystem import to_schema
+from ansible_navigator.configuration_subsystem import to_sources
 from ansible_navigator.configuration_subsystem.definitions import Constants
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.steps import StepType
+from ansible_navigator.steps import TypedStep
+from ansible_navigator.ui_framework import Color
+from ansible_navigator.ui_framework import CursesLine
+from ansible_navigator.ui_framework import CursesLinePart
+from ansible_navigator.ui_framework import CursesLines
+from ansible_navigator.ui_framework import Decoration
+from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.utils.print import print_to_stdout
 
-from ..action_base import ActionBase
-from ..action_defs import RunStdoutReturn
-from ..app_public import AppPublic
-from ..configuration_subsystem import PresentableSettingsEntries
-from ..configuration_subsystem import PresentableSettingsEntry
-from ..configuration_subsystem import to_effective
-from ..configuration_subsystem import to_presentable
-from ..configuration_subsystem import to_sample
-from ..configuration_subsystem import to_schema
-from ..configuration_subsystem import to_sources
-from ..content_defs import ContentFormat
-from ..steps import StepType
-from ..steps import TypedStep
-from ..ui_framework import Color
-from ..ui_framework import CursesLine
-from ..ui_framework import CursesLinePart
-from ..ui_framework import CursesLines
-from ..ui_framework import Decoration
-from ..ui_framework import Interaction
-from ..utils.print import print_to_stdout
 from . import _actions as actions
 from . import run_action
 

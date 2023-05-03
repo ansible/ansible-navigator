@@ -19,12 +19,13 @@ from typing import Callable
 from typing import NamedTuple
 from typing import Protocol
 
-from ..content_defs import ContentFormat
-from ..content_defs import ContentType
-from ..content_defs import ContentTypeSequence
-from ..content_defs import ContentView
-from ..utils.functions import templar
-from ..utils.serialize import serialize
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.content_defs import ContentType
+from ansible_navigator.content_defs import ContentTypeSequence
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.utils.functions import templar
+from ansible_navigator.utils.serialize import serialize
+
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
 from .curses_defs import CursesLine

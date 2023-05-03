@@ -20,8 +20,7 @@ from ansible_navigator.utils.functions import ExitMessage
 from ansible_navigator.utils.functions import LogMessage
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
-
-from ...defaults import FIXTURES_DIR
+from tests.defaults import FIXTURES_DIR
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")

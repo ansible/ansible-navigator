@@ -18,10 +18,11 @@ from typing import Any
 from typing import Callable
 from typing import Optional
 
-from ..action_defs import RunStdoutReturn
-from ..app_public import AppPublic
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..ui_framework import Interaction
+from ansible_navigator.action_defs import RunStdoutReturn
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+from ansible_navigator.ui_framework import Interaction
+
 from . import _actions as actions
 
 

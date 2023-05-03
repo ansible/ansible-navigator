@@ -14,9 +14,8 @@ from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.navigator_post_processor import (
     NavigatorPostProcessor,
 )
-
-from ....defaults import BaseScenario
-from ....defaults import id_func
+from tests.defaults import BaseScenario
+from tests.defaults import id_func
 
 
 @dataclass
