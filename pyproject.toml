@@ -165,7 +165,6 @@ ignore = [
   'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`
   'N813', # Camelcase `Action` imported as lowercase `stdout_action`
   'N817', # CamelCase `Constants` imported as acronym `C`
-  'N818', # Exception name `FailedCollection` should be named with an Error suffix
   'PGH003', # Use specific rule codes when ignoring type issues
   'PIE810', # [*] Call `startswith` once with a `tuple`
   'PLC1901', # `self.fs_source == ""` can be simplified to `not self.fs_source` as an empty string is falsey
@@ -235,14 +234,12 @@ ignore = [
   'TCH001', # Move application import `ansible_navigator.configuration_subsystem.definitions.SettingsEntry` into a type-checking block
   'TCH002', # Move third-party import `ansible_runner.Runner` into a type-checking block
   'TCH003', # Move standard library import `re.Pattern` into a type-checking block
-  'TID252', # [*] Relative imports from parent modules are banned
   'TRY003', # Avoid specifying long messages outside the exception class
   'TRY004', # Prefer `TypeError` exception for invalid type
   'TRY300', # Consider moving this statement to an `else` block
   'TRY301', # Abstract `raise` to an inner function
   'TRY400', # Use `logging.exception` instead of `logging.error`
   'TRY401', # Redundant exception object included in `logging.exception` call
-  'UP033', # [*] Use `@functools.cache` instead of `@functools.lru_cache(maxsize=None)`
 
 ]
 exclude = ["tests/fixtures/**", ".git"]

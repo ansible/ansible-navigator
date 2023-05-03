@@ -11,10 +11,9 @@ from typing import Any
 import pytest
 
 from ansible_navigator.utils.functions import shlex_join
-
-from ...defaults import FIXTURES_DIR
-from ...defaults import BaseScenario
-from ...defaults import id_func
+from tests.defaults import FIXTURES_DIR
+from tests.defaults import BaseScenario
+from tests.defaults import id_func
 
 
 TEST_FIXTURE_DIR = Path(FIXTURES_DIR) / "unit" / "configuration_subsystem"

@@ -9,7 +9,7 @@ from dataclasses import field
 from queue import Queue
 from typing import Callable
 
-from ..utils.definitions import LogMessage
+from ansible_navigator.utils.definitions import LogMessage
 
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1

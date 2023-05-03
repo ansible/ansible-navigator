@@ -31,7 +31,7 @@ def _id_description(value):
     return value.description
 
 
-class DuplicateMountException(RuntimeError):
+class DuplicateMountError(RuntimeError):
     """An exception specific to the duplicate mount test for collections."""
 
 
@@ -57,11 +57,11 @@ def test_for_duplicates_sources(
     monkeypatch.setattr("sys.argv", shlex.split(command))
     run_cmd_mocked = mocker.patch(
         "ansible_navigator.runner.command.run_command",
-        side_effect=DuplicateMountException,
+        side_effect=DuplicateMountError,
     )
     monkeypatch.chdir(working_dir)
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK", "true")
-    with pytest.raises(DuplicateMountException):
+    with pytest.raises(DuplicateMountError):
         cli.main()
     _args, kwargs = run_cmd_mocked.call_args
     host_cwd = Path(kwargs["host_cwd"])

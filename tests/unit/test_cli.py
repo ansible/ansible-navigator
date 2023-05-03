@@ -13,8 +13,7 @@ import pytest
 from ansible_navigator.cli import NavigatorConfiguration
 from ansible_navigator.cli import main
 from ansible_navigator.cli import parse_and_update
-
-from ..defaults import FIXTURES_DIR
+from tests.defaults import FIXTURES_DIR
 
 
 @pytest.mark.parametrize(

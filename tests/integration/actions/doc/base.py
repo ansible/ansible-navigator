@@ -6,10 +6,10 @@ import os
 
 import pytest
 
-from ....defaults import FIXTURES_COLLECTION_DIR
-from ..._common import retrieve_fixture_for_step
-from ..._common import update_fixtures
-from ..._tmux_session import TmuxSession
+from tests.defaults import FIXTURES_COLLECTION_DIR
+from tests.integration._common import retrieve_fixture_for_step
+from tests.integration._common import update_fixtures
+from tests.integration._tmux_session import TmuxSession
 
 
 class BaseClass:

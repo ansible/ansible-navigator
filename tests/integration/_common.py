@@ -14,7 +14,7 @@ from typing import Callable
 
 import pytest
 
-from .. import defaults
+from tests import defaults
 
 
 def get_executable_path(name: str) -> str:

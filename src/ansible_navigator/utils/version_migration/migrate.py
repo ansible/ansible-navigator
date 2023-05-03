@@ -4,14 +4,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..ansi import COLOR
-from ..ansi import IS_TTY
-from ..ansi import blank_line
-from ..ansi import info
-from ..ansi import prompt_enter
-from ..ansi import prompt_yn
-from ..ansi import success
-from ..ansi import warning
+from ansible_navigator.utils.ansi import COLOR
+from ansible_navigator.utils.ansi import IS_TTY
+from ansible_navigator.utils.ansi import blank_line
+from ansible_navigator.utils.ansi import info
+from ansible_navigator.utils.ansi import prompt_enter
+from ansible_navigator.utils.ansi import prompt_yn
+from ansible_navigator.utils.ansi import success
+from ansible_navigator.utils.ansi import warning
+
 from .definitions import MigrationType
 from .definitions import migrations
 

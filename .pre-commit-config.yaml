@@ -84,7 +84,7 @@ repos:
       - id: check-json5
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.33.0
+    rev: v0.34.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -135,7 +135,7 @@ repos:
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.3.1
+    rev: v3.3.2
     hooks:
       - id: pyupgrade
         args: ["--py39-plus"]

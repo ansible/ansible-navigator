@@ -5,14 +5,14 @@ import re
 
 from pathlib import Path
 
+from ansible_navigator.app_public import AppPublic
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
+from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.utils.functions import remove_dbl_un
+from ansible_navigator.utils.serialize import serialize_write_file
 
-from ..app_public import AppPublic
-from ..configuration_subsystem.definitions import ApplicationConfiguration
-from ..content_defs import SerializationFormat
-from ..ui_framework import Interaction
-from ..utils.functions import remove_dbl_un
-from ..utils.serialize import serialize_write_file
 from . import _actions as actions
 
 

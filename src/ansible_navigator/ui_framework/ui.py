@@ -9,7 +9,7 @@ import re
 from collections.abc import Mapping
 from collections.abc import Sequence
 from curses import ascii as curses_ascii
-from functools import lru_cache
+from functools import cache
 from math import ceil
 from math import floor
 from re import Match
@@ -19,12 +19,13 @@ from typing import Callable
 from typing import NamedTuple
 from typing import Protocol
 
-from ..content_defs import ContentFormat
-from ..content_defs import ContentType
-from ..content_defs import ContentTypeSequence
-from ..content_defs import ContentView
-from ..utils.functions import templar
-from ..utils.serialize import serialize
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.content_defs import ContentType
+from ansible_navigator.content_defs import ContentTypeSequence
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.utils.functions import templar
+from ansible_navigator.utils.serialize import serialize
+
 from .colorize import Colorize
 from .colorize import rgb_to_ansi
 from .curses_defs import CursesLine
@@ -791,11 +792,9 @@ class UserInterface(CursesWindow):
         return False
 
     @staticmethod
-    @lru_cache(maxsize=None)
+    @cache
     def _search_value(regex: Pattern, value: str) -> Match | None:
         """Check a str against a regex.
-
-        lru_cache enabled because this is hit during resize
 
         :param regex: the compiled regex
         :param value: the string to check

@@ -10,9 +10,8 @@ from re import Pattern
 import pytest
 
 from ansible_navigator import cli
-
-from ...defaults import BaseScenario
-from ...defaults import id_func
+from tests.defaults import BaseScenario
+from tests.defaults import id_func
 
 
 @dataclass

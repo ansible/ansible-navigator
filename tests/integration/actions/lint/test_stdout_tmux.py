@@ -4,11 +4,11 @@ import os
 import pytest
 
 from tests.defaults import id_func
+from tests.integration._interactions import Command
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._interactions import add_indices
 
-from ..._interactions import Command
-from ..._interactions import SearchFor
-from ..._interactions import UiTestStep
-from ..._interactions import add_indices
 from .base import LINT_FIXTURES
 from .base import BaseClass
 

@@ -17,11 +17,11 @@ from typing import NamedTuple
 
 import yaml
 
-from ..content_defs import ContentBase
-from ..content_defs import ContentFormat
-from ..content_defs import ContentType
-from ..content_defs import ContentView
-from ..content_defs import SerializationFormat
+from ansible_navigator.content_defs import ContentBase
+from ansible_navigator.content_defs import ContentFormat
+from ansible_navigator.content_defs import ContentType
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
 
 
 logger = logging.getLogger(__name__)

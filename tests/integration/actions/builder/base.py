@@ -2,16 +2,19 @@
 import difflib
 import os
 
+from pathlib import Path
+
 import pytest
 
-from ....defaults import FIXTURES_DIR
-from ..._common import retrieve_fixture_for_step
-from ..._common import update_fixtures
-from ..._interactions import SearchFor
-from ..._tmux_session import TmuxSession
+from tests.defaults import FIXTURES_DIR
+from tests.integration._common import retrieve_fixture_for_step
+from tests.integration._common import update_fixtures
+from tests.integration._interactions import SearchFor
+from tests.integration._tmux_session import TmuxSession
 
 
-BUILDER_FIXTURE = os.path.join(FIXTURES_DIR, "common", "builder", "test_ee")
+BUILDER_FIXTURE = Path(FIXTURES_DIR) / "common" / "builder" / "test_ee"
+EE_MANIFEST = BUILDER_FIXTURE / "execution-environment.yml"
 
 
 class BaseClass:
