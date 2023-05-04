@@ -37,13 +37,17 @@ PLUGIN_TYPES = (
     "callback",
     "cliconf",
     "connection",
+    "filter",
     "httpapi",
     "inventory",
+    "keyword",
     "lookup",
     "module",
     "netconf",
+    "role",
     "shell",
     "strategy",
+    "test",
     "vars",
 )
 
