@@ -272,10 +272,7 @@ class TmuxSession:
             showing = self._capture_pane()
 
             if showing:
-                if self.cli_prompt in showing[-1]:
-                    mode = "shell"
-                else:
-                    mode = "app"
+                mode = "shell" if self.cli_prompt in showing[-1] else "app"
 
             if mode is not None:
                 break

@@ -155,15 +155,14 @@ def place_at_path(
                     nested[part].sort()
                 continue
 
-            if isinstance(nested.get(part), dict):
-                if isinstance(value, dict):
-                    if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
-                        nested[part].update(value)
-                    elif MergeBehaviors.DICT_DICT_REPLACE in behaviors:
-                        nested[part] = value
-                    else:
-                        raise ValueError("No behavior specified for DICT_DICT")
-                    continue
+            if isinstance(nested.get(part), dict) and isinstance(value, dict):
+                if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
+                    nested[part].update(value)
+                elif MergeBehaviors.DICT_DICT_REPLACE in behaviors:
+                    nested[part] = value
+                else:
+                    raise ValueError("No behavior specified for DICT_DICT")
+                continue
 
             nested[part] = value
         elif part not in nested:

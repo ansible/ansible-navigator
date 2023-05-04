@@ -452,10 +452,7 @@ def parse_args() -> tuple[argparse.Namespace, list[Path]]:
     parsed_args = parser.parse_args()
 
     adjacent = vars(parsed_args).get("adjacent")
-    if adjacent:
-        directories = [adjacent] + parsed_args.dirs
-    else:
-        directories = parsed_args.dirs
+    directories = [adjacent] + parsed_args.dirs if adjacent else parsed_args.dirs
 
     directories.extend(reversed(sys.path))
 

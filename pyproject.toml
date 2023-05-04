@@ -218,13 +218,6 @@ ignore = [
   'S603', # `subprocess` call: check for execution of untrusted input
   'S605', # Starting a process with a shell, possible injection detected
   'S607', # Starting a process with a partial executable path
-  'SIM102', # [*] Use a single `if` statement instead of nested `if` statements
-  'SIM105', # [*] Use `contextlib.suppress(ValueError)` instead of `try`-`except`-`pass`
-  'SIM108', # [*] Use ternary operator `inventory_err = parts[0] + inventory_err if inventory_err else parts[0]` instead of `if`-`else`-block
-  'SIM110', # [*] Use `return any(self._search_value(self.menu_filter(), obj.get(key)) for key in columns)` instead of `for` loop
-  'SIM114', # Combine `if` branches using logical `or` operator
-  'SIM118', # [*] Use `group in self._inventory` instead of `group in self._inventory.keys()`
-  'SIM401', # [*] Use `cache_version = collection_cache.get("version", None)` instead of an `if` block
   'SLF001', # Private member accessed: `_ui`
   'T201', # `print` found
   'TCH001', # Move application import `ansible_navigator.configuration_subsystem.definitions.SettingsEntry` into a type-checking block

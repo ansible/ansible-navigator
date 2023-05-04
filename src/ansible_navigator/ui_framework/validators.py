@@ -52,10 +52,7 @@ class FieldValidators:
         """
         if hint:
             return "Please provide a value (optional)"
-        if text:
-            value = "*" * randrange(15, 20)
-        else:
-            value = ""
+        value = "*" * randrange(15, 20) if text else ""
         return Validation(value=value, error_msg="")
 
     @staticmethod
@@ -95,10 +92,7 @@ class FieldValidators:
         :param hint: If True, return a hint message instead of a Validation
         :returns: A Validation or a hint message
         """
-        if choices:
-            choices_str = f"{', '.join(choices[:-1])} or {choices[-1]}"
-        else:
-            choices_str = ""
+        choices_str = f"{', '.join(choices[:-1])} or {choices[-1]}" if choices else ""
         msg = f"Please enter {choices_str}"
         value = text
         if hint:

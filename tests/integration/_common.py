@@ -200,10 +200,7 @@ def copytree(
     :raises Error: If an error occurs
     """
     names = os.listdir(src)
-    if ignore is not None:
-        ignored_names = ignore(src, names)
-    else:
-        ignored_names = set()
+    ignored_names = ignore(src, names) if ignore is not None else set()
 
     os.makedirs(dst, exist_ok=dirs_exist_ok)
     errors = []

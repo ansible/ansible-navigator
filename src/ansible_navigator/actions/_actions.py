@@ -43,10 +43,8 @@ def _import_all(package: str) -> None:
     :param package: The name of the package
     """
     for entry in importlib_resources.files(package).iterdir():
-        if entry.is_file():
-            if entry.name.endswith(".py"):
-                if not entry.name.startswith("_"):
-                    _import(package, entry.name[0:-3])
+        if entry.is_file() and entry.name.endswith(".py") and not entry.name.startswith("_"):
+            _import(package, entry.name[0:-3])
 
 
 def register(cls: Any) -> Any:

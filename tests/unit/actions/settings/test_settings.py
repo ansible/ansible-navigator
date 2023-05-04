@@ -96,10 +96,7 @@ class ContentHeadingEntry(BaseScenario):
 
         :returns: The expected heading
         """
-        if self.content.default:
-            heading = CONTENT_HEADING_DEFAULT
-        else:
-            heading = CONTENT_HEADING_NOT_DEFAULT
+        heading = CONTENT_HEADING_DEFAULT if self.content.default else CONTENT_HEADING_NOT_DEFAULT
         return heading.format(**asdict(self.content))
 
     def __str__(self):

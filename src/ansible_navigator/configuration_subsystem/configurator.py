@@ -353,18 +353,16 @@ class Configurator:
         :param value: The value to check.
         :return: True if the value is invalid and an error message was logged.
         """
-        if entry.cli_parameters and entry.choices:
-            if value not in entry.choices:
-                self._exit_messages.append(ExitMessage(message=entry.invalid_choice))
-                choices = [
-                    f"{entry.cli_parameters.short} {str(choice).lower()}"
-                    for choice in entry.choices
-                ]
-                exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
-                self._exit_messages.append(
-                    ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
-                )
-                return True
+        if entry.cli_parameters and entry.choices and value not in entry.choices:
+            self._exit_messages.append(ExitMessage(message=entry.invalid_choice))
+            choices = [
+                f"{entry.cli_parameters.short} {str(choice).lower()}" for choice in entry.choices
+            ]
+            exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
+            self._exit_messages.append(
+                ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
+            )
+            return True
         return False
 
     def _apply_previous_cli_to_current(self) -> None:
@@ -411,9 +409,11 @@ class Configurator:
                 continue
 
             # skip if the same subcommand is required for reapplication
-            if current_entry.apply_to_subsequent_cli is C.SAME_SUBCOMMAND:
-                if current_subcommand != previous_subcommand:
-                    continue
+            if (
+                current_entry.apply_to_subsequent_cli is C.SAME_SUBCOMMAND
+                and current_subcommand != previous_subcommand
+            ):
+                continue
 
             # skip if the previous entry was not set by the CLI
             if previous_entry.value.source is not C.USER_CLI:
