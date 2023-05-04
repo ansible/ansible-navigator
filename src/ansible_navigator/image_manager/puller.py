@@ -117,11 +117,11 @@ class ImagePuller:
 
     def _determine_pull(self):
         """Determine if a pull is required."""
-        if self._pull_policy == "missing" and self._image_present is False:
+        if self._pull_policy == "missing" and self._image_present is False:  # noqa: SIM114
             pull = True
-        elif self._pull_policy == "always":
+        elif self._pull_policy == "always":  # noqa: SIM114
             pull = True
-        elif self._pull_policy == "tag" and self._image_tag == "latest":
+        elif self._pull_policy == "tag" and self._image_tag == "latest":  # noqa: SIM114
             pull = True
         elif self._pull_policy == "tag" and self._image_present is False:
             pull = True

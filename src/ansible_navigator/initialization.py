@@ -123,10 +123,7 @@ def get_and_check_collection_doc_cache(
         return messages, exit_messages, None
 
     collection_cache: KeyValueStore = KeyValueStore(collection_doc_cache_path)
-    if "version" in collection_cache:
-        cache_version = collection_cache["version"]
-    else:
-        cache_version = None
+    cache_version = collection_cache["version"] if "version" in collection_cache else None
     message = f"Collection doc cache: 'current version' is '{cache_version}'"
     messages.append(LogMessage(level=logging.DEBUG, message=message))
     if cache_version is None or cache_version != VERSION_CDC:

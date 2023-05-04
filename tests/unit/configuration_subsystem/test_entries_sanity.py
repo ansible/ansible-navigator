@@ -59,11 +59,13 @@ def test_entries_no_short_long_if_positional(entry: SettingsEntry):
 
     :param entry: The entry to test
     """
-    if hasattr(entry, "cli_arguments"):
-        if entry.cli_parameters is not None:
-            if entry.cli_parameters.positional:
-                assert entry.cli_parameters.short is None
-                assert entry.cli_parameters.long_override is None
+    if (
+        hasattr(entry, "cli_arguments")
+        and entry.cli_parameters is not None
+        and entry.cli_parameters.positional
+    ):
+        assert entry.cli_parameters.short is None
+        assert entry.cli_parameters.long_override is None
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)

@@ -1,6 +1,8 @@
 """Common definitions for a version migration."""
 from __future__ import annotations
 
+import contextlib
+
 from enum import Enum
 from pathlib import Path
 from typing import Callable
@@ -163,10 +165,9 @@ class Migration:
             return
 
         step.print_start()
-        try:
+        with contextlib.suppress(Exception):
             step.needed = function(*args, **kwargs)
-        except Exception:
-            pass
+
         if step.needed:
             step.print_failed()
         else:

@@ -346,9 +346,7 @@ def ansi_to_curses(line: str) -> CursesLine:
                 cap = match.groupdict()
                 one = cap["one"]
                 two = cap["two"]
-                if cap["fg_action"] == "39;":
-                    pass  # default color
-                elif one == "0" and two is None:
+                if cap["fg_action"] == "39;" or (one == "0" and two is None):
                     pass  # default color
                 elif cap["fg_action"] == "38;5;":
                     color = int(one)

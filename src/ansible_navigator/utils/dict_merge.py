@@ -34,7 +34,7 @@ def in_place_list_replace(left: Mergeable, right: Mergeable):
     """
     key = None
     try:
-        if left is None or isinstance(left, (str, int, float, bool)):
+        if left is None or isinstance(left, (str, int, float, bool)):  # noqa: SIM114
             # Border case for first run or if a is a primitive
             left = right
         elif isinstance(left, (tuple, list)):

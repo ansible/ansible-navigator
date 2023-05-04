@@ -247,10 +247,7 @@ class FormPresenter(CursesWindow):
                 f.valid for f in self._form.fields if not isinstance(f, FieldButton)
             ]
             form_field.conditional_validation(form_validity_state)
-            if form_field.disabled is True:
-                color = 8
-            else:
-                color = form_field.color
+            color = 8 if form_field.disabled is True else form_field.color
             line_part = CursesLinePart(far_right, string, color, 0)
             line_parts.append(line_part)
             far_right -= 1
@@ -345,10 +342,7 @@ class FormPresenter(CursesWindow):
         :returns: A list of CursesLinePart containing the prompt
         """
         prompt_start = self._prompt_end - len(form_field.full_prompt)
-        if form_field.valid is True:
-            color = 10
-        else:
-            color = 0
+        color = 10 if form_field.valid is True else 0
 
         cl_prompt = CursesLinePart(prompt_start, form_field.prompt, color, 0)
         cl_default = CursesLinePart(

@@ -233,10 +233,7 @@ def test_poor_choices(
             look_for in exit_msg.message for exit_msg in response.exit_messages
         ), response.exit_messages
 
-    if isinstance(entry.subcommands, list):
-        subcommand = entry.subcommands[0]
-    else:
-        subcommand = None
+    subcommand = entry.subcommands[0] if isinstance(entry.subcommands, list) else None
 
     if entry.cli_parameters and entry.cli_parameters.action == "store_true":
         pass

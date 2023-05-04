@@ -2,6 +2,7 @@
 """Post processing of ansible-navigator configuration."""
 from __future__ import annotations
 
+import contextlib
 import importlib
 import logging
 import os
@@ -95,11 +96,8 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        try:
+        with contextlib.suppress(ValueError):
             entry.value.current = str2bool(entry.value.current)
-        except ValueError:
-            # No error message here because the schema and/or choices will catch it
-            pass
 
         return messages, exit_messages
 
@@ -911,16 +909,20 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        if config.app == "run" and entry.value.current is C.NOT_SET:
-            if config.entry("help_playbook").value.current is False:
-                exit_msg = "A playbook is required when using the run subcommand"
-                exit_messages.append(ExitMessage(message=exit_msg))
-                exit_msg = "Try again with 'run <playbook name>'"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
-        if check_playbook_type(entry.value.current) == "file":
-            if isinstance(entry.value.current, str):
-                entry.value.current = abs_user_path(entry.value.current)
+        if (
+            config.app == "run"
+            and entry.value.current is C.NOT_SET
+            and config.entry("help_playbook").value.current is False
+        ):
+            exit_msg = "A playbook is required when using the run subcommand"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = "Try again with 'run <playbook name>'"
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
+        if check_playbook_type(entry.value.current) == "file" and isinstance(
+            entry.value.current, str
+        ):
+            entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages
 
     @_post_processor
@@ -956,10 +958,9 @@ class NavigatorPostProcessor:
                 entry.value.current = auto_pae
         elif len(pae_set) > 1:
             raise ValueError(f"Conflicting pae requests: {self._requested_pae}")
-        try:
+        with contextlib.suppress(ValueError):
             entry.value.current = str2bool(entry.value.current)
-        except ValueError:
-            pass
+
         return messages, exit_messages
 
     @staticmethod
@@ -986,15 +987,12 @@ class NavigatorPostProcessor:
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
 
-        if config.app == "replay":
-            if not os.path.isfile(entry.value.current):
-                exit_msg = (
-                    f"The specified playbook artifact could not be found: {entry.value.current}"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                exit_msg = "Try again with 'replay <valid path to playbook artifact>'"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
+        if config.app == "replay" and not os.path.isfile(entry.value.current):
+            exit_msg = f"The specified playbook artifact could not be found: {entry.value.current}"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = "Try again with 'replay <valid path to playbook artifact>'"
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
         return messages, exit_messages
 
     @staticmethod

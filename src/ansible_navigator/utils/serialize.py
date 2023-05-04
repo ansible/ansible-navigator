@@ -339,11 +339,7 @@ def _is_multiline_string(value: str):
     :param value: The value to check
     :returns: A boolean indicating if the string is multiline
     """
-    for character in "\u000a\u000d\u001c\u001d\u001e\u0085\u2028\u2029":
-        if character in value:
-            return True
-
-    return False
+    return any(character in value for character in "\n\r\x1c\x1d\x1e\x85\u2028\u2029")
 
 
 def opener(path: str, flags: int, mode: int) -> int:
