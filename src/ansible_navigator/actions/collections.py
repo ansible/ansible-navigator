@@ -564,9 +564,9 @@ class Action(ActionBase):
             collection["__version"] = collection["collection_info"].get("version", "missing")
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
-                if collection["path"].startswith(dest_volume_mounts):
-                    collection["__type"] = "bind_mount"
-                elif collection["path"].startswith(self._adjacent_collection_dir):
+                if collection["path"].startswith(dest_volume_mounts) or collection[
+                    "path"
+                ].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
                 elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
                     collection["__type"] = "bind_mount"

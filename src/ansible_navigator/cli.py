@@ -81,10 +81,7 @@ def log_dependencies() -> list[LogMessage]:
             if pkg_name not in found:
                 found.append(pkg_name)
                 spec = find_spec(pkg_name)
-                if spec:
-                    _location = spec.origin
-                else:
-                    _location = ""
+                _location = spec.origin if spec else ""
                 _version = version(pkg_name)
                 pkgs.append(f"{pkg_name}=={_version} {_location}")
 

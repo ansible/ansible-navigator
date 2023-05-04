@@ -79,9 +79,7 @@ class BaseClass:
         updated_received_output = []
         mask = "X" * 50
         for line in received_output:
-            if tmux_doc_session.cli_prompt in line:
-                updated_received_output.append(mask)
-            elif "filename" in line or "│warnings:" in line:
+            if tmux_doc_session.cli_prompt in line or ("filename" in line or "│warnings:" in line):
                 updated_received_output.append(mask)
             else:
                 for value in ["time=", "skipping entry", "failed:", "permission denied"]:
