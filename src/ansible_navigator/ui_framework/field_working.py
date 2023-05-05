@@ -35,7 +35,6 @@ class FieldWorking:
         return max(self.messages)
 
     def validate(self, response: str) -> None:
-        # pylint: disable=unused-argument
         """No validation required for working field.
 
         :param response: Field response

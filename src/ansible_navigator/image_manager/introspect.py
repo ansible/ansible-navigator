@@ -14,8 +14,6 @@ from typing import Callable
 from typing import Union
 
 
-# pylint: disable=broad-except
-
 JSONTypes = Union[bool, int, str, dict, list]
 
 

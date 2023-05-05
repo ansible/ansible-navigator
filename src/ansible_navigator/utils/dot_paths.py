@@ -108,8 +108,6 @@ def place_at_path(
     :raises ValueError: If something can't be done
     :return: The updated content
     """
-    # pylint: disable=too-many-branches
-    # pylint: disable=too-many-statements
     if (
         MergeBehaviors.DICT_DICT_REPLACE in behaviors
         and MergeBehaviors.DICT_DICT_UPDATE in behaviors

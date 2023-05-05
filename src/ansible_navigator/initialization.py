@@ -140,7 +140,6 @@ def get_and_check_collection_doc_cache(
     return messages, exit_messages, collection_cache
 
 
-# pylint: disable=inconsistent-return-statements
 def _diagnose(
     args: ApplicationConfiguration,
     exit_messages: list[ExitMessage],

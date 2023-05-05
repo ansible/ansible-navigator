@@ -28,7 +28,6 @@ from .validators import FieldValidators
 
 
 def dict_to_form(form_data: dict) -> Form:
-    # pylint: disable=too-many-branches
     """Convert a python dict to a form.
 
     :param form_data: Form data

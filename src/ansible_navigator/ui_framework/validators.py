@@ -84,7 +84,6 @@ class FieldValidators:
 
     @staticmethod
     def one_of(choices: list = [], text: str = "", hint: bool = False) -> Validation | str:
-        # pylint: disable=dangerous-default-value
         """Validate that some text is one of choices.
 
         :param choices: The list of choices

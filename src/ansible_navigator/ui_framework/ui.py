@@ -411,9 +411,7 @@ class UserInterface(CursesWindow):
         await_input: bool,
         count: int,
     ) -> str:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Show something on the screen.
 
         :param lines: The lines to show
@@ -677,9 +675,7 @@ class UserInterface(CursesWindow):
         index: int,
         await_input: bool,
     ) -> Interaction:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Show an object on the display.
 
         :param objs: A list of one or more object

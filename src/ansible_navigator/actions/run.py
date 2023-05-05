@@ -72,7 +72,6 @@ def get_color(word):
 
 
 def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-    # pylint: disable=too-many-branches
     """Find matching color for word.
 
     :param colname: The column name
@@ -347,7 +346,6 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return None
 
-    # pylint: disable=too-many-branches
     def _init_run(self) -> bool:
         """In the case of :run, check the user input.
 
@@ -639,10 +637,7 @@ class Action(ActionBase):
             self._logger.debug("Drained %s events", drain_count)
 
     def _handle_message(self, message: dict) -> None:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-return-statements
         """Handle a runner message.
 
         :param message: The message from runner

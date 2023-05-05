@@ -92,7 +92,6 @@ def severity_to_color(severity: str) -> int:
 
 
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-    # pylint: disable=unused-argument
     """Color the menu.
 
     :param colno: The column number

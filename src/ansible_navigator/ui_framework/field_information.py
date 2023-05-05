@@ -35,7 +35,6 @@ class FieldInformation:
         return max(self.information)
 
     def validate(self, response: str) -> None:
-        # pylint: disable=unused-argument
         """No validation required for information field.
 
         :param response: Field data

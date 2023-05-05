@@ -152,7 +152,7 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     # Capture and show a UI notification
     try:
         return run_action(app=app, interaction=interaction)
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         logger.critical("Subcommand '%s' encountered a fatal error.", action)
         logger.exception("Logging an uncaught exception")
         warn_msg = [f"Unexpected errors were encountered while running '{action}'."]

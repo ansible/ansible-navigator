@@ -150,7 +150,6 @@ class Action:
         return file_name
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
-        # pylint: disable=unused-argument
         """Execute the ``:open`` request for mode interactive.
 
         :param interaction: The interaction from the user

@@ -30,7 +30,6 @@ from . import run_action
 
 
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-    # pylint: disable=unused-argument
     """Provide a color for a collections menu entry in one column.
 
     :param colno: The column number
@@ -210,8 +209,6 @@ class Action(ActionBase):
         )
 
     def _run_runner(self) -> tuple | None:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         """Use the runner subsystem to retrieve the configuration.
 
         :raises RuntimeError: When the ansible-config command cannot be found with execution
@@ -309,7 +306,6 @@ class Action(ActionBase):
         :param dump_output: The output from config dump
         :returns: Nothing
         """
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
         try:
             parsed = yaml.load(list_output, Loader=Loader)

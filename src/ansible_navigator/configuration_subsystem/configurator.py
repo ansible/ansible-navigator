@@ -159,7 +159,6 @@ class Configurator:
 
     def _apply_settings_file(self) -> None:
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Apply the settings file.
 
         :raises ValueError: If the settings file is empty

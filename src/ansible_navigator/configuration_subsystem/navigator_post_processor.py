@@ -87,7 +87,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process a boolean value.
 
         :param entry: The current settings entry
@@ -107,7 +106,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ansible_runner_artifact_dir path.
 
         :param entry: The current settings entry
@@ -126,7 +124,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ansible_runner_rotate_artifacts_count.
 
         :param entry: The current settings entry
@@ -152,7 +149,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ansible_runner_timeout.
 
         :param entry: The current settings entry
@@ -175,7 +171,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process collection doc cache path.
 
         :param entry: The current settings entry
@@ -190,7 +185,6 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def cmdline(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process cmdline.
 
         :param entry: The current settings entry
@@ -209,7 +203,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process container_engine.
 
         :param entry: The current settings entry
@@ -253,9 +246,7 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def execution_environment(self, entry: SettingsEntry, config) -> PostProcessorReturn:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Post process execution_environment.
 
         :param entry: The current settings entry
@@ -338,7 +329,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process execution_environment_image.
 
         :param entry: The current settings entry
@@ -363,8 +353,6 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :return: An instance of the standard post process return object
         """
-        # pylint: disable=unused-argument
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
 
         messages: list[LogMessage] = []
@@ -464,7 +452,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process container_options.
 
         :param entry: The current settings entry
@@ -550,7 +537,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process execution_environment_image_details.
 
         :param entry: The current settings entry
@@ -626,7 +612,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process inventory_columns.
 
         :param entry: The current settings entry
@@ -700,7 +685,6 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def log_file(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process log_file.
 
         If the parent directory for the log file cannot be created and is writable.
@@ -886,7 +870,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process pass_environment_variable.
 
         :param entry: The current settings entry
@@ -939,7 +922,6 @@ class NavigatorPostProcessor:
         :raises ValueError: When more than 1 pae changes requests are present, shouldn't happen
         :returns: An instance of the standard post process return object
         """
-        # pylint: disable=unused-argument
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
 
@@ -1003,7 +985,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process playbook_artifact_save_as.
 
         :param entry: The current settings entry
@@ -1037,7 +1018,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ``pull_arguments``.
 
         :param entry: The current settings entry
@@ -1084,7 +1064,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process set_environment_variable.
 
         :param entry: The current settings entry
@@ -1123,7 +1102,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ``time_zone``.
 
         :param entry: The current settings entry

@@ -11,7 +11,7 @@ from .curses_window import CursesWindow
 
 
 if TYPE_CHECKING:
-    from .field_button import FieldButton  # pylint: disable=cyclic-import
+    from .field_button import FieldButton
 
 
 class FormHandlerButton(CursesWindow):

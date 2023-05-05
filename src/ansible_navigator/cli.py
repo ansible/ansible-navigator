@@ -137,7 +137,6 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
 
 def main():
     """Start application here."""
-    # pylint: disable=broad-except
     messages: list[LogMessage] = log_dependencies()
     exit_messages: list[ExitMessage] = []
 

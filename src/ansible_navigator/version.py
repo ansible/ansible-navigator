@@ -1,5 +1,5 @@
 """Ansible-navigator version information."""
-# pylint: disable=broad-except
+
 try:
     from ._version import version as __version__
 except ImportError:  # pragma: no branch

@@ -70,7 +70,6 @@ class Action(ActionBase):
         )
 
     def color_menu(self, colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-        # pylint: disable=unused-argument
         """Provide a color for a images menu entry in one column.
 
         :param colno: The column number

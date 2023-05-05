@@ -31,7 +31,6 @@ from . import run_action
 
 
 def color_menu(colno: int, colname: str, entry: PresentableSettingsEntry) -> tuple[int, int]:
-    # pylint: disable=unused-argument
     """Color the menu.
 
     :param colno: Column number

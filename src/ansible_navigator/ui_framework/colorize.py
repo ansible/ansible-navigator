@@ -121,7 +121,6 @@ class Colorize:
         :param scope: The scope, aka the format of the string
         :returns: A list of lines, each a list of dicts
         """
-        # pylint: disable=broad-except
         try:
             compiler = self._grammars.compiler_for_scope(scope)
         except KeyError:
@@ -258,7 +257,6 @@ def columns_and_colors(
     lines: list[tuple[Regions, str]],
     schema: ColorSchema,
 ) -> list[list[SimpleLinePart]]:
-    # pylint: disable=too-many-branches
     """Convert to colors and columns.
 
     :param lines: Lines of text and their regions
