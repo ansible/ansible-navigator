@@ -93,9 +93,11 @@ class Parser:
             entry for entry in self._config.entries if entry.subcommand_value is True
         ]
         if len(subcommand_value) == 0:
-            raise ValueError("No entry with subparser value defined")
+            msg = "No entry with subparser value defined"
+            raise ValueError(msg)
         if len(subcommand_value) > 1:
-            raise ValueError("Multiple entries with subparser value defined")
+            msg = "Multiple entries with subparser value defined"
+            raise ValueError(msg)
         entry = subcommand_value[0]
         return self.parser.add_subparsers(
             title=entry.short_description,
@@ -181,9 +183,10 @@ class CustomHelpFormatter(HelpFormatter):
 
         if len(action.option_strings) == 2:
             # Account for a --1234 --long-option-name
-            return f"{action.option_strings[0].ljust(6)} {action.option_strings[1]}"
-
-        raise ValueError("Too many option strings")
+            msg = f"{action.option_strings[0].ljust(6)} {action.option_strings[1]}"
+            return msg
+        msg = "Too many option strings"
+        raise ValueError(msg)
 
     def _format_usage(self, usage, actions, groups, prefix):
         """Format the usage.

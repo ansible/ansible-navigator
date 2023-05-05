@@ -53,7 +53,8 @@ class BaseClass:
         elif step.search_within_response is SearchFor.PROMPT:
             search_within_response = tmux_session.cli_prompt
         else:
-            raise ValueError("test mode not set")
+            msg = "test mode not set"
+            raise ValueError(msg)
 
         received_output = tmux_session.interaction(
             value=step.user_input,

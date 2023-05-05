@@ -61,9 +61,11 @@ class Configurator:
         """
         if self._apply_previous_cli_entries is not C.NONE:
             if self._config.internals.initializing:
-                raise ValueError("'apply_previous_cli' cannot be used while initializing")
+                msg = "'apply_previous_cli' cannot be used while initializing"
+                raise ValueError(msg)
             if not self._config.initial:
-                raise ValueError("'apply_previous_cli' enabled prior to an initialization")
+                msg = "'apply_previous_cli' enabled prior to an initialization"
+                raise ValueError(msg)
 
     def _roll_back(self) -> None:
         """In the case of a rollback, log the configuration state prior to roll back."""
@@ -180,7 +182,8 @@ class Configurator:
                     # the file will be empty, but we shouldn't exit.
                     if self._params in (["settings", "--sample"], ["settings", "--gs"]):
                         return
-                    raise ValueError("Settings file cannot be empty.")
+                    msg = "Settings file cannot be empty."
+                    raise ValueError(msg)
             except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                 exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
                 self._exit_messages.append(ExitMessage(message=exit_msg))

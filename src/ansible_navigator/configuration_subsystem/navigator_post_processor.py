@@ -820,7 +820,8 @@ class NavigatorPostProcessor:
                 entry.value.current = auto_mode
                 entry.value.source = C.AUTO
         elif len(mode_set) > 1:
-            raise ValueError(f"Conflicting mode requests: {self._requested_mode}")
+            msg = f"Conflicting mode requests: {self._requested_mode}"
+            raise ValueError(msg)
         return messages, exit_messages
 
     # Post process osc4.
@@ -957,7 +958,8 @@ class NavigatorPostProcessor:
                 )
                 entry.value.current = auto_pae
         elif len(pae_set) > 1:
-            raise ValueError(f"Conflicting pae requests: {self._requested_pae}")
+            msg = f"Conflicting pae requests: {self._requested_pae}"
+            raise ValueError(msg)
         with contextlib.suppress(ValueError):
             entry.value.current = str2bool(entry.value.current)
 

@@ -63,7 +63,8 @@ def serialize(
         return _yaml_dumps(dumpable=dumpable)
     if serialization_format == SerializationFormat.JSON:
         return _json_dumps(dumpable=dumpable)
-    raise ValueError("Unknown serialization format")
+    msg = "Unknown serialization format"
+    raise ValueError(msg)
 
 
 def serialize_write_file(
@@ -94,7 +95,8 @@ def serialize_write_file(
         if serialization_format == SerializationFormat.YAML:
             _yaml_dump(dumpable=dumpable, file_handle=file_handle)
             return
-    raise ValueError("Unknown serialization format")
+    msg = "Unknown serialization format"
+    raise ValueError(msg)
 
 
 def serialize_write_temp_file(
@@ -131,8 +133,8 @@ def serialize_write_temp_file(
             return Path(file_like.name)
         _text_dump(dumpable=str(dumpable), file_handle=file_like)
         return Path(file_like.name)
-
-    raise ValueError("Unknown serialization format")
+    msg = "Unknown serialization format"
+    raise ValueError(msg)
 
 
 SERIALIZATION_FAILURE_MSG = (

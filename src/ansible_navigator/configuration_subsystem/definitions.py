@@ -192,7 +192,8 @@ class SettingsEntry:
         """
         name = self.name.replace("_", "-")
         if self.value.source is Constants.NOT_SET:
-            raise ValueError(f"Current source not set for {self.name}")
+            msg = f"Current source not set for {self.name}"
+            raise ValueError(msg)
 
         choices = [str(choice).lower() for choice in self.choices]
         current = self.value.current

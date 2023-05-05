@@ -78,9 +78,8 @@ def test(data: Scenario, subtests: Any, tmp_path: Path):
     assert data.settings_file.exists()
     venv_path = os.environ.get("VIRTUAL_ENV")
     if venv_path is None:
-        raise AssertionError(
-            "VIRTUAL_ENV environment variable was not set but tox should have set it.",
-        )
+        msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
+        raise AssertionError(msg)
     venv = Path(venv_path, "bin", "activate")
     log_file = tmp_path / "log.txt"
 

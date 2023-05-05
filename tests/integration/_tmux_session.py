@@ -131,9 +131,8 @@ class TmuxSession:
         # it before we enter tmux. Do this before we switch to bash
         venv_path = os.environ.get("VIRTUAL_ENV")
         if venv_path is None:
-            raise AssertionError(
-                "VIRTUAL_ENV environment variable was not set but tox should have set it.",
-            )
+            msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
+            raise AssertionError(msg)
         venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
 
         # get the USER before we start a clean shell

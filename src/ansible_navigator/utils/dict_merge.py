@@ -47,11 +47,12 @@ def in_place_list_replace(left: Mergeable, right: Mergeable):
                     else:
                         left[key] = right[key]
             else:
-                raise DictMergeError(f"Cannot merge non-dict '{right}' into dict '{left}'")
+                msg = f"Cannot merge non-dict '{right}' into dict '{left}'"
+                raise DictMergeError(msg)
         else:
-            raise DictMergeError(f"Not implemented '{right}' into '{left}'")
+            msg = f"Not implemented '{right}' into '{left}'"
+            raise DictMergeError(msg)
     except TypeError as exc:
-        raise DictMergeError(
-            f"TypeError '{exc}' in key '{key}' when merging '{right}' into '{left}'",
-        ) from exc
+        msg = f"TypeError '{exc}' in key '{key}' when merging '{right}' into '{left}'"
+        raise DictMergeError(msg) from exc
     return left
