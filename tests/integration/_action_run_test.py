@@ -104,7 +104,6 @@ class ActionRunTest:
         value: ContentFormat | None = None,
         default: bool = False,
     ) -> ContentFormat:
-        # pylint: disable=unused-argument
         """Do nothing content format callable.
 
         :param value: The content format value

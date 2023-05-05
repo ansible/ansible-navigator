@@ -45,7 +45,6 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=unused-argument
         """Confirm execution of ``cli.main()`` produces the desired results.
 
         :param mocked_runner: A patched instance of runner
@@ -68,7 +67,6 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=unused-argument
         """Test using config, interactive.
 
         :param mocker: The mocker fixture
@@ -98,7 +96,6 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=unused-argument
         """Test using config, stdout.
 
         :param mocker: The mocker fixture
@@ -128,7 +125,6 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=unused-argument
         """Test using inventory, interactive.
 
         :param mocker: The mocker fixture
@@ -158,7 +154,6 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=unused-argument
         """Test using inventory, stdout.
 
         :param mocker: The mocker fixture
@@ -188,7 +183,6 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=unused-argument
         """Test using run, interactive.
 
         :param mocker: The mocker fixture
@@ -218,7 +212,6 @@ class Cli2Runner:
         expected: dict[str, str],
     ):
         # pylint: disable=too-many-arguments
-        # pylint: disable=unused-argument
         """Test using run, stdout.
 
         :param mocker: The mocker fixture

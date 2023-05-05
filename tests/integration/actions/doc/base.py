@@ -51,7 +51,6 @@ class BaseClass:
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-branches
         """Run the tests for ``doc``, mode and ``ee`` set in child class.
 
         :param request: A fixture providing details about the test caller

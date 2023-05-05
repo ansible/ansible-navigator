@@ -1,0 +1,2 @@
+for file in $(find tests -mindepth 1 -type f); do \
+sed -i -E '/.*(attribute-defined-outside-init|import-outside-toplevel|no-else-return|not-an-iterable|too-many-ancestors|too-many-instance-attributes|too-many-arguments|too-many-lines|too-many-locals|too-many-nested-blocks|preferred-module|protected-access|unused-import|used-before-assignment).*/! s/(.*)# pylint: disable=.*/\1/g' $file; done

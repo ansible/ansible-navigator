@@ -29,7 +29,7 @@ def id_func(param: Any) -> str:
     :return: Returns a string.
     """
     result = ""
-    global _AUTO_ID_COUNTER  # pylint: disable=global-statement
+    global _AUTO_ID_COUNTER
     if isinstance(param, str):
         result = param
     elif hasattr(param, "value") and isinstance(param.value, str):  # covers for Enums too
