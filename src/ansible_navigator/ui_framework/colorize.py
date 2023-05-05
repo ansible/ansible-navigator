@@ -121,6 +121,7 @@ class Colorize:
         :param scope: The scope, aka the format of the string
         :returns: A list of lines, each a list of dicts
         """
+        # pylint: disable=broad-except
         try:
             compiler = self._grammars.compiler_for_scope(scope)
         except KeyError:
@@ -134,7 +135,7 @@ class Colorize:
                 first_line = line_idx == 0
                 try:
                     state, regions = tokenize(compiler, state, line, first_line)
-                except Exception as exc:  # pylint: disable=broad-except
+                except Exception as exc:  # noqa: BLE001
                     self._logger.critical(
                         (
                             "An unexpected error occurred within the tokenization"

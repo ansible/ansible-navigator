@@ -62,7 +62,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
         run_command(command)
         try:
             command.parse(command)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             command.errors = command.errors + [str(exc)]
         completed_queue.put(command)
 
@@ -93,7 +93,7 @@ class CommandRunner:
             run_command(command)
             try:
                 command.parse(command)
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001
                 command.errors = command.errors + [str(exc)]
             results.append(command)
         return results
@@ -413,7 +413,7 @@ def main():
                     result_as_dict[f"__{key}"] = result_as_dict[key]
                     result_as_dict.pop(key)
             response[result_as_dict["__id_"]] = result_as_dict
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         response["errors"].append(str(exc))
     print(json.dumps(response))
 

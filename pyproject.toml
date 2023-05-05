@@ -132,7 +132,6 @@ ignore = [
   'B018', # Found useless attribute access. Either assign it to a variable or remove it.
   'B019', # Use of `functools.lru_cache` or `functools.cache` on methods can lead to memory leaks
   'B028', # No explicit `stacklevel` keyword argument found
-  'BLE001', # Do not catch blind exception: `Exception`
   'C408', # [*] Unnecessary `tuple` call (rewrite as a literal)
   'C409', # [*] Unnecessary `list` literal passed to `tuple()` (rewrite as a `tuple` literal)
   'C414', # [*] Unnecessary `list` call within `sorted()`

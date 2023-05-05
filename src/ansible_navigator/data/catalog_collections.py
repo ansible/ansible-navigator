@@ -357,7 +357,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
     :param completed_queue: The queue in which extracted documentation will be placed
     """
     # pylint: disable=import-outside-toplevel
-
+    # pylint: disable=broad-except
     # load the fragment_loader _after_ the path is set
     from ansible.plugins.loader import fragment_loader
 
@@ -380,7 +380,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                     collection_name=collection_name,
                 )
 
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:  # noqa: BLE001
             err_message = f"{type(exc).__name__} (get_docstring): {str(exc)}"
             completed_queue.put(("error", (checksum, plugin_path, err_message)))
             continue

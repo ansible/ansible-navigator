@@ -63,7 +63,7 @@ def worker(pending_queue: Queue, completed_queue: Queue) -> None:
         run_command(command)
         try:
             command.parse(command)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             command.errors = command.errors + [str(exc)]
         completed_queue.put(command)
 
@@ -401,7 +401,7 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
                     result_as_dict[f"__{key}"] = result_as_dict[key]
                     result_as_dict.pop(key)
             response[result_as_dict["__id"]] = result_as_dict
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         response["errors"].append(str(exc))
     if serialize:
         print(json.dumps(response))

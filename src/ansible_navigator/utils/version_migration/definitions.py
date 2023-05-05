@@ -156,7 +156,7 @@ class Migration:
         if self.check:
             try:
                 step.needed = function(*args, **kwargs)
-            except Exception:
+            except Exception:  # noqa: BLE001
                 step.needed = False
             return
 
