@@ -320,7 +320,8 @@ class Action(ActionBase):
             return self._build_group_menu("all")
         if self.steps.current.index == 1:
             return self._build_host_menu()
-        raise IndexError("broken modules somewhere?")
+        msg = "broken modules somewhere?"
+        raise IndexError(msg)
 
     def _build_group_menu(self, key=None) -> Step:
         """Build the menu for inventory groups.
@@ -432,7 +433,8 @@ class Action(ActionBase):
             return self._build_group_menu()
         if self.steps.current.selected["__type"] == "host":
             return self._build_host_content()
-        raise TypeError("unknown step type")
+        msg = "unknown step type"
+        raise TypeError(msg)
 
     def _collect_inventory_details_interactive(
         self,

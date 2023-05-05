@@ -86,7 +86,8 @@ class Compiler:
                 ret_regs.append(rule.begin)
                 ret_rules.append(self._visit_rule(grammar, rule))
             else:
-                raise AssertionError(f"unreachable {rule}")
+                msg = f"unreachable {rule}"
+                raise AssertionError(msg)
         return ret_regs, tuple(ret_rules)
 
     def _captures_ref(self, grammar: Grammar, captures: Captures) -> Captures:

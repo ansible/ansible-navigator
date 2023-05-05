@@ -70,10 +70,11 @@ class BaseClass:
             # clear the screen so it starts with stdout
             user_input = f"clear && {user_input}"
         else:
-            raise ValueError(
-                "Value of 'TEST_FOR_MODE' is not set."
+            msg = (
+                "Value of 'TEST_FOR_MODE' is not set.",
                 " Valid value is either 'interactive' or 'stdout'",
             )
+            raise ValueError(msg)
 
         received_output = tmux_doc_session.interaction(user_input, search_within_response)
         updated_received_output = []

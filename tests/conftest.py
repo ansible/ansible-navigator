@@ -133,9 +133,8 @@ def use_venv(monkeypatch: pytest.MonkeyPatch) -> None:
     """
     venv_path = os.environ.get("VIRTUAL_ENV")
     if venv_path is None:
-        raise AssertionError(
-            "VIRTUAL_ENV environment variable was not set but tox should have set it.",
-        )
+        msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
+        raise AssertionError(msg)
     path_prepend = Path.cwd() / venv_path / "bin"
     monkeypatch.setenv("PATH", str(path_prepend), prepend=os.pathsep)
 

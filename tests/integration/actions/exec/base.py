@@ -62,7 +62,8 @@ class BaseClass:
         :raises ValueError: If test mode isn't set
         """
         if step.search_within_response is not SearchFor.PROMPT:
-            raise ValueError("test mode not set")
+            msg = "test mode not set"
+            raise ValueError(msg)
 
         search_within_response = tmux_session.cli_prompt
 

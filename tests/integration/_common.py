@@ -28,7 +28,8 @@ def get_executable_path(name: str) -> str:
         return sys.executable
     exec_path = shutil.which(name)
     if not exec_path:
-        raise ValueError(f"{name} executable not found")
+        msg = f"{name} executable not found"
+        raise ValueError(msg)
     return exec_path
 
 

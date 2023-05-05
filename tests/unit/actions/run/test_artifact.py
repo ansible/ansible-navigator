@@ -63,7 +63,8 @@ class Scenario(BaseScenario):
         :raises ValueError: When neither is set
         """
         if not (self.re_match or self.starts_with):
-            raise ValueError("re_match or starts_with required")
+            msg = "re_match or starts_with required"
+            raise ValueError(msg)
 
     def __str__(self):
         """Provide the test id.

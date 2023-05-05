@@ -228,7 +228,8 @@ class MatchRule(NamedTuple):
         first_line: bool,
         boundary: bool,
     ) -> tuple[State, int, bool, Regions] | None:
-        raise AssertionError(f"unreachable {self}")
+        msg = f"unreachable {self}"
+        raise AssertionError(msg)
 
 
 @uniquely_constructed
@@ -243,7 +244,8 @@ class PatternRule(NamedTuple):
         match: Match[str],
         state: State,
     ) -> tuple[State, bool, Regions]:
-        raise AssertionError(f"unreachable {self}")
+        msg = f"unreachable {self}"
+        raise AssertionError(msg)
 
     def search(
         self,
