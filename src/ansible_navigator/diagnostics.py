@@ -141,6 +141,7 @@ def diagnostic_runner(func):
         :param kwargs: The keyword arguments
         :returns: The result of the function with elapsed or error information
         """
+        # pylint: disable=broad-except
         global DIAGNOSTIC_FAILURES  # pylint: disable=global-statement
         start = datetime.datetime.now()
         color = args[0].color
@@ -156,7 +157,7 @@ def diagnostic_runner(func):
             duration = (datetime.datetime.now() - start).total_seconds()
             collector.fail(color=color, duration=duration)
             DIAGNOSTIC_FAILURES += 1
-        except Exception as error:  # pylint: disable=broad-except
+        except Exception as error:  # noqa: BLE001
             # Any other exception, has no data
             result = {"error": str(error) + "\n" + traceback.format_exc()}
             duration = (datetime.datetime.now() - start).total_seconds()

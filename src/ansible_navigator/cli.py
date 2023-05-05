@@ -137,6 +137,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
 
 def main():
     """Start application here."""
+    # pylint: disable=broad-except
     messages: list[LogMessage] = log_dependencies()
     exit_messages: list[ExitMessage] = []
 
@@ -168,7 +169,7 @@ def main():
     try:
         Path(args.log_file).touch()
         setup_logger(args)
-    except Exception as exc:  # pylint: disable=broad-except
+    except Exception as exc:  # noqa: BLE001
         exit_msg = "The log file path or logging engine could not be setup."
         exit_msg += " No log file will be available, please check the log file"
         exit_msg += f" path setting. The error was {str(exc)}"
