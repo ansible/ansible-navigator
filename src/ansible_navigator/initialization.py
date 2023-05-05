@@ -160,9 +160,6 @@ def _diagnose(
         return messages, exit_messages
 
 
-# pylint: enable=inconsistent-return-statements
-
-
 def parse_and_update(
     params: list,
     args: ApplicationConfiguration,

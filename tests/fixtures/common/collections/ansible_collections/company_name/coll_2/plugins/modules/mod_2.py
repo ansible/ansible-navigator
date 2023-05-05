@@ -1,9 +1,6 @@
 """An ansible test module."""
 
 
-# pylint: enable=invalid-name
-
-
 DOCUMENTATION = """
 module: mod_2
 author:
