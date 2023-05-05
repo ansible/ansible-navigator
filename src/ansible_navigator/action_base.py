@@ -78,7 +78,8 @@ class ActionBase:
                 update=self.update,
                 write_artifact=self.write_artifact,
             )
-        raise AttributeError("app passed without args initialized")
+        msg = "app passed without args initialized"
+        raise AttributeError(msg)
 
     def no_interactive_mode(self, interaction: Interaction, app: AppPublic) -> None:
         # pylint: disable=unused-argument

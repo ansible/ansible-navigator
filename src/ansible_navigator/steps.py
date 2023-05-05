@@ -128,7 +128,8 @@ class Step:
         :raises ValueError: If value type doesn't match wanted type
         """
         if not isinstance(value, want):
-            raise ValueError(f"wanted {want}, got {type(value)}")
+            msg = f"wanted {want}, got {type(value)}"
+            raise ValueError(msg)
 
 
 class StepType(Enum):

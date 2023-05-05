@@ -147,8 +147,6 @@ ignore = [
   'D403', # [*] First word of the first line should be capitalized: `tokenize` -> `Tokenize`
   'DTZ003', # The use of `datetime.datetime.utcnow()` is not allowed, use `datetime.datetime.now(tz=)` instead
   'DTZ005', # The use of `datetime.datetime.now()` without `tz` argument is not allowed
-  'EM101', # Exception must not use a string literal, assign to variable first
-  'EM102', # Exception must not use an f-string literal, assign to variable first
   'ERA001', # [*] Found commented-out code
   'F401', # [*] `ansible_navigator.version.__version__` imported but unused
   'FBT001', # Boolean positional arg in function definition
