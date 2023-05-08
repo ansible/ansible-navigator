@@ -82,7 +82,6 @@ class ActionBase:
         raise AttributeError(msg)
 
     def no_interactive_mode(self, interaction: Interaction, app: AppPublic) -> None:
-        # pylint: disable=unused-argument
         """Show a warning notification that the user interactive mode is not supported.
 
         :param interaction: The interaction from the user

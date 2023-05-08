@@ -13,8 +13,6 @@ from typing import Any
 from typing import Callable
 
 
-# pylint: disable=broad-except
-
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 

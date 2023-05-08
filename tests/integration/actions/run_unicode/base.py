@@ -64,7 +64,6 @@ class BaseClass:
         tmux_session: TmuxSession,
         step: UiTestStep,
     ):
-        # pylint: disable=too-many-branches
         """Run the tests for run, mode and ``ee`` set in child class.
 
         :param request: The request for a test

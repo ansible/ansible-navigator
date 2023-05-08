@@ -109,7 +109,6 @@ class CollectionCatalog:
         :param collection: Details describing the collection
         """
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
 
         collection_name: str = collection["known_as"]
         collection["roles"] = []
@@ -357,7 +356,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
     :param completed_queue: The queue in which extracted documentation will be placed
     """
     # pylint: disable=import-outside-toplevel
-    # pylint: disable=broad-except
+
     # load the fragment_loader _after_ the path is set
     from ansible.plugins.loader import fragment_loader
 

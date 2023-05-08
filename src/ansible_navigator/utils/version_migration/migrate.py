@@ -41,7 +41,6 @@ def run_migrations(settings_file_str: str, migration_type: MigrationType) -> Non
     :param settings_file_str: Path to the settings file
     :param migration_type: Type of migration
     """
-    # pylint: disable=too-many-branches
     migrations_to_run = [
         migration()
         for migration in migrations

@@ -328,16 +328,16 @@ class VolumeMountOption(Enum):
     OVERLAY = "O"
 
     # Read Only
-    ro = "ro"  # pylint: disable=invalid-name
+    ro = "ro"
 
     # Read Write
-    rw = "rw"  # pylint: disable=invalid-name
+    rw = "rw"
 
     # Relabel as private
     Z = "Z"
 
     # Relabel as shared.
-    z = "z"  # pylint: disable=invalid-name
+    z = "z"
 
 
 V = TypeVar("V", bound="VolumeMount")

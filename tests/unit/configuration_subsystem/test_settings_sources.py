@@ -76,7 +76,6 @@ def test_full(settings_env_var_to_full):
 
     :param settings_env_var_to_full: The pytest fixture to provide a full config
     """
-    # pylint: disable=unused-argument
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
     _messages, _exit_messages = parse_and_update(params=[], args=settings)

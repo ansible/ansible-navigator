@@ -136,7 +136,7 @@ def test_invalid_choice_not_set():
         ],
     )
     with pytest.raises(ValueError, match="Current source not set for e1"):
-        test_config.entry("e1").invalid_choice  # pylint: disable=expression-not-assigned
+        test_config.entry("e1").invalid_choice
 
 
 def test_custom_nargs_for_positional():

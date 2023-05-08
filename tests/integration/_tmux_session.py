@@ -113,7 +113,7 @@ class TmuxSession:
         """
         # pylint: disable=attribute-defined-outside-init
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
+
         self._server = libtmux.Server()
         self._build_tmux_session()
         self._window = self._session.new_window(self._session_name)
@@ -248,8 +248,6 @@ class TmuxSession:
         timeout: int = 300,
         send_clear: bool = True,
     ) -> list[str]:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         """Interact with the tmux session.
 
         :param value: Send to screen

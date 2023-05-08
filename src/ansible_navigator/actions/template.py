@@ -41,7 +41,6 @@ class Action(ActionBase):
         :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
-        # pylint: disable=too-many-branches
         self._logger.debug("template requested '%s'", interaction.action.value)
         self._prepare_to_run(app, interaction)
 

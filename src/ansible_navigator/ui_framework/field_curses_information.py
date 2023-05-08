@@ -39,7 +39,6 @@ class FieldCursesInformation:
         )
 
     def validate(self, response: str) -> None:
-        # pylint: disable=unused-argument
         """No validation required for information field.
 
         :param response: The response to validate

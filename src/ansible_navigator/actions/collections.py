@@ -36,7 +36,6 @@ from . import run_action
 
 
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-    # pylint: disable=unused-argument
     """Provide a color for a collections menu entry in one column.
 
     :param colno: The column number
@@ -370,8 +369,6 @@ class Action(ActionBase):
         )
 
     def _run_runner(self) -> None:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         # pylint: disable=too-many-locals
         """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
@@ -513,9 +510,8 @@ class Action(ActionBase):
         :param output: The output from the collection cataloging process
         :returns: Nothing
         """
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
+
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)

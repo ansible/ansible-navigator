@@ -149,7 +149,6 @@ class Migration:
         :param args: The positional arguments
         :param kwargs: The keyword arguments
         """
-        # pylint: disable=broad-except
         if not isinstance(step.function_name, str):
             return
         function = getattr(self, step.function_name)

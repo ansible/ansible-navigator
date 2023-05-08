@@ -81,7 +81,7 @@ class Diagnostics:
 
     # pylint: disable=too-many-instance-attributes
 
-    __WARNING__: dict[str, JSONTypes]  # pylint: disable=invalid-name
+    __WARNING__: dict[str, JSONTypes]
     basics: dict[str, JSONTypes]
     container_engines: dict[str, JSONTypes]
     execution_environment: dict[str, JSONTypes]
@@ -141,8 +141,7 @@ def diagnostic_runner(func):
         :param kwargs: The keyword arguments
         :returns: The result of the function with elapsed or error information
         """
-        # pylint: disable=broad-except
-        global DIAGNOSTIC_FAILURES  # pylint: disable=global-statement
+        global DIAGNOSTIC_FAILURES
         start = datetime.datetime.now()
         color = args[0].color
         collector = func.__collector__

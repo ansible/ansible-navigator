@@ -66,7 +66,6 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        # pylint: disable=too-many-branches
         """Run the tests for run, mode and ``ee`` set in child class.
 
         :param request: A fixture providing details about the test caller

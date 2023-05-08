@@ -100,7 +100,6 @@ def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:
     :param ee_enabled: Indicates if EE support is enabled
     :returns: The ansible.cfg contents
     """
-    # pylint: disable=too-many-return-statements
     response = ParseAnsibleCfgResponse(messages=[], exit_messages=[])
     response.config.path = Constants.NONE
     response.config.text = Constants.NONE

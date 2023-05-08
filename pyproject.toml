@@ -95,6 +95,120 @@ disable = [
   "fixme",
   "too-few-public-methods",
   "unsubscriptable-object",
+  # https://gist.github.com/cidrblock/ec3412bacfeb34dbc2d334c1d53bef83
+  "C0103", # invalid-name / ruff N815
+  "C0112", # empty-docstring / ruff D419
+  "C0114", # missing-module-docstring / ruff D100
+  "C0115", # missing-class-docstring / ruff D101
+  "C0116", # missing-function-docstring / ruff D103
+  "C0121", # singleton-comparison / ruff PLC0121
+  "C0123", # unidiomatic-typecheck / ruff E721
+  # "C0198", # bad-docstring-quotes / ruff Q002
+  # "C0199", # docstring-first-line-empty / ruff D210
+  "C0202", # bad-classmethod-argument / ruff PLC0202
+  "C0301", # line-too-long / ruff E501
+  "C0304", # missing-final-newline / ruff W292
+  "C0325", # superfluous-parens / ruff UP034
+  "C0410", # multiple-imports / ruff E401
+  "C0411", # wrong-import-order / ruff I001
+  "C0412", # ungrouped-imports / ruff I001
+  "C0413", # wrong-import-position / ruff E402
+  "C0414", # useless-import-alias / ruff PLC0414
+  # "C0501", # consider-using-any-or-all / ruff PLC0501
+  # "C2201", # misplaced-comparison-constant / ruff SIM300
+  "C3001", # unnecessary-lambda-assignment / ruff PLC3001
+  "C3002", # unnecessary-direct-lambda-call / ruff PLC3002
+  "E0001", # syntax-error / ruff E999
+  "E0101", # return-in-init / ruff PLE0101
+  "E0102", # function-redefined / ruff F811
+  "E0103", # not-in-loop / ruff PLE0103
+  "E0104", # return-outside-function / ruff F706
+  "E0105", # yield-outside-function / ruff F704
+  "E0107", # nonexistent-operator / ruff B002
+  "E0116", # continue-in-finally / ruff PLE0116
+  "E0117", # nonlocal-without-binding / ruff PLE0117
+  "E0118", # used-prior-global-declaration / ruff PLE0118
+  "E0211", # no-method-argument / ruff N805
+  "E0213", # no-self-argument / ruff N805
+  "E0602", # undefined-variable / ruff F821
+  "E0604", # invalid-all-object / ruff PLE0604
+  "E0605", # invalid-all-format / ruff PLE0605
+  "E0711", # notimplemented-raised / ruff F901
+  "E1142", # await-outside-async / ruff PLE1142
+  "E1205", # logging-too-many-args / ruff PLE1205
+  "E1206", # logging-too-few-args / ruff PLE1206
+  "E1301", # truncated-format-string / ruff F501
+  "E1302", # mixed-format-string / ruff F506
+  "E1303", # format-needs-mapping / ruff F502
+  "E1304", # missing-format-string-key / ruff F524
+  "E1307", # bad-string-format-type / ruff PLE1307
+  "E1310", # bad-str-strip-call / ruff PLE1310
+  "E2502", # bidirectional-unicode / ruff PLE2502
+  "E2510", # invalid-character-backspace / ruff PLE2510
+  "E2512", # invalid-character-sub / ruff PLE2512
+  "E2513", # invalid-character-esc / ruff PLE2513
+  "E2514", # invalid-character-nul / ruff PLE2514
+  "E2515", # invalid-character-zero-width-space / ruff PLE2515
+  "R0123", # literal-comparison / ruff F632
+  "R0133", # comparison-of-constants / ruff PLR0133
+  "R0205", # useless-object-inheritance / ruff UP004
+  "R0911", # too-many-return-statements / ruff PLR0911
+  "R0912", # too-many-branches / ruff PLR0912
+  "R0915", # too-many-statements / ruff PLR0915
+  # "R1260", # too-complex / ruff C901
+  "R1701", # consider-merging-isinstance / ruff PLR1701
+  "R1706", # consider-using-ternary / ruff SIM108
+  "R1707", # trailing-comma-tuple / ruff COM818
+  "R1710", # inconsistent-return-statements / ruff PLR1710
+  "R1711", # useless-return / ruff PLR1711
+  "R1715", # consider-using-get / ruff SIM401
+  "R1717", # consider-using-dict-comprehension / ruff C402
+  "R1718", # consider-using-set-comprehension / ruff C401
+  "R1721", # unnecessary-comprehension / ruff PLR1721
+  "R1722", # consider-using-sys-exit / ruff PLR1722
+  "R1725", # super-with-arguments / ruff UP008
+  "R1728", # consider-using-generator / ruff C417
+  "R1729", # use-a-generator / ruff C417
+  "R1734", # use-list-literal / ruff C405
+  "R1735", # use-dict-literal / ruff C406
+  # "R2004", # magic-value-comparison / ruff PLR2004
+  # "R5501", # else-if-used / ruff PLR5501
+  # "R6002", # consider-using-alias / ruff UP006
+  # "R6003", # consider-alternative-union-syntax / ruff UP007
+  "W0102", # dangerous-default-value / ruff B006
+  "W0104", # pointless-statement / ruff B018
+  "W0106", # expression-not-assigned / ruff B018
+  "W0109", # duplicate-key / ruff F601
+  "W0120", # useless-else-on-loop / ruff PLW0120
+  "W0129", # assert-on-string-literal / ruff PLW0129
+  # "W0160", # consider-ternary-expression / ruff SIM108
+  "W0199", # assert-on-tuple / ruff F631
+  "W0401", # wildcard-import / ruff F403
+  "W0406", # import-self / ruff PLW0406
+  "W0410", # misplaced-future / ruff F404
+  "W0602", # global-variable-not-assigned / ruff PLW0602
+  "W0603", # global-statement / ruff PLW0603
+  "W0611", # unused-import / ruff F401
+  "W0612", # unused-variable / ruff F841
+  "W0613", # unused-argument / ruff ARG001
+  "W0622", # redefined-builtin / ruff A001
+  "W0640", # cell-var-from-loop / ruff B023
+  "W0702", # bare-except / ruff E722
+  "W0705", # duplicate-except / ruff B014
+  "W0711", # binary-op-exception / ruff PLW0711
+  "W0718", # broad-exception-caught / ruff PLW0718
+  "W1300", # bad-format-string-key / ruff PLW1300
+  "W1301", # unused-format-string-key / ruff F504
+  "W1302", # bad-format-string / ruff PLW1302
+  "W1304", # unused-format-string-argument / ruff F507
+  "W1308", # duplicate-string-formatting-argument / ruff PLW1308
+  "W1309", # f-string-without-interpolation / ruff F541
+  "W1310", # format-string-without-interpolation / ruff PLW1310
+  "W1401", # anomalous-backslash-in-string / ruff W605
+  "W1405", # inconsistent-quotes / ruff Q000
+  "W1508", # invalid-envvar-default / ruff PLW1508
+  "W1515", # forgotten-debug-statement / ruff T100
+
 ]
 enable = [
   "useless-suppression", # Identify unneeded pylint disable statements

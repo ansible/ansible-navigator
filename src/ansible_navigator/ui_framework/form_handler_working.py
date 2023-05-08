@@ -8,7 +8,7 @@ from .curses_window import CursesWindow
 
 
 if TYPE_CHECKING:
-    from .field_working import FieldWorking  # pylint: disable=cyclic-import
+    from .field_working import FieldWorking
 
 
 class FormHandlerWorking(CursesWindow):

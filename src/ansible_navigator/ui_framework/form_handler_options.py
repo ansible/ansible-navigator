@@ -11,8 +11,8 @@ from .curses_window import CursesWindow
 
 
 if TYPE_CHECKING:
-    from .field_checks import FieldChecks  # pylint: disable=cyclic-import
-    from .field_radio import FieldRadio  # pylint: disable=cyclic-import
+    from .field_checks import FieldChecks
+    from .field_radio import FieldRadio
 
 
 class FormHandlerOptions(CursesWindow):
