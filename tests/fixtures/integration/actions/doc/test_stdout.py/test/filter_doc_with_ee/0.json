@@ -1,0 +1,30 @@
+{
+    "name": "test[0-ansible-navigator doc company_name.coll_1.filter_1 -t filter -m stdout -j --execution-environment true-ansible-navigator filter doc in stdout mode with EE-filter_doc_with_ee-None]",
+    "index": 0,
+    "comment": "ansible-navigator filter doc in stdout mode with EE",
+    "output": [
+        "{",
+        "    \"company_name.coll_1.filter_1\": {",
+        "        \"doc\": {",
+        "            \"author\": \"test\",",
+        "            \"collection\": \"company_name.coll_1\",",
+        "            \"description\": [",
+        "                \"This is test filter plugin\"",
+        "            ],",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "            \"name\": \"filter_1\",",
+        "            \"notes\": [",
+        "                \"This is a dummy filter plugin\"",
+        "            ],",
+        "            \"short_description\": \"This is test filter plugin\",",
+        "            \"version_added\": \"1.0.0\",",
+        "            \"version_added_collection\": \"company_name.coll_1\"",
+        "        },",
+        "        \"examples\": null,",
+        "        \"metadata\": null,",
+        "        \"return\": null",
+        "    }",
+        "}",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
+}
