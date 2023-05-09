@@ -12,9 +12,9 @@ dependencies:
   ansible_runner:
     package_pip: ansible-runner
 
-  galaxy: |
+  galaxy:
     collections:
-    - ansible.utils
+      - ansible.utils
 
   python:
     - ansible-lint
