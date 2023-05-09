@@ -1,0 +1,26 @@
+{
+    "name": "test[1-:doc company_name.coll_1.filter_1 -t filter-load doc-filter_doc_pass-expected_in_output1]",
+    "index": 1,
+    "comment": "load doc",
+    "output": [
+        "Name: company_name.coll_1.filter_1 (filter)",
+        " 0│---",
+        " 1│doc:",
+        " 2│  author: test",
+        " 3│  collection: company_name.coll_1",
+        " 4│  description:",
+        " 5│  - This is test filter plugin",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        " 7│  name: filter_1",
+        " 8│  notes:",
+        " 9│  - This is a dummy filter plugin",
+        "10│  short_description: This is test filter plugin",
+        "11│  version_added: 1.0.0",
+        "12│  version_added_collection: company_name.coll_1",
+        "13│examples: null",
+        "14│metadata: null",
+        "15│return: null",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+    ]
+}

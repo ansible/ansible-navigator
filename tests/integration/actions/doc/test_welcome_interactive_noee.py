@@ -23,6 +23,14 @@ testdata_lookup_doc: list = [
     (1, ":doc company_name.coll_1.lookup_1 -t lookup", "load doc", "lookup_doc_pass", []),
 ]
 
+# filter plugin doc
+CLI_FILTER_DOC = "ansible-navigator  --execution-environment false"
+
+testdata_filter_doc: list = [
+    (0, CLI_FILTER_DOC, "welcome", "filter_doc_pass", []),
+    (1, ":doc company_name.coll_1.filter_1 -t filter", "load doc", "filter_doc_pass", []),
+]
+
 # plugin does not exist
 CLI_WRONG_MODULE_NOT_EXIST = "ansible-navigator --execution-environment false"
 
@@ -55,6 +63,17 @@ class TestModuleDoc(BaseClass):
 )
 class TestLookUpDoc(BaseClass):
     """Run the tests for doc from welcome, interactive, without an EE, lookup doc."""
+
+    TEST_FOR_MODE = "interactive"
+    UPDATE_FIXTURES = False
+
+
+@pytest.mark.parametrize(
+    "index, user_input, comment, testname, expected_in_output",
+    testdata_filter_doc,
+)
+class TestFilterDoc(BaseClass):
+    """Run the tests for doc from welcome, interactive, without an EE, filter doc."""
 
     TEST_FOR_MODE = "interactive"
     UPDATE_FIXTURES = False
