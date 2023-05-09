@@ -1,0 +1,9 @@
+DOCUMENTATION:
+  name: filter_1
+  author: test
+  version_added: "1.0.0"
+  short_description: This is test filter plugin
+  description:
+    - This is test filter plugin
+  notes:
+    - This is a dummy filter plugin
