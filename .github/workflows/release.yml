@@ -10,6 +10,8 @@ jobs:
     name: Publish to PyPI registry
     environment: release
     runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
 
     env:
       FORCE_COLOR: 1
@@ -45,5 +47,3 @@ jobs:
         if: >- # "create" workflows run separately from "push" & "pull_request"
           github.event_name == 'release'
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.pypi_password }}
