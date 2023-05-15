@@ -64,7 +64,7 @@ def parse(output) -> tuple[list[str], dict]:
         parsed = json.loads(json_str)
     except (json.decoder.JSONDecodeError, ValueError) as exc:
         errors.append("Unable to extract introspection from stdout")
-        errors.append(f"error json loading output: '{str(exc)}'")
+        errors.append(f"error json loading output: '{exc!s}'")
         errors.append(output)
         return errors, {}
 

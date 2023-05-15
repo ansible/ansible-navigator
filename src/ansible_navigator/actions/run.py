@@ -913,7 +913,7 @@ class Action(ActionBase):
 
             except OSError as exc:
                 error = (
-                    f"Saving the artifact file failed, resulted in the following error: f{str(exc)}"
+                    f"Saving the artifact file failed, resulted in the following error: f{exc!s}"
                 )
                 self._logger.error(error)
 

@@ -245,7 +245,7 @@ class Configurator:
                     "Errors encountered when loading settings file:"
                     f" {settings_filesystem_path}"
                     f" while loading entry {entry.name}, attempted: {settings_file_path}."
-                    f"The resulting error was {str(exc)}"
+                    f"The resulting error was {exc!s}"
                 )
                 self._exit_messages.append(ExitMessage(message=exit_msg))
                 exit_msg = (

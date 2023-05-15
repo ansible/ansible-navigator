@@ -171,7 +171,7 @@ def main():
     except Exception as exc:  # noqa: BLE001
         exit_msg = "The log file path or logging engine could not be setup."
         exit_msg += " No log file will be available, please check the log file"
-        exit_msg += f" path setting. The error was {str(exc)}"
+        exit_msg += f" path setting. The error was {exc!s}"
         exit_messages.append(ExitMessage(message=exit_msg))
         error_and_exit_early(exit_messages=exit_messages)
 

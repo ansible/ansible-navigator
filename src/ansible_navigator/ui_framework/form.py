@@ -282,7 +282,7 @@ class FormPresenter(CursesWindow):
         for option in form_field.options:
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
-            text = f"{option_code} {str(option.text)}"
+            text = f"{option_code} {option.text!s}"
             line_part = CursesLinePart(self._input_start, text, color, 0)
             lines.append(CursesLine((line_part,)))
         return CursesLines(tuple(lines))
