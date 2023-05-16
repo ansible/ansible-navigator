@@ -136,7 +136,7 @@ class NavigatorPostProcessor:
             try:
                 entry.value.current = int(entry.value.current)
             except ValueError as exc:
-                exit_msg = f"Value should be valid integer. Failed with error {str(exc)}"
+                exit_msg = f"Value should be valid integer. Failed with error {exc!s}"
                 exit_messages.append(ExitMessage(message=exit_msg))
         return messages, exit_messages
 
@@ -161,7 +161,7 @@ class NavigatorPostProcessor:
             try:
                 entry.value.current = int(entry.value.current)
             except ValueError as exc:
-                exit_msg = f"Value should be valid integer. Failed with error {str(exc)}"
+                exit_msg = f"Value should be valid integer. Failed with error {exc!s}"
                 exit_messages.append(ExitMessage(message=exit_msg))
         return messages, exit_messages
 
@@ -390,7 +390,7 @@ class NavigatorPostProcessor:
                 except VolumeMountError as exc:
                     exit_msg = (
                         f"The following {entry_name} entry could not be parsed:"
-                        f" {mount_str} ({entry.value.source.value}). Errors were found: {str(exc)}"
+                        f" {mount_str} ({entry.value.source.value}). Errors were found: {exc!s}"
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
                     exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
@@ -420,7 +420,7 @@ class NavigatorPostProcessor:
                     except (AttributeError, VolumeMountError) as exc:
                         exit_msg = (
                             f"The following {entry_name} entry could not be parsed:  {volume_mount}"
-                            f" ({entry_source.value}). Errors were found: {str(exc)}"
+                            f" ({entry_source.value}). Errors were found: {exc!s}"
                         )
                         exit_messages.append(ExitMessage(message=exit_msg))
                         exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
@@ -708,7 +708,7 @@ class NavigatorPostProcessor:
                     f" specified in '{entry.value.source.value}'"
                 ),
             ]
-            exit_msgs.append(f"The error was: {str(exc)}")
+            exit_msgs.append(f"The error was: {exc!s}")
             exit_messages.extend(ExitMessage(message=exit_msg) for exit_msg in exit_msgs)
             entry.value.current = entry.value.default
             entry.value.source = C.DEFAULT_CFG
@@ -746,7 +746,7 @@ class NavigatorPostProcessor:
             try:
                 action_package = importlib.import_module(action_package_name)
             except ImportError as exc:
-                message = f"Unable to load action package: '{action_package_name}': {str(exc)}"
+                message = f"Unable to load action package: '{action_package_name}': {exc!s}"
                 messages.append(LogMessage(level=logging.ERROR, message=message))
                 continue
             try:
@@ -756,7 +756,7 @@ class NavigatorPostProcessor:
                 break
             except (AttributeError, ModuleNotFoundError) as exc:
                 message = f"Unable to load subcommand '{subcommand_name}' from"
-                message += f" action package: '{action_package_name}': {str(exc)}"
+                message += f" action package: '{action_package_name}': {exc!s}"
                 messages.append(LogMessage(level=logging.DEBUG, message=message))
 
         if subcommand_action is None:
