@@ -95,7 +95,8 @@ class CollectionCatalog:
                 plugin_type = plugin_dir.name
                 if plugin_type == "modules":
                     plugin_type = "module"
-                filenames = plugin_dir.glob("**/*.py")
+                files = list(plugin_dir.glob("**/*.py")) + list(plugin_dir.glob("**/*.yml"))
+                filenames = (x for x in files)
                 self._process_plugin_dir(
                     plugin_type,
                     filenames,
