@@ -106,7 +106,7 @@ def get_and_check_collection_doc_cache(
         os.makedirs(doc_cache_dir, exist_ok=True)
     except OSError as exc:
         path_errors.append(f"Problem making directory: {doc_cache_dir}")
-        path_errors.append(f"Error was: {str(exc)}")
+        path_errors.append(f"Error was: {exc!s}")
 
     if not os.access(os.path.dirname(collection_doc_cache_path), os.W_OK):
         path_errors.append("Directory not writable")

@@ -288,7 +288,7 @@ class UserInterface(CursesWindow):
         :param key_dict: the keys and their description
         :returns: The footer line
         """
-        column_widths = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
+        column_widths = [len(f"{k!s}: {v!s}") for k, v in key_dict.items()]
         status_width = self._progress_bar_width if self._status else 0
         gap = floor((self._screen_width - status_width - sum(column_widths)) / len(key_dict))
         adjusted_column_widths = [c + gap for c in column_widths]

@@ -107,7 +107,7 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
         :param suffix: The suffix to append to values
         :returns: The dictionary with suffixed values
         """
-        return {name: f"{str(value)}_{suffix}" for name, value in kv_pairs}
+        return {name: f"{value!s}_{suffix}" for name, value in kv_pairs}
 
 
 parametrize_content_views = pytest.mark.parametrize(**ParametrizeView()._asdict())
@@ -185,7 +185,7 @@ def test_content_to_dict_override(
     )
     for key, value in content_as_dict.items():
         with subtests.test(msg=key, value=value):
-            assert value.endswith(f"_{serialization_tuple[0]}_{str(content_view)}")
+            assert value.endswith(f"_{serialization_tuple[0]}_{content_view!s}")
 
 
 @parametrize_content_views

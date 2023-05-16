@@ -380,7 +380,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                 )
 
         except Exception as exc:  # noqa: BLE001
-            err_message = f"{type(exc).__name__} (get_docstring): {str(exc)}"
+            err_message = f"{type(exc).__name__} (get_docstring): {exc!s}"
             completed_queue.put(("error", (checksum, plugin_path, err_message)))
             continue
 
@@ -396,7 +396,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
             }
             completed_queue.put(("plugin", (checksum, json.dumps(q_message, default=str))))
         except JSONDecodeError as exc:
-            err_message = f"{type(exc).__name__} (json_decode_doc): {str(exc)}"
+            err_message = f"{type(exc).__name__} (json_decode_doc): {exc!s}"
             completed_queue.put(("error", (checksum, plugin_path, err_message)))
 
 
