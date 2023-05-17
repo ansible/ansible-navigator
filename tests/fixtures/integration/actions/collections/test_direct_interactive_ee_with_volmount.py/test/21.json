@@ -9,10 +9,11 @@
     },
     "output": [
         "  Company name.coll 1                                   Type               Added                 Deprecated                    Description",
-        "0│lookup_1                                              lookup             1.0.0                 False                         This is test lookup plugin",
-        "1│mod_1                                                 module             1.0.0                 False                         This is a test module",
-        "2│role_full                                             role               Unknown               Unknown                       Complete sample role.",
-        "3│role_minimum                                          role               Unknown               Unknown                       Minimal sample role.",
+        "0│filter_1                                              filter             1.0.0                 False                         This is test filter plugin",
+        "1│lookup_1                                              lookup             1.0.0                 False                         This is test lookup plugin",
+        "2│mod_1                                                 module             1.0.0                 False                         This is a test module",
+        "3│role_full                                             role               Unknown               Unknown                       Complete sample role.",
+        "4│role_minimum                                          role               Unknown               Unknown                       Minimal sample role.",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
