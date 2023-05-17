@@ -76,7 +76,7 @@ base_steps = (
         present=["yum_repository"],
     ),
     UiTestStep(
-        user_input=":0",
+        user_input=":1",
         comment="Browse ansible.builtin.add_host module",
         present=["ansible.builtin.add_host"],
     ),
