@@ -21,13 +21,15 @@ EXPECTED_COLLECTIONS = ["ansible.builtin", "company_name.coll_1", "company_name.
 
 base_steps = (
     UiTestStep(user_input=":1", comment="Browse company_name.coll_1 plugins window"),
-    UiTestStep(user_input=":0", comment="lookup_1 plugin docs window"),
+    UiTestStep(user_input=":0", comment="filter_1 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
-    UiTestStep(user_input=":1", comment="mod_1 plugin docs window"),
+    UiTestStep(user_input=":1", comment="lookup_1 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
-    UiTestStep(user_input=":2", comment="role_full details window"),
+    UiTestStep(user_input=":2", comment="mod_1 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
-    UiTestStep(user_input=":3", comment="role_minimal details window"),
+    UiTestStep(user_input=":3", comment="role_full details window"),
+    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=":4", comment="role_minimal details window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
     UiTestStep(
         user_input=":back",
@@ -59,7 +61,9 @@ base_steps = (
     ),
     # and repeat some basic browsing
     UiTestStep(user_input=":1", comment="Browse company_name.coll_1 plugins window"),
-    UiTestStep(user_input=":0", comment="lookup_1 plugin docs window"),
+    UiTestStep(user_input=":0", comment="filter_1 plugin docs window"),
+    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=":1", comment="lookup_1 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
     UiTestStep(
         user_input=":back",

@@ -33,9 +33,9 @@
         "20│  version_added: 1.0.0",
         "21│  version_added_collection: company_name.coll_1",
         "22│examples: null",
-        "38│full_name: company_name.coll_1.filter_1",
-        "39│metadata: null",
-        "40│returndocs:null",
+        "23│full_name: company_name.coll_1.filter_1",
+        "24│metadata: null",
+        "25│returndocs: null",
         "^b/PgUp page up              ^f/PgDn page down              ↑↓ scroll              esc back              - previous              + next              [0-9] goto              :help help"
     ]
 }
