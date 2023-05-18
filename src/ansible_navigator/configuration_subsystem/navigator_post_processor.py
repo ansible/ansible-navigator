@@ -2,6 +2,7 @@
 """Post processing of ansible-navigator configuration."""
 from __future__ import annotations
 
+import contextlib
 import importlib
 import logging
 import os
@@ -86,7 +87,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process a boolean value.
 
         :param entry: The current settings entry
@@ -95,11 +95,8 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        try:
+        with contextlib.suppress(ValueError):
             entry.value.current = str2bool(entry.value.current)
-        except ValueError:
-            # No error message here because the schema and/or choices will catch it
-            pass
 
         return messages, exit_messages
 
@@ -109,7 +106,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ansible_runner_artifact_dir path.
 
         :param entry: The current settings entry
@@ -128,7 +124,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ansible_runner_rotate_artifacts_count.
 
         :param entry: The current settings entry
@@ -141,7 +136,7 @@ class NavigatorPostProcessor:
             try:
                 entry.value.current = int(entry.value.current)
             except ValueError as exc:
-                exit_msg = f"Value should be valid integer. Failed with error {str(exc)}"
+                exit_msg = f"Value should be valid integer. Failed with error {exc!s}"
                 exit_messages.append(ExitMessage(message=exit_msg))
         return messages, exit_messages
 
@@ -154,7 +149,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ansible_runner_timeout.
 
         :param entry: The current settings entry
@@ -167,7 +161,7 @@ class NavigatorPostProcessor:
             try:
                 entry.value.current = int(entry.value.current)
             except ValueError as exc:
-                exit_msg = f"Value should be valid integer. Failed with error {str(exc)}"
+                exit_msg = f"Value should be valid integer. Failed with error {exc!s}"
                 exit_messages.append(ExitMessage(message=exit_msg))
         return messages, exit_messages
 
@@ -177,7 +171,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process collection doc cache path.
 
         :param entry: The current settings entry
@@ -192,7 +185,6 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def cmdline(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process cmdline.
 
         :param entry: The current settings entry
@@ -211,7 +203,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process container_engine.
 
         :param entry: The current settings entry
@@ -255,9 +246,7 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def execution_environment(self, entry: SettingsEntry, config) -> PostProcessorReturn:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Post process execution_environment.
 
         :param entry: The current settings entry
@@ -340,7 +329,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process execution_environment_image.
 
         :param entry: The current settings entry
@@ -365,8 +353,6 @@ class NavigatorPostProcessor:
         :param config: The full application configuration
         :return: An instance of the standard post process return object
         """
-        # pylint: disable=unused-argument
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
 
         messages: list[LogMessage] = []
@@ -404,7 +390,7 @@ class NavigatorPostProcessor:
                 except VolumeMountError as exc:
                     exit_msg = (
                         f"The following {entry_name} entry could not be parsed:"
-                        f" {mount_str} ({entry.value.source.value}). Errors were found: {str(exc)}"
+                        f" {mount_str} ({entry.value.source.value}). Errors were found: {exc!s}"
                     )
                     exit_messages.append(ExitMessage(message=exit_msg))
                     exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
@@ -434,7 +420,7 @@ class NavigatorPostProcessor:
                     except (AttributeError, VolumeMountError) as exc:
                         exit_msg = (
                             f"The following {entry_name} entry could not be parsed:  {volume_mount}"
-                            f" ({entry_source.value}). Errors were found: {str(exc)}"
+                            f" ({entry_source.value}). Errors were found: {exc!s}"
                         )
                         exit_messages.append(ExitMessage(message=exit_msg))
                         exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
@@ -466,7 +452,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process container_options.
 
         :param entry: The current settings entry
@@ -552,7 +537,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process execution_environment_image_details.
 
         :param entry: The current settings entry
@@ -628,7 +612,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process inventory_columns.
 
         :param entry: The current settings entry
@@ -702,7 +685,6 @@ class NavigatorPostProcessor:
     @staticmethod
     @_post_processor
     def log_file(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process log_file.
 
         If the parent directory for the log file cannot be created and is writable.
@@ -726,7 +708,7 @@ class NavigatorPostProcessor:
                     f" specified in '{entry.value.source.value}'"
                 ),
             ]
-            exit_msgs.append(f"The error was: {str(exc)}")
+            exit_msgs.append(f"The error was: {exc!s}")
             exit_messages.extend(ExitMessage(message=exit_msg) for exit_msg in exit_msgs)
             entry.value.current = entry.value.default
             entry.value.source = C.DEFAULT_CFG
@@ -764,7 +746,7 @@ class NavigatorPostProcessor:
             try:
                 action_package = importlib.import_module(action_package_name)
             except ImportError as exc:
-                message = f"Unable to load action package: '{action_package_name}': {str(exc)}"
+                message = f"Unable to load action package: '{action_package_name}': {exc!s}"
                 messages.append(LogMessage(level=logging.ERROR, message=message))
                 continue
             try:
@@ -774,7 +756,7 @@ class NavigatorPostProcessor:
                 break
             except (AttributeError, ModuleNotFoundError) as exc:
                 message = f"Unable to load subcommand '{subcommand_name}' from"
-                message += f" action package: '{action_package_name}': {str(exc)}"
+                message += f" action package: '{action_package_name}': {exc!s}"
                 messages.append(LogMessage(level=logging.DEBUG, message=message))
 
         if subcommand_action is None:
@@ -822,7 +804,8 @@ class NavigatorPostProcessor:
                 entry.value.current = auto_mode
                 entry.value.source = C.AUTO
         elif len(mode_set) > 1:
-            raise ValueError(f"Conflicting mode requests: {self._requested_mode}")
+            msg = f"Conflicting mode requests: {self._requested_mode}"
+            raise ValueError(msg)
         return messages, exit_messages
 
     # Post process osc4.
@@ -887,7 +870,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process pass_environment_variable.
 
         :param entry: The current settings entry
@@ -911,16 +893,20 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        if config.app == "run" and entry.value.current is C.NOT_SET:
-            if config.entry("help_playbook").value.current is False:
-                exit_msg = "A playbook is required when using the run subcommand"
-                exit_messages.append(ExitMessage(message=exit_msg))
-                exit_msg = "Try again with 'run <playbook name>'"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
-        if check_playbook_type(entry.value.current) == "file":
-            if isinstance(entry.value.current, str):
-                entry.value.current = abs_user_path(entry.value.current)
+        if (
+            config.app == "run"
+            and entry.value.current is C.NOT_SET
+            and config.entry("help_playbook").value.current is False
+        ):
+            exit_msg = "A playbook is required when using the run subcommand"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = "Try again with 'run <playbook name>'"
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
+        if check_playbook_type(entry.value.current) == "file" and isinstance(
+            entry.value.current, str
+        ):
+            entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages
 
     @_post_processor
@@ -936,7 +922,6 @@ class NavigatorPostProcessor:
         :raises ValueError: When more than 1 pae changes requests are present, shouldn't happen
         :returns: An instance of the standard post process return object
         """
-        # pylint: disable=unused-argument
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
 
@@ -955,11 +940,11 @@ class NavigatorPostProcessor:
                 )
                 entry.value.current = auto_pae
         elif len(pae_set) > 1:
-            raise ValueError(f"Conflicting pae requests: {self._requested_pae}")
-        try:
+            msg = f"Conflicting pae requests: {self._requested_pae}"
+            raise ValueError(msg)
+        with contextlib.suppress(ValueError):
             entry.value.current = str2bool(entry.value.current)
-        except ValueError:
-            pass
+
         return messages, exit_messages
 
     @staticmethod
@@ -986,15 +971,12 @@ class NavigatorPostProcessor:
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
 
-        if config.app == "replay":
-            if not os.path.isfile(entry.value.current):
-                exit_msg = (
-                    f"The specified playbook artifact could not be found: {entry.value.current}"
-                )
-                exit_messages.append(ExitMessage(message=exit_msg))
-                exit_msg = "Try again with 'replay <valid path to playbook artifact>'"
-                exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
-                return messages, exit_messages
+        if config.app == "replay" and not os.path.isfile(entry.value.current):
+            exit_msg = f"The specified playbook artifact could not be found: {entry.value.current}"
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = "Try again with 'replay <valid path to playbook artifact>'"
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
         return messages, exit_messages
 
     @staticmethod
@@ -1003,7 +985,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process playbook_artifact_save_as.
 
         :param entry: The current settings entry
@@ -1037,7 +1018,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ``pull_arguments``.
 
         :param entry: The current settings entry
@@ -1084,7 +1064,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process set_environment_variable.
 
         :param entry: The current settings entry
@@ -1123,7 +1102,6 @@ class NavigatorPostProcessor:
         entry: SettingsEntry,
         config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
-        # pylint: disable=unused-argument
         """Post process ``time_zone``.
 
         :param entry: The current settings entry

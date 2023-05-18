@@ -198,3 +198,53 @@ class TestLookUpDocWithEE(BaseClass):
 
     TEST_FOR_MODE = "stdout"
     UPDATE_FIXTURES = False
+
+
+# doc command run in stdout mode without EE
+CLI_FILTER_DOC_WITHOUT_EE = (
+    "ansible-navigator doc company_name.coll_1.filter_1 -t filter -m stdout -j"
+    " --execution-environment false"
+)
+
+testdata_9: list = [
+    (
+        0,
+        CLI_FILTER_DOC_WITHOUT_EE,
+        "ansible-navigator filter doc in stdout mode without EE",
+        "filter_doc_without_ee",
+        None,
+    ),
+]
+
+
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_9)
+class TestFilterDocWithoutEE(BaseClass):
+    """Run the tests for doc from CLI, stdout, without an EE, filter doc."""
+
+    TEST_FOR_MODE = "stdout"
+    UPDATE_FIXTURES = False
+
+
+# doc command run in stdout mode with EE
+CLI_FILTER_DOC_WITH_EE = (
+    "ansible-navigator doc company_name.coll_1.filter_1 -t filter -m stdout -j"
+    " --execution-environment true"
+)
+
+testdata_10: list = [
+    (
+        0,
+        CLI_FILTER_DOC_WITH_EE,
+        "ansible-navigator filter doc in stdout mode with EE",
+        "filter_doc_with_ee",
+        None,
+    ),
+]
+
+
+@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_10)
+class TestFilterDocWithEE(BaseClass):
+    """Run the tests for doc from CLI, stdout, with an EE, filter doc."""
+
+    TEST_FOR_MODE = "stdout"
+    UPDATE_FIXTURES = False

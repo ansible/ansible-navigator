@@ -108,17 +108,18 @@ def place_at_path(
     :raises ValueError: If something can't be done
     :return: The updated content
     """
-    # pylint: disable=too-many-branches
     if (
         MergeBehaviors.DICT_DICT_REPLACE in behaviors
         and MergeBehaviors.DICT_DICT_UPDATE in behaviors
     ):
-        raise ValueError("Can't use both DICT_DICT_REPLACE and DICT_DICT_UPDATE behaviors")
+        msg = "Can't use both DICT_DICT_REPLACE and DICT_DICT_UPDATE behaviors"
+        raise ValueError(msg)
     if (
         MergeBehaviors.LIST_LIST_EXTEND in behaviors
         and MergeBehaviors.LIST_LIST_REPLACE in behaviors
     ):
-        raise ValueError("Can't use both LIST_LIST_EXTEND and LIST_LIST_REPLACE behaviors")
+        msg = "Can't use both LIST_LIST_EXTEND and LIST_LIST_REPLACE behaviors"
+        raise ValueError(msg)
 
     copied_content = copy.deepcopy(content)
     nested = copied_content
@@ -128,7 +129,8 @@ def place_at_path(
                 return value
             if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
                 return {**nested, **value}
-        raise ValueError("Cannot place non dict at root of dict")
+        msg = "Cannot place non dict at root of dict"
+        raise ValueError(msg)
 
     for part in path.split("."):
         if part == path.rsplit(".", maxsplit=1)[-1]:
@@ -139,7 +141,8 @@ def place_at_path(
                     elif MergeBehaviors.LIST_LIST_REPLACE in behaviors:
                         nested[part] = value
                     else:
-                        raise ValueError("No behavior specified for LIST_LIST")
+                        msg = "No behavior specified for LIST_LIST"
+                        raise ValueError(msg)
                 else:
                     if MergeBehaviors.LIST_APPEND in behaviors:
                         nested[part].append(value)
@@ -147,7 +150,8 @@ def place_at_path(
                         nested[part] = value
                         continue
                     else:
-                        raise ValueError("No behavior specified for LIST_*")
+                        msg = "No behavior specified for LIST_*"
+                        raise ValueError(msg)
 
                 if MergeBehaviors.LIST_UNIQUE in behaviors:
                     nested[part] = list(dict.fromkeys(nested[part]))
@@ -155,15 +159,15 @@ def place_at_path(
                     nested[part].sort()
                 continue
 
-            if isinstance(nested.get(part), dict):
-                if isinstance(value, dict):
-                    if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
-                        nested[part].update(value)
-                    elif MergeBehaviors.DICT_DICT_REPLACE in behaviors:
-                        nested[part] = value
-                    else:
-                        raise ValueError("No behavior specified for DICT_DICT")
-                    continue
+            if isinstance(nested.get(part), dict) and isinstance(value, dict):
+                if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
+                    nested[part].update(value)
+                elif MergeBehaviors.DICT_DICT_REPLACE in behaviors:
+                    nested[part] = value
+                else:
+                    msg = "No behavior specified for DICT_DICT"
+                    raise ValueError(msg)
+                continue
 
             nested[part] = value
         elif part not in nested:

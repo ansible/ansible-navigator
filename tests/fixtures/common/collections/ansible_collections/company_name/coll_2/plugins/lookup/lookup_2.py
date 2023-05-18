@@ -1,10 +1,6 @@
 """An ansible test lookup plugin."""
 
 
-# pylint: disable=invalid-name
-# pylint: enable=invalid-name
-
-
 DOCUMENTATION = """
     name: lookup_2
     author: test

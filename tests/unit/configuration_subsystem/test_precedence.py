@@ -169,7 +169,6 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
     cli_entry: str,
     expected: Iterable[tuple[str, str]],
 ):
-    # pylint: disable=unused-argument
     # pylint:disable=too-many-locals
     """Ensure all entries are set by the CLI.
 

@@ -138,7 +138,7 @@ class Action(ActionBase):
             k: {**v, "inventory_hostname": k}
             for k, v in value.get("_meta", {}).get("hostvars", {}).items()
         }
-        for group in self._inventory.keys():
+        for group in self._inventory:
             for host in self._inventory[group].get("hosts", []):
                 if host in self._host_vars:
                     continue
@@ -320,7 +320,8 @@ class Action(ActionBase):
             return self._build_group_menu("all")
         if self.steps.current.index == 1:
             return self._build_host_menu()
-        raise IndexError("broken modules somewhere?")
+        msg = "broken modules somewhere?"
+        raise IndexError(msg)
 
     def _build_group_menu(self, key=None) -> Step:
         """Build the menu for inventory groups.
@@ -432,13 +433,13 @@ class Action(ActionBase):
             return self._build_group_menu()
         if self.steps.current.selected["__type"] == "host":
             return self._build_host_content()
-        raise TypeError("unknown step type")
+        msg = "unknown step type"
+        raise TypeError(msg)
 
     def _collect_inventory_details_interactive(
         self,
         kwargs: dict[str, Any],
     ) -> None:
-        # pylint: disable=too-many-branches
         """Use the runner subsystem to collect inventory details for mode interactive.
 
         :param kwargs: The arguments for the runner call
@@ -468,15 +469,8 @@ class Action(ActionBase):
         )
         if inventory_output:
             parts = inventory_output.split("{", 1)
-            if inventory_err:
-                inventory_err = parts[0] + inventory_err
-            else:
-                inventory_err = parts[0]
-
-            if len(parts) == 2:
-                inventory_output = "{" + parts[1]
-            else:
-                inventory_output = ""
+            inventory_err = parts[0] + inventory_err if inventory_err else parts[0]
+            inventory_output = "{" + parts[1] if len(parts) == 2 else ""
         preface = ["Errors were encountered while gathering the inventory:"]
         notify = ("ERROR!", "Error", "Unable to parse")
         if any(string in inventory_err for string in notify):

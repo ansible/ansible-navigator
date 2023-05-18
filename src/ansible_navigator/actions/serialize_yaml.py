@@ -23,7 +23,6 @@ class Action:
         self._args = args
         self._logger = logging.getLogger(__name__)
 
-    # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:yaml`` request for mode interactive.
 

@@ -54,9 +54,8 @@ def is_percent(string):
     :param string: The string to check
     :returns: Boolean of comparison
     """
-    if string.endswith("%"):
-        if re.match(r"^\d{1,3}%$", string):
-            return True
+    if string.endswith("%") and re.match(r"^\d{1,3}%$", string):
+        return True
     return False
 
 

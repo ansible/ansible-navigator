@@ -133,9 +133,8 @@ def use_venv(monkeypatch: pytest.MonkeyPatch) -> None:
     """
     venv_path = os.environ.get("VIRTUAL_ENV")
     if venv_path is None:
-        raise AssertionError(
-            "VIRTUAL_ENV environment variable was not set but tox should have set it.",
-        )
+        msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
+        raise AssertionError(msg)
     path_prepend = Path.cwd() / venv_path / "bin"
     monkeypatch.setenv("PATH", str(path_prepend), prepend=os.pathsep)
 
@@ -337,7 +336,7 @@ def pytest_sessionstart(session: pytest.Session):
 USER_ENVIRONMENT = {}
 
 
-def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
+def pytest_configure(config: pytest.Config):
     """Attempt to save a contributor some troubleshooting.
 
     :param config: The pytest config object
@@ -375,7 +374,7 @@ def pytest_configure(config: pytest.Config):  # pylint: disable=unused-argument
         pytest.exit("Please install tmux before testing.")
 
 
-def pytest_unconfigure(config: pytest.Config):  # pylint: disable=unused-argument
+def pytest_unconfigure(config: pytest.Config):
     """Restore the environment variables that start with ANSIBLE_.
 
     :param config: The pytest config object

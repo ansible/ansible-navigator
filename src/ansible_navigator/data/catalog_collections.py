@@ -109,7 +109,6 @@ class CollectionCatalog:
         :param collection: Details describing the collection
         """
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
 
         collection_name: str = collection["known_as"]
         collection["roles"] = []
@@ -380,8 +379,8 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                     collection_name=collection_name,
                 )
 
-        except Exception as exc:  # pylint: disable=broad-except
-            err_message = f"{type(exc).__name__} (get_docstring): {str(exc)}"
+        except Exception as exc:  # noqa: BLE001
+            err_message = f"{type(exc).__name__} (get_docstring): {exc!s}"
             completed_queue.put(("error", (checksum, plugin_path, err_message)))
             continue
 
@@ -397,7 +396,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
             }
             completed_queue.put(("plugin", (checksum, json.dumps(q_message, default=str))))
         except JSONDecodeError as exc:
-            err_message = f"{type(exc).__name__} (json_decode_doc): {str(exc)}"
+            err_message = f"{type(exc).__name__} (json_decode_doc): {exc!s}"
             completed_queue.put(("error", (checksum, plugin_path, err_message)))
 
 
@@ -452,10 +451,7 @@ def parse_args() -> tuple[argparse.Namespace, list[Path]]:
     parsed_args = parser.parse_args()
 
     adjacent = vars(parsed_args).get("adjacent")
-    if adjacent:
-        directories = [adjacent] + parsed_args.dirs
-    else:
-        directories = parsed_args.dirs
+    directories = [adjacent] + parsed_args.dirs if adjacent else parsed_args.dirs
 
     directories.extend(reversed(sys.path))
 

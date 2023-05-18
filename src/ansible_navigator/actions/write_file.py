@@ -30,7 +30,6 @@ class Action:
         self._args = args
         self._logger = logging.getLogger(__name__)
 
-    # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:write`` request for mode interactive.
 
@@ -38,7 +37,6 @@ class Action:
         :param app: The app instance
         :returns: Nothing
         """
-        # pylint: disable=too-many-branches
         self._logger.debug("write requested as %s", interaction.action.value)
         match = interaction.action.match.groupdict()
         filename = os.path.abspath(match["filename"])

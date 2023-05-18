@@ -288,11 +288,8 @@ class UserInterface(CursesWindow):
         :param key_dict: the keys and their description
         :returns: The footer line
         """
-        column_widths = [len(f"{str(k)}: {str(v)}") for k, v in key_dict.items()]
-        if self._status:
-            status_width = self._progress_bar_width
-        else:
-            status_width = 0
+        column_widths = [len(f"{k!s}: {v!s}") for k, v in key_dict.items()]
+        status_width = self._progress_bar_width if self._status else 0
         gap = floor((self._screen_width - status_width - sum(column_widths)) / len(key_dict))
         adjusted_column_widths = [c + gap for c in column_widths]
         col_starts = [0]
@@ -414,9 +411,7 @@ class UserInterface(CursesWindow):
         await_input: bool,
         count: int,
     ) -> str:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Show something on the screen.
 
         :param lines: The lines to show
@@ -525,21 +520,22 @@ class UserInterface(CursesWindow):
         :param current: the content on the screen
         :returns: The name of the action and the action to call or nothing if no match found
         """
-        if not entry.startswith("{{"):  # don't match pure template
-            if "{{" in entry and "}}" in entry:
-                if isinstance(current, Mapping):
-                    template_vars = current
-                    type_msgs = []
-                else:
-                    template_vars = {"this": current}
-                    type_msgs = ["Current content passed for templating is not a dictionary."]
-                    type_msgs.append("[HINT] Use 'this' to reference it (e.g. {{ this[0] }}")
-                errors, entry = templar(entry, template_vars)
-                if errors:
-                    msgs = ["Errors encountered while templating input"] + errors
-                    msgs.extend(type_msgs)
-                    self._show_form(warning_notification(msgs))
-                    return None, None
+        if (
+            not entry.startswith("{{") and "{{" in entry and "}}" in entry
+        ):  # don't match pure template
+            if isinstance(current, Mapping):
+                template_vars = current
+                type_msgs = []
+            else:
+                template_vars = {"this": current}
+                type_msgs = ["Current content passed for templating is not a dictionary."]
+                type_msgs.append("[HINT] Use 'this' to reference it (e.g. {{ this[0] }}")
+            errors, entry = templar(entry, template_vars)
+            if errors:
+                msgs = ["Errors encountered while templating input"] + errors
+                msgs.extend(type_msgs)
+                self._show_form(warning_notification(msgs))
+                return None, None
         for kegex in self._kegexes():
             match = kegex.kegex.match(entry)
             if match:
@@ -679,9 +675,7 @@ class UserInterface(CursesWindow):
         index: int,
         await_input: bool,
     ) -> Interaction:
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Show an object on the display.
 
         :param objs: A list of one or more object
@@ -691,10 +685,7 @@ class UserInterface(CursesWindow):
         """
         heading, lines = self._filter_and_serialize(objs[index])
         while True:
-            if heading is not None:
-                heading_len = len(heading)
-            else:
-                heading_len = 0
+            heading_len = len(heading) if heading is not None else 0
             footer_len = 1
 
             if self.scroll() == 0:
@@ -710,10 +701,7 @@ class UserInterface(CursesWindow):
                 last_line_idx - (self._screen_height - 1 - heading_len - footer_len),
             )
 
-            if len(objs) > 1:
-                key_dict = {"-": "previous", "+": "next", "[0-9]": "goto"}
-            else:
-                key_dict = {}
+            key_dict = {"-": "previous", "+": "next", "[0-9]": "goto"} if len(objs) > 1 else {}
 
             line_numbers = tuple(range(first_line_idx, last_line_idx + 1))
 
@@ -786,10 +774,7 @@ class UserInterface(CursesWindow):
         :param columns: The dicts keys to check
         :returns: True if a match else False
         """
-        for key in columns:
-            if self._search_value(self.menu_filter(), obj.get(key)):
-                return True
-        return False
+        return any(self._search_value(self.menu_filter(), obj.get(key)) for key in columns)
 
     @staticmethod
     @cache

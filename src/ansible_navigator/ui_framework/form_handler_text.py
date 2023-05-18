@@ -53,8 +53,6 @@ class FormHandlerText(CursesWindow, Textbox):
                   1 if the window should be repainted
                   -1 if the window should be closed
         """
-        # pylint: disable=too-many-branches
-
         # in the case the term returns 127 instead of 263
         if char == curses_ascii.DEL:
             char = curses.KEY_BACKSPACE

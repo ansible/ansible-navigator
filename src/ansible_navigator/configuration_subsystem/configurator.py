@@ -61,9 +61,11 @@ class Configurator:
         """
         if self._apply_previous_cli_entries is not C.NONE:
             if self._config.internals.initializing:
-                raise ValueError("'apply_previous_cli' cannot be used while initializing")
+                msg = "'apply_previous_cli' cannot be used while initializing"
+                raise ValueError(msg)
             if not self._config.initial:
-                raise ValueError("'apply_previous_cli' enabled prior to an initialization")
+                msg = "'apply_previous_cli' enabled prior to an initialization"
+                raise ValueError(msg)
 
     def _roll_back(self) -> None:
         """In the case of a rollback, log the configuration state prior to roll back."""
@@ -157,7 +159,6 @@ class Configurator:
 
     def _apply_settings_file(self) -> None:
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
         """Apply the settings file.
 
         :raises ValueError: If the settings file is empty
@@ -180,7 +181,8 @@ class Configurator:
                     # the file will be empty, but we shouldn't exit.
                     if self._params in (["settings", "--sample"], ["settings", "--gs"]):
                         return
-                    raise ValueError("Settings file cannot be empty.")
+                    msg = "Settings file cannot be empty."
+                    raise ValueError(msg)
             except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                 exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
                 self._exit_messages.append(ExitMessage(message=exit_msg))
@@ -243,7 +245,7 @@ class Configurator:
                     "Errors encountered when loading settings file:"
                     f" {settings_filesystem_path}"
                     f" while loading entry {entry.name}, attempted: {settings_file_path}."
-                    f"The resulting error was {str(exc)}"
+                    f"The resulting error was {exc!s}"
                 )
                 self._exit_messages.append(ExitMessage(message=exit_msg))
                 exit_msg = (
@@ -353,18 +355,16 @@ class Configurator:
         :param value: The value to check.
         :return: True if the value is invalid and an error message was logged.
         """
-        if entry.cli_parameters and entry.choices:
-            if value not in entry.choices:
-                self._exit_messages.append(ExitMessage(message=entry.invalid_choice))
-                choices = [
-                    f"{entry.cli_parameters.short} {str(choice).lower()}"
-                    for choice in entry.choices
-                ]
-                exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
-                self._exit_messages.append(
-                    ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
-                )
-                return True
+        if entry.cli_parameters and entry.choices and value not in entry.choices:
+            self._exit_messages.append(ExitMessage(message=entry.invalid_choice))
+            choices = [
+                f"{entry.cli_parameters.short} {str(choice).lower()}" for choice in entry.choices
+            ]
+            exit_msg = f"Try again with {oxfordcomma(choices, 'or')}"
+            self._exit_messages.append(
+                ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
+            )
+            return True
         return False
 
     def _apply_previous_cli_to_current(self) -> None:
@@ -411,9 +411,11 @@ class Configurator:
                 continue
 
             # skip if the same subcommand is required for reapplication
-            if current_entry.apply_to_subsequent_cli is C.SAME_SUBCOMMAND:
-                if current_subcommand != previous_subcommand:
-                    continue
+            if (
+                current_entry.apply_to_subsequent_cli is C.SAME_SUBCOMMAND
+                and current_subcommand != previous_subcommand
+            ):
+                continue
 
             # skip if the previous entry was not set by the CLI
             if previous_entry.value.source is not C.USER_CLI:

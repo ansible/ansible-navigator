@@ -35,7 +35,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.0.263"
+    rev: "v0.0.267"
     hooks:
       - id: ruff
         args:
@@ -135,12 +135,12 @@ repos:
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.3.2
+    rev: v3.4.0
     hooks:
       - id: pyupgrade
         args: ["--py39-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.2.0
+    rev: v1.3.0
     hooks:
       - id: mypy
         additional_dependencies:

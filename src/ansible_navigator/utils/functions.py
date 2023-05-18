@@ -36,7 +36,7 @@ def oxfordcomma(listed, condition):
     :param condition: String to splice into string, usually 'and'
     :returns: Modified string
     """
-    listed = [f"'{str(entry)}'" for entry in listed]
+    listed = [f"'{entry!s}'" for entry in listed]
     if len(listed) == 0:
         return ""
     if len(listed) == 1:
@@ -442,7 +442,7 @@ def templar(string: str, template_vars: Mapping) -> tuple[list[str], Any]:
         result = template.render(template_vars)
     except (ValueError, TemplateError) as exc:
         errors.append(f"Error while templating string: '{string}'")
-        errors.append(f"The error was: {str(exc)}")
+        errors.append(f"The error was: {exc!s}")
         for error in errors:
             logger.error(error)
         return errors, string

@@ -38,10 +38,14 @@ class Action:
         this = app.steps.back_one()  # pop this
         step = app.steps.back_one()  # pop current
 
-        if app.steps:
-            if isinstance(step, Step) and isinstance(app.steps.current, Step):
-                if step.type == "menu" and app.steps.current.type == "menu":
-                    interaction.ui.menu_filter(None)
+        if (
+            app.steps
+            and isinstance(step, Step)
+            and isinstance(app.steps.current, Step)
+            and step.type == "menu"
+            and app.steps.current.type == "menu"
+        ):
+            interaction.ui.menu_filter(None)
             self._logger.debug(
                 "Stepping back in %s from %s to %s",
                 app.name,

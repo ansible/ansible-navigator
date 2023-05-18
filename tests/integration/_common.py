@@ -28,7 +28,8 @@ def get_executable_path(name: str) -> str:
         return sys.executable
     exec_path = shutil.which(name)
     if not exec_path:
-        raise ValueError(f"{name} executable not found")
+        msg = f"{name} executable not found"
+        raise ValueError(msg)
     return exec_path
 
 
@@ -200,10 +201,7 @@ def copytree(
     :raises Error: If an error occurs
     """
     names = os.listdir(src)
-    if ignore is not None:
-        ignored_names = ignore(src, names)
-    else:
-        ignored_names = set()
+    ignored_names = ignore(src, names) if ignore is not None else set()
 
     os.makedirs(dst, exist_ok=dirs_exist_ok)
     errors = []

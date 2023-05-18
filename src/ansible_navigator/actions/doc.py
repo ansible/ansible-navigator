@@ -134,7 +134,6 @@ class Action(ActionBase):
         return RunStdoutReturn(message=error, return_code=return_code)
 
     def _run_runner(self) -> dict | tuple[str, str, int] | None:
-        # pylint: disable=too-many-branches
         # pylint: disable=no-else-return
         """Use the runner subsystem to retrieve the configuration.
 
@@ -239,7 +238,6 @@ class Action(ActionBase):
         :param err: Any runner errors
         :returns: The plugin's doc or errors
         """
-        # pylint: disable=too-many-branches
         plugin_doc = {}
         if self._args.execution_environment:
             error_key_name = "execution_environment_errors"

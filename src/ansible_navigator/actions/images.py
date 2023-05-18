@@ -70,7 +70,6 @@ class Action(ActionBase):
         )
 
     def color_menu(self, colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-        # pylint: disable=unused-argument
         """Provide a color for a images menu entry in one column.
 
         :param colno: The column number
@@ -567,7 +566,7 @@ class Action(ActionBase):
             kwargs.update({"container_options": self._args.container_options})
 
         self._logger.debug(
-            f"Invoke runner with executable_cmd: {python_exec_path}" + f" and kwargs: {kwargs}",
+            "Invoke runner with executable_cmd: %s and kwargs: %s", python_exec_path, kwargs
         )
         _runner = Command(executable_cmd=python_exec_path, **kwargs)
         output, error, return_code = _runner.run()

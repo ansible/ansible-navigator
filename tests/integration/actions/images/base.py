@@ -88,7 +88,8 @@ class BaseClass:
         elif step.search_within_response is SearchFor.WARNING:
             search_within_response = "Warning"
         else:
-            raise ValueError("test mode not set")
+            msg = "test mode not set"
+            raise ValueError(msg)
 
         received_output = tmux_session.interaction(
             value=step.user_input,

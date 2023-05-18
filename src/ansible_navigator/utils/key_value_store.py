@@ -49,7 +49,7 @@ class KeyValueStore(MutableMapping[str, str]):
         self.conn.commit()
         self.conn.close()
 
-    def open(self) -> sqlite3.Connection:
+    def open_(self) -> sqlite3.Connection:
         """Establish the connection to the database.
 
         :returns: A connection to the database

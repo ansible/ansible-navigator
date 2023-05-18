@@ -1,6 +1,8 @@
 """Common definitions for a version migration."""
 from __future__ import annotations
 
+import contextlib
+
 from enum import Enum
 from pathlib import Path
 from typing import Callable
@@ -147,14 +149,13 @@ class Migration:
         :param args: The positional arguments
         :param kwargs: The keyword arguments
         """
-        # pylint: disable=broad-except
         if not isinstance(step.function_name, str):
             return
         function = getattr(self, step.function_name)
         if self.check:
             try:
                 step.needed = function(*args, **kwargs)
-            except Exception:
+            except Exception:  # noqa: BLE001
                 step.needed = False
             return
 
@@ -163,10 +164,9 @@ class Migration:
             return
 
         step.print_start()
-        try:
+        with contextlib.suppress(Exception):
             step.needed = function(*args, **kwargs)
-        except Exception:
-            pass
+
         if step.needed:
             step.print_failed()
         else:

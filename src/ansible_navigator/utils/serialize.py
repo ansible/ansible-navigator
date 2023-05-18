@@ -63,7 +63,8 @@ def serialize(
         return _yaml_dumps(dumpable=dumpable)
     if serialization_format == SerializationFormat.JSON:
         return _json_dumps(dumpable=dumpable)
-    raise ValueError("Unknown serialization format")
+    msg = "Unknown serialization format"
+    raise ValueError(msg)
 
 
 def serialize_write_file(
@@ -94,7 +95,8 @@ def serialize_write_file(
         if serialization_format == SerializationFormat.YAML:
             _yaml_dump(dumpable=dumpable, file_handle=file_handle)
             return
-    raise ValueError("Unknown serialization format")
+    msg = "Unknown serialization format"
+    raise ValueError(msg)
 
 
 def serialize_write_temp_file(
@@ -131,8 +133,8 @@ def serialize_write_temp_file(
             return Path(file_like.name)
         _text_dump(dumpable=str(dumpable), file_handle=file_like)
         return Path(file_like.name)
-
-    raise ValueError("Unknown serialization format")
+    msg = "Unknown serialization format"
+    raise ValueError(msg)
 
 
 SERIALIZATION_FAILURE_MSG = (
@@ -339,11 +341,7 @@ def _is_multiline_string(value: str):
     :param value: The value to check
     :returns: A boolean indicating if the string is multiline
     """
-    for character in "\u000a\u000d\u001c\u001d\u001e\u0085\u2028\u2029":
-        if character in value:
-            return True
-
-    return False
+    return any(character in value for character in "\n\r\x1c\x1d\x1e\x85\u2028\u2029")
 
 
 def opener(path: str, flags: int, mode: int) -> int:

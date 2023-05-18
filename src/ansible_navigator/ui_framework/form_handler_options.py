@@ -11,8 +11,8 @@ from .curses_window import CursesWindow
 
 
 if TYPE_CHECKING:
-    from .field_checks import FieldChecks  # pylint: disable=cyclic-import
-    from .field_radio import FieldRadio  # pylint: disable=cyclic-import
+    from .field_checks import FieldChecks
+    from .field_radio import FieldRadio
 
 
 class FormHandlerOptions(CursesWindow):
@@ -39,10 +39,9 @@ class FormHandlerOptions(CursesWindow):
             decoration = curses.A_STANDOUT if idx == active else 0
             clp_option_code = CursesLinePart(0, option_code, color, 0)
             if self._ui_config.color is False:
-                if idx == active:
-                    text = f"[{option.text.capitalize()}]"
-                else:
-                    text = option.text + "  "  # clear the []
+                text = (
+                    f"[{option.text.capitalize()}]" if idx == active else option.text + "  "
+                )  # clear the [], for else  # noqa: E501
             else:
                 text = option.text
             clp_text = CursesLinePart(len(option_code) + 1, text, color, decoration)

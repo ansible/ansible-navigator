@@ -43,10 +43,8 @@ def _import_all(package: str) -> None:
     :param package: The name of the package
     """
     for entry in importlib_resources.files(package).iterdir():
-        if entry.is_file():
-            if entry.name.endswith(".py"):
-                if not entry.name.startswith("_"):
-                    _import(package, entry.name[0:-3])
+        if entry.is_file() and entry.name.endswith(".py") and not entry.name.startswith("_"):
+            _import(package, entry.name[0:-3])
 
 
 def register(cls: Any) -> Any:
@@ -154,7 +152,7 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
     # Capture and show a UI notification
     try:
         return run_action(app=app, interaction=interaction)
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         logger.critical("Subcommand '%s' encountered a fatal error.", action)
         logger.exception("Logging an uncaught exception")
         warn_msg = [f"Unexpected errors were encountered while running '{action}'."]

@@ -99,7 +99,7 @@ class TmuxSession:
                 )
                 break
             except libtmux.exc.LibTmuxException as exc:
-                warnings.warn(f"tmux session failure #{count}: {str(exc)}", RuntimeWarning)
+                warnings.warn(f"tmux session failure #{count}: {exc!s}", RuntimeWarning)
                 if count == tries:
                     raise
                 count += 1
@@ -113,7 +113,7 @@ class TmuxSession:
         """
         # pylint: disable=attribute-defined-outside-init
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
+
         self._server = libtmux.Server()
         self._build_tmux_session()
         self._window = self._session.new_window(self._session_name)
@@ -131,9 +131,8 @@ class TmuxSession:
         # it before we enter tmux. Do this before we switch to bash
         venv_path = os.environ.get("VIRTUAL_ENV")
         if venv_path is None:
-            raise AssertionError(
-                "VIRTUAL_ENV environment variable was not set but tox should have set it.",
-            )
+            msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
+            raise AssertionError(msg)
         venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
 
         # get the USER before we start a clean shell
@@ -249,8 +248,6 @@ class TmuxSession:
         timeout: int = 300,
         send_clear: bool = True,
     ) -> list[str]:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         """Interact with the tmux session.
 
         :param value: Send to screen
@@ -272,10 +269,7 @@ class TmuxSession:
             showing = self._capture_pane()
 
             if showing:
-                if self.cli_prompt in showing[-1]:
-                    mode = "shell"
-                else:
-                    mode = "app"
+                mode = "shell" if self.cli_prompt in showing[-1] else "app"
 
             if mode is not None:
                 break

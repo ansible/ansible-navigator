@@ -51,7 +51,6 @@ class BaseClass:
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-branches
         """Run the tests for ``doc``, mode and ``ee`` set in child class.
 
         :param request: A fixture providing details about the test caller
@@ -70,18 +69,17 @@ class BaseClass:
             # clear the screen so it starts with stdout
             user_input = f"clear && {user_input}"
         else:
-            raise ValueError(
-                "Value of 'TEST_FOR_MODE' is not set."
+            msg = (
+                "Value of 'TEST_FOR_MODE' is not set.",
                 " Valid value is either 'interactive' or 'stdout'",
             )
+            raise ValueError(msg)
 
         received_output = tmux_doc_session.interaction(user_input, search_within_response)
         updated_received_output = []
         mask = "X" * 50
         for line in received_output:
-            if tmux_doc_session.cli_prompt in line:
-                updated_received_output.append(mask)
-            elif "filename" in line or "│warnings:" in line:
+            if tmux_doc_session.cli_prompt in line or ("filename" in line or "│warnings:" in line):
                 updated_received_output.append(mask)
             else:
                 for value in ["time=", "skipping entry", "failed:", "permission denied"]:

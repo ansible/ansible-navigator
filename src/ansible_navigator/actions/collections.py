@@ -36,7 +36,6 @@ from . import run_action
 
 
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-    # pylint: disable=unused-argument
     """Provide a color for a collections menu entry in one column.
 
     :param colno: The column number
@@ -189,7 +188,7 @@ class Action(ActionBase):
         ):
             msg = (
                 "Failed to create collections cache, "
-                + "Please review the ansible-navigator log file for errors."
+                "Please review the ansible-navigator log file for errors."
             )
             return RunStdoutReturn(message=msg, return_code=1)
 
@@ -200,7 +199,7 @@ class Action(ActionBase):
         if not self._collections:
             msg = (
                 "Failed to catalog collections, "
-                + "Please review the ansible-navigator log file for errors."
+                "Please review the ansible-navigator log file for errors."
             )
             return RunStdoutReturn(message=msg, return_code=1)
 
@@ -292,7 +291,7 @@ class Action(ActionBase):
 
         :returns: The plugin menu definition
         """
-        self._collection_cache.open()
+        self._collection_cache.open_()
         selected_collection = self._collections[self.steps.current.index]
         collection_name = f"__{selected_collection['known_as']}"
         collection_contents = []
@@ -370,8 +369,6 @@ class Action(ActionBase):
         )
 
     def _run_runner(self) -> None:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         # pylint: disable=too-many-locals
         """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
@@ -513,9 +510,8 @@ class Action(ActionBase):
         :param output: The output from the collection cataloging process
         :returns: Nothing
         """
-        # pylint: disable=too-many-branches
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-statements
+
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)
@@ -564,9 +560,9 @@ class Action(ActionBase):
             collection["__version"] = collection["collection_info"].get("version", "missing")
             collection["__shadowed"] = bool(collection["hidden_by"])
             if self._args.execution_environment:
-                if collection["path"].startswith(dest_volume_mounts):
-                    collection["__type"] = "bind_mount"
-                elif collection["path"].startswith(self._adjacent_collection_dir):
+                if collection["path"].startswith(dest_volume_mounts) or collection[
+                    "path"
+                ].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
                 elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
                     collection["__type"] = "bind_mount"
@@ -655,7 +651,7 @@ class Action(ActionBase):
         roles_exclude_keys = ["readme"]
         self._collection_cache = cast(KeyValueStore, self._collection_cache)
 
-        self._collection_cache.open()
+        self._collection_cache.open_()
         for collection in self._collections:
             plugins_details = self._get_collection_plugins_details(collection)
 

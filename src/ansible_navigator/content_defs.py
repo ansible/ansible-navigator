@@ -33,13 +33,6 @@ class SerializationFormat(Enum):
     YAML = "YAML"
     JSON = "JSON"
 
-    def repr(self) -> str:
-        """Return a string representation.
-
-        :return: A string
-        """
-        return self.value
-
 
 @dataclass
 class ContentBase(Generic[T]):

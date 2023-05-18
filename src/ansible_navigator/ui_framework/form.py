@@ -28,7 +28,7 @@ from .validators import FormValidators
 class Form:
     """Simple abstraction to hold the fields of the form and a convenience method to present it."""
 
-    type: FormType
+    type_: FormType
     cancelled: bool = False
     fields: list = field(default_factory=list)
     submitted: bool = False
@@ -44,7 +44,7 @@ class Form:
         :param screen: A curses window
         :param ui_config: The current user interface configuration
         """
-        if self.type is FormType.FORM:
+        if self.type_ is FormType.FORM:
             self.fields.append(
                 FieldButton(
                     name="submit",
@@ -54,7 +54,7 @@ class Form:
                 ),
             )
             self.fields.append(FieldButton(name="cancel", text="Cancel", color=9))
-        elif self.type is FormType.NOTIFICATION:
+        elif self.type_ is FormType.NOTIFICATION:
             self.fields.append(
                 FieldButton(
                     name="submit",
@@ -63,7 +63,7 @@ class Form:
                     color=10,
                 ),
             )
-        elif self.type is FormType.WORKING:
+        elif self.type_ is FormType.WORKING:
             pass
 
         FormPresenter(form=self, screen=screen, ui_config=ui_config).present()
@@ -142,9 +142,9 @@ class FormPresenter(CursesWindow):
                 widths.append(max(len(msg) for msg in form_field.messages))
             widths.append(len(form_field.validator(hint=True)) + self._input_start)
 
-        if self._form.type is FormType.FORM:
+        if self._form.type_ is FormType.FORM:
             self._form_width = max(widths) + BUTTON_SPACE
-        elif self._form.type in (FormType.NOTIFICATION, FormType.WORKING):
+        elif self._form.type_ in (FormType.NOTIFICATION, FormType.WORKING):
             self._form_width = max(widths)
 
         height = 2  # title + horizontal line
@@ -247,10 +247,7 @@ class FormPresenter(CursesWindow):
                 f.valid for f in self._form.fields if not isinstance(f, FieldButton)
             ]
             form_field.conditional_validation(form_validity_state)
-            if form_field.disabled is True:
-                color = 8
-            else:
-                color = form_field.color
+            color = 8 if form_field.disabled is True else form_field.color
             line_part = CursesLinePart(far_right, string, color, 0)
             line_parts.append(line_part)
             far_right -= 1
@@ -285,7 +282,7 @@ class FormPresenter(CursesWindow):
         for option in form_field.options:
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
-            text = f"{option_code} {str(option.text)}"
+            text = f"{option_code} {option.text!s}"
             line_part = CursesLinePart(self._input_start, text, color, 0)
             lines.append(CursesLine((line_part,)))
         return CursesLines(tuple(lines))
@@ -345,10 +342,7 @@ class FormPresenter(CursesWindow):
         :returns: A list of CursesLinePart containing the prompt
         """
         prompt_start = self._prompt_end - len(form_field.full_prompt)
-        if form_field.valid is True:
-            color = 10
-        else:
-            color = 0
+        color = 10 if form_field.valid is True else 0
 
         cl_prompt = CursesLinePart(prompt_start, form_field.prompt, color, 0)
         cl_default = CursesLinePart(

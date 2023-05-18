@@ -28,18 +28,17 @@ from .validators import FieldValidators
 
 
 def dict_to_form(form_data: dict) -> Form:
-    # pylint: disable=too-many-branches
     """Convert a python dict to a form.
 
     :param form_data: Form data
     :returns: Object containing fields from form
     """
     if form_data.get("type") == "notification":
-        form = Form(type=FormType.NOTIFICATION)
+        form = Form(type_=FormType.NOTIFICATION)
     elif form_data.get("type") == "working":
-        form = Form(type=FormType.WORKING)
+        form = Form(type_=FormType.WORKING)
     else:
-        form = Form(type=FormType.FORM)
+        form = Form(type_=FormType.FORM)
 
     form._dict = form_data  # pylint: disable=protected-access
     form.title = form_data["title"]

@@ -5,7 +5,7 @@ from .base import PLAYBOOK_ARTIFACT
 from .base import BaseClass
 
 
-CLI = "ansible-navigator" f" replay {PLAYBOOK_ARTIFACT}" " --execution-environment true --ll debug"
+CLI = f"ansible-navigator replay {PLAYBOOK_ARTIFACT} --execution-environment true --ll debug"
 
 testdata = [
     (0, CLI, "run top window", ["Complete", "Successful"]),

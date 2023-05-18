@@ -4,7 +4,7 @@
 #
 #    pip-compile --extra=docs --extra=test --no-annotate --output-file=requirements.txt --strip-extras setup.cfg
 #
-ansible-builder==3.0.0rc1
+ansible-builder==3.0.0
 ansible-core==2.14.3
 ansible-runner==2.3.2
 attrs==22.2.0

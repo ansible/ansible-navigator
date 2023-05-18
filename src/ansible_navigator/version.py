@@ -1,4 +1,5 @@
 """Ansible-navigator version information."""
+
 try:
     from ._version import version as __version__
 except ImportError:  # pragma: no branch
@@ -6,7 +7,7 @@ except ImportError:  # pragma: no branch
         from importlib.metadata import version
 
         __version__ = version("ansible-navigator")
-    except Exception:  # pylint: disable=broad-except
+    except Exception:  # noqa: BLE001
         # this is the fallback SemVer version picked by setuptools_scm when tag
         # information is not available.
         __version__ = "0.1.dev1"

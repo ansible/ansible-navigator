@@ -72,7 +72,6 @@ def get_color(word):
 
 
 def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
-    # pylint: disable=too-many-branches
     """Find matching color for word.
 
     :param colname: The column name
@@ -102,15 +101,12 @@ def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, i
             decoration = curses.A_BOLD
 
     elif "task" in entry:
-        if entry["__result"].lower() == "in progress":
-            color = get_color(entry["__result"])
-        elif colname in ["__result", "__host", "__number", "__task", "__task_action"]:
+        if entry["__result"].lower() == "in progress" or (
+            colname in ["__result", "__host", "__number", "__task", "__task_action"]
+        ):
             color = get_color(entry["__result"])
         elif colname == "__changed":
-            if colval is True:
-                color = 11
-            else:
-                color = get_color(entry["__result"])
+            color = 11 if colval is True else get_color(entry["__result"])
         elif colname == "__duration":
             color = 12
 
@@ -350,7 +346,6 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return None
 
-    # pylint: disable=too-many-branches
     def _init_run(self) -> bool:
         """In the case of :run, check the user input.
 
@@ -491,15 +486,9 @@ class Action(ActionBase):
         """
         self._logger.debug("Inventory/Playbook not set, provided, or valid, prompting")
 
-        if isinstance(self._args.playbook, str):
-            playbook = self._args.playbook
-        else:
-            playbook = ""
+        playbook = self._args.playbook if isinstance(self._args.playbook, str) else ""
 
-        if isinstance(self._args.cmdline, list):
-            cmdline = " ".join(self._args.cmdline)
-        else:
-            cmdline = ""
+        cmdline = " ".join(self._args.cmdline) if isinstance(self._args.cmdline, list) else ""
 
         FType = dict[str, Any]
         form_dict: FType = {
@@ -574,10 +563,7 @@ class Action(ActionBase):
         """
         executable_cmd: str | None
 
-        if self.mode == "stdout_w_artifact":
-            mode = "interactive"
-        else:
-            mode = self.mode
+        mode = "interactive" if self.mode == "stdout_w_artifact" else self.mode
 
         if isinstance(self._args.set_environment_variable, dict):
             set_env_vars = {**self._args.set_environment_variable}
@@ -651,10 +637,7 @@ class Action(ActionBase):
             self._logger.debug("Drained %s events", drain_count)
 
     def _handle_message(self, message: dict) -> None:
-        # pylint: disable=too-many-branches
-        # pylint: disable=too-many-statements
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-return-statements
         """Handle a runner message.
 
         :param message: The message from runner
@@ -930,7 +913,7 @@ class Action(ActionBase):
 
             except OSError as exc:
                 error = (
-                    f"Saving the artifact file failed, resulted in the following error: f{str(exc)}"
+                    f"Saving the artifact file failed, resulted in the following error: f{exc!s}"
                 )
                 self._logger.error(error)
 

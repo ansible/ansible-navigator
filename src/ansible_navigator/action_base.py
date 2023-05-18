@@ -78,10 +78,10 @@ class ActionBase:
                 update=self.update,
                 write_artifact=self.write_artifact,
             )
-        raise AttributeError("app passed without args initialized")
+        msg = "app passed without args initialized"
+        raise AttributeError(msg)
 
     def no_interactive_mode(self, interaction: Interaction, app: AppPublic) -> None:
-        # pylint: disable=unused-argument
         """Show a warning notification that the user interactive mode is not supported.
 
         :param interaction: The interaction from the user
@@ -91,7 +91,7 @@ class ActionBase:
             messages=[
                 f"The '{self._name}' subcommand is not available while using interactive mode.",
                 "[HINT] Start an additional instance of ansible-navigator"
-                + " in a new terminal with mode 'stdout'.",
+                " in a new terminal with mode 'stdout'.",
                 f"      e.g. 'ansible-navigator {self._name} --mode stdout",
             ],
         )

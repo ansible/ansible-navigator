@@ -22,7 +22,6 @@ class Action:
         self._args = args
         self._logger = logging.getLogger(__name__)
 
-    # pylint: disable=unused-argument
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Handle a request to quit the application from the user interface.
 

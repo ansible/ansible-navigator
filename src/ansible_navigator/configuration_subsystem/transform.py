@@ -134,8 +134,8 @@ def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
         version = settings.application_version.value
     else:
         version = settings.application_version
-    # get only major.minor version info for the schema:
-    version = ".".join(version.split(".")[:2])
+    # get only major version info for the schema:
+    version = ".".join(version.split(".")[:1])
 
     partial_schema["version"] = version
     partial_schema["title"] = partial_schema["title"].format(version=version)

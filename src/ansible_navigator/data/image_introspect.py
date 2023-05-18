@@ -13,15 +13,13 @@ from typing import Any
 from typing import Callable
 
 
-# pylint: disable=broad-except
-
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
 
 class Command(SimpleNamespace):
     """Abstraction for a details about a shell command."""
 
-    id: str
+    id_: str
     command: str
     parse: Callable
     stdout: str = ""
@@ -62,7 +60,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
         run_command(command)
         try:
             command.parse(command)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             command.errors = command.errors + [str(exc)]
         completed_queue.put(command)
 
@@ -93,7 +91,7 @@ class CommandRunner:
             run_command(command)
             try:
                 command.parse(command)
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001
                 command.errors = command.errors + [str(exc)]
             results.append(command)
         return results
@@ -209,7 +207,7 @@ class AnsibleCollections(CmdParser):
         command = "ansible-galaxy collection list"
         return [
             Command(
-                id="ansible_collections",
+                id_="ansible_collections",
                 command=command,
                 parse=self.parse,
             ),
@@ -241,7 +239,7 @@ class AnsibleVersion(CmdParser):
 
         :returns: The defined command
         """
-        return [Command(id="ansible_version", command="ansible --version", parse=self.parse)]
+        return [Command(id_="ansible_version", command="ansible --version", parse=self.parse)]
 
     @staticmethod
     def parse(command: Command) -> None:
@@ -262,7 +260,7 @@ class OsRelease(CmdParser):
 
         :returns: The defined command
         """
-        return [Command(id="os_release", command="cat /etc/os-release", parse=self.parse)]
+        return [Command(id_="os_release", command="cat /etc/os-release", parse=self.parse)]
 
     def parse(self, command) -> None:
         """Parse the output of the cat command.
@@ -282,12 +280,12 @@ class PythonPackages(CmdParser):
 
         :returns: The defined command
         """
-        pre = Command(id="pip_freeze", command="python3 -m pip freeze", parse=self.parse_freeze)
+        pre = Command(id_="pip_freeze", command="python3 -m pip freeze", parse=self.parse_freeze)
         run_command(pre)
         pre.parse(pre)
         pkgs = " ".join(pkg for pkg in pre.details[0])
         return [
-            Command(id="python_packages", command=f"python3 -m pip show {pkgs}", parse=self.parse),
+            Command(id_="python_packages", command=f"python3 -m pip show {pkgs}", parse=self.parse),
         ]
 
     def parse(self, command):
@@ -323,7 +321,7 @@ class RedhatRelease(CmdParser):
 
         :returns: The defined command
         """
-        return [Command(id="redhat_release", command="cat /etc/redhat-release", parse=self.parse)]
+        return [Command(id_="redhat_release", command="cat /etc/redhat-release", parse=self.parse)]
 
     @staticmethod
     def parse(command):
@@ -344,7 +342,7 @@ class SystemPackages(CmdParser):
 
         :returns: The defined command
         """
-        return [Command(id="system_packages", command="rpm -qai", parse=self.parse)]
+        return [Command(id_="system_packages", command="rpm -qai", parse=self.parse)]
 
     def parse(self, command):
         """Parse the output of the rpm command.
@@ -412,8 +410,8 @@ def main():
                 if key not in ["details", "errors"]:
                     result_as_dict[f"__{key}"] = result_as_dict[key]
                     result_as_dict.pop(key)
-            response[result_as_dict["__id"]] = result_as_dict
-    except Exception as exc:
+            response[result_as_dict["__id_"]] = result_as_dict
+    except Exception as exc:  # noqa: BLE001
         response["errors"].append(str(exc))
     print(json.dumps(response))
 

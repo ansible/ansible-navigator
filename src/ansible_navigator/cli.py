@@ -81,10 +81,7 @@ def log_dependencies() -> list[LogMessage]:
             if pkg_name not in found:
                 found.append(pkg_name)
                 spec = find_spec(pkg_name)
-                if spec:
-                    _location = spec.origin
-                else:
-                    _location = ""
+                _location = spec.origin if spec else ""
                 _version = version(pkg_name)
                 pkgs.append(f"{pkg_name}=={_version} {_location}")
 
@@ -171,10 +168,10 @@ def main():
     try:
         Path(args.log_file).touch()
         setup_logger(args)
-    except Exception as exc:  # pylint: disable=broad-except
+    except Exception as exc:  # noqa: BLE001
         exit_msg = "The log file path or logging engine could not be setup."
         exit_msg += " No log file will be available, please check the log file"
-        exit_msg += f" path setting. The error was {str(exc)}"
+        exit_msg += f" path setting. The error was {exc!s}"
         exit_messages.append(ExitMessage(message=exit_msg))
         error_and_exit_early(exit_messages=exit_messages)
 

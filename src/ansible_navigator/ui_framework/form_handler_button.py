@@ -11,7 +11,7 @@ from .curses_window import CursesWindow
 
 
 if TYPE_CHECKING:
-    from .field_button import FieldButton  # pylint: disable=cyclic-import
+    from .field_button import FieldButton
 
 
 class FormHandlerButton(CursesWindow):
@@ -30,10 +30,7 @@ class FormHandlerButton(CursesWindow):
 
     def populate(self):
         """Populate the window with the button."""
-        if self._form_field.disabled is True:
-            color = 8
-        else:
-            color = self._form_field.color
+        color = 8 if self._form_field.disabled is True else self._form_field.color
 
         if self._ui_config.color is False:
             text = f"[{self._form_field.text.upper()}]"

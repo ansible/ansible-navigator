@@ -52,10 +52,7 @@ class FieldValidators:
         """
         if hint:
             return "Please provide a value (optional)"
-        if text:
-            value = "*" * randrange(15, 20)
-        else:
-            value = ""
+        value = "*" * randrange(15, 20) if text else ""
         return Validation(value=value, error_msg="")
 
     @staticmethod
@@ -87,7 +84,6 @@ class FieldValidators:
 
     @staticmethod
     def one_of(choices: list = [], text: str = "", hint: bool = False) -> Validation | str:
-        # pylint: disable=dangerous-default-value
         """Validate that some text is one of choices.
 
         :param choices: The list of choices
@@ -95,10 +91,7 @@ class FieldValidators:
         :param hint: If True, return a hint message instead of a Validation
         :returns: A Validation or a hint message
         """
-        if choices:
-            choices_str = f"{', '.join(choices[:-1])} or {choices[-1]}"
-        else:
-            choices_str = ""
+        choices_str = f"{', '.join(choices[:-1])} or {choices[-1]}" if choices else ""
         msg = f"Please enter {choices_str}"
         value = text
         if hint:
@@ -128,7 +121,7 @@ class FieldValidators:
         """
         if min_selected == max_selected:
             word = "entry" if min_selected == 1 else "entries"
-            msg = f"Please select {str(min_selected)} {word}"
+            msg = f"Please select {min_selected!s} {word}"
         else:
             msg = f"Please select between {min_selected} and "
             word = str(max_selected) if max_selected != -1 else "all"

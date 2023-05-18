@@ -83,7 +83,6 @@ class BaseClass:
             yield tmux_session
 
     def test(self, request, tmux_session, step):
-        # pylint: disable=too-many-branches
         """Test interactive and ``stdout`` mode ``config``.
 
         :param request: A fixture providing details about the test caller

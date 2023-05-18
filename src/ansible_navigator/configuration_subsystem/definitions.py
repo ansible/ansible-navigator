@@ -192,7 +192,8 @@ class SettingsEntry:
         """
         name = self.name.replace("_", "-")
         if self.value.source is Constants.NOT_SET:
-            raise ValueError(f"Current source not set for {self.name}")
+            msg = f"Current source not set for {self.name}"
+            raise ValueError(msg)
 
         choices = [str(choice).lower() for choice in self.choices]
         current = self.value.current
@@ -222,10 +223,7 @@ class SettingsEntry:
         :param prefix: The prefix for the settings file path
         :returns: Settings file path
         """
-        if prefix:
-            prefix_str = f"{prefix}."
-        else:
-            prefix_str = prefix
+        prefix_str = f"{prefix}." if prefix else prefix
 
         if self.settings_file_path_override is not None:
             sfp = f"{prefix_str}{self.settings_file_path_override}"
@@ -330,16 +328,16 @@ class VolumeMountOption(Enum):
     OVERLAY = "O"
 
     # Read Only
-    ro = "ro"  # pylint: disable=invalid-name
+    ro = "ro"
 
     # Read Write
-    rw = "rw"  # pylint: disable=invalid-name
+    rw = "rw"
 
     # Relabel as private
     Z = "Z"
 
     # Relabel as shared.
-    z = "z"  # pylint: disable=invalid-name
+    z = "z"
 
 
 V = TypeVar("V", bound="VolumeMount")

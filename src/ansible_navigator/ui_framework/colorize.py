@@ -134,7 +134,7 @@ class Colorize:
                 first_line = line_idx == 0
                 try:
                     state, regions = tokenize(compiler, state, line, first_line)
-                except Exception as exc:  # pylint: disable=broad-except
+                except Exception as exc:  # noqa: BLE001
                     self._logger.critical(
                         (
                             "An unexpected error occurred within the tokenization"
@@ -257,7 +257,6 @@ def columns_and_colors(
     lines: list[tuple[Regions, str]],
     schema: ColorSchema,
 ) -> list[list[SimpleLinePart]]:
-    # pylint: disable=too-many-branches
     """Convert to colors and columns.
 
     :param lines: Lines of text and their regions
@@ -346,9 +345,7 @@ def ansi_to_curses(line: str) -> CursesLine:
                 cap = match.groupdict()
                 one = cap["one"]
                 two = cap["two"]
-                if cap["fg_action"] == "39;":
-                    pass  # default color
-                elif one == "0" and two is None:
+                if cap["fg_action"] == "39;" or (one == "0" and two is None):
                     pass  # default color
                 elif cap["fg_action"] == "38;5;":
                     color = int(one)
