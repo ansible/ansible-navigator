@@ -1,0 +1,21 @@
+{
+    "name": "test[26-:back-Back to ansible-navigator collections browse window]",
+    "index": 26,
+    "comment": "Back to ansible-navigator collections browse window",
+    "additional_information": {
+        "present": [
+            "ansible.builtin",
+            "company_name.coll_1",
+            "company_name.coll_2"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "  Name                       Version    Shadowed    Type           Path",
+        "0│ansible.builtin            2.14.1     False       contained      /usr/local/lib/python3.XX/site-packages/ansible",
+        "1│company_name.coll_1        1.0.0      False       bind_mount     /tmp/collections_to_volmount/ansible_collections/company_name/coll_1",
+        "2│company_name.coll_2        2.0.0      False       bind_mount     /tmp/collections_to_volmount/ansible_collections/company_name/coll_2",
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+    ]
+}

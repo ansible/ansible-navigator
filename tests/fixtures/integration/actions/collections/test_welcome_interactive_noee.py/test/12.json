@@ -1,16 +1,19 @@
 {
-    "name": "test[12-:2-Browse company_name.coll_2 plugins window]",
+    "name": "test[12-:back-Back to browse company_name.coll_1 plugins window]",
     "index": 12,
-    "comment": "Browse company_name.coll_2 plugins window",
+    "comment": "Back to browse company_name.coll_1 plugins window",
     "additional_information": {
         "present": [],
         "absent": [],
         "compared_fixture": true
     },
     "output": [
-        "  Company name.coll 2                                    Type               Added            Deprecated                     Description",
-        "0│lookup_2                                               lookup             2.0.0            False                          This is test lookup plugin",
-        "1│mod_2                                                  module             2.0.0            False                          This is a test module",
+        "  Company name.coll 1                                   Type               Added                 Deprecated                    Description",
+        "0│filter_1                                              filter             1.0.0                 False                         This is test filter plugin",
+        "1│lookup_1                                              lookup             1.0.0                 False                         This is test lookup plugin",
+        "2│mod_1                                                 module             1.0.0                 False                         This is a test module",
+        "3│role_full                                             role               Unknown               Unknown                       Complete sample role.",
+        "4│role_minimum                                          role               Unknown               Unknown                       Minimal sample role.",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
