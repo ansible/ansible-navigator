@@ -72,7 +72,8 @@ Prerequisites:
 
 After cloning the repository, all we need is to install ansible-navigator from
 the source. Use the following command in workspace (root folder of navigator).
-This will install all the required dependencies for testing the local changes.
+This will install package in editable/development mode, along with its
+additional dependencies required for testing.
 
 ```shell-session
 pip install -e .\[test]
@@ -80,8 +81,11 @@ pip install -e .\[test]
 
 ### Testing process and examples
 
-Once all the dependencies are installed, we can run our tests using `pytest`. To
-run tests inside a file test_xyz.py, we will need to traverse to that file.
+Once all the dependencies are installed, we can execute our tests using
+[pytest]. To run tests inside a file test_xyz.py, we will need to traverse to
+that file.
+
+[pytest]: https://docs.pytest.org/en/7.3.x/
 
 Example: To run an unit test "test_circular_imports.py", we will execute:
 
