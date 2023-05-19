@@ -1,7 +1,14 @@
 """Herein lies the ability for ansible-runner to run the ansible-config command."""
 from __future__ import annotations
 
-from ansible_runner import get_ansible_config
+import warnings
+
+
+# Remove this catch-all once newer ansible-runner is released
+# https://github.com/ansible/ansible-runner/issues/1223
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    from ansible_runner import get_ansible_config
 
 from .base import Base
 
