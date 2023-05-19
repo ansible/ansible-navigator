@@ -67,6 +67,7 @@ lintables
 magiclink
 maskables
 maxsplit
+mkdocs
 mkdocstrings
 moduleauthor
 mqueue              # https://github.com/ansible/ansible-runner/issues/984

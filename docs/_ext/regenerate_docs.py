@@ -7,6 +7,8 @@ from copy import copy
 from pathlib import Path
 from re import match
 
+import mkdocs_gen_files
+
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
@@ -184,10 +186,11 @@ def md_settings_sample() -> str:
     return result
 
 
-if __name__ == "__main__":
-    with DOCS_SETTINGS_SAMPLE.open("w") as f:
-        f.write(md_settings_sample())
-    with DOCS_SETTINGS_DUMP.open("w") as f:
-        f.write(md_settings_dump())
-    with DOCS_SUBCOMMANDS_OVERVIEW.open("w") as f:
-        f.write(_subcommands_overview())
+with mkdocs_gen_files.open(DOCS_SETTINGS_SAMPLE, "w") as f:
+    f.write(md_settings_sample())
+
+with mkdocs_gen_files.open(DOCS_SETTINGS_DUMP, "w") as f:
+    f.write(md_settings_dump())
+
+with mkdocs_gen_files.open(DOCS_SUBCOMMANDS_OVERVIEW, "w") as f:
+    f.write(_subcommands_overview())
