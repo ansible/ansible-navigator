@@ -1,18 +1,21 @@
 {
-    "name": "test[20-:1-Browse company_name.coll_1 plugins window]",
+    "name": "test[20-:collections --ee FFFFF-Provide an invalid ee value]",
     "index": 20,
-    "comment": "Browse company_name.coll_1 plugins window",
+    "comment": "Provide an invalid ee value",
     "additional_information": {
-        "present": [],
+        "present": [
+            "Issues were found while applying the settings"
+        ],
         "absent": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
-        "  Company name.coll 1                                   Type               Added                 Deprecated                    Description",
-        "0│lookup_1                                              lookup             1.0.0                 False                         This is test lookup plugin",
-        "1│mod_1                                                 module             1.0.0                 False                         This is a test module",
-        "2│role_full                                             role               Unknown               Unknown                       Complete sample role.",
-        "3│role_minimum                                          role               Unknown               Unknown                       Minimal sample role.",
-        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "                                  Warning: Issues were found while applying the settings.",
+        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                     Hint: Command provided: 'collections --ee FFFFF'",
+        "                                    Error: The setting 'execution-environment' must be one of 'true' or 'false', but set as 'FFFFF'. (Command line)",
+        "                                     Hint: Try again with '--ee true' or '--ee false'",
+        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                                                Ok"
     ]
 }

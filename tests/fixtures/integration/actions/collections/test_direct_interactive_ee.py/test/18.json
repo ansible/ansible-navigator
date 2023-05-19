@@ -1,7 +1,7 @@
 {
-    "name": "test[18-Enter-ansible-navigator collections browse window]",
+    "name": "test[18-:back-Back to ansible-navigator collections browse window]",
     "index": 18,
-    "comment": "ansible-navigator collections browse window",
+    "comment": "Back to ansible-navigator collections browse window",
     "additional_information": {
         "present": [
             "ansible.builtin",

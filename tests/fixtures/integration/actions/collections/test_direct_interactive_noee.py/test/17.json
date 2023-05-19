@@ -1,21 +1,16 @@
 {
-    "name": "test[17-:collections --ee FFFFF-Provide an invalid ee value]",
+    "name": "test[17-:back-Back to browse company_name.coll_2 plugins window]",
     "index": 17,
-    "comment": "Provide an invalid ee value",
+    "comment": "Back to browse company_name.coll_2 plugins window",
     "additional_information": {
-        "present": [
-            "Issues were found while applying the settings"
-        ],
+        "present": [],
         "absent": [],
-        "compared_fixture": false
+        "compared_fixture": true
     },
     "output": [
-        "                                  Warning: Issues were found while applying the settings.",
-        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                     Hint: Command provided: 'collections --ee FFFFF'",
-        "                                    Error: The setting 'execution-environment' must be one of 'true' or 'false', but set as 'FFFFF'. (Command line)",
-        "                                     Hint: Try again with '--ee true' or '--ee false'",
-        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                                                                                                                                Ok"
+        "  Company name.coll 2                                    Type               Added            Deprecated                     Description",
+        "0│lookup_2                                               lookup             2.0.0            False                          This is test lookup plugin",
+        "1│mod_2                                                  module             2.0.0            False                          This is a test module",
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
