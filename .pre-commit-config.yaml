@@ -2,6 +2,11 @@
 default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
   python: python3.11
+exclude: >
+  (?x)^(
+    _readthedocs|
+    .tox
+  )$
 repos:
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: "v3.0.0-alpha.9-for-vscode"
@@ -164,13 +169,14 @@ repos:
           - src/
           - tests/
         additional_dependencies:
-          - dill>=0.3.6 # needed for py311
           - ansible-core
-          - astroid
           - ansible-runner
+          - astroid
+          - dill>=0.3.6 # needed for py311
           - jinja2
           - jsonschema
           - libtmux
+          - mkdocs-gen-files
           - onigurumacffi
           - pytest
           - pytest-mock
