@@ -47,7 +47,7 @@ def id_ee(value: bool):
     :param value: The value of the parameter
     :returns: The test id
     """
-    return f"execution_environment={value}"
+    return "-ee" if value else "-no_ee"
 
 
 def id_test_data(value: StdoutTest):
@@ -56,7 +56,7 @@ def id_test_data(value: StdoutTest):
     :param value: The value of the parameter
     :returns: The test id
     """
-    return f"action={value.action_name} return={value.return_code}"
+    return f"{value.action_name}-r{value.return_code}"
 
 
 class StdoutTest(NamedTuple):
@@ -129,7 +129,7 @@ fixture_test_data = (
 
 @pytest.mark.parametrize("params", (True, False), indirect=["params"], ids=id_ee)
 @pytest.mark.parametrize("test_data", fixture_test_data, ids=id_test_data)
-def test(
+def test_stdout(
     action_run_stdout: type[ActionRunTest],
     params: dict[str, Any],
     test_data: StdoutTest,
