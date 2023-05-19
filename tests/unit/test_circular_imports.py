@@ -86,6 +86,12 @@ def test_no_warnings(import_path: str) -> None:
 
     :param import_path: The path to be imported and smoke-checked for warnings and crashes
     """
+    # Because pkg_resources.declare_namespace warning happens for any namespace
+    # package that exists on disk, even if they are imported we need to ignore
+    # the generic warning.
+    # NOTE: The following is related to the use of pkg_resource in debugpy
+    # and triggered when running the tests with vscode in debug mode
+    # https://github.com/microsoft/debugpy/issues/1230
     imp_cmd = (
         sys.executable,
         "-W",
@@ -97,13 +103,7 @@ def test_no_warnings(import_path: str) -> None:
         "-W",
         "ignore: pkg_resources is deprecated as an API:DeprecationWarning",
         "-W",
-        "ignore: Deprecated call to `pkg_resources.declare_namespace('ruamel'):DeprecationWarning",
-        # NOTE: The following is related to the use of pkg_resource in debugpy
-        # and triggered when running the tests with vscode in debug mode
-        # https://github.com/microsoft/debugpy/issues/1230
-        "-W",
-        "ignore: Deprecated call to `pkg_resources.declare_namespace('pydevd_plugins.extensions')"
-        ":DeprecationWarning",
+        "ignore: Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning",
         "-c",
         f"import {import_path!s}",
     )
