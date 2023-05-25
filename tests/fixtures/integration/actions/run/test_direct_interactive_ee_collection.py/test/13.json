@@ -8,10 +8,10 @@
         "compared_fixture": true
     },
     "output": [
-        " 0│[WARNING]: No inventory was parsed, only implicit localhost is available",
-        " 1│[WARNING]: provided hosts list is empty, only localhost is available. Note that",
-        " 2│the implicit localhost does not match 'all'",
-        " 3│[WARNING]: running playbook inside collection company_name.coll_1",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         " 4│",
         " 5│PLAY [run integration test play-1] *********************************************",
         " 6│",
