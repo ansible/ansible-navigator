@@ -625,8 +625,11 @@ class Action(ActionBase):
                     else:
                         short_name = plugin["doc"][plugin_type]
                 except KeyError:
-                    short_name = None
-                plugin_docs["full_name"] = f"{selected_collection['known_as']}.{short_name}"
+                    short_name = None  # option2: short_name = plugin_type and remove following 'if'
+                if short_name is None:
+                    plugin_docs["full_name"] = f"{selected_collection['known_as']}"
+                else:
+                    plugin_docs["full_name"] = f"{selected_collection['known_as']}.{short_name}"
 
                 if "short_description" in plugin["doc"]:
                     plugin_docs["short_description"] = plugin["doc"]["short_description"]
