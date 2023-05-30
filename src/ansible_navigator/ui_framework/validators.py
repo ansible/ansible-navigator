@@ -121,7 +121,7 @@ class FieldValidators:
         """
         if min_selected == max_selected:
             word = "entry" if min_selected == 1 else "entries"
-            msg = f"Please select {str(min_selected)} {word}"
+            msg = f"Please select {min_selected!s} {word}"
         else:
             msg = f"Please select between {min_selected} and "
             word = str(max_selected) if max_selected != -1 else "all"

@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v0.17.0 (primary) (Information collected from image inspection)",
+        "Image: creator-ee:v0.18.0 (primary) (Information collected from image inspection)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations: {}",
@@ -25,7 +25,7 @@
         " 11│    - FGC=f37",
         " 12│    - container=oci",
         " 13│    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-        " 14│    - CONTAINER_NAME=creator-ee:v0.17.0",
+        " 14│    - CONTAINER_NAME=creator-ee:v0.18.0",
         " 15│    labels:",
         " 16│      ansible-execution-environment: 'true'",
         " 17│      io.buildah.version: 1.23.1",

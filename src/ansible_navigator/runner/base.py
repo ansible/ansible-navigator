@@ -86,6 +86,14 @@ class Base:
         self.finished: bool = False
         self.status: str | None = None
         self._runner_args: dict = {}
+
+        # when the ce is podman, set the container user to root
+        if self._ce == "podman":
+            if container_options:
+                container_options.append("--user=root")
+            else:
+                container_options = ["--user=root"]
+
         if self._ee:
             self._runner_args.update(
                 {
@@ -119,7 +127,11 @@ class Base:
 
         if self._navigator_mode == "stdout":
             self._runner_args.update(
-                {"input_fd": sys.stdin, "output_fd": sys.stdout, "error_fd": sys.stderr},
+                {
+                    "input_fd": sys.stdin,
+                    "output_fd": sys.stdout,
+                    "error_fd": sys.stderr,
+                },
             )
 
     def __del__(self):

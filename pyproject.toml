@@ -217,6 +217,11 @@ enable = [
 
 [tool.pytest.ini_options]
 addopts = "-n=auto --dist=loadfile --maxfail=10 --durations=30 --showlocals"
+filterwarnings = [
+  "error",
+  # https://github.com/ansible/ansible-runner/issues/1246
+  "ignore::ResourceWarning:ansible_runner",
+]
 
 [tool.ruff]
 fix = true
@@ -334,6 +339,8 @@ ignore = [
   'TCH001', # Move application import `ansible_navigator.configuration_subsystem.definitions.SettingsEntry` into a type-checking block
   'TCH002', # Move third-party import `ansible_runner.Runner` into a type-checking block
   'TCH003', # Move standard library import `re.Pattern` into a type-checking block
+  'TD002', # Missing author in TODO
+  'TD003', # Missing issue link on the line following this TODO
   'TRY003', # Avoid specifying long messages outside the exception class
   'TRY004', # Prefer `TypeError` exception for invalid type
   'TRY300', # Consider moving this statement to an `else` block

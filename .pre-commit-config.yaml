@@ -2,6 +2,11 @@
 default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
   python: python3.11
+exclude: >
+  (?x)^(
+    _readthedocs|
+    .tox
+  )$
 repos:
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: "v3.0.0-alpha.9-for-vscode"
@@ -35,7 +40,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.0.265"
+    rev: "v0.0.270"
     hooks:
       - id: ruff
         args:
@@ -117,7 +122,7 @@ repos:
           $
 
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.31.0
+    rev: v1.32.0
     hooks:
       - id: yamllint
         args:
@@ -140,7 +145,7 @@ repos:
       - id: pyupgrade
         args: ["--py39-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.2.0
+    rev: v1.3.0
     hooks:
       - id: mypy
         additional_dependencies:
@@ -164,13 +169,14 @@ repos:
           - src/
           - tests/
         additional_dependencies:
-          - dill>=0.3.6 # needed for py311
           - ansible-core
-          - astroid
           - ansible-runner
+          - astroid
+          - dill>=0.3.6 # needed for py311
           - jinja2
           - jsonschema
           - libtmux
+          - mkdocs-gen-files
           - onigurumacffi
           - pytest
           - pytest-mock

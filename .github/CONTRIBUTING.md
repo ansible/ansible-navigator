@@ -66,17 +66,50 @@ Prerequisites:
     indicates the version of python that needs to be installed for tox to run
     locally. In this case, the version of python that needs to be installed is
 
-## Debugging Ansible Navigator with VS Code
+## Getting started with Ansible Navigator
 
-Getting started:
+### Building from the source and installing packages for testing
 
-After cloning the repository, all we need is to install ansible-navigator from
-the source. Use the following command in workspace (root folder of navigator).
-This will install all the required dependencies for testing the local changes.
+After cloning the repository, create and activate a new [virtual environment] in
+the root of the repository. Once that is done all we need is to install
+ansible-navigator from the source. Use the following command in workspace (root
+folder of navigator).This will install package in editable/development mode,
+along with its additional dependencies required for testing.
 
 ```shell-session
-pip install -e .
+pip install -e .\[test]
 ```
+
+[virtual environment]: https://docs.python.org/3/library/venv.html
+
+### Testing process and examples
+
+Once all the dependencies are installed, we can execute our tests using
+[pytest]. To run tests inside a file test_xyz.py, we will need to traverse to
+that file.
+
+[pytest]: https://docs.pytest.org/en/7.3.x/
+
+Example: To run an unit test "test_circular_imports.py", we will execute:
+
+`pytest tests/unit/test_circular_imports.py`
+
+Example: To run an integration test "test_stdout_vault.py ", we will execute:
+
+`pytest tests/integration/actions/exec/test_stdout_vault.py`
+
+and so on ...
+
+Additionally, leverage the ability of VSCode test tree to run and debug tests in
+a more easier and interactive way. There is a dedicated configuration provided
+inside launch.json named as **Debug tests** to interactively debug the tests
+through VSCode test tree.
+
+Hover to the **Testing** icon in the Activity Bar to see VSCode test tree. From
+there expand and reach to the desired unit or integration test and hit
+`Run Test` or `Debug Test` appropriately.
+
+![VSCode test tree](images/test_tree_view.png)
 
 ### Configure VSCode settings
 
@@ -107,7 +140,7 @@ Ansible-Navigator comes in with bunch of [sub-commands]. To debug around any
 specific subcommand, we will need to add `args` attribute (arguments passed to
 the program to debug) in our launch.json configuration file.
 
-[sub-commands]: https://ansible-navigator.readthedocs.io/en/latest/subcommands/
+[sub-commands]: https://ansible-navigator.readthedocs.io/subcommands/
 
 **Example:**
 

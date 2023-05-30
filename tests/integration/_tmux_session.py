@@ -99,7 +99,7 @@ class TmuxSession:
                 )
                 break
             except libtmux.exc.LibTmuxException as exc:
-                warnings.warn(f"tmux session failure #{count}: {str(exc)}", RuntimeWarning)
+                warnings.warn(f"tmux session failure #{count}: {exc!s}", RuntimeWarning)
                 if count == tries:
                     raise
                 count += 1
