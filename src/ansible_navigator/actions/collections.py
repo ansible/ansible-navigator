@@ -619,11 +619,17 @@ class Action(ActionBase):
             )
             plugin_docs["path"] = plugin_path
             if plugin and plugin["doc"] is not None:
-                if "name" in plugin["doc"]:
-                    short_name = plugin["doc"]["name"]
+                try:
+                    if "name" in plugin["doc"]:
+                        short_name = plugin["doc"]["name"]
+                    else:
+                        short_name = plugin["doc"][plugin_type]
+                except KeyError:
+                    short_name = None
+                if short_name is None:
+                    plugin_docs["full_name"] = selected_collection["known_as"]
                 else:
-                    short_name = plugin["doc"][plugin_type]
-                plugin_docs["full_name"] = f"{selected_collection['known_as']}.{short_name}"
+                    plugin_docs["full_name"] = f"{selected_collection['known_as']}.{short_name}"
 
                 if "short_description" in plugin["doc"]:
                     plugin_docs["short_description"] = plugin["doc"]["short_description"]
