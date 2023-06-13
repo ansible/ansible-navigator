@@ -271,6 +271,8 @@ ignore = [
   'FBT001', # Boolean positional arg in function definition
   'FBT002', # Boolean default value in function definition
   'FBT003', # Boolean positional value in function call
+  'FIX001', # Line contains FIXME
+  'FIX002', # Line contains TODO
   'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
   'N802', # Function name `formatTime` should be lowercase
   'N806', # Variable `FType` in function should be lowercase
@@ -339,6 +341,7 @@ ignore = [
   'TCH001', # Move application import `ansible_navigator.configuration_subsystem.definitions.SettingsEntry` into a type-checking block
   'TCH002', # Move third-party import `ansible_runner.Runner` into a type-checking block
   'TCH003', # Move standard library import `re.Pattern` into a type-checking block
+  'TD001', # Invalid TODO tag: `FIXME`
   'TD002', # Missing author in TODO
   'TD003', # Missing issue link on the line following this TODO
   'TRY003', # Avoid specifying long messages outside the exception class
