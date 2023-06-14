@@ -86,6 +86,7 @@ def log_dependencies() -> list[LogMessage]:
                 except ModuleNotFoundError:
                     message = f"Package '{pkg_name}' is missing"
                     messages.append(LogMessage(level=logging.DEBUG, message=message))
+                    continue
                 _location = spec.origin if spec else ""
                 _version = version(pkg_name)
                 pkgs.append(f"{pkg_name}=={_version} {_location}")
