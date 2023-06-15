@@ -163,11 +163,11 @@ class CmdParser:
         :returns: The first partition, separator, and final partition
         """
         separator_match = re.search(separator, content)
-        if not separator_match:
-            return content, "", ""
-        matched_separator = separator_match.group(0)
-        parts = re.split(matched_separator, content, 1)
-        return parts[0], matched_separator, parts[1]
+        if not separator_match or content.startswith(" "):
+            return "", "", content
+        delim = separator_match.group(0)
+        key, content = re.split(delim, content, 1)
+        return key, delim, content
 
     def splitter(self, lines, delimiter):
         """Split lines given a delimiter.
@@ -178,18 +178,23 @@ class CmdParser:
         """
         results = []
         result = {}
-        while lines:
-            line = lines.pop()
-            left, delim, right = self.re_partition(line, delimiter)
-            right = self._strip(right)
+        value = ""
+        current_key = ""
+        for line in lines:
+            left, delim, content = self.re_partition(line, delimiter)
+            content = self._strip(content)
             if not delim:
-                if result:
-                    results.append(result)
-                    result = {}
+                if value and current_key:
+                    value = value + " " + content
+                    result[current_key] = value
+                else:
+                    if result:
+                        results.append(result)
+                        result = {}
                 continue
-            key = left.lower().replace("_", "-").strip()
-            value = right
-            result[key] = value
+            current_key = left.lower().replace("_", "-").strip()
+            value = content
+            result[current_key] = value
         if result:
             results.append(result)
         return results
