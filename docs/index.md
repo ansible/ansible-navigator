@@ -14,7 +14,9 @@ A demo of the interface can be found [on YouTube][yt demo].
 - [Settings](settings.md)
 - [Subcommands](subcommands.md)
 - [FAQ](faq.md)
-- Contributions
-  - [Code Of Conduct](contributing/code-of-conduct)
-  - [Security](contributing/security)
-  - [Guidelines](contributing/guidelines)
+
+Contributions
+
+- [Code Of Conduct](contributing/code-of-conduct)
+- [Security](contributing/security)
+- [Guidelines](contributing/guidelines)
