@@ -40,7 +40,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.0.270"
+    rev: "v0.0.272"
     hooks:
       - id: ruff
         args:
@@ -89,7 +89,7 @@ repos:
       - id: check-json5
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.34.0
+    rev: v0.35.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -106,7 +106,7 @@ repos:
           $
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.4
+    rev: v2.2.5
     hooks:
       - id: codespell
         # NOTE: dout is part of the stdout action regex
@@ -140,7 +140,7 @@ repos:
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.4.0
+    rev: v3.7.0
     hooks:
       - id: pyupgrade
         args: ["--py39-plus"]
