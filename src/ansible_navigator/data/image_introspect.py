@@ -163,38 +163,43 @@ class CmdParser:
         :returns: The first partition, separator, and final partition
         """
         separator_match = re.search(separator, content)
-        if not separator_match or content.startswith(" "):
+        if not separator_match:
             return "", "", content
         delim = separator_match.group(0)
         key, content = re.split(delim, content, 1)
+        if key.startswith(" "):
+            return "", "", content
         return key, delim, content
 
-    def splitter(self, lines, delimiter):
+    def splitter(self, lines, line_split, section_delim=None):
         """Split lines given a delimiter.
 
         :param lines: The lines to split
-        :param delimiter: The delimiter to use for splitting
+        :param line_split: The delimiter use for splitting each line
+        :param section_delim: The separator between different packages
         :returns: All lines split on the delimiter
         """
         results = []
         result = {}
-        value = ""
+        cached_lines = []
         current_key = ""
-        for line in lines:
-            left, delim, content = self.re_partition(line, delimiter)
-            content = self._strip(content)
-            if not delim:
-                if value and current_key:
-                    value = value + " " + content
-                    result[current_key] = value
-                else:
-                    if result:
-                        results.append(result)
-                        result = {}
+
+        while lines:
+            line = lines.pop()
+            key, delim, content = self.re_partition(line, line_split)
+            if section_delim and line == section_delim:
+                results.append(result)
+                result = {}
                 continue
-            current_key = left.lower().replace("_", "-").strip()
-            value = content
-            result[current_key] = value
+            if not delim and not current_key:
+                cached_lines.insert(0, self._strip(content))
+                continue
+            current_key = key.lower().replace("_", "-").strip()
+            cached_lines.insert(0, self._strip(content))
+            result[current_key] = " ".join(cached_lines)
+            cached_lines = []
+            current_key = ""
+
         if result:
             results.append(result)
         return results
@@ -298,7 +303,7 @@ class PythonPackages(CmdParser):
 
         :param command: The result of running the command
         """
-        parsed = self.splitter(command.stdout.splitlines(), ":")
+        parsed = self.splitter(command.stdout.splitlines(), line_split=":", section_delim="---")
         for pkg in parsed:
             for entry in ["required-by", "requires"]:
                 if pkg[entry]:
