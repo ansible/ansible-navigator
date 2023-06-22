@@ -116,22 +116,25 @@ there expand and reach to the desired unit or integration test and hit
 - `src/ansible_navigator/cli.py` acts as the main entry point where the
   application starts.
 - `src/ansible_navigator/ui.py` contains show() function which is the entry
-  point for all the rendering UI.
+  point for rendering the UI.
 - `src/ansible_navigator/actions` has the implementation of all the actions
   ansible-navigator can perform (i.e. its [subcommands]) like run, collections,
   images, doc, inventory, settings and a lot more.
-- `src/ansible_navigator/command_runner`
+- `src/ansible_navigator/command_runner` command runner is a wrapper around
+  subprocess to run shell commands.
 - `src/ansible_navigator/configuration_subsystem` herein lies the logic behind
   all the CLI parameters from their declaration to processing.
-- `src/ansible_navigator/data`
+- `src/ansible_navigator/data` this directory includes non-python files and
+  stand alone scripts that will be run from inside an execution environment.
 - `src/ansible_navigator/image_manager` contains all the operations related to
   introspect, access, pull container images.
 - `src/ansible_navigator/runner` herein lies ability for all the interaction
   with ansible-runner.
-- `src/ansible_navigator/tm_tokenize`
+- `src/ansible_navigator/tm_tokenize` has the tokenization subsystem which
+  allows for syntax highlighting of json and yaml files.
 - `src/ansible_navigator/ui_framework` has the implementation of our
   user-interface.
-- `src/ansible_navigator/utils` consists of all the common utilities we use
+- `src/ansible_navigator/utils` consists of all the common utilities use
   throughout the application.
 
 ### Configure VSCode settings
