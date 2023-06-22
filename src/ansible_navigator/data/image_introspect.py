@@ -179,7 +179,6 @@ class CmdParser:
         """
         results = []
         result = {}
-        value = ""
         current_key = ""
         while lines:
             line = lines.pop(0)
@@ -189,14 +188,25 @@ class CmdParser:
                 results.append(result)
                 result = {}
                 continue
-            if not delim:
-                if value and current_key:
-                    value = value + " " + content
-                    result[current_key] = value
+            if not delim and current_key:
+                result[current_key] += f" {content}"
                 continue
             current_key = key.lower().replace("_", "-").strip()
-            value = content
-            result[current_key] = value
+            # system_packages description field needs special handling
+            if current_key == "description":
+                description = []
+                while lines:
+                    line = lines.pop(0)
+                    if line == section_delim:
+                        break
+                    description.append(line)
+                if description:
+                    result[current_key] = " ".join(description)
+                else:
+                    result[current_key] = "No description available"
+                results.append(result)
+                return result
+            result[current_key] = content
 
         if result:
             results.append(result)
@@ -370,28 +380,8 @@ class SystemPackages(CmdParser):
 
         parsed = []
         for package in packages:
-            entry = {}
-            while package:
-                line = package.pop(0)
-                left, _delim, right = self.re_partition(line, ":")
-                key = left.lower().replace("_", "-").strip()
-
-                # Description is at the end of the package section
-                # read until package is empty
-                if key == "description":
-                    description = []
-                    while package:
-                        description.append(package.pop(0))
-                    # Normalize the data, in the case description is totally empty
-                    if description:
-                        entry[key] = "\n".join(description)
-                    else:
-                        entry[key] = "No description available"
-                    parsed.append(entry)
-                # other package details are 1 line each
-                else:
-                    value = self._strip(right)
-                    entry[key] = value
+            result = self.splitter(package, line_split=":", section_delim="---")
+            parsed.append(result)
 
         command.details = parsed
 
