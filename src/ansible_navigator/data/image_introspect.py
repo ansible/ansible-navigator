@@ -163,33 +163,51 @@ class CmdParser:
         :returns: The first partition, separator, and final partition
         """
         separator_match = re.search(separator, content)
-        if not separator_match:
-            return content, "", ""
-        matched_separator = separator_match.group(0)
-        parts = re.split(matched_separator, content, 1)
-        return parts[0], matched_separator, parts[1]
+        if not separator_match or content.startswith(" "):
+            return "", "", content
+        delim = separator_match.group(0)
+        key, content = re.split(delim, content, 1)
+        return key, delim, content
 
-    def splitter(self, lines, delimiter):
+    def splitter(self, lines, line_split, section_delim=None):
         """Split lines given a delimiter.
 
         :param lines: The lines to split
-        :param delimiter: The delimiter to use for splitting
+        :param line_split: The delimiter use for splitting each line
+        :param section_delim: The separator between different packages
         :returns: All lines split on the delimiter
         """
         results = []
         result = {}
+        current_key = ""
         while lines:
-            line = lines.pop()
-            left, delim, right = self.re_partition(line, delimiter)
-            right = self._strip(right)
-            if not delim:
-                if result:
-                    results.append(result)
-                    result = {}
+            line = lines.pop(0)
+            key, delim, content = self.re_partition(line, line_split)
+            content = self._strip(content)
+            if section_delim and line == section_delim:
+                results.append(result)
+                result = {}
                 continue
-            key = left.lower().replace("_", "-").strip()
-            value = right
-            result[key] = value
+            if not delim and current_key:
+                result[current_key] += f" {content}"
+                continue
+            current_key = key.lower().replace("_", "-").strip()
+            # system_packages description field needs special handling
+            if current_key == "description":
+                description = []
+                while lines:
+                    line = lines.pop(0)
+                    if line == section_delim:
+                        break
+                    description.append(line)
+                if description:
+                    result[current_key] = " ".join(description)
+                else:
+                    result[current_key] = "No description available"
+                results.append(result)
+                return result
+            result[current_key] = content
+
         if result:
             results.append(result)
         return results
@@ -293,7 +311,7 @@ class PythonPackages(CmdParser):
 
         :param command: The result of running the command
         """
-        parsed = self.splitter(command.stdout.splitlines(), ":")
+        parsed = self.splitter(command.stdout.splitlines(), line_split=":", section_delim="---")
         for pkg in parsed:
             for entry in ["required-by", "requires"]:
                 if pkg[entry]:
@@ -362,28 +380,8 @@ class SystemPackages(CmdParser):
 
         parsed = []
         for package in packages:
-            entry = {}
-            while package:
-                line = package.pop(0)
-                left, _delim, right = self.re_partition(line, ":")
-                key = left.lower().replace("_", "-").strip()
-
-                # Description is at the end of the package section
-                # read until package is empty
-                if key == "description":
-                    description = []
-                    while package:
-                        description.append(package.pop(0))
-                    # Normalize the data, in the case description is totally empty
-                    if description:
-                        entry[key] = "\n".join(description)
-                    else:
-                        entry[key] = "No description available"
-                    parsed.append(entry)
-                # other package details are 1 line each
-                else:
-                    value = self._strip(right)
-                    entry[key] = value
+            result = self.splitter(package, line_split=":")
+            parsed.append(result)
 
         command.details = parsed
 
