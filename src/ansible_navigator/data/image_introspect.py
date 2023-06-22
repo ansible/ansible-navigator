@@ -380,7 +380,7 @@ class SystemPackages(CmdParser):
 
         parsed = []
         for package in packages:
-            result = self.splitter(package, line_split=":", section_delim="---")
+            result = self.splitter(package, line_split=":")
             parsed.append(result)
 
         command.details = parsed
