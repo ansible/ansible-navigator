@@ -111,6 +111,32 @@ there expand and reach to the desired unit or integration test and hit
 
 ![VSCode test tree](images/test_tree_view.png)
 
+### Overview of Base Entry Points and Summary of src files
+
+- `src/ansible_navigator/cli.py` acts as the main entry point where the
+  application starts.
+- `src/ansible_navigator/ui.py` contains show() function which is the entry
+  point for rendering the UI.
+- `src/ansible_navigator/actions` has the implementation of all the actions
+  ansible-navigator can perform (i.e. its [subcommands]) like run, collections,
+  images, doc, inventory, settings and a lot more.
+- `src/ansible_navigator/command_runner` command runner is a wrapper around
+  subprocess to run shell commands.
+- `src/ansible_navigator/configuration_subsystem` herein lies the logic behind
+  all the CLI parameters from their declaration to processing.
+- `src/ansible_navigator/data` this directory includes non-python files and
+  stand alone scripts that will be run from inside an execution environment.
+- `src/ansible_navigator/image_manager` contains all the operations related to
+  introspect, access, pull container images.
+- `src/ansible_navigator/runner` herein lies ability for all the interaction
+  with ansible-runner.
+- `src/ansible_navigator/tm_tokenize` has the tokenization subsystem which
+  allows for syntax highlighting of json and yaml files.
+- `src/ansible_navigator/ui_framework` has the implementation of our
+  user-interface.
+- `src/ansible_navigator/utils` consists of all the common utilities use
+  throughout the application.
+
 ### Configure VSCode settings
 
 Once we are inside vscode with project installed, we should see a `.vscode`
@@ -136,17 +162,19 @@ session.
 
 ### Debug Ansible-Navigator Subcommands
 
-Ansible-Navigator comes in with bunch of [sub-commands]. To debug around any
-specific subcommand, we will need to add `args` attribute (arguments passed to
-the program to debug) in our launch.json configuration file.
+Ansible-Navigator comes in with bunch of [subcommands]. To debug around any
+specific subcommand, use the **Run and Debug** drop down menu to select the
+appropriate entry from launch.json configuration. We add `args` attribute
+(arguments passed to the program to debug) in our launch.json configuration
+file.
 
-[sub-commands]: https://ansible-navigator.readthedocs.io/subcommands/
+[subcommands]: https://ansible-navigator.readthedocs.io/subcommands/
 
 **Example:**
 
-- Debug `ansible-navigator run` subcommand, use _args_ attribute, provide
-  absolute path to the playbook as mentioned. Following configuration will allow
-  to debug `ansible-navigator site.yml --mode stdout`.
+- To Debug `ansible-navigator run` subcommand, use _args_ attribute, provide
+  playbook name and absolute path to the playbook in _cwd_. Following
+  configuration will allow to debug `ansible-navigator site.yml --mode stdout`.
 
 ```json
 {
@@ -157,41 +185,17 @@ the program to debug) in our launch.json configuration file.
       "type": "python",
       "request": "launch",
       "module": "ansible_navigator",
-      "args": ["run", "../Path/to/Playbook/site.yml", "--mode", "stdout"],
-      "cwd": "${workspaceFolder}/src",
+      "args": ["run", "site.yml", "--mode", "stdout"],
+      "cwd": "/home/user/../path/to/the/playbook",
       "justMyCode": false
     }
   ]
 }
 ```
 
-- Debug `ansible-navigator exec` subcommand using _args_ with some parameter.
-  Following configuration will allow to debug `ansible-navigator exec -- pwd`.
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-     {
-      "name": "Debug subcommand: exec",
-      "type": "python",
-      "request": "launch",
-      "module": "ansible_navigator",
-      "args": ["exec", "--", "pwd"],
-      "cwd": "${workspaceFolder}/src",
-      "justMyCode": false
-    }
-}
-```
-
-- To debug subcommand `ansible-navigator images`, add one more attribute as
-  `"args": ["images"]` in our previously configured launch.json.
-- To debug subcommand `ansible-navigator collections`, add one more attribute as
-  `"args": ["collections"]` in launch.json, and so on.
-- Moreover, to debug subcommands with some parameter use
-  `"args": ["subcommand-name", "--", "parameter"]`
-- While debugging any subcommand with arguments, make sure to use one _args_
-  entry at a time in our configuration (comment/remove the ones not in use).
+Similar configuration entries are present inside the launch.json file to debug
+different subcommands. Choose an entry from the drop-down while debugging and
+modify accordingly if needed.
 
 ### Useful Links
 
