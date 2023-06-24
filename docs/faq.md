@@ -274,7 +274,7 @@ $ ln ~/.vault_password.sh .
 # by using an environment variable prefixed with ANSIBLE it will automatically get passed
 # into the execution environment
 $ HISTCONTROL=ignorespace
-$  export ANSIBLE_VAULT_SECRET=my_password
+$  export ANSIBLE_VAULT_PASSWORD=my_password
 # Set the environment variable to the location of the file
 $ ANSIBLE_VAULT_PASSWORD_FILE=.vault_password.sh
 $ ansible-navigator run site.yml
