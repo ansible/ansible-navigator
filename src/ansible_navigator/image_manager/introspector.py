@@ -8,9 +8,8 @@ import tempfile
 
 from pathlib import Path
 
+from ansible_navigator.data import image_introspect
 from ansible_navigator.runner import Command
-
-from . import introspect
 
 
 logger = logging.getLogger(__name__)
@@ -27,8 +26,8 @@ def run(image_name: str, container_engine: str) -> tuple[dict, list[str], int]:
     python_exec_path = "python3"
 
     with tempfile.TemporaryDirectory() as tmp_dir_name:
-        introspect_source = inspect.getsource(introspect)
-        file = Path(tmp_dir_name) / "introspect.py"
+        introspect_source = inspect.getsource(image_introspect)
+        file = Path(tmp_dir_name) / "image_introspect.py"
         file.write_text(introspect_source)
 
         _runner = Command(
