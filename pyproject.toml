@@ -326,6 +326,7 @@ ignore = [
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation
   'RUF009', # Do not perform function call `PresentableCliParameters` in dataclass defaults
+  'RUF012', # Mutable class attributes should be annotated with `typing.ClassVar`
   'RUF100', # [*] Unused `noqa` directive (unused: `E731`)
   'S101', # Use of `assert` detected
   'S103', # `os.chmod` setting a permissive mask `0o777` on file or directory

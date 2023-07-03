@@ -47,6 +47,7 @@ hostvars
 hrefs
 htmlproofer
 httpapi
+ignorespace
 importables
 inlinehilite
 intersphinx
