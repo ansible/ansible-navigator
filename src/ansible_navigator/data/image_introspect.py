@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import multiprocessing
+import os
 import re
 import subprocess
 import sys
@@ -11,7 +12,10 @@ from queue import Queue
 from types import SimpleNamespace
 from typing import Any
 from typing import Callable
+from typing import Union
 
+
+JSONTypes = Union[bool, int, str, dict, list]
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 
@@ -386,10 +390,15 @@ class SystemPackages(CmdParser):
         command.details = parsed
 
 
-def main():
-    """Enter the image introspection process."""
-    response = {"errors": []}
+def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
+    """Enter the image introspection process.
+
+    :param serialize: Whether to serialize the results
+    :returns: The collected data or none if serialize is False
+    """
+    response: dict = {"errors": []}
     response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}
+    response["environment_variables"] = {"details": dict(os.environ)}
     try:
         command_runner = CommandRunner()
         commands = [
@@ -411,7 +420,10 @@ def main():
             response[result_as_dict["__id_"]] = result_as_dict
     except Exception as exc:  # noqa: BLE001
         response["errors"].append(str(exc))
-    print(json.dumps(response))
+    if serialize:
+        print(json.dumps(response))
+        return None
+    return response
 
 
 if __name__ == "__main__":
