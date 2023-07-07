@@ -247,7 +247,7 @@ the text-based user interface (TUI). **Please ensure these do not conflict with
 your enterprise security standards. Do not add password files to source
 control.**
 
-1. Store the vault password securely on the local file system
+#### Store the vault password securely on the local file system
 
 ```bash
 $ touch ~/.vault_password
@@ -262,7 +262,7 @@ $ export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
 $ ansible-navigator run --pass-environment-variable ANSIBLE_VAULT_PASSWORD_FILE site.yml
 ```
 
-2. Store the vault password in an environment variable
+#### Store the vault password in an environment variable
 
 Chances are that your environment prohibits saving passwords in cleartext on disk.
 If you are subject to such a rule, then this will obviously include any command history
