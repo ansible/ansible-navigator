@@ -247,6 +247,9 @@ the text-based user interface (TUI). **Please ensure these do not conflict with
 your enterprise security standards. Do not add password files to source
 control.**
 
+Additional information about `ansible-vault` can be found
+[here](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
+
 #### Store the vault password securely on the local file system
 
 ```bash
@@ -287,9 +290,6 @@ $  export ANSIBLE_VAULT_PASSWORD=my_password
 # Set the environment variable to the location of the file when executing ansible-navigator
 $ ANSIBLE_VAULT_PASSWORD_FILE=.vault_password.sh ansible-navigator run site.yml
 ```
-
-Additional information about `ansible-vault` can be found
-[here](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
 
 ## Other
 
