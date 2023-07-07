@@ -250,21 +250,6 @@ control.**
 Additional information about `ansible-vault` can be found
 [here](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
 
-#### Store the vault password securely on the local file system
-
-```bash
-$ touch ~/.vault_password
-$ chmod 600 ~/.vault_password
-# The leading space here is necessary to keep the command out of the command history
-$  echo my_password >> ~/.vault_password
-# Link the password file into the current working directory
-$ ln ~/.vault_password .
-# Set the environment variable to the location of the file
-$ export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
-# Pass the variable into the execution-environment
-$ ansible-navigator run --pass-environment-variable ANSIBLE_VAULT_PASSWORD_FILE site.yml
-```
-
 #### Store the vault password in an environment variable
 
 Chances are that your environment prohibits saving passwords in cleartext on disk.
@@ -289,6 +274,21 @@ $ HISTCONTROL=ignorespace
 $  export ANSIBLE_VAULT_PASSWORD=my_password
 # Set the environment variable to the location of the file when executing ansible-navigator
 $ ANSIBLE_VAULT_PASSWORD_FILE=.vault_password.sh ansible-navigator run site.yml
+```
+
+#### Store the vault password securely on the local file system
+
+```bash
+$ touch ~/.vault_password
+$ chmod 600 ~/.vault_password
+# The leading space here is necessary to keep the command out of the command history
+$  echo my_password >> ~/.vault_password
+# Link the password file into the current working directory
+$ ln ~/.vault_password .
+# Set the environment variable to the location of the file
+$ export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
+# Pass the variable into the execution-environment
+$ ansible-navigator run --pass-environment-variable ANSIBLE_VAULT_PASSWORD_FILE site.yml
 ```
 
 ## Other
