@@ -132,15 +132,12 @@ class ExitMessage:
             initial_indent=str(self.prefix) if with_prefix else indent,
             subsequent_indent=indent,
         )
-        printable = []
         lines = message.splitlines()
 
         start_color = self.color if color else ""
         end_color = Color.END if color else ""
 
-        for line in lines:
-            printable.append(f"{start_color}{line}{end_color}")
-
+        printable = [f"{start_color}{line}{end_color}" for line in lines]
         return printable
 
 
