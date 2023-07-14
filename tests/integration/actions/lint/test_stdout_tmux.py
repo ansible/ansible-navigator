@@ -46,7 +46,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        present=["Unable to find a working copy"],
+        present=["Commands should not change things"],
         search_within_response=SearchFor.PROMPT,
     ),
 )

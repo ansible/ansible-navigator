@@ -1,16 +1,17 @@
 {
-    "name": "test[ansible-navigator-lint-/tests/fixtures/integration/actions/lint---ee-false---ll-debug---mode-stdout-lint-stdout-without-ee-['unable to find a working copy']-[]-true-2-search-for-the-shell-prompt]",
+    "name": "test[ansible-navigator-lint-/tests/fixtures/integration/actions/lint---ee-false---ll-debug---mode-stdout-lint-stdout-without-ee-['commands-should-not-change-things']-[]-true-2-search-for-the-shell-prompt]",
     "index": 2,
     "comment": "lint stdout without ee",
     "additional_information": {
         "present": [
-            "Unable to find a working copy"
+            "Commands should not change things"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
         "(venv) bash$ansible-navigator lint /home/user/Ansible/ansible-navigator/test",
+        "no-changed-when: Commands should not change things if nothing needs doing.",
         "s/fixtures/integration/actions/lint --ee False --ll debug --mode stdout",
         "WARNING: PATH altered to include /usr/bin",
         "Unable to find a working copy of ansible executable. CompletedProcess(args=['a",
