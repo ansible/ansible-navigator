@@ -1,0 +1,19 @@
+{
+    "name": "test[ansible-navigator-lint-/tests/fixtures/integration/actions/lint---ee-false---ll-debug---mode-stdout-lint-stdout-without-ee-['Unable to find a working copy']-[]-true-2-search-for-the-shell-prompt]",
+    "index": 2,
+    "comment": "lint stdout without ee",
+    "additional_information": {
+        "present": [
+            "Unable to find a working copy"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "WARNING: PATH altered to include /usr/bin",
+        "Unable to find a working copy of ansible executable. CompletedProcess(args=['ansible', '--version'], returncode=1, stdout='', stderr='Traceback (most recent call last):\n  File /us",
+        "r/bin/ansible, line 66, in <module>\n    from ansible.utils.display import Display, initialize_locale\nImportError: cannot import name 'initialize_locale' from 'ansible.utils.di",
+        "splay' (/home/user/.local/lib/python3.10/site-packages/ansible/utils/display.py)\n')",
+        "(venv) bash$"
+    ]
+}
