@@ -103,7 +103,7 @@ class Internals:
 navigator_subcommands = [
     SubCommand(
         name="builder",
-        description="Build execution environment (container image)",
+        description="Build [execution environment](https://docs.ansible.com/ansible/devel/getting_started_ee/index.html) (container image)",
         epilog=(
             "Note: 'ansible-navigator builder' additionally supports"
             " the same parameters as the 'ansible-builder' command."
