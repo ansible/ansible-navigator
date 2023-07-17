@@ -6,9 +6,11 @@
 
 ### What is an execution environment?
 
-An execution environment is a container image serving as an Ansible control node.
+An execution environment is a container image serving as an Ansible control
+node.
 
-See the [Getting started with Execution Environments guide](https://docs.ansible.com/ansible/devel/getting_started_ee/index.html)
+See the
+[Getting started with Execution Environments guide](https://docs.ansible.com/ansible/devel/getting_started_ee/index.html)
 for details.
 
 ## The `ansible.cfg` file
