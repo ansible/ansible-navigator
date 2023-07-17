@@ -105,7 +105,8 @@ navigator_subcommands = [
         name="builder",
         description=(
             "Build [execution environment]"
-            "(https://docs.ansible.com/ansible/devel/getting_started_ee/index.html) (container image)"
+            "(https://docs.ansible.com/ansible/devel/getting_started_ee/index.html) "
+            "(container image)"
         ),
         epilog=(
             "Note: 'ansible-navigator builder' additionally supports"
