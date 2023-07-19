@@ -148,7 +148,7 @@ class CmdParser:
         if not separator_match or content.startswith(" "):
             return "", "", content
         delim = separator_match.group(0)
-        key, content = re.split(delim, content, 1)
+        key, content = re.split(delim, content, maxsplit=1)
         return key, delim, content
 
     def splitter(self, lines, line_split, section_delim=None):
