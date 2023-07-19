@@ -34,13 +34,13 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/psf/black.git
-    rev: 23.3.0
+    rev: 23.7.0
     hooks:
       - id: black
         language_version: python3
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.0.277"
+    rev: "v0.0.278"
     hooks:
       - id: ruff
         args:
