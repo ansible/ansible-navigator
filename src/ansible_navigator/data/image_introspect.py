@@ -2,18 +2,20 @@
 from __future__ import annotations
 
 import json
-import multiprocessing
+import os
 import re
 import subprocess
 import sys
+import threading
 
 from queue import Queue
 from types import SimpleNamespace
 from typing import Any
 from typing import Callable
+from typing import Union
 
 
-PROCESSES = (multiprocessing.cpu_count() - 1) or 1
+JSONTypes = Union[bool, int, str, dict, list]
 
 
 class Command(SimpleNamespace):
@@ -47,7 +49,7 @@ def run_command(command: Command) -> None:
         command.errors = [str(exc.stderr)]
 
 
-def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
+def worker(pending_queue: Queue, completed_queue: Queue) -> None:
     """Run a command from pending, parse, and place in completed.
 
     :param pending_queue: A queue with plugins to process
@@ -76,28 +78,8 @@ class CommandRunner:
         self._completed_queue: Queue | None = None
         self._pending_queue: Queue | None = None
 
-    @staticmethod
-    def run_single_process(command_classes: Any):
-        """Run commands with a single process.
-
-        :param command_classes: All command classes to be run
-        :returns: The results from running all commands
-        """
-        all_commands = tuple(
-            command for command_class in command_classes for command in command_class.commands
-        )
-        results = []
-        for command in all_commands:
-            run_command(command)
-            try:
-                command.parse(command)
-            except Exception as exc:  # noqa: BLE001
-                command.errors = command.errors + [str(exc)]
-            results.append(command)
-        return results
-
-    def run_multi_process(self, command_classes):
-        """Run commands with multiple processes.
+    def run_multi_thread(self, command_classes):
+        """Run commands with multiple threads.
 
         Workers are started to read from pending queue.
         Exit when the number of results is equal to the number
@@ -107,9 +89,9 @@ class CommandRunner:
         :returns: The results from running all commands
         """
         if self._completed_queue is None:
-            self._completed_queue = multiprocessing.Manager().Queue()
+            self._completed_queue = Queue()
         if self._pending_queue is None:
-            self._pending_queue = multiprocessing.Manager().Queue()
+            self._pending_queue = Queue()
         results = {}
         all_commands = tuple(
             command for command_class in command_classes for command in command_class.commands
@@ -125,10 +107,10 @@ class CommandRunner:
 
         :param jobs: The jobs to be run
         """
-        worker_count = min(len(jobs), PROCESSES)
+        worker_count = len(jobs)
         processes = []
         for _proc in range(worker_count):
-            proc = multiprocessing.Process(
+            proc = threading.Thread(
                 target=worker,
                 args=(self._pending_queue, self._completed_queue),
             )
@@ -166,7 +148,7 @@ class CmdParser:
         if not separator_match or content.startswith(" "):
             return "", "", content
         delim = separator_match.group(0)
-        key, content = re.split(delim, content, 1)
+        key, content = re.split(delim, content, maxsplit=1)
         return key, delim, content
 
     def splitter(self, lines, line_split, section_delim=None):
@@ -386,10 +368,15 @@ class SystemPackages(CmdParser):
         command.details = parsed
 
 
-def main():
-    """Enter the image introspection process."""
-    response = {"errors": []}
+def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
+    """Enter the image introspection process.
+
+    :param serialize: Whether to serialize the results
+    :returns: The collected data or none if serialize is False
+    """
+    response: dict = {"errors": []}
     response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}
+    response["environment_variables"] = {"details": dict(os.environ)}
     try:
         command_runner = CommandRunner()
         commands = [
@@ -400,7 +387,7 @@ def main():
             PythonPackages(),
             SystemPackages(),
         ]
-        results = command_runner.run_multi_process(commands)
+        results = command_runner.run_multi_thread(commands)
         for result in results:
             result_as_dict = vars(result)
             result_as_dict.pop("parse")
@@ -411,7 +398,10 @@ def main():
             response[result_as_dict["__id_"]] = result_as_dict
     except Exception as exc:  # noqa: BLE001
         response["errors"].append(str(exc))
-    print(json.dumps(response))
+    if serialize:
+        print(json.dumps(response))
+        return None
+    return response
 
 
 if __name__ == "__main__":

@@ -21,7 +21,7 @@ from .configuration_subsystem import Constants
 from .configuration_subsystem import to_effective
 from .configuration_subsystem import to_sources
 from .configuration_subsystem.definitions import ApplicationConfiguration
-from .image_manager import introspect
+from .data import image_introspect
 from .image_manager import introspector
 from .utils import ansi
 from .utils.compatibility import importlib_metadata
@@ -344,7 +344,7 @@ class DiagnosticsCollector:
         :raises FailedCollectionError: If the collection process fails
         :returns: The local system information
         """
-        results = introspect.main(serialize=False)
+        results = image_introspect.main(serialize=False)
         if not results:
             raise FailedCollectionError(results)
         if results.get("errors"):
