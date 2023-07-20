@@ -46,7 +46,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=False,
         ).join(),
-        present=["Commands should not change things"],
+        present=["Issues were found while applying the settings"],
         search_within_response=SearchFor.PROMPT,
     ),
 )

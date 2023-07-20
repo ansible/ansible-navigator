@@ -1,25 +1,22 @@
 {
-    "name": "test[ansible-navigator-lint-/tests/fixtures/integration/actions/lint---ee-false---ll-debug---mode-stdout-lint-stdout-without-ee-['commands-should-not-change-things']-[]-true-2-search-for-the-shell-prompt]",
+    "name": "test[ansible-navigator-lint-/tests/fixtures/integration/actions/lint---ee-false---ll-debug---mode-stdout-lint-stdout-without-ee-['issues were found while applying the settings']-[]-true-2-search-for-the-shell-prompt]",
     "index": 2,
     "comment": "lint stdout without ee",
     "additional_information": {
         "present": [
-            "Commands should not change things"
+            "Issues were found while applying the settings"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "(venv) bash$ansible-navigator lint /home/user/Ansible/ansible-navigator/test",
-        "no-changed-when: Commands should not change things if nothing needs doing.",
-        "s/fixtures/integration/actions/lint --ee False --ll debug --mode stdout",
-        "WARNING: PATH altered to include /usr/bin",
-        "Unable to find a working copy of ansible executable. CompletedProcess(args=['a",
-        "nsible', '--version'], returncode=1, stdout='', stderr='Traceback (most recent",
-        " call last):\\n  File /usr/bin/ansible, line 66, in <module>\\n    from ansibl",
-        "e.utils.display import Display, initialize_locale\\nImportError: cannot import",
-        "name \\'initialize_locale\\' from \\'ansible.utils.display\\' (/home/user/.loc",
-        "al/lib/python3.10/site-packages/ansible/utils/display.py)\\n')",
+        "Warning: Issues were found while applying the settings.",
+        "   Hint: Command provided: 'lint tests/fixtures/integration/actions/lint --ee False --ll debug --mode stdout'",
+        "  Error: ansible-lint command could not be found.",
+        "   Hint: Try 'pip install ansible-lint' or consider using an execution environment which provides ansible-lint.",
+        "   Note: Configuration failed, using default log file location. (/home/user/Ansible/ansible-navigator/ansible-navigator.log) Log",
+        "         level set to debug",
+        "   Hint: Review the hints and log file to see what went wrong.",
         "(venv) bash$"
     ]
 }
