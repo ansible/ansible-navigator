@@ -1,0 +1,21 @@
+{
+    "name": "test[1-:lint /tests/fixtures/integration/actions/lint-ansible-navigator lint result without EE]",
+    "index": 1,
+    "comment": "ansible-navigator lint result without EE",
+    "additional_information": {
+        "present": [
+            "Issues were found while applying the settings"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "           Warning: Issues were found while applying the settings.",
+        "           ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "              Hint: Command provided: 'lint tests/fixtures/integration/actions/lint'",
+        "             Error: ansible-lint command could not be found.",
+        "              Hint: Try 'pip install ansible-lint' or consider using an execution environment which provides ansible-lint.",
+        "           ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
+        "                                                                                                                       Ok"
+    ]
+}
