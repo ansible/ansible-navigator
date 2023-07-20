@@ -16,7 +16,7 @@ steps: tuple[UiTestStep, ...] = (
     UiTestStep(
         user_input=CLI,
         comment="lint interactive without ee",
-        present=["Unable to find a working copy"],
+        present=["Issues were found while applying the settings"],
     ),
 )
 

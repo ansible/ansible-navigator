@@ -4,26 +4,19 @@
     "comment": "lint interactive without ee",
     "additional_information": {
         "present": [
-            "Unable to find a working copy"
+            "Issues were found while applying the settings"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "      Error",
-        "      ───────────────────────────────────────────────────────────────",
-        "      Could not parse 'ansible-lint' output.",
-        "      WARNING: PATH altered to include /usr/bin",
-        "      Unable to find a working copy of ansible executable.",
-        "      CompletedProcess(args=['ansible', '--version'], returncode=1,",
-        "      stdout='', stderr='Traceback (most recent call last):\\n  File",
-        "      /usr/bin/ansible, line 66, in <module>\\n    from",
-        "      ansible.utils.display import Display,",
-        "      initialize_locale\\nImportError: cannot import name",
-        "      \\'initialize_locale\\' from \\'ansible.utils.display\\'",
-        "      (/home/user/.local/lib/python3.10/site-",
-        "      packages/ansible/utils/display.py)\\n')",
-        "      ───────────────────────────────────────────────────────────────",
-        "                                                                Ok"
+        "Warning: Issues were found while applying the settings.",
+        "   Hint: Command provided: 'lint tests/fixtures/integration/actions/lint --ee False --ll debug --mode interactive'",
+        "  Error: ansible-lint command could not be found.",
+        "   Hint: Try 'pip install ansible-lint' or consider using an execution environment which provides ansible-lint.",
+        "   Note: Configuration failed, using default log file location. (/home/user/Ansible/ansible-navigator/ansible-navigator.log) Log",
+        "         level set to debug",
+        "   Hint: Review the hints and log file to see what went wrong.",
+        "(venv) bash$"
     ]
 }
