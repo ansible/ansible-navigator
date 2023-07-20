@@ -8,6 +8,7 @@ import logging
 import os
 import shlex
 import shutil
+import subprocess
 import sys
 import zoneinfo
 
@@ -655,6 +656,24 @@ class NavigatorPostProcessor:
                         prefix=ExitPrefix.HINT,
                     ),
                 )
+            else:
+                try:
+                    subprocess.run("ansible-lint --version", shell=True, check=True)
+                except subprocess.CalledProcessError:
+                    exit_messages.append(
+                        ExitMessage(
+                            message=("ansible-lint does not seem to be installed correctly.")
+                        ),
+                    )
+                    exit_messages.append(
+                        ExitMessage(
+                            message=(
+                                "Ensure the command `ansible-lint --version` can be run prior to"
+                                " using ansible-navigator"
+                            ),
+                            prefix=ExitPrefix.HINT,
+                        ),
+                    )
 
         if isinstance(entry.value.current, str) and config.app == "lint":
             entry_name = entry.settings_file_path(prefix="")
