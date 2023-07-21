@@ -27,6 +27,6 @@ steps = add_indices(initial_steps + base_steps)
 
 @pytest.mark.parametrize("step", steps, ids=step_id_padded)
 class Test(BaseClass):
-    """Run the tests for ``collections`` from CLI, interactive, with an EE."""
+    """Run the tests for ``collections`` from CLI, interactive, without an EE."""
 
     update_fixtures = False
