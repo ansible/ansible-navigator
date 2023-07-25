@@ -15,8 +15,18 @@ CLI = Command(subcommand="lint", cmdline=LINT_FIXTURES, execution_environment=Fa
 steps: tuple[UiTestStep, ...] = (
     UiTestStep(
         user_input=CLI,
-        comment="lint interactive without ee",
-        present=["Issues were found while applying the settings"],
+        comment="ansible-navigator lint top window",
+        present=["All tasks should be named"],
+    ),
+    UiTestStep(
+        user_input=":2",
+        comment="lint result content page",
+        present=["issue_path:"],
+    ),
+    UiTestStep(
+        user_input=":back",
+        comment="ansible-navigator lint top window",
+        present=["All tasks should be named"],
     ),
 )
 

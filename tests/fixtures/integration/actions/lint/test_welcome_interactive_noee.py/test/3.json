@@ -1,6 +1,6 @@
 {
-    "name": "test[0-ansible-navigator lint /tests/fixtures/integration/actions/lint --ee False --ll debug --mode interactive-ansible-navigator lint top window]",
-    "index": 0,
+    "name": "test[3-:back-ansible-navigator lint top window]",
+    "index": 3,
     "comment": "ansible-navigator lint top window",
     "additional_information": {
         "present": [

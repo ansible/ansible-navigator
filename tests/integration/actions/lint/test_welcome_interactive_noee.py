@@ -16,8 +16,18 @@ initial_steps = (
     UiTestStep(user_input=CLI, comment="welcome screen"),
     UiTestStep(
         user_input=f":lint {LINT_FIXTURES}",
-        comment="ansible-navigator lint result without EE",
-        present=["Issues were found while applying the settings"],
+        comment="ansible-navigator lint results list",
+        present=["All tasks should be named"],
+    ),
+    UiTestStep(
+        user_input=":2",
+        comment="lint result content page",
+        present=["issue_path:"],
+    ),
+    UiTestStep(
+        user_input=":back",
+        comment="ansible-navigator lint top window",
+        present=["All tasks should be named"],
     ),
 )
 
