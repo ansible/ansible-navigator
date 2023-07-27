@@ -283,7 +283,7 @@ class PythonPackages(CmdParser):
         pre = Command(id_="pip_freeze", command="python3 -m pip freeze", parse=self.parse_freeze)
         run_command(pre)
         pre.parse(pre)
-        pkgs = " ".join(pkg for pkg in pre.details[0])
+        pkgs = " ".join(pkg for pkg in pre.details[0]) if pre.details else ""
         return [
             Command(id_="python_packages", command=f"python3 -m pip show {pkgs}", parse=self.parse),
         ]
