@@ -434,7 +434,7 @@ class UserInterface(CursesWindow):
 
         index_width = len(str(count))
 
-        keypad = {str(x) for x in range(0, 10)}
+        keypad = {str(x) for x in range(10)}
         other_valid_keys = ["+", "-", "_", "KEY_F(5)", "^[", "\x1b"]
 
         while True:
