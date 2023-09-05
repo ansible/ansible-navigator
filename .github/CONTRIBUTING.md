@@ -80,8 +80,8 @@ along with its additional dependencies required for testing.
 pip install -e .\[test]
 ```
 
-In case of any errors, try to run `pip install --upgrade pip`.
-Then run the above command again.
+In case of any errors, try to run `pip install --upgrade pip`. Then run the
+above command again.
 
 [virtual environment]: https://docs.python.org/3/library/venv.html
 
@@ -228,4 +228,4 @@ It is also integrated with [Read The Docs](https://readthedocs.org/) that builds
 and publishes each commit to the main branch and generates live docs previews
 for each pull request.
 
-[docs source]:https://github.com/ansible/ansible-navigator/tree/main/docs
+[docs source]: https://github.com/ansible/ansible-navigator/tree/main/docs
