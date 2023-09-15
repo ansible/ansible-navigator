@@ -13,7 +13,7 @@
         "HOSTNAME=XXXXXXXX",
         "ANSIBLE_COLLECTIONS_PATHS=/tmp/collections",
         "DISTTAG=f37container",
-        "CONTAINER_NAME=creator-ee:v0.18.0",
+        "CONTAINER_NAME=creator-ee:v0.20.0",
         "PWD=/home/user/github/ansible-navigator",
         "ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/playbook-artifact.log",
         "container=oci",
