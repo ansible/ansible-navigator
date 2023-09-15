@@ -438,7 +438,7 @@ class Action(ActionBase):
 
         if self._args.execution_environment:
             self._logger.debug("running collections command with execution environment enabled")
-            python_exec_path = "python3"
+            python_exec_path = "/usr/bin/python3"
             utils_lib = os.path.join(
                 os.path.dirname(__file__),
                 "..",

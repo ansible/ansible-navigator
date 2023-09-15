@@ -551,7 +551,7 @@ class Action(ActionBase):
         """
         cache_path = self._args.internals.cache_path
         container_volume_mounts = [f"{cache_path}:{cache_path}"]
-        python_exec_path = "python3"
+        python_exec_path = "/usr/bin/python3"
 
         kwargs = {
             "cmdline": [f"{cache_path}/image_introspect.py"],

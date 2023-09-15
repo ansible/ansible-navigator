@@ -360,7 +360,7 @@ class DiagnosticsCollector:
         """
         pkgs = importlib_metadata.packages_distributions()
         meta: dict[str, Any] = {}
-        for _python_name, pkg_names in pkgs.items():
+        for pkg_names in pkgs.values():
             for pkg_name in pkg_names:
                 if pkg_name not in meta:
                     meta[pkg_name] = importlib_metadata.metadata(pkg_name).json
