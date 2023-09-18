@@ -1,0 +1,32 @@
+{
+    "name": "test[0-ansible-navigator --ee False --ll debug --mode interactive-welcome screen]",
+    "index": 0,
+    "comment": "welcome screen",
+    "additional_information": {
+        "present": [],
+        "absent": [],
+        "compared_fixture": true
+    },
+    "output": [
+        " 0│Welcome                                                                                                                                                                                             ▒",
+        " 1│————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————                                                                ▒",
+        " 2│                                                                                                                                                                                                    ▒",
+        " 3│Some things you can try from here:                                                                                                                                                                  ▒",
+        " 4│- :collections                                    Explore available collections                                                                                                                     ▒",
+        " 5│- :config                                         Explore the current ansible configuration                                                                                                         ▒",
+        " 6│- :doc <plugin>                                   Review documentation for a module or plugin                                                                                                       ▒",
+        " 7│- :help                                           Show the main help page                                                                                                                           ▒",
+        " 8│- :images                                         Explore execution environment images                                                                                                              ▒",
+        " 9│- :inventory -i <inventory>                       Explore an inventory                                                                                                                              ▒",
+        "10│- :log                                            Review the application log                                                                                                                        ▒",
+        "11│- :lint <file or directory>                       Lint Ansible/YAML files (experimental)                                                                                                            ▒",
+        "12│- :open                                           Open current page in the editor                                                                                                                   ▒",
+        "13│- :replay                                         Explore a previous run using a playbook artifact                                                                                                  ▒",
+        "14│- :run <playbook> -i <inventory>                  Run a playbook in interactive mode                                                                                                                ▒",
+        "15│- :settings                                       Review the current ansible-navigator settings                                                                                                     ▒",
+        "16│- :quit                                           Quit the application                                                                                                                              ▒",
+        "17│                                                                                                                                                                                                    ▒",
+        "18│happy automating,",
+        "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+    ]
+}

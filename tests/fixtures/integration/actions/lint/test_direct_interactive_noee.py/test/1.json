@@ -1,0 +1,32 @@
+{
+    "name": "test[1-:2-lint result content page]",
+    "index": 1,
+    "comment": "lint result content page",
+    "additional_information": {
+        "present": [
+            "issue_path:"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "Message: name[play]",
+        "Location: /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml:1",
+        " 0│---",
+        " 1│categories:",
+        " 2│- idiom",
+        " 3│check_name: name[play]",
+        " 4│description: All plays should be named.",
+        " 5│issue_path: /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml:1",
+        " 6│last_modified: '2023-03-22T15:50:59.389356+00:00'",
+        " 7│level: warning",
+        " 8│location:",
+        " 9│  lines:",
+        "10│    begin: 1",
+        "11│  path: tests/fixtures/integration/actions/lint/borked/playbook.yml",
+        "12│severity: major",
+        "13│type: issue",
+        "14│url: https://ansible-lint.readthedocs.io/rules/name/",
+        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Issues: 12"
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "name": "test[1-:lint /tests/fixtures/integration/actions/lint-ansible-navigator lint results list]",
+    "index": 1,
+    "comment": "ansible-navigator lint results list",
+    "additional_information": {
+        "present": [
+            "All tasks should be named"
+        ],
+        "absent": [],
+        "compared_fixture": false
+    },
+    "output": [
+        "   Severity Message                                                       Path                                                                                                                    Line",
+        " 0│Critical Commands should not change things if nothing needs doing.     /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml                        6",
+        " 1│Critical Commands should not change things if nothing needs doing.     /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml            1",
+        " 2│Major    All plays should be named.                                    /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml                        1",
+        " 3│Major    Use FQCN for builtin module actions (command).                /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml                        6",
+        " 4│Major    All tasks should be named.                                    /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/playbook.yml                        6",
+        " 5│Major    Use FQCN for builtin module actions (assert).                 /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/uh-huh/tasks/main.yml         1",
+        " 6│Major    All names should start with an uppercase letter.              /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/uh-huh/tasks/main.yml         1",
+        " 7│Major    Use FQCN for builtin module actions (command).                /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml            1",
+        " 8│Major    All tasks should be named.                                    /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml            1",
+        " 9│Major    Use FQCN for builtin module actions (debug).                  /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml            3",
+        "10│Major    All tasks should be named.                                    /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml            3",
+        "11│Major    Avoid using free-form when calling module actions. (debug)    /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/borked/roles/yep/tasks/main.yml            3",
+        "^b/PgUp page up                    ^f/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                   Issues: 12"
+    ]
+}
