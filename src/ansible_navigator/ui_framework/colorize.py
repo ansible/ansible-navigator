@@ -61,7 +61,7 @@ class ColorSchema:
         found_color = None
         found_style = None
         for name in scope:
-            for parts in range(0, len(name.split("."))):
+            for parts in range(len(name.split("."))):
                 prop = name.split()[-1].rsplit(".", parts)[0]
                 color = next(
                     (

@@ -134,6 +134,7 @@ disable = [
   "E0604", # invalid-all-object / ruff PLE0604
   "E0605", # invalid-all-format / ruff PLE0605
   "E0711", # notimplemented-raised / ruff F901
+  "E1133", # not-an-iterable
   "E1142", # await-outside-async / ruff PLE1142
   "E1205", # logging-too-many-args / ruff PLE1205
   "E1206", # logging-too-few-args / ruff PLE1206
@@ -320,7 +321,13 @@ ignore = [
   'PTH120', # `os.path.dirname()` should be replaced by `Path.parent`
   'PTH122', # `os.path.splitext()` should be replaced by `Path.suffix`
   'PTH123', # `open()` should be replaced by `Path.open()`
+  'PTH204', # `os.path.getmtime` should be replaced by `Path.stat().st_mtime`
+  'PTH207', # Replace `glob` with `Path.glob` or `Path.rglob`
   'PYI021', # Docstrings should not be included in stubs
+  'PYI024', # Use `typing.NamedTuple` instead of `collections.namedtuple`
+  'PYI034', # `__enter__` methods in classes like `TmuxSession` usually return `self` at runtime
+  'PYI036', # The first argument in `__exit__` should be annotated with `object` or `type[BaseException] | None`
+  'PYI041', # Use `float` instead of `int | float`
   'RET501', # [*] Do not explicitly `return None` in function if it is the only possible return value
   'RET503', # [*] Missing explicit `return` at the end of function able to return non-`None` value
   'RET504', # Unnecessary variable assignment before `return` statement

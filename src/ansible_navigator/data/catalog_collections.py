@@ -330,7 +330,7 @@ class CollectionCatalog:
             if collection_directory.exists():
                 self._one_path(collection_directory)
         self.add_pseudo_builtin()
-        for _collection_path, collection in self._collections.items():
+        for collection in self._collections.values():
             self._catalog_plugins(collection)
             self._catalog_roles(collection)
         self._find_shadows()
@@ -411,7 +411,7 @@ def identify_missing(collections: dict, collection_cache: KeyValueStore) -> tupl
     handled = set()
     missing = []
     plugin_count = 0
-    for _collection_path, collection in collections.items():
+    for collection in collections.values():
         for checksum, details in collection["plugin_checksums"].items():
             plugin_count += 1
             if checksum not in handled:
@@ -575,7 +575,7 @@ def main() -> dict:
     cached_checksums = collection_cache.keys()
     stats["cache_length"] = len(collection_cache.keys())
 
-    for _collection_path, collection in collections.items():
+    for collection in collections.values():
         for no_doc in set(collection["plugin_checksums"].keys()) - set(cached_checksums):
             del collection["plugin_checksums"][no_doc]
 
