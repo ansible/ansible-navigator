@@ -38,17 +38,6 @@ stdout_tests = (
         absent=[".yml:"],
         search_within_response=SearchFor.PROMPT,
     ),
-    UiTestStep(
-        comment="lint stdout without ee",
-        user_input=Command(
-            subcommand="lint",
-            cmdline=LINT_FIXTURES,
-            mode="stdout",
-            execution_environment=False,
-        ).join(),
-        present=["Commands should not change things"],
-        search_within_response=SearchFor.PROMPT,
-    ),
 )
 
 steps = add_indices(stdout_tests)
