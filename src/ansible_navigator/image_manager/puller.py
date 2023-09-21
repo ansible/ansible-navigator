@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-import shlex
+import os
 import subprocess
 
 from dataclasses import dataclass
@@ -183,18 +183,16 @@ class ImagePuller:
         print("Updating the execution environment")
         print("\u002d" * width)
 
-    def _generate_pull_command(self) -> list[str]:
+    def _generate_pull_command(self) -> str:
         """Generate the pull command.
 
-        :returns: The list of command parts
+        :returns: The command
         """
         command_line = [self._container_engine, "pull"]
-        # In case the settings file has an entry with a space
-        # e.g. ``--authfile file.txt``, split all of the entries
-        for argument in self._arguments:
-            command_line.extend(shlex.split(argument))
+        command_line.extend(self._arguments)
         command_line.append(self._image)
-        return command_line
+        joined_command = " ".join(command_line)
+        return joined_command
 
     def pull_stdout(self):
         """Pull the image, print to stdout.
@@ -209,10 +207,15 @@ class ImagePuller:
         """
         try:
             command_line = self._generate_pull_command()
-            shlex_joined = shlex_join(command_line)
-            print(f"Running the command: {shlex_joined}")
+            cmd_to_run = f"echo Running the command: {command_line} && {command_line}"
             stderr_pipe = subprocess.PIPE if self._container_engine == "docker" else None
-            subprocess.run(command_line, check=True, stderr=stderr_pipe)
+            subprocess.run(
+                cmd_to_run,
+                check=True,
+                stderr=stderr_pipe,
+                shell=True,
+                env=os.environ,
+            )
             self._log_message(level=logging.INFO, message="Execution environment updated")
             self._pull_required = False
             self._assessment.pull_required = False

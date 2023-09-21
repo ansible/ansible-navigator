@@ -1,6 +1,8 @@
 """Unit tests for image puller."""
 
+import os
 import shlex
+import subprocess
 import uuid
 
 from typing import NamedTuple
@@ -190,7 +192,24 @@ def test_pull_with_args():
         pull_policy="tag",
     )
     result = image_puller._generate_pull_command()  # pylint: disable=protected-access
-    expected_list = ["podman", "pull", "--tls-verify", "false", "my_image"]
-    assert result == expected_list
     expected_string = "podman pull --tls-verify false my_image"
-    assert result == shlex.split(expected_string)
+    assert result == expected_string
+    expected_list = ["podman", "pull", "--tls-verify", "false", "my_image"]
+    assert shlex.split(result) == expected_list
+
+
+def test_pull_with_env_arg():
+    """Ensure the expansion of env variable in the arguments."""
+    image_puller = ImagePuller(
+        container_engine="podman",
+        image="my_image",
+        arguments=["--authfile", "${XDG_RUNTIME_DIR}/containers/auth.json"],
+        pull_policy="tag",
+    )
+    result = image_puller._generate_pull_command()  # pylint: disable=protected-access
+    cmd_to_run = f"echo {result}"
+    proc = subprocess.run(
+        cmd_to_run, check=True, shell=True, env=os.environ, capture_output=True, text=True
+    )
+    assert "XDG_RUNTIME_DIR" not in proc.stdout
+    assert "containers/auth.json" in proc.stdout
