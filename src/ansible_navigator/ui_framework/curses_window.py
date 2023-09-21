@@ -206,6 +206,6 @@ class CursesWindow:
         else:
             self._logger.debug("Using terminal defaults")
 
-        for i in range(0, curses.COLORS):
+        for i in range(curses.COLORS):
             curses.init_pair(i, i, -1)
         self._ui_config.colors_initialized = True

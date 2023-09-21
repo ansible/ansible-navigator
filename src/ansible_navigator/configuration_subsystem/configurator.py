@@ -376,14 +376,14 @@ class Configurator:
         ):
             return
 
-        current_subcommand = [
+        current_subcommand = next(
             entry.value.current for entry in self._config.entries if entry.subcommand_value is True
-        ][0]
-        previous_subcommand = [
+        )
+        previous_subcommand = next(
             entry.value.current
             for entry in self._config.initial.entries
             if entry.subcommand_value is True
-        ][0]
+        )
 
         for current_entry in self._config.entries:
             # retrieve the corresponding previous entry

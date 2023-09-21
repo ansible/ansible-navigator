@@ -80,6 +80,9 @@ along with its additional dependencies required for testing.
 pip install -e .\[test]
 ```
 
+In case of any errors, try to run `pip install --upgrade pip`. Then run the
+above command again.
+
 [virtual environment]: https://docs.python.org/3/library/venv.html
 
 ### Testing process and examples
@@ -208,6 +211,9 @@ modify accordingly if needed.
 
 ## Contributing docs
 
+The documentation source code is located under the [docs][docs source] directory
+in the repository's root.
+
 We use [mkdocs](https://www.mkdocs.org/) to generate our docs website. You can
 trigger the process locally by executing:
 
@@ -221,3 +227,5 @@ $ tox -e docs
 It is also integrated with [Read The Docs](https://readthedocs.org/) that builds
 and publishes each commit to the main branch and generates live docs previews
 for each pull request.
+
+[docs source]: https://github.com/ansible/ansible-navigator/tree/main/docs

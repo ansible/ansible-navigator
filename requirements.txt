@@ -6,7 +6,7 @@
 #
 ansible-builder==3.0.0
 ansible-core==2.15.1
-ansible-lint==6.17.2
+ansible-lint==6.19.0
 ansible-runner==2.3.3
 attrs==23.1.0
 beautifulsoup4==4.12.2

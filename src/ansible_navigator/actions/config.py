@@ -329,8 +329,8 @@ class Action(ActionBase):
                     current = extracted.groupdict()["current"]
                 try:
                     if isinstance(source, dict):
-                        parsed[variable]["source"] = list(source.keys())[0]
-                        parsed[variable]["via"] = list(source.values())[0]
+                        parsed[variable]["source"] = next(iter(source.keys()))
+                        parsed[variable]["via"] = next(iter(source.values()))
                     else:
                         parsed[variable]["source"] = source
                         parsed[variable]["via"] = source
