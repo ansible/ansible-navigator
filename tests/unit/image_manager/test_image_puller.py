@@ -199,7 +199,7 @@ def test_pull_with_args():
 
 
 def test_pull_with_env_arg():
-    """Ensure command is generated with additional arguments."""
+    """Ensure the expansion of env variable in the arguments."""
     image_puller = ImagePuller(
         container_engine="podman",
         image="my_image",
