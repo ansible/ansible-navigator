@@ -40,7 +40,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.0.290"
+    rev: "v0.0.291"
     hooks:
       - id: ruff
         args:
@@ -89,7 +89,7 @@ repos:
       - id: check-json5
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.36.0
+    rev: v0.37.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -140,7 +140,7 @@ repos:
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.11.0
+    rev: v3.13.0
     hooks:
       - id: pyupgrade
         args: ["--py39-plus"]
