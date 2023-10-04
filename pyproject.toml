@@ -217,7 +217,7 @@ enable = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-n=auto --dist=loadfile --maxfail=10 --durations=30 --showlocals"
+addopts = "-n=auto --dist=loadfile --durations=30 --showlocals"
 filterwarnings = [
   "error",
   # https://github.com/ansible/ansible-runner/issues/1246
