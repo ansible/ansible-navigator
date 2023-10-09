@@ -40,7 +40,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.0.291"
+    rev: "v0.0.292"
     hooks:
       - id: ruff
         args:
@@ -58,7 +58,7 @@ repos:
       - id: remove-tabs
 
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       # Side-effects:
       - id: trailing-whitespace
@@ -106,7 +106,7 @@ repos:
           $
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.5
+    rev: v2.2.6
     hooks:
       - id: codespell
         # NOTE: dout is part of the stdout action regex
@@ -140,7 +140,7 @@ repos:
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.13.0
+    rev: v3.15.0
     hooks:
       - id: pyupgrade
         args: ["--py39-plus"]
@@ -161,7 +161,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v3.0.0b0
+    rev: v3.0.1
     hooks:
       - id: pylint
         args:
