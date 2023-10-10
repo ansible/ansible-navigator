@@ -1,7 +1,8 @@
 """Object to hold basic UI settings."""
 
 from dataclasses import dataclass
-from importlib.abc import Traversable
+
+from ansible_navigator.utils.compatibility import Traversable
 
 
 @dataclass

@@ -11,12 +11,12 @@ import json
 import logging
 import re
 
-from importlib.abc import Traversable
 from itertools import chain
 
 from ansible_navigator.tm_tokenize.grammars import Grammars
 from ansible_navigator.tm_tokenize.region import Regions
 from ansible_navigator.tm_tokenize.tokenize import tokenize
+from ansible_navigator.utils.compatibility import Traversable
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
