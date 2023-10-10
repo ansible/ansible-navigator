@@ -223,6 +223,7 @@ filterwarnings = [
   "error",
   # https://github.com/ansible/ansible-runner/issues/1246
   "ignore::ResourceWarning:ansible_runner",
+  "ignore::pytest.PytestUnraisableExceptionWarning",
 ]
 
 [tool.ruff]
