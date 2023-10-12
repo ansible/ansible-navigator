@@ -267,7 +267,6 @@ ignore = [
   'D105', # Missing docstring in magic method
   'D400', # [*] First line should end with a period
   'D403', # [*] First word of the first line should be capitalized: `tokenize` -> `Tokenize`
-  'DTZ003', # The use of `datetime.datetime.utcnow()` is not allowed, use `datetime.datetime.now(tz=)` instead
   'DTZ005', # The use of `datetime.datetime.now()` without `tz` argument is not allowed
   'ERA001', # [*] Found commented-out code
   'F401', # [*] `ansible_navigator.version.__version__` imported but unused
