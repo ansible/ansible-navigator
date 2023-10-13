@@ -1,7 +1,7 @@
 """Constants for ansible-navigator."""
 import importlib.resources as importlib_resources
 
-from importlib.abc import Traversable
+from ansible_navigator.utils.compatibility import Traversable
 
 
 PKG_NAME: str = "ansible_navigator"
