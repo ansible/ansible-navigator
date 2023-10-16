@@ -251,6 +251,20 @@ $ ansible-navigator run site.yml --forks 15
 $ ansible-navigator run site.yml -- --forks 15
 ```
 
+### How can I use syntax-check with `ansible-navigator`?
+
+To check for basic syntax errors in an Ansible playbook, one can use
+`ansible-navigator run` command to validate the syntax of a playbook. This also
+allows user to specify an EE while validating the syntax.
+
+```bash
+$ ansible-navigator run site.yml -m stdout --syntax-check
+```
+
+In case of any failure in syntax validation, a syntax error is reported with the
+output that includes the approximate location of the syntax issue in the
+playbook.
+
 ### How can I use a vault password with `ansible-navigator`?
 
 The following options provide a vault password to `ansible-navigator` when using
