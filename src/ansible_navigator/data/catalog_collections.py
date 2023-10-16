@@ -394,7 +394,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                     "returndocs": returndocs,
                     "metadata": metadata,
                 },
-                "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+                "timestamp": datetime.now().isoformat(),
             }
             completed_queue.put(("plugin", (checksum, json.dumps(q_message, default=str))))
         except JSONDecodeError as exc:
