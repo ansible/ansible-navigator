@@ -393,7 +393,7 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
                     "returndocs": returndocs,
                     "metadata": metadata,
                 },
-                "timestamp": datetime.now().isoformat(),
+                "timestamp": datetime.now(tz=datetime.timezone.utc).isoformat(),
             }
             completed_queue.put(("plugin", (checksum, json.dumps(q_message, default=str))))
         except JSONDecodeError as exc:
@@ -589,7 +589,7 @@ def main() -> dict:
 
 
 if __name__ == "__main__":
-    start_time = datetime.now()
+    start_time = datetime.now(tz=datetime.timezone.utc)
 
     collection_paths = retrieve_collections_paths()
     if "error" in collection_paths:
@@ -603,6 +603,8 @@ if __name__ == "__main__":
     os.environ["ANSIBLE_COLLECTIONS_PATHS"] = COLLECTION_SCAN_PATHS
 
     result = main()
-    result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
+    result["stats"]["duration"] = (
+        datetime.now(tz=datetime.timezone.utc) - start_time
+    ).total_seconds()
     result["collection_scan_paths"] = COLLECTION_SCAN_PATHS
     print(json.dumps(result, default=str))

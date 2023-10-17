@@ -16,12 +16,12 @@ ansible-lint codebase.
 """
 from __future__ import annotations
 
+import datetime
 import json
 import os
 import shlex
 
 from collections.abc import Mapping
-from datetime import datetime
 from enum import IntEnum
 from typing import Any
 
@@ -355,7 +355,9 @@ class Action(ActionBase):
         self._calling_app.update()
 
         # Do this only every 2 seconds
-        if (datetime.now() - self._modification_times_last_updated).total_seconds() > 2:
+        if (
+            datetime.now(tz=datetime.timezone.utc) - self._modification_times_last_updated
+        ).total_seconds() > 2:
             rerun_lint = self._rerun_needed()
             if rerun_lint:
                 self._build_issues_menu()
@@ -506,7 +508,7 @@ class Action(ActionBase):
                 if unix_ts > previous_ts:
                     rerun_lint = True
 
-        self._modification_times_last_updated = datetime.now()
+        self._modification_times_last_updated = datetime.now(tz=datetime.timezone.utc)
         if rerun_lint:
             self._logger.debug("Files modified")
         return rerun_lint
