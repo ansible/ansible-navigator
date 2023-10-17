@@ -15,7 +15,6 @@ from collections import Counter
 from collections import OrderedDict
 from collections.abc import Generator
 from datetime import datetime
-from datetime import timezone
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -590,7 +589,7 @@ def main() -> dict:
 
 
 if __name__ == "__main__":
-    start_time = datetime.now(tz=timezone.utc)
+    start_time = datetime.now()
 
     collection_paths = retrieve_collections_paths()
     if "error" in collection_paths:
@@ -604,6 +603,6 @@ if __name__ == "__main__":
     os.environ["ANSIBLE_COLLECTIONS_PATHS"] = COLLECTION_SCAN_PATHS
 
     result = main()
-    result["stats"]["duration"] = (datetime.now(tz=timezone.utc) - start_time).total_seconds()
+    result["stats"]["duration"] = (datetime.now() - start_time).total_seconds()
     result["collection_scan_paths"] = COLLECTION_SCAN_PATHS
     print(json.dumps(result, default=str))
