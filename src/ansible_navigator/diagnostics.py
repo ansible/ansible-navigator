@@ -1,13 +1,14 @@
 """Produce a diagnostics report in json format."""
 from __future__ import annotations
 
-import datetime
 import sys
 import traceback
 
 from collections.abc import Iterator
 from dataclasses import asdict
 from dataclasses import dataclass
+from datetime import datetime
+from datetime import timezone
 from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
@@ -142,24 +143,24 @@ def diagnostic_runner(func):
         :returns: The result of the function with elapsed or error information
         """
         global DIAGNOSTIC_FAILURES
-        start = datetime.datetime.now()
+        start = datetime.now(timezone.utc)
         color = args[0].color
         collector = func.__collector__
         collector.start(color=color)
         try:
             result = func(*args, **kwargs)
-            duration = (datetime.datetime.now() - start).total_seconds()
+            duration = (datetime.now(timezone.utc) - start).total_seconds()
             collector.finish(color=color, duration=duration)
         except FailedCollectionError as error:
             # A collector exception, has data
             result = error.errors
-            duration = (datetime.datetime.now() - start).total_seconds()
+            duration = (datetime.now(timezone.utc) - start).total_seconds()
             collector.fail(color=color, duration=duration)
             DIAGNOSTIC_FAILURES += 1
         except Exception as error:  # noqa: BLE001
             # Any other exception, has no data
             result = {"error": str(error) + "\n" + traceback.format_exc()}
-            duration = (datetime.datetime.now() - start).total_seconds()
+            duration = (datetime.now(timezone.utc) - start).total_seconds()
             collector.fail(color=color, duration=duration)
             DIAGNOSTIC_FAILURES += 1
         result["duration"] = round(duration)
