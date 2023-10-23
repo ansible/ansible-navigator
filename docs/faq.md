@@ -35,7 +35,7 @@ an execution-environment. (See the ansible docs for the possibilities)
 
 The easiest place to have ansible collections is in the project directory, in a
 playbook adjacent collections directory. (eg
-`ansible-galaxy collections install ansible.utils -p ./collections`). The
+`ansible-galaxy collection install ansible.utils -p ./collections`). The
 playbook directory is automatically mounted in the execution environment and the
 collections should be found. Another option is to build the collections into an
 execution environment using
