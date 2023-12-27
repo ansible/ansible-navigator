@@ -870,7 +870,7 @@ class NavigatorPostProcessor:
             if isinstance(cmdline, list) and force_stdout_for.intersection(cmdline):
                 mode = Mode.STDOUT
                 self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
-                message = message = f"`{entry.name} requesting mode {mode.value}"
+                message = f"`{entry.name} requesting mode {mode.value}"
                 messages.append(LogMessage(level=logging.DEBUG, message=message))
                 return messages, exit_messages
 
@@ -1073,7 +1073,7 @@ class NavigatorPostProcessor:
         if entry.value.source is not C.DEFAULT_CFG and config.app == "settings":
             mode = Mode.STDOUT
             self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
-            message = message = f"`{entry.name} requesting mode {mode.value}"
+            message = f"`{entry.name} requesting mode {mode.value}"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
 
