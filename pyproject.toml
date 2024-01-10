@@ -5,7 +5,7 @@ requires = [
   "setuptools >= 45",
   # Plugins
   "setuptools_scm[toml] >= 6.2",
-  "setuptools_scm_git_archive >= 1.1",
+  "setuptools_scm_git_archive >= 1.1"
 ]
 
 [project]
@@ -26,25 +26,25 @@ classifiers = [
   'Programming Language :: Python :: 3.11',
   'Programming Language :: Python :: 3.12',
   'Programming Language :: Python :: Implementation :: CPython',
-  'Programming Language :: Python :: Implementation :: PyPy',
+  'Programming Language :: Python :: Implementation :: PyPy'
 ]
 dynamic = ["version", "dependencies", "optional-dependencies"]
 name = "ansible-navigator"
 description = "A text-based user interface (TUI) for the Red Hat Ansible Automation Platform"
 readme = "README.md"
-authors = [{ "name" = "Bradley A. Thornton", "email" = "bthornto@redhat.com" }]
-maintainers = [{ "name" = "Ansible by Red Hat", "email" = "info@ansible.com" }]
-license = { text = "Apache" }
+authors = [{"name" = "Bradley A. Thornton", "email" = "bthornto@redhat.com"}]
+maintainers = [{"name" = "Ansible by Red Hat", "email" = "info@ansible.com"}]
+license = {text = "Apache"}
 keywords = ["ansible"]
+
+[project.scripts]
+ansible-navigator = "ansible_navigator.cli:main"
 
 [project.urls]
 homepage = "https://github.com/ansible/ansible-navigator"
 documentation = "https://ansible-navigator.readthedocs.io/en/latest/"
 repository = "https://github.com/ansible/ansible-navigator"
 changelog = "https://github.com/ansible/ansible-navigator/releases"
-
-[project.scripts]
-ansible-navigator = "ansible_navigator.cli:main"
 
 [tool]
 
@@ -76,14 +76,13 @@ preferred-modules = [
   # NOTE: The unittest replacements below help keep
   # NOTE: the tests pytest ecosystem-oriented.
   "unittest:pytest",
-  "unittest.mock:pytest-mock",
+  "unittest.mock:pytest-mock"
 ]
 
 [tool.pylint.master]
 ignore = [
   "_version.py", # built by setuptools_scm
-  "tm_tokenize", # tm_tokenize is virtually vendored and shouldn't be linted as such
-
+  "tm_tokenize" # tm_tokenize is virtually vendored and shouldn't be linted as such
 ]
 # pylint defaults + fh for with open .. as (f|fh)
 good-names = "i,j,k,ex,Run,_,f,fh"
@@ -209,12 +208,10 @@ disable = [
   "W1401", # anomalous-backslash-in-string / ruff W605
   "W1405", # inconsistent-quotes / ruff Q000
   "W1508", # invalid-envvar-default / ruff PLW1508
-  "W1515", # forgotten-debug-statement / ruff T100
-
+  "W1515" # forgotten-debug-statement / ruff T100
 ]
 enable = [
-  "useless-suppression", # Identify unneeded pylint disable statements
-
+  "useless-suppression" # Identify unneeded pylint disable statements
 ]
 
 [tool.pytest.ini_options]
@@ -224,7 +221,7 @@ filterwarnings = [
   # https://github.com/ansible/ansible-runner/issues/1246
   "ignore::ResourceWarning:ansible_runner",
   "ignore::pytest.PytestUnraisableExceptionWarning",
-  "ignore::DeprecationWarning:ansible_runner",
+  "ignore::DeprecationWarning:ansible_runner"
 ]
 
 [tool.ruff]
@@ -359,10 +356,12 @@ ignore = [
   'TRY300', # Consider moving this statement to an `else` block
   'TRY301', # Abstract `raise` to an inner function
   'TRY400', # Use `logging.exception` instead of `logging.error`
-  'TRY401', # Redundant exception object included in `logging.exception` call
-
+  'TRY401' # Redundant exception object included in `logging.exception` call
 ]
 exclude = ["tests/fixtures/**", ".git"]
+
+[tool.ruff.flake8-pytest-style]
+parametrize-values-type = "tuple"
 
 [tool.ruff.isort]
 force-single-line = true # Force from .. import to be 1 per line
@@ -373,14 +372,11 @@ lines-between-types = 1 # Separate import/from with 1 line
 [tool.ruff.pydocstyle]
 convention = "pep257"
 
-[tool.ruff.flake8-pytest-style]
-parametrize-values-type = "tuple"
-
 [tool.setuptools.dynamic]
-optional-dependencies.test = { file = [".config/requirements-test.txt"] }
-optional-dependencies.lock = { file = [".config/requirements-lock.txt"] }
-optional-dependencies.docs = { file = [".config/requirements-docs.txt"] }
-dependencies = { file = [".config/requirements.in"] }
+dependencies = {file = [".config/requirements.in"]}
+optional-dependencies.test = {file = [".config/requirements-test.txt"]}
+optional-dependencies.lock = {file = [".config/requirements-lock.txt"]}
+optional-dependencies.docs = {file = [".config/requirements-docs.txt"]}
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
