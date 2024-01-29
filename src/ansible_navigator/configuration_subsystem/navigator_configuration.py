@@ -266,7 +266,8 @@ NavigatorConfiguration = ApplicationConfiguration(
             name="cmdline",
             apply_to_subsequent_cli=C.SAME_SUBCOMMAND,
             settings_file_path_override="ansible.cmdline",
-            short_description="Extra parameters passed to the corresponding command",
+            short_description="Extra parameters passed to the underlying ansible command"
+            " (e.g. ansible-playbook, ansible-doc, etc)",
             value=SettingsEntryValue(),
             version_added="v1.0",
         ),
