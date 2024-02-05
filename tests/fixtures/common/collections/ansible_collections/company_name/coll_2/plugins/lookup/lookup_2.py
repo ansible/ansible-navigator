@@ -1,6 +1,5 @@
 """An ansible test lookup plugin."""
 
-
 DOCUMENTATION = """
     name: lookup_2
     author: test

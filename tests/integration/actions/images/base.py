@@ -1,4 +1,5 @@
 """Base class for images interactive tests."""
+
 import difflib
 import os
 import re

@@ -1,4 +1,5 @@
 """Test from the CLI up to to the invocation of runner."""
+
 from __future__ import annotations
 
 from pathlib import Path

@@ -1,4 +1,5 @@
 """Test the ability to recreate a settings file post configuration."""
+
 from __future__ import annotations
 
 import operator

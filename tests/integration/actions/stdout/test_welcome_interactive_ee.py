@@ -1,4 +1,5 @@
 """Tests for stdout from welcome, interactive, with an EE."""
+
 import pytest
 
 from .base import ANSIBLE_PLAYBOOK

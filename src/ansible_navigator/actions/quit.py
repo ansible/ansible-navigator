@@ -1,4 +1,5 @@
 """``:quit`` command implementation."""
+
 import logging
 
 from ansible_navigator.app_public import AppPublic

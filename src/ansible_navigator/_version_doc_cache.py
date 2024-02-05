@@ -11,4 +11,5 @@
    application version, although keeping the major in sync is probably
    not a bad idea to minimize the amount of stale docs in the user's cache
 """
+
 __version_collection_doc_cache__ = "1.0"

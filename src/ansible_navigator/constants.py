@@ -1,4 +1,5 @@
 """Constants for ansible-navigator."""
+
 import importlib.resources as importlib_resources
 
 from ansible_navigator.utils.compatibility import Traversable

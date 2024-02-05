@@ -1,4 +1,5 @@
 """Test the use of ``pass-environment-variable`` through to runner."""
+
 from __future__ import annotations
 
 import os

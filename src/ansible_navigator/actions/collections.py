@@ -1,4 +1,5 @@
 """Collections subcommand implementation."""
+
 from __future__ import annotations
 
 import curses
@@ -390,9 +391,9 @@ class Action(ActionBase):
                     f":{ee_navigator_utils_mount}",
                 )
             else:
-                set_environment_variable[
-                    "PYTHONPATH"
-                ] = f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
+                set_environment_variable["PYTHONPATH"] = (
+                    f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
+                )
             self._logger.debug(
                 "Execution Environment's PYTHONPATH is set to: %s",
                 set_environment_variable["PYTHONPATH"],

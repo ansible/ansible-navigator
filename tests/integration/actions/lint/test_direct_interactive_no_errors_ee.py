@@ -1,4 +1,5 @@
 """Tests for lint (with no errors) from CLI, interactive, with an EE."""
+
 import os
 
 import pytest

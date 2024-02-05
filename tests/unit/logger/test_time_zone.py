@@ -1,4 +1,5 @@
 """Tests for time zone support in the log."""
+
 from __future__ import annotations
 
 import re

@@ -12,6 +12,7 @@ Currently, the ``actions`` package is the only package supported for actions and
 is identified in the
 :class:`~ansible_navigator.configuration_subsystem.navigator_configuration.Internals`.
 """
+
 from __future__ import annotations
 
 from typing import Any

@@ -1,4 +1,5 @@
 """Simple utils for working with forms."""
+
 from __future__ import annotations
 
 import copy

@@ -1,4 +1,5 @@
 """The settings file migration base class."""
+
 from __future__ import annotations
 
 from ansible_navigator.content_defs import ContentView

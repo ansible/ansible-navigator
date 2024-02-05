@@ -1,4 +1,5 @@
 """A couple singleton sentinels for convenience to avoid the use of None."""
+
 from __future__ import annotations
 
 from typing import Any

@@ -1,4 +1,5 @@
 """Test for the conversion of percent string to progress bars."""
+
 from dataclasses import dataclass
 
 from ansible_navigator.content_defs import ContentBase

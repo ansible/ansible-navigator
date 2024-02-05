@@ -1,4 +1,5 @@
 """Tests for run from CLI, interactive, no EE, using collection playbook."""
+
 import pytest
 
 from tests.integration._interactions import Command

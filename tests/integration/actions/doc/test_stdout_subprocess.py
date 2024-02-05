@@ -1,4 +1,5 @@
 """Test doc using subprocess."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

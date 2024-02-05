@@ -1,4 +1,5 @@
 """Base class for run interactive/stdout tests."""
+
 from __future__ import annotations
 
 import difflib

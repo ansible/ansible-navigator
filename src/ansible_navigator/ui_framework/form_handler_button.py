@@ -1,4 +1,5 @@
 """Get one line of text input."""
+
 from __future__ import annotations
 
 import curses

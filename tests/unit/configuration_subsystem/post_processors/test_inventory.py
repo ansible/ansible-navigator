@@ -1,4 +1,5 @@
 """Test the use of the ansible.cfg file for inventory."""
+
 from copy import deepcopy
 from pathlib import Path
 

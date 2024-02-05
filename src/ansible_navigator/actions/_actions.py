@@ -1,4 +1,5 @@
 """Helper functions for the ``actions`` package."""
+
 from __future__ import annotations
 
 import functools

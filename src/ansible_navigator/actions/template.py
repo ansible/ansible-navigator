@@ -2,6 +2,7 @@
 
 Processor of a template request at the single line prompt. e.g. {{ }}
 """
+
 from __future__ import annotations
 
 import html

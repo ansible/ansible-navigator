@@ -1,4 +1,5 @@
 """Tests for collections from welcome, interactive, with an EE."""
+
 import pytest
 
 from tests.integration._interactions import Command

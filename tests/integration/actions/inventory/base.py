@@ -1,4 +1,5 @@
 """Base class for inventory interactive/stdout tests."""
+
 import difflib
 import os
 

@@ -1,4 +1,5 @@
 """Test the use of ``execution-environment-image`` through to runner."""
+
 from __future__ import annotations
 
 import os

@@ -1,4 +1,5 @@
 """Collection related tests run using subprocess."""
+
 import json
 
 import pytest

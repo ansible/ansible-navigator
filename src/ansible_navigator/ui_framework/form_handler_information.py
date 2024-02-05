@@ -1,4 +1,5 @@
 """Information handler, instant enter."""
+
 from __future__ import annotations
 
 from curses import ascii as curses_ascii

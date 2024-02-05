@@ -1,4 +1,5 @@
 """Unit tests for the ``config`` action."""
+
 import curses
 
 from ansible_navigator.actions.config import color_menu

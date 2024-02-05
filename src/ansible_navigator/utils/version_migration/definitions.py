@@ -1,4 +1,5 @@
 """Common definitions for a version migration."""
+
 from __future__ import annotations
 
 import contextlib

@@ -1,4 +1,5 @@
 """Introspect an execution environment image."""
+
 from __future__ import annotations
 
 import json

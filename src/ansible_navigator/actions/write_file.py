@@ -1,4 +1,5 @@
 """``:write`` command implementation."""
+
 import logging
 import os
 import re

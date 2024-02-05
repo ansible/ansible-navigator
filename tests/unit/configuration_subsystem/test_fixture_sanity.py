@@ -3,6 +3,7 @@
 Some handy tests to ensure the fixture data has
 entries for for all entries.
 """
+
 import os
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration

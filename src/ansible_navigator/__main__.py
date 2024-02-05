@@ -3,6 +3,7 @@
 This makes it possible to invoke CLI
 via :command:`python -m ansible_navigator`.
 """
+
 from .cli import main
 
 

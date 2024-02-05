@@ -1,4 +1,5 @@
 """``:rerun`` command implementation."""
+
 import copy
 import logging
 

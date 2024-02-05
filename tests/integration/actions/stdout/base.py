@@ -1,4 +1,5 @@
 """Base class for stdout interactive tests."""
+
 import difflib
 import os
 

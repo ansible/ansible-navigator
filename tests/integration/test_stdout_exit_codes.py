@@ -1,4 +1,5 @@
 """Check return codes from mode ``stdout``."""
+
 from __future__ import annotations
 
 import os

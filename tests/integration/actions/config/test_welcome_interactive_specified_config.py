@@ -1,4 +1,5 @@
 """Tests for ``config`` from welcome, interactive, specify configuration."""
+
 import pytest
 
 from tests.integration._interactions import Command

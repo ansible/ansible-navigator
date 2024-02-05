@@ -9,8 +9,7 @@ TValue_co = TypeVar("TValue_co", covariant=True)
 
 
 class Indexable(Generic[TKey_contra, TValue_co], Protocol):
-    def __getitem__(self, key: TKey_contra) -> TValue_co:
-        ...
+    def __getitem__(self, key: TKey_contra) -> TValue_co: ...
 
 
 class FChainMap(Generic[TKey_contra, TValue_co]):

@@ -1,4 +1,5 @@
 """An information field formatted as curses lines."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

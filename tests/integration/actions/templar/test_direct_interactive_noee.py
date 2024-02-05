@@ -1,4 +1,5 @@
 """Tests for templar from CLI, interactive, without an EE."""
+
 import pytest
 
 from tests.integration._interactions import Command

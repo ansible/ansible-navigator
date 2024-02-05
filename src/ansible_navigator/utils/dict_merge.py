@@ -1,4 +1,5 @@
 """Utilities related to the merging of dictionaries."""
+
 from __future__ import annotations
 
 from typing import Optional

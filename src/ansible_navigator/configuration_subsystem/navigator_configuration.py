@@ -1,4 +1,5 @@
 """The ansible-navigator configuration."""
+
 from __future__ import annotations
 
 import logging

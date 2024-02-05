@@ -1,4 +1,5 @@
 """A test inventory plugin."""
+
 from ansible.plugins.inventory import BaseInventoryPlugin
 
 

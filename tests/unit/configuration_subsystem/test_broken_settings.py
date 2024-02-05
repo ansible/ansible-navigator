@@ -1,4 +1,5 @@
 """Tests using broken settings files."""
+
 import os
 
 from .conftest import GenerateConfigCallable

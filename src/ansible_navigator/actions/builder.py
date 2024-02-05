@@ -3,6 +3,7 @@
 Importing this module registers this subcommand in the external
 global subcommand registry.
 """
+
 from __future__ import annotations
 
 import os

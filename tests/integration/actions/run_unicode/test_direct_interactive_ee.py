@@ -1,4 +1,5 @@
 """Tests for run from CLI, interactive, with an EE, with unicode."""
+
 import pytest
 
 from tests.integration._interactions import Command
