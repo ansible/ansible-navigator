@@ -15,13 +15,12 @@ from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner import CommandRunner
 
 
-def _get_venv():
+def _get_venv_prefix() -> str:
     venv_path = os.environ.get("VIRTUAL_ENV")
     if venv_path is None:
-        msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
-        raise AssertionError(msg)
+        return ""
     venv = Path(venv_path, "bin", "activate")
-    return venv
+    return f". {venv} && "
 
 
 @dataclass
@@ -35,8 +34,8 @@ class NavigatorCommand(Command):
     def __post_init__(self):
         """Post the init."""
         self.identity = self.command
-        venv = _get_venv()
-        self.command = f". {venv} && ansible-navigator {self.command} {self.set_env}"
+        venv = _get_venv_prefix()
+        self.command = f"{venv}ansible-navigator {self.command} {self.set_env}"
 
 
 @dataclass

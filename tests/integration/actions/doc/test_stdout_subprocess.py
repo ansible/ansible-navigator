@@ -97,7 +97,6 @@ StdoutCliTests = (
 )
 
 
-@pytest.mark.usefixtures("use_venv")
 @pytest.mark.parametrize(argnames="data", argvalues=StdoutCliTests, ids=id_func)
 @pytest.mark.parametrize(argnames="exec_env", argvalues=(True, False), ids=("ee_true", "ee_false"))
 def test(

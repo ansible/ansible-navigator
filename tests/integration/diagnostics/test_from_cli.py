@@ -14,7 +14,6 @@ from ansible_navigator.configuration_subsystem.definitions import SettingsFileTy
 from ansible_navigator.utils.functions import remove_ansi
 
 
-@pytest.mark.usefixtures("use_venv")
 def test(
     monkeypatch: pytest.MonkeyPatch,
     settings_env_var_to_full: tuple[Path, SettingsFileType],
