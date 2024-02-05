@@ -166,53 +166,44 @@ class TmuxSession:
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_PULL_POLICY='{self._pull_policy}'")
 
         set_up_commands = tmux_common + self._setup_commands
+
+        def send_and_wait(cmd: str) -> list[str]:
+            """Send commands and waits for prompt to appear.
+
+            :param cmd: command to be executed.
+            :returns:   terminal captured lines
+            """
+            # We observed that on some platforms initialization can fail as
+            # commands are sent too quickly.
+            self._pane.send_keys(cmd)
+            captured: str | list[str] = []
+            timeout = time.time() + self._shell_prompt_timeout
+            while not captured or not captured[-1].endswith(self.cli_prompt):
+                time.sleep(0.05)
+                captured = self._pane.capture_pane()
+                if time.time() > timeout:
+                    msg = "Timeout waiting for prompt after running {cmd} under tmux."
+                    raise ValueError(msg)
+            if isinstance(captured, str):
+                return [captured]
+            return captured
+
         # send the setup commands
         for set_up_command in set_up_commands:
-            self._pane.send_keys(set_up_command)
+            send_and_wait(set_up_command)
 
         self._setup_capture = self._pane.capture_pane()
 
-        self._pane.send_keys("clear")
-        self._pane.send_keys("echo ready")
+        captured = send_and_wait("clear")
+        captured = send_and_wait("echo ready")
+        if "ready" not in captured:
+            msg = f"Failed to retrieve the 'echo ready' output: {captured}"
+            raise ValueError(msg)
 
-        # wait for the ready line
-        start_time = timer()
-        prompt_showing = False
-        while True:
-            showing = self._pane.capture_pane()
-            if showing:
-                prompt_showing = "ready" in showing
-            if prompt_showing:
-                break
-            elapsed = timer() - start_time
-            if elapsed > self._shell_prompt_timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX SETUP TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                raise ValueError(alert)
-
-            time.sleep(0.1)
-
-        # capture the setup screen
-
-        # clear the screen, wait for prompt in line 0
-        start_time = timer()
-        self._pane.send_keys("clear")
-        prompt_showing = False
-        while True:
-            showing = self._pane.capture_pane()
-            showing = [showing] if isinstance(showing, str) else showing
-
-            # the screen has been cleared, wait for prompt in first line
-            if showing:
-                prompt_showing = self.cli_prompt in showing[0]
-            if prompt_showing:
-                break
-            elapsed = timer() - start_time
-            if elapsed > self._shell_prompt_timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX CLEAR TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                raise ValueError(alert)
-            time.sleep(0.1)
+        captured = send_and_wait("clear")
+        if len(captured) != 1 or self.cli_prompt not in captured[0]:
+            msg = f"TMUX CLEAR Failure: {captured}."
+            raise ValueError(msg)
 
         return self
 
