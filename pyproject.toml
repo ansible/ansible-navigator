@@ -66,6 +66,12 @@ data_file = ".tox/.coverage"
 parallel = true
 source_pkgs = ["ansible_navigator"]
 
+[tool.pydoclint]
+allow-init-docstring = true
+arg-type-hints-in-docstring = false
+check-return-types = false
+style = 'google'
+
 [tool.pylint]
 
 [tool.pylint.format]

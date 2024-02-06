@@ -140,8 +140,14 @@ repos:
       - id: flake8
         language_version: python3
         additional_dependencies:
-          - darglint
           - flake8-docstrings # uses pydocstyle
+
+  - repo: https://github.com/jsh9/pydoclint
+    rev: 0.3.4
+    hooks:
+      - id: pydoclint
+        args:
+          - "--config=pyproject.toml"
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
