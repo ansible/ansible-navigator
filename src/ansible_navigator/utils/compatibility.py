@@ -21,7 +21,7 @@ else:
     import importlib.metadata as importlib_metadata
 
 
-if sys.version_info < (3, 12):
+if sys.version_info < (3, 11):
     from importlib.abc import Traversable
 else:
     from importlib.resources.abc import Traversable
