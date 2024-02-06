@@ -1,4 +1,5 @@
 """ANSI color codes and functions for terminal output."""
+
 import os
 import sys
 

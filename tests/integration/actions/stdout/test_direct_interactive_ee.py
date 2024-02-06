@@ -1,4 +1,5 @@
 """Tests for ``stdout`` from CLI, interactive, with an EE."""
+
 import pytest
 
 from .base import ANSIBLE_PLAYBOOK

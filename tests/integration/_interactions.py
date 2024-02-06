@@ -1,4 +1,5 @@
 """Common classes to handle user interactions."""
+
 from __future__ import annotations
 
 import shlex

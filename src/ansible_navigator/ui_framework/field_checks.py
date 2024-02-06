@@ -1,4 +1,5 @@
 """Individual field check, the form field checks and radio check."""
+
 from __future__ import annotations
 
 import sys

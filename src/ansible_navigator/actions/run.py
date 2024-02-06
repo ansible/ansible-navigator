@@ -1,4 +1,5 @@
 """Run subcommand implementation."""
+
 from __future__ import annotations
 
 import curses
@@ -644,7 +645,7 @@ class Action(ActionBase):
         :type message: dict
         """
         # Collect any stdout
-        if "stdout" in message and message["stdout"]:
+        if message.get("stdout"):
             self.stdout.extend(message["stdout"].splitlines())
             if self.mode == "stdout_w_artifact":
                 print(message["stdout"])

@@ -1,4 +1,5 @@
 """Tests for utils.dict_merge."""
+
 from collections import deque
 
 import pytest

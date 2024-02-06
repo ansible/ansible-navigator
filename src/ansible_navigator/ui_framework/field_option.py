@@ -1,4 +1,5 @@
 """One option in either a check or radio field."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

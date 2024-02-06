@@ -1,4 +1,5 @@
 """An interface to use a sqlite database as a key-value store."""
+
 from __future__ import annotations
 
 import sqlite3

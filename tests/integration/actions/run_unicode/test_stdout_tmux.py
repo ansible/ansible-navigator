@@ -1,4 +1,5 @@
 """Tests for run from CLI, stdout, with unicode."""
+
 import pytest
 
 from tests.integration._interactions import Command

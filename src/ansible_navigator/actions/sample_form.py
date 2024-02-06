@@ -1,4 +1,5 @@
 """``:sample_form`` command implementation."""
+
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration

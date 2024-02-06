@@ -1,4 +1,5 @@
 """Herein lies the ability to have ansible-runner run a command in a synchronous manner."""
+
 from __future__ import annotations
 
 from ansible_runner import run_command

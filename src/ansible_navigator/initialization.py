@@ -2,6 +2,7 @@
 
 These helpers are specific to ansible_navigator.
 """
+
 from __future__ import annotations
 
 import logging
@@ -123,7 +124,7 @@ def get_and_check_collection_doc_cache(
         return messages, exit_messages, None
 
     collection_cache: KeyValueStore = KeyValueStore(collection_doc_cache_path)
-    cache_version = collection_cache["version"] if "version" in collection_cache else None
+    cache_version = collection_cache.get("version", None)
     message = f"Collection doc cache: 'current version' is '{cache_version}'"
     messages.append(LogMessage(level=logging.DEBUG, message=message))
     if cache_version is None or cache_version != VERSION_CDC:

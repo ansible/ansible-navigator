@@ -1,4 +1,5 @@
 """Tests for run from CLI, stdout."""
+
 import pytest
 
 from tests.integration._interactions import Command

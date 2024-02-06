@@ -3,6 +3,7 @@
 Prove code paths not covered by the ansible-navigator
 configuration
 """
+
 import pytest
 
 from ansible_navigator.configuration_subsystem.configurator import Configurator

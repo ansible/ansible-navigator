@@ -1,4 +1,5 @@
 """Tests for ``images`` from CLI, stdout."""
+
 import pytest
 
 from tests.conftest import default_ee_image_name

@@ -1,4 +1,5 @@
 """Base class for ``builder`` stdout tests."""
+
 import difflib
 import os
 

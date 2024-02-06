@@ -1,4 +1,5 @@
 """Tests for doc from welcome, interactive, with an EE."""
+
 from __future__ import annotations
 
 import pytest

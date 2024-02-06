@@ -1,4 +1,5 @@
 """Tests for replay from welcome, interactive, without an EE."""
+
 import pytest
 
 from .base import PLAYBOOK_ARTIFACT

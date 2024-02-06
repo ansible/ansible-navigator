@@ -1,4 +1,5 @@
 """Tests for ``config`` from CLI, interactive, with an EE and ansible.cfg file."""
+
 import pytest
 
 from tests.integration._interactions import Command

@@ -1,4 +1,5 @@
 """Scripts that generates documentation from the settings definitions."""
+
 from __future__ import annotations
 
 import logging

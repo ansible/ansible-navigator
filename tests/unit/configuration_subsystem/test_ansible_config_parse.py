@@ -1,4 +1,5 @@
 """Test the basic parsing of an ansible.cfg file."""
+
 from copy import deepcopy
 from pathlib import Path
 

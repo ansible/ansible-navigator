@@ -1,4 +1,5 @@
 """Build a menu."""
+
 from __future__ import annotations
 
 import curses

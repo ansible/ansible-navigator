@@ -1,4 +1,5 @@
 """Constants with default values used throughout the tests."""
+
 import os
 
 from enum import Enum

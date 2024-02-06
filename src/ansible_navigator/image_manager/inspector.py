@@ -1,4 +1,5 @@
 """Definitions for image inspection."""
+
 from __future__ import annotations
 
 import json

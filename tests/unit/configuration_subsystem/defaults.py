@@ -1,4 +1,5 @@
 """Defaults for adjacent tests."""
+
 import os
 
 from tests.defaults import FIXTURES_DIR

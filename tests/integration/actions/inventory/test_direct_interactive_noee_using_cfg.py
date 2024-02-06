@@ -1,4 +1,5 @@
 """Tests for inventory from CLI, interactive, without an EE, using ansible.cfg."""
+
 import pytest
 
 from tests.integration._interactions import Command

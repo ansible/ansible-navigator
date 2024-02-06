@@ -1,4 +1,5 @@
 """Tests for images from CLI, interactive, without an EE."""
+
 import pytest
 
 from tests.integration._interactions import Command

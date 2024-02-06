@@ -1,4 +1,5 @@
 """Check migration output."""
+
 import filecmp
 import os
 import shutil

@@ -1,4 +1,5 @@
 """Tests for ``lint`` from CLI, stdout."""
+
 import os
 
 import pytest

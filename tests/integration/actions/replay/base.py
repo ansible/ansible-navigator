@@ -1,4 +1,5 @@
 """Base class for replay interactive tests."""
+
 import difflib
 import os
 

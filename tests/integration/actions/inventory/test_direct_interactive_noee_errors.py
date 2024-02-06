@@ -1,4 +1,5 @@
 """Tests for inventory from CLI, interactive, with an EE, missing inventory."""
+
 import pytest
 
 from tests.integration._interactions import Command

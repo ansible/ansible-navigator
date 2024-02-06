@@ -1,4 +1,5 @@
 """Tests using the CLi directly."""
+
 import shlex
 
 from copy import deepcopy

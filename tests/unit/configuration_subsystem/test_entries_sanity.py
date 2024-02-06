@@ -1,4 +1,5 @@
 """Some sanity and syntax checking of the navigator configuration."""
+
 from collections import Counter
 from pathlib import Path
 

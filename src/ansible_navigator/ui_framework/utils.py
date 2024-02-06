@@ -1,4 +1,5 @@
 """Some UI specific utils."""
+
 from __future__ import annotations
 
 import functools

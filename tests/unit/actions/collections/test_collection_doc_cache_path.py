@@ -1,4 +1,5 @@
 """Test the use of ``collection-doc-cache-path`` through to runner."""
+
 import shlex
 
 from pathlib import Path

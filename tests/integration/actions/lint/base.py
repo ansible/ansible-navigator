@@ -1,4 +1,5 @@
 """Base class for lint interactive tests."""
+
 from __future__ import annotations
 
 import difflib

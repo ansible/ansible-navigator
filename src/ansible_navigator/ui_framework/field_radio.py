@@ -1,4 +1,5 @@
 """Individual check and the form field checks for radios."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

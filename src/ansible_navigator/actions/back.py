@@ -2,6 +2,7 @@
 
 Additionally triggered by the escape key.
 """
+
 import logging
 
 from ansible_navigator.app_public import AppPublic
