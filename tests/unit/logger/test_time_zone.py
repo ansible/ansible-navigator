@@ -55,7 +55,7 @@ test_data = (
 
 
 @pytest.mark.parametrize("data", test_data, ids=id_func)
-def test(
+def test_tz_support(
     data: Scenario,
     caplog: pytest.LogCaptureFixture,
     monkeypatch: pytest.MonkeyPatch,

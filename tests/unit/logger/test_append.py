@@ -31,7 +31,7 @@ class Scenario(BaseScenario):
     def args(self, log_file: Path) -> list[str]:
         """Provide an argument list for the CLI.
 
-        :param log_file: The path to the lgo file
+        :param log_file: The path to the log file
         :returns: The list of CLI arguments
         """
         arg_list = [
@@ -53,7 +53,7 @@ test_data = (
 
 
 @pytest.mark.parametrize("data", test_data, ids=id_func)
-def test(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+def test_log_append(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     """Start with the CLI, create log messages and count.
 
     :param data: The test data
