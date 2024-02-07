@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import sys
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
-from typing import Callable
 
 from .form_handler_options import FormHandlerOptions
 from .sentinels import Unknown

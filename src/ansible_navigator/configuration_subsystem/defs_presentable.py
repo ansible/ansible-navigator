@@ -17,8 +17,7 @@ from .navigator_configuration import Internals
 from .utils import create_settings_file_sample
 
 
-PresentableSettingsEntryValue = Union[bool, dict, str, list]
-
+PresentableSettingsEntryValue = bool | dict | str | list
 CliT = TypeVar("CliT", bound="PresentableCliParameters")
 EntT = TypeVar("EntT", bound="PresentableSettingsEntry")
 

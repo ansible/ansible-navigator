@@ -150,13 +150,13 @@ class FormPresenter(CursesWindow):
 
         height = 2  # title + horizontal line
         for form_field in self._form.fields:
-            if isinstance(form_field, (FieldCursesInformation, FieldInformation)):
+            if isinstance(form_field, FieldCursesInformation | FieldInformation):
                 height += len(form_field.information)
             if isinstance(form_field, (FieldWorking)):
                 height += len(form_field.messages)
             elif isinstance(form_field, FieldText):
                 height += 1
-            elif isinstance(form_field, (FieldChecks, FieldRadio)):
+            elif isinstance(form_field, FieldChecks | FieldRadio):
                 height += len(form_field.options)
         height += 2  # horizontal line + buttons
         self._form_height = height
@@ -206,7 +206,7 @@ class FormPresenter(CursesWindow):
                 lines.append((self._line_number, line))
                 self._line_number += 1
 
-            elif isinstance(form_field, (FieldChecks, FieldRadio)):
+            elif isinstance(form_field, FieldChecks | FieldRadio):
                 prompt = self._generate_prompt(form_field)
                 option_lines = self._generate_field_options(form_field)
                 # although option_lines[0] is a CursesLine, only it's first line part is needed

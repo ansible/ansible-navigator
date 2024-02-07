@@ -6,8 +6,8 @@ import curses
 import enum
 import re
 
+from collections.abc import Callable
 from typing import Any
-from typing import Callable
 
 from ansible_navigator.content_defs import ContentBase
 from ansible_navigator.content_defs import ContentTypeSequence
@@ -82,7 +82,7 @@ class MenuBuilder:
         lines = [[str(dicts[idx].get(c)) for c in cols] for idx in indices]
         column_widths = [
             max(len(str(v)) for v in c)
-            for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]])
+            for c in zip(*lines + [[re.sub("^__", "", col) for col in cols]], strict=False)
         ]
         # add a space
         column_widths = [c + 1 for c in column_widths]
@@ -220,7 +220,7 @@ class MenuBuilder:
         text = str(coltext)[0 : adjusted_column_widths[colno]]
 
         is_bool = isinstance(coltext, bool)
-        is_number = isinstance(coltext, (int, float))
+        is_number = isinstance(coltext, int | float)
         is_enum = isinstance(coltext, enum.Enum)
         is_duration = cols[colno].lower() == "__duration"
         is_progress = cols[colno].lower() == "__progress"

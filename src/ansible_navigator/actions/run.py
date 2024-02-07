@@ -12,12 +12,12 @@ import shutil
 import time
 import uuid
 
+from collections.abc import Callable
 from math import floor
 from operator import itemgetter
 from pathlib import Path
 from queue import Queue
 from typing import Any
-from typing import Callable
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
@@ -727,7 +727,7 @@ class Action(ActionBase):
             return
 
         # Get the duration
-        if isinstance(event_data["duration"], (int, float)):
+        if isinstance(event_data["duration"], int | float):
             duration = human_time(seconds=round_half_up(event_data["duration"]))
         else:
             self._logger.debug(

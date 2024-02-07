@@ -6,6 +6,7 @@ import curses
 import logging
 import re
 
+from collections.abc import Callable
 from collections.abc import Mapping
 from collections.abc import Sequence
 from curses import ascii as curses_ascii
@@ -15,7 +16,6 @@ from math import floor
 from re import Match
 from re import Pattern
 from typing import Any
-from typing import Callable
 from typing import NamedTuple
 from typing import Protocol
 
@@ -896,9 +896,9 @@ class UserInterface(CursesWindow):
         columns = columns or []
         self.content_format(content_format or self._default_content_format)
 
-        if index is not None and isinstance(obj, (list, tuple)):
+        if index is not None and isinstance(obj, list | tuple):
             result = self._show_obj_from_list(obj, index, await_input)
-        elif columns and isinstance(obj, (list, tuple)):
+        elif columns and isinstance(obj, list | tuple):
             result = self._show_menu(obj, columns, await_input)
         else:
             result = self._show_obj_from_list([obj], 0, await_input)

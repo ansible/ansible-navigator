@@ -10,14 +10,7 @@ class DictMergeError(Exception):
     """Custom exception for a dict merge error."""
 
 
-Mergeable = Optional[
-    Union[
-        bool,
-        dict,
-        list,
-        str,
-    ]
-]
+Mergeable = bool | dict | list | str | None
 
 
 def in_place_list_replace(left: Mergeable, right: Mergeable):
@@ -35,10 +28,10 @@ def in_place_list_replace(left: Mergeable, right: Mergeable):
     """
     key = None
     try:
-        if left is None or isinstance(left, (str, int, float, bool)):  # noqa: SIM114
+        if left is None or isinstance(left, str | int | float | bool):  # noqa: SIM114
             # Border case for first run or if a is a primitive
             left = right
-        elif isinstance(left, (tuple, list)):
+        elif isinstance(left, tuple | list):
             left = right
         elif isinstance(left, dict):
             if isinstance(right, dict):

@@ -82,7 +82,9 @@ class ImagesList:
             images = command.stdout.splitlines()
             re_2omo = re.compile(r"\s{2,}")
             headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]
-            local_images = [dict(zip(headers, re_2omo.split(line))) for line in images]
+            local_images = [
+                dict(zip(headers, re_2omo.split(line), strict=False)) for line in images
+            ]
             valid_images = [image for image in local_images if image["tag"] != "<none>"]
             command.details = valid_images
 
