@@ -21,7 +21,7 @@ from ansible_navigator.utils.functions import abs_user_path
 from ansible_navigator.utils.json_schema import validate
 
 
-def test_defaults(schema_dict: SettingsSchemaType):
+def test_settings_defaults(schema_dict: SettingsSchemaType):
     """Check the settings file used as a sample against the schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -54,7 +54,7 @@ def test_settings_env_var_to_full(
     assert settings.internals.settings_source == Constants.ENVIRONMENT_VARIABLE
 
 
-def test_cli():
+def test_settings_cli():
     """Test the round trip generation of effective settings given some cli parameters."""
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
@@ -70,7 +70,7 @@ def test_cli():
     assert root["logging"]["level"] == "debug"
 
 
-def test_env(monkeypatch: pytest.MonkeyPatch):
+def test_settings_env(monkeypatch: pytest.MonkeyPatch):
     """Test the round trip generation of effective settings given some environment variables.
 
     :param monkeypatch: The pytest monkeypatch fixture
@@ -94,7 +94,7 @@ def test_env(monkeypatch: pytest.MonkeyPatch):
     assert root["logging"]["level"] == "debug"
 
 
-def test_full(
+def test_settings_full(
     settings_env_var_to_full: tuple[Path, SettingsFileType],
 ):
     """Test the round trip generation of effective settings given a full settings file.

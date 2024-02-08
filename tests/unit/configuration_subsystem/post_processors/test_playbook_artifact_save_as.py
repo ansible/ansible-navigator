@@ -69,7 +69,7 @@ test_data = (
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=test_data, ids=id_func)
-def test(data: Scenario):
+def test_pas(data: Scenario):
     """Test the PAS post processor.
 
     :param data: The test data
