@@ -63,7 +63,7 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_session, step):
+    def test_action_settings(self, request, tmux_session, step):
         # pylint: disable=too-many-locals
         """Run the tests for ``settings``, mode and ``ee`` set in child class.
 

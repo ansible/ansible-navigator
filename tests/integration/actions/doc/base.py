@@ -40,7 +40,7 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(
+    def test_action_doc(
         self,
         request,
         tmux_doc_session,

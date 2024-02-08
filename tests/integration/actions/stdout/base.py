@@ -41,7 +41,15 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_session, index, user_input, comment, search_within_response):
+    def test_action_stdout(
+        self,
+        request,
+        tmux_session,
+        index,
+        user_input,
+        comment,
+        search_within_response
+    ):
         # pylint:disable=too-many-arguments
         """Run the tests for stdout, mode and EE set in child class.
 

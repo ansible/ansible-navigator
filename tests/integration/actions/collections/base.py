@@ -124,7 +124,7 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(
+    def test_action_collections(
         self,
         os_independent_tmp: str,
         request: pytest.FixtureRequest,

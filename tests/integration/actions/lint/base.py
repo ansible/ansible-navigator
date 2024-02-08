@@ -43,7 +43,12 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep):
+    def test_action_lint(
+        self,
+        request: pytest.FixtureRequest,
+        tmux_session: TmuxSession,
+        step: UiTestStep
+    ):
         """Run the tests for lint, mode and ``ee`` set in child class.
 
         :param request: Pytest request object
