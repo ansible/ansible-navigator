@@ -44,10 +44,7 @@ class BaseClass:
             yield tmux_session
 
     def test_action_lint(
-        self,
-        request: pytest.FixtureRequest,
-        tmux_session: TmuxSession,
-        step: UiTestStep
+        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
     ):
         """Run the tests for lint, mode and ``ee`` set in child class.
 

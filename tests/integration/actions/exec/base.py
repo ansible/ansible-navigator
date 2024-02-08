@@ -54,10 +54,7 @@ class BaseClass:
             yield tmux_session
 
     def test_action_exec(
-        self,
-        request: pytest.FixtureRequest,
-        tmux_session: TmuxSession,
-        step: UiTestStep
+        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
     ):
         """Test interactive/stdout exec.
 
