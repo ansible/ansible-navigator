@@ -67,7 +67,7 @@ test_data = (
 
 
 @pytest.mark.parametrize("data", test_data, ids=id_func)
-def test(data: Scenario, subtests: Any, tmp_path: Path):
+def test_json_errors(data: Scenario, subtests: Any, tmp_path: Path):
     """Test for json schema errors.
 
     :param data: The test data

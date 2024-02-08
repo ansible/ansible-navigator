@@ -101,7 +101,7 @@ class Test(unittest.TestCase):
         """Remove the directory after the test."""
         shutil.rmtree(self.test_dir)
 
-    def test(self):
+    def test_smoke(self):
         """Execute the smoke tests."""
         tmp_dir = self.test_dir
         commands = _generate_commands(tmp_dir)

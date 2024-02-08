@@ -15,7 +15,7 @@ from ansible_navigator.utils.functions import remove_ansi
 
 
 @pytest.mark.usefixtures("use_venv")
-def test(
+def test_diagnostics_gen(
     monkeypatch: pytest.MonkeyPatch,
     settings_env_var_to_full: tuple[Path, SettingsFileType],
     tmp_path: Path,
