@@ -5,6 +5,7 @@ darglint
 flake8-docstrings
 libtmux
 pre-commit
+pytest-env
 pytest-mock
 pytest-plus # implements PYTEST_REQPASS
 pytest-subtests
