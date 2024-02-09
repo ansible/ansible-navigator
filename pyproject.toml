@@ -230,6 +230,11 @@ filterwarnings = [
   "ignore::DeprecationWarning:ansible_runner"
 ]
 
+[tool.pytest_env]
+PYTEST_CHECK_TEST_DUPLICATE = 0
+PYTEST_CHECK_TEST_ID_REGEX = 0
+PYTEST_MAX_TEST_ID_LENGTH = 0
+
 [tool.ruff]
 fix = true
 line-length = 100
