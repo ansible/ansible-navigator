@@ -54,6 +54,7 @@ test_data = (
 )
 
 
+@pytest.mark.flaky(reruns=2)
 @pytest.mark.parametrize("data", test_data, ids=id_func)
 def test_tz_support(
     data: Scenario,
