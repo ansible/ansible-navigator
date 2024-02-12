@@ -6,7 +6,7 @@
 #
 ansible-builder==3.0.0
 ansible-compat==4.1.10
-ansible-core==2.15.8
+ansible-core==2.15.9
 ansible-lint==6.22.1
 ansible-runner==2.3.4
 attrs==23.2.0
