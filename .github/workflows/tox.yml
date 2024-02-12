@@ -98,7 +98,6 @@ jobs:
       - tox
     runs-on: ubuntu-22.04
     steps:
-
       - name: Check codecov.io status
         if: github.event_name == 'pull_request'
         uses: coactions/codecov-status@main
