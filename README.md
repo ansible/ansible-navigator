@@ -113,7 +113,7 @@ https://ansible-navigator.readthedocs.io/subcommands/
 
 ## Configuring ansible-navigator
 
-There are several ways to configure ansible-navigator and users and projects
+There are several ways to configure ansible-navigator. Users and projects
 are free to choose the most convenient method for them. The full hierarchy of
 how various configuration sources are applied can be found in the FAQ mentioned
 below.
