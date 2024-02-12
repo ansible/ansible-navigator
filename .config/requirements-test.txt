@@ -8,6 +8,7 @@ pre-commit
 pytest-env
 pytest-mock
 pytest-plus # implements PYTEST_REQPASS
+pytest-rerunfailures
 pytest-subtests
 pytest-xdist
 
