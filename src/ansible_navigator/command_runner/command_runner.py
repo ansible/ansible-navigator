@@ -5,10 +5,10 @@ from __future__ import annotations
 import multiprocessing
 import subprocess
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from queue import Queue
-from typing import Callable
 
 from ansible_navigator.utils.definitions import LogMessage
 

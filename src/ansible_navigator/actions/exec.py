@@ -17,7 +17,7 @@ from ansible_navigator.runner import Command
 from . import _actions as actions
 
 
-GeneratedCommand = tuple[str, Optional[list[str]]]
+GeneratedCommand = tuple[str, list[str] | None]
 
 logger = logging.getLogger(__name__)
 

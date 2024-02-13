@@ -8,7 +8,7 @@ from typing import Union
 from .sentinels import Unknown
 
 
-FieldValidationState = Union[Unknown, bool]
+FieldValidationState = Unknown | bool
 FieldValidationStates = list[FieldValidationState]
 
 

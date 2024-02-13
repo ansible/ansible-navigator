@@ -9,14 +9,14 @@ import subprocess
 import sys
 import threading
 
+from collections.abc import Callable
 from queue import Queue
 from types import SimpleNamespace
 from typing import Any
-from typing import Callable
 from typing import Union
 
 
-JSONTypes = Union[bool, int, str, dict, list]
+JSONTypes = bool | int | str | dict | list
 
 
 class Command(SimpleNamespace):

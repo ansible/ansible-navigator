@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from collections.abc import Iterable
 from dataclasses import asdict
 from dataclasses import dataclass
 from functools import partial
 from typing import Any
-from typing import Callable
 from typing import NamedTuple
 from typing import Union
 
@@ -36,7 +36,7 @@ class ParametrizeFormat(NamedTuple):
     ids: Callable = id_func
 
 
-SimpleDictValue = Union[bool, str, int]
+SimpleDictValue = bool | str | int
 
 
 @dataclass
@@ -50,7 +50,7 @@ class ContentTestSimple(ContentBase[SimpleDictValue]):
 
 OverrideDictValueT = str
 OverrideDictReturn = dict[str, OverrideDictValueT]
-OverrideAllValues = Union[bool, int, str]
+OverrideAllValues = bool | int | str
 
 
 @dataclass

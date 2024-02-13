@@ -11,6 +11,3 @@ pytest-plus # implements PYTEST_REQPASS
 pytest-rerunfailures
 pytest-subtests
 pytest-xdist
-
-# used for TypeAlias, can be removed once Python 3.10 is required
-typing-extensions; python_version < "3.10.0"

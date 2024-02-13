@@ -6,9 +6,9 @@ import curses
 import logging
 import os
 
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
-from typing import Callable
 from typing import Optional
 
 from ansible_navigator.app_public import AppPublic
@@ -63,7 +63,7 @@ class Action:
         self,
         menu: Menu,
         menu_filter: Callable,
-        serialization_format=Optional[SerializationFormat],
+        serialization_format=SerializationFormat | None,
     ) -> list[dict[Any, Any]]:
         """Convert a menu into structured data.
 

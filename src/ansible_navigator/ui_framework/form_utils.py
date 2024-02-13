@@ -110,7 +110,7 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> dict:
         if isinstance(field, FieldText):
             res["fields"][field_idx]["response"] = copy.copy(field.response)
             res["fields"][field_idx]["value"] = copy.copy(field.value)
-        elif isinstance(field, (FieldChecks, FieldRadio)):
+        elif isinstance(field, FieldChecks | FieldRadio):
             for option_idx, option in enumerate(field.options):
                 res_field_options = res["fields"][field_idx]["options"]
                 res_field_options[option_idx]["checked"] = option.checked
