@@ -11,9 +11,14 @@ from .base import BaseClass
 CLI_MODULE_DOC = "ansible-navigator doc company_name.coll_1.mod_1 --execution-environment false"
 testdata_module_doc = [
     pytest.param(
-        0, CLI_MODULE_DOC, "ansible-navigator doc module plugin display", "module_doc_pass", []
+        0,
+        CLI_MODULE_DOC,
+        "ansible-navigator doc module plugin display",
+        "module_doc_pass",
+        [],
+        id="0",
     ),
-    pytest.param(1, ":{{ examples }}", "load examples", "module_doc_pass", []),
+    pytest.param(1, ":{{ examples }}", "load examples", "module_doc_pass", [], id="1"),
 ]
 
 # lookup plugin doc
@@ -22,7 +27,12 @@ CLI_LOOKUP_DOC = (
 )
 testdata_lookup_doc = [
     pytest.param(
-        0, CLI_LOOKUP_DOC, "ansible-navigator doc lookup plugin display", "lookup_doc_pass", []
+        0,
+        CLI_LOOKUP_DOC,
+        "ansible-navigator doc lookup plugin display",
+        "lookup_doc_pass",
+        [],
+        id="0",
     ),
 ]
 
@@ -32,7 +42,12 @@ CLI_FILTER_DOC = (
 )
 testdata_filter_doc = [
     pytest.param(
-        0, CLI_FILTER_DOC, "ansible-navigator doc filter plugin display", "filter_doc_pass", []
+        0,
+        CLI_FILTER_DOC,
+        "ansible-navigator doc filter plugin display",
+        "filter_doc_pass",
+        [],
+        id="0",
     ),
 ]
 
@@ -47,6 +62,7 @@ testdata_module_doc_not_exist = [
         "ansible-navigator doc wrong plugin name",
         "module_doc_fail",
         ["WARNING", "module", "company_name.coll_1.doesnotexist", "not", "found", "local_errors"],
+        id="0",
     ),
 ]
 

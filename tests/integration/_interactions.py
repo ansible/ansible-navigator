@@ -110,4 +110,4 @@ def step_id_padded(value: UiTestStep) -> str:
     :param value: The test value
     :return: The test id
     """
-    return f"{value.step_index:02d}-{value.user_input}-{value.comment}"
+    return f"{value.step_index:02d}"

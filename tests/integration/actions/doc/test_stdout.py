@@ -20,6 +20,7 @@ testdata_1 = [
         "ansible-navigator doc help with ee",
         "doc_help_with_ee",
         ["usage: ansible-doc [-h]"],
+        id="1",
     ),
 ]
 
@@ -44,6 +45,7 @@ testdata_2 = [
         "ansible-navigator doc help without ee",
         "doc_help_without_ee",
         ["usage: ansible-doc [-h]"],
+        id="2",
     ),
 ]
 
@@ -68,6 +70,7 @@ testdata_3 = [
         "ansible-navigator doc help with ee in interactive mode",
         "doc_help_with_ee_wrong_mode",
         ["usage: ansible-doc [-h]"],
+        id="3",
     ),
 ]
 
@@ -92,6 +95,7 @@ testdata_4 = [
         "ansible-navigator doc help without ee in wrong mode",
         "doc_help_with_ee_wrong_mode",
         ["usage: ansible-doc [-h]"],
+        id="4",
     ),
 ]
 
@@ -115,6 +119,7 @@ testdata_5 = [
         "ansible-navigator doc in stdout mode without EE",
         "module_doc_without_ee",
         None,
+        id="5",
     ),
 ]
 
@@ -139,6 +144,7 @@ testdata_6 = [
         "ansible-navigator doc in stdout mode with EE",
         "module_doc_with_ee",
         None,
+        id="6",
     ),
 ]
 
@@ -164,6 +170,7 @@ testdata_7 = [
         "ansible-navigator lookup doc in stdout mode without EE",
         "lookup_doc_without_ee",
         None,
+        id="7",
     ),
 ]
 
@@ -189,6 +196,7 @@ testdata_8 = [
         "ansible-navigator lookup doc in stdout mode with EE",
         "lookup_doc_with_ee",
         None,
+        id="8",
     ),
 ]
 
@@ -214,6 +222,7 @@ testdata_9 = [
         "ansible-navigator filter doc in stdout mode without EE",
         "filter_doc_without_ee",
         None,
+        id="9",
     ),
 ]
 
@@ -239,6 +248,7 @@ testdata_10 = [
         "ansible-navigator filter doc in stdout mode with EE",
         "filter_doc_with_ee",
         None,
+        id="0",
     ),
 ]
 

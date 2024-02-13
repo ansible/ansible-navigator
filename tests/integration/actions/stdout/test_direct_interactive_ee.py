@@ -9,11 +9,11 @@ from .base import BaseClass
 CLI = f"ansible-navigator run {ANSIBLE_PLAYBOOK} --execution-environment true --ll debug"
 
 testdata = [
-    (0, CLI, "run top window", "Successful"),
-    (1, ":st", "Check stdout", ":help help"),
-    (2, ":back", "Return to play list", ":help help"),
-    (3, ":stdout", "Check stdout", ":help help"),
-    (4, ":back", "Return to playlist", ":help help"),
+    pytest.param(0, CLI, "run top window", "Successful", id="0"),
+    pytest.param(1, ":st", "Check stdout", ":help help", id="1"),
+    pytest.param(2, ":back", "Return to play list", ":help help", id="2"),
+    pytest.param(3, ":stdout", "Check stdout", ":help help", id="3"),
+    pytest.param(4, ":back", "Return to playlist", ":help help", id="4"),
 ]
 
 

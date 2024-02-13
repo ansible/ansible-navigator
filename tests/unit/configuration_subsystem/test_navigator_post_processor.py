@@ -51,10 +51,10 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import V
         ),
     ),
     ids=(
-        "normal-mount",
-        "mount-with-relabel-option",
-        "mount-with-a-list-of-options",
-        "mount-with-empty-list-of-options",
+        "normal",
+        "mount-relabel",
+        "mount-list",
+        "mount-empty-list",
     ),
 )
 def test_navigator_volume_mount_to_string(volmount, expected):

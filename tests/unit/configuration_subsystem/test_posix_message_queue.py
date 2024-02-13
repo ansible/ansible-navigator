@@ -8,10 +8,10 @@ from typing import Any
 import pytest
 
 
-@pytest.mark.parametrize("is_dir", [True, False], ids=["is_dir-True", "is_dir-False"])
-@pytest.mark.parametrize("ee_support", [True, False], ids=["ee_support-True", "ee_support-False"])
-@pytest.mark.parametrize("engine", ["podman", "docker"], ids=["engine-podman", "engine-docker"])
-@pytest.mark.parametrize("platform", ["linux", "darwin"], ids=["platform-linux", "platform-darwin"])
+@pytest.mark.parametrize("is_dir", [True, False], ids=["is_dir", "no_is_dir"])
+@pytest.mark.parametrize("ee_support", [True, False], ids=["ee", "no-ee"])
+@pytest.mark.parametrize("engine", ["podman", "docker"], ids=["podman", "docker"])
+@pytest.mark.parametrize("platform", ["linux", "darwin"], ids=["linux", "darwin"])
 def test_posix_message_queue_ee(
     monkeypatch: pytest.MonkeyPatch,
     is_dir: bool,
