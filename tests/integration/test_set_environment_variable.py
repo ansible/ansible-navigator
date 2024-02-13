@@ -52,7 +52,7 @@ test_data = [
 @pytest.mark.parametrize(
     argnames=("comment", "cli_entry", "config_fixture", "expected"),
     argvalues=test_data,
-    ids=[f"{idx}: {i[0]}" for idx, i in enumerate(test_data)],
+    ids=[f"{idx}" for idx, i in enumerate(test_data)],
 )
 class Test(Cli2Runner):
     """Test the use of ``set-environment-variable`` through to runner."""

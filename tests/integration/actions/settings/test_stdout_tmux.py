@@ -93,7 +93,7 @@ def step_id(value) -> str:
     :param value: If relevant, values for test id
     :return: String with step_id information
     """
-    return f"{value.comment}  {value.user_input}"
+    return f"{value.step_index}"
 
 
 @pytest.mark.parametrize("step", steps, ids=step_id)

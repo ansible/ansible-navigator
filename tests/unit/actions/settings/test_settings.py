@@ -40,22 +40,28 @@ class ColorMenuTestEntry(BaseScenario):
 
 
 ColorMenuTestEntries = (
-    ColorMenuTestEntry(
-        comment="default/green",
-        color=Color.GREEN,
-        decoration=Decoration.NORMAL,
-        default=True,
+    pytest.param(
+        ColorMenuTestEntry(
+            comment="default/green",
+            color=Color.GREEN,
+            decoration=Decoration.NORMAL,
+            default=True,
+        ),
+        id="0",
     ),
-    ColorMenuTestEntry(
-        comment="not default/yellow",
-        color=Color.YELLOW,
-        decoration=Decoration.NORMAL,
-        default=False,
+    pytest.param(
+        ColorMenuTestEntry(
+            comment="not default/yellow",
+            color=Color.YELLOW,
+            decoration=Decoration.NORMAL,
+            default=False,
+        ),
+        id="1",
     ),
 )
 
 
-@pytest.mark.parametrize(argnames="data", argvalues=ColorMenuTestEntries, ids=id_func)
+@pytest.mark.parametrize(argnames="data", argvalues=ColorMenuTestEntries)
 def test_color_menu(data: ColorMenuTestEntry) -> None:
     """Test color menu for a val set to the default.
 

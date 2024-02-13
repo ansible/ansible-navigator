@@ -11,7 +11,6 @@ import pytest
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.navigator_configuration import SettingsEntry
-from tests.defaults import id_func
 
 from .conftest import GenerateConfigCallable
 from .data import BASE_EXPECTED
@@ -22,7 +21,6 @@ from .data import ENV_VAR_DATA
 from .data import SETTINGS
 from .utils import config_post_process
 from .utils import id_for_base
-from .utils import id_for_cli
 from .utils import id_for_name
 
 
@@ -51,7 +49,7 @@ def isfile(*_args, **_kwargs):
 
 @pytest.mark.usefixtures("ansible_version")
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
+@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
 def test_all_entries_reflect_cli_given_env_vars(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -83,12 +81,15 @@ def test_all_entries_reflect_cli_given_env_vars(
     env_vars = {}
     for entry in NavigatorConfiguration.entries:
         env_var_name = entry.environment_variable("ansible_navigator")
-        env_var_value = [value[1] for value in ENV_VAR_DATA if value[0] == entry.name]
+        env_var_value = [value.values[1] for value in ENV_VAR_DATA if value.values[0] == entry.name]
         assert len(env_var_value) == 1, entry.name
         env_vars[env_var_name] = env_var_value[0]
 
-    for env_var, value in env_vars.items():
-        monkeypatch.setenv(env_var, value)
+    for env_var, env_value in env_vars.items():
+        if not isinstance(env_value, str):
+            msg = "Unexpected data"
+            raise pytest.fail(msg)
+        monkeypatch.setenv(env_var, env_value)
 
     response = generate_config(params=params)
     assert response.exit_messages == []
@@ -101,9 +102,9 @@ def test_all_entries_reflect_cli_given_env_vars(
 
 
 @pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_func)
+@pytest.mark.parametrize("settings, settings_file_type", SETTINGS)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
+@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
 def test_all_entries_reflect_cli_given_settings(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -157,9 +158,9 @@ def test_all_entries_reflect_cli_given_settings(
 
 
 @pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, source_other", SETTINGS, ids=id_func)
+@pytest.mark.parametrize("settings, source_other", SETTINGS)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA, ids=id_for_cli)
+@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
 def test_all_entries_reflect_cli_given_settings_and_env_vars(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -197,12 +198,15 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
     env_vars = {}
     for entry in NavigatorConfiguration.entries:
         env_var_name = entry.environment_variable("ansible_navigator")
-        env_var_value = [value[1] for value in ENV_VAR_DATA if value[0] == entry.name]
+        env_var_value = [value.values[1] for value in ENV_VAR_DATA if value.values[0] == entry.name]
         assert len(env_var_value) == 1, entry.name
         env_vars[env_var_name] = env_var_value[0]
 
-    for env_var, value in env_vars.items():
-        monkeypatch.setenv(env_var, value)
+    for env_var, env_value in env_vars.items():
+        if not isinstance(env_value, str):
+            msg = "Unexpected data"
+            raise pytest.fail(msg)
+        monkeypatch.setenv(env_var, env_value)
 
     response = generate_config(params=params, settings_file_name=settings)
     assert response.exit_messages == []
@@ -248,7 +252,7 @@ def test_all_entries_reflect_default(
 
 
 @pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS, ids=id_func)
+@pytest.mark.parametrize("settings, settings_file_type", SETTINGS)
 @pytest.mark.parametrize("entry, value, expected", ENV_VAR_DATA)
 def test_all_entries_reflect_env_var_given_settings(
     monkeypatch: pytest.MonkeyPatch,

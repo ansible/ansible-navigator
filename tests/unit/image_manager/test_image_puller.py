@@ -154,10 +154,10 @@ data_image_tag = [
     "image, expected_tag",
     data_image_tag,
     ids=[
-        "simple-image-name,no-tag-specified",
-        "simple-image-name,with-tag",
-        "complex-image-URL,with-port-but-no-tag",
-        "complex-image-URL,with-port-and-tag",
+        "simple-image-name:no-tag-specified",
+        "simple-image-name:with-tag",
+        "complex-image-URL:with-port-but-no-tag",
+        "complex-image-URL:with-port-and-tag",
     ],
 )
 def test_tag_parsing(image, expected_tag):
