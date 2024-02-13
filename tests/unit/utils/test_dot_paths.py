@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import MutableMapping
 from dataclasses import dataclass
 from dataclasses import field
+from typing import Any
 
 import pytest
 
@@ -84,7 +85,7 @@ class Scenario(BaseScenario):  # pylint: disable=too-many-instance-attributes
     behaviors: tuple[MergeBehaviors, ...]
     comment: str
     path: str
-    expected: MutableMapping | None
+    expected: MutableMapping[Any, Any] | None
     value: bool | int | list | float | str | dict = ""
     content: dict = field(default_factory=lambda: base_dict)
     new_path: str = ""

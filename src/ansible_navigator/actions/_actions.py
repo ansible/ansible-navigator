@@ -26,7 +26,7 @@ ActionT = namedtuple("ActionT", ("name", "cls", "kegex"))
 Kegex = namedtuple("Kegex", ("name", "kegex"))
 
 # Dictionary with information about all registered actions
-_ACTIONS: dict[str, dict] = {}
+_ACTIONS: dict[str, dict[str, Any]] = {}
 
 
 def _import(package: str, action: str) -> None:
@@ -60,7 +60,7 @@ def register(cls: Any) -> Any:
     return cls
 
 
-def get(package: str, action: str) -> Callable:
+def get(package: str, action: str) -> Callable[..., Any]:
     """Import and return a given action.
 
     :param package: The name of the package
@@ -71,7 +71,7 @@ def get(package: str, action: str) -> Callable:
     return _ACTIONS[package][action].cls
 
 
-def get_factory(package: str) -> Callable:
+def get_factory(package: str) -> Callable[..., Any]:
     """Create a ``get()`` function for one package.
 
     :param package: The name of the package
@@ -80,7 +80,7 @@ def get_factory(package: str) -> Callable:
     return functools.partial(get, package)
 
 
-def kegex(package: str, action: str) -> tuple:
+def kegex(package: str, action: str) -> tuple[str, str, str]:
     """Return a tuple of name, class, ``kegex`` for an action.
 
     :param package: The name of the package
@@ -91,7 +91,7 @@ def kegex(package: str, action: str) -> tuple:
     return _ACTIONS[package][action]
 
 
-def kegexes(package: str) -> Generator:
+def kegexes(package: str) -> Generator[tuple[str, str, str], None, None]:
     """Return a tuple of tuples, name, ``kegex`` for all actions.
 
     :param package: The name of the package
@@ -101,7 +101,7 @@ def kegexes(package: str) -> Generator:
     return (kegex(package, name) for name in names(package))
 
 
-def kegexes_factory(package: str) -> Callable:
+def kegexes_factory(package: str) -> Callable[..., Any]:
     """Create a ``kegexes()`` function for all packages.
 
     :param package: The name of the package
@@ -110,7 +110,7 @@ def kegexes_factory(package: str) -> Callable:
     return functools.partial(kegexes, package)
 
 
-def names(package: str) -> list:
+def names(package: str) -> list[str]:
     """List all actions in one package.
 
     :param package: The name of the package
@@ -120,7 +120,7 @@ def names(package: str) -> list:
     return sorted(_ACTIONS[package])
 
 
-def names_factory(package: str) -> Callable:
+def names_factory(package: str) -> Callable[..., Any]:
     """Create a ``names()`` function for one package.
 
     :param package: The name of the package
@@ -163,7 +163,7 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> An
         return None
 
 
-def run_interactive_factory(package: str) -> Callable:
+def run_interactive_factory(package: str) -> Callable[..., Any]:
     """Create a ``run_interactive()`` function for one package.
 
     :param package: The name of the package
@@ -186,7 +186,7 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> RunStdo
     return action_cls(args).run_stdout()
 
 
-def run_stdout_factory(package: str) -> Callable:
+def run_stdout_factory(package: str) -> Callable[..., Any]:
     """Create a ``run_stdout()`` function for one package.
 
     :param package: The name of the package

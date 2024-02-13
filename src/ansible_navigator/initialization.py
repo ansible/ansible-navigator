@@ -162,7 +162,7 @@ def _diagnose(
 
 
 def parse_and_update(
-    params: list,
+    params: list[str],
     args: ApplicationConfiguration,
     apply_previous_cli_entries: C | list[str] = C.NONE,
     attach_cdc=False,

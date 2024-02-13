@@ -45,7 +45,7 @@ base_steps = (
 )
 
 
-def some_time_repl(match: re.Match) -> str:
+def some_time_repl(match: re.Match[str]) -> str:
     """Replace the match string with a string of the same length.
 
     :param match: The string matched

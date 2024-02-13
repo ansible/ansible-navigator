@@ -8,6 +8,7 @@ import logging
 import tempfile
 
 from pathlib import Path
+from typing import Any
 
 from ansible_navigator.data import image_introspect
 from ansible_navigator.runner import Command
@@ -16,7 +17,7 @@ from ansible_navigator.runner import Command
 logger = logging.getLogger(__name__)
 
 
-def run(image_name: str, container_engine: str) -> tuple[dict, list[str], int]:
+def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
     """Run runner to collect image details.
 
     :param image_name: The full image name
@@ -48,7 +49,7 @@ def run(image_name: str, container_engine: str) -> tuple[dict, list[str], int]:
     return parsed, errors, return_code
 
 
-def parse(output) -> tuple[list[str], dict]:
+def parse(output: str) -> tuple[list[str], dict[Any, Any]]:
     """Load and process the ``json`` output from the image introspection process.
 
     :param output: The output from the image introspection process

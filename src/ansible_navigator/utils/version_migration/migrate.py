@@ -20,7 +20,7 @@ from .definitions import migrations
 # isort: off
 # pylint: disable=unused-import
 # Migrations will run in the order they are imported
-from .v1_v2_settings_file import V1V2SettingsFile
+from .v1_v2_settings_file import V1V2SettingsFile  # noqa: F401
 
 # isort: on
 

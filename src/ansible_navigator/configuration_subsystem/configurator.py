@@ -33,7 +33,7 @@ class Configurator:
         self,
         params: list[str],
         application_configuration: ApplicationConfiguration,
-        apply_previous_cli_entries: list | C = C.NONE,
+        apply_previous_cli_entries: list[str] | C = C.NONE,
         skip_roll_back: bool = False,
     ):
         """Initialize the configuration variables.

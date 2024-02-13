@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from functools import partial
 from typing import Any
 from typing import NamedTuple
-from typing import Union
 
 import pytest
 

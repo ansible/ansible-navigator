@@ -47,7 +47,7 @@ class TmuxSession:
         pane_height: int = 20,
         pane_width: int = 200,
         pull_policy: str = "never",
-        setup_commands: list | None = None,
+        setup_commands: list[str] | None = None,
         shell_prompt_timeout: int = 10,
     ) -> None:
         """Initialize a tmux session.
@@ -66,7 +66,7 @@ class TmuxSession:
         self.cli_prompt: str
         self._config_path = config_path
         self._cwd = cwd
-        self._fail_remaining: list = []
+        self._fail_remaining: list[str] = []
         self._pane_height = pane_height
         self._pane_width = pane_width
         self._pull_policy = pull_policy
@@ -112,7 +112,6 @@ class TmuxSession:
         :raises ValueError: If the time is exceeded for finding the shell prompt
         """
         # pylint: disable=attribute-defined-outside-init
-        # pylint: disable=too-many-locals
 
         self._server = libtmux.Server()
         self._build_tmux_session()
@@ -233,7 +232,7 @@ class TmuxSession:
     def interaction(
         self,
         value: str,
-        search_within_response: list | str | None = None,
+        search_within_response: list[str] | str | None = None,
         ignore_within_response: str | None = None,
         timeout: int = 300,
         send_clear: bool = True,

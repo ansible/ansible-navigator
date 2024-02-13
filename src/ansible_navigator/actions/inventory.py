@@ -90,11 +90,11 @@ def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
 
-class MenuEntry(dict):
+class MenuEntry(dict[Any, Any]):
     """A menu entry."""
 
 
-class Menu(list):
+class Menu(list[Any]):
     """A menu."""
 
 
@@ -129,7 +129,7 @@ class Action(ActionBase):
         return self.__inventory
 
     @_inventory.setter
-    def _inventory(self, value: dict) -> None:
+    def _inventory(self, value: dict[Any, Any]) -> None:
         """Set the inventory and hostvars.
 
         :param value: The inventory data
@@ -146,7 +146,7 @@ class Action(ActionBase):
                 self._host_vars[host] = {"inventory_hostname": host}
 
     @property
-    def _show_columns(self) -> list:
+    def _show_columns(self) -> list[str]:
         """Return the columns to show for an inventory menu.
 
         :returns: The columns to show

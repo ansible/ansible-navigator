@@ -179,9 +179,6 @@ class FormPresenter(CursesWindow):
             field for field in self._form.fields if field.name not in ["submit", "cancel"]
         ]
         for form_field in body_fields:
-            # pylint: disable=not-an-iterable
-            # https://github.com/PyCQA/pylint/issues/2296
-
             if isinstance(form_field, (FieldCursesInformation)):
                 for line in form_field.information:
                     lines.append((self._line_number, line))

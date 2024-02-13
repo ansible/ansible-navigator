@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from functools import partial
+from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
@@ -15,6 +16,7 @@ from ansible_navigator.configuration_subsystem import to_presentable
 from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.configuration_subsystem import to_schema
 from ansible_navigator.configuration_subsystem import to_sources
+from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.steps import StepType
@@ -82,7 +84,7 @@ class Action(ActionBase):
 
     KEGEX = r"^se(?:ttings)?$"
 
-    def __init__(self, args):
+    def __init__(self, args: ApplicationConfiguration):
         """Initialize the ``:settings`` action.
 
         :param args: The current settings for the application
@@ -147,7 +149,7 @@ class Action(ActionBase):
         dump(content=to_presentable(self._args), content_format=ContentFormat.YAML)
         return RunStdoutReturn(message="", return_code=0)
 
-    def _build_main_menu(self) -> TypedStep:
+    def _build_main_menu(self) -> TypedStep[Any]:
         """Build the main menu of settings.
 
         :returns: The settings menu definition
@@ -161,7 +163,7 @@ class Action(ActionBase):
         step.value = self._settings
         return step
 
-    def _build_settings_content(self) -> TypedStep:
+    def _build_settings_content(self) -> TypedStep[Any]:
         """Build the content for one settings entry.
 
         :returns: The option's content

@@ -15,7 +15,7 @@ from jsonschema.validators import validator_for
 from .functions import ExitMessage
 
 
-def to_path(schema_path: deque):
+def to_path(schema_path: deque[Any]) -> str:
     """Flatten a path to a dot delimited string.
 
     :param schema_path: The schema path
@@ -24,7 +24,7 @@ def to_path(schema_path: deque):
     return ".".join(str(index) for index in schema_path)
 
 
-def json_path(absolute_path: deque):
+def json_path(absolute_path: deque[Any]) -> str:
     """Flatten a data path to a dot delimited string.
 
     :param absolute_path: The path
@@ -79,6 +79,9 @@ def validate(schema: str | dict[str, Any], data: dict[str, Any]) -> list[JsonSch
 
     if isinstance(schema, str):
         schema = json.loads(schema)
+    if isinstance(schema, bool):
+        msg = "Unexpected schema data."
+        raise RuntimeError(msg)
     validator = validator_for(schema)
     try:
         validator.check_schema(schema)
