@@ -15,8 +15,8 @@ is identified in the
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
-from typing import Callable
 from typing import Optional
 
 from ansible_navigator.action_defs import RunStdoutReturn

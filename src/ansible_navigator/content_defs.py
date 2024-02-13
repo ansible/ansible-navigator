@@ -132,9 +132,9 @@ class ContentBase(Generic[T]):
         return asdict(self).items()
 
 
-ContentTypeSingle = Union[bool, float, int, str, dict[str, Any], ContentBase]
-ContentTypeSequence = Union[list[Any], Sequence[ContentBase]]
-ContentType = Union[ContentTypeSingle, ContentTypeSequence]
+ContentTypeSingle = bool | float | int | str | dict[str, Any] | ContentBase
+ContentTypeSequence = list[Any] | Sequence[ContentBase]
+ContentType = ContentTypeSingle | ContentTypeSequence
 
 
 @dataclass(frozen=True)

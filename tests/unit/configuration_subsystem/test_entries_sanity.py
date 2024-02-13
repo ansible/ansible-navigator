@@ -97,4 +97,4 @@ def test_entries_default_value(entry: SettingsEntry):
     if isinstance(entry.value.default, C):
         assert entry.value.default is C.NOT_SET
     else:
-        assert isinstance(entry.value.default, (bool, int, str, dict, list, Path))
+        assert isinstance(entry.value.default, bool | int | str | dict | list | Path)

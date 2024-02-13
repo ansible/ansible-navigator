@@ -157,7 +157,7 @@ def _prepare_content(
     :param serialization_format: The serialization format
     :returns: The prepared content
     """
-    if isinstance(content, (tuple, list)):
+    if isinstance(content, tuple | list):
         if all(is_dataclass(c) for c in content):
             return [
                 c.asdict(
@@ -167,7 +167,7 @@ def _prepare_content(
                 for c in content
             ]
         return content
-    if isinstance(content, (bool, dict, float, int, str)):
+    if isinstance(content, bool | dict | float | int | str):
         return content
     if isinstance(content, ContentBase):
         return content.asdict(

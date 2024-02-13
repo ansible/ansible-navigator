@@ -512,7 +512,7 @@ def to_list(thing: str | list | tuple | set | None) -> list:
     :param thing: Item to convert to a list
     :returns: Item as a list
     """
-    if isinstance(thing, (list, tuple, set)):
+    if isinstance(thing, list | tuple | set):
         converted_value = list(thing)
     elif thing is not None:
         converted_value = [thing]

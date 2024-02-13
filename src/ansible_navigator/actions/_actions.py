@@ -10,9 +10,9 @@ import os
 import re
 
 from collections import namedtuple
+from collections.abc import Callable
 from collections.abc import Generator
 from typing import Any
-from typing import Callable
 
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.ui_framework import error_notification

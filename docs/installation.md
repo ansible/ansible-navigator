@@ -93,7 +93,7 @@
 3.  Add the installation path to the PATH, using the installed Python version:
 
     ```bash
-    echo 'export PATH=$HOME/Library/Python/3.9/bin:$PATH' >> ~/.zprofile
+    echo 'export PATH=$HOME/Library/Python/3.10/bin:$PATH' >> ~/.zprofile
     ```
 
 4.  Refresh the PATH:

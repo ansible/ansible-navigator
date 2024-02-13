@@ -7,9 +7,9 @@ import re
 import sys
 import tempfile
 
+from collections.abc import Callable
 from copy import deepcopy
 from typing import Any
-from typing import Callable
 
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic
