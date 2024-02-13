@@ -109,7 +109,6 @@ class TmuxSession:
         """Enter the tmux session.
 
         :return: The tmux session
-        :raises AssertionError: If VIRTUAL_ENV environment variable was not set
         :raises ValueError: If the time is exceeded for finding the shell prompt
         """
         # pylint: disable=attribute-defined-outside-init
@@ -131,10 +130,7 @@ class TmuxSession:
         # expect inside of tmux, so we can't depend on it. We *must* determine
         # it before we enter tmux. Do this before we switch to bash
         venv_path = os.environ.get("VIRTUAL_ENV")
-        if venv_path is None:
-            msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
-            raise AssertionError(msg)
-        venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
+        venv = "" if venv_path is None else os.path.join(shlex.quote(venv_path), "bin", "activate")
 
         # get the USER before we start a clean shell
         user = os.environ.get("USER")
@@ -147,7 +143,9 @@ class TmuxSession:
         self._pane.send_keys(f"export PS1={self.cli_prompt}")
 
         # set environment variables for this session
-        tmux_common = [f". {venv}"]
+        tmux_common = []
+        if venv:
+            tmux_common.append(f". {venv}")
         tmux_common.append("export TERM=xterm")
         tmux_common.append("export LANG=en_US.UTF-8")
         tmux_common.append(f"export HOME='{home}'")

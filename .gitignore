@@ -152,4 +152,6 @@ dmypy.json
 /src/ansible_navigator/_version.py
 out
 
+# other
 .DS_Store
+.envrc
