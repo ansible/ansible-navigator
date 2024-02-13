@@ -15,6 +15,7 @@ from timeit import default_timer as timer
 from typing import TypedDict
 
 import libtmux
+import libtmux.exc
 import pytest
 
 from ._common import generate_test_log_dir
@@ -70,7 +71,7 @@ class TmuxSession:
         self._pane_height = pane_height
         self._pane_width = pane_width
         self._pull_policy = pull_policy
-        self._session: libtmux.Session
+        self._session: libtmux.session.Session
         self._session_name = str(uuid.uuid4())
         self._setup_capture: str | list[str]
         self._setup_commands = setup_commands or []
@@ -113,7 +114,7 @@ class TmuxSession:
         """
         # pylint: disable=attribute-defined-outside-init
 
-        self._server = libtmux.Server()
+        self._server = libtmux.server.Server()
         self._build_tmux_session()
         self._window = self._session.new_window(self._session_name)
         self._pane = self._window.panes[0]
