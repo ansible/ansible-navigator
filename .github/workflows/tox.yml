@@ -13,6 +13,8 @@ on:
     branches: # any integration branch but not tag
       - "main"
   pull_request:
+    branches:
+      - "main"
 
 jobs:
   pre:
@@ -82,6 +84,7 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           name: ${{ matrix.passed_name }}
+          fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true # optional (default = false)
       - name: Change accessibility for cache
@@ -95,6 +98,10 @@ jobs:
       - tox
     runs-on: ubuntu-22.04
     steps:
+      - name: Check codecov.io status
+        if: github.event_name == 'pull_request'
+        uses: coactions/codecov-status@main
+
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1
         with:
