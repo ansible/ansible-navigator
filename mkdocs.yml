@@ -1,9 +1,9 @@
 ---
 site_name: Ansible Navigator Documentation
-site_url: https://ansible-navigator.readthedocs.io/
+site_url: https://ansible.readthedocs.io/projects/navigator/
 repo_url: https://github.com/ansible/ansible-navigator
 edit_uri: blob/main/docs/
-copyright: Copyright © 2023 Red Hat, Inc.
+copyright: Copyright © 2024 Red Hat, Inc.
 docs_dir: docs
 strict: true
 
@@ -60,7 +60,8 @@ plugins:
   - gen-files:
       scripts:
         - docs/_ext/regenerate_docs.py
-  - search
+  - material/search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
   - material/social
   - material/tags
   # https://github.com/manuzhang/mkdocs-htmlproofer-plugin

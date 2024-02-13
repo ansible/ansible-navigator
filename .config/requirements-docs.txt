@@ -1,1 +1,1 @@
-mkdocs-ansible >= 0.1.2
+mkdocs-ansible >= 24.2.1
