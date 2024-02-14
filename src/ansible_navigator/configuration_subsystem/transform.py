@@ -28,11 +28,11 @@ def to_effective(
     :param settings: The current settings
     :returns: The settings represented as settings file
     """
-    rebuilt: dict = {}
+    rebuilt: dict[Any, Any] = {}
     for entry in settings.entries:
         path = entry.settings_file_path(prefix=settings.application_name_dashed)
         if not isinstance(entry.value.current, Constants):
-            current: bool | int | str | dict | list = entry.value.current
+            current: bool | int | str | dict[Any, Any] | list[Any] = entry.value.current
             # It is necessary to un post-process here
             if path == "ansible-navigator.ansible.cmdline":
                 # post-processed into a list
@@ -110,7 +110,7 @@ def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
     partial_schema = json.loads(file_contents)
 
     for entry in settings.entries:
-        subschema: dict = partial_schema["properties"]
+        subschema: dict[Any, Any] = partial_schema["properties"]
         dot_parts = entry.settings_file_path(prefix=settings.application_name_dashed).split(".")
         for part in dot_parts[:-1]:
             if isinstance(subschema, dict):

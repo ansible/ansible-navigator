@@ -141,7 +141,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
     return RunReturn(message="", return_code=0)
 
 
-def main():
+def main() -> None:
     """Start application here."""
     messages: list[LogMessage] = log_dependencies()
     exit_messages: list[ExitMessage] = []
@@ -181,12 +181,12 @@ def main():
         exit_messages.append(ExitMessage(message=exit_msg))
         error_and_exit_early(exit_messages=exit_messages)
 
-    for entry in messages:
-        logger.log(level=entry.level, msg=entry.message)
+    for log_message in messages:
+        logger.log(level=log_message.level, msg=log_message.message)
 
     if exit_messages:
-        for exit_msg in exit_messages:
-            logger.log(level=exit_msg.level, msg=exit_msg.message)
+        for entry in exit_messages:
+            logger.log(level=entry.level, msg=entry.message)
         error_and_exit_early(exit_messages=exit_messages)
 
     os.environ.setdefault("ESCDELAY", "25")

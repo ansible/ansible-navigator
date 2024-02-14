@@ -7,6 +7,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 from itertools import repeat
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -24,7 +25,7 @@ class Scenario(BaseScenario):
     """Data structure for EEV post processor tests."""
 
     name: str
-    current: bool | str | list | dict
+    current: bool | str | list[Any] | dict[Any, Any]
     source: C
     expected: list[str] | None = None
     exit_message_substr: str = ""

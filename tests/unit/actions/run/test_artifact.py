@@ -52,7 +52,7 @@ class Scenario(BaseScenario):
     filename: str | None
     playbook: str
     starts_with: str | None = None
-    re_match: Pattern | None = None
+    re_match: Pattern[str] | None = None
     help_playbook: bool = False
     enable_prompts: bool = False
     playbook_artifact_enable: bool = True

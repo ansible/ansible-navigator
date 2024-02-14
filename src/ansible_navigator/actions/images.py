@@ -61,7 +61,7 @@ class Action(ActionBase):
         :param args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="images")
-        self._image_list: list = []
+        self._image_list: list[str] = []
         self._images = Step(
             name="images",
             step_type="menu",
@@ -92,7 +92,9 @@ class Action(ActionBase):
                 return 12, 0
         return 2, 0
 
-    def generate_content_heading(self, obj: dict, screen_w: int, name: str = "") -> CursesLines:
+    def generate_content_heading(
+        self, obj: dict[Any, Any], screen_w: int, name: str = ""
+    ) -> CursesLines:
         """Create a heading for image content.
 
         :param obj: The content going to be shown
@@ -516,7 +518,7 @@ class Action(ActionBase):
             return False
         return True
 
-    def _parse(self, output) -> dict | None:
+    def _parse(self, output) -> dict[Any, Any] | None:
         """Load and process the ``json`` output from the image introspection process.
 
         :param output: The output from the image introspection process

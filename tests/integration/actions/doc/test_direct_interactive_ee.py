@@ -10,9 +10,11 @@ from .base import BaseClass
 # module doc
 CLI_MODULE_DOC = "ansible-navigator doc company_name.coll_1.mod_1 --execution-environment true"
 
-testdata_module_doc: list = [
-    (0, CLI_MODULE_DOC, "ansible-navigator doc module plugin display", "module_doc_pass", []),
-    (1, ":{{ examples }}", "load examples", "module_doc_pass", []),
+testdata_module_doc = [
+    pytest.param(
+        0, CLI_MODULE_DOC, "ansible-navigator doc module plugin display", "module_doc_pass", []
+    ),
+    pytest.param(1, ":{{ examples }}", "load examples", "module_doc_pass", []),
 ]
 
 # lookup plugin doc
@@ -20,8 +22,10 @@ CLI_LOOKUP_DOC = (
     "ansible-navigator doc company_name.coll_1.lookup_1 -t lookup --execution-environment true"
 )
 
-testdata_lookup_doc: list = [
-    (0, CLI_LOOKUP_DOC, "ansible-navigator doc lookup plugin display", "lookup_doc_pass", []),
+testdata_lookup_doc = [
+    pytest.param(
+        0, CLI_LOOKUP_DOC, "ansible-navigator doc lookup plugin display", "lookup_doc_pass", []
+    ),
 ]
 
 # filter plugin doc
@@ -29,8 +33,15 @@ CLI_FILTER_DOC = (
     "ansible-navigator doc company_name.coll_1.filter_1 -t filter --execution-environment true"
 )
 
-testdata_filter_doc: list = [
-    (0, CLI_FILTER_DOC, "ansible-navigator doc filter plugin display", "filter_doc_pass", []),
+testdata_filter_doc = [
+    pytest.param(
+        0,
+        CLI_FILTER_DOC,
+        "ansible-navigator doc filter plugin display",
+        "filter_doc_pass",
+        [],
+        id="filter_doc",
+    ),
 ]
 
 # plugin does not exist

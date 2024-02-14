@@ -41,9 +41,9 @@ class ActionBase:
         self._calling_app: AppPublic
         self._interaction: Interaction
         self._name = name
-        self._previous_filter: Pattern | None
+        self._previous_filter: Pattern[str] | None
         self._previous_scroll: int
-        self.stdout: list = []
+        self.stdout: list[str] = []
         self.steps = Steps()
 
     @staticmethod
@@ -168,7 +168,7 @@ class ActionBase:
 
     def _update_args(
         self,
-        params: list,
+        params: list[str],
         apply_previous_cli_entries: C = C.ALL,
         attach_cdc: bool = False,
     ) -> bool:

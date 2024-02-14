@@ -8,8 +8,8 @@ import os
 
 from collections.abc import Callable
 from pathlib import Path
+from re import Pattern
 from typing import Any
-from typing import Optional
 
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
@@ -62,7 +62,7 @@ class Action:
     def _transform_menu(
         self,
         menu: Menu,
-        menu_filter: Callable,
+        menu_filter: Callable[..., Pattern[str] | None],
         serialization_format=SerializationFormat | None,
     ) -> list[dict[Any, Any]]:
         """Convert a menu into structured data.
@@ -85,11 +85,12 @@ class Action:
         menu_entries = [
             {remove_dbl_un(k): v for k, v in c.items() if k in menu.columns} for c in menu_entries
         ]
-        if menu_filter():
+        menu_filter_result = menu_filter()
+        if menu_filter_result:
             menu_entries = [
                 e
                 for e in menu_entries
-                if menu_filter().search(" ".join(str(v) for v in e.values()))
+                if menu_filter_result.search(" ".join(str(v) for v in e.values()))
             ]
         return menu_entries
 

@@ -1,6 +1,7 @@
 """Test for the conversion of percent string to progress bars."""
 
 from dataclasses import dataclass
+from typing import Any
 
 from ansible_navigator.content_defs import ContentBase
 from ansible_navigator.ui_framework.utils import convert_percentage
@@ -23,7 +24,7 @@ def test_dictionary_complete() -> None:
 
 
 @dataclass
-class ContentTest(ContentBase):
+class ContentTest(ContentBase[Any]):
     """Test data for string conversion to a progress bar."""
 
     progress: str

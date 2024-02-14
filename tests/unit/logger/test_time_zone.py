@@ -20,7 +20,7 @@ class Scenario(BaseScenario):
     """Data for time zone support in the logs."""
 
     name: str
-    re_match: Pattern
+    re_match: Pattern[str]
     time_zone: str | None = None
     will_exit: bool = False
 

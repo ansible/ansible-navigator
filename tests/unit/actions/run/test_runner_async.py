@@ -6,6 +6,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from queue import Queue
+from typing import Any
 
 import pytest
 
@@ -24,23 +25,23 @@ class Scenario(BaseScenario):
     # pylint: disable=too-many-instance-attributes
     name: str
     container_engine: str | None
-    container_options: list | None
+    container_options: list[str] | None
     execution_environment_image: str | None
     execution_environment: bool | None
-    inventory: list | None
+    inventory: list[str] | None
     playbook_artifact_enable: bool
     mode: str | None
-    pass_environment_variable: list | None
-    set_environment_variable: dict | None
+    pass_environment_variable: list[str] | None
+    set_environment_variable: dict[str, str] | None
     playbook: str | None
-    container_volume_mounts: list | None
+    container_volume_mounts: list[str] | None
     help_playbook: bool
-    cmdline: list | None
+    cmdline: list[str] | None
     private_data_dir: str | None
     rotate_artifacts: int | None
     timeout: int | None
     write_job_events: bool
-    expected: dict
+    expected: dict[str, Any]
 
     def __str__(self):
         """Provide the test id.
@@ -50,7 +51,7 @@ class Scenario(BaseScenario):
         return self.name
 
 
-TEST_QUEUE: Queue = Queue()
+TEST_QUEUE: Queue[dict[str, str]] = Queue()
 
 test_data = [
     Scenario(

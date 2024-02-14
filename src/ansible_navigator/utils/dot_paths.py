@@ -8,6 +8,7 @@ import operator
 from collections.abc import MutableMapping
 from enum import Enum
 from functools import reduce
+from typing import Any
 
 
 class MergeBehaviors(Enum):
@@ -23,7 +24,7 @@ class MergeBehaviors(Enum):
     DICT_DICT_REPLACE = "replace left dict with right dict"
 
 
-def get_with_path(content: MutableMapping, path: str):
+def get_with_path(content: MutableMapping[Any, Any], path: str):
     """Get a value from a path in a dictionary.
 
     :param content: The content of the settings file
@@ -33,7 +34,7 @@ def get_with_path(content: MutableMapping, path: str):
     return reduce(operator.getitem, path.split("."), content)
 
 
-def check_path(content: MutableMapping, path: str):
+def check_path(content: MutableMapping[Any, Any], path: str):
     """Check if a path exists in a dictionary.
 
     :param content: The content of the settings file
@@ -47,7 +48,7 @@ def check_path(content: MutableMapping, path: str):
         return False
 
 
-def delete_with_path(content: MutableMapping, path: str):
+def delete_with_path(content: MutableMapping[Any, Any], path: str):
     """Delete a value from a path in a dictionary.
 
     :param content: The content of the settings file
@@ -77,7 +78,7 @@ def descendants_to_path(path: str):
     return [path.rsplit(".", i)[0] for i in reversed(range(len(parts)))]
 
 
-def remove_and_delete_empty_ascendants(content: MutableMapping, path: str):
+def remove_and_delete_empty_ascendants(content: MutableMapping[Any, Any], path: str):
     """Remove and delete empty ascendants.
 
     :param content: The content of the settings file

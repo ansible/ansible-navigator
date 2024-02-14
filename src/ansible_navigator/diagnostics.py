@@ -15,7 +15,6 @@ from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
 from typing import Any
-from typing import Union
 
 from .command_runner import Command
 from .command_runner import CommandRunner
@@ -36,7 +35,7 @@ from .utils.serialize import write_diagnostics_json
 from .utils.serialize import yaml
 
 
-JSONTypes = bool | int | str | dict | list[Any]
+JSONTypes = bool | int | str | dict[Any, Any] | list[Any]
 
 
 @dataclass
@@ -193,7 +192,7 @@ class DiagnosticsCollector:
         self._exit_messages = exit_messages
 
     @property
-    def registered(self) -> Iterator[Callable]:
+    def registered(self) -> Iterator[Callable[..., Any]]:
         """Return the registered diagnostics.
 
         :returns: The registered diagnostics

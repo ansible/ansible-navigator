@@ -7,6 +7,7 @@ import operator
 from copy import deepcopy
 from functools import reduce
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -101,14 +102,14 @@ def test_settings_full(
 
     :param settings_env_var_to_full: The env var and file writing fixture
     """
-    sample: dict = settings_env_var_to_full[1]
+    sample: dict[Any, Any] = settings_env_var_to_full[1]
 
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
     _messages, _exit_messages = parse_and_update(params=[], args=settings)
 
     # Build the effective settings
-    effective: dict = to_effective(settings)
+    effective: SettingsFileType = to_effective(settings)
 
     # Compare the effective against the settings sample
     type_check_only = [
@@ -118,7 +119,7 @@ def test_settings_full(
     # Walk the settings, for each path extract the value from the sample and effective and compare
     for entry in settings.entries:
         path = entry.settings_file_path(prefix=settings.application_name_dashed)
-        effective_value = reduce(operator.getitem, path.split("."), effective)
+        effective_value = reduce(operator.getitem, path.split("."), effective)  # type: ignore
         sample_value = reduce(operator.getitem, path.split("."), sample)
         # Don't check auto
         if entry.value.source == Constants.AUTO:

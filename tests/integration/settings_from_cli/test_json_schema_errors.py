@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import shlex
 import subprocess
 
 from dataclasses import dataclass
@@ -11,7 +12,6 @@ from typing import Any
 
 import pytest
 
-from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import FIXTURES_DIR
 from tests.defaults import BaseScenario
 from tests.defaults import id_func
@@ -86,7 +86,7 @@ def test(data: Scenario, subtests: Any, tmp_path: Path):
 
     command = list(data.command) + ["--lf", str(log_file)]
 
-    bash_wrapped = f"/bin/bash -c '{venv_prefix!s}{shlex_join(command)}'"
+    bash_wrapped = f"/bin/bash -c '{venv_prefix!s}{shlex.join(split_command=command)}'"
     # Some os.environ are required in order to make it work, likely HOME and PATH at least.
     env = os.environ | {"ANSIBLE_NAVIGATOR_CONFIG": str(data.settings_file), "NO_COLOR": "true"}
     proc_out = subprocess.run(

@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
+from typing import Any
 
 
 class DictMergeError(Exception):
     """Custom exception for a dict merge error."""
 
 
-Mergeable = bool | dict | list | str | None
+Mergeable = bool | dict[Any, Any] | list[Any] | str | None
 
 
 def in_place_list_replace(left: Mergeable, right: Mergeable):

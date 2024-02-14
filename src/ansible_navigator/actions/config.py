@@ -148,7 +148,12 @@ class Action(ActionBase):
         """
         self._logger.debug("config requested in stdout mode")
         response = self._run_runner()
-        if response is None:
+        if (
+            response is None
+            or response[0] is None
+            or response[1] is None
+            or not isinstance(response[2], int)
+        ):
             self._logger.error("Unexpected response: %s", response)
             return RunStdoutReturn(message="Please review the log for errors.", return_code=1)
         _out, error, return_code = response
@@ -209,7 +214,7 @@ class Action(ActionBase):
             index=self.steps.current.index,
         )
 
-    def _run_runner(self) -> tuple | None:
+    def _run_runner(self) -> tuple[str, str, int] | None:
         """Use the runner subsystem to retrieve the configuration.
 
         :raises RuntimeError: When the ansible-config command cannot be found with execution
@@ -298,7 +303,7 @@ class Action(ActionBase):
             self._runner = Command(executable_cmd=ansible_config_path, **kwargs)
             stdout_return = self._runner.run()
             return stdout_return
-        return (None, None, None)
+        return None
 
     def _parse_and_merge(self, list_output, dump_output) -> None:
         """Parse the list and dump output. Merge dump into list.

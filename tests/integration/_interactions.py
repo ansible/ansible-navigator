@@ -25,7 +25,7 @@ class Command(NamedTuple):
     format_: str | None = None
     log_level: str = "debug"
     mode: str = "interactive"
-    pass_environment_variables: list = []
+    pass_environment_variables: list[str] = []
     preclear: bool = False
     precommand: str = ""
     raw_append: str = ""
@@ -76,7 +76,7 @@ class UiTestStep(NamedTuple):
     #: The index of the step with the list of all steps
     step_index: int = 0
     #: Find this before returning from the tmux session to the test
-    search_within_response: SearchFor | str | list = SearchFor.HELP
+    search_within_response: SearchFor | str | list[str] = SearchFor.HELP
 
     def __str__(self) -> str:
         """Produce a test id for this step.

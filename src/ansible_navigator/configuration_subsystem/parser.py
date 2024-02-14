@@ -84,7 +84,7 @@ class Parser:
             else:
                 group.add_argument(short, long, **kwargs)
 
-    def _add_subcommand_holder(self) -> _SubParsersAction:
+    def _add_subcommand_holder(self) -> _SubParsersAction[Any]:
         """Add the subparsers holder.
 
         :raises ValueError: if zero or more than one subcommand is found

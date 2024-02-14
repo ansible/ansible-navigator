@@ -208,7 +208,7 @@ class Action(ActionBase):
 
         self._subaction_type: str
         self._msg_from_plays: tuple[str | None, int | None] = (None, None)
-        self._queue: Queue = Queue()
+        self._queue: Queue[dict[str, str]] = Queue()
         self.runner: CommandAsync
         self._runner_finished: bool
         self._auto_scroll = False
@@ -224,7 +224,7 @@ class Action(ActionBase):
             select_func=self._task_list_for_play,
         )
         self._task_list_columns: list[str] = TASK_LIST_COLUMNS
-        self._content_key_filter: Callable = filter_content_keys
+        self._content_key_filter: Callable[[dict[Any, Any]], dict[Any, Any]] = filter_content_keys
         self._playbook_type: str = check_playbook_type(self._args.playbook)
         self._task_cache: dict[str, str] = {}
         """Task name storage from playbook_on_start using the task uuid as the key"""
@@ -462,8 +462,7 @@ class Action(ActionBase):
         if not isinstance(artifact_file, str):
             artifact_file = ""
 
-        FType = dict[str, Any]
-        form_dict: FType = {
+        form_dict: dict[str, Any] = {
             "title": "Artifact file not found, please confirm the following",
             "fields": [],
         }
@@ -491,8 +490,7 @@ class Action(ActionBase):
 
         cmdline = " ".join(self._args.cmdline) if isinstance(self._args.cmdline, list) else ""
 
-        FType = dict[str, Any]
-        form_dict: FType = {
+        form_dict: dict[str, Any] = {
             "title": "Playbook not found, please confirm the following",
             "fields": [],
         }
@@ -637,7 +635,7 @@ class Action(ActionBase):
         if drain_count:
             self._logger.debug("Drained %s events", drain_count)
 
-    def _handle_message(self, message: dict) -> None:
+    def _handle_message(self, message: dict[str, Any]) -> None:
         # pylint: disable=too-many-locals
         """Handle a runner message.
 

@@ -83,7 +83,7 @@ class FieldValidators:
         return Validation(value=text, error_msg="")
 
     @staticmethod
-    def one_of(choices: list = [], text: str = "", hint: bool = False) -> Validation | str:
+    def one_of(choices: list[str] = [], text: str = "", hint: bool = False) -> Validation | str:
         """Validate that some text is one of choices.
 
         :param choices: The list of choices

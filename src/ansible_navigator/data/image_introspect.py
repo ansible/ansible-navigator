@@ -13,7 +13,6 @@ from collections.abc import Callable
 from queue import Queue
 from types import SimpleNamespace
 from typing import Any
-from typing import Union
 
 
 JSONTypes = bool | int | str | dict | list
@@ -27,8 +26,8 @@ class Command(SimpleNamespace):
     parse: Callable
     stdout: str = ""
     stderr: str = ""
-    details: list | dict | str = ""
-    errors: list = []
+    details: list[str] | dict[Any, Any] | str = ""
+    errors: list[str] = []
 
 
 def run_command(command: Command) -> None:
@@ -381,7 +380,7 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     :param serialize: Whether to serialize the results
     :returns: The collected data or none if serialize is False
     """
-    response: dict = {"errors": []}
+    response: dict[str, Any] = {"errors": []}
     response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}
     response["environment_variables"] = {"details": dict(os.environ)}
     try:
