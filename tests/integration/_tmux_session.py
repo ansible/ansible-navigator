@@ -171,7 +171,8 @@ class TmuxSession:
             """Send commands and waits for prompt to appear.
 
             :param cmd: command to be executed.
-            :returns:   terminal captured lines
+            :returns: terminal captured lines
+            :raises ValueError: if prompt is not found after timeout
             """
             # We observed that on some platforms initialization can fail as
             # commands are sent too quickly.
