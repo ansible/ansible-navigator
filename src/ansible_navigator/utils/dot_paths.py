@@ -97,10 +97,10 @@ def remove_and_delete_empty_ascendants(content: MutableMapping[Any, Any], path: 
 
 def place_at_path(
     behaviors: tuple[MergeBehaviors, ...],
-    content: dict,
+    content: dict[Any, Any],
     path: str,
-    value: bool | int | list | float | str | dict,
-) -> dict:
+    value: bool | int | list[Any] | float | str | dict[Any, Any],
+) -> dict[Any, Any]:
     """Place a value at a path in a dictionary.
 
     :param behaviors: The merge behaviors
@@ -180,10 +180,10 @@ def place_at_path(
 
 def move_to_path(
     behaviors: tuple[MergeBehaviors, ...],
-    content: dict,
+    content: dict[Any, Any],
     new_path: str,
     old_path: str,
-) -> dict:
+) -> dict[Any, Any]:
     """Move a value to a path in a dictionary.
 
     :param behaviors: The merge behaviors

@@ -16,9 +16,9 @@ class CommandBase(Base):
     def __init__(
         self,
         executable_cmd: str,
-        cmdline: list | None = None,
+        cmdline: list[str] | None = None,
         playbook: str | None = None,
-        inventory: list | None = None,
+        inventory: list[str] | None = None,
         **kwargs,
     ):
         """Handle common arguments of ``run_command`` interface for ``ansible-runner``.

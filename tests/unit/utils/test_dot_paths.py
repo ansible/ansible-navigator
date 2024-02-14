@@ -86,8 +86,8 @@ class Scenario(BaseScenario):  # pylint: disable=too-many-instance-attributes
     comment: str
     path: str
     expected: MutableMapping[Any, Any] | None
-    value: bool | int | list | float | str | dict = ""
-    content: dict = field(default_factory=lambda: base_dict)
+    value: bool | int | list[Any] | float | str | dict[Any, Any] = ""
+    content: dict[Any, Any] = field(default_factory=lambda: base_dict)
     new_path: str = ""
 
     def __str__(self):

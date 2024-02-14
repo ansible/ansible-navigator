@@ -15,7 +15,7 @@ class AnsibleDoc(Base):
 
     def fetch_plugin_doc(
         self,
-        plugin_names: list,
+        plugin_names: list[str | None],
         plugin_type: str | None = None,
         response_format: str | None = "json",
         snippet: bool | None = None,

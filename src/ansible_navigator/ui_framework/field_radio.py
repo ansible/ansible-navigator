@@ -6,6 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
+from typing import Any
 
 from .form_handler_options import FormHandlerOptions
 from .sentinels import Unknown
@@ -22,7 +23,7 @@ class FieldRadio:
     name: str
     current_error: str = ""
     valid: Unknown | bool = unknown
-    options: list = field(default_factory=list)
+    options: list[Any] = field(default_factory=list)
     window_handler = FormHandlerOptions
 
     @property
@@ -50,7 +51,7 @@ class FieldRadio:
         return self.prompt
 
     @property
-    def validator(self) -> Callable:
+    def validator(self) -> Callable[..., Any]:
         """Provide a validator based on form type.
 
         :returns: Validation of checked entries

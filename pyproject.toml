@@ -72,8 +72,15 @@ color_output = true
 error_summary = true
 # disallow_untyped_calls = true
 # disallow_untyped_defs = true
-# disallow_any_generics = true
+disallow_any_generics = true
 incremental = false
+
+[[tool.mypy.overrides]]
+# https://github.com/ansible/ansible-runner/issues/1340
+module = [
+  "ansible_runner"
+]
+ignore_missing_imports = true
 
 [tool.pydoclint]
 allow-init-docstring = true

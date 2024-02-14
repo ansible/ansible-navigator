@@ -24,7 +24,7 @@ class FormHandlerWorking(CursesWindow):
         self._screen = screen
 
     @staticmethod
-    def handle(idx, form_fields: list) -> tuple[FieldWorking, int]:
+    def handle(idx, form_fields: list[str]) -> tuple[FieldWorking, int]:
         """Handle the information field, immediate return.
 
         :param idx: Index to retrieve specific field

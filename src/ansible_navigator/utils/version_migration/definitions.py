@@ -7,6 +7,7 @@ import contextlib
 from collections.abc import Callable
 from enum import Enum
 from pathlib import Path
+from typing import Any
 from typing import Generic
 from typing import TypeVar
 
@@ -69,7 +70,7 @@ class MigrationStep(Generic[T]):
         subtle(color=COLOR, message=information)
 
     @classmethod
-    def register(cls: T, migration_step: T) -> Callable:
+    def register(cls: T, migration_step: T) -> Callable[..., Any]:
         """Register the migration step.
 
         :param migration_step: The migration step to register
@@ -114,12 +115,12 @@ class Migration:
         migrations.append(cls)
 
     @property
-    def migration_steps(self) -> tuple[MigrationStep, ...]:
+    def migration_steps(self) -> tuple[MigrationStep[Any], ...]:
         """Return the registered diagnostics.
 
         :returns: The registered diagnostics
         """
-        steps: list[MigrationStep] = []
+        steps: list[MigrationStep[Any]] = []
         for func_name in vars(self.__class__):
             if func_name.startswith("_"):
                 continue
@@ -143,7 +144,7 @@ class Migration:
         :param kwargs: The keyword arguments
         """
 
-    def run_step(self, step: MigrationStep, *args, **kwargs) -> None:
+    def run_step(self, step: MigrationStep[Any], *args, **kwargs) -> None:
         """Run the migration step.
 
         :param step: The migration step to run

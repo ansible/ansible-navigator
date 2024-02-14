@@ -85,7 +85,7 @@ class Base:
         self.cancelled: bool = False
         self.finished: bool = False
         self.status: str | None = None
-        self._runner_args: dict = {}
+        self._runner_args: dict[str, Any] = {}
 
         # when the ce is podman, set the container user to root
         if self._ce == "podman":

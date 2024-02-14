@@ -116,7 +116,7 @@ def test_env_var_is_file_path(
         "list-detailed",
     ],
 )
-def test_flatten_list(value: list, anticipated_result: list) -> None:
+def test_flatten_list(value: list[str], anticipated_result: list[str]) -> None:
     """Test for flatten list.
 
     :param value: List to be flattened

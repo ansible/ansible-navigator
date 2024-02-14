@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from ansible_navigator.utils.dot_paths import MergeBehaviors
 from ansible_navigator.utils.dot_paths import check_path
 from ansible_navigator.utils.dot_paths import get_with_path
@@ -23,10 +25,10 @@ class V1V2SettingsFile(SettingsFile):
     name = "Version 1 to Version 2 settings file format migration"
     migration_type: MigrationType = MigrationType.SETTINGS_FILE
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the v1 to v2 settings file migration."""
         super().__init__()
-        self.content: dict = {}
+        self.content: dict[Any, Any] = {}
         self._backup_suffix = ".v1"
 
     @MigrationStep.register(MigrationStep(name="config path"))

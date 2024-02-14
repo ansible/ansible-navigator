@@ -105,7 +105,7 @@ class FieldValidators:
 
     @staticmethod
     def some_of_or_none(
-        choices: Unknown | list = unknown,
+        choices: Unknown | list[Any] = unknown,
         min_selected: Unknown | int = unknown,
         max_selected: Unknown | int = unknown,
         hint: bool = False,
@@ -264,7 +264,7 @@ class FormValidators:
     """Validators for a form."""
 
     @staticmethod
-    def all_true(response: list | None = None, hint: bool = False) -> Validation | str:
+    def all_true(response: list[Any] | None = None, hint: bool = False) -> Validation | str:
         """Validate all in list are true.
 
         :param response: The list to validate
@@ -281,7 +281,7 @@ class FormValidators:
 
     @staticmethod
     def no_validation(
-        response: list | None = None,
+        response: list[Any] | None = None,
         hint: bool = False,
     ) -> Validation | str:
         """No validation.

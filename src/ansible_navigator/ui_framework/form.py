@@ -7,6 +7,7 @@ import curses
 from curses import ascii as curses_ascii
 from dataclasses import dataclass
 from dataclasses import field
+from typing import Any
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -31,12 +32,12 @@ class Form:
 
     type_: FormType
     cancelled: bool = False
-    fields: list = field(default_factory=list)
+    fields: list[Any] = field(default_factory=list)
     submitted: bool = False
     title: str = ""
     title_color: int = 0
 
-    _dict: dict = field(default_factory=dict)
+    _dict: dict[Any, Any] = field(default_factory=dict)
 
     def present(self, screen, ui_config):
         """Present the form the to user and return the results.

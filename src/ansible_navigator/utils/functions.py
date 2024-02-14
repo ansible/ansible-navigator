@@ -147,7 +147,7 @@ def dispatch(obj, replacements):
     return obj
 
 
-def escape_moustaches(obj: Mapping) -> Mapping:
+def escape_moustaches(obj: Mapping[Any, Any]) -> Mapping[Any, Any]:
     """Escape moustaches.
 
     :param obj: Variable that may contain moustaches
@@ -239,7 +239,7 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | Non
     return messages, exit_messages, use
 
 
-def flatten_list(data_list) -> list:
+def flatten_list(data_list: list[Any]) -> list[Any]:
     """Flatten a list of lists.
 
     :param data_list: List to flatten
@@ -426,7 +426,7 @@ def str2bool(value: Any) -> bool:
 
 # TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
 #       returns Any. Need to find a better solution... "Any" isn't it.
-def templar(string: str, template_vars: Mapping) -> tuple[list[str], Any]:
+def templar(string: str, template_vars: Mapping[Any, Any]) -> tuple[list[str], Any]:
     """Template some string with jinja2 always to and from json.
 
     :param string: The template string
@@ -506,7 +506,7 @@ def time_stamp_for_file(path: str, time_zone: str) -> tuple[float | None, str | 
     return modified, iso_stamp
 
 
-def to_list(thing: str | list | tuple | set | None) -> list:
+def to_list(thing: str | list[Any] | tuple[Any] | set[Any] | None) -> list[Any]:
     """Convert something to a list if necessary.
 
     :param thing: Item to convert to a list
@@ -521,7 +521,7 @@ def to_list(thing: str | list | tuple | set | None) -> list:
     return converted_value
 
 
-def unescape_moustaches(obj: Any) -> Mapping:
+def unescape_moustaches(obj: Any) -> Mapping[Any, Any]:
     """Unescape moustaches.
 
     :param obj: Variable that needs to contain moustaches
