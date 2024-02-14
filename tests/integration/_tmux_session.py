@@ -98,6 +98,7 @@ class TmuxSession:
                     session_name=self._session_name,
                     start_directory=str(self._cwd),
                     kill_session=True,
+                    attach=False,
                 )
                 break
             except libtmux.exc.LibTmuxException as exc:
@@ -116,7 +117,7 @@ class TmuxSession:
 
         self._server = libtmux.server.Server()
         self._build_tmux_session()
-        self._window = self._session.new_window(self._session_name)
+        self._window = self._session.new_window(self._session_name, attach=False)
         self._pane = self._window.panes[0]
         self._pane.split_window(attach=False)
         # split vertical
