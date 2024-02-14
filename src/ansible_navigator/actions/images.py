@@ -424,7 +424,7 @@ class Action(ActionBase):
             index=self.steps.current.index,
         )
 
-    def _collect_image_list(self):
+    def _collect_image_list(self) -> None:
         """Build a list of images for the images menu."""
         images, error = inspect_all(container_engine=self._args.container_engine)
         if error or not images:
@@ -575,7 +575,7 @@ class Action(ActionBase):
         output, error, return_code = _runner.run()
         return output, error, return_code
 
-    def notify_failed(self):
+    def notify_failed(self) -> None:
         """Notify image introspection failed."""
         msgs = ["humph. Something went really wrong while introspecting the image."]
         msgs.append("Details have been added to the log file")

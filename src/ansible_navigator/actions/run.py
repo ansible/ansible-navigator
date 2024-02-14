@@ -60,7 +60,7 @@ RESULT_TO_COLOR = [
 ]
 
 
-def get_color(word):
+def get_color(word: str) -> int:
     """Retrieve color value matching the keyword.
 
     :param word: Keyword to match color.
@@ -940,7 +940,7 @@ class Action(ActionBase):
         else:
             self._logger.error("sub-action type '%s' is invalid", self._subaction_type)
 
-    def _notify_error(self, message: str):
+    def _notify_error(self, message: str) -> None:
         """Show a blocking warning.
 
         :param message: Message for warning
@@ -954,7 +954,7 @@ class Action(ActionBase):
         warning = warning_notification(warn_msg)
         self._interaction.ui.show_form(warning)
 
-    def _notify_no_tasks_redirect(self):
+    def _notify_no_tasks_redirect(self) -> None:
         """In the case the playbook finished but without tasks, show a warning, send to stdout."""
         total_tasks = sum(len(play["tasks"]) for play in self._plays.value)
         # At least one task, no need to redirect
@@ -965,4 +965,4 @@ class Action(ActionBase):
         warning = warning_notification(message)
 
         self._interaction.ui.show_form(warning)
-        self.steps.append(Interaction(name="stdout", action=stdout_action, ui=self._interaction.ui))
+        self.steps.append(Interaction(name="stdout", action=stdout_action, ui=self._interaction.ui))  # type: ignore

@@ -30,7 +30,7 @@ from .definitions import LogMessage
 logger = logging.getLogger(__name__)
 
 
-def oxfordcomma(listed, condition):
+def oxfordcomma(listed: Iterable[bool | str], condition: str) -> str:
     """Format a list into a sentence.
 
     :param listed: List of string entries to modify
@@ -41,10 +41,10 @@ def oxfordcomma(listed, condition):
     if len(listed) == 0:
         return ""
     if len(listed) == 1:
-        return listed[0]
+        return str(listed[0])
     if len(listed) == 2:
         return f"{listed[0]} {condition} {listed[1]}"
-    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
+    return f"{', '.join(str(x) for x in listed[:-1])} {condition} {listed[-1]}"
 
 
 def abs_user_path(file_path: str) -> str:
@@ -349,7 +349,7 @@ def path_is_relative_to(child: Path, parent: Path) -> bool:
     return child.is_relative_to(parent)
 
 
-def remove_ansi(string):
+def remove_ansi(string: str) -> str:
     """Strip ansi code from a str.
 
     :param string: String to strip ansi code from
@@ -372,7 +372,7 @@ def remove_ansi(string):
     return ansi_escape.sub("", string)
 
 
-def remove_dbl_un(string):
+def remove_dbl_un(string: str) -> str:
     """Remove a __ from the beginning of a string.
 
     :param string: String to remove __ from

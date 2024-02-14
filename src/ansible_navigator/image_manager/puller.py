@@ -7,6 +7,7 @@ import os
 import subprocess
 
 from dataclasses import dataclass
+from typing import Any
 
 from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.utils.definitions import ExitMessage
@@ -51,7 +52,7 @@ class ImagePuller:
         else:
             self._arguments = []
 
-        self._assessment = ImageAssessment
+        self._assessment = ImageAssessment(messages=[], exit_messages=[], pull_required=False)
         self._container_engine: str = container_engine
         self._exit_messages: list[ExitMessage] = []
         self._image: str = image
@@ -62,7 +63,7 @@ class ImagePuller:
         self._pull_policy: str = pull_policy
         self._pull_required: bool = False
 
-    def assess(self):
+    def assess(self) -> None:
         """Assess the need to pull."""
         self._extract_tag()
         self._check_for_image()
@@ -131,7 +132,7 @@ class ImagePuller:
         self._pull_required = pull
         self._assessment.pull_required = pull
 
-    def _extract_tag(self):
+    def _extract_tag(self) -> None:
         """Extract the tag from the image name."""
         image_pieces = self._image.split(":")
         self._image_tag = "latest"
@@ -148,7 +149,7 @@ class ImagePuller:
         message = f"Image tag is: {self._image_tag}"
         self._log_message(level=logging.INFO, message=message)
 
-    def _log_message(self, message: str, level: int, hint=False):
+    def _log_message(self, message: str, level: int, hint=False) -> None:
         """Log a message.
 
         :param message: The message to log
@@ -163,9 +164,9 @@ class ImagePuller:
             self._messages.append(LogMessage(level=level, message=message))
         self._logger.log(level=level, msg=message)
 
-    def prologue_stdout(self):
+    def prologue_stdout(self) -> None:
         """Print a little value added information about the execution environment."""
-        messages = [("Execution environment image name:", self._image)]
+        messages: list[tuple[str, Any]] = [("Execution environment image name:", self._image)]
         messages.append(("Execution environment image tag:", self._image_tag))
         arguments = shlex_join(self._arguments) or None
         messages.append(("Execution environment pull arguments:", arguments))
@@ -195,7 +196,7 @@ class ImagePuller:
         joined_command = " ".join(command_line)
         return joined_command
 
-    def pull_stdout(self):
+    def pull_stdout(self) -> None:
         """Pull the image, print to stdout.
 
         ``podman`` writes errors to stdout and ``docker`` writes to stderr.
