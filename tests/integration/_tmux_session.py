@@ -183,7 +183,7 @@ class TmuxSession:
                 time.sleep(0.05)
                 captured = self._pane.capture_pane()
                 if time.time() > timeout:
-                    msg = "Timeout waiting for prompt after running {cmd} under tmux."
+                    msg = f"Timeout waiting for prompt after running {cmd} under tmux."
                     raise ValueError(msg)
             if isinstance(captured, str):
                 return [captured]
