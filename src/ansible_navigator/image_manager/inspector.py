@@ -89,7 +89,7 @@ class ImagesList:
             command.details = valid_images
 
 
-def inspect_all(container_engine: str) -> tuple[list, str]:
+def inspect_all(container_engine: str) -> tuple[list[str], str]:
     """Run inspect against all images in the list.
 
     :param container_engine: Name of the container engine

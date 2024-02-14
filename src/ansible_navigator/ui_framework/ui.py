@@ -282,7 +282,7 @@ class UserInterface(CursesWindow):
         )
         return res
 
-    def _footer(self, key_dict: dict) -> CursesLine:
+    def _footer(self, key_dict: dict[Any, Any]) -> CursesLine:
         """Build a footer from the key dict spread the columns out evenly.
 
         :param key_dict: the keys and their description

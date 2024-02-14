@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.utils.ansi import COLOR
@@ -22,7 +24,7 @@ class SettingsFile(Migration):
     def __init__(self):
         """Initialize the settings file migration."""
         super().__init__()
-        self.content: dict = {}
+        self.content: dict[Any, Any] = {}
         self._backup_suffix = ".v0"
 
     def run(self, *args, **kwargs) -> None:

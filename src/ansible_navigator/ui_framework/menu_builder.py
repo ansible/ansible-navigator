@@ -28,7 +28,7 @@ class MenuBuilder:
         progress_bar_width: int,
         screen_width: int,
         number_colors: int,
-        color_menu_item: Callable,
+        color_menu_item: Callable[..., Any],
         ui_config: UIConfig,
     ):
         """Initialize the menu builder.
@@ -101,7 +101,7 @@ class MenuBuilder:
         menu_lines = self._menu_lines(dicts, menu_layout, indices)
         return CursesLines(tuple([header])), menu_lines
 
-    def _menu_header_line(self, menu_layout: tuple[list, ...]) -> CursesLine:
+    def _menu_header_line(self, menu_layout: tuple[list[Any], ...]) -> CursesLine:
         """Generate the menu header line.
 
         :param menu_layout: A tuple of menu details:
@@ -118,7 +118,7 @@ class MenuBuilder:
         return CursesLine(line_parts)
 
     @staticmethod
-    def _menu_header_line_part(colno: int, menu_layout: tuple[list, ...]) -> CursesLinePart:
+    def _menu_header_line_part(colno: int, menu_layout: tuple[list[Any], ...]) -> CursesLinePart:
         """Generate one part of the menu header line.
 
         :param colno: The column number
@@ -151,7 +151,7 @@ class MenuBuilder:
     def _menu_lines(
         self,
         dicts: ContentTypeSequence,
-        menu_layout: tuple[list, ...],
+        menu_layout: tuple[list[Any], ...],
         indices,
     ) -> CursesLines:
         """Generate all the menu lines.
@@ -170,8 +170,8 @@ class MenuBuilder:
 
     def _menu_line(
         self,
-        menu_entry: dict[str, Any] | ContentBase,
-        menu_layout: tuple[list, ...],
+        menu_entry: dict[str, Any] | ContentBase[Any],
+        menu_layout: tuple[list[Any], ...],
     ) -> CursesLine:
         """Generate one the menu line.
 
@@ -196,8 +196,8 @@ class MenuBuilder:
         self,
         colno: int,
         coltext: Any,
-        menu_entry: dict[str, Any] | ContentBase,
-        menu_layout: tuple[list, ...],
+        menu_entry: dict[str, Any] | ContentBase[Any],
+        menu_layout: tuple[list[Any], ...],
     ) -> CursesLinePart:
         # pylint: disable=too-many-locals
         """Generate one menu line part.

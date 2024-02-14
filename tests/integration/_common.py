@@ -11,6 +11,7 @@ import sys
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -168,7 +169,7 @@ def copytree(
     src: str,
     dst: str,
     symlinks: bool = False,
-    ignore: Callable | None = None,
+    ignore: Callable[..., Any] | None = None,
     dirs_exist_ok: bool = False,
 ):
     """Recursively copy a directory tree using copy2().
@@ -247,4 +248,4 @@ class Parameter:
     """
 
     name: str
-    value: bool | str | list | Path
+    value: bool | str | list[str] | Path

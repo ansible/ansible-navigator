@@ -6,6 +6,7 @@ import curses
 
 from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
+from typing import Any
 
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow
@@ -48,7 +49,7 @@ class FormHandlerOptions(CursesWindow):
             clp_text = CursesLinePart(len(option_code) + 1, text, color, decoration)
             self._add_line(self.win, idx, ([clp_option_code, clp_text]))
 
-    def handle(self, idx, form_fields: list) -> tuple[FieldChecks | FieldRadio, int]:
+    def handle(self, idx, form_fields: list[Any]) -> tuple[FieldChecks | FieldRadio, int]:
         # pylint: disable=too-many-nested-blocks
         """Handle the check box field.
 

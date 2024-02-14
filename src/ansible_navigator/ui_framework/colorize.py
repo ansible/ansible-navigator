@@ -12,6 +12,7 @@ import logging
 import re
 
 from itertools import chain
+from typing import Any
 
 from ansible_navigator.tm_tokenize.grammars import Grammars
 from ansible_navigator.tm_tokenize.region import Regions
@@ -43,7 +44,7 @@ CURSES_STYLES = {
 class ColorSchema:
     """A storage mechanism for the schema (theme)."""
 
-    def __init__(self, schema: dict[str, str | list | dict]):
+    def __init__(self, schema: dict[str, str | list[Any] | dict[Any, Any]]):
         """Initialize the ColorSchema class.
 
         :param schema: The color scheme, theme to use
@@ -164,7 +165,7 @@ class Colorize:
         return res
 
 
-def scope_to_list(scope: str | list) -> list:
+def scope_to_list(scope: str | list[Any]) -> list[Any]:
     """Convert a token scope to a list if necessary.
 
     A scope in a theme should always be a string or list,

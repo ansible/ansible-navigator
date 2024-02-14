@@ -58,11 +58,11 @@ class CollectionCatalog:
         :param directories: A list of directories that may contain collections
         """
         self._directories: list[Path] = directories
-        self._collections: OrderedDict[str, dict] = OrderedDict()
+        self._collections: OrderedDict[str, dict[Any, Any]] = OrderedDict()
         self._errors: list[dict[str, str]] = []
         self._messages: list[str] = []
 
-    def _catalog_plugins(self, collection: dict) -> None:
+    def _catalog_plugins(self, collection: dict[Any, Any]) -> None:
         """Catalog the plugins within a collection.
 
         :param collection: Details describing the collection
@@ -202,7 +202,7 @@ class CollectionCatalog:
                 collection["roles"].append(role)
 
     @staticmethod
-    def _generate_checksum(file_path: Path, relative_path: Path) -> dict:
+    def _generate_checksum(file_path: Path, relative_path: Path) -> dict[str, Any]:
         """Generate a standard checksum for a file.
 
         :param file_path: The path to the file to generate a checksum for
@@ -226,8 +226,8 @@ class CollectionCatalog:
         self,
         plugin_type: str,
         filenames: Generator[Path, None, None],
-        file_checksums: dict[str, dict],
-        collection: dict,
+        file_checksums: dict[str, dict[Any, Any]],
+        collection: dict[Any, Any],
     ) -> None:
         """Process each plugin within one plugin directory.
 
@@ -321,7 +321,7 @@ class CollectionCatalog:
                             i_collection["path"],
                         )
 
-    def process_directories(self) -> tuple[dict, list]:
+    def process_directories(self) -> tuple[dict[Any, Any], list[dict[str, str]]]:
         """Process each parent directory.
 
         :returns: All collections found and any errors
@@ -339,7 +339,7 @@ class CollectionCatalog:
 
     def add_pseudo_builtin(self) -> None:
         """Add the pseudo builtin collection."""
-        collection: dict[str, str | list | dict] = {}
+        collection: dict[str, str | list[str] | dict[Any, Any]] = {}
         collection["known_as"] = "ansible.builtin"
         collection["plugin_checksums"] = {}
         collection["path"] = str(Path(plugins.__file__).parents[1])
@@ -351,7 +351,9 @@ class CollectionCatalog:
         self._messages.append(msg)
 
 
-def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
+def worker(
+    pending_queue: multiprocessing.Queue[Any], completed_queue: multiprocessing.Queue[Any]
+) -> None:
     """Extract the documentation from a plugin, place in completed queue.
 
     :param pending_queue: A queue with plugins to process
@@ -402,7 +404,9 @@ def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessin
             completed_queue.put(("error", (checksum, plugin_path, err_message)))
 
 
-def identify_missing(collections: dict, collection_cache: KeyValueStore) -> tuple[set, list, int]:
+def identify_missing(
+    collections: dict[Any, Any], collection_cache: KeyValueStore
+) -> tuple[set[Any], list[Any], int]:
     """Identify plugins missing from the cache.
 
     :param collections: All plugins found across all collections
@@ -466,7 +470,7 @@ def parse_args() -> tuple[argparse.Namespace, list[Path]]:
     return parsed_args, resolved
 
 
-def retrieve_collections_paths() -> dict:
+def retrieve_collections_paths() -> dict[Any, Any]:
     """Retrieve the currently set collection paths.
 
     :returns: Errors or the configured collection directories
@@ -488,9 +492,9 @@ def retrieve_collections_paths() -> dict:
 
 def retrieve_docs(
     collection_cache: KeyValueStore,
-    errors: list,
-    missing: list,
-    stats: dict,
+    errors: list[dict[str, str]],
+    missing: list[str],
+    stats: dict[Any, Any],
 ) -> None:
     # pylint: disable=too-many-locals
     """Extract the docs from the plugins.
@@ -528,7 +532,7 @@ def retrieve_docs(
             stats["cache_added_errors"] += 1
 
 
-def run_command(cmd: list) -> dict:
+def run_command(cmd: list[str]) -> dict[str, str]:
     """Run a command using subprocess.
 
     :param cmd: The command to run, split
@@ -547,7 +551,7 @@ def run_command(cmd: list) -> dict:
         return {"error": str(exc)}
 
 
-def main() -> dict:
+def main() -> dict[Any, Any]:
     # pylint: disable=protected-access
     # pylint: disable=used-before-assignment
     """Run the collection catalog process.

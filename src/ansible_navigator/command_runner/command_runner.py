@@ -9,6 +9,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from queue import Queue
+from typing import Any
 
 from ansible_navigator.utils.definitions import LogMessage
 
@@ -27,11 +28,11 @@ class Command:
     # pylint: disable=too-many-instance-attributes
     identity: str
     command: str
-    post_process: Callable
+    post_process: Callable[..., Any]
     return_code: int = 0
     stdout: str = ""
     stderr: str = ""
-    details: list = field(default_factory=list)
+    details: list[Any] = field(default_factory=list)
     errors: str = ""
     messages: list[LogMessage] = field(default_factory=list)
 
@@ -73,7 +74,9 @@ def run_command(command: Command) -> None:
         command.stderr = str(exc.stderr)
 
 
-def worker(pending_queue: multiprocessing.Queue, completed_queue: multiprocessing.Queue) -> None:
+def worker(
+    pending_queue: multiprocessing.Queue[Any], completed_queue: multiprocessing.Queue[Any]
+) -> None:
     """Read pending, run, post process, and place in completed.
 
     :param pending_queue: All pending commands

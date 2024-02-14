@@ -3,6 +3,7 @@
 import pathlib
 
 from collections.abc import Callable
+from typing import Any
 
 import pytest
 
@@ -17,7 +18,7 @@ def test_posix_message_queue_ee(
     ee_support: bool,
     engine: str,
     platform: str,
-    generate_config: Callable,
+    generate_config: Callable[..., Any],
 ):
     """Confirm error messages related to missing ``/dev/mqueue/`` and ``podman``.
 
