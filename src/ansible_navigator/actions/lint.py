@@ -351,7 +351,7 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return None
 
-    def update(self):
+    def update(self) -> None:
         """Request calling app update, and update modification time if needed."""
         self._calling_app.update()
 
@@ -362,7 +362,7 @@ class Action(ActionBase):
                 self._build_issues_menu()
 
     @property
-    def _max_severity_color(self):
+    def _max_severity_color(self) -> int:
         """Determine the color of the maximum severity issue.
 
         :returns: The color

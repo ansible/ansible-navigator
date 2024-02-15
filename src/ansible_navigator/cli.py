@@ -14,6 +14,7 @@ from importlib.metadata import version
 from importlib.util import find_spec
 from pathlib import Path
 from shutil import copyfile
+from typing import Any
 
 from .action_defs import ActionReturn
 from .action_defs import RunInteractiveReturn
@@ -96,7 +97,7 @@ def log_dependencies() -> list[LogMessage]:
     return messages
 
 
-def pull_image(args):
+def pull_image(args: Any) -> None:
     """Pull the image if required.
 
     :param args: Copy of NavigatorConfiguration

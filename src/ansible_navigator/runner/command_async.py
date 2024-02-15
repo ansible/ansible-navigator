@@ -8,6 +8,7 @@ queue with messages.
 
 from copy import deepcopy
 from queue import Queue
+from threading import Thread
 from typing import Any
 
 from ansible_runner import run_command_async
@@ -43,7 +44,7 @@ class CommandAsync(CommandBase):
         self._queue.put(new_event)
         return self._write_job_events
 
-    def run(self):
+    def run(self) -> Thread:
         """Initiate the execution of the runner command in async mode.
 
         :returns: The runner thread

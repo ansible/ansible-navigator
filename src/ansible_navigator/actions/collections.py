@@ -213,7 +213,7 @@ class Action(ActionBase):
         )
         return RunStdoutReturn(message="", return_code=0)
 
-    def notify_failed(self):
+    def notify_failed(self) -> None:
         """Notify collection cataloging failed."""
         msgs = ["humph. Something went really wrong while cataloging collections."]
         msgs.append("Details have been added to the log file")
@@ -221,12 +221,12 @@ class Action(ActionBase):
         warning = warning_notification(messages=msgs + closing)
         self._interaction.ui.show_form(warning)
 
-    def notify_none(self):
+    def notify_none(self) -> None:
         """Notify no collections were found."""
         msgs = ["humph. no collections were found in the following paths:"]
         paths = []
         for path in self._collection_scanned_paths:
-            if path.startswith(self._args.internals.cache_path):
+            if path.startswith(str(self._args.internals.cache_path)):
                 continue
             if self._args.execution_environment:
                 if path.startswith(self._adjacent_collection_dir):
@@ -269,7 +269,7 @@ class Action(ActionBase):
         else:
             self.steps.append(result)
 
-    def _build_main_menu(self):
+    def _build_main_menu(self) -> Step:
         """Build the menu of collections.
 
         :returns: The collections menu definition

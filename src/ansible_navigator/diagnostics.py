@@ -119,7 +119,7 @@ DIAGNOSTIC_FAILURES = 0
 class FailedCollectionError(Exception):
     """Exception for a failed collection."""
 
-    def __init__(self, errors):
+    def __init__(self, errors: dict[str, JSONTypes]) -> None:
         """Initialize the exception.
 
         :param errors: The errors
@@ -128,7 +128,7 @@ class FailedCollectionError(Exception):
         self.errors = errors
 
 
-def diagnostic_runner(func):
+def diagnostic_runner(func) -> Callable[..., Any]:
     """Wrap and run a collector.
 
     :param func: The function to wrap
@@ -347,9 +347,13 @@ class DiagnosticsCollector:
         """
         results = image_introspect.main(serialize=False)
         if not results:
-            raise FailedCollectionError(results)
-        if results.get("errors"):
-            raise FailedCollectionError(results["errors"])
+            raise FailedCollectionError({})
+        errors = results.get("errors")
+        if errors:
+            if not isinstance(errors, dict):
+                msg = "Unexpected data"
+                raise RuntimeError(msg)
+            raise FailedCollectionError(errors)  # type: ignore
         return {"details": results}
 
     @diagnostic_runner
