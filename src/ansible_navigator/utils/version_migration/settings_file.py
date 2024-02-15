@@ -21,7 +21,7 @@ class SettingsFile(Migration):
 
     name = "Settings file migration base class"
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the settings file migration."""
         super().__init__()
         self.content: dict[Any, Any] = {}

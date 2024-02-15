@@ -44,7 +44,7 @@ class Collector:
 
     name: str
 
-    def start(self, color: bool):
+    def start(self, color: bool) -> None:
         """Output start information to the console.
 
         :param color: Whether to color the message
@@ -94,20 +94,20 @@ class Diagnostics:
     settings_file: dict[str, JSONTypes]
 
 
-def register(collector: Collector):
+def register(collector: Collector) -> Callable[..., Any]:
     """Register a collector.
 
     :param collector: The collector to register
     :returns: The decorator
     """
 
-    def decorator(func):
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Add the dunder collector to the func.
 
         :param func: The function to decorate
         :returns: The decorated function
         """
-        func.__collector__ = collector
+        func.__collector__ = collector  # type: ignore[attr-defined]
         return func
 
     return decorator
@@ -128,14 +128,14 @@ class FailedCollectionError(Exception):
         self.errors = errors
 
 
-def diagnostic_runner(func) -> Callable[..., Any]:
+def diagnostic_runner(func: Callable[..., Any]) -> Callable[..., Any]:
     """Wrap and run a collector.
 
     :param func: The function to wrap
     :returns: The decorator
     """
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: dict[str, Any]) -> Callable[..., Any]:
         """Wrap and run the collector.
 
         :param args: The positional arguments
@@ -145,7 +145,7 @@ def diagnostic_runner(func) -> Callable[..., Any]:
         global DIAGNOSTIC_FAILURES
         start = datetime.now(timezone.utc)
         color = args[0].color
-        collector = func.__collector__
+        collector = func.__collector__  # type: ignore[attr-defined]
         collector.start(color=color)
         try:
             result = func(*args, **kwargs)

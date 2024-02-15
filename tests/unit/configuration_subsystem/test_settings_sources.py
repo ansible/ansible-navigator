@@ -1,6 +1,7 @@
 """Test the ability to produce a dictionary of effective sources."""
 
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
@@ -8,10 +9,11 @@ from ansible_navigator.configuration_subsystem import Configurator
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem import to_sources
+from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
 from ansible_navigator.initialization import parse_and_update
 
 
-def test_defaults():
+def test_defaults() -> None:
     """Check the settings file used as a sample against the schema."""
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
@@ -25,7 +27,7 @@ def test_defaults():
         )
 
 
-def test_cli():
+def test_cli() -> None:
     """Test the source of effective settings given some cli parameters."""
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
@@ -44,7 +46,7 @@ def test_cli():
         )
 
 
-def test_env(monkeypatch: pytest.MonkeyPatch):
+def test_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test the source of effective settings given some environment variables.
 
     :param monkeypatch: The pytest monkeypatch fixture
@@ -71,7 +73,7 @@ def test_env(monkeypatch: pytest.MonkeyPatch):
         )
 
 
-def test_full(settings_env_var_to_full):
+def test_full(settings_env_var_to_full: tuple[Path, SettingsFileType]) -> None:
     """Test the source of effective settings given a full config.
 
     :param settings_env_var_to_full: The pytest fixture to provide a full config

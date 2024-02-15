@@ -321,7 +321,7 @@ def pytest_sessionstart(session: pytest.Session):
 USER_ENVIRONMENT = {}
 
 
-def pytest_configure(config: pytest.Config):
+def pytest_configure(config: pytest.Config) -> None:
     """Attempt to save a contributor some troubleshooting.
 
     :param config: The pytest config object
@@ -359,7 +359,7 @@ def pytest_configure(config: pytest.Config):
         pytest.exit("Please install tmux before testing.")
 
 
-def pytest_unconfigure(config: pytest.Config):
+def pytest_unconfigure(config: pytest.Config) -> None:
     """Restore the environment variables that start with ANSIBLE_.
 
     :param config: The pytest config object

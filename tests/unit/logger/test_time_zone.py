@@ -7,12 +7,12 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 from re import Pattern
+from typing import Any
 
 import pytest
 
 from ansible_navigator import cli
 from tests.defaults import BaseScenario
-from tests.defaults import id_func
 
 
 @dataclass
@@ -24,7 +24,7 @@ class Scenario(BaseScenario):
     time_zone: str | None = None
     will_exit: bool = False
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide the test id.
 
         :returns: The test id
@@ -44,24 +44,38 @@ class Scenario(BaseScenario):
 
 
 test_data = (
-    Scenario(name="0", re_match=re.compile(r"^.*\+00:00$")),
-    Scenario(name="1", re_match=re.compile(r"^.*-0[78]:00$"), time_zone="America/Los_Angeles"),
-    Scenario(name="2", re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"),
-    Scenario(name="3", re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
-    Scenario(
-        name="4", re_match=re.compile(r"^.*\+00:00$"), time_zone="does_not_exist", will_exit=True
+    pytest.param(Scenario(name="0", re_match=re.compile(r"^.*\+00:00$")), id="0"),
+    pytest.param(
+        Scenario(name="1", re_match=re.compile(r"^.*-0[78]:00$"), time_zone="America/Los_Angeles"),
+        id="1",
+    ),
+    pytest.param(
+        Scenario(name="2", re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"), id="2"
+    ),
+    pytest.param(
+        Scenario(name="3", re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
+        id="3",
+    ),
+    pytest.param(
+        Scenario(
+            name="4",
+            re_match=re.compile(r"^.*\+00:00$"),
+            time_zone="does_not_exist",
+            will_exit=True,
+        ),
+        id="4",
     ),
 )
 
 
 @pytest.mark.flaky(reruns=2)
-@pytest.mark.parametrize("data", test_data, ids=id_func)
+@pytest.mark.parametrize("data", test_data)
 def test_tz_support(
     data: Scenario,
     caplog: pytest.LogCaptureFixture,
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
-):
+) -> None:
     """Start with the CLI, create log messages and match the time zone.
 
     :param caplog: The log capture fixture
@@ -70,7 +84,7 @@ def test_tz_support(
     :param tmp_path: A temporary file path
     """
 
-    def return_none(*_args, **_kwargs) -> None:
+    def return_none(*_args: Any, **_kwargs: dict[str, Any]) -> None:
         """Take no action, return none.
 
         :param _args: Arguments

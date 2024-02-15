@@ -75,12 +75,12 @@ class CommandRunner:
     Run commands using single or multiple processes.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the command runner."""
         self._completed_queue: Queue[Any] | None = None
         self._pending_queue: Queue[Any] | None = None
 
-    def run_multi_thread(self, command_classes):
+    def run_multi_thread(self, command_classes: list[CmdParser]) -> list[CmdParser]:
         """Run commands with multiple threads.
 
         Workers are started to read from pending queue.
@@ -94,17 +94,16 @@ class CommandRunner:
             self._completed_queue = Queue()
         if self._pending_queue is None:
             self._pending_queue = Queue()
-        results = {}
         all_commands = tuple(
             command for command_class in command_classes for command in command_class.commands
         )
         self.start_workers(all_commands)
-        results = []
+        results: list[CmdParser] = []
         while len(results) != len(all_commands):
             results.append(self._completed_queue.get())
         return results
 
-    def start_workers(self, jobs):
+    def start_workers(self, jobs: tuple[Command, ...]) -> None:
         """Start workers and submit jobs to pending queue.
 
         :param jobs: The jobs to be run
@@ -118,6 +117,8 @@ class CommandRunner:
             )
             processes.append(proc)
             proc.start()
+        if not self._pending_queue:
+            raise RuntimeError
         for job in jobs:
             self._pending_queue.put(job)
         for _proc in range(worker_count):
@@ -128,6 +129,11 @@ class CommandRunner:
 
 class CmdParser:
     """A base class for command parsers with common parsing functions."""
+
+    @property
+    def commands(self) -> list[Command]:
+        """List of commands to be executed."""
+        return []
 
     @staticmethod
     def _strip(value: str) -> str:
@@ -387,7 +393,7 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     response["environment_variables"] = {"details": dict(os.environ)}
     try:
         command_runner = CommandRunner()
-        commands = [
+        commands: list[CmdParser] = [
             AnsibleCollections(),
             AnsibleVersion(),
             OsRelease(),

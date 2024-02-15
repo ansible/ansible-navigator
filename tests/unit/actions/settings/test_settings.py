@@ -31,7 +31,7 @@ class ColorMenuTestEntry(BaseScenario):
     default: bool
     """Is the current value equal to the default"""
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide a string representation.
 
         :returns: The string representation of self
@@ -56,7 +56,7 @@ ColorMenuTestEntries = (
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=ColorMenuTestEntries, ids=id_func)
-def test_color_menu(data: ColorMenuTestEntry):
+def test_color_menu(data: ColorMenuTestEntry) -> None:
     """Test color menu for a val set to the default.
 
     :param data: A test entry
@@ -91,7 +91,7 @@ class ContentHeadingEntry(BaseScenario):
     """The content"""
 
     @property
-    def heading(self):
+    def heading(self) -> str:
         """Create the expected heading for this content.
 
         :returns: The expected heading
@@ -99,7 +99,7 @@ class ContentHeadingEntry(BaseScenario):
         heading = CONTENT_HEADING_DEFAULT if self.content.default else CONTENT_HEADING_NOT_DEFAULT
         return heading.format(**asdict(self.content))
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide a string representation.
 
         :returns: The string representation of self
@@ -150,7 +150,7 @@ ContentHeadingEntries = (
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=ContentHeadingEntries, ids=id_func)
-def test_content_heading(data: ContentHeadingEntry):
+def test_content_heading(data: ContentHeadingEntry) -> None:
     """Test menu generation.
 
     :param data: The test data

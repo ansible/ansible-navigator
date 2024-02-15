@@ -20,26 +20,19 @@ class TstPullPolicy(NamedTuple):
     pull_required: bool
 
 
-def id_from_data(value):
-    """Return the name from the test data object.
-
-    :param value: Test object
-    :returns: Test object name
-    """
-    return f" {value.pull_policy} "
-
-
 # Note, these tests assume our default is not a :latest
 data_do_have = [
-    TstPullPolicy(pull_policy="always", pull_required=True),
-    TstPullPolicy(pull_policy="missing", pull_required=False),
-    TstPullPolicy(pull_policy="never", pull_required=False),
-    TstPullPolicy(pull_policy="tag", pull_required=False),
+    pytest.param(TstPullPolicy(pull_policy="always", pull_required=True), id="always"),
+    pytest.param(TstPullPolicy(pull_policy="missing", pull_required=False), id="missing"),
+    pytest.param(TstPullPolicy(pull_policy="never", pull_required=False), id="never"),
+    pytest.param(TstPullPolicy(pull_policy="tag", pull_required=False), id="tag"),
 ]
 
 
-@pytest.mark.parametrize("data", data_do_have, ids=id_from_data)
-def test_do_have(valid_container_engine: str, default_ee_image_name: str, data: TstPullPolicy):
+@pytest.mark.parametrize("data", data_do_have)
+def test_do_have(
+    valid_container_engine: str, default_ee_image_name: str, data: TstPullPolicy
+) -> None:
     """Test using an image local.
 
     :param valid_container_engine: Container engine identifier
@@ -58,14 +51,14 @@ def test_do_have(valid_container_engine: str, default_ee_image_name: str, data: 
 
 # Note, these tests assume the image is a :latest
 data_do_have_but_latest = [
-    TstPullPolicy(pull_policy="always", pull_required=True),
-    TstPullPolicy(pull_policy="missing", pull_required=False),
-    TstPullPolicy(pull_policy="never", pull_required=False),
-    TstPullPolicy(pull_policy="tag", pull_required=True),
+    pytest.param(TstPullPolicy(pull_policy="always", pull_required=True), id="always"),
+    pytest.param(TstPullPolicy(pull_policy="missing", pull_required=False), id="missing"),
+    pytest.param(TstPullPolicy(pull_policy="never", pull_required=False), id="never"),
+    pytest.param(TstPullPolicy(pull_policy="tag", pull_required=True), id="tag"),
 ]
 
 
-@pytest.mark.parametrize("data", data_do_have_but_latest, ids=id_from_data)
+@pytest.mark.parametrize("data", data_do_have_but_latest)
 def test_do_have_but_latest(
     valid_container_engine: str, small_image_name: str, data: TstPullPolicy
 ):
@@ -86,15 +79,15 @@ def test_do_have_but_latest(
 
 
 data_missing_locally = [
-    TstPullPolicy(pull_policy="always", pull_required=True),
-    TstPullPolicy(pull_policy="missing", pull_required=True),
-    TstPullPolicy(pull_policy="never", pull_required=False),
-    TstPullPolicy(pull_policy="tag", pull_required=True),
+    pytest.param(TstPullPolicy(pull_policy="always", pull_required=True), id="always"),
+    pytest.param(TstPullPolicy(pull_policy="missing", pull_required=True), id="missing"),
+    pytest.param(TstPullPolicy(pull_policy="never", pull_required=False), id="never"),
+    pytest.param(TstPullPolicy(pull_policy="tag", pull_required=True), id="tag"),
 ]
 
 
-@pytest.mark.parametrize("data", data_missing_locally, ids=id_from_data)
-def test_missing_locally(valid_container_engine, data):
+@pytest.mark.parametrize("data", data_missing_locally)
+def test_missing_locally(valid_container_engine: str, data: TstPullPolicy) -> None:
     """Test using an image not local.
 
     :param valid_container_engine: Container engine identifier

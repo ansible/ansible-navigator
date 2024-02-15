@@ -4,6 +4,8 @@ import shlex
 
 from copy import deepcopy
 from pathlib import Path
+from typing import Any
+from typing import Literal
 from typing import NamedTuple
 
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
@@ -104,7 +106,22 @@ from tests.defaults import FIXTURES_DIR
     ),
 )
 @patch("shutil.which", return_value="/path/to/container_engine")
-def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
+def test_update_args_general(
+    _mf1: Any,
+    monkeypatch: pytest.MonkeyPatch,
+    given: list[str],
+    argname: Literal[
+        "plugin_type",
+        "plugin_name",
+        "execution_environment_image",
+        "log_level",
+        "editor_command",
+        "inventory",
+        "playbook",
+        "cmdline",
+    ],
+    expected: list[str],
+) -> None:
     """Test the parse and update function.
 
     :param monkeypatch: The monkeypatch fixture
@@ -123,7 +140,7 @@ def test_update_args_general(_mf1, monkeypatch, given, argname, expected):
 
 
 @patch("shutil.which", return_value="/path/to/container_engine")
-def test_editor_command_default(_mf1, monkeypatch):
+def test_editor_command_default(_mf1: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """Test editor with default.
 
     :param monkeypatch: The monkeypatch fixture
@@ -138,18 +155,6 @@ def test_editor_command_default(_mf1, monkeypatch):
     _messages, exit_msgs = parse_and_update(params=[], args=args)
     assert not exit_msgs
     assert args.editor_command == "vi +{line_number} {filename}"
-
-
-def id_for_hint_test(value):
-    """Generate an id for the hint test.
-
-    The spaces here help with zsh
-    https://github.com/microsoft/vscode-python/issues/10398
-
-    :param value: Test identifier
-    :returns: Test descriptor
-    """
-    return f" {value.command} "
 
 
 class TstHint(NamedTuple):
@@ -194,7 +199,12 @@ tst_hint_data = [
 
 
 @pytest.mark.parametrize("data", tst_hint_data)
-def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
+def test_hints(
+    monkeypatch: pytest.MonkeyPatch,
+    locked_directory: str,
+    valid_container_engine: str,
+    data: TstHint,
+) -> None:
     """Test the hints don't generate a traceback.
 
     :param monkeypatch: The monkeypatch fixture
@@ -214,13 +224,13 @@ def test_hints(monkeypatch, locked_directory, valid_container_engine, data):
     if data.set_ce:
         params += ["--ce", valid_container_engine]
 
-    _messages, exit_msgs = parse_and_update(params=params, args=args)
+    _messages, exit_msgs_obj = parse_and_update(params=params, args=args)
     expected = f"{data.prefix} {data.expected}"
-    exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
+    exit_msgs = [exit_msg.message for exit_msg in exit_msgs_obj]
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
 
 
-def test_no_term(monkeypatch):
+def test_no_term(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test for err and hint w/o TERM.
 
     :param monkeypatch: The monkeypatch fixture
@@ -228,9 +238,9 @@ def test_no_term(monkeypatch):
     monkeypatch.delenv("TERM")
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
-    params = []
-    _messages, exit_msgs = parse_and_update(params=params, args=args)
-    exit_msgs = [exit_msg.message for exit_msg in exit_msgs]
+    params: list[str] = []
+    _messages, exit_msgs_obj = parse_and_update(params=params, args=args)
+    exit_msgs = [exit_msg.message for exit_msg in exit_msgs_obj]
     expected = "TERM environment variable must be set"
     assert any(expected in exit_msg for exit_msg in exit_msgs), (expected, exit_msgs)
     expected = "Try again after setting the TERM environment variable"
@@ -241,7 +251,7 @@ def test_for_version_logged(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
     tmp_path: Path,
-):
+) -> None:
     """Ensure the version is captured in the log.
 
     :param monkeypatch: The monkey patch fixture
