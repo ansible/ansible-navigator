@@ -124,8 +124,7 @@ class TmuxSession:
         self._pane.split_window(vertical=False, attach=False)
         # attached to upper left
         self._window.resize(height=self._pane_height * 2, width=self._pane_width * 2)
-        self._pane.set_height(self._pane_height)
-        self._pane.set_width(self._pane_width)
+        self._pane.resize(height=self._pane_height, width=self._pane_width)
 
         # Figure out where the tox initiated venv is. In environments where a
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
