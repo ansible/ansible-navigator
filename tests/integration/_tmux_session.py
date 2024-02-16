@@ -222,7 +222,7 @@ class TmuxSession:
         :param exc_traceback: exception traceback
         """
         if self._server.has_session(self._session_name):
-            self._session.kill_session()
+            self._session.kill()
 
     def _capture_pane(self) -> list[str]:
         """Capture the pane.
