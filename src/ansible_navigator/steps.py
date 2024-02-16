@@ -159,7 +159,7 @@ class TypedStep(Generic[T]):
     _value_changed: bool = False
     _value: Sequence[T] = field(default_factory=list)
     columns: list[str] | None = None
-    select_func: Callable[[], TypedStep] | None = None
+    select_func: Callable[[], TypedStep[Any]] | None = None
     show_func: Callable[[], None] | None = None
 
     @property
@@ -224,7 +224,7 @@ class TypedStep(Generic[T]):
         self._value = value
 
 
-class Steps(deque):
+class Steps(deque[Any]):
     """A custom deque."""
 
     def back_one(self) -> Any:

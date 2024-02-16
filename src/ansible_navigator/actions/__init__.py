@@ -17,7 +17,6 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from typing import Any
-from typing import Optional
 
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic
@@ -31,7 +30,7 @@ get: Callable[[str], Any] = actions.get_factory(__package__)
 
 names = actions.names_factory(__package__)
 
-kegexes: Callable = actions.kegexes_factory(__package__)
+kegexes: Callable[..., Any] = actions.kegexes_factory(__package__)
 
 run_action_stdout: Callable[
     [str, ApplicationConfiguration],

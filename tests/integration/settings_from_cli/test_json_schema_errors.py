@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import shlex
 import subprocess
 
 from dataclasses import dataclass
@@ -11,7 +12,6 @@ from typing import Any
 
 import pytest
 
-from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import FIXTURES_DIR
 from tests.defaults import BaseScenario
 from tests.defaults import id_func
@@ -78,16 +78,17 @@ def test(data: Scenario, subtests: Any, tmp_path: Path):
     """
     assert data.settings_file.exists()
     venv_path = os.environ.get("VIRTUAL_ENV")
-    if venv_path is None:
-        msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
-        raise AssertionError(msg)
-    venv = Path(venv_path, "bin", "activate")
+    venv_prefix = ""
+    if venv_path is not None:
+        venv = str(Path(venv_path, "bin", "activate"))
+        venv_prefix = f"source {venv} && "
     log_file = tmp_path / "log.txt"
 
     command = list(data.command) + ["--lf", str(log_file)]
 
-    bash_wrapped = f"/bin/bash -c 'source {venv!s} && {shlex_join(command)}'"
-    env = {"ANSIBLE_NAVIGATOR_CONFIG": str(data.settings_file), "NO_COLOR": "true"}
+    bash_wrapped = f"/bin/bash -c '{venv_prefix!s}{shlex.join(split_command=command)}'"
+    # Some os.environ are required in order to make it work, likely HOME and PATH at least.
+    env = os.environ | {"ANSIBLE_NAVIGATOR_CONFIG": str(data.settings_file), "NO_COLOR": "true"}
     proc_out = subprocess.run(
         bash_wrapped,
         check=False,

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
+from typing import Any
 
 import pytest
 
@@ -22,7 +23,7 @@ class Scenario(BaseScenario):
     """Data structure for the time zone post processor tests."""
 
     name: str
-    current: bool | str | dict
+    current: bool | str | dict[Any, Any]
     source: C
     exit_message_substr: str = ""
     expected: str | None = None

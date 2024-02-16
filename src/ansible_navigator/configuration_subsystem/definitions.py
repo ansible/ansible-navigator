@@ -15,7 +15,6 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import NewType
 from typing import TypeVar
-from typing import Union
 
 from ansible_navigator.utils.functions import abs_user_path
 from ansible_navigator.utils.functions import oxfordcomma
@@ -468,10 +467,12 @@ class PaeChangeRequest:
 # and some common ones
 
 # A type used for the settings as a dictionary
-SettingsFileType = NewType("SettingsFileType", dict[str, bool | dict | int | str | list])
+SettingsFileType = NewType(
+    "SettingsFileType", dict[str, bool | dict[Any, Any] | int | str | list[Any]]
+)
 
 # A type used to describe a schema file for the settings
 SettingsSchemaType = NewType(
     "SettingsSchemaType",
-    dict[str, dict[str, bool | dict | int | str | list]],
+    dict[str, dict[str, bool | dict[Any, Any] | int | str | list[Any]]],
 )

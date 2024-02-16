@@ -27,7 +27,6 @@ inventory = inventory.yml
 """
 
 
-@pytest.mark.usefixtures("use_venv")
 @ee_states
 def test_valid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm a valid ansible.cfg is parsed.
@@ -49,7 +48,6 @@ def test_valid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     assert parsed_cfg.config.text == ANSIBLE_CFG_VALID.splitlines()
 
 
-@pytest.mark.usefixtures("use_venv")
 @ee_states
 def test_valid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm a valid ansible.cfg is parsed using configurator.
@@ -80,7 +78,6 @@ def test_valid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.Monk
     )
 
 
-@pytest.mark.usefixtures("use_venv")
 @ee_states
 def test_valid_home(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm a valid .ansible.cfg is parsed when in the home directory.
@@ -119,7 +116,6 @@ ANSIBLE_CFG_INVALID = """
 """
 
 
-@pytest.mark.usefixtures("use_venv")
 @ee_states
 def test_invalid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm a invalid ansible.cfg raises errors.
@@ -140,7 +136,6 @@ def test_invalid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPa
     assert "12345" in parsed_cfg.exit_messages[1].message
 
 
-@pytest.mark.usefixtures("use_venv")
 @ee_states
 def test_invalid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm a invalid ansible.cfg raises errors using configurator.

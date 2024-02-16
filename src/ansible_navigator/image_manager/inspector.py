@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import re
 
+from typing import Any
+
 from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner import CommandRunner
 from ansible_navigator.utils.functions import pascal_to_snake
@@ -89,7 +91,7 @@ class ImagesList:
             command.details = valid_images
 
 
-def inspect_all(container_engine: str) -> tuple[list, str]:
+def inspect_all(container_engine: str) -> tuple[list[dict[str, Any]], str]:
     """Run inspect against all images in the list.
 
     :param container_engine: Name of the container engine

@@ -28,11 +28,11 @@ class Base:
         execution_environment: bool | None = False,
         execution_environment_image: str | None = None,
         navigator_mode: str | None = None,
-        container_volume_mounts: list | None = None,
-        container_options: list | None = None,
+        container_volume_mounts: list[str] | None = None,
+        container_options: list[str] | None = None,
         container_workdir: str | None = None,
-        set_environment_variable: dict | None = None,
-        pass_environment_variable: list | None = None,
+        set_environment_variable: dict[str, str] | None = None,
+        pass_environment_variable: list[str] | None = None,
         host_cwd: str | None = None,
         rotate_artifacts: int | None = None,
         timeout: int | None = None,
@@ -85,7 +85,7 @@ class Base:
         self.cancelled: bool = False
         self.finished: bool = False
         self.status: str | None = None
-        self._runner_args: dict = {}
+        self._runner_args: dict[str, Any] = {}
 
         # when the ce is podman, set the container user to root
         if self._ce == "podman":

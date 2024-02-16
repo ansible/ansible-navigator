@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 from typing import ClassVar
 from typing import NewType
 from typing import TypeVar
-from typing import Union
 
 from ansible_navigator.content_defs import ContentBase
 
@@ -17,7 +17,7 @@ from .navigator_configuration import Internals
 from .utils import create_settings_file_sample
 
 
-PresentableSettingsEntryValue = bool | dict | str | list
+PresentableSettingsEntryValue = bool | dict[Any, Any] | str | list[str]
 CliT = TypeVar("CliT", bound="PresentableCliParameters")
 EntT = TypeVar("EntT", bound="PresentableSettingsEntry")
 
@@ -54,11 +54,11 @@ class PresentableCliParameters:
 
 
 @dataclass
-class PresentableSettingsEntry(ContentBase):
+class PresentableSettingsEntry(ContentBase[Any]):
     # pylint: disable=too-many-instance-attributes
     """A settings entry in a presentable structure."""
 
-    choices: list
+    choices: list[str | bool]
     """The possible values"""
     current_settings_file: str
     """The path to the current settings file"""
@@ -74,11 +74,11 @@ class PresentableSettingsEntry(ContentBase):
     """The environment variable"""
     name: str
     """The name"""
-    settings_file_sample: str | dict
+    settings_file_sample: str | dict[Any, Any]
     """A sample settings file snippet"""
     source: str
     """The source of the current value"""
-    subcommands: list
+    subcommands: list[str]
     """A list of subcommands where this entry is available"""
     version_added: str
     """The version this entry was added in"""
@@ -104,7 +104,7 @@ class PresentableSettingsEntry(ContentBase):
     @classmethod
     def for_settings_file(
         cls: type[EntT],
-        all_subcommands: list,
+        all_subcommands: list[str],
         application_name: str,
         internals: Internals,
     ) -> EntT:
@@ -138,7 +138,7 @@ class PresentableSettingsEntry(ContentBase):
     @classmethod
     def from_settings_entry(
         cls: type[EntT],
-        all_subcommands: list,
+        all_subcommands: list[str],
         application_name_dashed: str,
         entry: SettingsEntry,
         settings_file_path: str,

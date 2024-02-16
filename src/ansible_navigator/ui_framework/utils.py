@@ -13,7 +13,7 @@ from ansible_navigator.content_defs import ContentBase
 
 
 def convert_percentage(
-    content: dict[str, Any] | ContentBase,
+    content: dict[str, Any] | ContentBase[Any],
     columns: list[str],
     progress_bar_width: int,
 ) -> None:

@@ -74,7 +74,7 @@ class NavigatorPostProcessor:
     # pylint:disable=too-many-public-methods
     """Application post processor."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the post processor."""
         #: Volume mounts accumulated from post processing various config entries.
         #: These get processed towards the end, in the (delayed)

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from ansible_runner import get_inventory
 
 from .base import Base
@@ -14,7 +16,7 @@ class AnsibleInventory(Base):
     def fetch_inventory(
         self,
         action: str,
-        inventories: list,
+        inventories: list[Any],
         response_format: str | None = None,
         host: str | None = None,
         playbook_dir: str | None = None,

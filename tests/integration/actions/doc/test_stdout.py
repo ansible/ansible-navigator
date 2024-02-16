@@ -13,8 +13,8 @@ CLI_DOC_HELP_WITH_EE = (
     " --execution-environment true"
 )
 
-testdata_1: list = [
-    (
+testdata_1 = [
+    pytest.param(
         0,
         CLI_DOC_HELP_WITH_EE,
         "ansible-navigator doc help with ee",
@@ -37,8 +37,8 @@ CLI_DOC_HELP_WITHOUT_EE = (
     " --help-doc -m stdout --execution-environment false"
 )
 
-testdata_2: list = [
-    (
+testdata_2 = [
+    pytest.param(
         0,
         CLI_DOC_HELP_WITHOUT_EE,
         "ansible-navigator doc help without ee",
@@ -61,8 +61,8 @@ CLI_DOC_HELP_WITH_EE_INTERACTIVE_MODE = (
     " --execution-environment true"
 )
 
-testdata_3: list = [
-    (
+testdata_3 = [
+    pytest.param(
         0,
         CLI_DOC_HELP_WITH_EE_INTERACTIVE_MODE,
         "ansible-navigator doc help with ee in interactive mode",
@@ -85,8 +85,8 @@ CLI_DOC_HELP_WITHOUT_EE_INTERACTIVE_MODE = (
     " --execution-environment false"
 )
 
-testdata_4: list = [
-    (
+testdata_4 = [
+    pytest.param(
         0,
         CLI_DOC_HELP_WITHOUT_EE_INTERACTIVE_MODE,
         "ansible-navigator doc help without ee in wrong mode",
@@ -108,8 +108,8 @@ CLI_MODULE_DOC_WITHOUT_EE = (
     "ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment false"
 )
 
-testdata_5: list = [
-    (
+testdata_5 = [
+    pytest.param(
         0,
         CLI_MODULE_DOC_WITHOUT_EE,
         "ansible-navigator doc in stdout mode without EE",
@@ -132,8 +132,8 @@ CLI_MODULE_DOC_WITH_EE = (
     "ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment true"
 )
 
-testdata_6: list = [
-    (
+testdata_6 = [
+    pytest.param(
         0,
         CLI_MODULE_DOC_WITH_EE,
         "ansible-navigator doc in stdout mode with EE",
@@ -157,8 +157,8 @@ CLI_LOOKUP_DOC_WITHOUT_EE = (
     " --execution-environment false"
 )
 
-testdata_7: list = [
-    (
+testdata_7 = [
+    pytest.param(
         0,
         CLI_LOOKUP_DOC_WITHOUT_EE,
         "ansible-navigator lookup doc in stdout mode without EE",
@@ -182,8 +182,8 @@ CLI_LOOKUP_DOC_WITH_EE = (
     " --execution-environment true"
 )
 
-testdata_8: list = [
-    (
+testdata_8 = [
+    pytest.param(
         0,
         CLI_LOOKUP_DOC_WITH_EE,
         "ansible-navigator lookup doc in stdout mode with EE",
@@ -207,8 +207,8 @@ CLI_FILTER_DOC_WITHOUT_EE = (
     " --execution-environment false"
 )
 
-testdata_9: list = [
-    (
+testdata_9 = [
+    pytest.param(
         0,
         CLI_FILTER_DOC_WITHOUT_EE,
         "ansible-navigator filter doc in stdout mode without EE",
@@ -232,8 +232,8 @@ CLI_FILTER_DOC_WITH_EE = (
     " --execution-environment true"
 )
 
-testdata_10: list = [
-    (
+testdata_10 = [
+    pytest.param(
         0,
         CLI_FILTER_DOC_WITH_EE,
         "ansible-navigator filter doc in stdout mode with EE",

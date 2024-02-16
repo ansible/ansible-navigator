@@ -26,7 +26,7 @@ class FieldText:
     window_handler = FormHandlerText
     response: str | Unknown = unknown
     valid: bool | Unknown = unknown
-    validator: Callable = FieldValidators.none
+    validator: Callable[..., Any] = FieldValidators.none
     value: Any = unknown
     win: Window | None = None
 

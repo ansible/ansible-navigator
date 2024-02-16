@@ -23,7 +23,6 @@ inventory = inventory.yml,/tmp/inventory.yaml
 """
 
 
-@pytest.mark.usefixtures("use_venv")
 @ee_states
 def test_from_ansible_cfg(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """Confirm inventory is used from a valid ansible.cfg.

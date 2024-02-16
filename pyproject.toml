@@ -65,6 +65,23 @@ data_file = ".tox/.coverage"
 parallel = true
 source_pkgs = ["ansible_navigator"]
 
+[tool.mypy]
+python_version = "3.10"
+# strict = true
+color_output = true
+error_summary = true
+# disallow_untyped_calls = true
+# disallow_untyped_defs = true
+disallow_any_generics = true
+incremental = false
+
+[[tool.mypy.overrides]]
+# https://github.com/ansible/ansible-runner/issues/1340
+module = [
+  "ansible_runner"
+]
+ignore_missing_imports = true
+
 [tool.pydoclint]
 allow-init-docstring = true
 arg-type-hints-in-docstring = false
@@ -220,7 +237,9 @@ enable = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-n=auto --dist=loadfile --maxfail=10 --durations=30 --showlocals"
+# do not add xdist options here as this will make running of a single test and
+# debugging hard.
+addopts = "--maxfail=10 --durations=30 --showlocals"
 filterwarnings = [
   "error",
   # https://github.com/ansible/ansible-runner/issues/1246
@@ -238,7 +257,9 @@ PYTEST_MAX_TEST_ID_LENGTH = 0
 fix = true
 line-length = 100
 builtins = ["__"]
-select = ["ALL"]
+exclude = ["tests/fixtures/**", ".git"]
+
+[tool.ruff.lint]
 ignore = [
   'ANN001', # Missing type annotation for function argument `output`
   'ANN002', # Missing type annotation for `*args`
@@ -275,8 +296,8 @@ ignore = [
   'D105', # Missing docstring in magic method
   'D400', # [*] First line should end with a period
   'D403', # [*] First word of the first line should be capitalized: `tokenize` -> `Tokenize`
+  'E501', # line-too-long, already covered by black
   'ERA001', # [*] Found commented-out code
-  'F401', # [*] `ansible_navigator.version.__version__` imported but unused
   'FBT001', # Boolean positional arg in function definition
   'FBT002', # Boolean default value in function definition
   'FBT003', # Boolean positional value in function call
@@ -368,25 +389,24 @@ ignore = [
   'TRY400', # Use `logging.exception` instead of `logging.error`
   'TRY401' # Redundant exception object included in `logging.exception` call
 ]
-exclude = ["tests/fixtures/**", ".git"]
+select = ["ALL"]
 
-[tool.ruff.flake8-pytest-style]
+[tool.ruff.lint.flake8-pytest-style]
 parametrize-values-type = "tuple"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 force-single-line = true # Force from .. import to be 1 per line
 known-first-party = ["ansible_navigator"]
 lines-after-imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
 lines-between-types = 1 # Separate import/from with 1 line
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "pep257"
 
 [tool.setuptools.dynamic]
 dependencies = {file = [".config/requirements.in"]}
-optional-dependencies.test = {file = [".config/requirements-test.txt"]}
-optional-dependencies.lock = {file = [".config/requirements-lock.txt"]}
-optional-dependencies.docs = {file = [".config/requirements-docs.txt"]}
+optional-dependencies.test = {file = [".config/requirements-test.in"]}
+optional-dependencies.docs = {file = [".config/requirements-docs.in"]}
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"

@@ -22,7 +22,7 @@ from .definitions import SettingsFileType
 
 def create_settings_file_sample(
     settings_path: str,
-    placeholder: bool | int | str | dict | list = "",
+    placeholder: bool | int | str | dict[Any, Any] | list[Any] = "",
 ) -> SettingsFileType:
     """Generate a settings file sample.
 

@@ -13,10 +13,11 @@ from collections.abc import Callable
 from queue import Queue
 from types import SimpleNamespace
 from typing import Any
-from typing import Union
+from typing import TypeAlias
 
 
-JSONTypes = bool | int | str | dict | list
+# https://github.com/python/typing/issues/182#issuecomment-1320974824
+JSONTypes: TypeAlias = dict[str, "JSONTypes"] | list["JSONTypes"] | str | int | float | bool | None
 
 
 class Command(SimpleNamespace):
@@ -24,11 +25,11 @@ class Command(SimpleNamespace):
 
     id_: str
     command: str
-    parse: Callable
+    parse: Callable[..., Any]
     stdout: str = ""
     stderr: str = ""
-    details: list | dict | str = ""
-    errors: list = []
+    details: list[str] | dict[Any, Any] | str = ""
+    errors: list[str] = []
 
 
 def run_command(command: Command) -> None:
@@ -50,7 +51,7 @@ def run_command(command: Command) -> None:
         command.errors = [str(exc.stderr)]
 
 
-def worker(pending_queue: Queue, completed_queue: Queue) -> None:
+def worker(pending_queue: Queue[Any], completed_queue: Queue[Any]) -> None:
     """Run a command from pending, parse, and place in completed.
 
     :param pending_queue: A queue with plugins to process
@@ -76,8 +77,8 @@ class CommandRunner:
 
     def __init__(self):
         """Initialize the command runner."""
-        self._completed_queue: Queue | None = None
-        self._pending_queue: Queue | None = None
+        self._completed_queue: Queue[Any] | None = None
+        self._pending_queue: Queue[Any] | None = None
 
     def run_multi_thread(self, command_classes):
         """Run commands with multiple threads.
@@ -381,7 +382,7 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     :param serialize: Whether to serialize the results
     :returns: The collected data or none if serialize is False
     """
-    response: dict = {"errors": []}
+    response: dict[str, Any] = {"errors": []}
     response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}
     response["environment_variables"] = {"details": dict(os.environ)}
     try:

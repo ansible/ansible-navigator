@@ -30,7 +30,7 @@ from .definitions import LogMessage
 logger = logging.getLogger(__name__)
 
 
-def oxfordcomma(listed, condition):
+def oxfordcomma(listed: Iterable[bool | str], condition: str) -> str:
     """Format a list into a sentence.
 
     :param listed: List of string entries to modify
@@ -41,10 +41,10 @@ def oxfordcomma(listed, condition):
     if len(listed) == 0:
         return ""
     if len(listed) == 1:
-        return listed[0]
+        return str(listed[0])
     if len(listed) == 2:
         return f"{listed[0]} {condition} {listed[1]}"
-    return f"{', '.join(listed[:-1])} {condition} {listed[-1]}"
+    return f"{', '.join(str(x) for x in listed[:-1])} {condition} {listed[-1]}"
 
 
 def abs_user_path(file_path: str) -> str:
@@ -147,7 +147,7 @@ def dispatch(obj, replacements):
     return obj
 
 
-def escape_moustaches(obj: Mapping) -> Mapping:
+def escape_moustaches(obj: Mapping[Any, Any]) -> Mapping[Any, Any]:
     """Escape moustaches.
 
     :param obj: Variable that may contain moustaches
@@ -239,7 +239,7 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | Non
     return messages, exit_messages, use
 
 
-def flatten_list(data_list) -> list:
+def flatten_list(data_list: list[Any]) -> list[Any]:
     """Flatten a list of lists.
 
     :param data_list: List to flatten
@@ -349,7 +349,7 @@ def path_is_relative_to(child: Path, parent: Path) -> bool:
     return child.is_relative_to(parent)
 
 
-def remove_ansi(string):
+def remove_ansi(string: str) -> str:
     """Strip ansi code from a str.
 
     :param string: String to strip ansi code from
@@ -372,7 +372,7 @@ def remove_ansi(string):
     return ansi_escape.sub("", string)
 
 
-def remove_dbl_un(string):
+def remove_dbl_un(string: str) -> str:
     """Remove a __ from the beginning of a string.
 
     :param string: String to remove __ from
@@ -426,7 +426,7 @@ def str2bool(value: Any) -> bool:
 
 # TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
 #       returns Any. Need to find a better solution... "Any" isn't it.
-def templar(string: str, template_vars: Mapping) -> tuple[list[str], Any]:
+def templar(string: str, template_vars: Mapping[Any, Any]) -> tuple[list[str], Any]:
     """Template some string with jinja2 always to and from json.
 
     :param string: The template string
@@ -506,7 +506,7 @@ def time_stamp_for_file(path: str, time_zone: str) -> tuple[float | None, str | 
     return modified, iso_stamp
 
 
-def to_list(thing: str | list | tuple | set | None) -> list:
+def to_list(thing: str | list[Any] | tuple[Any] | set[Any] | None) -> list[Any]:
     """Convert something to a list if necessary.
 
     :param thing: Item to convert to a list
@@ -521,7 +521,7 @@ def to_list(thing: str | list | tuple | set | None) -> list:
     return converted_value
 
 
-def unescape_moustaches(obj: Any) -> Mapping:
+def unescape_moustaches(obj: Any) -> Mapping[Any, Any]:
     """Unescape moustaches.
 
     :param obj: Variable that needs to contain moustaches

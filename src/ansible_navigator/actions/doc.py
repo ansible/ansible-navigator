@@ -42,7 +42,7 @@ class Action(ActionBase):
         self._plugin_type: str | None = None
         self._runner: Command | AnsibleDoc
 
-    def generate_content_heading(self, _obj: dict, screen_w: int) -> CursesLines:
+    def generate_content_heading(self, _obj: dict[Any, Any], screen_w: int) -> CursesLines:
         """Create a heading for doc content.
 
         :param _obj: The content going to be shown
@@ -133,7 +133,7 @@ class Action(ActionBase):
         _out, error, return_code = response
         return RunStdoutReturn(message=error, return_code=return_code)
 
-    def _run_runner(self) -> dict | tuple[str, str, int] | None:
+    def _run_runner(self) -> dict[Any, Any] | tuple[str, str, int] | None:
         # pylint: disable=no-else-return
         """Use the runner subsystem to retrieve the configuration.
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Any
 
 from .curses_window import Window
 from .form_defs import FieldValidationStates
@@ -21,7 +22,7 @@ class FieldButton:
     pressed: bool = False
     color: int = 0
     window_handler = FormHandlerButton
-    validator: Callable = FieldValidators.none
+    validator: Callable[..., Any] = FieldValidators.none
     win: Window | None = None
 
     @property

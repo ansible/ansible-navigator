@@ -124,21 +124,6 @@ def patch_curses(monkeypatch) -> None:
     monkeypatch.setattr("curses.endwin", lambda: None)
 
 
-@pytest.fixture
-def use_venv(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Set the path such that it includes the virtual environment.
-
-    :param monkeypatch: Fixture for patching
-    :raises AssertionError: If the virtual environment is not set
-    """
-    venv_path = os.environ.get("VIRTUAL_ENV")
-    if venv_path is None:
-        msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
-        raise AssertionError(msg)
-    path_prepend = Path.cwd() / venv_path / "bin"
-    monkeypatch.setenv("PATH", str(path_prepend), prepend=os.pathsep)
-
-
 @pytest.fixture(name="settings_samples")
 def _settings_samples() -> tuple[str, str]:
     """Provide the full settings samples.

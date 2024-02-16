@@ -15,7 +15,6 @@ from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
 from typing import Any
-from typing import Union
 
 from .command_runner import Command
 from .command_runner import CommandRunner
@@ -36,7 +35,7 @@ from .utils.serialize import write_diagnostics_json
 from .utils.serialize import yaml
 
 
-JSONTypes = bool | int | str | dict | list[Any]
+JSONTypes = bool | int | str | dict[Any, Any] | list[Any]
 
 
 @dataclass
@@ -120,7 +119,7 @@ DIAGNOSTIC_FAILURES = 0
 class FailedCollectionError(Exception):
     """Exception for a failed collection."""
 
-    def __init__(self, errors):
+    def __init__(self, errors: dict[str, JSONTypes]) -> None:
         """Initialize the exception.
 
         :param errors: The errors
@@ -129,7 +128,7 @@ class FailedCollectionError(Exception):
         self.errors = errors
 
 
-def diagnostic_runner(func):
+def diagnostic_runner(func) -> Callable[..., Any]:
     """Wrap and run a collector.
 
     :param func: The function to wrap
@@ -193,7 +192,7 @@ class DiagnosticsCollector:
         self._exit_messages = exit_messages
 
     @property
-    def registered(self) -> Iterator[Callable]:
+    def registered(self) -> Iterator[Callable[..., Any]]:
         """Return the registered diagnostics.
 
         :returns: The registered diagnostics
@@ -348,9 +347,13 @@ class DiagnosticsCollector:
         """
         results = image_introspect.main(serialize=False)
         if not results:
-            raise FailedCollectionError(results)
-        if results.get("errors"):
-            raise FailedCollectionError(results["errors"])
+            raise FailedCollectionError({})
+        errors = results.get("errors")
+        if errors:
+            if not isinstance(errors, dict):
+                msg = "Unexpected data"
+                raise RuntimeError(msg)
+            raise FailedCollectionError(errors)  # type: ignore
         return {"details": results}
 
     @diagnostic_runner

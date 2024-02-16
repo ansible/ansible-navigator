@@ -25,8 +25,8 @@ class AppPublic(NamedTuple):
     # Quoted due to https://github.com/sphinx-doc/sphinx/issues/10400
     args: ApplicationConfiguration
     name: str
-    rerun: Callable
+    rerun: Callable[[], None]
     stdout: list[str]
     steps: Steps
-    update: Callable
-    write_artifact: Callable
+    update: Callable[..., None]
+    write_artifact: Callable[..., None]

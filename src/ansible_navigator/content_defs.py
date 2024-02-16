@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import Generic
 from typing import TypeVar
-from typing import Union
 
 
 if TYPE_CHECKING:
@@ -58,7 +57,7 @@ class ContentBase(Generic[T]):
         self,
         content_view: ContentView,
         serialization_format: SerializationFormat,
-    ) -> DictType:
+    ) -> DictType[Any]:
         """Convert thy self into a dictionary.
 
         :param content_view: The content view
@@ -78,28 +77,28 @@ class ContentBase(Generic[T]):
             return asdict(self)
         return dump_self_as_dict()
 
-    def serialize_json_full(self) -> DictType:
+    def serialize_json_full(self) -> DictType[Any]:
         """Provide dictionary for ``JSON`` with all attributes.
 
         :returns: A dictionary created from self
         """
         return asdict(self)
 
-    def serialize_json_normal(self) -> DictType:
+    def serialize_json_normal(self) -> DictType[Any]:
         """Provide dictionary for ``JSON`` with curated attributes.
 
         :returns: A dictionary created from self
         """
         return asdict(self)
 
-    def serialize_yaml_full(self) -> DictType:
+    def serialize_yaml_full(self) -> DictType[Any]:
         """Provide dictionary for ``YAML`` with all attributes.
 
         :returns: A dictionary created from self
         """
         return asdict(self)
 
-    def serialize_yaml_normal(self) -> DictType:
+    def serialize_yaml_normal(self) -> DictType[Any]:
         """Provide dictionary for ``JSON`` with curated attributes.
 
         :returns: A dictionary created from self
@@ -132,8 +131,8 @@ class ContentBase(Generic[T]):
         return asdict(self).items()
 
 
-ContentTypeSingle = bool | float | int | str | dict[str, Any] | ContentBase
-ContentTypeSequence = list[Any] | Sequence[ContentBase]
+ContentTypeSingle = bool | float | int | str | dict[str, Any] | ContentBase[Any]
+ContentTypeSequence = list[Any] | Sequence[ContentBase[Any]]
 ContentType = ContentTypeSingle | ContentTypeSequence
 
 

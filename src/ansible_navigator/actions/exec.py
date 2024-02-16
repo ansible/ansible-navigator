@@ -6,8 +6,6 @@ import logging
 import os
 import shlex
 
-from typing import Optional
-
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
@@ -98,7 +96,7 @@ class Action(ActionBase):
         _out, error, return_code = response
         return RunStdoutReturn(message=error, return_code=return_code)
 
-    def _run_runner(self) -> tuple | None:
+    def _run_runner(self) -> tuple[str, str, int] | None:
         """Spin up runner.
 
         :returns: The stdout, stderr and return code from runner

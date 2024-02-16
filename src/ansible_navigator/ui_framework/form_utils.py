@@ -7,6 +7,7 @@ import shutil
 import textwrap
 
 from functools import partial
+from typing import Any
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitMessages
@@ -28,7 +29,7 @@ from .ui_constants import Color
 from .validators import FieldValidators
 
 
-def dict_to_form(form_data: dict) -> Form:
+def dict_to_form(form_data: dict[str, Any]) -> Form:
     """Convert a python dict to a form.
 
     :param form_data: Form data
@@ -96,7 +97,7 @@ def dict_to_form(form_data: dict) -> Form:
     return form
 
 
-def form_to_dict(form: Form, key_on_name: bool = False) -> dict:
+def form_to_dict(form: Form, key_on_name: bool = False) -> dict[str, Any]:
     """Populate the original _dict of the form with the results.
 
     :param form: Holding place for form fields

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Any
 
 from .curses_window import Window
 from .form_handler_working import FormHandlerWorking
@@ -21,7 +22,7 @@ class FieldWorking:
     current_error: str = ""
     window_handler = FormHandlerWorking
     valid: bool | Unknown = unknown
-    validator: Callable = FieldValidators.null
+    validator: Callable[..., Any] = FieldValidators.null
     win: Window | None = None
 
     @property

@@ -103,7 +103,7 @@ def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, in
     return (severity_to_color(entry["severity"]), Color.BLACK)
 
 
-def content_heading(obj: dict, screen_w: int) -> CursesLines:
+def content_heading(obj: dict[Any, Any], screen_w: int) -> CursesLines:
     """Generate the content heading.
 
     :param obj: The content for which the heading will be generated
@@ -140,7 +140,7 @@ def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     return {k: v for k, v in obj.items() if not k.startswith("__") and k not in ignored_keys}
 
 
-def massage_issue(issue: dict) -> dict:
+def massage_issue(issue: dict[Any, Any]) -> dict[Any, Any]:
     """Massage an issue by injecting some useful keys with strings for rendering.
 
     :param issue: The issue reported
@@ -351,7 +351,7 @@ class Action(ActionBase):
         self._prepare_to_exit(interaction)
         return None
 
-    def update(self):
+    def update(self) -> None:
         """Request calling app update, and update modification time if needed."""
         self._calling_app.update()
 
@@ -362,7 +362,7 @@ class Action(ActionBase):
                 self._build_issues_menu()
 
     @property
-    def _max_severity_color(self):
+    def _max_severity_color(self) -> int:
         """Determine the color of the maximum severity issue.
 
         :returns: The color

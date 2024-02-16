@@ -119,6 +119,6 @@ def working(color: bool, message: str):
         print(message)
 
 
-def blank_line():
+def blank_line() -> None:
     """Output a blank line to the console."""
     print()

@@ -14,7 +14,6 @@ from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.utils.functions import oxfordcomma
-from ansible_navigator.version import __version__
 
 
 logger = logging.getLogger(__name__)
@@ -46,7 +45,7 @@ SUBCOMMAND_TABLE_HEADER = [
 ]
 
 
-def _mk_row(row: tuple) -> list:
+def _mk_row(row: tuple[str, ...]) -> list[str]:
     """Convert a row as a markdown definition list entry.
 
     :param row: The row tuple, with name, description and list of options
@@ -97,7 +96,7 @@ def md_settings_dump() -> str:
     return "\n".join(lines)
 
 
-def _params_row_for_entry(entry: SettingsEntry) -> tuple:
+def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
     # pylint: disable=too-many-branches
     """Create a row entry for one settings parameter.
 

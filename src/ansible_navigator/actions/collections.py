@@ -100,9 +100,9 @@ class Action(ActionBase):
         self._adjacent_collection_dir: str
         self._collection_cache: KeyValueStore
         self._collection_cache_path: str
-        self._collection_scanned_paths: list = []
-        self._collections: list = []
-        self._stats: dict = {}
+        self._collection_scanned_paths: list[str] = []
+        self._collections: list[Any] = []
+        self._stats: dict[str, Any] = {}
 
     def update(self) -> None:
         """Request calling app update, no collection update is required."""
@@ -213,7 +213,7 @@ class Action(ActionBase):
         )
         return RunStdoutReturn(message="", return_code=0)
 
-    def notify_failed(self):
+    def notify_failed(self) -> None:
         """Notify collection cataloging failed."""
         msgs = ["humph. Something went really wrong while cataloging collections."]
         msgs.append("Details have been added to the log file")
@@ -221,12 +221,12 @@ class Action(ActionBase):
         warning = warning_notification(messages=msgs + closing)
         self._interaction.ui.show_form(warning)
 
-    def notify_none(self):
+    def notify_none(self) -> None:
         """Notify no collections were found."""
         msgs = ["humph. no collections were found in the following paths:"]
         paths = []
         for path in self._collection_scanned_paths:
-            if path.startswith(self._args.internals.cache_path):
+            if path.startswith(str(self._args.internals.cache_path)):
                 continue
             if self._args.execution_environment:
                 if path.startswith(self._adjacent_collection_dir):
@@ -269,7 +269,7 @@ class Action(ActionBase):
         else:
             self.steps.append(result)
 
-    def _build_main_menu(self):
+    def _build_main_menu(self) -> Step:
         """Build the menu of collections.
 
         :returns: The collections menu definition
@@ -596,13 +596,15 @@ class Action(ActionBase):
 
         return None
 
-    def _get_collection_plugins_details(self, selected_collection: dict) -> dict:
+    def _get_collection_plugins_details(
+        self, selected_collection: dict[str, Any]
+    ) -> dict[str, Any]:
         """Get plugin details for the given collection.
 
         :param selected_collection: The selected collection
         :returns: The plugin details like full-name, type and short description.
         """
-        plugins_details: dict = {}
+        plugins_details: dict[str, Any] = {}
 
         for plugin_checksum, plugin_info in selected_collection["plugin_checksums"].items():
             plugin_type = plugin_info.get("type")
@@ -639,13 +641,13 @@ class Action(ActionBase):
 
         return plugins_details
 
-    def _parse_collection_info_stdout(self) -> dict:
+    def _parse_collection_info_stdout(self) -> dict[str, Any]:
         # pylint: disable=too-many-nested-blocks
         """Parse collection information from catalog collection cache.
 
         :returns: The collection information to be displayed on stdout
         """
-        collections_info: dict = {
+        collections_info: dict[str, Any] = {
             "collections": [],
         }
         collection_exclude_keys = [
@@ -662,7 +664,7 @@ class Action(ActionBase):
         for collection in self._collections:
             plugins_details = self._get_collection_plugins_details(collection)
 
-            collection_stdout: dict = {}
+            collection_stdout: dict[str, Any] = {}
             for info_name, info_value in collection.items():
                 info_name = remove_dbl_un(info_name)
                 if info_name in collection_exclude_keys:

@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from functools import partial
 from typing import Any
 from typing import NamedTuple
-from typing import Union
 
 import pytest
 
@@ -24,16 +23,16 @@ class ParametrizeView(NamedTuple):
     """Keyword arguments for parametrization of view."""
 
     argnames: str = "content_view"
-    argvalues: Iterable = (ContentView.NORMAL, ContentView.FULL)
-    ids: Callable = id_func
+    argvalues: Iterable[Any] = (ContentView.NORMAL, ContentView.FULL)
+    ids: Callable[..., Any] = id_func
 
 
 class ParametrizeFormat(NamedTuple):
     """Keyword arguments for parametrization of format."""
 
     argnames: str = "serialization_tuple"
-    argvalues: Iterable = (("j", SerializationFormat.JSON), ("y", SerializationFormat.YAML))
-    ids: Callable = id_func
+    argvalues: Iterable[Any] = (("j", SerializationFormat.JSON), ("y", SerializationFormat.YAML))
+    ids: Callable[..., Any] = id_func
 
 
 SimpleDictValue = bool | str | int

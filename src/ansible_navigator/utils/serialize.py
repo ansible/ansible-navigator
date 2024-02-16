@@ -197,7 +197,7 @@ class JsonParams(NamedTuple):
     ensure_ascii: bool = False
 
 
-def _json_dump(dumpable: ContentType, file_handle: IO) -> None:
+def _json_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
     """Serialize the dumpable to json and write to a file.
 
     :param dumpable: The object to dump
@@ -234,7 +234,7 @@ def _json_dumps(dumpable: ContentType) -> str:
         return error_message
 
 
-def _text_dump(dumpable: str, file_handle: IO) -> None:
+def _text_dump(dumpable: str, file_handle: IO[str]) -> None:
     """Write text to a file.
 
     :param dumpable: The text to write
@@ -253,7 +253,7 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def _yaml_dump(dumpable: ContentType, file_handle: IO):
+def _yaml_dump(dumpable: ContentType, file_handle: IO[str]):
     """Serialize the dumpable to yaml and write to a file.
 
     :param dumpable: The object to serialize

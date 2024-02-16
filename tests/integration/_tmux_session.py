@@ -47,7 +47,7 @@ class TmuxSession:
         pane_height: int = 20,
         pane_width: int = 200,
         pull_policy: str = "never",
-        setup_commands: list | None = None,
+        setup_commands: list[str] | None = None,
         shell_prompt_timeout: int = 10,
     ) -> None:
         """Initialize a tmux session.
@@ -66,7 +66,7 @@ class TmuxSession:
         self.cli_prompt: str
         self._config_path = config_path
         self._cwd = cwd
-        self._fail_remaining: list = []
+        self._fail_remaining: list[str] = []
         self._pane_height = pane_height
         self._pane_width = pane_width
         self._pull_policy = pull_policy
@@ -109,11 +109,9 @@ class TmuxSession:
         """Enter the tmux session.
 
         :return: The tmux session
-        :raises AssertionError: If VIRTUAL_ENV environment variable was not set
         :raises ValueError: If the time is exceeded for finding the shell prompt
         """
         # pylint: disable=attribute-defined-outside-init
-        # pylint: disable=too-many-locals
 
         self._server = libtmux.Server()
         self._build_tmux_session()
@@ -131,10 +129,7 @@ class TmuxSession:
         # expect inside of tmux, so we can't depend on it. We *must* determine
         # it before we enter tmux. Do this before we switch to bash
         venv_path = os.environ.get("VIRTUAL_ENV")
-        if venv_path is None:
-            msg = "VIRTUAL_ENV environment variable was not set but tox should have set it."
-            raise AssertionError(msg)
-        venv = os.path.join(shlex.quote(venv_path), "bin", "activate")
+        venv = "" if venv_path is None else os.path.join(shlex.quote(venv_path), "bin", "activate")
 
         # get the USER before we start a clean shell
         user = os.environ.get("USER")
@@ -147,7 +142,9 @@ class TmuxSession:
         self._pane.send_keys(f"export PS1={self.cli_prompt}")
 
         # set environment variables for this session
-        tmux_common = [f". {venv}"]
+        tmux_common = []
+        if venv:
+            tmux_common.append(f". {venv}")
         tmux_common.append("export TERM=xterm")
         tmux_common.append("export LANG=en_US.UTF-8")
         tmux_common.append(f"export HOME='{home}'")
@@ -168,53 +165,44 @@ class TmuxSession:
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_PULL_POLICY='{self._pull_policy}'")
 
         set_up_commands = tmux_common + self._setup_commands
+
+        def send_and_wait(cmd: str) -> list[str]:
+            """Send commands and waits for prompt to appear.
+
+            :param cmd: command to be executed.
+            :returns:   terminal captured lines
+            """
+            # We observed that on some platforms initialization can fail as
+            # commands are sent too quickly.
+            self._pane.send_keys(cmd)
+            captured: str | list[str] = []
+            timeout = time.time() + self._shell_prompt_timeout
+            while not captured or not captured[-1].endswith(self.cli_prompt):
+                time.sleep(0.05)
+                captured = self._pane.capture_pane()
+                if time.time() > timeout:
+                    msg = "Timeout waiting for prompt after running {cmd} under tmux."
+                    raise ValueError(msg)
+            if isinstance(captured, str):
+                return [captured]
+            return captured
+
         # send the setup commands
         for set_up_command in set_up_commands:
-            self._pane.send_keys(set_up_command)
+            send_and_wait(set_up_command)
 
         self._setup_capture = self._pane.capture_pane()
 
-        self._pane.send_keys("clear")
-        self._pane.send_keys("echo ready")
+        captured = send_and_wait("clear")
+        captured = send_and_wait("echo ready")
+        if "ready" not in captured:
+            msg = f"Failed to retrieve the 'echo ready' output: {captured}"
+            raise ValueError(msg)
 
-        # wait for the ready line
-        start_time = timer()
-        prompt_showing = False
-        while True:
-            showing = self._pane.capture_pane()
-            if showing:
-                prompt_showing = "ready" in showing
-            if prompt_showing:
-                break
-            elapsed = timer() - start_time
-            if elapsed > self._shell_prompt_timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX SETUP TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                raise ValueError(alert)
-
-            time.sleep(0.1)
-
-        # capture the setup screen
-
-        # clear the screen, wait for prompt in line 0
-        start_time = timer()
-        self._pane.send_keys("clear")
-        prompt_showing = False
-        while True:
-            showing = self._pane.capture_pane()
-            showing = [showing] if isinstance(showing, str) else showing
-
-            # the screen has been cleared, wait for prompt in first line
-            if showing:
-                prompt_showing = self.cli_prompt in showing[0]
-            if prompt_showing:
-                break
-            elapsed = timer() - start_time
-            if elapsed > self._shell_prompt_timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX CLEAR TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                raise ValueError(alert)
-            time.sleep(0.1)
+        captured = send_and_wait("clear")
+        if len(captured) != 1 or self.cli_prompt not in captured[0]:
+            msg = f"TMUX CLEAR Failure: {captured}."
+            raise ValueError(msg)
 
         return self
 
@@ -244,7 +232,7 @@ class TmuxSession:
     def interaction(
         self,
         value: str,
-        search_within_response: list | str | None = None,
+        search_within_response: list[str] | str | None = None,
         ignore_within_response: str | None = None,
         timeout: int = 300,
         send_clear: bool = True,

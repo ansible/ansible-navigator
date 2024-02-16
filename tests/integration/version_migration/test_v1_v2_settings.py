@@ -20,7 +20,7 @@ files = [
 
 
 @pytest.mark.parametrize("file", files)
-def test_all(
+def test_version(
     file: str,
     request: pytest.FixtureRequest,
     test_dir_fixture_dir: Path,

@@ -57,7 +57,7 @@ class Action(NamedTuple):
     """the user's input."""
 
     value: str | int
-    match: Match
+    match: Match[str]
 
 
 class Content(NamedTuple):
@@ -97,11 +97,11 @@ class ShowCallable(Protocol):
         obj: ContentType,
         content_format: ContentFormat | None = None,
         index: int | None = None,
-        columns: list | None = None,
+        columns: list[str] | None = None,
         await_input: bool = True,
-        filter_content_keys: Callable = lambda x: x,
-        color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
-        content_heading: Callable = lambda *args, **kwargs: None,
+        filter_content_keys: Callable[..., Any] = lambda x: x,
+        color_menu_item: Callable[..., Any] = lambda *args, **kwargs: (0, 0),
+        content_heading: Callable[..., Any] = lambda *args, **kwargs: None,
     ) -> Interaction:
         """Refer to and keep in sync with UserInterface.show.
 
@@ -119,12 +119,12 @@ class ShowCallable(Protocol):
 class Ui(NamedTuple):
     """select functions that can be called from an action."""
 
-    clear: Callable
-    menu_filter: Callable
-    scroll: Callable
+    clear: Callable[..., Any]
+    menu_filter: Callable[..., Any]
+    scroll: Callable[..., Any]
     show: ShowCallable
     show_form: Callable[[Form], Form]
-    update_status: Callable
+    update_status: Callable[..., Any]
     content_format: ContentFormatCallable
 
 
@@ -175,7 +175,7 @@ class UserInterface(CursesWindow):
         self._hide_keys = True
         self._kegexes = kegexes
         self._logger = logging.getLogger(__name__)
-        self._menu_filter: Pattern | None = None
+        self._menu_filter: Pattern[str] | None = None
         self._menu_indices: tuple[int, ...] = tuple()
 
         self._progress_bar_width = progress_bar_width
@@ -217,7 +217,7 @@ class UserInterface(CursesWindow):
         self._status = status
         self._status_color = status_color
 
-    def menu_filter(self, value: str | None = "") -> Pattern | None:
+    def menu_filter(self, value: str | None = "") -> Pattern[str] | None:
         """Set or return the menu filter.
 
         :param value: None or the menu_filter regex to set
@@ -282,7 +282,7 @@ class UserInterface(CursesWindow):
         )
         return res
 
-    def _footer(self, key_dict: dict) -> CursesLine:
+    def _footer(self, key_dict: dict[Any, Any]) -> CursesLine:
         """Build a footer from the key dict spread the columns out evenly.
 
         :param key_dict: the keys and their description
@@ -407,7 +407,7 @@ class UserInterface(CursesWindow):
         line_numbers: tuple[int, ...],
         heading: CursesLines | None,
         indent_heading: int,
-        key_dict: dict,
+        key_dict: dict[Any, Any],
         await_input: bool,
         count: int,
     ) -> str:
@@ -574,7 +574,7 @@ class UserInterface(CursesWindow):
         self._cache_init_colors(rendered)
         return self._color_decorate_lines(rendered)
 
-    def _cache_init_colors(self, lines: list):
+    def _cache_init_colors(self, lines: list[list[SimpleLinePart]]):
         """Cache and init the unique colors for future use.
 
         Maintain a mapping of RGB colors
@@ -767,7 +767,7 @@ class UserInterface(CursesWindow):
                 content = Content(showing=filtered)
                 return Interaction(name=name, action=action, content=content, ui=self._ui)
 
-    def _obj_match_filter(self, obj: dict, columns: list) -> bool:
+    def _obj_match_filter(self, obj: dict[Any, Any], columns: list[str]) -> bool:
         """Check columns in a dictionary against a regex.
 
         :param obj: The dict to check
@@ -778,7 +778,7 @@ class UserInterface(CursesWindow):
 
     @staticmethod
     @cache
-    def _search_value(regex: Pattern, value: str) -> Match | None:
+    def _search_value(regex: Pattern[str], value: str) -> Match[str] | None:
         """Check a str against a regex.
 
         :param regex: the compiled regex
@@ -790,7 +790,7 @@ class UserInterface(CursesWindow):
     def _get_heading_menu_items(
         self,
         current: Sequence[Any],
-        columns: list,
+        columns: list[str],
         indices,
     ) -> tuple[CursesLines, CursesLines]:
         """Build the menu.
@@ -810,7 +810,9 @@ class UserInterface(CursesWindow):
         menu_heading, menu_items = menu_builder.build(current, columns, indices)
         return menu_heading, menu_items
 
-    def _show_menu(self, current: Sequence[Any], columns: list, await_input: bool) -> Interaction:
+    def _show_menu(
+        self, current: Sequence[Any], columns: list[str], await_input: bool
+    ) -> Interaction:
         """Show a menu on the screen.
 
         :param current: A dict
@@ -872,11 +874,11 @@ class UserInterface(CursesWindow):
         obj: ContentType,
         content_format: ContentFormat | None = None,
         index: int | None = None,
-        columns: list | None = None,
+        columns: list[str] | None = None,
         await_input: bool = True,
-        filter_content_keys: Callable = lambda x: x,
-        color_menu_item: Callable = lambda *args, **kwargs: (0, 0),
-        content_heading: Callable = lambda *args, **kwargs: None,
+        filter_content_keys: Callable[..., Any] = lambda x: x,
+        color_menu_item: Callable[..., Any] = lambda *args, **kwargs: (0, 0),
+        content_heading: Callable[..., Any] = lambda *args, **kwargs: None,
     ) -> Interaction:
         """Show something on the screen.
 

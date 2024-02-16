@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from copy import deepcopy
+from typing import Any
 from typing import NamedTuple
 from typing import Protocol
 
@@ -33,7 +34,7 @@ class GenerateConfigResponse(NamedTuple):
     messages: list[LogMessage]
     exit_messages: list[ExitMessage]
     application_configuration: ApplicationConfiguration
-    settings_contents: dict
+    settings_contents: dict[Any, Any]
 
 
 class GenerateConfigCallable(Protocol):
@@ -144,7 +145,7 @@ def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaT
     :returns: the json schema as a dictionary
     """
 
-    def property_dive(subschema: dict):
+    def property_dive(subschema: dict[str, Any]):
         if "properties" in subschema:
             subschema["required"] = list(subschema["properties"].keys())
             for value in subschema["properties"].values():

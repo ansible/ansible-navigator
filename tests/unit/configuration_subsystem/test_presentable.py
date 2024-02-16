@@ -77,7 +77,6 @@ def test_settings_file_entry(sample_settings, settings_file_dict):
     configurator = Configurator(params=[], application_configuration=sample_settings)
     configurator._post_process()  # pylint: disable=protected-access
     presentable = to_presentable(sample_settings)
-    # pylint: disable=not-an-iterable # https://github.com/PyCQA/pylint/issues/2296
     assert all(isinstance(p, PresentableSettingsEntry) for p in presentable)
     assert asdict(presentable[0]) == settings_file_dict
 
@@ -104,7 +103,6 @@ def test_settings_entry(sample_settings, settings_file_dict):
     configurator = Configurator(params=[], application_configuration=sample_settings)
     configurator._post_process()  # pylint: disable=protected-access
     presentable = to_presentable(sample_settings)
-    # pylint: disable=not-an-iterable # https://github.com/PyCQA/pylint/issues/2296
     assert all(isinstance(p, PresentableSettingsEntry) for p in presentable)
     assert asdict(presentable[0]) == settings_file_dict
     entry_dict = {
