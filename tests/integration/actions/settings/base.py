@@ -63,7 +63,7 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_session, step):
+    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step):
         # pylint: disable=too-many-locals
         """Run the tests for ``settings``, mode and ``ee`` set in child class.
 

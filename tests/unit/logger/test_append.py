@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -21,7 +22,7 @@ class Scenario(BaseScenario):
     repeat: int = 5
     session_count: int = 1
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide the test id.
 
         :returns: The test id
@@ -53,7 +54,7 @@ test_data = (
 
 
 @pytest.mark.parametrize("data", test_data, ids=id_func)
-def test_log_append(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+def test_log_append(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Start with the CLI, create log messages and count.
 
     :param data: The test data
@@ -61,7 +62,7 @@ def test_log_append(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: P
     :param tmp_path: A temporary file path
     """
 
-    def return_none(*_args, **_kwargs) -> None:
+    def return_none(*_args: Any, **_kwargs: dict[str, Any]) -> None:
         """Take no action, return none.
 
         :param _args: Arguments

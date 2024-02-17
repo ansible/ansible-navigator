@@ -92,7 +92,7 @@ class FormPresenter(CursesWindow):
     """Present the form to the user."""
 
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, form, screen, ui_config):
+    def __init__(self, form, screen, ui_config) -> None:
         """Initialize the form presenter.
 
         :param form: The form to present to the user

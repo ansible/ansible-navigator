@@ -9,6 +9,7 @@ import re
 from copy import deepcopy
 from dataclasses import dataclass
 from re import Pattern
+from typing import Any
 
 import pytest
 
@@ -22,7 +23,7 @@ from tests.defaults import BaseScenario
 from tests.defaults import id_func
 
 
-def make_dirs(*_args, **_kwargs):
+def make_dirs(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
     """Mock make_dirs.
 
     :param _args: The positional arguments
@@ -32,7 +33,7 @@ def make_dirs(*_args, **_kwargs):
     return True
 
 
-def get_status(*_args, **_kwargs):
+def get_status(*_args: Any, **_kwargs: dict[str, Any]) -> tuple[str, int]:
     """Mock run.get_status.
 
     :param _args: The positional arguments
@@ -58,7 +59,7 @@ class Scenario(BaseScenario):
     playbook_artifact_enable: bool = True
     time_zone: str = "UTC"
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Ensure one match is set.
 
         :raises ValueError: When neither is set
@@ -67,7 +68,7 @@ class Scenario(BaseScenario):
             msg = "re_match or starts_with required"
             raise ValueError(msg)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide the test id.
 
         :returns: The test id
@@ -162,7 +163,7 @@ def test_artifact_path(
     mocker: MockerFixture,
     caplog: pytest.LogCaptureFixture,
     data: Scenario,
-):
+) -> None:
     """Test the building of the artifact filename given a filename or playbook.
 
     :param monkeypatch: The monkeypatch fixture
@@ -214,7 +215,7 @@ def test_artifact_path(
         mocked_write.assert_not_called()
 
 
-def test_artifact_contents(monkeypatch: pytest.MonkeyPatch, mocker: MockerFixture):
+def test_artifact_contents(monkeypatch: pytest.MonkeyPatch, mocker: MockerFixture) -> None:
     """Test the artifact contents for settings information.
 
     :param monkeypatch: The monkeypatch fixture

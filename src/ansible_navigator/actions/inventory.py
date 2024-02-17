@@ -173,7 +173,7 @@ class Action(ActionBase):
         else:
             self._inventories_mtime = None
 
-    def update(self):
+    def update(self) -> None:
         """Request calling app update, inventory update checked in ``run()``."""
         self._calling_app.update()
 

@@ -74,7 +74,7 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request, tmux_session, step):
+    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step):
         """Run the tests for images, mode and ``ee`` set in child class.
 
         :param request: A fixture providing details about the test caller

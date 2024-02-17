@@ -76,7 +76,7 @@ class Test(Cli2Runner):
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
 

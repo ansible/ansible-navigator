@@ -4,6 +4,8 @@ import os
 
 from copy import deepcopy
 
+import pytest
+
 from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.initialization import parse_and_update
@@ -11,7 +13,7 @@ from ansible_navigator.initialization import parse_and_update
 from .defaults import TEST_FIXTURE_DIR
 
 
-def test_settings_file_path_file_none():
+def test_settings_file_path_file_none() -> None:
     """Confirm a settings file path is not stored in the internals when not present."""
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
@@ -20,7 +22,7 @@ def test_settings_file_path_file_none():
     assert args.internals.settings_source == Constants.NONE
 
 
-def test_settings_file_path_file_system(monkeypatch):
+def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a settings file path is stored in the internals when searched.
 
     :param monkeypatch: Fixture providing these helper methods for safely patching and mocking
@@ -32,7 +34,7 @@ def test_settings_file_path_file_system(monkeypatch):
     args.internals.initializing = True
     args.application_version = "test"
 
-    def getcwd():
+    def getcwd() -> str:
         return TEST_FIXTURE_DIR
 
     monkeypatch.setattr(os, "getcwd", getcwd)
@@ -41,7 +43,7 @@ def test_settings_file_path_file_system(monkeypatch):
     assert args.internals.settings_source == Constants.SEARCH_PATH
 
 
-def test_settings_file_path_environment_variable(monkeypatch):
+def test_settings_file_path_environment_variable(monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a settings file path is stored in the internals when set via environment variable.
 
     :param monkeypatch: Fixture providing these helper methods for safely patching and mocking
