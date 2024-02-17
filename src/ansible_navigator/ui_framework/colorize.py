@@ -12,6 +12,7 @@ import logging
 import re
 
 from itertools import chain
+from pathlib import Path
 from typing import Any
 
 from ansible_navigator.tm_tokenize.grammars import Grammars
@@ -95,10 +96,10 @@ class Colorize:
         self._logger = logging.getLogger(__name__)
         self._schema: ColorSchema
         self._grammars = Grammars(str(grammar_dir))
-        self._theme_path = theme_path
+        self._theme_path = Path(str(theme_path))
         self._load()
 
-    def _load(self):
+    def _load(self) -> None:
         """Load the color scheme from the file system."""
         with self._theme_path.open(mode="r", encoding="utf-8") as fh:
             self._schema = ColorSchema(json.load(fh))

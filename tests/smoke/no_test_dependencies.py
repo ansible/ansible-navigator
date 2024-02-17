@@ -58,13 +58,13 @@ PartialCommands = (
 )
 
 
-def _generate_commands(tmp_dir: Path) -> list[NavigatorCommand]:
+def _generate_commands(tmp_dir: Path) -> list[Command]:
     """Produce the commands.
 
     :param tmp_dir: Path to a temporary directory
     :returns: All the commands
     """
-    commands: list[NavigatorCommand] = []
+    commands: list[Command] = []
     for partial_command in PartialCommands:
         for ee_value in partial_command.ee_support:
             random_name = uuid.uuid4()
@@ -106,6 +106,7 @@ class Test(unittest.TestCase):
         commands = _generate_commands(tmp_dir)
         command_results = CommandRunner().run_multi_process(commands)
         for command in command_results:
+            assert isinstance(command, NavigatorCommand)
             with self.subTest():
                 print(command.command)
                 self.assertIn(

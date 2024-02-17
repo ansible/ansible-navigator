@@ -159,7 +159,9 @@ class CmdParser:
         key, content = re.split(delim, content, maxsplit=1)
         return key, delim, content
 
-    def splitter(self, lines, line_split, section_delim=None):
+    def splitter(
+        self, lines: list[str], line_split: str, section_delim=None
+    ) -> list[dict[str, Any]] | dict[str, Any]:
         """Split lines given a delimiter.
 
         :param lines: The lines to split
@@ -167,9 +169,9 @@ class CmdParser:
         :param section_delim: The separator between different packages
         :returns: All lines split on the delimiter
         """
-        results = []
-        result = {}
-        current_key = ""
+        results: list[dict[str, Any]] = []
+        result: dict[str, Any] = {}
+        current_key: str = ""
         while lines:
             line = lines.pop(0)
             key, delim, content = self.re_partition(line, line_split)
@@ -358,13 +360,13 @@ class SystemPackages(CmdParser):
         """
         return [Command(id_="system_packages", command="rpm -qai", parse=self.parse)]
 
-    def parse(self, command):
+    def parse(self, command: Command) -> None:
         """Parse the output of the rpm command.
 
         :param command: The result of running the command
         """
         packages = []
-        package = []
+        package: list[str] = []
         for line in command.stdout.splitlines():
             if re.match(r"^Name\s{2,}:", line) and package:
                 packages.append(package)
@@ -374,7 +376,7 @@ class SystemPackages(CmdParser):
         if package:
             packages.append(package)
 
-        parsed = []
+        parsed: list[Any] = []
         for package in packages:
             result = self.splitter(package, line_split=":")
             parsed.append(result)

@@ -8,6 +8,7 @@ from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
 from typing import Any
 
+from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_window import CursesWindow
 
@@ -40,7 +41,7 @@ class FormHandlerButton(CursesWindow):
             text = self._form_field.text
 
         clp_button = CursesLinePart(0, text, color, curses.A_STANDOUT)
-        self._add_line(self.win, 0, ([clp_button]))
+        self._add_line(self.win, 0, CursesLine((clp_button,)))
 
     def handle(self, idx, form_fields: list[Any]) -> tuple[FieldButton, int]:
         """Handle the check box field.

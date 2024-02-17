@@ -70,7 +70,7 @@ class MigrationStep(Generic[T]):
         subtle(color=COLOR, message=information)
 
     @classmethod
-    def register(cls: T, migration_step: T) -> Callable[..., Any]:
+    def register(cls: T, migration_step: MigrationStep[Any]) -> Callable[..., Any]:
         """Register the migration step.
 
         :param migration_step: The migration step to register
