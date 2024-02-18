@@ -3,7 +3,7 @@ coverage-enable-subprocess
 coverage[toml]>=7.4.3
 darglint
 flake8-docstrings
-libtmux>=0.30.2
+libtmux>=0.31.0
 pre-commit
 pytest-env
 pytest-mock
