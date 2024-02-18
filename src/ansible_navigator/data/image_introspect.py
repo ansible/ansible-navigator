@@ -195,7 +195,7 @@ class CmdParser:
                 else:
                     result[current_key] = "No description available"
                 results.append(result)
-                return result
+                return results
             result[current_key] = content
 
         if result:
