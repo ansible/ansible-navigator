@@ -255,7 +255,7 @@ class ApplicationConfiguration:
     application_version: Constants | str
     entries: list[SettingsEntry]
     internals: Internals
-    post_processor: NavigatorPostProcessor
+    post_processor: NavigatorPostProcessor | None
     subcommands: list[SubCommand]
 
     application_name: str = ""

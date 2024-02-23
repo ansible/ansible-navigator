@@ -310,6 +310,8 @@ class PythonPackages(CmdParser):
         :param command: The result of running the command
         """
         parsed = self.splitter(command.stdout.splitlines(), line_split=":", section_delim="---")
+        if isinstance(parsed, dict):
+            parsed = [parsed]
         for pkg in parsed:
             for entry in ["required-by", "requires"]:
                 if pkg[entry]:

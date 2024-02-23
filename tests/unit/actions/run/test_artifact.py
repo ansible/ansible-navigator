@@ -193,6 +193,7 @@ def test_artifact_path(
     else:
         save_as.value.current = save_as.value.default
 
+    assert args.post_processor
     args.post_processor.playbook(
         entry=args.entry("playbook"),
         config=args,

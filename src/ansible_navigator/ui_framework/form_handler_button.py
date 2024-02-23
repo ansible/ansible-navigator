@@ -33,6 +33,9 @@ class FormHandlerButton(CursesWindow):
 
     def populate(self):
         """Populate the window with the button."""
+        if not self._form_field:
+            msg = "_form_field not initialized"
+            raise RuntimeError(msg)
         color = 8 if self._form_field.disabled is True else self._form_field.color
 
         if self._ui_config.color is False:
