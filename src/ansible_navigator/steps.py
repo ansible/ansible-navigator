@@ -25,7 +25,7 @@ class Step:
         self,
         name: str,
         step_type: str,
-        value: list[dict[str, str]],
+        value: list[dict[str, str]] | Any,
         columns: list[str] | None = None,
         index: int | None = None,
         select_func: Callable[[], Step] | None = None,
