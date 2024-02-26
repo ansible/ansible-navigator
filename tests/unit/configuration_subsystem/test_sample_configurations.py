@@ -164,7 +164,7 @@ def test_custom_nargs_for_positional():
             ),
             SettingsEntry(
                 name="e1",
-                cli_parameters=CliParameters(positional=True, nargs=3),
+                cli_parameters=CliParameters(positional=True, nargs="3"),
                 short_description="ex1",
                 value=SettingsEntryValue(),
                 subcommands=["subcommand1"],
@@ -173,4 +173,10 @@ def test_custom_nargs_for_positional():
         ],
     )
     parser = Parser(test_config)
-    assert parser.parser._actions[2].choices["subcommand1"]._actions[2].nargs == 3
+    assert parser.parser._actions
+    assert parser.parser._actions[2].choices
+    assert isinstance(parser.parser._actions[2].choices, dict)
+    subcommand = parser.parser._actions[2].choices["subcommand1"]
+    assert isinstance(subcommand._actions, list)
+    assert hasattr(subcommand._actions[2], "nargs")
+    assert subcommand._actions[2].nargs == "3"

@@ -32,7 +32,7 @@ class Command:
     return_code: int = 0
     stdout: str = ""
     stderr: str = ""
-    details: list[Any] = field(default_factory=list)
+    details: list[Any] | dict[Any, Any] = field(default_factory=list)
     errors: str = ""
     messages: list[LogMessage] = field(default_factory=list)
 
