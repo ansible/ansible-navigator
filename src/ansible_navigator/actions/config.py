@@ -189,7 +189,7 @@ class Action(ActionBase):
         else:
             self.steps.append(result)
 
-    def _build_main_menu(self):
+    def _build_main_menu(self) -> Step:
         """Build the menu of configuration options.
 
         :returns: The config menu definition

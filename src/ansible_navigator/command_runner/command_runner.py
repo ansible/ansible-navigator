@@ -32,7 +32,7 @@ class Command:
     return_code: int = 0
     stdout: str = ""
     stderr: str = ""
-    details: list[Any] = field(default_factory=list)
+    details: list[Any] | dict[Any, Any] = field(default_factory=list)
     errors: str = ""
     messages: list[LogMessage] = field(default_factory=list)
 
@@ -94,10 +94,10 @@ def worker(
 class CommandRunner:
     """Functionality for running commands."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the command runner."""
-        self._completed_queue: Queue | None = None
-        self._pending_queue: Queue | None = None
+        self._completed_queue: Queue[Any] | None = None
+        self._pending_queue: Queue[Command | None] | None = None
 
     @staticmethod
     def run_single_process(commands: list[Command]):
@@ -134,7 +134,7 @@ class CommandRunner:
             results.append(self._completed_queue.get())
         return results
 
-    def start_workers(self, jobs):
+    def start_workers(self, jobs: list[Command]) -> None:
         """Start the workers.
 
         :param jobs: List of commands to be run
@@ -148,6 +148,8 @@ class CommandRunner:
             )
             processes.append(proc)
             proc.start()
+        if not self._pending_queue:
+            raise RuntimeError
         for job in jobs:
             self._pending_queue.put(job)
         for _proc in range(worker_count):

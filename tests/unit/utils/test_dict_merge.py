@@ -5,6 +5,7 @@ from collections import deque
 import pytest
 
 from ansible_navigator.utils.dict_merge import DictMergeError
+from ansible_navigator.utils.dict_merge import Mergeable
 from ansible_navigator.utils.dict_merge import in_place_list_replace
 
 
@@ -42,8 +43,8 @@ def test_in_place_list_replace_primitive():
 
 def test_in_place_list_replace_right_not_dict():
     """Test the in_place_list_replace function, non-dict right."""
-    left = {"a": {}}
-    right = {"a": True}
+    left: Mergeable = {"a": {}}
+    right: Mergeable = {"a": True}
     with pytest.raises(DictMergeError):
         in_place_list_replace(left, right)
 

@@ -8,7 +8,7 @@ from ansible_navigator.actions.inventory import filter_content_keys
 from ansible_navigator.ui_framework.curses_defs import CursesLinePart
 
 
-def test_color_menu_true():
+def test_color_menu_true() -> None:
     """Test color menu for a val set to the default."""
     assert color_menu(0, "__name", {}) == (10, 0)
     assert color_menu(0, "__taxonomy", {}) == (11, 0)
@@ -18,7 +18,7 @@ def test_color_menu_true():
     assert color_menu(0, "", {"__name": True}) == (14, 0)
 
 
-def test_content_heading_true():
+def test_content_heading_true() -> None:
     """Test menu generation for a defaulted value."""
     curses.initscr()
     curses.start_color()
@@ -33,6 +33,7 @@ def test_content_heading_true():
         "ansible_platform": ansible_platform,
     }
     heading = content_heading(obj, line_length)
+    assert heading is not None
     assert len(heading) == 1
     assert len(heading[0]) == 1
     assert isinstance(heading[0][0], CursesLinePart)

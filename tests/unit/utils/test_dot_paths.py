@@ -60,7 +60,7 @@ def test_get_with_path():
 
 def test_remove_and_delete_empty_ascendants_changed():
     """Test remove and delete empty ascendants."""
-    content = {"a": {"b": {"c": {"d": {"e": {}}}}}}
+    content: MutableMapping[Any, Any] = {"a": {"b": {"c": {"d": {"e": {}}}}}}
     path = "a.b.c.d.e"
     remove_and_delete_empty_ascendants(content, path)
     assert not content

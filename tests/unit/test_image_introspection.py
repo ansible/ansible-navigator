@@ -1,6 +1,10 @@
 # cspell:ignore buildvm
 """Unit tests for image introspection."""
 import importlib
+import types
+
+from importlib.machinery import ModuleSpec
+from typing import Any
 
 import pytest
 
@@ -48,7 +52,7 @@ which contains NET-SNMP utilities.
 
 
 @pytest.fixture(scope="module", name="imported_ii")
-def image_introspection():
+def image_introspection() -> types.ModuleType:
     """Import the image introspection script using the share directory.
 
     :returns: Image introspect module
@@ -57,12 +61,15 @@ def image_introspection():
     cache_dir = generate_cache_path(app_name=APP_NAME)
     full_path = f"{cache_dir}/image_introspect.py"
     spec = importlib.util.spec_from_file_location("module", full_path)
+    assert isinstance(spec, ModuleSpec)
     module = importlib.util.module_from_spec(spec)
+    assert isinstance(module, types.ModuleType)
+    assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
 
 
-def test_system_packages_parse_one(imported_ii):
+def test_system_packages_parse_one(imported_ii: Any) -> None:
     """Test parsing one package.
 
     :param imported_ii: Image introspection
@@ -79,7 +86,7 @@ def test_system_packages_parse_one(imported_ii):
     assert "version: version_string" in command.details[0]["description"]
 
 
-def test_system_packages_parse_many(imported_ii):
+def test_system_packages_parse_many(imported_ii: Any) -> None:
     """Test parsing many packages.
 
     :param imported_ii: Image introspection

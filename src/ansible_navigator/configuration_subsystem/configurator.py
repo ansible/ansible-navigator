@@ -31,7 +31,7 @@ class Configurator:
 
     def __init__(
         self,
-        params: list[str],
+        params: list[str] | None,
         application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: list[str] | C = C.NONE,
         skip_roll_back: bool = False,
@@ -49,7 +49,7 @@ class Configurator:
         self._config = application_configuration
         self._exit_messages: list[ExitMessage] = []
         self._messages: list[LogMessage] = []
-        self._params = params
+        self._params = params if params is not None else []
         self._sanity_check()
         self._skip_rollback = skip_roll_back
         self._unaltered_entries = deepcopy(self._config.entries)

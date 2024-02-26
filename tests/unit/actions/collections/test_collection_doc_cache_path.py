@@ -7,6 +7,8 @@ from typing import NamedTuple
 
 import pytest
 
+from pytest_mock import MockerFixture
+
 from ansible_navigator import cli
 
 
@@ -18,32 +20,23 @@ class TstData(NamedTuple):
 
 
 DOC_CACHE_PATHS = (
-    TstData(description="cwd", path="./cache.db"),
-    TstData(description="tmp dir", path="../cache.db"),
+    pytest.param(TstData(description="cwd", path="./cache.db"), id="cwd"),
+    pytest.param(TstData(description="tmp dir", path="../cache.db"), id="tmp-dir"),
 )
-
-
-def _id_description(value):
-    """Generate id for a test.
-
-    :param value: Test identifier
-    :returns: Test ID descriptor
-    """
-    return value.description
 
 
 class DuplicateMountError(RuntimeError):
     """An exception specific to the duplicate mount test for collections."""
 
 
-@pytest.mark.parametrize("doc_cache_path", DOC_CACHE_PATHS, ids=_id_description)
+@pytest.mark.parametrize("doc_cache_path", DOC_CACHE_PATHS)
 @pytest.mark.usefixtures("patch_curses")
 def test_for_duplicates_sources(
-    doc_cache_path,
+    doc_cache_path: TstData,
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
-    mocker,
-):
+    mocker: MockerFixture,
+) -> None:
     """Ensure duplicate volume mounts are not passed to runner.
 
     :param doc_cache_path: The test data

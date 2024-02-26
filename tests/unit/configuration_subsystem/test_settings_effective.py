@@ -22,7 +22,7 @@ from ansible_navigator.utils.functions import abs_user_path
 from ansible_navigator.utils.json_schema import validate
 
 
-def test_settings_defaults(schema_dict: SettingsSchemaType):
+def test_settings_defaults(schema_dict: SettingsSchemaType) -> None:
     """Check the settings file used as a sample against the schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -38,7 +38,7 @@ def test_settings_defaults(schema_dict: SettingsSchemaType):
 
 def test_settings_env_var_to_full(
     settings_env_var_to_full: tuple[Path, SettingsFileType],
-):
+) -> None:
     """Confirm the fixture writes the file and environment variable.
 
     :param settings_env_var_to_full: The env var and file writing fixture
@@ -55,7 +55,7 @@ def test_settings_env_var_to_full(
     assert settings.internals.settings_source == Constants.ENVIRONMENT_VARIABLE
 
 
-def test_settings_cli():
+def test_settings_cli() -> None:
     """Test the round trip generation of effective settings given some cli parameters."""
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
@@ -66,6 +66,7 @@ def test_settings_cli():
     effective = to_effective(settings)
 
     root = effective["ansible-navigator"]
+    assert isinstance(root, dict)
     assert root["app"] == "images"
     assert root["logging"]["append"] is False
     assert root["logging"]["level"] == "debug"

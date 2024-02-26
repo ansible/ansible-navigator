@@ -129,7 +129,7 @@ def names_factory(package: str) -> Callable[..., Any]:
     return functools.partial(names, package)
 
 
-def run_interactive(package: str, action: str, *args: Any, **_kwargs: Any) -> Any:
+def run_interactive(package: str, action: str, *args: Any, **_kwargs: dict[str, Any]) -> Any:
     """Call the given action's ``run()`` method.
 
     :param package: The name of the package
@@ -172,7 +172,7 @@ def run_interactive_factory(package: str) -> Callable[..., Any]:
     return functools.partial(run_interactive, package)
 
 
-def run_stdout(package: str, action: str, *args: Any, **_kwargs: Any) -> RunStdoutReturn:
+def run_stdout(package: str, action: str, *args: Any, **_kwargs: dict[str, Any]) -> RunStdoutReturn:
     """Call the given action's ``run_stdout()`` method.
 
     :param package: The name of the package

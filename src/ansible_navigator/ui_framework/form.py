@@ -13,6 +13,7 @@ from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
 from .curses_window import CursesWindow
+from .curses_window import Window
 from .field_button import FieldButton
 from .field_checks import FieldChecks
 from .field_curses_information import FieldCursesInformation
@@ -39,7 +40,7 @@ class Form:
 
     _dict: dict[Any, Any] = field(default_factory=dict)
 
-    def present(self, screen, ui_config):
+    def present(self, screen: Window, ui_config):
         """Present the form the to user and return the results.
 
         :returns: Results from the form
@@ -92,7 +93,7 @@ class FormPresenter(CursesWindow):
     """Present the form to the user."""
 
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, form, screen, ui_config):
+    def __init__(self, form: Form, screen, ui_config) -> None:
         """Initialize the form presenter.
 
         :param form: The form to present to the user

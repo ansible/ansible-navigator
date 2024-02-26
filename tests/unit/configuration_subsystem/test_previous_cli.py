@@ -5,6 +5,7 @@ grouped here because they are all similar
 """
 
 from copy import deepcopy
+from typing import Any
 
 import pytest
 
@@ -22,7 +23,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import Na
 def test_apply_previous_cli_all():
     """Ensure all previous CLI parameters are applied when requested."""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
-    expected = [
+    expected: list[tuple[Any, ...]] = [
         ("app", "doc"),
         ("cmdline", ["--forks", "15"]),
         ("execution_environment", False),
@@ -79,7 +80,7 @@ def test_apply_previous_cli_specified():
     assert not exit_messages
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
-    expected = [
+    expected: list[tuple[Any, ...]] = [
         ("app", "doc"),
         ("cmdline", ["--forks", "15"]),
         ("execution_environment", False),
@@ -183,7 +184,7 @@ def test_apply_previous_cli_cmdline_not_applied():
 
     assert isinstance(application_configuration.initial, ApplicationConfiguration)
 
-    expected = [
+    expected: list[tuple[Any, ...]] = [
         ("app", "run"),
         ("cmdline", ["--forks", "15"]),
         ("execution_environment", False),
@@ -351,7 +352,7 @@ def test_apply_cli_subset_none():
 
     assert isinstance(test_config.initial, ApplicationConfiguration)
 
-    expected = [
+    expected: list[tuple[Any, ...]] = [
         ("subcommand", "list"),
         ("z", "zebra"),
     ]

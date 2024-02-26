@@ -1,7 +1,9 @@
 """An ansible test filter plugin."""
 
+from typing import Any
 
-def filter_1():
+
+def filter_1() -> None:
     """Convert strings to Candlepin labels."""
     return
 
@@ -10,7 +12,7 @@ def filter_1():
 class FilterModule:
     """Coll_1 filter."""
 
-    def filters(self):
+    def filters(self) -> dict[str, Any]:
         """Convert an arbitrary string to a valid Candlepin label.
 
         :returns: converted Candlepin label

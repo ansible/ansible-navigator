@@ -43,7 +43,7 @@ class Scenario(BaseScenario):
     write_job_events: bool
     expected: dict[str, Any]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide the test id.
 
         :returns: The test id
@@ -104,7 +104,7 @@ test_data = [
 
 
 @pytest.mark.parametrize("data", test_data, ids=id_func)
-def test_runner_args(mocker: MockerFixture, data: Scenario):
+def test_runner_args(mocker: MockerFixture, data: Scenario) -> None:
     """Test the arguments passed to runner API.
 
     :param mocker: The mocker fixture

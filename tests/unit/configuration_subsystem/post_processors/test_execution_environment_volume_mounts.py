@@ -27,16 +27,16 @@ class Scenario(BaseScenario):
     name: str
     current: bool | str | list[Any] | dict[Any, Any]
     source: C
-    expected: list[str] | None = None
+    expected: bool | str | list[Any] | dict[Any, Any] | None = None
     exit_message_substr: str = ""
     index: int = 0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Set the expected if errors are expected."""
         if self.expected is None and self.exit_message_substr:
             self.expected = self.current
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide a test id.
 
         :returns: The test id

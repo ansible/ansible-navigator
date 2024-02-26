@@ -321,12 +321,13 @@ def now_iso(time_zone: str) -> str:
 PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
 
 
-def pascal_to_snake(obj):
+def pascal_to_snake(obj) -> list[Any] | dict[Any, Any]:
     """Convert a pascal cased object into a snake cased object recursively.
 
     :param obj: Pascal cased object
     :returns: Snake cased object
     """
+    working: list[Any] | dict[Any, Any]
     if isinstance(obj, list):
         working = [pascal_to_snake(x) for x in obj]
         return working

@@ -230,7 +230,7 @@ class Action(ActionBase):
         """Task name storage from playbook_on_start using the task uuid as the key"""
 
     @property
-    def mode(self):
+    def mode(self) -> str:
         """Determine the mode and if playbook artifact creation is enabled.
 
         If so, run in interactive mode, but print stdout.

@@ -75,12 +75,12 @@ class CommandRunner:
     Run commands using single or multiple processes.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the command runner."""
         self._completed_queue: Queue[Any] | None = None
         self._pending_queue: Queue[Any] | None = None
 
-    def run_multi_thread(self, command_classes):
+    def run_multi_thread(self, command_classes: list[CmdParser]) -> list[CmdParser]:
         """Run commands with multiple threads.
 
         Workers are started to read from pending queue.
@@ -94,17 +94,16 @@ class CommandRunner:
             self._completed_queue = Queue()
         if self._pending_queue is None:
             self._pending_queue = Queue()
-        results = {}
         all_commands = tuple(
             command for command_class in command_classes for command in command_class.commands
         )
         self.start_workers(all_commands)
-        results = []
+        results: list[CmdParser] = []
         while len(results) != len(all_commands):
             results.append(self._completed_queue.get())
         return results
 
-    def start_workers(self, jobs):
+    def start_workers(self, jobs: tuple[Command, ...]) -> None:
         """Start workers and submit jobs to pending queue.
 
         :param jobs: The jobs to be run
@@ -118,6 +117,8 @@ class CommandRunner:
             )
             processes.append(proc)
             proc.start()
+        if not self._pending_queue:
+            raise RuntimeError
         for job in jobs:
             self._pending_queue.put(job)
         for _proc in range(worker_count):
@@ -128,6 +129,11 @@ class CommandRunner:
 
 class CmdParser:
     """A base class for command parsers with common parsing functions."""
+
+    @property
+    def commands(self) -> list[Command]:
+        """List of commands to be executed."""
+        return []
 
     @staticmethod
     def _strip(value: str) -> str:
@@ -153,7 +159,9 @@ class CmdParser:
         key, content = re.split(delim, content, maxsplit=1)
         return key, delim, content
 
-    def splitter(self, lines, line_split, section_delim=None):
+    def splitter(
+        self, lines: list[str], line_split: str, section_delim=None
+    ) -> list[dict[str, Any]] | dict[str, Any]:
         """Split lines given a delimiter.
 
         :param lines: The lines to split
@@ -161,9 +169,9 @@ class CmdParser:
         :param section_delim: The separator between different packages
         :returns: All lines split on the delimiter
         """
-        results = []
-        result = {}
-        current_key = ""
+        results: list[dict[str, Any]] = []
+        result: dict[str, Any] = {}
+        current_key: str = ""
         while lines:
             line = lines.pop(0)
             key, delim, content = self.re_partition(line, line_split)
@@ -302,6 +310,8 @@ class PythonPackages(CmdParser):
         :param command: The result of running the command
         """
         parsed = self.splitter(command.stdout.splitlines(), line_split=":", section_delim="---")
+        if isinstance(parsed, dict):
+            parsed = [parsed]
         for pkg in parsed:
             for entry in ["required-by", "requires"]:
                 if pkg[entry]:
@@ -352,13 +362,13 @@ class SystemPackages(CmdParser):
         """
         return [Command(id_="system_packages", command="rpm -qai", parse=self.parse)]
 
-    def parse(self, command):
+    def parse(self, command: Command) -> None:
         """Parse the output of the rpm command.
 
         :param command: The result of running the command
         """
         packages = []
-        package = []
+        package: list[str] = []
         for line in command.stdout.splitlines():
             if re.match(r"^Name\s{2,}:", line) and package:
                 packages.append(package)
@@ -368,7 +378,7 @@ class SystemPackages(CmdParser):
         if package:
             packages.append(package)
 
-        parsed = []
+        parsed: list[Any] = []
         for package in packages:
             result = self.splitter(package, line_split=":")
             parsed.append(result)
@@ -387,7 +397,7 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     response["environment_variables"] = {"details": dict(os.environ)}
     try:
         command_runner = CommandRunner()
-        commands = [
+        commands: list[CmdParser] = [
             AnsibleCollections(),
             AnsibleVersion(),
             OsRelease(),

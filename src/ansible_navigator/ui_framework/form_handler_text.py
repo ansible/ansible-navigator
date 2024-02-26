@@ -86,7 +86,7 @@ class FormHandlerText(CursesWindow, Textbox):
             ret = 0
         else:
             ret = bool(self.do_command(char))  # type: ignore[func-returns-value]
-            self._arrowing = 0
+            self._arrowing = False
         return ret
 
     def handle(self, idx, form_fields) -> tuple[str, int]:

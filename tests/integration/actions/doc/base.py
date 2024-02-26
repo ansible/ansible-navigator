@@ -42,13 +42,13 @@ class BaseClass:
 
     def test(
         self,
-        request,
-        tmux_doc_session,
-        index,
-        user_input,
-        comment,
-        testname,
-        expected_in_output,
+        request: pytest.FixtureRequest,
+        tmux_doc_session: TmuxSession,
+        index: int,
+        user_input: str,
+        comment: str,
+        testname: str,
+        expected_in_output: list[str] | None,
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
