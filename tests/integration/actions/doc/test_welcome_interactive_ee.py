@@ -11,18 +11,18 @@ from .base import BaseClass
 CLI_MODULE_DOC = "ansible-navigator --execution-environment true"
 
 testdata_module_doc = [
-    pytest.param(0, CLI_MODULE_DOC, "welcome", "module_doc_pass", []),
-    pytest.param(1, ":doc company_name.coll_1.mod_1", "load doc", "module_doc_pass", []),
-    pytest.param(2, ":{{ examples }}", "load examples", "module_doc_pass", []),
+    pytest.param(0, CLI_MODULE_DOC, "welcome", "module_doc_pass", [], id="0"),
+    pytest.param(1, ":doc company_name.coll_1.mod_1", "load doc", "module_doc_pass", [], id="1"),
+    pytest.param(2, ":{{ examples }}", "load examples", "module_doc_pass", [], id="2"),
 ]
 
 # lookup plugin doc
 CLI_LOOKUP_DOC = "ansible-navigator --execution-environment true"
 
 testdata_lookup_doc = [
-    pytest.param(0, CLI_LOOKUP_DOC, "welcome", "lookup_doc_pass", []),
+    pytest.param(0, CLI_LOOKUP_DOC, "welcome", "lookup_doc_pass", [], id="0"),
     pytest.param(
-        1, ":doc company_name.coll_1.lookup_1 -t lookup", "load doc", "lookup_doc_pass", []
+        1, ":doc company_name.coll_1.lookup_1 -t lookup", "load doc", "lookup_doc_pass", [], id="1"
     ),
 ]
 
@@ -30,9 +30,9 @@ testdata_lookup_doc = [
 CLI_FILTER_DOC = "ansible-navigator --execution-environment true"
 
 testdata_filter_doc = [
-    pytest.param(0, CLI_FILTER_DOC, "welcome", "filter_doc_pass", []),
+    pytest.param(0, CLI_FILTER_DOC, "welcome", "filter_doc_pass", [], id="0"),
     pytest.param(
-        1, ":doc company_name.coll_1.filter_1 -t filter", "load doc", "filter_doc_pass", []
+        1, ":doc company_name.coll_1.filter_1 -t filter", "load doc", "filter_doc_pass", [], id="1"
     ),
 ]
 
@@ -40,8 +40,8 @@ testdata_filter_doc = [
 CLI_WRONG_MODULE_NOT_EXIST = "ansible-navigator --execution-environment true"
 
 testdata_module_doc_not_exist = [
-    (0, CLI_WRONG_MODULE_NOT_EXIST, "welcome", "module_doc_fail", []),
-    (
+    pytest.param(0, CLI_WRONG_MODULE_NOT_EXIST, "welcome", "module_doc_fail", [], id="0"),
+    pytest.param(
         1,
         ":doc company_name.coll_1.doesnotexist",
         "ansible-navigator doc wrong plugin name",
@@ -54,6 +54,7 @@ testdata_module_doc_not_exist = [
             "found",
             "execution_environment_errors",
         ],
+        id="1",
     ),
 ]
 

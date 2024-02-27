@@ -11,7 +11,6 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.utils import functions
-from tests.defaults import id_func
 
 
 EXTENSIONS = [".yml", ".yaml", ".json"]
@@ -129,24 +128,25 @@ def test_flatten_list(value: list[str], anticipated_result: list[str]) -> None:
 class HumanTimeTestData(NamedTuple):
     """Data for human time test."""
 
-    id_: str
     value: int | float
     expected: str
 
 
 human_time_test_data = [
-    HumanTimeTestData(id_="s", value=1, expected="1s"),
-    HumanTimeTestData(id_="m-s", value=60 + 1, expected="1m1s"),
-    HumanTimeTestData(id_="h-m-s", value=3600 + 60 + 1, expected="1h1m1s"),
-    HumanTimeTestData(
-        id_="d-h-m-s",
-        value=86400 + 3600 + 60 + 1,
-        expected="1d1h1m1s",
+    pytest.param(HumanTimeTestData(value=1, expected="1s"), id="s"),
+    pytest.param(HumanTimeTestData(value=60 + 1, expected="1m1s"), id="ms"),
+    pytest.param(HumanTimeTestData(value=3600 + 60 + 1, expected="1h1m1s"), id="hms"),
+    pytest.param(
+        HumanTimeTestData(
+            value=86400 + 3600 + 60 + 1,
+            expected="1d1h1m1s",
+        ),
+        id="d-hms",
     ),
 ]
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id_)
+@pytest.mark.parametrize("data", human_time_test_data)
 def test_human_time_integer(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (integer passed).
 
@@ -158,7 +158,7 @@ def test_human_time_integer(data: HumanTimeTestData) -> None:
     assert result == data.expected
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=id_func)
+@pytest.mark.parametrize("data", human_time_test_data)
 def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (negative integer passed).
 
@@ -170,7 +170,7 @@ def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
     assert result == f"-{data.expected}"
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id_)
+@pytest.mark.parametrize("data", human_time_test_data)
 def test_human_time_float(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (float passed).
 
@@ -182,7 +182,7 @@ def test_human_time_float(data: HumanTimeTestData) -> None:
     assert result == data.expected
 
 
-@pytest.mark.parametrize("data", human_time_test_data, ids=lambda data: data.id_)
+@pytest.mark.parametrize("data", human_time_test_data)
 def test_human_time_negative_float(data: HumanTimeTestData) -> None:
     """Test for the functions.human_time function (negative float passed).
 

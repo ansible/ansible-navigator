@@ -3,7 +3,6 @@
 import pytest
 
 from tests.conftest import default_ee_image_name
-from tests.defaults import id_func
 from tests.integration._interactions import Command
 from tests.integration._interactions import SearchFor
 from tests.integration._interactions import UiTestStep
@@ -104,7 +103,7 @@ stdout_tests = (
 steps = add_indices(stdout_tests)
 
 
-@pytest.mark.parametrize("step", steps, ids=id_func)
+@pytest.mark.parametrize("step", steps)
 class Test(BaseClass):
     """Run the tests for ``images`` from CLI, mode stdout."""
 

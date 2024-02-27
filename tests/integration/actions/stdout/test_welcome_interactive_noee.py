@@ -9,12 +9,12 @@ from .base import BaseClass
 CLI = "ansible-navigator --execution-environment false"
 
 testdata = [
-    (0, CLI, "welcome", ":help help"),
-    (1, f":run {ANSIBLE_PLAYBOOK}", "Play list", "Successful"),
-    (2, ":st", "Check stdout", ":help help"),
-    (3, ":back", "Return to play list", ":help help"),
-    (4, ":stdout", "Check stdout", ":help help"),
-    (5, ":back", "Return to playlist", ":help help"),
+    pytest.param(0, CLI, "welcome", ":help help", id="0"),
+    pytest.param(1, f":run {ANSIBLE_PLAYBOOK}", "Play list", "Successful", id="1"),
+    pytest.param(2, ":st", "Check stdout", ":help help", id="2"),
+    pytest.param(3, ":back", "Return to play list", ":help help", id="3"),
+    pytest.param(4, ":stdout", "Check stdout", ":help help", id="4"),
+    pytest.param(5, ":back", "Return to playlist", ":help help", id="5"),
 ]
 
 
