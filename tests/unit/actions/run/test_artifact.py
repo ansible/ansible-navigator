@@ -20,7 +20,6 @@ from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.initialization import parse_and_update
 from tests.defaults import BaseScenario
-from tests.defaults import id_func
 
 
 def make_dirs(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
@@ -77,87 +76,111 @@ class Scenario(BaseScenario):
 
 
 test_data = [
-    Scenario(
-        name="Filename absolute",
-        filename="/tmp/artifact.json",
-        playbook="site.yml",
-        starts_with="/tmp/artifact.json",
+    pytest.param(
+        Scenario(
+            name="Filename absolute",
+            filename="/tmp/artifact.json",
+            playbook="site.yml",
+            starts_with="/tmp/artifact.json",
+        )
     ),
-    Scenario(
-        name="Filename with .",
-        filename="./artifact.json",
-        playbook="site.yml",
-        starts_with=f"{os.path.abspath('.')}/artifact.json",
+    pytest.param(
+        Scenario(
+            name="Filename with .",
+            filename="./artifact.json",
+            playbook="site.yml",
+            starts_with=f"{os.path.abspath('.')}/artifact.json",
+        )
     ),
-    Scenario(
-        name="Filename with ..",
-        filename="../artifact.json",
-        playbook="site.yml",
-        starts_with=f"{os.path.abspath('..')}/artifact.json",
+    pytest.param(
+        Scenario(
+            name="Filename with ..",
+            filename="../artifact.json",
+            playbook="site.yml",
+            starts_with=f"{os.path.abspath('..')}/artifact.json",
+        )
     ),
-    Scenario(
-        name="Filename with ~",
-        filename="~/artifact.json",
-        playbook="/tmp/site.yaml",
-        starts_with="/home/test_user/artifact.json",
+    pytest.param(
+        Scenario(
+            name="Filename with ~",
+            filename="~/artifact.json",
+            playbook="/tmp/site.yaml",
+            starts_with="/home/test_user/artifact.json",
+        )
     ),
-    Scenario(
-        name="Playbook absolute",
-        filename=None,
-        playbook="/tmp/site.yaml",
-        starts_with="/tmp/site-artifact",
+    pytest.param(
+        Scenario(
+            name="Playbook absolute",
+            filename=None,
+            playbook="/tmp/site.yaml",
+            starts_with="/tmp/site-artifact",
+        )
     ),
-    Scenario(
-        name="Playbook with .",
-        filename=None,
-        playbook="./site.yaml",
-        starts_with=f"{os.path.abspath('.')}/site-artifact",
+    pytest.param(
+        Scenario(
+            name="Playbook with .",
+            filename=None,
+            playbook="./site.yaml",
+            starts_with=f"{os.path.abspath('.')}/site-artifact",
+        )
     ),
-    Scenario(
-        name="Playbook with ..",
-        filename=None,
-        playbook="../site.yaml",
-        starts_with=f"{os.path.abspath('..')}/site-artifact",
+    pytest.param(
+        Scenario(
+            name="Playbook with ..",
+            filename=None,
+            playbook="../site.yaml",
+            starts_with=f"{os.path.abspath('..')}/site-artifact",
+        )
     ),
-    Scenario(
-        name="Playbook with ~",
-        filename=None,
-        playbook="~/site.yaml",
-        starts_with="/home/test_user/site-artifact",
+    pytest.param(
+        Scenario(
+            name="Playbook with ~",
+            filename=None,
+            playbook="~/site.yaml",
+            starts_with="/home/test_user/site-artifact",
+        )
     ),
-    Scenario(
-        name="help_playbook enabled",
-        filename=None,
-        playbook="~/site.yaml",
-        starts_with="/home/test_user/site-artifact",
-        help_playbook=True,
-        playbook_artifact_enable=False,
+    pytest.param(
+        Scenario(
+            name="help_playbook enabled",
+            filename=None,
+            playbook="~/site.yaml",
+            starts_with="/home/test_user/site-artifact",
+            help_playbook=True,
+            playbook_artifact_enable=False,
+        )
     ),
-    Scenario(
-        name="Check with enable_prompts",
-        filename=None,
-        playbook="~/site.yaml",
-        starts_with="/home/test_user/site-artifact",
-        enable_prompts=True,
-        playbook_artifact_enable=False,
+    pytest.param(
+        Scenario(
+            name="Check with enable_prompts",
+            filename=None,
+            playbook="~/site.yaml",
+            starts_with="/home/test_user/site-artifact",
+            enable_prompts=True,
+            playbook_artifact_enable=False,
+        )
     ),
-    Scenario(
-        name="Filename timezone",
-        filename="/tmp/{time_stamp}.json",
-        playbook="site.yml",
-        time_zone="America/Los_Angeles",
-        re_match=re.compile("^/tmp/.*-0[7,8]:00"),
+    pytest.param(
+        Scenario(
+            name="Filename timezone",
+            filename="/tmp/{time_stamp}.json",
+            playbook="site.yml",
+            time_zone="America/Los_Angeles",
+            re_match=re.compile("^/tmp/.*-0[7,8]:00"),
+        )
     ),
-    Scenario(
-        name="With status",
-        playbook="site.yml",
-        filename="/tmp/{playbook_status}/{playbook_name}.json",
-        starts_with="/tmp/successful/site.json",
+    pytest.param(
+        Scenario(
+            name="With status",
+            playbook="site.yml",
+            filename="/tmp/{playbook_status}/{playbook_name}.json",
+            starts_with="/tmp/successful/site.json",
+        )
     ),
 ]
 
 
-@pytest.mark.parametrize("data", test_data, ids=id_func)
+@pytest.mark.parametrize("data", test_data)
 def test_artifact_path(
     monkeypatch: pytest.MonkeyPatch,
     mocker: MockerFixture,

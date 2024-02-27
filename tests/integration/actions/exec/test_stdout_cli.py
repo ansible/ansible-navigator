@@ -69,7 +69,7 @@ def step_id(test_value: ShellCommand) -> str:
     :param test_value: The data from the test iteration
     :returns: An id for the test
     """
-    return f"{test_value.comment}  {test_value.user_input}"
+    return f"{test_value.step_index}"
 
 
 @pytest.mark.parametrize("step", steps, ids=step_id)

@@ -83,7 +83,7 @@ class UiTestStep(NamedTuple):
 
         :return: The test id
         """
-        return f"{self.comment}  {self.user_input}"
+        return f"{self.step_index}"
 
 
 def add_indices(steps: tuple[UiTestStep, ...]) -> tuple[UiTestStep, ...]:
@@ -101,7 +101,7 @@ def step_id(value: UiTestStep) -> str:
     :param value: The test value
     :return: The test id
     """
-    return f"{value.step_index}-{value.user_input}-{value.comment}"
+    return f"{value.step_index}"
 
 
 def step_id_padded(value: UiTestStep) -> str:

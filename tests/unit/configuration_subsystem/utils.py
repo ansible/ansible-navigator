@@ -13,23 +13,12 @@ def id_for_base(val: str) -> str:
     :returns: The id
     """
     if val is None:
-        return "No base params"
+        return "no-base-params"
     if "editor-command" in val:
-        return "Long base params"
+        return "long-base-params"
     if "ecmd" in val:
-        return "Short base params"
-    return "Unknown base params"
-
-
-def id_for_cli(val: str) -> str:
-    """Generate an id for a CLI entry.
-
-    :param val: The CLI entry
-    :returns: The id
-    """
-    if isinstance(val, str):
-        return val
-    return ""
+        return "short-base-params"
+    return "unknown-base-params"
 
 
 def id_for_name(val: SettingsEntry) -> str:
