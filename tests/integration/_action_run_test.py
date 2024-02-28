@@ -31,7 +31,7 @@ class ActionRunTest:
 
     def __init__(
         self,
-        action_name,
+        action_name: str,
         container_engine: str | None = None,
         container_options: list[str] | None = None,
         execution_environment: str | None = None,
@@ -94,7 +94,7 @@ class ActionRunTest:
         :param value: The value to return
         """
 
-    def callable_pass(self, **kwargs) -> None:
+    def callable_pass(self, **kwargs: Any) -> None:
         """Do nothing callable.
 
         :param kwargs: The call values
@@ -196,7 +196,7 @@ class ActionRunTest:
 
         return action
 
-    def run_action_stdout(self, **kwargs) -> tuple[RunStdoutReturn, str, str]:
+    def run_action_stdout(self, **kwargs: Any) -> tuple[RunStdoutReturn, str, str]:
         # pylint: disable=too-many-locals
         """Run the action, stdout.
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 
+from collections.abc import Callable
 from copy import deepcopy
 from typing import Any
 from typing import NamedTuple
@@ -54,7 +55,9 @@ class GenerateConfigCallable(Protocol):
         """
 
 
-def _generate_config(params=None, settings_file_name=None, initial=True) -> GenerateConfigResponse:
+def _generate_config(
+    params: list[Any] | None = None, settings_file_name: str | None = None, initial: bool = True
+) -> GenerateConfigResponse:
     """Generate a configuration given a settings file.
 
     :param initial: Bool for if this is the first run
@@ -96,7 +99,7 @@ def _generate_config(params=None, settings_file_name=None, initial=True) -> Gene
 
 
 @pytest.fixture(name="generate_config")
-def fixture_generate_config():
+def fixture_generate_config() -> Callable[..., GenerateConfigResponse]:
     """Generate a configuration.
 
     :returns: A generated config
@@ -105,14 +108,14 @@ def fixture_generate_config():
 
 
 @pytest.fixture
-def ansible_version(monkeypatch):
+def ansible_version(monkeypatch: pytest.MonkeyPatch) -> None:
     """Path the ansible --version call to avoid the subprocess calls.
 
     :param monkeypatch: Fixture for patching
     """
     original_run_command = run_command
 
-    def static_ansible_version(command: Command):
+    def static_ansible_version(command: Command) -> None:
         if command.command == "ansible --version":
             command.return_code = 0
             command.stdout = "ansible [core 2.12.3]\nconfig file = None"
@@ -145,7 +148,7 @@ def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaT
     :returns: the json schema as a dictionary
     """
 
-    def property_dive(subschema: dict[str, Any]):
+    def property_dive(subschema: dict[str, Any]) -> None:
         if "properties" in subschema:
             subschema["required"] = list(subschema["properties"].keys())
             for value in subschema["properties"].values():

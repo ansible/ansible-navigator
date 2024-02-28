@@ -202,7 +202,7 @@ class Action(ActionBase):
             value=self._config,
         )
 
-    def _build_option_content(self):
+    def _build_option_content(self) -> Step:
         """Build the content for one configuration option.
 
         :returns: The option's content
@@ -305,7 +305,7 @@ class Action(ActionBase):
             return stdout_return
         return None
 
-    def _parse_and_merge(self, list_output, dump_output) -> None:
+    def _parse_and_merge(self, list_output: str, dump_output: str) -> None:
         """Parse the list and dump output. Merge dump into list.
 
         :param list_output: The output from config list

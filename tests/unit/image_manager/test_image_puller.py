@@ -61,7 +61,7 @@ data_do_have_but_latest = [
 @pytest.mark.parametrize("data", data_do_have_but_latest)
 def test_do_have_but_latest(
     valid_container_engine: str, small_image_name: str, data: TstPullPolicy
-):
+) -> None:
     """Test using an image local.
 
     :param valid_container_engine: Container engine identifier
@@ -123,7 +123,7 @@ data_will_have = [
         pytest.param(TstPullPolicy(pull_policy="tag", pull_required=True), id="3"),
     ),
 )
-def test_will_have(valid_container_engine, pullable_image, data):
+def test_will_have(valid_container_engine: str, pullable_image: str, data: TstPullPolicy) -> None:
     """Test using an image not local.
 
     :param valid_container_engine: Container engine identifier
@@ -142,25 +142,24 @@ def test_will_have(valid_container_engine, pullable_image, data):
     assert image_puller.assessment.pull_required is False
 
 
-data_image_tag = [
-    ("foo", "latest"),
-    ("foo:bar", "bar"),
-    ("registry.redhat.io:443/ansible-automation-platform-21/ee-supported-rhel8", "latest"),
-    ("registry.redhat.io:443/ansible-automation-platform-21/ee-supported-rhel8:latest", "latest"),
-]
-
-
 @pytest.mark.parametrize(
-    "image, expected_tag",
-    data_image_tag,
-    ids=[
-        "simple-image-name:no-tag-specified",
-        "simple-image-name:with-tag",
-        "complex-image-URL:with-port-but-no-tag",
-        "complex-image-URL:with-port-and-tag",
+    ("image", "expected_tag"),
+    [
+        pytest.param("foo", "latest", id="simple-image-name:no-tag-specified"),
+        pytest.param("foo:bar", "bar", id="simple-image-name:with-tag"),
+        pytest.param(
+            "registry.redhat.io:443/ansible-automation-platform-21/ee-supported-rhel8",
+            "latest",
+            id="complex-image-URL:with-port-but-no-tag",
+        ),
+        pytest.param(
+            "registry.redhat.io:443/ansible-automation-platform-21/ee-supported-rhel8:latest",
+            "latest",
+            id="complex-image-URL:with-port-and-tag",
+        ),
     ],
 )
-def test_tag_parsing(image, expected_tag):
+def test_tag_parsing(image: str, expected_tag: str) -> None:
     """Test that we parse image tags in a reasonable way.
 
     :param image: Test image
@@ -176,7 +175,7 @@ def test_tag_parsing(image, expected_tag):
     assert image_puller._image_tag == expected_tag  # pylint: disable=protected-access
 
 
-def test_pull_with_args():
+def test_pull_with_args() -> None:
     """Ensure command is generated with additional arguments."""
     image_puller = ImagePuller(
         container_engine="podman",
@@ -191,7 +190,7 @@ def test_pull_with_args():
     assert shlex.split(result) == expected_list
 
 
-def test_pull_with_env_arg():
+def test_pull_with_env_arg() -> None:
     """Ensure the expansion of env variable in the arguments."""
     image_puller = ImagePuller(
         container_engine="podman",

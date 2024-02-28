@@ -5,6 +5,8 @@ from __future__ import annotations
 import difflib
 import os
 
+from collections.abc import Generator
+
 import pytest
 
 from tests.defaults import FIXTURES_DIR
@@ -31,7 +33,7 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request: pytest.FixtureRequest):
+    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
         :param request: Pytest request object
@@ -44,7 +46,9 @@ class BaseClass:
             yield tmux_session
 
     @pytest.mark.flaky(reruns=2)
-    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep):
+    def test(
+        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
+    ) -> None:
         """Run the tests for lint, mode and ``ee`` set in child class.
 
         :param request: Pytest request object

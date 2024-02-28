@@ -4,6 +4,8 @@ import difflib
 import os
 import re
 
+from collections.abc import Generator
+
 import pytest
 
 from tests.conftest import default_ee_image_name
@@ -62,19 +64,18 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request):
+    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
         :param request: A fixture providing details about the test caller
         :yields: Tmux session
         """
-        params = {
-            "request": request,
-        }
-        with TmuxSession(**params) as tmux_session:
+        with TmuxSession(request=request) as tmux_session:
             yield tmux_session
 
-    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step):
+    def test(
+        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
+    ) -> None:
         """Run the tests for images, mode and ``ee`` set in child class.
 
         :param request: A fixture providing details about the test caller

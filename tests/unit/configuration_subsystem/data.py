@@ -4,10 +4,15 @@ Note: Some of these are defined as dictionaries for ease but all should be froze
 before use so they are immutable within the tests
 """
 
+from collections.abc import Generator
+from typing import Any
+
 import pytest
 
+from _pytest.mark.structures import ParameterSet
 
-def d2t(dictionary):
+
+def d2t(dictionary: dict[Any, Any]) -> tuple[Any, ...]:
     """Turn the data dictionary into a frozen set so they are immutable.
 
     :param dictionary: Data to be a tuple
@@ -83,10 +88,10 @@ BASE_EXPECTED = d2t(
 )
 
 
-CLI_DATA_COLLECTIONS = [
+CLI_DATA_COLLECTIONS: list[tuple[str, dict[Any, Any]]] = [
     ("collections -m interactive", {"app": "collections", "mode": "interactive"}),
 ]
-CLI_DATA_CONFIG = [
+CLI_DATA_CONFIG: list[tuple[str, dict[Any, Any]]] = [
     ("config", {"app": "config"}),
     ("config dump", {"app": "config", "cmdline": ["dump"]}),
     (
@@ -94,7 +99,7 @@ CLI_DATA_CONFIG = [
         {"app": "config", "cmdline": ["dump"], "config": "/tmp/ansible.cfg"},
     ),
 ]
-CLI_DATA_DOC = [
+CLI_DATA_DOC: list[tuple[str, dict[Any, Any]]] = [
     ("doc shell", {"app": "doc", "plugin_name": "shell"}),
     ("doc shell --mode stdout", {"app": "doc", "mode": "stdout", "plugin_name": "shell"}),
     ("doc shell -t become", {"app": "doc", "plugin_name": "shell", "plugin_type": "become"}),
@@ -103,7 +108,7 @@ CLI_DATA_DOC = [
         {"app": "doc", "plugin_name": "shell", "plugin_type": "become"},
     ),
 ]
-CLI_DATA_INVENTORY = [
+CLI_DATA_INVENTORY: list[tuple[str, dict[Any, Any]]] = [
     ("inventory -i /tmp/inv1.yml", {"app": "inventory", "inventory": ["/tmp/inv1.yml"]}),
     (
         "inventory -i /tmp/inv1.yml -m stdout",
@@ -120,7 +125,7 @@ CLI_DATA_INVENTORY = [
         {"app": "inventory", "inventory": ["/tmp/inv1.yml", "/tmp/inv2.yml"]},
     ),
 ]
-CLI_DATA_INVENTORY_COLUMNS = [
+CLI_DATA_INVENTORY_COLUMNS: list[tuple[str, dict[Any, Any]]] = [
     (
         "inventory -i /tmp/inv1.yml --ic hv1",
         {"app": "inventory", "inventory": ["/tmp/inv1.yml"], "inventory_column": ["hv1"]},
@@ -149,13 +154,13 @@ CLI_DATA_INVENTORY_COLUMNS = [
         },
     ),
 ]
-CLI_DATA_REPLAY = [
+CLI_DATA_REPLAY: list[tuple[str, dict[Any, Any]]] = [
     (
         "replay /tmp/part.json -m interactive",
         {"app": "replay", "mode": "interactive", "playbook_artifact_replay": "/tmp/part.json"},
     ),
 ]
-CLI_DATA_RUN = [
+CLI_DATA_RUN: list[tuple[str, dict[Any, Any]]] = [
     ("run /tmp/site.yml", {"app": "run", "playbook": "/tmp/site.yml"}),
     ("run /tmp/site.yml -m stdout", {"app": "run", "mode": "stdout", "playbook": "/tmp/site.yml"}),
     (
@@ -193,7 +198,7 @@ CLI_DATA_RUN = [
 ]
 
 
-def cli_data():
+def cli_data() -> Generator[ParameterSet, None, None]:
     """Turn them all into tuples.
 
     :returns: CLI data in tuples

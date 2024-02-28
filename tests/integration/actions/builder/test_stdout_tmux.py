@@ -103,16 +103,7 @@ stdout_tests = (
 steps = add_indices(stdout_tests)
 
 
-def step_id(value) -> str:
-    """Return the test id from the test step object.
-
-    :param value: The parameterized value from which the id will be generated
-    :returns: A formatted id for the test
-    """
-    return f"{value.step_index}"
-
-
-@pytest.mark.parametrize("step", steps, ids=step_id)
+@pytest.mark.parametrize("step", steps)
 class Test(BaseClass):
     """Run the tests for ``builder`` from CLI, mode stdout."""
 

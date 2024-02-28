@@ -128,7 +128,7 @@ class Configurator:
 
         return self._messages, self._exit_messages
 
-    def _argparse_error_handler(self, message: str):
+    def _argparse_error_handler(self, message: str) -> None:
         """Call back for argparser error handling.
 
         :param message: A message from the parser
@@ -348,7 +348,7 @@ class Configurator:
                 else:
                     self._check_choice(entry=entry, value=entry.value.current)
 
-    def _check_choice(self, entry: SettingsEntry, value: bool | str):
+    def _check_choice(self, entry: SettingsEntry, value: bool | str) -> bool:
         """Check the choice for a single settings entry.
 
         :param entry: The settings entry to check.
@@ -424,7 +424,7 @@ class Configurator:
             current_entry.value.current = previous_entry.value.current
             current_entry.value.source = C.PREVIOUS_CLI
 
-    def _retrieve_ansible_cfg(self):
+    def _retrieve_ansible_cfg(self) -> None:
         """Retrieve the ansible.cfg file.
 
         EE support is needed early on here so the post processors

@@ -29,12 +29,12 @@ class Scenario(BaseScenario):
     expected: str | None = None
     index: int = 0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Set the expected if errors are expected."""
         if self.expected is None:
             object.__setattr__(self, "expected", self.current)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide a test id.
 
         :returns: The test id
@@ -119,7 +119,7 @@ test_data = (
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=test_data, ids=id_func)
-def test_pp_direct(data: Scenario):
+def test_pp_direct(data: Scenario) -> None:
     """Test the time zone post processor.
 
     :param data: The test data
@@ -145,7 +145,7 @@ env_var_test_data = [s for s in test_data if s.source is C.ENVIRONMENT_VARIABLE]
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=env_var_test_data, ids=id_func)
-def test_env_var(monkeypatch: pytest.MonkeyPatch, data: Scenario):
+def test_env_var(monkeypatch: pytest.MonkeyPatch, data: Scenario) -> None:
     """Test the time zone post processor using the environment variable.
 
     :param monkeypatch: The monkey patch fixture

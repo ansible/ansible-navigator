@@ -72,7 +72,7 @@ def test_settings_cli() -> None:
     assert root["logging"]["level"] == "debug"
 
 
-def test_settings_env(monkeypatch: pytest.MonkeyPatch):
+def test_settings_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test the round trip generation of effective settings given some environment variables.
 
     :param monkeypatch: The pytest monkeypatch fixture
@@ -98,7 +98,7 @@ def test_settings_env(monkeypatch: pytest.MonkeyPatch):
 
 def test_settings_full(
     settings_env_var_to_full: tuple[Path, SettingsFileType],
-):
+) -> None:
     """Test the round trip generation of effective settings given a full settings file.
 
     :param settings_env_var_to_full: The env var and file writing fixture

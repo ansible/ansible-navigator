@@ -134,7 +134,7 @@ class Base:
                 },
             )
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Drop the private_data_dir if it is temporary."""
         if (
             self._private_data_dir_is_tmp
@@ -148,7 +148,7 @@ class Base:
             shutil.rmtree(self._private_data_dir, ignore_errors=True)
 
     @staticmethod
-    def _generate_tmp_directory():
+    def _generate_tmp_directory() -> str:
         """Generate a tmp directory for artifacts.
 
         :returns: Temporary directory path
@@ -176,14 +176,14 @@ class Base:
         self._private_data_dir = private_data_directory
         self._logger.debug("private data dir %s: %s", source, self._private_data_dir)
 
-    def runner_cancelled_callback(self):
+    def runner_cancelled_callback(self) -> bool:
         """Check by runner to see if it should cancel.
 
         :returns: Boolean cancelled value
         """
         return self.cancelled
 
-    def runner_finished_callback(self, runner: Runner):
+    def runner_finished_callback(self, runner: Runner) -> None:
         """Call when runner finishes.
 
         :param runner: A runner instance
@@ -191,7 +191,7 @@ class Base:
         self.status = runner.status
         self.finished = True
 
-    def _add_env_vars_to_args(self):
+    def _add_env_vars_to_args(self) -> None:
         """Add environment variables to runner args."""
         self._runner_args["envvars"] = {
             k: v for k, v in os.environ.items() if k.startswith("ANSIBLE_")

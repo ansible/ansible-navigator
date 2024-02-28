@@ -22,13 +22,13 @@ from tests.defaults import BaseScenario
 from tests.defaults import id_func
 
 
-def test_ascendants_from_path():
+def test_ascendants_from_path() -> None:
     """Test ascendant from path."""
     path = "a.b.c.d.e"
     assert ascendants_from_path(path) == ["a.b.c.d.e", "a.b.c.d", "a.b.c", "a.b", "a"]
 
 
-def test_check_path():
+def test_check_path() -> None:
     """Test check path."""
     content = {"a": {"b": {"c": {"d": {"e": "f"}}}}}
     path = "a.b.c.d.e"
@@ -37,7 +37,7 @@ def test_check_path():
     assert not check_path(content, path)
 
 
-def test_delete_with_path():
+def test_delete_with_path() -> None:
     """Test delete with path."""
     content = {"a": {"b": {"c": {"d": {"e": "f"}}}}}
     path = "a.b.c.d.e"
@@ -45,20 +45,20 @@ def test_delete_with_path():
     assert content == {"a": {"b": {"c": {"d": {}}}}}
 
 
-def test_descendants_to_path():
+def test_descendants_to_path() -> None:
     """Test descendants to path."""
     path = "a.b.c.d.e"
     assert descendants_to_path(path) == ["a", "a.b", "a.b.c", "a.b.c.d", "a.b.c.d.e"]
 
 
-def test_get_with_path():
+def test_get_with_path() -> None:
     """Test get with path."""
     content = {"a": {"b": {"c": {"d": {"e": "f"}}}}}
     path = "a.b.c.d.e"
     assert get_with_path(content, path) == "f"
 
 
-def test_remove_and_delete_empty_ascendants_changed():
+def test_remove_and_delete_empty_ascendants_changed() -> None:
     """Test remove and delete empty ascendants."""
     content: MutableMapping[Any, Any] = {"a": {"b": {"c": {"d": {"e": {}}}}}}
     path = "a.b.c.d.e"
@@ -66,7 +66,7 @@ def test_remove_and_delete_empty_ascendants_changed():
     assert not content
 
 
-def test_remove_and_delete_empty_ascendants_not_changed():
+def test_remove_and_delete_empty_ascendants_not_changed() -> None:
     """Test remove and delete empty ascendants."""
     content = {"a": {"b": {"c": {"d": {"e": {}, "ee": True}}}}}
     path = "a.b.c.d.ee"
@@ -229,7 +229,7 @@ scenarios_place_success = (
 
 
 @pytest.mark.parametrize("scenario", scenarios_place_success, ids=id_func)
-def test_place_at_path_success(scenario: Scenario):
+def test_place_at_path_success(scenario: Scenario) -> None:
     """Test place at path.
 
     :param scenario: Test data.
@@ -304,7 +304,7 @@ scenarios_place_raise = (
 
 
 @pytest.mark.parametrize("scenario", scenarios_place_raise, ids=id_func)
-def test_place_at_path_raises(scenario: Scenario):
+def test_place_at_path_raises(scenario: Scenario) -> None:
     """Test place at path.
 
     :param scenario: Test data.
@@ -363,7 +363,7 @@ scenarios_move = (
 
 
 @pytest.mark.parametrize("scenario", scenarios_move, ids=id_func)
-def test_move(scenario: Scenario):
+def test_move(scenario: Scenario) -> None:
     """Test move to path.
 
     :param scenario: Test data.

@@ -5,6 +5,8 @@ from __future__ import annotations
 import difflib
 import os
 
+from collections.abc import Generator
+
 import pytest
 
 from tests.defaults import FIXTURES_COLLECTION_DIR
@@ -21,23 +23,24 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_doc_session")
-    def fixture_tmux_doc_session(request):
+    def fixture_tmux_doc_session(
+        request: pytest.FixtureRequest,
+    ) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
         :param request: A fixture providing details about the test caller
         :yields: Tmux session
         """
-        params = {
-            "pane_height": "2000",
-            "pane_width": "200",
-            "setup_commands": [
+        with TmuxSession(
+            pane_height=2000,
+            pane_width=200,
+            setup_commands=[
                 f"export ANSIBLE_COLLECTIONS_PATH={FIXTURES_COLLECTION_DIR}",
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
             ],
-            "request": request,
-        }
-        with TmuxSession(**params) as tmux_session:
+            request=request,
+        ) as tmux_session:
             yield tmux_session
 
     def test(
@@ -49,7 +52,7 @@ class BaseClass:
         comment: str,
         testname: str,
         expected_in_output: list[str] | None,
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
         """Run the tests for ``doc``, mode and ``ee`` set in child class.

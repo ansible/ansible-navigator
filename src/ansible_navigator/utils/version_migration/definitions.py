@@ -43,7 +43,7 @@ class MigrationStep(Generic[T]):
         self.function_name: str | None = None
         """The name of the function to call"""
 
-    def print_start(self):
+    def print_start(self) -> None:
         """Output start information to the console."""
         message = f"Migrating '{self.name}'"
         information = f"{message:.<60}"
@@ -105,7 +105,7 @@ class Migration:
         self.was_needed: bool = False
         """Whether the migration was needed."""
 
-    def __init_subclass__(cls, *args, **kwargs):
+    def __init_subclass__(cls, *args, **kwargs) -> None:
         """Register the migration steps.
 
         :param args: Positional arguments

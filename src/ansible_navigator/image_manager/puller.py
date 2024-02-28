@@ -86,14 +86,14 @@ class ImagePuller:
         )
 
     @property
-    def assessment(self):
+    def assessment(self) -> ImageAssessment:
         """Return an image assessment.
 
         :returns: Image assessment
         """
         return self._assessment
 
-    def _check_for_image(self):
+    def _check_for_image(self) -> None:
         """Check for the image."""
         try:
             cmd_parts = [self._container_engine, "image", "inspect", self._image]
@@ -117,7 +117,7 @@ class ImagePuller:
                 self._log_message(level=logging.WARNING, message=f"stdout: {stdout}")
                 self._log_message(level=logging.WARNING, message=f"stderr: {stderr}")
 
-    def _determine_pull(self):
+    def _determine_pull(self) -> None:
         """Determine if a pull is required."""
         if self._pull_policy == "missing" and self._image_present is False:  # noqa: SIM114
             pull = True
@@ -149,7 +149,7 @@ class ImagePuller:
         message = f"Image tag is: {self._image_tag}"
         self._log_message(level=logging.INFO, message=message)
 
-    def _log_message(self, message: str, level: int, hint=False) -> None:
+    def _log_message(self, message: str, level: int, hint: bool = False) -> None:
         """Log a message.
 
         :param message: The message to log

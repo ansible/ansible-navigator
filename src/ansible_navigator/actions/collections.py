@@ -287,7 +287,7 @@ class Action(ActionBase):
             value=self._collections,
         )
 
-    def _build_collection_content_menu(self):
+    def _build_collection_content_menu(self) -> Step:
         """Build the menu of plugins.
 
         :returns: The plugin menu definition
@@ -357,7 +357,7 @@ class Action(ActionBase):
             value=collection_contents,
         )
 
-    def _build_collection_content(self):
+    def _build_collection_content(self) -> Step:
         """Build the content for one plugin.
 
         :returns: The plugin's content
@@ -505,7 +505,7 @@ class Action(ActionBase):
         if output:
             self._parse(output)
 
-    def _parse(self, output) -> None:
+    def _parse(self, output: str) -> None:
         """Load and process the ``json`` output from the collection cataloging process.
 
         :param output: The output from the collection cataloging process

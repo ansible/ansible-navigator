@@ -12,13 +12,13 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import Se
 from .utils import id_for_name
 
 
-def test_entries_no_duplicate_names():
+def test_entries_no_duplicate_names() -> None:
     """Ensure no name is duplicated."""
     values = Counter([entry.name for entry in NavigatorConfiguration.entries])
     assert not any(k for (k, v) in values.items() if v > 1)
 
 
-def test_entries_no_duplicate_shorts():
+def test_entries_no_duplicate_shorts() -> None:
     """Ensure no short is duplicated."""
     values = Counter(
         [
@@ -30,14 +30,14 @@ def test_entries_no_duplicate_shorts():
     assert not any(k for (k, v) in values.items() if v > 1)
 
 
-def test_entries_alphabetical():
+def test_entries_alphabetical() -> None:
     """Ensure entries are alphabetical."""
     values = [entry.name for entry in NavigatorConfiguration.entries]
     assert values == sorted(values)
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_entries_no_dash_in_name(entry: SettingsEntry):
+def test_entries_no_dash_in_name(entry: SettingsEntry) -> None:
     """Ensure no names contain a -.
 
     :param entry: The entry to test
@@ -46,7 +46,7 @@ def test_entries_no_dash_in_name(entry: SettingsEntry):
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_entries_no_dash_in_environment_variable(entry: SettingsEntry):
+def test_entries_no_dash_in_environment_variable(entry: SettingsEntry) -> None:
     """Ensure no environment variable has a dash.
 
     :param entry: The entry to test
@@ -55,7 +55,7 @@ def test_entries_no_dash_in_environment_variable(entry: SettingsEntry):
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_entries_no_short_long_if_positional(entry: SettingsEntry):
+def test_entries_no_short_long_if_positional(entry: SettingsEntry) -> None:
     """Ensure no positional argument has a short or long set.
 
     :param entry: The entry to test
@@ -70,7 +70,7 @@ def test_entries_no_short_long_if_positional(entry: SettingsEntry):
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_entries_no_underscore_in_path(entry: SettingsEntry):
+def test_entries_no_underscore_in_path(entry: SettingsEntry) -> None:
     """Ensure no long override has an _.
 
     :param entry: The entry to test
@@ -80,7 +80,7 @@ def test_entries_no_underscore_in_path(entry: SettingsEntry):
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_entries_no_current_set(entry: SettingsEntry):
+def test_entries_no_current_set(entry: SettingsEntry) -> None:
     """Ensure no entry has a current value set prior to configuration.
 
     :param entry: The entry to test
@@ -89,7 +89,7 @@ def test_entries_no_current_set(entry: SettingsEntry):
 
 
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
-def test_entries_default_value(entry: SettingsEntry):
+def test_entries_default_value(entry: SettingsEntry) -> None:
     """Ensure entry has a default value not set or a common type.
 
     :param entry: The entry to test

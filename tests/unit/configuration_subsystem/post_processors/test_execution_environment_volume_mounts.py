@@ -251,7 +251,7 @@ test_data = (
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=test_data, ids=id_func)
-def test_ee_volume_mount(data: Scenario):
+def test_ee_volume_mount(data: Scenario) -> None:
     """Test the eev post processor.
 
     :param data: The test data

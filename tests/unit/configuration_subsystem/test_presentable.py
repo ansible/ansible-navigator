@@ -1,6 +1,7 @@
 """Tests for the transformation of settings to a presentable structure."""
 
 from dataclasses import asdict
+from typing import Any
 
 import pytest
 
@@ -20,7 +21,7 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 
 
 @pytest.fixture(name="sample_settings")
-def _sample_settings():
+def _sample_settings() -> ApplicationConfiguration:
     """Provide sample settings.
 
     :return: A sample settings instance
@@ -42,7 +43,7 @@ def _sample_settings():
 
 
 @pytest.fixture(name="settings_file_dict")
-def _settings_file_dict():
+def _settings_file_dict() -> dict[str, Any]:
     """Provide a sample settings file as a dictionary.
 
     :return: A sample settings file as a dictionary
@@ -68,7 +69,9 @@ def _settings_file_dict():
     }
 
 
-def test_settings_file_entry(sample_settings, settings_file_dict):
+def test_settings_file_entry(
+    sample_settings: ApplicationConfiguration, settings_file_dict: dict[str, Any]
+) -> None:
     """Ensure the settings file entry is properly constructed.
 
     :param sample_settings: A sample application configuration (settings)
@@ -81,7 +84,9 @@ def test_settings_file_entry(sample_settings, settings_file_dict):
     assert asdict(presentable[0]) == settings_file_dict
 
 
-def test_settings_entry(sample_settings, settings_file_dict):
+def test_settings_entry(
+    sample_settings: ApplicationConfiguration, settings_file_dict: dict[str, Any]
+) -> None:
     """Ensure a settings entry is properly constructed.
 
     :param sample_settings: A sample application configuration (settings)

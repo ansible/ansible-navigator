@@ -324,7 +324,7 @@ class Action(ActionBase):
         msg = "broken modules somewhere?"
         raise IndexError(msg)
 
-    def _build_group_menu(self, key=None) -> Step:
+    def _build_group_menu(self, key: str | None = None) -> Step:
         """Build the menu for inventory groups.
 
         :param key: The optional menu name

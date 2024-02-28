@@ -50,7 +50,7 @@ class MenuBuilder:
         self,
         dicts: ContentTypeSequence,
         cols: list[str],
-        indices,
+        indices: tuple[int, ...],
     ) -> tuple[CursesLines, CursesLines]:
         """Build menu main entry point.
 
@@ -65,7 +65,7 @@ class MenuBuilder:
         self,
         dicts: ContentTypeSequence,
         cols: list[str],
-        indices,
+        indices: tuple[int, ...],
     ) -> tuple[CursesLines, CursesLines]:
         """Build a text menu from a list of dicts given columns(root keys).
 
@@ -101,7 +101,7 @@ class MenuBuilder:
         menu_lines = self._menu_lines(dicts, menu_layout, indices)
         return CursesLines(tuple([header])), menu_lines
 
-    def _menu_header_line(self, menu_layout: tuple[list[Any], ...]) -> CursesLine:
+    def _menu_header_line(self, menu_layout: Any) -> CursesLine:
         """Generate the menu header line.
 
         :param menu_layout: A tuple of menu details:
@@ -151,7 +151,7 @@ class MenuBuilder:
     def _menu_lines(
         self,
         dicts: ContentTypeSequence,
-        menu_layout: tuple[list[Any], ...],
+        menu_layout: Any,
         indices,
     ) -> CursesLines:
         """Generate all the menu lines.

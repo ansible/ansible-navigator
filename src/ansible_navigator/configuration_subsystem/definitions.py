@@ -166,7 +166,7 @@ class SettingsEntry:
     #: Does this hold the name of the active subcommand
     subcommand_value: bool = False
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Perform post initialization actions."""
         version_added_sanity_check(self.version_added)
 
@@ -242,7 +242,7 @@ class SubCommand:
     version_added: str
     epilog: str | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Perform post initialization actions."""
         version_added_sanity_check(self.version_added)
 

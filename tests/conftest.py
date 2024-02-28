@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 
+from collections.abc import Callable
 from collections.abc import Generator
 from copy import deepcopy
 from pathlib import Path
@@ -25,6 +26,7 @@ from ansible_navigator.configuration_subsystem.utils import parse_ansible_veriso
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.image_manager.puller import ImagePuller
+from ansible_navigator.utils.functions import console_width
 from ansible_navigator.utils.functions import find_settings_file
 from ansible_navigator.utils.packaged_data import ImageEntry
 from ansible_navigator.utils.serialize import Loader
@@ -90,7 +92,7 @@ def fixture_small_image_name() -> str:
 
 
 @pytest.fixture(scope="function")
-def locked_directory(tmpdir) -> Generator[str, None, None]:
+def locked_directory(tmpdir: str) -> Generator[str, None, None]:
     """Directory without read-write for throwing errors.
 
     :param tmpdir: Fixture for temporary directory
@@ -102,7 +104,7 @@ def locked_directory(tmpdir) -> Generator[str, None, None]:
 
 
 @pytest.fixture(scope="session")
-def pullable_image(valid_container_engine) -> Generator[str, None, None]:
+def pullable_image(valid_container_engine: str) -> Generator[str, None, None]:
     """Return a container that can be pulled.
 
     :param valid_container_engine: Fixture for a valid container engine
@@ -114,7 +116,7 @@ def pullable_image(valid_container_engine) -> Generator[str, None, None]:
 
 
 @pytest.fixture
-def patch_curses(monkeypatch) -> None:
+def patch_curses(monkeypatch: pytest.MonkeyPatch) -> None:
     """Patch curses so it doesn't traceback during tests.
 
     :param monkeypatch: Fixture for patching
@@ -174,7 +176,7 @@ def settings_env_var_to_full(
 
 
 @pytest.fixture
-def test_dir_fixture_dir(request) -> Path:
+def test_dir_fixture_dir(request: pytest.FixtureRequest) -> Path:
     """Provide the fixture directory for a given test directory.
 
     :param request: The pytest request object
@@ -184,7 +186,7 @@ def test_dir_fixture_dir(request) -> Path:
     return test_dir
 
 
-def pull_image(valid_container_engine: str, image_name: str):
+def pull_image(valid_container_engine: str, image_name: str) -> None:
     """Pull an image.
 
     :param valid_container_engine: The container engine to use
@@ -199,7 +201,10 @@ def pull_image(valid_container_engine: str, image_name: str):
     image_puller.assess()
     image_puller.prologue_stdout()
     if image_puller.assessment.exit_messages:
-        print(msg.to_lines() for msg in image_puller.assessment.exit_messages)
+        print(
+            msg.to_lines(color=False, width=console_width(), with_prefix=True)
+            for msg in image_puller.assessment.exit_messages
+        )
         pytest.exit("Image assessment failed", 1)
     if image_puller.assessment.pull_required:
         # ensure the output is flushed prior to the pull
@@ -276,7 +281,7 @@ def _cmd_in_tty(
 
 
 @pytest.fixture
-def cmd_in_tty():
+def cmd_in_tty() -> Generator[Callable[..., tuple[str, str, int]], None, None]:
     """Provide the cmd in tty function as a fixture.
 
     :yields: The cmd_in_tty function
@@ -295,7 +300,7 @@ class TCmdInTty(Protocol):
         """
 
 
-def pytest_sessionstart(session: pytest.Session):
+def pytest_sessionstart(session: pytest.Session) -> None:
     """Pull the default EE image before the tests start.
 
     Only in the main process, not the workers.

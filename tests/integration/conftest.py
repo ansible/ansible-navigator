@@ -136,7 +136,7 @@ class CliRunner:
 
 
 @pytest.fixture(scope="function")
-def cli_runner(request) -> CliRunner:
+def cli_runner(request: pytest.FixtureRequest) -> CliRunner:
     """Create a fixture for the cli runner.
 
     :param request: The current test request.

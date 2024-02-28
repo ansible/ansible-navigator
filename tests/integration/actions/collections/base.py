@@ -130,7 +130,7 @@ class BaseClass:
         request: pytest.FixtureRequest,
         step: UiTestStep,
         tmux_session: TmuxSession,
-    ):
+    ) -> None:
         """Run the tests for ``collections``, mode and ``ee`` set in child class.
 
         :param os_independent_tmp: An OS independent tmp directory

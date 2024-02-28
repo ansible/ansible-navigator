@@ -44,7 +44,7 @@ class Cli2Runner:
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
 
@@ -66,7 +66,7 @@ class Cli2Runner:
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Test using config, interactive.
 
@@ -95,7 +95,7 @@ class Cli2Runner:
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Test using config, stdout.
 
@@ -124,7 +124,7 @@ class Cli2Runner:
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Test using inventory, interactive.
 
@@ -153,7 +153,7 @@ class Cli2Runner:
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Test using inventory, stdout.
 
@@ -182,7 +182,7 @@ class Cli2Runner:
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Test using run, interactive.
 
@@ -211,7 +211,7 @@ class Cli2Runner:
         cli_entry: str,
         config_fixture: str,
         expected: dict[str, str],
-    ):
+    ) -> None:
         # pylint: disable=too-many-arguments
         """Test using run, stdout.
 
