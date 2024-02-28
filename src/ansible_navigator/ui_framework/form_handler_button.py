@@ -31,7 +31,7 @@ class FormHandlerButton(CursesWindow):
         self._form_fields = None
         self._screen = screen
 
-    def populate(self):
+    def populate(self) -> None:
         """Populate the window with the button."""
         if not self._form_field:
             msg = "_form_field not initialized"

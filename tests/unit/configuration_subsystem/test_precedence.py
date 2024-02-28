@@ -5,6 +5,7 @@ from __future__ import annotations
 import shlex
 
 from collections.abc import Iterable
+from typing import Any
 
 import pytest
 
@@ -27,7 +28,7 @@ from .utils import id_for_name
 # pylint: disable=too-many-arguments
 
 
-def which(*_args, **_kwargs):
+def which(*_args: Any, **_kwargs: dict[str, Any]) -> str:
     """Return the path to the container engine.
 
     :param _args: args
@@ -37,7 +38,7 @@ def which(*_args, **_kwargs):
     return "/path/to/container_engine"
 
 
-def isfile(*_args, **_kwargs):
+def isfile(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
     """Return True.
 
     :param _args: args
@@ -56,7 +57,7 @@ def test_all_entries_reflect_cli_given_env_vars(
     base: str | None,
     cli_entry: str,
     expected: Iterable[tuple[str, str]],
-):
+) -> None:
     # pylint: disable=too-many-locals
     """Ensure all entries are set by the CLI, even with environment variables set.
 
@@ -113,7 +114,7 @@ def test_all_entries_reflect_cli_given_settings(
     base: str | None,
     cli_entry: str,
     expected: Iterable[tuple[str, str]],
-):
+) -> None:
     """Ensure all entries are set by the CLI.
 
     Based on the settings file, the non CLI parameters will be
@@ -169,7 +170,7 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
     base: str | None,
     cli_entry: str,
     expected: Iterable[tuple[str, str]],
-):
+) -> None:
     # pylint:disable=too-many-locals
     """Ensure all entries are set by the CLI.
 
@@ -225,7 +226,7 @@ def test_all_entries_reflect_default(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
     entry: SettingsEntry,
-):
+) -> None:
     """Ensure all entries are set to a default value.
 
     :param monkeypatch: Pytest monkeypatch fixture
@@ -262,7 +263,7 @@ def test_all_entries_reflect_env_var_given_settings(
     entry: str,
     value: str,
     expected: str | list[str],
-):
+) -> None:
     """Ensure each entry is are set by an environment variables.
 
     Even though settings file has been provided, the others
@@ -308,7 +309,7 @@ def test_all_entries_reflect_settings_given_settings(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
     entry: SettingsEntry,
-):
+) -> None:
     """Ensure all entries are set to an entry in a settings file.
 
     :param monkeypatch: Pytest monkeypatch fixture

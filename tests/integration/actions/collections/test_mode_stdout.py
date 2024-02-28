@@ -20,7 +20,7 @@ def test_stdout_output(
     stdout_format: str,
     cli_runner: CliRunner,
     monkeypatch: pytest.MonkeyPatch,
-):
+) -> None:
     """Test the json output for collections.
 
     :param cwd: Whether to change the working directory.

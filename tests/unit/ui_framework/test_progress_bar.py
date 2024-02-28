@@ -31,7 +31,7 @@ class ContentTest(ContentBase[Any]):
     _progress: str = ""
     other: str = "test_value"
 
-    def get(self, attribute: str):
+    def get(self, attribute: str) -> Any:
         """Allow this dataclass to be treated like a dictionary.
 
         This is a work around until the UI fully supports dataclasses

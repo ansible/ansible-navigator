@@ -5,7 +5,7 @@ import types
 from ansible_navigator.utils.key_value_store import KeyValueStore
 
 
-def test_kvs_save_restore(empty_kvs: KeyValueStore):
+def test_kvs_save_restore(empty_kvs: KeyValueStore) -> None:
     """Test basic KVS write to disk and restore.
 
     :param empty_kvs: An empty key-value store
@@ -19,7 +19,7 @@ def test_kvs_save_restore(empty_kvs: KeyValueStore):
     assert kvs2["i_am_a_key"] == "and I am a value"
 
 
-def test_kvs_len(kvs: KeyValueStore):
+def test_kvs_len(kvs: KeyValueStore) -> None:
     """Test KVS __len__ / len().
 
     :param kvs: A key-value store populated with data
@@ -29,7 +29,7 @@ def test_kvs_len(kvs: KeyValueStore):
     assert len(kvs) == 5
 
 
-def test_kvs_iterkeys(kvs: KeyValueStore):
+def test_kvs_iterkeys(kvs: KeyValueStore) -> None:
     """Test KVS iterkeys().
 
     :param kvs: A key-value store populated with data
@@ -42,7 +42,7 @@ def test_kvs_iterkeys(kvs: KeyValueStore):
     assert sorted(list(kvs.iterkeys())) == ["apple", "banana", "grape", "strawberry"]
 
 
-def test_kvs_itervalues(kvs: KeyValueStore):
+def test_kvs_itervalues(kvs: KeyValueStore) -> None:
     """Test KVS itervalues().
 
     :param kvs: A key-value store populated with data
@@ -55,7 +55,7 @@ def test_kvs_itervalues(kvs: KeyValueStore):
     assert sorted(list(kvs.itervalues())) == ["green", "red", "red", "yellow"]
 
 
-def test_kvs_iteritems(kvs: KeyValueStore):
+def test_kvs_iteritems(kvs: KeyValueStore) -> None:
     """Test KVS iteritems().
 
     :param kvs: A key-value store populated with data
@@ -76,7 +76,7 @@ def test_kvs_iteritems(kvs: KeyValueStore):
 # Now things get weird.
 
 
-def test_kvs_keys(kvs: KeyValueStore):
+def test_kvs_keys(kvs: KeyValueStore) -> None:
     """Test KVS keys().
 
     :param kvs: A key-value store populated with data
@@ -90,7 +90,7 @@ def test_kvs_keys(kvs: KeyValueStore):
     assert sorted(list(keys)) == ["apple", "banana", "grape", "strawberry"]
 
 
-def test_kvs_values(kvs: KeyValueStore):
+def test_kvs_values(kvs: KeyValueStore) -> None:
     """Test KVS values().
 
     :param kvs: A key-value store populated with data
@@ -104,7 +104,7 @@ def test_kvs_values(kvs: KeyValueStore):
     assert sorted(list(values)) == ["green", "red", "red", "yellow"]
 
 
-def test_kvs_items(kvs: KeyValueStore):
+def test_kvs_items(kvs: KeyValueStore) -> None:
     """Test KVS items().
 
     :param kvs: A key-value store populated with data
@@ -123,7 +123,7 @@ def test_kvs_items(kvs: KeyValueStore):
     ]
 
 
-def test_kvs_repr(kvs: KeyValueStore, empty_kvs: KeyValueStore):
+def test_kvs_repr(kvs: KeyValueStore, empty_kvs: KeyValueStore) -> None:
     """Test KVS __repr__().
 
     :param empty_kvs: An empty key-value store

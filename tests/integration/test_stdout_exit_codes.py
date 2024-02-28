@@ -42,7 +42,7 @@ def fixture_params(
     }
 
 
-def id_ee(value: bool):
+def id_ee(value: bool) -> str:
     """Generate the test id.
 
     :param value: The value of the parameter
@@ -51,7 +51,7 @@ def id_ee(value: bool):
     return "-ee" if value else "-no_ee"
 
 
-def id_test_data(value: StdoutTest):
+def id_test_data(value: StdoutTest) -> str:
     """Generate the test id.
 
     :param value: The value of the parameter
@@ -134,7 +134,7 @@ def test_stdout(
     action_run_stdout: type[ActionRunTest],
     params: dict[str, Any],
     test_data: StdoutTest,
-):
+) -> None:
     """Test for a return code.
 
     :param action_run_stdout: The action runner

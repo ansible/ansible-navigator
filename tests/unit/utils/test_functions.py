@@ -227,7 +227,7 @@ def test_round_half_up(data: RoundHalfUpTestData) -> None:
     assert result == data.expected
 
 
-def test_path_is_relative_to():
+def test_path_is_relative_to() -> None:
     """Ensure path_is_relative_to returns accurate results."""
     directory = Path("/tmp/test")
     file_in_directory = Path("/tmp/test/file.txt")

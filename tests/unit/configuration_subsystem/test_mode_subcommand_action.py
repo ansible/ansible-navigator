@@ -17,7 +17,7 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 # pylint: disable=protected-access
 
 
-def test_import_error():
+def test_import_error() -> None:
     """Ensure an error for invalid action_package."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
@@ -56,7 +56,7 @@ def test_import_error():
     assert exit_msg in [exit_msg.message for exit_msg in configurator._exit_messages]
 
 
-def test_subcommand_not_found():
+def test_subcommand_not_found() -> None:
     """Ensure an error for invalid subcommand/action."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",

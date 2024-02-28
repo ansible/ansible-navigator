@@ -518,7 +518,7 @@ class Action(ActionBase):
             return False
         return True
 
-    def _parse(self, output) -> dict[Any, Any] | None:
+    def _parse(self, output: str) -> dict[Any, Any] | None:
         """Load and process the ``json`` output from the image introspection process.
 
         :param output: The output from the image introspection process

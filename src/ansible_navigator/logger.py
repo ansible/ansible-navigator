@@ -7,6 +7,8 @@ import logging
 import os
 import zoneinfo
 
+from typing import Any
+
 from .configuration_subsystem import Constants
 from .configuration_subsystem.definitions import ApplicationConfiguration
 
@@ -17,7 +19,7 @@ logger = logging.getLogger("ansible_navigator")
 class Formatter(logging.Formatter):
     """Format a logging timestamp using a time zone."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the logging formatter.
 
         :param args: The arguments

@@ -28,7 +28,7 @@ inventory = inventory.yml
 
 
 @ee_states
-def test_valid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_valid_config(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a valid ansible.cfg is parsed.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -49,7 +49,9 @@ def test_valid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatc
 
 
 @ee_states
-def test_valid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_valid_configurator(
+    ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Confirm a valid ansible.cfg is parsed using configurator.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -79,7 +81,7 @@ def test_valid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.Monk
 
 
 @ee_states
-def test_valid_home(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_valid_home(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a valid .ansible.cfg is parsed when in the home directory.
 
     When EE support is enabled, the .ansible.cfg file is not used
@@ -117,7 +119,7 @@ ANSIBLE_CFG_INVALID = """
 
 
 @ee_states
-def test_invalid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_invalid_config(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a invalid ansible.cfg raises errors.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -137,7 +139,9 @@ def test_invalid_config(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPa
 
 
 @ee_states
-def test_invalid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_invalid_configurator(
+    ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Confirm a invalid ansible.cfg raises errors using configurator.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -164,7 +168,7 @@ def test_invalid_configurator(ee_enabled, tmp_path: Path, monkeypatch: pytest.Mo
 
 @pytest.mark.usefixtures("ansible_version")
 @ee_states
-def test_config_none(ee_enabled):
+def test_config_none(ee_enabled: bool) -> None:
     """Confirm a invalid ansible.cfg raises errors.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -183,7 +187,7 @@ def test_config_none(ee_enabled):
 
 
 @ee_states
-def test_invalid_path(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_invalid_path(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm an invalid path to ansible.cfg is handled.
 
     :param ee_enabled: Indicate if EE support is enabled
@@ -192,7 +196,7 @@ def test_invalid_path(ee_enabled, tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     """
     original_run_command = run_command
 
-    def static_ansible_version(command: Command):
+    def static_ansible_version(command: Command) -> None:
         if command.command == "ansible --version":
             command.return_code = 0
             command.stdout = f"ansible [core 2.12.3]\nconfig file = {(tmp_path / 'ansible.cfg')!s}"

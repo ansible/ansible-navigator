@@ -20,7 +20,7 @@ from ansible_navigator.utils.serialize import yaml
 from .defaults import TEST_FIXTURE_DIR
 
 
-def test_basic(schema_dict: SettingsSchemaType):
+def test_basic(schema_dict: SettingsSchemaType) -> None:
     """Simple test to ensure an exception isn't raised.
 
     :param schema_dict: The json schema as a dictionary
@@ -34,13 +34,13 @@ def test_basic(schema_dict: SettingsSchemaType):
     assert len(schema_dict["properties"]["ansible-navigator"]["properties"]) >= 15
 
 
-def test_additional_properties(schema_dict: SettingsSchemaType):
+def test_additional_properties(schema_dict: SettingsSchemaType) -> None:
     """Ensure additional properties are forbidden throughout the schema.
 
     :param schema_dict: The json schema as a dictionary
     """
 
-    def property_dive(subschema: SettingsSchemaType):
+    def property_dive(subschema: SettingsSchemaType) -> None:
         if "properties" in subschema:
             assert subschema["additionalProperties"] is False
             for value in subschema["properties"].values():
@@ -49,7 +49,7 @@ def test_additional_properties(schema_dict: SettingsSchemaType):
     property_dive(schema_dict)
 
 
-def test_no_extras(schema_dict: SettingsSchemaType):
+def test_no_extras(schema_dict: SettingsSchemaType) -> None:
     """Ensure no extras exist in either settings or schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -62,7 +62,7 @@ def test_no_extras(schema_dict: SettingsSchemaType):
 
     json_paths = []
 
-    def dive(subschema, path=""):
+    def dive(subschema: dict[str, Any], path: str = "") -> None:
         if "properties" in subschema:
             for name, prop in subschema["properties"].items():
                 if path:
@@ -76,7 +76,7 @@ def test_no_extras(schema_dict: SettingsSchemaType):
     assert sorted(all_paths) == sorted(json_paths)
 
 
-def test_schema_sample_full_tests(schema_dict: SettingsSchemaType):
+def test_schema_sample_full_tests(schema_dict: SettingsSchemaType) -> None:
     """Check the full settings file against the schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -87,7 +87,7 @@ def test_schema_sample_full_tests(schema_dict: SettingsSchemaType):
     validate(instance=settings_contents, schema=schema_dict)
 
 
-def test_schema_sample_full_package_data(schema_dict: SettingsSchemaType):
+def test_schema_sample_full_package_data(schema_dict: SettingsSchemaType) -> None:
     """Check the settings file used as a sample against the schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -100,7 +100,7 @@ def test_schema_sample_full_package_data(schema_dict: SettingsSchemaType):
     validate(instance=settings_dict, schema=schema_dict)
 
 
-def test_schema_sample_wrong(schema_dict: SettingsSchemaType):
+def test_schema_sample_wrong(schema_dict: SettingsSchemaType) -> None:
     """Check the broken settings file against the schema.
 
     :param schema_dict: The json schema as a dictionary
@@ -115,13 +115,13 @@ def test_schema_sample_wrong(schema_dict: SettingsSchemaType):
 
 def test_schema_dict_all_required(
     schema_dict_all_required: SettingsSchemaType,
-):
+) -> None:
     """Confirm every entry in the schema has required.
 
     :param schema_dict_all_required: The json schema as a dictionary, everything required
     """
 
-    def property_dive(subschema: dict[str, Any]):
+    def property_dive(subschema: dict[str, Any]) -> None:
         if "properties" in subschema:
             assert subschema["required"] == list(subschema["properties"].keys())
             for value in subschema["properties"].values():

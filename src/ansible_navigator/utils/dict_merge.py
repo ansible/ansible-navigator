@@ -12,7 +12,7 @@ class DictMergeError(Exception):
 Mergeable = bool | dict[Any, Any] | list[Any] | str | None
 
 
-def in_place_list_replace(left: Mergeable, right: Mergeable):
+def in_place_list_replace(left: Mergeable, right: Mergeable) -> Mergeable:
     """Merge right into left in place and returns merged result.
 
     If left is a primitive, right will be used

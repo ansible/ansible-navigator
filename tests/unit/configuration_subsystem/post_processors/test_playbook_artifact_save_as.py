@@ -25,12 +25,12 @@ class Scenario(BaseScenario):
     expected: str | None = None
     exit_message_substr: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Set the expected if errors are expected."""
         if self.expected is None:
             self.expected = self.current
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide a test id.
 
         :returns: The test id
@@ -69,7 +69,7 @@ test_data = (
 
 
 @pytest.mark.parametrize(argnames="data", argvalues=test_data, ids=id_func)
-def test_pas(data: Scenario):
+def test_pas(data: Scenario) -> None:
     """Test the PAS post processor.
 
     :param data: The test data

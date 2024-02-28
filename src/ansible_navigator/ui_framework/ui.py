@@ -791,7 +791,7 @@ class UserInterface(CursesWindow):
         self,
         current: Sequence[Any],
         columns: list[str],
-        indices,
+        indices: tuple[int, ...],
     ) -> tuple[CursesLines, CursesLines]:
         """Build the menu.
 

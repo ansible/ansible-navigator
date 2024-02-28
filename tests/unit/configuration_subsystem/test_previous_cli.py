@@ -20,7 +20,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import In
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
 
-def test_apply_previous_cli_all():
+def test_apply_previous_cli_all() -> None:
     """Ensure all previous CLI parameters are applied when requested."""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     expected: list[tuple[Any, ...]] = [
@@ -66,7 +66,7 @@ def test_apply_previous_cli_all():
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-def test_apply_previous_cli_specified():
+def test_apply_previous_cli_specified() -> None:
     """Ensure only some of the previous CLI parameters are applied when requested."""
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
@@ -111,7 +111,7 @@ def test_apply_previous_cli_specified():
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-def test_apply_previous_cli_mixed(monkeypatch: pytest.MonkeyPatch):
+def test_apply_previous_cli_mixed(monkeypatch: pytest.MonkeyPatch) -> None:
     """Ensure a mixed configuration passes.
 
     :param monkeypatch: pytest fixture
@@ -169,7 +169,7 @@ def test_apply_previous_cli_mixed(monkeypatch: pytest.MonkeyPatch):
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-def test_apply_previous_cli_cmdline_not_applied():
+def test_apply_previous_cli_cmdline_not_applied() -> None:
     """Ensure the command line parameters are not carried forward."""
     params = "run /tmp/site.yml --ee False --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
@@ -217,13 +217,13 @@ def test_apply_previous_cli_cmdline_not_applied():
         assert application_configuration.entry(expect[0]).value.source is expect[2]
 
 
-def test_apply_previous_cli_none(monkeypatch: pytest.MonkeyPatch):
+def test_apply_previous_cli_none(monkeypatch: pytest.MonkeyPatch) -> None:
     """Ensure nothing is carried forward.
 
     :param monkeypatch: The monkeypatch fixture
     """
 
-    def which(*_args, **_kwargs):
+    def which(*_args: Any, **_kwargs: Any) -> str:
         """Return a path to the container engine.
 
         :param _args: The args
@@ -298,7 +298,7 @@ def test_apply_previous_cli_none(monkeypatch: pytest.MonkeyPatch):
         assert application_configuration.entry(entry).value.source is kind
 
 
-def test_apply_cli_subset_none():
+def test_apply_cli_subset_none() -> None:
     """Ensure subset none works for apply CLI."""
     test_config = ApplicationConfiguration(
         application_name="test_application",

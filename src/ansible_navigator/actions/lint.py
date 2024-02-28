@@ -66,7 +66,7 @@ class Severity(IntEnum):
     UNKNOWN = -1
 
     @classmethod
-    def _missing_(cls, value):
+    def _missing_(cls, value: object) -> Severity:
         """Return unknown if ansible-lint ever returns something unexpected.
 
         :param value: The value
@@ -197,7 +197,7 @@ class Action(ActionBase):
         super().__init__(args=args, logger_name=__name__, name="lint")
 
     @property
-    def is_interactive(self):
+    def is_interactive(self) -> bool:
         """Determine if interactive.
 
         :returns: An indication is running in interactive mode
@@ -400,7 +400,7 @@ class Action(ActionBase):
         else:
             self.steps.append(result)
 
-    def _build_issues_menu(self):
+    def _build_issues_menu(self) -> None:
         """Build the menu of all issues.
 
         :returns: Indication of success
@@ -459,7 +459,7 @@ class Action(ActionBase):
         _rerun_lint = self._rerun_needed()
         return
 
-    def _build_issue_content(self):
+    def _build_issue_content(self) -> Step:
         """Build the content for one plugin.
 
         :returns: The plugin's content

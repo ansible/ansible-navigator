@@ -2,9 +2,11 @@
 
 import os
 
-from copy import deepcopy
 
 # pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
+from collections.abc import Callable
+from copy import deepcopy
+from typing import Any
 from unittest import mock
 from unittest.mock import patch
 
@@ -18,7 +20,7 @@ from ansible_navigator.configuration_subsystem.navigator_configuration import (
 )
 
 
-def test_mutual_exclusivity_for_configuration_init():
+def test_mutual_exclusivity_for_configuration_init() -> None:
     """Ensure the configuration cannot be initiated with apply_previous_cli_entries and initial."""
     with pytest.raises(ValueError, match="cannot be used while initializing"):
         application_configuration = deepcopy(NavigatorConfiguration)
@@ -30,7 +32,7 @@ def test_mutual_exclusivity_for_configuration_init():
         )
 
 
-def test_apply_before_initial_saved():
+def test_apply_before_initial_saved() -> None:
     """Ensure the apply_previous_cli_entries can't be used before initial."""
     with pytest.raises(ValueError, match="enabled prior to"):
         application_configuration = deepcopy(NavigatorConfiguration)
@@ -43,7 +45,7 @@ def test_apply_before_initial_saved():
 
 
 @patch("shutil.which", return_value="/path/to/container_engine")
-def test_editor_command_from_editor(_mocked_func, generate_config):
+def test_editor_command_from_editor(_mocked_func: Any, generate_config: Callable[..., Any]) -> None:
     """Ensure the editor_command defaults to EDITOR if set.
 
     :param generate_config: The configuration generator fixture

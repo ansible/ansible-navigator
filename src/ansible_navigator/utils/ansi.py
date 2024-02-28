@@ -12,7 +12,7 @@ IS_TTY = stdout.isatty()
 COLOR = "NO_COLOR" not in os.environ and IS_TTY
 
 
-def changed(color: bool, message: str):
+def changed(color: bool, message: str) -> None:
     """Output changed information to the console.
 
     :param color: Whether to color the message
@@ -24,7 +24,7 @@ def changed(color: bool, message: str):
         print(message)
 
 
-def failed(color: bool, message: str):
+def failed(color: bool, message: str) -> None:
     """Output failure information to the console.
 
     :param color: Whether to color the message
@@ -36,7 +36,7 @@ def failed(color: bool, message: str):
         print(message)
 
 
-def info(color: bool, message: str):
+def info(color: bool, message: str) -> None:
     """Output info information to the console.
 
     :param color: Whether to color the message
@@ -48,7 +48,7 @@ def info(color: bool, message: str):
         print(message)
 
 
-def subtle(color: bool, message: str):
+def subtle(color: bool, message: str) -> None:
     """Output subtle information to the console.
 
     :param color: Whether to color the message
@@ -60,7 +60,7 @@ def subtle(color: bool, message: str):
         print(message)
 
 
-def prompt_enter():
+def prompt_enter() -> None:
     """Output prompt information to the console."""
     try:
         input("Press Enter to continue: ")
@@ -83,7 +83,7 @@ def prompt_yn(message: str) -> bool:
         sys.exit(0)
 
 
-def success(color: bool, message: str):
+def success(color: bool, message: str) -> None:
     """Output success information to the console.
 
     :param color: Whether to color the message
@@ -95,7 +95,7 @@ def success(color: bool, message: str):
         print(message)
 
 
-def warning(color: bool, message: str):
+def warning(color: bool, message: str) -> None:
     """Output warning information to the console.
 
     :param color: Whether to color the message
@@ -107,7 +107,7 @@ def warning(color: bool, message: str):
         print(message)
 
 
-def working(color: bool, message: str):
+def working(color: bool, message: str) -> None:
     """Output working information to the console.
 
     :param color: Whether to color the message

@@ -22,7 +22,7 @@ from ansible_navigator.configuration_subsystem.parser import Parser
 # pylint: disable=protected-access
 
 
-def test_cmdline_source_not_set():
+def test_cmdline_source_not_set() -> None:
     """Ensure a configuration without a ``subparser`` entry fails."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
@@ -51,7 +51,7 @@ def test_cmdline_source_not_set():
     assert not configurator._exit_messages
 
 
-def test_no_subcommand():
+def test_no_subcommand() -> None:
     """Ensure a configuration without no ``subparser`` entry fails."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
@@ -71,7 +71,7 @@ def test_no_subcommand():
         Configurator(params=[], application_configuration=test_config).configure()
 
 
-def test_many_subcommand():
+def test_many_subcommand() -> None:
     """Ensure a configuration without a ``subparser`` entry fails."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
@@ -106,7 +106,7 @@ def test_many_subcommand():
         Configurator(params=[], application_configuration=test_config).configure()
 
 
-def test_invalid_choice_not_set():
+def test_invalid_choice_not_set() -> None:
     """Ensure an error is raised for no choice."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",
@@ -140,7 +140,7 @@ def test_invalid_choice_not_set():
         test_config.entry("e1").invalid_choice
 
 
-def test_custom_nargs_for_positional():
+def test_custom_nargs_for_positional() -> None:
     """Ensure a ``nargs`` for a positional are carried forward."""
     test_config = ApplicationConfiguration(
         application_name="test_config1",

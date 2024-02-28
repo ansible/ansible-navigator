@@ -5,7 +5,7 @@ import os
 from .conftest import GenerateConfigCallable
 
 
-def test_broken_settings_file(generate_config: GenerateConfigCallable):
+def test_broken_settings_file(generate_config: GenerateConfigCallable) -> None:
     """Ensure exit_messages generated for broken settings file.
 
     :param generate_config: The configuration generator fixture
@@ -16,7 +16,7 @@ def test_broken_settings_file(generate_config: GenerateConfigCallable):
     assert error in response.exit_messages[3].message
 
 
-def test_garbage_settings_file(generate_config: GenerateConfigCallable):
+def test_garbage_settings_file(generate_config: GenerateConfigCallable) -> None:
     """Ensure exit_messages generated for garbage settings file.
 
     :param generate_config: The configuration generator fixture

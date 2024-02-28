@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from typing import NamedTuple
-from unittest.mock import patch  # pylint: disable=preferred-module  # FIXME: GH-872
+from unittest.mock import patch  # pylint: disable=W0407
+
+import pytest
 
 from ansible_navigator.constants import GRAMMAR_DIR
 from ansible_navigator.constants import THEME_PATH
@@ -27,7 +29,7 @@ SAMPLE_JSON = Sample(serialization_format=SerializationFormat.JSON)._asdict()
 SAMPLE_YAML = Sample(serialization_format=SerializationFormat.YAML)._asdict()
 
 
-def test_basic_success_json():
+def test_basic_success_json() -> None:
     """Ensure the json string is as expected.
 
     Test that the json string is returned as 1 line, 5 parts and can be
@@ -45,7 +47,7 @@ def test_basic_success_json():
     assert "".join(serialized_lines) == sample
 
 
-def test_basic_success_yaml():
+def test_basic_success_yaml() -> None:
     """Ensure the yaml string is returned as expected.
 
     Check that the yaml string is returned as 2 lines, with 1 and 3 parts
@@ -66,7 +68,7 @@ def test_basic_success_yaml():
     )
 
 
-def test_basic_success_log():
+def test_basic_success_log() -> None:
     """Ensure the log string is returned as 1 line, with 5 parts.
 
     Also ensure the parts can be reassembled to match the string.
@@ -84,7 +86,7 @@ def test_basic_success_log():
     assert "".join(line_parts) == sample
 
 
-def test_basic_success_no_color():
+def test_basic_success_no_color() -> None:
     """Ensure scope ``no_color`` return just lines."""
     sample = serialize(**SAMPLE_JSON)
     colorized = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
@@ -95,7 +97,7 @@ def test_basic_success_no_color():
 
 
 @patch("ansible_navigator.ui_framework.colorize.tokenize")
-def test_graceful_failure(mocked_func, caplog):
+def test_graceful_failure(mocked_func, caplog: pytest.LogCaptureFixture) -> None:
     """Test for correct error format.
 
     Ensure a tokenization error returns the original one line json string
@@ -155,7 +157,7 @@ YAML_TXT_EXPECTED = [
 ]
 
 
-def test_basic_success_yaml_text():
+def test_basic_success_yaml_text() -> None:
     """Ensure the yaml string is returned match the expected tokens."""
     content_format = ContentFormat.YAML_TXT
 
@@ -171,7 +173,7 @@ STYLED_MARKDOWN = """\
 """
 
 
-def test_styled_markdown():
+def test_styled_markdown() -> None:
     """Ensure style is captured from markdown correctly."""
     content_format = ContentFormat.MARKDOWN
 

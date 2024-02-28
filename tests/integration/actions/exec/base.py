@@ -53,7 +53,9 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep):
+    def test(
+        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
+    ) -> None:
         """Test interactive/stdout exec.
 
         :param request: The test request

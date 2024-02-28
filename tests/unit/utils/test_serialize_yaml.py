@@ -1,5 +1,7 @@
 """Tests related to the yaml abstraction layer."""
 
+from typing import Any
+
 import pytest
 
 from yaml import Dumper
@@ -8,7 +10,7 @@ from ansible_navigator.content_defs import ContentView
 from ansible_navigator.utils import serialize
 
 
-def test_check_yaml_imports():
+def test_check_yaml_imports() -> None:
     """Ensure yaml, Dumper, and Loader are imported without error."""
     assert serialize.yaml is not None
     assert serialize.SafeDumper is not None
@@ -16,7 +18,7 @@ def test_check_yaml_imports():
 
 
 @pytest.fixture(name="aliases_allowed")
-def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest):
+def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest) -> Any:
     """Patch the human dumper if requested.
 
     :param monkeypatch: Fixture for patching
@@ -37,7 +39,7 @@ def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReq
     ids=["pyyaml-original", "no-aliases-or-anchors"],
     indirect=("aliases_allowed",),
 )
-def test_anchor_alias(aliases_allowed: bool):
+def test_anchor_alias(aliases_allowed: bool) -> None:
     """Test for anchors and aliases in yaml output.
 
     :param aliases_allowed: Indicates if aliases and anchors should be found
