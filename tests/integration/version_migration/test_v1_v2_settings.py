@@ -25,7 +25,7 @@ def test_version(
     request: pytest.FixtureRequest,
     test_dir_fixture_dir: Path,
     tmp_path: Path,
-):
+) -> None:
     """Test migration with a file of all changes.
 
     :param file: The file to test

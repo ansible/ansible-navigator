@@ -9,6 +9,7 @@ import os
 from collections.abc import Callable
 from pathlib import Path
 from re import Pattern
+from types import TracebackType
 from typing import Any
 
 from ansible_navigator.app_public import AppPublic
@@ -29,11 +30,13 @@ from . import _actions as actions
 class SuspendCurses:
     """Context Manager to temporarily leave curses mode."""
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         """Close the curses window."""
         curses.endwin()
 
-    def __exit__(self, exc_type, exc_val, traceback):
+    def __exit__(
+        self, exc_type: BaseException | None, exc_val: BaseException, traceback: TracebackType
+    ) -> None:
         """Open the curses window.
 
         :param exc_type: The exception class
@@ -63,8 +66,8 @@ class Action:
         self,
         menu: Menu,
         menu_filter: Callable[..., Pattern[str] | None],
-        serialization_format=SerializationFormat | None,
-    ) -> list[dict[Any, Any]]:
+        serialization_format: SerializationFormat | None,
+    ) -> list[dict[Any, Any] | ContentBase[Any]]:
         """Convert a menu into structured data.
 
         :param menu: The current menu showing
@@ -73,9 +76,9 @@ class Action:
         :returns: The menu converted to a structured data
         """
         self._logger.debug("menu is showing, open that")
-        menu_entries = []
+        menu_entries: list[dict[Any, Any] | ContentBase[Any]] = []
         for entry in menu.current:
-            if isinstance(entry, ContentBase):
+            if isinstance(entry, ContentBase) and serialization_format is not None:
                 entry = entry.asdict(
                     content_view=ContentView.FULL,
                     serialization_format=serialization_format,
@@ -90,7 +93,7 @@ class Action:
             menu_entries = [
                 e
                 for e in menu_entries
-                if menu_filter_result.search(" ".join(str(v) for v in e.values()))
+                if menu_filter_result.search(" ".join(str(v) for v in e.values()))  # type: ignore[union-attr]
             ]
         return menu_entries
 
@@ -118,7 +121,7 @@ class Action:
         line_number: int,
         editor_console: bool,
         editor_command: str,
-    ):
+    ) -> None:
         """Open a file using the editor.
 
         :param file_name: The name of the file to open

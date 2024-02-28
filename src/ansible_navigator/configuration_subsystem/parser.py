@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import argparse
+
 from argparse import SUPPRESS
 from argparse import ArgumentParser
 from argparse import HelpFormatter
@@ -10,6 +12,7 @@ from typing import Any
 
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
+from .definitions import SettingsEntry
 
 
 class Parser:
@@ -71,7 +74,7 @@ class Parser:
 
         return entry.cli_parameters.short, long, kwargs
 
-    def _add_parser(self, group, entry) -> None:
+    def _add_parser(self, group: argparse._ArgumentGroup, entry: SettingsEntry) -> None:
         """Add a parser to the subparsers.
 
         :param group: The group to add the parser to
@@ -189,7 +192,7 @@ class CustomHelpFormatter(HelpFormatter):
         msg = "Too many option strings"
         raise ValueError(msg)
 
-    def _format_usage(self, usage, actions, groups, prefix):
+    def _format_usage(self, usage: Any, actions: Any, groups: Any, prefix) -> str:
         """Format the usage.
 
         :param usage: The usage

@@ -3,6 +3,8 @@
 import difflib
 import os
 
+from collections.abc import Generator
+
 import pytest
 
 from tests.defaults import FIXTURES_DIR
@@ -45,25 +47,28 @@ class BaseClass:
     PANE_WIDTH = 300
 
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(self, request):
+    def fixture_tmux_session(
+        self, request: pytest.FixtureRequest
+    ) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
         :param request: Used for generating test id
         :yields: tmux_session object
         """
-        params = {
-            "setup_commands": [
+        with TmuxSession(
+            setup_commands=[
                 "export ANSIBLE_NAVIGATOR_ANSIBLE_RUNNER_TIMEOUT=42",
                 "export PAGER=cat",
             ],
-            "request": request,
-            "pane_height": self.PANE_HEIGHT,
-            "pane_width": self.PANE_WIDTH,
-        }
-        with TmuxSession(**params) as tmux_session:
+            request=request,
+            pane_height=self.PANE_HEIGHT,
+            pane_width=self.PANE_WIDTH,
+        ) as tmux_session:
             yield tmux_session
 
-    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step):
+    def test(
+        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
+    ) -> None:
         # pylint: disable=too-many-locals
         """Run the tests for ``settings``, mode and ``ee`` set in child class.
 

@@ -5,6 +5,8 @@ from __future__ import annotations
 import difflib
 import os
 
+from collections.abc import Generator
+
 import pytest
 
 from tests.defaults import FIXTURES_DIR
@@ -42,7 +44,7 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request: pytest.FixtureRequest):
+    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
         :param request: The request for this fixture from a test
@@ -65,7 +67,7 @@ class BaseClass:
         request: pytest.FixtureRequest,
         tmux_session: TmuxSession,
         step: UiTestStep,
-    ):
+    ) -> None:
         """Run the tests for run, mode and ``ee`` set in child class.
 
         :param request: The request for a test
