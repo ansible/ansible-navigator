@@ -3,12 +3,16 @@
 import difflib
 import os
 
+from collections.abc import Generator
+from pathlib import Path
+
 import pytest
 
 from tests.defaults import FIXTURES_DIR
 from tests.integration._common import retrieve_fixture_for_step
 from tests.integration._common import update_fixtures
 from tests.integration._tmux_session import TmuxSession
+from tests.integration._tmux_session import TmuxSessionKwargs
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/stdout")
@@ -23,15 +27,15 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request):
+    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
         :param request: A fixture providing details about the test caller
         :yields: Tmux session
         """
-        params = {
-            "config_path": TEST_CONFIG_FILE,
-            "pane_height": "100",
+        params: TmuxSessionKwargs = {
+            "config_path": Path(TEST_CONFIG_FILE),
+            "pane_height": 100,
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
@@ -45,11 +49,11 @@ class BaseClass:
         self,
         request: pytest.FixtureRequest,
         tmux_session: TmuxSession,
-        index,
-        user_input,
-        comment,
-        search_within_response,
-    ):
+        index: int,
+        user_input: str,
+        comment: str,
+        search_within_response: str,
+    ) -> None:
         # pylint:disable=too-many-arguments
         """Run the tests for stdout, mode and EE set in child class.
 

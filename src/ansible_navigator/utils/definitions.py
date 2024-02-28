@@ -54,7 +54,7 @@ class ExitPrefix(Enum):
     WARNING = "Warning"
 
     @classmethod
-    def _longest_name(cls):
+    def _longest_name(cls) -> int:
         """Return the longest exit message prefix.
 
         :returns: The longest exit message prefix
@@ -62,19 +62,20 @@ class ExitPrefix(Enum):
         return max(len(member.value) for member in cls)
 
     @classmethod
-    def longest_formatted(cls):
+    def longest_formatted(cls) -> int:
         """Return the longest exit message prefix.
 
         :returns: The longest exit message prefix
         """
         return max(len(str(member)) for member in cls)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return the exit message prefix as a string.
 
         :returns: The exit message prefix as a string
         """
-        return f"{' ' * (self._longest_name() - len(self.name))}{self.name.capitalize()}: "
+        name_len = self._longest_name()
+        return f"{' ' * (name_len - len(self.name))}{self.name.capitalize()}: "
 
 
 @dataclass

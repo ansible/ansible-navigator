@@ -5,6 +5,8 @@ from __future__ import annotations
 import difflib
 import os
 
+from collections.abc import Generator
+
 import pytest
 
 from tests.defaults import FIXTURES_DIR
@@ -13,6 +15,7 @@ from tests.integration._common import update_fixtures
 from tests.integration._interactions import SearchFor
 from tests.integration._interactions import UiTestStep
 from tests.integration._tmux_session import TmuxSession
+from tests.integration._tmux_session import TmuxSessionKwargs
 
 
 # run playbook
@@ -48,15 +51,15 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request):
+    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Generate a tmux fixture for this module.
 
         :param request: A fixture providing details about the test caller
         :yields: A tmux session
         """
-        params = {
-            "pane_height": "1000",
-            "pane_width": "500",
+        params: TmuxSessionKwargs = {
+            "pane_height": 1000,
+            "pane_width": 500,
             "setup_commands": [
                 "export ANSIBLE_DEVEL_WARNING=False",
                 "export ANSIBLE_DEPRECATION_WARNINGS=False",
@@ -66,13 +69,16 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    def test(self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step):
+    def test(
+        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
+    ) -> None:
         """Run the tests for run, mode and ``ee`` set in child class.
 
         :param request: A fixture providing details about the test caller
         :param tmux_session: The tmux session to use
         :param step: The commands to issue and content to look for
         """
+        search_within_response: str | list[str]
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
         elif step.search_within_response is SearchFor.PROMPT:
