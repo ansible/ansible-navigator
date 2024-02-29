@@ -53,14 +53,14 @@ class JsonSchemaError:
     validator: str
     found: str
 
-    def to_friendly(self):
+    def to_friendly(self) -> str:
         """Provide a friendly explanation of the error.
 
         :returns: The error message
         """
         return f"In '{self.data_path}': {self.message}."
 
-    def to_exit_message(self):
+    def to_exit_message(self) -> ExitMessage:
         """Provide an exit message for a schema validation failure.
 
         :returns: The exit message

@@ -57,7 +57,7 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import V
         "mount-empty-list",
     ),
 )
-def test_navigator_volume_mount_to_string(volmount, expected):
+def test_navigator_volume_mount_to_string(volmount: VolumeMount, expected: str) -> None:
     """Make sure volume mount ``to_string`` is sane.
 
     :param volmount: The volume mount to test

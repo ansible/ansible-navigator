@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import sys
 
+from typing import Any
+
 from .base import Base
 
 
@@ -19,8 +21,8 @@ class CommandBase(Base):
         cmdline: list[str] | None = None,
         playbook: str | None = None,
         inventory: list[str] | None = None,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> None:
         """Handle common arguments of ``run_command`` interface for ``ansible-runner``.
 
         :param executable_cmd: The command to be invoked

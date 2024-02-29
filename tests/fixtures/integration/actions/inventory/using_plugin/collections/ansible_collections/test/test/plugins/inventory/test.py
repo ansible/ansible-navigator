@@ -1,6 +1,9 @@
 """A test inventory plugin."""
 
+from typing import Any
+from click import Path
 from ansible.plugins.inventory import BaseInventoryPlugin
+from ansible.inventory.data import InventoryData
 
 
 DOCUMENTATION = """
@@ -26,7 +29,7 @@ class InventoryModule(BaseInventoryPlugin):
 
     NAME = "test.test.test"
 
-    def verify_file(self, path):
+    def verify_file(self, path: str) -> bool:
         """Return true/false if this is possibly a valid file for this plugin to consume.
 
         :param path: Path to inventory file
@@ -38,7 +41,7 @@ class InventoryModule(BaseInventoryPlugin):
                 valid = True
         return valid
 
-    def parse(self, inventory, loader, path, cache=True):
+    def parse(self, inventory: InventoryData, loader: Any, path: str, cache: bool = True) -> None:
         """Parse the inventory source.
 
         :param inventory: Inventory object

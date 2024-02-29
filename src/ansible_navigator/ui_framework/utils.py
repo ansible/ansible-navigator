@@ -49,7 +49,7 @@ def _string_to_progress(value: str, progress_bar_width: int) -> str:
 
 
 @functools.cache
-def is_percent(string):
+def is_percent(string: str) -> bool:
     """Determine if a string is a percentage.
 
     :param string: The string to check

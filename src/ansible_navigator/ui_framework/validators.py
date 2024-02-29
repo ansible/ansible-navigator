@@ -43,7 +43,7 @@ class FieldValidators:
         return Validation(value=text, error_msg=msg)
 
     @staticmethod
-    def masked_or_none(text="", hint: bool = False) -> Validation | str:
+    def masked_or_none(text: str = "", hint: bool = False) -> Validation | str:
         """Validate a masked field or None.
 
         :param text: The text to validate
@@ -71,7 +71,7 @@ class FieldValidators:
         return Validation(value=text, error_msg="")
 
     @staticmethod
-    def null(text="", hint: bool = False) -> Validation | str:
+    def null(text: str = "", hint: bool = False) -> Validation | str:
         """No validation, no message.
 
         :param text: The text to validate
@@ -180,7 +180,7 @@ class FieldValidators:
         return Validation(value=text, error_msg=msg)
 
     @staticmethod
-    def valid_file_path(text: str = "", hint=False) -> Validation | str:
+    def valid_file_path(text: str = "", hint: bool = False) -> Validation | str:
         """Validate that a file path is a real file.
 
         :param text: The text to validate
@@ -198,7 +198,7 @@ class FieldValidators:
         return Validation(value=value, error_msg=msg)
 
     @staticmethod
-    def valid_path(text: str = "", hint=False) -> Validation | str:
+    def valid_path(text: str = "", hint: bool = False) -> Validation | str:
         """Validate that a path is real.
 
         :param text: The text to validate
@@ -216,7 +216,7 @@ class FieldValidators:
         return Validation(value=value, error_msg=msg)
 
     @staticmethod
-    def valid_path_or_none(text: str = "", hint=False) -> Validation | str:
+    def valid_path_or_none(text: str = "", hint: bool = False) -> Validation | str:
         """Validate that a path is real or none.
 
         :param text: The text to validate

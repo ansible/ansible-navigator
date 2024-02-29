@@ -15,7 +15,7 @@ def _contents() -> str:
     return retrieve_content(filename="images_dockerfile")
 
 
-def test_count(contents: str):
+def test_count(contents: str) -> None:
     """Verify the number of images in the dockerfile.
 
     :param contents: The contents of the dockerfile.
@@ -25,7 +25,7 @@ def test_count(contents: str):
     )
 
 
-def test_format(contents: str):
+def test_format(contents: str) -> None:
     """Verify the format of each FROM line.
 
     :param contents: The contents of the dockerfile.
@@ -36,7 +36,7 @@ def test_format(contents: str):
 
 
 @pytest.mark.parametrize("image", ImageEntry)
-def test_get(image: ImageEntry):
+def test_get(image: ImageEntry) -> None:
     """Verify the image name can be retrieved.
 
     :param image: The image to retrieve.

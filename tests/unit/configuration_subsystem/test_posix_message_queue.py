@@ -19,7 +19,7 @@ def test_posix_message_queue_ee(
     engine: str,
     platform: str,
     generate_config: Callable[..., Any],
-):
+) -> None:
     """Confirm error messages related to missing ``/dev/mqueue/`` and ``podman``.
 
     Test using all possible combinations of container_engine, ee_support, and ``is_dir``.
@@ -37,7 +37,7 @@ def test_posix_message_queue_ee(
     )
     unpatched_is_dir = pathlib.Path.is_dir
 
-    def mock_is_dir(path):
+    def mock_is_dir(path: pathlib.Path) -> bool:
         """Override the result for ``Path('/dev/mqueue/')`` to ``is_dir``.
 
         :param path: The provided path to check

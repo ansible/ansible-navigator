@@ -6,6 +6,7 @@ import os
 import re
 
 from pathlib import Path
+from typing import Any
 from typing import NamedTuple
 
 import pytest
@@ -16,7 +17,7 @@ from ansible_navigator.utils import functions
 EXTENSIONS = [".yml", ".yaml", ".json"]
 
 
-def test_find_many_settings_home(monkeypatch) -> None:
+def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test more than one in home.
 
     :param monkeypatch: The monkeypatch fixture
@@ -25,7 +26,7 @@ def test_find_many_settings_home(monkeypatch) -> None:
         os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENSIONS
     ]
 
-    def check_path_exists(arg):
+    def check_path_exists(arg: Any) -> bool:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
@@ -34,14 +35,14 @@ def test_find_many_settings_home(monkeypatch) -> None:
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
-def test_find_many_settings_cwd(monkeypatch) -> None:
+def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test more than one in CWD.
 
     :param monkeypatch: The monkeypatch fixture
     """
     paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
-    def check_path_exists(arg):
+    def check_path_exists(arg: Any) -> bool:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
@@ -50,7 +51,7 @@ def test_find_many_settings_cwd(monkeypatch) -> None:
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
-def test_find_many_settings_precedence(monkeypatch) -> None:
+def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test more than one in CWD.
 
     :param monkeypatch: The monkeypatch fixture
@@ -58,7 +59,7 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
     expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
     paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
 
-    def check_path_exists(arg):
+    def check_path_exists(arg: Any) -> bool:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
@@ -80,7 +81,7 @@ def test_find_many_settings_precedence(monkeypatch) -> None:
     ],
 )
 def test_env_var_is_file_path(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
     set_env: bool,
     file_path: str,
     anticipated_result: str | None,
@@ -261,7 +262,7 @@ iso8601 = re.compile(
         pytest.param("bogus", id="3"),
     ),
 )
-def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str):
+def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str) -> None:
     """Test the using local as a time zone.
 
     :param caplog: The log capture fixture

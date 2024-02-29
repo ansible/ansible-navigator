@@ -8,6 +8,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
+from typing import TYPE_CHECKING
 from typing import Any
 
 from .form_handler_options import FormHandlerOptions
@@ -17,8 +18,13 @@ from .validators import FieldValidators
 from .validators import Validation
 
 
+if TYPE_CHECKING:
+    from ansible_navigator.ui_framework.curses_window import Window
+
+
 @dataclass
 class FieldChecks:
+    # pylint: disable=too-many-instance-attributes
     """A form field containing checks."""
 
     prompt: str
@@ -29,6 +35,7 @@ class FieldChecks:
     max_selected: int = sys.maxsize
     min_selected: int = 1
     window_handler = FormHandlerOptions
+    win: Window | None = None
 
     @property
     def checked(self) -> tuple[bool, ...]:

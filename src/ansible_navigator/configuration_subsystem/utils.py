@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 
+from collections.abc import Iterable
 from configparser import ConfigParser
 from configparser import ParsingError
 from dataclasses import dataclass
@@ -36,7 +37,7 @@ def create_settings_file_sample(
     return SettingsFileType({key: create_settings_file_sample(remainder, placeholder)})
 
 
-def ansible_verison_parser(command: Command):
+def ansible_verison_parser(command: Command) -> None:
     """Parse the output of the ansible command.
 
     :param command: The result of running the command
@@ -183,4 +184,10 @@ def parse_ansible_verison() -> tuple[list[LogMessage], list[ExitMessage], dict[s
 
     msg = f"ansible --version stdout: '{command.stdout}'"
     messages.append(LogMessage(level=logging.DEBUG, message=msg))
-    return messages, exit_messages, command.details[0]
+    if not isinstance(command.details, Iterable):
+        raise RuntimeError
+    return (
+        messages,
+        exit_messages,
+        command.details[0] if isinstance(command.details, list) else None,
+    )

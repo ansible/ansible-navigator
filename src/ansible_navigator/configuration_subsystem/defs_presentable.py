@@ -93,12 +93,14 @@ class PresentableSettingsEntry(ContentBase[Any]):
         """
         return str(self.current_value)
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
         """Compare based on name, called by sort, sorted.
 
         :param other: The entry to compare this to
         :returns: Indication of less than the other
         """
+        if not isinstance(other, PresentableSettingsEntry):
+            return NotImplemented
         return self.name < other.name
 
     @classmethod

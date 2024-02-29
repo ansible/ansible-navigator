@@ -32,12 +32,12 @@ class Command:
     return_code: int = 0
     stdout: str = ""
     stderr: str = ""
-    details: list[Any] | dict[Any, Any] = field(default_factory=list)
+    details: list[Any] | dict[Any, Any] | object = field(default_factory=list)
     errors: str = ""
     messages: list[LogMessage] = field(default_factory=list)
 
     @property
-    def stderr_lines(self):
+    def stderr_lines(self) -> list[str]:
         """Produce a list of stderr lines.
 
         :returns: A list of stderr lines
@@ -45,7 +45,7 @@ class Command:
         return self.stderr.splitlines()
 
     @property
-    def stdout_lines(self):
+    def stdout_lines(self) -> list[str]:
         """Produce a list of stdout lines.
 
         :returns: A list of stdout lines
@@ -100,7 +100,7 @@ class CommandRunner:
         self._pending_queue: Queue[Command | None] | None = None
 
     @staticmethod
-    def run_single_process(commands: list[Command]):
+    def run_single_process(commands: list[Command]) -> list[Command]:
         """Run commands with a single process.
 
         :param commands: All commands to be run

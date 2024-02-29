@@ -152,7 +152,7 @@ class MenuBuilder:
         self,
         dicts: ContentTypeSequence,
         menu_layout: Any,
-        indices,
+        indices: tuple[int, ...],
     ) -> CursesLines:
         """Generate all the menu lines.
 

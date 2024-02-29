@@ -6,7 +6,6 @@ import curses
 
 from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
-from typing import Any
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -14,21 +13,24 @@ from .curses_window import CursesWindow
 
 
 if TYPE_CHECKING:
+    from ansible_navigator.action_runner import Window
+    from ansible_navigator.ui_framework.ui_config import UIConfig
+
     from .field_button import FieldButton
 
 
 class FormHandlerButton(CursesWindow):
     """Handle form button."""
 
-    def __init__(self, screen, ui_config):
+    def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for a form button.
 
         :param screen:  A curses window
         :param ui_config: The current user interface configuration
         """
         super().__init__(ui_config=ui_config)
-        self._form_field = None
-        self._form_fields = None
+        self._form_field: FieldButton | None = None
+        self._form_fields: list[FieldButton] | None = None
         self._screen = screen
 
     def populate(self) -> None:
@@ -46,7 +48,7 @@ class FormHandlerButton(CursesWindow):
         clp_button = CursesLinePart(0, text, color, curses.A_STANDOUT)
         self._add_line(self.win, 0, CursesLine((clp_button,)))
 
-    def handle(self, idx, form_fields: list[Any]) -> tuple[FieldButton, int]:
+    def handle(self, idx: int, form_fields: list[FieldButton]) -> tuple[FieldButton, int]:
         """Handle the check box field.
 
         :param form_fields: List of fields

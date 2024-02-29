@@ -88,7 +88,7 @@ class ExitMessage:
     prefix: ExitPrefix = ExitPrefix.ERROR
 
     @property
-    def color(self):
+    def color(self) -> str:
         """Return a color for the prefix.
 
         :returns: The color for the prefix
@@ -102,7 +102,7 @@ class ExitMessage:
         return color_mapping[self.prefix]
 
     @property
-    def level(self):
+    def level(self) -> int:
         """Return a log level.
 
         :returns: The log level

@@ -45,7 +45,7 @@ def serialize(
     content: ContentType,
     content_view: ContentView,
     serialization_format: SerializationFormat,
-) -> str:
+) -> str | None:
     """Serialize a dataclass based on format and view.
 
     :param content: The content dataclass to serialize
@@ -73,7 +73,7 @@ def serialize_write_file(
     file_mode: str,
     file: Path,
     serialization_format: SerializationFormat,
-):
+) -> None:
     """Serialize and write content to a file.
 
     :param content: The content to serialize
@@ -253,7 +253,7 @@ class YamlStyle(NamedTuple):
     allow_unicode: bool = True
 
 
-def _yaml_dump(dumpable: ContentType, file_handle: IO[str]):
+def _yaml_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
     """Serialize the dumpable to yaml and write to a file.
 
     :param dumpable: The object to serialize
@@ -271,7 +271,7 @@ def _yaml_dump(dumpable: ContentType, file_handle: IO[str]):
         logger.error(error_message)
 
 
-def _yaml_dumps(dumpable: ContentType):
+def _yaml_dumps(dumpable: ContentType) -> str | None:
     """Serialize the dumpable to yaml.
 
     :param dumpable: The object to serialize
@@ -331,7 +331,7 @@ class HumanDumper(SafeDumper):
         return super().represent_scalar(tag, value, style)
 
 
-def _is_multiline_string(value: str):
+def _is_multiline_string(value: str) -> bool:
     """Determine if a string is multiline.
 
     .. note::

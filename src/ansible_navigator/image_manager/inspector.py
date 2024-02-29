@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 
+from collections.abc import Iterable
 from typing import Any
 
 from ansible_navigator.command_runner import Command
@@ -15,7 +16,7 @@ from ansible_navigator.utils.functions import pascal_to_snake
 class ImagesInspect:
     """Functionality for inspecting container images."""
 
-    def __init__(self, container_engine, ids):
+    def __init__(self, container_engine: str, ids: list[str]) -> None:
         """Initialize the container image inspector.
 
         :param container_engine: The name of the container engine to use
@@ -40,7 +41,7 @@ class ImagesInspect:
         ]
 
     @staticmethod
-    def parse(command: Command):
+    def parse(command: Command) -> None:
         """Parse the image inspection command output.
 
         :param command: Image inspection command object
@@ -53,7 +54,7 @@ class ImagesInspect:
 class ImagesList:
     """Functionality for listing container images."""
 
-    def __init__(self, container_engine):
+    def __init__(self, container_engine: str) -> None:
         """Initialize the container image lister.
 
         :param container_engine: The name of the container engine to use
@@ -75,7 +76,7 @@ class ImagesList:
         ]
 
     @staticmethod
-    def parse(command: Command):
+    def parse(command: Command) -> None:
         """Parse the image lister command output.
 
         :param command: Image lister command object
@@ -105,6 +106,8 @@ def inspect_all(container_engine: str) -> tuple[list[dict[str, Any]], str]:
         return [], images_list.errors
     if images_list.stderr and not images_list.details:
         return [], images_list.stderr
+    if not isinstance(images_list.details, Iterable):
+        raise RuntimeError
     images = {image["image_id"]: image for image in images_list.details}
     image_ids = [image["image_id"] for image in images.values()]
     images_inspect_class = ImagesInspect(container_engine=container_engine, ids=image_ids)

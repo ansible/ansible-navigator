@@ -39,7 +39,7 @@ def color_bits() -> int:
         return 4
 
 
-def color_lines(term_color_bits, tokenized) -> str:
+def color_lines(term_color_bits: int, tokenized: list[list[SimpleLinePart]]) -> str:
     """Transform tokenized lines to ANSI lines.
 
     :param term_color_bits: The number of color bits the terminal supports
@@ -102,10 +102,12 @@ def print_to_stdout(
     """
     serialization_format = content_format.value.serialization
     if serialization_format:
-        serialized = serialize(
-            content=content,
-            content_view=ContentView.NORMAL,
-            serialization_format=serialization_format,
+        serialized = str(
+            serialize(
+                content=content,
+                content_view=ContentView.NORMAL,
+                serialization_format=serialization_format,
+            )
         )
         output = serialized
     else:

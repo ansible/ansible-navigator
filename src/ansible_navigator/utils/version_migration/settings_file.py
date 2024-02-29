@@ -27,7 +27,7 @@ class SettingsFile(Migration):
         self.content: dict[Any, Any] = {}
         self._backup_suffix = ".v0"
 
-    def run(self, *args, **kwargs) -> None:
+    def run(self, *args: Any, **kwargs: Any) -> None:
         """Perform the settings file migration.
 
         :param args: Positional arguments

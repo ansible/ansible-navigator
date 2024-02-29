@@ -88,7 +88,7 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
         """
         return self._asdict(suffix=f"_y_{ContentView.NORMAL!s}")
 
-    def _asdict(self, suffix) -> OverrideDictReturn:
+    def _asdict(self, suffix: Any) -> OverrideDictReturn:
         """Create a dictionary from the dataclass with suffixed values.
 
         :param suffix: The suffix to append to values
@@ -119,7 +119,7 @@ parametrize_serialization_format = pytest.mark.parametrize(**ParametrizeFormat()
 def test_content_to_dict(
     content_view: ContentView,
     serialization_tuple: tuple[str, SerializationFormat],
-):
+) -> None:
     """Test the conversion of the dataclass to a dict.
 
     :param content_view: The content view
@@ -134,7 +134,7 @@ def test_content_to_dict(
 
 
 @parametrize_content_views
-def test_content_to_json(content_view: ContentView):
+def test_content_to_json(content_view: ContentView) -> None:
     """Test the conversion of the dataclass to json.
 
     :param content_view: The content view
@@ -150,7 +150,7 @@ def test_content_to_json(content_view: ContentView):
 
 
 @parametrize_content_views
-def test_content_to_yaml(content_view: ContentView):
+def test_content_to_yaml(content_view: ContentView) -> None:
     """Test the conversion of the dataclass to yaml.
 
     :param content_view: The content view
@@ -171,7 +171,7 @@ def test_content_to_dict_override(
     subtests: Any,
     content_view: ContentView,
     serialization_tuple: tuple[str, SerializationFormat],
-):
+) -> None:
     """Test the conversion of the dataclass with overrides to a ``dict``.
 
     :param subtests: The pytest subtest fixture
@@ -189,7 +189,7 @@ def test_content_to_dict_override(
 
 
 @parametrize_content_views
-def test_content_to_json_override(content_view: ContentView):
+def test_content_to_json_override(content_view: ContentView) -> None:
     """Test the conversion of the dataclass with overrides to ``JSON``.
 
     :param content_view: The content view
@@ -209,7 +209,7 @@ def test_content_to_json_override(content_view: ContentView):
 
 
 @parametrize_content_views
-def test_content_to_yaml_override(content_view: ContentView):
+def test_content_to_yaml_override(content_view: ContentView) -> None:
     """Test the conversion of the dataclass with overrides to ``YAML``.
 
     :param content_view: The content view

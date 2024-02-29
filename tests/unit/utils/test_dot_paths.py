@@ -90,7 +90,7 @@ class Scenario(BaseScenario):  # pylint: disable=too-many-instance-attributes
     content: dict[Any, Any] = field(default_factory=lambda: base_dict)
     new_path: str = ""
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide string representation.
 
         :returns: String representation
