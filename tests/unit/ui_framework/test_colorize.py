@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import NamedTuple
+from unittest.mock import MagicMock  # pylint: disable=W0407
 from unittest.mock import patch  # pylint: disable=W0407
 
 import pytest
@@ -35,7 +36,7 @@ def test_basic_success_json() -> None:
     Test that the json string is returned as 1 line, 5 parts and can be
     reassembled to the json string.
     """
-    sample = serialize(**SAMPLE_JSON) + "\n"
+    sample = str(serialize(**SAMPLE_JSON)) + "\n"
     colorized = Colorize(grammar_dir=GRAMMAR_DIR, theme_path=THEME_PATH).render(
         doc=sample,
         scope="source.json",
@@ -61,6 +62,7 @@ def test_basic_success_yaml() -> None:
     )
     assert len(result) == 2
     assert len(result[0]) == 1
+    assert sample
     assert result[0][0].chars == sample.splitlines(keepends=True)[0]
     assert len(result[1]) == 4
     assert (
@@ -97,7 +99,7 @@ def test_basic_success_no_color() -> None:
 
 
 @patch("ansible_navigator.ui_framework.colorize.tokenize")
-def test_graceful_failure(mocked_func, caplog: pytest.LogCaptureFixture) -> None:
+def test_graceful_failure(mocked_func: MagicMock, caplog: pytest.LogCaptureFixture) -> None:
     """Test for correct error format.
 
     Ensure a tokenization error returns the original one line json string

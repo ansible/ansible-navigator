@@ -10,7 +10,7 @@ class Singleton(type):
 
     _instances: dict[Any, Singleton] = {}
 
-    def __call__(cls, *args, **kwargs):
+    def __call__(cls, *args: Any, **kwargs: Any) -> Any:
         """Determine if the instance is one of a kind.
 
         :param *args: Arbitrary arguments
@@ -25,7 +25,7 @@ class Singleton(type):
 class Unknown(metaclass=Singleton):
     """Something that should eventually be known."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return the type of the object.
 
         :returns: The type of the object.
@@ -39,7 +39,7 @@ unknown = Unknown()
 class Nonexistent(metaclass=Singleton):
     """Something that does not exist."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return the type of the object.
 
         :returns: The type of the object

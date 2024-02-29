@@ -8,6 +8,8 @@ from dataclasses import field
 from functools import partial
 from typing import Any
 
+from ansible_navigator.ui_framework.curses_window import Window
+
 from .form_handler_options import FormHandlerOptions
 from .sentinels import Unknown
 from .sentinels import unknown
@@ -25,9 +27,10 @@ class FieldRadio:
     valid: Unknown | bool = unknown
     options: list[Any] = field(default_factory=list)
     window_handler = FormHandlerOptions
+    win: Window | None = None
 
     @property
-    def checked(self):
+    def checked(self) -> tuple[str, ...]:
         """Conveniently return just checked options.
 
         :returns: Checked options

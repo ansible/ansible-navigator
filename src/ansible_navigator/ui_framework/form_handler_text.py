@@ -6,6 +6,7 @@ import curses
 
 from curses import ascii as curses_ascii
 from curses.textpad import Textbox
+from typing import TYPE_CHECKING
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -13,17 +14,23 @@ from .curses_window import CursesWindow
 from .sentinels import unknown
 
 
+if TYPE_CHECKING:
+    from ansible_navigator.action_runner import Window
+    from ansible_navigator.ui_framework.field_text import FieldText
+    from ansible_navigator.ui_framework.ui_config import UIConfig
+
+
 class FormHandlerText(CursesWindow, Textbox):
     """Get one line of text input."""
 
-    def __init__(self, screen, ui_config):
+    def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for a form text field.
 
         :param screen: A curses window
         :param ui_config: The current user interface configuration
         """
         super().__init__(ui_config=ui_config)
-        self.input_line_cache = []
+        self.input_line_cache: list[str] = []
         self.input_line_pointer = 0
         self._arrowing = False
         self.insert_mode = False
@@ -89,7 +96,7 @@ class FormHandlerText(CursesWindow, Textbox):
             self._arrowing = False
         return ret
 
-    def handle(self, idx, form_fields) -> tuple[str, int]:
+    def handle(self, idx: int, form_fields: list[FieldText]) -> tuple[str, int]:
         """Edit in the widget window and collect the results.
 
         :param idx: Index to retrieve specific field
@@ -99,7 +106,7 @@ class FormHandlerText(CursesWindow, Textbox):
         form_field = form_fields[idx]
 
         if form_field.response is not unknown:
-            line_part = CursesLinePart(0, form_field.response, 0, 0)
+            line_part = CursesLinePart(0, str(form_field.response), 0, 0)
             self._add_line(self.win, 0, CursesLine((line_part,)))
         else:
             self.win.move(0, 0)

@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Any
 
+from ansible_navigator.ui_framework.ui_config import UIConfig
+
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
 from .curses_defs import CursesLines
@@ -40,7 +42,7 @@ class Form:
 
     _dict: dict[Any, Any] = field(default_factory=dict)
 
-    def present(self, screen: Window, ui_config):
+    def present(self, screen: Window, ui_config: UIConfig) -> Form:
         """Present the form the to user and return the results.
 
         :returns: Results from the form
@@ -93,7 +95,7 @@ class FormPresenter(CursesWindow):
     """Present the form to the user."""
 
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, form: Form, screen, ui_config) -> None:
+    def __init__(self, form: Form, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the form presenter.
 
         :param form: The form to present to the user
@@ -113,7 +115,7 @@ class FormPresenter(CursesWindow):
         self._separator = ": "
 
     @property
-    def _field_win_start(self):
+    def _field_win_start(self) -> int:
         """The window start of a field.
 
         :returns: The window start of a field
@@ -121,14 +123,14 @@ class FormPresenter(CursesWindow):
         return self._input_start + self._pad_left
 
     @property
-    def _field_win_width(self):
+    def _field_win_width(self) -> int:
         """The window width of a field.
 
         :returns: The window width of a field
         """
         return self._screen_width - self._field_win_start
 
-    def _dimensions(self):
+    def _dimensions(self) -> None:
         """Calculate the dimensions of the form."""
         self._prompt_end = max(len(form_field.full_prompt) for form_field in self._form.fields)
         self._input_start = self._prompt_end + len(self._separator)
@@ -253,7 +255,7 @@ class FormPresenter(CursesWindow):
             far_right -= 1
         return CursesLine(tuple(line_parts))
 
-    def _generate_error(self, form_field) -> CursesLine | None:
+    def _generate_error(self, form_field: FieldText) -> CursesLine | None:
         """Generate the error for a field.
 
         :param form_field: The field to generate the error for
@@ -264,7 +266,7 @@ class FormPresenter(CursesWindow):
             return CursesLine((line_part,))
         return None
 
-    def _generate_field_options(self, form_field) -> CursesLines:
+    def _generate_field_options(self, form_field: FieldChecks | FieldRadio) -> CursesLines:
         """Generate the options for a field.
 
         :param form_field: The field to generate the options for
@@ -287,7 +289,7 @@ class FormPresenter(CursesWindow):
             lines.append(CursesLine((line_part,)))
         return CursesLines(tuple(lines))
 
-    def _generate_field_text(self, form_field) -> CursesLinePart:
+    def _generate_field_text(self, form_field: FieldText) -> CursesLinePart:
         """Generate the text for a field.
 
         :param form_field: The field to generate the text for
@@ -314,7 +316,7 @@ class FormPresenter(CursesWindow):
         return CursesLine((line_part,))
 
     @staticmethod
-    def _generate_information(form_field) -> CursesLines:
+    def _generate_information(form_field: FieldInformation) -> CursesLines:
         """Generate an information field.
 
         :param form_field: The field to generate the information for
@@ -326,7 +328,7 @@ class FormPresenter(CursesWindow):
         return CursesLines(lines)
 
     @staticmethod
-    def _generate_messages(form_field) -> CursesLines:
+    def _generate_messages(form_field: FieldWorking) -> CursesLines:
         """Generate a messages field.
 
         :param form_field: The field to generate the messages for
@@ -335,7 +337,9 @@ class FormPresenter(CursesWindow):
         lines = tuple(CursesLine((CursesLinePart(0, line, 0, 0),)) for line in form_field.messages)
         return CursesLines(lines)
 
-    def _generate_prompt(self, form_field) -> list[CursesLinePart]:
+    def _generate_prompt(
+        self, form_field: FieldText | FieldChecks | FieldRadio
+    ) -> list[CursesLinePart]:
         """Generate the prompt for a field.
 
         :param form_field: The field to generate the prompt for

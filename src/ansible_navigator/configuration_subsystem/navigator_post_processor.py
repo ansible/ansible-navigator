@@ -12,11 +12,13 @@ import subprocess
 import sys
 import zoneinfo
 
+from collections.abc import Callable
 from functools import partialmethod
 from itertools import chain
 from itertools import repeat
 from pathlib import Path
 from string import Formatter
+from typing import Any
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitPrefix
@@ -40,14 +42,14 @@ from .definitions import VolumeMount
 from .definitions import VolumeMountError
 
 
-def _post_processor(func):
+def _post_processor(func: Callable[..., Any]) -> Callable[..., Any]:
     """Decorate a post processing function.
 
     :param func: The function to wrap
     :returns: The wrapped function
     """
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> PostProcessorReturn:
         name = kwargs["entry"].name
         before = str(kwargs["entry"].value.current)
         messages, exit_messages = func(*args, **kwargs)
@@ -246,7 +248,9 @@ class NavigatorPostProcessor:
     editor_console = _true_or_false
 
     @_post_processor
-    def execution_environment(self, entry: SettingsEntry, config) -> PostProcessorReturn:
+    def execution_environment(
+        self, entry: SettingsEntry, config: ApplicationConfiguration
+    ) -> PostProcessorReturn:
         # pylint: disable=too-many-locals
         """Post process execution_environment.
 
@@ -267,7 +271,10 @@ class NavigatorPostProcessor:
                 exit_msg += f" '{config.container_engine}',"
                 exit_msg += f" set by '{config.entry('container_engine').value.source.value}'"
                 exit_messages.append(ExitMessage(message=exit_msg))
-                ce_short = config.entry("container_engine").cli_parameters.short
+                ce_short: str | None = ""
+                cli_parameters = config.entry("container_engine").cli_parameters
+                if isinstance(cli_parameters, CliParameters):
+                    ce_short = cli_parameters.short
                 if isinstance(entry.cli_parameters, CliParameters):
                     entry_short = entry.cli_parameters.short
                 else:

@@ -10,6 +10,7 @@ import uuid
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner import CommandRunner
@@ -31,7 +32,7 @@ class NavigatorCommand(Command):
     find: str = ""
     set_env: str = "--senv PAGER=cat"
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post the init."""
         self.identity = self.command
         venv = _get_venv_prefix()
@@ -81,7 +82,7 @@ def _generate_commands(tmp_dir: Path) -> list[Command]:
     return commands
 
 
-def _post_process(*_args, **_kwargs) -> None:
+def _post_process(*_args: Any, **_kwargs: Any) -> None:
     """Do nothing command post processor.
 
     :param _args: The arguments

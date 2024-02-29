@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from .navigator_post_processor import NavigatorPostProcessor
 
 
-def version_added_sanity_check(version: str):
+def version_added_sanity_check(version: str) -> None:
     """Check if a version string is valid.
 
     :param version: The version string to check
@@ -104,7 +104,7 @@ class SettingsEntryValue:
     source: Constants = Constants.NOT_SET
 
     @property
-    def is_default(self):
+    def is_default(self) -> bool:
         """Determine if the current value is the default value.
 
         :returns: Indication of if the current is the default
@@ -113,7 +113,7 @@ class SettingsEntryValue:
         return result
 
     @property
-    def resolved(self):
+    def resolved(self) -> SettingsEntryValue:
         """Transform this entry to an entry without internal constants.
 
         This would typically be used when the attributes need to be presented to the user.
@@ -271,7 +271,7 @@ class ApplicationConfiguration:
         """
         return self.application_name.replace("_", "-")
 
-    def _get_by_name(self, name, kind):
+    def _get_by_name(self, name: str, kind: str) -> SettingsEntry:
         """Retrieve a settings entry by name.
 
         :param name: The name of the entry
@@ -295,7 +295,7 @@ class ApplicationConfiguration:
         except (AttributeError, KeyError):
             return super().__getattribute__(attr)
 
-    def entry(self, name) -> SettingsEntry:
+    def entry(self, name: str) -> SettingsEntry:
         """Retrieve a configuration entry by name.
 
         :param name: The name of the entry
@@ -303,13 +303,16 @@ class ApplicationConfiguration:
         """
         return self._get_by_name(name, "entries")
 
-    def subcommand(self, name) -> SubCommand:
+    def subcommand(self, name: str) -> SubCommand:
         """Retrieve a configuration subcommand by name.
 
         :param name: The name of the subcommand
         :returns: Configuration subcommand name
         """
-        return self._get_by_name(name, "subcommands")
+        command = self._get_by_name(name, "subcommands")
+        if not isinstance(command, SubCommand):
+            raise RuntimeError
+        return command
 
 
 # The following are ordered to build up to an VolumeMount
@@ -364,7 +367,7 @@ class VolumeMount:
     options: tuple[VolumeMountOption, ...] = ()
     """Options for the bind mount"""
 
-    def __post_init__(self, options_string):
+    def __post_init__(self, options_string: str) -> None:
         """Post process the ``VolumeMount`` and perform sanity checks.
 
         :raises VolumeMountError: When a viable VolumeMount cannot be created

@@ -171,7 +171,7 @@ def copytree(
     symlinks: bool = False,
     ignore: Callable[..., Any] | None = None,
     dirs_exist_ok: bool = False,
-):
+) -> None:
     """Recursively copy a directory tree using copy2().
 
     The destination directory must not already exist.

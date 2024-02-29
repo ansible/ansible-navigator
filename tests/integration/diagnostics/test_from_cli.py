@@ -18,7 +18,7 @@ def test(
     monkeypatch: pytest.MonkeyPatch,
     settings_env_var_to_full: tuple[Path, SettingsFileType],
     tmp_path: Path,
-):
+) -> None:
     """Test diagnostics generation.
 
     :param monkeypatch: Fixture for patching

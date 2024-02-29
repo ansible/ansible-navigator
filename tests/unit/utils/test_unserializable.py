@@ -30,7 +30,7 @@ serialization_formats = pytest.mark.parametrize(
 def test_custom_class(
     content_view: tuple[str, ContentView],
     serialization_format: tuple[str, SerializationFormat],
-):
+) -> None:
     """Ensure an error is provided when something can't be serialized.
 
     A typing error does not exist here because the content is Dict[str, Any].
@@ -43,10 +43,12 @@ def test_custom_class(
         """An empty custom class."""
 
     content = {"foo": CustomClass()}
-    serialized = serialize(
-        content=content,
-        content_view=content_view[1],
-        serialization_format=serialization_format[1],
+    serialized = str(
+        serialize(
+            content=content,
+            content_view=content_view[1],
+            serialization_format=serialization_format[1],
+        )
     )
     assert (
         f"The requested content could not be converted to {serialization_format[0]!s}."
@@ -59,7 +61,7 @@ def test_custom_class(
 def test_deque(
     content_view: tuple[str, ContentView],
     serialization_format: tuple[str, SerializationFormat],
-):
+) -> None:
     """Ensure an error is provided when something can't be serialized.
 
     A typing error exists here, because tuple is not a ``utils.serialize.ContentType``.
@@ -68,10 +70,12 @@ def test_deque(
     :param serialization_format: The serialization format
     """
     content = deque([1, 2, 3])
-    serialized = serialize(
-        content=content,  # type:ignore[arg-type]
-        content_view=content_view[1],
-        serialization_format=serialization_format[1],
+    serialized = str(
+        serialize(
+            content=content,  # type:ignore[arg-type]
+            content_view=content_view[1],
+            serialization_format=serialization_format[1],
+        )
     )
     assert (
         f"The requested content could not be converted to {serialization_format[0]!s}."

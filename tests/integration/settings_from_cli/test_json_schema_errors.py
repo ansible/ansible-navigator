@@ -34,7 +34,7 @@ class Scenario(BaseScenario):
     command: tuple[str, ...] = ("ansible-navigator", "-m", "stdout")
     """The command to run"""
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Provide a test id.
 
         :returns: The test id
@@ -67,7 +67,7 @@ test_data = (
 
 
 @pytest.mark.parametrize("data", test_data, ids=id_func)
-def test(data: Scenario, subtests: Any, tmp_path: Path):
+def test(data: Scenario, subtests: Any, tmp_path: Path) -> None:
     """Test for json schema errors.
 
     :param data: The test data

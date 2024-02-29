@@ -24,7 +24,7 @@ class MergeBehaviors(Enum):
     DICT_DICT_REPLACE = "replace left dict with right dict"
 
 
-def get_with_path(content: MutableMapping[Any, Any], path: str):
+def get_with_path(content: MutableMapping[Any, Any], path: str) -> Any:
     """Get a value from a path in a dictionary.
 
     :param content: The content of the settings file
@@ -34,7 +34,7 @@ def get_with_path(content: MutableMapping[Any, Any], path: str):
     return reduce(operator.getitem, path.split("."), content)
 
 
-def check_path(content: MutableMapping[Any, Any], path: str):
+def check_path(content: MutableMapping[Any, Any], path: str) -> bool:
     """Check if a path exists in a dictionary.
 
     :param content: The content of the settings file
@@ -48,7 +48,7 @@ def check_path(content: MutableMapping[Any, Any], path: str):
         return False
 
 
-def delete_with_path(content: MutableMapping[Any, Any], path: str):
+def delete_with_path(content: MutableMapping[Any, Any], path: str) -> None:
     """Delete a value from a path in a dictionary.
 
     :param content: The content of the settings file
@@ -58,7 +58,7 @@ def delete_with_path(content: MutableMapping[Any, Any], path: str):
     del reduce(operator.getitem, parts[:-1], content)[parts[-1]]
 
 
-def ascendants_from_path(path: str):
+def ascendants_from_path(path: str) -> list[str]:
     """Get the ascendants of a path.
 
     :param path: The path to the value
@@ -68,7 +68,7 @@ def ascendants_from_path(path: str):
     return [path.rsplit(".", i)[0] for i in range(len(parts))]
 
 
-def descendants_to_path(path: str):
+def descendants_to_path(path: str) -> list[str]:
     """Get the descendants to a path.
 
     :param path: The path to the value
@@ -78,7 +78,7 @@ def descendants_to_path(path: str):
     return [path.rsplit(".", i)[0] for i in reversed(range(len(parts)))]
 
 
-def remove_and_delete_empty_ascendants(content: MutableMapping[Any, Any], path: str):
+def remove_and_delete_empty_ascendants(content: MutableMapping[Any, Any], path: str) -> None:
     """Remove and delete empty ascendants.
 
     :param content: The content of the settings file

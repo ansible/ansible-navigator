@@ -28,7 +28,7 @@ class Command(SimpleNamespace):
     parse: Callable[..., Any]
     stdout: str = ""
     stderr: str = ""
-    details: list[str] | dict[Any, Any] | str = ""
+    details: list[str] | dict[Any, Any] | list[dict[Any, Any]] | str = ""
     errors: list[str] = []
 
 
@@ -145,7 +145,7 @@ class CmdParser:
         return value.strip('"').strip("'").strip()
 
     @staticmethod
-    def re_partition(content, separator):
+    def re_partition(content: Any, separator: str) -> Any:
         """Partition a string using a regular expression.
 
         :param content: The content to partition
@@ -160,7 +160,7 @@ class CmdParser:
         return key, delim, content
 
     def splitter(
-        self, lines: list[str], line_split: str, section_delim=None
+        self, lines: list[str], line_split: str, section_delim: str | None = None
     ) -> list[dict[str, Any]] | dict[str, Any]:
         """Split lines given a delimiter.
 
@@ -209,7 +209,7 @@ class AnsibleCollections(CmdParser):
     """Available ansible collections collector."""
 
     @property
-    def commands(self):
+    def commands(self) -> list[Command]:
         """Define the ansible-galaxy command to list ansible collections.
 
         :returns: The defined command
@@ -224,7 +224,7 @@ class AnsibleCollections(CmdParser):
         ]
 
     @staticmethod
-    def parse(command: Command):
+    def parse(command: Command) -> None:
         """Parse the output of the ansible-galaxy command.
 
         :param command: The result of running the command
@@ -272,7 +272,7 @@ class OsRelease(CmdParser):
         """
         return [Command(id_="os_release", command="cat /etc/os-release", parse=self.parse)]
 
-    def parse(self, command) -> None:
+    def parse(self, command: Command) -> None:
         """Parse the output of the cat command.
 
         :param command: The result of running the command
@@ -304,7 +304,7 @@ class PythonPackages(CmdParser):
             ),
         ]
 
-    def parse(self, command):
+    def parse(self, command: Command) -> None:
         """Parse the output of the pip command.
 
         :param command: The result of running the command
@@ -320,7 +320,7 @@ class PythonPackages(CmdParser):
                     pkg[entry] = []
         command.details = parsed
 
-    def parse_freeze(self, command):
+    def parse_freeze(self, command: Command) -> None:
         """Parse the output of the pip freeze command, skipping editables.
 
         :param command: The result of running the command
@@ -342,7 +342,7 @@ class RedhatRelease(CmdParser):
         return [Command(id_="redhat_release", command="cat /etc/redhat-release", parse=self.parse)]
 
     @staticmethod
-    def parse(command):
+    def parse(command: Command) -> None:
         """Parse the output of the cat redhat release command.
 
         :param command: The result of running the command

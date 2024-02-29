@@ -150,7 +150,7 @@ class UserInterface(CursesWindow):
         refresh: int,
         ui_config: UIConfig,
         progress_bar_width: int = 8,
-        status_width=12,
+        status_width: int = 12,
     ) -> None:
         """Initialize the user interface.
 
@@ -574,7 +574,7 @@ class UserInterface(CursesWindow):
         self._cache_init_colors(rendered)
         return self._color_decorate_lines(rendered)
 
-    def _cache_init_colors(self, lines: list[list[SimpleLinePart]]):
+    def _cache_init_colors(self, lines: list[list[SimpleLinePart]]) -> None:
         """Cache and init the unique colors for future use.
 
         Maintain a mapping of RGB colors

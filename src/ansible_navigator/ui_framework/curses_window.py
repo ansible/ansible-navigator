@@ -96,7 +96,7 @@ class CursesWindow:
         color_arg = color % curses.COLORS  # self._number_colors
         return curses.color_pair(color_arg)
 
-    def _curs_set(self, value: int):
+    def _curs_set(self, value: int) -> None:
         """Log an error in the case of a TERM with limited capabilities.
 
         :param value: TERM value

@@ -35,7 +35,7 @@ class Parser:
         self._configure_subparsers()
 
     @staticmethod
-    def generate_argument(entry) -> tuple[Any, Any, dict[str, Any]]:
+    def generate_argument(entry: SettingsEntry) -> tuple[Any, Any, dict[str, Any]]:
         """Generate an argparse argument.
 
         :param entry: Single settings entry
@@ -48,6 +48,8 @@ class Parser:
             help_strings.append(f"({'|'.join(lower_choices)})")
 
         has_default = entry.value.default is not C.NOT_SET
+        if entry.cli_parameters is None:
+            raise NotImplementedError
         not_store = entry.cli_parameters.action not in ("store_true", "store_false")
         if has_default and not_store:
             help_strings.append(f"(default: {str(entry.value.default).lower()})")
@@ -67,7 +69,7 @@ class Parser:
             if entry.cli_parameters.nargs is not None:
                 kwargs["nargs"] = entry.cli_parameters.nargs
             if entry.cli_parameters.const is not None:
-                kwargs["const"] = entry.cli_parameters.const
+                kwargs["const"] = str(entry.cli_parameters.const)
 
         if entry.cli_parameters.action is not None:
             kwargs["action"] = entry.cli_parameters.action
@@ -156,7 +158,7 @@ class Parser:
 class CustomHelpFormatter(HelpFormatter):
     """A custom help formatter."""
 
-    def __init__(self, prog):
+    def __init__(self, prog: str) -> None:
         """Initialize the help formatter.
 
         :param prog: The program name
@@ -170,7 +172,7 @@ class CustomHelpFormatter(HelpFormatter):
             max_help_position=len(long_string) + 3,
         )
 
-    def _format_action_invocation(self, action):
+    def _format_action_invocation(self, action: argparse.Action) -> str:
         """Format the action invocation.
 
         :param action: The action to format
@@ -192,7 +194,7 @@ class CustomHelpFormatter(HelpFormatter):
         msg = "Too many option strings"
         raise ValueError(msg)
 
-    def _format_usage(self, usage: Any, actions: Any, groups: Any, prefix) -> str:
+    def _format_usage(self, usage: Any, actions: Any, groups: Any, prefix: str | None) -> str:
         """Format the usage.
 
         :param usage: The usage

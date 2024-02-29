@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import ItemsView
 from collections.abc import Sequence
 from dataclasses import asdict
 from dataclasses import dataclass
@@ -105,7 +106,7 @@ class ContentBase(Generic[T]):
         """
         return asdict(self)
 
-    def get(self, attribute: str):
+    def get(self, attribute: str) -> Any:
         """Allow this dataclass to be treated like a dictionary.
 
         This is a work around until the UI fully supports dataclasses
@@ -120,7 +121,7 @@ class ContentBase(Generic[T]):
         """
         return getattr(self, attribute)
 
-    def items(self):
+    def items(self) -> ItemsView[str, Any]:
         """Allow this dataclass to be treated like a dictionary.
 
         This is a work around until the UI fully supports dataclasses
