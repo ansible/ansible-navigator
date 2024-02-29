@@ -446,7 +446,7 @@ class Action(ActionBase):
 
             try:
                 legacy_check = details["config"]["working_dir"] == "/runner"
-            except KeyError:
+            except (KeyError, TypeError):
                 legacy_check = False
 
             # podman has a root label

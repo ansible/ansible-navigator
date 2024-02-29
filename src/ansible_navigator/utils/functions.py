@@ -130,7 +130,7 @@ def console_width() -> int:
 
 
 # TODO: Replace this with something type-safe.
-def dispatch(obj, replacements):
+def dispatch(obj: object, replacements: tuple[tuple[str, str], ...]) -> object:
     """Make the replacement based on type.
 
     :param obj: An obj in which replacements will be made
@@ -154,7 +154,10 @@ def escape_moustaches(obj: Mapping[Any, Any]) -> Mapping[Any, Any]:
     :returns: The obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
-    return dispatch(obj, replacements)
+    result = dispatch(obj, replacements)
+    if not isinstance(result, dict):
+        raise RuntimeError
+    return result
 
 
 def environment_variable_is_file_path(
@@ -321,7 +324,7 @@ def now_iso(time_zone: str) -> str:
 PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
 
 
-def pascal_to_snake(obj) -> list[Any] | dict[Any, Any]:
+def pascal_to_snake(obj: object) -> object:
     """Convert a pascal cased object into a snake cased object recursively.
 
     :param obj: Pascal cased object
@@ -522,11 +525,12 @@ def to_list(thing: str | list[Any] | tuple[Any] | set[Any] | None) -> list[Any]:
     return converted_value
 
 
-def unescape_moustaches(obj: Any) -> Mapping[Any, Any]:
+def unescape_moustaches(obj: Any) -> Any:
     """Unescape moustaches.
 
     :param obj: Variable that needs to contain moustaches
     :returns: The obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
-    return dispatch(obj, replacements)
+    result = dispatch(obj, replacements)
+    return result
