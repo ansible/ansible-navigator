@@ -60,7 +60,7 @@ def is_percent(string: str) -> bool:
     return False
 
 
-def distribute(available, weights):
+def distribute(available: int, weights: list[int]) -> list[int]:
     """Distribute some available fairly across a list of numbers.
 
     :param available: the total
@@ -82,8 +82,7 @@ def distribute(available, weights):
     distributed_amounts = []
     total_weights = sum(weights)
     for weight in weights:
-        weight = float(weight)
-        percent_of_total = weight / total_weights
+        percent_of_total = float(weight) / total_weights
         distributed_amount = round(percent_of_total * available)
         distributed_amounts.append(distributed_amount)
         total_weights -= weight

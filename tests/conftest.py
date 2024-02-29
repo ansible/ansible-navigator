@@ -394,7 +394,7 @@ def pytest_unconfigure(config: pytest.Config) -> None:
 
 @pytest.fixture(scope="function")
 def skip_if_already_failed(
-    request: pytest.FixtureRequest, failed=set()
+    request: pytest.FixtureRequest, failed: set[str] = set()
 ) -> Generator[None, None, None]:
     """Fixture that stops parametrized tests running on first failure."""
     key = request.node.name.split("[")[0]

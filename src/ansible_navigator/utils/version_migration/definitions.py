@@ -77,14 +77,14 @@ class MigrationStep(Generic[T]):
         :return: The registered migration step
         """
 
-        def wrapper(func):
+        def wrapper(func: Callable[..., Any]) -> Callable[..., Any]:
             """Add the dunder collector to the func.
 
             :param func: The function to decorate
             :returns: The decorated function
             """
             migration_step.function_name = func.__name__
-            func.__migration_step__ = migration_step
+            func.__migration_step__ = migration_step  # type: ignore[attr-defined]
             return func
 
         return wrapper
@@ -105,7 +105,7 @@ class Migration:
         self.was_needed: bool = False
         """Whether the migration was needed."""
 
-    def __init_subclass__(cls, *args, **kwargs) -> None:
+    def __init_subclass__(cls, *args: Any, **kwargs: Any) -> None:
         """Register the migration steps.
 
         :param args: Positional arguments
@@ -137,14 +137,14 @@ class Migration:
         """
         return any(step.needed for step in self.migration_steps)
 
-    def run(self, *args, **kwargs) -> None:
+    def run(self, *args: Any, **kwargs: Any) -> None:
         """Run the migration.
 
         :param args: The positional arguments
         :param kwargs: The keyword arguments
         """
 
-    def run_step(self, step: MigrationStep[Any], *args, **kwargs) -> None:
+    def run_step(self, step: MigrationStep[Any], *args: Any, **kwargs: Any) -> None:
         """Run the migration step.
 
         :param step: The migration step to run
@@ -175,7 +175,7 @@ class Migration:
             step.print_updated()
         return
 
-    def run_steps(self, *args, **kwargs) -> None:
+    def run_steps(self, *args: Any, **kwargs: Any) -> None:
         """Run all registered migration steps.
 
         :param args: The positional arguments
