@@ -202,7 +202,7 @@ class Action(ActionBase):
 
         :returns: An indication is running in interactive mode
         """
-        return self._args.mode == "interactive"
+        return bool(self._args.mode == "interactive")
 
     def _fatal(self, msg: str) -> None:
         """Show a notification if a fatal error has occurred.

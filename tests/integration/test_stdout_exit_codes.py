@@ -16,7 +16,7 @@ from tests.conftest import TCmdInTty
 from tests.defaults import FIXTURES_DIR
 from tests.defaults import id_func
 
-from .conftest import ActionRunTest
+from ._action_run_test import ActionRunTest
 
 
 PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.yml")

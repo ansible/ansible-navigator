@@ -49,6 +49,7 @@ def retrieve_fixture_for_step(
     fixture_path = fixture_path_from_request(request, step_index, test_name)
     with fixture_path.open(encoding="utf-8") as fh:
         expected_output = json.load(fh)["output"]
+    assert isinstance(expected_output, list)
     return expected_output
 
 

@@ -24,7 +24,7 @@ EXAMPLES = """
  """
 
 
-class InventoryModule(BaseInventoryPlugin):
+class InventoryModule(BaseInventoryPlugin):  # type: ignore[misc]
     """A test inventory plugin."""
 
     NAME = "test.test.test"

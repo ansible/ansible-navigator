@@ -13,8 +13,8 @@ from .ui import Action
 from .ui import Content
 from .ui import Interaction
 from .ui import Menu
-from .ui import UIConfig
 from .ui import UserInterface
+from .ui_config import UIConfig
 from .ui_constants import Color
 from .ui_constants import Decoration
 

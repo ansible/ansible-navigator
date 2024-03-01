@@ -19,7 +19,7 @@ def test_ce_auto_podman(
     """
 
     def which(arg: Any) -> bool:
-        return arg == "podman"
+        return bool(arg == "podman")
 
     monkeypatch.setattr(shutil, "which", which)
     response = generate_config()
@@ -37,7 +37,7 @@ def test_ce_auto_docker(
     """
 
     def which(arg: Any) -> bool:
-        return arg == "docker"
+        return bool(arg == "docker")
 
     monkeypatch.setattr(shutil, "which", which)
     response = generate_config()
