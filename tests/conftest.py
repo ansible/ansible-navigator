@@ -13,6 +13,7 @@ import sys
 from collections.abc import Callable
 from collections.abc import Generator
 from copy import deepcopy
+from functools import lru_cache
 from pathlib import Path
 from typing import Protocol
 
@@ -36,15 +37,29 @@ from ansible_navigator.utils.serialize import yaml
 from .defaults import FIXTURES_DIR
 
 
+# implicit verbosity, updated at runtime
+VERBOSITY = 0
+
+
+@lru_cache
 def valid_ce() -> str:
     """Return an available container engine.
 
     :returns: The container engine or exits
     """
+    msg = "unknown"
     for engine in ("podman", "docker"):
         if shutil.which(engine):
+            # fail fast if engine is not working properly, macos podman machine have
+            # the habit of getting stuck.
+            try:
+                cmd = [engine, "info"]
+                subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=6)
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+                msg = f"Container engine is broken, fail to run: {' '.join(cmd)}: {exc}"
+                continue
             return engine
-    pytest.exit(reason="Container engine required", returncode=1)
+    pytest.exit(reason=msg, returncode=1)
     return False
 
 
@@ -199,7 +214,8 @@ def pull_image(valid_container_engine: str, image_name: str) -> None:
         pull_policy="missing",
     )
     image_puller.assess()
-    image_puller.prologue_stdout()
+    if VERBOSITY > 0:
+        image_puller.prologue_stdout()
     if image_puller.assessment.exit_messages:
         print(
             msg.to_lines(color=False, width=console_width(), with_prefix=True)
@@ -313,6 +329,7 @@ def pytest_sessionstart(session: pytest.Session) -> None:
     if getattr(session.config, "workerinput", None) is not None:
         return
     container_engine = valid_ce()
+
     pull_image(
         valid_container_engine=container_engine,
         image_name=default_ee_image_name(),
@@ -331,6 +348,8 @@ def pytest_configure(config: pytest.Config) -> None:
 
     :param config: The pytest config object
     """
+    global VERBOSITY
+    VERBOSITY = config.option.verbose
     # limit an environment variables that may conflict with tests
     allow = ("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES",)
     for k in os.environ:
@@ -371,3 +390,18 @@ def pytest_unconfigure(config: pytest.Config) -> None:
     """
     for key, value in USER_ENVIRONMENT.items():
         os.environ[key] = value
+
+
+@pytest.fixture(scope="function")
+def skip_if_already_failed(
+    request: pytest.FixtureRequest, failed=set()
+) -> Generator[None, None, None]:
+    """Fixture that stops parametrized tests running on first failure."""
+    key = request.node.name.split("[")[0]
+    failed_before = request.session.testsfailed
+    if key in failed:
+        pytest.skip(f"previous test {key} failed")
+    yield
+    failed_after = request.session.testsfailed
+    if failed_before != failed_after:
+        failed.add(key)

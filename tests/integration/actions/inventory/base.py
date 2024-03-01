@@ -79,7 +79,11 @@ class BaseClass:
             yield tmux_session
 
     def test(
-        self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
+        self,
+        request: pytest.FixtureRequest,
+        tmux_session: TmuxSession,
+        step: UiTestStep,
+        skip_if_already_failed: None,
     ) -> None:
         """Run the tests for inventory, mode and ``ee`` set in child class.
 

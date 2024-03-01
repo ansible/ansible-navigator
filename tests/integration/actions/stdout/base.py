@@ -53,6 +53,7 @@ class BaseClass:
         user_input: str,
         comment: str,
         search_within_response: str,
+        skip_if_already_failed: None,
     ) -> None:
         # pylint:disable=too-many-arguments
         """Run the tests for stdout, mode and EE set in child class.

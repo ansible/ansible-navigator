@@ -287,3 +287,18 @@ def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str) -> None:
     if time_zone == "bogus":
         assert matched["timezone"] == "+00:00"
         assert "The time zone 'bogus' could not be found. Using UTC." in caplog.text
+
+
+@pytest.mark.parametrize(
+    "data,output",
+    (
+        pytest.param({}, {}, id="0"),
+        pytest.param(None, None, id="1"),
+        pytest.param([], [], id="2"),
+        pytest.param("foo", "foo", id="3"),
+    ),
+)
+def test_unescape_moustaches(data: Any, output: Any) -> None:
+    """Tests unescape_moustaches."""
+    result = functions.unescape_moustaches(data)
+    assert result == output

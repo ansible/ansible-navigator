@@ -108,6 +108,7 @@ templated
 templating
 testhost
 testname
+testsfailed
 topbar
 tracebacks
 truecolor

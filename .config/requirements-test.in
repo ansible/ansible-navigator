@@ -1,6 +1,6 @@
 ansible-core
 coverage-enable-subprocess
-coverage[toml]>=7.0.0b1
+coverage[toml]>=7.4.3
 darglint
 flake8-docstrings
 libtmux<=0.16.1 # https://github.com/tmux-python/libtmux/issues/468
@@ -8,6 +8,5 @@ pre-commit
 pytest-env
 pytest-mock
 pytest-plus # implements PYTEST_REQPASS
-pytest-rerunfailures
 pytest-subtests
 pytest-xdist
