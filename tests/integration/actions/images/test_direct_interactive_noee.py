@@ -26,7 +26,6 @@ initial_steps = (
 steps = add_indices(initial_steps + base_steps)
 
 
-@pytest.mark.flaky(reruns=4)
 @pytest.mark.parametrize("step", steps, ids=step_id_padded)
 class Test(BaseClass):
     """Run the tests for images from CLI, interactive, without an EE."""

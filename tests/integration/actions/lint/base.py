@@ -45,7 +45,6 @@ class BaseClass:
         with TmuxSession(**params) as tmux_session:
             yield tmux_session
 
-    @pytest.mark.flaky(reruns=2)
     def test(
         self, request: pytest.FixtureRequest, tmux_session: TmuxSession, step: UiTestStep
     ) -> None:
