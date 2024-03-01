@@ -6,7 +6,6 @@ import curses
 
 from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
-from typing import Any
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -14,14 +13,15 @@ from .curses_window import CursesWindow
 
 
 if TYPE_CHECKING:
-    from .field_checks import FieldChecks
-    from .field_radio import FieldRadio
+    from ansible_navigator.action_runner import Window
+    from ansible_navigator.ui_framework.field_text import FieldText
+    from ansible_navigator.ui_framework.ui_config import UIConfig
 
 
 class FormHandlerOptions(CursesWindow):
     """Handle form checkbox field."""
 
-    def __init__(self, screen, ui_config):
+    def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for either form checkboxes or radio buttons.
 
         :param screen: A curses window
@@ -30,13 +30,14 @@ class FormHandlerOptions(CursesWindow):
         super().__init__(ui_config=ui_config)
         self._screen = screen
 
-    def populate(self, form_field, active):
+    def populate(self, form_field: FieldText, active: int) -> None:
         """Populate the window with the checkboxes.
 
         :param form_field: Field from a form
         :param active: Track active checkbox/option
         """
-        for idx, option in enumerate(form_field.options):
+        options = getattr(form_field, "options", [])
+        for idx, option in enumerate(options):
             option_code = option.ansi_code(form_field)
             color = 8 if option.disabled else 0
             decoration = curses.A_STANDOUT if idx == active else 0
@@ -52,7 +53,7 @@ class FormHandlerOptions(CursesWindow):
                 window=self.win, lineno=idx, line=CursesLine((clp_option_code, clp_text))
             )
 
-    def handle(self, idx, form_fields: list[Any]) -> tuple[FieldChecks | FieldRadio, int]:
+    def handle(self, idx: int, form_fields: list[FieldText]) -> tuple[FieldText, int]:
         # pylint: disable=too-many-nested-blocks
         """Handle the check box field.
 
@@ -63,6 +64,8 @@ class FormHandlerOptions(CursesWindow):
         form_field = form_fields[idx]
         active = 0
 
+        if not hasattr(form_field, "options"):
+            raise RuntimeError
         while True:
             active = active % len(form_field.options)
             self.populate(form_field, active)

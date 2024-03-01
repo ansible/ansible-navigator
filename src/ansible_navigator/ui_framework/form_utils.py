@@ -132,7 +132,7 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> dict[str, Any]:
     return res
 
 
-def break_long_lines(messages):
+def break_long_lines(messages: list[str]) -> list[str]:
     """Break lines such that the form width !> 80%.
 
     :param messages: Lines of the form

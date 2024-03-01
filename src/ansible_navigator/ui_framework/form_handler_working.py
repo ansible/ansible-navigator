@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from ansible_navigator.ui_framework.ui_config import UIConfig
+
 from .curses_window import CursesWindow
+from .curses_window import Window
 
 
 if TYPE_CHECKING:
@@ -14,7 +17,7 @@ if TYPE_CHECKING:
 class FormHandlerWorking(CursesWindow):
     """Handle form button."""
 
-    def __init__(self, screen, ui_config):
+    def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for a form working notification.
 
         :param screen: A curses window
@@ -24,7 +27,7 @@ class FormHandlerWorking(CursesWindow):
         self._screen = screen
 
     @staticmethod
-    def handle(idx, form_fields: list[str]) -> tuple[FieldWorking, int]:
+    def handle(idx: int, form_fields: list[FieldWorking]) -> tuple[FieldWorking, int]:
         """Handle the information field, immediate return.
 
         :param idx: Index to retrieve specific field

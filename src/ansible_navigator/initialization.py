@@ -146,7 +146,7 @@ def _diagnose(
     exit_messages: list[ExitMessage],
     messages: list[LogMessage],
     should_diagnose: bool,
-):
+) -> tuple[list[LogMessage], list[ExitMessage]]:
     """Direct to the diagnostic information writer or return.
 
     :param args: Application configuration
@@ -159,13 +159,14 @@ def _diagnose(
         DiagnosticsCollector(args=args, messages=messages, exit_messages=exit_messages).run()
     else:
         return messages, exit_messages
+    return ([], [])
 
 
 def parse_and_update(
     params: list[str],
     args: ApplicationConfiguration,
     apply_previous_cli_entries: C | list[str] = C.NONE,
-    attach_cdc=False,
+    attach_cdc: bool = False,
 ) -> tuple[list[LogMessage], list[ExitMessage]]:
     """Build a configuration.
 
