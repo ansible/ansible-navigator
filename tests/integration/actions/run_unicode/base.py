@@ -66,6 +66,7 @@ class BaseClass:
         request: pytest.FixtureRequest,
         tmux_session: TmuxSession,
         step: UiTestStep,
+        skip_if_already_failed: None,
     ) -> None:
         """Run the tests for run, mode and ``ee`` set in child class.
 

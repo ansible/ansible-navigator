@@ -18,6 +18,7 @@ def test(
     monkeypatch: pytest.MonkeyPatch,
     settings_env_var_to_full: tuple[Path, SettingsFileType],
     tmp_path: Path,
+    skip_if_already_failed: None,
 ) -> None:
     """Test diagnostics generation.
 

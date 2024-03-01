@@ -39,7 +39,6 @@ class MenuBuilder:
         :param color_menu_item: The callback for adding color to menu entries
         :param ui_config: The current user interface configuration
         """
-        # pylint: disable=too-many-arguments
         self._number_colors = number_colors
         self._progress_bar_width = progress_bar_width
         self._screen_width = screen_width

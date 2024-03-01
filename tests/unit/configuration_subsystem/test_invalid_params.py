@@ -230,7 +230,7 @@ def test_poor_choices(
     """
     monkeypatch.setattr("shutil.which", which)
 
-    def test(subcommand: Any, param: Any, look_for: str) -> None:
+    def test_smoke_deps(subcommand: Any, param: Any, look_for: str) -> None:
         if subcommand is None:
             response = generate_config(params=[param, "Sentinel"])
         else:
@@ -246,12 +246,12 @@ def test_poor_choices(
     elif entry.cli_parameters:
         look_for = "must be one"
         # ansible-navigator choice error
-        test(subcommand, entry.cli_parameters.short, look_for)
-        test(
+        test_smoke_deps(subcommand, entry.cli_parameters.short, look_for)
+        test_smoke_deps(
             subcommand,
             entry.cli_parameters.long_override or f"--{entry.name_dashed}",
             look_for,
         )
     else:
         # argparse choice error
-        test(subcommand, "", "choose from")
+        test_smoke_deps(subcommand, "", "choose from")

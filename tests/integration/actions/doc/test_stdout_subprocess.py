@@ -105,6 +105,7 @@ def test(
     data: StdoutCliTest,
     exec_env: bool,
     cmd_in_tty: TCmdInTty,
+    skip_if_already_failed: None,
 ) -> None:
     """Test doc using subcommand.
 
