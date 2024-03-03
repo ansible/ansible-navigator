@@ -26,7 +26,6 @@ from ansible_navigator.content_defs import SerializationFormat
 
 logger = logging.getLogger(__name__)
 
-# pylint: disable=unused-import
 try:
     from yaml import CSafeDumper as SafeDumper
 except ImportError:
@@ -38,7 +37,6 @@ try:
 except ImportError:
     from yaml import Loader  # type: ignore # noqa: F401
     from yaml import SafeLoader  # type: ignore # noqa: F401
-# pylint: enable=unused-import
 
 
 def serialize(
@@ -369,3 +367,6 @@ def write_diagnostics_json(path: str, mode: int, content: object) -> None:
     with open(path, "w", encoding="utf-8", opener=opener_func) as f:
         f.write(json.dumps(content, indent=4, sort_keys=True))
     os.umask(oldmask)
+
+
+__all__ = ("SafeLoader", "SafeDumper", "Loader", "yaml", "SerializationFormat")

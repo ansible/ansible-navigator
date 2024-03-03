@@ -12,7 +12,6 @@ from copy import deepcopy
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import Any
-from typing import cast
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
@@ -658,7 +657,6 @@ class Action(ActionBase):
             "runtime",
         ]
         roles_exclude_keys = ["readme"]
-        self._collection_cache = cast(KeyValueStore, self._collection_cache)
 
         self._collection_cache.open_()
         for collection in self._collections:

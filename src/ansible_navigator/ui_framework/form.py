@@ -426,3 +426,6 @@ class FormPresenter(CursesWindow):
                         idx += 1
 
         return self._form
+
+
+__all__ = ("FormType",)

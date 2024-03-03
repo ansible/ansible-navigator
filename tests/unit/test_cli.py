@@ -15,7 +15,7 @@ import pytest
 
 from ansible_navigator.cli import NavigatorConfiguration
 from ansible_navigator.cli import main
-from ansible_navigator.cli import parse_and_update
+from ansible_navigator.initialization import parse_and_update
 from tests.defaults import FIXTURES_DIR
 
 

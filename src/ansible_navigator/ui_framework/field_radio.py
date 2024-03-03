@@ -54,12 +54,15 @@ class FieldRadio:
         return self.prompt
 
     @property
-    def validator(self) -> Callable[..., Any]:
+    def validator(self) -> Callable[..., Validation]:
         """Provide a validator based on form type.
 
         :returns: Validation of checked entries
         """
-        return partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
+        result = partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
+        if not isinstance(result, Validation):
+            raise RuntimeError
+        return result
 
     def _validate(self, response: FieldRadio) -> Validation:
         """Validate this FieldRadio instance.

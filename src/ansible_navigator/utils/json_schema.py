@@ -12,7 +12,7 @@ from jsonschema import SchemaError
 from jsonschema import ValidationError
 from jsonschema.validators import validator_for
 
-from .functions import ExitMessage
+from .definitions import ExitMessage
 
 
 def to_path(schema_path: deque[Any]) -> str:

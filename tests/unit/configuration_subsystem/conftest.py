@@ -19,8 +19,8 @@ from ansible_navigator.configuration_subsystem.configurator import Configurator
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsSchemaType
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
-from ansible_navigator.utils.functions import ExitMessage
-from ansible_navigator.utils.functions import LogMessage
+from ansible_navigator.utils.definitions import ExitMessage
+from ansible_navigator.utils.definitions import LogMessage
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
 from tests.defaults import FIXTURES_DIR

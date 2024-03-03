@@ -12,9 +12,9 @@ from ansible_navigator.constants import GRAMMAR_DIR
 from ansible_navigator.constants import THEME_PATH
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.ui_framework.colorize import Colorize
 from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
-from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
 
 
