@@ -118,12 +118,12 @@ class TmuxSession:
         self._server = libtmux.server.Server()
         self._build_tmux_session()
         self._window = self._session.new_window(self._session_name, attach=False)
+        self._window.resize(height=self._pane_height * 2, width=self._pane_width * 2)
         self._pane = self._window.panes[0]
         self._pane.split_window(attach=False)
         # split vertical
         self._pane.split_window(vertical=False, attach=False)
         # attached to upper left
-        self._window.resize(height=self._pane_height * 2, width=self._pane_width * 2)
         self._pane.resize(height=self._pane_height, width=self._pane_width)
 
         # Figure out where the tox initiated venv is. In environments where a
