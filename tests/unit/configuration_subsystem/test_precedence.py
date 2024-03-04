@@ -10,8 +10,8 @@ from typing import Any
 import pytest
 
 from ansible_navigator.configuration_subsystem.definitions import Constants as C
+from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
-from ansible_navigator.configuration_subsystem.navigator_configuration import SettingsEntry
 
 from .conftest import GenerateConfigCallable
 from .data import BASE_EXPECTED

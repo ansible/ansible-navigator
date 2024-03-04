@@ -8,8 +8,8 @@ import pytest
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem import SettingsEntry
+from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import LogMessage
-from ansible_navigator.utils.functions import ExitMessage
 
 from .conftest import GenerateConfigCallable
 from .utils import id_for_name

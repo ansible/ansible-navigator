@@ -25,12 +25,12 @@ def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReq
     :param request: The request for this fixture from a test
     :returns: The original request parameter
     """
-    if request.param:  # type: ignore[attr-defined] # github.com/pytest-dev/pytest/issues/8073
+    if request.param:
         monkeypatch.setattr(
             "ansible_navigator.utils.serialize.HumanDumper.ignore_aliases",
             Dumper.ignore_aliases,
         )
-    return request.param  # type: ignore[attr-defined]
+    return request.param
 
 
 @pytest.mark.parametrize(

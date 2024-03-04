@@ -15,7 +15,7 @@ from ansible_navigator.utils.functions import shlex_join
 from ansible_navigator.utils.json_schema import validate
 from ansible_navigator.utils.serialize import SafeLoader
 from ansible_navigator.utils.serialize import yaml
-from ansible_navigator.utils.version_migration.migrate import MigrationType
+from ansible_navigator.utils.version_migration.definitions import MigrationType
 from ansible_navigator.utils.version_migration.migrate import run_all_migrations
 
 from .definitions import ApplicationConfiguration

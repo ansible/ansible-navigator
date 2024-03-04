@@ -227,7 +227,11 @@ class TmuxSession:
         :returns: The captured pane
         """
         captured = self._pane.capture_pane()
-        return [captured] if isinstance(captured, str) else captured
+        if isinstance(captured, str):
+            return [captured]
+        if isinstance(captured, list):
+            return captured
+        raise RuntimeError
 
     def interaction(
         self,
