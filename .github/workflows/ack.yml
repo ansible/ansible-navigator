@@ -6,4 +6,5 @@ on:
 
 jobs:
   ack:
-    uses: ansible/devtools/.github/workflows/ack.yml@main
+    uses: ansible/team-devtools/.github/workflows/ack.yml@main
+    secrets: inherit
