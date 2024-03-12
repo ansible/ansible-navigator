@@ -279,6 +279,7 @@ But note that gpg is better because you can leverage the gpg-agent in order to
 not have to introduce your password all the time.
 
 Then you create a shell script that runs the decrypt command, eg:
+
 ```bash
 cat <<EOF > ~/bin/vault.sh
 #!/bin/sh
@@ -289,6 +290,7 @@ chmod +x ~/bin/vault.sh
 ```
 
 Now you can export `ANSIBLE_VAULT_PASSWORD` with the result of that script:
+
 ```
 ANSIBLE_VAULT_PASSWORD="$( ~/bin/vault.sh )" ansible-navigator run (...)
 ```
