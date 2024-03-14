@@ -272,7 +272,30 @@ the text-based user interface (TUI). **Please ensure these do not conflict with
 your enterprise security standards. Do not add password files to source
 control.**
 
-1. Store the vault password securely on the local file system
+1. Store the vault password **securely** on the local file system
+
+You can create an encrypted file with your tool of choice, gpg, openssl, etc.
+But note that gpg is better because you can leverage the gpg-agent in order to
+not have to introduce your password all the time.
+
+Then you create a shell script that runs the decrypt command, eg:
+
+```bash
+cat <<EOF > ~/bin/vault.sh
+#!/bin/sh
+
+gpg -d /path/to/encrypted_file.asc
+EOF
+chmod +x ~/bin/vault.sh
+```
+
+Now you can export `ANSIBLE_VAULT_PASSWORD` with the result of that script:
+
+```
+ANSIBLE_VAULT_PASSWORD="$( ~/bin/vault.sh )" ansible-navigator run (...)
+```
+
+2. Store the vault password (clear text, insecurely) on the local file system
 
 ```bash
 $ touch ~/.vault_password
@@ -287,7 +310,9 @@ $ export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
 $ ansible-navigator run --pass-environment-variable ANSIBLE_VAULT_PASSWORD_FILE site.yml
 ```
 
-2. Store the vault password in an environment variable
+3. Store the vault password in an environment variable
+
+This is a less secure version of the first option.
 
 Chances are that your environment prohibits saving passwords in clear text on
 disk. If you are subject to such a rule, then this will obviously include any
