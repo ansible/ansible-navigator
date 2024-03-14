@@ -4,7 +4,7 @@
     // Run testing debugging in the terminal so the workspace venv is used
     {
       "name": "Debug tests",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "purpose": ["debug-test"],
       "console": "integratedTerminal"
@@ -12,7 +12,7 @@
     // Configuration for pure debugging (use args and cwd attributes accordingly)
     {
       "name": "Debug subcommand: collections",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "ansible_navigator",
       "args": ["collections", "--ee", "false"],
@@ -21,7 +21,7 @@
     },
     {
       "name": "Debug subcommand: exec",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "ansible_navigator",
       "args": ["exec", "--", "pwd"],
@@ -30,7 +30,7 @@
     },
     {
       "name": "Debug subcommand: images",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "ansible_navigator",
       "args": ["images"],
@@ -39,7 +39,7 @@
     },
     {
       "name": "Debug subcommand: lint",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "ansible_navigator",
       "args": ["lint", "tests/fixtures/integration/actions/lint"],
@@ -48,7 +48,7 @@
     },
     {
       "name": "Debug subcommand: run",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "ansible_navigator",
       "args": ["run", "ping.yml"],
