@@ -122,9 +122,16 @@ class TmuxSession:
         self._window = self._session.new_window(self._session_name, attach=False)
         self._window.resize(height=self._pane_height * 2, width=self._pane_width * 2)
         self._pane = self._window.panes[0]
-        self._pane.split(attach=False)
+        self._pane.split(
+            attach=False,
+            full_window_split=True,
+        )
         # split vertical
-        self._pane.split(direction=PaneDirection.Right, attach=False)
+        self._pane.split(
+            direction=PaneDirection.Right,
+            attach=False,
+            full_window_split=True,
+        )
         # attached to upper left
         self._pane.resize(height=self._pane_height, width=self._pane_width)
 
