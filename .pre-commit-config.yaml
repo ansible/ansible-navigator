@@ -34,7 +34,7 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/psf/black.git
-    rev: 24.2.0
+    rev: 24.3.0
     hooks:
       - id: black
         language_version: python3
@@ -45,7 +45,7 @@ repos:
       - id: toml-sort-fix
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.3.2"
+    rev: "v0.3.3"
     hooks:
       - id: ruff
         args:
