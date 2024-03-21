@@ -4,6 +4,8 @@
 
 [TOC]
 
+{{ install_from_adt("ansible-navigator") }}
+
 ## Linux
 
 ### Requirements
