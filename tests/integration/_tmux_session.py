@@ -236,7 +236,7 @@ class TmuxSession:
         value: str,
         search_within_response: list[str] | str | None = None,
         ignore_within_response: str | None = None,
-        timeout: int = 60,
+        timeout: int = 300,
         send_clear: bool = True,
     ) -> list[str]:
         """Interact with the tmux session.
