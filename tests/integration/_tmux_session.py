@@ -18,8 +18,6 @@ import libtmux
 import libtmux.exc
 import pytest
 
-from libtmux.constants import PaneDirection
-
 from ._common import generate_test_log_dir
 
 
@@ -119,23 +117,9 @@ class TmuxSession:
 
         self._server = libtmux.server.Server()
         self._build_tmux_session()
-        self._window = self._session.new_window(self._session_name, attach=False)
-        self._window.resize(height=self._pane_height * 2, width=self._pane_width * 2)
+        self._window = self._session.windows[0]
         self._pane = self._window.panes[0]
-        self._pane.split(
-            attach=False,
-            full_window_split=True,
-            size="50%",
-        )
-        # split vertical
-        self._pane.split(
-            direction=PaneDirection.Right,
-            attach=False,
-            full_window_split=True,
-            size="50%",
-        )
-        # attached to upper left
-        self._pane.resize(height=self._pane_height, width=self._pane_width)
+        self._window.resize(height=self._pane_height, width=self._pane_width)
 
         # Figure out where the tox initiated venv is. In environments where a
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
