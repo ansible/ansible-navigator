@@ -52,7 +52,7 @@ jsonschema-specifications==2023.12.1
 libtmux==0.16.1
 linkchecker==10.4.0
 lockfile==0.12.2
-markdown==3.6
+markdown==3.5.2
 markdown-exec==1.8.0
 markdown-include==0.8.1
 markdown-it-py==3.0.0
