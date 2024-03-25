@@ -105,4 +105,7 @@ def test_tz_support(
     # This is a conservative number based on debug logging, it should be closer to 200
     # but this assertion is here to ensure many records were retrieved.
     assert len(caplog.records) > 100
-    assert all(data.re_match.match(record.asctime) for record in caplog.records)
+    for record in caplog.records:
+        assert data.re_match.match(
+            record.asctime
+        ), f"{data.re_match.pattern} does not match '{record.asctime}'"
