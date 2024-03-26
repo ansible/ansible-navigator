@@ -52,7 +52,7 @@ class BaseClass:
         comment: str,
         testname: str,
         expected_in_output: list[str] | None,
-        skip_if_already_failed: None,
+        skip_if_already_failed: bool | None = None,
     ) -> None:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
