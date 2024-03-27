@@ -5,6 +5,7 @@ from __future__ import annotations
 import errno
 import os
 import pty
+import re
 import select
 import shutil
 import subprocess
@@ -343,6 +344,17 @@ def pytest_sessionstart(session: pytest.Session) -> None:
 USER_ENVIRONMENT = {}
 
 
+def is_config_empty(filename: str) -> bool:
+    """Establish if config file is empty."""
+    pattern = re.compile(r"^\s*(?:#|$)")
+    with open(filename, encoding="utf-8") as file:
+        for line in file:
+            if not pattern.match(line):
+                pytest.exit(f"[{line}]")
+                return False
+    return True
+
+
 def pytest_configure(config: pytest.Config) -> None:
     """Attempt to save a contributor some troubleshooting.
 
@@ -369,8 +381,13 @@ def pytest_configure(config: pytest.Config) -> None:
         err = "\n".join(error.message for error in errors)
         pytest.exit(f"Error parsing ansible version:\n{err}")
     config_file = details["config file"]
-    if config_file != "None":
-        pytest.exit(f"Please remove the ansible config file '{config_file}' before testing.")
+    # detect if the config file is the default empty one.
+    if config_file != "None" and not (
+        config_file == "/etc/ansible/ansible.cfg" and is_config_empty(config_file)
+    ):
+        pytest.exit(
+            f"Please remove or empty the ansible config file '{config_file}' before testing, as this will likely break the test results."
+        )
 
     # look for ansible-navigator settings file
     _log, _errors, file_path = find_settings_file()

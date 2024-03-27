@@ -89,6 +89,13 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true # optional (default = false)
+      - name: Archive logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ matrix.name }}.zip
+          path: .tox/**/log/
+
       - name: Change accessibility for cache
         if: ${{ startsWith(matrix.passed_name, 'py') }}
         run: podman unshare chmod -R 755 ~/.local/share/containers/
@@ -100,6 +107,13 @@ jobs:
       - tox
     runs-on: ubuntu-22.04
     steps:
+      - name: Merge logs into a single archive
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: logs.zip
+          pattern: logs*.zip
+          delete-merged: true
+
       - name: Check codecov.io status
         if: github.event_name == 'pull_request'
         uses: coactions/codecov-status@main
