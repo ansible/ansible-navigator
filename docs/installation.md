@@ -61,21 +61,14 @@
 
 ### Requirements (macos)
 
-- [Docker Desktop for Mac]
+- [Docker Desktop for Mac] or [Podman on macOS]
 - macOS command line developer tools
 - Internet access (during initial installation)
 
 ### Install the desired container engine for execution environment support (macos)
 
-- Follow the [Docker Desktop for Mac] installation instructions
-
-!!! notice
-
-    There is no convenient way to use `ansible-navigator` with [podman] on
-    macOS.  Native source mounts from macOS through the [podman] machine into
-    the execution environment are not currently available.
-
-    See this [related issue][macOS podman issue #8016] for details.
+- [Docker Desktop for Mac] installation instructions
+- [Podman on MacOS] installation instructions
 
 ### Install ansible-navigator (macos)
 
@@ -250,6 +243,7 @@ From the Ubuntu terminal:
 [podman]: https://podman.io/
 [podman installation instructions]:
   https://podman.io/getting-started/installation
+[Podman on macOS]: https://podman.io/docs/installation#macos
 [ubuntu]: https://ubuntu.com
 [windows subsystem for linux 2]:
   https://docs.microsoft.com/en-us/windows/wsl/install-win10
