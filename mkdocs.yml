@@ -64,7 +64,8 @@ plugins:
         - docs/_ext/regenerate_docs.py
   - material/search:
       separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
-  - material/social
+  # https://github.com/squidfunk/mkdocs-material/issues/6983
+  # - material/social
   - material/tags
   # https://github.com/manuzhang/mkdocs-htmlproofer-plugin
   # - htmlproofer
