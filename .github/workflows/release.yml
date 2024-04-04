@@ -35,7 +35,7 @@ jobs:
         with:
           fetch-depth: 0 # needed by setuptools-scm
       - name: Build dists
-        run: python -m tox
+        run: python3 -m tox
       - name: Publish to pypi.org
         if: >- # "create" workflows run separately from "push" & "pull_request"
           github.event_name == 'release'
