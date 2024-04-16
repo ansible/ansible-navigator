@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import multiprocessing
@@ -383,10 +384,19 @@ def worker(
                     collection_name=collection_name,
                 )
 
-        except Exception as exc:  # noqa: BLE001
-            err_message = f"{type(exc).__name__} (get_docstring): {exc!s}"
-            completed_queue.put(("error", (checksum, plugin_path, err_message)))
-            continue
+        except Exception:  # noqa: BLE001
+            try:
+                with plugin_path.open(mode="r", encoding="utf-8") as f:
+                    content = f.read()
+                doc = get_doc_withast(content)
+                doc = yaml.load(doc, Loader=yaml.SafeLoader)
+                examples = []
+                returndocs = []
+                metadata = {}
+            except Exception as exc:  # noqa: BLE001
+                err_message = f"{type(exc).__name__} (get_docstring): {exc!s}"
+                completed_queue.put(("error", (checksum, plugin_path, err_message)))
+                continue
 
         try:
             q_message = {
@@ -530,6 +540,17 @@ def retrieve_docs(
             collection_cache[checksum] = json.dumps({"error": error})
             errors.append({"path": str(plugin_path), "error": error})
             stats["cache_added_errors"] += 1
+
+
+def get_doc_withast(content: Any) -> str:
+    """Get the documentation string from a module using ast.
+
+    :param content: The module content to extract the docstring from
+    :returns: The documentation string
+    """
+    for node in ast.walk(ast.parse(content)):
+        if isinstance(node, ast.Assign) and node.targets[0].id == "DOCUMENTATION":
+            return node.value.s.strip()
 
 
 def run_command(cmd: list[str]) -> dict[str, str]:
