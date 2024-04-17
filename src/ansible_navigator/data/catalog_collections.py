@@ -361,6 +361,7 @@ def worker(
     :param completed_queue: The queue in which extracted documentation will be placed
     """
     # pylint: disable=import-outside-toplevel
+    # pylint: disable=too-many-locals
 
     # load the fragment_loader _after_ the path is set
     from ansible.plugins.loader import fragment_loader
@@ -388,11 +389,11 @@ def worker(
             try:
                 with plugin_path.open(mode="r", encoding="utf-8") as f:
                     content = f.read()
-                doc = get_doc_withast(content)
-                doc = yaml.load(doc, Loader=yaml.SafeLoader)
-                examples = []
-                returndocs = []
-                metadata = {}
+                doc, examples, returndocs, metadata = get_doc_withast(content)
+                doc, examples, returndocs, metadata = (
+                    yaml.load(value, Loader=yaml.SafeLoader)
+                    for value in (doc, examples, returndocs, metadata)
+                )
             except Exception as exc:  # noqa: BLE001
                 err_message = f"{type(exc).__name__} (get_docstring): {exc!s}"
                 completed_queue.put(("error", (checksum, plugin_path, err_message)))
@@ -542,15 +543,22 @@ def retrieve_docs(
             stats["cache_added_errors"] += 1
 
 
-def get_doc_withast(content: Any) -> str:
+def get_doc_withast(content: Any) -> tuple[Any, Any, Any, str]:
     """Get the documentation string from a module using ast.
 
     :param content: The module content to extract the docstring from
     :returns: The documentation string
     """
+    metadata = ""
     for node in ast.walk(ast.parse(content)):
-        if isinstance(node, ast.Assign) and node.targets[0].id == "DOCUMENTATION":
-            return node.value.s.strip()
+        if isinstance(node, ast.Assign):
+            if node.targets[0].id == "DOCUMENTATION":
+                doc = node.value.s.strip()
+            elif node.targets[0].id == "EXAMPLES":
+                examples = node.value.s.strip()
+            elif node.targets[0].id == "RETURN":
+                returndocs = node.value.s.strip()
+                return doc, examples, returndocs, metadata
 
 
 def run_command(cmd: list[str]) -> dict[str, str]:
