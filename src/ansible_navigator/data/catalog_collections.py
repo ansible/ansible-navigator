@@ -543,22 +543,30 @@ def retrieve_docs(
             stats["cache_added_errors"] += 1
 
 
-def get_doc_withast(content: Any) -> tuple[Any, Any, Any, str]:
-    """Get the documentation string from a module using ast.
+def get_doc_withast(content: Any) -> tuple[Any, Any, Any, Any]:
+    """Get the documentation, examples, returndocs, and metadata from the content using ast.
 
-    :param content: The module content to extract the docstring from
-    :returns: The documentation string
+    :param content: The content to parse using ast.
+    :return: A tuple containing the documentation, examples, returndocs, and metadata.
     """
-    metadata = ""
+    doc, examples, returndocs, metadata = "", "", "", ""
+
+    # Parse the content using ast and walk through nodes
     for node in ast.walk(ast.parse(content)):
-        if isinstance(node, ast.Assign):
-            if node.targets[0].id == "DOCUMENTATION":
-                doc = node.value.s.strip()
-            elif node.targets[0].id == "EXAMPLES":
-                examples = node.value.s.strip()
-            elif node.targets[0].id == "RETURN":
-                returndocs = node.value.s.strip()
-                return doc, examples, returndocs, metadata
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            target_id = node.targets[0].id
+
+            # Check if node.value is an instance of ast.Constant and its value is a string
+            if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                if target_id == "DOCUMENTATION":
+                    doc = node.value.value.strip()
+                elif target_id == "EXAMPLES":
+                    examples = node.value.value.strip()
+                elif target_id == "RETURN":
+                    returndocs = node.value.value.strip()
+                elif target_id == "METADATA":
+                    metadata = node.value.value.strip()
+    return doc, examples, returndocs, metadata
 
 
 def run_command(cmd: list[str]) -> dict[str, str]:
