@@ -194,7 +194,7 @@ def main() -> None:
 
     if args.execution_environment:
         pull_image(args)
-        cache_scripts()
+    cache_scripts()
 
     run_return = run(args)
     run_message = f"{run_return.message}\n"

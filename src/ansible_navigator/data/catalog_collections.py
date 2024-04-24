@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import multiprocessing
@@ -360,6 +361,7 @@ def worker(
     :param completed_queue: The queue in which extracted documentation will be placed
     """
     # pylint: disable=import-outside-toplevel
+    # pylint: disable=too-many-locals
 
     # load the fragment_loader _after_ the path is set
     from ansible.plugins.loader import fragment_loader
@@ -383,10 +385,19 @@ def worker(
                     collection_name=collection_name,
                 )
 
-        except Exception as exc:  # noqa: BLE001
-            err_message = f"{type(exc).__name__} (get_docstring): {exc!s}"
-            completed_queue.put(("error", (checksum, plugin_path, err_message)))
-            continue
+        except Exception:  # noqa: BLE001
+            try:
+                with plugin_path.open(mode="r", encoding="utf-8") as f:
+                    content = f.read()
+                doc, examples, returndocs, metadata = get_doc_withast(content)
+                doc, examples, returndocs, metadata = (
+                    yaml.load(value, Loader=yaml.SafeLoader)
+                    for value in (doc, examples, returndocs, metadata)
+                )
+            except Exception as exc:  # noqa: BLE001
+                err_message = f"{type(exc).__name__} (get_docstring): {exc!s}"
+                completed_queue.put(("error", (checksum, plugin_path, err_message)))
+                continue
 
         try:
             q_message = {
@@ -530,6 +541,32 @@ def retrieve_docs(
             collection_cache[checksum] = json.dumps({"error": error})
             errors.append({"path": str(plugin_path), "error": error})
             stats["cache_added_errors"] += 1
+
+
+def get_doc_withast(content: Any) -> tuple[Any, Any, Any, Any]:
+    """Get the documentation, examples, returndocs, and metadata from the content using ast.
+
+    :param content: The content to parse using ast.
+    :return: A tuple containing the documentation, examples, returndocs, and metadata.
+    """
+    doc, examples, returndocs, metadata = "", "", "", ""
+
+    # Parse the content using ast and walk through nodes
+    for node in ast.walk(ast.parse(content)):
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            target_id = node.targets[0].id
+
+            # Check if node.value is an instance of ast.Constant and its value is a string
+            if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                if target_id == "DOCUMENTATION":
+                    doc = node.value.value.strip()
+                elif target_id == "EXAMPLES":
+                    examples = node.value.value.strip()
+                elif target_id == "RETURN":
+                    returndocs = node.value.value.strip()
+                elif target_id == "METADATA":
+                    metadata = node.value.value.strip()
+    return doc, examples, returndocs, metadata
 
 
 def run_command(cmd: list[str]) -> dict[str, str]:

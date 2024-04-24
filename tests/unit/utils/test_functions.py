@@ -11,6 +11,7 @@ from typing import NamedTuple
 
 import pytest
 
+from ansible_navigator.data.catalog_collections import get_doc_withast
 from ansible_navigator.utils import functions
 
 
@@ -299,6 +300,30 @@ def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str) -> None:
     ),
 )
 def test_unescape_moustaches(data: Any, output: Any) -> None:
-    """Tests unescape_moustaches."""
+    """Tests unescape_moustaches.
+
+    :param data: The input data.
+    :param output: The expected output.
+    """
     result = functions.unescape_moustaches(data)
     assert result == output
+
+
+def test_get_doc_withast() -> None:
+    """Test for the get_doc_withast function.
+
+    This test ensures that the get_doc_withast function correctly extracts the documentation,
+    examples, returndocs, and metadata from the module content.
+    """
+    module_content = """
+DOCUMENTATION = "This is a test documentation."
+EXAMPLES = "Example usage here."
+RETURN = "This function returns a value."
+METADATA = "Author: John Doe"
+"""
+
+    doc, examples, returndocs, metadata = get_doc_withast(module_content)
+    assert doc == "This is a test documentation."
+    assert examples == "Example usage here."
+    assert returndocs == "This function returns a value."
+    assert metadata == "Author: John Doe"
