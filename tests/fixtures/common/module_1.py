@@ -1,4 +1,4 @@
-"""Unit tests for catalog collections."""
+"""An ansible test module."""
 
 DOCUMENTATION = r"""
 ---
