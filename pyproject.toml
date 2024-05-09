@@ -291,10 +291,6 @@ ignore = [
   'D101', # Missing docstring in public class
   'D102', # Missing docstring in public method
   'D103', # Missing docstring in public function
-  'D104', # Missing docstring in public package
-  'D105', # Missing docstring in magic method
-  'D400', # [*] First line should end with a period
-  'D403', # [*] First word of the first line should be capitalized: `tokenize` -> `Tokenize`
   'E501', # line-too-long, already covered by black
   'ERA001', # [*] Found commented-out code
   'FBT001', # Boolean positional arg in function definition
