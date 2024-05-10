@@ -17,7 +17,7 @@ def tokenize(
     line: str,
     first_line: bool,
 ) -> tuple[State, Regions]:
-    """tokenize a string into it's parts"""
+    """Tokenize a string into it's parts."""
     ret: list[Region] = []
     pos = 0
     boundary = state.cur.boundary
