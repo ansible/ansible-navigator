@@ -69,7 +69,7 @@ def test_log_append(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: P
         :param _kwargs: Keyword arguments
         :returns: Nothing
         """
-        return None
+        return
 
     new_session_msg = "New ansible-navigator instance"
     log_file = tmp_path / "ansible-navigator.log"

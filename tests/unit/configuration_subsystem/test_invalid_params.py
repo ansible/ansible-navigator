@@ -98,7 +98,7 @@ def test_no_container_engine(
         :param _kwargs: kwargs
         :returns: no container engine
         """
-        return None
+        return
 
     monkeypatch.setattr("shutil.which", local_which)
     response = generate_config()

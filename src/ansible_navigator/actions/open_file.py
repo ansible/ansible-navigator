@@ -178,7 +178,7 @@ class Action:
                     editor_console=editor_console,
                     editor_command=editor_command,
                 )
-                return None
+                return
 
             temp_file_name = self._persist_content(content=requested, content_format=content_format)
             temp_line_number = 0
@@ -188,7 +188,7 @@ class Action:
                 editor_console=editor_console,
                 editor_command=editor_command,
             )
-            return None
+            return
 
         if interaction.content:
             content = interaction.content.showing
@@ -199,7 +199,7 @@ class Action:
                 serialization_format=serialization_format,
             )
         else:
-            return None
+            return
 
         content_file_name = self._persist_content(content=content, content_format=content_format)
         content_line_number = 0
@@ -209,4 +209,4 @@ class Action:
             editor_console=editor_console,
             editor_command=editor_command,
         )
-        return None
+        return
