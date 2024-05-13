@@ -353,8 +353,6 @@ ignore = [
   'PYI034', # `__enter__` methods in classes like `TmuxSession` usually return `self` at runtime
   'PYI036', # The first argument in `__exit__` should be annotated with `object` or `type[BaseException] | None`
   'PYI041', # Use `float` instead of `int | float`
-  'RET501', # [*] Do not explicitly `return None` in function if it is the only possible return value
-  'RET503', # [*] Missing explicit `return` at the end of function able to return non-`None` value
   'RET504', # Unnecessary variable assignment before `return` statement
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation

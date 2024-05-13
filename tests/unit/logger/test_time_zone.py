@@ -90,7 +90,7 @@ def test_tz_support(
         :param _kwargs: Keyword arguments
         :returns: Nothing
         """
-        return None
+        return
 
     log_file = tmp_path / "ansible-navigator.log"
     args = data.args(log_file=log_file)
