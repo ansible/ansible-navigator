@@ -305,7 +305,9 @@ ignore = [
   'N817', # CamelCase `Constants` imported as acronym `C`
   'PERF203', # `try`-`except` within a loop incurs performance overhead
   'PGH003', # Use specific rule codes when ignoring type issues
+  'PIE810', # [*] Call `startswith` once with a `tuple`
   'PD011', # https://github.com/astral-sh/ruff/issues/2229
+  'PLC1901', # `self.fs_source == ""` can be simplified to `not self.fs_source` as an empty string is falsey
   'PLR0911', # Too many return statements (8 > 6)
   'PLR0912', # Too many branches (13 > 12)
   'PLR0913', # Too many arguments to function call (7 > 5)
