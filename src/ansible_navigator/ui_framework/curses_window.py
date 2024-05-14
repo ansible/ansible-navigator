@@ -104,7 +104,7 @@ class CursesWindow:
         try:
             curses.curs_set(value)
         except curses.error:
-            self._logger.error("Errors setting up terminal, check TERM value")
+            self._logger.exception("Errors setting up terminal, check TERM value")
 
     def _add_line(
         self,
@@ -182,7 +182,7 @@ class CursesWindow:
         try:
             curses.use_default_colors()
         except curses.error:
-            self._logger.error("Errors setting up terminal, no color support")
+            self._logger.exception("Errors setting up terminal, no color support")
             self._term_osc4_support = False
             self._ui_config.colors_initialized = True
             return

@@ -185,7 +185,7 @@ def parse_ansible_verison() -> tuple[list[LogMessage], list[ExitMessage], dict[s
     msg = f"ansible --version stdout: '{command.stdout}'"
     messages.append(LogMessage(level=logging.DEBUG, message=msg))
     if not isinstance(command.details, Iterable):
-        raise RuntimeError
+        raise TypeError
     return (
         messages,
         exit_messages,

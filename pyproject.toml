@@ -374,13 +374,7 @@ ignore = [
   'TCH003', # Move standard library import `re.Pattern` into a type-checking block
   'TD001', # Invalid TODO tag: `FIXME`
   'TD002', # Missing author in TODO
-  'TD003', # Missing issue link on the line following this TODO
-  'TRY003', # Avoid specifying long messages outside the exception class
-  'TRY004', # Prefer `TypeError` exception for invalid type
-  'TRY300', # Consider moving this statement to an `else` block
-  'TRY301', # Abstract `raise` to an inner function
-  'TRY400', # Use `logging.exception` instead of `logging.error`
-  'TRY401' # Redundant exception object included in `logging.exception` call
+  'TD003' # Missing issue link on the line following this TODO
 ]
 select = ["ALL"]
 

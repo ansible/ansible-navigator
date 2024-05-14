@@ -78,9 +78,10 @@ def prompt_yn(message: str) -> bool:
         reply = None
         while reply not in ("", "y", "n"):
             reply = input(f"{message} (Y/n): ").lower()
-        return reply in ("", "y")
     except KeyboardInterrupt:
         sys.exit(0)
+    else:
+        return reply in ("", "y")
 
 
 def success(color: bool, message: str) -> None:
