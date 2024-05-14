@@ -18,7 +18,7 @@ class RunnerTestError(Exception):
     """Custom exception for runner to throw."""
 
 
-@pytest.mark.usefixtures("patch_curses")
+@pytest.mark.usefixtures("_patch_curses")
 class Cli2Runner:
     """A base class which mocks the runner calls."""
 
