@@ -50,7 +50,7 @@ def isfile(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
 
 @pytest.mark.usefixtures("ansible_version")
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
+@pytest.mark.parametrize(("cli_entry", "expected"), CLI_DATA)
 def test_all_entries_reflect_cli_given_env_vars(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -103,9 +103,9 @@ def test_all_entries_reflect_cli_given_env_vars(
 
 
 @pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS)
+@pytest.mark.parametrize(("settings", "settings_file_type"), SETTINGS)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
+@pytest.mark.parametrize(("cli_entry", "expected"), CLI_DATA)
 def test_all_entries_reflect_cli_given_settings(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -159,9 +159,9 @@ def test_all_entries_reflect_cli_given_settings(
 
 
 @pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, source_other", SETTINGS)
+@pytest.mark.parametrize(("settings", "source_other"), SETTINGS)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
+@pytest.mark.parametrize(("cli_entry", "expected"), CLI_DATA)
 def test_all_entries_reflect_cli_given_settings_and_env_vars(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -253,8 +253,8 @@ def test_all_entries_reflect_default(
 
 
 @pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS)
-@pytest.mark.parametrize("entry, value, expected", ENV_VAR_DATA)
+@pytest.mark.parametrize(("settings", "settings_file_type"), SETTINGS)
+@pytest.mark.parametrize(("entry", "value", "expected"), ENV_VAR_DATA)
 def test_all_entries_reflect_env_var_given_settings(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,

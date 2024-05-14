@@ -8,7 +8,7 @@ import pytest
 from ansible_navigator.utils.key_value_store import KeyValueStore
 
 
-@pytest.fixture
+@pytest.fixture()
 def empty_kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
     """Give us a temporary, empty KeyValueStore.
 
@@ -19,7 +19,7 @@ def empty_kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
     yield KeyValueStore(database_path)
 
 
-@pytest.fixture
+@pytest.fixture()
 def kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
     """Give us a temporary KeyValueStore with some data.
 
