@@ -130,7 +130,7 @@ class Step:
         """
         if not isinstance(value, want):
             msg = f"wanted {want}, got {type(value)}"
-            raise ValueError(msg)
+            raise TypeError(msg)
 
 
 class StepType(Enum):

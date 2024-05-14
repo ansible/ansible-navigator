@@ -107,7 +107,7 @@ def inspect_all(container_engine: str) -> tuple[list[dict[str, Any]], str]:
     if images_list.stderr and not images_list.details:
         return [], images_list.stderr
     if not isinstance(images_list.details, Iterable):
-        raise RuntimeError
+        raise TypeError
     images = {image["image_id"]: image for image in images_list.details}
     image_ids = [image["image_id"] for image in images.values()]
     images_inspect_class = ImagesInspect(container_engine=container_engine, ids=image_ids)
