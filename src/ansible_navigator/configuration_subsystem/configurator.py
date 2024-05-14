@@ -182,7 +182,7 @@ class Configurator:
                     if self._params in (["settings", "--sample"], ["settings", "--gs"]):
                         return
                     msg = "Settings file cannot be empty."
-                    raise ValueError(msg)
+                    raise ValueError(msg)  # noqa: TRY301
             except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                 exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
                 self._exit_messages.append(ExitMessage(message=exit_msg))

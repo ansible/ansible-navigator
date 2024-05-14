@@ -66,7 +66,7 @@ class KeyValueStore(MutableMapping[str, str]):
         cursor = self.conn.cursor()
         rows = cursor.execute("SELECT COUNT(*) FROM kv").fetchone()[0]
         if not isinstance(rows, int):
-            raise RuntimeError
+            raise TypeError
         return rows if rows is not None else 0
 
     def iterkeys(self) -> Iterator[str]:

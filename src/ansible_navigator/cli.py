@@ -125,7 +125,7 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
     if args.mode == "stdout":
         try:
             result = run_action_stdout(args.app.replace("-", "_"), args)
-            return result
+            return result  # noqa: TRY300
         except KeyboardInterrupt:
             logger.warning("Dirty exit, killing the pid")
             os.kill(os.getpid(), signal.SIGTERM)

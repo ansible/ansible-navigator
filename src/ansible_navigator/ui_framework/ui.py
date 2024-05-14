@@ -229,10 +229,9 @@ class UserInterface(CursesWindow):
             else:
                 try:
                     self._menu_filter = re.compile(value)
-                except re.error as exc:
+                except re.error:
                     self._menu_filter = None
-                    self._logger.error("Regex for menu filter was invalid: %s", value)
-                    self._logger.exception(exc)
+                    self._logger.exception("Regex for menu filter was invalid: %s", value)
         return self._menu_filter
 
     def scroll(self, value: int | None = None) -> int:

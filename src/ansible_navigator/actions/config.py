@@ -350,7 +350,7 @@ class Action(ActionBase):
                     parsed[variable]["__current"] = current_as_str
                     parsed[variable]["current_value"] = current
                 except KeyError:
-                    self._logger.error("variable '%s' not found in list output")
+                    self._logger.exception("variable '%s' not found in list output")
                     return
             else:
                 self._logger.error("Unparsable dump entry: %s", line)

@@ -395,10 +395,10 @@ class Action(ActionBase):
                 columns=["__name"] + self._show_columns,
                 show_func=self._refresh,
             )
-            return entry
         except KeyError:
             # selected host removed from inventory
             return self.steps.back_one()
+        return entry
 
     def _refresh(self) -> None:
         """Refresh the current step, removing and replacing it."""
