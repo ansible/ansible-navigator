@@ -45,8 +45,7 @@ def test_apply_before_initial_saved() -> None:
 
 
 @patch("shutil.which", return_value="/path/to/container_engine")
-@pytest.mark.usefixtures("_mocked_func")
-def test_editor_command_from_editor(generate_config: Callable[..., Any]) -> None:
+def test_editor_command_from_editor(_mocked_func: Any, generate_config: Callable[..., Any]) -> None:
     """Ensure the editor_command defaults to EDITOR if set.
 
     :param generate_config: The configuration generator fixture

@@ -4,6 +4,7 @@ import shlex
 
 from copy import deepcopy
 from pathlib import Path
+from typing import Any
 from typing import Literal
 from typing import NamedTuple
 
@@ -105,8 +106,8 @@ from tests.defaults import FIXTURES_DIR
     ),
 )
 @patch("shutil.which", return_value="/path/to/container_engine")
-@pytest.mark.usefixtures("_mf1")
 def test_update_args_general(
+    _mf1: Any,
     monkeypatch: pytest.MonkeyPatch,
     given: list[str],
     argname: Literal[
@@ -139,8 +140,7 @@ def test_update_args_general(
 
 
 @patch("shutil.which", return_value="/path/to/container_engine")
-@pytest.mark.usefixtures("_mf1")
-def test_editor_command_default(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_editor_command_default(_mf1: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """Test editor with default.
 
     :param monkeypatch: The monkeypatch fixture
