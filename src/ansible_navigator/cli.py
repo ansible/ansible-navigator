@@ -125,12 +125,12 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
     if args.mode == "stdout":
         try:
             result = run_action_stdout(args.app.replace("-", "_"), args)
-            return result  # noqa: TRY300
         except KeyboardInterrupt:
             logger.warning("Dirty exit, killing the pid")
             os.kill(os.getpid(), signal.SIGTERM)
             return RunStdoutReturn(message="", return_code=1)
-    elif args.mode == "interactive":
+        return result
+    if args.mode == "interactive":
         try:
             clear_screen()
             wrapper(ActionRunner(args=args).run)
