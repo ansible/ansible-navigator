@@ -421,7 +421,7 @@ class Action(ActionBase):
                 data = json.load(fh)
         except json.JSONDecodeError as exc:
             self._logger.debug("json decode error: %s", str(exc))
-            self._logger.error("Unable to parse artifact file")
+            self._logger.exception("Unable to parse artifact file")
             return False
 
         version = data.get("version", "")
@@ -914,7 +914,7 @@ class Action(ActionBase):
                 error = (
                     f"Saving the artifact file failed, resulted in the following error: f{exc!s}"
                 )
-                self._logger.error(error)
+                self._logger.exception(error)
 
     def rerun(self) -> None:
         """Rerun the current playbook.

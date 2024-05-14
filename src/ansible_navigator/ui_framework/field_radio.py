@@ -61,7 +61,7 @@ class FieldRadio:
         """
         result = partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
         if not isinstance(result, Validation):
-            raise RuntimeError
+            raise TypeError
         return result
 
     def _validate(self, response: FieldRadio) -> Validation:

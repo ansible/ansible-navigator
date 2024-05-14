@@ -350,8 +350,6 @@ ignore = [
   'PYI034', # `__enter__` methods in classes like `TmuxSession` usually return `self` at runtime
   'PYI036', # The first argument in `__exit__` should be annotated with `object` or `type[BaseException] | None`
   'PYI041', # Use `float` instead of `int | float`
-  'RET501', # [*] Do not explicitly `return None` in function if it is the only possible return value
-  'RET503', # [*] Missing explicit `return` at the end of function able to return non-`None` value
   'RET504', # Unnecessary variable assignment before `return` statement
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation
@@ -374,13 +372,7 @@ ignore = [
   'TCH003', # Move standard library import `re.Pattern` into a type-checking block
   'TD001', # Invalid TODO tag: `FIXME`
   'TD002', # Missing author in TODO
-  'TD003', # Missing issue link on the line following this TODO
-  'TRY003', # Avoid specifying long messages outside the exception class
-  'TRY004', # Prefer `TypeError` exception for invalid type
-  'TRY300', # Consider moving this statement to an `else` block
-  'TRY301', # Abstract `raise` to an inner function
-  'TRY400', # Use `logging.exception` instead of `logging.error`
-  'TRY401' # Redundant exception object included in `logging.exception` call
+  'TD003' # Missing issue link on the line following this TODO
 ]
 select = ["ALL"]
 

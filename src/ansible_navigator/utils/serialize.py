@@ -211,7 +211,7 @@ def _json_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
             serialization_format="JSON",
         )
         file_handle.write(error_message)
-        logger.error(error_message)
+        logger.exception(error_message)
 
 
 def _json_dumps(dumpable: ContentType) -> str:
@@ -228,7 +228,7 @@ def _json_dumps(dumpable: ContentType) -> str:
             exception_str=str(exc),
             serialization_format="JSON",
         )
-        logger.error(error_message)
+        logger.exception(error_message)
         return error_message
 
 
@@ -266,7 +266,7 @@ def _yaml_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
             serialization_format="YAML",
         )
         file_handle.write(error_message)
-        logger.error(error_message)
+        logger.exception(error_message)
 
 
 def _yaml_dumps(dumpable: ContentType) -> str | None:
@@ -283,7 +283,7 @@ def _yaml_dumps(dumpable: ContentType) -> str | None:
             exception_str=str(exc),
             serialization_format="YAML",
         )
-        logger.error(error_message)
+        logger.exception(error_message)
         return error_message
 
 

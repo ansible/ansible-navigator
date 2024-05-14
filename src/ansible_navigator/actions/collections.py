@@ -330,7 +330,7 @@ class Action(ActionBase):
 
                     collection_contents.append(plugin)
             except (KeyError, JSONDecodeError) as exc:
-                self._logger.error("error loading plugin doc %s", details)
+                self._logger.exception("error loading plugin doc %s", details)
                 self._logger.debug("error was %s", str(exc))
 
         self._collection_cache.close()
@@ -521,10 +521,10 @@ class Action(ActionBase):
             parsed = json.loads(json_str)
             self._logger.debug("json loading output succeeded")
         except (JSONDecodeError, ValueError) as exc:
-            self._logger.error("Unable to extract collection json from stdout")
+            self._logger.exception("Unable to extract collection json from stdout")
             self._logger.debug("error json loading output: '%s'", str(exc))
             self._logger.debug(output)
-            return None
+            return
 
         for error in parsed["errors"]:
             self._logger.error("%s %s", error["path"], error["error"])
@@ -593,7 +593,7 @@ class Action(ActionBase):
             error += parsed["collection_scan_paths"]
             self._logger.warning(error)
 
-        return None
+        return
 
     def _get_collection_plugins_details(
         self, selected_collection: dict[str, Any]

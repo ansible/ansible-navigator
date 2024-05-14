@@ -43,9 +43,9 @@ def check_path(content: MutableMapping[Any, Any], path: str) -> bool:
     """
     try:
         get_with_path(content, path)
-        return True
     except (KeyError, TypeError):
         return False
+    return True
 
 
 def delete_with_path(content: MutableMapping[Any, Any], path: str) -> None:

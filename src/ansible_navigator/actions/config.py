@@ -318,7 +318,7 @@ class Action(ActionBase):
             self._logger.debug("yaml loading list output succeeded")
         except yaml.YAMLError as exc:
             self._logger.debug("error yaml loading list output: '%s'", str(exc))
-            return None
+            return
 
         regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
         for line in dump_output.splitlines():
@@ -350,11 +350,11 @@ class Action(ActionBase):
                     parsed[variable]["__current"] = current_as_str
                     parsed[variable]["current_value"] = current
                 except KeyError:
-                    self._logger.error("variable '%s' not found in list output")
-                    return None
+                    self._logger.exception("variable '%s' not found in list output")
+                    return
             else:
                 self._logger.error("Unparsable dump entry: %s", line)
-                return None
+                return
 
         for key, value in parsed.items():
             value["option"] = key
@@ -368,4 +368,4 @@ class Action(ActionBase):
 
         self._config = list(parsed.values())
         self._logger.debug("parsed and merged list and dump successfully")
-        return None
+        return

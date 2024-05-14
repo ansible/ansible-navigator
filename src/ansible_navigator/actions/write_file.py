@@ -47,7 +47,7 @@ class Action:
                     "Append operation failed because %s does not exist, force with !",
                     filename,
                 )
-                return None
+                return
             file_mode = "a"
         else:
             if os.path.exists(filename) and not match["force"]:
@@ -55,7 +55,7 @@ class Action:
                     "Write operation failed because %s exists, force with !",
                     filename,
                 )
-                return None
+                return
             file_mode = "w"
 
         if interaction.content:
@@ -102,4 +102,4 @@ class Action:
                 serialization_format=SerializationFormat.JSON,
             )
         self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, file_mode, write_as)
-        return None
+        return
