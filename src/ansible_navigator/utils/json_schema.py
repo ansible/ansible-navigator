@@ -81,7 +81,7 @@ def validate(schema: str | dict[str, Any], data: dict[str, Any]) -> list[JsonSch
         schema = json.loads(schema)
     if isinstance(schema, bool):
         msg = "Unexpected schema data."
-        raise RuntimeError(msg)
+        raise TypeError(msg)
     validator = validator_for(schema)
     try:
         validator.check_schema(schema)

@@ -495,9 +495,9 @@ def retrieve_collections_paths() -> dict[Any, Any]:
     if parsed:
         try:
             current = yaml.load(parsed.groupdict()["current"], Loader=SafeLoader)
-            return {"result": current}
         except (YAMLError, KeyError) as exc:
             return {"error": str(exc)}
+        return {"result": current}
     return {"error": f"corrupt current collection path: {proc_out['stdout']}"}
 
 
@@ -583,9 +583,9 @@ def run_command(cmd: list[str]) -> dict[str, str]:
             text=True,
             shell=True,
         )
-        return {"stdout": proc_out.stdout}
     except subprocess.CalledProcessError as exc:
         return {"error": str(exc)}
+    return {"stdout": proc_out.stdout}
 
 
 def main() -> dict[Any, Any]:

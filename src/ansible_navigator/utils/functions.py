@@ -156,7 +156,7 @@ def escape_moustaches(obj: Mapping[Any, Any]) -> Mapping[Any, Any]:
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     result = dispatch(obj, replacements)
     if not isinstance(result, dict):
-        raise RuntimeError
+        raise TypeError
     return result
 
 
@@ -317,7 +317,7 @@ def now_iso(time_zone: str) -> str:
     try:
         return datetime.datetime.now(tz=zoneinfo.ZoneInfo(time_zone)).isoformat()
     except zoneinfo.ZoneInfoNotFoundError:
-        logger.error("The time zone '%s' could not be found. Using UTC.", time_zone)
+        logger.exception("The time zone '%s' could not be found. Using UTC.", time_zone)
         return datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
 
 
@@ -449,7 +449,7 @@ def templar(string: str, template_vars: Mapping[Any, Any]) -> tuple[list[str], A
         errors.append(f"Error while templating string: '{string}'")
         errors.append(f"The error was: {exc!s}")
         for error in errors:
-            logger.error(error)
+            logger.exception(error)
         return errors, string
 
     # We may have gotten the __repr__ of a python object
@@ -487,7 +487,7 @@ def timestamp_to_iso(timestamp: float, time_zone: str) -> str | None:
             tz=zoneinfo.ZoneInfo(time_zone),
         ).isoformat()
     except zoneinfo.ZoneInfoNotFoundError:
-        logger.error("The time zone '%s' could not be found. Returning None", time_zone)
+        logger.exception("The time zone '%s' could not be found. Returning None", time_zone)
         return None
 
 

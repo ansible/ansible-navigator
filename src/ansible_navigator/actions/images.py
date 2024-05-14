@@ -533,10 +533,10 @@ class Action(ActionBase):
             parsed = json.loads(json_str)
             self._logger.debug("json loading output succeeded")
         except (json.decoder.JSONDecodeError, ValueError) as exc:
-            self._logger.error("Unable to extract introspection from stdout")
+            self._logger.exception("Unable to extract introspection from stdout")
             self._logger.debug("error json loading output: '%s'", str(exc))
             self._logger.debug(output)
-            self._logger.error(
+            self._logger.exception(
                 "Image introspection failed (parsed), the return value was: %s",
                 output[0:1000],
             )

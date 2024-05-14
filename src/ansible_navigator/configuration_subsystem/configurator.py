@@ -163,6 +163,11 @@ class Configurator:
 
         :raises ValueError: If the settings file is empty
         """
+
+        def raise_value_error(message: str) -> None:
+            """Raise a ValueError with the given message."""
+            raise ValueError(message)
+
         settings_filesystem_path = self._config.internals.settings_file_path
 
         if not isinstance(settings_filesystem_path, str):
@@ -181,8 +186,7 @@ class Configurator:
                     # the file will be empty, but we shouldn't exit.
                     if self._params in (["settings", "--sample"], ["settings", "--gs"]):
                         return
-                    msg = "Settings file cannot be empty."
-                    raise ValueError(msg)
+                    raise_value_error("Settings file cannot be empty.")
             except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                 exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
                 self._exit_messages.append(ExitMessage(message=exit_msg))

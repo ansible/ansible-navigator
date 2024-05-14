@@ -311,7 +311,7 @@ class ApplicationConfiguration:
         """
         command = self._get_by_name(name, "subcommands")
         if not isinstance(command, SubCommand):
-            raise RuntimeError
+            raise TypeError
         return command
 
 
