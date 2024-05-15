@@ -91,7 +91,7 @@ class Internals:
 
     ansible_configuration: AnsibleConfiguration = field(default_factory=AnsibleConfiguration)
     action_packages: tuple[str] = ("ansible_navigator.actions",)
-    cache_path: Path = generate_cache_path(APP_NAME.replace("_", "-"))
+    cache_path: Path = generate_cache_path(APP_NAME.replace("_", "-"))  # noqa: RUF009
     collection_doc_cache: C | KeyValueStore = C.NOT_SET
     initializing: bool = False
     """This is an initial run (app starting for the first time)."""
