@@ -11,9 +11,9 @@ from tests.integration._common import Parameter
 from tests.integration.conftest import CliRunner
 
 
-@pytest.mark.parametrize("cwd", [True, False], ids=["adjacent", "not_adjacent"])
-@pytest.mark.parametrize("exec_env", [True, False], ids=["ee", "no_ee"])
-@pytest.mark.parametrize("stdout_format", ["json", "yaml"], ids=["json", "yaml"])
+@pytest.mark.parametrize("cwd", (True, False), ids=["adjacent", "not_adjacent"])
+@pytest.mark.parametrize("exec_env", (True, False), ids=["ee", "no_ee"])
+@pytest.mark.parametrize("stdout_format", ("json", "yaml"), ids=["json", "yaml"])
 def test_stdout_output(
     cwd: bool,
     exec_env: bool,

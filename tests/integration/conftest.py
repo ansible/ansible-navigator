@@ -25,7 +25,7 @@ from ._common import generate_test_log_dir
 EXECUTION_MODES = ["interactive", "stdout"]
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def action_run_stdout() -> Generator[type[ActionRunTest], None, None]:
     """Create a fixture for ActionRunTest.
 
@@ -135,7 +135,7 @@ class CliRunner:
         return cmd_in_tty(self.to_cmdline(), cwd=self.cwd)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def cli_runner(request: pytest.FixtureRequest) -> CliRunner:
     """Create a fixture for the cli runner.
 
