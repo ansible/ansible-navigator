@@ -99,7 +99,7 @@ def place_at_path(
     behaviors: tuple[MergeBehaviors, ...],
     content: dict[Any, Any],
     path: str,
-    value: bool | int | list[Any] | float | str | dict[Any, Any],
+    value: bool | list[Any] | float | str | dict[Any, Any],
 ) -> dict[Any, Any]:
     """Place a value at a path in a dictionary.
 

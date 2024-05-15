@@ -339,11 +339,6 @@ ignore = [
   'PTH123', # `open()` should be replaced by `Path.open()`
   'PTH204', # `os.path.getmtime` should be replaced by `Path.stat().st_mtime`
   'PTH207', # Replace `glob` with `Path.glob` or `Path.rglob`
-  'PYI021', # Docstrings should not be included in stubs
-  'PYI024', # Use `typing.NamedTuple` instead of `collections.namedtuple`
-  'PYI034', # `__enter__` methods in classes like `TmuxSession` usually return `self` at runtime
-  'PYI036', # The first argument in `__exit__` should be annotated with `object` or `type[BaseException] | None`
-  'PYI041', # Use `float` instead of `int | float`
   'RET504', # Unnecessary variable assignment before `return` statement
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation

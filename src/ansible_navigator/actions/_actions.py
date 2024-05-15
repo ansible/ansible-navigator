@@ -9,10 +9,10 @@ import logging
 import os
 import re
 
-from collections import namedtuple
 from collections.abc import Callable
 from collections.abc import Generator
 from typing import Any
+from typing import NamedTuple
 
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.ui_framework import error_notification
@@ -20,10 +20,22 @@ from ansible_navigator.ui_framework import error_notification
 
 logger = logging.getLogger(__name__)
 
-# Basic structure for storing information about one action
-ActionT = namedtuple("ActionT", ("name", "cls", "kegex"))
 
-Kegex = namedtuple("Kegex", ("name", "kegex"))
+# Basic structure for storing information about one action
+class ActionT(NamedTuple):
+    """NamedTuple representing an action."""
+
+    name: str
+    cls: str
+    kegex: str
+
+
+class Kegex(NamedTuple):
+    """NamedTuple representing a kegex."""
+
+    name: str
+    kegex: str
+
 
 # Dictionary with information about all registered actions
 _ACTIONS: dict[str, dict[str, Any]] = {}
@@ -56,7 +68,7 @@ def register(cls: Any) -> Any:
     """
     package, _, action = cls.__module__.rpartition(".")
     pkg_info = _ACTIONS.setdefault(package, {})
-    pkg_info[action] = ActionT(name=action, cls=cls, kegex=re.compile(cls.KEGEX))
+    pkg_info[action] = ActionT(name=action, cls=cls, kegex=re.compile(cls.KEGEX))  # type: ignore[arg-type]
     return cls
 
 

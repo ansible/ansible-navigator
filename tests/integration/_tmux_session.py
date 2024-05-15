@@ -107,7 +107,7 @@ class TmuxSession:
                     raise
                 count += 1
 
-    def __enter__(self) -> TmuxSession:
+    def __enter__(self) -> TmuxSession:  # noqa: PYI034
         """Enter the tmux session.
 
         :return: The tmux session
@@ -206,7 +206,7 @@ class TmuxSession:
 
     def __exit__(
         self,
-        exc_type: BaseException | None,
+        exc_type: type[BaseException] | None,
         exc_value: BaseException | None,
         exc_traceback: types.TracebackType | None,
     ) -> None:
