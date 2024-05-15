@@ -35,7 +35,7 @@ def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReq
 
 @pytest.mark.parametrize(
     "aliases_allowed",
-    [True, False],
+    (True, False),
     ids=["pyyaml-original", "no-aliases-or-anchors"],
     indirect=("aliases_allowed",),
 )

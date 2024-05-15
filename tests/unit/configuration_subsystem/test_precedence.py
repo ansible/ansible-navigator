@@ -48,9 +48,9 @@ def isfile(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
     return True
 
 
-@pytest.mark.usefixtures("ansible_version")
+@pytest.mark.usefixtures("_ansible_version")
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
+@pytest.mark.parametrize(("cli_entry", "expected"), CLI_DATA)
 def test_all_entries_reflect_cli_given_env_vars(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -102,10 +102,10 @@ def test_all_entries_reflect_cli_given_env_vars(
             assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry.name
 
 
-@pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS)
+@pytest.mark.usefixtures("_ansible_version")
+@pytest.mark.parametrize(("settings", "settings_file_type"), SETTINGS)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
+@pytest.mark.parametrize(("cli_entry", "expected"), CLI_DATA)
 def test_all_entries_reflect_cli_given_settings(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -158,10 +158,10 @@ def test_all_entries_reflect_cli_given_settings(
                 assert entry.value.source is C.USER_CFG, entry.name
 
 
-@pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, source_other", SETTINGS)
+@pytest.mark.usefixtures("_ansible_version")
+@pytest.mark.parametrize(("settings", "source_other"), SETTINGS)
 @pytest.mark.parametrize("base", (None, BASE_SHORT_CLI, BASE_LONG_CLI), ids=id_for_base)
-@pytest.mark.parametrize("cli_entry, expected", CLI_DATA)
+@pytest.mark.parametrize(("cli_entry", "expected"), CLI_DATA)
 def test_all_entries_reflect_cli_given_settings_and_env_vars(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -220,7 +220,7 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
             assert entry.value.source is C.ENVIRONMENT_VARIABLE, entry.name
 
 
-@pytest.mark.usefixtures("ansible_version")
+@pytest.mark.usefixtures("_ansible_version")
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_all_entries_reflect_default(
     monkeypatch: pytest.MonkeyPatch,
@@ -252,9 +252,9 @@ def test_all_entries_reflect_default(
             assert configured_entry.value.current == entry.value.default, configured_entry
 
 
-@pytest.mark.usefixtures("ansible_version")
-@pytest.mark.parametrize("settings, settings_file_type", SETTINGS)
-@pytest.mark.parametrize("entry, value, expected", ENV_VAR_DATA)
+@pytest.mark.usefixtures("_ansible_version")
+@pytest.mark.parametrize(("settings", "settings_file_type"), SETTINGS)
+@pytest.mark.parametrize(("entry", "value", "expected"), ENV_VAR_DATA)
 def test_all_entries_reflect_env_var_given_settings(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
@@ -303,7 +303,7 @@ def test_all_entries_reflect_env_var_given_settings(
                 assert other_entry.value.source is C.USER_CFG, other_entry.name
 
 
-@pytest.mark.usefixtures("ansible_version")
+@pytest.mark.usefixtures("_ansible_version")
 @pytest.mark.parametrize("entry", NavigatorConfiguration.entries, ids=id_for_name)
 def test_all_entries_reflect_settings_given_settings(
     monkeypatch: pytest.MonkeyPatch,

@@ -144,7 +144,7 @@ def test_will_have(valid_container_engine: str, pullable_image: str, data: TstPu
 
 @pytest.mark.parametrize(
     ("image", "expected_tag"),
-    [
+    (
         pytest.param("foo", "latest", id="simple-image-name:no-tag-specified"),
         pytest.param("foo:bar", "bar", id="simple-image-name:with-tag"),
         pytest.param(
@@ -157,7 +157,7 @@ def test_will_have(valid_container_engine: str, pullable_image: str, data: TstPu
             "latest",
             id="complex-image-URL:with-port-and-tag",
         ),
-    ],
+    ),
 )
 def test_tag_parsing(image: str, expected_tag: str) -> None:
     """Test that we parse image tags in a reasonable way.

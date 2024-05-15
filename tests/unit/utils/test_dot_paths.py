@@ -309,7 +309,7 @@ def test_place_at_path_raises(scenario: Scenario) -> None:
 
     :param scenario: Test data.
     """
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011
         place_at_path(
             behaviors=scenario.behaviors,
             content=scenario.content,

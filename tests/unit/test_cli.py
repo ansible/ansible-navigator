@@ -20,7 +20,7 @@ from tests.defaults import FIXTURES_DIR
 
 
 @pytest.mark.parametrize(
-    "given, argname, expected",
+    ("given", "argname", "expected"),
     (
         pytest.param(
             ["doc", "-t", "callback", "oneline"],
