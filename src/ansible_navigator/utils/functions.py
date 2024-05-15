@@ -263,7 +263,7 @@ def generate_cache_path(app_name: str) -> Path:
     return Path(cache_home) / app_name
 
 
-def divmod_int(numerator: int | float, denominator: int | float) -> tuple[int, int]:
+def divmod_int(numerator: float, denominator: float) -> tuple[int, int]:
     """Return the result of divmod, as a tuple of integers.
 
     :param numerator: Numerator for divmod
@@ -274,7 +274,7 @@ def divmod_int(numerator: int | float, denominator: int | float) -> tuple[int, i
     return int(quotient), int(remainder)
 
 
-def human_time(seconds: int | float) -> str:
+def human_time(seconds: float) -> str:
     """Convert seconds into human readable 00d00h00m00s format.
 
     :param seconds: Time in seconds
@@ -387,7 +387,7 @@ def remove_dbl_un(string: str) -> str:
     return string
 
 
-def round_half_up(number: float | int) -> int:
+def round_half_up(number: float) -> int:
     """Round a number to the nearest integer with ties going away from zero.
 
     This is different the round() where exact halfway cases are rounded to the nearest
