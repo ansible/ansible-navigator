@@ -66,7 +66,7 @@ def get_color(word: str) -> int:
     :param word: Keyword to match color.
     :returns: Color value
     """
-    return next(  # noqa: E731
+    return next(
         (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)),
         0,
     )

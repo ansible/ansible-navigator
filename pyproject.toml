@@ -308,7 +308,6 @@ ignore = [
   'PGH003', # Use specific rule codes when ignoring type issues
   'PIE810', # [*] Call `startswith` once with a `tuple`
   'PD011', # https://github.com/astral-sh/ruff/issues/2229
-  'PLC1901', # `self.fs_source == ""` can be simplified to `not self.fs_source` as an empty string is falsey
   'PLR0911', # Too many return statements (8 > 6)
   'PLR0912', # Too many branches (13 > 12)
   'PLR0913', # Too many arguments to function call (7 > 5)
@@ -343,13 +342,10 @@ ignore = [
   'RET504', # Unnecessary variable assignment before `return` statement
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation
-  'RUF009', # Do not perform function call `PresentableCliParameters` in dataclass defaults
   'RUF012', # Mutable class attributes should be annotated with `typing.ClassVar`
-  'RUF100', # [*] Unused `noqa` directive (unused: `E731`)
   'S101', # Use of `assert` detected
   'S103', # `os.chmod` setting a permissive mask `0o777` on file or directory
   'S108', # Probable insecure usage of temporary file or directory: "/tmp"
-  'S110', # `try`-`except`-`pass` detected, consider logging the exception
   'S311', # Standard pseudo-random generators are not suitable for cryptographic purposes
   'S602', # `subprocess` call with `shell=True` identified, security issue
   'S603', # `subprocess` call: check for execution of untrusted input
