@@ -30,7 +30,7 @@ class DuplicateMountError(RuntimeError):
 
 
 @pytest.mark.parametrize("doc_cache_path", DOC_CACHE_PATHS)
-@pytest.mark.usefixtures("patch_curses")
+@pytest.mark.usefixtures("_patch_curses")
 def test_for_duplicates_sources(
     doc_cache_path: TstData,
     monkeypatch: pytest.MonkeyPatch,

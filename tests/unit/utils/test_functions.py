@@ -69,7 +69,7 @@ def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 @pytest.mark.parametrize(
-    "set_env, file_path, anticipated_result",
+    ("set_env", "file_path", "anticipated_result"),
     (
         (True, os.path.abspath(__file__), os.path.abspath(__file__)),
         (True, "", None),
@@ -105,7 +105,7 @@ def test_env_var_is_file_path(
 
 
 @pytest.mark.parametrize(
-    "value, anticipated_result",
+    ("value", "anticipated_result"),
     (
         ([1, 2, 3], [1, 2, 3]),
         ([1, 2, [3]], [1, 2, 3]),
@@ -291,7 +291,7 @@ def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "data,output",
+    ("data", "output"),
     (
         pytest.param({}, {}, id="0"),
         pytest.param(None, None, id="1"),
