@@ -9,12 +9,12 @@ This module is based on an idea that ``pytest`` uses for self-testing:
 * https://github.com/pytest-dev/pytest/blob/d18c75b/testing/test_meta.py
 * https://twitter.com/codewithanthony/status/1229445110510735361
 * https://github.com/aio-libs/aiohttp/blob/master/tests/test_circular_imports.py
-"""  # noqa: E501
+"""
 from __future__ import annotations
 
 import os
 import pkgutil
-import subprocess  # noqa: S404 Required due to the nature of this test
+import subprocess  # Required due to the nature of this test
 import sys
 
 from collections.abc import Generator
@@ -108,4 +108,4 @@ def test_no_warnings(import_path: str) -> None:
         f"import {import_path!s}",
     )
 
-    subprocess.check_call(imp_cmd)  # noqa: S603 Input is trusted, generated above, not external
+    subprocess.check_call(imp_cmd)  # Input is trusted, generated above, not external

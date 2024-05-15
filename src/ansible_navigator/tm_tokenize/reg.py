@@ -24,7 +24,7 @@ _BACKREF_RE = re.compile(r"((?<!\\)(?:\\\\)*)\\([0-9]+)")
 
 
 _FLAGS = {
-    # (first_line, boundary)  # noqa: E800
+    # (first_line, boundary)
     (False, False): (
         onigurumacffi.OnigSearchOption.NOT_END_STRING
         | onigurumacffi.OnigSearchOption.NOT_BEGIN_STRING
