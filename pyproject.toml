@@ -346,7 +346,6 @@ ignore = [
   'S101', # Use of `assert` detected
   'S103', # `os.chmod` setting a permissive mask `0o777` on file or directory
   'S108', # Probable insecure usage of temporary file or directory: "/tmp"
-  'S110', # `try`-`except`-`pass` detected, consider logging the exception
   'S311', # Standard pseudo-random generators are not suitable for cryptographic purposes
   'S602', # `subprocess` call with `shell=True` identified, security issue
   'S603', # `subprocess` call: check for execution of untrusted input
