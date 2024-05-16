@@ -12,11 +12,15 @@ import warnings
 
 from pathlib import Path
 from timeit import default_timer as timer
+from typing import TYPE_CHECKING
 from typing import TypedDict
 
 import libtmux
 import libtmux.exc
-import pytest
+
+
+if TYPE_CHECKING:
+    import pytest
 
 from ._common import generate_test_log_dir
 

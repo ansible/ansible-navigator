@@ -353,7 +353,6 @@ ignore = [
   'SLF001', # Private member accessed: `_ui`
   'T201', # `print` found
   'TCH001', # Move application import `ansible_navigator.configuration_subsystem.definitions.SettingsEntry` into a type-checking block
-  'TCH002', # Move third-party import `ansible_runner.Runner` into a type-checking block
   'TCH003', # Move standard library import `re.Pattern` into a type-checking block
   'TD001', # Invalid TODO tag: `FIXME`
   'TD002', # Missing author in TODO

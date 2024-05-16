@@ -7,11 +7,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from pytest_mock import MockerFixture
-
 
 if TYPE_CHECKING:
     from unittest.mock import MagicMock  # pylint: disable=preferred-module
+
+    from pytest_mock import MockerFixture
 
 
 class RunnerTestError(Exception):

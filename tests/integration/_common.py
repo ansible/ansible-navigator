@@ -11,9 +11,12 @@ import sys
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 
-import pytest
+
+if TYPE_CHECKING:
+    import pytest
 
 from tests import defaults
 

@@ -7,8 +7,11 @@ import os
 import subprocess
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import pytest
+
+if TYPE_CHECKING:
+    import pytest
 
 from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
 from ansible_navigator.utils.functions import remove_ansi

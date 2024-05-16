@@ -9,11 +9,14 @@ import re
 from copy import deepcopy
 from dataclasses import dataclass
 from re import Pattern
+from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
 
-from pytest_mock import MockerFixture
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 from ansible_navigator.actions.run import Action as action
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration

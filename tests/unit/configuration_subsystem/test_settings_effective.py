@@ -7,9 +7,12 @@ import operator
 from copy import deepcopy
 from functools import reduce
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 
-import pytest
+
+if TYPE_CHECKING:
+    import pytest
 
 from ansible_navigator.configuration_subsystem import Configurator
 from ansible_navigator.configuration_subsystem import Constants
