@@ -288,7 +288,7 @@ class Configurator:
     def _apply_cli_params(self) -> None:
         """Apply the cli params."""
         parser = Parser(self._config).parser
-        setattr(parser, "error", self._argparse_error_handler)
+        setattr(parser, "error", self._argparse_error_handler)  # noqa: B010
         try:
             # split the _params on double-dash
             index = self._params.index("--")

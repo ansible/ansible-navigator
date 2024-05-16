@@ -53,7 +53,7 @@ class ColorSchema:
         self._logger = logging.getLogger(__name__)
         self._schema = schema
 
-    @functools.lru_cache(maxsize=128)
+    @functools.lru_cache(maxsize=128)  # noqa: B019
     def get_color_and_style(self, scope: str) -> tuple[RgbTuple | None, str | None]:
         """Get a color from the schema, traverse all to aggregate color and style.
 
@@ -115,7 +115,7 @@ class Colorize:
         lines = tuple(ansi_to_curses(line) for line in doc.splitlines())
         return CursesLines(lines)
 
-    @functools.lru_cache(maxsize=100)
+    @functools.lru_cache(maxsize=100)  # noqa: B019
     def render(self, doc: str, scope: str) -> list[list[SimpleLinePart]]:
         """Render text lines into lines of columns and colors.
 

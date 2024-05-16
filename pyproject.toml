@@ -281,12 +281,7 @@ ignore = [
   'ARG003', # Unused class method argument: `value`
   'ARG004', # Unused static method argument: `config`
   'ARG005', # Unused lambda argument: `args`
-  'B005', # Using `.strip()` with multi-character strings is misleading the reader
   'B006', # Do not use mutable data structures for argument defaults
-  'B010', # [*] Do not call `setattr` with a constant attribute value. It is not any safer than normal property access.
-  'B018', # Found useless attribute access. Either assign it to a variable or remove it.
-  'B019', # Use of `functools.lru_cache` or `functools.cache` on methods can lead to memory leaks
-  'B028', # No explicit `stacklevel` keyword argument found
   'C408', # [*] Unnecessary `tuple` call (rewrite as a literal)
   'C409', # [*] Unnecessary `list` literal passed to `tuple()` (rewrite as a `tuple` literal)
   'C414', # [*] Unnecessary `list` call within `sorted()`
