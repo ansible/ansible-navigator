@@ -45,7 +45,7 @@ class FormHandlerOptions(CursesWindow):
             if self._ui_config.color is False:
                 text = (
                     f"[{option.text.capitalize()}]" if idx == active else option.text + "  "
-                )  # clear the [], for else  # noqa: E501
+                )  # clear the [], for else
             else:
                 text = option.text
             clp_text = CursesLinePart(len(option_code) + 1, text, color, decoration)

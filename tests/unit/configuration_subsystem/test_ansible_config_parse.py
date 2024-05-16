@@ -166,7 +166,7 @@ def test_invalid_configurator(
     assert "12345" in exit_messages[3].message
 
 
-@pytest.mark.usefixtures("ansible_version")
+@pytest.mark.usefixtures("_ansible_version")
 @ee_states
 def test_config_none(ee_enabled: bool) -> None:
     """Confirm a invalid ansible.cfg raises errors.

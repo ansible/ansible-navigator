@@ -308,7 +308,6 @@ ignore = [
   'PGH003', # Use specific rule codes when ignoring type issues
   'PIE810', # [*] Call `startswith` once with a `tuple`
   'PD011', # https://github.com/astral-sh/ruff/issues/2229
-  'PLC1901', # `self.fs_source == ""` can be simplified to `not self.fs_source` as an empty string is falsey
   'PLR0911', # Too many return statements (8 > 6)
   'PLR0912', # Too many branches (13 > 12)
   'PLR0913', # Too many arguments to function call (7 > 5)
@@ -317,15 +316,7 @@ ignore = [
   'PLR5501', # Consider using `elif` instead of `else` then `if` to remove one indentation level
   'PLW0603', # Using the global statement to update `DIAGNOSTIC_FAILURES` is discouraged
   'PLW2901', # `for` loop variable `info_name` overwritten by assignment target
-  'PT001', # [*] Use `@pytest.fixture()` over `@pytest.fixture`
-  'PT003', # [*] `scope='function'` is implied in `@pytest.fixture()`
-  'PT004', # Fixture `patch_curses` does not return anything, add leading underscore
   'PT005', # Fixture `_settings_samples` returns a value, remove leading underscore
-  'PT006', # [*] Wrong name(s) type in `@pytest.mark.parametrize`, expected `tuple`
-  'PT007', # Wrong values type in `@pytest.mark.parametrize` expected `tuple` of `tuple`
-  'PT009', # [*] Use a regular `assert` instead of unittest-style `assertIn`
-  'PT011', # `pytest.raises(ValueError)` is too broad, set the `match` parameter or use a more specific exception
-  'PT012', # `pytest.raises()` block should contain a single simple statement
   'PT019', # Fixture `_mocked_func` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
   'PT022', # [*] No teardown in fixture `cmd_in_tty`, use `return` instead of `yield`
   'PTH100', # `os.path.abspath()` should be replaced by `Path.resolve()`
@@ -347,21 +338,13 @@ ignore = [
   'PTH123', # `open()` should be replaced by `Path.open()`
   'PTH204', # `os.path.getmtime` should be replaced by `Path.stat().st_mtime`
   'PTH207', # Replace `glob` with `Path.glob` or `Path.rglob`
-  'PYI021', # Docstrings should not be included in stubs
-  'PYI024', # Use `typing.NamedTuple` instead of `collections.namedtuple`
-  'PYI034', # `__enter__` methods in classes like `TmuxSession` usually return `self` at runtime
-  'PYI036', # The first argument in `__exit__` should be annotated with `object` or `type[BaseException] | None`
-  'PYI041', # Use `float` instead of `int | float`
   'RET504', # Unnecessary variable assignment before `return` statement
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation
-  'RUF009', # Do not perform function call `PresentableCliParameters` in dataclass defaults
   'RUF012', # Mutable class attributes should be annotated with `typing.ClassVar`
-  'RUF100', # [*] Unused `noqa` directive (unused: `E731`)
   'S101', # Use of `assert` detected
   'S103', # `os.chmod` setting a permissive mask `0o777` on file or directory
   'S108', # Probable insecure usage of temporary file or directory: "/tmp"
-  'S110', # `try`-`except`-`pass` detected, consider logging the exception
   'S311', # Standard pseudo-random generators are not suitable for cryptographic purposes
   'S602', # `subprocess` call with `shell=True` identified, security issue
   'S603', # `subprocess` call: check for execution of untrusted input

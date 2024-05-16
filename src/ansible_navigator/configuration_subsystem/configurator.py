@@ -4,19 +4,16 @@ from __future__ import annotations
 
 import logging
 import os
-
 from copy import deepcopy
 
-from ansible_navigator.utils.definitions import ExitMessage
-from ansible_navigator.utils.definitions import ExitPrefix
-from ansible_navigator.utils.definitions import LogMessage
-from ansible_navigator.utils.functions import oxfordcomma
-from ansible_navigator.utils.functions import shlex_join
+from ansible_navigator.utils.definitions import (ExitMessage, ExitPrefix,
+                                                 LogMessage)
+from ansible_navigator.utils.functions import oxfordcomma, shlex_join
 from ansible_navigator.utils.json_schema import validate
-from ansible_navigator.utils.serialize import SafeLoader
-from ansible_navigator.utils.serialize import yaml
+from ansible_navigator.utils.serialize import SafeLoader, yaml
 from ansible_navigator.utils.version_migration.definitions import MigrationType
-from ansible_navigator.utils.version_migration.migrate import run_all_migrations
+from ansible_navigator.utils.version_migration.migrate import \
+    run_all_migrations
 
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C
@@ -163,6 +160,11 @@ class Configurator:
 
         :raises ValueError: If the settings file is empty
         """
+
+        def raise_value_error(message: str) -> None:
+            """Raise a ValueError with the given message."""
+            raise ValueError(message)
+
         settings_filesystem_path = self._config.internals.settings_file_path
 
         if not isinstance(settings_filesystem_path, str):
@@ -181,8 +183,7 @@ class Configurator:
                     # the file will be empty, but we shouldn't exit.
                     if self._params in (["settings", "--sample"], ["settings", "--gs"]):
                         return
-                    msg = "Settings file cannot be empty."
-                    raise ValueError(msg)  # noqa: TRY301
+                    raise_value_error("Settings file cannot be empty.")
             except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                 exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
                 self._exit_messages.append(ExitMessage(message=exit_msg))

@@ -35,7 +35,10 @@ class SuspendCurses:
         curses.endwin()
 
     def __exit__(
-        self, exc_type: BaseException | None, exc_val: BaseException, traceback: TracebackType
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         """Open the curses window.
 

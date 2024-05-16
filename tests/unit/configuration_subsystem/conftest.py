@@ -107,8 +107,8 @@ def fixture_generate_config() -> Callable[..., GenerateConfigResponse]:
     return _generate_config
 
 
-@pytest.fixture
-def ansible_version(monkeypatch: pytest.MonkeyPatch) -> None:
+@pytest.fixture()
+def _ansible_version(monkeypatch: pytest.MonkeyPatch) -> None:
     """Path the ansible --version call to avoid the subprocess calls.
 
     :param monkeypatch: Fixture for patching

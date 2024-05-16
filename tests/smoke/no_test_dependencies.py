@@ -110,14 +110,10 @@ class Test(unittest.TestCase):
             assert isinstance(command, NavigatorCommand)
             with self.subTest():
                 print(command.command)
-                self.assertIn(
-                    command.find,
-                    command.stdout,
-                    msg=(
-                        f"command: {command.command},"
-                        f" stdout: {command.stdout},"
-                        f" stderr: {command.stderr}"
-                    ),
+                assert command.find in command.stdout, (
+                    f"command: {command.command}, "
+                    f"stdout: {command.stdout}, "
+                    f"stderr: {command.stderr}"
                 )
 
 

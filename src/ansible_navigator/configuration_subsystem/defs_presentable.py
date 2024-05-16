@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from dataclasses import field
 from typing import Any
 from typing import ClassVar
 from typing import NewType
@@ -82,7 +83,7 @@ class PresentableSettingsEntry(ContentBase[Any]):
     """A list of subcommands where this entry is available"""
     version_added: str
     """The version this entry was added in"""
-    cli_parameters: PresentableCliParameters = PresentableCliParameters()
+    cli_parameters: PresentableCliParameters = field(default_factory=PresentableCliParameters)
     """The CLI parameters, long and short"""
 
     @property
