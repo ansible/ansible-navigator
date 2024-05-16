@@ -260,6 +260,11 @@ exclude = ["tests/fixtures/**", ".git"]
 
 [tool.ruff.lint]
 ignore = [
+  'ERA001', # [*] Found commented-out code
+  'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
+  'PLW2901', # `for` loop variable `info_name` overwritten by assignment target
+  "RET504", # Unnecessary variable assignment before `return` statement
+  # temporary disabled until we fix them:
   'ANN001', # Missing type annotation for function argument `output`
   'ANN002', # Missing type annotation for `*args`
   'ANN003', # Missing type annotation for `**kwargs`
@@ -291,14 +296,11 @@ ignore = [
   'D101', # Missing docstring in public class
   'D102', # Missing docstring in public method
   'D103', # Missing docstring in public function
-  'E501', # line-too-long, already covered by black
-  'ERA001', # [*] Found commented-out code
   'FBT001', # Boolean positional arg in function definition
   'FBT002', # Boolean default value in function definition
   'FBT003', # Boolean positional value in function call
   'FIX001', # Line contains FIXME
   'FIX002', # Line contains TODO
-  'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
   'N802', # Function name `formatTime` should be lowercase
   'N806', # Variable `FType` in function should be lowercase
   'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`
@@ -314,9 +316,7 @@ ignore = [
   'PLR0915', # Too many statements (58 > 50)
   'PLR2004', # Magic value used in comparison, consider replacing 2 with a constant variable
   'PLR5501', # Consider using `elif` instead of `else` then `if` to remove one indentation level
-  'PLW0120', # `else` clause on loop without a `break` statement; remove the `else` and de-indent all the code inside it
   'PLW0603', # Using the global statement to update `DIAGNOSTIC_FAILURES` is discouraged
-  'PLW2901', # `for` loop variable `info_name` overwritten by assignment target
   'PT005', # Fixture `_settings_samples` returns a value, remove leading underscore
   'PT019', # Fixture `_mocked_func` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
   'PT022', # [*] No teardown in fixture `cmd_in_tty`, use `return` instead of `yield`
@@ -339,7 +339,6 @@ ignore = [
   'PTH123', # `open()` should be replaced by `Path.open()`
   'PTH204', # `os.path.getmtime` should be replaced by `Path.stat().st_mtime`
   'PTH207', # Replace `glob` with `Path.glob` or `Path.rglob`
-  'RET504', # Unnecessary variable assignment before `return` statement
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation
   'RUF012', # Mutable class attributes should be annotated with `typing.ClassVar`

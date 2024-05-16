@@ -20,9 +20,6 @@ class BaseScenario:
     name: str
 
 
-_AUTO_ID_COUNTER = 0
-
-
 def id_func(param: Any) -> str:
     """Generate id for tests.
 
@@ -30,7 +27,7 @@ def id_func(param: Any) -> str:
     :return: Returns a string.
     """
     result = ""
-    global _AUTO_ID_COUNTER
+    _AUTO_ID_COUNTER = 0
     if isinstance(param, str):
         result = param
     elif hasattr(param, "value") and isinstance(param.value, str):  # covers for Enums too
