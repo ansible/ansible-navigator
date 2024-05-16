@@ -9,7 +9,11 @@ from ansible_navigator.data.catalog_collections import worker
 
 
 def test_worker_with_failed_get_docstring() -> None:
-    """Test worker function when get_docstring fails and get_doc_withast method is used to parse the content."""
+    """Test worker function.
+
+    Test worker function when get_docstring fails and
+     get_doc_withast method is used to parse the content.
+    """
     # Create the queues
     pending_queue: multiprocessing.Queue[Any] = multiprocessing.Queue()
     completed_queue: multiprocessing.Queue[Any] = multiprocessing.Queue()
