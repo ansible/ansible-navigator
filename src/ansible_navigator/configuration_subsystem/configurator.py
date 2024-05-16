@@ -4,16 +4,19 @@ from __future__ import annotations
 
 import logging
 import os
+
 from copy import deepcopy
 
-from ansible_navigator.utils.definitions import (ExitMessage, ExitPrefix,
-                                                 LogMessage)
-from ansible_navigator.utils.functions import oxfordcomma, shlex_join
+from ansible_navigator.utils.definitions import ExitMessage
+from ansible_navigator.utils.definitions import ExitPrefix
+from ansible_navigator.utils.definitions import LogMessage
+from ansible_navigator.utils.functions import oxfordcomma
+from ansible_navigator.utils.functions import shlex_join
 from ansible_navigator.utils.json_schema import validate
-from ansible_navigator.utils.serialize import SafeLoader, yaml
+from ansible_navigator.utils.serialize import SafeLoader
+from ansible_navigator.utils.serialize import yaml
 from ansible_navigator.utils.version_migration.definitions import MigrationType
-from ansible_navigator.utils.version_migration.migrate import \
-    run_all_migrations
+from ansible_navigator.utils.version_migration.migrate import run_all_migrations
 
 from .definitions import ApplicationConfiguration
 from .definitions import Constants as C

@@ -386,7 +386,8 @@ def pytest_configure(config: pytest.Config) -> None:
         config_file == "/etc/ansible/ansible.cfg" and is_config_empty(config_file)
     ):
         pytest.exit(
-            f"Please remove or empty the ansible config file '{config_file}' before testing, as this will likely break the test results."
+            f"Please remove or empty the ansible config file '{config_file}' "
+            "before testing, as this will likely break the test results."
         )
 
     # look for ansible-navigator settings file

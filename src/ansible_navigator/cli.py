@@ -7,6 +7,7 @@ import logging
 import os
 import signal
 import sys
+
 from copy import deepcopy
 from curses import wrapper
 from importlib.metadata import version
@@ -15,19 +16,27 @@ from pathlib import Path
 from shutil import copyfile
 from typing import Any
 
-from .action_defs import (ActionReturn, RunInteractiveReturn, RunReturn,
-                          RunStdoutReturn)
+from .action_defs import ActionReturn
+from .action_defs import RunInteractiveReturn
+from .action_defs import RunReturn
+from .action_defs import RunStdoutReturn
 from .action_runner import ActionRunner
 from .actions import run_action_stdout
-from .configuration_subsystem import Constants, NavigatorConfiguration
+from .configuration_subsystem import Constants
+from .configuration_subsystem import NavigatorConfiguration
 from .configuration_subsystem.definitions import ApplicationConfiguration
 from .image_manager import ImagePuller
-from .initialization import error_and_exit_early, parse_and_update
+from .initialization import error_and_exit_early
+from .initialization import parse_and_update
 from .logger import setup_logger
 from .utils.compatibility import importlib_metadata
-from .utils.definitions import ExitMessage, ExitPrefix, LogMessage
-from .utils.functions import clear_screen, generate_cache_path
+from .utils.definitions import ExitMessage
+from .utils.definitions import ExitPrefix
+from .utils.definitions import LogMessage
+from .utils.functions import clear_screen
+from .utils.functions import generate_cache_path
 from .utils.packaged_data import path_to_file
+
 
 __version__: Constants | str
 try:

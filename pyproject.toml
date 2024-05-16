@@ -260,6 +260,7 @@ exclude = ["tests/fixtures/**", ".git"]
 
 [tool.ruff.lint]
 ignore = [
+  # temporary disabled until we fix them:
   'ANN001', # Missing type annotation for function argument `output`
   'ANN002', # Missing type annotation for `*args`
   'ANN003', # Missing type annotation for `**kwargs`
@@ -291,7 +292,6 @@ ignore = [
   'D101', # Missing docstring in public class
   'D102', # Missing docstring in public method
   'D103', # Missing docstring in public function
-  'E501', # line-too-long, already covered by black
   'ERA001', # [*] Found commented-out code
   'FBT001', # Boolean positional arg in function definition
   'FBT002', # Boolean default value in function definition
