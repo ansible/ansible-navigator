@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 from copy import deepcopy
-from re import Pattern
+from typing import TYPE_CHECKING
 
 from ansible_navigator.actions import kegexes
 
@@ -22,6 +22,10 @@ from .ui_framework.form_utils import settings_notification
 from .utils.definitions import ExitMessage
 from .utils.definitions import ExitPrefix
 from .utils.definitions import LogMessage
+
+
+if TYPE_CHECKING:
+    from re import Pattern
 
 
 class ActionBase:

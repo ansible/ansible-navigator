@@ -5,7 +5,6 @@ from __future__ import annotations
 import copy
 import re
 
-from collections.abc import Iterable
 from dataclasses import InitVar
 from dataclasses import dataclass
 from dataclasses import field
@@ -21,6 +20,8 @@ from ansible_navigator.utils.functions import oxfordcomma
 
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from .navigator_configuration import Internals
     from .navigator_post_processor import NavigatorPostProcessor
 

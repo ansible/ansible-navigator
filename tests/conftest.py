@@ -11,11 +11,10 @@ import shutil
 import subprocess
 import sys
 
-from collections.abc import Callable
-from collections.abc import Generator
 from copy import deepcopy
 from functools import lru_cache
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Protocol
 
 import pytest
@@ -36,6 +35,11 @@ from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import yaml
 
 from .defaults import FIXTURES_DIR
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Generator
 
 
 # implicit verbosity, updated at runtime

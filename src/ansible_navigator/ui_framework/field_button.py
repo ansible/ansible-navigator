@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from typing import Any
 
 from .curses_window import Window
 from .form_defs import FieldValidationStates
 from .form_handler_button import FormHandlerButton
 from .validators import FieldValidators
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @dataclass

@@ -6,10 +6,8 @@ import curses
 import logging
 import os
 
-from collections.abc import Callable
 from pathlib import Path
-from re import Pattern
-from types import TracebackType
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.app_public import AppPublic
@@ -25,6 +23,12 @@ from ansible_navigator.utils.functions import remove_dbl_un
 from ansible_navigator.utils.serialize import serialize_write_temp_file
 
 from . import _actions as actions
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from re import Pattern
+    from types import TracebackType
 
 
 class SuspendCurses:

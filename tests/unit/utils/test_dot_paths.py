@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from collections.abc import MutableMapping
 from dataclasses import dataclass
 from dataclasses import field
+from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
@@ -20,6 +20,10 @@ from ansible_navigator.utils.dot_paths import place_at_path
 from ansible_navigator.utils.dot_paths import remove_and_delete_empty_ascendants
 from tests.defaults import BaseScenario
 from tests.defaults import id_func
+
+
+if TYPE_CHECKING:
+    from collections.abc import MutableMapping
 
 
 def test_ascendants_from_path() -> None:

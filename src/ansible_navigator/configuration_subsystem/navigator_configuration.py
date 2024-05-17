@@ -7,7 +7,7 @@ import os
 
 from dataclasses import dataclass
 from dataclasses import field
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import LogMessage
@@ -25,6 +25,10 @@ from .definitions import SettingsEntryValue
 from .definitions import SubCommand
 from .navigator_post_processor import NavigatorPostProcessor
 from .utils import AnsibleConfiguration
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 APP_NAME = "ansible_navigator"

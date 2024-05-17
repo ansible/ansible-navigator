@@ -5,13 +5,17 @@ from __future__ import annotations
 import multiprocessing
 import subprocess
 
-from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
-from queue import Queue
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.utils.definitions import LogMessage
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from queue import Queue
 
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1

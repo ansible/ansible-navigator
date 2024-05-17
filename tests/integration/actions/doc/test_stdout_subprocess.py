@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -11,6 +11,10 @@ from ansible_navigator.utils.functions import shlex_join
 from tests.conftest import TCmdInTty
 from tests.defaults import BaseScenario
 from tests.defaults import id_func
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 BUILTINS = (

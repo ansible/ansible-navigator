@@ -12,11 +12,11 @@ import shutil
 import time
 import uuid
 
-from collections.abc import Callable
 from math import floor
 from operator import itemgetter
 from pathlib import Path
 from queue import Queue
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.action_base import ActionBase
@@ -49,6 +49,10 @@ from ansible_navigator.utils.serialize import serialize_write_file
 from . import _actions as actions
 from . import run_action
 from .stdout import Action as stdout_action
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 RESULT_TO_COLOR = [

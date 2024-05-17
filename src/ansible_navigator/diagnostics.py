@@ -5,8 +5,6 @@ from __future__ import annotations
 import sys
 import traceback
 
-from collections.abc import Callable
-from collections.abc import Iterator
 from dataclasses import asdict
 from dataclasses import dataclass
 from datetime import datetime
@@ -14,6 +12,7 @@ from datetime import timezone
 from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
+from typing import TYPE_CHECKING
 from typing import Any
 
 from .command_runner import Command
@@ -33,6 +32,11 @@ from .utils.functions import shlex_join
 from .utils.serialize import Loader
 from .utils.serialize import write_diagnostics_json
 from .utils.serialize import yaml
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Iterator
 
 
 JSONTypes = bool | int | str | dict[Any, Any] | list[Any]

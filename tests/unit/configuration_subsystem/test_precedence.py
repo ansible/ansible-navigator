@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import shlex
 
-from collections.abc import Iterable
+from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
@@ -24,6 +24,9 @@ from .utils import config_post_process
 from .utils import id_for_base
 from .utils import id_for_name
 
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 # pylint: disable=too-many-arguments
 

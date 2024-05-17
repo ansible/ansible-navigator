@@ -6,11 +6,12 @@ import json
 import os
 import subprocess
 
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     import pytest
 
 from ansible_navigator.configuration_subsystem.definitions import SettingsFileType

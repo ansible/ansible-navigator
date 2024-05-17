@@ -8,7 +8,6 @@ import re
 import shutil
 import sys
 
-from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -16,6 +15,8 @@ from typing import Any
 
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import pytest
 
 from tests import defaults

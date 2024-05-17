@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import os
 
-from collections.abc import Callable
 from copy import deepcopy
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
 from typing import Protocol
@@ -24,6 +24,10 @@ from ansible_navigator.utils.definitions import LogMessage
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
 from tests.defaults import FIXTURES_DIR
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")

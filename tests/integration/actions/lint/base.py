@@ -5,7 +5,7 @@ from __future__ import annotations
 import difflib
 import os
 
-from collections.abc import Generator
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -16,6 +16,10 @@ from tests.integration._interactions import SearchFor
 from tests.integration._interactions import UiTestStep
 from tests.integration._tmux_session import TmuxSession
 from tests.integration._tmux_session import TmuxSessionKwargs
+
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 LINT_FIXTURES = os.path.join(

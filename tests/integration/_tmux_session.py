@@ -6,7 +6,6 @@ import datetime
 import os
 import shlex
 import time
-import types
 import uuid
 import warnings
 
@@ -20,6 +19,8 @@ import libtmux.exc
 
 
 if TYPE_CHECKING:
+    import types
+
     import pytest
 
 from ._common import generate_test_log_dir

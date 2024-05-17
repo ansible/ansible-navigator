@@ -7,9 +7,13 @@ import re
 import sys
 import tempfile
 
-from collections.abc import Callable
 from copy import deepcopy
+from typing import TYPE_CHECKING
 from typing import Any
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic

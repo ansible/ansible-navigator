@@ -6,7 +6,7 @@ import curses
 import enum
 import re
 
-from collections.abc import Callable
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.content_defs import ContentBase
@@ -18,6 +18,10 @@ from .curses_defs import CursesLines
 from .ui_config import UIConfig
 from .utils import convert_percentage
 from .utils import distribute
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class MenuBuilder:

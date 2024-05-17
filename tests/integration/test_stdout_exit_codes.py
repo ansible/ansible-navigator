@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import os
 
-from collections.abc import Iterable
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
 
@@ -17,6 +17,10 @@ from tests.defaults import FIXTURES_DIR
 from tests.defaults import id_func
 
 from ._action_run_test import ActionRunTest
+
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.yml")
