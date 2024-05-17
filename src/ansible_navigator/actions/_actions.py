@@ -13,13 +13,14 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
 
-from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.ui_framework import error_notification
 
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Generator
+
+    from ansible_navigator.action_defs import RunStdoutReturn
 
 
 logger = logging.getLogger(__name__)

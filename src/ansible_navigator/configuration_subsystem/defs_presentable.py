@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
 from typing import NewType
@@ -14,8 +15,11 @@ from ansible_navigator.content_defs import ContentBase
 from .definitions import CliParameters
 from .definitions import Constants as C
 from .definitions import SettingsEntry
-from .navigator_configuration import Internals
 from .utils import create_settings_file_sample
+
+
+if TYPE_CHECKING:
+    from .navigator_configuration import Internals
 
 
 PresentableSettingsEntryValue = bool | dict[Any, Any] | str | list[str]

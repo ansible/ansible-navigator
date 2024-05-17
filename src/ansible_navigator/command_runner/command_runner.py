@@ -10,12 +10,12 @@ from dataclasses import field
 from typing import TYPE_CHECKING
 from typing import Any
 
-from ansible_navigator.utils.definitions import LogMessage
-
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from queue import Queue
+
+    from ansible_navigator.utils.definitions import LogMessage
 
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1

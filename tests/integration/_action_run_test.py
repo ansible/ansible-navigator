@@ -11,21 +11,22 @@ from copy import deepcopy
 from typing import TYPE_CHECKING
 from typing import Any
 
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
-from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import Constants as C
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentType
 from ansible_navigator.steps import Steps
-from ansible_navigator.ui_framework.form import Form
 from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
 from ansible_navigator.ui_framework.ui import Ui
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from ansible_navigator.action_defs import RunStdoutReturn
+    from ansible_navigator.ui_framework.form import Form
 
 
 class ActionRunTest:

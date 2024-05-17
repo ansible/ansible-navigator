@@ -14,6 +14,7 @@ from importlib.metadata import version
 from importlib.util import find_spec
 from pathlib import Path
 from shutil import copyfile
+from typing import TYPE_CHECKING
 from typing import Any
 
 from .action_defs import ActionReturn
@@ -24,7 +25,6 @@ from .action_runner import ActionRunner
 from .actions import run_action_stdout
 from .configuration_subsystem import Constants
 from .configuration_subsystem import NavigatorConfiguration
-from .configuration_subsystem.definitions import ApplicationConfiguration
 from .image_manager import ImagePuller
 from .initialization import error_and_exit_early
 from .initialization import parse_and_update
@@ -43,6 +43,9 @@ try:
     from ._version import version as __version__
 except ImportError:
     __version__ = Constants.NOT_SET
+
+if TYPE_CHECKING:
+    from .configuration_subsystem.definitions import ApplicationConfiguration
 
 
 APP_NAME = "ansible-navigator"

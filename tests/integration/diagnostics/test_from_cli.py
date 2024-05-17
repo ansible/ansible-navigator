@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 
     import pytest
 
-from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
+    from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
+
 from ansible_navigator.utils.functions import remove_ansi
 
 

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from functools import partial
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import PresentableSettingsEntries
 from ansible_navigator.configuration_subsystem import PresentableSettingsEntry
 from ansible_navigator.configuration_subsystem import to_effective
@@ -31,6 +31,10 @@ from ansible_navigator.utils.print import print_to_stdout
 
 from . import _actions as actions
 from . import run_action
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.app_public import AppPublic
 
 
 def color_menu(colno: int, colname: str, entry: PresentableSettingsEntry) -> tuple[int, int]:

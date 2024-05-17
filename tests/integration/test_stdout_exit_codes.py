@@ -12,15 +12,16 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.utils.functions import shlex_join
-from tests.conftest import TCmdInTty
 from tests.defaults import FIXTURES_DIR
 from tests.defaults import id_func
-
-from ._action_run_test import ActionRunTest
 
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+
+    from tests.conftest import TCmdInTty
+
+    from ._action_run_test import ActionRunTest
 
 
 PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.yml")

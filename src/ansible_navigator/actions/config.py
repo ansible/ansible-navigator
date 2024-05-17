@@ -8,12 +8,11 @@ import re
 import shlex
 import shutil
 
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.runner import AnsibleConfig
 from ansible_navigator.runner import Command
 from ansible_navigator.steps import Step
@@ -28,6 +27,11 @@ from ansible_navigator.utils.serialize import yaml
 
 from . import _actions as actions
 from . import run_action
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:

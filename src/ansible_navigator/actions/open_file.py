@@ -10,15 +10,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
-from ansible_navigator.app_public import AppPublic
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.content_defs import ContentBase
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentType
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
-from ansible_navigator.ui_framework import Interaction
-from ansible_navigator.ui_framework import Menu
 from ansible_navigator.utils.functions import remove_dbl_un
 from ansible_navigator.utils.serialize import serialize_write_temp_file
 
@@ -29,6 +25,11 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from re import Pattern
     from types import TracebackType
+
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+    from ansible_navigator.ui_framework import Interaction
+    from ansible_navigator.ui_framework import Menu
 
 
 class SuspendCurses:

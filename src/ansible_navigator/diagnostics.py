@@ -20,13 +20,10 @@ from .command_runner import CommandRunner
 from .configuration_subsystem import Constants
 from .configuration_subsystem import to_effective
 from .configuration_subsystem import to_sources
-from .configuration_subsystem.definitions import ApplicationConfiguration
 from .data import image_introspect
 from .image_manager import introspector
 from .utils import ansi
 from .utils.compatibility import importlib_metadata
-from .utils.definitions import ExitMessage
-from .utils.definitions import LogMessage
 from .utils.functions import now_iso
 from .utils.functions import shlex_join
 from .utils.serialize import Loader
@@ -37,6 +34,10 @@ from .utils.serialize import yaml
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Iterator
+
+    from .configuration_subsystem.definitions import ApplicationConfiguration
+    from .utils.definitions import ExitMessage
+    from .utils.definitions import LogMessage
 
 
 JSONTypes = bool | int | str | dict[Any, Any] | list[Any]

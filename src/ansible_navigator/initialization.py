@@ -9,12 +9,12 @@ import logging
 import os
 import sys
 
+from typing import TYPE_CHECKING
 from typing import NoReturn
 
 from ._version_doc_cache import __version_collection_doc_cache__ as VERSION_CDC
 from .configuration_subsystem import Configurator
 from .configuration_subsystem import Constants as C
-from .configuration_subsystem.definitions import ApplicationConfiguration
 from .diagnostics import DiagnosticsCollector
 from .utils.definitions import ExitMessage
 from .utils.definitions import ExitMessages
@@ -24,6 +24,10 @@ from .utils.functions import console_width
 from .utils.functions import environment_variable_is_file_path
 from .utils.functions import find_settings_file
 from .utils.key_value_store import KeyValueStore
+
+
+if TYPE_CHECKING:
+    from .configuration_subsystem.definitions import ApplicationConfiguration
 
 
 def error_and_exit_early(exit_messages: list[ExitMessage]) -> NoReturn:

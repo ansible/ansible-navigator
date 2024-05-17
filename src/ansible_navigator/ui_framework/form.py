@@ -7,9 +7,8 @@ import curses
 from curses import ascii as curses_ascii
 from dataclasses import dataclass
 from dataclasses import field
+from typing import TYPE_CHECKING
 from typing import Any
-
-from ansible_navigator.ui_framework.ui_config import UIConfig
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -27,6 +26,10 @@ from .form_defs import FormType
 from .form_handler_text import FormHandlerText
 from .sentinels import unknown
 from .validators import FormValidators
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.ui_framework.ui_config import UIConfig
 
 
 @dataclass

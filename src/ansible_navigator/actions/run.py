@@ -21,10 +21,8 @@ from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import to_effective
 from ansible_navigator.configuration_subsystem import to_sources
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.runner import CommandAsync
@@ -53,6 +51,9 @@ from .stdout import Action as stdout_action
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 RESULT_TO_COLOR = [

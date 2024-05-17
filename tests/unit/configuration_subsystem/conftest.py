@@ -12,15 +12,12 @@ from typing import Protocol
 
 import pytest
 
-from ansible_navigator.command_runner import Command
 from ansible_navigator.command_runner.command_runner import run_command
 from ansible_navigator.configuration_subsystem import to_schema
 from ansible_navigator.configuration_subsystem.configurator import Configurator
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import SettingsSchemaType
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
-from ansible_navigator.utils.definitions import ExitMessage
-from ansible_navigator.utils.definitions import LogMessage
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
 from tests.defaults import FIXTURES_DIR
@@ -28,6 +25,10 @@ from tests.defaults import FIXTURES_DIR
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    from ansible_navigator.command_runner import Command
+    from ansible_navigator.utils.definitions import ExitMessage
+    from ansible_navigator.utils.definitions import LogMessage
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")

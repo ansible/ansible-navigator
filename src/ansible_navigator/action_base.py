@@ -12,7 +12,6 @@ from ansible_navigator.actions import kegexes
 from .action_defs import RunStdoutReturn
 from .app_public import AppPublic
 from .configuration_subsystem import Constants as C
-from .configuration_subsystem.definitions import ApplicationConfiguration
 from .initialization import parse_and_update
 from .steps import Steps
 from .ui_framework import Interaction
@@ -26,6 +25,8 @@ from .utils.definitions import LogMessage
 
 if TYPE_CHECKING:
     from re import Pattern
+
+    from .configuration_subsystem.definitions import ApplicationConfiguration
 
 
 class ActionBase:

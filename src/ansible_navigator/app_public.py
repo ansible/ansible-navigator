@@ -8,13 +8,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import NamedTuple
 
-from .steps import Steps
-
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
     from .configuration_subsystem.definitions import ApplicationConfiguration
+    from .steps import Steps
 
 
 class AppPublic(NamedTuple):

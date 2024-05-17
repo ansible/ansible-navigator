@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ansible_navigator.ui_framework.ui_config import UIConfig
-
 from .curses_window import CursesWindow
 from .curses_window import Window
 
 
 if TYPE_CHECKING:
+    from ansible_navigator.ui_framework.ui_config import UIConfig
+
     from .field_working import FieldWorking
 
 
