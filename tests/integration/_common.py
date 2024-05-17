@@ -117,7 +117,7 @@ def fixture_path_from_request(
     :param zfill_index: Pad the index with zeros
     :returns: The path to the fixture
     """
-    path_in_fixture_dir = request.node.nodeid.split("::")[0].lstrip("tests/")
+    path_in_fixture_dir = request.node.nodeid.split("::")[0].removeprefix("tests/")
     dir_path = Path(defaults.FIXTURES_DIR, path_in_fixture_dir, request.node.originalname)
     if testname:
         dir_path = dir_path / testname

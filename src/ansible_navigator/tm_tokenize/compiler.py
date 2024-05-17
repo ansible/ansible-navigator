@@ -40,7 +40,7 @@ class Compiler:
         self._rule_to_grammar[rule] = grammar
         return rule
 
-    @functools.cache
+    @functools.cache  # noqa: B019
     def _include(
         self,
         grammar: Grammar,
@@ -62,7 +62,7 @@ class Compiler:
             grammar = self._grammars.grammar_for_scope(scope)
             return self._include(grammar, grammar.repository, f"#{s}")
 
-    @functools.cache
+    @functools.cache  # noqa: B019
     def _patterns(
         self,
         grammar: Grammar,
