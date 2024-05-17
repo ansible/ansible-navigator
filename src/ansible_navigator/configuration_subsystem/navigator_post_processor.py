@@ -12,12 +12,12 @@ import subprocess
 import sys
 import zoneinfo
 
-from collections.abc import Callable
 from functools import partialmethod
 from itertools import chain
 from itertools import repeat
 from pathlib import Path
 from string import Formatter
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.utils.definitions import ExitMessage
@@ -40,6 +40,10 @@ from .definitions import PaeChangeRequest
 from .definitions import SettingsEntry
 from .definitions import VolumeMount
 from .definitions import VolumeMountError
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def _post_processor(func: Callable[..., Any]) -> Callable[..., Any]:

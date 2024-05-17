@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import shlex
 
-from collections.abc import Iterable
+from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
@@ -13,7 +13,6 @@ from ansible_navigator.configuration_subsystem.definitions import Constants as C
 from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
 
-from .conftest import GenerateConfigCallable
 from .data import BASE_EXPECTED
 from .data import BASE_LONG_CLI
 from .data import BASE_SHORT_CLI
@@ -24,6 +23,11 @@ from .utils import config_post_process
 from .utils import id_for_base
 from .utils import id_for_name
 
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from .conftest import GenerateConfigCallable
 
 # pylint: disable=too-many-arguments
 

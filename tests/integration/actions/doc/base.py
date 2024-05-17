@@ -5,7 +5,7 @@ from __future__ import annotations
 import difflib
 import os
 
-from collections.abc import Generator
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -13,6 +13,10 @@ from tests.defaults import FIXTURES_COLLECTION_DIR
 from tests.integration._common import retrieve_fixture_for_step
 from tests.integration._common import update_fixtures
 from tests.integration._tmux_session import TmuxSession
+
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 class BaseClass:

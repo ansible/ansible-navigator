@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 
-from collections import deque
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from typing import Any
 
 from jsonschema import SchemaError
@@ -13,6 +13,10 @@ from jsonschema import ValidationError
 from jsonschema.validators import validator_for
 
 from .definitions import ExitMessage
+
+
+if TYPE_CHECKING:
+    from collections import deque
 
 
 def to_path(schema_path: deque[Any]) -> str:

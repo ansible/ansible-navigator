@@ -5,14 +5,18 @@ from __future__ import annotations
 import re
 
 from dataclasses import dataclass
-from pathlib import Path
 from re import Pattern
+from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
 
 from ansible_navigator import cli
 from tests.defaults import BaseScenario
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @dataclass

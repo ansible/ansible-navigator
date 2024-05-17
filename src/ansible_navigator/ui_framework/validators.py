@@ -6,13 +6,17 @@ import os
 
 from collections.abc import Iterable
 from random import randrange
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
 from urllib.parse import urlparse
 
-from .form_defs import FieldValidationStates
 from .sentinels import Unknown
 from .sentinels import unknown
+
+
+if TYPE_CHECKING:
+    from .form_defs import FieldValidationStates
 
 
 class Validation(NamedTuple):

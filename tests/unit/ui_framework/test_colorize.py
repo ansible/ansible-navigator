@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import NamedTuple
 from unittest.mock import MagicMock  # pylint: disable=W0407
 from unittest.mock import patch  # pylint: disable=W0407
 
-import pytest
+
+if TYPE_CHECKING:
+    import pytest
 
 from ansible_navigator.constants import GRAMMAR_DIR
 from ansible_navigator.constants import THEME_PATH

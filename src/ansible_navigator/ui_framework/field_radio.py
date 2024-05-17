@@ -2,19 +2,23 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
+from typing import TYPE_CHECKING
 from typing import Any
-
-from ansible_navigator.ui_framework.curses_window import Window
 
 from .form_handler_options import FormHandlerOptions
 from .sentinels import Unknown
 from .sentinels import unknown
 from .validators import FieldValidators
 from .validators import Validation
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from ansible_navigator.ui_framework.curses_window import Window
 
 
 @dataclass

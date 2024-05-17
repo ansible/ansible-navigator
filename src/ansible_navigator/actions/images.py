@@ -8,13 +8,12 @@ import shlex
 
 from copy import deepcopy
 from functools import partial
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import Constants
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.image_manager import inspect_all
 from ansible_navigator.runner import Command
@@ -29,6 +28,11 @@ from ansible_navigator.utils.print import print_to_stdout
 
 from . import _actions as actions
 from . import run_action
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:

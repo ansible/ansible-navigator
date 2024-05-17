@@ -14,7 +14,6 @@ import sys
 
 from collections import Counter
 from collections import OrderedDict
-from collections.abc import Generator
 from datetime import datetime
 from datetime import timezone
 from json.decoder import JSONDecodeError
@@ -28,6 +27,10 @@ from ansible import __version__ as ansible_version
 from ansible import plugins
 from ansible.utils.plugin_docs import get_docstring
 from yaml.error import YAMLError
+
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 try:

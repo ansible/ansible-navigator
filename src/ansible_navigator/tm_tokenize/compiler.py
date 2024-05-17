@@ -4,7 +4,6 @@ import functools
 
 from typing import TYPE_CHECKING
 
-from .fchainmap import FChainMap
 from .reg import make_regset
 from .rules import EndRule
 from .rules import Entry
@@ -15,6 +14,7 @@ from .state import State
 
 
 if TYPE_CHECKING:
+    from .fchainmap import FChainMap
     from .grammars import Grammar
     from .grammars import Grammars
     from .rules import Captures

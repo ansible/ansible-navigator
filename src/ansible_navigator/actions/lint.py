@@ -24,12 +24,11 @@ from collections.abc import Mapping
 from datetime import datetime
 from datetime import timezone
 from enum import IntEnum
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.runner.command import Command
 from ansible_navigator.steps import Step
 from ansible_navigator.ui_framework import Color
@@ -47,6 +46,11 @@ from ansible_navigator.utils.functions import time_stamp_for_file
 
 from . import _actions as actions
 from . import run_action
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 class Severity(IntEnum):

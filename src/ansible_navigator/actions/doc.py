@@ -8,13 +8,12 @@ import os
 import shlex
 import shutil
 
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import Constants as C
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.runner import AnsibleDoc
 from ansible_navigator.runner import Command
 from ansible_navigator.ui_framework import CursesLine
@@ -23,6 +22,11 @@ from ansible_navigator.ui_framework import CursesLines
 from ansible_navigator.ui_framework import Interaction
 
 from . import _actions as actions
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 @actions.register

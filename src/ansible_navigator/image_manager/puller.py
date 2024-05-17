@@ -7,13 +7,17 @@ import os
 import subprocess
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from typing import Any
 
-from ansible_navigator.configuration_subsystem import Constants
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitPrefix
 from ansible_navigator.utils.definitions import LogMessage
 from ansible_navigator.utils.functions import shlex_join
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.configuration_subsystem import Constants
 
 
 @dataclass(frozen=False)

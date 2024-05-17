@@ -12,19 +12,17 @@ import shutil
 import time
 import uuid
 
-from collections.abc import Callable
 from math import floor
 from operator import itemgetter
 from pathlib import Path
 from queue import Queue
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem import to_effective
 from ansible_navigator.configuration_subsystem import to_sources
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.runner import CommandAsync
@@ -49,6 +47,13 @@ from ansible_navigator.utils.serialize import serialize_write_file
 from . import _actions as actions
 from . import run_action
 from .stdout import Action as stdout_action
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 RESULT_TO_COLOR = [

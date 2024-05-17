@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 from collections import deque
-from collections.abc import Callable
-from collections.abc import Sequence
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Generic
 from typing import TypeVar
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Sequence
 
 
 class Step:

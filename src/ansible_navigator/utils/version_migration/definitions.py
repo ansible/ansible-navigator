@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import contextlib
 
-from collections.abc import Callable
 from enum import Enum
-from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Generic
 from typing import TypeVar
@@ -16,6 +15,11 @@ from ansible_navigator.utils.ansi import changed
 from ansible_navigator.utils.ansi import failed
 from ansible_navigator.utils.ansi import subtle
 from ansible_navigator.utils.ansi import working
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
 
 
 class MigrationType(Enum):

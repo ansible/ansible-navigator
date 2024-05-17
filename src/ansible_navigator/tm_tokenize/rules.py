@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from re import Match
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
@@ -21,6 +20,8 @@ from .utils import uniquely_constructed
 
 
 if TYPE_CHECKING:
+    from re import Match
+
     from .compiler import Compiler
     from .region import Scope
 

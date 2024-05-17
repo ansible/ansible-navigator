@@ -7,6 +7,7 @@ import math
 import os
 
 from sys import stdout
+from typing import TYPE_CHECKING
 
 from ansible_navigator.constants import GRAMMAR_DIR
 from ansible_navigator.constants import THEME_PATH
@@ -15,8 +16,11 @@ from ansible_navigator.content_defs import ContentType
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.ui_framework.colorize import Colorize
 from ansible_navigator.ui_framework.colorize import rgb_to_ansi
-from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 from ansible_navigator.utils.serialize import serialize
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 
 
 logger = logging.getLogger(__name__)

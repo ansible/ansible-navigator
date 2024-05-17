@@ -15,6 +15,7 @@ from math import ceil
 from math import floor
 from re import Match
 from re import Pattern
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
 from typing import Protocol
@@ -36,12 +37,15 @@ from .curses_defs import SimpleLinePart
 from .curses_window import CursesWindow
 from .curses_window import Window
 from .field_text import FieldText
-from .form import Form
 from .form_handler_text import FormHandlerText
 from .form_utils import warning_notification
 from .menu_builder import MenuBuilder
-from .ui_config import UIConfig
 from .ui_constants import Decoration
+
+
+if TYPE_CHECKING:
+    from .form import Form
+    from .ui_config import UIConfig
 
 
 STANDARD_KEYS = {
