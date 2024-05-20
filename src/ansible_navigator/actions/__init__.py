@@ -15,15 +15,19 @@ is identified in the
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from typing import TYPE_CHECKING
 from typing import Any
 
-from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.app_public import AppPublic
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
-from ansible_navigator.ui_framework import Interaction
-
 from . import _actions as actions
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from ansible_navigator.action_defs import RunStdoutReturn
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+    from ansible_navigator.ui_framework import Interaction
 
 
 get: Callable[[str], Any] = actions.get_factory(__package__)

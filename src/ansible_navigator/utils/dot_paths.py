@@ -5,10 +5,14 @@ from __future__ import annotations
 import copy
 import operator
 
-from collections.abc import MutableMapping
 from enum import Enum
 from functools import reduce
+from typing import TYPE_CHECKING
 from typing import Any
+
+
+if TYPE_CHECKING:
+    from collections.abc import MutableMapping
 
 
 class MergeBehaviors(Enum):

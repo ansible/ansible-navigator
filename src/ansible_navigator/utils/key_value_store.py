@@ -9,7 +9,11 @@ from collections.abc import Iterator
 from collections.abc import KeysView
 from collections.abc import MutableMapping
 from collections.abc import ValuesView
-from pathlib import Path
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class KVSKeysView(KeysView[str]):

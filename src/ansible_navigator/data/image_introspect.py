@@ -9,12 +9,15 @@ import subprocess
 import sys
 import threading
 
-from collections.abc import Callable
 from queue import Queue
 from types import SimpleNamespace
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypeAlias
 
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # https://github.com/python/typing/issues/182#issuecomment-1320974824
 JSONTypes: TypeAlias = dict[str, "JSONTypes"] | list["JSONTypes"] | str | int | float | bool | None

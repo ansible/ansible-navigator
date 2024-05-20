@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
@@ -13,11 +14,14 @@ from jsonschema.exceptions import ValidationError
 
 from ansible_navigator.configuration_subsystem import NavigatorConfiguration
 from ansible_navigator.configuration_subsystem import to_sample
-from ansible_navigator.configuration_subsystem.definitions import SettingsSchemaType
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import yaml
 
 from .defaults import TEST_FIXTURE_DIR
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.configuration_subsystem.definitions import SettingsSchemaType
 
 
 def test_basic(schema_dict: SettingsSchemaType) -> None:

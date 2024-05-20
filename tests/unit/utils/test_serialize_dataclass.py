@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from collections.abc import Iterable
 from dataclasses import asdict
 from dataclasses import dataclass
 from functools import partial
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
 
@@ -17,6 +16,11 @@ from ansible_navigator.content_defs import ContentView
 from ansible_navigator.utils.serialize import SerializationFormat
 from ansible_navigator.utils.serialize import serialize
 from tests.defaults import id_func
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Iterable
 
 
 class ParametrizeView(NamedTuple):

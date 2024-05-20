@@ -11,9 +11,12 @@ import shutil
 import sys
 import tempfile
 
+from typing import TYPE_CHECKING
 from typing import Any
 
-from ansible_runner import Runner
+
+if TYPE_CHECKING:
+    from ansible_runner import Runner
 
 
 class Base:

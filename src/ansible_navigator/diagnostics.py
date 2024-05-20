@@ -5,8 +5,6 @@ from __future__ import annotations
 import sys
 import traceback
 
-from collections.abc import Callable
-from collections.abc import Iterator
 from dataclasses import asdict
 from dataclasses import dataclass
 from datetime import datetime
@@ -14,6 +12,7 @@ from datetime import timezone
 from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
+from typing import TYPE_CHECKING
 from typing import Any
 
 from .command_runner import Command
@@ -21,18 +20,24 @@ from .command_runner import CommandRunner
 from .configuration_subsystem import Constants
 from .configuration_subsystem import to_effective
 from .configuration_subsystem import to_sources
-from .configuration_subsystem.definitions import ApplicationConfiguration
 from .data import image_introspect
 from .image_manager import introspector
 from .utils import ansi
 from .utils.compatibility import importlib_metadata
-from .utils.definitions import ExitMessage
-from .utils.definitions import LogMessage
 from .utils.functions import now_iso
 from .utils.functions import shlex_join
 from .utils.serialize import Loader
 from .utils.serialize import write_diagnostics_json
 from .utils.serialize import yaml
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Iterator
+
+    from .configuration_subsystem.definitions import ApplicationConfiguration
+    from .utils.definitions import ExitMessage
+    from .utils.definitions import LogMessage
 
 
 JSONTypes = bool | int | str | dict[Any, Any] | list[Any]

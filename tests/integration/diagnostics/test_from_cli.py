@@ -6,11 +6,16 @@ import json
 import os
 import subprocess
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
-import pytest
 
-from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
+
+    from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
+
 from ansible_navigator.utils.functions import remove_ansi
 
 

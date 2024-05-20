@@ -7,10 +7,14 @@ import logging
 import os
 import zoneinfo
 
+from typing import TYPE_CHECKING
 from typing import Any
 
 from .configuration_subsystem import Constants
-from .configuration_subsystem.definitions import ApplicationConfiguration
+
+
+if TYPE_CHECKING:
+    from .configuration_subsystem.definitions import ApplicationConfiguration
 
 
 logger = logging.getLogger("ansible_navigator")

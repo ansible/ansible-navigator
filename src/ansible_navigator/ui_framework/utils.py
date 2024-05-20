@@ -7,9 +7,12 @@ import re
 
 from dataclasses import is_dataclass
 from math import floor
+from typing import TYPE_CHECKING
 from typing import Any
 
-from ansible_navigator.content_defs import ContentBase
+
+if TYPE_CHECKING:
+    from ansible_navigator.content_defs import ContentBase
 
 
 def convert_percentage(

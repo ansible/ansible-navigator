@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import os
 
-from collections.abc import Generator
 from copy import deepcopy
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -20,6 +19,11 @@ from tests.conftest import _cmd_in_tty as cmd_in_tty
 from ._action_run_test import ActionRunTest
 from ._common import Parameter
 from ._common import generate_test_log_dir
+
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+    from pathlib import Path
 
 
 EXECUTION_MODES = ["interactive", "stdout"]

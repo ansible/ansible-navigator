@@ -6,13 +6,13 @@ from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
 from typing import Any
 
-from ansible_navigator.ui_framework.ui_config import UIConfig
-
 from .curses_window import CursesWindow
 from .curses_window import Window
 
 
 if TYPE_CHECKING:
+    from ansible_navigator.ui_framework.ui_config import UIConfig
+
     from .field_information import FieldInformation
 
 

@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from typing import Any
 
-from .curses_window import Window
 from .form_handler_text import FormHandlerText
 from .sentinels import Unknown
 from .sentinels import nonexistent
 from .sentinels import unknown
 from .validators import FieldValidators
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from .curses_window import Window
 
 
 @dataclass

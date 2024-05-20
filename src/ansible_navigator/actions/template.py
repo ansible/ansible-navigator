@@ -8,10 +8,9 @@ from __future__ import annotations
 import html
 
 from collections.abc import Mapping
+from typing import TYPE_CHECKING
 
 from ansible_navigator.action_base import ActionBase
-from ansible_navigator.app_public import AppPublic
-from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.ui_framework import Interaction
 from ansible_navigator.ui_framework import warning_notification
@@ -19,6 +18,11 @@ from ansible_navigator.utils.functions import remove_dbl_un
 from ansible_navigator.utils.functions import templar
 
 from . import _actions as actions
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.app_public import AppPublic
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 @actions.register

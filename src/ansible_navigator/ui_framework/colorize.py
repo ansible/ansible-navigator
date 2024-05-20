@@ -13,12 +13,11 @@ import re
 
 from itertools import chain
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_navigator.tm_tokenize.grammars import Grammars
-from ansible_navigator.tm_tokenize.region import Regions
 from ansible_navigator.tm_tokenize.tokenize import tokenize
-from ansible_navigator.utils.compatibility import Traversable
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -27,6 +26,11 @@ from .curses_defs import RgbTuple
 from .curses_defs import SimpleLinePart
 from .ui_constants import Color
 from .ui_constants import Decoration
+
+
+if TYPE_CHECKING:
+    from ansible_navigator.tm_tokenize.region import Regions
+    from ansible_navigator.utils.compatibility import Traversable
 
 
 CURSES_STYLES = {

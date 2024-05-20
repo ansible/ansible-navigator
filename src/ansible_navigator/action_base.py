@@ -5,14 +5,13 @@ from __future__ import annotations
 import logging
 
 from copy import deepcopy
-from re import Pattern
+from typing import TYPE_CHECKING
 
 from ansible_navigator.actions import kegexes
 
 from .action_defs import RunStdoutReturn
 from .app_public import AppPublic
 from .configuration_subsystem import Constants as C
-from .configuration_subsystem.definitions import ApplicationConfiguration
 from .initialization import parse_and_update
 from .steps import Steps
 from .ui_framework import Interaction
@@ -22,6 +21,12 @@ from .ui_framework.form_utils import settings_notification
 from .utils.definitions import ExitMessage
 from .utils.definitions import ExitPrefix
 from .utils.definitions import LogMessage
+
+
+if TYPE_CHECKING:
+    from re import Pattern
+
+    from .configuration_subsystem.definitions import ApplicationConfiguration
 
 
 class ActionBase:

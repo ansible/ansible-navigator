@@ -17,14 +17,18 @@ import pkgutil
 import subprocess  # Required due to the nature of this test
 import sys
 
-from collections.abc import Generator
 from itertools import chain
 from pathlib import Path
-from types import ModuleType
+from typing import TYPE_CHECKING
 
 import pytest
 
 import ansible_navigator
+
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+    from types import ModuleType
 
 
 def _find_all_importables(pkg: ModuleType) -> list[str]:

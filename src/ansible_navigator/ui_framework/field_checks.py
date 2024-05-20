@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import sys
 
-from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
@@ -19,6 +18,8 @@ from .validators import Validation
 
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from ansible_navigator.ui_framework.curses_window import Window
 
 
