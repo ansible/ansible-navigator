@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from copy import deepcopy
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import NamedTuple
@@ -75,7 +76,7 @@ def _generate_config(
 
     if settings_file_name:
         settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file_name)
-        with open(file=settings_file_path, encoding="utf-8") as fh:
+        with Path(settings_file_path).open(encoding="utf-8") as fh:
             try:
                 settings_contents = yaml.load(fh, Loader=Loader)
             except yaml.parser.ParserError:

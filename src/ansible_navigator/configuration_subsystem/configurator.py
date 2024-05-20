@@ -6,6 +6,7 @@ import logging
 import os
 
 from copy import deepcopy
+from pathlib import Path
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitPrefix
@@ -178,7 +179,7 @@ class Configurator:
             migration_types=(MigrationType.SETTINGS_FILE,),
         )
 
-        with open(settings_filesystem_path, encoding="utf-8") as fh:
+        with Path(settings_filesystem_path).open(encoding="utf-8") as fh:
             try:
                 config = yaml.load(fh, Loader=SafeLoader)
                 if config is None:

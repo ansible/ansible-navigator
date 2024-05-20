@@ -422,7 +422,7 @@ class Action(ActionBase):
             artifact_file = populated_form["fields"]["artifact_file"]["value"]
 
         try:
-            with open(artifact_file, encoding="utf-8") as fh:
+            with Path(artifact_file).open(encoding="utf-8") as fh:
                 data = json.load(fh)
         except json.JSONDecodeError as exc:
             self._logger.debug("json decode error: %s", str(exc))

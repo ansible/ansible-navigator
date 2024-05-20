@@ -331,7 +331,6 @@ ignore = [
   'PTH119', # `os.path.basename()` should be replaced by `Path.name`
   'PTH120', # `os.path.dirname()` should be replaced by `Path.parent`
   'PTH122', # `os.path.splitext()` should be replaced by `Path.suffix`
-  'PTH123', # `open()` should be replaced by `Path.open()`
   'PTH204', # `os.path.getmtime` should be replaced by `Path.stat().st_mtime`
   'PTH207', # Replace `glob` with `Path.glob` or `Path.rglob`
   'RET505', # Unnecessary `else` after `return` statement

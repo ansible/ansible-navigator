@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 
+from pathlib import Path
 from typing import Any
 from typing import NamedTuple
 from typing import TypeVar
@@ -68,8 +69,8 @@ class Grammars:
         except KeyError:
             pass
 
-        grammar_path = self._scope_to_files.pop(scope)
-        with open(grammar_path, encoding="UTF-8") as f:
+        grammar_path = Path(self._scope_to_files.pop(scope))
+        with grammar_path.open(encoding="UTF-8") as f:
             ret = self._raw[scope] = json.load(f)
 
         file_types = frozenset(ret.get("fileTypes", ()))

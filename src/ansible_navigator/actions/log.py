@@ -1,5 +1,7 @@
 """``:log`` command implementation."""
 
+from pathlib import Path
+
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.app_public import AppPublic
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
@@ -35,7 +37,7 @@ class Action(ActionBase):
         auto_scroll = True
         while True:
             self._calling_app.update()
-            with open(self._args.log_file, encoding="utf-8") as fh:
+            with Path(self._args.log_file).open(encoding="utf-8") as fh:
                 log_contents = fh.read()
 
             new_scroll = len(log_contents.splitlines())
