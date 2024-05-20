@@ -16,7 +16,7 @@ class Action(ActionBase):
 
     KEGEX = r"^h(?:elp)?$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:help`` action.
 
         :param args: The current settings for the application

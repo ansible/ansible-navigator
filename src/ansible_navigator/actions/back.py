@@ -19,7 +19,7 @@ class Action:
 
     KEGEX = r"^\^\[|\x1b|back$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:back`` action.
 
         :param args: The current settings for the application

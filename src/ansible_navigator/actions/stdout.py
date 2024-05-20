@@ -15,7 +15,7 @@ class Action(ActionBase):
 
     KEGEX = r"^st(?:dout)?$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:stdout`` action.
 
         :param args: The current settings for the application

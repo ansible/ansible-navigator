@@ -204,7 +204,7 @@ class Action(ActionBase):
             (\s(?P<params_run>.*))?)
             $"""
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:run`` action.
 
         :param args: The current settings for the application

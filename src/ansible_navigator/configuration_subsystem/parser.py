@@ -18,7 +18,7 @@ from .definitions import SettingsEntry
 class Parser:
     """Build the args."""
 
-    def __init__(self, config: ApplicationConfiguration):
+    def __init__(self, config: ApplicationConfiguration) -> None:
         """Initialize the command line interface parameter parser.
 
         :param config: The current settings for the application

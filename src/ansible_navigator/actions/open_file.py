@@ -62,7 +62,7 @@ class Action:
 
     KEGEX = r"^o(?:pen)?(\s(?P<requested>.*))?$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:open`` action.
 
         :param args: The current settings for the application

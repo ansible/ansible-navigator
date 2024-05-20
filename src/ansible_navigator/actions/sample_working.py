@@ -17,7 +17,7 @@ class Action(ActionBase):
 
     KEGEX = r"^sample_working$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:sample_working`` action.
 
         :param args: The current settings for the application

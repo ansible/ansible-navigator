@@ -17,7 +17,7 @@ class Action(ActionBase):
 
     KEGEX = r"^l(?:og)?$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:log`` action.
 
         :param args: The current settings for the application

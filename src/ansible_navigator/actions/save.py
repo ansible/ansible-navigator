@@ -15,7 +15,7 @@ class Action:
 
     KEGEX = r"^s(?:ave)?\s(?P<filename>.*)$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:save`` action.
 
         :param args: The current settings for the application
