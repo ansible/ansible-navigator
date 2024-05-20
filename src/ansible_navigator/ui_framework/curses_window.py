@@ -47,7 +47,7 @@ class CursesWindow:
     # pylint: disable=too-many-instance-attributes
     """Abstraction for a curses window."""
 
-    def __init__(self, ui_config: UIConfig):
+    def __init__(self, ui_config: UIConfig) -> None:
         """Initialize a curses window.
 
         :param ui_config: The current user interface configuration

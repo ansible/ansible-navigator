@@ -39,7 +39,7 @@ class ImagePuller:
         image: str,
         arguments: Constants | list[str],
         pull_policy: str,
-    ):
+    ) -> None:
         """Initialize the container image puller.
 
         :param container_engine: The name of the container engine

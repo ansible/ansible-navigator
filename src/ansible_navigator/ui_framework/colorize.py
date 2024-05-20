@@ -45,7 +45,7 @@ CURSES_STYLES = {
 class ColorSchema:
     """A storage mechanism for the schema (theme)."""
 
-    def __init__(self, schema: dict[str, str | list[Any] | dict[Any, Any]]):
+    def __init__(self, schema: dict[str, str | list[Any] | dict[Any, Any]]) -> None:
         """Initialize the ColorSchema class.
 
         :param schema: The color scheme, theme to use
@@ -87,7 +87,7 @@ class ColorSchema:
 class Colorize:
     """Functionality for coloring."""
 
-    def __init__(self, grammar_dir: Traversable, theme_path: Traversable):
+    def __init__(self, grammar_dir: Traversable, theme_path: Traversable) -> None:
         """Initialize the colorizer.
 
         :param grammar_dir: The directory in which the grammars reside

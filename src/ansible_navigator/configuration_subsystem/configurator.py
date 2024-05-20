@@ -35,7 +35,7 @@ class Configurator:
         application_configuration: ApplicationConfiguration,
         apply_previous_cli_entries: list[str] | C = C.NONE,
         skip_roll_back: bool = False,
-    ):
+    ) -> None:
         """Initialize the configuration variables.
 
         :param params: A list of parameters e.g. ['-x', 'value']

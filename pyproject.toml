@@ -267,7 +267,6 @@ ignore = [
   'PLW2901', # `for` loop variable `info_name` overwritten by assignment target
   "RET504", # Unnecessary variable assignment before `return` statement
   # temporary disabled until we fix them:
-  'ANN204', # [*] Missing return type annotation for special method `__init__`
   'ANN401', # Dynamically typed expressions (typing.Any) are disallowed in `cls`
   'ARG001', # Unused function argument: `colno`
   'ARG002', # Unused method argument: `app`

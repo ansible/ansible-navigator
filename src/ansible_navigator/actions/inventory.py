@@ -106,7 +106,7 @@ class Action(ActionBase):
 
     KEGEX = r"^i(?:nventory)?(\s(?P<params>.*))?$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:images`` action.
 
         :param args: The current settings for the application

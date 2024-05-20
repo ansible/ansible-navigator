@@ -179,7 +179,7 @@ class DiagnosticsCollector:
         args: ApplicationConfiguration,
         messages: list[LogMessage],
         exit_messages: list[ExitMessage],
-    ):
+    ) -> None:
         """Initialize the ShowTech class.
 
         :param args: The current settings

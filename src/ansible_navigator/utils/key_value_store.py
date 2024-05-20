@@ -27,7 +27,7 @@ class KVSValuesView(ValuesView[str]):
 class KeyValueStore(MutableMapping[str, str]):
     """An interface to use a sqlite database as a key-value store."""
 
-    def __init__(self, filename: str | Path):
+    def __init__(self, filename: str | Path) -> None:
         """Initialize the key-value store.
 
         :param filename: The full path to the sqlite database file

@@ -19,7 +19,7 @@ class Action:
 
     KEGEX = r"^\d+$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the select action.
 
         :param args: The current settings for the application

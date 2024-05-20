@@ -28,7 +28,9 @@ class ActionBase:
     # pylint: disable=too-many-instance-attributes
     """Base class for actions."""
 
-    def __init__(self, args: ApplicationConfiguration, name: str, logger_name: str = __name__):
+    def __init__(
+        self, args: ApplicationConfiguration, name: str, logger_name: str = __name__
+    ) -> None:
         """Initialize the App class.
 
         :param args: The current application configuration
