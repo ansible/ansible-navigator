@@ -183,7 +183,7 @@ class Action(ActionBase):
 
     KEGEX = r"^lint(\s(?P<params>.*))?$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the action.
 
         :param args: The current application configuration

@@ -74,7 +74,7 @@ class Action(ActionBase):
 
     KEGEX = "^e(?:xec)?$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:exec`` action.
 
         :param args: The current settings for the application

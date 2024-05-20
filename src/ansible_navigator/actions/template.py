@@ -31,7 +31,7 @@ class Action(ActionBase):
 
     KEGEX = r"^{{\s*(?P<params>.*?)\s*}}$"
 
-    def __init__(self, args: ApplicationConfiguration):
+    def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the template action.
 
         :param args: The current settings for the application

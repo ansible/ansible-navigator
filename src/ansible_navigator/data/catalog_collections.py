@@ -56,7 +56,7 @@ PROCESSES = (multiprocessing.cpu_count() - 1) or 1
 class CollectionCatalog:
     """A collection cataloger."""
 
-    def __init__(self, directories: list[Path]):
+    def __init__(self, directories: list[Path]) -> None:
         """Initialize the collection cataloger.
 
         :param directories: A list of directories that may contain collections

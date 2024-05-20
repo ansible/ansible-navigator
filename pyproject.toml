@@ -260,21 +260,13 @@ exclude = ["tests/fixtures/**", ".git"]
 
 [tool.ruff.lint]
 ignore = [
+  'ANN101', # This rule is deprecated and will be removed in a future release.
+  'ANN102', # This rule is deprecated and will be removed in a future release.
   'ERA001', # [*] Found commented-out code
   'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
   'PLW2901', # `for` loop variable `info_name` overwritten by assignment target
   "RET504", # Unnecessary variable assignment before `return` statement
   # temporary disabled until we fix them:
-  'ANN001', # Missing type annotation for function argument `output`
-  'ANN002', # Missing type annotation for `*args`
-  'ANN003', # Missing type annotation for `**kwargs`
-  'ANN101', # Missing type annotation for `self` in method
-  'ANN102', # Missing type annotation for `cls` in classmethod
-  'ANN201', # Missing return type annotation for public function `notify_none`
-  'ANN202', # Missing return type annotation for private function `_build_main_menu`
-  'ANN204', # [*] Missing return type annotation for special method `__init__`
-  'ANN205', # Missing return type annotation for staticmethod `run_single_process`
-  'ANN206', # Missing return type annotation for classmethod `_missing_`
   'ANN401', # Dynamically typed expressions (typing.Any) are disallowed in `cls`
   'ARG001', # Unused function argument: `colno`
   'ARG002', # Unused method argument: `app`

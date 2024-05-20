@@ -73,7 +73,7 @@ class CliRunner:
     def __init__(
         self,
         request: pytest.FixtureRequest,
-    ):
+    ) -> None:
         """Initialize the class.
 
         :param request: The current test request.

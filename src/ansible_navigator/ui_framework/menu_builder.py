@@ -35,7 +35,7 @@ class MenuBuilder:
         number_colors: int,
         color_menu_item: Callable[..., Any],
         ui_config: UIConfig,
-    ):
+    ) -> None:
         """Initialize the menu builder.
 
         :param progress_bar_width:  The width of the progress bar
