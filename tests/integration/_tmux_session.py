@@ -308,8 +308,8 @@ class TmuxSession:
                 return showing
             time.sleep(0.1)
 
-        setup_capture_path = os.path.join(self._test_log_dir, "showing_setup.txt")
-        timeout_capture_path = os.path.join(self._test_log_dir, "showing_timeout.txt")
+        setup_capture_path = Path(os.path.join(self._test_log_dir, "showing_setup.txt"))
+        timeout_capture_path = Path(os.path.join(self._test_log_dir, "showing_timeout.txt"))
 
         ok_to_return = False
         err_message = "RESPONSE"
@@ -350,7 +350,7 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                with open(file=setup_capture_path, mode="w", encoding="utf-8") as fh:
+                with setup_capture_path.open(mode="w", encoding="utf-8") as fh:
                     fh.writelines("\n".join(self._setup_capture))
 
                 time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
@@ -361,7 +361,7 @@ class TmuxSession:
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
-                with open(file=timeout_capture_path, mode="w", encoding="utf-8") as fh:
+                with timeout_capture_path.open(mode="w", encoding="utf-8") as fh:
                     fh.writelines("\n".join(showing))
                 self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
                 return showing

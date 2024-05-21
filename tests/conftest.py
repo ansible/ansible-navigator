@@ -349,10 +349,10 @@ def pytest_sessionstart(session: pytest.Session) -> None:
 USER_ENVIRONMENT = {}
 
 
-def is_config_empty(filename: str) -> bool:
+def is_config_empty(filename: Path) -> bool:
     """Establish if config file is empty."""
     pattern = re.compile(r"^\s*(?:#|$)")
-    with open(filename, encoding="utf-8") as file:
+    with filename.open(encoding="utf-8") as file:
         for line in file:
             if not pattern.match(line):
                 pytest.exit(f"[{line}]")
