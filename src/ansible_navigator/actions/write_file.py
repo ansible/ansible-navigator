@@ -83,7 +83,8 @@ class Action:
                 write_as = interaction.ui.content_format().value.file_extension
 
         if write_as == ".txt":
-            with open(os.path.abspath(filename), file_mode, encoding="utf-8") as fh:
+            file = Path(os.path.abspath(filename))
+            with file.open(file_mode, encoding="utf-8") as fh:
                 fh.write(obj)
         elif write_as == ".yaml":
             serialize_write_file(
