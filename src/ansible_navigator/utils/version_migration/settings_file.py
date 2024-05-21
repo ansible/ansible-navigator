@@ -33,6 +33,7 @@ class SettingsFile(Migration):
         :param args: Positional arguments
         :param kwargs: Keyword arguments
         """
+        # pylint: disable=possibly-used-before-assignment
         if not self.content:
             with self.settings_file_path.open("r", encoding="utf-8") as f:
                 try:

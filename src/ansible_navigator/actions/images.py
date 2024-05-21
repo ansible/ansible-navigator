@@ -106,6 +106,7 @@ class Action(ActionBase):
         :param name: The name of the images menu
         :returns: The heading
         """
+        text = ""
         if name == "image_menu":
             text = (
                 f"{self.steps.previous.selected['first_column']}"

@@ -78,6 +78,7 @@ class Action(ActionBase):
         self._prepare_to_run(app, interaction)
 
         colon_prompt = self._interaction.action.match.groupdict()["params"]
+        source = None
 
         # Nothing provided at colon prompt and content is showing, get the task action
         if interaction.content and not colon_prompt:
