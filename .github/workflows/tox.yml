@@ -36,7 +36,9 @@ jobs:
           platforms: linux,macos
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
-    environment: test
+    permissions:
+      id-token: write
+      checks: read
     runs-on: ubuntu-20.04
     needs: pre
     strategy:
@@ -87,8 +89,8 @@ jobs:
         with:
           name: ${{ matrix.passed_name }}
           fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true # optional (default = false)
+          use_oidc: true # cspell:ignore oidc
       - name: Archive logs
         if: always()
         uses: actions/upload-artifact@v4
