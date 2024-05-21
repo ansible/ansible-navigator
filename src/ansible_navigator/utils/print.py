@@ -50,6 +50,7 @@ def color_lines(term_color_bits: int, tokenized: list[list[SimpleLinePart]]) -> 
     :param tokenized: The tokenized content
     :returns: The ANSI string
     """
+    # pylint: disable=possibly-used-before-assignment
     lines = []
     for line in tokenized:
         printable = ""

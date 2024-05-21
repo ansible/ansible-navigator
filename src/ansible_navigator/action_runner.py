@@ -105,6 +105,7 @@ class ActionRunner(ActionBase):
 
         :param initial_interaction: The initial interaction for app start
         """
+        interaction = None
         while True:
             if not self.steps:
                 self.steps.append(initial_interaction)

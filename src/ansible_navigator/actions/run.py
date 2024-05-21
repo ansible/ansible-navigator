@@ -294,6 +294,7 @@ class Action(ActionBase):
         :returns: The pending interaction or none
         """
         self._prepare_to_run(app, interaction)
+        initialized = False
 
         if interaction.action.match.groupdict().get("run"):
             self._logger.debug("run requested in interactive mode")
