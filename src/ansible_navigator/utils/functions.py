@@ -503,7 +503,7 @@ def time_stamp_for_file(path: str, time_zone: str) -> tuple[float | None, str | 
     :returns: The UNIX timestamp and an ISO 8601 string
     """
     try:
-        modified = os.path.getmtime(path)
+        modified = Path(path).stat().st_mtime
     except FileNotFoundError:
         # It may have been mounted to a different location in the execution environment
         modified = None
