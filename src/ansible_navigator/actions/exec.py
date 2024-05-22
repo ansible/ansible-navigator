@@ -51,18 +51,17 @@ def _generate_command(
         else:
             pass_through_args = []
 
+    elif exec_command_is_default and isinstance(extra_args, list):
+        command, pass_through_args = extra_args[0], extra_args[1:]
     else:
-        if exec_command_is_default and isinstance(extra_args, list):
-            command, pass_through_args = extra_args[0], extra_args[1:]
+        parts = shlex.split(exec_command)
+        command = parts[0]
+        if len(parts) == 1 and isinstance(extra_args, list):
+            # Use the extra arguments
+            pass_through_args = extra_args
         else:
-            parts = shlex.split(exec_command)
-            command = parts[0]
-            if len(parts) == 1 and isinstance(extra_args, list):
-                # Use the extra arguments
-                pass_through_args = extra_args
-            else:
-                # Use the leftovers or an empty list
-                pass_through_args = parts[1:]
+            # Use the leftovers or an empty list
+            pass_through_args = parts[1:]
     logger.debug("runner command: %s", command)
     logger.debug("runner passthrough: %s", pass_through_args)
     return (command, pass_through_args)

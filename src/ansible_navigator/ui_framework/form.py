@@ -419,14 +419,13 @@ class FormPresenter(CursesWindow):
                 if form_field.pressed:
                     break
                 idx += 1
+            elif char == curses_ascii.TAB:
+                form_field.conditional_validation(response)
+                idx += 1
             else:
-                if char == curses_ascii.TAB:
-                    form_field.conditional_validation(response)
+                form_field.validate(response)
+                if form_field.valid is True:
                     idx += 1
-                else:
-                    form_field.validate(response)
-                    if form_field.valid is True:
-                        idx += 1
 
         return self._form
 

@@ -149,15 +149,14 @@ def place_at_path(
                     else:
                         msg = "No behavior specified for LIST_LIST"
                         raise ValueError(msg)
+                elif MergeBehaviors.LIST_APPEND in behaviors:
+                    nested[part].append(value)
+                elif MergeBehaviors.LIST_REPLACE in behaviors:
+                    nested[part] = value
+                    continue
                 else:
-                    if MergeBehaviors.LIST_APPEND in behaviors:
-                        nested[part].append(value)
-                    elif MergeBehaviors.LIST_REPLACE in behaviors:
-                        nested[part] = value
-                        continue
-                    else:
-                        msg = "No behavior specified for LIST_*"
-                        raise ValueError(msg)
+                    msg = "No behavior specified for LIST_*"
+                    raise ValueError(msg)
 
                 if MergeBehaviors.LIST_UNIQUE in behaviors:
                     nested[part] = list(dict.fromkeys(nested[part]))

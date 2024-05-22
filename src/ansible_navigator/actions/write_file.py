@@ -74,13 +74,12 @@ class Action:
 
         if isinstance(obj, str):
             write_as = ".txt"
+        elif re.match(r"^.*\.y(?:a)?ml$", filename):
+            write_as = ".yaml"
+        elif filename.endswith(".json"):
+            write_as = ".json"
         else:
-            if re.match(r"^.*\.y(?:a)?ml$", filename):
-                write_as = ".yaml"
-            elif filename.endswith(".json"):
-                write_as = ".json"
-            else:
-                write_as = interaction.ui.content_format().value.file_extension
+            write_as = interaction.ui.content_format().value.file_extension
 
         if write_as == ".txt":
             file = Path(os.path.abspath(filename))

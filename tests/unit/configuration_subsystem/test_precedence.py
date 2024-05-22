@@ -150,16 +150,15 @@ def test_all_entries_reflect_cli_given_settings(
         if entry.name in expected_dict:
             assert entry.value.current == expected_dict[entry.name], entry.name
             assert entry.value.source is C.USER_CLI, entry.name
-        else:
-            if settings_file_type == "empty":
-                if entry.value.default is C.NOT_SET:
-                    assert entry.value.source is C.NOT_SET, entry.name
-                elif entry.value.default == "auto":
-                    assert entry.value.source is C.AUTO, entry.name
-                else:
-                    assert entry.value.source is C.DEFAULT_CFG, entry.name
-            elif settings_file_type == "full":
-                assert entry.value.source is C.USER_CFG, entry.name
+        elif settings_file_type == "empty":
+            if entry.value.default is C.NOT_SET:
+                assert entry.value.source is C.NOT_SET, entry.name
+            elif entry.value.default == "auto":
+                assert entry.value.source is C.AUTO, entry.name
+            else:
+                assert entry.value.source is C.DEFAULT_CFG, entry.name
+        elif settings_file_type == "full":
+            assert entry.value.source is C.USER_CFG, entry.name
 
 
 @pytest.mark.usefixtures("_ansible_version")
@@ -244,16 +243,15 @@ def test_all_entries_reflect_default(
     configured_entry = response.application_configuration.entry(entry.name)
     if configured_entry.value.default is C.NOT_SET:
         assert configured_entry.value.source is C.NOT_SET, configured_entry
+    elif configured_entry.name == "playbook_save_as":
+        assert configured_entry.value.source is C.DEFAULT_CFG, configured_entry
+        assert configured_entry.value.current.endswith(entry.value.default), configured_entry
+    elif configured_entry.name == "container_engine":
+        assert configured_entry.value.source is C.AUTO, configured_entry
+        assert configured_entry.value.current == "podman"
     else:
-        if configured_entry.name == "playbook_save_as":
-            assert configured_entry.value.source is C.DEFAULT_CFG, configured_entry
-            assert configured_entry.value.current.endswith(entry.value.default), configured_entry
-        elif configured_entry.name == "container_engine":
-            assert configured_entry.value.source is C.AUTO, configured_entry
-            assert configured_entry.value.current == "podman"
-        else:
-            assert configured_entry.value.source is C.DEFAULT_CFG, configured_entry
-            assert configured_entry.value.current == entry.value.default, configured_entry
+        assert configured_entry.value.source is C.DEFAULT_CFG, configured_entry
+        assert configured_entry.value.current == entry.value.default, configured_entry
 
 
 @pytest.mark.usefixtures("_ansible_version")
