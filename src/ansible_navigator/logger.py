@@ -7,6 +7,7 @@ import logging
 import os
 import zoneinfo
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -57,7 +58,7 @@ def setup_logger(args: ApplicationConfiguration) -> None:
     :param args: The CLI args
     """
     if os.path.exists(args.log_file) and args.log_append is False:
-        os.remove(args.log_file)
+        Path(args.log_file).unlink()
     handler = logging.FileHandler(args.log_file)
 
     time_zone = args.entry("time_zone").value.current

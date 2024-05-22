@@ -306,7 +306,6 @@ ignore = [
   'PT022', # [*] No teardown in fixture `cmd_in_tty`, use `return` instead of `yield`
   'PTH100', # `os.path.abspath()` should be replaced by `Path.resolve()`
   'PTH103', # `os.makedirs()` should be replaced by `Path.mkdir(parents=True)`
-  'PTH107', # `os.remove()` should be replaced by `Path.unlink()`
   'PTH109', # `os.getcwd()` should be replaced by `Path.cwd()`
   'PTH110', # `os.path.exists()` should be replaced by `Path.exists()`
   'PTH111', # `os.path.expanduser()` should be replaced by `Path.expanduser()`
