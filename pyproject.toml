@@ -310,7 +310,6 @@ ignore = [
   'PTH109', # `os.getcwd()` should be replaced by `Path.cwd()`
   'PTH110', # `os.path.exists()` should be replaced by `Path.exists()`
   'PTH111', # `os.path.expanduser()` should be replaced by `Path.expanduser()`
-  'PTH112', # `os.path.isdir()` should be replaced by `Path.is_dir()`
   'PTH113', # `os.path.isfile()` should be replaced by `Path.is_file()`
   'PTH114', # `os.path.islink()` should be replaced by `Path.is_symlink()`
   'PTH115', # `os.readlink()` should be replaced by `Path.readlink()`

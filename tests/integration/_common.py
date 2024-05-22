@@ -220,7 +220,7 @@ def copytree(
             if symlinks and os.path.islink(source_path):
                 source_link = os.readlink(source_path)
                 os.symlink(source_link, destination_path)
-            elif os.path.isdir(source_path):
+            elif Path(source_path).is_dir():
                 copytree(
                     source_path,
                     destination_path,
