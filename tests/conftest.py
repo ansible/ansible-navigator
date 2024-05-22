@@ -119,9 +119,9 @@ def locked_directory(tmpdir: str) -> Generator[str, None, None]:
     :param tmpdir: Fixture for temporary directory
     :yields: The temporary directory
     """
-    os.chmod(tmpdir, 0o000)
+    Path(tmpdir).chmod(0o000)
     yield tmpdir
-    os.chmod(tmpdir, 0o777)
+    Path(tmpdir).chmod(0o777)
 
 
 @pytest.fixture(scope="session")

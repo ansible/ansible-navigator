@@ -305,7 +305,6 @@ ignore = [
   'PT019', # Fixture `_mocked_func` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
   'PT022', # [*] No teardown in fixture `cmd_in_tty`, use `return` instead of `yield`
   'PTH100', # `os.path.abspath()` should be replaced by `Path.resolve()`
-  'PTH101', # `os.chmod()` should be replaced by `Path.chmod()`
   'PTH103', # `os.makedirs()` should be replaced by `Path.mkdir(parents=True)`
   'PTH107', # `os.remove()` should be replaced by `Path.unlink()`
   'PTH109', # `os.getcwd()` should be replaced by `Path.cwd()`
