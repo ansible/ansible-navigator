@@ -109,15 +109,14 @@ def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
     """
     if entry.cli_parameters is None:
         cli_parameters = "positional"
-    else:
-        if entry.cli_parameters.short:
-            if entry.cli_parameters.long_override:
-                long = entry.cli_parameters.long_override
-            else:
-                long = f"--{entry.name_dashed}"
-            cli_parameters = f"``{entry.cli_parameters.short}`` or ``{long}``"
+    elif entry.cli_parameters.short:
+        if entry.cli_parameters.long_override:
+            long = entry.cli_parameters.long_override
         else:
-            cli_parameters = "positional"
+            long = f"--{entry.name_dashed}"
+        cli_parameters = f"``{entry.cli_parameters.short}`` or ``{long}``"
+    else:
+        cli_parameters = "positional"
 
     path = entry.settings_file_path("ansible-navigator")
     indent = 4

@@ -860,13 +860,12 @@ class Action(ActionBase):
                     status_color = 9
                 else:
                     status_color = self._msg_from_plays[1] or 10
+            elif self._msg_from_plays[0] is not None and self._msg_from_plays[1] is not None:
+                status = self._msg_from_plays[0]
+                status_color = self._msg_from_plays[1]
             else:
-                if self._msg_from_plays[0] is not None and self._msg_from_plays[1] is not None:
-                    status = self._msg_from_plays[0]
-                    status_color = self._msg_from_plays[1]
-                else:
-                    status = self.runner.status
-                    status_color = 10
+                status = self.runner.status
+                status_color = 10
         return status, status_color
 
     def _set_status(self) -> None:
