@@ -152,6 +152,9 @@ dmypy.json
 /src/ansible_navigator/_version.py
 out
 
+# Coverage files
+*.lcov
+
 # other
 .DS_Store
 .envrc
