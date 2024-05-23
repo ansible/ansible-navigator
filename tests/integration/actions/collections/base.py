@@ -4,6 +4,7 @@ import difflib
 import os
 
 from collections.abc import Generator
+from pathlib import Path
 
 import pytest
 
@@ -106,7 +107,7 @@ class BaseClass:
         os.makedirs(tmp_coll_dir, exist_ok=True)
         copytree(
             FIXTURES_COLLECTION_DIR,
-            os.path.join(tmp_coll_dir, "collections"),
+            Path(tmp_coll_dir) / "collections",
             dirs_exist_ok=True,
         )
         params: TmuxSessionKwargs = {

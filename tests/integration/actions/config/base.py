@@ -4,6 +4,7 @@ import difflib
 import os
 
 from collections.abc import Generator
+from pathlib import Path
 
 import pytest
 
@@ -15,8 +16,8 @@ from tests.integration._interactions import UiTestStep
 from tests.integration._tmux_session import TmuxSession
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration", "actions", "config")
-CONFIG_FIXTURE = os.path.join(TEST_FIXTURE_DIR, "ansible.cfg")
+TEST_FIXTURE_DIR = Path(FIXTURES_DIR) / "integration" / "actions" / "config"
+CONFIG_FIXTURE = Path(TEST_FIXTURE_DIR) / "ansible.cfg"
 
 
 base_steps = (

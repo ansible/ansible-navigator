@@ -427,7 +427,8 @@ class Action(ActionBase):
 
         kwargs["host_cwd"] = playbook_dir
 
-        self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")
+        self._adjacent_collection_dir = Path(playbook_dir) / "collections"
+
         cache_path = self._args.internals.cache_path
 
         pass_through_arg = [

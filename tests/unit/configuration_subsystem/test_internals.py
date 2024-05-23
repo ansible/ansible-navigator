@@ -3,6 +3,7 @@
 import os
 
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
@@ -29,7 +30,7 @@ def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None
         functionality in tests
     """
     settings_file = "ansible-navigator.yml"
-    settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file)
+    settings_file_path = Path(TEST_FIXTURE_DIR) / settings_file
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
     args.application_version = "test"
@@ -50,7 +51,7 @@ def test_settings_file_path_environment_variable(monkeypatch: pytest.MonkeyPatch
         functionality in tests
     """
     settings_file = "ansible-navigator.yml"
-    settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file)
+    settings_file_path = Path(TEST_FIXTURE_DIR) / settings_file
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", settings_file_path)
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True

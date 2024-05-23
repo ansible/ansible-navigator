@@ -14,9 +14,9 @@ from tests.integration._common import update_fixtures
 from tests.integration._tmux_session import TmuxSession
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/replay")
-PLAYBOOK_ARTIFACT = os.path.join(TEST_FIXTURE_DIR, "playbook-artifact.json")
-TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
+TEST_FIXTURE_DIR = Path(FIXTURES_DIR) / "integration/actions/replay"
+PLAYBOOK_ARTIFACT = Path(TEST_FIXTURE_DIR) / "playbook-artifact.json"
+TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR) / "ansible-navigator.yml"
 
 
 class BaseClass:

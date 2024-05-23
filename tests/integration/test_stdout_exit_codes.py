@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
@@ -24,7 +22,7 @@ if TYPE_CHECKING:
     from ._action_run_test import ActionRunTest
 
 
-PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.yml")
+PLAYBOOK = Path(FIXTURES_DIR) / "integration" / "stdout_exit_codes" / "site.yml"
 
 
 @pytest.fixture(name="params")
