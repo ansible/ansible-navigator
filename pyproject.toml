@@ -60,7 +60,6 @@ show_missing = true
 [tool.coverage.run]
 # branch = true
 concurrency = ["multiprocessing", "thread"]
-data_file = ".tox/.coverage"
 parallel = true
 source_pkgs = ["ansible_navigator"]
 
