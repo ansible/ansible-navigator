@@ -89,7 +89,6 @@ jobs:
           name: logs-${{ matrix.name }}.zip
           path: |
             .tox/**/log/
-            .tox/**/.coverage*
             .tox/**/coverage.xml
 
       - name: Change accessibility for cache
