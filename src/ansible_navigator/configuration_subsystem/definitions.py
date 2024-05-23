@@ -472,7 +472,8 @@ class PaeChangeRequest:
 
 # A type used for the settings as a dictionary
 SettingsFileType = NewType(
-    "SettingsFileType", dict[str, bool | dict[Any, Any] | int | str | list[Any]]
+    "SettingsFileType",
+    dict[str, bool | dict[Any, Any] | int | str | list[Any]],
 )
 
 # A type used to describe a schema file for the settings

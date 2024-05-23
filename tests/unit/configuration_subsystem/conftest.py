@@ -62,7 +62,9 @@ class GenerateConfigCallable(Protocol):
 
 
 def _generate_config(
-    params: list[Any] | None = None, settings_file_name: str | None = None, initial: bool = True
+    params: list[Any] | None = None,
+    settings_file_name: str | None = None,
+    initial: bool = True,
 ) -> GenerateConfigResponse:
     """Generate a configuration given a settings file.
 

@@ -21,7 +21,7 @@ def test_count(contents: str) -> None:
     :param contents: The contents of the dockerfile.
     """
     assert len(ImageEntry.__members__) == len(
-        [line for line in contents.splitlines() if line.startswith("FROM")]
+        [line for line in contents.splitlines() if line.startswith("FROM")],
     )
 
 

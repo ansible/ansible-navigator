@@ -63,7 +63,8 @@ def test_ee_false_no_ansible(
     """
 
     def check_for_ansible(
-        *_args: Any, **_kwargs: dict[str, Any]
+        *_args: Any,
+        **_kwargs: dict[str, Any],
     ) -> tuple[list[LogMessage], list[ExitMessage]]:
         """Return the path to the container engine.
 

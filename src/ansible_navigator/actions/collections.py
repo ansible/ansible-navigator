@@ -463,13 +463,15 @@ class Action(ActionBase):
             mount_doc_cache = True
             # Determine if the doc_cache is relative to the cache directory
             if path_is_relative_to(
-                child=Path(self._args.collection_doc_cache_path), parent=(cache_path)
+                child=Path(self._args.collection_doc_cache_path),
+                parent=(cache_path),
             ):
                 mount_doc_cache = False
 
             # The playbook directory will be mounted as host_cwd, so don't duplicate
             if path_is_relative_to(
-                child=Path(self._args.collection_doc_cache_path), parent=(Path(playbook_dir))
+                child=Path(self._args.collection_doc_cache_path),
+                parent=(Path(playbook_dir)),
             ):
                 mount_doc_cache = False
 
@@ -600,7 +602,8 @@ class Action(ActionBase):
         return
 
     def _get_collection_plugins_details(
-        self, selected_collection: dict[str, Any]
+        self,
+        selected_collection: dict[str, Any],
     ) -> dict[str, Any]:
         """Get plugin details for the given collection.
 

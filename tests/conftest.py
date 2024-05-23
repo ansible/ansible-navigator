@@ -392,7 +392,7 @@ def pytest_configure(config: pytest.Config) -> None:
     ):
         pytest.exit(
             f"Please remove or empty the ansible config file '{config_file}' "
-            "before testing, as this will likely break the test results."
+            "before testing, as this will likely break the test results.",
         )
 
     # look for ansible-navigator settings file
@@ -417,7 +417,8 @@ def pytest_unconfigure(config: pytest.Config) -> None:
 
 @pytest.fixture()
 def skip_if_already_failed(  # noqa: PT004
-    request: pytest.FixtureRequest, failed: set[str] = set()
+    request: pytest.FixtureRequest,
+    failed: set[str] = set(),
 ) -> Generator[None, None, None]:
     """Fixture that stops parametrized tests running on first failure."""
     key = request.node.name.split("[")[0]

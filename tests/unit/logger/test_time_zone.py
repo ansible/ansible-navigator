@@ -54,7 +54,8 @@ test_data = (
         id="1",
     ),
     pytest.param(
-        Scenario(name="2", re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"), id="2"
+        Scenario(name="2", re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"),
+        id="2",
     ),
     pytest.param(
         Scenario(name="3", re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
@@ -111,5 +112,5 @@ def test_tz_support(
     assert len(caplog.records) > 100
     for record in caplog.records:
         assert data.re_match.match(
-            record.asctime
+            record.asctime,
         ), f"{data.re_match.pattern} does not match '{record.asctime}'"

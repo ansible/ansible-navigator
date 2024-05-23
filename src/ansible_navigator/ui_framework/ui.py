@@ -814,7 +814,10 @@ class UserInterface(CursesWindow):
         return menu_heading, menu_items
 
     def _show_menu(
-        self, current: Sequence[Any], columns: list[str], await_input: bool
+        self,
+        current: Sequence[Any],
+        columns: list[str],
+        await_input: bool,
     ) -> Interaction:
         """Show a menu on the screen.
 

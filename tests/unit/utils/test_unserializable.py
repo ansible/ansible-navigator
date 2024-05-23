@@ -48,7 +48,7 @@ def test_custom_class(
             content=content,
             content_view=content_view[1],
             serialization_format=serialization_format[1],
-        )
+        ),
     )
     assert (
         f"The requested content could not be converted to {serialization_format[0]!s}."
@@ -75,7 +75,7 @@ def test_deque(
             content=content,  # type:ignore[arg-type]
             content_view=content_view[1],
             serialization_format=serialization_format[1],
-        )
+        ),
     )
     assert (
         f"The requested content could not be converted to {serialization_format[0]!s}."

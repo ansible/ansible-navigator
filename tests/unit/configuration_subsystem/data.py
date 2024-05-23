@@ -266,7 +266,10 @@ ENV_VAR_DATA = [
     ),
     pytest.param("inventory_column", "t1,t2,t3", ["t1", "t2", "t3"], id="27"),
     pytest.param(
-        "lint_config", "/tmp/ansible-lint-config.yml", "/tmp/ansible-lint-config.yml", id="28"
+        "lint_config",
+        "/tmp/ansible-lint-config.yml",
+        "/tmp/ansible-lint-config.yml",
+        id="28",
     ),
     pytest.param("lintables", "/tmp/lintables", "/tmp/lintables", id="29"),
     pytest.param("log_append", "false", False, id="30"),
@@ -284,7 +287,10 @@ ENV_VAR_DATA = [
     pytest.param("pull_arguments", "--tls-verify=false", ["--tls-verify=false"], id="42"),
     pytest.param("pull_policy", "never", "never", id="43"),
     pytest.param(
-        "set_environment_variable", "T1=A,T2=B,T3=C", {"T1": "A", "T2": "B", "T3": "C"}, id="44"
+        "set_environment_variable",
+        "T1=A,T2=B,T3=C",
+        {"T1": "A", "T2": "B", "T3": "C"},
+        id="44",
     ),
     pytest.param("settings_effective", "false", False, id="45"),
     pytest.param("settings_sample", "false", False, id="46"),

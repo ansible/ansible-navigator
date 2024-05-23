@@ -11,7 +11,11 @@ CLI = "ansible-navigator --execution-environment false"
 testdata = [
     pytest.param(0, CLI, "welcome", ":help help", id="0"),
     pytest.param(
-        1, f":replay {PLAYBOOK_ARTIFACT}", "Play list", ["Complete", "Successful"], id="1"
+        1,
+        f":replay {PLAYBOOK_ARTIFACT}",
+        "Play list",
+        ["Complete", "Successful"],
+        id="1",
     ),
     pytest.param(2, ":0", "Task list", ":help help", id="2"),
     pytest.param(3, ":0", "Task 1", ":help help", id="3"),

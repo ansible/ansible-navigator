@@ -79,7 +79,8 @@ def run_command(command: Command) -> None:
 
 
 def worker(
-    pending_queue: multiprocessing.Queue[Any], completed_queue: multiprocessing.Queue[Any]
+    pending_queue: multiprocessing.Queue[Any],
+    completed_queue: multiprocessing.Queue[Any],
 ) -> None:
     """Read pending, run, post process, and place in completed.
 

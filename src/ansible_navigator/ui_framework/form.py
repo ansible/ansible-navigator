@@ -341,7 +341,8 @@ class FormPresenter(CursesWindow):
         return CursesLines(lines)
 
     def _generate_prompt(
-        self, form_field: FieldText | FieldChecks | FieldRadio
+        self,
+        form_field: FieldText | FieldChecks | FieldRadio,
     ) -> list[CursesLinePart]:
         """Generate the prompt for a field.
 
