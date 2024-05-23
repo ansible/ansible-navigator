@@ -84,7 +84,6 @@ jobs:
         run: python3 -m tox -e no-test-deps
 
       - name: Archive logs and coverage data
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.name }}.zip
