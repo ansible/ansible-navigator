@@ -4,16 +4,20 @@ from __future__ import annotations
 
 import difflib
 import os
+
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
 
 from tests.defaults import FIXTURES_DIR
-from tests.integration._common import (retrieve_fixture_for_step,
-                                       update_fixtures)
-from tests.integration._interactions import SearchFor, UiTestStep
-from tests.integration._tmux_session import TmuxSession, TmuxSessionKwargs
+from tests.integration._common import retrieve_fixture_for_step
+from tests.integration._common import update_fixtures
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
+from tests.integration._tmux_session import TmuxSession
+from tests.integration._tmux_session import TmuxSessionKwargs
+
 
 if TYPE_CHECKING:
     from collections.abc import Generator
