@@ -50,7 +50,7 @@ class StdoutCliTest(BaseScenario):
 
         :returns: The constructed command
         """
-        return ("ansible-navigator", self.subcommand) + self.params
+        return ("ansible-navigator", *self.subcommand, *self.params)
 
 
 # Intentionally not using parametrize so the behavior can be documented
@@ -125,7 +125,7 @@ def test(
     monkeypatch.setenv("PAGER", "cat")
     monkeypatch.setenv("NO_COLOR", "true")
     command = shlex_join(
-        data.command + ("--lf", log_file, "--ee", str(exec_env), "--set-env", "PAGER=cat"),
+        [*data.command, "--lf", log_file, "--ee", str(exec_env), "--set-env", "PAGER=cat"],
     )
     stdout, _stderr, _exit_code = cmd_in_tty(cmd=command)
 

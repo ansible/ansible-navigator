@@ -95,7 +95,7 @@ class Test(Cli2Runner):
 
         assert cfg_path.exists()
 
-        params = shlex.split(cli_entry) + ["--pp", "never"]
+        params = [*shlex.split(cli_entry), "--pp", "never"]
 
         monkeypatch.setattr("sys.argv", params)
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", str(cfg_path))

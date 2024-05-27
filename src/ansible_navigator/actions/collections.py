@@ -130,9 +130,12 @@ class Action(ActionBase):
         )
         interaction.ui.show_form(notification)
 
-        params = [self._name] + shlex.split(
-            self._interaction.action.match.groupdict()["params"] or "",
-        )
+        params = [
+            self._name,
+            *shlex.split(
+                self._interaction.action.match.groupdict()["params"] or "",
+            ),
+        ]
 
         args_updated = self._update_args(params=params, attach_cdc=True)
         if not args_updated:

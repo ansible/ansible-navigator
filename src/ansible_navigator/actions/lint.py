@@ -317,7 +317,7 @@ class Action(ActionBase):
         self._prepare_to_run(app, interaction)
 
         updated = self._update_args(
-            ["lint"] + shlex.split(interaction.action.match.groupdict()["params"] or ""),
+            ["lint", *shlex.split(interaction.action.match.groupdict()["params"] or "")],
         )
 
         if not updated:

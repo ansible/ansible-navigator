@@ -535,7 +535,7 @@ class UserInterface(CursesWindow):
                 type_msgs.append("[HINT] Use 'this' to reference it (e.g. {{ this[0] }}")
             errors, entry = templar(entry, template_vars)
             if errors:
-                msgs = ["Errors encountered while templating input"] + errors
+                msgs = ["Errors encountered while templating input", *errors]
                 msgs.extend(type_msgs)
                 self._show_form(warning_notification(msgs))
                 return None, None

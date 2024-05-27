@@ -206,7 +206,7 @@ class FormPresenter(CursesWindow):
 
             elif isinstance(form_field, FieldText):
                 prompt = self._generate_prompt(form_field)
-                line = CursesLine(tuple(prompt + [self._generate_field_text(form_field)]))
+                line = CursesLine(tuple([*prompt, self._generate_field_text(form_field)]))
                 lines.append((self._line_number, line))
                 self._line_number += 1
 
@@ -216,7 +216,7 @@ class FormPresenter(CursesWindow):
                 # although option_lines[0] is a CursesLine, only it's first line part is needed
                 # because the prompt needs to be prepended to it
                 first_option_line_part = option_lines[0][0]
-                line = CursesLine(tuple(prompt + [first_option_line_part]))
+                line = CursesLine(tuple([*prompt, first_option_line_part]))
                 lines.append((self._line_number, line))
                 self._line_number += 1
 

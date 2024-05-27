@@ -195,7 +195,7 @@ class StdoutCliTest(NamedTuple):
 
         :returns: The command
         """
-        return ["ansible-navigator", self.subcommand] + self.params + ["--mode", self.mode]
+        return ["ansible-navigator", self.subcommand, *self.params, "--mode", self.mode]
 
 
 # Intentionally not using parametrize so the behavior can be documented

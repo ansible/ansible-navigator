@@ -68,7 +68,7 @@ def worker(pending_queue: Queue[Any], completed_queue: Queue[Any]) -> None:
         try:
             command.parse(command)
         except Exception as exc:  # noqa: BLE001
-            command.errors = command.errors + [str(exc)]
+            command.errors = [*command.errors, str(exc)]
         completed_queue.put(command)
 
 

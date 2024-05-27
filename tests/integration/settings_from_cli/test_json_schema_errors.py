@@ -84,7 +84,7 @@ def test(data: Scenario, subtests: Any, tmp_path: Path) -> None:
         venv_prefix = f"source {venv} && "
     log_file = tmp_path / "log.txt"
 
-    command = list(data.command) + ["--lf", str(log_file)]
+    command = [*list(data.command), "--lf", str(log_file)]
 
     bash_wrapped = f"/bin/bash -c '{venv_prefix!s}{shlex.join(split_command=command)}'"
     # Some os.environ are required in order to make it work, likely HOME and PATH at least.

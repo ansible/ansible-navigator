@@ -189,7 +189,7 @@ class Action(ActionBase):
         self._prepare_to_run(app, interaction)
 
         args_updated = self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
+            [self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")],
         )
         if not args_updated:
             self._prepare_to_exit(interaction)
@@ -392,7 +392,7 @@ class Action(ActionBase):
                 step_type="content",
                 value=values,
                 index=self.steps.current.index,
-                columns=["__name"] + self._show_columns,
+                columns=["__name", *self._show_columns],
                 show_func=self._refresh,
             )
         except KeyError:
@@ -414,7 +414,7 @@ class Action(ActionBase):
         for host in self._host_vars.values():
             host["__type"] = "host"
             menu.append(MenuEntry(host))
-        columns = ["inventory_hostname"] + self._show_columns
+        columns = ["inventory_hostname", *self._show_columns]
         return Step(
             columns=columns,
             name="host_menu",

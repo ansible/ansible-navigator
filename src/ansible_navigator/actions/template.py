@@ -84,7 +84,7 @@ class Action(ActionBase):
             template_vars=template_vars,
         )
         if errors:
-            msgs = ["Errors encountered while templating input"] + errors
+            msgs = ["Errors encountered while templating input", *errors]
             msgs.extend(type_msgs)
             interaction.ui.show_form(warning_notification(msgs))
             return None

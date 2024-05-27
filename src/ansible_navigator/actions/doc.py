@@ -92,7 +92,7 @@ class Action(ActionBase):
 
         # Process the colon prompt and allow update args to identify missing entries
         if self._plugin_name is None:
-            args_updated = self._update_args([self._name] + shlex.split(colon_prompt or ""))
+            args_updated = self._update_args([self._name, *shlex.split(colon_prompt or "")])
             if not args_updated:
                 self._prepare_to_exit(interaction)
                 return None

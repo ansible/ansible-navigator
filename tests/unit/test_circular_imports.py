@@ -66,7 +66,7 @@ def _discover_path_importables(
             continue
 
         rel_pt = pkg_dir_path.relative_to(pkg_pth)
-        pkg_pref = ".".join((pkg_name,) + rel_pt.parts)
+        pkg_pref = ".".join((pkg_name,) + rel_pt.parts)  # noqa: RUF005
         yield from (
             pkg_path
             for _, pkg_path, _ in pkgutil.walk_packages(

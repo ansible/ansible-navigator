@@ -210,7 +210,7 @@ class Action(ActionBase):
         self._prepare_to_run(app, interaction)
 
         args_updated = self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
+            [self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")],
         )
         if not args_updated:
             self._prepare_to_exit(interaction)

@@ -361,7 +361,7 @@ class Action(ActionBase):
         # Ensure the playbook and inventory are valid
 
         args_updated = self._update_args(
-            ["run"] + shlex.split(self._interaction.action.match.groupdict()["params_run"] or ""),
+            ["run", *shlex.split(self._interaction.action.match.groupdict()["params_run"] or "")],
         )
         if not args_updated:
             return False
@@ -403,8 +403,10 @@ class Action(ActionBase):
 
         if self.mode == "interactive":
             args_updated = self._update_args(
-                ["replay"]
-                + shlex.split(self._interaction.action.match.groupdict()["params_replay"] or ""),
+                [
+                    "replay",
+                    *shlex.split(self._interaction.action.match.groupdict()["params_replay"] or ""),
+                ],
             )
             if not args_updated:
                 return False
