@@ -112,7 +112,7 @@ def print_to_stdout(
                 content=content,
                 content_view=ContentView.NORMAL,
                 serialization_format=serialization_format,
-            )
+            ),
         )
         output = serialized
     else:

@@ -50,7 +50,9 @@ def test_valid_config(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.Monk
 
 @ee_states
 def test_valid_configurator(
-    ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ee_enabled: bool,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Confirm a valid ansible.cfg is parsed using configurator.
 
@@ -140,7 +142,9 @@ def test_invalid_config(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.Mo
 
 @ee_states
 def test_invalid_configurator(
-    ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ee_enabled: bool,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Confirm a invalid ansible.cfg raises errors using configurator.
 

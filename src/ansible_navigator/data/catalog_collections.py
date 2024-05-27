@@ -356,7 +356,8 @@ class CollectionCatalog:
 
 
 def worker(
-    pending_queue: multiprocessing.Queue[Any], completed_queue: multiprocessing.Queue[Any]
+    pending_queue: multiprocessing.Queue[Any],
+    completed_queue: multiprocessing.Queue[Any],
 ) -> None:
     """Extract the documentation from a plugin, place in completed queue.
 
@@ -419,7 +420,8 @@ def worker(
 
 
 def identify_missing(
-    collections: dict[Any, Any], collection_cache: KeyValueStore
+    collections: dict[Any, Any],
+    collection_cache: KeyValueStore,
 ) -> tuple[set[Any], list[Any], int]:
     """Identify plugins missing from the cache.
 

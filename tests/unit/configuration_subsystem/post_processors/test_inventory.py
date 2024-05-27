@@ -25,7 +25,9 @@ inventory = inventory.yml,/tmp/inventory.yaml
 
 @ee_states
 def test_from_ansible_cfg(
-    ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ee_enabled: bool,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Confirm inventory is used from a valid ansible.cfg.
 

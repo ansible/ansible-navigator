@@ -253,7 +253,9 @@ class NavigatorPostProcessor:
 
     @_post_processor
     def execution_environment(
-        self, entry: SettingsEntry, config: ApplicationConfiguration
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
     ) -> PostProcessorReturn:
         # pylint: disable=too-many-locals
         """Post process execution_environment.
@@ -497,8 +499,9 @@ class NavigatorPostProcessor:
             self._requested_mode.append(ModeChangeRequest(entry=entry.name, mode=mode))
             self._requested_pae.append(
                 PaeChangeRequest(
-                    entry=entry.name, playbook_artifact_enable=playbook_artifact_enable
-                )
+                    entry=entry.name,
+                    playbook_artifact_enable=playbook_artifact_enable,
+                ),
             )
             message = (
                 f"`{entry.name} requesting mode {mode.value} and pae as {playbook_artifact_enable}"
@@ -673,7 +676,7 @@ class NavigatorPostProcessor:
                 except subprocess.CalledProcessError:
                     exit_messages.append(
                         ExitMessage(
-                            message=("ansible-lint does not seem to be installed correctly.")
+                            message=("ansible-lint does not seem to be installed correctly."),
                         ),
                     )
                     exit_messages.append(
@@ -934,7 +937,8 @@ class NavigatorPostProcessor:
             exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
             return messages, exit_messages
         if check_playbook_type(entry.value.current) == "file" and isinstance(
-            entry.value.current, str
+            entry.value.current,
+            str,
         ):
             entry.value.current = abs_user_path(entry.value.current)
         return messages, exit_messages

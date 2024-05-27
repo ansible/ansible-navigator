@@ -85,7 +85,7 @@ test_data = [
             filename="/tmp/artifact.json",
             playbook="site.yml",
             starts_with="/tmp/artifact.json",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -93,7 +93,7 @@ test_data = [
             filename="./artifact.json",
             playbook="site.yml",
             starts_with=f"{os.path.abspath('.')}/artifact.json",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -101,7 +101,7 @@ test_data = [
             filename="../artifact.json",
             playbook="site.yml",
             starts_with=f"{os.path.abspath('..')}/artifact.json",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -109,7 +109,7 @@ test_data = [
             filename="~/artifact.json",
             playbook="/tmp/site.yaml",
             starts_with="/home/test_user/artifact.json",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -117,7 +117,7 @@ test_data = [
             filename=None,
             playbook="/tmp/site.yaml",
             starts_with="/tmp/site-artifact",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -125,7 +125,7 @@ test_data = [
             filename=None,
             playbook="./site.yaml",
             starts_with=f"{os.path.abspath('.')}/site-artifact",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -133,7 +133,7 @@ test_data = [
             filename=None,
             playbook="../site.yaml",
             starts_with=f"{os.path.abspath('..')}/site-artifact",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -141,7 +141,7 @@ test_data = [
             filename=None,
             playbook="~/site.yaml",
             starts_with="/home/test_user/site-artifact",
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -151,7 +151,7 @@ test_data = [
             starts_with="/home/test_user/site-artifact",
             help_playbook=True,
             playbook_artifact_enable=False,
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -161,7 +161,7 @@ test_data = [
             starts_with="/home/test_user/site-artifact",
             enable_prompts=True,
             playbook_artifact_enable=False,
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -170,7 +170,7 @@ test_data = [
             playbook="site.yml",
             time_zone="America/Los_Angeles",
             re_match=re.compile("^/tmp/.*-0[7,8]:00"),
-        )
+        ),
     ),
     pytest.param(
         Scenario(
@@ -178,7 +178,7 @@ test_data = [
             playbook="site.yml",
             filename="/tmp/{playbook_status}/{playbook_name}.json",
             starts_with="/tmp/successful/site.json",
-        )
+        ),
     ),
 ]
 

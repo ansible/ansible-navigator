@@ -31,7 +31,9 @@ data_do_have = [
 
 @pytest.mark.parametrize("data", data_do_have)
 def test_do_have(
-    valid_container_engine: str, default_ee_image_name: str, data: TstPullPolicy
+    valid_container_engine: str,
+    default_ee_image_name: str,
+    data: TstPullPolicy,
 ) -> None:
     """Test using an image local.
 
@@ -60,7 +62,9 @@ data_do_have_but_latest = [
 
 @pytest.mark.parametrize("data", data_do_have_but_latest)
 def test_do_have_but_latest(
-    valid_container_engine: str, small_image_name: str, data: TstPullPolicy
+    valid_container_engine: str,
+    small_image_name: str,
+    data: TstPullPolicy,
 ) -> None:
     """Test using an image local.
 
@@ -201,7 +205,12 @@ def test_pull_with_env_arg() -> None:
     result = image_puller._generate_pull_command()  # pylint: disable=protected-access
     cmd_to_run = f"echo {result}"
     proc = subprocess.run(
-        cmd_to_run, check=True, shell=True, env=os.environ, capture_output=True, text=True
+        cmd_to_run,
+        check=True,
+        shell=True,
+        env=os.environ,
+        capture_output=True,
+        text=True,
     )
     assert "XDG_RUNTIME_DIR" not in proc.stdout
     assert "containers/auth.json" in proc.stdout

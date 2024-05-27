@@ -50,7 +50,9 @@ class FormHandlerOptions(CursesWindow):
                 text = option.text
             clp_text = CursesLinePart(len(option_code) + 1, text, color, decoration)
             self._add_line(
-                window=self.win, lineno=idx, line=CursesLine((clp_option_code, clp_text))
+                window=self.win,
+                lineno=idx,
+                line=CursesLine((clp_option_code, clp_text)),
             )
 
     def handle(self, idx: int, form_fields: list[FieldText]) -> tuple[FieldText, int]:

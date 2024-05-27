@@ -20,7 +20,11 @@ class CommandAsync(CommandBase):
     """A wrapper for the asynchronous runner."""
 
     def __init__(
-        self, executable_cmd: str, queue: Queue[Any], write_job_events: bool, **kwargs: Any
+        self,
+        executable_cmd: str,
+        queue: Queue[Any],
+        write_job_events: bool,
+        **kwargs: Any,
     ) -> None:
         """Initialize the arguments for the ``run_command_async`` interface of ``ansible-runner``.
 

@@ -10,7 +10,8 @@ from .conftest import GenerateConfigCallable
 
 
 def test_ce_auto_podman(
-    monkeypatch: pytest.MonkeyPatch, generate_config: GenerateConfigCallable
+    monkeypatch: pytest.MonkeyPatch,
+    generate_config: GenerateConfigCallable,
 ) -> None:
     """Ensure podman is the result.
 
@@ -28,7 +29,8 @@ def test_ce_auto_podman(
 
 
 def test_ce_auto_docker(
-    monkeypatch: pytest.MonkeyPatch, generate_config: GenerateConfigCallable
+    monkeypatch: pytest.MonkeyPatch,
+    generate_config: GenerateConfigCallable,
 ) -> None:
     """Ensure docker is the result.
 
@@ -46,7 +48,8 @@ def test_ce_auto_docker(
 
 
 def test_ce_auto_none(
-    monkeypatch: pytest.MonkeyPatch, generate_config: GenerateConfigCallable
+    monkeypatch: pytest.MonkeyPatch,
+    generate_config: GenerateConfigCallable,
 ) -> None:
     """Ensure error is the result.
 

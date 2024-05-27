@@ -59,7 +59,10 @@ from tests.defaults import FIXTURES_DIR
             id="nested-config-option-override-by-commandline",
         ),
         pytest.param(
-            [], "editor_command", "emacs -nw +{line_number} {filename}", id="check-editor-command"
+            [],
+            "editor_command",
+            "emacs -nw +{line_number} {filename}",
+            id="check-editor-command",
         ),
         pytest.param(
             ["inventory", "-i", "/tmp/inventory.yaml"],
@@ -169,7 +172,9 @@ class TstHint(NamedTuple):
 tst_hint_data = [
     pytest.param(
         TstHint(
-            command=r"--cdcp {locked_directory}/foo.db", expected="without '--cdcp'", set_ce=True
+            command=r"--cdcp {locked_directory}/foo.db",
+            expected="without '--cdcp'",
+            set_ce=True,
         ),
         id="0",
     ),
@@ -190,10 +195,12 @@ tst_hint_data = [
     pytest.param(TstHint(command="run", expected="with 'run <playbook name>"), id="9"),
     pytest.param(TstHint(command="run --pae not_bool", expected="with '--pae true"), id="10"),
     pytest.param(
-        TstHint(command="replay", expected="with 'replay <path to playbook artifact>'"), id="11"
+        TstHint(command="replay", expected="with 'replay <path to playbook artifact>'"),
+        id="11",
     ),
     pytest.param(
-        TstHint(command="--senv FOO:BAR", expected="with '--senv MY_VAR=my_value'"), id="12"
+        TstHint(command="--senv FOO:BAR", expected="with '--senv MY_VAR=my_value'"),
+        id="12",
     ),
 ]
 

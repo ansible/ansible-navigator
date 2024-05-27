@@ -97,7 +97,10 @@ class Action(ActionBase):
         return 2, 0
 
     def generate_content_heading(
-        self, obj: dict[Any, Any], screen_w: int, name: str = ""
+        self,
+        obj: dict[Any, Any],
+        screen_w: int,
+        name: str = "",
     ) -> CursesLines:
         """Create a heading for image content.
 
@@ -469,7 +472,7 @@ class Action(ActionBase):
                 config_label_check = False
 
             image["execution_environment"] = any(
-                (legacy_check, root_label_check, config_label_check)
+                (legacy_check, root_label_check, config_label_check),
             )
         self._images.value = sorted(images, key=lambda i: i["name"])
 
@@ -574,7 +577,9 @@ class Action(ActionBase):
             kwargs.update({"container_options": self._args.container_options})
 
         self._logger.debug(
-            "Invoke runner with executable_cmd: %s and kwargs: %s", python_exec_path, kwargs
+            "Invoke runner with executable_cmd: %s and kwargs: %s",
+            python_exec_path,
+            kwargs,
         )
         _runner = Command(executable_cmd=python_exec_path, **kwargs)
         output, error, return_code = _runner.run()

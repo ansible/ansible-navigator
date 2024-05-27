@@ -70,7 +70,8 @@ def _settings_file_dict() -> dict[str, Any]:
 
 
 def test_settings_file_entry(
-    sample_settings: ApplicationConfiguration, settings_file_dict: dict[str, Any]
+    sample_settings: ApplicationConfiguration,
+    settings_file_dict: dict[str, Any],
 ) -> None:
     """Ensure the settings file entry is properly constructed.
 
@@ -85,7 +86,8 @@ def test_settings_file_entry(
 
 
 def test_settings_entry(
-    sample_settings: ApplicationConfiguration, settings_file_dict: dict[str, Any]
+    sample_settings: ApplicationConfiguration,
+    settings_file_dict: dict[str, Any],
 ) -> None:
     """Ensure a settings entry is properly constructed.
 

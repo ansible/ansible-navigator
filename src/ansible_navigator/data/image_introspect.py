@@ -163,7 +163,10 @@ class CmdParser:
         return key, delim, content
 
     def splitter(
-        self, lines: list[str], line_split: str, section_delim: str | None = None
+        self,
+        lines: list[str],
+        line_split: str,
+        section_delim: str | None = None,
     ) -> list[dict[str, Any]] | dict[str, Any]:
         """Split lines given a delimiter.
 
@@ -294,7 +297,9 @@ class PythonPackages(CmdParser):
         :returns: The defined command
         """
         pre = Command(
-            id_="pip_freeze", command="/usr/bin/python3 -m pip freeze", parse=self.parse_freeze
+            id_="pip_freeze",
+            command="/usr/bin/python3 -m pip freeze",
+            parse=self.parse_freeze,
         )
         run_command(pre)
         pre.parse(pre)

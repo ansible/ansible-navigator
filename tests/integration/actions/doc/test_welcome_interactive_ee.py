@@ -22,7 +22,12 @@ CLI_LOOKUP_DOC = "ansible-navigator --execution-environment true"
 testdata_lookup_doc = [
     pytest.param(0, CLI_LOOKUP_DOC, "welcome", "lookup_doc_pass", [], id="0"),
     pytest.param(
-        1, ":doc company_name.coll_1.lookup_1 -t lookup", "load doc", "lookup_doc_pass", [], id="1"
+        1,
+        ":doc company_name.coll_1.lookup_1 -t lookup",
+        "load doc",
+        "lookup_doc_pass",
+        [],
+        id="1",
     ),
 ]
 
@@ -32,7 +37,12 @@ CLI_FILTER_DOC = "ansible-navigator --execution-environment true"
 testdata_filter_doc = [
     pytest.param(0, CLI_FILTER_DOC, "welcome", "filter_doc_pass", [], id="0"),
     pytest.param(
-        1, ":doc company_name.coll_1.filter_1 -t filter", "load doc", "filter_doc_pass", [], id="1"
+        1,
+        ":doc company_name.coll_1.filter_1 -t filter",
+        "load doc",
+        "filter_doc_pass",
+        [],
+        id="1",
     ),
 ]
 

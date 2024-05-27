@@ -277,7 +277,6 @@ ignore = [
   'C409', # [*] Unnecessary `list` literal passed to `tuple()` (rewrite as a `tuple` literal)
   'C414', # [*] Unnecessary `list` call within `sorted()`
   'C901', # `_params_row_for_entry` is too complex (11 > 10)
-  'COM812', # [*] Trailing comma missing
   'D100', # Missing docstring in public module
   'D101', # Missing docstring in public class
   'D102', # Missing docstring in public method
