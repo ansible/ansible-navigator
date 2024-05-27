@@ -217,10 +217,10 @@ def copytree(
         source_path = os.path.join(src, name)
         destination_path = os.path.join(dst, name)
         try:
-            if symlinks and os.path.islink(source_path):
-                source_link = os.readlink(source_path)
+            if symlinks and Path(source_path).is_symlink():
+                source_link = Path(source_path).readlink()
                 os.symlink(source_link, destination_path)
-            elif os.path.isdir(source_path):
+            elif Path(source_path).is_dir():
                 copytree(
                     source_path,
                     destination_path,

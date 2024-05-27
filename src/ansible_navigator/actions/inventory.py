@@ -163,15 +163,15 @@ class Action(ActionBase):
         """Record the inventory modification time."""
         modification_times = []
         for inventory in self._inventories:
-            if os.path.isdir(inventory):
+            if Path(inventory).is_dir():
                 modification_times.append(
                     max(
-                        os.path.getmtime(e)
+                        Path(e).stat().st_mtime
                         for e in glob.glob(os.path.join(inventory, "**"), recursive=True)
                     ),
                 )
             elif os.path.isfile(inventory):
-                modification_times.append(os.path.getmtime(inventory))
+                modification_times.append(Path(inventory).stat().st_mtime)
         if modification_times:
             self._inventories_mtime = max(modification_times)
         else:

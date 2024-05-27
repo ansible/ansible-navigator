@@ -305,22 +305,16 @@ ignore = [
   'PT019', # Fixture `_mocked_func` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
   'PT022', # [*] No teardown in fixture `cmd_in_tty`, use `return` instead of `yield`
   'PTH100', # `os.path.abspath()` should be replaced by `Path.resolve()`
-  'PTH101', # `os.chmod()` should be replaced by `Path.chmod()`
   'PTH103', # `os.makedirs()` should be replaced by `Path.mkdir(parents=True)`
-  'PTH107', # `os.remove()` should be replaced by `Path.unlink()`
   'PTH109', # `os.getcwd()` should be replaced by `Path.cwd()`
   'PTH110', # `os.path.exists()` should be replaced by `Path.exists()`
   'PTH111', # `os.path.expanduser()` should be replaced by `Path.expanduser()`
-  'PTH112', # `os.path.isdir()` should be replaced by `Path.is_dir()`
   'PTH113', # `os.path.isfile()` should be replaced by `Path.is_file()`
-  'PTH114', # `os.path.islink()` should be replaced by `Path.is_symlink()`
-  'PTH115', # `os.readlink()` should be replaced by `Path.readlink()`
   'PTH116', # `os.stat()` should be replaced by `Path.stat()`, `Path.owner()`, or `Path.group()`
   'PTH118', # `os.path.join()` should be replaced by `Path` with `/` operator
   'PTH119', # `os.path.basename()` should be replaced by `Path.name`
   'PTH120', # `os.path.dirname()` should be replaced by `Path.parent`
   'PTH122', # `os.path.splitext()` should be replaced by `Path.suffix`
-  'PTH204', # `os.path.getmtime` should be replaced by `Path.stat().st_mtime`
   'PTH207', # Replace `glob` with `Path.glob` or `Path.rglob`
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation

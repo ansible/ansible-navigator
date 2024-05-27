@@ -9,6 +9,7 @@ import logging
 import os
 import sys
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import NoReturn
 
@@ -135,7 +136,7 @@ def get_and_check_collection_doc_cache(
         message = "Collection doc cache: version was empty or incorrect, rebuilding"
         messages.append(LogMessage(level=logging.INFO, message=message))
         collection_cache.close()
-        os.remove(collection_doc_cache_path)
+        Path(collection_doc_cache_path).unlink()
         collection_cache = KeyValueStore(collection_doc_cache_path)
         collection_cache["version"] = VERSION_CDC
         cache_version = collection_cache["version"]
