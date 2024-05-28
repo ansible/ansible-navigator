@@ -887,7 +887,7 @@ class Action(ActionBase):
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
                 playbook_dir=os.path.dirname(playbook),
-                playbook_name=os.path.splitext(os.path.basename(playbook))[0],
+                playbook_name=os.path.splitext(Path(playbook).name)[0],
                 playbook_status=status,
                 time_stamp=now_iso(self._args.time_zone),
             )
