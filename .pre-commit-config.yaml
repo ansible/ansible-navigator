@@ -45,14 +45,14 @@ repos:
       - id: toml-sort-fix
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.4.4"
+    rev: "v0.4.5"
     hooks:
       - id: ruff
         args:
           - "--exit-non-zero-on-fix"
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.8.1
+    rev: v8.8.2
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -94,7 +94,7 @@ repos:
       - id: check-json5
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.40.0
+    rev: v0.41.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -111,7 +111,7 @@ repos:
           $
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.6
+    rev: v2.3.0
     hooks:
       - id: codespell
         # NOTE: dout is part of the stdout action regex
