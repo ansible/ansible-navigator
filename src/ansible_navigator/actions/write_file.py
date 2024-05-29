@@ -42,7 +42,7 @@ class Action:
         match = interaction.action.match.groupdict()
         filename = os.path.abspath(match["filename"])
         if match["append"]:
-            if not os.path.exists(filename) and not match["force"]:
+            if not Path(filename).exists() and not match["force"]:
                 self._logger.warning(
                     "Append operation failed because %s does not exist, force with !",
                     filename,
@@ -50,7 +50,7 @@ class Action:
                 return
             file_mode = "a"
         else:
-            if os.path.exists(filename) and not match["force"]:
+            if Path(filename).exists() and not match["force"]:
                 self._logger.warning(
                     "Write operation failed because %s exists, force with !",
                     filename,

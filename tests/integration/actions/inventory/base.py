@@ -92,8 +92,8 @@ class BaseClass:
         :param step: Step index to use
         :raises ValueError: When the test mode is not set
         """
-        assert os.path.exists(ANSIBLE_INVENTORY_FIXTURE_DIR)
-        assert os.path.exists(TEST_CONFIG_FILE)
+        assert Path(ANSIBLE_INVENTORY_FIXTURE_DIR).exists()
+        assert Path(TEST_CONFIG_FILE).exists()
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"

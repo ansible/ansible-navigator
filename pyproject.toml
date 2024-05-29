@@ -307,7 +307,6 @@ ignore = [
   'PTH100', # `os.path.abspath()` should be replaced by `Path.resolve()`
   'PTH103', # `os.makedirs()` should be replaced by `Path.mkdir(parents=True)`
   'PTH109', # `os.getcwd()` should be replaced by `Path.cwd()`
-  'PTH110', # `os.path.exists()` should be replaced by `Path.exists()`
   'PTH111', # `os.path.expanduser()` should be replaced by `Path.expanduser()`
   'PTH113', # `os.path.isfile()` should be replaced by `Path.is_file()`
   'PTH116', # `os.stat()` should be replaced by `Path.stat()`, `Path.owner()`, or `Path.group()`

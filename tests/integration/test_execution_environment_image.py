@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import shlex
 
 from pathlib import Path
@@ -90,7 +89,7 @@ class Test(Cli2Runner):
         cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
         coll_cache_path = tmp_path / "collection_doc_cache.db"
 
-        assert os.path.exists(cfg_path)
+        assert Path(cfg_path).exists()
 
         params = shlex.split(cli_entry) + ["--pp", "never"]
 

@@ -368,7 +368,7 @@ class Action(ActionBase):
 
         if self._playbook_type == "file":
             if isinstance(self._args.playbook, str):
-                playbook_valid = os.path.exists(self._args.playbook)
+                playbook_valid = Path(self._args.playbook).exists()
             else:
                 playbook_valid = False
 
@@ -412,7 +412,7 @@ class Action(ActionBase):
         artifact_file = self._args.playbook_artifact_replay
 
         if isinstance(self._args.playbook_artifact_replay, str):
-            artifact_valid = os.path.exists(self._args.playbook_artifact_replay)
+            artifact_valid = Path(self._args.playbook_artifact_replay).exists()
         else:
             artifact_valid = False
 

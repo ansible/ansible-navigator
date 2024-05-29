@@ -62,8 +62,8 @@ class BaseClass:
         :param comment: Comment to add to the fixture
         :param search_within_response: A list of strings or string to find
         """
-        assert os.path.exists(PLAYBOOK_ARTIFACT)
-        assert os.path.exists(TEST_CONFIG_FILE)
+        assert Path(PLAYBOOK_ARTIFACT).exists()
+        assert Path(TEST_CONFIG_FILE).exists()
 
         received_output = tmux_session.interaction(user_input, search_within_response)
 

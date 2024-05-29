@@ -98,9 +98,9 @@ def check_playbook_type(playbook: str) -> str:
     """
     playbook_type = "file"
     playbook_path = str(playbook)
-    if os.path.exists(playbook_path) is False:
+    if Path(playbook_path).exists() is False:
         playbook_type = "missing"
-    if os.path.exists(playbook_path) is False and len(playbook_path.split(".")) >= 3:
+    if Path(playbook_path).exists() is False and len(playbook_path.split(".")) >= 3:
         playbook_type = "fqcn"
     return playbook_type
 
@@ -184,7 +184,7 @@ def environment_variable_is_file_path(
     else:
         message = f"Found a {kind} file at {candidate_path} set by {env_var}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
-        if os.path.isfile(candidate_path) and os.path.exists(candidate_path):
+        if os.path.isfile(candidate_path) and Path(candidate_path).exists():
             file_path = candidate_path
             message = f"{kind.capitalize()} file at {file_path} set by {env_var} is viable"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
@@ -224,7 +224,7 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | Non
         message = f"Looking for {oxfordcomma(candidates, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        found = [file for file in candidates if os.path.exists(file)]
+        found = [file for file in candidates if Path(file).exists()]
         message = f"Found {len(found)}: {oxfordcomma(found, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
