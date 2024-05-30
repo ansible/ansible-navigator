@@ -323,10 +323,7 @@ ignore = [
   'S605', # Starting a process with a shell, possible injection detected
   'S607', # Starting a process with a partial executable path
   'SLF001', # Private member accessed: `_ui`
-  'T201', # `print` found
-  'TD001', # Invalid TODO tag: `FIXME`
-  'TD002', # Missing author in TODO
-  'TD003' # Missing issue link on the line following this TODO
+  'T201' # `print` found
 ]
 select = ["ALL"]
 
