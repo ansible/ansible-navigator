@@ -180,7 +180,7 @@ class UserInterface(CursesWindow):
         self._kegexes = kegexes
         self._logger = logging.getLogger(__name__)
         self._menu_filter: Pattern[str] | None = None
-        self._menu_indices: tuple[int, ...] = tuple()
+        self._menu_indices: tuple[int, ...] = ()
 
         self._progress_bar_width = progress_bar_width
         self._status_width = status_width
@@ -426,7 +426,7 @@ class UserInterface(CursesWindow):
         :param count: The count to show
         :returns: the key pressed
         """
-        heading = heading or CursesLines(tuple())
+        heading = heading or CursesLines(())
         heading_len = len(heading)
         footer = self._footer({**STANDARD_KEYS, **key_dict, **END_KEYS})
         footer_at = self._screen_height - 1  # screen is 0 based index

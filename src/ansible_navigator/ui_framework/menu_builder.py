@@ -98,12 +98,12 @@ class MenuBuilder:
         for idx, column_width in enumerate(adjusted_column_widths):
             col_starts.append(column_width + col_starts[idx])
 
-        menu_layout = tuple([col_starts, cols, adjusted_column_widths])
+        menu_layout = (col_starts, cols, adjusted_column_widths)
         header = self._menu_header_line(menu_layout)
 
-        menu_layout = tuple([col_starts, cols, adjusted_column_widths, header])
+        menu_layout = (col_starts, cols, adjusted_column_widths, header)  # type: ignore
         menu_lines = self._menu_lines(dicts, menu_layout, indices)
-        return CursesLines(tuple([header])), menu_lines
+        return CursesLines((header,)), menu_lines
 
     def _menu_header_line(self, menu_layout: Any) -> CursesLine:
         """Generate the menu header line.
