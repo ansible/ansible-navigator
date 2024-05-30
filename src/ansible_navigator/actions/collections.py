@@ -559,7 +559,7 @@ class Action(ActionBase):
                 tmp_list.append(str(dest_path))
             dest_volume_mounts = tuple(tmp_list)
         else:
-            dest_volume_mounts = tuple()
+            dest_volume_mounts = ()
 
         for collection in self._collections:
             collection["__name"] = collection["known_as"]

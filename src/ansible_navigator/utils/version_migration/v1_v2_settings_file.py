@@ -52,7 +52,7 @@ class V1V2SettingsFile(SettingsFile):
             return True
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -73,7 +73,7 @@ class V1V2SettingsFile(SettingsFile):
             return exists
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -101,7 +101,7 @@ class V1V2SettingsFile(SettingsFile):
             return True
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -122,7 +122,7 @@ class V1V2SettingsFile(SettingsFile):
             return exists
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -143,7 +143,7 @@ class V1V2SettingsFile(SettingsFile):
             return exists
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -164,7 +164,7 @@ class V1V2SettingsFile(SettingsFile):
             return exists
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -185,7 +185,7 @@ class V1V2SettingsFile(SettingsFile):
             return exists
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -206,7 +206,7 @@ class V1V2SettingsFile(SettingsFile):
             return exists
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,
@@ -261,7 +261,7 @@ class V1V2SettingsFile(SettingsFile):
         new_value = value.replace("ts_utc", "time_stamp")
 
         self.content = place_at_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             path=path,
             value=new_value,
@@ -282,7 +282,7 @@ class V1V2SettingsFile(SettingsFile):
             return exists
 
         self.content = move_to_path(
-            behaviors=tuple(),
+            behaviors=(),
             content=self.content,
             new_path=new_path,
             old_path=old_path,

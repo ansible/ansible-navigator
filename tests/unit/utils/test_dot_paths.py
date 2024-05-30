@@ -205,7 +205,7 @@ scenarios_place_success = (
     ),
     Scenario(
         name="12",
-        behaviors=tuple(),
+        behaviors=(),
         comment="deep change str",
         content={"a": {"b": {"c": {"d": {"e": "f"}}}}},
         path="a.b.c.d.e",
@@ -214,7 +214,7 @@ scenarios_place_success = (
     ),
     Scenario(
         name="13",
-        behaviors=tuple(),
+        behaviors=(),
         comment="deep dict replace",
         content={"a": {"b": {"c": {"d": {"e": "f"}}}}},
         path="a.b.c.d",
@@ -223,7 +223,7 @@ scenarios_place_success = (
     ),
     Scenario(
         name="14",
-        behaviors=tuple(),
+        behaviors=(),
         comment="deep dict placement",
         path="root.dict.aa.bb",
         expected={"root": {"dict": {"a": "b", "aa": {"bb": True}}, "list": [1, 2, 3]}},
@@ -266,7 +266,7 @@ scenarios_place_raise = (
     ),
     Scenario(
         name="2",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test dict_dict",
         path="root.dict",
         expected=None,
@@ -274,7 +274,7 @@ scenarios_place_raise = (
     ),
     Scenario(
         name="3",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test list_list behavior",
         path="root.list",
         expected=None,
@@ -282,7 +282,7 @@ scenarios_place_raise = (
     ),
     Scenario(
         name="4",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test list behavior",
         path="root.list",
         expected=None,
@@ -290,7 +290,7 @@ scenarios_place_raise = (
     ),
     Scenario(
         name="5",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test mass replace",
         path="",
         expected=None,
@@ -298,7 +298,7 @@ scenarios_place_raise = (
     ),
     Scenario(
         name="6",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test mass replace",
         path="",
         expected=None,
@@ -325,7 +325,7 @@ def test_place_at_path_raises(scenario: Scenario) -> None:
 scenarios_move = (
     Scenario(
         name="0",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test list move",
         path="root.list",
         new_path="root.list_moved",
@@ -333,7 +333,7 @@ scenarios_move = (
     ),
     Scenario(
         name="1",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test dict move",
         path="root.dict",
         new_path="root.dict_moved",
@@ -341,7 +341,7 @@ scenarios_move = (
     ),
     Scenario(
         name="2",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test dict move and cleanup",
         path="root.dict.a",
         new_path="root.dict.aa",
@@ -349,7 +349,7 @@ scenarios_move = (
     ),
     Scenario(
         name="3",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test move root nested",
         path="root",
         new_path="r0.r1.r2.r3",
@@ -357,7 +357,7 @@ scenarios_move = (
     ),
     Scenario(
         name="4",
-        behaviors=tuple(),
+        behaviors=(),
         comment="Test move same ",
         path="root.dict",
         new_path="root.dict",
