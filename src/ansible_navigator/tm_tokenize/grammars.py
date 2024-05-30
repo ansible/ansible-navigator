@@ -109,7 +109,7 @@ class Grammars:
         for k in tuple(self._scope_to_files):
             self._raw_for_scope(k)
 
-        _, _, ext = os.path.basename(filename).rpartition(".")
+        _, _, ext = Path(filename).name.rpartition(".")
         for extensions, scope in self._file_types:
             if ext in extensions:
                 return self.compiler_for_scope(scope)
