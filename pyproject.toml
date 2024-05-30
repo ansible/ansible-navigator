@@ -273,7 +273,6 @@ ignore = [
   'ARG004', # Unused static method argument: `config`
   'ARG005', # Unused lambda argument: `args`
   'B006', # Do not use mutable data structures for argument defaults
-  'C409', # [*] Unnecessary `list` literal passed to `tuple()` (rewrite as a `tuple` literal)
   'C901', # `_params_row_for_entry` is too complex (11 > 10)
   'D100', # Missing docstring in public module
   'D101', # Missing docstring in public class
