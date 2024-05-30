@@ -39,7 +39,7 @@ def test_kvs_iterkeys(kvs: KeyValueStore) -> None:
 
     # Does it have all the keys we expect? (sorted because dicts don't care
     # about order)
-    assert sorted(list(kvs.iterkeys())) == ["apple", "banana", "grape", "strawberry"]
+    assert sorted(kvs.iterkeys()) == ["apple", "banana", "grape", "strawberry"]
 
 
 def test_kvs_itervalues(kvs: KeyValueStore) -> None:
@@ -52,7 +52,7 @@ def test_kvs_itervalues(kvs: KeyValueStore) -> None:
 
     # Does it have all the values we expect? (sorted because dicts don't care
     # about order)
-    assert sorted(list(kvs.itervalues())) == ["green", "red", "red", "yellow"]
+    assert sorted(kvs.itervalues()) == ["green", "red", "red", "yellow"]
 
 
 def test_kvs_iteritems(kvs: KeyValueStore) -> None:
@@ -65,7 +65,7 @@ def test_kvs_iteritems(kvs: KeyValueStore) -> None:
 
     # Does it have all the items we expect? (sorted because dicts don't care
     # about order)
-    assert sorted(list(kvs.iteritems())) == [
+    assert sorted(kvs.iteritems()) == [
         ("apple", "red"),
         ("banana", "yellow"),
         ("grape", "green"),
@@ -87,7 +87,7 @@ def test_kvs_keys(kvs: KeyValueStore) -> None:
     assert "banana" in keys
     assert "foo" not in keys
     assert len(keys) == len(kvs)
-    assert sorted(list(keys)) == ["apple", "banana", "grape", "strawberry"]
+    assert sorted(keys) == ["apple", "banana", "grape", "strawberry"]
 
 
 def test_kvs_values(kvs: KeyValueStore) -> None:
@@ -101,7 +101,7 @@ def test_kvs_values(kvs: KeyValueStore) -> None:
     assert "red" in values
     assert "blue" not in values
     assert len(values) == len(kvs)
-    assert sorted(list(values)) == ["green", "red", "red", "yellow"]
+    assert sorted(values) == ["green", "red", "red", "yellow"]
 
 
 def test_kvs_items(kvs: KeyValueStore) -> None:
@@ -115,7 +115,7 @@ def test_kvs_items(kvs: KeyValueStore) -> None:
     assert ("banana", "yellow") in items
     assert ("banana", "blue") not in items
     assert len(items) == len(kvs)
-    assert sorted(list(kvs.items())) == [
+    assert sorted(kvs.items()) == [
         ("apple", "red"),
         ("banana", "yellow"),
         ("grape", "green"),

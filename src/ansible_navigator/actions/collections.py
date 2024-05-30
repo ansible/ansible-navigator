@@ -536,7 +536,7 @@ class Action(ActionBase):
             self._logger.error("%s %s", error["path"], error["error"])
 
         self._collections = sorted(
-            list(parsed["collections"].values()),
+            parsed["collections"].values(),
             key=lambda i: i["known_as"],
         )
         volume_mounts = self.app.args.execution_environment_volume_mounts
