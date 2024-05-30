@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import glob
 import json
 import os
 import shlex
@@ -165,10 +164,7 @@ class Action(ActionBase):
         for inventory in self._inventories:
             if Path(inventory).is_dir():
                 modification_times.append(
-                    max(
-                        Path(e).stat().st_mtime
-                        for e in glob.glob(os.path.join(inventory, "**"), recursive=True)
-                    ),
+                    max(Path(e).stat().st_mtime for e in Path(inventory).rglob("*")),
                 )
             elif os.path.isfile(inventory):
                 modification_times.append(Path(inventory).stat().st_mtime)
