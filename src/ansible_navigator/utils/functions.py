@@ -133,7 +133,7 @@ def console_width() -> int:
     return 132
 
 
-# TODO: Replace this with something type-safe.
+# Replace this with something type-safe.
 def dispatch(obj: object, replacements: tuple[tuple[str, str], ...]) -> object:
     """Make the replacement based on type.
 
@@ -432,8 +432,8 @@ def str2bool(value: Any) -> bool:
     raise ValueError
 
 
-# TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
-#       returns Any. Need to find a better solution... "Any" isn't it.
+# We are kind-of screwed type-wise by the fact that ast.literal_eval()
+#  returns Any. Need to find a better solution... "Any" isn't it.
 def templar(string: str, template_vars: Mapping[Any, Any]) -> tuple[list[str], Any]:
     """Template some string with jinja2 always to and from json.
 
