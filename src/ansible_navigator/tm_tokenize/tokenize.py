@@ -22,7 +22,7 @@ def tokenize(
     pos = 0
     boundary = state.cur.boundary
 
-    # TODO: this is still a little wasteful
+    # this is still a little wasteful
     while_stack = []
     for while_rule, idx in state.while_stack:
         while_stack.append((while_rule, idx))

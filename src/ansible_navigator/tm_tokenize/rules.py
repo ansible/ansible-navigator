@@ -415,7 +415,7 @@ def _captures(
         rule = compiler.compile_rule(u_rule)
         start, end = match.span(i)
         if start < pos:
-            # TODO: could maybe bisect but this is probably fast enough
+            # could maybe bisect but this is probably fast enough
             j = len(ret) - 1
             while j > 0 and start < ret[j - 1].end:
                 j -= 1

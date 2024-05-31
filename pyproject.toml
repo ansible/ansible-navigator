@@ -233,6 +233,9 @@ disable = [
 enable = [
   "useless-suppression" # Identify unneeded pylint disable statements
 ]
+fail-on = [
+  "useless-suppression"
+]
 
 [tool.pytest.ini_options]
 # do not add xdist options here as this will make running of a single test and
@@ -281,8 +284,6 @@ ignore = [
   'FBT001', # Boolean positional arg in function definition
   'FBT002', # Boolean default value in function definition
   'FBT003', # Boolean positional value in function call
-  'FIX001', # Line contains FIXME
-  'FIX002', # Line contains TODO
   'N802', # Function name `formatTime` should be lowercase
   'N806', # Variable `FType` in function should be lowercase
   'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`
@@ -322,10 +323,7 @@ ignore = [
   'S605', # Starting a process with a shell, possible injection detected
   'S607', # Starting a process with a partial executable path
   'SLF001', # Private member accessed: `_ui`
-  'T201', # `print` found
-  'TD001', # Invalid TODO tag: `FIXME`
-  'TD002', # Missing author in TODO
-  'TD003' # Missing issue link on the line following this TODO
+  'T201' # `print` found
 ]
 select = ["ALL"]
 

@@ -449,7 +449,6 @@ def identify_missing(
 
 
 def parse_args() -> tuple[argparse.Namespace, list[Path]]:
-    # pylint: disable=used-before-assignment
     # pylint: disable=possibly-used-before-assignment
     """Parse the arguments from the command line.
 
@@ -596,7 +595,6 @@ def run_command(cmd: list[str]) -> dict[str, str]:
 
 def main() -> dict[Any, Any]:
     # pylint: disable=protected-access
-    # pylint: disable=used-before-assignment
     # pylint: disable=possibly-used-before-assignment
     """Run the collection catalog process.
 
