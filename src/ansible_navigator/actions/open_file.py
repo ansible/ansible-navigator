@@ -143,9 +143,9 @@ class Action:
         if isinstance(command, str):
             if editor_console:
                 with SuspendCurses():
-                    os.system(command)
+                    os.system(command)  # noqa:S605
             else:
-                os.system(command)
+                os.system(command)  # noqa:S605
 
     @staticmethod
     def _persist_content(content: ContentType, content_format: ContentFormat) -> Path:

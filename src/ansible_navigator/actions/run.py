@@ -686,8 +686,8 @@ class Action(ActionBase):
         # Only runner on_* events are relevant now
         try:
             prefix, runner_event = event.rsplit("_", 1)
-            assert prefix == "runner_on"
-            assert runner_event in ("ok", "skipped", "start", "unreachable", "failed")
+            assert prefix == "runner_on"  # noqa:S101
+            assert runner_event in ("ok", "skipped", "start", "unreachable", "failed")  # noqa:S101
         except (AssertionError, ValueError):
             return
 

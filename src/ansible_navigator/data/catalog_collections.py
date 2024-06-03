@@ -586,7 +586,7 @@ def run_command(cmd: list[str]) -> dict[str, str]:
             capture_output=True,
             check=True,
             text=True,
-            shell=True,
+            shell=True,  # noqa:S602
         )
     except subprocess.CalledProcessError as exc:
         return {"error": str(exc)}
@@ -631,7 +631,7 @@ def main() -> dict[Any, Any]:
         "collections": collections,
         "errors": errors,
         "stats": stats,
-        "messages": cc_obj._messages,
+        "messages": cc_obj._messages,  # noqa: SLF001
     }
 
 

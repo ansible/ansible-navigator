@@ -33,7 +33,9 @@ def version_added_sanity_check(version: str) -> None:
     :raises AssertionError: If the version string is invalid
     """
     re_version = re.compile(r"^v\d+\.\d+$")
-    assert re_version.match(version) is not None, "Version must be in the form of v{major}.{minor}"
+    assert (  # noqa:S101
+        re_version.match(version) is not None
+    ), "Version must be in the form of v{major}.{minor}"
 
 
 class Constants(Enum):

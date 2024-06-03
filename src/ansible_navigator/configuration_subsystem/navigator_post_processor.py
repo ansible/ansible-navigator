@@ -672,7 +672,11 @@ class NavigatorPostProcessor:
                 )
             else:
                 try:
-                    subprocess.run("ansible-lint --version", shell=True, check=True)
+                    subprocess.run(
+                        "ansible-lint --version",  # noqa:S607
+                        shell=True,  # noqa:S602
+                        check=True,
+                    )
                 except subprocess.CalledProcessError:
                     exit_messages.append(
                         ExitMessage(
