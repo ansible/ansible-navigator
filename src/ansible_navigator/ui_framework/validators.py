@@ -56,7 +56,7 @@ class FieldValidators:
         """
         if hint:
             return "Please provide a value (optional)"
-        value = "*" * randrange(15, 20) if text else ""
+        value = "*" * randrange(15, 20) if text else ""  # noqa:S311
         return Validation(value=value, error_msg="")
 
     @staticmethod

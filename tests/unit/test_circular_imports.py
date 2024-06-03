@@ -112,4 +112,4 @@ def test_no_warnings(import_path: str) -> None:
         f"import {import_path!s}",
     )
 
-    subprocess.check_call(imp_cmd)  # Input is trusted, generated above, not external
+    subprocess.check_call(imp_cmd)  # Input is trusted, generated above, not external  # noqa:S603

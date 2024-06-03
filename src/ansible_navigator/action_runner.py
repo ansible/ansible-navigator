@@ -96,7 +96,7 @@ class ActionRunner(ActionBase):
                 action=action,
                 menu=None,
                 content=None,
-                ui=self._ui._ui,
+                ui=self._ui._ui,  # noqa: SLF001
             )
             self._run_app(interaction)
 

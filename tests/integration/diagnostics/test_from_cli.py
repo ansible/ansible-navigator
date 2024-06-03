@@ -35,7 +35,7 @@ def test(
     settings_path, settings_file = settings_env_var_to_full
 
     proc_out = subprocess.run(
-        "ansible-navigator --diagnostics",
+        "ansible-navigator --diagnostics",  # noqa:S607
         check=False,
         shell=True,
         capture_output=True,
