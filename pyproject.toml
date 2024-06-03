@@ -284,14 +284,11 @@ ignore = [
   'FBT001', # Boolean positional arg in function definition
   'FBT002', # Boolean default value in function definition
   'FBT003', # Boolean positional value in function call
-  'N802', # Function name `formatTime` should be lowercase
-  'N806', # Variable `FType` in function should be lowercase
   'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`
   'N813', # Camelcase `Action` imported as lowercase `stdout_action`
   'N817', # CamelCase `Constants` imported as acronym `C`
   'PERF203', # `try`-`except` within a loop incurs performance overhead
   'PGH003', # Use specific rule codes when ignoring type issues
-  'PIE810', # [*] Call `startswith` once with a `tuple`
   'PD011', # https://github.com/astral-sh/ruff/issues/2229
   'PLR0911', # Too many return statements (8 > 6)
   'PLR0912', # Too many branches (13 > 12)

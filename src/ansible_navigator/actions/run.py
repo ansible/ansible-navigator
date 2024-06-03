@@ -431,7 +431,7 @@ class Action(ActionBase):
             return False
 
         version = data.get("version", "")
-        if version.startswith("1.") or version.startswith("2."):
+        if version.startswith(("1.", "2.")):
             try:
                 stdout = data["stdout"]
                 if self.mode == "interactive":

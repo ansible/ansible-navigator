@@ -27,7 +27,7 @@ def id_func(param: Any) -> str:
     :return: Returns a string.
     """
     result = ""
-    _AUTO_ID_COUNTER = 0
+    auto_id_counter = 0
     if isinstance(param, str):
         result = param
     elif hasattr(param, "value") and isinstance(param.value, str):  # covers for Enums too
@@ -49,7 +49,7 @@ def id_func(param: Any) -> str:
                     args.append(str(part))
             result = "-".join(args)
     else:
-        result = str(_AUTO_ID_COUNTER)
-        _AUTO_ID_COUNTER += 1
+        result = str(auto_id_counter)
+        auto_id_counter += 1
     result = result.lower().replace(" ", "-")
     return result
