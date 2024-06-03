@@ -284,7 +284,6 @@ ignore = [
   'FBT001', # Boolean positional arg in function definition
   'FBT002', # Boolean default value in function definition
   'FBT003', # Boolean positional value in function call
-  'N806', # Variable `FType` in function should be lowercase
   'N812', # Lowercase `__version_collection_doc_cache__` imported as non-lowercase `VERSION_CDC`
   'N813', # Camelcase `Action` imported as lowercase `stdout_action`
   'N817', # CamelCase `Constants` imported as acronym `C`

@@ -132,15 +132,17 @@ def test_runner_args(mocker: MockerFixture, data: Scenario) -> None:
     args.entry("ansible_runner_timeout").value.current = data.timeout
     args.entry("ansible_runner_write_job_events").value.current = data.write_job_events
 
-    TestRunnerException = Exception
+    class TestRunnerError(Exception):
+        """Test runner exception."""
+
     command_async = mocker.patch(
         "ansible_navigator.actions.run.CommandAsync",
-        side_effect=TestRunnerException,
+        side_effect=TestRunnerError,
     )
 
     run = action(args=args)
     run._queue = TEST_QUEUE  # pylint: disable=protected-access
-    with pytest.raises(TestRunnerException):
+    with pytest.raises(TestRunnerError):
         run._run_runner()  # pylint: disable=protected-access
 
     command_async.assert_called_once_with(**data.expected)
