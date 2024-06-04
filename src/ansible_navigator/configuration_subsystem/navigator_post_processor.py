@@ -122,7 +122,7 @@ class NavigatorPostProcessor:
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
-            entry.value.current = expand_path(entry.value.current)
+            entry.value.current = str(expand_path(entry.value.current))
         return messages, exit_messages
 
     @staticmethod
@@ -186,7 +186,7 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        entry.value.current = expand_path(entry.value.current)
+        entry.value.current = str(expand_path(entry.value.current))
         return messages, exit_messages
 
     @staticmethod
@@ -593,7 +593,9 @@ class NavigatorPostProcessor:
             if isinstance(ansible_cfg, dict):
                 ansible_cfg_entry = ansible_cfg.get("defaults", {}).get("inventory")
                 if isinstance(ansible_cfg_entry, str):
-                    entry.value.current = [expand_path(i) for i in ansible_cfg_entry.split(",")]
+                    entry.value.current = [
+                        str(expand_path(i)) for i in ansible_cfg_entry.split(",")
+                    ]
                     entry.value.source = C.ANSIBLE_CFG
         else:
             # Use the specified
@@ -605,7 +607,7 @@ class NavigatorPostProcessor:
                     entry.value.current.append(inv_entry)
                 else:
                     # file path
-                    entry.value.current.append(expand_path(inv_entry))
+                    entry.value.current.append(str(expand_path(inv_entry)))
 
         # Something may be required
         app_match = config.app == "inventory"
@@ -696,11 +698,11 @@ class NavigatorPostProcessor:
         if isinstance(entry.value.current, str) and config.app == "lint":
             entry_name = entry.settings_file_path(prefix="")
             entry_source = entry.value.source
-            source = expand_path(entry.value.current)
+            source = str(expand_path(entry.value.current))
             try:
                 mount = VolumeMount(
-                    fs_source=str(source),
-                    fs_destination=str(source),
+                    fs_source=source,
+                    fs_destination=source,
                     settings_entry=entry_name,
                     source=entry_source,
                     options_string="",
@@ -734,7 +736,7 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        entry.value.current = expand_path(entry.value.current)
+        entry.value.current = str(expand_path(entry.value.current))
         try:
             Path(os.path.dirname(entry.value.current)).mkdir(parents=True, exist_ok=True)
             Path(entry.value.current).touch()
@@ -944,7 +946,7 @@ class NavigatorPostProcessor:
             entry.value.current,
             str,
         ):
-            entry.value.current = expand_path(entry.value.current)
+            entry.value.current = str(expand_path(entry.value.current))
         return messages, exit_messages
 
     @_post_processor
@@ -1007,7 +1009,7 @@ class NavigatorPostProcessor:
             return messages, exit_messages
 
         if isinstance(entry.value.current, str):
-            entry.value.current = expand_path(entry.value.current)
+            entry.value.current = str(expand_path(entry.value.current))
 
         if config.app == "replay" and not Path(entry.value.current).is_file():
             exit_msg = f"The specified playbook artifact could not be found: {entry.value.current}"

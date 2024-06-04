@@ -161,7 +161,7 @@ def massage_issue(issue: dict[Any, Any]) -> dict[Any, Any]:
         massaged["__message"] = issue["check_name"].split("]")[1].strip()
     else:
         massaged["__message"] = issue["description"]
-    massaged["__path"] = expand_path(issue["location"]["path"])
+    massaged["__path"] = str(expand_path(issue["location"]["path"]))
     if isinstance(issue["location"]["lines"]["begin"], Mapping):
         massaged["__line"] = issue["location"]["lines"]["begin"]["line"]
     else:

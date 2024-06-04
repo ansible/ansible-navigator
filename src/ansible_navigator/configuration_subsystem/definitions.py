@@ -398,8 +398,8 @@ class VolumeMount:
 
         # Resolve the source and destination
         # frozen, cannot use simple assignment to initialize fields, and must use:
-        object.__setattr__(self, "fs_source", expand_path(self.fs_source))
-        object.__setattr__(self, "fs_destination", expand_path(self.fs_destination))
+        object.__setattr__(self, "fs_source", str(expand_path(self.fs_source)))
+        object.__setattr__(self, "fs_destination", str(expand_path(self.fs_source)))
 
         # Source must exist
         if not Path(self.fs_source).exists():
