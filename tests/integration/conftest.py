@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from copy import deepcopy
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -23,7 +24,6 @@ from ._common import generate_test_log_dir
 
 if TYPE_CHECKING:
     from collections.abc import Generator
-    from pathlib import Path
 
 
 EXECUTION_MODES = ["interactive", "stdout"]
@@ -62,7 +62,7 @@ def os_independent_tmp() -> str:
         an_tmp = os.path.join(tmp_real, "an")
     else:
         an_tmp = os.path.join("/tmp", "private", "an")
-    os.makedirs(an_tmp, exist_ok=True)
+    Path(an_tmp).mkdir(parents=True, exist_ok=True)
     return an_tmp
 
 
