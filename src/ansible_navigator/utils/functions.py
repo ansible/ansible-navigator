@@ -71,17 +71,6 @@ def expand_path(path: str) -> Path:
     return _path.resolve()
 
 
-def expand_path(path: str) -> Path:
-    """Resolve a path.
-
-    :param path: The file path to resolve
-    :returns: Resolved file path
-    """
-    _path = Path(os.path.expandvars(path))
-    _path = _path.expanduser()
-    return _path.resolve()
-
-
 def check_for_ansible() -> tuple[list[LogMessage], list[ExitMessage]]:
     """Check for the ansible-playbook command, runner will need it.
 
