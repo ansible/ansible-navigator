@@ -3,15 +3,20 @@
 from __future__ import annotations
 
 import os
+
 from collections.abc import Iterable
 from pathlib import Path
 from random import randrange
-from typing import TYPE_CHECKING, Any, NamedTuple
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import NamedTuple
 from urllib.parse import urlparse
 
 from ansible_navigator.utils.functions import expand_path
 
-from .sentinels import Unknown, unknown
+from .sentinels import Unknown
+from .sentinels import unknown
+
 
 if TYPE_CHECKING:
     from .form_defs import FieldValidationStates
@@ -210,8 +215,8 @@ class FieldValidators:
         msg = "Please enter a valid file or directory path"
         if hint:
             return msg
-        value = os.path.abspath(os.path.expanduser(text))
-        if os.path.exists(value):
+        value = str(expand_path(text))
+        if Path(value).exists():
             msg = ""
         else:
             value = text
@@ -233,8 +238,8 @@ class FieldValidators:
             msg = ""
             value = text
         else:
-            value = os.path.abspath(os.path.expanduser(text))
-            if os.path.exists(value):
+            value = str(expand_path(text))
+            if Path(value).exists():
                 msg = ""
             else:
                 value = text
