@@ -3,18 +3,15 @@
 from __future__ import annotations
 
 import os
-
 from collections.abc import Iterable
 from pathlib import Path
 from random import randrange
-from typing import TYPE_CHECKING
-from typing import Any
-from typing import NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
 from urllib.parse import urlparse
 
-from .sentinels import Unknown
-from .sentinels import unknown
+from ansible_navigator.utils.functions import expand_path
 
+from .sentinels import Unknown, unknown
 
 if TYPE_CHECKING:
     from .form_defs import FieldValidationStates
@@ -57,7 +54,7 @@ class FieldValidators:
         """
         if hint:
             return "Please provide a value (optional)"
-        value = "*" * randrange(15, 20) if text else ""
+        value = "*" * randrange(15, 20) if text else ""  # noqa:S311
         return Validation(value=value, error_msg="")
 
     @staticmethod
@@ -195,7 +192,7 @@ class FieldValidators:
         msg = "Please enter a valid file path"
         if hint:
             return msg
-        value = os.path.abspath(os.path.expanduser(text))
+        value = str(expand_path(text))
         if Path(value).exists() and os.path.isfile(value):
             msg = ""
         else:
@@ -214,7 +211,7 @@ class FieldValidators:
         if hint:
             return msg
         value = os.path.abspath(os.path.expanduser(text))
-        if Path(value).exists():
+        if os.path.exists(value):
             msg = ""
         else:
             value = text
@@ -237,7 +234,7 @@ class FieldValidators:
             value = text
         else:
             value = os.path.abspath(os.path.expanduser(text))
-            if Path(value).exists():
+            if os.path.exists(value):
                 msg = ""
             else:
                 value = text

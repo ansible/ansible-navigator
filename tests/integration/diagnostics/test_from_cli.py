@@ -3,15 +3,13 @@
 from __future__ import annotations
 
 import json
-import os
 import subprocess
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     import pytest
 
     from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
@@ -37,7 +35,7 @@ def test(
     settings_path, settings_file = settings_env_var_to_full
 
     proc_out = subprocess.run(
-        "ansible-navigator --diagnostics",
+        "ansible-navigator --diagnostics",  # noqa:S607
         check=False,
         shell=True,
         capture_output=True,
@@ -58,5 +56,5 @@ def test(
         assert not section.get("errors")
 
     # Test the file permissions as well since diagnostics takes time to run
-    status = os.stat(file_name)
+    status = Path(file_name).stat()
     assert oct(status.st_mode)[-3:] == str(oct(0o600))[-3:]

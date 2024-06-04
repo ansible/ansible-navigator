@@ -6,10 +6,14 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+from ansible_navigator.utils.functions import expand_path
 
-FIXTURES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "fixtures"))
-FIXTURES_COLLECTION_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections"),
+
+FIXTURES_DIR = str(expand_path(os.path.join(os.path.dirname(__file__), "fixtures")))
+FIXTURES_COLLECTION_DIR = str(
+    expand_path(
+        os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections"),
+    ),
 )
 FIXTURES_COLLECTION_PATH = Path(FIXTURES_COLLECTION_DIR)
 
@@ -27,7 +31,7 @@ def id_func(param: Any) -> str:
     :return: Returns a string.
     """
     result = ""
-    _AUTO_ID_COUNTER = 0
+    auto_id_counter = 0
     if isinstance(param, str):
         result = param
     elif hasattr(param, "value") and isinstance(param.value, str):  # covers for Enums too
@@ -49,7 +53,7 @@ def id_func(param: Any) -> str:
                     args.append(str(part))
             result = "-".join(args)
     else:
-        result = str(_AUTO_ID_COUNTER)
-        _AUTO_ID_COUNTER += 1
+        result = str(auto_id_counter)
+        auto_id_counter += 1
     result = result.lower().replace(" ", "-")
     return result

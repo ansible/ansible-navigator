@@ -57,7 +57,18 @@ def abs_user_path(file_path: str) -> str:
     :param file_path: The file path to resolve
     :returns: Resolved file path
     """
-    return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))
+    return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))  # noqa:PTH100
+
+
+def expand_path(path: str) -> Path:
+    """Resolve a path.
+
+    :param path: The file path to resolve
+    :returns: Resolved file path
+    """
+    _path = Path(os.path.expandvars(path))
+    _path = _path.expanduser()
+    return _path.resolve()
 
 
 def check_for_ansible() -> tuple[list[LogMessage], list[ExitMessage]]:
@@ -133,7 +144,7 @@ def console_width() -> int:
     return 132
 
 
-# TODO: Replace this with something type-safe.
+# Replace this with something type-safe.
 def dispatch(obj: object, replacements: tuple[tuple[str, str], ...]) -> object:
     """Make the replacement based on type.
 
@@ -188,7 +199,7 @@ def environment_variable_is_file_path(
             file_path = candidate_path
             message = f"{kind.capitalize()} file at {file_path} set by {env_var} is viable"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
-            exp_path = os.path.abspath(os.path.expanduser(file_path))
+            exp_path = str(expand_path(file_path))
             if exp_path != file_path:
                 message = f"{kind.capitalize()} resolves to {exp_path}"
                 messages.append(LogMessage(level=logging.DEBUG, message=message))
@@ -432,8 +443,8 @@ def str2bool(value: Any) -> bool:
     raise ValueError
 
 
-# TODO: We are kind-of screwed type-wise by the fact that ast.literal_eval()
-#       returns Any. Need to find a better solution... "Any" isn't it.
+# We are kind-of screwed type-wise by the fact that ast.literal_eval()
+#  returns Any. Need to find a better solution... "Any" isn't it.
 def templar(string: str, template_vars: Mapping[Any, Any]) -> tuple[list[str], Any]:
     """Template some string with jinja2 always to and from json.
 

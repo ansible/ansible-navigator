@@ -3,7 +3,7 @@
 import os
 
 
-# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
+# pylint: disable=preferred-module
 from collections.abc import Callable
 from copy import deepcopy
 from typing import Any

@@ -8,7 +8,7 @@ from typing import Any
 from typing import Literal
 from typing import NamedTuple
 
-# pylint: disable=preferred-module  # FIXME: remove once migrated per GH-872
+# pylint: disable=preferred-module
 from unittest.mock import patch
 
 import pytest

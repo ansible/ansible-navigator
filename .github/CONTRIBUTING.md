@@ -71,10 +71,10 @@ Prerequisites:
 ### Building from the source and installing packages for testing
 
 After cloning the repository, create and activate a new [virtual environment] in
-the root of the repository. Once that is done all we need is to install
-ansible-navigator from the source. Use the following command in workspace (root
-folder of navigator).This will install package in editable/development mode,
-along with its additional dependencies required for testing.
+the root of the repository. Once that is done all we need is to install ansible-navigator
+from the source. Use the following command in workspace (root folder of navigator).This
+will install package in editable/development mode, along with its additional dependencies
+required for testing.
 
 ```shell-session
 pip install -e .\[test]
@@ -203,8 +203,7 @@ modify accordingly if needed.
 ### Useful Links
 
 - VS code debugging [guide].
-- Facilitate [Python Debugger] (pdb) in navigator for pure command line
-  debugging.
+- Facilitate [Python Debugger] (pdb) in navigator for pure command line debugging.
 
 [guide]: https://code.visualstudio.com/docs/editor/debugging
 [python debugger]: https://www.geeksforgeeks.org/python-debugger-python-pdb/

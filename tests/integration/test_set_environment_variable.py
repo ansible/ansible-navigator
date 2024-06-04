@@ -57,7 +57,7 @@ test_data = [
 class Test(Cli2Runner):
     """Test the use of ``set-environment-variable`` through to runner."""
 
-    TEST_DIR_NAME = os.path.basename(__file__).replace("test_", "").replace(".py", "")
+    TEST_DIR_NAME = Path(__file__).name.replace("test_", "").replace(".py", "")
     TEST_FIXTURE_DIR = Path(FIXTURES_DIR) / "integration" / TEST_DIR_NAME
 
     STDOUT = {

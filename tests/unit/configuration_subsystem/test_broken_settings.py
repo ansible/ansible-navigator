@@ -1,6 +1,6 @@
 """Tests using broken settings files."""
 
-import os
+from ansible_navigator.utils.functions import expand_path
 
 from .conftest import GenerateConfigCallable
 
@@ -21,6 +21,6 @@ def test_garbage_settings_file(generate_config: GenerateConfigCallable) -> None:
 
     :param generate_config: The configuration generator fixture
     """
-    response = generate_config(settings_file_name=os.path.abspath(__file__))
+    response = generate_config(settings_file_name=str(expand_path(__file__)))
     error = "but failed to load it."
     assert response.exit_messages[2].message.endswith(error), response.exit_messages

@@ -449,7 +449,6 @@ def identify_missing(
 
 
 def parse_args() -> tuple[argparse.Namespace, list[Path]]:
-    # pylint: disable=used-before-assignment
     # pylint: disable=possibly-used-before-assignment
     """Parse the arguments from the command line.
 
@@ -587,7 +586,7 @@ def run_command(cmd: list[str]) -> dict[str, str]:
             capture_output=True,
             check=True,
             text=True,
-            shell=True,
+            shell=True,  # noqa:S602
         )
     except subprocess.CalledProcessError as exc:
         return {"error": str(exc)}
@@ -596,7 +595,6 @@ def run_command(cmd: list[str]) -> dict[str, str]:
 
 def main() -> dict[Any, Any]:
     # pylint: disable=protected-access
-    # pylint: disable=used-before-assignment
     # pylint: disable=possibly-used-before-assignment
     """Run the collection catalog process.
 
@@ -633,7 +631,7 @@ def main() -> dict[Any, Any]:
         "collections": collections,
         "errors": errors,
         "stats": stats,
-        "messages": cc_obj._messages,
+        "messages": cc_obj._messages,  # noqa: SLF001
     }
 
 

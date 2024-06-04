@@ -98,7 +98,7 @@ class Compiler:
         return PatternRule((grammar.scope_name,), make_regset(*regs), rules)
 
     def _compile_rule(self, grammar: Grammar, rule: _Rule) -> CompiledRule:
-        assert rule.include is None, rule
+        assert rule.include is None, rule  # noqa:S101
         if rule.match is not None:
             captures_ref = self._captures_ref(grammar, rule.captures)
             return MatchRule(rule.name, captures_ref)

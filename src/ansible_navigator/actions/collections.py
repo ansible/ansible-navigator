@@ -536,7 +536,7 @@ class Action(ActionBase):
             self._logger.error("%s %s", error["path"], error["error"])
 
         self._collections = sorted(
-            list(parsed["collections"].values()),
+            parsed["collections"].values(),
             key=lambda i: i["known_as"],
         )
         volume_mounts = self.app.args.execution_environment_volume_mounts
@@ -559,7 +559,7 @@ class Action(ActionBase):
                 tmp_list.append(str(dest_path))
             dest_volume_mounts = tuple(tmp_list)
         else:
-            dest_volume_mounts = tuple()
+            dest_volume_mounts = ()
 
         for collection in self._collections:
             collection["__name"] = collection["known_as"]

@@ -431,7 +431,7 @@ class Action(ActionBase):
             return False
 
         version = data.get("version", "")
-        if version.startswith("1.") or version.startswith("2."):
+        if version.startswith(("1.", "2.")):
             try:
                 stdout = data["stdout"]
                 if self.mode == "interactive":
@@ -686,8 +686,8 @@ class Action(ActionBase):
         # Only runner on_* events are relevant now
         try:
             prefix, runner_event = event.rsplit("_", 1)
-            assert prefix == "runner_on"
-            assert runner_event in ("ok", "skipped", "start", "unreachable", "failed")
+            assert prefix == "runner_on"  # noqa:S101
+            assert runner_event in ("ok", "skipped", "start", "unreachable", "failed")  # noqa:S101
         except (AssertionError, ValueError):
             return
 
@@ -887,7 +887,7 @@ class Action(ActionBase):
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
                 playbook_dir=os.path.dirname(playbook),
-                playbook_name=os.path.splitext(os.path.basename(playbook))[0],
+                playbook_name=os.path.splitext(Path(playbook).name)[0],
                 playbook_status=status,
                 time_stamp=now_iso(self._args.time_zone),
             )
