@@ -11,6 +11,7 @@ from ansible_navigator.configuration_subsystem.definitions import ApplicationCon
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.utils.functions import expand_path
 from ansible_navigator.utils.functions import remove_dbl_un
 from ansible_navigator.utils.serialize import serialize_write_file
 
@@ -40,7 +41,7 @@ class Action:
         """
         self._logger.debug("write requested as %s", interaction.action.value)
         match = interaction.action.match.groupdict()
-        filename = os.path.abspath(match["filename"])
+        filename = str(expand_path(match["filename"]))
         if match["append"]:
             if not os.path.exists(filename) and not match["force"]:
                 self._logger.warning(
@@ -82,7 +83,7 @@ class Action:
             write_as = interaction.ui.content_format().value.file_extension
 
         if write_as == ".txt":
-            file = Path(os.path.abspath(filename))
+            file = expand_path(filename)
             with file.open(file_mode, encoding="utf-8") as fh:
                 fh.write(obj)
         elif write_as == ".yaml":
