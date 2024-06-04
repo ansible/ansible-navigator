@@ -12,7 +12,16 @@ from typing import NamedTuple
 import pytest
 
 from ansible_navigator.data.catalog_collections import get_doc_withast
-from ansible_navigator.utils import functions
+from ansible_navigator.utils.functions import environment_variable_is_file_path
+from ansible_navigator.utils.functions import expand_path
+from ansible_navigator.utils.functions import find_settings_file
+from ansible_navigator.utils.functions import flatten_list
+from ansible_navigator.utils.functions import human_time
+from ansible_navigator.utils.functions import now_iso
+from ansible_navigator.utils.functions import oxfordcomma
+from ansible_navigator.utils.functions import path_is_relative_to
+from ansible_navigator.utils.functions import round_half_up
+from ansible_navigator.utils.functions import unescape_moustaches
 
 
 EXTENSIONS = [".yml", ".yaml", ".json"]
@@ -31,8 +40,8 @@ def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    _messages, exit_messages, _found = functions.find_settings_file()
-    expected = f"Only one file among {functions.oxfordcomma(paths, 'and')}"
+    _messages, exit_messages, _found = find_settings_file()
+    expected = f"Only one file among {oxfordcomma(paths, 'and')}"
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
@@ -47,8 +56,8 @@ def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    _messages, exit_messages, _found = functions.find_settings_file()
-    expected = f"Only one file among {functions.oxfordcomma(paths, 'and')}"
+    _messages, exit_messages, _found = find_settings_file()
+    expected = f"Only one file among {oxfordcomma(paths, 'and')}"
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
 
 
@@ -64,14 +73,14 @@ def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
         return arg in paths
 
     monkeypatch.setattr(os.path, "exists", check_path_exists)
-    _messages, _exit_messages, found = functions.find_settings_file()
+    _messages, _exit_messages, found = find_settings_file()
     assert expected == found
 
 
 @pytest.mark.parametrize(
     ("set_env", "file_path", "anticipated_result"),
     (
-        (True, functions.expand_path(__file__), functions.expand_path(__file__)),
+        (True, str(expand_path(__file__)), str(expand_path(__file__))),
         (True, "", None),
         (False, None, None),
     ),
@@ -97,7 +106,7 @@ def test_env_var_is_file_path(
     env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
         monkeypatch.setenv(env_var, file_path)
-    _messages, _exit_messages, result = functions.environment_variable_is_file_path(
+    _messages, _exit_messages, result = environment_variable_is_file_path(
         env_var,
         "config",
     )
@@ -123,7 +132,7 @@ def test_flatten_list(value: list[str], anticipated_result: list[str]) -> None:
     :param value: List to be flattened
     :param anticipated_result: Expected outcome for assertion
     """
-    actual_result = functions.flatten_list(value)
+    actual_result = flatten_list(value)
     assert list(actual_result) == anticipated_result
 
 
@@ -156,7 +165,7 @@ def test_human_time_integer(data: HumanTimeTestData) -> None:
 
     :param data: Time data in human-readable format
     """
-    result = functions.human_time(data.value)
+    result = human_time(data.value)
     assert result == data.expected
 
 
@@ -168,7 +177,7 @@ def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
 
     :param data: Time data in human-readable format
     """
-    result = functions.human_time(-data.value)
+    result = human_time(-data.value)
     assert result == f"-{data.expected}"
 
 
@@ -180,7 +189,7 @@ def test_human_time_float(data: HumanTimeTestData) -> None:
 
     :param data: Time data in human-readable format
     """
-    result = functions.human_time(float(data.value))
+    result = human_time(float(data.value))
     assert result == data.expected
 
 
@@ -192,7 +201,7 @@ def test_human_time_negative_float(data: HumanTimeTestData) -> None:
 
     :param data: Time data in human-readable format
     """
-    result = functions.human_time(-float(data.value))
+    result = human_time(-float(data.value))
     assert result == f"-{data.expected}"
 
 
@@ -225,7 +234,7 @@ def test_round_half_up(data: RoundHalfUpTestData) -> None:
 
     :param data: Test object
     """
-    result = functions.round_half_up(data.value)
+    result = round_half_up(data.value)
     assert result == data.expected
 
 
@@ -233,8 +242,8 @@ def test_path_is_relative_to() -> None:
     """Ensure path_is_relative_to returns accurate results."""
     directory = Path("/tmp/test")
     file_in_directory = Path("/tmp/test/file.txt")
-    assert functions.path_is_relative_to(child=file_in_directory, parent=directory)
-    assert not functions.path_is_relative_to(child=directory, parent=file_in_directory)
+    assert path_is_relative_to(child=file_in_directory, parent=directory)
+    assert not path_is_relative_to(child=directory, parent=file_in_directory)
 
 
 iso8601 = re.compile(
@@ -269,7 +278,7 @@ def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str) -> None:
     :param caplog: The log capture fixture
     :param time_zone: The timezone
     """
-    time_string = functions.now_iso(time_zone=time_zone)
+    time_string = now_iso(time_zone=time_zone)
     re_matched = iso8601.match(time_string)
     assert re_matched is not None
     matched = re_matched.groupdict()
@@ -305,7 +314,7 @@ def test_unescape_moustaches(data: Any, output: Any) -> None:
     :param data: The input data.
     :param output: The expected output.
     """
-    result = functions.unescape_moustaches(data)
+    result = unescape_moustaches(data)
     assert result == output
 
 
