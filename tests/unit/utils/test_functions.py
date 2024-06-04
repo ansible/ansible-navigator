@@ -71,7 +71,7 @@ def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
 @pytest.mark.parametrize(
     ("set_env", "file_path", "anticipated_result"),
     (
-        (True, os.path.abspath(__file__), os.path.abspath(__file__)),
+        (True, functions.expand_path(__file__), functions.expand_path(__file__)),
         (True, "", None),
         (False, None, None),
     ),

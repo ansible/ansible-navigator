@@ -6,7 +6,6 @@ global subcommand registry.
 
 from __future__ import annotations
 
-import os
 import shutil
 
 from ansible_navigator.action_base import ActionBase
@@ -14,6 +13,7 @@ from ansible_navigator.action_defs import RunStdoutReturn
 from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 from ansible_navigator.configuration_subsystem.definitions import Constants
 from ansible_navigator.runner import Command
+from ansible_navigator.utils.functions import expand_path
 
 from . import _actions as actions
 
@@ -82,7 +82,7 @@ class Action(ActionBase):
 
         kwargs = {
             "execution_environment": False,
-            "host_cwd": os.path.abspath(os.path.expanduser(self._args.workdir)),
+            "host_cwd": str(expand_path(self._args.workdir)),
             "navigator_mode": self._args.mode,
             "pass_environment_variable": self._args.pass_environment_variable,
             "set_environment_variable": env_vars_to_set,

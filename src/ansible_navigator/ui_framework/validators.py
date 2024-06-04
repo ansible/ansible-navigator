@@ -11,6 +11,8 @@ from typing import Any
 from typing import NamedTuple
 from urllib.parse import urlparse
 
+from ansible_navigator.utils.functions import expand_path
+
 from .sentinels import Unknown
 from .sentinels import unknown
 
@@ -194,7 +196,7 @@ class FieldValidators:
         msg = "Please enter a valid file path"
         if hint:
             return msg
-        value = os.path.abspath(os.path.expanduser(text))
+        value = str(expand_path(text))
         if os.path.exists(value) and os.path.isfile(value):
             msg = ""
         else:
@@ -212,7 +214,7 @@ class FieldValidators:
         msg = "Please enter a valid file or directory path"
         if hint:
             return msg
-        value = os.path.abspath(os.path.expanduser(text))
+        value = str(expand_path(text))
         if os.path.exists(value):
             msg = ""
         else:
@@ -235,7 +237,7 @@ class FieldValidators:
             msg = ""
             value = text
         else:
-            value = os.path.abspath(os.path.expanduser(text))
+            value = str(expand_path(text))
             if os.path.exists(value):
                 msg = ""
             else:

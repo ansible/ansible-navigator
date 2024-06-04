@@ -6,10 +6,14 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+from ansible_navigator.utils.functions import expand_path
 
-FIXTURES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "fixtures"))
-FIXTURES_COLLECTION_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections"),
+
+FIXTURES_DIR = str(expand_path(os.path.join(os.path.dirname(__file__), "fixtures")))
+FIXTURES_COLLECTION_DIR = str(
+    expand_path(
+        os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections"),
+    ),
 )
 FIXTURES_COLLECTION_PATH = Path(FIXTURES_COLLECTION_DIR)
 

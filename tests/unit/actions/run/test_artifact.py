@@ -14,6 +14,8 @@ from typing import Any
 
 import pytest
 
+from ansible_navigator.utils.functions import expand_path
+
 
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture
@@ -92,7 +94,7 @@ test_data = [
             name="Filename with .",
             filename="./artifact.json",
             playbook="site.yml",
-            starts_with=f"{os.path.abspath('.')}/artifact.json",
+            starts_with=f"{expand_path('.')}/artifact.json",
         ),
     ),
     pytest.param(
@@ -100,7 +102,7 @@ test_data = [
             name="Filename with ..",
             filename="../artifact.json",
             playbook="site.yml",
-            starts_with=f"{os.path.abspath('..')}/artifact.json",
+            starts_with=f"{expand_path('..')}/artifact.json",
         ),
     ),
     pytest.param(
@@ -124,7 +126,7 @@ test_data = [
             name="Playbook with .",
             filename=None,
             playbook="./site.yaml",
-            starts_with=f"{os.path.abspath('.')}/site-artifact",
+            starts_with=f"{expand_path('.')}/site-artifact",
         ),
     ),
     pytest.param(
@@ -132,7 +134,7 @@ test_data = [
             name="Playbook with ..",
             filename=None,
             playbook="../site.yaml",
-            starts_with=f"{os.path.abspath('..')}/site-artifact",
+            starts_with=f"{expand_path('..')}/site-artifact",
         ),
     ),
     pytest.param(
