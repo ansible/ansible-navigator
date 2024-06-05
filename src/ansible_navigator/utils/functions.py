@@ -51,15 +51,6 @@ def oxfordcomma(listed: Iterable[bool | str | Path], condition: str) -> str:
     return f"{', '.join(str(x) for x in listed[:-1])} {condition} {listed[-1]}"
 
 
-def abs_user_path(file_path: str) -> str:
-    """Resolve a path.
-
-    :param file_path: The file path to resolve
-    :returns: Resolved file path
-    """
-    return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))  # noqa:PTH100
-
-
 def expand_path(path: str) -> Path:
     """Resolve a path.
 
