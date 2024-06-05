@@ -16,8 +16,8 @@ from tests.integration._tmux_session import TmuxSessionKwargs
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/stdout")
-ANSIBLE_PLAYBOOK = os.path.join(TEST_FIXTURE_DIR, "site.yml")
-TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
+ANSIBLE_PLAYBOOK = Path(TEST_FIXTURE_DIR) / "site.yml"
+TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR) / "ansible-navigator.yml"
 
 
 class BaseClass:
@@ -65,8 +65,8 @@ class BaseClass:
         :param comment: Comment to add to the fixture
         :param search_within_response: A list of strings or string to find
         """
-        assert Path(ANSIBLE_PLAYBOOK).exists()
-        assert Path(TEST_CONFIG_FILE).exists()
+        assert ANSIBLE_PLAYBOOK.exists()
+        assert TEST_CONFIG_FILE.exists()
 
         received_output = tmux_session.interaction(user_input, search_within_response)
 

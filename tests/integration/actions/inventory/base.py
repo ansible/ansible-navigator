@@ -17,8 +17,8 @@ from tests.integration._tmux_session import TmuxSession
 
 
 TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration", "actions", "inventory")
-ANSIBLE_INVENTORY_FIXTURE_DIR = os.path.join(TEST_FIXTURE_DIR, "ansible_inventory", "inventory.yml")
-TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
+ANSIBLE_INVENTORY_FIXTURE_DIR = Path(TEST_FIXTURE_DIR) / "ansible_inventory" / "inventory.yml"
+TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR) / "ansible-navigator.yml"
 
 
 base_steps = (
@@ -73,7 +73,7 @@ class BaseClass:
             ],
             pane_height=2000,
             pane_width=500,
-            config_path=Path(TEST_CONFIG_FILE),
+            config_path=TEST_CONFIG_FILE,
             request=request,
         ) as tmux_session:
             yield tmux_session
@@ -92,8 +92,8 @@ class BaseClass:
         :param step: Step index to use
         :raises ValueError: When the test mode is not set
         """
-        assert Path(ANSIBLE_INVENTORY_FIXTURE_DIR).exists()
-        assert Path(TEST_CONFIG_FILE).exists()
+        assert ANSIBLE_INVENTORY_FIXTURE_DIR.exists()
+        assert TEST_CONFIG_FILE.exists()
 
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"
