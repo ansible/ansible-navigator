@@ -550,7 +550,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description="Specify the full path for the ansible-navigator log file",
             settings_file_path_override="logging.file",
             value=SettingsEntryValue(
-                default=str(expand_path("./ansible-navigator.log")),
+                default=expand_path("./ansible-navigator.log"),
                 schema_default="./ansible-navigator.log",
             ),
             version_added="v1.0",
