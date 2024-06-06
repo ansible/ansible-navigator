@@ -7,6 +7,7 @@ import os
 
 from dataclasses import dataclass
 from dataclasses import field
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ansible_navigator.utils.definitions import ExitMessage
@@ -27,8 +28,6 @@ from .utils import AnsibleConfiguration
 
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from ansible_navigator.utils.key_value_store import KeyValueStore
 
 
@@ -776,7 +775,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description="Specify the path that contains ansible-builder manifest files",
             subcommands=["builder"],
             value=SettingsEntryValue(
-                default=os.getcwd(),
+                default=Path.cwd(),
                 schema_default=".",
             ),
             version_added="v2.0",

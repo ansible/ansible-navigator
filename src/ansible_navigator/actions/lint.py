@@ -24,6 +24,7 @@ from collections.abc import Mapping
 from datetime import datetime
 from datetime import timezone
 from enum import IntEnum
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -237,7 +238,7 @@ class Action(ActionBase):
             "private_data_dir": self._args.ansible_runner_artifact_dir,
             "rotate_artifacts": self._args.ansible_runner_rotate_artifacts_count,
             "timeout": self._args.ansible_runner_timeout,
-            "host_cwd": os.getcwd(),
+            "host_cwd": Path.cwd(),
         }
 
         if isinstance(self._args.execution_environment_volume_mounts, list):

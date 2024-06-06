@@ -50,7 +50,7 @@ def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
+    paths = [os.path.join(Path.cwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
         return arg in paths
@@ -66,7 +66,7 @@ def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
+    expected = os.path.join(Path.cwd(), "ansible-navigator.yml")
     paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
 
     def check_path_exists(arg: Any) -> bool:

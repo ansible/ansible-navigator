@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import curses
-import os
 import re
 import shlex
 import shutil
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -236,7 +236,7 @@ class Action(ActionBase):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "host_cwd": os.getcwd(),
+            "host_cwd": Path.cwd(),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,

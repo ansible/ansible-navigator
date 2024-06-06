@@ -225,7 +225,7 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | Non
     found_files: list[str] = []
 
     potential_paths.append([os.path.expanduser("~"), ".ansible-navigator"])
-    potential_paths.append([os.getcwd(), "ansible-navigator"])
+    potential_paths.append([str(Path.cwd()), "ansible-navigator"])
 
     for path in potential_paths:
         message = f"Looking in {path[0]}"

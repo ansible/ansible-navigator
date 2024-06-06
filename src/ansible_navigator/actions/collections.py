@@ -417,7 +417,7 @@ class Action(ActionBase):
         if isinstance(self._args.playbook, str):
             playbook_dir = os.path.dirname(self._args.playbook)
         else:
-            playbook_dir = os.getcwd()
+            playbook_dir = str(Path.cwd())
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs["container_volume_mounts"] = self._args.execution_environment_volume_mounts
