@@ -58,7 +58,6 @@ def os_independent_tmp() -> str:
     :return: The os independent tmp directory.
     """
     tmp_real = Path("/tmp").resolve()
-    # tmp_real = os.path.realpath("/tmp")
     an_tmp = tmp_real / "an" if tmp_real == "/private/tmp" else Path("/tmp") / "private" / "an"
     an_tmp.mkdir(parents=True, exist_ok=True)
     return str(an_tmp)
