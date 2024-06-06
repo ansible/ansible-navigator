@@ -299,7 +299,6 @@ ignore = [
   'PT005', # Fixture `_settings_samples` returns a value, remove leading underscore
   'PT019', # Fixture `_mocked_func` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
   'PT022', # [*] No teardown in fixture `cmd_in_tty`, use `return` instead of `yield`
-  'PTH103', # `os.makedirs()` should be replaced by `Path.mkdir(parents=True)`
   'PTH110', # `os.path.exists()` should be replaced by `Path.exists()`
   'PTH111', # `os.path.expanduser()` should be replaced by `Path.expanduser()`
   'PTH113', # `os.path.isfile()` should be replaced by `Path.is_file()`

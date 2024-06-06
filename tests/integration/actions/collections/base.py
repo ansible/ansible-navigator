@@ -4,6 +4,7 @@ import difflib
 import os
 
 from collections.abc import Generator
+from pathlib import Path
 
 import pytest
 
@@ -103,10 +104,10 @@ class BaseClass:
         :yields: A tmux session
         """
         tmp_coll_dir = os.path.join(os_independent_tmp, request.node.name, "")
-        os.makedirs(tmp_coll_dir, exist_ok=True)
+        Path(tmp_coll_dir).mkdir(parents=True, exist_ok=True)
         copytree(
             FIXTURES_COLLECTION_DIR,
-            os.path.join(tmp_coll_dir, "collections"),
+            Path(tmp_coll_dir) / "collections",
             dirs_exist_ok=True,
         )
         params: TmuxSessionKwargs = {

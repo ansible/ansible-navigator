@@ -896,7 +896,7 @@ class Action(ActionBase):
             self._logger.debug("Resolved artifact file name set to %s", filename)
 
             try:
-                os.makedirs(os.path.dirname(filename), exist_ok=True)
+                Path(os.path.dirname(filename)).mkdir(parents=True, exist_ok=True)
                 artifact = {
                     "version": "2.0.0",
                     "plays": self._plays.value,
