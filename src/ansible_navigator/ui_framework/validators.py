@@ -3,20 +3,15 @@
 from __future__ import annotations
 
 import os
-
 from collections.abc import Iterable
 from pathlib import Path
 from random import randrange
-from typing import TYPE_CHECKING
-from typing import Any
-from typing import NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
 from urllib.parse import urlparse
 
 from ansible_navigator.utils.functions import expand_path
 
-from .sentinels import Unknown
-from .sentinels import unknown
-
+from .sentinels import Unknown, unknown
 
 if TYPE_CHECKING:
     from .form_defs import FieldValidationStates
@@ -198,7 +193,7 @@ class FieldValidators:
         if hint:
             return msg
         value = str(expand_path(text))
-        if Path(value).exists() and os.path.isfile(value):
+        if Path(value).exists() and Path(value).is_file():
             msg = ""
         else:
             value = text
