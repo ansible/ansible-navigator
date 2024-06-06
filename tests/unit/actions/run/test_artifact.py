@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+import pathlib
 import re
 
 from copy import deepcopy
@@ -201,7 +202,7 @@ def test_artifact_path(
     """
     caplog.set_level(logging.DEBUG)
     monkeypatch.setenv("HOME", "/home/test_user")
-    monkeypatch.setattr(os, "makedirs", make_dirs)
+    monkeypatch.setattr(pathlib.Path, "mkdir", make_dirs)
     monkeypatch.setattr(action, "_get_status", get_status)
     mocked_write = mocker.patch(
         "ansible_navigator.actions.run.serialize_write_file",
