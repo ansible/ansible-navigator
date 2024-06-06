@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from collections.abc import Iterable
+from pathlib import Path
 from random import randrange
 from typing import TYPE_CHECKING
 from typing import Any
@@ -197,7 +198,7 @@ class FieldValidators:
         if hint:
             return msg
         value = str(expand_path(text))
-        if os.path.exists(value) and os.path.isfile(value):
+        if os.path.exists(value) and Path(value).is_file():
             msg = ""
         else:
             value = text
