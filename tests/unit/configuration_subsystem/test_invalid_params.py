@@ -128,7 +128,7 @@ def test_fail_log_file_dir(
         """
         raise OSError
 
-    monkeypatch.setattr("os.makedirs", makedirs)
+    monkeypatch.setattr("pathlib.Path.mkdir", makedirs)
     monkeypatch.setattr("shutil.which", which)
 
     response = generate_config()
