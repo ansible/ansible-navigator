@@ -3,6 +3,7 @@
 import os
 
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
@@ -29,17 +30,17 @@ def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None
         functionality in tests
     """
     settings_file = "ansible-navigator.yml"
-    settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file)
+    settings_file_path = TEST_FIXTURE_DIR / settings_file
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
     args.application_version = "test"
 
-    def getcwd() -> str:
+    def getcwd() -> Path:
         return TEST_FIXTURE_DIR
 
-    monkeypatch.setattr(os, "getcwd", getcwd)
+    monkeypatch.setattr(Path, "cwd", getcwd)
     parse_and_update(params=[], args=args)
-    assert args.internals.settings_file_path == settings_file_path
+    assert args.internals.settings_file_path == str(settings_file_path)
     assert args.internals.settings_source == Constants.SEARCH_PATH
 
 

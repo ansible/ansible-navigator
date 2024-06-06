@@ -9,7 +9,7 @@ from typing import Any
 from ansible_navigator.utils.functions import expand_path
 
 
-FIXTURES_DIR = str(expand_path(os.path.join(os.path.dirname(__file__), "fixtures")))
+FIXTURES_DIR = expand_path(os.path.join(os.path.dirname(__file__), "fixtures"))
 FIXTURES_COLLECTION_DIR = expand_path(
     os.path.join(os.path.dirname(__file__), "fixtures", "common", "collections"),
 )
