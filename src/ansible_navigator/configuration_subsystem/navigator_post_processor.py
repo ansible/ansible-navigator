@@ -1009,7 +1009,7 @@ class NavigatorPostProcessor:
         if isinstance(entry.value.current, str):
             entry.value.current = abs_user_path(entry.value.current)
 
-        if config.app == "replay" and not os.path.isfile(entry.value.current):
+        if config.app == "replay" and not Path(entry.value.current).is_file():
             exit_msg = f"The specified playbook artifact could not be found: {entry.value.current}"
             exit_messages.append(ExitMessage(message=exit_msg))
             exit_msg = "Try again with 'replay <valid path to playbook artifact>'"
