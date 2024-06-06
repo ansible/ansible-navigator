@@ -57,13 +57,11 @@ def os_independent_tmp() -> str:
 
     :return: The os independent tmp directory.
     """
-    tmp_real = os.path.realpath("/tmp")
-    if tmp_real == "/private/tmp":
-        an_tmp = os.path.join(tmp_real, "an")
-    else:
-        an_tmp = os.path.join("/tmp", "private", "an")
-    Path(an_tmp).mkdir(parents=True, exist_ok=True)
-    return an_tmp
+    tmp_real = Path("/tmp").resolve()
+    # tmp_real = os.path.realpath("/tmp")
+    an_tmp = tmp_real / "an" if tmp_real == "/private/tmp" else Path("/tmp") / "private" / "an"
+    an_tmp.mkdir(parents=True, exist_ok=True)
+    return str(an_tmp)
 
 
 @pytest.mark.usefixtures("cmd_in_tty")

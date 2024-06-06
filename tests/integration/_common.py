@@ -171,8 +171,8 @@ def sanitize_output(output: list[str]) -> list[str]:
 
 
 def copytree(
-    src: str,
-    dst: str,
+    src: Path,
+    dst: Path,
     symlinks: bool = False,
     ignore: Callable[..., Any] | None = None,
     dirs_exist_ok: bool = False,
@@ -209,18 +209,18 @@ def copytree(
     names = os.listdir(src)
     ignored_names = ignore(src, names) if ignore is not None else set()
 
-    Path(dst).mkdir(parents=True, exist_ok=dirs_exist_ok)
+    dst.mkdir(parents=True, exist_ok=dirs_exist_ok)
     errors = []
     for name in names:
         if name in ignored_names:
             continue
-        source_path = os.path.join(src, name)
-        destination_path = os.path.join(dst, name)
+        source_path = src / name
+        destination_path = dst / name
         try:
-            if symlinks and Path(source_path).is_symlink():
-                source_link = Path(source_path).readlink()
+            if symlinks and source_path.is_symlink():
+                source_link = source_path.readlink()
                 os.symlink(source_link, destination_path)
-            elif Path(source_path).is_dir():
+            elif source_path.is_dir():
                 copytree(
                     source_path,
                     destination_path,

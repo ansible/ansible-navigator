@@ -107,7 +107,7 @@ class BaseClass:
         Path(tmp_coll_dir).mkdir(parents=True, exist_ok=True)
         copytree(
             FIXTURES_COLLECTION_DIR,
-            os.path.join(tmp_coll_dir, "collections"),
+            Path(tmp_coll_dir) / "collections",
             dirs_exist_ok=True,
         )
         params: TmuxSessionKwargs = {
