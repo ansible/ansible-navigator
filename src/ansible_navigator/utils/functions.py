@@ -60,7 +60,7 @@ def abs_user_path(file_path: str) -> str:
     return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))  # noqa:PTH100
 
 
-def expand_path(path: str) -> Path:
+def expand_path(path: str | Path) -> Path:
     """Resolve a path.
 
     :param path: The file path to resolve

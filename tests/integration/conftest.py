@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 from copy import deepcopy
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -39,12 +37,12 @@ def action_run_stdout() -> Generator[type[ActionRunTest], None, None]:
 
 
 @pytest.fixture(scope="session")
-def test_fixtures_dir() -> str:
+def test_fixtures_dir() -> Path:
     """Return the test fixture directory.
 
     :return: The test fixture directory.
     """
-    return os.path.join(Path(__file__).parent, "..", "fixtures")
+    return Path(__file__).parent / ".." / "fixtures"
 
 
 @pytest.fixture(scope="session")
