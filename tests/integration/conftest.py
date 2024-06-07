@@ -44,7 +44,7 @@ def test_fixtures_dir() -> str:
 
     :return: The test fixture directory.
     """
-    return os.path.join(os.path.dirname(__file__), "..", "fixtures")
+    return os.path.join(Path(__file__).parent, "..", "fixtures")
 
 
 @pytest.fixture(scope="session")
