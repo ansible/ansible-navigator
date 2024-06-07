@@ -415,9 +415,9 @@ class Action(ActionBase):
         }
 
         if isinstance(self._args.playbook, str):
-            playbook_dir = os.path.dirname(self._args.playbook)
+            playbook_dir = Path(self._args.playbook).parent
         else:
-            playbook_dir = os.getcwd()
+            playbook_dir = Path.cwd()
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs["container_volume_mounts"] = self._args.execution_environment_volume_mounts
@@ -443,11 +443,7 @@ class Action(ActionBase):
         if self._args.execution_environment:
             self._logger.debug("running collections command with execution environment enabled")
             python_exec_path = "/usr/bin/python3"
-            utils_lib = os.path.join(
-                os.path.dirname(__file__),
-                "..",
-                "utils",
-            )
+            utils_lib = Path(__file__).parent / ".." / "utils"
 
             container_volume_mounts = [
                 # cache directory which has introspection script
@@ -570,7 +566,7 @@ class Action(ActionBase):
                     "path"
                 ].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
-                elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
+                elif collection["path"].startswith(Path(self._adjacent_collection_dir).parent):
                     collection["__type"] = "bind_mount"
                     error = (
                         f"{collection['known_as']} was mounted and catalogued in the"

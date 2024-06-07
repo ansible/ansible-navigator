@@ -107,17 +107,17 @@ def get_and_check_collection_doc_cache(
     messages.append(LogMessage(level=logging.DEBUG, message=message))
 
     path_errors = []
-    doc_cache_dir = os.path.dirname(collection_doc_cache_path)
+    doc_cache_dir = Path(collection_doc_cache_path).parent
     try:
-        Path(doc_cache_dir).mkdir(parents=True, exist_ok=True)
+        doc_cache_dir.mkdir(parents=True, exist_ok=True)
     except OSError as exc:
         path_errors.append(f"Problem making directory: {doc_cache_dir}")
         path_errors.append(f"Error was: {exc!s}")
 
-    if not os.access(os.path.dirname(collection_doc_cache_path), os.W_OK):
+    if not os.access(Path(collection_doc_cache_path).parent, os.W_OK):
         path_errors.append("Directory not writable")
 
-    if not os.access(os.path.dirname(collection_doc_cache_path), os.R_OK):
+    if not os.access(Path(collection_doc_cache_path).parent, os.R_OK):
         path_errors.append("Directory not readable")
 
     if path_errors:

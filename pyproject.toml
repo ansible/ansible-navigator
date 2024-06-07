@@ -303,7 +303,6 @@ ignore = [
   'PTH110', # `os.path.exists()` should be replaced by `Path.exists()`
   'PTH111', # `os.path.expanduser()` should be replaced by `Path.expanduser()`
   'PTH118', # `os.path.join()` should be replaced by `Path` with `/` operator
-  'PTH120', # `os.path.dirname()` should be replaced by `Path.parent`
   'PTH122', # `os.path.splitext()` should be replaced by `Path.suffix`
   'RET505', # Unnecessary `else` after `return` statement
   'RUF005', # [*] Consider `[self._name, *shlex.split(self._interaction.action.match.groupdict()["params"] or "")]` instead of concatenation

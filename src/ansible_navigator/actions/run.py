@@ -886,7 +886,7 @@ class Action(ActionBase):
                 playbook = next(k["playbook"] for k in self._plays.value)
             filename = filename or self._args.playbook_artifact_save_as
             filename = filename.format(
-                playbook_dir=os.path.dirname(playbook),
+                playbook_dir=Path(playbook).parent,
                 playbook_name=os.path.splitext(Path(playbook).name)[0],
                 playbook_status=status,
                 time_stamp=now_iso(self._args.time_zone),
@@ -896,7 +896,7 @@ class Action(ActionBase):
             self._logger.debug("Resolved artifact file name set to %s", filename)
 
             try:
-                Path(os.path.dirname(filename)).mkdir(parents=True, exist_ok=True)
+                Path(Path(filename).parent).mkdir(parents=True, exist_ok=True)
                 artifact = {
                     "version": "2.0.0",
                     "plays": self._plays.value,
