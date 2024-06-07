@@ -166,7 +166,7 @@ class Action(ActionBase):
                 modification_times.append(
                     max(Path(e).stat().st_mtime for e in Path(inventory).rglob("*")),
                 )
-            elif os.path.isfile(inventory):
+            elif Path(inventory).is_file():
                 modification_times.append(Path(inventory).stat().st_mtime)
         if modification_times:
             self._inventories_mtime = max(modification_times)

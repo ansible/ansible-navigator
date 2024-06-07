@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pathlib
 import shlex
 
 from typing import TYPE_CHECKING
@@ -72,7 +73,7 @@ def test_all_entries_reflect_cli_given_env_vars(
     :param expected: Expected value
     """
     monkeypatch.setattr("shutil.which", which)
-    monkeypatch.setattr("os.path.isfile", isfile)
+    monkeypatch.setattr(pathlib.Path, "is_file", isfile)
 
     expected_dict: dict[str, str]
     if base is None:

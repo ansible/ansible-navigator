@@ -195,7 +195,7 @@ def environment_variable_is_file_path(
     else:
         message = f"Found a {kind} file at {candidate_path} set by {env_var}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
-        if os.path.isfile(candidate_path) and os.path.exists(candidate_path):
+        if Path(candidate_path).is_file() and os.path.exists(candidate_path):
             file_path = candidate_path
             message = f"{kind.capitalize()} file at {file_path} set by {env_var} is viable"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
