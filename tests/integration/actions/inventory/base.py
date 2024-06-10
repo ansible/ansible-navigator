@@ -4,7 +4,6 @@ import difflib
 import os
 
 from collections.abc import Generator
-from pathlib import Path
 
 import pytest
 
@@ -16,9 +15,9 @@ from tests.integration._interactions import UiTestStep
 from tests.integration._tmux_session import TmuxSession
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration", "actions", "inventory")
-ANSIBLE_INVENTORY_FIXTURE_DIR = Path(TEST_FIXTURE_DIR) / "ansible_inventory" / "inventory.yml"
-TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR) / "ansible-navigator.yml"
+TEST_FIXTURE_DIR = FIXTURES_DIR / "integration" / "actions" / "inventory"
+ANSIBLE_INVENTORY_FIXTURE_DIR = TEST_FIXTURE_DIR / "ansible_inventory" / "inventory.yml"
+TEST_CONFIG_FILE = TEST_FIXTURE_DIR / "ansible-navigator.yml"
 
 
 base_steps = (

@@ -15,9 +15,9 @@ from tests.integration._tmux_session import TmuxSession
 from tests.integration._tmux_session import TmuxSessionKwargs
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/stdout")
-ANSIBLE_PLAYBOOK = Path(TEST_FIXTURE_DIR) / "site.yml"
-TEST_CONFIG_FILE = Path(TEST_FIXTURE_DIR) / "ansible-navigator.yml"
+TEST_FIXTURE_DIR = FIXTURES_DIR / "integration/actions/stdout"
+ANSIBLE_PLAYBOOK = TEST_FIXTURE_DIR / "site.yml"
+TEST_CONFIG_FILE = TEST_FIXTURE_DIR / "ansible-navigator.yml"
 
 
 class BaseClass:
