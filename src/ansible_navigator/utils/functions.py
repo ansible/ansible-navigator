@@ -12,23 +12,15 @@ import re
 import shlex
 import shutil
 import zoneinfo
-
 from pathlib import Path
-from typing import TYPE_CHECKING
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from jinja2 import Environment
-from jinja2 import StrictUndefined
-from jinja2 import TemplateError
+from jinja2 import Environment, StrictUndefined, TemplateError
 
-from .definitions import GOLDEN_RATIO
-from .definitions import ExitMessage
-from .definitions import LogMessage
-
+from .definitions import GOLDEN_RATIO, ExitMessage, LogMessage
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
-    from collections.abc import Mapping
+    from collections.abc import Iterable, Mapping
 
 
 logger = logging.getLogger(__name__)
@@ -223,7 +215,6 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | No
     allowed_extensions = ["yml", "yaml", "json"]
     potential_paths: list[Path] = []
     found_files: list[Path] = []
-    candidates: list[Path] = []
 
     X = Path.home() / ".ansible-navigator"
     Y = Path.cwd() / "ansible-navigator"
@@ -234,6 +225,7 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | No
         message = f"Looking in {path}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
+        candidates: list[Path] = []
         for ext in allowed_extensions:
             p1 = Path(f"{path}.{ext}")
             candidates.append(p1)
