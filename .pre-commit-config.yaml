@@ -9,7 +9,7 @@ exclude: >
   )$
 repos:
   - repo: https://github.com/pycontribs/mirrors-prettier
-    rev: "v3.3.0"
+    rev: "v3.3.1"
     hooks:
       - id: prettier
         # Original hook implementation is flaky due to *several* bugs described
@@ -45,7 +45,7 @@ repos:
       - id: toml-sort-fix
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.4.7"
+    rev: "v0.4.8"
     hooks:
       - id: ruff
         args:
@@ -151,7 +151,7 @@ repos:
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8
-    rev: v3.15.2
+    rev: v3.16.0
     hooks:
       - id: pyupgrade
         args: ["--py310-plus"]
@@ -173,7 +173,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v3.2.2
+    rev: v3.2.3
     hooks:
       - id: pylint
         args:
