@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def oxfordcomma(listed: Iterable[bool | str], condition: str) -> str:
+def oxfordcomma(listed: Iterable[bool | str | Path], condition: str) -> str:
     """Format a list into a sentence.
 
     :param listed: List of string entries to modify
@@ -210,7 +210,7 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | None]:
+def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | None]:
     """Find the settings file.
 
     Find the file at ./ansible-navigator.(.yml,.yaml,.json),
@@ -221,27 +221,37 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | Non
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
     allowed_extensions = ["yml", "yaml", "json"]
-    potential_paths: list[list[str]] = []
-    found_files: list[str] = []
+    potential_paths: list[Path] = []
+    found_files: list[Path] = []
+    candidates: list[Path] = []
 
-    potential_paths.append([os.path.expanduser("~"), ".ansible-navigator"])
-    potential_paths.append([os.getcwd(), "ansible-navigator"])
+    X = Path.home() / ".ansible-navigator"
+    Y = Path.cwd() / "ansible-navigator"
+    potential_paths.append(X)
+    potential_paths.append(Y)
 
     for path in potential_paths:
-        message = f"Looking in {path[0]}"
+        message = f"Looking in {path}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        candidates = [os.path.join(path[0], f"{path[1]}.{ext}") for ext in allowed_extensions]
-        message = f"Looking for {oxfordcomma(candidates, 'and')}"
+        for ext in allowed_extensions:
+            p1 = Path(f"{path}.{ext}")
+            candidates.append(p1)
+        message = f"Looking for {candidates} xxx {oxfordcomma(candidates, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        found = [file for file in candidates if os.path.exists(file)]
-        message = f"Found {len(found)}: {oxfordcomma(found, 'and')}"
+        found: list[Path] = []
+
+        for candidate in candidates:
+            if candidate.exists():
+                found.append(candidate)
+
+        message = f"Found {found} {len(found)}: {oxfordcomma(found, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
         if len(found) > 1:
             exit_msg = f"Only one file among {oxfordcomma(candidates, 'and')}"
-            exit_msg += f" should be present in {path[0]}"
+            exit_msg += f" should be present in {path}"
             exit_msg += f" Found: {oxfordcomma(found, 'and')}"
             exit_messages.append(ExitMessage(message=exit_msg))
             return messages, exit_messages, None
