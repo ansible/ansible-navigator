@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import curses
 import json
-import os
 import shlex
 import shutil
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -177,9 +177,9 @@ class Action(ActionBase):
 
         if self._args.mode == "interactive":
             if isinstance(self._args.playbook, str):
-                playbook_dir = os.path.dirname(self._args.playbook)
+                playbook_dir = Path(self._args.playbook).parent
             else:
-                playbook_dir = os.getcwd()  # noqa:PTH109
+                playbook_dir = Path.cwd()
             kwargs.update({"host_cwd": playbook_dir})
 
             self._runner = AnsibleDoc(**kwargs)
@@ -202,7 +202,7 @@ class Action(ActionBase):
             plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
             return plugin_doc_response
         else:
-            kwargs.update({"host_cwd": os.getcwd()})  # noqa:PTH109
+            kwargs.update({"host_cwd": Path.cwd()})
             if self._args.execution_environment:
                 ansible_doc_path = "ansible-doc"
             else:

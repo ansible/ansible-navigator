@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_runner import get_plugin_docs
 
 from .base import Base
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class AnsibleDoc(Base):
@@ -19,7 +24,7 @@ class AnsibleDoc(Base):
         plugin_type: str | None = None,
         response_format: str | None = "json",
         snippet: bool | None = None,
-        playbook_dir: str | None = None,
+        playbook_dir: str | Path | None = None,
         module_path: str | None = None,
     ) -> tuple[dict[Any, Any] | str, dict[Any, Any] | str]:
         """Run ``ansible-doc`` command and get the plugin docs related details.

@@ -453,7 +453,7 @@ class Action(ActionBase):
         except (AttributeError, IndexError, ValueError):
             if isinstance(self._args.playbook, str):
                 # or use the parent of the currently set playbook
-                playbook_dir = str(Path(self._args.playbook).resolve().parent)
+                playbook_dir = Path(self._args.playbook).resolve().parent
                 source = "derived from playbook"
             else:
                 # or the current working directory
