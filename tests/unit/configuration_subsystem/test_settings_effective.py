@@ -22,7 +22,7 @@ from ansible_navigator.configuration_subsystem import SettingsFileType
 from ansible_navigator.configuration_subsystem import SettingsSchemaType
 from ansible_navigator.configuration_subsystem import to_effective
 from ansible_navigator.initialization import parse_and_update
-from ansible_navigator.utils.functions import abs_user_path
+from ansible_navigator.utils.functions import expand_path
 from ansible_navigator.utils.json_schema import validate
 
 
@@ -138,4 +138,4 @@ def test_settings_full(
             else:
                 assert isinstance(effective_value, str)
                 assert isinstance(sample_value, str)
-                assert abs_user_path(effective_value) == abs_user_path(sample_value)
+                assert expand_path(effective_value) == expand_path(sample_value)

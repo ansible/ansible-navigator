@@ -35,8 +35,8 @@ from ansible_navigator.ui_framework import dict_to_form
 from ansible_navigator.ui_framework import form_to_dict
 from ansible_navigator.ui_framework import nonblocking_notification
 from ansible_navigator.ui_framework import warning_notification
-from ansible_navigator.utils.functions import abs_user_path
 from ansible_navigator.utils.functions import check_playbook_type
+from ansible_navigator.utils.functions import expand_path
 from ansible_navigator.utils.functions import human_time
 from ansible_navigator.utils.functions import is_jinja
 from ansible_navigator.utils.functions import now_iso
@@ -892,7 +892,7 @@ class Action(ActionBase):
                 time_stamp=now_iso(self._args.time_zone),
             )
             self._logger.debug("Formatted artifact file name set to %s", filename)
-            filename = abs_user_path(filename)
+            filename = str(expand_path(filename))
             self._logger.debug("Resolved artifact file name set to %s", filename)
 
             try:
