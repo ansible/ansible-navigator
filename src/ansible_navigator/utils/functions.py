@@ -12,29 +12,21 @@ import re
 import shlex
 import shutil
 import zoneinfo
-
 from pathlib import Path
-from typing import TYPE_CHECKING
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from jinja2 import Environment
-from jinja2 import StrictUndefined
-from jinja2 import TemplateError
+from jinja2 import Environment, StrictUndefined, TemplateError
 
-from .definitions import GOLDEN_RATIO
-from .definitions import ExitMessage
-from .definitions import LogMessage
-
+from .definitions import GOLDEN_RATIO, ExitMessage, LogMessage
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
-    from collections.abc import Mapping
+    from collections.abc import Iterable, Mapping
 
 
 logger = logging.getLogger(__name__)
 
 
-def oxfordcomma(listed: Iterable[bool | str], condition: str) -> str:
+def oxfordcomma(listed: Iterable[bool | str | Path], condition: str) -> str:
     """Format a list into a sentence.
 
     :param listed: List of string entries to modify
@@ -210,7 +202,7 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | None]:
+def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | None]:
     """Find the settings file.
 
     Find the file at ./ansible-navigator.(.yml,.yaml,.json),
@@ -221,27 +213,33 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | Non
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
     allowed_extensions = ["yml", "yaml", "json"]
-    potential_paths: list[list[str]] = []
-    found_files: list[str] = []
+    potential_paths: list[Path] = []
+    found_files: list[Path] = []
 
-    potential_paths.append([os.path.expanduser("~"), ".ansible-navigator"])
-    potential_paths.append([str(Path.cwd()), "ansible-navigator"])
+    settings_file_home = Path.home() / ".ansible-navigator"
+    settings_file_current = Path.cwd() / "ansible-navigator"
+    potential_paths.append(settings_file_home)
+    potential_paths.append(settings_file_current)
 
     for path in potential_paths:
-        message = f"Looking in {path[0]}"
+        message = f"Looking in {path}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        candidates = [os.path.join(path[0], f"{path[1]}.{ext}") for ext in allowed_extensions]
+        candidates: list[Path] = []
+        for ext in allowed_extensions:
+            p = Path(f"{path}.{ext}")
+            candidates.append(p)
         message = f"Looking for {oxfordcomma(candidates, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        found = [file for file in candidates if os.path.exists(file)]
+        found = [file for file in candidates if file.exists()]
+
         message = f"Found {len(found)}: {oxfordcomma(found, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
         if len(found) > 1:
             exit_msg = f"Only one file among {oxfordcomma(candidates, 'and')}"
-            exit_msg += f" should be present in {path[0]}"
+            exit_msg += f" should be present in {path}"
             exit_msg += f" Found: {oxfordcomma(found, 'and')}"
             exit_messages.append(ExitMessage(message=exit_msg))
             return messages, exit_messages, None
