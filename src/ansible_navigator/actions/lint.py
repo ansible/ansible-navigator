@@ -17,7 +17,6 @@ ansible-lint codebase.
 from __future__ import annotations
 
 import json
-import os
 import shlex
 
 from collections.abc import Mapping
