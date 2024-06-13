@@ -300,7 +300,8 @@ EOF
 chmod +x vault.sh
 ```
 
-Now you can export `ANSIBLE_VAULT_PASSWORD` with the result of that script and set ```ANSIBLE_VAULT_PASSWORD_FILE``` to this script as you run ansible-navigator:
+Now you can export `ANSIBLE_VAULT_PASSWORD` with the result of that script and
+set `ANSIBLE_VAULT_PASSWORD_FILE` to this script as you run ansible-navigator:
 
 ```
 ANSIBLE_VAULT_PASSWORD="$( ~/bin/vault.sh )" ansible-navigator run --senv=ANSIBLE_VAULT_PASSWORD_FILE=vault.sh --penv=ANSIBLE_VAULT_PASSWORD (...)
