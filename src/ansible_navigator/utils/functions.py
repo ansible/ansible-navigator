@@ -271,7 +271,7 @@ def generate_cache_path(app_name: str) -> Path:
     :param app_name: Name of application - currently ansible_navigator
     :returns: Path to the cache directory
     """
-    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{Path.home()}/.cache")
     return Path(cache_home) / app_name
 
 
