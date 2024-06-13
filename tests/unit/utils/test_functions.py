@@ -32,9 +32,7 @@ def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    paths = [
-        os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENSIONS
-    ]
+    paths = [os.path.join(Path.home(), ".ansible-navigator" + ext) for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
         return str(arg) in paths
