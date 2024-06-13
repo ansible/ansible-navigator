@@ -50,7 +50,7 @@ def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
+    paths = [os.path.join(Path.cwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
         return str(arg) in paths

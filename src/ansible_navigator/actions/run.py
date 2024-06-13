@@ -580,7 +580,7 @@ class Action(ActionBase):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "host_cwd": os.getcwd(),
+            "host_cwd": Path.cwd(),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "inventory": self._args.inventory,

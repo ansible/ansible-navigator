@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
 import shlex
 import shutil
 
@@ -458,7 +457,7 @@ class Action(ActionBase):
                 source = "derived from playbook"
             else:
                 # or the current working directory
-                playbook_dir = os.getcwd()
+                playbook_dir = Path.cwd()
                 source = "CWD"
         self._logger.info("--playbook-directory for inventory from (%s): %s", source, playbook_dir)
 
@@ -540,7 +539,7 @@ class Action(ActionBase):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "host_cwd": os.getcwd(),
+            "host_cwd": Path.cwd(),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,
