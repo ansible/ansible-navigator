@@ -81,7 +81,7 @@ def find_config() -> tuple[list[LogMessage], list[ExitMessage], str | None, C]:
         message = f"Using settings file at {config_path} set by {cfg_env_var}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
     elif found_config_path is not None:
-        config_path = found_config_path
+        config_path = str(found_config_path)
         settings_source = C.SEARCH_PATH
         message = f"Using settings file at {config_path} in search path"
         messages.append(LogMessage(level=logging.DEBUG, message=message))

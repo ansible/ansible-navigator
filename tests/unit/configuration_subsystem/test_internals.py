@@ -3,6 +3,7 @@
 import os
 
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
@@ -34,10 +35,10 @@ def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None
     args.internals.initializing = True
     args.application_version = "test"
 
-    def getcwd() -> str:
+    def getcwd() -> Path:
         return TEST_FIXTURE_DIR
 
-    monkeypatch.setattr(os, "getcwd", getcwd)
+    monkeypatch.setattr(Path, "cwd", getcwd)
     parse_and_update(params=[], args=args)
     assert args.internals.settings_file_path == settings_file_path
     assert args.internals.settings_source == Constants.SEARCH_PATH
