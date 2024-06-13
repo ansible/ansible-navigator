@@ -37,9 +37,9 @@ def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
     ]
 
     def check_path_exists(arg: Any) -> bool:
-        return arg in paths
+        return str(arg) in paths
 
-    monkeypatch.setattr(os.path, "exists", check_path_exists)
+    monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, exit_messages, _found = find_settings_file()
     expected = f"Only one file among {oxfordcomma(paths, 'and')}"
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
@@ -53,9 +53,9 @@ def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
     paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
-        return arg in paths
+        return str(arg) in paths
 
-    monkeypatch.setattr(os.path, "exists", check_path_exists)
+    monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, exit_messages, _found = find_settings_file()
     expected = f"Only one file among {oxfordcomma(paths, 'and')}"
     assert any(expected in exit_msg.message for exit_msg in exit_messages)
@@ -66,13 +66,13 @@ def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
-    paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
+    expected = Path.cwd() / "ansible-navigator.yml"
+    paths = [expected, Path.home() / ".ansible-navigator.json"]
 
     def check_path_exists(arg: Any) -> bool:
         return arg in paths
 
-    monkeypatch.setattr(os.path, "exists", check_path_exists)
+    monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, _exit_messages, found = find_settings_file()
     assert expected == found
 
