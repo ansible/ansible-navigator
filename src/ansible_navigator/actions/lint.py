@@ -266,7 +266,7 @@ class Action(ActionBase):
 
         if isinstance(self._args.lintables, str):
             # Does it actually exist?
-            if not os.path.exists(self._args.lintables):
+            if not Path(self._args.lintables).exists():
                 self._fatal(f"The given path `{self._args.lintables}` does not exist.")
                 return "", "", 1
             cmd_args.append(self._args.lintables)

@@ -11,6 +11,7 @@ import shutil
 import sys
 import tempfile
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -142,7 +143,7 @@ class Base:
         if (
             self._private_data_dir_is_tmp
             and self._private_data_dir
-            and os.path.exists(self._private_data_dir)
+            and Path(self._private_data_dir).exists()
         ):
             self._logger.debug(
                 "delete temporary ansible-runner private_data_dir at path %s",

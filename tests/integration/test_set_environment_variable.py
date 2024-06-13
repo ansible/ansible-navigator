@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import shlex
 
 from pathlib import Path
@@ -91,15 +90,15 @@ class Test(Cli2Runner):
         :param config_fixture: The settings fixture
         :param expected: the expected return value
         """
-        cfg_path = f"{self.TEST_FIXTURE_DIR}/{config_fixture}"
+        cfg_path = self.TEST_FIXTURE_DIR / config_fixture
         coll_cache_path = tmp_path / "collection_doc_cache.db"
 
-        assert os.path.exists(cfg_path)
+        assert cfg_path.exists()
 
         params = shlex.split(cli_entry) + ["--pp", "never"]
 
         monkeypatch.setattr("sys.argv", params)
-        monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", cfg_path)
+        monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", str(cfg_path))
         monkeypatch.setenv("ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH", str(coll_cache_path))
         monkeypatch.chdir(tmp_path)
 
