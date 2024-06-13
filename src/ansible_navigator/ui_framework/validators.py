@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 from collections.abc import Iterable
 from pathlib import Path
 from random import randrange
@@ -198,7 +196,7 @@ class FieldValidators:
         if hint:
             return msg
         value = str(expand_path(text))
-        if os.path.exists(value) and Path(value).is_file():
+        if Path(value).exists() and Path(value).is_file():
             msg = ""
         else:
             value = text
@@ -216,7 +214,7 @@ class FieldValidators:
         if hint:
             return msg
         value = str(expand_path(text))
-        if os.path.exists(value):
+        if Path(value).exists():
             msg = ""
         else:
             value = text
@@ -239,7 +237,7 @@ class FieldValidators:
             value = text
         else:
             value = str(expand_path(text))
-            if os.path.exists(value):
+            if Path(value).exists():
                 msg = ""
             else:
                 value = text

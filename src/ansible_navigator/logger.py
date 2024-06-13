@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import datetime
 import logging
-import os
 import zoneinfo
 
 from pathlib import Path
@@ -61,7 +60,7 @@ def setup_logger(args: ApplicationConfiguration) -> None:
 
     :param args: The CLI args
     """
-    if os.path.exists(args.log_file) and args.log_append is False:
+    if Path(args.log_file).exists() and args.log_append is False:
         Path(args.log_file).unlink()
     handler = logging.FileHandler(args.log_file)
 

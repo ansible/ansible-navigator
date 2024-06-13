@@ -14,9 +14,9 @@ from tests.integration._common import update_fixtures
 from tests.integration._tmux_session import TmuxSession
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/replay")
-PLAYBOOK_ARTIFACT = os.path.join(TEST_FIXTURE_DIR, "playbook-artifact.json")
-TEST_CONFIG_FILE = os.path.join(TEST_FIXTURE_DIR, "ansible-navigator.yml")
+TEST_FIXTURE_DIR = FIXTURES_DIR / "integration/actions/replay"
+PLAYBOOK_ARTIFACT = TEST_FIXTURE_DIR / "playbook-artifact.json"
+TEST_CONFIG_FILE = TEST_FIXTURE_DIR / "ansible-navigator.yml"
 
 
 class BaseClass:
@@ -62,8 +62,8 @@ class BaseClass:
         :param comment: Comment to add to the fixture
         :param search_within_response: A list of strings or string to find
         """
-        assert os.path.exists(PLAYBOOK_ARTIFACT)
-        assert os.path.exists(TEST_CONFIG_FILE)
+        assert PLAYBOOK_ARTIFACT.exists()
+        assert TEST_CONFIG_FILE.exists()
 
         received_output = tmux_session.interaction(user_input, search_within_response)
 

@@ -109,9 +109,9 @@ def check_playbook_type(playbook: str) -> str:
     """
     playbook_type = "file"
     playbook_path = str(playbook)
-    if os.path.exists(playbook_path) is False:
+    if Path(playbook_path).exists() is False:
         playbook_type = "missing"
-    if os.path.exists(playbook_path) is False and len(playbook_path.split(".")) >= 3:
+    if Path(playbook_path).exists() is False and len(playbook_path.split(".")) >= 3:
         playbook_type = "fqcn"
     return playbook_type
 
@@ -195,7 +195,7 @@ def environment_variable_is_file_path(
     else:
         message = f"Found a {kind} file at {candidate_path} set by {env_var}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
-        if Path(candidate_path).is_file() and os.path.exists(candidate_path):
+        if Path(candidate_path).is_file() and Path(candidate_path).exists():
             file_path = candidate_path
             message = f"{kind.capitalize()} file at {file_path} set by {env_var} is viable"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
