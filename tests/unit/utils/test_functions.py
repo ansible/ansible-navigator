@@ -66,15 +66,15 @@ def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    expected = os.path.join(os.getcwd(), "ansible-navigator.yml")
-    paths = [expected, os.path.join(os.path.expanduser("~"), ".ansible-navigator.json")]
+    expected = Path.cwd() / "ansible-navigator.yml"
+    paths = [expected, Path.home() / ".ansible-navigator.json"]
 
     def check_path_exists(arg: Any) -> bool:
-        return str(arg) in paths
+        return arg in paths
 
     monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, _exit_messages, found = find_settings_file()
-    assert expected == str(found)
+    assert expected == found
 
 
 @pytest.mark.parametrize(
