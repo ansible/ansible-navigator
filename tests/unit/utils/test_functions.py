@@ -4,16 +4,25 @@ from __future__ import annotations
 
 import os
 import re
+
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import Any
+from typing import NamedTuple
 
 import pytest
 
 from ansible_navigator.data.catalog_collections import get_doc_withast
-from ansible_navigator.utils.functions import (
-    environment_variable_is_file_path, expand_path, find_settings_file,
-    flatten_list, human_time, now_iso, oxfordcomma, path_is_relative_to,
-    round_half_up, unescape_moustaches)
+from ansible_navigator.utils.functions import environment_variable_is_file_path
+from ansible_navigator.utils.functions import expand_path
+from ansible_navigator.utils.functions import find_settings_file
+from ansible_navigator.utils.functions import flatten_list
+from ansible_navigator.utils.functions import human_time
+from ansible_navigator.utils.functions import now_iso
+from ansible_navigator.utils.functions import oxfordcomma
+from ansible_navigator.utils.functions import path_is_relative_to
+from ansible_navigator.utils.functions import round_half_up
+from ansible_navigator.utils.functions import unescape_moustaches
+
 
 EXTENSIONS = [".yml", ".yaml", ".json"]
 
