@@ -12,15 +12,23 @@ import re
 import shlex
 import shutil
 import zoneinfo
+
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+from typing import Any
 
-from jinja2 import Environment, StrictUndefined, TemplateError
+from jinja2 import Environment
+from jinja2 import StrictUndefined
+from jinja2 import TemplateError
 
-from .definitions import GOLDEN_RATIO, ExitMessage, LogMessage
+from .definitions import GOLDEN_RATIO
+from .definitions import ExitMessage
+from .definitions import LogMessage
+
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Mapping
+    from collections.abc import Iterable
+    from collections.abc import Mapping
 
 
 logger = logging.getLogger(__name__)
@@ -216,10 +224,10 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | No
     potential_paths: list[Path] = []
     found_files: list[Path] = []
 
-    X = Path.home() / ".ansible-navigator"
-    Y = Path.cwd() / "ansible-navigator"
-    potential_paths.append(X)
-    potential_paths.append(Y)
+    settings_file_home = Path.home() / ".ansible-navigator"
+    settings_file_current = Path.cwd() / "ansible-navigator"
+    potential_paths.append(settings_file_home)
+    potential_paths.append(settings_file_current)
 
     for path in potential_paths:
         message = f"Looking in {path}"
@@ -227,18 +235,14 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | No
 
         candidates: list[Path] = []
         for ext in allowed_extensions:
-            p1 = Path(f"{path}.{ext}")
-            candidates.append(p1)
-        message = f"Looking for {candidates} xxx {oxfordcomma(candidates, 'and')}"
+            p = Path(f"{path}.{ext}")
+            candidates.append(p)
+        message = f"Looking for {oxfordcomma(candidates, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        found: list[Path] = []
+        found = [file for file in candidates if file.exists()]
 
-        for candidate in candidates:
-            if candidate.exists():
-                found.append(candidate)
-
-        message = f"Found {found} {len(found)}: {oxfordcomma(found, 'and')}"
+        message = f"Found {len(found)}: {oxfordcomma(found, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
         if len(found) > 1:
