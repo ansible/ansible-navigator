@@ -158,15 +158,15 @@ class TmuxSession:
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_CONFIG='{self._config_path}'")
         tmux_common.append("export ANSIBLE_NAVIGATOR_LOG_LEVEL=debug")
 
-        log_file = os.path.join(self._test_log_dir, "ansible-navigator.log")
-        tmux_common.append(f"export ANSIBLE_NAVIGATOR_LOG_FILE='{log_file}'")
-        playbook_artifact = os.path.join(self._test_log_dir, "playbook-artifact.log")
+        log_file = self._test_log_dir / "ansible-navigator.log"
+        tmux_common.append(f"export ANSIBLE_NAVIGATOR_LOG_FILE='{log_file!s}'")
+        playbook_artifact = self._test_log_dir / "playbook-artifact.log"
         tmux_common.append(
-            f"export ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS='{playbook_artifact}'",
+            f"export ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS='{playbook_artifact!s}'",
         )
-        collection_doc_cache = os.path.join(self._test_log_dir, "collection_doc_cache.db")
+        collection_doc_cache = self._test_log_dir / "collection_doc_cache.db"
         tmux_common.append(
-            f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH='{collection_doc_cache}'",
+            f"export ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH='{collection_doc_cache!s}'",
         )
         tmux_common.append(f"export ANSIBLE_NAVIGATOR_PULL_POLICY='{self._pull_policy}'")
 
@@ -310,8 +310,8 @@ class TmuxSession:
                 return showing
             time.sleep(0.1)
 
-        setup_capture_path = Path(os.path.join(self._test_log_dir, "showing_setup.txt"))
-        timeout_capture_path = Path(os.path.join(self._test_log_dir, "showing_timeout.txt"))
+        setup_capture_path = self._test_log_dir / "showing_setup.txt"
+        timeout_capture_path = self._test_log_dir / "showing_timeout.txt"
 
         ok_to_return = False
         err_message = "RESPONSE"

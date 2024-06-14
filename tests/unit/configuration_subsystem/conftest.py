@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 from copy import deepcopy
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -77,7 +75,7 @@ def _generate_config(
         params = []
 
     if settings_file_name:
-        settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file_name)
+        settings_file_path = TEST_FIXTURE_DIR / settings_file_name
         with Path(settings_file_path).open(encoding="utf-8") as fh:
             try:
                 settings_contents = yaml.load(fh, Loader=Loader)
@@ -85,14 +83,14 @@ def _generate_config(
                 # let the configuration subsystem catch the invalid yaml file
                 settings_contents = {}
     else:
-        settings_file_path = ""
+        settings_file_path = ""  # type:ignore[assignment]
         settings_contents = {}
 
     # make a deep copy here to ensure we do not modify the original
     application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = initial
     application_configuration.application_version = "test"
-    application_configuration.internals.settings_file_path = settings_file_path or None
+    application_configuration.internals.settings_file_path = str(settings_file_path) or None
     configurator = Configurator(
         application_configuration=application_configuration,
         params=params,
