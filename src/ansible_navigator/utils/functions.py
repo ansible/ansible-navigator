@@ -12,15 +12,23 @@ import re
 import shlex
 import shutil
 import zoneinfo
+
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+from typing import Any
 
-from jinja2 import Environment, StrictUndefined, TemplateError
+from jinja2 import Environment
+from jinja2 import StrictUndefined
+from jinja2 import TemplateError
 
-from .definitions import GOLDEN_RATIO, ExitMessage, LogMessage
+from .definitions import GOLDEN_RATIO
+from .definitions import ExitMessage
+from .definitions import LogMessage
+
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Mapping
+    from collections.abc import Iterable
+    from collections.abc import Mapping
 
 
 logger = logging.getLogger(__name__)
