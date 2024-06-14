@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     from ansible_navigator.utils.definitions import LogMessage
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "unit", "configuration_subsystem")
+TEST_FIXTURE_DIR = FIXTURES_DIR / "unit" / "configuration_subsystem"
 
 
 class GenerateConfigResponse(NamedTuple):

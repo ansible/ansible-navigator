@@ -23,9 +23,9 @@ if TYPE_CHECKING:
 
 
 # run playbook
-run_fixture_dir = os.path.join(FIXTURES_DIR, "integration", "actions", "run_unicode")
-inventory_path = os.path.join(run_fixture_dir, "inventory")
-playbook_path = os.path.join(run_fixture_dir, "site.yaml")
+run_fixture_dir = FIXTURES_DIR / "integration" / "actions" / "run_unicode"
+inventory_path = run_fixture_dir / "inventory"
+playbook_path = run_fixture_dir / "site.yaml"
 
 base_steps = (
     UiTestStep(user_input=":0", comment="play-1 details"),

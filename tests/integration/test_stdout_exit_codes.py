@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
@@ -24,7 +22,7 @@ if TYPE_CHECKING:
     from ._action_run_test import ActionRunTest
 
 
-PLAYBOOK = os.path.join(FIXTURES_DIR, "integration", "stdout_exit_codes", "site.yml")
+PLAYBOOK = FIXTURES_DIR / "integration" / "stdout_exit_codes" / "site.yml"
 
 
 @pytest.fixture(name="params")
@@ -120,7 +118,7 @@ fixture_test_data = (
     ),
     StdoutTest(
         action_name="run",
-        action_params=(("playbook", PLAYBOOK), ("playbook_artifact_enable", False)),
+        action_params=(("playbook", str(PLAYBOOK)), ("playbook_artifact_enable", False)),
         present="success",
         return_code=0,
     ),
@@ -206,7 +204,7 @@ StdoutCliTests = (
         name="0",
         comment="run pass",
         subcommand="run",
-        params=[PLAYBOOK],
+        params=[str(PLAYBOOK)],
         return_code=0,
         ansible_stdout="ok=1",
         ansible_stderr="",

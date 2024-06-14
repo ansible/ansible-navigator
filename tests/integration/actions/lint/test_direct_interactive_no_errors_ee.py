@@ -1,7 +1,5 @@
 """Tests for lint (with no errors) from CLI, interactive, with an EE."""
 
-import os
-
 import pytest
 
 from tests.integration._interactions import Command
@@ -15,10 +13,7 @@ from .base import BaseClass
 
 CLI = Command(
     subcommand="lint",
-    cmdline=os.path.join(
-        LINT_FIXTURES,
-        "no_errors",
-    ),
+    cmdline=LINT_FIXTURES / "no_errors",
     execution_environment=True,
 ).join()
 

@@ -22,12 +22,7 @@ if TYPE_CHECKING:
     from collections.abc import Generator
 
 
-LINT_FIXTURES = os.path.join(
-    FIXTURES_DIR,
-    "integration",
-    "actions",
-    "lint",
-)
+LINT_FIXTURES = FIXTURES_DIR / "integration" / "actions" / "lint"
 
 
 class BaseClass:

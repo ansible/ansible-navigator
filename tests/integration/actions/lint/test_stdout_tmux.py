@@ -31,7 +31,7 @@ stdout_tests = (
         comment="lint stdout with no errors",
         user_input=Command(
             subcommand="lint",
-            cmdline=os.path.join(LINT_FIXTURES, "no_errors"),
+            cmdline=LINT_FIXTURES / "no_errors",
             mode="stdout",
             execution_environment=True,
         ).join(),

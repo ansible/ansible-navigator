@@ -5,7 +5,12 @@ from __future__ import annotations
 import shlex
 
 from enum import Enum
+from typing import TYPE_CHECKING
 from typing import NamedTuple
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class SearchFor(Enum):
@@ -20,7 +25,7 @@ class Command(NamedTuple):
     """Command details."""
 
     execution_environment: bool
-    cmdline: str | None = None
+    cmdline: str | Path | None = None
     command: str = "ansible-navigator"
     format_: str | None = None
     log_level: str = "debug"
