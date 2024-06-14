@@ -103,7 +103,7 @@ class BaseClass:
         :param os_independent_tmp: An OS independent tmp directory
         :yields: A tmux session
         """
-        tmp_coll_dir = os.path.join(os_independent_tmp, request.node.name, "")
+        tmp_coll_dir = Path(os_independent_tmp) / request.node.name / ""
         Path(tmp_coll_dir).mkdir(parents=True, exist_ok=True)
         copytree(
             FIXTURES_COLLECTION_DIR,

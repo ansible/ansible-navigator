@@ -135,7 +135,7 @@ class TmuxSession:
         # expect inside of tmux, so we can't depend on it. We *must* determine
         # it before we enter tmux. Do this before we switch to bash
         venv_path = os.environ.get("VIRTUAL_ENV")
-        venv = "" if venv_path is None else os.path.join(shlex.quote(venv_path), "bin", "activate")
+        venv = "" if venv_path is None else shlex.quote(str(Path(venv_path) / "bin" / "activate"))
 
         # get the USER before we start a clean shell
         user = os.environ.get("USER")
