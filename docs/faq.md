@@ -289,11 +289,25 @@ EOF
 chmod +x ~/bin/vault.sh
 ```
 
-Now you can export `ANSIBLE_VAULT_PASSWORD` with the result of that script:
+Add a simple shellscript to your project:
+
+```bash
+cat <<EOF > vault.sh
+#!/bin/sh
+
+echo $ANSIBLE_VAULT_PASSWORD
+EOF
+chmod +x vault.sh
+```
+
+Now you can export `ANSIBLE_VAULT_PASSWORD` with the result of that script and
+set `ANSIBLE_VAULT_PASSWORD_FILE` to this script as you run ansible-navigator:
 
 ```
-ANSIBLE_VAULT_PASSWORD="$( ~/bin/vault.sh )" ansible-navigator run (...)
+ANSIBLE_VAULT_PASSWORD="$( ~/bin/vault.sh )" ansible-navigator run --senv=ANSIBLE_VAULT_PASSWORD_FILE=vault.sh --penv=ANSIBLE_VAULT_PASSWORD (...)
 ```
+
+It won't even display your password in ps for other users.
 
 2. Store the vault password (clear text, insecurely) on the local file system
 
