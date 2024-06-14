@@ -451,7 +451,7 @@ class Action(ActionBase):
                 # KVS library used by both Navigator and the introspection script
                 f"{utils_lib}:/opt/ansible_navigator_utils",
             ]
-            if os.path.exists(self._adjacent_collection_dir):
+            if Path(self._adjacent_collection_dir).exists():
                 container_volume_mounts.append(
                     f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
                 )

@@ -12,29 +12,21 @@ import re
 import shlex
 import shutil
 import zoneinfo
-
 from pathlib import Path
-from typing import TYPE_CHECKING
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from jinja2 import Environment
-from jinja2 import StrictUndefined
-from jinja2 import TemplateError
+from jinja2 import Environment, StrictUndefined, TemplateError
 
-from .definitions import GOLDEN_RATIO
-from .definitions import ExitMessage
-from .definitions import LogMessage
-
+from .definitions import GOLDEN_RATIO, ExitMessage, LogMessage
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
-    from collections.abc import Mapping
+    from collections.abc import Iterable, Mapping
 
 
 logger = logging.getLogger(__name__)
 
 
-def oxfordcomma(listed: Iterable[bool | str], condition: str) -> str:
+def oxfordcomma(listed: Iterable[bool | str | Path], condition: str) -> str:
     """Format a list into a sentence.
 
     :param listed: List of string entries to modify
@@ -49,15 +41,6 @@ def oxfordcomma(listed: Iterable[bool | str], condition: str) -> str:
     if len(listed) == 2:
         return f"{listed[0]} {condition} {listed[1]}"
     return f"{', '.join(str(x) for x in listed[:-1])} {condition} {listed[-1]}"
-
-
-def abs_user_path(file_path: str) -> str:
-    """Resolve a path.
-
-    :param file_path: The file path to resolve
-    :returns: Resolved file path
-    """
-    return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))  # noqa:PTH100
 
 
 def expand_path(path: str | Path) -> Path:
@@ -109,9 +92,9 @@ def check_playbook_type(playbook: str) -> str:
     """
     playbook_type = "file"
     playbook_path = str(playbook)
-    if os.path.exists(playbook_path) is False:
+    if Path(playbook_path).exists() is False:
         playbook_type = "missing"
-    if os.path.exists(playbook_path) is False and len(playbook_path.split(".")) >= 3:
+    if Path(playbook_path).exists() is False and len(playbook_path.split(".")) >= 3:
         playbook_type = "fqcn"
     return playbook_type
 
@@ -195,7 +178,7 @@ def environment_variable_is_file_path(
     else:
         message = f"Found a {kind} file at {candidate_path} set by {env_var}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
-        if Path(candidate_path).is_file() and os.path.exists(candidate_path):
+        if Path(candidate_path).is_file() and Path(candidate_path).exists():
             file_path = candidate_path
             message = f"{kind.capitalize()} file at {file_path} set by {env_var} is viable"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
@@ -210,7 +193,7 @@ def environment_variable_is_file_path(
     return messages, exit_messages, file_path
 
 
-def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | None]:
+def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | None]:
     """Find the settings file.
 
     Find the file at ./ansible-navigator.(.yml,.yaml,.json),
@@ -221,27 +204,33 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], str | Non
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
     allowed_extensions = ["yml", "yaml", "json"]
-    potential_paths: list[list[str]] = []
-    found_files: list[str] = []
+    potential_paths: list[Path] = []
+    found_files: list[Path] = []
 
-    potential_paths.append([os.path.expanduser("~"), ".ansible-navigator"])
-    potential_paths.append([os.getcwd(), "ansible-navigator"])
+    settings_file_home = Path.home() / ".ansible-navigator"
+    settings_file_current = Path.cwd() / "ansible-navigator"
+    potential_paths.append(settings_file_home)
+    potential_paths.append(settings_file_current)
 
     for path in potential_paths:
-        message = f"Looking in {path[0]}"
+        message = f"Looking in {path}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        candidates = [os.path.join(path[0], f"{path[1]}.{ext}") for ext in allowed_extensions]
+        candidates: list[Path] = []
+        for ext in allowed_extensions:
+            p = Path(f"{path}.{ext}")
+            candidates.append(p)
         message = f"Looking for {oxfordcomma(candidates, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
-        found = [file for file in candidates if os.path.exists(file)]
+        found = [file for file in candidates if file.exists()]
+
         message = f"Found {len(found)}: {oxfordcomma(found, 'and')}"
         messages.append(LogMessage(level=logging.DEBUG, message=message))
 
         if len(found) > 1:
             exit_msg = f"Only one file among {oxfordcomma(candidates, 'and')}"
-            exit_msg += f" should be present in {path[0]}"
+            exit_msg += f" should be present in {path}"
             exit_msg += f" Found: {oxfordcomma(found, 'and')}"
             exit_messages.append(ExitMessage(message=exit_msg))
             return messages, exit_messages, None
@@ -274,7 +263,7 @@ def generate_cache_path(app_name: str) -> Path:
     :param app_name: Name of application - currently ansible_navigator
     :returns: Path to the cache directory
     """
-    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{Path.home()}/.cache")
     return Path(cache_home) / app_name
 
 

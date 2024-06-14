@@ -51,7 +51,7 @@ class Grammars:
         self._scope_to_files = {
             os.path.splitext(filename)[0]: os.path.join(directory, filename)
             for directory in directories
-            if os.path.exists(directory)
+            if Path(directory).exists()
             for filename in sorted(os.listdir(directory))
             if filename.endswith(".json")
         }

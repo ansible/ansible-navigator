@@ -23,9 +23,9 @@ from typing import Any
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitPrefix
 from ansible_navigator.utils.definitions import LogMessage
-from ansible_navigator.utils.functions import abs_user_path
 from ansible_navigator.utils.functions import check_for_ansible
 from ansible_navigator.utils.functions import check_playbook_type
+from ansible_navigator.utils.functions import expand_path
 from ansible_navigator.utils.functions import flatten_list
 from ansible_navigator.utils.functions import oxfordcomma
 from ansible_navigator.utils.functions import str2bool
@@ -122,7 +122,7 @@ class NavigatorPostProcessor:
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
         if entry.value.current is not C.NOT_SET:
-            entry.value.current = abs_user_path(entry.value.current)
+            entry.value.current = str(expand_path(entry.value.current))
         return messages, exit_messages
 
     @staticmethod
@@ -186,7 +186,7 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        entry.value.current = abs_user_path(entry.value.current)
+        entry.value.current = str(expand_path(entry.value.current))
         return messages, exit_messages
 
     @staticmethod
@@ -593,7 +593,9 @@ class NavigatorPostProcessor:
             if isinstance(ansible_cfg, dict):
                 ansible_cfg_entry = ansible_cfg.get("defaults", {}).get("inventory")
                 if isinstance(ansible_cfg_entry, str):
-                    entry.value.current = [abs_user_path(i) for i in ansible_cfg_entry.split(",")]
+                    entry.value.current = [
+                        str(expand_path(i)) for i in ansible_cfg_entry.split(",")
+                    ]
                     entry.value.source = C.ANSIBLE_CFG
         else:
             # Use the specified
@@ -605,7 +607,7 @@ class NavigatorPostProcessor:
                     entry.value.current.append(inv_entry)
                 else:
                     # file path
-                    entry.value.current.append(abs_user_path(inv_entry))
+                    entry.value.current.append(str(expand_path(inv_entry)))
 
         # Something may be required
         app_match = config.app == "inventory"
@@ -696,7 +698,7 @@ class NavigatorPostProcessor:
         if isinstance(entry.value.current, str) and config.app == "lint":
             entry_name = entry.settings_file_path(prefix="")
             entry_source = entry.value.source
-            source = abs_user_path(entry.value.current)
+            source = str(expand_path(entry.value.current))
             try:
                 mount = VolumeMount(
                     fs_source=source,
@@ -734,7 +736,7 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        entry.value.current = abs_user_path(entry.value.current)
+        entry.value.current = str(expand_path(entry.value.current))
         try:
             Path(Path(entry.value.current).parent).mkdir(parents=True, exist_ok=True)
             Path(entry.value.current).touch()
@@ -944,7 +946,7 @@ class NavigatorPostProcessor:
             entry.value.current,
             str,
         ):
-            entry.value.current = abs_user_path(entry.value.current)
+            entry.value.current = str(expand_path(entry.value.current))
         return messages, exit_messages
 
     @_post_processor
@@ -1007,7 +1009,7 @@ class NavigatorPostProcessor:
             return messages, exit_messages
 
         if isinstance(entry.value.current, str):
-            entry.value.current = abs_user_path(entry.value.current)
+            entry.value.current = str(expand_path(entry.value.current))
 
         if config.app == "replay" and not Path(entry.value.current).is_file():
             exit_msg = f"The specified playbook artifact could not be found: {entry.value.current}"

@@ -15,7 +15,7 @@ from typing import Any
 from typing import NewType
 from typing import TypeVar
 
-from ansible_navigator.utils.functions import abs_user_path
+from ansible_navigator.utils.functions import expand_path
 from ansible_navigator.utils.functions import oxfordcomma
 
 
@@ -398,8 +398,8 @@ class VolumeMount:
 
         # Resolve the source and destination
         # frozen, cannot use simple assignment to initialize fields, and must use:
-        object.__setattr__(self, "fs_source", abs_user_path(self.fs_source))
-        object.__setattr__(self, "fs_destination", abs_user_path(self.fs_destination))
+        object.__setattr__(self, "fs_source", expand_path(self.fs_source))
+        object.__setattr__(self, "fs_destination", expand_path(self.fs_destination))
 
         # Source must exist
         if not Path(self.fs_source).exists():

@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import LogMessage
-from ansible_navigator.utils.functions import abs_user_path
+from ansible_navigator.utils.functions import expand_path
 from ansible_navigator.utils.functions import generate_cache_path
 from ansible_navigator.utils.functions import oxfordcomma
 from ansible_navigator.utils.packaged_data import ImageEntry
@@ -550,7 +550,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description="Specify the full path for the ansible-navigator log file",
             settings_file_path_override="logging.file",
             value=SettingsEntryValue(
-                default=abs_user_path("./ansible-navigator.log"),
+                default=str(expand_path("./ansible-navigator.log")),
                 schema_default="./ansible-navigator.log",
             ),
             version_added="v1.0",
