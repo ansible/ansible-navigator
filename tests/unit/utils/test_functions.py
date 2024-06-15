@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import re
 
 from pathlib import Path
@@ -32,10 +31,11 @@ def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    paths = [os.path.join(Path.home(), ".ansible-navigator" + ext) for ext in EXTENSIONS]
+    home_path = Path.home() / ".ansible-navigator"
+    paths = [Path(f"{home_path}{ext}") for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
-        return str(arg) in paths
+        return arg in paths
 
     monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, exit_messages, _found = find_settings_file()
@@ -48,10 +48,11 @@ def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    paths = [os.path.join(os.getcwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
+    cwd_path = Path.cwd() / "ansible-navigator"
+    paths = [Path(f"{cwd_path}{ext}") for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
-        return str(arg) in paths
+        return arg in paths
 
     monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, exit_messages, _found = find_settings_file()

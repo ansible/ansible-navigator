@@ -15,8 +15,8 @@ from tests.integration._interactions import UiTestStep
 from tests.integration._tmux_session import TmuxSession
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration", "actions", "config")
-CONFIG_FIXTURE = os.path.join(TEST_FIXTURE_DIR, "ansible.cfg")
+TEST_FIXTURE_DIR = FIXTURES_DIR / "integration" / "actions" / "config"
+CONFIG_FIXTURE = TEST_FIXTURE_DIR / "ansible.cfg"
 
 
 base_steps = (
