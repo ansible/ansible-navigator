@@ -1,7 +1,5 @@
 """Tests for ``lint`` from CLI, stdout."""
 
-import os
-
 import pytest
 
 from tests.integration._interactions import Command
@@ -18,8 +16,8 @@ stdout_tests = (
         comment="lint stdout with errors",
         user_input=Command(
             subcommand="lint",
-            cmdline=LINT_FIXTURES,
-            precommand=f"cd {os.path.join(LINT_FIXTURES, '..')} ; ",
+            cmdline=str(LINT_FIXTURES),
+            precommand=f"cd {LINT_FIXTURES / '..'} ; ",
             mode="stdout",
             execution_environment=True,
             preclear=True,
@@ -31,7 +29,7 @@ stdout_tests = (
         comment="lint stdout with no errors",
         user_input=Command(
             subcommand="lint",
-            cmdline=os.path.join(LINT_FIXTURES, "no_errors"),
+            cmdline=f"{LINT_FIXTURES / 'no_errors'}",
             mode="stdout",
             execution_environment=True,
         ).join(),
