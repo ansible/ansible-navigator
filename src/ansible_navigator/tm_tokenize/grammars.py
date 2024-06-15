@@ -49,7 +49,7 @@ class Grammars:
         :param directories: A tuple of strings, each a directory in which grammar files can be found
         """
         self._scope_to_files = {
-            Path(filename).stem: os.path.join(directory, filename)
+            Path(filename).stem: Path(directory) / filename
             for directory in directories
             if Path(directory).exists()
             for filename in sorted(os.listdir(directory))
