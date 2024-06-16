@@ -22,7 +22,6 @@ if TYPE_CHECKING:
     from collections.abc import Generator
 
 
-# LINT_FIXTURES = f"{FIXTURES_DIR / 'integration' / 'actions' / 'lint'}"
 LINT_FIXTURES = FIXTURES_DIR / "integration" / "actions" / "lint"
 
 

@@ -126,7 +126,7 @@ class Base:
 
         if self._host_cwd:
             # ensure the CWD ends with a trailing slash
-            host_cwd = os.path.join(self._host_cwd, "")
+            host_cwd = f"{Path(self._host_cwd) / ''}"
             self._runner_args["host_cwd"] = host_cwd
 
         if self._navigator_mode == "stdout":
