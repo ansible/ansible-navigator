@@ -2,27 +2,17 @@
 
 from __future__ import annotations
 
-import os
 import re
-
 from pathlib import Path
-from typing import Any
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 import pytest
 
 from ansible_navigator.data.catalog_collections import get_doc_withast
-from ansible_navigator.utils.functions import environment_variable_is_file_path
-from ansible_navigator.utils.functions import expand_path
-from ansible_navigator.utils.functions import find_settings_file
-from ansible_navigator.utils.functions import flatten_list
-from ansible_navigator.utils.functions import human_time
-from ansible_navigator.utils.functions import now_iso
-from ansible_navigator.utils.functions import oxfordcomma
-from ansible_navigator.utils.functions import path_is_relative_to
-from ansible_navigator.utils.functions import round_half_up
-from ansible_navigator.utils.functions import unescape_moustaches
-
+from ansible_navigator.utils.functions import (
+    environment_variable_is_file_path, expand_path, find_settings_file,
+    flatten_list, human_time, now_iso, oxfordcomma, path_is_relative_to,
+    round_half_up, unescape_moustaches)
 
 EXTENSIONS = [".yml", ".yaml", ".json"]
 
@@ -32,12 +22,11 @@ def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    paths = [
-        os.path.join(os.path.expanduser("~"), ".ansible-navigator" + ext) for ext in EXTENSIONS
-    ]
+    home_path = Path.home() / ".ansible-navigator"
+    paths = [Path(f"{home_path}{ext}") for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
-        return str(arg) in paths
+        return arg in paths
 
     monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, exit_messages, _found = find_settings_file()
@@ -50,10 +39,11 @@ def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
 
     :param monkeypatch: The monkeypatch fixture
     """
-    paths = [os.path.join(Path.cwd(), "ansible-navigator" + ext) for ext in EXTENSIONS]
+    cwd_path = Path.cwd() / "ansible-navigator"
+    paths = [Path(f"{cwd_path}{ext}") for ext in EXTENSIONS]
 
     def check_path_exists(arg: Any) -> bool:
-        return str(arg) in paths
+        return arg in paths
 
     monkeypatch.setattr(Path, "exists", check_path_exists)
     _messages, exit_messages, _found = find_settings_file()

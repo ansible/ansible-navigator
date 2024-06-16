@@ -1,7 +1,5 @@
 """Test the internals of a NavigatorConfiguration."""
 
-import os
-
 from copy import deepcopy
 from pathlib import Path
 
@@ -30,7 +28,7 @@ def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None
         functionality in tests
     """
     settings_file = "ansible-navigator.yml"
-    settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file)
+    settings_file_path = TEST_FIXTURE_DIR / settings_file
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
     args.application_version = "test"
@@ -40,7 +38,7 @@ def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None
 
     monkeypatch.setattr(Path, "cwd", getcwd)
     parse_and_update(params=[], args=args)
-    assert args.internals.settings_file_path == settings_file_path
+    assert args.internals.settings_file_path == str(settings_file_path)
     assert args.internals.settings_source == Constants.SEARCH_PATH
 
 
@@ -51,11 +49,11 @@ def test_settings_file_path_environment_variable(monkeypatch: pytest.MonkeyPatch
         functionality in tests
     """
     settings_file = "ansible-navigator.yml"
-    settings_file_path = os.path.join(TEST_FIXTURE_DIR, settings_file)
-    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", settings_file_path)
+    settings_file_path = TEST_FIXTURE_DIR / settings_file
+    monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", str(settings_file_path))
     args = deepcopy(NavigatorConfiguration)
     args.internals.initializing = True
     args.application_version = "test"
     parse_and_update(params=[], args=args)
-    assert args.internals.settings_file_path == settings_file_path
+    assert args.internals.settings_file_path == str(settings_file_path)
     assert args.internals.settings_source == Constants.ENVIRONMENT_VARIABLE

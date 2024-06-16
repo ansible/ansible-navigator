@@ -23,11 +23,11 @@ if TYPE_CHECKING:
 
 
 # run playbook
-run_fixture_dir = os.path.join(FIXTURES_DIR, "integration", "actions", "run")
-inventory_path = os.path.join(run_fixture_dir, "inventory")
-playbook_path = os.path.join(run_fixture_dir, "site.yaml")
+run_fixture_dir = FIXTURES_DIR / "integration" / "actions" / "run"
+inventory_path = run_fixture_dir / "inventory"
+playbook_path = run_fixture_dir / "site.yaml"
 
-common_fixture_dir = os.path.join(FIXTURES_DIR, "common", "collections")
+common_fixture_dir = FIXTURES_DIR / "common" / "collections"
 PLAYBOOK_COLLECTION = "company_name.coll_1.playbook_1"
 
 base_steps = (

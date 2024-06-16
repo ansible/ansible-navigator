@@ -15,7 +15,7 @@ from tests.integration._interactions import UiTestStep
 from tests.integration._tmux_session import TmuxSession
 
 
-TEST_FIXTURE_DIR = os.path.join(FIXTURES_DIR, "integration/actions/settings")
+TEST_FIXTURE_DIR = FIXTURES_DIR / "integration/actions/settings"
 
 base_steps = (
     UiTestStep(user_input=":f App", comment="filter for app settings"),

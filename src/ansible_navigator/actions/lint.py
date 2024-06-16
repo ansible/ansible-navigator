@@ -40,7 +40,7 @@ from ansible_navigator.ui_framework import Interaction
 from ansible_navigator.ui_framework import error_notification
 from ansible_navigator.ui_framework import nonblocking_notification
 from ansible_navigator.ui_framework import success_notification
-from ansible_navigator.utils.functions import abs_user_path
+from ansible_navigator.utils.functions import expand_path
 from ansible_navigator.utils.functions import remove_ansi
 from ansible_navigator.utils.functions import time_stamp_for_file
 
@@ -160,7 +160,7 @@ def massage_issue(issue: dict[Any, Any]) -> dict[Any, Any]:
         massaged["__message"] = issue["check_name"].split("]")[1].strip()
     else:
         massaged["__message"] = issue["description"]
-    massaged["__path"] = abs_user_path(issue["location"]["path"])
+    massaged["__path"] = expand_path(issue["location"]["path"])
     if isinstance(issue["location"]["lines"]["begin"], Mapping):
         massaged["__line"] = issue["location"]["lines"]["begin"]["line"]
     else:

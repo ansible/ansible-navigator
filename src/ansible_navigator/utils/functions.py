@@ -51,16 +51,7 @@ def oxfordcomma(listed: Iterable[bool | str | Path], condition: str) -> str:
     return f"{', '.join(str(x) for x in listed[:-1])} {condition} {listed[-1]}"
 
 
-def abs_user_path(file_path: str) -> str:
-    """Resolve a path.
-
-    :param file_path: The file path to resolve
-    :returns: Resolved file path
-    """
-    return os.path.abspath(os.path.expanduser(os.path.expandvars(file_path)))  # noqa:PTH100
-
-
-def expand_path(path: str) -> Path:
+def expand_path(path: str | Path) -> Path:
     """Resolve a path.
 
     :param path: The file path to resolve
@@ -280,7 +271,7 @@ def generate_cache_path(app_name: str) -> Path:
     :param app_name: Name of application - currently ansible_navigator
     :returns: Path to the cache directory
     """
-    cache_home = os.environ.get("XDG_CACHE_HOME", f"{os.path.expanduser('~')}/.cache")
+    cache_home = os.environ.get("XDG_CACHE_HOME", f"{Path.home()}/.cache")
     return Path(cache_home) / app_name
 
 

@@ -443,17 +443,13 @@ class Action(ActionBase):
         if self._args.execution_environment:
             self._logger.debug("running collections command with execution environment enabled")
             python_exec_path = "/usr/bin/python3"
-            utils_lib = os.path.join(
-                os.path.dirname(__file__),
-                "..",
-                "utils",
-            )
+            utils_lib = Path(__file__).parent / ".." / "utils"
 
             container_volume_mounts = [
                 # cache directory which has introspection script
                 f"{cache_path}:{cache_path}",
                 # KVS library used by both Navigator and the introspection script
-                f"{utils_lib}:/opt/ansible_navigator_utils",
+                f"{utils_lib!s}:/opt/ansible_navigator_utils",
             ]
             if Path(self._adjacent_collection_dir).exists():
                 container_volume_mounts.append(
