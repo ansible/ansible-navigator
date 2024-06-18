@@ -178,9 +178,9 @@ class Action(ActionBase):
 
         if self._args.mode == "interactive":
             if isinstance(self._args.playbook, str):
-                playbook_dir = Path(self._args.playbook).parent
+                playbook_dir = f"{Path(self._args.playbook).parent}"
             else:
-                playbook_dir = Path.cwd()
+                playbook_dir = os.getcwd()
             kwargs.update({"host_cwd": playbook_dir})
 
             self._runner = AnsibleDoc(**kwargs)

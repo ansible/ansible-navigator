@@ -415,9 +415,9 @@ class Action(ActionBase):
         }
 
         if isinstance(self._args.playbook, str):
-            playbook_dir = Path(self._args.playbook).parent
+            playbook_dir = f"{Path(self._args.playbook).parent}"
         else:
-            playbook_dir = Path.cwd()
+            playbook_dir = os.getcwd()
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs["container_volume_mounts"] = self._args.execution_environment_volume_mounts
@@ -566,7 +566,7 @@ class Action(ActionBase):
                     "path"
                 ].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
-                elif collection["path"].startswith(Path(self._adjacent_collection_dir).parent):
+                elif collection["path"].startswith(f"{Path(self._adjacent_collection_dir).parent}"):
                     collection["__type"] = "bind_mount"
                     error = (
                         f"{collection['known_as']} was mounted and catalogued in the"

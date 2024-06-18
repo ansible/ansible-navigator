@@ -111,7 +111,7 @@ def get_and_check_collection_doc_cache(
     try:
         doc_cache_dir.mkdir(parents=True, exist_ok=True)
     except OSError as exc:
-        path_errors.append(f"Problem making directory: {doc_cache_dir}")
+        path_errors.append(f"Problem making directory: {doc_cache_dir!s}")
         path_errors.append(f"Error was: {exc!s}")
 
     if not os.access(Path(collection_doc_cache_path).parent, os.W_OK):
