@@ -5,7 +5,6 @@ from __future__ import annotations
 import curses
 import json
 import logging
-import os
 import re
 import shlex
 import shutil
@@ -580,7 +579,7 @@ class Action(ActionBase):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "host_cwd": os.getcwd(),
+            "host_cwd": str(Path.cwd()),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "inventory": self._args.inventory,

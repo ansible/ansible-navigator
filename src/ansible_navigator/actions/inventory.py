@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
 import shlex
 import shutil
 
@@ -454,11 +453,11 @@ class Action(ActionBase):
         except (AttributeError, IndexError, ValueError):
             if isinstance(self._args.playbook, str):
                 # or use the parent of the currently set playbook
-                playbook_dir = str(Path(self._args.playbook).resolve().parent)
+                playbook_dir = f"{Path(self._args.playbook).resolve().parent}"
                 source = "derived from playbook"
             else:
                 # or the current working directory
-                playbook_dir = os.getcwd()
+                playbook_dir = str(Path.cwd())
                 source = "CWD"
         self._logger.info("--playbook-directory for inventory from (%s): %s", source, playbook_dir)
 
@@ -540,7 +539,7 @@ class Action(ActionBase):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "host_cwd": os.getcwd(),
+            "host_cwd": str(Path.cwd()),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,

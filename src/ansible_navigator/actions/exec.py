@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import logging
-import os
 import shlex
+
+from pathlib import Path
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
@@ -121,7 +122,7 @@ class Action(ActionBase):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "host_cwd": os.getcwd(),
+            "host_cwd": str(Path.cwd()),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,

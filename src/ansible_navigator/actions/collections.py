@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import curses
 import json
-import os
 import shlex
 import sys
 
@@ -417,7 +416,7 @@ class Action(ActionBase):
         if isinstance(self._args.playbook, str):
             playbook_dir = f"{Path(self._args.playbook).parent}"
         else:
-            playbook_dir = os.getcwd()
+            playbook_dir = str(Path.cwd())
 
         if isinstance(self._args.execution_environment_volume_mounts, list):
             kwargs["container_volume_mounts"] = self._args.execution_environment_volume_mounts
