@@ -738,7 +738,7 @@ class NavigatorPostProcessor:
         exit_messages: list[ExitMessage] = []
         entry.value.current = str(expand_path(entry.value.current))
         try:
-            Path(os.path.dirname(entry.value.current)).mkdir(parents=True, exist_ok=True)
+            Path(Path(entry.value.current).parent).mkdir(parents=True, exist_ok=True)
             Path(entry.value.current).touch()
         except (OSError, FileNotFoundError) as exc:
             exit_msgs = [

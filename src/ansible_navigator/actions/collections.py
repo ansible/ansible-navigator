@@ -427,7 +427,7 @@ class Action(ActionBase):
 
         kwargs["host_cwd"] = playbook_dir
 
-        self._adjacent_collection_dir = os.path.join(playbook_dir, "collections")
+        self._adjacent_collection_dir = f"{Path(playbook_dir) / 'collections'}"
         cache_path = self._args.internals.cache_path
 
         pass_through_arg = [
@@ -566,7 +566,7 @@ class Action(ActionBase):
                     "path"
                 ].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
-                elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
+                elif collection["path"].startswith(f"{Path(self._adjacent_collection_dir).parent}"):
                     collection["__type"] = "bind_mount"
                     error = (
                         f"{collection['known_as']} was mounted and catalogued in the"
@@ -618,11 +618,10 @@ class Action(ActionBase):
 
             plugin = loaded.get("plugin")
             plugin_docs = {}
-            plugin_path = os.path.join(
-                selected_collection.get("path", ""),
+            plugin_path = Path(selected_collection.get("path", "")) / Path(
                 plugin_info.get("path", ""),
             )
-            plugin_docs["path"] = plugin_path
+            plugin_docs["path"] = str(plugin_path)
             if plugin and plugin["doc"] is not None:
                 try:
                     if "name" in plugin["doc"]:
