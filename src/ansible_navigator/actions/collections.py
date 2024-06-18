@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import curses
 import json
-import os
 import shlex
 import sys
 
