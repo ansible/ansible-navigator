@@ -415,7 +415,7 @@ class Action(ActionBase):
         }
 
         if isinstance(self._args.playbook, str):
-            playbook_dir = os.path.dirname(self._args.playbook)
+            playbook_dir = f"{Path(self._args.playbook).parent}"
         else:
             playbook_dir = os.getcwd()
 
@@ -566,7 +566,7 @@ class Action(ActionBase):
                     "path"
                 ].startswith(self._adjacent_collection_dir):
                     collection["__type"] = "bind_mount"
-                elif collection["path"].startswith(os.path.dirname(self._adjacent_collection_dir)):
+                elif collection["path"].startswith(f"{Path(self._adjacent_collection_dir).parent}"):
                     collection["__type"] = "bind_mount"
                     error = (
                         f"{collection['known_as']} was mounted and catalogued in the"
