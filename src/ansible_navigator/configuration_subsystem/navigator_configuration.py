@@ -775,7 +775,7 @@ NavigatorConfiguration = ApplicationConfiguration(
             short_description="Specify the path that contains ansible-builder manifest files",
             subcommands=["builder"],
             value=SettingsEntryValue(
-                default=Path.cwd(),
+                default=str(Path.cwd()),
                 schema_default=".",
             ),
             version_added="v2.0",
