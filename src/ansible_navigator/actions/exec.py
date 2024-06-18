@@ -122,7 +122,7 @@ class Action(ActionBase):
 
         kwargs = {
             "container_engine": self._args.container_engine,
-            "host_cwd": Path.cwd(),
+            "host_cwd": str(Path.cwd()),
             "execution_environment_image": self._args.execution_environment_image,
             "execution_environment": self._args.execution_environment,
             "navigator_mode": self._args.mode,

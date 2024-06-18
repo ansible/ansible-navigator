@@ -2,16 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 from typing import Any
 
 from ansible_runner import get_inventory
 
 from .base import Base
-
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 
 class AnsibleInventory(Base):
@@ -24,7 +19,7 @@ class AnsibleInventory(Base):
         inventories: list[Any],
         response_format: str | None = None,
         host: str | None = None,
-        playbook_dir: str | Path | None = None,
+        playbook_dir: str | None = None,
         vault_ids: str | None = None,
         vault_password_file: str | None = None,
     ) -> tuple[str, str]:
