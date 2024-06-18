@@ -11,7 +11,7 @@ from .base import LINT_FIXTURES
 from .base import BaseClass
 
 
-CLI = Command(subcommand="lint", cmdline=LINT_FIXTURES, execution_environment=True).join()
+CLI = Command(subcommand="lint", cmdline=str(LINT_FIXTURES), execution_environment=True).join()
 
 steps: tuple[UiTestStep, ...] = (
     UiTestStep(

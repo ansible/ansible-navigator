@@ -22,7 +22,7 @@ steps: tuple[UiTestStep, ...] = (
     ),
     UiTestStep(user_input=":back", comment="return to welcome screen"),
     UiTestStep(
-        user_input=":config -c " + CONFIG_FIXTURE,
+        user_input=":config -c " + str(CONFIG_FIXTURE),
         comment="enter config from welcome screen, custom config, (no ee)",
         present=["Yaml filename extensions", "['.os2']"],
     ),

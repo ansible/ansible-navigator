@@ -449,7 +449,7 @@ class Action(ActionBase):
                 # cache directory which has introspection script
                 f"{cache_path}:{cache_path}",
                 # KVS library used by both Navigator and the introspection script
-                f"{utils_lib}:/opt/ansible_navigator_utils",
+                f"{utils_lib!s}:/opt/ansible_navigator_utils",
             ]
             if Path(self._adjacent_collection_dir).exists():
                 container_volume_mounts.append(
