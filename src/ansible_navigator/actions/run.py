@@ -11,39 +11,49 @@ import shlex
 import shutil
 import time
 import uuid
+
 from math import floor
 from operator import itemgetter
 from pathlib import Path
 from queue import Queue
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+from typing import Any
 
 from ansible_navigator.action_base import ActionBase
 from ansible_navigator.action_defs import RunStdoutReturn
-from ansible_navigator.configuration_subsystem import to_effective, to_sources
-from ansible_navigator.content_defs import ContentView, SerializationFormat
+from ansible_navigator.configuration_subsystem import to_effective
+from ansible_navigator.configuration_subsystem import to_sources
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.runner import CommandAsync
 from ansible_navigator.steps import Step
-from ansible_navigator.ui_framework import (CursesLine, CursesLinePart,
-                                            CursesLines, Interaction,
-                                            dict_to_form, form_to_dict,
-                                            nonblocking_notification,
-                                            warning_notification)
-from ansible_navigator.utils.functions import (check_playbook_type,
-                                               expand_path, human_time,
-                                               is_jinja, now_iso, remove_ansi,
-                                               round_half_up)
+from ansible_navigator.ui_framework import CursesLine
+from ansible_navigator.ui_framework import CursesLinePart
+from ansible_navigator.ui_framework import CursesLines
+from ansible_navigator.ui_framework import Interaction
+from ansible_navigator.ui_framework import dict_to_form
+from ansible_navigator.ui_framework import form_to_dict
+from ansible_navigator.ui_framework import nonblocking_notification
+from ansible_navigator.ui_framework import warning_notification
+from ansible_navigator.utils.functions import check_playbook_type
+from ansible_navigator.utils.functions import expand_path
+from ansible_navigator.utils.functions import human_time
+from ansible_navigator.utils.functions import is_jinja
+from ansible_navigator.utils.functions import now_iso
+from ansible_navigator.utils.functions import remove_ansi
+from ansible_navigator.utils.functions import round_half_up
 from ansible_navigator.utils.serialize import serialize_write_file
 
 from . import _actions as actions
 from . import run_action
 from .stdout import Action as stdout_action
 
+
 if TYPE_CHECKING:
     from collections.abc import Callable
 
     from ansible_navigator.app_public import AppPublic
-    from ansible_navigator.configuration_subsystem.definitions import \
-        ApplicationConfiguration
+    from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
 RESULT_TO_COLOR = [
