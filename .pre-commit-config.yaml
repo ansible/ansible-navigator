@@ -45,14 +45,14 @@ repos:
       - id: toml-sort-fix
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.4.9"
+    rev: "v0.4.10"
     hooks:
       - id: ruff
         args:
           - "--exit-non-zero-on-fix"
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.8.2
+    rev: v8.9.0
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -61,6 +61,10 @@ repos:
     rev: v1.5.5
     hooks:
       - id: remove-tabs
+        exclude: >
+          (?x)^(
+            .config/pylint-baseline.txt
+          )$
 
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
     rev: v4.6.0
@@ -143,11 +147,9 @@ repos:
           - flake8-docstrings # uses pydocstyle
 
   - repo: https://github.com/jsh9/pydoclint
-    rev: 0.4.2
+    rev: 0.5.1
     hooks:
       - id: pydoclint
-        args:
-          - "--config=pyproject.toml"
 
   - repo: https://github.com/asottile/pyupgrade
     # keep it after flake8

@@ -80,9 +80,9 @@ module = ["ansible_runner"]
 ignore_missing_imports = true
 
 [tool.pydoclint]
-allow-init-docstring = true
 arg-type-hints-in-docstring = false
-check-return-types = false
+baseline = ".config/pylint-baseline.txt"
+exclude = '\.git|\.test_logs|\.tox|build|out|tests/fixtures|venv'
 style = 'google'
 
 [tool.pylint]
