@@ -4,7 +4,7 @@
     "comment": "print image details as json output",
     "additional_information": {
         "present": [
-            "\"name\": \"creator-ee\""
+            "\"name\": \"community-ansible-dev-tools\""
         ],
         "absent": [],
         "compared_fixture": false
@@ -26,7 +26,7 @@
         "                    \"ghcr.io/ansible/creator-ee@sha256:39fd2060b7fb2f987835057e50a9ee1c1290d525e43aafbdcd1461f76c46a770\",",
         "                    \"ghcr.io/ansible/creator-ee@sha256:de0ae709f909b17e5f5f8ca5e1656ee427e2a01c7e1e74be314dc989edf47a49\"",
         "                    \"ghcr.io/ansible/creator-ee:v24.2.0\"",
-        "        \"name\": \"creator-ee\",",
+        "        \"name\": \"community-ansible-dev-tools\",",
         "        \"name_tag\": \"creator-ee:v24.2.0 (primary)\",",
         "        \"repository\": \"ghcr.io/ansible/creator-ee\",",
         "(venv) bash$"

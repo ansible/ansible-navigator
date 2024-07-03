@@ -6,7 +6,7 @@
         "present": [
             "ansible_collections",
             "ansible_version",
-            "image_name: ghcr.io/ansible/creator-ee:v24.2.0",
+            "image_name: ghcr.io/ansible/community-ansible-dev-tools:v24.6.1",
             "os_release",
             "python_packages",
             "python_version",
@@ -19,7 +19,7 @@
     "output": [
         "ansible_collections:",
         "ansible_version:",
-        "image_name: ghcr.io/ansible/creator-ee:v24.2.0",
+        "image_name: ghcr.io/ansible/community-ansible-dev-tools:v24.6.1",
         "os_release:",
         "python_packages:",
         "python_version:",

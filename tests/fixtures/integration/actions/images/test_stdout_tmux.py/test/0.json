@@ -4,7 +4,7 @@
     "comment": "print image to stdout",
     "additional_information": {
         "present": [
-            "repository: ghcr.io/ansible/creator-ee"
+            "repository: ghcr.io/ansible/community-ansible-dev-tools"
         ],
         "absent": [],
         "compared_fixture": false
@@ -28,7 +28,7 @@
         "      - ghcr.io/ansible/creator-ee:v24.2.0",
         "  name: creator-ee",
         "  name_tag: creator-ee:v24.2.0(primary)",
-        "  repository: ghcr.io/ansible/creator-ee",
+        "  repository: ghcr.io/ansible/community-ansible-dev-tools",
         "(venv) bash$"
     ]
 }
