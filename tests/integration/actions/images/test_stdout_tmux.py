@@ -96,7 +96,7 @@ stdout_tests = (
             execution_environment=True,
             raw_append=" | grep creator",
         ).join(),
-        present=['"name": "creator-ee"'],
+        present=['"name": "community-ansible-dev-tools"'],
     ),
 )
 

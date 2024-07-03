@@ -43,7 +43,7 @@ from tests.defaults import FIXTURES_DIR
         pytest.param(
             ["config"],
             "execution_environment_image",
-            "quay.io/ansible/creator-ee:v0.9.2",
+            "ghcr.io/ansible/community-ansible-dev-tools:v24.6.1",
             id="internal-default-value-gets-picked-if-not-overridden",
         ),
         pytest.param(
