@@ -41,7 +41,6 @@
         "                    \"type\": \"str\"",
         "                }",
         "            },",
-        "            \"plugin_name\": \"company_name.coll_1.mod_1\",",
         "            \"short_description\": \"This is a test module\",",
         "            \"version_added\": \"1.0.0\",",
         "            \"version_added_collection\": \"company_name.coll_1\"",

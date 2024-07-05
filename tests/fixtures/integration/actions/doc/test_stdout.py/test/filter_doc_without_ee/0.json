@@ -16,7 +16,6 @@
         "            \"notes\": [",
         "                \"This is a dummy filter plugin\"",
         "            ],",
-        "            \"plugin_name\": \"company_name.coll_1.filter_1\",",
         "            \"short_description\": \"This is test filter plugin\",",
         "            \"version_added\": \"1.0.0\",",
         "            \"version_added_collection\": \"company_name.coll_1\"",
