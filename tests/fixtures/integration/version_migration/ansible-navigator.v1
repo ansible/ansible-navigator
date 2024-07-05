@@ -45,7 +45,7 @@
                 }
             },
             "image": "test_image:latest",
-            "pull-policy": "never",
+            "pull-policy": "always",
             "volume-mounts": [
                 {
                     "src": "/test1",

@@ -9,7 +9,7 @@ ansible-navigator:
       name: debug
       type: module
   execution-environment:
-    pull-policy: never
+    pull-policy: always
     volume-mounts:
       - dest: /tmp/foo
         label: Z
