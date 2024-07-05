@@ -50,13 +50,13 @@ jobs:
         with:
           fetch-depth: 0 # needed by setuptools-scm
 
-      - name: Cache container images
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/share/containers
-          key: ${{ runner.os }}-${{ hashFiles('src/ansible_navigator/data/images_dockerfile') }}
+      # - name: Cache container images
+      #   if: ${{ startsWith(matrix.passed_name, 'py') }}
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/.local/share/containers
+      #     key: ${{ runner.os }}-${{ hashFiles('src/ansible_navigator/data/images_dockerfile') }}
 
       - name: Set up Python ${{ matrix.python_version }}
         uses: actions/setup-python@v5
