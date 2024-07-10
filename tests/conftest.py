@@ -10,32 +10,37 @@ import select
 import shutil
 import subprocess
 import sys
+
 from copy import deepcopy
 from functools import lru_cache
 from pathlib import Path
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING
+from typing import Protocol
 
 import pytest
 
 from ansible_navigator.configuration_subsystem import to_sample
-from ansible_navigator.configuration_subsystem.navigator_configuration import (
-    APP_NAME, NavigatorConfiguration)
-from ansible_navigator.configuration_subsystem.utils import \
-    parse_ansible_verison
-from ansible_navigator.content_defs import ContentView, SerializationFormat
+from ansible_navigator.configuration_subsystem.navigator_configuration import APP_NAME
+from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
+from ansible_navigator.configuration_subsystem.utils import parse_ansible_verison
+from ansible_navigator.content_defs import ContentView
+from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.image_manager.puller import ImagePuller
-from ansible_navigator.utils.functions import console_width, find_settings_file
+from ansible_navigator.utils.functions import console_width
+from ansible_navigator.utils.functions import find_settings_file
 from ansible_navigator.utils.packaged_data import ImageEntry
-from ansible_navigator.utils.serialize import (Loader, serialize_write_file,
-                                               yaml)
+from ansible_navigator.utils.serialize import Loader
+from ansible_navigator.utils.serialize import serialize_write_file
+from ansible_navigator.utils.serialize import yaml
 
 from .defaults import FIXTURES_DIR
 
-if TYPE_CHECKING:
-    from collections.abc import Callable, Generator
 
-    from ansible_navigator.configuration_subsystem.definitions import \
-        SettingsFileType
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Generator
+
+    from ansible_navigator.configuration_subsystem.definitions import SettingsFileType
 
 
 # implicit verbosity, updated at runtime
