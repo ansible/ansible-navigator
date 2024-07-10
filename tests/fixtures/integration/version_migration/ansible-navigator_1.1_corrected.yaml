@@ -45,7 +45,7 @@ ansible-navigator:
         KEY3: VALUE3
     image: test_image:latest
     pull:
-      policy: never
+      policy: always
     volume-mounts:
     - dest: /test1
       options: Z

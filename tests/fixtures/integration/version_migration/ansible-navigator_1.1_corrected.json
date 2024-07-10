@@ -59,7 +59,7 @@
             },
             "image": "test_image:latest",
             "pull": {
-                "policy": "never"
+                "policy": "always"
             },
             "volume-mounts": [
                 {
