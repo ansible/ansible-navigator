@@ -7,7 +7,6 @@ from tests.integration._interactions import UiTestStep
 from tests.integration._interactions import add_indices
 from tests.integration._interactions import step_id_padded
 
-from .base import IMAGE_VERSION
 from .base import BaseClass
 from .base import base_steps
 
@@ -19,7 +18,7 @@ initial_steps = (
     UiTestStep(
         user_input=CLI,
         comment="ansible-navigator images top window",
-        present=[IMAGE_VERSION],
+        present=["community-ansible-dev-tools"],
     ),
 )
 
