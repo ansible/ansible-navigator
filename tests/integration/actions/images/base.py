@@ -32,6 +32,11 @@ base_steps = (
         comment=f"filter for {IMAGE_VERSION}",
         present=[IMAGE_VERSION],
     ),
+    UiTestStep(
+        user_input=":f community",
+        comment="filter for community",
+        present=["community"],
+    ),
     UiTestStep(user_input=":0", comment="goto info menu", present=["Everything"]),
     UiTestStep(user_input=":0", comment="goto Image information", present=["architecture:"]),
     step_back,
