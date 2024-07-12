@@ -1,7 +1,7 @@
 {
-    "name": "test[02-:f community-ansible-dev-tools-filter for community-ansible-dev-tools]",
+    "name": "test[02-:f latest-filter for latest]",
     "index": 2,
-    "comment": "filter for community-ansible-dev-tools",
+    "comment": "filter for latest",
     "additional_information": {
         "present": [
             "latest"
