@@ -586,7 +586,7 @@ def run_command(cmd: list[str]) -> dict[str, str]:
             capture_output=True,
             check=True,
             text=True,
-            shell=True,  # noqa:S602
+            shell=True,
         )
     except subprocess.CalledProcessError as exc:
         return {"error": str(exc)}

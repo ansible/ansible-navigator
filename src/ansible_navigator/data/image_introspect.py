@@ -46,7 +46,7 @@ def run_command(command: Command) -> None:
             capture_output=True,
             check=True,
             text=True,
-            shell=True,  # noqa:S602
+            shell=True,
         )
         command.stdout = proc_out.stdout
     except subprocess.CalledProcessError as exc:

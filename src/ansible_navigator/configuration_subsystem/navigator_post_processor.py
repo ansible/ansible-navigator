@@ -676,7 +676,7 @@ class NavigatorPostProcessor:
                 try:
                     subprocess.run(
                         "ansible-lint --version",  # noqa:S607
-                        shell=True,  # noqa:S602
+                        shell=True,
                         check=True,
                     )
                 except subprocess.CalledProcessError:

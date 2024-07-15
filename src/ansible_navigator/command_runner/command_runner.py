@@ -68,7 +68,7 @@ def run_command(command: Command) -> None:
             capture_output=True,
             check=True,
             text=True,
-            shell=True,  # noqa:S602
+            shell=True,
         )
         command.return_code = proc_out.returncode
         command.stdout = proc_out.stdout
