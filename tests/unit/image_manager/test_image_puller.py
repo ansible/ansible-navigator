@@ -20,12 +20,12 @@ class TstPullPolicy(NamedTuple):
     pull_required: bool
 
 
-# Note, these tests assume our default is not a :latest
+# Note, these tests assume our default is a :latest
 data_do_have = [
     pytest.param(TstPullPolicy(pull_policy="always", pull_required=True), id="always"),
     pytest.param(TstPullPolicy(pull_policy="missing", pull_required=False), id="missing"),
     pytest.param(TstPullPolicy(pull_policy="never", pull_required=False), id="never"),
-    pytest.param(TstPullPolicy(pull_policy="tag", pull_required=False), id="tag"),
+    pytest.param(TstPullPolicy(pull_policy="tag", pull_required=True), id="tag"),
 ]
 
 
