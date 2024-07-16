@@ -1,17 +1,17 @@
 {
-    "name": "test[1-:f redhatinsights.insights-filter collections]",
+    "name": "test[1-:f ansible.posix-filter collections]",
     "index": 1,
     "comment": "filter collections",
     "additional_information": {
         "present": [
-            "redhatinsights.insights"
+            "ansible.posix"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
         "  Name                                                                                           Version                         Shadowed                           Type                                   Path",
-        "0│redhatinsights.insights                                                                        1.0.7                           False                              contained                              /usr/share/ansible/collections/ansible_collections/redhatinsights/insights",
+        "0│ansible.posix                                                                        1.5.4                           False                              contained                              /usr/share/ansible/collections/ansible_collections/ansible/posix",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }
