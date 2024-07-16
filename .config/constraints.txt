@@ -5,9 +5,9 @@
 #    pip-compile --all-extras --no-annotate --output-file=.config/constraints.txt --strip-extras pyproject.toml
 #
 ansible-builder==3.1.0
-ansible-compat==24.6.1
+ansible-compat==24.7.0
 ansible-core==2.16.5
-ansible-lint==24.6.1
+ansible-lint==24.7.0
 ansible-runner==2.4.0
 attrs==23.2.0
 babel==2.15.0
@@ -23,7 +23,7 @@ cfgv==3.4.0
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
-coverage==7.5.4
+coverage==7.6.0
 coverage-enable-subprocess==1.0
 cryptography==42.0.8
 csscompressor==0.9.5
@@ -34,7 +34,7 @@ distlib==0.3.8
 distro==1.9.0
 dnspython==2.6.1
 docutils==0.21.2
-exceptiongroup==1.2.1
+exceptiongroup==1.2.2
 execnet==2.1.1
 filelock==3.15.4
 flake8==7.1.0
@@ -42,12 +42,12 @@ flake8-docstrings==1.7.0
 ghp-import==2.1.0
 griffe==0.47.0
 htmlmin2==0.1.13
-identify==2.5.36
+identify==2.6.0
 idna==3.7
 iniconfig==2.0.0
 jinja2==3.1.4
 jsmin==3.0.1
-jsonschema==4.22.0
+jsonschema==4.23.0
 jsonschema-specifications==2023.12.1
 libtmux==0.37.0
 linkchecker==10.4.0
@@ -82,7 +82,7 @@ pathspec==0.12.1
 pbr==6.0.0
 pexpect==4.9.0
 pillow==10.4.0
-pipdeptree==2.23.0
+pipdeptree==2.23.1
 platformdirs==4.2.2
 pluggy==1.5.0
 pre-commit==3.7.1
@@ -97,7 +97,7 @@ pytest==8.2.2
 pytest-env==1.1.3
 pytest-mock==3.14.0
 pytest-plus==0.7.0
-pytest-subtests==0.12.1
+pytest-subtests==0.13.0
 pytest-xdist==3.6.1
 python-daemon==3.0.1
 python-dateutil==2.9.0.post0
@@ -110,7 +110,7 @@ requests==2.32.3
 requirements-parser==0.9.0
 resolvelib==1.0.1
 rich==13.7.1
-rpds-py==0.18.1
+rpds-py==0.19.0
 ruamel-yaml==0.18.6
 ruamel-yaml-clib==0.2.8
 six==1.16.0
@@ -121,7 +121,7 @@ termcolor==2.4.0
 text-unidecode==1.3
 tinycss2==1.3.0
 tomli==2.0.1
-types-setuptools==70.2.0.20240704
+types-setuptools==70.3.0.20240710
 typing-extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
