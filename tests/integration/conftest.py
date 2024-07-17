@@ -86,6 +86,7 @@ class CliRunner:
             Parameter(name="log_append", value=False),
             Parameter(name="log_file", value=generate_test_log_dir(self.request)),
             Parameter(name="mode", value="stdout"),
+            Parameter(name="pull_policy", value="never"),
         )
         for parameter in default_parameters:
             self._apply_parameter(parameter)

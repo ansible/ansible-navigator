@@ -32,7 +32,7 @@ stdout_tests = (
             cmdline="",
             mode="stdout",
             execution_environment=True,
-            raw_append=" | grep creator",
+            raw_append=" | grep community",
         ).join(),
         present=[f"repository: {IMAGE_NO_VERSION}"],
     ),
@@ -94,9 +94,9 @@ stdout_tests = (
             mode="stdout",
             format_="json",
             execution_environment=True,
-            raw_append=" | grep creator",
+            raw_append=" | grep community",
         ).join(),
-        present=['"name": "creator-ee"'],
+        present=['"name": "community-ansible-dev-tools"'],
     ),
 )
 

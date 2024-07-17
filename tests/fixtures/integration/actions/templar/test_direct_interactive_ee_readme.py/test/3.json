@@ -4,18 +4,18 @@
     "comment": "unfiltered",
     "additional_information": {
         "present": [
-            "compliance"
+            "csh"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  Redhatinsights.insights                                                                     Type                                   Added                          Deprecated                                Description",
-        "0│compliance                                                                                  role                                   Unknown                        Unknown                                   Install and configure Red Hat Insights Client",
-        "1│insights                                                                                    inventory                              None                           False                                     insights inventory source",
-        "2│insights_client                                                                             role                                   Unknown                        Unknown                                   Install and configure Red Hat Insights Client",
-        "3│insights_config                                                                             module                                 None                           False                                     This module handles initial configuration of the insights client on install",
-        "4│insights_register                                                                           module                                 None                           False                                     This module registers the insights client",
+        "  Ansible.posix                                                                     Type                                   Added                          Deprecated                                Description",
+        "0│acl               module   1.0.0 False      Set and retrieve file ACL information.",
+        "1│at                module   1.0.0 False      Schedule the execution of a command or script file",
+        "2│authorized_key    module   1.0.0 False      Adds or removes an SSH authorized key",
+        "3│cgroup_perf_recap callback None  False      Profiles system activity of tasks and full execution",
+        "4│csh               shell    None  False      C shell (/bin/csh)",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

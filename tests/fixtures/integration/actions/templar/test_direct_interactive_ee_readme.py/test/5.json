@@ -1,23 +1,23 @@
 {
-    "name": "test[5-:0-select compliance]",
+    "name": "test[5-:0-select csh]",
     "index": 5,
-    "comment": "select compliance",
+    "comment": "select csh",
     "additional_information": {
         "present": [
-            "full_name: redhatinsights.insights.compliance"
+            "full_name: ansible.posix.csh"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "Image: redhatinsights.insights.compliance",
-        "Description: Install and configure Red Hat Insights Client",
+        "Image: ansible.posix.csh",
+        "Description: C shell (/bin/csh)",
         " 0│---",
         " 1│argument_specs: {}",
         " 2│argument_specs_path: ''",
         " 3│defaults: {}",
         " 4│defaults_path: ''",
-        " 5│full_name: redhatinsights.insights.compliance",
+        " 5│full_name: ansible.posix.csh",
         " 6│info:",
         " 7│  galaxy_info:",
         " 8│    author: Red Hat, Inc",
@@ -26,7 +26,7 @@
         "11│    - system",
         "12│    company: Red Hat, Inc.",
         "13│    dependencies: []",
-        "14│    description: Install and configure Red Hat Insights Client",
+        "14│    description: Ansible Collection targeting POSIX and POSIX-ish platforms.",
         "15│    license: Apache License 2.0",
         "16│    min_ansible_version: 1.2",
         "17│    platforms:",
