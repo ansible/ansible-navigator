@@ -103,7 +103,7 @@ class ImagePuller:
             cmd_parts = [self._container_engine, "image", "inspect", self._image]
             self._log_message(level=logging.DEBUG, message=f"Command: {shlex_join(cmd_parts)}")
             subprocess.run(
-                cmd_parts,  # noqa:S603
+                cmd_parts,
                 check=True,
                 capture_output=True,
             )
@@ -219,7 +219,7 @@ class ImagePuller:
                 cmd_to_run,
                 check=True,
                 stderr=stderr_pipe,
-                shell=True,  # noqa:S602
+                shell=True,
                 env=os.environ,
             )
             self._log_message(level=logging.INFO, message="Execution environment updated")
