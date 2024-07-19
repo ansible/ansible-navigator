@@ -19,22 +19,26 @@ steps: tuple[UiTestStep, ...] = (
         present=["ansible.builtin", "ansible.posix"],
     ),
     UiTestStep(
-        user_input=":f redhatinsights.insights",
+        user_input=":f ansible.posix",
         comment="filter collections",
-        present=["redhatinsights.insights"],
+        present=["ansible.posix"],
     ),
     UiTestStep(
         user_input=":0",
-        comment="select redhatinsights.insights",
+        comment="select ansible.posix",
     ),
-    UiTestStep(user_input=":f", comment="unfiltered", present=["compliance"]),
-    UiTestStep(user_input=":f compliance", comment="filter content", present=["compliance"]),
+    UiTestStep(user_input=":f", comment="unfiltered", present=["csh"]),
+    UiTestStep(user_input=":f csh", comment="filter content", present=["csh"]),
     UiTestStep(
         user_input=":0",
-        comment="select compliance",
-        present=["full_name: redhatinsights.insights.compliance"],
+        comment="select csh",
+        present=["full_name: ansible.posix.csh"],
     ),
-    UiTestStep(user_input=":{{ readme }}", comment="open readme", present=["OpenSCAP"]),
+    UiTestStep(
+        user_input=":{{ full_name }}",
+        comment="open full_name",
+        present=["ansible.posix.csh"],
+    ),
 )
 
 steps = add_indices(steps)

@@ -1,17 +1,17 @@
 {
-    "name": "test[4-:f compliance-filter content]",
+    "name": "test[4-:f csh-filter content]",
     "index": 4,
     "comment": "filter content",
     "additional_information": {
         "present": [
-            "compliance"
+            "csh"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  Redhatinsights.insights                                                                                                        Type                      Added                                     Deprecated                                                Description",
-        "0│compliance                                                                                                                     role                      Unknown                                   Unknown                                                   Install and configure Red Hat Insights Client",
+        "  Ansible.posix                                                                                                        Type                      Added                                     Deprecated                                                Description",
+        "0│csh                      shell      None       False               C shell (/bin/csh)",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

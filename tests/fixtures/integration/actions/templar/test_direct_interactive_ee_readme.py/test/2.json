@@ -1,14 +1,14 @@
 {
-    "name": "test[2-:0-select redhatinsights.insights]",
+    "name": "test[2-:0-select ansible.posix]",
     "index": 2,
-    "comment": "select redhatinsights.insights",
+    "comment": "select ansible.posix",
     "additional_information": {
         "present": [],
         "absent": [],
         "compared_fixture": true
     },
     "output": [
-        "  Redhatinsights.insights                                                                                                                                                                                       Type                                       Added                                              Deprecated                                                                                    Description",
+        "  Ansible.posix                                                                                                                                    Type                                                Added                                                         Deprecated                                                                                                       Description",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

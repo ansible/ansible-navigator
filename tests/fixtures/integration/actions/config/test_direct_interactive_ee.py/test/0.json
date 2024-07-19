@@ -16,7 +16,7 @@
         "  4│Ansible cow path                                                                                              True                  default               None",
         "  5│Ansible cow selection                                                                                         True                  default               default",
         "  6│Ansible force color                                                                                           True                  default               False",
-        "  7│Ansible home                                                                                                  True                  default               /home/runner/.ansible",
+        "  7│Ansible home                                                                                                  True                  default               /root/.ansible",
         "  8│Ansible nocolor                                                                                               True                  default               False",
         "  9│Ansible nocows                                                                                                True                  default               False",
         " 10│Ansible pipelining                                                                                            True                  default               False",

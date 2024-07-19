@@ -1,22 +1,17 @@
 {
-    "name": "test[02-:0-goto info menu]",
+    "name": "test[02-:f community-filter for community]",
     "index": 2,
-    "comment": "goto info menu",
+    "comment": "filter for community",
     "additional_information": {
         "present": [
-            "Everything"
+            "community"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  Image: creator-ee:v24.2.0 (primary)                                               Description",
-        "0│Image information                                                                 Information collected from image inspection",
-        "1│General information                                                               OS and python version information",
-        "2│Ansible version and collections                                                   Information about ansible and ansible collections",
-        "3│Python packages                                                                   Information about python and python packages",
-        "4│Operating system packages                                                         Information about operating system packages",
-        "5│Everything                                                                        All image information",
+        "  Image                               Tag                       Execution environment                                                   Created                                 Size",
+        "0│community-ansible-dev-tools                          latest                   True                                                                    5 weeks ago                             686 MB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
