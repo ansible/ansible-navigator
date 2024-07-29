@@ -108,7 +108,7 @@ def kegex(package: str, action: str) -> tuple[str, str, str]:
     return _ACTIONS[package][action]
 
 
-def kegexes(package: str) -> Generator[tuple[str, str, str], None, None]:
+def kegexes(package: str) -> Generator[tuple[str, str, str]]:
     """Return a tuple of tuples, name, ``kegex`` for all actions.
 
     :param package: The name of the package

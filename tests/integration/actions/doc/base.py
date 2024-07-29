@@ -29,7 +29,7 @@ class BaseClass:
     @pytest.fixture(scope="module", name="tmux_doc_session")
     def fixture_tmux_doc_session(
         request: pytest.FixtureRequest,
-    ) -> Generator[TmuxSession, None, None]:
+    ) -> Generator[TmuxSession]:
         """Tmux fixture for this module.
 
         :param request: A fixture providing details about the test caller

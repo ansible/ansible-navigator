@@ -49,7 +49,7 @@ def _find_all_importables(pkg: ModuleType) -> list[str]:
 def _discover_path_importables(
     pkg_pth: Path,
     pkg_name: str,
-) -> Generator[str, None, None]:
+) -> Generator[str]:
     """Yield all importables under a given path and package.
 
     :param pkg_pth: The path to the package to walk

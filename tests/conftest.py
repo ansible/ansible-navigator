@@ -113,7 +113,7 @@ def fixture_small_image_name() -> str:
 
 
 @pytest.fixture()
-def locked_directory(tmpdir: str) -> Generator[str, None, None]:
+def locked_directory(tmpdir: str) -> Generator[str]:
     """Directory without read-write for throwing errors.
 
     :param tmpdir: Fixture for temporary directory
@@ -125,7 +125,7 @@ def locked_directory(tmpdir: str) -> Generator[str, None, None]:
 
 
 @pytest.fixture(scope="session")
-def pullable_image(valid_container_engine: str) -> Generator[str, None, None]:
+def pullable_image(valid_container_engine: str) -> Generator[str]:
     """Return a container that can be pulled.
 
     :param valid_container_engine: Fixture for a valid container engine
@@ -303,7 +303,7 @@ def _cmd_in_tty(
 
 
 @pytest.fixture()
-def cmd_in_tty() -> Generator[Callable[..., tuple[str, str, int]], None, None]:
+def cmd_in_tty() -> Generator[Callable[..., tuple[str, str, int]]]:
     """Provide the cmd in tty function as a fixture.
 
     :yields: The cmd_in_tty function
@@ -419,7 +419,7 @@ def pytest_unconfigure(config: pytest.Config) -> None:
 def skip_if_already_failed(  # noqa: PT004
     request: pytest.FixtureRequest,
     failed: set[str] = set(),
-) -> Generator[None, None, None]:
+) -> Generator[None]:
     """Fixture that stops parametrized tests running on first failure."""
     key = request.node.name.split("[")[0]
     failed_before = request.session.testsfailed

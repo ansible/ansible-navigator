@@ -39,7 +39,7 @@ class BaseClass:
     def fixture_tmux_session(
         self,
         request: pytest.FixtureRequest,
-    ) -> Generator[TmuxSession, None, None]:
+    ) -> Generator[TmuxSession]:
         """Tmux fixture for this module.
 
         :param request: The request for this fixture
