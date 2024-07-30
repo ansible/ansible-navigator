@@ -229,7 +229,7 @@ class CollectionCatalog:
     def _process_plugin_dir(
         self,
         plugin_type: str,
-        filenames: Generator[Path, None, None],
+        filenames: Generator[Path],
         file_checksums: dict[str, dict[Any, Any]],
         collection: dict[Any, Any],
     ) -> None:

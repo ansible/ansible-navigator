@@ -28,7 +28,7 @@ EXECUTION_MODES = ["interactive", "stdout"]
 
 
 @pytest.fixture()
-def action_run_stdout() -> Generator[type[ActionRunTest], None, None]:
+def action_run_stdout() -> Generator[type[ActionRunTest]]:
     """Create a fixture for ActionRunTest.
 
     :yield: The ActionRunTest class.

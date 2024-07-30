@@ -69,7 +69,7 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
+    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession]:
         """Return a new tmux session.
 
         The EDITOR is set here such that vi will not create swap files.

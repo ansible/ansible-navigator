@@ -48,7 +48,7 @@ class BaseClass:
 
     @staticmethod
     @pytest.fixture(scope="module", name="tmux_session")
-    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
+    def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession]:
         """Tmux fixture for this module.
 
         :param request: The request for this fixture from a test
