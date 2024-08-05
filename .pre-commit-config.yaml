@@ -34,7 +34,7 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/psf/black.git
-    rev: 24.4.2
+    rev: 24.8.0
     hooks:
       - id: black
         language_version: python3
@@ -45,14 +45,14 @@ repos:
       - id: toml-sort-fix
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.5.5"
+    rev: "v0.5.6"
     hooks:
       - id: ruff
         args:
           - "--exit-non-zero-on-fix"
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.12.0
+    rev: v8.13.1
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -139,7 +139,7 @@ repos:
         types: [file, yaml]
 
   - repo: https://github.com/PyCQA/flake8.git
-    rev: 7.1.0
+    rev: 7.1.1
     hooks:
       - id: flake8
         language_version: python3
@@ -158,7 +158,7 @@ repos:
       - id: pyupgrade
         args: ["--py310-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.11.0
+    rev: v1.11.1
     hooks:
       - id: mypy
         additional_dependencies:
