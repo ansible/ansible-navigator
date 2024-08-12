@@ -9,8 +9,8 @@ ansible-compat==24.7.0
 ansible-core==2.16.5
 ansible-lint==24.7.0
 ansible-runner==2.4.0
-attrs==24.1.0
-babel==2.15.0
+attrs==24.2.0
+babel==2.16.0
 beautifulsoup4==4.12.3
 bindep==2.11.0
 black==24.8.0
@@ -18,12 +18,12 @@ bracex==2.5
 cairocffi==1.7.1
 cairosvg==2.7.1
 certifi==2024.7.4
-cffi==1.16.0
+cffi==1.17.0
 cfgv==3.4.0
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
-coverage==7.6.0
+coverage==7.6.1
 coverage-enable-subprocess==1.0
 cryptography==43.0.0
 csscompressor==0.9.5
@@ -37,7 +37,7 @@ docutils==0.21.2
 exceptiongroup==1.2.2
 execnet==2.1.1
 filelock==3.15.4
-flake8==7.1.0
+flake8==7.1.1
 flake8-docstrings==1.7.0
 ghp-import==2.1.0
 griffe==0.48.0
@@ -87,7 +87,7 @@ platformdirs==4.2.2
 pluggy==1.5.0
 pre-commit==3.8.0
 ptyprocess==0.7.0
-pycodestyle==2.12.0
+pycodestyle==2.12.1
 pycparser==2.22
 pydocstyle==6.3.0
 pyflakes==3.2.0
@@ -102,7 +102,7 @@ pytest-xdist==3.6.1
 python-daemon==3.0.1
 python-dateutil==2.9.0.post0
 python-slugify==8.0.4
-pyyaml==6.0.1
+pyyaml==6.0.2
 pyyaml-env-tag==0.1
 referencing==0.35.1
 regex==2024.7.24
@@ -110,7 +110,7 @@ requests==2.32.3
 requirements-parser==0.10.2
 resolvelib==1.0.1
 rich==13.7.1
-rpds-py==0.19.1
+rpds-py==0.20.0
 ruamel-yaml==0.18.6
 ruamel-yaml-clib==0.2.8
 six==1.16.0
@@ -121,12 +121,12 @@ termcolor==2.4.0
 text-unidecode==1.3
 tinycss2==1.3.0
 tomli==2.0.1
-types-setuptools==71.1.0.20240726
+types-setuptools==71.1.0.20240806
 typing-extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
 virtualenv==20.26.3
-watchdog==4.0.1
+watchdog==4.0.2
 wcmatch==9.0
 webencodings==0.5.1
 yamllint==1.35.1
