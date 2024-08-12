@@ -80,7 +80,7 @@ passing `--mode stdout` (`-m stdout`) or setting `mode` in
 
 [settings documentation]: https://ansible-navigator.readthedocs.io/settings/
 
-## Example commands.
+## Example commands
 
 All of ansible-navigator's features can be accessed from the *welcome page*
 described above, but as a shortcut, commands can also be provided directly as
