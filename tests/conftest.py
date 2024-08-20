@@ -416,7 +416,7 @@ def pytest_unconfigure(config: pytest.Config) -> None:
 
 
 @pytest.fixture()
-def skip_if_already_failed(  # noqa: PT004
+def skip_if_already_failed(
     request: pytest.FixtureRequest,
     failed: set[str] = set(),
 ) -> Generator[None]:
