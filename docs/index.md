@@ -20,6 +20,6 @@ To learn how to easily start leveraging the container technology with
 
 Contributions
 
-- [Code Of Conduct](contributing/code-of-conduct.md)
+- [Code Of Conduct](contributing/community.md)
 - [Security](contributing/security.md)
 - [Guidelines](contributing/guidelines.md)
