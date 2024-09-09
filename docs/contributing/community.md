@@ -23,5 +23,5 @@ If you encounter security-related concerns, report them via email to
 
 ## Code of Conduct
 
-Please see the official
+Please see the
 [Ansible Community Code of Conduct](https://docs.ansible.com/ansible/latest/community/code_of_conduct.html).
