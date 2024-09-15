@@ -7,7 +7,7 @@
 ansible-builder==3.1.0
 ansible-compat==24.9.0
 ansible-core==2.16.5
-ansible-lint==24.7.0
+ansible-lint==24.9.0
 ansible-runner==2.4.0
 attrs==24.2.0
 babel==2.16.0
@@ -40,10 +40,10 @@ filelock==3.16.0
 flake8==7.1.1
 flake8-docstrings==1.7.0
 ghp-import==2.1.0
-griffe==1.3.0
+griffe==1.3.1
 htmlmin2==0.1.13
-identify==2.6.0
-idna==3.8
+identify==2.6.1
+idna==3.9
 iniconfig==2.0.0
 jinja2==3.1.4
 jsmin==3.0.1
@@ -64,7 +64,7 @@ mkdocs==1.6.0
 mkdocs-ansible==24.3.1
 mkdocs-autorefs==1.2.0
 mkdocs-gen-files==0.5.0
-mkdocs-htmlproofer-plugin==1.2.1
+mkdocs-htmlproofer-plugin==1.3.0
 mkdocs-macros-plugin==1.0.5
 mkdocs-material==9.5.34
 mkdocs-material-extensions==1.3.1
@@ -83,7 +83,7 @@ pbr==6.1.0
 pexpect==4.9.0
 pillow==10.4.0
 pipdeptree==2.23.3
-platformdirs==4.3.2
+platformdirs==4.3.3
 pluggy==1.5.0
 pre-commit==3.8.0
 ptyprocess==0.7.0
@@ -105,7 +105,7 @@ python-slugify==8.0.4
 pyyaml==6.0.2
 pyyaml-env-tag==0.1
 referencing==0.35.1
-regex==2024.7.24
+regex==2024.9.11
 requests==2.32.3
 requirements-parser==0.11.0
 resolvelib==1.0.1
@@ -124,7 +124,7 @@ tomli==2.0.1
 types-setuptools==74.1.0.20240907
 typing-extensions==4.12.2
 tzdata==2024.1
-urllib3==2.2.2
+urllib3==2.2.3
 virtualenv==20.26.4
 watchdog==5.0.2
 wcmatch==9.0
