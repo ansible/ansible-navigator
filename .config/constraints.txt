@@ -5,9 +5,9 @@
 #    pip-compile --all-extras --no-annotate --output-file=.config/constraints.txt --strip-extras pyproject.toml
 #
 ansible-builder==3.1.0
-ansible-compat==24.9.0
+ansible-compat==24.9.1
 ansible-core==2.16.5
-ansible-lint==24.9.0
+ansible-lint==24.9.2
 ansible-runner==2.4.0
 attrs==24.2.0
 babel==2.16.0
@@ -36,14 +36,14 @@ dnspython==2.6.1
 docutils==0.21.2
 exceptiongroup==1.2.2
 execnet==2.1.1
-filelock==3.16.0
+filelock==3.16.1
 flake8==7.1.1
 flake8-docstrings==1.7.0
 ghp-import==2.1.0
 griffe==1.3.1
 htmlmin2==0.1.13
 identify==2.6.1
-idna==3.9
+idna==3.10
 iniconfig==2.0.0
 jinja2==3.1.4
 jsmin==3.0.1
@@ -65,8 +65,8 @@ mkdocs-ansible==24.3.1
 mkdocs-autorefs==1.2.0
 mkdocs-gen-files==0.5.0
 mkdocs-htmlproofer-plugin==1.3.0
-mkdocs-macros-plugin==1.0.5
-mkdocs-material==9.5.34
+mkdocs-macros-plugin==1.2.0
+mkdocs-material==9.5.36
 mkdocs-material-extensions==1.3.1
 mkdocs-minify-plugin==0.8.0
 mkdocs-monorepo-plugin==1.1.0
@@ -82,8 +82,8 @@ pathspec==0.12.1
 pbr==6.1.0
 pexpect==4.9.0
 pillow==10.4.0
-pipdeptree==2.23.3
-platformdirs==4.3.3
+pipdeptree==2.23.4
+platformdirs==4.3.6
 pluggy==1.5.0
 pre-commit==3.8.0
 ptyprocess==0.7.0
@@ -92,9 +92,9 @@ pycparser==2.22
 pydocstyle==6.3.0
 pyflakes==3.2.0
 pygments==2.18.0
-pymdown-extensions==10.9
+pymdown-extensions==10.10
 pytest==8.3.3
-pytest-env==1.1.4
+pytest-env==1.1.5
 pytest-mock==3.14.0
 pytest-plus==0.7.0
 pytest-subtests==0.13.1
@@ -121,11 +121,11 @@ termcolor==2.4.0
 text-unidecode==1.3
 tinycss2==1.3.0
 tomli==2.0.1
-types-setuptools==74.1.0.20240907
+types-setuptools==75.1.0.20240917
 typing-extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.3
-virtualenv==20.26.4
+virtualenv==20.26.5
 watchdog==5.0.2
 wcmatch==9.0
 webencodings==0.5.1
