@@ -197,7 +197,7 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: dict[str, Any])
     :param args: The arguments passed to the action's run_stdout method
     :param _kwargs: The keyword arguments passed to the action's run_stdout method
     :returns: The outcome of running the action's ``run_stdout()`` method
-    """  # noqa: D402 # Refers to the action's run_stdout in the first line, not this function
+    """  # Refers to the action's run_stdout in the first line, not this function
     action_cls = get(package, action)
     args = args[0]
     return action_cls(args).run_stdout()
