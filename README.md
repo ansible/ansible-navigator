@@ -10,6 +10,15 @@ A demo of the interface can be found [on YouTube][YT demo].
 
 [//]: # (DO-NOT-REMOVE-docs-intro-END)
 
+## Communication
+
+Refer to the
+[Talk to us](https://ansible.readthedocs.io/projects/navigator/contributing/community/#talk-to-us)
+section of the Contributing guide to find out how to get in touch with us.
+
+You can also find more information in the
+[Ansible communication guide](https://docs.ansible.com/ansible/devel/community/communication.html).
+
 ## Contributing
 
 Any kind of contribution to this project is very welcome and appreciated,
@@ -22,6 +31,11 @@ See the [Contributing guidelines][contributing guidelines] for details.
 [pull request]:https://github.com/ansible/ansible-navigator/pulls
 [contributing guidelines]:
 https://ansible.readthedocs.io/projects/navigator/contributing/guidelines/
+
+## Code of Conduct
+
+Please see the official
+[Ansible Community Code of Conduct](https://docs.ansible.com/ansible/latest/community/code_of_conduct.html).
 
 ## Quick start
 

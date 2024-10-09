@@ -11,7 +11,7 @@ A demo of the interface can be found [on YouTube][yt demo].
 
 To learn how to easily start leveraging the container technology with
 `ansible-navigator`, see the
-[Getting started with Execution Environments guide](https://ansible.readthedocs.io/en/latest/getting_started_ee/index.html).
+[Getting started with Execution Environments guide](https://docs.ansible.com/ansible/devel/getting_started_ee/index.html).
 
 - [Installation](installation.md)
 - [Settings](settings.md)
@@ -20,6 +20,6 @@ To learn how to easily start leveraging the container technology with
 
 Contributions
 
-- [Code Of Conduct](contributing/code-of-conduct.md)
+- [Code Of Conduct](contributing/community.md)
 - [Security](contributing/security.md)
 - [Guidelines](contributing/guidelines.md)
