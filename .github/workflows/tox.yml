@@ -74,9 +74,19 @@ jobs:
           python --version --version
           python3 -m pip freeze --all
 
-      - name: "tox -e ${{ matrix.name }}"
-        continue-on-error: ${{ matrix.devel || false }}
-        run: python3 -m tox -e ${{ matrix.name }}
+      - run: ${{ matrix.command }}
+
+      - run: ${{ matrix.command2 }}
+        if: ${{ matrix.command2 }}
+
+      - run: ${{ matrix.command3 }}
+        if: ${{ matrix.command3 }}
+
+      - run: ${{ matrix.command4 }}
+        if: ${{ matrix.command4 }}
+
+      - run: ${{ matrix.command5 }}
+        if: ${{ matrix.command5 }}
 
       - name: tox -e no-test-deps
         if: ${{ startsWith(matrix.name, 'py') }}
