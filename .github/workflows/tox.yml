@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Determine matrix
         id: generate_matrix
-        uses: coactions/dynamic-matrix@v2
+        uses: coactions/dynamic-matrix@v3
         with:
           min_python: "3.10"
           max_python: "3.12"
@@ -51,7 +51,7 @@ jobs:
           fetch-depth: 0 # needed by setuptools-scm
 
       - name: Cache container images
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
+        if: ${{ startsWith(matrix.name, 'py') }}
         uses: actions/cache@v4
         with:
           path: |
@@ -74,12 +74,22 @@ jobs:
           python --version --version
           python3 -m pip freeze --all
 
-      - name: "tox -e ${{ matrix.passed_name }}"
-        continue-on-error: ${{ matrix.devel || false }}
-        run: python3 -m tox -e ${{ matrix.passed_name }}
+      - run: ${{ matrix.command }}
+
+      - run: ${{ matrix.command2 }}
+        if: ${{ matrix.command2 }}
+
+      - run: ${{ matrix.command3 }}
+        if: ${{ matrix.command3 }}
+
+      - run: ${{ matrix.command4 }}
+        if: ${{ matrix.command4 }}
+
+      - run: ${{ matrix.command5 }}
+        if: ${{ matrix.command5 }}
 
       - name: tox -e no-test-deps
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
+        if: ${{ startsWith(matrix.name, 'py') }}
         continue-on-error: ${{ matrix.devel || false }}
         run: python3 -m tox -e no-test-deps
 
@@ -93,7 +103,7 @@ jobs:
             .tox/**/coverage.xml
 
       - name: Change accessibility for cache
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
+        if: ${{ startsWith(matrix.name, 'py') }}
         run: podman unshare chmod -R 755 ~/.local/share/containers/
 
       - name: Report failure if git reports dirty status
@@ -150,7 +160,7 @@ jobs:
       - name: Upload coverage data
         uses: codecov/codecov-action@v4
         with:
-          name: ${{ matrix.passed_name }}
+          name: ${{ matrix.name }}
           fail_ci_if_error: true
           use_oidc: true # cspell:ignore oidc
 
