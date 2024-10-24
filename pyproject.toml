@@ -107,6 +107,7 @@ ignore = [
 good-names = "i,j,k,ex,Run,_,f,fh"
 jobs = 0
 no-docstring-rgx = "__.*__"
+max-positional-arguments = 14
 max-args = 6 # default of 5 too low
 
 [tool.pylint.messages_control]
