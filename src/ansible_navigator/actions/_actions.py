@@ -190,7 +190,7 @@ def run_interactive_factory(package: str) -> Callable[..., Any]:
 
 
 def run_stdout(package: str, action: str, *args: Any, **_kwargs: dict[str, Any]) -> RunStdoutReturn:
-    """Call the given action's ``run_stdout()`` method.
+    """Call the given action's ``run_stdout`` method.
 
     :param package: The name of the package
     :param action: The name of the action
