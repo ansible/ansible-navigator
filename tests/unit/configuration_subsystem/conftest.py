@@ -113,7 +113,7 @@ def fixture_generate_config() -> Callable[..., GenerateConfigResponse]:
     return _generate_config
 
 
-@pytest.fixture()
+@pytest.fixture
 def _ansible_version(monkeypatch: pytest.MonkeyPatch) -> None:
     """Path the ansible --version call to avoid the subprocess calls.
 
@@ -146,7 +146,7 @@ def _schema_dict() -> SettingsSchemaType:
     return SettingsSchemaType(schema)
 
 
-@pytest.fixture()
+@pytest.fixture
 def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaType:
     """Provide the json schema as a dictionary with all properties required.
 

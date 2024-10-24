@@ -112,7 +112,7 @@ def fixture_small_image_name() -> str:
     return small_image_name()
 
 
-@pytest.fixture()
+@pytest.fixture
 def locked_directory(tmpdir: str) -> Generator[str]:
     """Directory without read-write for throwing errors.
 
@@ -136,7 +136,7 @@ def pullable_image(valid_container_engine: str) -> Generator[str]:
     subprocess.run([valid_container_engine, "image", "rm", image], check=True)
 
 
-@pytest.fixture()
+@pytest.fixture
 def _patch_curses(monkeypatch: pytest.MonkeyPatch) -> None:
     """Patch curses so it doesn't traceback during tests.
 
@@ -158,7 +158,7 @@ def _settings_samples() -> tuple[str, str]:
     return commented, uncommented
 
 
-@pytest.fixture()
+@pytest.fixture
 def settings_env_var_to_full(
     settings_samples: tuple[str, str],
     tmp_path: Path,
@@ -196,7 +196,7 @@ def settings_env_var_to_full(
     return settings_path, settings_contents
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_dir_fixture_dir(request: pytest.FixtureRequest) -> Path:
     """Provide the fixture directory for a given test directory.
 
@@ -302,7 +302,7 @@ def _cmd_in_tty(
     return result[m_stdout].decode("utf-8"), result[m_stderr].decode("utf-8"), proc.returncode
 
 
-@pytest.fixture()
+@pytest.fixture
 def cmd_in_tty() -> Generator[Callable[..., tuple[str, str, int]]]:
     """Provide the cmd in tty function as a fixture.
 
@@ -415,7 +415,7 @@ def pytest_unconfigure(config: pytest.Config) -> None:
         os.environ[key] = value
 
 
-@pytest.fixture()
+@pytest.fixture
 def skip_if_already_failed(
     request: pytest.FixtureRequest,
     failed: set[str] = set(),
