@@ -119,6 +119,7 @@ jobs:
   check:
     if: always()
     permissions:
+      contents: read
       id-token: write
       checks: read
     needs:
