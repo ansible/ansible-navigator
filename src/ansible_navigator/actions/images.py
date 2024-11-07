@@ -193,7 +193,7 @@ class Action(ActionBase):
         details["image_name"] = image_name
         print_to_stdout(
             content=details,
-            content_format=ContentFormat.YAML,
+            content_format=getattr(ContentFormat, self._args.format.upper()),
             use_color=self._args.display_color,
         )
         return RunStdoutReturn(message="", return_code=0)
