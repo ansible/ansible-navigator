@@ -1,4 +1,4 @@
 ---
 ansible-navigator:
   execution-environment:
-    image: quay.io/fedora/fedora-minimal:40
+    image: quay.io/fedora/fedora:40

@@ -216,7 +216,7 @@ def pull_image(valid_container_engine: str, image_name: str) -> None:
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
         image=image_name,
-        arguments=[],
+        arguments=["--quiet"],
         pull_policy="missing",
     )
     image_puller.assess()
