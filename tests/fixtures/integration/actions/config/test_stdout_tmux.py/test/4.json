@@ -1,5 +1,5 @@
 {
-    "name": "test[config helpconfig with ee  clear && ansible-navigator config --help-config --ee True --ll debug --mode stdout]",
+    "name": "test[4]",
     "index": 4,
     "comment": "config helpconfig with ee",
     "additional_information": {
@@ -21,7 +21,7 @@
         "options:",
         "  --version             show program's version number, config file location, configured module search path, module location, executable location and exit",
         "  -h, --help            show this help message and exit",
-        "  -v, --verbose         Causes Ansible to print more debug messages. Adding multiple -v will increase the verbosity, the builtin plugins currently evaluate up to -vvvvvv. A reasonable level to start is -vvv, connection debugging might require -vvvv.",
-        "(venv) bash$"
+        "  -v, --verbose         Causes Ansible to print more debug messages. Adding multiple -v will increase the verbosity, the builtin plugins currently evaluate up to -vvvvvv. A reasonable level to start is -vvv, connection debugging might require -vvvv. This argument may be specified multiple times.",
+        "(py313) bash$"
     ]
 }

@@ -541,6 +541,6 @@
         "    \"type\": \"object\",",
         "    \"version\": \"24\"",
         "}",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

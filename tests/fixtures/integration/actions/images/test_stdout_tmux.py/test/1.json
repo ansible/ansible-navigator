@@ -1,5 +1,5 @@
 {
-    "name": "test[clear-&&-ansible-navigator-images---details---display-color-false---ee-true---ll-debug---mode-stdout--|-grep-'^[a-z]'-print-all-details-to-stdout-['ansible_collections',-'ansible_version',-'image_name:-ghcr.io/ansible/community-ansible-dev-tools:latest',-'os_release',-'python_packages',-'python_version',-'redhat_release',-'system_packages']-[]-true-1-search-for-help]",
+    "name": "test[step1]",
     "index": 1,
     "comment": "print all details to stdout",
     "additional_information": {
@@ -19,12 +19,13 @@
     "output": [
         "ansible_collections:",
         "ansible_version:",
+        "environment_variables:",
         "image_name: ghcr.io/ansible/community-ansible-dev-tools:latest",
         "os_release:",
         "python_packages:",
         "python_version:",
         "redhat_release:",
         "system_packages:",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

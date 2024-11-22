@@ -1,5 +1,5 @@
 {
-    "name": "test[05-:0-goto Image information]",
+    "name": "test[05]",
     "index": 5,
     "comment": "goto Image information",
     "additional_information": {
@@ -10,25 +10,25 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v24.2.0 (primary) (Information collected from image inspection)",
+        "Image: community-ansible-dev-tools:latest (primary) (Information collected from image inspection)",
         "  0│---                                                                                                                                                                                                ▒",
         "  1│details:                                                                                                                                                                                           ▒",
         "  2│  annotations: {}",
         "  3│  architecture: amd64",
-        "  4│  author: ''",
-        "  5│  comment: Created by Image Factory",
+        "  4│  author: Fedora Project Contributors <devel@lists.fedoraproject.org>",
+        "  5│  comment: ''",
         "  6│  config:",
-        "  7│    entrypoint:",
-        "  8│    - entrypoint",
-        "  9│    env:",
-        " 10│    - DISTTAG=f37container",
-        " 11│    - FGC=f37",
-        " 12│    - container=oci",
-        " 13│    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-        " 14│    - CONTAINER_NAME=creator-ee:v24.2.0",
-        " 15│    labels:",
-        " 16│      ansible-execution-environment: 'true'",
-        " 17│      io.buildah.version: 1.23.1",
+        "  7│    args_escaped: true",
+        "  8│    cmd:",
+        "  9│    - zsh",
+        " 10│    entrypoint:",
+        " 11│    - /opt/builder/bin/entrypoint",
+        " 12│    - dumb-init",
+        " 13│    env:",
+        " 14│    - container=oci",
+        " 15│    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        " 16│    - PIP_BREAK_SYSTEM_PACKAGES=1",
+        " 17│    - _CONTAINERS_USERNS_CONFIGURED=",
         "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

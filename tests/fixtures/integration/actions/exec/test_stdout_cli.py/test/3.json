@@ -11,6 +11,6 @@
     },
     "output": [
         "$PATH",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

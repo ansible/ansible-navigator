@@ -64,6 +64,6 @@
         "ansible-navigator.time-zone: Defaults",
         "settings_file_path: None",
         "settings_file_source: None",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

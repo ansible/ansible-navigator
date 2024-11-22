@@ -1,5 +1,5 @@
 {
-    "name": "test[config list without ee  clear && ansible-navigator config dump --ee False --ll debug --mode stdout]",
+    "name": "test[3]",
     "index": 3,
     "comment": "config list without ee",
     "additional_information": {
@@ -10,11 +10,6 @@
         "compared_fixture": false
     },
     "output": [
-        "PLAYBOOK_DIR(default) = None",
-        "PLAYBOOK_VARS_ROOT(default) = top",
-        "PLUGIN_FILTERS_CFG(default) = None",
-        "PYTHON_MODULE_RLIMIT_NOFILE(default) = 0",
-        "RETRY_FILES_ENABLED(env: ANSIBLE_RETRY_FILES_ENABLED) = False",
         "RETRY_FILES_SAVE_PATH(default) = None",
         "RUN_VARS_PLUGINS(default) = demand",
         "SHOW_CUSTOM_STATS(default) = False",
@@ -23,6 +18,7 @@
         "SYSTEM_WARNINGS(default) = True",
         "TAGS_RUN(default) = []",
         "TAGS_SKIP(default) = []",
+        "TARGET_LOG_INFO(default) = None",
         "TASK_DEBUGGER_IGNORE_ERRORS(default) = True",
         "TASK_TIMEOUT(default) = 0",
         "TRANSFORM_INVALID_GROUP_CHARS(default) = never",
@@ -30,10 +26,13 @@
         "VALIDATE_ACTION_GROUP_METADATA(default) = True",
         "VARIABLE_PLUGINS_ENABLED(default) = ['host_group_vars']",
         "VARIABLE_PRECEDENCE(default) = ['all_inventory', 'groups_inventory', 'all_plugins_inventory', 'all_plugins_play', 'groups_plugins_inventory', 'groups_plugins_play']",
+        "VAULT_ENCRYPT_SALT(default) = None",
         "VERBOSE_TO_STDERR(default) = False",
         "WIN_ASYNC_STARTUP_TIMEOUT(default) = 5",
         "WORKER_SHUTDOWN_POLL_COUNT(default) = 0",
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
-        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json'](venv) bash$"
+        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json']",
+        "GALAXY_SERVERS:",
+        "(py313) bash$"
     ]
 }

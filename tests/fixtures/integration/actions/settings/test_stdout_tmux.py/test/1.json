@@ -1008,6 +1008,6 @@
         "  subcommands:",
         "  - builder",
         "  version_added: v2.0",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

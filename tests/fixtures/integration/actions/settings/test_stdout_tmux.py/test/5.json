@@ -65,6 +65,6 @@
         "    schema: json",
         "    sources: false",
         "  time-zone: UTC",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

@@ -33,6 +33,6 @@
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
         "YAML_FILENAME_EXTENSIONS(/home/user/github/ansible-navigator/tests/fixtures/integration/actions/config/ansible.cfg) = ['.os2']",
         "GALAXY_SERVERS:",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

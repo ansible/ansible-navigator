@@ -22,6 +22,6 @@
         "lint/borked/roles/yep/tasks/main.yml:3 Task/Handler: debug msg=boo!",
         "no-free-form: Avoid using free-form when calling module actions. (debug)",
         "lint/borked/roles/yep/tasks/main.yml:3 Task/Handler: debug msg=boo!",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }
