@@ -1,5 +1,5 @@
 {
-    "name": "test[clear-&&-cd-/tests/fixtures/integration/actions/lint/..-;--ansible-navigator-lint-/tests/fixtures/integration/actions/lint---ee-true---ll-debug---mode-stdout-lint-stdout-with-errors-['commands-should-not-change-things']-[]-true-0-search-for-the-shell-prompt]",
+    "name": "test[step0]",
     "index": 0,
     "comment": "lint stdout with errors",
     "additional_information": {
@@ -20,7 +20,7 @@
         "lint/borked/roles/yep/tasks/main.yml:3 Use `ansible.builtin.debug` or `ansible.legacy.debug` instead.",
         "name[missing]: All tasks should be named.",
         "lint/borked/roles/yep/tasks/main.yml:3 Task/Handler: debug msg=boo!",
-        "no-free-form: Avoid using free-form when calling module actions. (debug) (warning)",
+        "no-free-form: Avoid using free-form when calling module actions. (debug)",
         "lint/borked/roles/yep/tasks/main.yml:3 Task/Handler: debug msg=boo!",
         "(venv) bash$"
     ]

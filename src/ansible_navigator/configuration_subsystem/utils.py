@@ -161,7 +161,9 @@ def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:
     return response
 
 
-def parse_ansible_verison() -> tuple[list[LogMessage], list[ExitMessage], dict[str, Any] | None]:
+def parse_ansible_verison(
+    path: Path | None = None,
+) -> tuple[list[LogMessage], list[ExitMessage], dict[str, Any] | None]:
     """Parse the output of the ansible --version command.
 
     :returns: Log messages, exit messages, and the stdout as a dictionary
@@ -169,9 +171,14 @@ def parse_ansible_verison() -> tuple[list[LogMessage], list[ExitMessage], dict[s
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
 
+    if path is None:
+        ansible_cmd = "ansible"
+    else:
+        ansible_cmd = str(path / "ansible")
+
     command = Command(
         identity="ansible_version",
-        command="ansible --version",
+        command=f"{ansible_cmd} --version",
         post_process=ansible_verison_parser,
     )
 

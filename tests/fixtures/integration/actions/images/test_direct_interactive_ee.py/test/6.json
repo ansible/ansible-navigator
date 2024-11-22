@@ -1,5 +1,5 @@
 {
-    "name": "test[06-:1-goto General information]",
+    "name": "test[06]",
     "index": 6,
     "comment": "goto General information",
     "additional_information": {
@@ -10,24 +10,24 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v24.2.0 (primary) (OS and python version information)",
+        "Image: community-ansible-dev-tools:latest (primary) (OS and python version information)",
         " 0│---                                                                                                                                                                                                 ▒",
         " 1│friendly:                                                                                                                                                                                           ▒",
         " 2│  details: |-                                                                                                                                                                                       ▒",
-        " 3│    Fedora release 37 (Thirty Seven)                                                                                                                                                                ▒",
+        " 3│    Fedora release 40 (Forty)                                                                                                                                                                       ▒",
         " 4│os:                                                                                                                                                                                                 ▒",
         " 5│  details:                                                                                                                                                                                          ▒",
         " 6│  - ansi-color: 0;38;2;60;110;180                                                                                                                                                                   ▒",
         " 7│    bug-report-url: https://bugzilla.redhat.com/                                                                                                                                                    ▒",
-        " 8│    cpe-name: cpe:/o:fedoraproject:fedora:37                                                                                                                                                        ▒",
+        " 8│    cpe-name: cpe:/o:fedoraproject:fedora:40                                                                                                                                                        ▒",
         " 9│    default-hostname: fedora                                                                                                                                                                        ▒",
-        "10│    documentation-url: https://docs.fedoraproject.org/en-US/fedora/f37/system-administrators-guide/                                                                                                 ▒",
+        "10│    documentation-url: https://docs.fedoraproject.org/en-US/fedora/f40/system-administrators-guide/                                                                                                 ▒",
         "11│    home-url: https://fedoraproject.org/",
         "12│    id: fedora",
         "13│    logo: fedora-logo-icon",
         "14│    name: Fedora Linux",
-        "15│    platform-id: platform:f37",
-        "16│    pretty-name: Fedora Linux 37 (Container Image)",
+        "15│    platform-id: platform:f40",
+        "16│    pretty-name: Fedora Linux 40 (Container Image)",
         "17│    redhat-bugzilla-product: Fedora",
         "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]

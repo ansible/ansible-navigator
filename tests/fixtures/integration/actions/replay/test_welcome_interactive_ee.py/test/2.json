@@ -1,11 +1,12 @@
 {
-    "name": "test[2-:0-Task list-:help help]",
+    "name": "test[2]",
     "index": 2,
     "comment": "Task list",
     "output": [
-        "  Result                 Host                             Number                  Changed                    Task                Task action                             Duration",
-        "0│OK                     localhost                             0                  False                      debug               debug                                         0s",
-        "1│OK                     localhost                             1                  False                      debug               debug                                         0s",
-        "^b/PgUp page up                    ^f/PgDn page down                    ↑↓ scroll                    esc back                    [0-9] goto                    :help help                   Successful"
+        "******** ERROR: TMUX 'RESPONSE' TIMEOUT @ {elapsed}s @ {time_stamp} ********",
+        "******** Captured to: /home/user/github/ansible-navigator/.test_logs/integration/actions/replay/test_welcome_interactive_ee.py/test_welcome_interactive_ee_py/ansible-navigator.log/showing_timeout.txt",
+        "(venv) bash$:0",
+        "bash: :0: command not found",
+        "(venv) bash$"
     ]
 }

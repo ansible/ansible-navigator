@@ -1,5 +1,5 @@
 {
-    "name": "test[ansible-navigator-lint-/tests/fixtures/integration/actions/lint/no_errors---ee-true---ll-debug---mode-stdout-lint-stdout-with-no-errors-[]-['.yml:']-true-1-search-for-the-shell-prompt]",
+    "name": "test[step1]",
     "index": 1,
     "comment": "lint stdout with no errors",
     "additional_information": {

@@ -1,5 +1,5 @@
 {
-    "name": "test[08-:2-goto Ansible information]",
+    "name": "test[08]",
     "index": 8,
     "comment": "goto Ansible information",
     "additional_information": {
@@ -10,20 +10,17 @@
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v24.2.0 (primary) (Information about ansible and ansible collections)",
+        "Image: community-ansible-dev-tools:latest (primary) (Information about ansible and ansible collections)",
         " 0│---",
         " 1│ansible:",
         " 2│  collections:",
         " 3│    details:",
-        " 4│      ansible.posix: 1.5.1",
-        " 5│      ansible.windows: 1.13.0",
-        " 6│      awx.awx: 21.11.0",
-        " 7│      containers.podman: 1.10.1",
-        " 8│      kubernetes.core: 2.4.0",
-        " 9│      redhatinsights.insights: 1.0.7",
-        "10│      theforeman.foreman: 3.8.0",
-        "11│  version:",
-        "12│    details: ansible [core 2.14.1]",
+        " 4│      ansible.netcommon: 7.1.0",
+        " 5│      ansible.posix: 1.6.2",
+        " 6│      ansible.scm: 3.0.0",
+        " 7│      ansible.utils: 5.1.2",
+        " 8│  version:",
+        " 9│    details: ansible [core 2.17.6]",
         "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }
