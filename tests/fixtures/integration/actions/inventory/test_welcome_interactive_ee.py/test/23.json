@@ -8,6 +8,11 @@
         "compared_fixture": true
     },
     "output": [
-        "******** PREVIOUS TEST FAILURE ********"
+        "[host0301]",
+        "0│---",
+        "1│ansible_host: host0301.test.com",
+        "2│host0301_foo: host0301_bar",
+        "3│inventory_hostname: host0301",
+        "^b/PgUp page up                                                   ^f/PgDn page down                                                   ↑↓ scroll                                                   esc back                                                   - previous                                                   + next                                                   [0-9] goto                                                   :help help"
     ]
 }

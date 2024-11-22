@@ -8,6 +8,10 @@
         "compared_fixture": true
     },
     "output": [
-        "******** PREVIOUS TEST FAILURE ********"
+        "  Inventory hostname                                                                               Ansible network os                                                                               Ansible network cli ssh type                                                                                                                         Ansible connection",
+        "0│host0101                                                                                         org.coll.nos                                                                                     None                                                                                                                                                 ansible.netcommon.network_cli",
+        "1│host0201                                                                                         None                                                                                             None                                                                                                                                                 None",
+        "2│host0301                                                                                         None                                                                                             None                                                                                                                                                 None",
+        "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }
