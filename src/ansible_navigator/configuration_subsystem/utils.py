@@ -172,10 +172,7 @@ def parse_ansible_verison(
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
 
-    if path is None:
-        ansible_cmd = "ansible"
-    else:
-        ansible_cmd = str(path / "ansible")
+    ansible_cmd = "ansible" if path is None else str(path / "ansible")
 
     command = Command(
         identity="ansible_version",

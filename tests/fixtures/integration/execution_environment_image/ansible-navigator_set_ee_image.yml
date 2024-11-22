@@ -1,4 +1,4 @@
 ---
 ansible-navigator:
   execution-environment:
-    image: ghcr.io/ansible/creator-base:latest
+    image: quay.io/fedora/fedora-minimal:40
