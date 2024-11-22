@@ -4,6 +4,6 @@
 FROM ghcr.io/ansible/community-ansible-dev-tools:latest as DEFAULT_EE
 
 # This is also hard coded in tests/fixtures/integration/execution_environment_image/ansible-navigator_set_ee_image.yml
-FROM quay.io/fedora/fedora:40 as SMALL_IMAGE
+FROM quay.io/fedora/fedora:latest as SMALL_IMAGE
 
 FROM registry.hub.docker.com/library/alpine:latest as PULLABLE_IMAGE
