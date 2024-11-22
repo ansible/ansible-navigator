@@ -166,6 +166,7 @@ def parse_ansible_verison(
 ) -> tuple[list[LogMessage], list[ExitMessage], dict[str, Any] | None]:
     """Parse the output of the ansible --version command.
 
+    :param path: The path to the ansible executable
     :returns: Log messages, exit messages, and the stdout as a dictionary
     """
     messages: list[LogMessage] = []
