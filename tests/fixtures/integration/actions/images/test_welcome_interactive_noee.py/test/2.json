@@ -1,18 +1,17 @@
 {
     "name": "test[02]",
     "index": 2,
-    "comment": "filter for latest",
+    "comment": "filter for community-ansible-dev-tools",
     "additional_information": {
         "present": [
-            "latest"
+            "community-ansible-dev-tools"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  Image                                                                   Tag               Execution environment                                   Created                        Size",
-        "0│community-ansible-dev-tools                                             latest            True                                                    some time ago                  1.36 GB",
-        "1│test_ee                                                                 latest            True                                                    some time ago                  352 MB",
+        "  Image                                                                    Tag               Execution environment                                    Created                     Size",
+        "0│community-ansible-dev-tools                                              latest            True                                                     some time ago               1.36 GB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

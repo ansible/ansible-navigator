@@ -1,22 +1,26 @@
 {
     "name": "test[08]",
     "index": 8,
-    "comment": "goto info menu",
+    "comment": "goto Ansible information",
     "additional_information": {
         "present": [
-            "Everything"
+            "collections:"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  Image: community-ansible-dev-tools:latest (primary)                                                 Description",
-        "0│Image information                                                                                   Information collected from image inspection",
-        "1│General information                                                                                 OS and python version information",
-        "2│Ansible version and collections                                                                     Information about ansible and ansible collections",
-        "3│Python packages                                                                                     Information about python and python packages",
-        "4│Operating system packages                                                                           Information about operating system packages",
-        "5│Everything                                                                                          All image information",
-        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
+        "Image: community-ansible-dev-tools:latest (primary) (Information about ansible and ansible collections)",
+        " 0│---",
+        " 1│ansible:",
+        " 2│  collections:",
+        " 3│    details:",
+        " 4│      ansible.netcommon: 7.1.0",
+        " 5│      ansible.posix: 1.6.2",
+        " 6│      ansible.scm: 3.0.0",
+        " 7│      ansible.utils: 5.1.2",
+        " 8│  version:",
+        " 9│    details: ansible [core 2.17.6]",
+        "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
     ]
 }

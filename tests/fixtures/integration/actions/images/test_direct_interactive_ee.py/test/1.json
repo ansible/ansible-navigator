@@ -1,35 +1,17 @@
 {
     "name": "test[01]",
     "index": 1,
-    "comment": "filter for latest",
+    "comment": "filter for community-ansible-dev-tools",
     "additional_information": {
         "present": [
-            "latest"
+            "community-ansible-dev-tools"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "******** ERROR: TMUX EXEC TIMEOUT  @ 300.06440041799215s @ 2024-11-22T22:34:57.118194+00:00 ********",
-        "  Image                                                                Tag              Execution environment                                 Created                              Size",
-        "0│community-ansible-dev-tools                                          latest           True                                                  some time ago                        1.36 GB",
-        "1│python-313                                                           latest           False                                                 some time ago                        1.01 GB",
-        "2│test_ee                                                              latest           True                                                  some time ago                        1.1 GB",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        "  Image                                                                    Tag               Execution environment                                    Created                     Size",
+        "0│community-ansible-dev-tools                                              latest            True                                                     some time ago               1.36 GB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

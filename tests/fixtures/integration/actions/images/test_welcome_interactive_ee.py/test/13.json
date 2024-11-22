@@ -1,34 +1,22 @@
 {
     "name": "test[13]",
     "index": 13,
-    "comment": "goto System information",
+    "comment": "goto info menu",
     "additional_information": {
         "present": [
-            "basesystem"
+            "Everything"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "    Name                                     Version                          Summary",
-        "  0│aardvark-dns                             1.12.2                           Authoritative DNS server for A/AAAA container records                                                                    ▒",
-        "  1│alternatives                             1.27                             A tool to maintain symbolic links determining default commands",
-        "  2│audit-libs                               4.0.2                            Dynamic library for libaudit",
-        "  3│authselect                               1.5.0                            Configures authentication and identity sources from supported profiles",
-        "  4│authselect-libs                          1.5.0                            Utility library used by the authselect tool",
-        "  5│basesystem                               11                               The skeleton package which defines a simple Fedora system",
-        "  6│bash                                     5.2.26                           The GNU Bourne Again shell",
-        "  7│binutils                                 2.41                             A GNU collection of binary utilities",
-        "  8│binutils-gold                            2.41                             The GOLD linker, a faster alternative to the BFD linker",
-        "  9│bzip2-libs                               1.0.8                            Libraries for applications using bzip2",
-        " 10│ca-certificates                          2024.2.69_v8.0.401               The Mozilla CA root certificate bundle",
-        " 11│catatonit                                0.1.7                            A signal-forwarding process manager for containers",
-        " 12│cmake-filesystem                         3.30.5                           Directories used by CMake modules",
-        " 13│composefs                                1.0.6                            Tools to handle creating and mounting composefs images",
-        " 14│composefs-libs                           1.0.6                            Libraries for composefs",
-        " 15│conmon                                   2.1.12                           OCI container runtime monitor",
-        " 16│containers-common                        0.60.4                           Common configuration and documentation for containers",
-        " 17│containers-common-extra                  0.60.4                           Extra dependencies for Podman and Buildah",
+        "  Image: community-ansible-dev-tools:latest (primary)                                                 Description",
+        "0│Image information                                                                                   Information collected from image inspection",
+        "1│General information                                                                                 OS and python version information",
+        "2│Ansible version and collections                                                                     Information about ansible and ansible collections",
+        "3│Python packages                                                                                     Information about python and python packages",
+        "4│Operating system packages                                                                           Information about operating system packages",
+        "5│Everything                                                                                          All image information",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
