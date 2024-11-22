@@ -1,4 +1,4 @@
 ---
 ansible-navigator:
   execution-environment:
-    image: quay.io/fedora/fedora:latest
+    image: quay.io/fedora/python-313:latest
