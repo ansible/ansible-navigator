@@ -324,7 +324,7 @@ class Action(ActionBase):
             self._logger.debug("error yaml loading list output: '%s'", str(exc))
             return
 
-        del parsed["GALAXY_SERVERS"]
+        parsed.pop("GALAXY_SERVERS", None)
 
         regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
         for line in dump_output.splitlines():
