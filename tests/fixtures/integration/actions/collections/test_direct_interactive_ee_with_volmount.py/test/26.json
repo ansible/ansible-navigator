@@ -12,10 +12,10 @@
         "compared_fixture": false
     },
     "output": [
-        "******** ERROR: TMUX 'RESPONSE' TIMEOUT @ {elapsed}s @ {time_stamp} ********",
-        "******** Captured to: /home/user/github/ansible-navigator/.test_logs/integration/actions/collections/test_direct_interactive_ee_with_volmount.py/test_direct_interactive_ee_with_volmount_py/ansible-navigator.log/showing_timeout.txt",
-        "(py313) bash$:back",
-        "bash: :back: command not found",
-        "(py313) bash$"
+        "  Name                              Version      Shadowed       Type               Path",
+        "0│ansible.builtin                   2.17.6       False          contained          /usr/local/lib/python3.XX/site-packages/ansible",
+        "1│company_name.coll_1               1.0.0        False          bind_mount         /tmp/collections_to_volmount/ansible_collections/company_name/coll_1",
+        "2│company_name.coll_2               2.0.0        False          bind_mount         /tmp/collections_to_volmount/ansible_collections/company_name/coll_2",
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }
