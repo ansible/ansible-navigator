@@ -60,7 +60,7 @@ def valid_ce() -> str:
             # the habit of getting stuck.
             try:
                 cmd = [engine, "info"]
-                subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=6)
+                subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=10)
             except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
                 msg = f"Container engine is broken, fail to run: {' '.join(cmd)}: {exc}"
                 continue
@@ -216,7 +216,7 @@ def pull_image(valid_container_engine: str, image_name: str) -> None:
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
         image=image_name,
-        arguments=["--quiet"],
+        arguments=[],
         pull_policy="missing",
     )
     image_puller.assess()
