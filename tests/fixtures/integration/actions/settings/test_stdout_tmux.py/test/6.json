@@ -1,5 +1,5 @@
 {
-    "name": "test[print settings sources to stdout,, mode auto  clear && ansible-navigator settings --sources --ll debug --ee False --ll debug --mode interactive]",
+    "name": "test[6]",
     "index": 6,
     "comment": "print settings sources to stdout,, mode auto",
     "additional_information": {
@@ -64,6 +64,6 @@
         "ansible-navigator.time-zone: Defaults",
         "settings_file_path: None",
         "settings_file_source: None",
-        "(venv) bash$"
+        "(py313) bash$"
     ]
 }

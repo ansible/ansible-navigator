@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment false-ansible-navigator doc in stdout mode without EE-module_doc_without_ee-None]",
+    "name": "test[5]",
     "index": 0,
     "comment": "ansible-navigator doc in stdout mode without EE",
     "output": [
@@ -41,6 +41,7 @@
         "                    \"type\": \"str\"",
         "                }",
         "            },",
+        "            \"plugin_name\": \"company_name.coll_1.mod_1\",",
         "            \"short_description\": \"This is a test module\",",
         "            \"version_added\": \"1.0.0\",",
         "            \"version_added_collection\": \"company_name.coll_1\"",

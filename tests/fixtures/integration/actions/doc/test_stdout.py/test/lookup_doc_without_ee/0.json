@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator doc company_name.coll_1.lookup_1 -t lookup -m stdout -j --execution-environment false-ansible-navigator lookup doc in stdout mode without EE-lookup_doc_without_ee-None]",
+    "name": "test[7]",
     "index": 0,
     "comment": "ansible-navigator lookup doc in stdout mode without EE",
     "output": [
@@ -32,6 +32,7 @@
         "                    \"type\": \"str\"",
         "                }",
         "            },",
+        "            \"plugin_name\": \"company_name.coll_1.lookup_1\",",
         "            \"plugin_type\": \"lookup\",",
         "            \"short_description\": \"This is test lookup plugin\",",
         "            \"version_added\": \"1.0.0\",",

@@ -1,34 +1,22 @@
 {
-    "name": "test[07-:1-goto General information]",
+    "name": "test[07]",
     "index": 7,
-    "comment": "goto General information",
+    "comment": "goto info menu",
     "additional_information": {
         "present": [
-            "friendly:"
+            "Everything"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "Image: creator-ee:v24.2.0 (primary) (OS and python version information)",
-        " 0│---                                                                                                                                                                                                 ▒",
-        " 1│friendly:                                                                                                                                                                                           ▒",
-        " 2│  details: |-                                                                                                                                                                                       ▒",
-        " 3│    Fedora release 37 (Thirty Seven)                                                                                                                                                                ▒",
-        " 4│os:                                                                                                                                                                                                 ▒",
-        " 5│  details:                                                                                                                                                                                          ▒",
-        " 6│  - ansi-color: 0;38;2;60;110;180                                                                                                                                                                   ▒",
-        " 7│    bug-report-url: https://bugzilla.redhat.com/                                                                                                                                                    ▒",
-        " 8│    cpe-name: cpe:/o:fedoraproject:fedora:37                                                                                                                                                        ▒",
-        " 9│    default-hostname: fedora                                                                                                                                                                        ▒",
-        "10│    documentation-url: https://docs.fedoraproject.org/en-US/fedora/f37/system-administrators-guide/                                                                                                 ▒",
-        "11│    home-url: https://fedoraproject.org/",
-        "12│    id: fedora",
-        "13│    logo: fedora-logo-icon",
-        "14│    name: Fedora Linux",
-        "15│    platform-id: platform:f37",
-        "16│    pretty-name: Fedora Linux 37 (Container Image)",
-        "17│    redhat-bugzilla-product: Fedora",
-        "^b/PgUp page up                            ^f/PgDn page down                            ↑↓ scroll                            esc back                            :help help"
+        "  Image: community-ansible-dev-tools:latest (primary)                                                 Description",
+        "0│Image information                                                                                   Information collected from image inspection",
+        "1│General information                                                                                 OS and python version information",
+        "2│Ansible version and collections                                                                     Information about ansible and ansible collections",
+        "3│Python packages                                                                                     Information about python and python packages",
+        "4│Operating system packages                                                                           Information about operating system packages",
+        "5│Everything                                                                                          All image information",
+        "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

@@ -1,5 +1,5 @@
 {
-    "name": "test[2-:{{ examples }}-load examples-module_doc_pass-expected_in_output2]",
+    "name": "test[2]",
     "index": 2,
     "comment": "load examples",
     "output": [

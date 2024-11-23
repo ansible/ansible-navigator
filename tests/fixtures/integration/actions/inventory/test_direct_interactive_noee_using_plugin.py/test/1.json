@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:1-visit host provided by inventory plugin]",
+    "name": "test[1]",
     "index": 1,
     "comment": "visit host provided by inventory plugin",
     "additional_information": {

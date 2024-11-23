@@ -1,5 +1,5 @@
 {
-    "name": "test[00-ansible-navigator run company_name.coll_1.playbook_1 --eev /tests/fixtures/common/collections:/tests/fixtures/common/collections --senv ANSIBLE_COLLECTIONS_PATHS=/tests/fixtures/common/collections --ee True --ll debug --mode interactive-ansible-navigator run playbook]",
+    "name": "test[00]",
     "index": 0,
     "comment": "ansible-navigator run playbook",
     "additional_information": {

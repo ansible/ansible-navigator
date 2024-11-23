@@ -1,5 +1,5 @@
 {
-    "name": "test[6-:yaml-task-2 yaml]",
+    "name": "test[6]",
     "index": 6,
     "comment": "task-2 yaml",
     "additional_information": {
@@ -23,7 +23,7 @@
         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         " 8│remote_addr: localhost",
         " 9│res:",
-        "10│  _ansible_no_log: null",
+        "10│  _ansible_no_log: false",
         "11│  _ansible_verbose_always: true",
         "12│  changed: false",
         "13│  output:",

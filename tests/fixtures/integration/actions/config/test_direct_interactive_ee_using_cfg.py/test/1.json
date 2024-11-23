@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:0-Action warnings]",
+    "name": "test[1]",
     "index": 1,
     "comment": "Action warnings",
     "additional_information": {
@@ -18,8 +18,8 @@
         " 3│default: true",
         " 4│default_value: true",
         " 5│description:",
-        " 6│- By default Ansible will issue a warning when received from a task action (module",
-        " 7│  or action plugin)",
+        " 6│- By default, Ansible will issue a warning when received from a task action (module",
+        " 7│  or action plugin).",
         " 8│- These warnings can be silenced by adjusting this setting to False.",
         " 9│env:",
         "10│- name: ANSIBLE_ACTION_WARNINGS",

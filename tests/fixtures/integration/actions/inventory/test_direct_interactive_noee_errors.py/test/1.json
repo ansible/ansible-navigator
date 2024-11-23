@@ -1,5 +1,5 @@
 {
-    "name": "test[1-echo exited-exit]",
+    "name": "test[1]",
     "index": 1,
     "comment": "exit",
     "additional_information": {

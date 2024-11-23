@@ -60,7 +60,7 @@ def valid_ce() -> str:
             # the habit of getting stuck.
             try:
                 cmd = [engine, "info"]
-                subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=6)
+                subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=10)
             except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
                 msg = f"Container engine is broken, fail to run: {' '.join(cmd)}: {exc}"
                 continue
@@ -381,7 +381,9 @@ def pytest_configure(config: pytest.Config) -> None:
         print(f"[NOTE] The environment variable(s) {env_vars} will be restored after the test run")
 
     # look for ansible.cfg
-    _log, errors, details = parse_ansible_verison()
+    # use the current interpreter to get the ansible version
+    bin_dir = Path(sys.executable).parent
+    _log, errors, details = parse_ansible_verison(path=bin_dir)
     if details is None:
         err = "\n".join(error.message for error in errors)
         pytest.exit(f"Error parsing ansible version:\n{err}")

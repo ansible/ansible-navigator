@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:1-visit host from inventory specified in ansible.cfg]",
+    "name": "test[1]",
     "index": 1,
     "comment": "visit host from inventory specified in ansible.cfg",
     "additional_information": {

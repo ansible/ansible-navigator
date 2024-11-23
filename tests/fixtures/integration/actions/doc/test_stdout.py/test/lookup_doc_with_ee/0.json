@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator doc company_name.coll_1.lookup_1 -t lookup -m stdout -j --execution-environment true-ansible-navigator lookup doc in stdout mode with EE-lookup_doc_with_ee-None]",
+    "name": "test[8]",
     "index": 0,
     "comment": "ansible-navigator lookup doc in stdout mode with EE",
     "output": [

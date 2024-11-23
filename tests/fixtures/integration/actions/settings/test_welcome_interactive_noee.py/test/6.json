@@ -1,5 +1,5 @@
 {
-    "name": "test[6-:f Exec-filter using a different index]",
+    "name": "test[6]",
     "index": 6,
     "comment": "filter using a different index",
     "additional_information": {

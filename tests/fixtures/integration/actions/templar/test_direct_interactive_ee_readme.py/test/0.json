@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator collections --ee True --ll debug --mode interactive-ansible-navigator collections]",
+    "name": "test[0]",
     "index": 0,
     "comment": "ansible-navigator collections",
     "additional_information": {
@@ -11,12 +11,12 @@
         "compared_fixture": false
     },
     "output": [
-        "  Name                                                                                           Version                         Shadowed                           Type                                   Path",
-        "0│ansible.builtin                                                                                2.17.1                          False                              contained                              /usr/local/lib/python3.XX/site-packages/ansible",
-        "1│ansible.netcommon                                                                                  7.0.0                           False                              contained                              /usr/share/ansible/collections/ansible_collections/ansible/netcommon",
-        "2│ansible.posix                                                                                  1.5.4                           False                              contained                              /usr/share/ansible/collections/ansible_collections/ansible/posix",
-        "3│ansible.scm                                                                                2.0.0                          False                              contained                              /usr/share/ansible/collections/ansible_collections/ansible/scm",
-        "4│ansible.utils                                                                                5.0.0                          False                              contained                              /usr/share/ansible/collections/ansible_collections/ansible/utils",
+        "  Name                                                                          Version                            Shadowed                               Type                                        Path",
+        "0│ansible.builtin                                                               2.17.6                             False                                  contained                                   /usr/local/lib/python3.XX/site-packages/ansible",
+        "1│ansible.netcommon                                                             7.1.0                              False                                  contained                                   /usr/share/ansible/collections/ansible_collections/ansible/netcommon",
+        "2│ansible.posix                                                                 1.6.2                              False                                  contained                                   /usr/share/ansible/collections/ansible_collections/ansible/posix",
+        "3│ansible.scm                                                                   3.0.0                              False                                  contained                                   /usr/share/ansible/collections/ansible_collections/ansible/scm",
+        "4│ansible.utils                                                                 5.1.2                              False                                  contained                                   /usr/share/ansible/collections/ansible_collections/ansible/utils",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

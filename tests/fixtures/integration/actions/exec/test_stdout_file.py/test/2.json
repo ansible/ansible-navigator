@@ -1,5 +1,5 @@
 {
-    "name": "test[ensure env vars get set from config  clear && ansible-navigator exec /bin/env --ee True --ll debug --mode stdout]",
+    "name": "test[2]",
     "index": 2,
     "comment": "ensure env vars get set from config",
     "additional_information": {
@@ -10,16 +10,15 @@
         "compared_fixture": false
     },
     "output": [
-        "HOSTNAME=XXXXXXXX",
+        "ANSIBLE_DEV_TOOLS_CONTAINER=1",
         "ANSIBLE_COLLECTIONS_PATHS=/tmp/collections",
-        "DISTTAG=f37container",
-        "CONTAINER_NAME=creator-ee:v24.2.0",
         "PWD=/home/user/github/ansible-navigator",
+        "PIP_BREAK_SYSTEM_PACKAGES=1",
         "ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/playbook-artifact.log",
         "container=oci",
         "AWX_ISOLATED_DATA_DIR=/runner/artifacts/00000000-0000-0000-0000-000000000000",
-        "HOME=/home/runner",
-        "FGC=f37",
+        "HOME=/root",
+        "_CONTAINERS_USERNS_CONFIGURED=",
         "ANSIBLE_STDOUT_CALLBACK=awx_display",
         "ANSIBLE_CALLBACK_PLUGINS=/runner/artifacts/00000000-0000-0000-0000-000000000000/callback",
         "ANSIBLE_UNSAFE_WRITES=1",
@@ -28,6 +27,7 @@
         "SHLVL=0",
         "ANSIBLE_RETRY_FILES_ENABLED=False",
         "ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/collection_doc_cache.db",
+        "PIP_ROOT_USER_ACTION=ignore",
         "ANSIBLE_NAVIGATOR_LOG_FILE=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/ansible-navigator.log",
         "ANSIBLE_HOST_KEY_CHECKING=False",
         "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",

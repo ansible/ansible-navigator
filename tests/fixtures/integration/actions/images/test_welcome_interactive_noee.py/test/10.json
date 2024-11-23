@@ -1,22 +1,34 @@
 {
-    "name": "test[10-:back-goto info menu]",
+    "name": "test[10]",
     "index": 10,
-    "comment": "goto info menu",
+    "comment": "goto Python information",
     "additional_information": {
         "present": [
-            "Everything"
+            "ansible-runner"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
-        "  Image: creator-ee:v24.2.0 (primary)                                               Description",
-        "0│Image information                                                                 Information collected from image inspection",
-        "1│General information                                                               OS and python version information",
-        "2│Ansible version and collections                                                   Information about ansible and ansible collections",
-        "3│Python packages                                                                   Information about python and python packages",
-        "4│Operating system packages                                                         Information about operating system packages",
-        "5│Everything                                                                        All image information",
+        "    Name                                Version        Summary",
+        "  0│ansible-builder                     3.1.0          \"A tool for building Ansible Execution Environments                                                                                             ▒",
+        "  1│ansible-compat                      24.10.0        Ansible compatibility goodies                                                                                                                   ▒",
+        "  2│ansible-core                        2.17.6         Radically simple IT automation                                                                                                                  ▒",
+        "  3│ansible-creator                     24.11.0        A CLI tool for scaffolding Ansible Content.",
+        "  4│ansible-dev-environment             24.9.0         A pip-like ansible collection installer.",
+        "  5│ansible-dev-tools                   24.11.0        Ansible Developtment Tools kit bundles all tools needed for content creation and testing.",
+        "  6│ansible-lint                        24.10.0        Checks playbooks for practices and behavior that could potentially be improved",
+        "  7│ansible-navigator                   24.10.0        A text-based user interface (TUI) for the Red Hat Ansible Automation Platform",
+        "  8│ansible-pylibssh                    1.2.2          Python bindings for libssh client specific to Ansible use case",
+        "  9│ansible-runner                      2.4.0          \"Consistent Ansible Python API and CLI with container and process isolation runtime capabilities",
+        " 10│ansible-sign                        0.1.1          Ansible content validation library and CLI",
+        " 11│argcomplete                         3.5.1          Bash tab completion for argparse",
+        " 12│asgiref                             3.8.1          ASGI specs, helper code, and adapters",
+        " 13│attrs                               24.2.0         Classes Without Boilerplate",
+        " 14│bcrypt                              4.2.0          Modern password hashing for your software and your servers",
+        " 15│bindep                              2.11.0         Binary dependency utility",
+        " 16│black                               24.10.0        The uncompromising code formatter.",
+        " 17│bracex                              2.5.post1      Bash style brace expander.",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

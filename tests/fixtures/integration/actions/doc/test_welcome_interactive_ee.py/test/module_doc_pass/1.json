@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:doc company_name.coll_1.mod_1-load doc-module_doc_pass-expected_in_output1]",
+    "name": "test[1]",
     "index": 1,
     "comment": "load doc",
     "output": [

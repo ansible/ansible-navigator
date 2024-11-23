@@ -1,5 +1,5 @@
 {
-    "name": "test[00-ansible-navigator images --ee True --ll debug --mode interactive-ansible-navigator images top window]",
+    "name": "test[00]",
     "index": 0,
     "comment": "ansible-navigator images top window",
     "additional_information": {
@@ -10,9 +10,10 @@
         "compared_fixture": false
     },
     "output": [
-        "  Image                                    Tag                      Execution environment                                                Created                                 Size",
-        "0│creator-base                             latest                   False                                                                some time ago                           341 MB",
-        "1│community-ansible-dev-tools                               latest                  True                                                                 5 weeks ago                             686 MB",
+        "  Image                                                                   Tag               Execution environment                                   Created                        Size",
+        "0│community-ansible-dev-tools                                             latest            True                                                    some time ago                  1.36 GB",
+        "1│python-313                                                              latest            False                                                   some time ago                  1.01 GB",
+        "2│test_ee                                                                 latest            True                                                    some time ago                  1.1 GB",
         "^b/PgUp page up                     ^f/PgDn page down                     ↑↓ scroll                     esc back                     [0-9] goto                     :help help"
     ]
 }

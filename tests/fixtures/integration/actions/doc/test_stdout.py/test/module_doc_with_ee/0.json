@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator doc company_name.coll_1.mod_1 -m stdout -j --execution-environment true-ansible-navigator doc in stdout mode with EE-module_doc_with_ee-None]",
+    "name": "test[6]",
     "index": 0,
     "comment": "ansible-navigator doc in stdout mode with EE",
     "output": [

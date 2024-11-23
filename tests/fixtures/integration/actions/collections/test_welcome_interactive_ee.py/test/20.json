@@ -1,5 +1,5 @@
 {
-    "name": "test[20-:collections --ee FFFFF-Provide an invalid ee value]",
+    "name": "test[20]",
     "index": 20,
     "comment": "Provide an invalid ee value",
     "additional_information": {
