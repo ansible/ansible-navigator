@@ -34,6 +34,6 @@
         "    section: defaults",
         "  name: Valid YAML extensions",
         "  type: list",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }

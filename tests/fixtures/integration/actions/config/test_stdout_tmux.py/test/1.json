@@ -33,6 +33,6 @@
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
         "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json']",
         "GALAXY_SERVERS:",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }

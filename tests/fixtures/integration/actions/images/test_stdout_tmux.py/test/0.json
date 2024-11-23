@@ -18,6 +18,6 @@
         "  name: community-ansible-dev-tools",
         "  name_tag: community-ansible-dev-tools:latest (primary)",
         "  repository: ghcr.io/ansible/community-ansible-dev-tools",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }

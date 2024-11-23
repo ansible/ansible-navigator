@@ -218,6 +218,6 @@
         "Successfully tagged localhost/test_ee:latest",
         "0d0e4f75cd53b570d3087fd96567df800dc2c96f33bce57ae5dfae340c706c8f",
         "Complete! The build context can be found at: /home/user/github/ansible-navigator/context",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }

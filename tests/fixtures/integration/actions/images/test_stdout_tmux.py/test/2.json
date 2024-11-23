@@ -21,6 +21,6 @@
         "ansible_collections:",
         "ansible_version:",
         "image_name: ghcr.io/ansible/community-ansible-dev-tools:latest",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }

@@ -34,6 +34,6 @@
         "ANSIBLE_NAVIGATOR_PULL_POLICY=never",
         "ANSIBLE_NAVIGATOR_CONFIG=/home/user/github/ansible-navigator/tests/fixtures/integration/actions/exec/ansible-navigator.yaml",
         "ANSIBLE_NAVIGATOR_LOG_LEVEL=debug",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }

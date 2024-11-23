@@ -26,6 +26,6 @@
         "python_version:",
         "redhat_release:",
         "system_packages:",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }

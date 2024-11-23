@@ -14,6 +14,6 @@
     },
     "output": [
         "test_data_from_config",
-        "(py313) bash$"
+        "(venv) bash$"
     ]
 }
