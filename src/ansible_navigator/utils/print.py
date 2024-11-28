@@ -70,7 +70,7 @@ def color_lines(term_color_bits: int, tokenized: list[list[SimpleLinePart]]) -> 
                     number_of_colors = 2**term_color_bits
                     ansi_color = rgb_to_ansi(red, green, blue, number_of_colors)
                 ansi_code = f"\033[38;5;{ansi_color}m"
-            printable += f"{ansi_code}{line_part.chars}\033[1m"
+            printable += f"{ansi_code}{line_part.chars}\033[m"
         lines.append(printable)
     return "".join(lines)
 
