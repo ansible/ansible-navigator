@@ -369,4 +369,4 @@ def write_diagnostics_json(path: str, mode: int, content: object) -> None:
     os.umask(oldmask)
 
 
-__all__ = ("SafeLoader", "SafeDumper", "Loader", "yaml", "SerializationFormat")
+__all__ = ("Loader", "SafeDumper", "SafeLoader", "SerializationFormat", "yaml")

@@ -14,4 +14,4 @@ else:
     from importlib.resources.abc import Traversable
 
 
-__all__ = ["Traversable", "importlib_metadata", "TypeAlias"]
+__all__ = ["Traversable", "TypeAlias", "importlib_metadata"]
