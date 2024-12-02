@@ -8,8 +8,8 @@ exclude: >
     .tox
   )$
 repos:
-  - repo: https://github.com/pycontribs/mirrors-prettier
-    rev: "v3.3.3"
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: "v3.4.1"
     hooks:
       - id: prettier
         # Original hook implementation is flaky due to *several* bugs described
