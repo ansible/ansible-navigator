@@ -147,7 +147,7 @@ to this document for the greater community!
 
 ## License
 
-ansible-navigator is released under the Apache License version 2. See the
+ansible-navigator is released under the Apache License version 2. See
 [LICENSE] file for more details.
 
 [LICENSE]: https://github.com/ansible/ansible-navigator/blob/main/LICENSE
