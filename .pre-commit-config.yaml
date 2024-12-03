@@ -40,12 +40,12 @@ repos:
         language_version: python3
 
   - repo: https://github.com/pappasam/toml-sort
-    rev: v0.24.1
+    rev: v0.24.2
     hooks:
       - id: toml-sort-fix
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.7.4"
+    rev: "v0.8.1"
     hooks:
       - id: ruff
         args:
@@ -98,7 +98,7 @@ repos:
       - id: check-json5
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.42.0
+    rev: v0.43.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -175,7 +175,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v3.3.1
+    rev: v3.3.2
     hooks:
       - id: pylint
         args:

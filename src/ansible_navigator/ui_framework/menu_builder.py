@@ -232,7 +232,7 @@ class MenuBuilder:
         if is_bool:
             # booleans are left justified
             print_at = column_starts[colno]
-        elif is_number and not is_enum or is_duration:
+        elif (is_number and not is_enum) or is_duration:
             # right justify on header if int, float or "duration"
             print_at = column_starts[colno] + len(header[colno][1]) - len(text)
         elif is_progress:
