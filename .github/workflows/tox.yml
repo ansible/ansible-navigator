@@ -159,7 +159,7 @@ jobs:
           fi
 
       - name: Upload coverage data
-        uses: codecov/codecov-action@v4.6.0
+        uses: codecov/codecov-action@v5.1.1
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
