@@ -7,7 +7,7 @@
 ansible-builder==3.1.0
 ansible-compat==24.10.0
 ansible-core==2.16.5
-ansible-lint==24.12.1
+ansible-lint==24.12.2
 ansible-runner==2.4.0
 attrs==24.2.0
 babel==2.16.0
@@ -17,7 +17,7 @@ black==24.10.0
 bracex==2.5.post1
 cairocffi==1.7.1
 cairosvg==2.7.1
-certifi==2024.8.30
+certifi==2024.12.14
 cffi==1.17.1
 cfgv==3.4.0
 charset-normalizer==3.4.0
