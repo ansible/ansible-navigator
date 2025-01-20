@@ -1,5 +1,5 @@
 {
-    "name": "test[exec echo without ee  clear && ansible-navigator exec 'echo test_data_from_cli' --ee False --ll debug --mode stdout]",
+    "name": "test[1]",
     "index": 1,
     "comment": "exec echo without ee",
     "additional_information": {

@@ -1,5 +1,5 @@
 {
-    "name": "test[Vault variation  clear && ansible-navigator --ll debug --la false exec \"ansible-vault encrypt_string --vault-password-file a_password_file 'foobar' --name 'the_secret'\" --mode stdout]",
+    "name": "test[4]",
     "index": 4,
     "comment": "Vault variation",
     "additional_information": {

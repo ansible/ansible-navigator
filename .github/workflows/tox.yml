@@ -159,11 +159,11 @@ jobs:
           fi
 
       - name: Upload coverage data
-        uses: codecov/codecov-action@v5.1.1
+        uses: codecov/codecov-action@v5.1.2
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
-          use_oidc: true # cspell:ignore oidc
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }} # cspell:ignore oidc
 
       - name: Check codecov.io status
         if: github.event_name == 'pull_request'

@@ -1,5 +1,5 @@
 {
-    "name": "test[2-:0-select ansible.posix]",
+    "name": "test[2]",
     "index": 2,
     "comment": "select ansible.posix",
     "additional_information": {
