@@ -95,7 +95,7 @@ class Action(ActionBase):
         """
         super().__init__(args=args, logger_name=__name__, name="config")
 
-        self._config: list[Any] | None = None
+        self.config: list[Any] | None = None
         self._runner: AnsibleConfig | Command
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
@@ -124,7 +124,7 @@ class Action(ActionBase):
             return None
 
         self._run_runner()
-        if self._config is None:
+        if self.config is None:
             self._prepare_to_exit(interaction)
             return None
 
@@ -203,7 +203,7 @@ class Action(ActionBase):
             columns=["name", "default", "source", "__current"],
             select_func=self._build_option_content,
             step_type="menu",
-            value=self._config,
+            value=self.config,
         )
 
     def _build_option_content(self) -> Step:
@@ -214,7 +214,7 @@ class Action(ActionBase):
         return Step(
             name="option_content",
             step_type="content",
-            value=self._config,
+            value=self.config,
             index=self.steps.current.index,
         )
 
@@ -279,7 +279,7 @@ class Action(ActionBase):
                 warning = warning_notification(warn_msg)
                 self._interaction.ui.show_form(warning)
             else:
-                self._parse_and_merge(list_output, dump_output)
+                self.parse_and_merge(list_output, dump_output)
         else:
             if self._args.execution_environment:
                 ansible_config_path = "ansible-config"
@@ -309,7 +309,7 @@ class Action(ActionBase):
             return stdout_return
         return None
 
-    def _parse_and_merge(self, list_output: str, dump_output: str) -> None:
+    def parse_and_merge(self, list_output: str, dump_output: str) -> None:
         """Parse the list and dump output. Merge dump into list.
 
         :param list_output: The output from config list
@@ -374,6 +374,6 @@ class Action(ActionBase):
                 value["default"] = False
             value["current_config_file"] = str(self._args.internals.ansible_configuration.path)
 
-        self._config = list(parsed.values())
+        self.config = list(parsed.values())
         self._logger.debug("parsed and merged list and dump successfully")
         return
