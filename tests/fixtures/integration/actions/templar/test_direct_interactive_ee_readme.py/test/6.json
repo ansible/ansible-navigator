@@ -1,5 +1,5 @@
 {
-    "name": "test[6-:{{ full_name }}-open full_name]",
+    "name": "test[6]",
     "index": 6,
     "comment": "open full_name",
     "additional_information": {
@@ -10,7 +10,7 @@
         "compared_fixture": false
     },
     "output": [
-        " 0│ansible.posix.csh",
+        "0│ansible.posix.csh",
         "^b/PgUp page up                                                                                        ^f/PgDn page down                                                                                        ↑↓ scroll                                                                                        esc back                                                                                        :help help"
     ]
 }

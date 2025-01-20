@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator doc company_name.coll_1.filter_1 -t filter --execution-environment true-ansible-navigator doc filter plugin display-filter_doc_pass-expected_in_output0]",
+    "name": "test[filter_doc]",
     "index": 0,
     "comment": "ansible-navigator doc filter plugin display",
     "output": [

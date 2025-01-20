@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:doc company_name.coll_1.filter_1 -t filter-load doc-filter_doc_pass-expected_in_output1]",
+    "name": "test[1]",
     "index": 1,
     "comment": "load doc",
     "output": [

@@ -1,5 +1,5 @@
 {
-    "name": "test[run playbook with ee  clear && ansible-navigator run /tests/fixtures/integration/actions/run_unicode/site.yaml -i /tests/fixtures/integration/actions/run_unicode/inventory --pae false --ee True --ll debug --mode stdout]",
+    "name": "test[0]",
     "index": 0,
     "comment": "run playbook with ee",
     "additional_information": {

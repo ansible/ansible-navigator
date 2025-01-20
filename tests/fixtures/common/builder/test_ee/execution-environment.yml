@@ -3,7 +3,7 @@ version: 3
 
 images:
   base_image:
-    name: registry.fedoraproject.org/fedora:38
+    name: quay.io/fedora/python-313:latest
 
 dependencies:
   ansible_core:
