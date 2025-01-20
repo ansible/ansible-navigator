@@ -2,9 +2,15 @@
 
 import curses
 
+from copy import deepcopy
+
+import pytest
+
+from ansible_navigator.actions.config import Action as action
 from ansible_navigator.actions.config import color_menu
 from ansible_navigator.actions.config import content_heading
 from ansible_navigator.actions.config import filter_content_keys
+from ansible_navigator.cli import NavigatorConfiguration
 from ansible_navigator.ui_framework.curses_defs import CursesLinePart
 
 
@@ -75,3 +81,39 @@ def test_config_filter_content_keys() -> None:
     obj = {"__key": "value", "key": "value"}
     ret = {"key": "value"}
     assert filter_content_keys(obj) == ret
+
+
+@pytest.mark.parametrize(
+    ("list_output", "dump_output", "expected_config"),
+    (
+        pytest.param(
+            """GALAXY_SERVERS:""",
+            "",
+            [],
+        ),
+        pytest.param(
+            "{}",
+            "\n\nSOME_VAR(default) = some_value",
+            [],
+        ),
+    ),
+    ids=[
+        "output_with_galaxy_server",
+        "empty_output_with_some_var_dump",
+    ],
+)
+def test_parse_and_merge(
+    list_output: str,
+    dump_output: str,
+    expected_config: list[str],
+) -> None:
+    # pylint: disable=protected-access
+    """Test _parse_and_merge method of config class."""
+    args = deepcopy(NavigatorConfiguration)
+    run_action = action(args=args)
+    run_action._parse_and_merge(list_output, dump_output)
+
+    assert run_action._config == expected_config
+
+    if "GALAXY_SERVERS" in list_output:
+        assert not any(config.get("option") == "GALAXY_SERVERS" for config in run_action._config)

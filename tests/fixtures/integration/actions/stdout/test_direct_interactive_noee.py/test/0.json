@@ -1,5 +1,5 @@
 {
-    "name": "test[0-ansible-navigator run /tests/fixtures/integration/actions/stdout/site.yml --execution-environment false-run top window-Successful]",
+    "name": "test[0]",
     "index": 0,
     "comment": "run top window",
     "output": [

@@ -1,5 +1,5 @@
 {
-    "name": "test[4-:f csh-filter content]",
+    "name": "test[4]",
     "index": 4,
     "comment": "filter content",
     "additional_information": {
@@ -10,8 +10,8 @@
         "compared_fixture": false
     },
     "output": [
-        "  Ansible.posix                                                                                                        Type                      Added                                     Deprecated                                                Description",
-        "0│csh                      shell      None       False               C shell (/bin/csh)",
+        "  Ansible.posix                                                                                                               Type                                                 Added                                                Deprecated                                                                                        Description",
+        "0│csh                                                                                                                         shell                                                None                                                 False                                                                                             C shell (/bin/csh)",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

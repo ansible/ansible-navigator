@@ -18,24 +18,15 @@ from tests.integration._tmux_session import TmuxSession
 
 # The image name w/o a version
 IMAGE_NO_VERSION = default_ee_image_name().split(":")[0]
-
-# Note: This filters the list of images based on image version
-# It is not bullet proof since 2 images could have the same version
-IMAGE_VERSION = default_ee_image_name().split(":")[-1]
-
+IMAGE_NAME = IMAGE_NO_VERSION.split("/")[-1]
 
 step_back = UiTestStep(user_input=":back", comment="goto info menu", present=["Everything"])
 
 base_steps = (
     UiTestStep(
-        user_input=f":f {IMAGE_VERSION}",
-        comment=f"filter for {IMAGE_VERSION}",
-        present=[IMAGE_VERSION],
-    ),
-    UiTestStep(
-        user_input=":f community",
-        comment="filter for community",
-        present=["community"],
+        user_input=f":f {IMAGE_NAME}",
+        comment=f"filter for {IMAGE_NAME}",
+        present=[IMAGE_NAME],
     ),
     UiTestStep(user_input=":0", comment="goto info menu", present=["Everything"]),
     UiTestStep(user_input=":0", comment="goto Image information", present=["architecture:"]),

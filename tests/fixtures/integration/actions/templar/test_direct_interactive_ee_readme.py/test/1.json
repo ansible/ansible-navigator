@@ -1,5 +1,5 @@
 {
-    "name": "test[1-:f ansible.posix-filter collections]",
+    "name": "test[1]",
     "index": 1,
     "comment": "filter collections",
     "additional_information": {
@@ -10,8 +10,8 @@
         "compared_fixture": false
     },
     "output": [
-        "  Name                                                                                           Version                         Shadowed                           Type                                   Path",
-        "0│ansible.posix                                                                        1.5.4                           False                              contained                              /usr/share/ansible/collections/ansible_collections/ansible/posix",
+        "  Name                                                              Version                              Shadowed                                  Type                                           Path",
+        "0│ansible.posix                                                     1.6.2                                False                                     contained                                      /usr/share/ansible/collections/ansible_collections/ansible/posix",
         "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
     ]
 }

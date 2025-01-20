@@ -1,5 +1,5 @@
 {
-    "name": "test[builder help-builder without ee  clear && ansible-navigator builder --help-builder --ee False --ll debug --mode stdout]",
+    "name": "test[step1]",
     "index": 1,
     "comment": "builder help-builder without ee",
     "additional_information": {
