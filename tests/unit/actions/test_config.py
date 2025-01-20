@@ -107,12 +107,13 @@ def test_parse_and_merge(
     dump_output: str,
     expected_config: list[str],
 ) -> None:
+    # pylint: disable=protected-access
     """Test _parse_and_merge method of config class."""
     args = deepcopy(NavigatorConfiguration)
     run_action = action(args=args)
-    run_action.parse_and_merge(list_output, dump_output)
+    run_action._parse_and_merge(list_output, dump_output)
 
-    assert run_action.config == expected_config
+    assert run_action._config == expected_config
 
     if "GALAXY_SERVERS" in list_output:
-        assert not any(config.get("option") == "GALAXY_SERVERS" for config in run_action.config)
+        assert not any(config.get("option") == "GALAXY_SERVERS" for config in run_action._config)
