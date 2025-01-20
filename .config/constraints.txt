@@ -111,7 +111,7 @@ pyyaml-env-tag==0.1
 referencing==0.36.1
 regex==2024.11.6
 requests==2.32.3
-resolvelib==1.1.0
+resolvelib==1.0.1
 rich==13.9.4
 rpds-py==0.22.3
 ruamel-yaml==0.18.10
