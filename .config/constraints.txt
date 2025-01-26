@@ -9,12 +9,12 @@ ansible-builder==3.1.0
 ansible-compat==24.10.0
 ansible-core==2.17.6 ; python_version < '3.11'
 ansible-core==2.18.0 ; python_version > '3.10'
-ansible-lint==24.12.2
+ansible-lint==25.1.0
 ansible-runner==2.4.0
-attrs==24.3.0
+attrs==25.1.0
 babel==2.16.0
 beautifulsoup4==4.12.3
-bindep==2.11.0
+bindep==2.12.0
 black==24.10.0
 bracex==2.5.post1
 cairocffi==1.7.1
@@ -37,16 +37,16 @@ distro==1.9.0
 dnspython==2.7.0
 exceptiongroup==1.2.2
 execnet==2.1.1
-filelock==3.16.1
+filelock==3.17.0
 flake8==7.1.1
 flake8-docstrings==1.7.0
 ghp-import==2.1.0
 griffe==1.5.5
 hjson==3.1.0
 htmlmin2==0.1.13
-identify==2.6.5
+identify==2.6.6
 idna==3.10
-importlib-metadata==8.5.0
+importlib-metadata==8.6.1
 iniconfig==2.0.0
 jinja2==3.1.5
 jsmin==3.0.1
@@ -89,14 +89,14 @@ pillow==11.1.0
 pipdeptree==2.24.0
 platformdirs==4.3.6
 pluggy==1.5.0
-pre-commit==4.0.1
+pre-commit==4.1.0
 ptyprocess==0.7.0
 pycodestyle==2.12.1
 pycparser==2.22
 pydocstyle==6.3.0
 pyflakes==3.2.0
 pygments==2.19.1
-pymdown-extensions==10.14
+pymdown-extensions==10.14.1
 pytest==8.3.4
 pytest-env==1.1.5
 pytest-mock==3.14.0
@@ -108,10 +108,10 @@ python-dateutil==2.9.0.post0
 python-slugify==8.0.4
 pyyaml==6.0.2
 pyyaml-env-tag==0.1
-referencing==0.36.1
+referencing==0.36.2
 regex==2024.11.6
 requests==2.32.3
-resolvelib==1.0.1
+resolvelib==1.1.0
 rich==13.9.4
 rpds-py==0.22.3
 ruamel-yaml==0.18.10
@@ -127,7 +127,7 @@ tinycss2==1.4.0
 tomli==2.2.1
 types-setuptools==75.8.0.20250110
 typing-extensions==4.12.2
-tzdata==2024.2
+tzdata==2025.1
 urllib3==2.3.0
 virtualenv==20.29.1
 watchdog==6.0.0
