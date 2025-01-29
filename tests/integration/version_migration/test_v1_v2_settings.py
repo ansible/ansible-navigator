@@ -69,7 +69,7 @@ def test_version(
         shutil.copy(destination, corrected)
 
     assert any(
-        "ansible-navigator 24." in line for line in result
+        "ansible-navigator 25." in line for line in result
     ), "(Note: requires recent tags, `git fetch --all`)"
     assert filecmp.cmp(destination, corrected)
     assert filecmp.cmp(source, backup)
