@@ -158,3 +158,6 @@ out
 # other
 .DS_Store
 .envrc
+
+# Ansible
+.ansible/
