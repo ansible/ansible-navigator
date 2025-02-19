@@ -19,7 +19,7 @@ on:
 jobs:
   pre:
     name: pre
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       matrix: ${{ steps.generate_matrix.outputs.matrix }}
     steps:
@@ -39,7 +39,7 @@ jobs:
     permissions:
       id-token: write
       checks: read
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: pre
     strategy:
       fail-fast: false
@@ -124,7 +124,7 @@ jobs:
       checks: read
     needs:
       - tox
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       # checkout needed for codecov action which needs codecov.yml file
       - uses: actions/checkout@v4

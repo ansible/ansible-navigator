@@ -117,7 +117,7 @@
 ### Setup Windows Subsystem for Linux 2 with Ubuntu
 
 1.  Install [Windows Subsystem for Linux 2].
-1.  Install the [Ubuntu] 20.04 LTS Linux distribution from the Microsoft store.
+1.  Install the latest [Ubuntu] LTS Linux distribution from the Microsoft store.
 1.  Open PowerShell and set the default WSL 2 distribution:
 
     ```bash
@@ -134,7 +134,7 @@
 
 ### Install the desired container engine for execution environment support (windows)
 
-- Installation instructions for [podman] on Ubuntu 20.04 LTS.
+- Installation instructions for [podman] on Ubuntu LTS.
 
   !!! notice
 
