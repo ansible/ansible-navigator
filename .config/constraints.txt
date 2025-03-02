@@ -27,7 +27,7 @@ click==8.1.8
 colorama==0.4.6
 coverage==7.6.12
 coverage-enable-subprocess==1.0
-cryptography==44.0.1
+cryptography==44.0.2
 csscompressor==0.9.5
 cssselect2==0.7.0
 darglint==1.8.1
@@ -41,7 +41,7 @@ filelock==3.17.0
 flake8==7.1.2
 flake8-docstrings==1.7.0
 ghp-import==2.1.0
-griffe==1.5.7
+griffe==1.6.0
 hjson==3.1.0
 htmlmin2==0.1.13
 identify==2.6.8
@@ -52,7 +52,7 @@ jinja2==3.1.5
 jsmin==3.0.1
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
-libtmux==0.44.2
+libtmux==0.46.0
 linkchecker==10.5.0
 lockfile==0.12.2
 markdown==3.7
@@ -65,17 +65,17 @@ mdurl==0.1.2
 mergedeep==1.3.4
 mkdocs==1.6.1
 mkdocs-ansible==25.2.0
-mkdocs-autorefs==1.3.1
+mkdocs-autorefs==1.4.0
 mkdocs-gen-files==0.5.0
 mkdocs-get-deps==0.2.0
 mkdocs-htmlproofer-plugin==1.3.0
 mkdocs-macros-plugin==1.3.7
-mkdocs-material==9.6.5
+mkdocs-material==9.6.6
 mkdocs-material-extensions==1.3.1
 mkdocs-minify-plugin==0.8.0
 mkdocs-monorepo-plugin==1.1.0
-mkdocstrings==0.28.1
-mkdocstrings-python==1.16.1
+mkdocstrings==0.28.2
+mkdocstrings-python==1.16.2
 mypy-extensions==1.0.0
 nodeenv==1.9.1
 onigurumacffi==1.4.1
@@ -125,7 +125,7 @@ termcolor==2.5.0
 text-unidecode==1.3
 tinycss2==1.4.0
 tomli==2.2.1
-types-setuptools==75.8.0.20250210
+types-setuptools==75.8.2.20250301
 typing-extensions==4.12.2
 tzdata==2025.1
 urllib3==2.3.0
