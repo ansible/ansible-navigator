@@ -334,7 +334,7 @@ class Action(ActionBase):
 
         try:
             menu = Menu()
-            taxonomy = "\u25B8".join(
+            taxonomy = "\u25b8".join(
                 ["all"]
                 + [step.selected["__name"] for step in self.steps if step.name == "group_menu"],
             )
