@@ -158,7 +158,7 @@ repos:
       - id: pyupgrade
         args: ["--py310-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.15.0
+    rev: v1.13.0
     hooks:
       - id: mypy
         additional_dependencies:
