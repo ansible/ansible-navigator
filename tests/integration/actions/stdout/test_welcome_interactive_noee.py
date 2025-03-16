@@ -18,7 +18,7 @@ testdata = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
+@pytest.mark.parametrize(("index", "user_input", "comment", "search_within_response"), testdata)
 class Test(BaseClass):
     """Run the tests for stdout from welcome, interactive, without an EE."""
 

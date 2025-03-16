@@ -70,7 +70,7 @@ testdata_module_doc_not_exist = [
 
 
 @pytest.mark.parametrize(
-    "index, user_input, comment, testname, expected_in_output",
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
     testdata_module_doc,
 )
 class TestModuleDoc(BaseClass):
@@ -81,7 +81,7 @@ class TestModuleDoc(BaseClass):
 
 
 @pytest.mark.parametrize(
-    "index, user_input, comment, testname, expected_in_output",
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
     testdata_lookup_doc,
 )
 class TestLookUpDoc(BaseClass):
@@ -92,7 +92,7 @@ class TestLookUpDoc(BaseClass):
 
 
 @pytest.mark.parametrize(
-    "index, user_input, comment, testname, expected_in_output",
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
     testdata_filter_doc,
 )
 class TestFilterDoc(BaseClass):
@@ -103,7 +103,7 @@ class TestFilterDoc(BaseClass):
 
 
 @pytest.mark.parametrize(
-    "index, user_input, comment, testname, expected_in_output",
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
     testdata_module_doc_not_exist,
 )
 class TestModuleDocNotExist(BaseClass):

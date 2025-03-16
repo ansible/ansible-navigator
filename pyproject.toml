@@ -322,6 +322,7 @@ lines-between-types = 1 # Separate import/from with 1 line
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["SLF001", "S101", "S602"]
+"tests/integration/actions/collections/__init__.py" = ["A005"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "pep257"

@@ -27,7 +27,7 @@ testdata = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, search_within_response", testdata)
+@pytest.mark.parametrize(("index", "user_input", "comment", "search_within_response"), testdata)
 class Test(BaseClass):
     """Run the tests for images from welcome, interactive, with an EE."""
 

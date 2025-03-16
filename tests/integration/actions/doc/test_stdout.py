@@ -25,7 +25,10 @@ testdata_1 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_1)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_1,
+)
 class TestDocHelpWithEE(BaseClass):
     """Run the tests for doc help from CLI, stdout, with an EE."""
 
@@ -50,7 +53,10 @@ testdata_2 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_2)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_2,
+)
 class TestDocHelpWithoutEE(BaseClass):
     """Run the tests for doc help from CLI, stdout, without an EE."""
 
@@ -75,7 +81,10 @@ testdata_3 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_3)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_3,
+)
 class TestDocHelpWithEEInteractiveMode(BaseClass):
     """Run the tests for doc help from CLI, stdout, with an EE, wrong mode."""
 
@@ -100,7 +109,10 @@ testdata_4 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_4)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_4,
+)
 class TestDocHelpWithoutEEInteractiveMode(BaseClass):
     """Run the tests for doc help from CLI, stdout, without an EE, wrong mode."""
 
@@ -124,7 +136,10 @@ testdata_5 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_5)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_5,
+)
 class TestModuleDocWithoutEE(BaseClass):
     """Run the tests for doc from CLI, stdout, without an EE, module doc."""
 
@@ -149,7 +164,10 @@ testdata_6 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_6)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_6,
+)
 class TestModuleDocWithEE(BaseClass):
     """Run the tests for doc from CLI, stdout, with an EE, module doc."""
 
@@ -175,7 +193,10 @@ testdata_7 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_7)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_7,
+)
 class TestLookUpDocWithoutEE(BaseClass):
     """Run the tests for doc from CLI, stdout, without an EE, lookup doc."""
 
@@ -201,7 +222,10 @@ testdata_8 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_8)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_8,
+)
 class TestLookUpDocWithEE(BaseClass):
     """Run the tests for doc from CLI, stdout, with an EE, lookup doc."""
 
@@ -227,7 +251,10 @@ testdata_9 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_9)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_9,
+)
 class TestFilterDocWithoutEE(BaseClass):
     """Run the tests for doc from CLI, stdout, without an EE, filter doc."""
 
@@ -253,7 +280,10 @@ testdata_10 = [
 ]
 
 
-@pytest.mark.parametrize("index, user_input, comment, testname, expected_in_output", testdata_10)
+@pytest.mark.parametrize(
+    ("index", "user_input", "comment", "testname", "expected_in_output"),
+    testdata_10,
+)
 class TestFilterDocWithEE(BaseClass):
     """Run the tests for doc from CLI, stdout, with an EE, filter doc."""
 
