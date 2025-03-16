@@ -1,4 +1,4 @@
-"""Collections subcommand implementation."""
+"""Collections subcommand implementation."""  # noqa: A005
 
 from __future__ import annotations
 

@@ -1,3 +1,5 @@
+# noqa: A005
+
 """Menu selection implementation.
 
 Processor of a menu selection from a numeric key press
