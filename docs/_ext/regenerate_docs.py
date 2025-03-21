@@ -101,7 +101,6 @@ def md_settings_dump() -> str:
 
 
 def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
-    # pylint: disable=too-many-branches
     """Create a row entry for one settings parameter.
 
     :param entry: The settings entry for which the row will be generated

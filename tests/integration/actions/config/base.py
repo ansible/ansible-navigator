@@ -57,7 +57,9 @@ class BaseClass:
 
         Args:
             request: A fixture providing details about the test caller
-        :yields: A tmux session
+
+        Yields:
+            A tmux session
         """
         with TmuxSession(
             setup_commands=["export ANSIBLE_CACHE_PLUGIN_TIMEOUT=42", "export PAGER=cat"],
@@ -81,6 +83,7 @@ class BaseClass:
             request: A fixture providing details about the test caller
             tmux_session: The tmux session to use
             step: The commands to issue and content to look for
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
 
         Raises:
             ValueError: When the test mode is not set

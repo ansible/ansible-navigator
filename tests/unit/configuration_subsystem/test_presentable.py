@@ -82,9 +82,12 @@ def test_settings_file_entry(
         settings_file_dict: The expected settings as a dictionary
     """
     configurator = Configurator(params=[], application_configuration=sample_settings)
-    configurator._post_process()  # pylint: disable=protected-access
+    configurator._post_process()
     presentable = to_presentable(sample_settings)
-    assert all(isinstance(p, PresentableSettingsEntry) for p in presentable)
+    assert all(
+        isinstance(p, PresentableSettingsEntry)
+        for p in presentable  # pylint: disable=not-an-iterable
+    )
     assert asdict(presentable[0]) == settings_file_dict
 
 
@@ -112,9 +115,12 @@ def test_settings_entry(
     )
     sample_settings.entries = [entry]
     configurator = Configurator(params=[], application_configuration=sample_settings)
-    configurator._post_process()  # pylint: disable=protected-access
+    configurator._post_process()
     presentable = to_presentable(sample_settings)
-    assert all(isinstance(p, PresentableSettingsEntry) for p in presentable)
+    assert all(
+        isinstance(p, PresentableSettingsEntry)
+        for p in presentable  # pylint: disable=not-an-iterable
+    )
     assert asdict(presentable[0]) == settings_file_dict
     entry_dict = {
         "choices": ["choice_1", "choice_2"],

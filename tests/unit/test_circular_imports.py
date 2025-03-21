@@ -58,7 +58,9 @@ def _discover_path_importables(
     Args:
         pkg_pth: The path to the package to walk
         pkg_name: The name of the package
-    :yields: Package directory paths
+
+    Yields:
+        Package directory paths
     """
     for dir_path, _dir_names, file_names in os.walk(pkg_pth):
         pkg_dir_path = Path(dir_path)

@@ -149,7 +149,6 @@ class Action(ActionBase):
         return RunStdoutReturn(message=error, return_code=return_code)
 
     def _run_runner(self) -> dict[Any, Any] | tuple[str, str, int] | None:
-        # pylint: disable=no-else-return
         """Use the runner subsystem to retrieve the configuration.
 
         Raises:
@@ -214,36 +213,35 @@ class Action(ActionBase):
                 )
             plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
             return plugin_doc_response
+        kwargs.update({"host_cwd": str(Path.cwd())})
+        if self._args.execution_environment:
+            ansible_doc_path = "ansible-doc"
         else:
-            kwargs.update({"host_cwd": str(Path.cwd())})
-            if self._args.execution_environment:
-                ansible_doc_path = "ansible-doc"
-            else:
-                exec_path = shutil.which("ansible-doc")
-                if exec_path is None:
-                    msg = "'ansible-doc' executable not found"
-                    self._logger.error(msg)
-                    raise RuntimeError(msg)
-                ansible_doc_path = exec_path
+            exec_path = shutil.which("ansible-doc")
+            if exec_path is None:
+                msg = "'ansible-doc' executable not found"
+                self._logger.error(msg)
+                raise RuntimeError(msg)
+            ansible_doc_path = exec_path
 
-            pass_through_arg = []
-            if self._plugin_name is not C.NOT_SET:
-                pass_through_arg.append(self._plugin_name)
+        pass_through_arg = []
+        if self._plugin_name is not C.NOT_SET:
+            pass_through_arg.append(self._plugin_name)
 
-            if self._plugin_type is not C.NOT_SET:
-                pass_through_arg.extend(["-t", self._plugin_type])
+        if self._plugin_type is not C.NOT_SET:
+            pass_through_arg.extend(["-t", self._plugin_type])
 
-            if self._args.help_doc is True:
-                pass_through_arg.append("--help")
+        if self._args.help_doc is True:
+            pass_through_arg.append("--help")
 
-            if isinstance(self._args.cmdline, list):
-                pass_through_arg.extend(self._args.cmdline)
+        if isinstance(self._args.cmdline, list):
+            pass_through_arg.extend(self._args.cmdline)
 
-            kwargs.update({"cmdline": pass_through_arg})
+        kwargs.update({"cmdline": pass_through_arg})
 
-            self._runner = Command(executable_cmd=ansible_doc_path, **kwargs)
-            stdout_return = self._runner.run()
-            return stdout_return
+        self._runner = Command(executable_cmd=ansible_doc_path, **kwargs)
+        stdout_return = self._runner.run()
+        return stdout_return
 
     def _extract_plugin_doc(
         self,

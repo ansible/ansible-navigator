@@ -34,7 +34,9 @@ class BaseClass:
 
         Args:
             request: A fixture providing details about the test caller
-        :yields: Tmux session
+
+        Yields:
+            A tmux session
         """
         with TmuxSession(
             pane_height=2000,
@@ -71,6 +73,7 @@ class BaseClass:
             comment: Comment to add to the fixture
             testname: Name of test
             expected_in_output: A list of strings or string to find
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
 
         Raises:
             ValueError: When the test mode is not set

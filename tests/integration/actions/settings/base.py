@@ -55,7 +55,9 @@ class BaseClass:
 
         Args:
             request: Used for generating test id
-        :yields: tmux_session object
+
+        Yields:
+            tmux_session object
         """
         with TmuxSession(
             setup_commands=[
@@ -82,6 +84,8 @@ class BaseClass:
             request: Used for generating test id
             tmux_session: tmux_session object
             step: UiTestStep object
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
+
 
         Raises:
             ValueError: If HELP or PROMPT aren't found

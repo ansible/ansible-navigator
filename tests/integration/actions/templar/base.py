@@ -76,7 +76,9 @@ class BaseClass:
 
         Args:
             request: A fixture providing details about the test caller
-        :yields: A tmux session
+
+        Yields:
+            A tmux session
         """
         params: TmuxSessionKwargs = {
             "pane_height": 1000,
@@ -104,6 +106,7 @@ class BaseClass:
             request: A fixture providing details about the test caller
             tmux_session: The tmux session to use
             step: The commands to issue and content to look for
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
         """
         search_within_response: str | list[str]
         if step.search_within_response is SearchFor.HELP:

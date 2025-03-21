@@ -32,7 +32,9 @@ class BaseClass:
 
         Args:
             request: A fixture providing details about the test caller
-        :yields: Tmux session
+
+        Yields:
+            Tmux session
         """
         params: TmuxSessionKwargs = {
             "config_path": Path(TEST_CONFIG_FILE),
@@ -66,6 +68,7 @@ class BaseClass:
             user_input: Value to send to the tmux session
             comment: Comment to add to the fixture
             search_within_response: A list of strings or string to find
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
         """
         assert ANSIBLE_PLAYBOOK.exists()
         assert TEST_CONFIG_FILE.exists()

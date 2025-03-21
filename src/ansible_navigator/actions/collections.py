@@ -668,7 +668,6 @@ class Action(ActionBase):
         return plugins_details
 
     def _parse_collection_info_stdout(self) -> dict[str, Any]:
-        # pylint: disable=too-many-nested-blocks
         """Parse collection information from catalog collection cache.
 
         Returns:

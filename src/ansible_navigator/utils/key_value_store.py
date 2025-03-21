@@ -80,7 +80,8 @@ class KeyValueStore(MutableMapping[str, str]):
     def iterkeys(self) -> Iterator[str]:
         """Yield keys from the key-value store one by one.
 
-        :yields: The keys in the key-value store
+        Yields:
+            The keys in the key-value store
         """
         cursor = self.conn.cursor()
         for row in cursor.execute("SELECT key FROM kv"):
@@ -89,7 +90,8 @@ class KeyValueStore(MutableMapping[str, str]):
     def itervalues(self) -> Iterator[str]:
         """Yield values from the key-value store one by one.
 
-        :yields: The values in the key-value store
+        Yields:
+            The values in the key-value store
         """
         cursor = self.conn.cursor()
         for row in cursor.execute("SELECT value FROM kv"):
@@ -98,7 +100,8 @@ class KeyValueStore(MutableMapping[str, str]):
     def iteritems(self) -> Iterator[tuple[str, str]]:
         """Yield items from the key-value store one by one.
 
-        :yields: The key-value store as items (key, value)
+        Yields:
+            The key-value store as items (key, value)
         """
         cursor = self.conn.cursor()
         for row in cursor.execute("SELECT key, value FROM kv"):

@@ -122,6 +122,7 @@ def test(
         data: The test data
         exec_env: Whether to use the exec environment
         cmd_in_tty: The tty command runner
+        skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
 
     Raises:
         AssertionError: When test fails

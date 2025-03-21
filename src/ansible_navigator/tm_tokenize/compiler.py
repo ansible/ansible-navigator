@@ -50,18 +50,17 @@ class Compiler:
     ) -> tuple[list[str], tuple[_Rule, ...]]:
         if s == "$self":
             return self._patterns(grammar, grammar.patterns)
-        elif s == "$base":
+        if s == "$base":
             grammar = self._grammars.grammar_for_scope(self._root_scope)
             return self._include(grammar, grammar.repository, "$self")
-        elif s.startswith("#"):
+        if s.startswith("#"):
             return self._patterns(grammar, (repository[s[1:]],))
-        elif "#" not in s:
+        if "#" not in s:
             grammar = self._grammars.grammar_for_scope(s)
             return self._include(grammar, grammar.repository, "$self")
-        else:
-            scope, _, s = s.partition("#")
-            grammar = self._grammars.grammar_for_scope(scope)
-            return self._include(grammar, grammar.repository, f"#{s}")
+        scope, _, s = s.partition("#")
+        grammar = self._grammars.grammar_for_scope(scope)
+        return self._include(grammar, grammar.repository, f"#{s}")
 
     @functools.cache  # noqa: B019
     def _patterns(
@@ -103,7 +102,7 @@ class Compiler:
         if rule.match is not None:
             captures_ref = self._captures_ref(grammar, rule.captures)
             return MatchRule(rule.name, captures_ref)
-        elif rule.begin is not None and rule.end is not None:
+        if rule.begin is not None and rule.end is not None:
             regs, rules = self._patterns(grammar, rule.patterns)
             return EndRule(
                 rule.name,
@@ -114,7 +113,7 @@ class Compiler:
                 make_regset(*regs),
                 rules,
             )
-        elif rule.begin is not None and rule.while_ is not None:
+        if rule.begin is not None and rule.while_ is not None:
             regs, rules = self._patterns(grammar, rule.patterns)
             return WhileRule(
                 rule.name,
@@ -125,9 +124,8 @@ class Compiler:
                 make_regset(*regs),
                 rules,
             )
-        else:
-            regs, rules = self._patterns(grammar, rule.patterns)
-            return PatternRule(rule.name, make_regset(*regs), rules)
+        regs, rules = self._patterns(grammar, rule.patterns)
+        return PatternRule(rule.name, make_regset(*regs), rules)
 
     def compile_rule(self, rule: _Rule) -> CompiledRule:
         try:

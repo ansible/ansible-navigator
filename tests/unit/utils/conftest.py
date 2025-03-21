@@ -14,7 +14,9 @@ def empty_kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
 
     Args:
         tmp_path: Path to a temporary directory
-    :yields: The temporary KVS
+
+    Yields:
+        The temporary KVS
     """
     database_path = tmp_path / "basic_kvs_usage.db"
     yield KeyValueStore(database_path)
@@ -26,7 +28,9 @@ def kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
 
     Args:
         tmp_path: Path to a temporary directory
-    :yields: The temporary KVS
+
+    Yields:
+        The temporary KVS
     """
     database_path = tmp_path / "basic_kvs_usage.db"
     key_value_store = KeyValueStore(database_path)

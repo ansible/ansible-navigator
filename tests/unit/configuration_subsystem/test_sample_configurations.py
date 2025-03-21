@@ -19,9 +19,6 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 from ansible_navigator.configuration_subsystem.parser import Parser
 
 
-# pylint: disable=protected-access
-
-
 def test_cmdline_source_not_set() -> None:
     """Ensure a configuration without a ``subparser`` entry fails."""
     test_config = ApplicationConfiguration(

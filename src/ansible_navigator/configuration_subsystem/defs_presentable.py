@@ -41,10 +41,10 @@ class PresentableCliParameters:
 
     @classmethod
     def from_cli_params(
-        cls: type[CliT],
+        cls,
         cli_parameters: CliParameters | None,
         name_dashed: str,
-    ) -> CliT:
+    ) -> PresentableCliParameters:
         """Create an ``_HRCliParameters`` based on an entry's cli parameters.
 
         Args:
@@ -117,11 +117,11 @@ class PresentableSettingsEntry(ContentBase[Any]):
 
     @classmethod
     def for_settings_file(
-        cls: type[EntT],
+        cls,
         all_subcommands: list[str],
         application_name: str,
         internals: Internals,
-    ) -> EntT:
+    ) -> PresentableSettingsEntry:
         """Create an ``PresentableSettingsEntry`` containing the details for the settings file.
 
         Args:
@@ -154,12 +154,12 @@ class PresentableSettingsEntry(ContentBase[Any]):
 
     @classmethod
     def from_settings_entry(
-        cls: type[EntT],
+        cls,
         all_subcommands: list[str],
         application_name_dashed: str,
         entry: SettingsEntry,
         settings_file_path: str,
-    ) -> EntT:
+    ) -> PresentableSettingsEntry:
         """Create an ``PresentableSettingsEntry`` containing the details for one settings entry.
 
         Args:

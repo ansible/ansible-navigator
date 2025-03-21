@@ -58,7 +58,6 @@ class FormHandlerOptions(CursesWindow):
             )
 
     def handle(self, idx: int, form_fields: list[FieldText]) -> tuple[FieldText, int]:
-        # pylint: disable=too-many-nested-blocks
         """Handle the check box field.
 
         Args:

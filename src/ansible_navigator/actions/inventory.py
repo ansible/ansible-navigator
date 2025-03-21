@@ -385,7 +385,7 @@ class Action(ActionBase):
                     menu_entry["__taxonomy"] = taxonomy
                     menu_entry["__type"] = "group"
                     if hosts:
-                        menu_entry.update({c: "" for c in self._show_columns})
+                        menu_entry.update(dict.fromkeys(self._show_columns, ""))
                     menu.append(menu_entry)
 
             return Step(

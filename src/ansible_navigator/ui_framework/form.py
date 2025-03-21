@@ -200,16 +200,15 @@ class FormPresenter(CursesWindow):
 
             elif isinstance(form_field, FieldInformation):
                 information_lines = self._generate_information(form_field)
-                for line in information_lines:
+                for line in information_lines:  # pylint: disable=not-an-iterable
                     lines.append((self._line_number, line))
                     self._line_number += 1
 
             elif isinstance(form_field, FieldWorking):
                 message_lines = self._generate_messages(form_field)
-                for line in message_lines:
+                for line in message_lines:  # pylint: disable=not-an-iterable
                     lines.append((self._line_number, line))
                     self._line_number += 1
-            # pylint: enable=not-an-iterable
 
             elif isinstance(form_field, FieldText):
                 prompt = self._generate_prompt(form_field)

@@ -45,7 +45,7 @@ def dict_to_form(form_data: dict[str, Any]) -> Form:
     else:
         form = Form(type_=FormType.FORM)
 
-    form._dict = form_data  # pylint: disable=protected-access  # noqa: SLF001
+    form._dict = form_data  # noqa: SLF001
     form.title = form_data["title"]
     form.title_color = form_data.get("title_color", 0)
 
@@ -110,7 +110,7 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> dict[str, Any]:
     Returns:
         form as type dict
     """
-    res = form._dict  # pylint: disable=protected-access  # noqa: SLF001
+    res = form._dict  # noqa: SLF001
     res["cancelled"] = form.cancelled
     res["submitted"] = form.submitted
     for field_idx, field in enumerate(form.fields):
