@@ -29,7 +29,8 @@ from ansible_navigator.utils.json_schema import validate
 def test_settings_defaults(schema_dict: SettingsSchemaType) -> None:
     """Check the settings file used as a sample against the schema.
 
-    :param schema_dict: The json schema as a dictionary
+    Args:
+        schema_dict: The json schema as a dictionary
     """
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
@@ -45,7 +46,8 @@ def test_settings_env_var_to_full(
 ) -> None:
     """Confirm the fixture writes the file and environment variable.
 
-    :param settings_env_var_to_full: The env var and file writing fixture
+    Args:
+        settings_env_var_to_full: The env var and file writing fixture
     """
     settings_path, _sample = settings_env_var_to_full
 
@@ -79,7 +81,8 @@ def test_settings_cli() -> None:
 def test_settings_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test the round trip generation of effective settings given some environment variables.
 
-    :param monkeypatch: The pytest monkeypatch fixture
+    Args:
+        monkeypatch: The pytest monkeypatch fixture
     """
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
@@ -105,7 +108,8 @@ def test_settings_full(
 ) -> None:
     """Test the round trip generation of effective settings given a full settings file.
 
-    :param settings_env_var_to_full: The env var and file writing fixture
+    Args:
+        settings_env_var_to_full: The env var and file writing fixture
     """
     sample: dict[Any, Any] = settings_env_var_to_full[1]
 

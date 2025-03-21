@@ -36,10 +36,13 @@ if TYPE_CHECKING:
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Provide a color for a inventory menu entry in one column.
 
-    :param colno: The column number
-    :param colname: The column name
-    :param entry: The menu entry
-    :returns: The color and decoration
+    Args:
+        colno: The column number
+        colname: The column name
+        entry: The menu entry
+
+    Returns:
+        The color and decoration
     """
     if colname in ["__name", "title", "inventory_hostname"]:
         return Color.BRIGHT_GREEN, Decoration.NORMAL
@@ -66,9 +69,12 @@ def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, in
 def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
     """Create a heading for inventory content.
 
-    :param obj: The content going to be shown
-    :param screen_w: The current screen width
-    :returns: The heading
+    Args:
+        obj: The content going to be shown
+        screen_w: The current screen width
+
+    Returns:
+        The heading
     """
     host = obj["inventory_hostname"]
     operating_system = obj.get("ansible_network_os", obj.get("ansible_platform", ""))
@@ -86,8 +92,11 @@ def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
 def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing inventory content.
 
-    :param obj: The object from which keys should be removed
-    :returns: The object with keys removed
+    Args:
+        obj: The object from which keys should be removed
+
+    Returns:
+        The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
@@ -111,7 +120,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:images`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="inventory")
 
@@ -126,7 +136,8 @@ class Action(ActionBase):
     def _inventory(self) -> dict[Any, Any]:
         """Return the inventory.
 
-        :returns: The inventory details
+        Returns:
+            The inventory details
         """
         return self.__inventory
 
@@ -134,7 +145,8 @@ class Action(ActionBase):
     def _inventory(self, value: dict[Any, Any]) -> None:
         """Set the inventory and hostvars.
 
-        :param value: The inventory data
+        Args:
+            value: The inventory data
         """
         self.__inventory = value
         self._host_vars = {
@@ -151,7 +163,8 @@ class Action(ActionBase):
     def _show_columns(self) -> list[str]:
         """Return the columns to show for an inventory menu.
 
-        :returns: The columns to show
+        Returns:
+            The columns to show
         """
         if isinstance(self._args.inventory_column, list):
             return self._args.inventory_column
@@ -179,9 +192,13 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``inventory`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("inventory requested in interactive mode")
@@ -246,8 +263,9 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``inventory`` request for mode stdout.
 
-        :returns: The return code, 0 or 1. If the runner status if failed, return 1
-            along with a message to review the logs.
+        Returns:
+            The return code, 0 or 1. If the runner status if failed,
+            return 1 along with a message to review the logs.
         """
         self._logger.debug("inventory requested in stdout mode")
         if hasattr(self._args, "inventory") and self._args.inventory:
@@ -290,7 +308,8 @@ class Action(ActionBase):
     def _build_main_menu(self) -> Step:
         """Build the inventory menu.
 
-        :returns: The inventory menu definition
+        Returns:
+            The inventory menu definition
         """
         groups = MenuEntry(
             title="Browse groups",
@@ -313,8 +332,12 @@ class Action(ActionBase):
     def _step_from_main_menu(self) -> Step:
         """Take a step away from the main menu.
 
-        :raises IndexError: When the index does not correspond to a menu entry
-        :returns: Either the group or host menu
+        Raises:
+            IndexError: When the index does not correspond to a menu
+                entry
+
+        Returns:
+            Either the group or host menu
         """
         if self.steps.current.index == 0:
             return self._build_group_menu("all")
@@ -326,8 +349,11 @@ class Action(ActionBase):
     def _build_group_menu(self, key: str | None = None) -> Step:
         """Build the menu for inventory groups.
 
-        :param key: The optional menu name
-        :returns: The inventory group menu definition
+        Args:
+            key: The optional menu name
+
+        Returns:
+            The inventory group menu definition
         """
         if key is None:
             key = self.steps.current.selected["__name"]
@@ -377,7 +403,8 @@ class Action(ActionBase):
     def _build_host_content(self) -> Step:
         """Build the inventory content for one host.
 
-        :returns: The inventory content for the host
+        Returns:
+            The inventory content for the host
         """
         host_vars = self._host_vars
         try:
@@ -407,7 +434,8 @@ class Action(ActionBase):
     def _build_host_menu(self) -> Step:
         """Build the menu of hosts.
 
-        :returns: The hosts menu definition
+        Returns:
+            The hosts menu definition
         """
         menu = Menu()
         for host in self._host_vars.values():
@@ -426,8 +454,11 @@ class Action(ActionBase):
     def _host_or_group_step(self) -> Step:
         """Build a menu based on the type of the current step.
 
-        :raises TypeError: When the step type is unknown
-        :returns: The group or host menu definition
+        Raises:
+            TypeError: When the step type is unknown
+
+        Returns:
+            The group or host menu definition
         """
         if self.steps.current.selected["__type"] == "group":
             return self._build_group_menu()
@@ -442,7 +473,8 @@ class Action(ActionBase):
     ) -> None:
         """Use the runner subsystem to collect inventory details for mode interactive.
 
-        :param kwargs: The arguments for the runner call
+        Args:
+            kwargs: The arguments for the runner call
         """
         try:
             # Extract the playbook dir the user may have provided
@@ -493,9 +525,15 @@ class Action(ActionBase):
     ) -> tuple[str | None, str | None, int | None]:
         """Use the runner subsystem to collect inventory details for mode stdout.
 
-        :param kwargs: The arguments for the runner call
-        :raises RuntimeError: When the ``ansible-inventory`` command cannot be found for mode stdout
-        :returns: The output, errors and return code from runner
+        Args:
+            kwargs: The arguments for the runner call
+
+        Raises:
+            RuntimeError: When the ``ansible-inventory`` command cannot
+                be found for mode stdout
+
+        Returns:
+            The output, errors and return code from runner
         """
         if self._args.execution_environment:
             ansible_inventory_path = "ansible-inventory"
@@ -526,8 +564,9 @@ class Action(ActionBase):
     ) -> tuple[str | None, str | None, int | None]:
         """Use the runner subsystem to collect inventory details for either mode.
 
-        :returns: For mode interactive nothing. For mode stdout, the output, errors and return
-            code from runner
+        Returns:
+            For mode interactive nothing. For mode stdout, the output,
+            errors and return code from runner
         """
         if isinstance(self._args.set_environment_variable, dict):
             set_env_vars = {**self._args.set_environment_variable}
@@ -568,7 +607,8 @@ class Action(ActionBase):
     def _extract_inventory(self, stdout: str) -> None:
         """Load and the ``json`` output from the inventory collection process.
 
-        :param stdout: The output from the inventory collection process
+        Args:
+            stdout: The output from the inventory collection process
         """
         try:
             self._inventory = json.loads(stdout)

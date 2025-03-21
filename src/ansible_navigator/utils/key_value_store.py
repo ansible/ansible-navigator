@@ -34,7 +34,8 @@ class KeyValueStore(MutableMapping[str, str]):
     def __init__(self, filename: str | Path) -> None:
         """Initialize the key-value store.
 
-        :param filename: The full path to the sqlite database file
+        Args:
+            filename: The full path to the sqlite database file
         """
         self._path = str(filename)
         self.conn = sqlite3.connect(self._path)
@@ -45,7 +46,8 @@ class KeyValueStore(MutableMapping[str, str]):
     def path(self) -> str:
         """Provide the filename where the KVS is stored on disk.
 
-        :returns: The path to the key-value store
+        Returns:
+            The path to the key-value store
         """
         return self._path
 
@@ -57,7 +59,8 @@ class KeyValueStore(MutableMapping[str, str]):
     def open_(self) -> sqlite3.Connection:
         """Establish the connection to the database.
 
-        :returns: A connection to the database
+        Returns:
+            A connection to the database
         """
         self.conn = sqlite3.connect(self.path)
         return self.conn
@@ -65,7 +68,8 @@ class KeyValueStore(MutableMapping[str, str]):
     def __len__(self) -> int:
         """Count the number of keys in the key-value store.
 
-        :returns: The number of keys
+        Returns:
+            The number of keys
         """
         cursor = self.conn.cursor()
         rows = cursor.execute("SELECT COUNT(*) FROM kv").fetchone()[0]
@@ -103,21 +107,24 @@ class KeyValueStore(MutableMapping[str, str]):
     def keys(self) -> KVSKeysView:
         """Return all keys in the key-value store.
 
-        :returns: All the keys
+        Returns:
+            All the keys
         """
         return KVSKeysView(self)
 
     def values(self) -> KVSValuesView:
         """Return all values in the key-value store.
 
-        :returns: All the values
+        Returns:
+            All the values
         """
         return KVSValuesView(self)
 
     def items(self) -> KVSItemsView:
         """Return all items from the key-value store.
 
-        :returns: The key-value store as items (key, value)
+        Returns:
+            The key-value store as items (key, value)
         """
         return KVSItemsView(self)
 
@@ -131,8 +138,12 @@ class KeyValueStore(MutableMapping[str, str]):
 
         This provides dictionary like  `some_key in` support for the key-value store.
 
-        :param key: The key to search for
-        :returns: An indication of the provided key's existence in the key-value store
+        Args:
+            key: The key to search for
+
+        Returns:
+            An indication of the provided key's existence in the key-
+            value store
         """
         cursor = self.conn.cursor()
         return cursor.execute("SELECT 1 FROM kv WHERE key = ?", (key,)).fetchone() is not None
@@ -140,9 +151,14 @@ class KeyValueStore(MutableMapping[str, str]):
     def __getitem__(self, key: str) -> str:
         """Return a value from the key-value store given a key.
 
-        :param key: The key to find
-        :raises KeyError: When the key does not exist in the key-value store
-        :returns: The value for the key provided
+        Args:
+            key: The key to find
+
+        Raises:
+            KeyError: When the key does not exist in the key-value store
+
+        Returns:
+            The value for the key provided
         """
         cursor = self.conn.cursor()
         item = cursor.execute("SELECT value FROM kv WHERE key = ?", (key,)).fetchone()
@@ -153,8 +169,9 @@ class KeyValueStore(MutableMapping[str, str]):
     def __setitem__(self, key: str, value: str) -> None:
         """Place a key-value combination in the key-value store.
 
-        :param key: The key of the combination to set
-        :param value: The value of the combination to set
+        Args:
+            key: The key of the combination to set
+            value: The value of the combination to set
         """
         cursor = self.conn.cursor()
         cursor.execute("REPLACE INTO kv (key, value) VALUES (?,?)", (key, value))
@@ -162,8 +179,12 @@ class KeyValueStore(MutableMapping[str, str]):
     def __delitem__(self, key: str) -> None:
         """Delete a key-value combination in the key-value store.
 
-        :param key: The key of the entry to delete
-        :raises KeyError: When the provided key does not exist in the key-value store
+        Args:
+            key: The key of the entry to delete
+
+        Raises:
+            KeyError: When the provided key does not exist in the key-
+                value store
         """
         if key not in self:
             raise KeyError(key)
@@ -175,14 +196,16 @@ class KeyValueStore(MutableMapping[str, str]):
 
         This provides dictionary like `for key in` support for the key-value store.
 
-        :returns: The keys in the key-value store
+        Returns:
+            The keys in the key-value store
         """
         return self.iterkeys()
 
     def __repr__(self) -> str:
         """Represent the key-value store.
 
-        :returns: Representation of the key-value store
+        Returns:
+            Representation of the key-value store
         """
         # Loosely based on collections.OrderedDict#__repr__
         if not self:

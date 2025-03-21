@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """Run subcommand implementation."""
 
 from __future__ import annotations
@@ -67,8 +68,11 @@ RESULT_TO_COLOR = [
 def get_color(word: str) -> int:
     """Retrieve color value matching the keyword.
 
-    :param word: Keyword to match color.
-    :returns: Color value
+    Args:
+        word: Keyword to match color.
+
+    Returns:
+        Color value
     """
     return next(
         (x[1] for x in RESULT_TO_COLOR if re.match(x[0], word)),
@@ -79,9 +83,12 @@ def get_color(word: str) -> int:
 def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Find matching color for word.
 
-    :param colname: The column name
-    :param entry: The menu entry
-    :returns: The color and decoration
+    Args:
+        colname: The column name
+        entry: The menu entry
+
+    Returns:
+        The color and decoration
     """
     colval = entry[colname]
     color = 0
@@ -121,9 +128,12 @@ def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, i
 def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
     """Create a heading for some piece of content showing.
 
-    :param obj: The content going to be shown
-    :param screen_w: The current screen width
-    :returns: The heading
+    Args:
+        obj: The content going to be shown
+        screen_w: The current screen width
+
+    Returns:
+        The heading
     """
     if isinstance(obj, dict) and "task" in obj:
         detail = f"Play name: {obj['play']}:{obj['__number']}"
@@ -162,8 +172,11 @@ def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
 def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
-    :param obj: The object from which keys should be removed
-    :returns: The object with keys removed
+    Args:
+        obj: The object from which keys should be removed
+
+    Returns:
+        The object with keys removed
     """
     return {k: v for k, v in obj.items() if not (k.startswith("_") or k.endswith("uuid"))}
 
@@ -206,7 +219,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:run`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="run")
 
@@ -239,7 +253,9 @@ class Action(ActionBase):
 
         If so, run in interactive mode, but print stdout.
 
-        :returns: If stdout and artifact creation, return a str statement as such, else return mode
+        Returns:
+            If stdout and artifact creation, return a str statement as
+            such, else return mode
         """
         if all(
             (
@@ -254,8 +270,9 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``run`` request for mode stdout.
 
-        :returns: The return code from the runner invocation, along with a message to review the
-            logs if not 0
+        Returns:
+            The return code from the runner invocation, along with a
+            message to review the logs if not 0
         """
         if self._args.app == "replay":
             successful: bool = self._init_replay()
@@ -288,9 +305,12 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Run :run or :replay.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending interaction or none
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending interaction or none
         """
         self._prepare_to_run(app, interaction)
         initialized = False
@@ -355,7 +375,8 @@ class Action(ActionBase):
     def _init_run(self) -> bool:
         """In the case of :run, check the user input.
 
-        :returns: True
+        Returns:
+            True
         """
         # Ensure the playbook and inventory are valid
 
@@ -396,7 +417,8 @@ class Action(ActionBase):
 
         Check for a version and process artifact file.
 
-        :returns: True if replay completes, False if there is an error
+        Returns:
+            True if replay completes, False if there is an error
         """
         self._logger.debug("Starting replay artifact request with mode %s", self.mode)
 
@@ -461,8 +483,11 @@ class Action(ActionBase):
     def _prompt_for_artifact(self, artifact_file: str) -> dict[Any, Any]:
         """Prompt for a valid artifact file.
 
-        :param artifact_file: Artifact file
-        :returns: Dict with artifact detail entries
+        Args:
+            artifact_file: Artifact file
+
+        Returns:
+            Dict with artifact detail entries
         """
         if not isinstance(artifact_file, str):
             artifact_file = ""
@@ -487,7 +512,8 @@ class Action(ActionBase):
     def _prompt_for_playbook(self) -> dict[Any, Any]:
         """Pre-populate a form to confirm the playbook details.
 
-        :returns: Dict with playbook and inventory detail entries
+        Returns:
+            Dict with playbook and inventory detail entries
         """
         self._logger.debug("Inventory/Playbook not set, provided, or valid, prompting")
 
@@ -563,7 +589,8 @@ class Action(ActionBase):
     def _run_runner(self) -> None:
         """Spin up runner.
 
-        :raises RuntimeError: If no ansible-playbook executable
+        Raises:
+            RuntimeError: If no ansible-playbook executable
         """
         executable_cmd: str | None
 
@@ -644,8 +671,8 @@ class Action(ActionBase):
         # pylint: disable=too-many-locals
         """Handle a runner message.
 
-        :param message: The message from runner
-        :type message: dict
+        Args:
+            message (dict): The message from runner
         """
         # Collect any stdout
         if message.get("stdout"):
@@ -787,8 +814,11 @@ class Action(ActionBase):
     def _prepare_to_quit(self, interaction: Interaction) -> bool:
         """Pre-quit tasks.
 
-        :param interaction: The quit interaction
-        :returns: A bool indicating whether or not it's safe to exit
+        Args:
+            interaction: The quit interaction
+
+        Returns:
+            A bool indicating whether or not it's safe to exit
         """
         self.update()
         if self.runner is not None and not self.runner.finished:
@@ -807,7 +837,8 @@ class Action(ActionBase):
     def _task_list_for_play(self) -> Step:
         """Generate a menu of tasks for the currently selected play.
 
-        :returns: The menu step
+        Returns:
+            The menu step
         """
         value = self.steps.current.selected["tasks"]
         step = Step(
@@ -822,7 +853,8 @@ class Action(ActionBase):
     def _task_from_task_list(self) -> Step:
         """Generate task content for the selected task.
 
-        :returns: Content which shows a task
+        Returns:
+            Content which shows a task
         """
         value = self.steps.current.value
         index = self.steps.current.index
@@ -848,7 +880,8 @@ class Action(ActionBase):
     def _get_status(self) -> tuple[str, int]:
         """Get the runner status and color for status message.
 
-        :returns: status string, status color
+        Returns:
+            status string, status color
         """
         status = ""
         status_color = 0
@@ -875,8 +908,8 @@ class Action(ActionBase):
     def write_artifact(self, filename: str | None = None) -> None:
         """Write the artifact.
 
-        :param filename: The file to write to
-        :type filename: str
+        Args:
+            filename (str): The file to write to
         """
         if filename or self._args.playbook_artifact_enable is True:
             status, status_color = self._get_status()
@@ -947,7 +980,8 @@ class Action(ActionBase):
     def _notify_error(self, message: str) -> None:
         """Show a blocking warning.
 
-        :param message: Message for warning
+        Args:
+            message: Message for warning
         """
         warn_msg = ["Errors were encountered while running the playbook:"]
         messages = remove_ansi(message).splitlines()

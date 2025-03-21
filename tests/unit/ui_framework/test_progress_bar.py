@@ -41,8 +41,11 @@ class ContentTest(ContentBase[Any]):
         this is not more work than necessary to remove in the future
         and will only return attributes in existence.
 
-        :param attribute: The attribute to get
-        :returns: The gotten attribute
+        Args:
+            attribute: The attribute to get
+
+        Returns:
+            The gotten attribute
         """
         return getattr(self, attribute)
 

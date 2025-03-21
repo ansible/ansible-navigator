@@ -31,9 +31,12 @@ from tests.defaults import BaseScenario
 def make_dirs(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
     """Mock make_dirs.
 
-    :param _args: The positional arguments
-    :param _kwargs: The keyword arguments
-    :returns: Indication of directory creation success
+    Args:
+        *_args: The positional arguments
+        **_kwargs: The keyword arguments
+
+    Returns:
+        Indication of directory creation success
     """
     return True
 
@@ -41,9 +44,12 @@ def make_dirs(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
 def get_status(*_args: Any, **_kwargs: dict[str, Any]) -> tuple[str, int]:
     """Mock run.get_status.
 
-    :param _args: The positional arguments
-    :param _kwargs: The keyword arguments
-    :returns: The runner status
+    Args:
+        *_args: The positional arguments
+        **_kwargs: The keyword arguments
+
+    Returns:
+        The runner status
     """
     return ("successful", 0)
 
@@ -67,7 +73,8 @@ class Scenario(BaseScenario):
     def __post_init__(self) -> None:
         """Ensure one match is set.
 
-        :raises ValueError: When neither is set
+        Raises:
+            ValueError: When neither is set
         """
         if not (self.re_match or self.starts_with):
             msg = "re_match or starts_with required"
@@ -76,7 +83,8 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide the test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return self.name
 
@@ -195,10 +203,11 @@ def test_artifact_path(
 ) -> None:
     """Test the building of the artifact filename given a filename or playbook.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param mocker: The mocker fixture
-    :param caplog: The log capture fixture
-    :param data: The test data
+    Args:
+        monkeypatch: The monkeypatch fixture
+        mocker: The mocker fixture
+        caplog: The log capture fixture
+        data: The test data
     """
     caplog.set_level(logging.DEBUG)
     monkeypatch.setenv("HOME", "/home/test_user")
@@ -248,8 +257,9 @@ def test_artifact_path(
 def test_artifact_contents(monkeypatch: pytest.MonkeyPatch, mocker: MockerFixture) -> None:
     """Test the artifact contents for settings information.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param mocker: The mocker fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
+        mocker: The mocker fixture
     """
     monkeypatch.setattr(os, "makedirs", make_dirs)
     monkeypatch.setattr(action, "_get_status", get_status)

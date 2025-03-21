@@ -46,8 +46,11 @@ base_steps = (
 def some_time_repl(match: re.Match[str]) -> str:
     """Replace the match string with a string of the same length.
 
-    :param match: The string matched
-    :returns: A padded replacement string
+    Args:
+        match: The string matched
+
+    Returns:
+        A padded replacement string
     """
     match_len = len(match.group())
     return "some time ago".ljust(match_len)
@@ -63,7 +66,8 @@ class BaseClass:
     def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
-        :param request: A fixture providing details about the test caller
+        Args:
+            request: A fixture providing details about the test caller
         :yields: Tmux session
         """
         with TmuxSession(request=request) as tmux_session:
@@ -78,10 +82,13 @@ class BaseClass:
     ) -> None:
         """Run the tests for images, mode and ``ee`` set in child class.
 
-        :param request: A fixture providing details about the test caller
-        :param tmux_session: The tmux session to use
-        :param step: Step index to use
-        :raises ValueError: When the test mode is not set
+        Args:
+            request: A fixture providing details about the test caller
+            tmux_session: The tmux session to use
+            step: Step index to use
+
+        Raises:
+            ValueError: When the test mode is not set
         """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"

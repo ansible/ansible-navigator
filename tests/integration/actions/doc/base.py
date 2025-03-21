@@ -32,7 +32,8 @@ class BaseClass:
     ) -> Generator[TmuxSession]:
         """Tmux fixture for this module.
 
-        :param request: A fixture providing details about the test caller
+        Args:
+            request: A fixture providing details about the test caller
         :yields: Tmux session
         """
         with TmuxSession(
@@ -62,14 +63,17 @@ class BaseClass:
         # pylint: disable=too-many-locals
         """Run the tests for ``doc``, mode and ``ee`` set in child class.
 
-        :param request: A fixture providing details about the test caller
-        :param tmux_doc_session: The tmux session to use
-        :param index: Step index
-        :param user_input: Value to send to the tmux session
-        :param comment: Comment to add to the fixture
-        :param testname: Name of test
-        :param expected_in_output: A list of strings or string to find
-        :raises ValueError: When the test mode is not set
+        Args:
+            request: A fixture providing details about the test caller
+            tmux_doc_session: The tmux session to use
+            index: Step index
+            user_input: Value to send to the tmux session
+            comment: Comment to add to the fixture
+            testname: Name of test
+            expected_in_output: A list of strings or string to find
+
+        Raises:
+            ValueError: When the test mode is not set
         """
         if self.TEST_FOR_MODE == "interactive":
             search_within_response = ":help help"

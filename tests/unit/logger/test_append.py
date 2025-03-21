@@ -29,15 +29,19 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide the test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return f"{self.log_append}"
 
     def args(self, log_file: Path) -> list[str]:
         """Provide an argument list for the CLI.
 
-        :param log_file: The path to the log file
-        :returns: The list of CLI arguments
+        Args:
+            log_file: The path to the log file
+
+        Returns:
+            The list of CLI arguments
         """
         arg_list = [
             "ansible-navigator",
@@ -61,17 +65,21 @@ test_data = (
 def test_log_append(data: Scenario, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Start with the CLI, create log messages and count.
 
-    :param data: The test data
-    :param monkeypatch: The monkeypatch fixture
-    :param tmp_path: A temporary file path
+    Args:
+        data: The test data
+        monkeypatch: The monkeypatch fixture
+        tmp_path: A temporary file path
     """
 
     def return_none(*_args: Any, **_kwargs: dict[str, Any]) -> None:
         """Take no action, return none.
 
-        :param _args: Arguments
-        :param _kwargs: Keyword arguments
-        :returns: Nothing
+        Args:
+            *_args: Arguments
+            **_kwargs: Keyword arguments
+
+        Returns:
+            Nothing
         """
         return
 

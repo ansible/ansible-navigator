@@ -8,7 +8,8 @@ from ansible_navigator.utils.key_value_store import KeyValueStore
 def test_kvs_save_restore(empty_kvs: KeyValueStore) -> None:
     """Test basic KVS write to disk and restore.
 
-    :param empty_kvs: An empty key-value store
+    Args:
+        empty_kvs: An empty key-value store
     """
     empty_kvs["hello"] = "whoop"
     empty_kvs["i_am_a_key"] = "and I am a value"
@@ -22,7 +23,8 @@ def test_kvs_save_restore(empty_kvs: KeyValueStore) -> None:
 def test_kvs_len(kvs: KeyValueStore) -> None:
     """Test KVS __len__ / len().
 
-    :param kvs: A key-value store populated with data
+    Args:
+        kvs: A key-value store populated with data
     """
     assert len(kvs) == 4
     kvs["new_key"] = "something"
@@ -32,7 +34,8 @@ def test_kvs_len(kvs: KeyValueStore) -> None:
 def test_kvs_iterkeys(kvs: KeyValueStore) -> None:
     """Test KVS iterkeys().
 
-    :param kvs: A key-value store populated with data
+    Args:
+        kvs: A key-value store populated with data
     """
     # Is it truly an iterator?
     assert isinstance(kvs.iterkeys(), types.GeneratorType)
@@ -45,7 +48,8 @@ def test_kvs_iterkeys(kvs: KeyValueStore) -> None:
 def test_kvs_itervalues(kvs: KeyValueStore) -> None:
     """Test KVS itervalues().
 
-    :param kvs: A key-value store populated with data
+    Args:
+        kvs: A key-value store populated with data
     """
     # Is it truly an iterator?
     assert isinstance(kvs.itervalues(), types.GeneratorType)
@@ -58,7 +62,8 @@ def test_kvs_itervalues(kvs: KeyValueStore) -> None:
 def test_kvs_iteritems(kvs: KeyValueStore) -> None:
     """Test KVS iteritems().
 
-    :param kvs: A key-value store populated with data
+    Args:
+        kvs: A key-value store populated with data
     """
     # Is it truly an iterator?
     assert isinstance(kvs.iteritems(), types.GeneratorType)
@@ -79,7 +84,8 @@ def test_kvs_iteritems(kvs: KeyValueStore) -> None:
 def test_kvs_keys(kvs: KeyValueStore) -> None:
     """Test KVS keys().
 
-    :param kvs: A key-value store populated with data
+    Args:
+        kvs: A key-value store populated with data
     """
     # We get back a KVSKeysView which is just a collections.abc.KeysView in
     # disguise.
@@ -93,7 +99,8 @@ def test_kvs_keys(kvs: KeyValueStore) -> None:
 def test_kvs_values(kvs: KeyValueStore) -> None:
     """Test KVS values().
 
-    :param kvs: A key-value store populated with data
+    Args:
+        kvs: A key-value store populated with data
     """
     # We get back a KVSValuesView which is just a collections.abc.ValuesView in
     # disguise.
@@ -107,7 +114,8 @@ def test_kvs_values(kvs: KeyValueStore) -> None:
 def test_kvs_items(kvs: KeyValueStore) -> None:
     """Test KVS items().
 
-    :param kvs: A key-value store populated with data
+    Args:
+        kvs: A key-value store populated with data
     """
     # We get back a KVSItemsView which is just a collections.abc.ItemsView in
     # disguise.
@@ -126,8 +134,9 @@ def test_kvs_items(kvs: KeyValueStore) -> None:
 def test_kvs_repr(kvs: KeyValueStore, empty_kvs: KeyValueStore) -> None:
     """Test KVS __repr__().
 
-    :param empty_kvs: An empty key-value store
-    :param kvs: A key-value store populated with data
+    Args:
+        empty_kvs: An empty key-value store
+        kvs: A key-value store populated with data
     """
     assert repr(kvs) == (
         "KeyValueStore([('apple', 'red'), ('banana', 'yellow'), "

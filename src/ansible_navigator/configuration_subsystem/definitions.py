@@ -29,8 +29,11 @@ if TYPE_CHECKING:
 def version_added_sanity_check(version: str) -> None:
     """Check if a version string is valid.
 
-    :param version: The version string to check
-    :raises AssertionError: If the version string is invalid
+    Args:
+        version: The version string to check
+
+    Raises:
+        AssertionError: If the version string is invalid
     """
     re_version = re.compile(r"^v\d+\.\d+$")
     assert (  # noqa:S101
@@ -63,7 +66,8 @@ class Constants(Enum):
     def __str__(self) -> str:
         """Use the value when presented as a string.
 
-        :returns: The value as type str
+        Returns:
+            The value as type str
         """
         return str(self.value)
 
@@ -86,8 +90,11 @@ class CliParameters:
     def long(self, name_dashed: str) -> str:
         """Provide a cli long parameter.
 
-        :param name_dashed: The dashed name of the parent settings entry
-        :returns: The long cli parameter
+        Args:
+            name_dashed: The dashed name of the parent settings entry
+
+        Returns:
+            The long cli parameter
         """
         long = self.long_override or f"--{name_dashed}"
         return long
@@ -110,7 +117,8 @@ class SettingsEntryValue:
     def is_default(self) -> bool:
         """Determine if the current value is the default value.
 
-        :returns: Indication of if the current is the default
+        Returns:
+            Indication of if the current is the default
         """
         result = self.default == self.current
         return result
@@ -122,7 +130,8 @@ class SettingsEntryValue:
         This would typically be used when the attributes need to be presented to the user.
         Constants are resolved to their value.
 
-        :returns: An entry without internal constants for attributes
+        Returns:
+            An entry without internal constants for attributes
         """
         new_entry = copy.deepcopy(self)
 
@@ -176,8 +185,11 @@ class SettingsEntry:
     def environment_variable(self, prefix: str = "") -> str:
         """Generate an effective environment variable for this entry.
 
-        :param prefix: The prefix for environmental variable
-        :returns: Environmental variable with prefix prepended
+        Args:
+            prefix: The prefix for environmental variable
+
+        Returns:
+            Environmental variable with prefix prepended
         """
         if self.environment_variable_override is not None:
             env_var = self.environment_variable_override
@@ -190,8 +202,11 @@ class SettingsEntry:
     def invalid_choice(self) -> str:
         """Generate an invalid choice message for this entry.
 
-        :raises ValueError: If source is not set for that entry
-        :returns: Constructed message
+        Raises:
+            ValueError: If source is not set for that entry
+
+        Returns:
+            Constructed message
         """
         name = self.name.replace("_", "-")
         if self.value.source is Constants.NOT_SET:
@@ -216,15 +231,19 @@ class SettingsEntry:
     def name_dashed(self) -> str:
         """Generate a dashed version of the name.
 
-        :returns: Dashed version of the name
+        Returns:
+            Dashed version of the name
         """
         return self.name.replace("_", "-")
 
     def settings_file_path(self, prefix: str) -> str:
         """Generate an effective settings file path for this entry.
 
-        :param prefix: The prefix for the settings file path
-        :returns: Settings file path
+        Args:
+            prefix: The prefix for the settings file path
+
+        Returns:
+            Settings file path
         """
         prefix_str = f"{prefix}." if prefix else prefix
 
@@ -270,17 +289,23 @@ class ApplicationConfiguration:
     def application_name_dashed(self) -> str:
         """Generate a dashed version of the application name.
 
-        :returns: Application name dashed
+        Returns:
+            Application name dashed
         """
         return self.application_name.replace("_", "-")
 
     def _get_by_name(self, name: str, kind: str) -> SettingsEntry:
         """Retrieve a settings entry by name.
 
-        :param name: The name of the entry
-        :param kind: The kind of entry to retrieve
-        :returns: The settings entry
-        :raises KeyError: If the entry is not found
+        Args:
+            name: The name of the entry
+            kind: The kind of entry to retrieve
+
+        Returns:
+            The settings entry
+
+        Raises:
+            KeyError: If the entry is not found
         """
         try:
             return next(entry for entry in super().__getattribute__(kind) if entry.name == name)
@@ -290,8 +315,11 @@ class ApplicationConfiguration:
     def __getattribute__(self, attr: str) -> Any:
         """Return a matching entry or the default from super.
 
-        :param attr: The attribute to get
-        :returns: Either the matching entry or default from super
+        Args:
+            attr: The attribute to get
+
+        Returns:
+            Either the matching entry or default from super
         """
         try:
             return super().__getattribute__("_get_by_name")(attr, "entries").value.current
@@ -301,16 +329,22 @@ class ApplicationConfiguration:
     def entry(self, name: str) -> SettingsEntry:
         """Retrieve a configuration entry by name.
 
-        :param name: The name of the entry
-        :returns: Configuration entry name
+        Args:
+            name: The name of the entry
+
+        Returns:
+            Configuration entry name
         """
         return self._get_by_name(name, "entries")
 
     def subcommand(self, name: str) -> SubCommand:
         """Retrieve a configuration subcommand by name.
 
-        :param name: The name of the subcommand
-        :returns: Configuration subcommand name
+        Args:
+            name: The name of the subcommand
+
+        Returns:
+            Configuration subcommand name
         """
         command = self._get_by_name(name, "subcommands")
         if not isinstance(command, SubCommand):
@@ -373,8 +407,12 @@ class VolumeMount:
     def __post_init__(self, options_string: str) -> None:
         """Post process the ``VolumeMount`` and perform sanity checks.
 
-        :raises VolumeMountError: When a viable VolumeMount cannot be created
-        :param options_string: Option entries in as type string
+        Raises:
+            VolumeMountError: When a viable VolumeMount cannot be
+                created
+
+        Args:
+            options_string: Option entries in as type string
         """
         errors = []
 
@@ -431,7 +469,8 @@ class VolumeMount:
     def to_string(self) -> str:
         """Render the volume mount in a way that (docker|podman) understands.
 
-        :returns: File system source and system path for volume mount
+        Returns:
+            File system source and system path for volume mount
         """
         out = f"{self.fs_source}:{self.fs_destination}"
         if self.options:

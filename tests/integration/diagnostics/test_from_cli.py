@@ -25,11 +25,13 @@ def test(
 ) -> None:
     """Test diagnostics generation.
 
-    :param monkeypatch: Fixture for patching
-    :param settings_env_var_to_full: The pytest subtest fixture
-    :param tmp_path: The pytest tmp_path fixture
+    Args:
+        monkeypatch: Fixture for patching
+        settings_env_var_to_full: The pytest subtest fixture
+        tmp_path: The pytest tmp_path fixture
 
-    :raises AssertionError: When tests fails
+    Raises:
+        AssertionError: When tests fails
     """
     monkeypatch.chdir(tmp_path)
     settings_path, settings_file = settings_env_var_to_full

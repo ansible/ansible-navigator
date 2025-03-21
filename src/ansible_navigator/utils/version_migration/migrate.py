@@ -28,8 +28,9 @@ from .v1_v2_settings_file import V1V2SettingsFile  # noqa: F401
 def run_all_migrations(migration_types: tuple[MigrationType], settings_file_str: str = "") -> None:
     """Run all migrations.
 
-    :param migration_types: Type of migration
-    :param settings_file_str: Path to the settings file
+    Args:
+        migration_types: Type of migration
+        settings_file_str: Path to the settings file
     """
     for migration_type in migration_types:
         run_migrations(settings_file_str, migration_type)
@@ -38,8 +39,9 @@ def run_all_migrations(migration_types: tuple[MigrationType], settings_file_str:
 def run_migrations(settings_file_str: str, migration_type: MigrationType) -> None:
     """Run migrations of a specific type.
 
-    :param settings_file_str: Path to the settings file
-    :param migration_type: Type of migration
+    Args:
+        settings_file_str: Path to the settings file
+        migration_type: Type of migration
     """
     migrations_to_run = [
         migration()

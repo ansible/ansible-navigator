@@ -26,8 +26,9 @@ class FormHandlerText(CursesWindow, Textbox):
     def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for a form text field.
 
-        :param screen: A curses window
-        :param ui_config: The current user interface configuration
+        Args:
+            screen: A curses window
+            ui_config: The current user interface configuration
         """
         super().__init__(ui_config=ui_config)
         self.input_line_cache: list[str] = []
@@ -48,17 +49,20 @@ class FormHandlerText(CursesWindow, Textbox):
     def _adjust_line_pointer(self, amount: int) -> None:
         """Increase the current position in the line cache.
 
-        :param amount: The number to increase by
+        Args:
+            amount: The number to increase by
         """
         self.input_line_pointer = (self.input_line_pointer + amount) % len(self.input_line_cache)
 
     def _do_command(self, char: int) -> int:
         """Handle the input from the user.
 
-        :param char: The character input from the user
-        :returns: 0 if the window needs to be resized
-                  1 if the window should be repainted
-                  -1 if the window should be closed
+        Args:
+            char: The character input from the user
+
+        Returns:
+            0 if the window needs to be resized 1 if the window should
+            be repainted -1 if the window should be closed
         """
         # in the case the term returns 127 instead of 263
         if char == curses_ascii.DEL:
@@ -99,9 +103,12 @@ class FormHandlerText(CursesWindow, Textbox):
     def handle(self, idx: int, form_fields: list[FieldText]) -> tuple[str, int]:
         """Edit in the widget window and collect the results.
 
-        :param idx: Index to retrieve specific field
-        :param form_fields: List of fields
-        :returns: Results from line and char edit
+        Args:
+            idx: Index to retrieve specific field
+            form_fields: List of fields
+
+        Returns:
+            Results from line and char edit
         """
         form_field = form_fields[idx]
 

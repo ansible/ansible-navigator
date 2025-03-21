@@ -37,7 +37,8 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide a test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return self.comment
 
@@ -70,11 +71,13 @@ test_data = (
 def test(data: Scenario, subtests: Any, tmp_path: Path) -> None:
     """Test for json schema errors.
 
-    :param data: The test data
-    :param tmp_path: The temporary path fixture
-    :param subtests: The pytest subtest fixture
+    Args:
+        data: The test data
+        tmp_path: The temporary path fixture
+        subtests: The pytest subtest fixture
 
-    :raises AssertionError: When tests fails
+    Raises:
+        AssertionError: When tests fails
     """
     assert data.settings_file.exists()
     venv_path = os.environ.get("VIRTUAL_ENV")

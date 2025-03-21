@@ -38,7 +38,8 @@ class Command(SimpleNamespace):
 def run_command(command: Command) -> None:
     """Run a command using subprocess.
 
-    :param command: Details of the command to run
+    Args:
+        command: Details of the command to run
     """
     try:
         proc_out = subprocess.run(
@@ -57,8 +58,10 @@ def run_command(command: Command) -> None:
 def worker(pending_queue: Queue[Any], completed_queue: Queue[Any]) -> None:
     """Run a command from pending, parse, and place in completed.
 
-    :param pending_queue: A queue with plugins to process
-    :param completed_queue: The queue in which extracted documentation will be placed
+    Args:
+        pending_queue: A queue with plugins to process
+        completed_queue: The queue in which extracted documentation will
+            be placed
     """
     while True:
         command = pending_queue.get()
@@ -90,8 +93,11 @@ class CommandRunner:
         Exit when the number of results is equal to the number
         of commands needing to be run.
 
-        :param command_classes: All command classes to be run
-        :returns: The results from running all commands
+        Args:
+            command_classes: All command classes to be run
+
+        Returns:
+            The results from running all commands
         """
         if self._completed_queue is None:
             self._completed_queue = Queue()
@@ -109,7 +115,8 @@ class CommandRunner:
     def start_workers(self, jobs: tuple[Command, ...]) -> None:
         """Start workers and submit jobs to pending queue.
 
-        :param jobs: The jobs to be run
+        Args:
+            jobs: The jobs to be run
         """
         worker_count = len(jobs)
         processes = []
@@ -142,8 +149,12 @@ class CmdParser:
     def _strip(value: str) -> str:
         """Remove quotes, leading and trailing whitespace.
 
-        :param value: The string to act on
-        :returns: The string after removing quotes, leading and trailing whitespace
+        Args:
+            value: The string to act on
+
+        Returns:
+            The string after removing quotes, leading and trailing
+            whitespace
         """
         return value.strip('"').strip("'").strip()
 
@@ -151,9 +162,12 @@ class CmdParser:
     def re_partition(content: Any, separator: str) -> Any:
         """Partition a string using a regular expression.
 
-        :param content: The content to partition
-        :param separator: The separator to use for the partitioning
-        :returns: The first partition, separator, and final partition
+        Args:
+            content: The content to partition
+            separator: The separator to use for the partitioning
+
+        Returns:
+            The first partition, separator, and final partition
         """
         separator_match = re.search(separator, content)
         if not separator_match or content.startswith(" "):
@@ -170,10 +184,13 @@ class CmdParser:
     ) -> list[dict[str, Any]] | dict[str, Any]:
         """Split lines given a delimiter.
 
-        :param lines: The lines to split
-        :param line_split: The delimiter use for splitting each line
-        :param section_delim: The separator between different packages
-        :returns: All lines split on the delimiter
+        Args:
+            lines: The lines to split
+            line_split: The delimiter use for splitting each line
+            section_delim: The separator between different packages
+
+        Returns:
+            All lines split on the delimiter
         """
         results: list[dict[str, Any]] = []
         result: dict[str, Any] = {}
@@ -218,7 +235,8 @@ class AnsibleCollections(CmdParser):
     def commands(self) -> list[Command]:
         """Define the ansible-galaxy command to list ansible collections.
 
-        :returns: The defined command
+        Returns:
+            The defined command
         """
         command = "ansible-galaxy collection list"
         return [
@@ -233,7 +251,8 @@ class AnsibleCollections(CmdParser):
     def parse(command: Command) -> None:
         """Parse the output of the ansible-galaxy command.
 
-        :param command: The result of running the command
+        Args:
+            command: The result of running the command
         """
         if "invalid choice: 'list'" in command.stderr:
             command.details = "This command is not supported with ansible 2.9."
@@ -253,7 +272,8 @@ class AnsibleVersion(CmdParser):
     def commands(self) -> list[Command]:
         """Define the ansible command to get the version.
 
-        :returns: The defined command
+        Returns:
+            The defined command
         """
         return [Command(id_="ansible_version", command="ansible --version", parse=self.parse)]
 
@@ -261,7 +281,8 @@ class AnsibleVersion(CmdParser):
     def parse(command: Command) -> None:
         """Parse the output of the ansible command.
 
-        :param command: The result of running the command
+        Args:
+            command: The result of running the command
         """
         version = command.stdout.splitlines()[0]
         command.details = version
@@ -274,14 +295,16 @@ class OsRelease(CmdParser):
     def commands(self) -> list[Command]:
         """Define the command to collect os release information.
 
-        :returns: The defined command
+        Returns:
+            The defined command
         """
         return [Command(id_="os_release", command="cat /etc/os-release", parse=self.parse)]
 
     def parse(self, command: Command) -> None:
         """Parse the output of the cat command.
 
-        :param command: The result of running the command
+        Args:
+            command: The result of running the command
         """
         parsed = self.splitter(command.stdout.splitlines(), "=")
         command.details = parsed
@@ -294,7 +317,8 @@ class PythonPackages(CmdParser):
     def commands(self) -> list[Command]:
         """Define the pip command to list installed pip packages.
 
-        :returns: The defined command
+        Returns:
+            The defined command
         """
         pre = Command(
             id_="pip_freeze",
@@ -315,7 +339,8 @@ class PythonPackages(CmdParser):
     def parse(self, command: Command) -> None:
         """Parse the output of the pip command.
 
-        :param command: The result of running the command
+        Args:
+            command: The result of running the command
         """
         parsed = self.splitter(command.stdout.splitlines(), line_split=":", section_delim="---")
         if isinstance(parsed, dict):
@@ -331,7 +356,8 @@ class PythonPackages(CmdParser):
     def parse_freeze(self, command: Command) -> None:
         """Parse the output of the pip freeze command, skipping editables.
 
-        :param command: The result of running the command
+        Args:
+            command: The result of running the command
         """
         lines = [line for line in command.stdout.splitlines() if not line.startswith("-e")]
         parsed = self.splitter(lines, "(==|@)")
@@ -345,7 +371,8 @@ class RedhatRelease(CmdParser):
     def commands(self) -> list[Command]:
         """Define the command to get the redhat release information.
 
-        :returns: The defined command
+        Returns:
+            The defined command
         """
         return [Command(id_="redhat_release", command="cat /etc/redhat-release", parse=self.parse)]
 
@@ -353,7 +380,8 @@ class RedhatRelease(CmdParser):
     def parse(command: Command) -> None:
         """Parse the output of the cat redhat release command.
 
-        :param command: The result of running the command
+        Args:
+            command: The result of running the command
         """
         parsed = command.stdout
         command.details = parsed
@@ -366,14 +394,16 @@ class SystemPackages(CmdParser):
     def commands(self) -> list[Command]:
         """Define the command to list system packages.
 
-        :returns: The defined command
+        Returns:
+            The defined command
         """
         return [Command(id_="system_packages", command="rpm -qai", parse=self.parse)]
 
     def parse(self, command: Command) -> None:
         """Parse the output of the rpm command.
 
-        :param command: The result of running the command
+        Args:
+            command: The result of running the command
         """
         packages = []
         package: list[str] = []
@@ -397,8 +427,11 @@ class SystemPackages(CmdParser):
 def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     """Enter the image introspection process.
 
-    :param serialize: Whether to serialize the results
-    :returns: The collected data or none if serialize is False
+    Args:
+        serialize: Whether to serialize the results
+
+    Returns:
+        The collected data or none if serialize is False
     """
     response: dict[str, Any] = {"errors": []}
     response["python_version"] = {"details": {"version": " ".join(sys.version.splitlines())}}

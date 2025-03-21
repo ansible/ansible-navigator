@@ -64,8 +64,11 @@ class Decoration(IntEnum):
     def get_best(cls, name: str | None) -> int:
         """Return the default value for a missing value.
 
-        :param name: The name of the value
-        :return: The match or default value
+        Args:
+            name: The name of the value
+
+        Returns:
+            The match or default value
         """
         if isinstance(name, str):
             try:

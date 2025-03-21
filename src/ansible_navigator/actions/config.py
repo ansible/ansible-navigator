@@ -37,10 +37,13 @@ if TYPE_CHECKING:
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Provide a color for a collections menu entry in one column.
 
-    :param colno: The column number
-    :param colname: The column name
-    :param entry: The menu entry
-    :returns: The color and decoration
+    Args:
+        colno: The column number
+        colname: The column name
+        entry: The menu entry
+
+    Returns:
+        The color and decoration
     """
     if entry["default"] is False:
         return 3, 0
@@ -50,9 +53,12 @@ def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, in
 def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
     """Create a heading for config content.
 
-    :param obj: The content going to be shown
-    :param screen_w: The current screen width
-    :returns: The heading
+    Args:
+        obj: The content going to be shown
+        screen_w: The current screen width
+
+    Returns:
+        The heading
     """
     string = obj["name"]
     if obj["default"] is False:
@@ -76,8 +82,11 @@ def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
 def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
-    :param obj: The object from which keys should be removed
-    :returns: The object with keys removed
+    Args:
+        obj: The object from which keys should be removed
+
+    Returns:
+        The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
@@ -91,7 +100,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:config`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="config")
 
@@ -101,9 +111,13 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``config`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("config requested in interactive mode")
@@ -146,9 +160,11 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``config`` request for mode stdout.
 
-        :returns: The return code or 1. If the response from the runner invocation is None,
-            indicates there is no console output to display, so assume an issue and return 1
-            along with a message to review the logs.
+        Returns:
+            The return code or 1. If the response from the runner
+            invocation is None, indicates there is no console output to
+            display, so assume an issue and return 1 along with a
+            message to review the logs.
         """
         self._logger.debug("config requested in stdout mode")
         response = self._run_runner()
@@ -196,7 +212,8 @@ class Action(ActionBase):
     def _build_main_menu(self) -> Step:
         """Build the menu of configuration options.
 
-        :returns: The config menu definition
+        Returns:
+            The config menu definition
         """
         return Step(
             name="all_options",
@@ -209,7 +226,8 @@ class Action(ActionBase):
     def _build_option_content(self) -> Step:
         """Build the content for one configuration option.
 
-        :returns: The option's content
+        Returns:
+            The option's content
         """
         return Step(
             name="option_content",
@@ -221,10 +239,13 @@ class Action(ActionBase):
     def _run_runner(self) -> tuple[str, str, int] | None:
         """Use the runner subsystem to retrieve the configuration.
 
-        :raises RuntimeError: When the ansible-config command cannot be found with execution
-            environment support disabled.
-        :returns: For mode interactive nothing. For mode stdout the
-            output, errors and return code from runner.
+        Raises:
+            RuntimeError: When the ansible-config command cannot be
+                found with execution environment support disabled.
+
+        Returns:
+            For mode interactive nothing. For mode stdout the output,
+            errors and return code from runner.
         """
         if isinstance(self._args.set_environment_variable, dict):
             set_env_vars = {**self._args.set_environment_variable}
@@ -312,9 +333,12 @@ class Action(ActionBase):
     def _parse_and_merge(self, list_output: str, dump_output: str) -> None:
         """Parse the list and dump output. Merge dump into list.
 
-        :param list_output: The output from config list
-        :param dump_output: The output from config dump
-        :returns: Nothing
+        Args:
+            list_output: The output from config list
+            dump_output: The output from config dump
+
+        Returns:
+            Nothing
         """
         # pylint: disable=too-many-locals
         try:

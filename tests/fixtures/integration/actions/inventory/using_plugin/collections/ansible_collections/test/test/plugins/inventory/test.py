@@ -32,8 +32,11 @@ class InventoryModule(BaseInventoryPlugin):  # type: ignore[misc]
     def verify_file(self, path: str) -> bool:
         """Return true/false if this is possibly a valid file for this plugin to consume.
 
-        :param path: Path to inventory file
-        :return: True if valid, False if not
+        Args:
+            path: Path to inventory file
+
+        Returns:
+            True if valid, False if not
         """
         valid = False
         if super().verify_file(path):
@@ -44,10 +47,11 @@ class InventoryModule(BaseInventoryPlugin):  # type: ignore[misc]
     def parse(self, inventory: InventoryData, loader: Any, path: str, cache: bool = True) -> None:
         """Parse the inventory source.
 
-        :param inventory: Inventory object
-        :param loader: Loader object
-        :param path: Path to inventory source
-        :param cache: Cache or not
+        Args:
+            inventory: Inventory object
+            loader: Loader object
+            path: Path to inventory source
+            cache: Cache or not
         """
         super().parse(inventory, loader, path, cache)
         self.inventory.add_host("from.test.plugin")

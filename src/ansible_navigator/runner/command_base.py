@@ -25,11 +25,13 @@ class CommandBase(Base):
     ) -> None:
         """Handle common arguments of ``run_command`` interface for ``ansible-runner``.
 
-        :param executable_cmd: The command to be invoked
-        :param cmdline: A list of arguments to be passed to the executable command
-        :param playbook: The playbook file name to run
-        :param inventory: List of path to the inventory files
-        :param kwargs: The arguments for the runner call
+        Args:
+            executable_cmd: The command to be invoked
+            cmdline: A list of arguments to be passed to the executable
+                command
+            playbook: The playbook file name to run
+            inventory: List of path to the inventory files
+            **kwargs: The arguments for the runner call
         """
         self._executable_cmd = executable_cmd
         self._cmdline: list[str] = cmdline if isinstance(cmdline, list) else []

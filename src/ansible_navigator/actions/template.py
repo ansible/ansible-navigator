@@ -34,16 +34,21 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the template action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="template")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the templating request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("template requested '%s'", interaction.action.value)

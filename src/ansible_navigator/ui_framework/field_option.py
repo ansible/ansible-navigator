@@ -20,9 +20,14 @@ class FieldOption:
     def ansi_code(self, form_field: FieldChecks | FieldRadio) -> str:
         """Return our icon based on the form provided.
 
-        :param form_field: Form with check or radio field
-        :raises TypeError: If form_field is not a check or radio field
-        :returns: Check box icon
+        Args:
+            form_field: Form with check or radio field
+
+        Raises:
+            TypeError: If form_field is not a check or radio field
+
+        Returns:
+            Check box icon
         """
         if isinstance(form_field, FieldChecks):
             check_box = "\u25fc" if self.checked else "\u25fb"

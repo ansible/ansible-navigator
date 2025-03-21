@@ -20,16 +20,21 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:log`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="log")
 
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction:
         """Execute the ``:log`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction`
         """
         self._logger.debug("log requested")
         self._prepare_to_run(app, interaction)

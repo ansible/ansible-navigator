@@ -39,7 +39,8 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide a test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return f"{self.source}-{self.current}"
 
@@ -254,7 +255,8 @@ test_data = (
 def test_ee_volume_mount(data: Scenario) -> None:
     """Test the eev post processor.
 
-    :param data: The test data
+    Args:
+        data: The test data
     """
     settings = deepcopy(NavigatorConfiguration)
     entry = settings.entry("execution_environment_volume_mounts")

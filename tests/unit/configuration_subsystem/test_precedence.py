@@ -36,9 +36,12 @@ if TYPE_CHECKING:
 def which(*_args: Any, **_kwargs: dict[str, Any]) -> str:
     """Return the path to the container engine.
 
-    :param _args: args
-    :param _kwargs: kwargs
-    :returns: path to container engine
+    Args:
+        *_args: args
+        **_kwargs: kwargs
+
+    Returns:
+        path to container engine
     """
     return "/path/to/container_engine"
 
@@ -46,9 +49,12 @@ def which(*_args: Any, **_kwargs: dict[str, Any]) -> str:
 def isfile(*_args: Any, **_kwargs: dict[str, Any]) -> bool:
     """Return True.
 
-    :param _args: args
-    :param _kwargs: kwargs
-    :returns: True
+    Args:
+        *_args: args
+        **_kwargs: kwargs
+
+    Returns:
+        True
     """
     return True
 
@@ -66,11 +72,12 @@ def test_all_entries_reflect_cli_given_env_vars(
     # pylint: disable=too-many-locals
     """Ensure all entries are set by the CLI, even with environment variables set.
 
-    :param monkeypatch: Pytest monkeypatch fixture
-    :param generate_config: Fixture for generating a config
-    :param base: CLI parameters or None
-    :param cli_entry: CLI entry
-    :param expected: Expected value
+    Args:
+        monkeypatch: Pytest monkeypatch fixture
+        generate_config: Fixture for generating a config
+        base: CLI parameters or None
+        cli_entry: CLI entry
+        expected: Expected value
     """
     monkeypatch.setattr("shutil.which", which)
     monkeypatch.setattr(pathlib.Path, "is_file", isfile)
@@ -125,13 +132,14 @@ def test_all_entries_reflect_cli_given_settings(
     Based on the settings file, the non CLI parameters will be
     either DEFAULT_CFG or USER_CFG
 
-    :param monkeypatch: Pytest monkeypatch fixture
-    :param generate_config: Fixture for generating a config
-    :param settings: Settings file name
-    :param settings_file_type: Settings file type
-    :param base: CLI parameters or None
-    :param cli_entry: CLI entry
-    :param expected: Expected value
+    Args:
+        monkeypatch: Pytest monkeypatch fixture
+        generate_config: Fixture for generating a config
+        settings: Settings file name
+        settings_file_type: Settings file type
+        base: CLI parameters or None
+        cli_entry: CLI entry
+        expected: Expected value
     """
     monkeypatch.setattr("shutil.which", which)
     monkeypatch.setattr("os.path.isfile", isfile)
@@ -181,13 +189,14 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
     The non CLI parameters will be all be ENVIRONMENT_VARIABLE
     even though an empty or full settings file was provided
 
-    :param monkeypatch: Pytest monkeypatch fixture
-    :param generate_config: Fixture for generating a config
-    :param settings: Settings file name
-    :param source_other: Settings file type
-    :param base: CLI parameters or None
-    :param cli_entry: CLI entry
-    :param expected: Expected value
+    Args:
+        monkeypatch: Pytest monkeypatch fixture
+        generate_config: Fixture for generating a config
+        settings: Settings file name
+        source_other: Settings file type
+        base: CLI parameters or None
+        cli_entry: CLI entry
+        expected: Expected value
     """
     monkeypatch.setattr("shutil.which", which)
     monkeypatch.setattr("os.path.isfile", isfile)
@@ -233,9 +242,10 @@ def test_all_entries_reflect_default(
 ) -> None:
     """Ensure all entries are set to a default value.
 
-    :param monkeypatch: Pytest monkeypatch fixture
-    :param generate_config: Fixture for generating a config
-    :param entry: Settings entry
+    Args:
+        monkeypatch: Pytest monkeypatch fixture
+        generate_config: Fixture for generating a config
+        entry: Settings entry
     """
     monkeypatch.setattr("shutil.which", which)
 
@@ -272,13 +282,14 @@ def test_all_entries_reflect_env_var_given_settings(
     Even though settings file has been provided, the others
     should by default or settings file
 
-    :param monkeypatch: Pytest monkeypatch fixture
-    :param generate_config: Fixture for generating a config
-    :param settings: Settings file name
-    :param settings_file_type: Settings file type
-    :param entry: Entry name
-    :param value: Value to set
-    :param expected: Expected value
+    Args:
+        monkeypatch: Pytest monkeypatch fixture
+        generate_config: Fixture for generating a config
+        settings: Settings file name
+        settings_file_type: Settings file type
+        entry: Entry name
+        value: Value to set
+        expected: Expected value
     """
     monkeypatch.setattr("shutil.which", which)
     monkeypatch.setattr("os.path.isfile", isfile)
@@ -315,9 +326,10 @@ def test_all_entries_reflect_settings_given_settings(
 ) -> None:
     """Ensure all entries are set to an entry in a settings file.
 
-    :param monkeypatch: Pytest monkeypatch fixture
-    :param generate_config: Fixture for generating a config
-    :param entry: Settings entry
+    Args:
+        monkeypatch: Pytest monkeypatch fixture
+        generate_config: Fixture for generating a config
+        entry: Settings entry
     """
     monkeypatch.setattr("shutil.which", which)
     monkeypatch.setattr("os.path.isfile", isfile)

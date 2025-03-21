@@ -25,8 +25,9 @@ class FormHandlerButton(CursesWindow):
     def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for a form button.
 
-        :param screen:  A curses window
-        :param ui_config: The current user interface configuration
+        Args:
+            screen: A curses window
+            ui_config: The current user interface configuration
         """
         super().__init__(ui_config=ui_config)
         self._form_field: FieldButton | None = None
@@ -51,9 +52,12 @@ class FormHandlerButton(CursesWindow):
     def handle(self, idx: int, form_fields: list[FieldButton]) -> tuple[FieldButton, int]:
         """Handle the check box field.
 
-        :param form_fields: List of fields
-        :param idx: Index to retrieve specific field
-        :returns: Field and input from said field
+        Args:
+            form_fields: List of fields
+            idx: Index to retrieve specific field
+
+        Returns:
+            Field and input from said field
         """
         self._form_fields = form_fields
         self._form_field = form_fields[idx]

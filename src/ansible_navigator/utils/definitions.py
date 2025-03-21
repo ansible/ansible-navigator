@@ -57,7 +57,8 @@ class ExitPrefix(Enum):
     def _longest_name(cls) -> int:
         """Return the longest exit message prefix.
 
-        :returns: The longest exit message prefix
+        Returns:
+            The longest exit message prefix
         """
         return max(len(member.value) for member in cls)
 
@@ -65,14 +66,16 @@ class ExitPrefix(Enum):
     def longest_formatted(cls) -> int:
         """Return the longest exit message prefix.
 
-        :returns: The longest exit message prefix
+        Returns:
+            The longest exit message prefix
         """
         return max(len(str(member)) for member in cls)
 
     def __str__(self) -> str:
         """Return the exit message prefix as a string.
 
-        :returns: The exit message prefix as a string
+        Returns:
+            The exit message prefix as a string
         """
         name_len = self._longest_name()
         return f"{' ' * (name_len - len(self.name))}{self.name.capitalize()}: "
@@ -91,7 +94,8 @@ class ExitMessage:
     def color(self) -> str:
         """Return a color for the prefix.
 
-        :returns: The color for the prefix
+        Returns:
+            The color for the prefix
         """
         color_mapping = {
             ExitPrefix.ERROR: Color.RED,
@@ -105,7 +109,8 @@ class ExitMessage:
     def level(self) -> int:
         """Return a log level.
 
-        :returns: The log level
+        Returns:
+            The log level
         """
         mapping = {
             ExitPrefix.ERROR: logging.ERROR,
@@ -118,10 +123,13 @@ class ExitMessage:
     def to_lines(self, color: bool, width: int, with_prefix: bool) -> list[str]:
         """Output exit message to the console.
 
-        :param color: Whether to color the message
-        :param width: Constrain message to width
-        :param with_prefix: Whether to prefix the message
-        :returns: The exit message as a string
+        Args:
+            color: Whether to color the message
+            width: Constrain message to width
+            with_prefix: Whether to prefix the message
+
+        Returns:
+            The exit message as a string
         """
         prefix_length = ExitPrefix.longest_formatted()
         indent = " " * prefix_length
@@ -151,9 +159,12 @@ class ExitMessages:
     def to_strings(self, color: bool, width: int) -> list[str]:
         """Output exit messages to the console.
 
-        :param color: Whether to color the message
-        :param width: Constrain messages to width
-        :returns: The exit messages as a list of strings
+        Args:
+            color: Whether to color the message
+            width: Constrain messages to width
+
+        Returns:
+            The exit messages as a list of strings
         """
         printable = []
         new_section = True

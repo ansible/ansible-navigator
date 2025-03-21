@@ -20,15 +20,17 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:sample_working`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="sample_working")
 
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:sample_working`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
         """
         self._logger.debug("sample working requested")
         self._prepare_to_run(app, interaction)

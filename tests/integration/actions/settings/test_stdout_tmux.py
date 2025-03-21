@@ -90,8 +90,11 @@ steps = add_indices(stdout_tests)
 def step_id(value: ShellCommand) -> str:
     """Return the test id from the test step object.
 
-    :param value: If relevant, values for test id
-    :return: String with step_id information
+    Args:
+        value: If relevant, values for test id
+
+    Returns:
+        String with step_id information
     """
     return f"{value.step_index}"
 

@@ -40,7 +40,8 @@ def test_entries_alphabetical() -> None:
 def test_entries_no_dash_in_name(entry: SettingsEntry) -> None:
     """Ensure no names contain a -.
 
-    :param entry: The entry to test
+    Args:
+        entry: The entry to test
     """
     assert "-" not in entry.name
 
@@ -49,7 +50,8 @@ def test_entries_no_dash_in_name(entry: SettingsEntry) -> None:
 def test_entries_no_dash_in_environment_variable(entry: SettingsEntry) -> None:
     """Ensure no environment variable has a dash.
 
-    :param entry: The entry to test
+    Args:
+        entry: The entry to test
     """
     assert "-" not in entry.environment_variable("ansible_navigator")
 
@@ -58,7 +60,8 @@ def test_entries_no_dash_in_environment_variable(entry: SettingsEntry) -> None:
 def test_entries_no_short_long_if_positional(entry: SettingsEntry) -> None:
     """Ensure no positional argument has a short or long set.
 
-    :param entry: The entry to test
+    Args:
+        entry: The entry to test
     """
     if (
         hasattr(entry, "cli_arguments")
@@ -73,7 +76,8 @@ def test_entries_no_short_long_if_positional(entry: SettingsEntry) -> None:
 def test_entries_no_underscore_in_path(entry: SettingsEntry) -> None:
     """Ensure no long override has an _.
 
-    :param entry: The entry to test
+    Args:
+        entry: The entry to test
     """
     if entry.settings_file_path_override is not None:
         assert "_" not in entry.settings_file_path_override
@@ -83,7 +87,8 @@ def test_entries_no_underscore_in_path(entry: SettingsEntry) -> None:
 def test_entries_no_current_set(entry: SettingsEntry) -> None:
     """Ensure no entry has a current value set prior to configuration.
 
-    :param entry: The entry to test
+    Args:
+        entry: The entry to test
     """
     assert entry.value.current is C.NOT_SET
 
@@ -92,7 +97,8 @@ def test_entries_no_current_set(entry: SettingsEntry) -> None:
 def test_entries_default_value(entry: SettingsEntry) -> None:
     """Ensure entry has a default value not set or a common type.
 
-    :param entry: The entry to test
+    Args:
+        entry: The entry to test
     """
     if isinstance(entry.value.default, C):
         assert entry.value.default is C.NOT_SET

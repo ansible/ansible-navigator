@@ -37,9 +37,10 @@ def test_do_have(
 ) -> None:
     """Test using an image local.
 
-    :param valid_container_engine: Container engine identifier
-    :param default_ee_image_name: Default image name
-    :param data: Test object
+    Args:
+        valid_container_engine: Container engine identifier
+        default_ee_image_name: Default image name
+        data: Test object
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
@@ -68,9 +69,10 @@ def test_do_have_but_latest(
 ) -> None:
     """Test using an image local.
 
-    :param valid_container_engine: Container engine identifier
-    :param small_image_name: Small image name
-    :param data: Test object
+    Args:
+        valid_container_engine: Container engine identifier
+        small_image_name: Small image name
+        data: Test object
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
@@ -94,8 +96,9 @@ data_missing_locally = [
 def test_missing_locally(valid_container_engine: str, data: TstPullPolicy) -> None:
     """Test using an image not local.
 
-    :param valid_container_engine: Container engine identifier
-    :param data: Test object
+    Args:
+        valid_container_engine: Container engine identifier
+        data: Test object
     """
     uuid_str = str(uuid.uuid4())
     image_puller = ImagePuller(
@@ -130,9 +133,10 @@ data_will_have = [
 def test_will_have(valid_container_engine: str, pullable_image: str, data: TstPullPolicy) -> None:
     """Test using an image not local.
 
-    :param valid_container_engine: Container engine identifier
-    :param pullable_image: Container image
-    :param data: Test object
+    Args:
+        valid_container_engine: Container engine identifier
+        pullable_image: Container image
+        data: Test object
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
@@ -166,8 +170,9 @@ def test_will_have(valid_container_engine: str, pullable_image: str, data: TstPu
 def test_tag_parsing(image: str, expected_tag: str) -> None:
     """Test that we parse image tags in a reasonable way.
 
-    :param image: Test image
-    :param expected_tag: Expected tag for assertion
+    Args:
+        image: Test image
+        expected_tag: Expected tag for assertion
     """
     image_puller = ImagePuller(
         container_engine="podman",

@@ -18,7 +18,8 @@ class Action:
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:quit`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         self._args = args
         self._logger = logging.getLogger(__name__)
@@ -30,9 +31,13 @@ class Action:
         :class:`~ansible_navigator.action_runner.ActionRunner` so return immediately,
         passing the ``:quit`` request backwards through the stack of actions that are on the stack.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction`
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction`
         """
         self._logger.debug("quit was requested as: %s", interaction.action.value)
         return interaction

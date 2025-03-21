@@ -31,9 +31,10 @@ inventory = inventory.yml
 def test_valid_config(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a valid ansible.cfg is parsed.
 
-    :param ee_enabled: Indicate if EE support is enabled
-    :param tmp_path: The path to a test temporary directory
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        ee_enabled: Indicate if EE support is enabled
+        tmp_path: The path to a test temporary directory
+        monkeypatch: The monkeypatch fixture
     """
     cfg_path = tmp_path / "ansible.cfg"
     with cfg_path.open(mode="w") as fh:
@@ -56,9 +57,10 @@ def test_valid_configurator(
 ) -> None:
     """Confirm a valid ansible.cfg is parsed using configurator.
 
-    :param ee_enabled: Indicate if EE support is enabled
-    :param tmp_path: The path to a test temporary directory
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        ee_enabled: Indicate if EE support is enabled
+        tmp_path: The path to a test temporary directory
+        monkeypatch: The monkeypatch fixture
     """
     cfg_path = tmp_path / "ansible.cfg"
     with cfg_path.open(mode="w") as fh:
@@ -89,9 +91,10 @@ def test_valid_home(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.Monkey
     When EE support is enabled, the .ansible.cfg file is not used
     When EE support is disabled the .ansible.cfg file is used
 
-    :param ee_enabled: Indicate if EE support is enabled
-    :param tmp_path: The path to a test temporary directory
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        ee_enabled: Indicate if EE support is enabled
+        tmp_path: The path to a test temporary directory
+        monkeypatch: The monkeypatch fixture
     """
     cfg_path = tmp_path / ".ansible.cfg"
     with cfg_path.open(mode="w") as fh:
@@ -124,9 +127,10 @@ ANSIBLE_CFG_INVALID = """
 def test_invalid_config(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a invalid ansible.cfg raises errors.
 
-    :param ee_enabled: Indicate if EE support is enabled
-    :param tmp_path: The path to a test temporary directory
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        ee_enabled: Indicate if EE support is enabled
+        tmp_path: The path to a test temporary directory
+        monkeypatch: The monkeypatch fixture
     """
     cfg_path = tmp_path / "ansible.cfg"
     with cfg_path.open(mode="w") as fh:
@@ -148,9 +152,10 @@ def test_invalid_configurator(
 ) -> None:
     """Confirm a invalid ansible.cfg raises errors using configurator.
 
-    :param ee_enabled: Indicate if EE support is enabled
-    :param tmp_path: The path to a test temporary directory
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        ee_enabled: Indicate if EE support is enabled
+        tmp_path: The path to a test temporary directory
+        monkeypatch: The monkeypatch fixture
     """
     cfg_path = tmp_path / "ansible.cfg"
     with cfg_path.open(mode="w") as fh:
@@ -175,7 +180,8 @@ def test_invalid_configurator(
 def test_config_none(ee_enabled: bool) -> None:
     """Confirm a invalid ansible.cfg raises errors.
 
-    :param ee_enabled: Indicate if EE support is enabled
+    Args:
+        ee_enabled: Indicate if EE support is enabled
     """
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
 
@@ -194,9 +200,10 @@ def test_config_none(ee_enabled: bool) -> None:
 def test_invalid_path(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm an invalid path to ansible.cfg is handled.
 
-    :param ee_enabled: Indicate if EE support is enabled
-    :param tmp_path: The path to a test temporary directory
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        ee_enabled: Indicate if EE support is enabled
+        tmp_path: The path to a test temporary directory
+        monkeypatch: The monkeypatch fixture
     """
     original_run_command = run_command
 

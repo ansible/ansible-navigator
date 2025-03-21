@@ -62,8 +62,11 @@ PartialCommands = (
 def _generate_commands(tmp_dir: Path) -> list[Command]:
     """Produce the commands.
 
-    :param tmp_dir: Path to a temporary directory
-    :returns: All the commands
+    Args:
+        tmp_dir: Path to a temporary directory
+
+    Returns:
+        All the commands
     """
     commands: list[Command] = []
     for partial_command in PartialCommands:
@@ -85,8 +88,9 @@ def _generate_commands(tmp_dir: Path) -> list[Command]:
 def _post_process(*_args: Any, **_kwargs: Any) -> None:
     """Do nothing command post processor.
 
-    :param _args: The arguments
-    :param _kwargs: The keyword arguments
+    Args:
+        *_args: The arguments
+        **_kwargs: The keyword arguments
     """
 
 

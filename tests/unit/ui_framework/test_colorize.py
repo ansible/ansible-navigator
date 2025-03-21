@@ -107,8 +107,10 @@ def test_graceful_failure(mocked_func: MagicMock, caplog: pytest.LogCaptureFixtu
 
     Ensure a tokenization error returns the original one line json string
     w/o color and the log reflects the critical error.
-    :param mocked_func: Mocked fixture
-    :param caplog: Capture log
+
+    Args:
+        mocked_func: Mocked fixture
+        caplog: Capture log
     """
     mocked_func.side_effect = ValueError()
     sample = serialize(**SAMPLE_JSON)

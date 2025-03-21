@@ -21,7 +21,8 @@ class Parser:
     def __init__(self, config: ApplicationConfiguration) -> None:
         """Initialize the command line interface parameter parser.
 
-        :param config: The current settings for the application
+        Args:
+            config: The current settings for the application
         """
         self._config = config
         self._base_parser = ArgumentParser(add_help=False)
@@ -38,8 +39,12 @@ class Parser:
     def generate_argument(entry: SettingsEntry) -> tuple[Any, Any, dict[str, Any]]:
         """Generate an argparse argument.
 
-        :param entry: Single settings entry
-        :returns: Long and short cli parameters, and dictionary of parsed arguments
+        Args:
+            entry: Single settings entry
+
+        Returns:
+            Long and short cli parameters, and dictionary of parsed
+            arguments
         """
         kwargs = {}
         help_strings = [entry.short_description]
@@ -79,8 +84,9 @@ class Parser:
     def _add_parser(self, group: argparse._ArgumentGroup, entry: SettingsEntry) -> None:
         """Add a parser to the subparsers.
 
-        :param group: The group to add the parser to
-        :param entry: The entry to add
+        Args:
+            group: The group to add the parser to
+            entry: The entry to add
         """
         if entry.cli_parameters:
             short, long, kwargs = self.generate_argument(entry)
@@ -92,8 +98,11 @@ class Parser:
     def _add_subcommand_holder(self) -> _SubParsersAction[Any]:
         """Add the subparsers holder.
 
-        :raises ValueError: if zero or more than one subcommand is found
-        :returns: The subparsers action
+        Raises:
+            ValueError: if zero or more than one subcommand is found
+
+        Returns:
+            The subparsers action
         """
         subcommand_value = [
             entry for entry in self._config.entries if entry.subcommand_value is True
@@ -161,7 +170,8 @@ class CustomHelpFormatter(HelpFormatter):
     def __init__(self, prog: str) -> None:
         """Initialize the help formatter.
 
-        :param prog: The program name
+        Args:
+            prog: The program name
         """
         long_string = "--rac  --ansible-runner-rotate-artifacts-count"
         # 3 here accounts for the spaces in the ljust(6) below
@@ -175,9 +185,14 @@ class CustomHelpFormatter(HelpFormatter):
     def _format_action_invocation(self, action: argparse.Action) -> str:
         """Format the action invocation.
 
-        :param action: The action to format
-        :raises ValueError: If more than 2 options are given
-        :returns: The formatted action invocation
+        Args:
+            action: The action to format
+
+        Raises:
+            ValueError: If more than 2 options are given
+
+        Returns:
+            The formatted action invocation
         """
         if not action.option_strings:
             default = self._get_default_metavar_for_positional(action)
@@ -197,11 +212,14 @@ class CustomHelpFormatter(HelpFormatter):
     def _format_usage(self, usage: Any, actions: Any, groups: Any, prefix: str | None) -> str:
         """Format the usage.
 
-        :param usage: The usage
-        :param actions: The actions
-        :param groups: The groups
-        :param prefix: The prefix
-        :returns: The formatted usage
+        Args:
+            usage: The usage
+            actions: The actions
+            groups: The groups
+            prefix: The prefix
+
+        Returns:
+            The formatted usage
         """
         prefix = "Usage:" if prefix is None else ""
         options = "[options]" if actions else ""

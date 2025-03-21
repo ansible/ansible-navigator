@@ -24,12 +24,13 @@ def test_posix_message_queue_ee(
 
     Test using all possible combinations of container_engine, ee_support, and ``is_dir``.
 
-    :param monkeypatch: Fixture for patching
-    :param is_dir: The return value to set for ``pathlib.Path.is_dir``
-    :param ee_support: The value to set for ``--ee``
-    :param engine: The value to set for ``--ce``
-    :param platform: The system platform to mock
-    :param generate_config: The configuration generator fixture
+    Args:
+        monkeypatch: Fixture for patching
+        is_dir: The return value to set for ``pathlib.Path.is_dir``
+        ee_support: The value to set for ``--ee``
+        engine: The value to set for ``--ce``
+        platform: The system platform to mock
+        generate_config: The configuration generator fixture
     """
     message_queue_msg = (
         "Execution environment support while using podman requires a '/dev/mqueue/' directory."
@@ -39,8 +40,12 @@ def test_posix_message_queue_ee(
     def mock_is_dir(path: pathlib.Path) -> bool:
         """Override the result for ``Path('/dev/mqueue/')`` to ``is_dir``.
 
-        :param path: The provided path to check
-        :returns: ``is_dir`` if the path is ``/dev/mqueue/``, else the real result
+        Args:
+            path: The provided path to check
+
+        Returns:
+            ``is_dir`` if the path is ``/dev/mqueue/``, else the real
+            result
         """
         if path == pathlib.Path("/dev/mqueue/"):
             return is_dir

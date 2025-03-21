@@ -52,7 +52,8 @@ class ColorSchema:
     def __init__(self, schema: dict[str, str | list[Any] | dict[Any, Any]]) -> None:
         """Initialize the ColorSchema class.
 
-        :param schema: The color scheme, theme to use
+        Args:
+            schema: The color scheme, theme to use
         """
         self._logger = logging.getLogger(__name__)
         self._schema = schema
@@ -61,8 +62,11 @@ class ColorSchema:
     def get_color_and_style(self, scope: str) -> tuple[RgbTuple | None, str | None]:
         """Get a color from the schema, traverse all to aggregate color and style.
 
-        :param scope: The scope, aka format
-        :returns: The color in RGB format or nothing
+        Args:
+            scope: The scope, aka format
+
+        Returns:
+            The color in RGB format or nothing
         """
         found_color = None
         found_style = None
@@ -94,8 +98,9 @@ class Colorize:
     def __init__(self, grammar_dir: Traversable, theme_path: Traversable) -> None:
         """Initialize the colorizer.
 
-        :param grammar_dir: The directory in which the grammars reside
-        :param theme_path: The path to the currently configured color theme
+        Args:
+            grammar_dir: The directory in which the grammars reside
+            theme_path: The path to the currently configured color theme
         """
         self._logger = logging.getLogger(__name__)
         self._schema: ColorSchema
@@ -113,8 +118,11 @@ class Colorize:
     def render_ansi(doc: str) -> CursesLines:
         """Convert ansi colored text into curses lines.
 
-        :param doc: The text to convert
-        :returns: Lines ready to present using the TUI
+        Args:
+            doc: The text to convert
+
+        Returns:
+            Lines ready to present using the TUI
         """
         lines = tuple(ansi_to_curses(line) for line in doc.splitlines())
         return CursesLines(lines)
@@ -123,9 +131,12 @@ class Colorize:
     def render(self, doc: str, scope: str) -> list[list[SimpleLinePart]]:
         """Render text lines into lines of columns and colors.
 
-        :param doc: The string to split, tokenize and color
-        :param scope: The scope, aka the format of the string
-        :returns: A list of lines, each a list of dicts
+        Args:
+            doc: The string to split, tokenize and color
+            scope: The scope, aka the format of the string
+
+        Returns:
+            A list of lines, each a list of dicts
         """
         try:
             compiler = self._grammars.compiler_for_scope(scope)
@@ -176,8 +187,11 @@ def scope_to_list(scope: str | list[Any]) -> list[Any]:
     A scope in a theme should always be a string or list,
     but just in case return an empty list if not
 
-    :param scope: The scope
-    :returns: Scope as list
+    Args:
+        scope: The scope
+
+    Returns:
+        Scope as list
     """
     if isinstance(scope, list):
         return scope
@@ -189,8 +203,11 @@ def scope_to_list(scope: str | list[Any]) -> list[Any]:
 def hex_to_rgb(value: str) -> RgbTuple:
     """Convert a hex value to RGB tuple.
 
-    :param value: The hex color
-    :returns: RGB tuple
+    Args:
+        value: The hex color
+
+    Returns:
+        RGB tuple
     """
     value = value.lstrip("#")
     value_length = len(value)
@@ -203,8 +220,11 @@ def hex_to_rgb(value: str) -> RgbTuple:
 def scale_for_curses(rgb_value: int) -> int:
     """Scale a single RGB value for curses.
 
-    :param rgb_value: One RGB value
-    :returns: The value scaled for curses
+    Args:
+        rgb_value: One RGB value
+
+    Returns:
+        The value scaled for curses
     """
     curses_ceiling = 1000
     rgb_ceiling = 255
@@ -214,8 +234,11 @@ def scale_for_curses(rgb_value: int) -> int:
 def hex_to_rgb_curses(value: str) -> RgbTuple:
     """Convert a hex color to RGB scaled for curses.
 
-    :param value: an RGB color
-    :returns: The colors scaled to 1000
+    Args:
+        value: an RGB color
+
+    Returns:
+        The colors scaled to 1000
     """
     red, green, blue = hex_to_rgb(value)
     return (scale_for_curses(red), scale_for_curses(green), scale_for_curses(blue))
@@ -224,11 +247,14 @@ def hex_to_rgb_curses(value: str) -> RgbTuple:
 def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
     """Convert an RGB color to an ansi color.
 
-    :param red: The red component
-    :param green: The green component
-    :param blue: The blue component
-    :param colors: The number of color supported by the terminal
-    :returns: A color suitable for the terminal
+    Args:
+        red: The red component
+        green: The green component
+        blue: The blue component
+        colors: The number of color supported by the terminal
+
+    Returns:
+        A color suitable for the terminal
     """
     # https://github.com/Qix-/color-convert/blob/master/conversions.js
     if colors == 256:
@@ -265,9 +291,12 @@ def columns_and_colors(
 ) -> list[list[SimpleLinePart]]:
     """Convert to colors and columns.
 
-    :param lines: Lines of text and their regions
-    :param schema: An instance of the ColorSchema
-    :returns: Lines of text, each broken into sections
+    Args:
+        lines: Lines of text and their regions
+        schema: An instance of the ColorSchema
+
+    Returns:
+        Lines of text, each broken into sections
     """
     results: list[list[SimpleLinePart]] = []
 
@@ -314,8 +343,11 @@ def columns_and_colors(
 def ansi_to_curses(line: str) -> CursesLine:
     """Convert ansible color codes to curses colors.
 
-    :param line: A string with ansi colors
-    :returns: A line ready for presentation in the TUI
+    Args:
+        line: A string with ansi colors
+
+    Returns:
+        A line ready for presentation in the TUI
     """
     # pylint: disable=too-many-locals
     if line == "":
@@ -384,8 +416,11 @@ def strip_markdown(lines: list[list[SimpleLinePart]]) -> list[list[SimpleLinePar
     This is not a complete removal of markdown, but it removes some of the
     common markdown that is in use.
 
-    :param lines: Lines of text and their parts
-    :returns: Lines of text and their parts without some markdown
+    Args:
+        lines: Lines of text and their parts
+
+    Returns:
+        Lines of text and their parts without some markdown
     """
     full_dash_line = [
         SimpleLinePart(

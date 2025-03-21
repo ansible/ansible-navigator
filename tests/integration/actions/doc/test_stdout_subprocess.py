@@ -40,7 +40,8 @@ class StdoutCliTest(BaseScenario):
     def __str__(self) -> str:
         """Provide a test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return self.comment
 
@@ -48,7 +49,8 @@ class StdoutCliTest(BaseScenario):
     def command(self) -> tuple[str, ...]:
         """Provide the constructed command.
 
-        :returns: The constructed command
+        Returns:
+            The constructed command
         """
         return ("ansible-navigator", self.subcommand) + self.params
 
@@ -114,12 +116,15 @@ def test(
 ) -> None:
     """Test doc using subcommand.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param tmp_path: The temporary path to use
-    :param data: The test data
-    :param exec_env: Whether to use the exec environment
-    :param cmd_in_tty: The tty command runner
-    :raises AssertionError: When test fails
+    Args:
+        monkeypatch: The monkeypatch fixture
+        tmp_path: The temporary path to use
+        data: The test data
+        exec_env: Whether to use the exec environment
+        cmd_in_tty: The tty command runner
+
+    Raises:
+        AssertionError: When test fails
     """
     log_file = str(tmp_path / "log.txt")
     monkeypatch.setenv("PAGER", "cat")

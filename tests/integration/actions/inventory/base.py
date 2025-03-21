@@ -62,7 +62,8 @@ class BaseClass:
     def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
-        :param request: A fixture providing details about the test caller
+        Args:
+            request: A fixture providing details about the test caller
         :yields: Tmux session
         """
         with TmuxSession(
@@ -86,10 +87,13 @@ class BaseClass:
     ) -> None:
         """Run the tests for inventory, mode and ``ee`` set in child class.
 
-        :param request: A fixture providing details about the test caller
-        :param tmux_session: The tmux session to use
-        :param step: Step index to use
-        :raises ValueError: When the test mode is not set
+        Args:
+            request: A fixture providing details about the test caller
+            tmux_session: The tmux session to use
+            step: Step index to use
+
+        Raises:
+            ValueError: When the test mode is not set
         """
         assert ANSIBLE_INVENTORY_FIXTURE_DIR.exists()
         assert TEST_CONFIG_FILE.exists()

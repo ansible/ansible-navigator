@@ -18,7 +18,8 @@ class Action:
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:save`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         self._args = args
         self._logger = logging.getLogger(__name__)
@@ -26,8 +27,9 @@ class Action:
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:save`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
         """
         self._logger.debug("save requested")
         filename = interaction.action.match.groupdict()["filename"]

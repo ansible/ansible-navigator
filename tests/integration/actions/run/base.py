@@ -58,7 +58,8 @@ class BaseClass:
     def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession]:
         """Generate a tmux fixture for this module.
 
-        :param request: A fixture providing details about the test caller
+        Args:
+            request: A fixture providing details about the test caller
         :yields: A tmux session
         """
         params: TmuxSessionKwargs = {
@@ -82,9 +83,10 @@ class BaseClass:
     ) -> None:
         """Run the tests for run, mode and ``ee`` set in child class.
 
-        :param request: A fixture providing details about the test caller
-        :param tmux_session: The tmux session to use
-        :param step: The commands to issue and content to look for
+        Args:
+            request: A fixture providing details about the test caller
+            tmux_session: The tmux session to use
+            step: The commands to issue and content to look for
         """
         search_within_response: str | list[str]
         if step.search_within_response is SearchFor.HELP:

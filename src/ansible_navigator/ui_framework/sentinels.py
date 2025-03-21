@@ -13,9 +13,12 @@ class Singleton(type):
     def __call__(cls, *args: Any, **kwargs: Any) -> Any:
         """Determine if the instance is one of a kind.
 
-        :param *args: Arbitrary arguments
-        :param **kwargs: Dict of Keyword Args
-        :returns: The type
+        Args:
+            *args: Arbitrary arguments
+            **kwargs: Dict of Keyword Args
+
+        Returns:
+            The type
         """
         if cls not in cls._instances:
             cls._instances[cls] = super().__call__(*args, **kwargs)
@@ -28,7 +31,8 @@ class Unknown(metaclass=Singleton):
     def __repr__(self) -> str:
         """Return the type of the object.
 
-        :returns: The type of the object.
+        Returns:
+            The type of the object.
         """
         return type(self).__name__
 
@@ -42,7 +46,8 @@ class Nonexistent(metaclass=Singleton):
     def __repr__(self) -> str:
         """Return the type of the object.
 
-        :returns: The type of the object
+        Returns:
+            The type of the object
         """
         return type(self).__name__
 

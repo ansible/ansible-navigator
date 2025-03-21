@@ -29,11 +29,16 @@ def _generate_command(
 ) -> GeneratedCommand:
     """Generate the command and args.
 
-    :param exec_command: The command to run
-    :param exec_shell: Should the command be wrapped in a shell
-    :param extra_args: Any unknown or extra arguments passed on the command line
-    :param exec_command_is_default: If the exec_command is set to its default value
-    :returns: The command and any pass through arguments
+    Args:
+        exec_command: The command to run
+        exec_shell: Should the command be wrapped in a shell
+        extra_args: Any unknown or extra arguments passed on the command
+            line
+        exec_command_is_default: If the exec_command is set to its
+            default value
+
+    Returns:
+        The command and any pass through arguments
     """
     logger.debug("exec_command: %s", exec_command)
     logger.debug("exec_shell: %s", exec_shell)
@@ -77,16 +82,19 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:exec`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="exec")
 
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``exec`` request for mode stdout.
 
-        :returns: The return code or 1. If the response from the runner invocation is None,
-            indicates there is no console output to display, so assume an issue and return 1
-            along with a message to review the logs.
+        Returns:
+            The return code or 1. If the response from the runner
+            invocation is None, indicates there is no console output to
+            display, so assume an issue and return 1 along with a
+            message to review the logs.
         """
         self._logger.debug("exec requested in stdout mode")
         response = self._run_runner()
@@ -99,7 +107,8 @@ class Action(ActionBase):
     def _run_runner(self) -> tuple[str, str, int] | None:
         """Spin up runner.
 
-        :returns: The stdout, stderr and return code from runner
+        Returns:
+            The stdout, stderr and return code from runner
         """
         if isinstance(self._args.set_environment_variable, dict):
             env_vars_to_set = self._args.set_environment_variable.copy()

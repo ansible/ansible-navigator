@@ -127,10 +127,11 @@ def test_update_args_general(
 ) -> None:
     """Test the parse and update function.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param given: Exit message params
-    :param argname: Name of the entry
-    :param expected: Expected value of the entry
+    Args:
+        monkeypatch: The monkeypatch fixture
+        given: Exit message params
+        argname: Name of the entry
+        expected: Expected value of the entry
     """
     monkeypatch.setenv("ANSIBLE_NAVIGATOR_CONFIG", f"{FIXTURES_DIR}/unit/cli/ansible-navigator.yml")
     args = deepcopy(NavigatorConfiguration)
@@ -146,7 +147,8 @@ def test_update_args_general(
 def test_editor_command_default(_mf1: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """Test editor with default.
 
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
     """
     monkeypatch.setenv(
         "ANSIBLE_NAVIGATOR_CONFIG",
@@ -214,10 +216,11 @@ def test_hints(
 ) -> None:
     """Test the hints don't generate a traceback.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param locked_directory: Locked directory
-    :param valid_container_engine: Container engine
-    :param data: Test object
+    Args:
+        monkeypatch: The monkeypatch fixture
+        locked_directory: Locked directory
+        valid_container_engine: Container engine
+        data: Test object
     """
     monkeypatch.setenv(
         "ANSIBLE_NAVIGATOR_CONFIG",
@@ -240,7 +243,8 @@ def test_hints(
 def test_no_term(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test for err and hint w/o TERM.
 
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
     """
     monkeypatch.delenv("TERM")
     args = deepcopy(NavigatorConfiguration)
@@ -261,9 +265,10 @@ def test_for_version_logged(
 ) -> None:
     """Ensure the version is captured in the log.
 
-    :param monkeypatch: The monkey patch fixture
-    :param caplog: The log capture fixture
-    :param tmp_path: A temporary director for this test
+    Args:
+        monkeypatch: The monkey patch fixture
+        caplog: The log capture fixture
+        tmp_path: A temporary director for this test
     """
     logfile = tmp_path / "log.txt"
     command_line = [

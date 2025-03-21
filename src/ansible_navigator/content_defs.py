@@ -61,9 +61,12 @@ class ContentBase(Generic[T]):
     ) -> DictType[Any]:
         """Convert thy self into a dictionary.
 
-        :param content_view: The content view
-        :param serialization_format: The serialization format
-        :returns: A dictionary created from self
+        Args:
+            content_view: The content view
+            serialization_format: The serialization format
+
+        Returns:
+            A dictionary created from self
         """
         converter_map = {
             (ContentView.FULL, SerializationFormat.JSON): self.serialize_json_full,
@@ -81,28 +84,32 @@ class ContentBase(Generic[T]):
     def serialize_json_full(self) -> DictType[Any]:
         """Provide dictionary for ``JSON`` with all attributes.
 
-        :returns: A dictionary created from self
+        Returns:
+            A dictionary created from self
         """
         return asdict(self)
 
     def serialize_json_normal(self) -> DictType[Any]:
         """Provide dictionary for ``JSON`` with curated attributes.
 
-        :returns: A dictionary created from self
+        Returns:
+            A dictionary created from self
         """
         return asdict(self)
 
     def serialize_yaml_full(self) -> DictType[Any]:
         """Provide dictionary for ``YAML`` with all attributes.
 
-        :returns: A dictionary created from self
+        Returns:
+            A dictionary created from self
         """
         return asdict(self)
 
     def serialize_yaml_normal(self) -> DictType[Any]:
         """Provide dictionary for ``JSON`` with curated attributes.
 
-        :returns: A dictionary created from self
+        Returns:
+            A dictionary created from self
         """
         return asdict(self)
 
@@ -116,8 +123,11 @@ class ContentBase(Generic[T]):
         this is not more work than necessary to remove in the future
         and will only return attributes in existence.
 
-        :param attribute: The attribute to get
-        :returns: The gotten attribute
+        Args:
+            attribute: The attribute to get
+
+        Returns:
+            The gotten attribute
         """
         return getattr(self, attribute)
 
@@ -127,7 +137,8 @@ class ContentBase(Generic[T]):
         This is a work around until the UI fully supports dataclasses
         at which time this can be removed.
 
-        :returns: Tuples of attribute value pairs
+        Returns:
+            Tuples of attribute value pairs
         """
         return asdict(self).items()
 

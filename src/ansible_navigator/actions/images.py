@@ -38,8 +38,11 @@ if TYPE_CHECKING:
 def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing image content.
 
-    :param obj: The object from which keys should be removed
-    :returns: The object with keys removed
+    Args:
+        obj: The object from which keys should be removed
+
+    Returns:
+        The object with keys removed
     """
     if isinstance(obj, list):
         working = [filter_content_keys(x) for x in obj]
@@ -62,7 +65,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:images`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="images")
         self._image_list: list[str] = []
@@ -77,10 +81,13 @@ class Action(ActionBase):
     def color_menu(self, colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
         """Provide a color for a images menu entry in one column.
 
-        :param colno: The column number
-        :param colname: The column name
-        :param entry: The menu entry
-        :returns: The color and decoration
+        Args:
+            colno: The column number
+            colname: The column name
+            entry: The menu entry
+
+        Returns:
+            The color and decoration
         """
         if "__full_name" in entry:
             if entry.get("execution_environment") is False:
@@ -104,10 +111,13 @@ class Action(ActionBase):
     ) -> CursesLines:
         """Create a heading for image content.
 
-        :param obj: The content going to be shown
-        :param screen_w: The current screen width
-        :param name: The name of the images menu
-        :returns: The heading
+        Args:
+            obj: The content going to be shown
+            screen_w: The current screen width
+            name: The name of the images menu
+
+        Returns:
+            The heading
         """
         text = ""
         if name == "image_menu":
@@ -138,7 +148,8 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Handle settings in mode stdout.
 
-        :returns: RunStdoutReturn
+        Returns:
+            RunStdoutReturn
         """
         self._logger.debug("images requested in stdout mode")
 
@@ -167,7 +178,8 @@ class Action(ActionBase):
     def run_stdout_details(self) -> RunStdoutReturn:
         """Execute the ``images --details`` request for mode stdout.
 
-        :returns: A message and return code
+        Returns:
+            A message and return code
         """
         image_name = self._args.execution_environment_image
 
@@ -201,9 +213,13 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``images`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("images requested")
@@ -284,7 +300,8 @@ class Action(ActionBase):
     def _build_image_content(self) -> Step:
         """Build the menu of image details.
 
-        :returns: The image details menu definition
+        Returns:
+            The image details menu definition
         """
         if self._images.selected is None:
             # an image should always be selected by now
@@ -355,7 +372,8 @@ class Action(ActionBase):
     def _build_image_menu(self) -> Step:
         """Build the menu of images.
 
-        :returns: The images menu definition
+        Returns:
+            The images menu definition
         """
         if self._images.selected is None:
             # an image should always be selected by now
@@ -411,7 +429,8 @@ class Action(ActionBase):
     def _build_python_content(self) -> Step:
         """Build the content for an image's python packages.
 
-        :returns: The python package content
+        Returns:
+            The python package content
         """
         return Step(
             name="python_content",
@@ -423,7 +442,8 @@ class Action(ActionBase):
     def _build_system_content(self) -> Step:
         """Build the content for an image's system packages.
 
-        :returns: The system package content
+        Returns:
+            The system package content
         """
         return Step(
             name="system_content",
@@ -479,7 +499,8 @@ class Action(ActionBase):
     def _introspect_image(self) -> bool:
         """Use the runner subsystem to introspect an image.
 
-        :returns: An indication of image introspection success
+        Returns:
+            An indication of image introspection success
         """
         if self._images.selected is None:
             # an image should always be selected by now
@@ -529,8 +550,11 @@ class Action(ActionBase):
     def _parse(self, output: str) -> dict[Any, Any] | None:
         """Load and process the ``json`` output from the image introspection process.
 
-        :param output: The output from the image introspection process
-        :returns: The parsed output
+        Args:
+            output: The output from the image introspection process
+
+        Returns:
+            The parsed output
         """
         try:
             if not output.startswith("{"):
@@ -557,8 +581,11 @@ class Action(ActionBase):
     def _run_runner(self, image_name: str) -> tuple[str, str, int]:
         """Run runner to collect image details.
 
-        :param image_name: The full image name
-        :returns: Output, errors and the return code
+        Args:
+            image_name: The full image name
+
+        Returns:
+            Output, errors and the return code
         """
         cache_path = self._args.internals.cache_path
         container_volume_mounts = [f"{cache_path}:{cache_path}"]

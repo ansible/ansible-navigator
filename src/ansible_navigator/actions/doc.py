@@ -38,7 +38,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``doc`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="doc")
 
@@ -49,9 +50,12 @@ class Action(ActionBase):
     def generate_content_heading(self, _obj: dict[Any, Any], screen_w: int) -> CursesLines:
         """Create a heading for doc content.
 
-        :param _obj: The content going to be shown
-        :param screen_w: The current screen width
-        :returns: The heading
+        Args:
+            _obj: The content going to be shown
+            screen_w: The current screen width
+
+        Returns:
+            The heading
         """
         plugin_str = f"Name: {self._plugin_name} ({self._plugin_type})"
         empty_str = " " * (screen_w - len(plugin_str) + 1)
@@ -69,9 +73,13 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``doc`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("doc requested in interactive")
@@ -124,9 +132,11 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``doc`` request for mode stdout.
 
-        :returns: The return code or 1. If the response from the runner invocation is None,
-            indicates there is no console output to display, so assume an issue and return 1
-            along with a message to review the logs.
+        Returns:
+            The return code or 1. If the response from the runner
+            invocation is None, indicates there is no console output to
+            display, so assume an issue and return 1 along with a
+            message to review the logs.
         """
         self._plugin_name = self._args.plugin_name
         self._plugin_type = self._args.plugin_type
@@ -142,10 +152,13 @@ class Action(ActionBase):
         # pylint: disable=no-else-return
         """Use the runner subsystem to retrieve the configuration.
 
-        :raises RuntimeError: When the ansible-doc command cannot be found with execution
-            environment support disabled.
-        :returns: For mode interactive nothing or the plugin's doc. For mode stdout the
-            output, errors and return code from runner.
+        Raises:
+            RuntimeError: When the ansible-doc command cannot be found
+                with execution environment support disabled.
+
+        Returns:
+            For mode interactive nothing or the plugin's doc. For mode
+            stdout the output, errors and return code from runner.
         """
         if isinstance(self._args.set_environment_variable, dict):
             set_env_vars = {**self._args.set_environment_variable}
@@ -239,9 +252,12 @@ class Action(ActionBase):
     ) -> dict[Any, Any] | None:
         """Extract the plugin's documentation from the runner output.
 
-        :param out: The output from runner
-        :param err: Any runner errors
-        :returns: The plugin's doc or errors
+        Args:
+            out: The output from runner
+            err: Any runner errors
+
+        Returns:
+            The plugin's doc or errors
         """
         plugin_doc = {}
         if self._args.execution_environment:

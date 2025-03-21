@@ -37,9 +37,12 @@ logger = logging.getLogger(__name__)
 def oxfordcomma(listed: Iterable[bool | str | Path], condition: str) -> str:
     """Format a list into a sentence.
 
-    :param listed: List of string entries to modify
-    :param condition: String to splice into string, usually 'and'
-    :returns: Modified string
+    Args:
+        listed: List of string entries to modify
+        condition: String to splice into string, usually 'and'
+
+    Returns:
+        Modified string
     """
     listed = [f"'{entry!s}'" for entry in listed]
     if len(listed) == 0:
@@ -54,8 +57,11 @@ def oxfordcomma(listed: Iterable[bool | str | Path], condition: str) -> str:
 def expand_path(path: str | Path) -> Path:
     """Resolve a path.
 
-    :param path: The file path to resolve
-    :returns: Resolved file path
+    Args:
+        path: The file path to resolve
+
+    Returns:
+        Resolved file path
     """
     _path = Path(os.path.expandvars(path))
     _path = _path.expanduser()
@@ -65,7 +71,8 @@ def expand_path(path: str | Path) -> Path:
 def check_for_ansible() -> tuple[list[LogMessage], list[ExitMessage]]:
     """Check for the ansible-playbook command, runner will need it.
 
-    :returns: Exit messages if not found, messages if found
+    Returns:
+        Exit messages if not found, messages if found
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
@@ -95,8 +102,11 @@ def check_playbook_type(playbook: str) -> str:
     Note: These checks are added to directly access a playbook provided by a collection
     i.e. `namespace.collection.playbook_name` fqcn format.
 
-    :param playbook: given playbook
-    :returns: playbook type
+    Args:
+        playbook: given playbook
+
+    Returns:
+        playbook type
     """
     playbook_type = "file"
     playbook_path = str(playbook)
@@ -125,7 +135,8 @@ def clear_screen() -> None:
 def console_width() -> int:
     """Get a console width based on common screen widths.
 
-    :returns: The console width
+    Returns:
+        The console width
     """
     width = shutil.get_terminal_size().columns
     if width <= 80:
@@ -139,9 +150,12 @@ def console_width() -> int:
 def dispatch(obj: object, replacements: tuple[tuple[str, str], ...]) -> object:
     """Make the replacement based on type.
 
-    :param obj: An obj in which replacements will be made
-    :param replacements: The things to replace
-    :returns: Variable obj
+    Args:
+        obj: An obj in which replacements will be made
+        replacements: The things to replace
+
+    Returns:
+        Variable obj
     """
     if isinstance(obj, dict):
         obj = {k: dispatch(v, replacements) for k, v in obj.items()}
@@ -156,8 +170,11 @@ def dispatch(obj: object, replacements: tuple[tuple[str, str], ...]) -> object:
 def escape_moustaches(obj: Mapping[Any, Any]) -> Mapping[Any, Any]:
     """Escape moustaches.
 
-    :param obj: Variable that may contain moustaches
-    :returns: The obj with replacements made
+    Args:
+        obj: Variable that may contain moustaches
+
+    Returns:
+        The obj with replacements made
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     result = dispatch(obj, replacements)
@@ -172,10 +189,12 @@ def environment_variable_is_file_path(
 ) -> tuple[list[LogMessage], list[ExitMessage], str | None]:
     """Check if a given environment variable is a viable file path, and if so, return that path.
 
-    :param env_var: Environment variable to check for a file path
-    :param kind: Type of file
-    :returns: Log messages and file path
+    Args:
+        env_var: Environment variable to check for a file path
+        kind: Type of file
 
+    Returns:
+        Log messages and file path
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
@@ -207,7 +226,8 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | No
     Find the file at ./ansible-navigator.(.yml,.yaml,.json),
     or ~/.ansible-navigator.(.yml,.yaml,.json).
 
-    :returns: Log messages and correct settings file to use
+    Returns:
+        Log messages and correct settings file to use
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
@@ -257,8 +277,11 @@ def find_settings_file() -> tuple[list[LogMessage], list[ExitMessage], Path | No
 def flatten_list(data_list: list[Any]) -> list[Any]:
     """Flatten a list of lists.
 
-    :param data_list: List to flatten
-    :returns: Flattened list
+    Args:
+        data_list: List to flatten
+
+    Returns:
+        Flattened list
     """
     if isinstance(data_list, list):
         return [a for i in data_list for a in flatten_list(i)]
@@ -268,8 +291,11 @@ def flatten_list(data_list: list[Any]) -> list[Any]:
 def generate_cache_path(app_name: str) -> Path:
     """Return the path to the cache directory.
 
-    :param app_name: Name of application - currently ansible_navigator
-    :returns: Path to the cache directory
+    Args:
+        app_name: Name of application - currently ansible_navigator
+
+    Returns:
+        Path to the cache directory
     """
     cache_home = os.environ.get("XDG_CACHE_HOME", f"{Path.home()}/.cache")
     return Path(cache_home) / app_name
@@ -278,9 +304,12 @@ def generate_cache_path(app_name: str) -> Path:
 def divmod_int(numerator: float, denominator: float) -> tuple[int, int]:
     """Return the result of divmod, as a tuple of integers.
 
-    :param numerator: Numerator for divmod
-    :param denominator: Denominator for divmod
-    :returns: Quotient and remainder of divmod
+    Args:
+        numerator: Numerator for divmod
+        denominator: Denominator for divmod
+
+    Returns:
+        Quotient and remainder of divmod
     """
     quotient, remainder = divmod(numerator, denominator)
     return int(quotient), int(remainder)
@@ -289,8 +318,11 @@ def divmod_int(numerator: float, denominator: float) -> tuple[int, int]:
 def human_time(seconds: float) -> str:
     """Convert seconds into human readable 00d00h00m00s format.
 
-    :param seconds: Time in seconds
-    :returns: Human readable conversion of seconds
+    Args:
+        seconds: Time in seconds
+
+    Returns:
+        Human readable conversion of seconds
     """
     sign_string = "-" if seconds < 0 else ""
     seconds = abs(int(seconds))
@@ -309,8 +341,11 @@ def human_time(seconds: float) -> str:
 def is_jinja(string: str) -> bool:
     """Determine if a string is a Jinja2 template.
 
-    :param string: The string to check.
-    :return: True if the string is a Jinja2 template, False otherwise.
+    Args:
+        string: The string to check.
+
+    Returns:
+        True if the string is a Jinja2 template, False otherwise.
     """
     try:
         return string.index("{{") < string.index("}}")
@@ -321,8 +356,11 @@ def is_jinja(string: str) -> bool:
 def now_iso(time_zone: str) -> str:
     """Return the current time as an ISO 8601 formatted string, given a time zone.
 
-    :param time_zone: The IANA timezone name or local
-    :returns: The ISO 8601 formatted time zone string
+    Args:
+        time_zone: The IANA timezone name or local
+
+    Returns:
+        The ISO 8601 formatted time zone string
     """
     if time_zone == "local":
         return datetime.datetime.now(tz=datetime.timezone.utc).astimezone().isoformat()
@@ -339,8 +377,11 @@ PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
 def pascal_to_snake(obj: object) -> object:
     """Convert a pascal cased object into a snake cased object recursively.
 
-    :param obj: Pascal cased object
-    :returns: Snake cased object
+    Args:
+        obj: Pascal cased object
+
+    Returns:
+        Snake cased object
     """
     working: list[Any] | dict[Any, Any]
     if isinstance(obj, list):
@@ -358,9 +399,12 @@ def pascal_to_snake(obj: object) -> object:
 def path_is_relative_to(child: Path, parent: Path) -> bool:
     """Return True if the path is relative to another path or False.
 
-    :param child: The path that may be a child
-    :param parent: The path that may be a parent
-    :returns: Indicates the child is a child of the parent
+    Args:
+        child: The path that may be a child
+        parent: The path that may be a parent
+
+    Returns:
+        Indicates the child is a child of the parent
     """
     return child.is_relative_to(parent)
 
@@ -368,8 +412,11 @@ def path_is_relative_to(child: Path, parent: Path) -> bool:
 def remove_ansi(string: str) -> str:
     """Strip ansi code from a str.
 
-    :param string: String to strip ansi code from
-    :returns: String without ansi code
+    Args:
+        string: String to strip ansi code from
+
+    Returns:
+        String without ansi code
     """
     ansi_escape = re.compile(
         r"""
@@ -391,8 +438,11 @@ def remove_ansi(string: str) -> str:
 def remove_dbl_un(string: str) -> str:
     """Remove a __ from the beginning of a string.
 
-    :param string: String to remove __ from
-    :returns: String without __
+    Args:
+        string: String to remove __ from
+
+    Returns:
+        String without __
     """
     if string.startswith("__"):
         return string.replace("__", "", 1)
@@ -407,8 +457,11 @@ def round_half_up(number: float) -> int:
 
     This will always round based on distance from zero. (e.g round(2.5) = 3, round(3.5) = 4).
 
-    :param number: The number to round
-    :returns: The rounded number as an it
+    Args:
+        number: The number to round
+
+    Returns:
+        The rounded number as an it
     """
     rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
@@ -417,8 +470,11 @@ def round_half_up(number: float) -> int:
 def shlex_join(tokens: Iterable[str]) -> str:
     """Concatenate the tokens of a list and return a string.
 
-    :param tokens: The iterable of strings to join
-    :returns: The iterable joined with spaces
+    Args:
+        tokens: The iterable of strings to join
+
+    Returns:
+        The iterable joined with spaces
     """
     return shlex.join(split_command=tokens)
 
@@ -426,9 +482,14 @@ def shlex_join(tokens: Iterable[str]) -> str:
 def str2bool(value: Any) -> bool:
     """Convert some commonly used values to a boolean.
 
-    :param value: Value to convert to boolean
-    :raises ValueError: If value is not a boolean or string
-    :returns: New converted boolean
+    Args:
+        value: Value to convert to boolean
+
+    Raises:
+        ValueError: If value is not a boolean or string
+
+    Returns:
+        New converted boolean
     """
     if isinstance(value, bool):
         return value
@@ -445,9 +506,13 @@ def str2bool(value: Any) -> bool:
 def templar(string: str, template_vars: Mapping[Any, Any]) -> tuple[list[str], Any]:
     """Template some string with jinja2 always to and from json.
 
-    :param string: The template string
-    :param template_vars: The vars used to render the template
-    :returns: A list of errors and either the result of templating or original string
+    Args:
+        string: The template string
+        template_vars: The vars used to render the template
+
+    Returns:
+        A list of errors and either the result of templating or original
+        string
     """
     errors = []
     # hide the jinja that may be in the template_vars
@@ -483,9 +548,12 @@ def templar(string: str, template_vars: Mapping[Any, Any]) -> tuple[list[str], A
 def timestamp_to_iso(timestamp: float, time_zone: str) -> str | None:
     """Generate an ISO 8601 date time string from a timestamp.
 
-    :param timestamp: The unix timestamp
-    :param time_zone: The time zone
-    :returns: The ISO string
+    Args:
+        timestamp: The unix timestamp
+        time_zone: The time zone
+
+    Returns:
+        The ISO string
     """
     try:
         if time_zone == "local":
@@ -506,9 +574,12 @@ def timestamp_to_iso(timestamp: float, time_zone: str) -> str | None:
 def time_stamp_for_file(path: str, time_zone: str) -> tuple[float | None, str | None]:
     """Get a timestamp for a file path.
 
-    :param path: The file path
-    :param time_zone: Time zone
-    :returns: The UNIX timestamp and an ISO 8601 string
+    Args:
+        path: The file path
+        time_zone: Time zone
+
+    Returns:
+        The UNIX timestamp and an ISO 8601 string
     """
     try:
         modified = Path(path).stat().st_mtime
@@ -525,8 +596,11 @@ def time_stamp_for_file(path: str, time_zone: str) -> tuple[float | None, str | 
 def to_list(thing: str | list[Any] | tuple[Any] | set[Any] | None) -> list[Any]:
     """Convert something to a list if necessary.
 
-    :param thing: Item to convert to a list
-    :returns: Item as a list
+    Args:
+        thing: Item to convert to a list
+
+    Returns:
+        Item as a list
     """
     if isinstance(thing, list | tuple | set):
         converted_value = list(thing)
@@ -540,8 +614,11 @@ def to_list(thing: str | list[Any] | tuple[Any] | set[Any] | None) -> list[Any]:
 def unescape_moustaches(obj: Any) -> Any:
     """Unescape moustaches.
 
-    :param obj: Variable that needs to contain moustaches
-    :returns: The obj with replacements made
+    Args:
+        obj: Variable that needs to contain moustaches
+
+    Returns:
+        The obj with replacements made
     """
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     result = dispatch(obj, replacements)

@@ -9,7 +9,8 @@ from ansible_navigator.utils.serialize import yaml
 def test_valid_yaml(settings_samples: tuple[str, str]) -> None:
     """Simple test to ensure the sample is valid yaml.
 
-    :param settings_samples: The sample setting
+    Args:
+        settings_samples: The sample setting
     """
     commented, uncommented = settings_samples
     settings_contents = yaml.load(commented, Loader=Loader)
@@ -21,7 +22,8 @@ def test_valid_yaml(settings_samples: tuple[str, str]) -> None:
 def test_no_un_templated(settings_samples: tuple[str, str]) -> None:
     """Simple test to ensure the sample is valid yaml.
 
-    :param settings_samples: The sample settings
+    Args:
+        settings_samples: The sample settings
     """
     commented, uncommented = settings_samples
     assert "{{" not in commented

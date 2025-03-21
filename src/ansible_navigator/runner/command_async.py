@@ -30,10 +30,12 @@ class CommandAsync(CommandBase):
 
         For common arguments refer to the documentation of the ``CommandBase`` class.
 
-        :param executable_cmd: The command to be invoked
-        :param queue: The queue to post events from ``ansible-runner``
-        :param write_job_events: Allows job_events to be processed by ``ansible-runner``
-        :param kwargs: The arguments for the async runner call
+        Args:
+            executable_cmd: The command to be invoked
+            queue: The queue to post events from ``ansible-runner``
+            write_job_events: Allows job_events to be processed by
+                ``ansible-runner``
+            **kwargs: The arguments for the async runner call
         """
         self._queue = queue
         self._write_job_events = write_job_events
@@ -42,8 +44,11 @@ class CommandAsync(CommandBase):
     def _event_handler(self, event: Any) -> bool:
         """Handle the event from ansible-runner.
 
-        :param event: The event from ansible-runner
-        :returns: The value of ``self._write_job_events``, a boolean
+        Args:
+            event: The event from ansible-runner
+
+        Returns:
+            The value of ``self._write_job_events``, a boolean
         """
         self._logger.debug("ansible-runner event handle: %s", event)
         new_event = deepcopy(event)
@@ -53,7 +58,8 @@ class CommandAsync(CommandBase):
     def run(self) -> Thread:
         """Initiate the execution of the runner command in async mode.
 
-        :returns: The runner thread
+        Returns:
+            The runner thread
         """
         self.generate_run_command_args()
         self._runner_args.update({"event_handler": self._event_handler})

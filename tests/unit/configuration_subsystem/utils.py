@@ -9,8 +9,11 @@ from ansible_navigator.configuration_subsystem.definitions import SettingsEntry
 def id_for_base(val: str) -> str:
     """Return an id for a param set.
 
-    :param val: The base param set
-    :returns: The id
+    Args:
+        val: The base param set
+
+    Returns:
+        The id
     """
     if val is None:
         return "no-base-params"
@@ -24,8 +27,11 @@ def id_for_base(val: str) -> str:
 def id_for_name(val: SettingsEntry) -> str:
     """Return an id based on entry name.
 
-    :param val: The entry
-    :returns: The id
+    Args:
+        val: The entry
+
+    Returns:
+        The id
     """
     if isinstance(val, SettingsEntry):
         return f"{val.name}"
@@ -35,9 +41,12 @@ def id_for_name(val: SettingsEntry) -> str:
 def config_post_process(expected: dict[str, Any], path: str) -> dict[str, Any]:
     """Perform custom post processing on the configuration.
 
-    :param expected: The expected configuration
-    :param path: The path to the configuration
-    :returns: The processed configuration
+    Args:
+        expected: The expected configuration
+        path: The path to the configuration
+
+    Returns:
+        The processed configuration
     """
     if path == "ansible-navigator.execution-environment.volume-mounts":
         parsed_volume_mounts = []

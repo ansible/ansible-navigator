@@ -86,7 +86,8 @@ command_test_data = [
 def test_command_generation(cmd_test_data: CommandTestData) -> None:
     """Test the generation of the command and params.
 
-    :param cmd_test_data: The test data
+    Args:
+        cmd_test_data: The test data
     """
     command, additional_params = _generate_command(
         exec_command=cmd_test_data.command,

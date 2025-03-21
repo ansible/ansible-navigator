@@ -15,8 +15,9 @@ def test_ce_auto_podman(
 ) -> None:
     """Ensure podman is the result.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param generate_config: The configuration generator fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
+        generate_config: The configuration generator fixture
     """
 
     def which(arg: Any) -> bool:
@@ -34,8 +35,9 @@ def test_ce_auto_docker(
 ) -> None:
     """Ensure docker is the result.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param generate_config: The configuration generator fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
+        generate_config: The configuration generator fixture
     """
 
     def which(arg: Any) -> bool:
@@ -53,8 +55,9 @@ def test_ce_auto_none(
 ) -> None:
     """Ensure error is the result.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param generate_config: The configuration generator fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
+        generate_config: The configuration generator fixture
     """
 
     def which(_arg: Any) -> bool:

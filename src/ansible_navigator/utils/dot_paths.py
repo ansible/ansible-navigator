@@ -31,9 +31,12 @@ class MergeBehaviors(Enum):
 def get_with_path(content: MutableMapping[Any, Any], path: str) -> Any:
     """Get a value from a path in a dictionary.
 
-    :param content: The content of the settings file
-    :param path: The path to the value
-    :return: The value at the path
+    Args:
+        content: The content of the settings file
+        path: The path to the value
+
+    Returns:
+        The value at the path
     """
     return reduce(operator.getitem, path.split("."), content)
 
@@ -41,9 +44,12 @@ def get_with_path(content: MutableMapping[Any, Any], path: str) -> Any:
 def check_path(content: MutableMapping[Any, Any], path: str) -> bool:
     """Check if a path exists in a dictionary.
 
-    :param content: The content of the settings file
-    :param path: The path to the value
-    :return: Whether the path exists
+    Args:
+        content: The content of the settings file
+        path: The path to the value
+
+    Returns:
+        Whether the path exists
     """
     try:
         get_with_path(content, path)
@@ -55,8 +61,9 @@ def check_path(content: MutableMapping[Any, Any], path: str) -> bool:
 def delete_with_path(content: MutableMapping[Any, Any], path: str) -> None:
     """Delete a value from a path in a dictionary.
 
-    :param content: The content of the settings file
-    :param path: The path to the value
+    Args:
+        content: The content of the settings file
+        path: The path to the value
     """
     parts = path.split(".")
     del reduce(operator.getitem, parts[:-1], content)[parts[-1]]
@@ -65,8 +72,11 @@ def delete_with_path(content: MutableMapping[Any, Any], path: str) -> None:
 def ascendants_from_path(path: str) -> list[str]:
     """Get the ascendants of a path.
 
-    :param path: The path to the value
-    :return: The ascendants of the path
+    Args:
+        path: The path to the value
+
+    Returns:
+        The ascendants of the path
     """
     parts = path.split(".")
     return [path.rsplit(".", i)[0] for i in range(len(parts))]
@@ -75,8 +85,11 @@ def ascendants_from_path(path: str) -> list[str]:
 def descendants_to_path(path: str) -> list[str]:
     """Get the descendants to a path.
 
-    :param path: The path to the value
-    :return: The descendants to the path
+    Args:
+        path: The path to the value
+
+    Returns:
+        The descendants to the path
     """
     parts = path.split(".")
     return [path.rsplit(".", i)[0] for i in reversed(range(len(parts)))]
@@ -85,8 +98,9 @@ def descendants_to_path(path: str) -> list[str]:
 def remove_and_delete_empty_ascendants(content: MutableMapping[Any, Any], path: str) -> None:
     """Remove and delete empty ascendants.
 
-    :param content: The content of the settings file
-    :param path: The path to the value
+    Args:
+        content: The content of the settings file
+        path: The path to the value
     """
     ascendants = ascendants_from_path(path)
     delete_with_path(content, ascendants.pop(0))
@@ -107,12 +121,17 @@ def place_at_path(
 ) -> dict[Any, Any]:
     """Place a value at a path in a dictionary.
 
-    :param behaviors: The merge behaviors
-    :param content: The content of the settings file
-    :param path: The path to the value
-    :param value: The value to place
-    :raises ValueError: If something can't be done
-    :return: The updated content
+    Args:
+        behaviors: The merge behaviors
+        content: The content of the settings file
+        path: The path to the value
+        value: The value to place
+
+    Raises:
+        ValueError: If something can't be done
+
+    Returns:
+        The updated content
     """
     if (
         MergeBehaviors.DICT_DICT_REPLACE in behaviors
@@ -189,11 +208,14 @@ def move_to_path(
 ) -> dict[Any, Any]:
     """Move a value to a path in a dictionary.
 
-    :param behaviors: The merge behaviors
-    :param content: The content of the settings file
-    :param old_path: The path to the value
-    :param new_path: The path to the value
-    :return: The updated content
+    Args:
+        behaviors: The merge behaviors
+        content: The content of the settings file
+        old_path: The path to the value
+        new_path: The path to the value
+
+    Returns:
+        The updated content
     """
     copied_content = copy.deepcopy(content)
     if new_path == old_path:

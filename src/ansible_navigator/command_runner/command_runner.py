@@ -44,7 +44,8 @@ class Command:
     def stderr_lines(self) -> list[str]:
         """Produce a list of stderr lines.
 
-        :returns: A list of stderr lines
+        Returns:
+            A list of stderr lines
         """
         return self.stderr.splitlines()
 
@@ -52,7 +53,8 @@ class Command:
     def stdout_lines(self) -> list[str]:
         """Produce a list of stdout lines.
 
-        :returns: A list of stdout lines
+        Returns:
+            A list of stdout lines
         """
         return self.stdout.splitlines()
 
@@ -60,7 +62,8 @@ class Command:
 def run_command(command: Command) -> None:
     """Run a command.
 
-    :param command: Command to be run
+    Args:
+        command: Command to be run
     """
     try:
         proc_out = subprocess.run(
@@ -84,8 +87,9 @@ def worker(
 ) -> None:
     """Read pending, run, post process, and place in completed.
 
-    :param pending_queue: All pending commands
-    :param completed_queue: All completed commands
+    Args:
+        pending_queue: All pending commands
+        completed_queue: All completed commands
     """
     while True:
         command = pending_queue.get()
@@ -108,8 +112,11 @@ class CommandRunner:
     def run_single_process(commands: list[Command]) -> list[Command]:
         """Run commands with a single process.
 
-        :param commands: All commands to be run
-        :returns: The results from running all commands
+        Args:
+            commands: All commands to be run
+
+        Returns:
+            The results from running all commands
         """
         results: list[Command] = []
         for command in commands:
@@ -125,8 +132,11 @@ class CommandRunner:
         Exit when the number of results is equal to the number
         of commands needing to be run.
 
-        :param commands: All commands to be run
-        :returns: The results from running all commands
+        Args:
+            commands: All commands to be run
+
+        Returns:
+            The results from running all commands
         """
         if self._completed_queue is None:
             self._completed_queue = multiprocessing.Manager().Queue()
@@ -142,7 +152,8 @@ class CommandRunner:
     def start_workers(self, jobs: list[Command]) -> None:
         """Start the workers.
 
-        :param jobs: List of commands to be run
+        Args:
+            jobs: List of commands to be run
         """
         worker_count = min(len(jobs), PROCESSES)
         processes = []

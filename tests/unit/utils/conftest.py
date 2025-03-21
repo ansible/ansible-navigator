@@ -12,7 +12,8 @@ from ansible_navigator.utils.key_value_store import KeyValueStore
 def empty_kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
     """Give us a temporary, empty KeyValueStore.
 
-    :param tmp_path: Path to a temporary directory
+    Args:
+        tmp_path: Path to a temporary directory
     :yields: The temporary KVS
     """
     database_path = tmp_path / "basic_kvs_usage.db"
@@ -23,7 +24,8 @@ def empty_kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
 def kvs(tmp_path: Path) -> Generator[KeyValueStore, None, None]:
     """Give us a temporary KeyValueStore with some data.
 
-    :param tmp_path: Path to a temporary directory
+    Args:
+        tmp_path: Path to a temporary directory
     :yields: The temporary KVS
     """
     database_path = tmp_path / "basic_kvs_usage.db"

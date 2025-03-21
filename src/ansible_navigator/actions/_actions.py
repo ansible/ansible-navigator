@@ -49,8 +49,9 @@ _ACTIONS: dict[str, dict[str, Any]] = {}
 def _import(package: str, action: str) -> None:
     """Import the given action from a package.
 
-    :param package: The name of the package
-    :param action: The action to import
+    Args:
+        package: The name of the package
+        action: The action to import
     """
     importlib.import_module(f"{package}.{action}")
 
@@ -58,7 +59,8 @@ def _import(package: str, action: str) -> None:
 def _import_all(package: str) -> None:
     """Import all actions in a package.
 
-    :param package: The name of the package
+    Args:
+        package: The name of the package
     """
     for entry in importlib_resources.files(package).iterdir():
         if entry.is_file() and entry.name.endswith(".py") and not entry.name.startswith("_"):
@@ -68,8 +70,11 @@ def _import_all(package: str) -> None:
 def register(cls: Any) -> Any:
     """Register an action, used as a decorator.
 
-    :param cls: The class to register
-    :returns: The class after registration
+    Args:
+        cls: The class to register
+
+    Returns:
+        The class after registration
     """
     package, _, action = cls.__module__.rpartition(".")
     pkg_info = _ACTIONS.setdefault(package, {})
@@ -80,9 +85,12 @@ def register(cls: Any) -> Any:
 def get(package: str, action: str) -> Callable[..., Any]:
     """Import and return a given action.
 
-    :param package: The name of the package
-    :param action: The name of the action
-    :returns: The action's registered class
+    Args:
+        package: The name of the package
+        action: The name of the action
+
+    Returns:
+        The action's registered class
     """
     _import(package, action)
     return _ACTIONS[package][action].cls
@@ -91,8 +99,11 @@ def get(package: str, action: str) -> Callable[..., Any]:
 def get_factory(package: str) -> Callable[..., Any]:
     """Create a ``get()`` function for one package.
 
-    :param package: The name of the package
-    :returns: The action's registered class
+    Args:
+        package: The name of the package
+
+    Returns:
+        The action's registered class
     """
     return functools.partial(get, package)
 
@@ -100,9 +111,12 @@ def get_factory(package: str) -> Callable[..., Any]:
 def kegex(package: str, action: str) -> tuple[str, str, str]:
     """Return a tuple of name, class, ``kegex`` for an action.
 
-    :param package: The name of the package
-    :param action: The name of the action
-    :returns: The name, class and kegex for an action
+    Args:
+        package: The name of the package
+        action: The name of the action
+
+    Returns:
+        The name, class and kegex for an action
     """
     _import(package, action)
     return _ACTIONS[package][action]
@@ -111,8 +125,11 @@ def kegex(package: str, action: str) -> tuple[str, str, str]:
 def kegexes(package: str) -> Generator[tuple[str, str, str]]:
     """Return a tuple of tuples, name, ``kegex`` for all actions.
 
-    :param package: The name of the package
-    :returns: A generator for all ``kegexes``
+    Args:
+        package: The name of the package
+
+    Returns:
+        A generator for all ``kegexes``
     """
     _import_all(package)
     return (kegex(package, name) for name in names(package))
@@ -121,8 +138,11 @@ def kegexes(package: str) -> Generator[tuple[str, str, str]]:
 def kegexes_factory(package: str) -> Callable[..., Any]:
     """Create a ``kegexes()`` function for all packages.
 
-    :param package: The name of the package
-    :returns: A ``kegexes()`` method for the package
+    Args:
+        package: The name of the package
+
+    Returns:
+        A ``kegexes()`` method for the package
     """
     return functools.partial(kegexes, package)
 
@@ -130,8 +150,11 @@ def kegexes_factory(package: str) -> Callable[..., Any]:
 def names(package: str) -> list[str]:
     """List all actions in one package.
 
-    :param package: The name of the package
-    :returns: All packages
+    Args:
+        package: The name of the package
+
+    Returns:
+        All packages
     """
     _import_all(package)
     return sorted(_ACTIONS[package])
@@ -140,8 +163,11 @@ def names(package: str) -> list[str]:
 def names_factory(package: str) -> Callable[..., Any]:
     """Create a ``names()`` function for one package.
 
-    :param package: The name of the package
-    :returns: a ``names()`` method for the package
+    Args:
+        package: The name of the package
+
+    Returns:
+        a ``names()`` method for the package
     """
     return functools.partial(names, package)
 
@@ -149,11 +175,15 @@ def names_factory(package: str) -> Callable[..., Any]:
 def run_interactive(package: str, action: str, *args: Any, **_kwargs: dict[str, Any]) -> Any:
     """Call the given action's ``run()`` method.
 
-    :param package: The name of the package
-    :param action: The name of the action
-    :param args: The arguments passed to the action's run method
-    :param _kwargs: The keyword arguments passed to the action's run method
-    :returns: The outcome of running the action's run method
+    Args:
+        package: The name of the package
+        action: The name of the action
+        *args: The arguments passed to the action's run method
+        **_kwargs: The keyword arguments passed to the action's run
+            method
+
+    Returns:
+        The outcome of running the action's run method
     """
     action_cls = get(package, action)
     app, interaction = args
@@ -183,8 +213,11 @@ def run_interactive(package: str, action: str, *args: Any, **_kwargs: dict[str, 
 def run_interactive_factory(package: str) -> Callable[..., Any]:
     """Create a ``run_interactive()`` function for one package.
 
-    :param package: The name of the package
-    :returns: A partial ``run_interactive()`` method for the package
+    Args:
+        package: The name of the package
+
+    Returns:
+        A partial ``run_interactive()`` method for the package
     """
     return functools.partial(run_interactive, package)
 
@@ -192,12 +225,17 @@ def run_interactive_factory(package: str) -> Callable[..., Any]:
 def run_stdout(package: str, action: str, *args: Any, **_kwargs: dict[str, Any]) -> RunStdoutReturn:
     """Call the given action's ``run_stdout`` method.
 
-    :param package: The name of the package
-    :param action: The name of the action
-    :param args: The arguments passed to the action's run_stdout method
-    :param _kwargs: The keyword arguments passed to the action's run_stdout method
-    :returns: The outcome of running the action's ``run_stdout()`` method
-    """  # Refers to the action's run_stdout in the first line, not this function
+    Args:
+        package: The name of the package
+        action: The name of the action
+        *args: The arguments passed to the action's run_stdout method
+        **_kwargs: The keyword arguments passed to the action's
+            run_stdout method
+
+    Returns:
+        The outcome of running the action's ``run_stdout()`` method
+    """
+    # Refers to the action's run_stdout in the first line, not this function
     action_cls = get(package, action)
     args = args[0]
     return action_cls(args).run_stdout()
@@ -206,7 +244,10 @@ def run_stdout(package: str, action: str, *args: Any, **_kwargs: dict[str, Any])
 def run_stdout_factory(package: str) -> Callable[..., Any]:
     """Create a ``run_stdout()`` function for one package.
 
-    :param package: The name of the package
-    :returns: A partial ``run_stdout()`` method for the package
+    Args:
+        package: The name of the package
+
+    Returns:
+        A partial ``run_stdout()`` method for the package
     """
     return functools.partial(run_stdout, package)

@@ -20,9 +20,12 @@ logger = logging.getLogger(__name__)
 def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
     """Run runner to collect image details.
 
-    :param image_name: The full image name
-    :param container_engine: The container engine to use
-    :returns: Output, errors and the return code
+    Args:
+        image_name: The full image name
+        container_engine: The container engine to use
+
+    Returns:
+        Output, errors and the return code
     """
     errors = []
     python_exec_path = "python3"
@@ -52,8 +55,11 @@ def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[st
 def parse(output: str) -> tuple[list[str], dict[Any, Any]]:
     """Load and process the ``json`` output from the image introspection process.
 
-    :param output: The output from the image introspection process
-    :returns: The parsed output
+    Args:
+        output: The output from the image introspection process
+
+    Returns:
+        The parsed output
     """
     errors = []
     try:

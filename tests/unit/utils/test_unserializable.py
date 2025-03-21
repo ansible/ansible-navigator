@@ -35,8 +35,9 @@ def test_custom_class(
 
     A typing error does not exist here because the content is Dict[str, Any].
 
-    :param content_view: The content view
-    :param serialization_format: The serialization format
+    Args:
+        content_view: The content view
+        serialization_format: The serialization format
     """
 
     class CustomClass:
@@ -66,8 +67,9 @@ def test_deque(
 
     A typing error exists here, because tuple is not a ``utils.serialize.ContentType``.
 
-    :param content_view: The content view
-    :param serialization_format: The serialization format
+    Args:
+        content_view: The content view
+        serialization_format: The serialization format
     """
     content = deque([1, 2, 3])
     serialized = str(

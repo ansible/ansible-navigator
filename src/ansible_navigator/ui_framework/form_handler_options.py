@@ -24,8 +24,9 @@ class FormHandlerOptions(CursesWindow):
     def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for either form checkboxes or radio buttons.
 
-        :param screen: A curses window
-        :param ui_config: The current user interface configuration
+        Args:
+            screen: A curses window
+            ui_config: The current user interface configuration
         """
         super().__init__(ui_config=ui_config)
         self._screen = screen
@@ -33,8 +34,9 @@ class FormHandlerOptions(CursesWindow):
     def populate(self, form_field: FieldText, active: int) -> None:
         """Populate the window with the checkboxes.
 
-        :param form_field: Field from a form
-        :param active: Track active checkbox/option
+        Args:
+            form_field: Field from a form
+            active: Track active checkbox/option
         """
         options = getattr(form_field, "options", [])
         for idx, option in enumerate(options):
@@ -59,9 +61,12 @@ class FormHandlerOptions(CursesWindow):
         # pylint: disable=too-many-nested-blocks
         """Handle the check box field.
 
-        :param form_fields: List of fields
-        :param idx: Index to retrieve specific field
-        :returns: Field from form and characters
+        Args:
+            form_fields: List of fields
+            idx: Index to retrieve specific field
+
+        Returns:
+            Field from form and characters
         """
         form_field = form_fields[idx]
         active = 0

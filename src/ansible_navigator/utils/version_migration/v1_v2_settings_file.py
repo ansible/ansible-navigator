@@ -35,7 +35,8 @@ class V1V2SettingsFile(SettingsFile):
     def config_path(self) -> bool:
         """Migrate the config path entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.ansible.config"
         new_path = "ansible-navigator.ansible.config.path"
@@ -63,7 +64,8 @@ class V1V2SettingsFile(SettingsFile):
     def documentation(self) -> bool:
         """Migrate the documentation entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.documentation"
         new_path = "ansible-navigator.ansible.doc"
@@ -84,7 +86,8 @@ class V1V2SettingsFile(SettingsFile):
     def playbook_path(self) -> bool:
         """Migrate the playbook path entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.ansible.playbook"
         new_path = "ansible-navigator.ansible.playbook.path"
@@ -112,7 +115,8 @@ class V1V2SettingsFile(SettingsFile):
     def help_builder(self) -> bool:
         """Migrate the help-builder entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.help-builder"
         new_path = "ansible-navigator.ansible-builder.help"
@@ -133,7 +137,8 @@ class V1V2SettingsFile(SettingsFile):
     def help_config(self) -> bool:
         """Migrate the help-config entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.help-config"
         new_path = "ansible-navigator.ansible.config.help"
@@ -154,7 +159,8 @@ class V1V2SettingsFile(SettingsFile):
     def help_doc(self) -> bool:
         """Migrate the help-doc entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.help-doc"
         new_path = "ansible-navigator.ansible.doc.help"
@@ -175,7 +181,8 @@ class V1V2SettingsFile(SettingsFile):
     def help_inventory(self) -> bool:
         """Migrate the help-inventory entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.help-inventory"
         new_path = "ansible-navigator.ansible.inventory.help"
@@ -196,7 +203,8 @@ class V1V2SettingsFile(SettingsFile):
     def help_playbook(self) -> bool:
         """Migrate the help-playbook entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.help-playbook"
         new_path = "ansible-navigator.ansible.playbook.help"
@@ -217,7 +225,8 @@ class V1V2SettingsFile(SettingsFile):
     def inventories(self) -> bool:
         """Migrate the inventory paths.
 
-        :return: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.ansible.inventories"
         new_path = "ansible-navigator.ansible.inventory.entries"
@@ -242,7 +251,8 @@ class V1V2SettingsFile(SettingsFile):
     def playbook_artifact(self) -> bool:
         """Migrate the playbook artifact entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         path = "ansible-navigator.playbook-artifact.save-as"
 
@@ -272,7 +282,8 @@ class V1V2SettingsFile(SettingsFile):
     def pull_policy(self) -> bool:
         """Migrate the pull-policy entry.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         old_path = "ansible-navigator.execution-environment.pull-policy"
         new_path = "ansible-navigator.execution-environment.pull.policy"
@@ -293,7 +304,8 @@ class V1V2SettingsFile(SettingsFile):
     def volume_mount_labels(self) -> bool:
         """Migrate the volume mount labels.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         path = "ansible-navigator.execution-environment.volume-mounts"
 

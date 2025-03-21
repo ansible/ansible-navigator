@@ -23,11 +23,12 @@ def test_stdout_output(
 ) -> None:
     """Test the json output for collections.
 
-    :param cwd: Whether to change the working directory.
-    :param exec_env: Whether to use the execution environment.
-    :param stdout_format: The output format.
-    :param cli_runner: The CliRunner fixture.
-    :param monkeypatch: The monkeypatch fixture.
+    Args:
+        cwd: Whether to change the working directory.
+        exec_env: Whether to use the execution environment.
+        stdout_format: The output format.
+        cli_runner: The CliRunner fixture.
+        monkeypatch: The monkeypatch fixture.
     """
     # Either cd to the collection parent or set the env var.
     if cwd:

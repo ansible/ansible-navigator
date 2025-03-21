@@ -19,8 +19,11 @@ class ImageEntry(Enum):
     def get(self, app_name: str) -> str:
         """Retrieve an image name from the packaged container file.
 
-        :param app_name: The name of the application.
-        :returns: The default execution environment image.
+        Args:
+            app_name: The name of the application.
+
+        Returns:
+            The default execution environment image.
         """
         file_contents = retrieve_content(app_name=app_name, filename="images_dockerfile")
         from_line = (
@@ -36,9 +39,12 @@ class ImageEntry(Enum):
 def retrieve_content(filename: str, app_name: str = "ansible_navigator") -> str:
     """Retrieve the content of a packaged data file.
 
-    :param app_name: The name of the application.
-    :param filename: The name of the file to retrieve.
-    :returns: The content of the file.
+    Args:
+        app_name: The name of the application.
+        filename: The name of the file to retrieve.
+
+    Returns:
+        The content of the file.
     """
     data_directory = "data"
     package = f"{app_name}.{data_directory}"
@@ -52,9 +58,12 @@ def retrieve_content(filename: str, app_name: str = "ansible_navigator") -> str:
 def path_to_file(filename: str, app_name: str = "ansible_navigator") -> Path:
     """Retrieve the path to a packaged data file.
 
-    :param app_name: The name of the application.
-    :param filename: The name of the file to retrieve.
-    :returns: The path to the file.
+    Args:
+        app_name: The name of the application.
+        filename: The name of the file to retrieve.
+
+    Returns:
+        The path to the file.
     """
     data_directory = "data"
     package = f"{app_name}.{data_directory}"

@@ -37,7 +37,8 @@ class FieldRadio:
     def checked(self) -> tuple[str, ...]:
         """Conveniently return just checked options.
 
-        :returns: Checked options
+        Returns:
+            Checked options
         """
         return tuple(option.name for option in self.options if option.checked)
 
@@ -45,7 +46,8 @@ class FieldRadio:
     def formatted_default(self) -> str:
         """Format the field prompt with an empty string.
 
-        :returns: Empty string
+        Returns:
+            Empty string
         """
         return ""
 
@@ -53,7 +55,8 @@ class FieldRadio:
     def full_prompt(self) -> str:
         """Format the prompt.
 
-        :returns: Prompt
+        Returns:
+            Prompt
         """
         return self.prompt
 
@@ -61,7 +64,8 @@ class FieldRadio:
     def validator(self) -> Callable[..., Validation]:
         """Provide a validator based on form type.
 
-        :returns: Validation of checked entries
+        Returns:
+            Validation of checked entries
         """
         result = partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
         if not isinstance(result, Validation):
@@ -71,8 +75,11 @@ class FieldRadio:
     def _validate(self, response: FieldRadio) -> Validation:
         """Validate this FieldRadio instance.
 
-        :param response: The form response from the user
-        :returns: Validation of the response
+        Args:
+            response: The form response from the user
+
+        Returns:
+            Validation of the response
         """
         validation = self.validator(choices=response.options)
         if validation.error_msg:
@@ -84,7 +91,8 @@ class FieldRadio:
     def validate(self, response: FieldRadio) -> None:
         """Validate this FieldRadio instance.
 
-        :param response: Instance to check and verify options are valid
+        Args:
+            response: Instance to check and verify options are valid
         """
         validation = self._validate(response)
         self.current_error = validation.error_msg
@@ -92,7 +100,8 @@ class FieldRadio:
     def conditional_validation(self, response: FieldRadio) -> None:
         """Conditional validation for a FieldRadio instance.
 
-        :param response: Instance to check and verify options are valid
+        Args:
+            response: Instance to check and verify options are valid
         """
         self._validate(response)
         self.current_error = ""

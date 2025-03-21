@@ -51,7 +51,8 @@ VERBOSITY = 0
 def valid_ce() -> str:
     """Return an available container engine.
 
-    :returns: The container engine or exits
+    Returns:
+        The container engine or exits
     """
     msg = "unknown"
     for engine in ("podman", "docker"):
@@ -73,7 +74,8 @@ def valid_ce() -> str:
 def fixture_valid_container_engine() -> str:
     """Return an available container engine.
 
-    :returns: The container engine or exits
+    Returns:
+        The container engine or exits
     """
     return valid_ce()
 
@@ -81,7 +83,8 @@ def fixture_valid_container_engine() -> str:
 def default_ee_image_name() -> str:
     """Return the default ee image name.
 
-    :returns: The default ee image name
+    Returns:
+        The default ee image name
     """
     return ImageEntry.DEFAULT_EE.get(app_name=APP_NAME)
 
@@ -90,7 +93,8 @@ def default_ee_image_name() -> str:
 def fixture_default_image_name() -> str:
     """Return the default ee image name.
 
-    :returns: The default ee image name
+    Returns:
+        The default ee image name
     """
     return default_ee_image_name()
 
@@ -98,7 +102,8 @@ def fixture_default_image_name() -> str:
 def small_image_name() -> str:
     """Return the small image name.
 
-    :returns: The small image name
+    Returns:
+        The small image name
     """
     return ImageEntry.SMALL_IMAGE.get(app_name=APP_NAME)
 
@@ -107,7 +112,8 @@ def small_image_name() -> str:
 def fixture_small_image_name() -> str:
     """Return the small image name.
 
-    :returns: The small image name
+    Returns:
+        The small image name
     """
     return small_image_name()
 
@@ -116,7 +122,8 @@ def fixture_small_image_name() -> str:
 def locked_directory(tmpdir: str) -> Generator[str]:
     """Directory without read-write for throwing errors.
 
-    :param tmpdir: Fixture for temporary directory
+    Args:
+        tmpdir: Fixture for temporary directory
     :yields: The temporary directory
     """
     Path(tmpdir).chmod(0o000)
@@ -128,7 +135,8 @@ def locked_directory(tmpdir: str) -> Generator[str]:
 def pullable_image(valid_container_engine: str) -> Generator[str]:
     """Return a container that can be pulled.
 
-    :param valid_container_engine: Fixture for a valid container engine
+    Args:
+        valid_container_engine: Fixture for a valid container engine
     :yields: The image name
     """
     image = ImageEntry.PULLABLE_IMAGE.get(app_name=APP_NAME)
@@ -140,7 +148,8 @@ def pullable_image(valid_container_engine: str) -> Generator[str]:
 def _patch_curses(monkeypatch: pytest.MonkeyPatch) -> None:
     """Patch curses so it doesn't traceback during tests.
 
-    :param monkeypatch: Fixture for patching
+    Args:
+        monkeypatch: Fixture for patching
     """
     monkeypatch.setattr("curses.cbreak", lambda: None)
     monkeypatch.setattr("curses.nocbreak", lambda: None)
@@ -151,7 +160,8 @@ def _patch_curses(monkeypatch: pytest.MonkeyPatch) -> None:
 def _settings_samples() -> tuple[str, str]:
     """Provide the full settings samples.
 
-    :returns: The commented and uncommented samples
+    Returns:
+        The commented and uncommented samples
     """
     settings = deepcopy(NavigatorConfiguration)
     commented, uncommented = to_sample(settings=settings)
@@ -166,10 +176,13 @@ def settings_env_var_to_full(
 ) -> tuple[Path, SettingsFileType]:
     """Set the settings environment variable to a full sample settings file in a tmp path.
 
-    :param settings_samples: The commented and uncommented samples
-    :param tmp_path: The tmp path
-    :param monkeypatch: Fixture for patching
-    :returns: The settings path and the settings contents
+    Args:
+        settings_samples: The commented and uncommented samples
+        tmp_path: The tmp path
+        monkeypatch: Fixture for patching
+
+    Returns:
+        The settings path and the settings contents
     """
     _commented, uncommented = settings_samples
     settings_contents = yaml.load(uncommented, Loader=Loader)
@@ -200,8 +213,11 @@ def settings_env_var_to_full(
 def test_dir_fixture_dir(request: pytest.FixtureRequest) -> Path:
     """Provide the fixture directory for a given test directory.
 
-    :param request: The pytest request object
-    :returns: The fixture directory
+    Args:
+        request: The pytest request object
+
+    Returns:
+        The fixture directory
     """
     test_dir = Path(FIXTURES_DIR) / request.path.parent.relative_to(Path(__file__).parent)
     return test_dir
@@ -210,8 +226,9 @@ def test_dir_fixture_dir(request: pytest.FixtureRequest) -> Path:
 def pull_image(valid_container_engine: str, image_name: str) -> None:
     """Pull an image.
 
-    :param valid_container_engine: The container engine to use
-    :param image_name: The default EE image name
+    Args:
+        valid_container_engine: The container engine to use
+        image_name: The default EE image name
     """
     image_puller = ImagePuller(
         container_engine=valid_container_engine,
@@ -247,11 +264,16 @@ def _cmd_in_tty(
     Based on Andy Hayden's gist:
     https://gist.github.com/hayd/4f46a68fc697ba8888a7b517a414583e
 
-    :param cmd: The command to run
-    :param bytes_input: Some bytes to input
-    :param cwd: The working directory
-    :raises OSError: Error if the command fails
-    :returns: stdout, stderr, and the exit code
+    Args:
+        cmd: The command to run
+        bytes_input: Some bytes to input
+        cwd: The working directory
+
+    Raises:
+        OSError: Error if the command fails
+
+    Returns:
+        stdout, stderr, and the exit code
     """
     # pylint: disable=too-many-locals
     m_stdout, s_stdout = pty.openpty()  # provide tty to enable line-buffering
@@ -317,8 +339,9 @@ class TCmdInTty(Protocol):
     def __call__(self, cmd: str, bytes_input: bytes | None = None) -> tuple[str, str, int]:
         """Provide the callable type hint for the cmd_in_tty fixture.
 
-        :param cmd: The command to run
-        :param bytes_input: Some bytes to input
+        Args:
+            cmd: The command to run
+            bytes_input: Some bytes to input
         """
 
 
@@ -330,7 +353,8 @@ def pytest_sessionstart(session: pytest.Session) -> None:
     although the images will be downloaded by the time the workers
     run their session start, there is no reason from each to perform the image assessments
 
-    :param session: The pytest session object
+    Args:
+        session: The pytest session object
     """
     if getattr(session.config, "workerinput", None) is not None:
         return
@@ -363,7 +387,8 @@ def is_config_empty(filename: Path) -> bool:
 def pytest_configure(config: pytest.Config) -> None:
     """Attempt to save a contributor some troubleshooting.
 
-    :param config: The pytest config object
+    Args:
+        config: The pytest config object
     """
     global VERBOSITY
     VERBOSITY = config.option.verbose
@@ -411,7 +436,8 @@ def pytest_configure(config: pytest.Config) -> None:
 def pytest_unconfigure(config: pytest.Config) -> None:
     """Restore the environment variables that start with ANSIBLE_.
 
-    :param config: The pytest config object
+    Args:
+        config: The pytest config object
     """
     for key, value in USER_ENVIRONMENT.items():
         os.environ[key] = value

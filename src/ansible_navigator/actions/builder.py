@@ -27,16 +27,19 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the action.
 
-        :param args: The current application configuration
+        Args:
+            args: The current application configuration
         """
         super().__init__(args=args, logger_name=__name__, name="builder")
 
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``builder`` request for mode stdout.
 
-        :returns: The return code or 1. If the response from the runner invocation is None,
-            indicates there is no console output to display, so assume an issue and return 1
-            along with a message to review the logs.
+        Returns:
+            The return code or 1. If the response from the runner
+            invocation is None, indicates there is no console output to
+            display, so assume an issue and return 1 along with a
+            message to review the logs.
         """
         self._logger.debug("builder requested in stdout mode")
         response = self._run_runner()
@@ -49,8 +52,11 @@ class Action(ActionBase):
     def _run_runner(self) -> tuple[str, str, int] | None:
         """Spin up runner.
 
-        :raises RuntimeError: When ansible-builder can not be found
-        :returns: The stdout, stderr and return code from runner
+        Raises:
+            RuntimeError: When ansible-builder can not be found
+
+        Returns:
+            The stdout, stderr and return code from runner
         """
         ansible_builder_path = shutil.which("ansible-builder")
         if ansible_builder_path is None:

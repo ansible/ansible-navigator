@@ -26,7 +26,8 @@ class Action:
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:write`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         self._args = args
         self._logger = logging.getLogger(__name__)
@@ -34,9 +35,12 @@ class Action:
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:write`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: Nothing
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            Nothing
         """
         self._logger.debug("write requested as %s", interaction.action.value)
         match = interaction.action.match.groupdict()

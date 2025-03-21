@@ -42,7 +42,8 @@ class BaseClass:
     ) -> Generator[TmuxSession]:
         """Tmux fixture for this module.
 
-        :param request: The request for this fixture
+        Args:
+            request: The request for this fixture
         :yields: A tmux session
         """
         params: TmuxSessionKwargs = {
@@ -66,10 +67,13 @@ class BaseClass:
     ) -> None:
         """Test interactive/stdout exec.
 
-        :param request: The test request
-        :param tmux_session: The tmux session
-        :param step: A step within a series of tests
-        :raises ValueError: If test mode isn't set
+        Args:
+            request: The test request
+            tmux_session: The tmux session
+            step: A step within a series of tests
+
+        Raises:
+            ValueError: If test mode isn't set
         """
         if step.search_within_response is not SearchFor.PROMPT:
             msg = "test mode not set"

@@ -52,7 +52,8 @@ class Collector:
     def start(self, color: bool) -> None:
         """Output start information to the console.
 
-        :param color: Whether to color the message
+        Args:
+            color: Whether to color the message
         """
         message = f"Collecting {self.name} information"
         information = f"{message:.<60}"
@@ -61,8 +62,9 @@ class Collector:
     def fail(self, color: bool, duration: float) -> None:
         """Output fail information to the console.
 
-        :param color: Whether to color the message
-        :param duration: The duration of the collection
+        Args:
+            color: Whether to color the message
+            duration: The duration of the collection
         """
         message = f"{self.name.capitalize()} information collection failed"
         information = f"{message:.<60}{duration:.2f}s"
@@ -71,8 +73,9 @@ class Collector:
     def finish(self, color: bool, duration: float) -> None:
         """Output finish information to the console.
 
-        :param color: Whether to color the message
-        :param duration: The duration of the collection
+        Args:
+            color: Whether to color the message
+            duration: The duration of the collection
         """
         message = f"{self.name.capitalize()} information collected"
         information = f"{message:.<60}{duration:.2f}s"
@@ -102,15 +105,21 @@ class Diagnostics:
 def register(collector: Collector) -> Callable[..., Any]:
     """Register a collector.
 
-    :param collector: The collector to register
-    :returns: The decorator
+    Args:
+        collector: The collector to register
+
+    Returns:
+        The decorator
     """
 
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Add the dunder collector to the func.
 
-        :param func: The function to decorate
-        :returns: The decorated function
+        Args:
+            func: The function to decorate
+
+        Returns:
+            The decorated function
         """
         func.__collector__ = collector  # type: ignore[attr-defined]
         return func
@@ -127,7 +136,8 @@ class FailedCollectionError(Exception):
     def __init__(self, errors: dict[str, JSONTypes]) -> None:
         """Initialize the exception.
 
-        :param errors: The errors
+        Args:
+            errors: The errors
         """
         super().__init__()
         self.errors = errors
@@ -136,16 +146,22 @@ class FailedCollectionError(Exception):
 def diagnostic_runner(func: Callable[..., Any]) -> Callable[..., Any]:
     """Wrap and run a collector.
 
-    :param func: The function to wrap
-    :returns: The decorator
+    Args:
+        func: The function to wrap
+
+    Returns:
+        The decorator
     """
 
     def wrapper(*args: Any, **kwargs: dict[str, Any]) -> Callable[..., Any]:
         """Wrap and run the collector.
 
-        :param args: The positional arguments
-        :param kwargs: The keyword arguments
-        :returns: The result of the function with elapsed or error information
+        Args:
+            *args: The positional arguments
+            **kwargs: The keyword arguments
+
+        Returns:
+            The result of the function with elapsed or error information
         """
         global DIAGNOSTIC_FAILURES
         start = datetime.now(timezone.utc)
@@ -187,9 +203,10 @@ class DiagnosticsCollector:
     ) -> None:
         """Initialize the ShowTech class.
 
-        :param args: The current settings
-        :param messages: The messages to log
-        :param exit_messages: The exit messages to log
+        Args:
+            args: The current settings
+            messages: The messages to log
+            exit_messages: The exit messages to log
         """
         self._args = args
         self.color = args.display_color and stdout.isatty()
@@ -200,7 +217,8 @@ class DiagnosticsCollector:
     def registered(self) -> Iterator[Callable[..., Any]]:
         """Return the registered diagnostics.
 
-        :returns: The registered diagnostics
+        Returns:
+            The registered diagnostics
         """
         return (getattr(self, f) for f in dir(self) if hasattr(getattr(self, f), "registration"))
 
@@ -238,7 +256,8 @@ class DiagnosticsCollector:
     def _warning(self) -> dict[str, JSONTypes]:
         """Add a warning.
 
-        :returns: The warning
+        Returns:
+            The warning
         """
         return {"message": self.WARNING}
 
@@ -247,7 +266,8 @@ class DiagnosticsCollector:
     def _basics(self) -> dict[str, JSONTypes]:
         """Add basic information.
 
-        :returns: The basic information
+        Returns:
+            The basic information
         """
         return {
             "application_name": self._args.application_name,
@@ -265,7 +285,8 @@ class DiagnosticsCollector:
     def _container_engines(self) -> dict[str, JSONTypes]:
         """Add container engines.
 
-        :returns: The container engines
+        Returns:
+            The container engines
         """
         commands = [
             Command(identity="podman", command="podman --version", post_process=lambda c: c),
@@ -287,8 +308,11 @@ class DiagnosticsCollector:
     def _execution_environment(self) -> dict[str, JSONTypes]:
         """Add execution environment information.
 
-        :raises FailedCollectionError: If the collection process fails
-        :returns: The execution environment information
+        Raises:
+            FailedCollectionError: If the collection process fails
+
+        Returns:
+            The execution environment information
         """
         if self._args.entry("container_engine").value.source is Constants.DEFAULT_CFG:
             return {"errors": "No container engine available or found"}
@@ -307,7 +331,8 @@ class DiagnosticsCollector:
     def _initialization(self) -> dict[str, JSONTypes]:
         """Add initialization information.
 
-        :returns: The initialization information
+        Returns:
+            The initialization information
         """
         return {
             "messages": [msg.message for msg in self._messages],
@@ -319,7 +344,8 @@ class DiagnosticsCollector:
     def _log_collector(self) -> dict[str, JSONTypes]:
         """Add log collector information.
 
-        :returns: The log collector information
+        Returns:
+            The log collector information
         """
         logs: list[JSONTypes] = []
         cwd_log = Path("./ansible-navigator.log")
@@ -347,8 +373,11 @@ class DiagnosticsCollector:
     def _local_system(self) -> dict[str, JSONTypes]:
         """Add local system information.
 
-        :raises FailedCollectionError: If the collection process fails
-        :returns: The local system information
+        Raises:
+            FailedCollectionError: If the collection process fails
+
+        Returns:
+            The local system information
         """
         results = image_introspect.main(serialize=False)
         if not results:
@@ -366,7 +395,8 @@ class DiagnosticsCollector:
     def _python_packages(self) -> dict[str, JSONTypes]:
         """Add python packages information.
 
-        :returns: The python packages information
+        Returns:
+            The python packages information
         """
         pkgs = importlib_metadata.packages_distributions()
         meta: dict[str, Any] = {}
@@ -385,7 +415,8 @@ class DiagnosticsCollector:
     def _settings(self) -> dict[str, JSONTypes]:
         """Add settings information.
 
-        :returns: The settings information
+        Returns:
+            The settings information
         """
         return {
             "effective": to_effective(self._args),
@@ -397,7 +428,8 @@ class DiagnosticsCollector:
     def _settings_file(self) -> dict[str, JSONTypes]:
         """Add settings file information.
 
-        :returns: The settings file information
+        Returns:
+            The settings file information
         """
         contents: dict[str, JSONTypes] = {}
         if self._args.internals.settings_file_path:

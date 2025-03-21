@@ -37,20 +37,23 @@ class FieldWorking:
         This is needed because windows width and : placement
         is based on the largest 'prompt'.
 
-        :returns: Max width information message
+        Returns:
+            Max width information message
         """
         return max(self.messages)
 
     def validate(self, response: str) -> None:
         """No validation required for working field.
 
-        :param response: Field response
+        Args:
+            response: Field response
         """
         self.valid = True
 
     def conditional_validation(self, response: str) -> None:
         """No conditional validation.
 
-        :param response: Field response
+        Args:
+            response: Field response
         """
         self.validate(response)

@@ -35,7 +35,8 @@ class Command(NamedTuple):
     def join(self) -> str:
         """Create  the CLI command.
 
-        :return: The command
+        Returns:
+            The command
         """
         args = [self.command]
         if isinstance(self.subcommand, str):
@@ -81,7 +82,8 @@ class UiTestStep(NamedTuple):
     def __str__(self) -> str:
         """Produce a test id for this step.
 
-        :return: The test id
+        Returns:
+            The test id
         """
         return f"{self.step_index}"
 
@@ -89,8 +91,11 @@ class UiTestStep(NamedTuple):
 def add_indices(steps: tuple[UiTestStep, ...]) -> tuple[UiTestStep, ...]:
     """Update the index of each.
 
-    :param steps: The list of steps
-    :return: The list of steps with the index updated
+    Args:
+        steps: The list of steps
+
+    Returns:
+        The list of steps with the index updated
     """
     return tuple(step._replace(step_index=idx) for idx, step in enumerate(steps))
 
@@ -98,8 +103,11 @@ def add_indices(steps: tuple[UiTestStep, ...]) -> tuple[UiTestStep, ...]:
 def step_id(value: UiTestStep) -> str:
     """Create a test id from the test step object.
 
-    :param value: The test value
-    :return: The test id
+    Args:
+        value: The test value
+
+    Returns:
+        The test id
     """
     return f"{value.step_index}"
 
@@ -107,7 +115,10 @@ def step_id(value: UiTestStep) -> str:
 def step_id_padded(value: UiTestStep) -> str:
     """Return the test id from the test step object, index padded to 2.
 
-    :param value: The test value
-    :return: The test id
+    Args:
+        value: The test value
+
+    Returns:
+        The test id
     """
     return f"{value.step_index:02d}"

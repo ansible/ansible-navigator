@@ -50,20 +50,25 @@ class ActionRunTest:
     ) -> None:
         """Initialize the test runner for an action.
 
-        :param action_name: The name of the action tests will be run against
-        :param container_engine: The name of the container engine
-        :param container_options: Any options being passed directly to the container engine
-        :param execution_environment: A boolean indicating if an execution environment
-            should be used
-        :param execution_environment_image: The name of the execution environment image to be used
-        :param host_cwd: The current working directory for the host
-        :param set_environment_variable: Any environment variable to set in the
-            execution environment
-        :param pass_environment_variable: Any environment variables to pass into the
-            execution environment
-        :param private_data_dir: The artifact directory for ansible runner
-        :param rotate_artifacts: The number of artifacts ansible runner should maintain
-        :param timeout: The ansible runner timeout value
+        Args:
+            action_name: The name of the action tests will be run
+                against
+            container_engine: The name of the container engine
+            container_options: Any options being passed directly to the
+                container engine
+            execution_environment: A boolean indicating if an execution
+                environment should be used
+            execution_environment_image: The name of the execution
+                environment image to be used
+            host_cwd: The current working directory for the host
+            set_environment_variable: Any environment variable to set in
+                the execution environment
+            pass_environment_variable: Any environment variables to pass
+                into the execution environment
+            private_data_dir: The artifact directory for ansible runner
+            rotate_artifacts: The number of artifacts ansible runner
+                should maintain
+            timeout: The ansible runner timeout value
         """
         self._action_name = action_name
         self._container_engine = container_engine
@@ -96,13 +101,15 @@ class ActionRunTest:
     def callable_pass_one_arg(self, value: int = 0) -> None:
         """Do nothing callable.
 
-        :param value: The value to return
+        Args:
+            value: The value to return
         """
 
     def callable_pass(self, **kwargs: Any) -> None:
         """Do nothing callable.
 
-        :param kwargs: The call values
+        Args:
+            **kwargs: The call values
         """
 
     def content_format(
@@ -112,9 +119,13 @@ class ActionRunTest:
     ) -> ContentFormat:
         """Do nothing content format callable.
 
-        :param value: The content format value
-        :param default: A boolean indicating if the default value should be used
-        :returns: The content format value
+        Args:
+            value: The content format value
+            default: A boolean indicating if the default value should be
+                used
+
+        Returns:
+            The content format value
         """
         return value if value else ContentFormat.YAML
 
@@ -131,21 +142,25 @@ class ActionRunTest:
     ) -> None:
         """Show a content object, but don't really.
 
-        :param obj: The content object to show
-        :param content_format: The content format to use
-        :param index: The index of the content object
-        :param columns: The columns to display
-        :param await_input: A boolean indicating if input should be awaited
-        :param filter_content_keys: A callable to filter content keys
-        :param color_menu_item: A callable to color menu items
-        :param content_heading: A callable to display content headings
+        Args:
+            obj: The content object to show
+            content_format: The content format to use
+            index: The index of the content object
+            columns: The columns to display
+            await_input: A boolean indicating if input should be awaited
+            filter_content_keys: A callable to filter content keys
+            color_menu_item: A callable to color menu items
+            content_heading: A callable to display content headings
         """
 
     def show_form(self, form: Form) -> Form:
         """Do nothing show form callable.
 
-        :param form: The form to show
-        :returns: The form to show
+        Args:
+            form: The form to show
+
+        Returns:
+            The form to show
         """
         return form
 
@@ -156,8 +171,11 @@ class ActionRunTest:
         have the same signature, the corresponding integration test
         will be using the action internals for asserts
 
-        :returns: The action return value
-        :raises ValueError: If no action name match
+        Returns:
+            The action return value
+
+        Raises:
+            ValueError: If no action name match
         """
         self._app_args.update({"mode": "interactive"})
         args = deepcopy(NavigatorConfiguration)
@@ -205,8 +223,11 @@ class ActionRunTest:
         # pylint: disable=too-many-locals
         """Run the action, stdout.
 
-        :param kwargs: The action arguments
-        :returns: The result, stdout and stderr
+        Args:
+            **kwargs: The action arguments
+
+        Returns:
+            The result, stdout and stderr
         """
         self._app_args.update({"mode": "stdout"})
         self._app_args.update(kwargs)

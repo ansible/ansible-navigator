@@ -60,7 +60,9 @@ from ansible_navigator.configuration_subsystem.definitions import VolumeMount
 def test_navigator_volume_mount_to_string(volmount: VolumeMount, expected: str) -> None:
     """Make sure volume mount ``to_string`` is sane.
 
-    :param volmount: The volume mount to test
-    :param expected: The expected string resulting from the conversion of the mount to a string
+    Args:
+        volmount: The volume mount to test
+        expected: The expected string resulting from the conversion of
+            the mount to a string
     """
     assert volmount.to_string() == expected

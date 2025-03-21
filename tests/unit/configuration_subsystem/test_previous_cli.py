@@ -114,7 +114,8 @@ def test_apply_previous_cli_specified() -> None:
 def test_apply_previous_cli_mixed(monkeypatch: pytest.MonkeyPatch) -> None:
     """Ensure a mixed configuration passes.
 
-    :param monkeypatch: pytest fixture
+    Args:
+        monkeypatch: pytest fixture
     """
     params = "doc shell --ee False --eei test_image:latest --forks 15"
     application_configuration = deepcopy(NavigatorConfiguration)
@@ -220,15 +221,19 @@ def test_apply_previous_cli_cmdline_not_applied() -> None:
 def test_apply_previous_cli_none(monkeypatch: pytest.MonkeyPatch) -> None:
     """Ensure nothing is carried forward.
 
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
     """
 
     def which(*_args: Any, **_kwargs: Any) -> str:
         """Return a path to the container engine.
 
-        :param _args: The args
-        :param _kwargs: The kwargs
-        :return: The path to a container engine
+        Args:
+            *_args: The args
+            **_kwargs: The kwargs
+
+        Returns:
+            The path to a container engine
         """
         return "/path/to/container_engine"
 
