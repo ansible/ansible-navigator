@@ -42,7 +42,8 @@ class FieldChecks:
     def checked(self) -> tuple[bool, ...]:
         """Conveniently return just checked fields.
 
-        :returns: Name of every checked field
+        Returns:
+            Name of every checked field
         """
         return tuple(option.name for option in self.options if option.checked)
 
@@ -50,7 +51,8 @@ class FieldChecks:
     def formatted_default(self) -> str:
         """Format the checked field prompt with an empty string.
 
-        :returns: Empty string
+        Returns:
+            Empty string
         """
         return ""
 
@@ -58,7 +60,8 @@ class FieldChecks:
     def full_prompt(self) -> str:
         """Format the checkbox prompt.
 
-        :returns: Checkbox prompt
+        Returns:
+            Checkbox prompt
         """
         return self.prompt
 
@@ -66,7 +69,8 @@ class FieldChecks:
     def validator(self) -> Callable[..., Any]:
         """Provide a validator based on form type.
 
-        :returns: Validation of checked entries
+        Returns:
+            Validation of checked entries
         """
         return partial(
             FieldValidators.some_of_or_none,
@@ -77,8 +81,11 @@ class FieldChecks:
     def _validate(self, response: FieldChecks) -> Validation:
         """Validate this FieldChecks instance.
 
-        :param response: The form response from the user
-        :returns: Validation of the response
+        Args:
+            response: The form response from the user
+
+        Returns:
+            Validation of the response
         """
         validation = self.validator(choices=response.options)
         if validation.error_msg:
@@ -90,7 +97,8 @@ class FieldChecks:
     def validate(self, response: FieldChecks) -> None:
         """Validate this FieldChecks instance.
 
-        :param response: Instance to check and verify options are valid
+        Args:
+            response: Instance to check and verify options are valid
         """
         if self.max_selected == sys.maxsize:
             self.max_selected = len(self.options)
@@ -101,7 +109,8 @@ class FieldChecks:
     def conditional_validation(self, response: FieldChecks) -> None:
         """Conditional validation for a field_checks instance.
 
-        :param response: Instance to check and verify options are valid
+        Args:
+            response: Instance to check and verify options are valid
         """
         self._validate(response)
         self.current_error = ""

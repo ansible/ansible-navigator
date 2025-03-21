@@ -33,7 +33,8 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide a test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return f"{self.current}"
 
@@ -72,7 +73,8 @@ test_data = (
 def test_pas(data: Scenario) -> None:
     """Test the PAS post processor.
 
-    :param data: The test data
+    Args:
+        data: The test data
     """
     settings = deepcopy(NavigatorConfiguration)
     entry = settings.entry("playbook_artifact_save_as")

@@ -37,7 +37,8 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide a test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return f"{self.source}-{self.current}"
 
@@ -122,7 +123,8 @@ test_data = (
 def test_pp_direct(data: Scenario) -> None:
     """Test the time zone post processor.
 
-    :param data: The test data
+    Args:
+        data: The test data
     """
     settings = deepcopy(NavigatorConfiguration)
     entry = settings.entry("time_zone")
@@ -148,8 +150,9 @@ env_var_test_data = [s for s in test_data if s.source is C.ENVIRONMENT_VARIABLE]
 def test_env_var(monkeypatch: pytest.MonkeyPatch, data: Scenario) -> None:
     """Test the time zone post processor using the environment variable.
 
-    :param monkeypatch: The monkey patch fixture
-    :param data: The test data
+    Args:
+        monkeypatch: The monkey patch fixture
+        data: The test data
     """
     application_configuration = deepcopy(NavigatorConfiguration)
     application_configuration.internals.initializing = True

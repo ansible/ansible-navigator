@@ -19,8 +19,9 @@ class ImagesInspect:
     def __init__(self, container_engine: str, ids: list[str]) -> None:
         """Initialize the container image inspector.
 
-        :param container_engine: The name of the container engine to use
-        :param ids: The ids of the container images to inspect
+        Args:
+            container_engine: The name of the container engine to use
+            ids: The ids of the container images to inspect
         """
         self._container_engine = container_engine
         self._image_ids = ids
@@ -29,7 +30,8 @@ class ImagesInspect:
     def commands(self) -> list[Command]:
         """Generate image inspection commands.
 
-        :returns: List of image inspection command objects
+        Returns:
+            List of image inspection command objects
         """
         return [
             Command(
@@ -44,7 +46,8 @@ class ImagesInspect:
     def parse(command: Command) -> None:
         """Parse the image inspection command output.
 
-        :param command: Image inspection command object
+        Args:
+            command: Image inspection command object
         """
         obj = json.loads(command.stdout)
         snake = pascal_to_snake(obj[0])
@@ -57,7 +60,8 @@ class ImagesList:
     def __init__(self, container_engine: str) -> None:
         """Initialize the container image lister.
 
-        :param container_engine: The name of the container engine to use
+        Args:
+            container_engine: The name of the container engine to use
         """
         self._container_engine = container_engine
 
@@ -65,7 +69,8 @@ class ImagesList:
     def commands(self) -> list[Command]:
         """Generate image lister commands.
 
-        :returns: List of the image lister commands
+        Returns:
+            List of the image lister commands
         """
         return [
             Command(
@@ -79,7 +84,8 @@ class ImagesList:
     def parse(command: Command) -> None:
         """Parse the image lister command output.
 
-        :param command: Image lister command object
+        Args:
+            command: Image lister command object
         """
         if command.stdout:
             images = command.stdout.splitlines()
@@ -95,8 +101,11 @@ class ImagesList:
 def inspect_all(container_engine: str) -> tuple[list[dict[str, Any]], str]:
     """Run inspect against all images in the list.
 
-    :param container_engine: Name of the container engine
-    :returns: List of all image values and stderr, if applicable
+    Args:
+        container_engine: Name of the container engine
+
+    Returns:
+        List of all image values and stderr, if applicable
     """
     cmd_runner = CommandRunner()
     images_list_class = ImagesList(container_engine=container_engine)

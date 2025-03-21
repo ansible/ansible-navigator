@@ -27,9 +27,14 @@ def create_settings_file_sample(
 ) -> SettingsFileType:
     """Generate a settings file sample.
 
-    :param settings_path: The dot delimited settings file path for a settings entry
-    :param placeholder: String used to identify the placement of a settings value
-    :returns: A sample of the settings file
+    Args:
+        settings_path: The dot delimited settings file path for a
+            settings entry
+        placeholder: String used to identify the placement of a settings
+            value
+
+    Returns:
+        A sample of the settings file
     """
     if "." not in settings_path:
         return SettingsFileType({settings_path: placeholder})
@@ -40,7 +45,8 @@ def create_settings_file_sample(
 def ansible_verison_parser(command: Command) -> None:
     """Parse the output of the ansible command.
 
-    :param command: The result of running the command
+    Args:
+        command: The result of running the command
     """
     if command.return_code:
         return
@@ -99,8 +105,11 @@ def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:
     If running with an EE only look in the CWD.
     In the future user-specified volume mounts might be considered as locations.
 
-    :param ee_enabled: Indicates if EE support is enabled
-    :returns: The ansible.cfg contents
+    Args:
+        ee_enabled: Indicates if EE support is enabled
+
+    Returns:
+        The ansible.cfg contents
     """
     response = ParseAnsibleCfgResponse(messages=[], exit_messages=[])
     response.config.path = Constants.NONE
@@ -166,8 +175,11 @@ def parse_ansible_verison(
 ) -> tuple[list[LogMessage], list[ExitMessage], dict[str, Any] | None]:
     """Parse the output of the ansible --version command.
 
-    :param path: The path to the ansible executable
-    :returns: Log messages, exit messages, and the stdout as a dictionary
+    Args:
+        path: The path to the ansible executable
+
+    Returns:
+        Log messages, exit messages, and the stdout as a dictionary
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []

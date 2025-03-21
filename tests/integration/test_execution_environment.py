@@ -67,12 +67,13 @@ class Test(Cli2Runner):
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
 
-        :param mocked_runner: A patched instance of runner
-        :param monkeypatch: The monkeypatch fixture
-        :param tmp_path: A test specific temporary path
-        :param cli_entry: The CLI entry to set as ``sys.argv``
-        :param config_fixture: The settings fixture
-        :param expected: the expected return value
+        Args:
+            mocked_runner: A patched instance of runner
+            monkeypatch: The monkeypatch fixture
+            tmp_path: A test specific temporary path
+            cli_entry: The CLI entry to set as ``sys.argv``
+            config_fixture: The settings fixture
+            expected: the expected return value
         """
         cfg_path = self.TEST_FIXTURE_DIR / config_fixture
         coll_cache_path = tmp_path / "collection_doc_cache.db"

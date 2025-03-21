@@ -76,7 +76,8 @@ def cache_scripts() -> None:
 def log_dependencies() -> list[LogMessage]:
     """Retrieve installed packages and log as debug.
 
-    :returns: All packages, version and location
+    Returns:
+        All packages, version and location
     """
     pkgs = []
     found = []
@@ -103,7 +104,8 @@ def log_dependencies() -> list[LogMessage]:
 def pull_image(args: Any) -> None:
     """Pull the image if required.
 
-    :param args: Copy of NavigatorConfiguration
+    Args:
+        args: Copy of NavigatorConfiguration
     """
     image_puller = ImagePuller(
         container_engine=args.container_engine,
@@ -124,8 +126,11 @@ def pull_image(args: Any) -> None:
 def run(args: ApplicationConfiguration) -> ActionReturn:
     """Run the appropriate subcommand.
 
-    :param args: The current application settings
-    :returns: A message to display and a return code
+    Args:
+        args: The current application settings
+
+    Returns:
+        A message to display and a return code
     """
     if args.mode == "stdout":
         try:

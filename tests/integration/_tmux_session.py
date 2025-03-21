@@ -58,16 +58,19 @@ class TmuxSession:
     ) -> None:
         """Initialize a tmux session.
 
-        :param request: The request for this fixture
-        :param config_path: The path to a settings file to use
-        :param cwd: The current working directory to set when starting the tmux session
-        :param pane_height: The height of the tmux session in lines
-        :param pane_width: The width of the tmux session in characters
-        :param pull_policy: The pull policy to set for the session
-        :param setup_commands: Any commands needing to be run before starting the application
-            in the tmux session
-        :param shell_prompt_timeout: The amount of time to wait for a shell prompt in seconds after
-            issuing commands in the tmux session
+        Args:
+            request: The request for this fixture
+            config_path: The path to a settings file to use
+            cwd: The current working directory to set when starting the
+                tmux session
+            pane_height: The height of the tmux session in lines
+            pane_width: The width of the tmux session in characters
+            pull_policy: The pull policy to set for the session
+            setup_commands: Any commands needing to be run before
+                starting the application in the tmux session
+            shell_prompt_timeout: The amount of time to wait for a shell
+                prompt in seconds after issuing commands in the tmux
+                session
         """
         self.cli_prompt: str
         self._config_path = config_path
@@ -93,7 +96,8 @@ class TmuxSession:
         Retry here do to errors captured here:
         https://github.com/ansible/ansible-navigator/issues/812
 
-        :raises libtmux.exc.LibTmuxException: If tries are exceeded
+        Raises:
+            libtmux.exc.LibTmuxException: If tries are exceeded
         """
         count = 1
         tries = 3
@@ -119,8 +123,12 @@ class TmuxSession:
     def __enter__(self) -> TmuxSession:  # noqa: PYI034
         """Enter the tmux session.
 
-        :return: The tmux session
-        :raises ValueError: If the time is exceeded for finding the shell prompt
+        Returns:
+            The tmux session
+
+        Raises:
+            ValueError: If the time is exceeded for finding the shell
+                prompt
         """
         # pylint: disable=attribute-defined-outside-init
 
@@ -175,9 +183,14 @@ class TmuxSession:
         def send_and_wait(cmd: str) -> list[str]:
             """Send commands and waits for prompt to appear.
 
-            :param cmd: command to be executed.
-            :returns: terminal captured lines
-            :raises ValueError: if prompt is not found after timeout
+            Args:
+                cmd: command to be executed.
+
+            Returns:
+                terminal captured lines
+
+            Raises:
+                ValueError: if prompt is not found after timeout
             """
             # We observed that on some platforms initialization can fail as
             # commands are sent too quickly.
@@ -221,9 +234,10 @@ class TmuxSession:
     ) -> None:
         """Exit the tmux session.
 
-        :param exc_type: exception type
-        :param exc_value: exception value
-        :param exc_traceback: exception traceback
+        Args:
+            exc_type: exception type
+            exc_value: exception value
+            exc_traceback: exception traceback
         """
         if self._server.has_session(self._session_name):
             self._session.kill()
@@ -231,7 +245,8 @@ class TmuxSession:
     def _capture_pane(self) -> list[str]:
         """Capture the pane.
 
-        :returns: The captured pane
+        Returns:
+            The captured pane
         """
         captured = self._pane.capture_pane()
         if isinstance(captured, str):
@@ -250,12 +265,16 @@ class TmuxSession:
     ) -> list[str]:
         """Interact with the tmux session.
 
-        :param value: Send to screen
-        :param search_within_response: A list of strings or string to find
-        :param ignore_within_response: Ignore screen if this there
-        :param timeout: The amount of time is seconds to allow for completion
-        :param send_clear: Send a clear command before sending the value
-        :returns: The screen content
+        Args:
+            value: Send to screen
+            search_within_response: A list of strings or string to find
+            ignore_within_response: Ignore screen if this there
+            timeout: The amount of time is seconds to allow for
+                completion
+            send_clear: Send a clear command before sending the value
+
+        Returns:
+            The screen content
         """
         showing = None
         if self._fail_remaining:

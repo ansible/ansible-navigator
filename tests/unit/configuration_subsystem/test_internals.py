@@ -24,8 +24,9 @@ def test_settings_file_path_file_none() -> None:
 def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a settings file path is stored in the internals when searched.
 
-    :param monkeypatch: Fixture providing these helper methods for safely patching and mocking
-        functionality in tests
+    Args:
+        monkeypatch: Fixture providing these helper methods for safely
+            patching and mocking functionality in tests
     """
     settings_file = "ansible-navigator.yml"
     settings_file_path = TEST_FIXTURE_DIR / settings_file
@@ -45,8 +46,9 @@ def test_settings_file_path_file_system(monkeypatch: pytest.MonkeyPatch) -> None
 def test_settings_file_path_environment_variable(monkeypatch: pytest.MonkeyPatch) -> None:
     """Confirm a settings file path is stored in the internals when set via environment variable.
 
-    :param monkeypatch: Fixture providing these helper methods for safely patching and mocking
-        functionality in tests
+    Args:
+        monkeypatch: Fixture providing these helper methods for safely
+            patching and mocking functionality in tests
     """
     settings_file = "ansible-navigator.yml"
     settings_file_path = TEST_FIXTURE_DIR / settings_file

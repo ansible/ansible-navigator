@@ -22,7 +22,8 @@ class Action:
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:back`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         self._args = args
         self._logger = logging.getLogger(__name__)
@@ -30,8 +31,9 @@ class Action:
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:back`` request.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
         """
         self._logger.debug("back requested")
         interaction.ui.scroll(0)

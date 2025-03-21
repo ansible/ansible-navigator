@@ -1,4 +1,4 @@
-"""Collections subcommand implementation."""  # noqa: A005
+"""Collections subcommand implementation."""
 
 from __future__ import annotations
 
@@ -41,10 +41,13 @@ if TYPE_CHECKING:
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Provide a color for a collections menu entry in one column.
 
-    :param colno: The column number
-    :param colname: The column name
-    :param entry: The menu entry
-    :returns: The color and decoration
+    Args:
+        colno: The column number
+        colname: The column name
+        entry: The menu entry
+
+    Returns:
+        The color and decoration
     """
     if entry.get("__shadowed") is True:
         return 8, 0
@@ -56,9 +59,12 @@ def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, in
 def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
     """Create a heading for collection content.
 
-    :param obj: The content going to be shown
-    :param screen_w: The current screen width
-    :returns: The heading
+    Args:
+        obj: The content going to be shown
+        screen_w: The current screen width
+
+    Returns:
+        The heading
     """
     name = f"Image: {obj['full_name']}"
     description = f"Description: {obj['__description']}"
@@ -81,8 +87,11 @@ def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
 def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out some keys when showing collection content.
 
-    :param obj: The object from which keys should be removed
-    :returns: The object with keys removed
+    Args:
+        obj: The object from which keys should be removed
+
+    Returns:
+        The object with keys removed
     """
     return {k: v for k, v in obj.items() if not k.startswith("__")}
 
@@ -96,7 +105,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``collections`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="collections")
         self._adjacent_collection_dir: str
@@ -113,9 +123,13 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``collections`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("collections requested")
@@ -178,9 +192,11 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``collection`` request for mode stdout.
 
-        :returns: The return code or 1. If the response from the runner invocation is None,
-            indicates there is no console output to display, so assume an issue and return 1
-            along with a message to review the logs.
+        Returns:
+            The return code or 1. If the response from the runner
+            invocation is None, indicates there is no console output to
+            display, so assume an issue and return 1 along with a
+            message to review the logs.
         """
         self._logger.debug("collection requested in stdout mode")
 
@@ -274,7 +290,8 @@ class Action(ActionBase):
     def _build_main_menu(self) -> Step:
         """Build the menu of collections.
 
-        :returns: The collections menu definition
+        Returns:
+            The collections menu definition
         """
         if self._args.execution_environment:
             columns = ["__name", "__version", "__shadowed", "__type", "path"]
@@ -292,7 +309,8 @@ class Action(ActionBase):
     def _build_collection_content_menu(self) -> Step:
         """Build the menu of plugins.
 
-        :returns: The plugin menu definition
+        Returns:
+            The plugin menu definition
         """
         self._collection_cache.open_()
         selected_collection = self._collections[self.steps.current.index]
@@ -362,7 +380,8 @@ class Action(ActionBase):
     def _build_collection_content(self) -> Step:
         """Build the content for one plugin.
 
-        :returns: The plugin's content
+        Returns:
+            The plugin's content
         """
         return Step(
             name="collection_content",
@@ -508,8 +527,11 @@ class Action(ActionBase):
     def _parse(self, output: str) -> None:
         """Load and process the ``json`` output from the collection cataloging process.
 
-        :param output: The output from the collection cataloging process
-        :returns: Nothing
+        Args:
+            output: The output from the collection cataloging process
+
+        Returns:
+            Nothing
         """
         # pylint: disable=too-many-locals
 
@@ -602,8 +624,12 @@ class Action(ActionBase):
     ) -> dict[str, Any]:
         """Get plugin details for the given collection.
 
-        :param selected_collection: The selected collection
-        :returns: The plugin details like full-name, type and short description.
+        Args:
+            selected_collection: The selected collection
+
+        Returns:
+            The plugin details like full-name, type and short
+            description.
         """
         plugins_details: dict[str, Any] = {}
 
@@ -645,7 +671,8 @@ class Action(ActionBase):
         # pylint: disable=too-many-nested-blocks
         """Parse collection information from catalog collection cache.
 
-        :returns: The collection information to be displayed on stdout
+        Returns:
+            The collection information to be displayed on stdout
         """
         collections_info: dict[str, Any] = {
             "collections": [],

@@ -49,8 +49,11 @@ if TYPE_CHECKING:
 def _post_processor(func: Callable[..., Any]) -> Callable[..., Any]:
     """Decorate a post processing function.
 
-    :param func: The function to wrap
-    :returns: The wrapped function
+    Args:
+        func: The function to wrap
+
+    Returns:
+        The wrapped function
     """
 
     def wrapper(*args: Any, **kwargs: Any) -> PostProcessorReturn:
@@ -96,9 +99,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process a boolean value.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -115,9 +121,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process ansible_runner_artifact_dir path.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -133,9 +142,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process ansible_runner_rotate_artifacts_count.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -158,9 +170,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process ansible_runner_timeout.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -180,9 +195,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process collection doc cache path.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -194,9 +212,12 @@ class NavigatorPostProcessor:
     def cmdline(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process cmdline.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -212,9 +233,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process container_engine.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -235,9 +259,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process display_color.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -260,9 +287,12 @@ class NavigatorPostProcessor:
         # pylint: disable=too-many-locals
         """Post process execution_environment.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages, exit_messages = self._true_or_false(entry, config)
         if entry.value.current is True:
@@ -345,9 +375,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process execution_environment_image.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -363,9 +396,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process set_environment_variable.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :return: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         # pylint: disable=too-many-locals
 
@@ -468,9 +504,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process container_options.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -488,9 +527,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Disable playbook artifact creation and force mode stdout for a settings parameter.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages, exit_messages = self._true_or_false(entry, config)
         if entry.value.current is True:
@@ -524,10 +566,13 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Force mode stdout for a settings parameter.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :param subcommand: The applicable subcommand
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+            subcommand: The applicable subcommand
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages, exit_messages = self._true_or_false(entry, config)
 
@@ -554,9 +599,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process execution_environment_image_details.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -580,9 +628,12 @@ class NavigatorPostProcessor:
     def inventory(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process inventory.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -631,9 +682,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process inventory_columns.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -648,9 +702,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post-process lintables.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -730,9 +787,12 @@ class NavigatorPostProcessor:
         If not restore to default, this will allow the writing of log messages
         even if application initialization results in a sys.exit condition
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -766,10 +826,16 @@ class NavigatorPostProcessor:
         # pylint: disable=too-many-locals
         """Post process mode.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :raises ValueError: When more than 2 mode changes requests are present, shouldn't happen
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Raises:
+            ValueError: When more than 2 mode changes requests are
+                present, shouldn't happen
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -858,9 +924,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process plugin_name.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -911,9 +980,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process pass_environment_variable.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -926,9 +998,12 @@ class NavigatorPostProcessor:
     def playbook(entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
         """Post process playbook.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -957,10 +1032,16 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process playbook_artifact_enable.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :raises ValueError: When more than 1 pae changes requests are present, shouldn't happen
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Raises:
+            ValueError: When more than 1 pae changes requests are
+                present, shouldn't happen
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -995,9 +1076,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process playbook_artifact_replay.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -1027,9 +1111,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process playbook_artifact_save_as.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -1060,9 +1147,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process ``pull_arguments``.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -1084,9 +1174,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Force mode stdout for schema parameter.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -1106,9 +1199,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process set_environment_variable.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
@@ -1144,9 +1240,12 @@ class NavigatorPostProcessor:
     ) -> PostProcessorReturn:
         """Post process ``time_zone``.
 
-        :param entry: The current settings entry
-        :param config: The full application configuration
-        :returns: An instance of the standard post process return object
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []

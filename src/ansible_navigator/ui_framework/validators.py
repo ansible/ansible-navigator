@@ -34,9 +34,12 @@ class FieldValidators:
     def http(text: str = "", hint: bool = False) -> Validation | str:
         """Validate http or https.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please enter a valid URL"
         if hint:
@@ -51,9 +54,12 @@ class FieldValidators:
     def masked_or_none(text: str = "", hint: bool = False) -> Validation | str:
         """Validate a masked field or None.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         if hint:
             return "Please provide a value (optional)"
@@ -67,9 +73,12 @@ class FieldValidators:
     ) -> Validation | str:
         """Validate nothing about this field.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         if hint:
             return "Please provide a value (optional)"
@@ -79,9 +88,12 @@ class FieldValidators:
     def null(text: str = "", hint: bool = False) -> Validation | str:
         """No validation, no message.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         if hint:
             return ""
@@ -91,10 +103,13 @@ class FieldValidators:
     def one_of(choices: list[str] = [], text: str = "", hint: bool = False) -> Validation | str:
         """Validate that some text is one of choices.
 
-        :param choices: The list of choices
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            choices: The list of choices
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         choices_str = f"{', '.join(choices[:-1])} or {choices[-1]}" if choices else ""
         msg = f"Please enter {choices_str}"
@@ -117,12 +132,19 @@ class FieldValidators:
     ) -> Validation | str:
         """Validate a checkbox set.
 
-        :param choices: The list of choices
-        :param min_selected: The minimum number of choices that must be selected
-        :param max_selected: The maximum number of choices that can be selected
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
-        :raises TypeError: If the types are not as expected
+        Args:
+            choices: The list of choices
+            min_selected: The minimum number of choices that must be
+                selected
+            max_selected: The maximum number of choices that can be
+                selected
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
+
+        Raises:
+            TypeError: If the types are not as expected
         """
         if min_selected == max_selected:
             word = "entry" if min_selected == 1 else "entries"
@@ -150,9 +172,12 @@ class FieldValidators:
     def something(text: str = "", hint: bool = False) -> Validation | str:
         """Validate that the text is not an empty string.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please provide a value (required)"
         if hint:
@@ -165,9 +190,12 @@ class FieldValidators:
     def true_false(text: str = "", hint: bool = False) -> Validation | str:
         """Validate true or false.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please enter true or false"
         if hint:
@@ -188,9 +216,12 @@ class FieldValidators:
     def valid_file_path(text: str = "", hint: bool = False) -> Validation | str:
         """Validate that a file path is a real file.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please enter a valid file path"
         if hint:
@@ -206,9 +237,12 @@ class FieldValidators:
     def valid_path(text: str = "", hint: bool = False) -> Validation | str:
         """Validate that a path is real.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please enter a valid file or directory path"
         if hint:
@@ -224,9 +258,12 @@ class FieldValidators:
     def valid_path_or_none(text: str = "", hint: bool = False) -> Validation | str:
         """Validate that a path is real or none.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please enter a valid path or leave blank"
         if hint:
@@ -247,9 +284,12 @@ class FieldValidators:
     def yes_no(text: str = "", hint: bool = False) -> Validation | str:
         """Validate yes or no.
 
-        :param text: The text to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            text: The text to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please enter yes or no"
         value = text
@@ -272,9 +312,12 @@ class FormValidators:
     def all_true(response: list[Any] | None = None, hint: bool = False) -> Validation | str:
         """Validate all in list are true.
 
-        :param response: The list to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            response: The list to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = "Please ensure all values are true"
         if hint:
@@ -291,9 +334,12 @@ class FormValidators:
     ) -> Validation | str:
         """No validation.
 
-        :param response: The list to validate
-        :param hint: If True, return a hint message instead of a Validation
-        :returns: A Validation or a hint message
+        Args:
+            response: The list to validate
+            hint: If True, return a hint message instead of a Validation
+
+        Returns:
+            A Validation or a hint message
         """
         msg = ""
         if hint:

@@ -46,7 +46,9 @@ class Grammars:
     def __init__(self, *directories: str) -> None:
         """Initialize an instance of Grammars.
 
-        :param directories: A tuple of strings, each a directory in which grammar files can be found
+        Args:
+            *directories: A tuple of strings, each a directory in which
+                grammar files can be found
         """
         self._scope_to_files = {
             Path(filename).stem: Path(directory) / filename

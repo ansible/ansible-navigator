@@ -30,8 +30,9 @@ class SettingsFile(Migration):
     def run(self, *args: Any, **kwargs: Any) -> None:
         """Perform the settings file migration.
 
-        :param args: Positional arguments
-        :param kwargs: Keyword arguments
+        Args:
+            *args: Positional arguments
+            **kwargs: Keyword arguments
         """
         # pylint: disable=possibly-used-before-assignment
         if not self.content:

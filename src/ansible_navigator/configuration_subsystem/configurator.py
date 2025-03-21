@@ -39,12 +39,14 @@ class Configurator:
     ) -> None:
         """Initialize the configuration variables.
 
-        :param params: A list of parameters e.g. ['-x', 'value']
-        :param application_configuration: An application specific Config object
-        :param apply_previous_cli_entries: Apply previous USER_CLI values where the current value
-                                           is not a USER_CLI sourced value, a list of entry names
-                                           ['all'] will apply all previous
-        :param skip_roll_back: Skip roll back on error
+        Args:
+            params: A list of parameters e.g. ['-x', 'value']
+            application_configuration: An application specific Config
+                object
+            apply_previous_cli_entries: Apply previous USER_CLI values
+                where the current value is not a USER_CLI sourced value,
+                a list of entry names ['all'] will apply all previous
+            skip_roll_back: Skip roll back on error
         """
         self._apply_previous_cli_entries = apply_previous_cli_entries
         self._config = application_configuration
@@ -58,7 +60,8 @@ class Configurator:
     def _sanity_check(self) -> None:
         """Sanity check the configuration.
 
-        :raises ValueError: If apply_previous_cli is used while initializing
+        Raises:
+            ValueError: If apply_previous_cli is used while initializing
         """
         if self._apply_previous_cli_entries is not C.NONE:
             if self._config.internals.initializing:
@@ -92,7 +95,8 @@ class Configurator:
         Save the original entries, if an error is encountered
         restore them.
 
-        :returns: Log messages
+        Returns:
+            Log messages
         """
         self._config.original_command = self._params
         shlex_joined = shlex_join(self._config.original_command)
@@ -132,8 +136,8 @@ class Configurator:
     def _argparse_error_handler(self, message: str) -> None:
         """Call back for argparser error handling.
 
-        :param message: A message from the parser
-        :type message: str
+        Args:
+            message (str): A message from the parser
         """
         self._exit_messages.append(ExitMessage(message=message))
 
@@ -162,7 +166,8 @@ class Configurator:
         # pylint: disable=too-many-locals
         """Apply the settings file.
 
-        :raises ValueError: If the settings file is empty
+        Raises:
+            ValueError: If the settings file is empty
         """
 
         def raise_value_error(message: str) -> None:
@@ -356,9 +361,13 @@ class Configurator:
     def _check_choice(self, entry: SettingsEntry, value: bool | str) -> bool:
         """Check the choice for a single settings entry.
 
-        :param entry: The settings entry to check.
-        :param value: The value to check.
-        :return: True if the value is invalid and an error message was logged.
+        Args:
+            entry: The settings entry to check.
+            value: The value to check.
+
+        Returns:
+            True if the value is invalid and an error message was
+            logged.
         """
         if entry.cli_parameters and entry.choices and value not in entry.choices:
             self._exit_messages.append(ExitMessage(message=entry.invalid_choice))

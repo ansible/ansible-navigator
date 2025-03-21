@@ -49,7 +49,8 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide the test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return self.name
 
@@ -110,8 +111,9 @@ test_data = [
 def test_runner_args(mocker: MockerFixture, data: Scenario) -> None:
     """Test the arguments passed to runner API.
 
-    :param mocker: The mocker fixture
-    :param data: The test data
+    Args:
+        mocker: The mocker fixture
+        data: The test data
     """
     args = deepcopy(NavigatorConfiguration)
     args.entry("container_engine").value.current = data.container_engine

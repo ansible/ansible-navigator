@@ -39,10 +39,11 @@ def test_for_duplicates_sources(
 ) -> None:
     """Ensure duplicate volume mounts are not passed to runner.
 
-    :param doc_cache_path: The test data
-    :param monkeypatch: The monkeypatch fixture
-    :param tmp_path: The tmp directory
-    :param mocker: The mocker fixture
+    Args:
+        doc_cache_path: The test data
+        monkeypatch: The monkeypatch fixture
+        tmp_path: The tmp directory
+        mocker: The mocker fixture
     """
     working_dir = tmp_path / "working_dir"
     working_dir.mkdir()

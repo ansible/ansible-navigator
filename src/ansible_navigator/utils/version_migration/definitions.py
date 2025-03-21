@@ -38,7 +38,8 @@ class MigrationStep(Generic[T]):
     def __init__(self, name: str) -> None:
         """Initialize a migration step.
 
-        :param name: The name of the migration step
+        Args:
+            name: The name of the migration step
         """
         self.name: str = name
         """The name of the migration step"""
@@ -77,15 +78,21 @@ class MigrationStep(Generic[T]):
     def register(cls: T, migration_step: MigrationStep[Any]) -> Callable[..., Any]:
         """Register the migration step.
 
-        :param migration_step: The migration step to register
-        :return: The registered migration step
+        Args:
+            migration_step: The migration step to register
+
+        Returns:
+            The registered migration step
         """
 
         def wrapper(func: Callable[..., Any]) -> Callable[..., Any]:
             """Add the dunder collector to the func.
 
-            :param func: The function to decorate
-            :returns: The decorated function
+            Args:
+                func: The function to decorate
+
+            Returns:
+                The decorated function
             """
             migration_step.function_name = func.__name__
             func.__migration_step__ = migration_step  # type: ignore[attr-defined]
@@ -112,8 +119,9 @@ class Migration:
     def __init_subclass__(cls, *args: Any, **kwargs: Any) -> None:
         """Register the migration steps.
 
-        :param args: Positional arguments
-        :param kwargs: Keyword arguments
+        Args:
+            *args: Positional arguments
+            **kwargs: Keyword arguments
         """
         super().__init_subclass__(*args, **kwargs)
         migrations.append(cls)
@@ -122,7 +130,8 @@ class Migration:
     def migration_steps(self) -> tuple[MigrationStep[Any], ...]:
         """Return the registered diagnostics.
 
-        :returns: The registered diagnostics
+        Returns:
+            The registered diagnostics
         """
         steps: list[MigrationStep[Any]] = []
         for func_name in vars(self.__class__):
@@ -137,23 +146,26 @@ class Migration:
     def needed_now(self) -> bool:
         """Return whether the migration is needed.
 
-        :returns: Whether the migration is needed
+        Returns:
+            Whether the migration is needed
         """
         return any(step.needed for step in self.migration_steps)
 
     def run(self, *args: Any, **kwargs: Any) -> None:
         """Run the migration.
 
-        :param args: The positional arguments
-        :param kwargs: The keyword arguments
+        Args:
+            *args: The positional arguments
+            **kwargs: The keyword arguments
         """
 
     def run_step(self, step: MigrationStep[Any], *args: Any, **kwargs: Any) -> None:
         """Run the migration step.
 
-        :param step: The migration step to run
-        :param args: The positional arguments
-        :param kwargs: The keyword arguments
+        Args:
+            step: The migration step to run
+            *args: The positional arguments
+            **kwargs: The keyword arguments
         """
         if not isinstance(step.function_name, str):
             return
@@ -182,8 +194,9 @@ class Migration:
     def run_steps(self, *args: Any, **kwargs: Any) -> None:
         """Run all registered migration steps.
 
-        :param args: The positional arguments
-        :param kwargs: The keyword arguments
+        Args:
+            *args: The positional arguments
+            **kwargs: The keyword arguments
         """
         for step in self.migration_steps:
             self.run_step(step, *args, **kwargs)

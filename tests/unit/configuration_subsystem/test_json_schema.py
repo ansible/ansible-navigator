@@ -27,7 +27,8 @@ if TYPE_CHECKING:
 def test_basic(schema_dict: SettingsSchemaType) -> None:
     """Simple test to ensure an exception isn't raised.
 
-    :param schema_dict: The json schema as a dictionary
+    Args:
+        schema_dict: The json schema as a dictionary
     """
     assert schema_dict["$schema"] == "http://json-schema.org/draft-07/schema"
     assert isinstance(schema_dict, dict)
@@ -41,7 +42,8 @@ def test_basic(schema_dict: SettingsSchemaType) -> None:
 def test_additional_properties(schema_dict: SettingsSchemaType) -> None:
     """Ensure additional properties are forbidden throughout the schema.
 
-    :param schema_dict: The json schema as a dictionary
+    Args:
+        schema_dict: The json schema as a dictionary
     """
 
     def property_dive(subschema: SettingsSchemaType) -> None:
@@ -56,7 +58,8 @@ def test_additional_properties(schema_dict: SettingsSchemaType) -> None:
 def test_no_extras(schema_dict: SettingsSchemaType) -> None:
     """Ensure no extras exist in either settings or schema.
 
-    :param schema_dict: The json schema as a dictionary
+    Args:
+        schema_dict: The json schema as a dictionary
     """
     settings = deepcopy(NavigatorConfiguration)
     all_paths = [
@@ -83,7 +86,8 @@ def test_no_extras(schema_dict: SettingsSchemaType) -> None:
 def test_schema_sample_full_tests(schema_dict: SettingsSchemaType) -> None:
     """Check the full settings file against the schema.
 
-    :param schema_dict: The json schema as a dictionary
+    Args:
+        schema_dict: The json schema as a dictionary
     """
     settings_file = Path(TEST_FIXTURE_DIR, "ansible-navigator.yml")
     with settings_file.open(encoding="utf-8") as fh:
@@ -94,7 +98,8 @@ def test_schema_sample_full_tests(schema_dict: SettingsSchemaType) -> None:
 def test_schema_sample_full_package_data(schema_dict: SettingsSchemaType) -> None:
     """Check the settings file used as a sample against the schema.
 
-    :param schema_dict: The json schema as a dictionary
+    Args:
+        schema_dict: The json schema as a dictionary
     """
     settings = deepcopy(NavigatorConfiguration)
     commented, uncommented = to_sample(settings=settings)
@@ -107,7 +112,8 @@ def test_schema_sample_full_package_data(schema_dict: SettingsSchemaType) -> Non
 def test_schema_sample_wrong(schema_dict: SettingsSchemaType) -> None:
     """Check the broken settings file against the schema.
 
-    :param schema_dict: The json schema as a dictionary
+    Args:
+        schema_dict: The json schema as a dictionary
     """
     settings_file = Path(TEST_FIXTURE_DIR, "ansible-navigator_no_app.yml")
     with settings_file.open(encoding="utf-8") as fh:
@@ -122,7 +128,9 @@ def test_schema_dict_all_required(
 ) -> None:
     """Confirm every entry in the schema has required.
 
-    :param schema_dict_all_required: The json schema as a dictionary, everything required
+    Args:
+        schema_dict_all_required: The json schema as a dictionary,
+            everything required
     """
 
     def property_dive(subschema: dict[str, Any]) -> None:

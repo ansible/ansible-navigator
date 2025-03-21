@@ -15,8 +15,9 @@ COLOR = "NO_COLOR" not in os.environ and IS_TTY
 def changed(color: bool, message: str) -> None:
     """Output changed information to the console.
 
-    :param color: Whether to color the message
-    :param message: The message to output
+    Args:
+        color: Whether to color the message
+        message: The message to output
     """
     if color:
         print(f"\r{Color.YELLOW}{message}{Color.END}\033[K")
@@ -27,8 +28,9 @@ def changed(color: bool, message: str) -> None:
 def failed(color: bool, message: str) -> None:
     """Output failure information to the console.
 
-    :param color: Whether to color the message
-    :param message: The message to output
+    Args:
+        color: Whether to color the message
+        message: The message to output
     """
     if color:
         print(f"\r{Color.RED}{message}{Color.END}\033[K")
@@ -39,8 +41,9 @@ def failed(color: bool, message: str) -> None:
 def info(color: bool, message: str) -> None:
     """Output info information to the console.
 
-    :param color: Whether to color the message
-    :param message: The message to output
+    Args:
+        color: Whether to color the message
+        message: The message to output
     """
     if color:
         print(f"{Color.CYAN}{message}{Color.END}")
@@ -51,8 +54,9 @@ def info(color: bool, message: str) -> None:
 def subtle(color: bool, message: str) -> None:
     """Output subtle information to the console.
 
-    :param color: Whether to color the message
-    :param message: The message to output
+    Args:
+        color: Whether to color the message
+        message: The message to output
     """
     if color:
         print(f"{Color.GREY}{message}{Color.END}")
@@ -71,8 +75,11 @@ def prompt_enter() -> None:
 def prompt_yn(message: str) -> bool:
     """Output prompt information to the console.
 
-    :param message: The message to output
-    :return: Whether the user answered yes
+    Args:
+        message: The message to output
+
+    Returns:
+        Whether the user answered yes
     """
     try:
         reply = None
@@ -87,8 +94,9 @@ def prompt_yn(message: str) -> bool:
 def success(color: bool, message: str) -> None:
     """Output success information to the console.
 
-    :param color: Whether to color the message
-    :param message: The message to output
+    Args:
+        color: Whether to color the message
+        message: The message to output
     """
     if color:
         print(f"\r{Color.GREEN}{message}{Color.END}\033[K")
@@ -99,8 +107,9 @@ def success(color: bool, message: str) -> None:
 def warning(color: bool, message: str) -> None:
     """Output warning information to the console.
 
-    :param color: Whether to color the message
-    :param message: The message to output
+    Args:
+        color: Whether to color the message
+        message: The message to output
     """
     if color:
         print(f"{Color.YELLOW}{message}{Color.END}")
@@ -111,8 +120,9 @@ def warning(color: bool, message: str) -> None:
 def working(color: bool, message: str) -> None:
     """Output working information to the console.
 
-    :param color: Whether to color the message
-    :param message: The message to output
+    Args:
+        color: Whether to color the message
+        message: The message to output
     """
     if color:
         print(f"{Color.GREY}{message}{Color.END}", end="", flush=True)

@@ -35,7 +35,8 @@ class FieldCursesInformation:
     def full_prompt(self) -> str:
         """Return the max width string.
 
-        :returns: The max width string
+        Returns:
+            The max width string
         """
         return max(
             (
@@ -48,13 +49,15 @@ class FieldCursesInformation:
     def validate(self, response: str) -> None:
         """No validation required for information field.
 
-        :param response: The response to validate
+        Args:
+            response: The response to validate
         """
         self.valid = True
 
     def conditional_validation(self, response: str) -> None:
         """No conditional validation.
 
-        :param response: The response to validate
+        Args:
+            response: The response to validate
         """
         self.validate(response)

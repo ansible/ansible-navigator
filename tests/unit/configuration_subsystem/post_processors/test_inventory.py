@@ -31,9 +31,10 @@ def test_from_ansible_cfg(
 ) -> None:
     """Confirm inventory is used from a valid ansible.cfg.
 
-    :param ee_enabled: Indicate if EE support is enabled
-    :param tmp_path: The path to a test temporary directory
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        ee_enabled: Indicate if EE support is enabled
+        tmp_path: The path to a test temporary directory
+        monkeypatch: The monkeypatch fixture
     """
     cfg_path = tmp_path / "ansible.cfg"
     with cfg_path.open(mode="w") as fh:

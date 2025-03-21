@@ -25,8 +25,11 @@ def to_effective(
 ) -> SettingsFileType:
     """Transform the current settings into a settings file.
 
-    :param settings: The current settings
-    :returns: The settings represented as settings file
+    Args:
+        settings: The current settings
+
+    Returns:
+        The settings represented as settings file
     """
     rebuilt: dict[Any, Any] = {}
     for entry in settings.entries:
@@ -57,8 +60,11 @@ def to_effective(
 def to_sources(settings: ApplicationConfiguration) -> dict[str, str]:
     """Transform the current settings into representation of sources.
 
-    :param settings: The current settings
-    :returns: The settings sourced represented as a dictionary of path, source
+    Args:
+        settings: The current settings
+
+    Returns:
+        The settings sourced represented as a dictionary of path, source
     """
     sources = {}
     for entry in settings.entries:
@@ -72,8 +78,11 @@ def to_sources(settings: ApplicationConfiguration) -> dict[str, str]:
 def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEntries:
     """Transform the current settings into a structure that can be presented with the TUI.
 
-    :param settings: The current settings
-    :returns: The settings represented as a list of dictionaries
+    Args:
+        settings: The current settings
+
+    Returns:
+        The settings represented as a list of dictionaries
     """
     settings_list = []
 
@@ -103,8 +112,11 @@ def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEnt
 def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
     """Build a json schema from the settings using the stub schema.
 
-    :param settings: The application settings
-    :returns: The json schema
+    Args:
+        settings: The application settings
+
+    Returns:
+        The json schema
     """
     file_contents = retrieve_content("settings-schema.partial.json")
     partial_schema = json.loads(file_contents)
@@ -147,8 +159,11 @@ def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
 def to_sample(settings: ApplicationConfiguration) -> tuple[str, str]:
     """Load and clean the settings sample.
 
-    :param settings: The application settings
-    :returns: One selectively commented sample, one uncommented
+    Args:
+        settings: The application settings
+
+    Returns:
+        One selectively commented sample, one uncommented
     """
     # pylint: disable=too-many-locals
 

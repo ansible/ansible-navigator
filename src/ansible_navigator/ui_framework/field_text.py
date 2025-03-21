@@ -39,7 +39,8 @@ class FieldText:
     def formatted_default(self) -> str:
         """Return the default value.
 
-        :returns: Default value or empty string
+        Returns:
+            Default value or empty string
         """
         if self.default is nonexistent:
             return ""
@@ -49,7 +50,8 @@ class FieldText:
     def full_prompt(self) -> str:
         """Return the full prompt with the default.
 
-        :returns: Prompt with default text
+        Returns:
+            Prompt with default text
         """
         return self.prompt + self.formatted_default
 
@@ -59,14 +61,16 @@ class FieldText:
         This is different from a default
         in that it will populate the text input field.
 
-        :param value: Item to populate the input field
+        Args:
+            value: Item to populate the input field
         """
         self.conditional_validation(str(value))
 
     def validate(self, response: str) -> None:
         """Validate the response.
 
-        :param response: Text input response
+        Args:
+            response: Text input response
         """
         if response == "" and self.default is not nonexistent:
             response = str(self.default)
@@ -85,7 +89,8 @@ class FieldText:
 
         Only accept the value if it validates, otherwise move along.
 
-        :param response: Text input response
+        Args:
+            response: Text input response
         """
         if response == "" and self.default is not nonexistent:
             response = str(self.default)

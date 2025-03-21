@@ -53,7 +53,8 @@ class BaseClass:
     ) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
-        :param request: Used for generating test id
+        Args:
+            request: Used for generating test id
         :yields: tmux_session object
         """
         with TmuxSession(
@@ -77,10 +78,13 @@ class BaseClass:
         # pylint: disable=too-many-locals
         """Run the tests for ``settings``, mode and ``ee`` set in child class.
 
-        :param request: Used for generating test id
-        :param tmux_session: tmux_session object
-        :param step: UiTestStep object
-        :raises ValueError: If HELP or PROMPT aren't found
+        Args:
+            request: Used for generating test id
+            tmux_session: tmux_session object
+            step: UiTestStep object
+
+        Raises:
+            ValueError: If HELP or PROMPT aren't found
         """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"

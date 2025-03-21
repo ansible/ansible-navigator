@@ -34,8 +34,11 @@ if TYPE_CHECKING:
 def _find_all_importables(pkg: ModuleType) -> list[str]:
     """Find all importables in the project.
 
-    :param pkg: The package in which importables will be found
-    :returns: A sorted list of the importables
+    Args:
+        pkg: The package in which importables will be found
+
+    Returns:
+        A sorted list of the importables
     """
     return sorted(
         set(
@@ -52,8 +55,9 @@ def _discover_path_importables(
 ) -> Generator[str]:
     """Yield all importables under a given path and package.
 
-    :param pkg_pth: The path to the package to walk
-    :param pkg_name: The name of the package
+    Args:
+        pkg_pth: The path to the package to walk
+        pkg_name: The name of the package
     :yields: Package directory paths
     """
     for dir_path, _dir_names, file_names in os.walk(pkg_pth):
@@ -88,7 +92,9 @@ def test_no_warnings(import_path: str) -> None:
 
     DeprecationWarnings related to ``distutils`` in ansible_runner are ignored
 
-    :param import_path: The path to be imported and smoke-checked for warnings and crashes
+    Args:
+        import_path: The path to be imported and smoke-checked for
+            warnings and crashes
     """
     # Because pkg_resources.declare_namespace warning happens for any namespace
     # package that exists on disk, even if they are imported we need to ignore

@@ -29,7 +29,8 @@ class BaseClass:
     def fixture_tmux_session(request: pytest.FixtureRequest) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
-        :param request: A fixture providing details about the test caller
+        Args:
+            request: A fixture providing details about the test caller
         :yields: Tmux session
         """
         with TmuxSession(
@@ -55,12 +56,13 @@ class BaseClass:
         # pylint: disable=too-many-arguments
         """Run the tests for replay, mode and ``ee`` set in child class.
 
-        :param request: A fixture providing details about the test caller
-        :param tmux_session: The tmux session to use
-        :param index: Step index
-        :param user_input: Value to send to the tmux session
-        :param comment: Comment to add to the fixture
-        :param search_within_response: A list of strings or string to find
+        Args:
+            request: A fixture providing details about the test caller
+            tmux_session: The tmux session to use
+            index: Step index
+            user_input: Value to send to the tmux session
+            comment: Comment to add to the fixture
+            search_within_response: A list of strings or string to find
         """
         assert PLAYBOOK_ARTIFACT.exists()
         assert TEST_CONFIG_FILE.exists()

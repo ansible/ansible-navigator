@@ -19,7 +19,8 @@ class Action:
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:yaml`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         self._args = args
         self._logger = logging.getLogger(__name__)
@@ -27,8 +28,9 @@ class Action:
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:yaml`` request for mode interactive.
 
-        :param interaction: The interaction from the user, action and value
-        :param app: The app instance
+        Args:
+            interaction: The interaction from the user, action and value
+            app: The app instance
         """
         self._logger.debug("yaml requested")
         if interaction.ui is not None:

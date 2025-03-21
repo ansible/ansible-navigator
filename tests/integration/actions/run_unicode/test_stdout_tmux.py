@@ -52,8 +52,11 @@ steps = add_indices(stdout_tests)
 def step_id(value: ShellCommand) -> str:
     """Return a test id for the test step object.
 
-    :param value: The data to generate the id from
-    :returns: The test id
+    Args:
+        value: The data to generate the id from
+
+    Returns:
+        The test id
     """
     return f"{value.step_index}"
 

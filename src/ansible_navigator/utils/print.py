@@ -29,7 +29,8 @@ logger = logging.getLogger(__name__)
 def color_bits() -> int:
     """Determine to number of color bit the terminal can support.
 
-    :returns: The number of color bits
+    Returns:
+        The number of color bits
     """
     color_term = os.environ.get("COLORTERM", "").strip().lower()
     if color_term in ("truecolor", "24bit"):
@@ -46,9 +47,12 @@ def color_bits() -> int:
 def color_lines(term_color_bits: int, tokenized: list[list[SimpleLinePart]]) -> str:
     """Transform tokenized lines to ANSI lines.
 
-    :param term_color_bits: The number of color bits the terminal supports
-    :param tokenized: The tokenized content
-    :returns: The ANSI string
+    Args:
+        term_color_bits: The number of color bits the terminal supports
+        tokenized: The tokenized content
+
+    Returns:
+        The ANSI string
     """
     # pylint: disable=possibly-used-before-assignment
     lines = []
@@ -81,9 +85,12 @@ def tokenize(
 ) -> list[list[SimpleLinePart]]:
     """Serialize and tokenize an object.
 
-    :param content_format: The format type
-    :param serialized: The serialized content
-    :returns: A list of list of line parts
+    Args:
+        content_format: The format type
+        serialized: The serialized content
+
+    Returns:
+        A list of list of line parts
     """
     colorizer = Colorize(
         grammar_dir=GRAMMAR_DIR,
@@ -101,9 +108,10 @@ def print_to_stdout(
 ) -> None:
     """Print some colored output to stdout.
 
-    :param content: The content to print out.
-    :param content_format: The content_format
-    :param use_color: Indicates if color should be used
+    Args:
+        content: The content to print out.
+        content_format: The content_format
+        use_color: Indicates if color should be used
     """
     serialization_format = content_format.value.serialization
     if serialization_format:

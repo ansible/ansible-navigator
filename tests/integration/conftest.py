@@ -40,7 +40,8 @@ def action_run_stdout() -> Generator[type[ActionRunTest]]:
 def test_fixtures_dir() -> Path:
     """Return the test fixture directory.
 
-    :return: The test fixture directory.
+    Returns:
+        The test fixture directory.
     """
     return Path(__file__).parent / ".." / "fixtures"
 
@@ -53,7 +54,8 @@ def os_independent_tmp() -> str:
     is the same between MacOS and Linux
     otherwise ansible-navigator column widths can vary
 
-    :return: The os independent tmp directory.
+    Returns:
+        The os independent tmp directory.
     """
     tmp_real = Path("/tmp").resolve()
     an_tmp = tmp_real / "an" if tmp_real == "/private/tmp" else Path("/tmp") / "private" / "an"
@@ -71,7 +73,8 @@ class CliRunner:
     ) -> None:
         """Initialize the class.
 
-        :param request: The current test request.
+        Args:
+            request: The current test request.
         """
         self.cwd: Path | None
         self.parameters: tuple[Parameter, ...]
@@ -97,7 +100,8 @@ class CliRunner:
     def _apply_parameter(self, parameter: Parameter) -> None:
         """Apply a parameter to the settings.
 
-        :param parameter: The parameter to apply.
+        Args:
+            parameter: The parameter to apply.
         """
         entry = self.settings.entry(parameter.name)
         entry.value.current = str(parameter.value)
@@ -106,7 +110,8 @@ class CliRunner:
     def to_cmdline(self) -> str:
         """Return the command line to run.
 
-        :return: The command line.
+        Returns:
+            The command line.
         """
         self._apply_parameters()
         cli_parts = ["ansible-navigator"]
@@ -130,7 +135,8 @@ class CliRunner:
     def run(self) -> tuple[str, str, int]:
         """Run ansible-navigator.
 
-        :return: The stdout, stderr, and exit code.
+        Returns:
+            The stdout, stderr, and exit code.
         """
         return cmd_in_tty(self.to_cmdline(), cwd=self.cwd)
 
@@ -139,7 +145,10 @@ class CliRunner:
 def cli_runner(request: pytest.FixtureRequest) -> CliRunner:
     """Create a fixture for the cli runner.
 
-    :param request: The current test request.
-    :returns: The CliRunner class.
+    Args:
+        request: The current test request.
+
+    Returns:
+        The CliRunner class.
     """
     return CliRunner(request=request)

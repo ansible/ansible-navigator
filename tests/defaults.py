@@ -21,8 +21,11 @@ class BaseScenario:
 def id_func(param: Any) -> str:
     """Generate id for tests.
 
-    :param param: the parametrized data
-    :return: Returns a string.
+    Args:
+        param: the parametrized data
+
+    Returns:
+        Returns a string.
     """
     result = ""
     auto_id_counter = 0

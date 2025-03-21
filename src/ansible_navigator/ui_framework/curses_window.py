@@ -51,7 +51,8 @@ class CursesWindow:
     def __init__(self, ui_config: UIConfig) -> None:
         """Initialize a curses window.
 
-        :param ui_config: The current user interface configuration
+        Args:
+            ui_config: The current user interface configuration
         """
         self._logger = logging.getLogger(__name__)
 
@@ -69,7 +70,8 @@ class CursesWindow:
     def _screen_width(self) -> int:
         """Return the screen width.
 
-        :returns: the current screen width
+        Returns:
+            the current screen width
         """
         return self._screen.getmaxyx()[1]
 
@@ -77,7 +79,8 @@ class CursesWindow:
     def _screen_height(self) -> int:
         """Return the screen height, or notify if too small.
 
-        :returns: the current screen height
+        Returns:
+            the current screen height
         """
         while True:
             if self._screen.getmaxyx()[0] >= self._screen_min_height:
@@ -89,8 +92,11 @@ class CursesWindow:
     def _color_pair_or_none(self, color: int) -> int | None:
         """Return 0 if colors are disabled, otherwise returns the curses color pair.
 
-        :param color: Int for specific curses color
-        :returns: Curses color pair
+        Args:
+            color: Int for specific curses color
+
+        Returns:
+            Curses color pair
         """
         if not self._ui_config.color or curses.COLORS == 0:
             return None
@@ -100,7 +106,8 @@ class CursesWindow:
     def _curs_set(self, value: int) -> None:
         """Log an error in the case of a TERM with limited capabilities.
 
-        :param value: TERM value
+        Args:
+            value: TERM value
         """
         try:
             curses.curs_set(value)
@@ -116,14 +123,11 @@ class CursesWindow:
     ) -> None:
         """Add a line to a window.
 
-        :param window: A curses window
-        :type window: Window
-        :param lineno: the line number
-        :type lineno: int
-        :param line: The line to add
-        :type line: CursesLine
-        :param prefix: The prefix for the line
-        :type prefix: str or None
+        Args:
+            window (Window): A curses window
+            lineno (int): the line number
+            line (CursesLine): The line to add
+            prefix (str or None): The prefix for the line
         """
         if prefix:
             color = self._color_pair_or_none(self._prefix_color)

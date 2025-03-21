@@ -46,11 +46,16 @@ def serialize(
 ) -> str | None:
     """Serialize a dataclass based on format and view.
 
-    :param content: The content dataclass to serialize
-    :param content_view: The content view
-    :param serialization_format: The serialization format
-    :raises ValueError: When serialization format is not recognized
-    :returns: The serialized content
+    Args:
+        content: The content dataclass to serialize
+        content_view: The content view
+        serialization_format: The serialization format
+
+    Raises:
+        ValueError: When serialization format is not recognized
+
+    Returns:
+        The serialized content
     """
     dumpable = _prepare_content(
         content=content,
@@ -74,12 +79,15 @@ def serialize_write_file(
 ) -> None:
     """Serialize and write content to a file.
 
-    :param content: The content to serialize
-    :param content_view: The content view
-    :param file_mode: The file mode for the file
-    :param file: The file to write to
-    :param serialization_format: The serialization format
-    :raises ValueError: When serialization format is not recognized
+    Args:
+        content: The content to serialize
+        content_view: The content view
+        file_mode: The file mode for the file
+        file: The file to write to
+        serialization_format: The serialization format
+
+    Raises:
+        ValueError: When serialization format is not recognized
     """
     dumpable = _prepare_content(
         content=content,
@@ -104,11 +112,16 @@ def serialize_write_temp_file(
 ) -> Path:
     """Serialize and write content to a premanent temporary file.
 
-    :param content: The content to serialize
-    :param content_view: The content view
-    :param content_format: The content format
-    :raises ValueError: When serialization format is not recognized
-    :returns: A ``Path`` to the file written to
+    Args:
+        content: The content to serialize
+        content_view: The content view
+        content_format: The content format
+
+    Raises:
+        ValueError: When serialization format is not recognized
+
+    Returns:
+        A ``Path`` to the file written to
     """
     serialization_format = content_format.value.serialization
     suffix = content_format.value.file_extension
@@ -150,10 +163,13 @@ def _prepare_content(
 ) -> ContentType:
     """Prepare content for serialization.
 
-    :param content: The content to prepare
-    :param content_view: The content view
-    :param serialization_format: The serialization format
-    :returns: The prepared content
+    Args:
+        content: The content to prepare
+        content_view: The content view
+        serialization_format: The serialization format
+
+    Returns:
+        The prepared content
     """
     if isinstance(content, tuple | list):
         if all(is_dataclass(c) for c in content):
@@ -198,8 +214,9 @@ class JsonParams(NamedTuple):
 def _json_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
     """Serialize the dumpable to json and write to a file.
 
-    :param dumpable: The object to dump
-    :param file_handle: The file handle to write to
+    Args:
+        dumpable: The object to dump
+        file_handle: The file handle to write to
     """
     try:
         json.dump(dumpable, file_handle, **JsonParams()._asdict())
@@ -217,8 +234,11 @@ def _json_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
 def _json_dumps(dumpable: ContentType) -> str:
     """Serialize the dumpable to json.
 
-    :param dumpable: The object to serialize
-    :returns: The object serialized
+    Args:
+        dumpable: The object to serialize
+
+    Returns:
+        The object serialized
     """
     try:
         return json.dumps(dumpable, **JsonParams()._asdict())
@@ -235,8 +255,9 @@ def _json_dumps(dumpable: ContentType) -> str:
 def _text_dump(dumpable: str, file_handle: IO[str]) -> None:
     """Write text to a file.
 
-    :param dumpable: The text to write
-    :param file_handle: The file handle to write to
+    Args:
+        dumpable: The text to write
+        file_handle: The file handle to write to
     """
     file_handle.write(dumpable)
     if not dumpable.endswith("\n"):
@@ -254,8 +275,9 @@ class YamlStyle(NamedTuple):
 def _yaml_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
     """Serialize the dumpable to yaml and write to a file.
 
-    :param dumpable: The object to serialize
-    :param file_handle: The file handle to write to
+    Args:
+        dumpable: The object to serialize
+        file_handle: The file handle to write to
     """
     try:
         yaml.dump(dumpable, file_handle, Dumper=HumanDumper, **YamlStyle()._asdict())
@@ -272,8 +294,11 @@ def _yaml_dump(dumpable: ContentType, file_handle: IO[str]) -> None:
 def _yaml_dumps(dumpable: ContentType) -> str | None:
     """Serialize the dumpable to yaml.
 
-    :param dumpable: The object to serialize
-    :return: The serialized object
+    Args:
+        dumpable: The object to serialize
+
+    Returns:
+        The serialized object
     """
     try:
         return yaml.dump(dumpable, Dumper=HumanDumper, **YamlStyle()._asdict())
@@ -298,8 +323,11 @@ class HumanDumper(SafeDumper):
     def ignore_aliases(self, _data: Any) -> bool:
         """Disable the use of anchors and aliases in the given data.
 
-        :param _data: The data used to make the determination
-        :returns: True, indicating aliases and anchors should not be used
+        Args:
+            _data: The data used to make the determination
+
+        Returns:
+            True, indicating aliases and anchors should not be used
         """
         return True
 
@@ -311,10 +339,13 @@ class HumanDumper(SafeDumper):
     ) -> yaml.nodes.ScalarNode:
         """Represent all multiline strings as block scalars to improve readability for humans.
 
-        :param tag: A custom tag
-        :param value: The value to represent
-        :param style: The style to use
-        :returns: The serialized multiline string, result of the super scalar
+        Args:
+            tag: A custom tag
+            value: The value to represent
+            style: The style to use
+
+        Returns:
+            The serialized multiline string, result of the super scalar
         """
         if style is None and _is_multiline_string(value):
             style = "|"
@@ -332,12 +363,14 @@ class HumanDumper(SafeDumper):
 def _is_multiline_string(value: str) -> bool:
     """Determine if a string is multiline.
 
-    .. note::
+    Note:
+        Inspired by http://stackoverflow.com/a/15423007/115478.
 
-       Inspired by http://stackoverflow.com/a/15423007/115478.
+    Args:
+        value: The value to check
 
-    :param value: The value to check
-    :returns: A boolean indicating if the string is multiline
+    Returns:
+        A boolean indicating if the string is multiline
     """
     return any(character in value for character in "\n\r\x1c\x1d\x1e\x85\u2028\u2029")
 
@@ -345,10 +378,13 @@ def _is_multiline_string(value: str) -> bool:
 def opener(path: str, flags: int, mode: int) -> int:
     """Open a file with the given path and flags.
 
-    :param path: The path of the file to open.
-    :param flags: The flags to use when opening the file.
-    :param mode: The mode to use when opening the file.
-    :return: The file descriptor of the opened file.
+    Args:
+        path: The path of the file to open.
+        flags: The flags to use when opening the file.
+        mode: The mode to use when opening the file.
+
+    Returns:
+        The file descriptor of the opened file.
     """
     return os.open(path=path, flags=flags, mode=mode)
 
@@ -356,9 +392,10 @@ def opener(path: str, flags: int, mode: int) -> int:
 def write_diagnostics_json(path: str, mode: int, content: object) -> None:
     """Write a file with the given name.
 
-    :param content: The content we want to write in the file.
-    :param mode: The mode to use when writing the file.
-    :param path: The path of the file to write.
+    Args:
+        content: The content we want to write in the file.
+        mode: The mode to use when writing the file.
+        path: The path of the file to write.
     """
     # Without this, the created file will have 0o777 - 0o022 (default umask) = 0o755 permissions
     oldmask = os.umask(0)

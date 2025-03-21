@@ -22,9 +22,11 @@ def convert_percentage(
 ) -> None:
     """Convert an attribute or value to a progress bar formatted for the TUI in place.
 
-    :param content: The content for which the progress bar will be generated
-    :param columns: The menu columns, only make progress bars for columns
-    :param progress_bar_width: The target width of the progress bar
+    Args:
+        content: The content for which the progress bar will be
+            generated
+        columns: The menu columns, only make progress bars for columns
+        progress_bar_width: The target width of the progress bar
     """
     for column in columns:
         value = content.get(column)
@@ -41,9 +43,12 @@ def convert_percentage(
 def _string_to_progress(value: str, progress_bar_width: int) -> str:
     """Convert a string to a progress bar or text string indicating complete.
 
-    :param value: The percent string
-    :param progress_bar_width: The target width of the progress bar
-    :returns: The resulting progress bar or text string
+    Args:
+        value: The percent string
+        progress_bar_width: The target width of the progress bar
+
+    Returns:
+        The resulting progress bar or text string
     """
     if value == "100%":
         return "Complete".center(progress_bar_width, " ")
@@ -55,8 +60,11 @@ def _string_to_progress(value: str, progress_bar_width: int) -> str:
 def is_percent(string: str) -> bool:
     """Determine if a string is a percentage.
 
-    :param string: The string to check
-    :returns: Boolean of comparison
+    Args:
+        string: The string to check
+
+    Returns:
+        Boolean of comparison
     """
     if string.endswith("%") and re.match(r"^\d{1,3}%$", string):  # noqa:SIM103
         return True
@@ -66,11 +74,12 @@ def is_percent(string: str) -> bool:
 def distribute(available: int, weights: list[int]) -> list[int]:
     """Distribute some available fairly across a list of numbers.
 
-    :param available: the total
-    :type available: int
-    :param weights: numbers
-    :type weights: List[int]
-    :returns: List of distributed amounts available
+    Args:
+        available (int): the total
+        weights (List[int]): numbers
+
+    Returns:
+        List of distributed amounts available
     """
     total = sum(weights)
     if available < total:

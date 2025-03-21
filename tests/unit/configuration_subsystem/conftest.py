@@ -53,9 +53,10 @@ class GenerateConfigCallable(Protocol):
     ) -> GenerateConfigResponse:
         """Generate a configuration given a settings file.
 
-        :param initial: Bool for if this is the first run
-        :param settings_file_name: Name of settings file name
-        :param params: Configuration parameters
+        Args:
+            initial: Bool for if this is the first run
+            settings_file_name: Name of settings file name
+            params: Configuration parameters
         """
 
 
@@ -66,10 +67,13 @@ def _generate_config(
 ) -> GenerateConfigResponse:
     """Generate a configuration given a settings file.
 
-    :param initial: Bool for if this is the first run
-    :param settings_file_name: Name of settings file name
-    :param params: Configuration parameters
-    :returns: Generated config response object
+    Args:
+        initial: Bool for if this is the first run
+        settings_file_name: Name of settings file name
+        params: Configuration parameters
+
+    Returns:
+        Generated config response object
     """
     if params is None:
         params = []
@@ -108,7 +112,8 @@ def _generate_config(
 def fixture_generate_config() -> Callable[..., GenerateConfigResponse]:
     """Generate a configuration.
 
-    :returns: A generated config
+    Returns:
+        A generated config
     """
     return _generate_config
 
@@ -117,7 +122,8 @@ def fixture_generate_config() -> Callable[..., GenerateConfigResponse]:
 def _ansible_version(monkeypatch: pytest.MonkeyPatch) -> None:
     """Path the ansible --version call to avoid the subprocess calls.
 
-    :param monkeypatch: Fixture for patching
+    Args:
+        monkeypatch: Fixture for patching
     """
     original_run_command = run_command
 
@@ -138,7 +144,8 @@ def _ansible_version(monkeypatch: pytest.MonkeyPatch) -> None:
 def _schema_dict() -> SettingsSchemaType:
     """Provide the json schema as a dictionary.
 
-    :returns: the json schema as a dictionary
+    Returns:
+        the json schema as a dictionary
     """
     settings = deepcopy(NavigatorConfiguration)
     settings.application_version = "test"
@@ -150,8 +157,11 @@ def _schema_dict() -> SettingsSchemaType:
 def schema_dict_all_required(schema_dict: SettingsSchemaType) -> SettingsSchemaType:
     """Provide the json schema as a dictionary with all properties required.
 
-    :param schema_dict: The schema dictionary
-    :returns: the json schema as a dictionary
+    Args:
+        schema_dict: The schema dictionary
+
+    Returns:
+        the json schema as a dictionary
     """
 
     def property_dive(subschema: dict[str, Any]) -> None:

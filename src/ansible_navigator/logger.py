@@ -26,8 +26,9 @@ class Formatter(logging.Formatter):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the logging formatter.
 
-        :param args: The arguments
-        :param kwargs: The keyword arguments
+        Args:
+            *args: The arguments
+            **kwargs: The keyword arguments
         """
         self._time_zone = kwargs.pop("time_zone")
         super().__init__(*args, **kwargs)
@@ -39,9 +40,12 @@ class Formatter(logging.Formatter):
     ) -> str:
         """Format the log timestamp.
 
-        :param record: The log record
-        :param _datefmt: The optional date format
-        :returns: The timestamp
+        Args:
+            record: The log record
+            _datefmt: The optional date format
+
+        Returns:
+            The timestamp
         """
         if self._time_zone == "local":
             return (
@@ -58,7 +62,8 @@ class Formatter(logging.Formatter):
 def setup_logger(args: ApplicationConfiguration) -> None:
     """Set up the logger.
 
-    :param args: The CLI args
+    Args:
+        args: The CLI args
     """
     if Path(args.log_file).exists() and args.log_append is False:
         Path(args.log_file).unlink()

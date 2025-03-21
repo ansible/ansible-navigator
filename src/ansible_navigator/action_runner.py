@@ -47,7 +47,8 @@ class ActionRunner(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ActionRunner class.
 
-        :param args: The current application configuration
+        Args:
+            args: The current application configuration
         """
         super().__init__(args, name="action_runner")
         self._ui: UserInterface
@@ -56,8 +57,8 @@ class ActionRunner(ActionBase):
     def initialize_ui(self, refresh: int) -> None:
         """Initialize the user interface.
 
-        :param refresh: The refresh for the UI
-        :type refresh: int
+        Args:
+            refresh (int): The refresh for the UI
         """
         config = UIConfig(
             color=self._args.display_color,
@@ -86,7 +87,8 @@ class ActionRunner(ActionBase):
         Create an interaction based on the app name from the current settings.
         Run the action, passing the interaction.
 
-        :param _screen: The screen instance from the curses wrapper call
+        Args:
+            _screen: The screen instance from the curses wrapper call
         """
         self.initialize_ui(DEFAULT_REFRESH)
         name, action = self._action_match(self._args.app)
@@ -103,7 +105,8 @@ class ActionRunner(ActionBase):
     def _run_app(self, initial_interaction: Interaction) -> None:
         """Enter the endless app loop.
 
-        :param initial_interaction: The initial interaction for app start
+        Args:
+            initial_interaction: The initial interaction for app start
         """
         interaction = None
         while True:

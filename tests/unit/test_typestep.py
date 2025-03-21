@@ -32,7 +32,8 @@ value_2 = TSTestClass(attr_1=3, attr_2="test element 2")
 def _test_step() -> TypedStep[TSTestClass]:
     """Instantiate and set default attribute values for TypedStep test object.
 
-    :returns: Test fixture
+    Returns:
+        Test fixture
     """
     test_step = TypedStep[TSTestClass](name="test", step_type=StepType.MENU)
     test_step.value = [value_1, value_2]
@@ -45,7 +46,8 @@ def _test_step() -> TypedStep[TSTestClass]:
 def test_fixture(test_step: TypedStep[TSTestClass]) -> None:
     """Base test fixture test for the other tests.
 
-    :param test_step: Test fixture
+    Args:
+        test_step: Test fixture
     """
     assert not test_step.changed
     assert test_step.index == 0
@@ -56,7 +58,8 @@ def test_fixture(test_step: TypedStep[TSTestClass]) -> None:
 def test_index(test_step: TypedStep[TSTestClass]) -> None:
     """Testing @property index and index.setter.
 
-    :param test_step: Test fixture
+    Args:
+        test_step: Test fixture
     """
     test_step.index = 1
     assert test_step.index == 1
@@ -72,7 +75,8 @@ def test_index(test_step: TypedStep[TSTestClass]) -> None:
 def test_selected(test_step: TypedStep[TSTestClass]) -> None:
     """Testing @property selected.
 
-    :param test_step: Test fixture
+    Args:
+        test_step: Test fixture
     """
     test_step.index = 1
     assert test_step.selected == value_2
@@ -83,7 +87,8 @@ def test_selected(test_step: TypedStep[TSTestClass]) -> None:
 def test_value(test_step: TypedStep[TSTestClass]) -> None:
     """Testing @property value and value.setter.
 
-    :param test_step: Test fixture
+    Args:
+        test_step: Test fixture
     """
     assert not test_step.changed
     test_step.value = [value_2, value_2]

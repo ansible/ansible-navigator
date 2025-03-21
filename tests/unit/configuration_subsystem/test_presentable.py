@@ -24,7 +24,8 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 def _sample_settings() -> ApplicationConfiguration:
     """Provide sample settings.
 
-    :return: A sample settings instance
+    Returns:
+        A sample settings instance
     """
     return ApplicationConfiguration(
         application_name="app",
@@ -46,7 +47,8 @@ def _sample_settings() -> ApplicationConfiguration:
 def _settings_file_dict() -> dict[str, Any]:
     """Provide a sample settings file as a dictionary.
 
-    :return: A sample settings file as a dictionary
+    Returns:
+        A sample settings file as a dictionary
     """
     return {
         "choices": [],
@@ -75,8 +77,9 @@ def test_settings_file_entry(
 ) -> None:
     """Ensure the settings file entry is properly constructed.
 
-    :param sample_settings: A sample application configuration (settings)
-    :param settings_file_dict: The expected settings as a dictionary
+    Args:
+        sample_settings: A sample application configuration (settings)
+        settings_file_dict: The expected settings as a dictionary
     """
     configurator = Configurator(params=[], application_configuration=sample_settings)
     configurator._post_process()  # pylint: disable=protected-access
@@ -91,8 +94,9 @@ def test_settings_entry(
 ) -> None:
     """Ensure a settings entry is properly constructed.
 
-    :param sample_settings: A sample application configuration (settings)
-    :param settings_file_dict: The expected settings as a dictionary
+    Args:
+        sample_settings: A sample application configuration (settings)
+        settings_file_dict: The expected settings as a dictionary
     """
     entry = SettingsEntry(
         name="se_1",

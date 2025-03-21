@@ -47,9 +47,11 @@ class SuspendCurses:
     ) -> None:
         """Open the curses window.
 
-        :param exc_type: The exception class
-        :param exc_val: The type of exception
-        :param traceback: Report of all information related to the exception
+        Args:
+            exc_type: The exception class
+            exc_val: The type of exception
+            traceback: Report of all information related to the
+                exception
         """
         new_scr = curses.initscr()
         new_scr.refresh()
@@ -65,7 +67,8 @@ class Action:
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:open`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         self._args = args
         self._logger = logging.getLogger(__name__)
@@ -78,10 +81,13 @@ class Action:
     ) -> list[dict[Any, Any] | ContentBase[Any]]:
         """Convert a menu into structured data.
 
-        :param menu: The current menu showing
-        :param menu_filter: The effective menu filter
-        :param serialization_format: The current serialization format
-        :returns: The menu converted to a structured data
+        Args:
+            menu: The current menu showing
+            menu_filter: The effective menu filter
+            serialization_format: The current serialization format
+
+        Returns:
+            The menu converted to a structured data
         """
         self._logger.debug("menu is showing, open that")
         menu_entries: list[dict[Any, Any] | ContentBase[Any]] = []
@@ -109,8 +115,11 @@ class Action:
     def _assess_requested_is_file(requested: str) -> tuple[Path | None, int | None]:
         """Determine is the user requested string is a file.
 
-        :param requested: The string requested at the ``:`` prompt
-        :returns: None, None or file name and line number
+        Args:
+            requested: The string requested at the ``:`` prompt
+
+        Returns:
+            None, None or file name and line number
         """
         parts = requested.rsplit(":", 1)
         possible_filename = Path(parts[0])
@@ -132,10 +141,11 @@ class Action:
     ) -> None:
         """Open a file using the editor.
 
-        :param file_name: The name of the file to open
-        :param line_number: The line number the file should be opened at
-        :param editor_console: Indicates if the editor is console based
-        :param editor_command: The templatable editor command
+        Args:
+            file_name: The name of the file to open
+            line_number: The line number the file should be opened at
+            editor_console: Indicates if the editor is console based
+            editor_command: The templatable editor command
         """
         command = editor_command.format(filename=file_name, line_number=line_number)
 
@@ -151,9 +161,12 @@ class Action:
     def _persist_content(content: ContentType, content_format: ContentFormat) -> Path:
         """Write content to a temporary file.
 
-        :param content: the content to write
-        :param content_format: The format of the content
-        :returns: The path to the file
+        Args:
+            content: the content to write
+            content_format: The format of the content
+
+        Returns:
+            The path to the file
         """
         file_name = serialize_write_temp_file(
             content=content,
@@ -165,9 +178,12 @@ class Action:
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Execute the ``:open`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: Nothing
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            Nothing
         """
         self._logger.debug("open requested")
 

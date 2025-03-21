@@ -26,8 +26,9 @@ class Compiler:
     def __init__(self, grammar: Grammar, grammars: Grammars) -> None:
         """Initialize the grammar compiler.
 
-        :param grammar: The grammar to compile, a text mate language file
-        :param grammars: All previously compiled grammars
+        Args:
+            grammar: The grammar to compile, a text mate language file
+            grammars: All previously compiled grammars
         """
         self._root_scope = grammar.scope_name
         self._grammars = grammars

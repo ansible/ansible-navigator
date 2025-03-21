@@ -33,10 +33,14 @@ def fixture_params(
 ) -> dict[str, str]:
     """Generate parameters.
 
-    :param default_ee_image_name: The default execution environment image name
-    :param valid_container_engine: The valid container engine
-    :param request: The pytest request object
-    :returns: The parameters
+    Args:
+        default_ee_image_name: The default execution environment image
+            name
+        valid_container_engine: The valid container engine
+        request: The pytest request object
+
+    Returns:
+        The parameters
     """
     return {
         "container_engine": valid_container_engine,
@@ -48,8 +52,11 @@ def fixture_params(
 def id_ee(value: bool) -> str:
     """Generate the test id.
 
-    :param value: The value of the parameter
-    :returns: The test id
+    Args:
+        value: The value of the parameter
+
+    Returns:
+        The test id
     """
     return "-ee" if value else "-no_ee"
 
@@ -57,8 +64,11 @@ def id_ee(value: bool) -> str:
 def id_test_data(value: StdoutTest) -> str:
     """Generate the test id.
 
-    :param value: The value of the parameter
-    :returns: The test id
+    Args:
+        value: The value of the parameter
+
+    Returns:
+        The test id
     """
     return f"{value.action_name}-r{value.return_code}"
 
@@ -140,10 +150,10 @@ def test_stdout(
 ) -> None:
     """Test for a return code.
 
-    :param action_run_stdout: The action runner
-    :param params: The parameters
-    :param test_data: The test data
-
+    Args:
+        action_run_stdout: The action runner
+        params: The parameters
+        test_data: The test data
     """
     action_runner = action_run_stdout(action_name=test_data.action_name, **params)
     run_stdout_return, stdout, stderr = action_runner.run_action_stdout(
@@ -185,7 +195,8 @@ class StdoutCliTest(NamedTuple):
     def __str__(self) -> str:
         """Provide a test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return self.comment
 
@@ -193,7 +204,8 @@ class StdoutCliTest(NamedTuple):
     def command(self) -> list[str]:
         """Provide the constructed command.
 
-        :returns: The command
+        Returns:
+            The command
         """
         return ["ansible-navigator", self.subcommand] + self.params + ["--mode", self.mode]
 
@@ -237,12 +249,15 @@ def test_run_through_cli(
 ) -> None:
     """Test for a return code from run through a shell.
 
-    :param tmp_path: A tmp location
-    :param data: The test data
-    :param exec_env: Enable/disable execution environment support
-    :param pae: Enable/disable playbook artifact creation
-    :param cmd_in_tty: The tty command runner
-    :raises AssertionError: When no virtual environment found
+    Args:
+        tmp_path: A tmp location
+        data: The test data
+        exec_env: Enable/disable execution environment support
+        pae: Enable/disable playbook artifact creation
+        cmd_in_tty: The tty command runner
+
+    Raises:
+        AssertionError: When no virtual environment found
     """
     log_file = str(Path(tmp_path, "log.txt"))
     artifact_file = str(Path(tmp_path, "artifact.json"))

@@ -13,7 +13,8 @@ class Command(CommandBase):
     def run(self) -> tuple[str, str, int]:
         """Run command.
 
-        :returns: Output, error, and error code
+        Returns:
+            Output, error, and error code
         """
         self.generate_run_command_args()
         out, err, ret_code = run_command(**self._runner_args)

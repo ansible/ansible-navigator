@@ -34,7 +34,8 @@ class ColorMenuTestEntry(BaseScenario):
     def __str__(self) -> str:
         """Provide a string representation.
 
-        :returns: The string representation of self
+        Returns:
+            The string representation of self
         """
         return self.comment
 
@@ -65,7 +66,8 @@ ColorMenuTestEntries = (
 def test_color_menu(data: ColorMenuTestEntry) -> None:
     """Test color menu for a val set to the default.
 
-    :param data: A test entry
+    Args:
+        data: A test entry
     """
     entry = PresentableSettingsEntry(
         choices=[],
@@ -100,7 +102,8 @@ class ContentHeadingEntry(BaseScenario):
     def heading(self) -> str:
         """Create the expected heading for this content.
 
-        :returns: The expected heading
+        Returns:
+            The expected heading
         """
         heading = CONTENT_HEADING_DEFAULT if self.content.default else CONTENT_HEADING_NOT_DEFAULT
         return heading.format(**asdict(self.content))
@@ -108,7 +111,8 @@ class ContentHeadingEntry(BaseScenario):
     def __str__(self) -> str:
         """Provide a string representation.
 
-        :returns: The string representation of self
+        Returns:
+            The string representation of self
         """
         return self.comment
 
@@ -159,7 +163,8 @@ ContentHeadingEntries = (
 def test_content_heading(data: ContentHeadingEntry) -> None:
     """Test menu generation.
 
-    :param data: The test data
+    Args:
+        data: The test data
     """
     width = 100
     heading = content_heading(obj=data.content, screen_w=width)

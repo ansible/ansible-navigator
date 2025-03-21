@@ -38,11 +38,14 @@ class MenuBuilder:
     ) -> None:
         """Initialize the menu builder.
 
-        :param progress_bar_width:  The width of the progress bar
-        :param screen_width: The current screen width
-        :param number_colors: The number of colors the current terminal supports
-        :param color_menu_item: The callback for adding color to menu entries
-        :param ui_config: The current user interface configuration
+        Args:
+            progress_bar_width: The width of the progress bar
+            screen_width: The current screen width
+            number_colors: The number of colors the current terminal
+                supports
+            color_menu_item: The callback for adding color to menu
+                entries
+            ui_config: The current user interface configuration
         """
         self._number_colors = number_colors
         self._progress_bar_width = progress_bar_width
@@ -58,10 +61,13 @@ class MenuBuilder:
     ) -> tuple[CursesLines, CursesLines]:
         """Build menu main entry point.
 
-        :param cols: he columns (keys) to use in the dicts
-        :param dicts: A list of dicts
-        :param indices: A range of what's showing in the UI
-        :returns: The heading and body of a menu
+        Args:
+            cols: he columns (keys) to use in the dicts
+            dicts: A list of dicts
+            indices: A range of what's showing in the UI
+
+        Returns:
+            The heading and body of a menu
         """
         return self._menu(dicts, cols, indices)
 
@@ -73,10 +79,13 @@ class MenuBuilder:
     ) -> tuple[CursesLines, CursesLines]:
         """Build a text menu from a list of dicts given columns(root keys).
 
-        :param dicts: A list of dicts
-        :param cols: The columns (keys) to use in the dicts
-        :param indices: A range of what's showing in the UI
-        :returns: the heading and body of the menu
+        Args:
+            dicts: A list of dicts
+            cols: The columns (keys) to use in the dicts
+            indices: A range of what's showing in the UI
+
+        Returns:
+            the heading and body of the menu
         """
         line_prefix_w = len(str(len(dicts))) + len("|")
 
@@ -108,12 +117,15 @@ class MenuBuilder:
     def _menu_header_line(self, menu_layout: Any) -> CursesLine:
         """Generate the menu header line.
 
-        :param menu_layout: A tuple of menu details:
+        Args:
+            menu_layout: A tuple of menu details:
 
-            * ``menu_layout[0]``: ``List[int]``, the starting in for each column
-            * ``menu_layout[1]``: ``List[str]``, the columns of the menu
-            * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
-        :returns: The menu header line
+                * ``menu_layout[0]``: ``List[int]``, the starting in for each column
+                * ``menu_layout[1]``: ``List[str]``, the columns of the menu
+                * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
+
+        Returns:
+            The menu header line
         """
         _column_starts, cols, _adjusted_column_widths = menu_layout
         line_parts = tuple(
@@ -125,13 +137,16 @@ class MenuBuilder:
     def _menu_header_line_part(colno: int, menu_layout: tuple[list[Any], ...]) -> CursesLinePart:
         """Generate one part of the menu header line.
 
-        :param colno: The column number
-        :param menu_layout: A tuple of menu details:
+        Args:
+            colno: The column number
+            menu_layout: A tuple of menu details:
 
-            * ``menu_layout[0]``: ``List[int]``, the starting in for each column
-            * ``menu_layout[1]``: ``List[str]``, the columns of the menu
-            * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
-        :returns: The menu head line
+                * ``menu_layout[0]``: ``List[int]``, the starting in for each column
+                * ``menu_layout[1]``: ``List[str]``, the columns of the menu
+                * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
+
+        Returns:
+            The menu head line
         """
         col_starts, cols, adjusted_column_widths = menu_layout
         coltext = re.sub("^__", "", cols[colno])
@@ -160,15 +175,18 @@ class MenuBuilder:
     ) -> CursesLines:
         """Generate all the menu lines.
 
-        :param dicts: A list of dicts from which the menu will be generated
-        :param indices: A range of what's showing in the UI
-        :param menu_layout: A tuple of menu details:
+        Args:
+            dicts: A list of dicts from which the menu will be generated
+            indices: A range of what's showing in the UI
+            menu_layout: A tuple of menu details:
 
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
             * ``menu_layout[1]``: ``List[str]``, the columns of the menu
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
             * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
-        :returns: The menu lines
+
+        Returns:
+            The menu lines
         """
         return CursesLines(tuple(self._menu_line(dicts[idx], menu_layout) for idx in indices))
 
@@ -179,14 +197,17 @@ class MenuBuilder:
     ) -> CursesLine:
         """Generate one the menu line.
 
-        :param menu_entry: One dict from which the menu line will be generated
-        :param menu_layout: A tuple of menu details:
+        Args:
+            menu_entry: One dict from which the menu line will be generated
+            menu_layout: A tuple of menu details:
 
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
             * ``menu_layout[1]``: ``List[str]``, the columns of the menu
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
             * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
-        :returns: A menu line
+
+        Returns:
+            A menu line
         """
         _column_starts, cols, _adjusted_column_widths, _header = menu_layout
         menu_line = (menu_entry.get(c) for c in cols)
@@ -206,16 +227,20 @@ class MenuBuilder:
         # pylint: disable=too-many-locals
         """Generate one menu line part.
 
-        :param colno: The column number of the line part
-        :param coltext: The text to be placed at the given column
-        :param menu_entry: The dict from which the menu line will be generated
-        :param menu_layout: A tuple of menu details:
+        Args:
+            colno: The column number of the line part
+            coltext: The text to be placed at the given column
+            menu_entry: The dict from which the menu line will be
+                generated
+            menu_layout: A tuple of menu details:
 
             * ``menu_layout[0]``: ``List[int]``, the starting in for each column
             * ``menu_layout[1]``: ``List[str]``, the columns of the menu
             * ``menu_layout[2]``: ``List[int]``, the adjusted column widths
             * ``menu_layout[3]``: ``CursesLine``, the menu header, used to determine justification
-        :returns: A menu line part
+
+        Returns:
+            A menu line part
         """
         column_starts, cols, adjusted_column_widths, header = menu_layout
 

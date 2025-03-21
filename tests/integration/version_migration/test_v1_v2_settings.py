@@ -28,11 +28,14 @@ def test_version(
 ) -> None:
     """Test migration with a file of all changes.
 
-    :param file: The file to test
-    :param request: The pytest fixture request
-    :param test_dir_fixture_dir: Path to the test directory
-    :param tmp_path: The pytest tmp_path fixture
-    :raises AssertionError: When tests fails
+    Args:
+        file: The file to test
+        request: The pytest fixture request
+        test_dir_fixture_dir: Path to the test directory
+        tmp_path: The pytest tmp_path fixture
+
+    Raises:
+        AssertionError: When tests fails
     """
     file_path = Path(file)
     file_stem = file_path.stem

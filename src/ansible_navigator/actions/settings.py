@@ -40,10 +40,13 @@ if TYPE_CHECKING:
 def color_menu(colno: int, colname: str, entry: PresentableSettingsEntry) -> tuple[int, int]:
     """Color the menu.
 
-    :param colno: Column number
-    :param colname: Column name
-    :param entry: Column value
-    :returns: Constants that curses uses to color a line of text
+    Args:
+        colno: Column number
+        colname: Column name
+        entry: Column value
+
+    Returns:
+        Constants that curses uses to color a line of text
     """
     if entry.default:
         return Color.GREEN, Color.BLACK
@@ -59,9 +62,12 @@ CONTENT_HEADING_NOT_DEFAULT = (
 def content_heading(obj: PresentableSettingsEntry, screen_w: int) -> CursesLines:
     """Create a heading for the setting entry showing.
 
-    :param obj: The content going to be shown
-    :param screen_w: The current screen width
-    :returns: The heading
+    Args:
+        obj: The content going to be shown
+        screen_w: The current screen width
+
+    Returns:
+        The heading
     """
     if obj.default:
         text = CONTENT_HEADING_DEFAULT.format(**asdict(obj))
@@ -91,7 +97,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the ``:settings`` action.
 
-        :param args: The current settings for the application
+        Args:
+            args: The current settings for the application
         """
         super().__init__(args=args, logger_name=__name__, name="settings")
         self._settings: PresentableSettingsEntries
@@ -99,9 +106,13 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> None:
         """Handle the ``settings`` subcommand in mode ``interactive``.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("settings requested")
@@ -125,7 +136,8 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Handle settings in mode stdout.
 
-        :returns: RunStdoutReturn
+        Returns:
+            RunStdoutReturn
         """
         self._logger.debug("settings requested in stdout mode")
 
@@ -156,7 +168,8 @@ class Action(ActionBase):
     def _build_main_menu(self) -> TypedStep[Any]:
         """Build the main menu of settings.
 
-        :returns: The settings menu definition
+        Returns:
+            The settings menu definition
         """
         step = TypedStep[PresentableSettingsEntry](
             name="all_options",
@@ -170,7 +183,8 @@ class Action(ActionBase):
     def _build_settings_content(self) -> TypedStep[Any]:
         """Build the content for one settings entry.
 
-        :returns: The option's content
+        Returns:
+            The option's content
         """
         step = TypedStep[PresentableSettingsEntry](
             name="setting_content",

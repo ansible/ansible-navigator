@@ -10,10 +10,12 @@ from typing import NewType
 class CursesLinePart(NamedTuple):
     """One chunk of a line of text.
 
-    :param column: the column at which the text should start
-    :param string: the text to be displayed
-    :param color: An integer representing a color, not a curses.color_pair(n)
-    :param decoration: A curses decoration
+    Args:
+        column: the column at which the text should start
+        string: the text to be displayed
+        color: An integer representing a color, not a
+            curses.color_pair(n)
+        decoration: A curses decoration
     """
 
     column: int

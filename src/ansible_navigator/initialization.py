@@ -34,7 +34,8 @@ if TYPE_CHECKING:
 def error_and_exit_early(exit_messages: list[ExitMessage]) -> NoReturn:
     """Exit the application early.
 
-    :param exit_messages: List of all exit messages to be printed
+    Args:
+        exit_messages: List of all exit messages to be printed
     """
     color = "NO_COLOR" not in os.environ
     printable = ExitMessages(messages=exit_messages).to_strings(color=color, width=console_width())
@@ -48,7 +49,8 @@ def find_config() -> tuple[list[LogMessage], list[ExitMessage], str | None, C]:
     If the config can't be found/loaded, use default settings.
     If it's found but empty or not well formed, bail out.
 
-    :returns: All log messages and config path
+    Returns:
+        All log messages and config path
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
@@ -98,8 +100,12 @@ def get_and_check_collection_doc_cache(
 
     Always delete and rebuild if not.
 
-    :param collection_doc_cache_path: Path for collection documentation cache
-    :returns: All messages and collection cache or None
+    Args:
+        collection_doc_cache_path: Path for collection documentation
+            cache
+
+    Returns:
+        All messages and collection cache or None
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []
@@ -154,11 +160,14 @@ def _diagnose(
 ) -> tuple[list[LogMessage], list[ExitMessage]]:
     """Direct to the diagnostic information writer or return.
 
-    :param args: Application configuration
-    :param exit_messages: List of exit messages
-    :param messages: List of log messages
-    :param should_diagnose: Whether to show tech info
-    :returns: All messages and exit messages
+    Args:
+        args: Application configuration
+        exit_messages: List of exit messages
+        messages: List of log messages
+        should_diagnose: Whether to show tech info
+
+    Returns:
+        All messages and exit messages
     """
     if should_diagnose:
         DiagnosticsCollector(args=args, messages=messages, exit_messages=exit_messages).run()
@@ -178,11 +187,16 @@ def parse_and_update(
     Return after the CDC is mounted, even if exit messages are generated, the CDC may still
     be needed. e.g. ``:collections --ee NotBool``.
 
-    :param params: A list of parameters e.g. ['-x', 'value']
-    :param args: The application args
-    :param apply_previous_cli_entries: Should previous params from the CLI be applied
-    :param attach_cdc: Should the collection doc cache be attached to the args.internals
-    :returns: Log and exit messages
+    Args:
+        params: A list of parameters e.g. ['-x', 'value']
+        args: The application args
+        apply_previous_cli_entries: Should previous params from the CLI
+            be applied
+        attach_cdc: Should the collection doc cache be attached to the
+            args.internals
+
+    Returns:
+        Log and exit messages
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []

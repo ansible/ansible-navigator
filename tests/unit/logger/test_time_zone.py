@@ -31,15 +31,19 @@ class Scenario(BaseScenario):
     def __str__(self) -> str:
         """Provide the test id.
 
-        :returns: The test id
+        Returns:
+            The test id
         """
         return f"{self.time_zone}"
 
     def args(self, log_file: Path) -> list[str]:
         """Provide an argument list for the CLI.
 
-        :param log_file: The path to the lgo file
-        :returns: The list of CLI arguments
+        Args:
+            log_file: The path to the lgo file
+
+        Returns:
+            The list of CLI arguments
         """
         arg_list = ["ansible-navigator", "--la", "false", "--lf", str(log_file), "--ll", "debug"]
         if isinstance(self.time_zone, str):
@@ -82,18 +86,22 @@ def test_tz_support(
 ) -> None:
     """Start with the CLI, create log messages and match the time zone.
 
-    :param caplog: The log capture fixture
-    :param data: The test data
-    :param monkeypatch: The monkeypatch fixture
-    :param tmp_path: A temporary file path
+    Args:
+        caplog: The log capture fixture
+        data: The test data
+        monkeypatch: The monkeypatch fixture
+        tmp_path: A temporary file path
     """
 
     def return_none(*_args: Any, **_kwargs: dict[str, Any]) -> None:
         """Take no action, return none.
 
-        :param _args: Arguments
-        :param _kwargs: Keyword arguments
-        :returns: Nothing
+        Args:
+            *_args: Arguments
+            **_kwargs: Keyword arguments
+
+        Returns:
+            Nothing
         """
         return
 

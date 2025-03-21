@@ -60,7 +60,8 @@ PLUGIN_TYPES = (
 def generate_editor_command() -> str:
     """Generate a default for editor_command if EDITOR is set.
 
-    :returns: command to be run by specific editor
+    Returns:
+        command to be run by specific editor
     """
     editor = os.environ.get("EDITOR")
     if editor is None:
@@ -79,7 +80,8 @@ def generate_editor_command() -> str:
 def _generate_doc_cache_path() -> str:
     """Generate a path for the collection cache.
 
-    :returns: Collection cache path
+    Returns:
+        Collection cache path
     """
     file_name = "collection_doc_cache.db"
     cache_dir = generate_cache_path(APP_NAME.replace("_", "-"))

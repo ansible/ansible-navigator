@@ -10,7 +10,8 @@ from ansible_navigator.utils.packaged_data import retrieve_content
 def _contents() -> str:
     """Return the contents of the dockerfile.
 
-    :returns: The contents of the dockerfile.
+    Returns:
+        The contents of the dockerfile.
     """
     return retrieve_content(filename="images_dockerfile")
 
@@ -18,7 +19,8 @@ def _contents() -> str:
 def test_count(contents: str) -> None:
     """Verify the number of images in the dockerfile.
 
-    :param contents: The contents of the dockerfile.
+    Args:
+        contents: The contents of the dockerfile.
     """
     assert len(ImageEntry.__members__) == len(
         [line for line in contents.splitlines() if line.startswith("FROM")],
@@ -28,7 +30,8 @@ def test_count(contents: str) -> None:
 def test_format(contents: str) -> None:
     """Verify the format of each FROM line.
 
-    :param contents: The contents of the dockerfile.
+    Args:
+        contents: The contents of the dockerfile.
     """
     from_lines = (line for line in contents.splitlines() if line.startswith("FROM"))
     for line in from_lines:
@@ -39,7 +42,8 @@ def test_format(contents: str) -> None:
 def test_get(image: ImageEntry) -> None:
     """Verify the image name can be retrieved.
 
-    :param image: The image to retrieve.
+    Args:
+        image: The image to retrieve.
     """
     name = image.get(app_name="ansible_navigator")
     assert isinstance(name, str)

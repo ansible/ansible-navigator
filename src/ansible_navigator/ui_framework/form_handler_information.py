@@ -22,8 +22,9 @@ class FormHandlerInformation(CursesWindow):
     def __init__(self, screen: Window, ui_config: UIConfig) -> None:
         """Initialize the handler for a informational notification.
 
-        :param screen: A curses window
-        :param ui_config: The current user interface configuration
+        Args:
+            screen: A curses window
+            ui_config: The current user interface configuration
         """
         super().__init__(ui_config=ui_config)
         self._screen = screen
@@ -32,8 +33,11 @@ class FormHandlerInformation(CursesWindow):
     def handle(idx: int, form_fields: list[Any]) -> tuple[FieldInformation, int]:
         """Handle the information field, immediate return.
 
-        :param idx: Index to retrieve specific field
-        :param form_fields: List of fields
-        :returns: Indexed form fields
+        Args:
+            idx: Index to retrieve specific field
+            form_fields: List of fields
+
+        Returns:
+            Indexed form fields
         """
         return form_fields[idx], curses_ascii.NL

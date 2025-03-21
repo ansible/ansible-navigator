@@ -25,9 +25,14 @@ from tests import defaults
 def get_executable_path(name: str) -> str:
     """Get the path of an executable.
 
-    :param name: The name of the executable
-    :raises ValueError: If the executable is not found
-    :returns: The path of the executable
+    Args:
+        name: The name of the executable
+
+    Raises:
+        ValueError: If the executable is not found
+
+    Returns:
+        The path of the executable
     """
     if name == "python":
         return sys.executable
@@ -45,10 +50,14 @@ def retrieve_fixture_for_step(
 ) -> list[str]:
     """Retrieve a fixture based on the test request and step index.
 
-    :param request: The current test request
-    :param step_index: The index of the current step in a set of TUI interactions
-    :param test_name: A test name to add to the fixture path if needed
-    :returns: The specific test step fixture
+    Args:
+        request: The current test request
+        step_index: The index of the current step in a set of TUI
+            interactions
+        test_name: A test name to add to the fixture path if needed
+
+    Returns:
+        The specific test step fixture
     """
     fixture_path = fixture_path_from_request(request, step_index, test_name)
     with fixture_path.open(encoding="utf-8") as fh:
@@ -69,13 +78,15 @@ def update_fixtures(
     # pylint: disable=too-many-arguments
     """Write out a test fixture.
 
-    :param request: Test request
-    :param index: The test index
-    :param received_output: Tmux screen contents
-    :param comment: Comment to add to the fixture
-    :param testname: Test name
-    :param additional_information: Additional information to include in the fixture
-    :param zfill_index: Pad the index with zeros
+    Args:
+        request: Test request
+        index: The test index
+        received_output: Tmux screen contents
+        comment: Comment to add to the fixture
+        testname: Test name
+        additional_information: Additional information to include in the
+            fixture
+        zfill_index: Pad the index with zeros
     """
     fixture_path = fixture_path_from_request(
         request=request,
@@ -110,12 +121,15 @@ def fixture_path_from_request(
 ) -> Path:
     """Build a fixture path for a test.
 
-    :param request: Test request
-    :param index: Test index
-    :param testname: Test name, used as a subdirectory
-    :param suffix: The fixture file suffix
-    :param zfill_index: Pad the index with zeros
-    :returns: The path to the fixture
+    Args:
+        request: Test request
+        index: Test index
+        testname: Test name, used as a subdirectory
+        suffix: The fixture file suffix
+        zfill_index: Pad the index with zeros
+
+    Returns:
+        The path to the fixture
     """
     path_in_fixture_dir = request.node.nodeid.split("::")[0].removeprefix("tests/")
     dir_path = Path(defaults.FIXTURES_DIR, path_in_fixture_dir, request.node.originalname)
@@ -129,8 +143,11 @@ def fixture_path_from_request(
 def generate_test_log_dir(request: pytest.FixtureRequest) -> Path:
     """Return a log directory for a test given it's request.
 
-    :param request: The test request
-    :returns: The path for the log file
+    Args:
+        request: The test request
+
+    Returns:
+        The path for the log file
     """
     test_path = Path(request.path)
     test_parts = list(test_path.parts)
@@ -153,8 +170,11 @@ class Error(EnvironmentError):
 def sanitize_output(output: list[str]) -> list[str]:
     """Sanitize test output that may be environment specific or unique per run.
 
-    :param output: The output to sanitize
-    :returns: The sanitized output
+    Args:
+        output: The output to sanitize
+
+    Returns:
+        The sanitized output
     """
     re_uuid = re.compile(
         "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
@@ -199,12 +219,16 @@ def copytree(
     list of names relative to the `src` directory that should
     not be copied.
 
-    :param src: Source directory
-    :param dst: Destination directory
-    :param symlinks: Copy symlinks
-    :param ignore: Callable to ignore files
-    :param dirs_exist_ok: Do not raise an exception if the destination directory exists
-    :raises Error: If an error occurs
+    Args:
+        src: Source directory
+        dst: Destination directory
+        symlinks: Copy symlinks
+        ignore: Callable to ignore files
+        dirs_exist_ok: Do not raise an exception if the destination
+            directory exists
+
+    Raises:
+        Error: If an error occurs
     """
     names = os.listdir(src)
     ignored_names = ignore(src, names) if ignore is not None else set()

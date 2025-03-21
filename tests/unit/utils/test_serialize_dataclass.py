@@ -67,36 +67,43 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
     def serialize_json_full(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``JSON`` with all attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        Returns:
+            The function used for conversion to a dictionary or nothing
         """
         return self._asdict(suffix=f"_j_{ContentView.FULL!s}")
 
     def serialize_json_normal(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``JSON`` with curated attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        Returns:
+            The function used for conversion to a dictionary or nothing
         """
         return self._asdict(suffix=f"_j_{ContentView.NORMAL!s}")
 
     def serialize_yaml_full(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``YAML`` with all attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        Returns:
+            The function used for conversion to a dictionary or nothing
         """
         return self._asdict(suffix=f"_y_{ContentView.FULL!s}")
 
     def serialize_yaml_normal(self) -> OverrideDictReturn:
         """Provide dictionary factory for ``JSON`` with curated attributes.
 
-        :returns: The function used for conversion to a dictionary or nothing
+        Returns:
+            The function used for conversion to a dictionary or nothing
         """
         return self._asdict(suffix=f"_y_{ContentView.NORMAL!s}")
 
     def _asdict(self, suffix: Any) -> OverrideDictReturn:
         """Create a dictionary from the dataclass with suffixed values.
 
-        :param suffix: The suffix to append to values
-        :returns: The dictionary with suffixed values
+        Args:
+            suffix: The suffix to append to values
+
+        Returns:
+            The dictionary with suffixed values
         """
         return asdict(self, dict_factory=partial(self._custom_dict_factory, suffix=suffix))
 
@@ -107,9 +114,13 @@ class ContentTestOverride(ContentBase[OverrideDictValueT]):
     ) -> OverrideDictReturn:
         """Create a dictionary with suffixed values from a list of key-value pairs.
 
-        :param kv_pairs: The key-value pairs provided by ``dataclasses.asdict()``
-        :param suffix: The suffix to append to values
-        :returns: The dictionary with suffixed values
+        Args:
+            kv_pairs: The key-value pairs provided by
+                ``dataclasses.asdict()``
+            suffix: The suffix to append to values
+
+        Returns:
+            The dictionary with suffixed values
         """
         return {name: f"{value!s}_{suffix}" for name, value in kv_pairs}
 
@@ -126,8 +137,9 @@ def test_content_to_dict(
 ) -> None:
     """Test the conversion of the dataclass to a dict.
 
-    :param content_view: The content view
-    :param serialization_tuple: The suffix, serialization format
+    Args:
+        content_view: The content view
+        serialization_tuple: The suffix, serialization format
     """
     content = ContentTestSimple()
     content_as_dict = content.asdict(
@@ -141,7 +153,8 @@ def test_content_to_dict(
 def test_content_to_json(content_view: ContentView) -> None:
     """Test the conversion of the dataclass to json.
 
-    :param content_view: The content view
+    Args:
+        content_view: The content view
     """
     content = ContentTestSimple()
     content_serialized = serialize(
@@ -157,7 +170,8 @@ def test_content_to_json(content_view: ContentView) -> None:
 def test_content_to_yaml(content_view: ContentView) -> None:
     """Test the conversion of the dataclass to yaml.
 
-    :param content_view: The content view
+    Args:
+        content_view: The content view
     """
     content = ContentTestSimple()
     content_serialized = serialize(
@@ -178,9 +192,10 @@ def test_content_to_dict_override(
 ) -> None:
     """Test the conversion of the dataclass with overrides to a ``dict``.
 
-    :param subtests: The pytest subtest fixture
-    :param content_view: The content view
-    :param serialization_tuple: The suffix, serialization format
+    Args:
+        subtests: The pytest subtest fixture
+        content_view: The content view
+        serialization_tuple: The suffix, serialization format
     """
     content = ContentTestOverride()
     content_as_dict = content.asdict(
@@ -196,7 +211,8 @@ def test_content_to_dict_override(
 def test_content_to_json_override(content_view: ContentView) -> None:
     """Test the conversion of the dataclass with overrides to ``JSON``.
 
-    :param content_view: The content view
+    Args:
+        content_view: The content view
     """
     content = ContentTestOverride()
     content_serialized = serialize(
@@ -216,7 +232,8 @@ def test_content_to_json_override(content_view: ContentView) -> None:
 def test_content_to_yaml_override(content_view: ContentView) -> None:
     """Test the conversion of the dataclass with overrides to ``YAML``.
 
-    :param content_view: The content view
+    Args:
+        content_view: The content view
     """
     content = ContentTestOverride()
     content_serialized = serialize(

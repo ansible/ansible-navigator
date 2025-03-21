@@ -37,20 +37,23 @@ class FieldInformation:
         Windows width and : placement is based on
         the largest 'prompt'.
 
-        :returns: Max width information
+        Returns:
+            Max width information
         """
         return max(self.information)
 
     def validate(self, response: str) -> None:
         """No validation required for information field.
 
-        :param response: Field data
+        Args:
+            response: Field data
         """
         self.valid = True
 
     def conditional_validation(self, response: str) -> None:
         """No conditional validation required.
 
-        :param response: Field data
+        Args:
+            response: Field data
         """
         self.validate(response)

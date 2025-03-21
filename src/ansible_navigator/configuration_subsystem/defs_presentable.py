@@ -47,9 +47,12 @@ class PresentableCliParameters:
     ) -> CliT:
         """Create an ``_HRCliParameters`` based on an entry's cli parameters.
 
-        :param cli_parameters: The entry's cli parameters
-        :param name_dashed: The dashed name of the parent settings entry
-        :returns: The instance of self based on an entry's cli parameters
+        Args:
+            cli_parameters: The entry's cli parameters
+            name_dashed: The dashed name of the parent settings entry
+
+        Returns:
+            The instance of self based on an entry's cli parameters
         """
         if isinstance(cli_parameters, CliParameters):
             short = cli_parameters.short or cls.NO_SHORT_MSG
@@ -94,15 +97,19 @@ class PresentableSettingsEntry(ContentBase[Any]):
     def current(self) -> str:
         """Convert the current value into a string.
 
-        :returns: The current value as a string
+        Returns:
+            The current value as a string
         """
         return str(self.current_value)
 
     def __lt__(self, other: object) -> bool:
         """Compare based on name, called by sort, sorted.
 
-        :param other: The entry to compare this to
-        :returns: Indication of less than the other
+        Args:
+            other: The entry to compare this to
+
+        Returns:
+            Indication of less than the other
         """
         if not isinstance(other, PresentableSettingsEntry):
             return NotImplemented
@@ -117,10 +124,13 @@ class PresentableSettingsEntry(ContentBase[Any]):
     ) -> EntT:
         """Create an ``PresentableSettingsEntry`` containing the details for the settings file.
 
-        :param all_subcommands: All application subcommands
-        :param application_name: The application name
-        :param internals: The internal storage for settings information
-        :returns: The settings file entry
+        Args:
+            all_subcommands: All application subcommands
+            application_name: The application name
+            internals: The internal storage for settings information
+
+        Returns:
+            The settings file entry
         """
         description = (
             "The path to the current settings file. Possible locations are"
@@ -152,12 +162,14 @@ class PresentableSettingsEntry(ContentBase[Any]):
     ) -> EntT:
         """Create an ``PresentableSettingsEntry`` containing the details for one settings entry.
 
-        :param application_name_dashed: The application name, dashed
-        :param all_subcommands: All application subcommands
-        :param entry: A settings entry
-        :param settings_file_path: The path to the settings file
+        Args:
+            application_name_dashed: The application name, dashed
+            all_subcommands: All application subcommands
+            entry: A settings entry
+            settings_file_path: The path to the settings file
 
-        :returns: The settings file entry
+        Returns:
+            The settings file entry
         """
         cli_parameters = PresentableCliParameters.from_cli_params(
             cli_parameters=entry.cli_parameters,

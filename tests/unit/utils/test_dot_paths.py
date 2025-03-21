@@ -97,7 +97,8 @@ class Scenario(BaseScenario):  # pylint: disable=too-many-instance-attributes
     def __str__(self) -> str:
         """Provide string representation.
 
-        :returns: String representation
+        Returns:
+            String representation
         """
         return f"{self.comment}"
 
@@ -236,7 +237,8 @@ scenarios_place_success = (
 def test_place_at_path_success(scenario: Scenario) -> None:
     """Test place at path.
 
-    :param scenario: Test data.
+    Args:
+        scenario: Test data.
     """
     updated = place_at_path(
         behaviors=scenario.behaviors,
@@ -311,7 +313,8 @@ scenarios_place_raise = (
 def test_place_at_path_raises(scenario: Scenario) -> None:
     """Test place at path.
 
-    :param scenario: Test data.
+    Args:
+        scenario: Test data.
     """
     with pytest.raises(ValueError):  # noqa: PT011
         place_at_path(
@@ -370,7 +373,8 @@ scenarios_move = (
 def test_move(scenario: Scenario) -> None:
     """Test move to path.
 
-    :param scenario: Test data.
+    Args:
+        scenario: Test data.
     """
     updated = move_to_path(
         behaviors=scenario.behaviors,

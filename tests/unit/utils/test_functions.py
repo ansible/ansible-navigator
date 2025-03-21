@@ -29,7 +29,8 @@ EXTENSIONS = [".yml", ".yaml", ".json"]
 def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test more than one in home.
 
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
     """
     home_path = Path.home() / ".ansible-navigator"
     paths = [Path(f"{home_path}{ext}") for ext in EXTENSIONS]
@@ -46,7 +47,8 @@ def test_find_many_settings_home(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test more than one in CWD.
 
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
     """
     cwd_path = Path.cwd() / "ansible-navigator"
     paths = [Path(f"{cwd_path}{ext}") for ext in EXTENSIONS]
@@ -63,7 +65,8 @@ def test_find_many_settings_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_find_many_settings_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test more than one in CWD.
 
-    :param monkeypatch: The monkeypatch fixture
+    Args:
+        monkeypatch: The monkeypatch fixture
     """
     expected = Path.cwd() / "ansible-navigator.yml"
     paths = [expected, Path.home() / ".ansible-navigator.json"]
@@ -97,10 +100,11 @@ def test_env_var_is_file_path(
 ) -> None:
     """Test environment variable is a file path.
 
-    :param monkeypatch: The monkeypatch fixture
-    :param set_env: To set or not to set the env var
-    :param file_path: File path to set env var to
-    :param anticipated_result: Expected outcome for assertion
+    Args:
+        monkeypatch: The monkeypatch fixture
+        set_env: To set or not to set the env var
+        file_path: File path to set env var to
+        anticipated_result: Expected outcome for assertion
     """
     env_var = "ANSIBLE_NAVIGATOR_CONFIG"
     if set_env:
@@ -128,8 +132,9 @@ def test_env_var_is_file_path(
 def test_flatten_list(value: list[str], anticipated_result: list[str]) -> None:
     """Test for flatten list.
 
-    :param value: List to be flattened
-    :param anticipated_result: Expected outcome for assertion
+    Args:
+        value: List to be flattened
+        anticipated_result: Expected outcome for assertion
     """
     actual_result = flatten_list(value)
     assert list(actual_result) == anticipated_result
@@ -162,7 +167,8 @@ def test_human_time_integer(data: HumanTimeTestData) -> None:
 
     Ensure the integer passed is correctly transformed into a human readable time string.
 
-    :param data: Time data in human-readable format
+    Args:
+        data: Time data in human-readable format
     """
     result = human_time(data.value)
     assert result == data.expected
@@ -174,7 +180,8 @@ def test_human_time_negative_integer(data: HumanTimeTestData) -> None:
 
     Ensure the negative integer passed is correctly transformed into a human readable time string.
 
-    :param data: Time data in human-readable format
+    Args:
+        data: Time data in human-readable format
     """
     result = human_time(-data.value)
     assert result == f"-{data.expected}"
@@ -186,7 +193,8 @@ def test_human_time_float(data: HumanTimeTestData) -> None:
 
     Ensure the float passed is correctly transformed into a human readable time string.
 
-    :param data: Time data in human-readable format
+    Args:
+        data: Time data in human-readable format
     """
     result = human_time(float(data.value))
     assert result == data.expected
@@ -198,7 +206,8 @@ def test_human_time_negative_float(data: HumanTimeTestData) -> None:
 
     Ensure the negative float passed is correctly transformed into a human readable time string.
 
-    :param data: Time data in human-readable format
+    Args:
+        data: Time data in human-readable format
     """
     result = human_time(-float(data.value))
     assert result == f"-{data.expected}"
@@ -231,7 +240,8 @@ def test_round_half_up(data: RoundHalfUpTestData) -> None:
     Ensure the number passed is consistently rounded to the nearest
     integer with ties going away from zero.
 
-    :param data: Test object
+    Args:
+        data: Test object
     """
     result = round_half_up(data.value)
     assert result == data.expected
@@ -274,8 +284,9 @@ iso8601 = re.compile(
 def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str) -> None:
     """Test the using local as a time zone.
 
-    :param caplog: The log capture fixture
-    :param time_zone: The timezone
+    Args:
+        caplog: The log capture fixture
+        time_zone: The timezone
     """
     time_string = now_iso(time_zone=time_zone)
     re_matched = iso8601.match(time_string)
@@ -310,8 +321,9 @@ def test_now_iso(caplog: pytest.LogCaptureFixture, time_zone: str) -> None:
 def test_unescape_moustaches(data: Any, output: Any) -> None:
     """Tests unescape_moustaches.
 
-    :param data: The input data.
-    :param output: The expected output.
+    Args:
+        data: The input data.
+        output: The expected output.
     """
     result = unescape_moustaches(data)
     assert result == output

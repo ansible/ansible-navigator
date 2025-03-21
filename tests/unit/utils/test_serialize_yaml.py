@@ -21,9 +21,12 @@ def test_check_yaml_imports() -> None:
 def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest) -> Any:
     """Patch the human dumper if requested.
 
-    :param monkeypatch: Fixture for patching
-    :param request: The request for this fixture from a test
-    :returns: The original request parameter
+    Args:
+        monkeypatch: Fixture for patching
+        request: The request for this fixture from a test
+
+    Returns:
+        The original request parameter
     """
     if request.param:
         monkeypatch.setattr(
@@ -42,7 +45,9 @@ def _aliases_allowed(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReq
 def test_anchor_alias(aliases_allowed: bool) -> None:
     """Test for anchors and aliases in yaml output.
 
-    :param aliases_allowed: Indicates if aliases and anchors should be found
+    Args:
+        aliases_allowed: Indicates if aliases and anchors should be
+            found
     """
     data = {"integer": 42}
     many_data = [data, data, data]

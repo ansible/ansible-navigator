@@ -59,7 +59,9 @@ class CollectionCatalog:
     def __init__(self, directories: list[Path]) -> None:
         """Initialize the collection cataloger.
 
-        :param directories: A list of directories that may contain collections
+        Args:
+            directories: A list of directories that may contain
+                collections
         """
         self._directories: list[Path] = directories
         self._collections: OrderedDict[str, dict[Any, Any]] = OrderedDict()
@@ -69,7 +71,8 @@ class CollectionCatalog:
     def _catalog_plugins(self, collection: dict[Any, Any]) -> None:
         """Catalog the plugins within a collection.
 
-        :param collection: Details describing the collection
+        Args:
+            collection: Details describing the collection
         """
         file_checksums = {}
 
@@ -112,7 +115,8 @@ class CollectionCatalog:
     def _catalog_roles(self, collection: dict[str, Any]) -> None:
         """Catalog the roles within a collection.
 
-        :param collection: Details describing the collection
+        Args:
+            collection: Details describing the collection
         """
         # pylint: disable=too-many-locals
 
@@ -209,9 +213,13 @@ class CollectionCatalog:
     def _generate_checksum(file_path: Path, relative_path: Path) -> dict[str, Any]:
         """Generate a standard checksum for a file.
 
-        :param file_path: The path to the file to generate a checksum for
-        :param relative_path: The relative path within the collection directory structure
-        :returns: Details about the file, including the checksum
+        Args:
+            file_path: The path to the file to generate a checksum for
+            relative_path: The relative path within the collection
+                directory structure
+
+        Returns:
+            Details about the file, including the checksum
         """
         sha256_hash = hashlib.sha256()
         with file_path.open("rb") as fh:
@@ -235,10 +243,11 @@ class CollectionCatalog:
     ) -> None:
         """Process each plugin within one plugin directory.
 
-        :param plugin_type: The type of plugins
-        :param filenames: The filenames of the plugins
-        :param file_checksums: The checksums for the plugin files
-        :param collection: The details of the collection
+        Args:
+            plugin_type: The type of plugins
+            filenames: The filenames of the plugins
+            file_checksums: The checksums for the plugin files
+            collection: The details of the collection
         """
         for filename in filenames:
             if str(filename.name).startswith("__"):
@@ -257,7 +266,9 @@ class CollectionCatalog:
     def _one_path(self, directory: Path) -> None:
         """Process the contents of an <...>/ansible_collections/ directory.
 
-        :param directory: The path to collections directory to walk and load
+        Args:
+            directory: The path to collections directory to walk and
+                load
         """
         for directory_path in directory.glob("*/*/"):
             manifest_file = directory_path / "MANIFEST.json"
@@ -328,7 +339,8 @@ class CollectionCatalog:
     def process_directories(self) -> tuple[dict[Any, Any], list[dict[str, str]]]:
         """Process each parent directory.
 
-        :returns: All collections found and any errors
+        Returns:
+            All collections found and any errors
         """
         for directory in self._directories:
             collection_directory = directory / "ansible_collections"
@@ -361,8 +373,10 @@ def worker(
 ) -> None:
     """Extract the documentation from a plugin, place in completed queue.
 
-    :param pending_queue: A queue with plugins to process
-    :param completed_queue: The queue in which extracted documentation will be placed
+    Args:
+        pending_queue: A queue with plugins to process
+        completed_queue: The queue in which extracted documentation will
+            be placed
     """
     # pylint: disable=import-outside-toplevel
     # pylint: disable=too-many-locals
@@ -425,9 +439,13 @@ def identify_missing(
 ) -> tuple[set[Any], list[Any], int]:
     """Identify plugins missing from the cache.
 
-    :param collections: All plugins found across all collections
-    :param collection_cache: The key value interface to a sqlite database
-    :returns: Handled and plugins missing from the cache, including a count of plugins
+    Args:
+        collections: All plugins found across all collections
+        collection_cache: The key value interface to a sqlite database
+
+    Returns:
+        Handled and plugins missing from the cache, including a count of
+        plugins
     """
     handled = set()
     missing = []
@@ -452,7 +470,8 @@ def parse_args() -> tuple[argparse.Namespace, list[Path]]:
     # pylint: disable=possibly-used-before-assignment
     """Parse the arguments from the command line.
 
-    :returns: The parsed arguments and all directories to search
+    Returns:
+        The parsed arguments and all directories to search
     """
     parser = argparse.ArgumentParser(description="Catalog collections.")
     parser.add_argument(
@@ -489,7 +508,8 @@ def parse_args() -> tuple[argparse.Namespace, list[Path]]:
 def retrieve_collections_paths() -> dict[Any, Any]:
     """Retrieve the currently set collection paths.
 
-    :returns: Errors or the configured collection directories
+    Returns:
+        Errors or the configured collection directories
     """
     cmd = ["ansible-config", "dump", "|", "grep", "COLLECTIONS_PATHS"]
     proc_out = run_command(cmd)
@@ -515,10 +535,11 @@ def retrieve_docs(
     # pylint: disable=too-many-locals
     """Extract the docs from the plugins.
 
-    :param collection_cache: The key value interface to a sqlite database
-    :param errors: Previous errors encountered
-    :param missing: Plugins missing from the collection cache
-    :param stats: Statistics related to the collection cataloging process
+    Args:
+        collection_cache: The key value interface to a sqlite database
+        errors: Previous errors encountered
+        missing: Plugins missing from the collection cache
+        stats: Statistics related to the collection cataloging process
     """
     pending_queue = multiprocessing.Manager().Queue()
     completed_queue = multiprocessing.Manager().Queue()
@@ -551,8 +572,12 @@ def retrieve_docs(
 def get_doc_withast(content: Any) -> tuple[Any, Any, Any, Any]:
     """Get the documentation, examples, returndocs, and metadata from the content using ast.
 
-    :param content: The content to parse using ast.
-    :return: A tuple containing the documentation, examples, returndocs, and metadata.
+    Args:
+        content: The content to parse using ast.
+
+    Returns:
+        A tuple containing the documentation, examples, returndocs, and
+        metadata.
     """
     doc, examples, returndocs, metadata = "", "", "", ""
 
@@ -577,8 +602,11 @@ def get_doc_withast(content: Any) -> tuple[Any, Any, Any, Any]:
 def run_command(cmd: list[str]) -> dict[str, str]:
     """Run a command using subprocess.
 
-    :param cmd: The command to run, split
-    :returns: Errors and the stdout from the command run
+    Args:
+        cmd: The command to run, split
+
+    Returns:
+        Errors and the stdout from the command run
     """
     try:
         proc_out = subprocess.run(
@@ -598,7 +626,8 @@ def main() -> dict[Any, Any]:
     # pylint: disable=possibly-used-before-assignment
     """Run the collection catalog process.
 
-    :returns: The results from the completed collection cataloging process
+    Returns:
+        The results from the completed collection cataloging process
     """
     stats = {}
     stats["cache_added_success"] = 0

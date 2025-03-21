@@ -55,7 +55,8 @@ which contains NET-SNMP utilities.
 def image_introspection() -> types.ModuleType:
     """Import the image introspection script using the share directory.
 
-    :returns: Image introspect module
+    Returns:
+        Image introspect module
     """
     cache_scripts()
     cache_dir = generate_cache_path(app_name=APP_NAME)
@@ -72,7 +73,8 @@ def image_introspection() -> types.ModuleType:
 def test_system_packages_parse_one(imported_ii: Any) -> None:
     """Test parsing one package.
 
-    :param imported_ii: Image introspection
+    Args:
+        imported_ii: Image introspection
     """
     command = imported_ii.Command(id="test", parse=lambda x: x, stdout=RPM_OUTPUT)
     imported_ii.SystemPackages().parse(command)
@@ -89,7 +91,8 @@ def test_system_packages_parse_one(imported_ii: Any) -> None:
 def test_system_packages_parse_many(imported_ii: Any) -> None:
     """Test parsing many packages.
 
-    :param imported_ii: Image introspection
+    Args:
+        imported_ii: Image introspection
     """
     count = 10
 

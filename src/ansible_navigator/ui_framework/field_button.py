@@ -34,14 +34,16 @@ class FieldButton:
     def full_prompt(self) -> str:
         """No default to add into the prompt for checkbox.
 
-        :returns: Empty string
+        Returns:
+            Empty string
         """
         return ""
 
     def validate(self, response: FieldValidationStates) -> None:
         """Validate this instance.
 
-        :param response: List of field states for validation.
+        Args:
+            response: List of field states for validation.
         """
         validation = self.validator(response)
         if validation.error_msg:
@@ -52,6 +54,7 @@ class FieldButton:
     def conditional_validation(self, response: FieldValidationStates) -> None:
         """Conditional validation used for form validation.
 
-        :param response: List of field states for validation.
+        Args:
+            response: List of field states for validation.
         """
         self.validate(response)

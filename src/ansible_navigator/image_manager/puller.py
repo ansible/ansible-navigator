@@ -46,10 +46,12 @@ class ImagePuller:
     ) -> None:
         """Initialize the container image puller.
 
-        :param container_engine: The name of the container engine
-        :param image: The name of the image to pull
-        :param arguments: Additional arguments to be appended to the pull policy
-        :param pull_policy: The current pull policy from the settings
+        Args:
+            container_engine: The name of the container engine
+            image: The name of the image to pull
+            arguments: Additional arguments to be appended to the pull
+                policy
+            pull_policy: The current pull policy from the settings
         """
         if isinstance(arguments, list):
             self._arguments = arguments
@@ -93,7 +95,8 @@ class ImagePuller:
     def assessment(self) -> ImageAssessment:
         """Return an image assessment.
 
-        :returns: Image assessment
+        Returns:
+            Image assessment
         """
         return self._assessment
 
@@ -156,9 +159,10 @@ class ImagePuller:
     def _log_message(self, message: str, level: int, hint: bool = False) -> None:
         """Log a message.
 
-        :param message: The message to log
-        :param level: The logging level
-        :param hint: Whether or not the message is a hint
+        Args:
+            message: The message to log
+            level: The logging level
+            hint: Whether or not the message is a hint
         """
         if level == logging.ERROR:
             self._exit_messages.append(ExitMessage(message=message))
@@ -192,7 +196,8 @@ class ImagePuller:
     def _generate_pull_command(self) -> str:
         """Generate the pull command.
 
-        :returns: The command
+        Returns:
+            The command
         """
         command_line = [self._container_engine, "pull"]
         command_line.extend(self._arguments)

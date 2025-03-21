@@ -49,7 +49,8 @@ def test_cli() -> None:
 def test_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test the source of effective settings given some environment variables.
 
-    :param monkeypatch: The pytest monkeypatch fixture
+    Args:
+        monkeypatch: The pytest monkeypatch fixture
     """
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True
@@ -76,7 +77,9 @@ def test_env(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_full(settings_env_var_to_full: tuple[Path, SettingsFileType]) -> None:
     """Test the source of effective settings given a full config.
 
-    :param settings_env_var_to_full: The pytest fixture to provide a full config
+    Args:
+        settings_env_var_to_full: The pytest fixture to provide a full
+            config
     """
     settings = deepcopy(NavigatorConfiguration)
     settings.internals.initializing = True

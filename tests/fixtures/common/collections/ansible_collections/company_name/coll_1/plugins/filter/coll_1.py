@@ -15,7 +15,8 @@ class FilterModule:
     def filters(self) -> dict[str, Any]:
         """Convert an arbitrary string to a valid Candlepin label.
 
-        :returns: converted Candlepin label
+        Returns:
+            converted Candlepin label
         """
         return {
             "filter_1": filter_1,

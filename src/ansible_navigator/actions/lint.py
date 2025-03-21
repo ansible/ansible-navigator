@@ -73,8 +73,11 @@ class Severity(IntEnum):
     def _missing_(cls, value: object) -> Severity:
         """Return unknown if ansible-lint ever returns something unexpected.
 
-        :param value: The value
-        :returns: A severity unknown
+        Args:
+            value: The value
+
+        Returns:
+            A severity unknown
         """
         return Severity.UNKNOWN
 
@@ -82,8 +85,11 @@ class Severity(IntEnum):
 def severity_to_color(severity: str) -> int:
     """Convert severity to curses colors.
 
-    :param severity: The severity to convert to a color
-    :returns: A color for the severity
+    Args:
+        severity: The severity to convert to a color
+
+    Returns:
+        A color for the severity
     """
     if severity == "minor":
         return Color.MAGENTA
@@ -99,10 +105,13 @@ def severity_to_color(severity: str) -> int:
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Color the menu.
 
-    :param colno: The column number
-    :param colname: The column name
-    :param entry: The current content entry
-    :returns: The foreground and background color
+    Args:
+        colno: The column number
+        colname: The column name
+        entry: The current content entry
+
+    Returns:
+        The foreground and background color
     """
     return (severity_to_color(entry["severity"]), Color.BLACK)
 
@@ -110,9 +119,12 @@ def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, in
 def content_heading(obj: dict[Any, Any], screen_w: int) -> CursesLines:
     """Generate the content heading.
 
-    :param obj: The content for which the heading will be generated
-    :param screen_w: The current screen width
-    :returns: The content heading
+    Args:
+        obj: The content for which the heading will be generated
+        screen_w: The current screen width
+
+    Returns:
+        The content heading
     """
     check_line = f"Message: {obj['check_name']}"
     location = f"Location: {obj['issue_path']}"
@@ -137,8 +149,11 @@ def content_heading(obj: dict[Any, Any], screen_w: int) -> CursesLines:
 def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
     """Filter out internal keys.
 
-    :param obj: The content from which the content keys will be filtered
-    :returns: The content without the internal keys
+    Args:
+        obj: The content from which the content keys will be filtered
+
+    Returns:
+        The content without the internal keys
     """
     ignored_keys = ("fingerprint",)
     return {k: v for k, v in obj.items() if not k.startswith("__") and k not in ignored_keys}
@@ -147,8 +162,11 @@ def filter_content_keys(obj: dict[Any, Any]) -> dict[Any, Any]:
 def massage_issue(issue: dict[Any, Any]) -> dict[Any, Any]:
     """Massage an issue by injecting some useful keys with strings for rendering.
 
-    :param issue: The issue reported
-    :returns: The issue reformatted
+    Args:
+        issue: The issue reported
+
+    Returns:
+        The issue reformatted
     """
     massaged = issue.copy()
     massaged["__severity"] = massaged["severity"].capitalize()
@@ -186,7 +204,8 @@ class Action(ActionBase):
     def __init__(self, args: ApplicationConfiguration) -> None:
         """Initialize the action.
 
-        :param args: The current application configuration
+        Args:
+            args: The current application configuration
         """
         self._modification_times_last_updated: datetime
         self._success_notification_shown: bool = False
@@ -204,15 +223,19 @@ class Action(ActionBase):
     def is_interactive(self) -> bool:
         """Determine if interactive.
 
-        :returns: An indication is running in interactive mode
+        Returns:
+            An indication is running in interactive mode
         """
         return bool(self._args.mode == "interactive")
 
     def _fatal(self, msg: str) -> None:
         """Show a notification if a fatal error has occurred.
 
-        :param msg: The message to display
-        :raises RuntimeError: A runtime error if not mode interactive
+        Args:
+            msg: The message to display
+
+        Raises:
+            RuntimeError: A runtime error if not mode interactive
         """
         self._logger.error(msg)
 
@@ -225,7 +248,8 @@ class Action(ActionBase):
     def _run_runner(self) -> tuple[str, str, int]:
         """Spin up runner to run ansible-lint, either in an exec env or not.
 
-        :returns: The output, errors and return code
+        Returns:
+            The output, errors and return code
         """
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -278,7 +302,8 @@ class Action(ActionBase):
     def run_stdout(self) -> RunStdoutReturn:
         """Execute the ``doc`` request for mode stdout.
 
-        :returns: A message and return code
+        Returns:
+            A message and return code
         """
         self._logger.debug("lint requested in stdout mode")
         _output, _error, return_code = self._run_runner()
@@ -286,15 +311,17 @@ class Action(ActionBase):
 
     @staticmethod
     def _pull_out_json_or_fatal(stdout: str) -> str | None:
-        """
-        Attempt to pull out JSON line from ansible-lint raw output.
+        """Attempt to pull out JSON line from ansible-lint raw output.
 
         Note that stdout and stderr get munged together by docker/podman, so we
         need to do some trickery to try to figure out the actual JSON line vs,
         say, ansible warnings.
 
-        :param stdout: The stdout from the lint invocation
-        :returns: The json string
+        Args:
+            stdout: The stdout from the lint invocation
+
+        Returns:
+            The json string
         """
         # We want the last (non empty) line of output. This should hopefully be
         # the JSON we need.
@@ -307,9 +334,13 @@ class Action(ActionBase):
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``lint`` request for mode interactive.
 
-        :param interaction: The interaction from the user
-        :param app: The app instance
-        :returns: The pending :class:`~ansible_navigator.ui_framework.ui.Interaction` or
+        Args:
+            interaction: The interaction from the user
+            app: The app instance
+
+        Returns:
+            The pending
+            :class:`~ansible_navigator.ui_framework.ui.Interaction` or
             :data:`None`
         """
         self._logger.debug("lint requested")
@@ -369,7 +400,8 @@ class Action(ActionBase):
     def _max_severity_color(self) -> int:
         """Determine the color of the maximum severity issue.
 
-        :returns: The color
+        Returns:
+            The color
         """
         max_severity = max(Severity[i["severity"].upper()].value for i in self._issues_menu.value)
         return severity_to_color(Severity(max_severity).name.lower())
@@ -407,7 +439,8 @@ class Action(ActionBase):
     def _build_issues_menu(self) -> None:
         """Build the menu of all issues.
 
-        :returns: Indication of success
+        Returns:
+            Indication of success
         """
         output, _error, return_code = self._run_runner()
         self._logger.debug("Output from ansible-lint run (rc=%d): %s", return_code, output)
@@ -466,7 +499,8 @@ class Action(ActionBase):
     def _build_issue_content(self) -> Step:
         """Build the content for one plugin.
 
-        :returns: The plugin's content
+        Returns:
+            The plugin's content
         """
         return Step(
             name="issue_content",
@@ -478,7 +512,8 @@ class Action(ActionBase):
     def _rerun_needed(self) -> bool:
         """Add a modification timestamp to each issue, check for changes.
 
-        :returns: Indication if lint should be rerun
+        Returns:
+            Indication if lint should be rerun
         """
         rerun_lint = False
         checked_paths = []

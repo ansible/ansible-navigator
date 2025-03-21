@@ -20,10 +20,15 @@ def in_place_list_replace(left: Mergeable, right: Mergeable) -> Mergeable:
     If left and right have a common key, they will be dict merged
     If left is missing a key from right, the key from right will be added
 
-    :param left: Dict to be merged into
-    :param right: Dict to be merged from
-    :raises DictMergeError: If merging cannot be done
-    :return: Merged dict
+    Args:
+        left: Dict to be merged into
+        right: Dict to be merged from
+
+    Raises:
+        DictMergeError: If merging cannot be done
+
+    Returns:
+        Merged dict
     """
     key = None
     try:

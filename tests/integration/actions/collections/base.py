@@ -99,8 +99,9 @@ class BaseClass:
     ) -> Generator[TmuxSession, None, None]:
         """Tmux fixture for this module.
 
-        :param request: The request for this fixture
-        :param os_independent_tmp: An OS independent tmp directory
+        Args:
+            request: The request for this fixture
+            os_independent_tmp: An OS independent tmp directory
         :yields: A tmux session
         """
         tmp_coll_dir = Path(os_independent_tmp) / request.node.name / ""
@@ -135,11 +136,14 @@ class BaseClass:
     ) -> None:
         """Run the tests for ``collections``, mode and ``ee`` set in child class.
 
-        :param os_independent_tmp: An OS independent tmp directory
-        :param request: The request for this fixture
-        :param step: The UI test step
-        :param tmux_session: A tmux session
-        :raises ValueError: If test mode is not set
+        Args:
+            os_independent_tmp: An OS independent tmp directory
+            request: The request for this fixture
+            step: The UI test step
+            tmux_session: A tmux session
+
+        Raises:
+            ValueError: If test mode is not set
         """
         if step.search_within_response is SearchFor.HELP:
             search_within_response = ":help help"

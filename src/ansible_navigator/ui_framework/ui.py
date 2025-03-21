@@ -87,8 +87,9 @@ class ContentFormatCallable(Protocol):
     ) -> ContentFormat:
         """Refer to and keep in sync with UserInterface.content_format.
 
-        :param value: The value refers to the UI content format
-        :param default: The default UI content format
+        Args:
+            value: The value refers to the UI content format
+            default: The default UI content format
         """
 
 
@@ -109,14 +110,15 @@ class ShowCallable(Protocol):
     ) -> Interaction:
         """Refer to and keep in sync with UserInterface.show.
 
-        :param obj: The inbound object
-        :param content_format: Refers to the content format
-        :param index: The indices of objects
-        :param columns: Refers to the menu column
-        :param await_input: Should we wait for user input?
-        :param filter_content_keys: The filter content keys
-        :param color_menu_item: To color the menu item
-        :param content_heading: Refers to the content heading
+        Args:
+            obj: The inbound object
+            content_format: Refers to the content format
+            index: The indices of objects
+            columns: Refers to the menu column
+            await_input: Should we wait for user input?
+            filter_content_keys: The filter content keys
+            color_menu_item: To color the menu item
+            content_heading: Refers to the content heading
         """
 
 
@@ -158,12 +160,14 @@ class UserInterface(CursesWindow):
     ) -> None:
         """Initialize the user interface.
 
-        :param screen_min_height: The minimum screen height
-        :param kegexes: A callable producing a list of action regular expressions to match against
-        :param refresh: The screen refresh time is ms
-        :param ui_config: The current UI configuration
-        :param progress_bar_width: The width of the progress bar
-        :param status_width: The width of the status indicator
+        Args:
+            screen_min_height: The minimum screen height
+            kegexes: A callable producing a list of action regular
+                expressions to match against
+            refresh: The screen refresh time is ms
+            ui_config: The current UI configuration
+            progress_bar_width: The width of the progress bar
+            status_width: The width of the status indicator
         """
         super().__init__(ui_config=ui_config)
         self._color_menu_item: Callable[[int, str, dict[str, Any]], tuple[int, int]]
@@ -215,8 +219,9 @@ class UserInterface(CursesWindow):
     def update_status(self, status: str = "", status_color: int = 0) -> None:
         """Update the status.
 
-        :param status: The string of status information
-        :param status_color: The color of status
+        Args:
+            status: The string of status information
+            status_color: The color of status
         """
         self._status = status
         self._status_color = status_color
@@ -224,8 +229,11 @@ class UserInterface(CursesWindow):
     def menu_filter(self, value: str | None = "") -> Pattern[str] | None:
         """Set or return the menu filter.
 
-        :param value: None or the menu_filter regex to set
-        :returns: the current menu filter
+        Args:
+            value: None or the menu_filter regex to set
+
+        Returns:
+            the current menu filter
         """
         if value != "":
             if value is None:
@@ -241,9 +249,14 @@ class UserInterface(CursesWindow):
     def scroll(self, value: int | None = None) -> int:
         """Set or return the current scroll.
 
-        :param value: the value to set the scroll to
-        :raises TypeError: raise exception here
-        :returns: the current scroll
+        Args:
+            value: the value to set the scroll to
+
+        Raises:
+            TypeError: raise exception here
+
+        Returns:
+            the current scroll
         """
         if value is not None:
             if not isinstance(value, int):
@@ -258,9 +271,12 @@ class UserInterface(CursesWindow):
     ) -> ContentFormat:
         """Set or return the current content format.
 
-        :param value: The value to set the content format to
-        :param default: The default content format
-        :returns: The current content format
+        Args:
+            value: The value to set the content format to
+            default: The default content format
+
+        Returns:
+            The current content format
         """
         if value is not None:
             self._content_format = value
@@ -272,7 +288,8 @@ class UserInterface(CursesWindow):
     def _ui(self) -> Ui:
         """Limit the callables the actions can access.
 
-        :returns: A tuple of available functions
+        Returns:
+            A tuple of available functions
         """
         res = Ui(
             clear=self.clear,
@@ -288,8 +305,11 @@ class UserInterface(CursesWindow):
     def _footer(self, key_dict: dict[Any, Any]) -> CursesLine:
         """Build a footer from the key dict spread the columns out evenly.
 
-        :param key_dict: the keys and their description
-        :returns: The footer line
+        Args:
+            key_dict: the keys and their description
+
+        Returns:
+            The footer line
         """
         column_widths = [len(f"{k!s}: {v!s}") for k, v in key_dict.items()]
         status_width = self._progress_bar_width if self._status else 0
@@ -347,11 +367,12 @@ class UserInterface(CursesWindow):
     ) -> None:
         """Add a scroll bar if the length of the content is longer than the viewport height.
 
-        :param viewport_height: The height of the viewport
-        :param len_heading: The height of the heading
-        :param menu_size: The number of lines in the content
-        :param body_start: Where we are in the body
-        :param body_stop: The end of the body
+        Args:
+            viewport_height: The height of the viewport
+            len_heading: The height of the heading
+            menu_size: The number of lines in the content
+            body_start: Where we are in the body
+            body_stop: The end of the body
         """
         start_scroll_bar = body_start / menu_size * viewport_height
         stop_scroll_bar = body_stop / menu_size * viewport_height
@@ -376,7 +397,8 @@ class UserInterface(CursesWindow):
     def _get_input_line(self) -> str:
         """Get one line of input from the user.
 
-        :returns: the lines
+        Returns:
+            the lines
         """
         self.disable_refresh()
         form_field = FieldText(name="one_line", prompt="")
@@ -417,14 +439,17 @@ class UserInterface(CursesWindow):
         # pylint: disable=too-many-locals
         """Show something on the screen.
 
-        :param lines: The lines to show
-        :param line_numbers: The number of lines to show
-        :param heading: The headers to show
-        :param indent_heading: The indentation of heading
-        :param key_dict: any supplemental key to show
-        :param await_input: Should we wait for a key
-        :param count: The count to show
-        :returns: the key pressed
+        Args:
+            lines: The lines to show
+            line_numbers: The number of lines to show
+            heading: The headers to show
+            indent_heading: The indentation of heading
+            key_dict: any supplemental key to show
+            await_input: Should we wait for a key
+            count: The count to show
+
+        Returns:
+            the key pressed
         """
         heading = heading or CursesLines(())
         heading_len = len(heading)
@@ -519,9 +544,13 @@ class UserInterface(CursesWindow):
     ) -> tuple[str, Action] | tuple[None, None]:
         """Attempt to template & match the user input against the kegexes.
 
-        :param entry: the user input
-        :param current: the content on the screen
-        :returns: The name of the action and the action to call or nothing if no match found
+        Args:
+            entry: the user input
+            current: the content on the screen
+
+        Returns:
+            The name of the action and the action to call or nothing if
+            no match found
         """
         if (
             not entry.startswith("{{") and "{{" in entry and "}}" in entry
@@ -552,8 +581,11 @@ class UserInterface(CursesWindow):
     def _serialize_color(self, obj: Any) -> CursesLines:
         """Serialize, if necessary and color an obj.
 
-        :param obj: the object to color
-        :returns: The generated lines
+        Args:
+            obj: the object to color
+
+        Returns:
+            The generated lines
         """
         if self.content_format() is ContentFormat.ANSI:
             return self._colorizer.render_ansi(doc=obj)
@@ -583,7 +615,8 @@ class UserInterface(CursesWindow):
         Maintain a mapping of RGB colors
         to curses colors in self._rgb_to_curses_color_idx
 
-        :param lines: The from which colors will be cached and initialized
+        Args:
+            lines: The from which colors will be cached and initialized
         """
         if curses.COLORS > 16 and self._term_osc4_support:
             unique_colors = list(
@@ -616,24 +649,33 @@ class UserInterface(CursesWindow):
     def _color_decorate_lines(self, lines: list[list[SimpleLinePart]]) -> CursesLines:
         """Color and decorate each of the lines.
 
-        :param lines: The lines to transform
-        :returns: All lines colored
+        Args:
+            lines: The lines to transform
+
+        Returns:
+            All lines colored
         """
         return CursesLines(tuple(self._color_decorate_line(line) for line in lines))
 
     def _color_decorate_line(self, line: list[SimpleLinePart]) -> CursesLine:
         """Color and decorate one line.
 
-        :param line: The line to color
-        :returns: One line colored
+        Args:
+            line: The line to color
+
+        Returns:
+            One line colored
         """
         return CursesLine(tuple(self._color_decorate_line_part(line_part) for line_part in line))
 
     def _color_decorate_line_part(self, line_part: SimpleLinePart) -> CursesLinePart:
         """Color and decorate one line part.
 
-        :param line_part: One line part
-        :returns: One line part colored
+        Args:
+            line_part: One line part
+
+        Returns:
+            One line part colored
         """
         if line_part.color:
             if self._term_osc4_support and curses.COLORS > 16:
@@ -655,8 +697,11 @@ class UserInterface(CursesWindow):
     def _filter_and_serialize(self, obj: Any) -> tuple[CursesLines | None, CursesLines]:
         """Filter an obj and serialize.
 
-        :param obj: the obj to serialize
-        :returns: the serialize lines ready for display
+        Args:
+            obj: the obj to serialize
+
+        Returns:
+            the serialize lines ready for display
         """
         heading = self._content_heading(obj, self._screen_width)
         filtered_obj = self._filter_content_keys(obj) if self._hide_keys else obj
@@ -666,8 +711,11 @@ class UserInterface(CursesWindow):
     def _show_form(self, obj: Form) -> Form:
         """Show a form on the display.
 
-        :param obj: The form to show
-        :returns: The form
+        Args:
+            obj: The form to show
+
+        Returns:
+            The form
         """
         res = obj.present(screen=self._screen, ui_config=self._ui_config)
         return res
@@ -681,10 +729,13 @@ class UserInterface(CursesWindow):
         # pylint: disable=too-many-locals
         """Show an object on the display.
 
-        :param objs: A list of one or more object
-        :param index: The index associated with an object
-        :param await_input: Should we wait for user input before returning
-        :returns: interaction with the user
+        Args:
+            objs: A list of one or more object
+            index: The index associated with an object
+            await_input: Should we wait for user input before returning
+
+        Returns:
+            interaction with the user
         """
         heading, lines = self._filter_and_serialize(objs[index])
         while True:
@@ -773,9 +824,12 @@ class UserInterface(CursesWindow):
     def _obj_match_filter(self, obj: dict[Any, Any], columns: list[str]) -> bool:
         """Check columns in a dictionary against a regex.
 
-        :param obj: The dict to check
-        :param columns: The dicts keys to check
-        :returns: True if a match else False
+        Args:
+            obj: The dict to check
+            columns: The dicts keys to check
+
+        Returns:
+            True if a match else False
         """
         return any(self._search_value(self.menu_filter(), obj.get(key)) for key in columns)
 
@@ -784,9 +838,12 @@ class UserInterface(CursesWindow):
     def _search_value(regex: Pattern[str], value: str) -> Match[str] | None:
         """Check a str against a regex.
 
-        :param regex: the compiled regex
-        :param value: the string to check
-        :returns: the match if made
+        Args:
+            regex: the compiled regex
+            value: the string to check
+
+        Returns:
+            the match if made
         """
         return regex.search(str(value))
 
@@ -798,10 +855,13 @@ class UserInterface(CursesWindow):
     ) -> tuple[CursesLines, CursesLines]:
         """Build the menu.
 
-        :param current: A dict
-        :param columns: The keys from the dictionary to use as columns
-        :param indices: The indices associated with items
-        :returns: The heading and menu items
+        Args:
+            current: A dict
+            columns: The keys from the dictionary to use as columns
+            indices: The indices associated with items
+
+        Returns:
+            The heading and menu items
         """
         menu_builder = MenuBuilder(
             progress_bar_width=self._progress_bar_width,
@@ -821,10 +881,13 @@ class UserInterface(CursesWindow):
     ) -> Interaction:
         """Show a menu on the screen.
 
-        :param current: A dict
-        :param columns: The keys from the dictionary to use as columns
-        :param await_input: Should we wait for user input?
-        :returns: Interaction with the user
+        Args:
+            current: A dict
+            columns: The keys from the dictionary to use as columns
+            await_input: Should we wait for user input?
+
+        Returns:
+            Interaction with the user
         """
         while True:
             if self.scroll() == 0:
@@ -888,15 +951,19 @@ class UserInterface(CursesWindow):
     ) -> Interaction:
         """Show something on the screen.
 
-        :param obj: The inbound object
-        :param content_format: Set the content format
-        :param index: When obj is a list, show this entry
-        :param columns: When obj is a list of dicts, use these keys for menu columns
-        :param await_input: Should we wait for user input?
-        :param filter_content_keys: To show the filter content keys
-        :param color_menu_item: To show the colored menu item
-        :param content_heading: Show the content heading
-        :returns: interaction with the user
+        Args:
+            obj: The inbound object
+            content_format: Set the content format
+            index: When obj is a list, show this entry
+            columns: When obj is a list of dicts, use these keys for
+                menu columns
+            await_input: Should we wait for user input?
+            filter_content_keys: To show the filter content keys
+            color_menu_item: To show the colored menu item
+            content_heading: Show the content heading
+
+        Returns:
+            interaction with the user
         """
         self._color_menu_item = color_menu_item
         self._content_heading = content_heading
@@ -915,8 +982,11 @@ class UserInterface(CursesWindow):
     def show_form(self, form: Form) -> Form:
         """Show a form on using the user interface.
 
-        :param form: The form to show
-        :returns: The form populated with the response
+        Args:
+            form: The form to show
+
+        Returns:
+            The form populated with the response
         """
         form_result = self._show_form(form)
         return form_result

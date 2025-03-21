@@ -15,8 +15,11 @@ from _pytest.mark.structures import ParameterSet
 def d2t(dictionary: dict[Any, Any]) -> tuple[Any, ...]:
     """Turn the data dictionary into a frozen set so they are immutable.
 
-    :param dictionary: Data to be a tuple
-    :returns: Data dict as a tuple
+    Args:
+        dictionary: Data to be a tuple
+
+    Returns:
+        Data dict as a tuple
     """
     return tuple(dictionary.items())
 
@@ -201,7 +204,8 @@ CLI_DATA_RUN: list[tuple[str, dict[Any, Any]]] = [
 def cli_data() -> Generator[ParameterSet, None, None]:
     """Turn them all into tuples.
 
-    :returns: CLI data in tuples
+    Returns:
+        CLI data in tuples
     """
     aggregated = (
         CLI_DATA_COLLECTIONS
