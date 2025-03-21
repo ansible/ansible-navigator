@@ -10,8 +10,6 @@ from typing import ClassVar
 from typing import NewType
 from typing import TypeVar
 
-from typing_extensions import Self
-
 from ansible_navigator.content_defs import ContentBase
 
 from .definitions import CliParameters
@@ -46,7 +44,7 @@ class PresentableCliParameters:
         cls,
         cli_parameters: CliParameters | None,
         name_dashed: str,
-    ) -> Self:
+    ) -> PresentableCliParameters:
         """Create an ``_HRCliParameters`` based on an entry's cli parameters.
 
         Args:
@@ -123,7 +121,7 @@ class PresentableSettingsEntry(ContentBase[Any]):
         all_subcommands: list[str],
         application_name: str,
         internals: Internals,
-    ) -> Self:
+    ) -> PresentableSettingsEntry:
         """Create an ``PresentableSettingsEntry`` containing the details for the settings file.
 
         Args:
@@ -161,7 +159,7 @@ class PresentableSettingsEntry(ContentBase[Any]):
         application_name_dashed: str,
         entry: SettingsEntry,
         settings_file_path: str,
-    ) -> Self:
+    ) -> PresentableSettingsEntry:
         """Create an ``PresentableSettingsEntry`` containing the details for one settings entry.
 
         Args:
