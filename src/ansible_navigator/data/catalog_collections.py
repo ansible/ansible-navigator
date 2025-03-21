@@ -622,7 +622,6 @@ def run_command(cmd: list[str]) -> dict[str, str]:
 
 
 def main() -> dict[Any, Any]:
-    # pylint: disable=protected-access
     # pylint: disable=possibly-used-before-assignment
     """Run the collection catalog process.
 

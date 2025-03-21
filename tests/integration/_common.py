@@ -230,7 +230,7 @@ def copytree(
     Raises:
         Error: If an error occurs
     """
-    names = os.listdir(src)
+    names = os.listdir(src)  # noqa: PTH208
     ignored_names = ignore(src, names) if ignore is not None else set()
 
     dst.mkdir(parents=True, exist_ok=dirs_exist_ok)

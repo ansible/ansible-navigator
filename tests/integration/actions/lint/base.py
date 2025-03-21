@@ -37,7 +37,9 @@ class BaseClass:
 
         Args:
             request: Pytest request object
-        :yields: TmuxSession object
+
+        Yields:
+            TmuxSession object
         """
         params: TmuxSessionKwargs = {
             "request": request,
@@ -58,6 +60,7 @@ class BaseClass:
             request: Pytest request object
             tmux_session: TmuxSession fixture
             step: UiTestStep object
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
         """
         search_within_response: str | list[str]
         if step.search_within_response is SearchFor.HELP:

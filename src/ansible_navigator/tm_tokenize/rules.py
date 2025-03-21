@@ -31,8 +31,7 @@ Captures = tuple[tuple[int, "_Rule"], ...]  # declared later
 def _split_name(s: str | None) -> tuple[str, ...]:
     if s is None:
         return ()
-    else:
-        return tuple(s.split())
+    return tuple(s.split())
 
 
 class CompiledRule(Protocol):
@@ -176,15 +175,13 @@ class EndRule(NamedTuple):
         end_match = state.cur.reg.search(line, pos, first_line, boundary)
         if end_match is not None and end_match.start() == pos:
             return self._end_ret(compiler, state, pos, end_match)
-        elif end_match is None:
+        if end_match is None:
             idx, match = self.regset.search(line, pos, first_line, boundary)
             return do_regset(idx, match, self, compiler, state, pos)
-        else:
-            idx, match = self.regset.search(line, pos, first_line, boundary)
-            if match is None or end_match.start() <= match.start():
-                return self._end_ret(compiler, state, pos, end_match)
-            else:
-                return do_regset(idx, match, self, compiler, state, pos)
+        idx, match = self.regset.search(line, pos, first_line, boundary)
+        if match is None or end_match.start() <= match.start():
+            return self._end_ret(compiler, state, pos, end_match)
+        return do_regset(idx, match, self, compiler, state, pos)
 
 
 @uniquely_constructed

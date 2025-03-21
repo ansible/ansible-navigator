@@ -420,12 +420,6 @@ src/ansible_navigator/utils/json_schema.py
 src/ansible_navigator/utils/key_value_store.py
     DOC501: Method `KeyValueStore.__len__` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Method `KeyValueStore.__len__` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
-    DOC402: Method `KeyValueStore.iterkeys` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `KeyValueStore.iterkeys` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC402: Method `KeyValueStore.itervalues` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `KeyValueStore.itervalues` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC402: Method `KeyValueStore.iteritems` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `KeyValueStore.iteritems` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
 --------------------
 src/ansible_navigator/utils/packaged_data.py
     DOC601: Class `ImageEntry`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -458,12 +452,6 @@ src/ansible_navigator/utils/version_migration/v1_v2_settings_file.py
     DOC603: Class `V1V2SettingsFile`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [migration_type: MigrationType, name: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
 --------------------
 tests/conftest.py
-    DOC402: Function `locked_directory` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Function `locked_directory` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC402: Function `pullable_image` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Function `pullable_image` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC402: Function `cmd_in_tty` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Function `cmd_in_tty` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
     DOC201: Method `TCmdInTty.__call__` does not have a return section in docstring
     DOC101: Function `is_config_empty`: Docstring contains fewer arguments than in function signature.
     DOC103: Function `is_config_empty`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [filename: Path].
@@ -502,10 +490,6 @@ tests/integration/_tmux_session.py
 tests/integration/actions/collections/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [pane_height: , pane_width: , update_fixtures: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/collections/test_direct_interactive_ee.py
@@ -531,10 +515,6 @@ tests/integration/actions/collections/test_welcome_interactive_noee.py
 tests/integration/actions/config/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [PANE_HEIGHT: , PANE_WIDTH: , UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/config/test_direct_interactive_ee.py
@@ -568,10 +548,6 @@ tests/integration/actions/config/test_welcome_interactive_specified_config.py
 tests/integration/actions/doc/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [TEST_FOR_MODE: str | None, UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_doc_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_doc_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: bool | None].
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/doc/test_direct_interactive_ee.py
@@ -617,21 +593,13 @@ tests/integration/actions/doc/test_welcome_interactive_noee.py
 tests/integration/actions/exec/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [config_file: Path | None, pane_height: , pane_width: , update_fixtures: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
     DOC501: Method `BaseClass.fixture_tmux_session` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Method `BaseClass.fixture_tmux_session` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/images/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/images/test_direct_interactive_ee.py
@@ -653,10 +621,6 @@ tests/integration/actions/images/test_welcome_interactive_noee.py
 tests/integration/actions/inventory/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/inventory/test_direct_interactive_ee.py
@@ -702,10 +666,6 @@ tests/integration/actions/inventory/test_welcome_interactive_noee.py
 tests/integration/actions/lint/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC501: Method `BaseClass.test` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
 --------------------
@@ -732,8 +692,6 @@ tests/integration/actions/lint/test_welcome_interactive_noee.py
 tests/integration/actions/replay/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
     DOC501: Method `BaseClass.test` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
 --------------------
@@ -756,10 +714,6 @@ tests/integration/actions/replay/test_welcome_interactive_noee.py
 tests/integration/actions/run/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [TEST_FOR_MODE: str | None, UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC501: Method `BaseClass.test` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
 --------------------
@@ -790,10 +744,6 @@ tests/integration/actions/run/test_welcome_interactive_noee.py
 tests/integration/actions/run_unicode/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [TEST_FOR_MODE: str | None, UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC501: Method `BaseClass.test` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
 --------------------
@@ -808,10 +758,6 @@ tests/integration/actions/run_unicode/test_direct_interactive_noee.py
 tests/integration/actions/settings/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [PANE_HEIGHT: , PANE_WIDTH: , UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/settings/test_direct_interactive_ee.py
@@ -833,10 +779,6 @@ tests/integration/actions/settings/test_welcome_interactive_noee.py
 tests/integration/actions/templar/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [TEST_FOR_MODE: str | None, UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC402: Method `BaseClass.fixture_tmux_session` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Method `BaseClass.fixture_tmux_session` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC101: Method `BaseClass.test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `BaseClass.test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
     DOC501: Method `BaseClass.test` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
 --------------------
@@ -862,11 +804,6 @@ tests/integration/actions/templar/test_welcome_interactive_noee.py
 --------------------
 tests/integration/conftest.py
     DOC402: Function `action_run_stdout` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Function `action_run_stdout` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
---------------------
-tests/integration/diagnostics/test_from_cli.py
-    DOC101: Function `test`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [skip_if_already_failed: None].
 --------------------
 tests/integration/settings_from_cli/test_json_schema_errors.py
     DOC601: Class `Scenario`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -1215,10 +1152,6 @@ tests/unit/test_catalog_collections.py
     DOC501: Function `test_worker_with_invalid_plugin_path` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Function `test_worker_with_invalid_plugin_path` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
 --------------------
-tests/unit/test_circular_imports.py
-    DOC402: Function `_discover_path_importables` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Function `_discover_path_importables` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
---------------------
 tests/unit/test_cli.py
     DOC101: Function `test_update_args_general`: Docstring contains fewer arguments than in function signature.
     DOC103: Function `test_update_args_general`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [_mf1: Any].
@@ -1286,12 +1219,6 @@ tests/unit/ui_framework/test_progress_bar.py
     DOC503: Function `test_dataclass_running` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
     DOC501: Function `test_dataclass_complete` has raise/assert statements, but the docstring does not have a "Raises" section
     DOC503: Function `test_dataclass_complete` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)'].
---------------------
-tests/unit/utils/conftest.py
-    DOC402: Function `empty_kvs` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Function `empty_kvs` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
-    DOC402: Function `kvs` has "yield" statements, but the docstring does not have a "Yields" section
-    DOC404: Function `kvs` yield type(s) in docstring not consistent with the return annotation. Return annotation exists, but docstring "yields" section does not exist or has 0 type(s).
 --------------------
 tests/unit/utils/test_dict_merge.py
     DOC501: Function `test_in_place_list_replace_basic` has raise/assert statements, but the docstring does not have a "Raises" section

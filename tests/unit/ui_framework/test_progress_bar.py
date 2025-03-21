@@ -55,7 +55,7 @@ def test_dataclass_running() -> None:
     test_data = ContentTest(progress="30%")
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)
     assert test_data.progress == "▇▇▇       "
-    assert test_data._progress == "30%"  # pylint: disable=protected-access
+    assert test_data._progress == "30%"
     assert test_data.other == "test_value"
 
 
@@ -64,5 +64,5 @@ def test_dataclass_complete() -> None:
     test_data = ContentTest(progress="100%")
     convert_percentage(content=test_data, columns=["progress"], progress_bar_width=10)
     assert test_data.progress == " Complete "
-    assert test_data._progress == "100%"  # pylint: disable=protected-access
+    assert test_data._progress == "100%"
     assert test_data.other == "test_value"

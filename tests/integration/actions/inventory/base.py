@@ -64,7 +64,9 @@ class BaseClass:
 
         Args:
             request: A fixture providing details about the test caller
-        :yields: Tmux session
+
+        Yields:
+            Tmux session
         """
         with TmuxSession(
             setup_commands=[
@@ -91,6 +93,7 @@ class BaseClass:
             request: A fixture providing details about the test caller
             tmux_session: The tmux session to use
             step: Step index to use
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
 
         Raises:
             ValueError: When the test mode is not set

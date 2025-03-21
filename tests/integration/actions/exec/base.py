@@ -44,7 +44,9 @@ class BaseClass:
 
         Args:
             request: The request for this fixture
-        :yields: A tmux session
+
+        Yields:
+            A tmux session
         """
         params: TmuxSessionKwargs = {
             "request": request,
@@ -71,6 +73,7 @@ class BaseClass:
             request: The test request
             tmux_session: The tmux session
             step: A step within a series of tests
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
 
         Raises:
             ValueError: If test mode isn't set

@@ -124,7 +124,9 @@ def locked_directory(tmpdir: str) -> Generator[str]:
 
     Args:
         tmpdir: Fixture for temporary directory
-    :yields: The temporary directory
+
+    Yields:
+        The temporary directory
     """
     Path(tmpdir).chmod(0o000)
     yield tmpdir
@@ -137,7 +139,9 @@ def pullable_image(valid_container_engine: str) -> Generator[str]:
 
     Args:
         valid_container_engine: Fixture for a valid container engine
-    :yields: The image name
+
+    Yields:
+        The image name
     """
     image = ImageEntry.PULLABLE_IMAGE.get(app_name=APP_NAME)
     yield image
@@ -328,7 +332,8 @@ def _cmd_in_tty(
 def cmd_in_tty() -> Generator[Callable[..., tuple[str, str, int]]]:
     """Provide the cmd in tty function as a fixture.
 
-    :yields: The cmd_in_tty function
+    Yields:
+        The cmd_in_tty function
     """
     yield _cmd_in_tty
 

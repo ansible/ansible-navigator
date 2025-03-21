@@ -80,7 +80,6 @@ class ActionRunner(ActionBase):
         )
 
     def run(self, _screen: Window) -> None:
-        # pylint: disable=protected-access
         """Run the app.
 
         Initialize the UI.

@@ -14,9 +14,6 @@ from ansible_navigator.configuration_subsystem.navigator_post_processor import (
 )
 
 
-# pylint: disable=protected-access
-
-
 def test_import_error() -> None:
     """Ensure an error for invalid action_package."""
     test_config = ApplicationConfiguration(
