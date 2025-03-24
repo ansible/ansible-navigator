@@ -107,7 +107,6 @@ def test_parse_and_merge(
     dump_output: str,
     expected_config: list[str],
 ) -> None:
-    # pylint: disable=protected-access
     """Test _parse_and_merge method of config class."""
     args = deepcopy(NavigatorConfiguration)
     run_action = action(args=args)

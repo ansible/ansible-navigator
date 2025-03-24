@@ -31,7 +31,9 @@ class BaseClass:
 
         Args:
             request: A fixture providing details about the test caller
-        :yields: Tmux session
+
+        Yields:
+            Tmux session
         """
         with TmuxSession(
             config_path=Path(TEST_CONFIG_FILE),

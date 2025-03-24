@@ -80,7 +80,6 @@ PostProcessorReturn = tuple[list[LogMessage], list[ExitMessage]]
 
 
 class NavigatorPostProcessor:
-    # pylint:disable=too-many-public-methods
     """Application post processor."""
 
     def __init__(self) -> None:

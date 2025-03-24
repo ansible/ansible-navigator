@@ -102,7 +102,9 @@ class BaseClass:
         Args:
             request: The request for this fixture
             os_independent_tmp: An OS independent tmp directory
-        :yields: A tmux session
+
+        Yields:
+            A tmux session
         """
         tmp_coll_dir = Path(os_independent_tmp) / request.node.name / ""
         Path(tmp_coll_dir).mkdir(parents=True, exist_ok=True)
@@ -141,6 +143,7 @@ class BaseClass:
             request: The request for this fixture
             step: The UI test step
             tmux_session: A tmux session
+            skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
 
         Raises:
             ValueError: If test mode is not set

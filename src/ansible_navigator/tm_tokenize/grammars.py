@@ -54,7 +54,7 @@ class Grammars:
             Path(filename).stem: Path(directory) / filename
             for directory in directories
             if Path(directory).exists()
-            for filename in sorted(os.listdir(directory))
+            for filename in sorted(os.listdir(directory))  # noqa: PTH208
             if filename.endswith(".json")
         }
 

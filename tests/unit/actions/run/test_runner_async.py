@@ -143,8 +143,8 @@ def test_runner_args(mocker: MockerFixture, data: Scenario) -> None:
     )
 
     run = action(args=args)
-    run._queue = TEST_QUEUE  # pylint: disable=protected-access
+    run._queue = TEST_QUEUE
     with pytest.raises(TestRunnerError):
-        run._run_runner()  # pylint: disable=protected-access
+        run._run_runner()
 
     command_async.assert_called_once_with(**data.expected)

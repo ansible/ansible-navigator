@@ -180,8 +180,8 @@ def test_tag_parsing(image: str, expected_tag: str) -> None:
         arguments=Constants.NOT_SET,
         pull_policy="tag",
     )
-    image_puller._extract_tag()  # pylint: disable=protected-access
-    assert image_puller._image_tag == expected_tag  # pylint: disable=protected-access
+    image_puller._extract_tag()
+    assert image_puller._image_tag == expected_tag
 
 
 def test_pull_with_args() -> None:
@@ -192,7 +192,7 @@ def test_pull_with_args() -> None:
         arguments=["--tls-verify false"],
         pull_policy="tag",
     )
-    result = image_puller._generate_pull_command()  # pylint: disable=protected-access
+    result = image_puller._generate_pull_command()
     expected_string = "podman pull --tls-verify false my_image"
     assert result == expected_string
     expected_list = ["podman", "pull", "--tls-verify", "false", "my_image"]
@@ -207,7 +207,7 @@ def test_pull_with_env_arg() -> None:
         arguments=["--authfile", "${XDG_RUNTIME_DIR}/containers/auth.json"],
         pull_policy="tag",
     )
-    result = image_puller._generate_pull_command()  # pylint: disable=protected-access
+    result = image_puller._generate_pull_command()
     cmd_to_run = f"echo {result}"
     proc = subprocess.run(
         cmd_to_run,
