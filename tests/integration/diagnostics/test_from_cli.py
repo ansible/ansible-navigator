@@ -30,9 +30,6 @@ def test(
         settings_env_var_to_full: The pytest subtest fixture
         tmp_path: The pytest tmp_path fixture
         skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
-
-    Raises:
-        AssertionError: When tests fails
     """
     monkeypatch.chdir(tmp_path)
     settings_path, settings_file = settings_env_var_to_full

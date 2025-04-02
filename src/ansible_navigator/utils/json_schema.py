@@ -89,6 +89,9 @@ def validate(schema: str | dict[str, Any], data: dict[str, Any]) -> list[JsonSch
 
     Returns:
         Any errors encountered
+
+    Raises:
+        TypeError: If there is a typing error.
     """
     errors: list[JsonSchemaError] = []
 

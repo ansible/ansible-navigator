@@ -117,6 +117,9 @@ class CommandRunner:
 
         Args:
             jobs: The jobs to be run
+
+        Raises:
+            RuntimeError: if there is a runtime error
         """
         worker_count = len(jobs)
         processes = []

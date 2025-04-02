@@ -70,6 +70,9 @@ class KeyValueStore(MutableMapping[str, str]):
 
         Returns:
             The number of keys
+
+        Raises:
+            TypeError: If there is a typing error.
         """
         cursor = self.conn.cursor()
         rows = cursor.execute("SELECT COUNT(*) FROM kv").fetchone()[0]

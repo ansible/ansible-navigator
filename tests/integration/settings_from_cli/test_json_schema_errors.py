@@ -75,9 +75,6 @@ def test(data: Scenario, subtests: Any, tmp_path: Path) -> None:
         data: The test data
         tmp_path: The temporary path fixture
         subtests: The pytest subtest fixture
-
-    Raises:
-        AssertionError: When tests fails
     """
     assert data.settings_file.exists()
     venv_path = os.environ.get("VIRTUAL_ENV")

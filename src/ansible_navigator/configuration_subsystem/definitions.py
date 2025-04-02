@@ -31,9 +31,6 @@ def version_added_sanity_check(version: str) -> None:
 
     Args:
         version: The version string to check
-
-    Raises:
-        AssertionError: If the version string is invalid
     """
     re_version = re.compile(r"^v\d+\.\d+$")
     assert (  # noqa:S101
@@ -345,6 +342,9 @@ class ApplicationConfiguration:
 
         Returns:
             Configuration subcommand name
+
+        Raises:
+            TypeError: if there is a typing error
         """
         command = self._get_by_name(name, "subcommands")
         if not isinstance(command, SubCommand):
@@ -483,7 +483,12 @@ class VolumeMount:
 
 
 class Mode(Enum):
-    """An enum to restrict mode type."""
+    """An enum to restrict mode type.
+
+    Attributes:
+        STDOUT: Represents the "stdout" mode.
+        INTERACTIVE: Represents the "interactive" mode.
+    """
 
     STDOUT = "stdout"
     INTERACTIVE = "interactive"

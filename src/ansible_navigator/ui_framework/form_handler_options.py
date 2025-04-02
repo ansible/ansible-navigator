@@ -66,6 +66,9 @@ class FormHandlerOptions(CursesWindow):
 
         Returns:
             Field from form and characters
+
+        Raises:
+            RuntimeError: if there is a runtime error.
         """
         form_field = form_fields[idx]
         active = 0

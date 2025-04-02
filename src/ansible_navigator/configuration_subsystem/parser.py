@@ -45,6 +45,9 @@ class Parser:
         Returns:
             Long and short cli parameters, and dictionary of parsed
             arguments
+
+        Raises:
+            NotImplementedError: if there is an error
         """
         kwargs = {}
         help_strings = [entry.short_description]

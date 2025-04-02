@@ -167,12 +167,10 @@ src/ansible_navigator/configuration_subsystem/definitions.py
     DOC603: Class `SubCommand`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [description: str, epilog: str | None, name: str, version_added: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `ApplicationConfiguration`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `ApplicationConfiguration`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [application_name: str, application_version: Constants | str, entries: list[SettingsEntry], initial: Any, internals: Internals, original_command: list[str], post_processor: NavigatorPostProcessor | None, subcommands: list[SubCommand]]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `ApplicationConfiguration.subcommand` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
     DOC601: Class `VolumeMountOption`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `VolumeMountOption`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [OVERLAY: , Z: , ro: , rw: , z: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `VolumeMount`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `VolumeMount`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [fs_destination: str, fs_source: str, options: tuple[VolumeMountOption, ...], options_string: InitVar[str], settings_entry: str, source: Constants]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC601: Class `Mode`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `ModeChangeRequest`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `ModeChangeRequest`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [entry: str, mode: Mode]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `PaeChangeRequest`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -194,15 +192,11 @@ src/ansible_navigator/configuration_subsystem/navigator_post_processor.py
     DOC601: Class `NavigatorPostProcessor`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `NavigatorPostProcessor`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [ansible_runner_write_job_events: , editor_console: , enable_prompts: , exec_shell: , help_builder: , help_config: , help_doc: , help_inventory: , help_playbook: , log_append: , osc4: , settings_effective: , settings_sample: , settings_sources: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
 --------------------
-src/ansible_navigator/configuration_subsystem/parser.py
-    DOC503: Method `Parser.generate_argument` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['NotImplementedError'].
---------------------
 src/ansible_navigator/configuration_subsystem/utils.py
     DOC601: Class `AnsibleConfiguration`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `AnsibleConfiguration`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [contents: Constants | dict[str, dict[str, bool | int | float | str]], path: Constants | Path, text: Constants | list[str]]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `ParseAnsibleCfgResponse`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `ParseAnsibleCfgResponse`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [config: AnsibleConfiguration, exit_messages: list[ExitMessage], messages: list[LogMessage]]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Function `parse_ansible_verison` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
 --------------------
 src/ansible_navigator/content_defs.py
     DOC601: Class `ContentView`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -217,7 +211,6 @@ src/ansible_navigator/content_defs.py
 src/ansible_navigator/data/image_introspect.py
     DOC601: Class `Command`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `Command`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [command: str, details: list[str] | dict[Any, Any] | list[dict[Any, Any]] | str, errors: list[str], id_: str, parse: Callable[..., Any], stderr: str, stdout: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `CommandRunner.start_workers` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['RuntimeError'].
 --------------------
 src/ansible_navigator/diagnostics.py
     DOC601: Class `Collector`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -227,9 +220,6 @@ src/ansible_navigator/diagnostics.py
     DOC601: Class `DiagnosticsCollector`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `DiagnosticsCollector`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [WARNING: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC503: Method `DiagnosticsCollector._local_system` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['FailedCollectionError']. Raised exceptions in the body: ['FailedCollectionError', 'RuntimeError'].
---------------------
-src/ansible_navigator/image_manager/inspector.py
-    DOC503: Function `inspect_all` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
 --------------------
 src/ansible_navigator/image_manager/puller.py
     DOC601: Class `ImageAssessment`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -294,7 +284,6 @@ src/ansible_navigator/ui_framework/field_option.py
 src/ansible_navigator/ui_framework/field_radio.py
     DOC601: Class `FieldRadio`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `FieldRadio`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [current_error: str, name: str, options: list[Any], prompt: str, valid: Unknown | bool, win: Window | None, window_handler: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `FieldRadio.validator` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
 --------------------
 src/ansible_navigator/ui_framework/field_text.py
     DOC601: Class `FieldText`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -313,14 +302,12 @@ src/ansible_navigator/ui_framework/form_defs.py
     DOC603: Class `FormType`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [FORM: , NOTIFICATION: , WORKING: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
 --------------------
 src/ansible_navigator/ui_framework/form_handler_button.py
-    DOC503: Method `FormHandlerButton.populate` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['RuntimeError'].
     DOC104: Method `FormHandlerButton.handle`: Arguments are the same in the docstring and the function signature, but are in a different order.
     DOC105: Method `FormHandlerButton.handle`: Argument names match, but type hints in these args do not match: idx, form_fields
 --------------------
 src/ansible_navigator/ui_framework/form_handler_options.py
     DOC104: Method `FormHandlerOptions.handle`: Arguments are the same in the docstring and the function signature, but are in a different order.
     DOC105: Method `FormHandlerOptions.handle`: Argument names match, but type hints in these args do not match: idx, form_fields
-    DOC503: Method `FormHandlerOptions.handle` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['RuntimeError'].
 --------------------
 src/ansible_navigator/ui_framework/form_utils.py
     DOC104: Function `settings_notification`: Arguments are the same in the docstring and the function signature, but are in a different order.
@@ -381,16 +368,9 @@ src/ansible_navigator/utils/dot_paths.py
     DOC104: Function `move_to_path`: Arguments are the same in the docstring and the function signature, but are in a different order.
     DOC105: Function `move_to_path`: Argument names match, but type hints in these args do not match: behaviors, content, new_path, old_path
 --------------------
-src/ansible_navigator/utils/functions.py
-    DOC503: Function `escape_moustaches` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
---------------------
 src/ansible_navigator/utils/json_schema.py
     DOC601: Class `JsonSchemaError`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `JsonSchemaError`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [data_path: str, expected: bool | int | str, found: str, json_path: str, message: str, relative_schema: str, schema_path: str, validator: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Function `validate` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
---------------------
-src/ansible_navigator/utils/key_value_store.py
-    DOC503: Method `KeyValueStore.__len__` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['TypeError'].
 --------------------
 src/ansible_navigator/utils/packaged_data.py
     DOC601: Class `ImageEntry`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)

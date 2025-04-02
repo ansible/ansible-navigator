@@ -171,7 +171,11 @@ class Configurator:
         """
 
         def raise_value_error(message: str) -> None:
-            """Raise a ValueError with the given message."""
+            """Raise a ValueError with the given message.
+
+            Raises:
+                ValueError: If the settings file is empty
+            """
             raise ValueError(message)
 
         settings_filesystem_path = self._config.internals.settings_file_path

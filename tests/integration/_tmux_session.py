@@ -247,6 +247,9 @@ class TmuxSession:
 
         Returns:
             The captured pane
+
+        Raises:
+            RuntimeError: If there is a runtime error.
         """
         captured = self._pane.capture_pane()
         if isinstance(captured, str):

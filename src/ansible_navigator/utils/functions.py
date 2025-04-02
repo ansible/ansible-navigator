@@ -175,6 +175,9 @@ def escape_moustaches(obj: Mapping[Any, Any]) -> Mapping[Any, Any]:
 
     Returns:
         The obj with replacements made
+
+    Raises:
+        TypeError: If there is a typing error.
     """
     replacements = (("{", "U+007B"), ("}", "U+007D"))
     result = dispatch(obj, replacements)
