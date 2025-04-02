@@ -78,6 +78,10 @@ def test_all_entries_reflect_cli_given_env_vars(
         base: CLI parameters or None
         cli_entry: CLI entry
         expected: Expected value
+
+    Raises:
+       AssertionError: If the assertion fails
+       pytest.fail: If the pytest fails
     """
     monkeypatch.setattr("shutil.which", which)
     monkeypatch.setattr(pathlib.Path, "is_file", isfile)
@@ -197,6 +201,10 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
         base: CLI parameters or None
         cli_entry: CLI entry
         expected: Expected value
+
+    Raises:
+       AssertionError: If the assertion fails
+       pytest.fail: If the pytest fails
     """
     monkeypatch.setattr("shutil.which", which)
     monkeypatch.setattr("os.path.isfile", isfile)

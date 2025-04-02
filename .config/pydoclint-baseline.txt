@@ -147,14 +147,12 @@ src/ansible_navigator/app_public.py
 src/ansible_navigator/command_runner/command_runner.py
     DOC601: Class `Command`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `Command`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [command: str, details: list[Any] | dict[Any, Any] | object, errors: str, identity: str, messages: list[LogMessage], post_process: Callable[..., Any], return_code: int, stderr: str, stdout: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `CommandRunner.start_workers` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['RuntimeError'].
 --------------------
 src/ansible_navigator/configuration_subsystem/configurator.py
     DOC111: Method `Configurator._argparse_error_handler`: The option `--arg-type-hints-in-docstring` is `False` but there are type hints in the docstring arg list
     DOC502: Method `Configurator._apply_settings_file` has a "Raises" section in the docstring, but there are not "raise" statements in the body
     DOC101: Function `raise_value_error`: Docstring contains fewer arguments than in function signature.
     DOC103: Function `raise_value_error`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [message: str].
-    DOC503: Function `raise_value_error` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['ValueError'].
 --------------------
 src/ansible_navigator/configuration_subsystem/definitions.py
     DOC601: Class `Constants`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -175,7 +173,6 @@ src/ansible_navigator/configuration_subsystem/definitions.py
     DOC601: Class `VolumeMount`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `VolumeMount`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [fs_destination: str, fs_source: str, options: tuple[VolumeMountOption, ...], options_string: InitVar[str], settings_entry: str, source: Constants]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `Mode`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC603: Class `Mode`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [INTERACTIVE: str, STDOUT: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `ModeChangeRequest`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `ModeChangeRequest`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [entry: str, mode: Mode]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC601: Class `PaeChangeRequest`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -456,7 +453,6 @@ tests/integration/_interactions.py
 tests/integration/_tmux_session.py
     DOC601: Class `TmuxSessionKwargs`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `TmuxSessionKwargs`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [config_path: Path, cwd: Path, pane_height: int, pane_width: int, pull_policy: str, request: pytest.FixtureRequest, setup_commands: list[str], shell_prompt_timeout: int]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `TmuxSession._capture_pane` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['RuntimeError'].
 --------------------
 tests/integration/actions/collections/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -842,10 +838,6 @@ tests/unit/configuration_subsystem/post_processors/test_time_zone.py
 tests/unit/configuration_subsystem/test_configurator.py
     DOC101: Function `test_editor_command_from_editor`: Docstring contains fewer arguments than in function signature.
     DOC103: Function `test_editor_command_from_editor`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [_mocked_func: Any].
---------------------
-tests/unit/configuration_subsystem/test_precedence.py
-    DOC503: Function `test_all_entries_reflect_cli_given_env_vars` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'pytest.fail'].
-    DOC503: Function `test_all_entries_reflect_cli_given_settings_and_env_vars` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: []. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'pytest.fail'].
 --------------------
 tests/unit/image_manager/test_image_puller.py
     DOC601: Class `TstPullPolicy`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)

@@ -485,8 +485,8 @@ class VolumeMount:
 class Mode(Enum):
     """An enum to restrict mode type."""
 
-    STDOUT: str = "stdout"
-    INTERACTIVE: str = "interactive"
+    STDOUT = "stdout"
+    INTERACTIVE = "interactive"
 
 
 @dataclass
