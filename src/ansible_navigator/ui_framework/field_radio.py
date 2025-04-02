@@ -66,6 +66,9 @@ class FieldRadio:
 
         Returns:
             Validation of checked entries
+
+        Raises:
+            TypeError: If there is a typing error.
         """
         result = partial(FieldValidators.some_of_or_none, max_selected=1, min_selected=1)
         if not isinstance(result, Validation):

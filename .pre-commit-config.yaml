@@ -131,7 +131,7 @@ repos:
           $
 
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
+    rev: v1.37.0
     hooks:
       - id: yamllint
         args:
@@ -139,7 +139,7 @@ repos:
         types: [file, yaml]
 
   - repo: https://github.com/PyCQA/flake8.git
-    rev: 7.1.2
+    rev: 7.2.0
     hooks:
       - id: flake8
         language_version: python3
@@ -147,7 +147,7 @@ repos:
           - flake8-docstrings # uses pydocstyle
 
   - repo: https://github.com/jsh9/pydoclint
-    rev: 0.6.2
+    rev: 0.6.4
     hooks:
       - id: pydoclint
 
@@ -158,7 +158,7 @@ repos:
       - id: pyupgrade
         args: ["--py310-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.13.0
+    rev: v1.15.0
     hooks:
       - id: mypy
         additional_dependencies:
@@ -175,7 +175,7 @@ repos:
           - types-typed-ast
 
   - repo: https://github.com/pycqa/pylint.git
-    rev: v3.3.5
+    rev: v3.3.6
     hooks:
       - id: pylint
         args:

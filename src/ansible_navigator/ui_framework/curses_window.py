@@ -12,12 +12,12 @@ from .colorize import hex_to_rgb_curses
 
 
 if TYPE_CHECKING:
-    from _curses import _CursesWindow
+    from _curses import window
 
     from .curses_defs import CursesLine
     from .ui_config import UIConfig
 
-    Window = _CursesWindow
+    Window = window
 else:
     from typing import Any
 

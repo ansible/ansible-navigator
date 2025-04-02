@@ -180,6 +180,9 @@ def parse_ansible_verison(
 
     Returns:
         Log messages, exit messages, and the stdout as a dictionary
+
+    Raises:
+        TypeError: if there is a typing error
     """
     messages: list[LogMessage] = []
     exit_messages: list[ExitMessage] = []

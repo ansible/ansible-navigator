@@ -154,6 +154,9 @@ class CommandRunner:
 
         Args:
             jobs: List of commands to be run
+
+        Raises:
+            RuntimeError: if the assertion fails
         """
         worker_count = min(len(jobs), PROCESSES)
         processes = []

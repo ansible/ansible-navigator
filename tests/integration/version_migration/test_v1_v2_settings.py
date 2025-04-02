@@ -33,9 +33,6 @@ def test_version(
         request: The pytest fixture request
         test_dir_fixture_dir: Path to the test directory
         tmp_path: The pytest tmp_path fixture
-
-    Raises:
-        AssertionError: When tests fails
     """
     file_path = Path(file)
     file_stem = file_path.stem

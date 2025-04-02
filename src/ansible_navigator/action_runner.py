@@ -30,9 +30,9 @@ from .ui_framework import UserInterface
 
 
 if TYPE_CHECKING:
-    from _curses import _CursesWindow
+    from _curses import window
 
-    Window = _CursesWindow
+    Window = window
 else:
     from typing import Any
 

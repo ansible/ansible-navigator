@@ -106,6 +106,9 @@ def inspect_all(container_engine: str) -> tuple[list[dict[str, Any]], str]:
 
     Returns:
         List of all image values and stderr, if applicable
+
+    Raises:
+        TypeError: If there is a typing error
     """
     cmd_runner = CommandRunner()
     images_list_class = ImagesList(container_engine=container_engine)
