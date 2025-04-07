@@ -437,7 +437,6 @@ tests/integration/_tmux_session.py
 tests/integration/actions/collections/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [pane_height: , pane_width: , update_fixtures: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/collections/test_direct_interactive_ee.py
     DOC601: Class `Test`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -462,7 +461,6 @@ tests/integration/actions/collections/test_welcome_interactive_noee.py
 tests/integration/actions/config/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [PANE_HEIGHT: , PANE_WIDTH: , UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/config/test_direct_interactive_ee.py
     DOC601: Class `Test`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -495,7 +493,6 @@ tests/integration/actions/config/test_welcome_interactive_specified_config.py
 tests/integration/actions/doc/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [TEST_FOR_MODE: str | None, UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/doc/test_direct_interactive_ee.py
     DOC601: Class `TestModuleDoc`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -540,12 +537,10 @@ tests/integration/actions/doc/test_welcome_interactive_noee.py
 tests/integration/actions/exec/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [config_file: Path | None, pane_height: , pane_width: , update_fixtures: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/images/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/images/test_direct_interactive_ee.py
     DOC601: Class `Test`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -566,7 +561,6 @@ tests/integration/actions/images/test_welcome_interactive_noee.py
 tests/integration/actions/inventory/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/inventory/test_direct_interactive_ee.py
     DOC601: Class `Test`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -695,7 +689,6 @@ tests/integration/actions/run_unicode/test_direct_interactive_noee.py
 tests/integration/actions/settings/base.py
     DOC601: Class `BaseClass`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `BaseClass`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [PANE_HEIGHT: , PANE_WIDTH: , UPDATE_FIXTURES: ]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC503: Method `BaseClass.test` exceptions in the "Raises" section in the docstring do not match those in the function body. Raised exceptions in the docstring: ['ValueError']. Raised exceptions in the body: ['AssertionError (implicitly from the `assert` statement)', 'ValueError'].
 --------------------
 tests/integration/actions/settings/test_direct_interactive_ee.py
     DOC601: Class `Test`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
