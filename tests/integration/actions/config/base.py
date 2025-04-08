@@ -21,7 +21,7 @@ CONFIG_FIXTURE = TEST_FIXTURE_DIR / "ansible.cfg"
 
 base_steps = (
     UiTestStep(user_input=":f Cache plugin timeout", comment="filter for cache plugin timeout"),
-    UiTestStep(user_input=":0", comment="cache plugin details"),
+    UiTestStep(user_input=":0", comment="cache plugin details", present=["current_config_file:"]),
     UiTestStep(user_input=":back", comment="return to filtered list"),
     UiTestStep(
         user_input=":f",
@@ -30,7 +30,11 @@ base_steps = (
         mask=True,
     ),
     UiTestStep(user_input=":f Yaml filename extensions", comment="filter off screen value"),
-    UiTestStep(user_input=":0", comment="Yaml filename extensions details"),
+    UiTestStep(
+        user_input=":0",
+        comment="Yaml filename extensions details",
+        present=["Yaml filename extensions (current/default: ['.yml', '.yaml', '.json'])"],
+    ),
     UiTestStep(user_input=":back", comment="return to filtered list"),
     UiTestStep(
         user_input=":f",

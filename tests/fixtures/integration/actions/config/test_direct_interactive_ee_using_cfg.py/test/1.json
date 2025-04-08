@@ -5,7 +5,9 @@
     "additional_information": {
         "present": [
             "current_config_file",
-            "ansible.cfg"
+            "ansible.cfg",
+            "name: ANSIBLE_ACTION_WARNINGS",
+            "option: ACTION_WARNINGS"
         ],
         "absent": [],
         "compared_fixture": false

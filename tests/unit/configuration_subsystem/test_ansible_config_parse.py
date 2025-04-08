@@ -185,15 +185,20 @@ def test_config_none(ee_enabled: bool) -> None:
     """
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
 
-    assert parsed_cfg.config.contents is Constants.NONE
-    assert parsed_cfg.config.path is Constants.NONE
-    assert parsed_cfg.config.text is Constants.NONE
     if ee_enabled:
+        assert not parsed_cfg.config.contents
         assert (
-            "no 'ansible.cfg' found in current working directory." in parsed_cfg.messages[1].message
+            "EE support enabled: found 'ansible.cfg' in current working directory."
+            in parsed_cfg.messages[1].message
         )
     else:
-        assert "'ansible --version' reports no config file" in parsed_cfg.messages[2].message
+        assert parsed_cfg.config.contents is Constants.NONE
+        assert parsed_cfg.config.path is Constants.NONE
+        assert parsed_cfg.config.text is Constants.NONE
+        assert (
+            "EE support disabled: 'ansible --version' reports no config file"
+            in parsed_cfg.messages[2].message
+        )
 
 
 @ee_states
@@ -220,12 +225,14 @@ def test_invalid_path(ee_enabled: bool, tmp_path: Path, monkeypatch: pytest.Monk
     )
 
     parsed_cfg = parse_ansible_cfg(ee_enabled=ee_enabled)
-    assert parsed_cfg.config.contents is Constants.NONE
-    assert parsed_cfg.config.path is Constants.NONE
-    assert parsed_cfg.config.text is Constants.NONE
+    if not ee_enabled:
+        assert parsed_cfg.config.contents is Constants.NONE
+        assert parsed_cfg.config.path is Constants.NONE
+        assert parsed_cfg.config.text is Constants.NONE
     if ee_enabled:
         assert (
-            "no 'ansible.cfg' found in current working directory." in parsed_cfg.messages[1].message
+            "EE support enabled: using current working directory for 'ansible.cfg'"
+            in parsed_cfg.messages[0].message
         )
     else:
         assert "does not exist" in parsed_cfg.messages[2].message
