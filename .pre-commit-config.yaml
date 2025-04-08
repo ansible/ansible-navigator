@@ -45,7 +45,7 @@ repos:
       - id: toml-sort-fix
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.11.2"
+    rev: "v0.11.4"
     hooks:
       - id: ruff
         args:
@@ -147,7 +147,7 @@ repos:
           - flake8-docstrings # uses pydocstyle
 
   - repo: https://github.com/jsh9/pydoclint
-    rev: 0.6.4
+    rev: 0.6.5
     hooks:
       - id: pydoclint
 
