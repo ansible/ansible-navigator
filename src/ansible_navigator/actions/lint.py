@@ -179,8 +179,13 @@ def massage_issue(issue: dict[Any, Any]) -> dict[Any, Any]:
     else:
         massaged["__message"] = issue["description"]
     massaged["__path"] = expand_path(issue["location"]["path"])
-    if isinstance(issue["location"]["lines"]["begin"], Mapping):
+    if "lines" in issue["location"] and isinstance(issue["location"]["lines"]["begin"], Mapping):
         massaged["__line"] = issue["location"]["lines"]["begin"]["line"]
+    elif "positions" in issue["location"] and isinstance(
+        issue["location"]["positions"]["begin"],
+        Mapping,
+    ):
+        massaged["__line"] = issue["location"]["positions"]["begin"]
     else:
         massaged["__line"] = issue["location"]["lines"]["begin"]
     massaged["issue_path"] = f"{massaged['__path']}:{massaged['__line']}"

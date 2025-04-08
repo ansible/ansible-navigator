@@ -80,7 +80,6 @@ def test_all_entries_reflect_cli_given_env_vars(
         expected: Expected value
 
     Raises:
-       AssertionError: If the assertion fails
        pytest.fail: If the pytest fails
     """
     monkeypatch.setattr("shutil.which", which)
@@ -203,7 +202,6 @@ def test_all_entries_reflect_cli_given_settings_and_env_vars(
         expected: Expected value
 
     Raises:
-       AssertionError: If the assertion fails
        pytest.fail: If the pytest fails
     """
     monkeypatch.setattr("shutil.which", which)
