@@ -653,8 +653,14 @@ class Action(ActionBase):
                         short_name = plugin["doc"]["name"]
                     else:
                         short_name = plugin["doc"][plugin_type]
-                except KeyError:
+                except (KeyError, TypeError) as exc:
                     short_name = None
+                    self._logger.exception(
+                        "Error getting short name from plugin doc %s",
+                        plugin_docs["path"],
+                    )
+                    self._logger.debug("error was %s", str(exc))
+                    self._logger.debug(plugin)
                 if short_name is None:
                     plugin_docs["full_name"] = selected_collection["known_as"]
                 else:
