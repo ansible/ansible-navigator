@@ -460,7 +460,7 @@ class Action(ActionBase):
 
         if self._args.execution_environment:
             self._logger.debug("running collections command with execution environment enabled")
-            python_exec_path = "/usr/bin/python3"
+            python_exec_path = sys.executable
             utils_lib = Path(__file__).parent / ".." / "utils"
 
             container_volume_mounts = [

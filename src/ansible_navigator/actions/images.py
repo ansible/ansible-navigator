@@ -5,6 +5,7 @@ from __future__ import annotations
 import curses
 import json
 import shlex
+import sys
 
 from copy import deepcopy
 from functools import partial
@@ -589,7 +590,7 @@ class Action(ActionBase):
         """
         cache_path = self._args.internals.cache_path
         container_volume_mounts = [f"{cache_path}:{cache_path}"]
-        python_exec_path = "/usr/bin/python3"
+        python_exec_path = sys.executable
 
         kwargs = {
             "cmdline": [f"{cache_path}/image_introspect.py"],
