@@ -9,13 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "                                                                                                                                       Warning",
-        "                                                                                                                                       ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                                                                                                                       Errors were encountered while gathering the inventory:",
-        "                                                                                                                                       [WARNING]: Unable to parse /home/user/github/ansible- navigator/tests/fixtures/integration/actions/inventory/not_a_real_inventory.yml as an inventory source",
-        "                                                                                                                                       [WARNING]: No inventory was parsed, only implicit localhost is available",
-        "                                                                                                                                       ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                                                                                                                                                                                                                                                                                    Ok"
-    ]
+    "output": []
 }

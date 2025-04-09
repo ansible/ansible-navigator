@@ -9,13 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "                                  Warning: Issues were found while applying the settings.",
-        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                     Hint: Command provided: 'collections --ee FFFFF'",
-        "                                    Error: The setting 'execution-environment' must be one of 'true' or 'false', but set as 'FFFFF'. (Command line)",
-        "                                     Hint: Try again with '--ee true' or '--ee false'",
-        "                                  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────",
-        "                                                                                                                                                Ok"
-    ]
+    "output": []
 }

@@ -9,8 +9,5 @@
         ],
         "compared_fixture": false
     },
-    "output": [
-        "(py313) bash$ansible-navigator lint /home/user/github/ansible-navigator/tests/fixtures/integration/actions/lint/no_errors --ee True --ll debug --mode stdout",
-        "(py313) bash$"
-    ]
+    "output": []
 }

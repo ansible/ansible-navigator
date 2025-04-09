@@ -16,16 +16,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "ansible_collections:",
-        "ansible_version:",
-        "environment_variables:",
-        "image_name: ghcr.io/ansible/community-ansible-dev-tools:latest",
-        "os_release:",
-        "python_packages:",
-        "python_version:",
-        "redhat_release:",
-        "system_packages:",
-        "(venv) bash$"
-    ]
+    "output": []
 }

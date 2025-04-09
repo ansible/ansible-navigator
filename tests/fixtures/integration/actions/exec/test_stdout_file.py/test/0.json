@@ -12,8 +12,5 @@
         ],
         "compared_fixture": false
     },
-    "output": [
-        "test_data_from_config",
-        "(venv) bash$"
-    ]
+    "output": []
 }

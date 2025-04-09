@@ -9,31 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "ANSIBLE_DEV_TOOLS_CONTAINER=1",
-        "ANSIBLE_COLLECTIONS_PATHS=/tmp/collections",
-        "PWD=/home/user/github/ansible-navigator",
-        "PIP_BREAK_SYSTEM_PACKAGES=1",
-        "ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/playbook-artifact.log",
-        "container=oci",
-        "AWX_ISOLATED_DATA_DIR=/runner/artifacts/00000000-0000-0000-0000-000000000000",
-        "HOME=/root",
-        "_CONTAINERS_USERNS_CONFIGURED=",
-        "ANSIBLE_STDOUT_CALLBACK=awx_display",
-        "ANSIBLE_CALLBACK_PLUGINS=/runner/artifacts/00000000-0000-0000-0000-000000000000/callback",
-        "ANSIBLE_UNSAFE_WRITES=1",
-        "ANSIBLE_CACHE_PLUGIN_CONNECTION=/runner/artifacts/00000000-0000-0000-0000-000000000000/fact_cache",
-        "TERM=xterm",
-        "SHLVL=0",
-        "ANSIBLE_RETRY_FILES_ENABLED=False",
-        "ANSIBLE_NAVIGATOR_COLLECTION_DOC_CACHE_PATH=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/collection_doc_cache.db",
-        "PIP_ROOT_USER_ACTION=ignore",
-        "ANSIBLE_NAVIGATOR_LOG_FILE=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/ansible-navigator.log",
-        "ANSIBLE_HOST_KEY_CHECKING=False",
-        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-        "ANSIBLE_NAVIGATOR_PULL_POLICY=never",
-        "ANSIBLE_NAVIGATOR_CONFIG=/home/user/github/ansible-navigator/tests/fixtures/integration/actions/exec/ansible-navigator.yaml",
-        "ANSIBLE_NAVIGATOR_LOG_LEVEL=debug",
-        "(venv) bash$"
-    ]
+    "output": []
 }

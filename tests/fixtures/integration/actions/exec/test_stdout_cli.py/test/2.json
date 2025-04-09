@@ -9,8 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-        "(venv) bash$"
-    ]
+    "output": []
 }

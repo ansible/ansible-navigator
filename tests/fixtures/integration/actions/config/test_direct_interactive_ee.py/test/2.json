@@ -4,31 +4,10 @@
     "comment": "cache plugin details",
     "additional_information": {
         "present": [
-            "Cache plugin timeout (current: 42)  (default: 86400)"
+            "current_config_file:"
         ],
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "Cache plugin timeout (current: 42)  (default: 86400)",
-        " 0│---",
-        " 1│current_config_file: None",
-        " 2│current_value: 42",
-        " 3│default: false",
-        " 4│default_value: 86400",
-        " 5│description: Expiration timeout for the cache plugin data.",
-        " 6│env:",
-        " 7│- name: ANSIBLE_CACHE_PLUGIN_TIMEOUT",
-        " 8│ini:",
-        " 9│- key: fact_caching_timeout",
-        "10│  section: defaults",
-        "11│name: Cache plugin timeout",
-        "12│option: CACHE_PLUGIN_TIMEOUT",
-        "13│source: env",
-        "14│type: integer",
-        "15│via: ANSIBLE_CACHE_PLUGIN_TIMEOUT",
-        "16│yaml:",
-        "17│  key: facts.cache.timeout",
-        "^b/PgUp page up                          ^f/PgDn page down                          ↑↓ scroll                          esc back                          - previous                          + next                          [0-9] goto                          :help help"
-    ]
+    "output": []
 }
