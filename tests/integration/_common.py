@@ -111,9 +111,12 @@ def update_fixtures(
     if additional_information is not None:
         fixture["additional_information"] = additional_information
         if "compared_fixture" not in additional_information:
-            compared_fixture = any((
-                additional_information.get("present", []), additional_information.get("absent", []),
-            ))
+            compared_fixture = any(
+                (
+                    additional_information.get("present", []),
+                    additional_information.get("absent", []),
+                ),
+            )
         else:
             compared_fixture = bool(additional_information.get("compared_fixture", False))
     if compared_fixture:
