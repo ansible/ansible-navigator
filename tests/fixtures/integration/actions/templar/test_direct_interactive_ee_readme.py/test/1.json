@@ -9,9 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "  Name                                                              Version                              Shadowed                                  Type                                           Path",
-        "0│ansible.posix                                                     1.6.2                                False                                     contained                                      /usr/share/ansible/collections/ansible_collections/ansible/posix",
-        "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
-    ]
+    "output": []
 }

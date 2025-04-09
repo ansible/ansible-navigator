@@ -10,31 +10,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "    Name                                                                                                          Default               Source                Current",
-        "  0│Action warnings                                                                                               True                  default               True                                                                                                                                         ▒",
-        "  1│Agnostic become prompt                                                                                        True                  default               True                                                                                                                                         ▒",
-        "  2│Ansible connection path                                                                                       True                  default               None                                                                                                                                         ▒",
-        "  3│Ansible cow acceptlist                                                                                        True                  default               ['bud-frogs', 'bunny', 'cheese', 'daemon', 'def...",
-        "  4│Ansible cow path                                                                                              True                  default               None",
-        "  5│Ansible cow selection                                                                                         True                  default               default",
-        "  6│Ansible force color                                                                                           True                  default               False",
-        "  7│Ansible home                                                                                                  True                  default               /home/user/.ansible",
-        "  8│Ansible nocolor                                                                                               True                  default               False",
-        "  9│Ansible nocows                                                                                                True                  default               False",
-        " 10│Ansible pipelining                                                                                            True                  default               False",
-        " 11│Any errors fatal                                                                                              True                  default               False",
-        " 12│Become allow same user                                                                                        True                  default               False",
-        " 13│Become password file                                                                                          True                  default               None",
-        " 14│Become plugin path                                                                                            True                  default               XXXXXXX",
-        " 15│Cache plugin                                                                                                  False                 env                   jsonfile",
-        " 16│Cache plugin connection                                                                                       False                 env                   XXXXXXX",
-        " 17│Cache plugin prefix                                                                                           True                  default               ansible_facts",
-        " 18│Cache plugin timeout                                                                                          False                 env                   42",
-        " 19│Callbacks enabled                                                                                             True                  default               []",
-        " 20│Collections on ansible version mismatch                                                                       True                  default               warning",
-        " 21│Collections paths                                                                                             True                  default               XXXXXXX",
-        " 22│Collections scan sys path                                                                                     True                  default               True",
-        "^b/PgUp page up                                      ^f/PgDn page down                                      ↑↓ scroll                                      esc back                                      [0-9] goto                                      :help help"
-    ]
+    "output": []
 }

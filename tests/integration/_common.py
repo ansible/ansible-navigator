@@ -107,10 +107,20 @@ def update_fixtures(
         "index": index,
         "comment": comment,
     }
+    compared_fixture = True
     if additional_information is not None:
         fixture["additional_information"] = additional_information
-    received_output_list = sanitize_output(received_output)
-    fixture["output"] = received_output_list
+        if "compared_fixture" not in additional_information:
+            compared_fixture = any((
+                additional_information.get("present", []), additional_information.get("absent", []),
+            ))
+        else:
+            compared_fixture = bool(additional_information.get("compared_fixture", False))
+    if compared_fixture:
+        received_output_list = sanitize_output(received_output)
+        fixture["output"] = received_output_list
+    else:
+        fixture["output"] = []
     with fixture_path.open(mode="w", encoding="utf8") as fh:
         json.dump(fixture, fh, indent=4, ensure_ascii=False, sort_keys=False)
         fh.write("\n")
