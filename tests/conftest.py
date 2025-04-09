@@ -61,7 +61,7 @@ def valid_ce() -> str:
             # the habit of getting stuck.
             try:
                 cmd = [engine, "info"]
-                subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=10)
+                subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=15)
             except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
                 msg = f"Container engine is broken, fail to run: {' '.join(cmd)}: {exc}"
                 continue

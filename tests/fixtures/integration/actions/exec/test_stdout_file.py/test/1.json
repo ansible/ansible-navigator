@@ -9,8 +9,5 @@
         ],
         "compared_fixture": false
     },
-    "output": [
-        "$PATH",
-        "(venv) bash$"
-    ]
+    "output": []
 }
