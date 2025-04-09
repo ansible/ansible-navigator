@@ -3,9 +3,11 @@
     "index": 3,
     "comment": "cache plugin details",
     "additional_information": {
-        "present": [],
+        "present": [
+            "option: CACHE_PLUGIN_TIMEOUT"
+        ],
         "absent": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
         "Cache plugin timeout (current: 42)  (default: 86400)",

@@ -60,8 +60,12 @@ def retrieve_fixture_for_step(
         The specific test step fixture
     """
     fixture_path = fixture_path_from_request(request, step_index, test_name)
+    expected_output = []
+
     with fixture_path.open(encoding="utf-8") as fh:
-        expected_output = json.load(fh)["output"]
+        data = json.load(fh)
+        if "output" in data:
+            expected_output = data["output"]
     assert isinstance(expected_output, list)
     return expected_output
 
@@ -177,10 +181,10 @@ def sanitize_output(output: list[str]) -> list[str]:
         The sanitized output
     """
     re_uuid = re.compile(
-        "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+        r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
         re.IGNORECASE,
     )
-    re_home = re.compile("(/Users|/home)/(?!runner)[a-z,0-9]*/")
+    re_home = re.compile(r"(/Users|/home)/(?!runner)[a-z,0-9]*/")
     re_python_version = re.compile(r"python3\.\d{2}")
     for idx, line in enumerate(output):
         new_line = re.sub(re_uuid, "00000000-0000-0000-0000-000000000000", line)

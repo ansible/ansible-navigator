@@ -417,10 +417,10 @@ def pytest_configure(config: pytest.Config) -> None:
     if details is None:
         err = "\n".join(error.message for error in errors)
         pytest.exit(f"Error parsing ansible version:\n{err}")
-    config_file = details["config file"]
+    config_file = Path(details["config file"]).resolve()
     # detect if the config file is the default empty one.
-    if config_file != "None" and not (
-        config_file == "/etc/ansible/ansible.cfg" and is_config_empty(config_file)
+    if (Path() / "ansible.cfg").resolve() != config_file and not (
+        config_file == Path("/etc/ansible/ansible.cfg") and is_config_empty(config_file)
     ):
         pytest.exit(
             f"Please remove or empty the ansible config file '{config_file}' "

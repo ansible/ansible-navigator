@@ -3,9 +3,12 @@
     "index": 6,
     "comment": "Yaml filename extensions details",
     "additional_information": {
-        "present": [],
+        "present": [
+            "Yaml filename extensions (current/default: ['.yml', '.yaml', '.json'])",
+            "YAML_FILENAME_EXTENSIONS"
+        ],
         "absent": [],
-        "compared_fixture": true
+        "compared_fixture": false
     },
     "output": [
         "Yaml filename extensions (current/default: ['.yml', '.yaml', '.json'])",
