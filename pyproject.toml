@@ -361,6 +361,7 @@ filterwarnings = [
   "ignore::pytest.PytestUnraisableExceptionWarning",
   "ignore::DeprecationWarning:ansible_runner"
 ]
+junit_family = "legacy" # see https://docs.codecov.com/docs/test-analytics
 
 [tool.pytest_env]
 PYTEST_CHECK_TEST_DUPLICATE = 0

@@ -37,8 +37,8 @@ jobs:
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
     permissions:
-      id-token: write
-      checks: read
+      id-token: write # codecov actions
+      checks: read # codecov actions
     runs-on: ubuntu-24.04
     needs: pre
     strategy:
@@ -101,6 +101,16 @@ jobs:
           path: |
             .tox/**/log/
             .tox/**/coverage.xml
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() && hashFiles('junit.xml') != '' }}
+        uses: codecov/test-results-action@v1
+        with:
+          fail_ci_if_error: true
+          name: ${{ matrix.name }}
+          # unable to use wildcards yet due to https://github.com/codecov/test-results-action/issues/110
+          flags: ${{ matrix.python_version }},${{ matrix.os }}
+          use_oidc: true
 
       - name: Change accessibility for cache
         if: ${{ startsWith(matrix.name, 'py') }}
