@@ -15,7 +15,8 @@ on:
   pull_request:
     branches:
       - "main"
-
+  schedule:
+    - cron: "0 0 * * *"
 jobs:
   pre:
     name: pre
@@ -94,6 +95,7 @@ jobs:
         run: python3 -m tox -e no-test-deps
 
       - name: Archive logs and coverage data
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.name }}.zip
@@ -160,6 +162,19 @@ jobs:
           name: logs.zip
           path: .
 
+      - name: Upload coverage data
+        uses: codecov/codecov-action@v5.4.0
+        with:
+          name: ${{ matrix.name }}
+          fail_ci_if_error: true
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }} # cspell:ignore oidc
+
+      - name: Delete Merged Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          include-hidden-files: true
+          delete-merged: true
+
       - name: Check for expected number of coverage.xml reports
         run: |
           JOBS_PRODUCING_COVERAGE=6
@@ -167,13 +182,6 @@ jobs:
             echo "::error::Number of coverage.xml files was not the expected one (${JOBS_PRODUCING_COVERAGE}): $(find . -name coverage.xml |xargs echo)"
             exit 1
           fi
-
-      - name: Upload coverage data
-        uses: codecov/codecov-action@v5.4.0
-        with:
-          name: ${{ matrix.name }}
-          fail_ci_if_error: true
-          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }} # cspell:ignore oidc
 
       - name: Check codecov.io status
         if: github.event_name == 'pull_request'
@@ -183,12 +191,6 @@ jobs:
         uses: re-actors/alls-green@release/v1
         with:
           jobs: ${{ toJSON(needs) }}
-
-      - name: Delete Merged Artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          include-hidden-files: true
-          delete-merged: true
 
       - name: Notify repository owners about changes affecting them
         uses: sourcegraph/codenotify@v0.6.4
