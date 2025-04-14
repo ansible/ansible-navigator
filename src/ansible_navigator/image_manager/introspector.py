@@ -12,6 +12,7 @@ from typing import Any
 
 from ansible_navigator.data import image_introspect
 from ansible_navigator.runner import Command
+from ansible_navigator.utils.functions import get_latest_python3_executable
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +29,7 @@ def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[st
         Output, errors and the return code
     """
     errors = []
-    python_exec_path = "python3"
+    python_exec_path = get_latest_python3_executable()
 
     with tempfile.TemporaryDirectory() as tmp_dir_name:
         introspect_source = inspect.getsource(image_introspect)

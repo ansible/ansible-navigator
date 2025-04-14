@@ -24,6 +24,7 @@ from ansible_navigator.ui_framework import CursesLines
 from ansible_navigator.ui_framework import Interaction
 from ansible_navigator.ui_framework import nonblocking_notification
 from ansible_navigator.ui_framework import warning_notification
+from ansible_navigator.utils.functions import get_latest_python3_executable
 from ansible_navigator.utils.print import print_to_stdout
 
 from . import _actions as actions
@@ -589,7 +590,7 @@ class Action(ActionBase):
         """
         cache_path = self._args.internals.cache_path
         container_volume_mounts = [f"{cache_path}:{cache_path}"]
-        python_exec_path = "/usr/bin/python3"
+        python_exec_path = get_latest_python3_executable()
 
         kwargs = {
             "cmdline": [f"{cache_path}/image_introspect.py"],

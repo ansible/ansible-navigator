@@ -24,6 +24,7 @@ from ansible_navigator.ui_framework import CursesLines
 from ansible_navigator.ui_framework import Interaction
 from ansible_navigator.ui_framework import nonblocking_notification
 from ansible_navigator.ui_framework import warning_notification
+from ansible_navigator.utils.functions import get_latest_python3_executable
 from ansible_navigator.utils.functions import path_is_relative_to
 from ansible_navigator.utils.functions import remove_dbl_un
 from ansible_navigator.utils.key_value_store import KeyValueStore
@@ -460,7 +461,7 @@ class Action(ActionBase):
 
         if self._args.execution_environment:
             self._logger.debug("running collections command with execution environment enabled")
-            python_exec_path = "/usr/bin/python3"
+            python_exec_path = get_latest_python3_executable()
             utils_lib = Path(__file__).parent / ".." / "utils"
 
             container_volume_mounts = [
