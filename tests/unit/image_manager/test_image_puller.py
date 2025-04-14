@@ -195,7 +195,7 @@ def test_pull_with_args() -> None:
     result = image_puller._generate_pull_command()
     expected_string = "podman pull --tls-verify false my_image"
     assert result == expected_string
-    expected_list = ["podman", "pull", "--tls-verify", "false", "my_image"]
+    expected_list = ["podman", "pull", "-q", "--tls-verify", "false", "my_image"]
     assert shlex.split(result) == expected_list
 
 
