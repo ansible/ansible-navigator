@@ -68,8 +68,8 @@ def test_version(
     if os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true":
         shutil.copy(destination, corrected)
 
-    assert any(
-        "ansible-navigator 25." in line for line in result
-    ), "(Note: requires recent tags, `git fetch --all`)"
+    assert any("ansible-navigator 25." in line for line in result), (
+        "(Note: requires recent tags, `git fetch --all`)"
+    )
     assert filecmp.cmp(destination, corrected)
     assert filecmp.cmp(source, backup)

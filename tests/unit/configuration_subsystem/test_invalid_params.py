@@ -117,9 +117,9 @@ def test_no_container_engine(
     monkeypatch.setattr("shutil.which", local_which)
     response = generate_config()
     expected = "No container engine could be found"
-    assert any(
-        expected in exit_msg.message for exit_msg in response.exit_messages
-    ), response.exit_messages
+    assert any(expected in exit_msg.message for exit_msg in response.exit_messages), (
+        response.exit_messages
+    )
 
 
 def test_fail_log_file_dir(
@@ -259,9 +259,9 @@ def test_poor_choices(
             response = generate_config(params=[param, "Sentinel"])
         else:
             response = generate_config(params=[subcommand, param, "Sentinel"])
-        assert any(
-            look_for in exit_msg.message for exit_msg in response.exit_messages
-        ), response.exit_messages
+        assert any(look_for in exit_msg.message for exit_msg in response.exit_messages), (
+            response.exit_messages
+        )
 
     subcommand = entry.subcommands[0] if isinstance(entry.subcommands, list) else None
 

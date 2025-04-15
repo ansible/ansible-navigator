@@ -1,5 +1,6 @@
 # cspell:ignore sessionstart,unconfigure,workerinput
 """Fixtures for all tests."""
+
 from __future__ import annotations
 
 import errno
