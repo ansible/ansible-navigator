@@ -424,7 +424,7 @@ def strip_markdown(lines: list[list[SimpleLinePart]]) -> list[list[SimpleLinePar
     """
     full_dash_line = [
         SimpleLinePart(
-            chars=f"{'—'*132}\n",
+            chars=f"{'—' * 132}\n",
             column=0,
             color=(128, 128, 128),
             style=None,

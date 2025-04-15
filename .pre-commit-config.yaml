@@ -33,12 +33,6 @@ repos:
           - prettier
           - prettier-plugin-toml
 
-  - repo: https://github.com/psf/black.git
-    rev: 25.1.0
-    hooks:
-      - id: black
-        language_version: python3
-
   - repo: https://github.com/pappasam/toml-sort
     rev: v0.24.2
     hooks:
@@ -53,8 +47,8 @@ repos:
     rev: "v0.11.5"
     hooks:
       - id: ruff
-        args:
-          - "--exit-non-zero-on-fix"
+        entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
+        types_or: [python, pyi]
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v8.17.3

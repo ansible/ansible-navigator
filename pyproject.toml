@@ -47,9 +47,6 @@ repository = "https://github.com/ansible/ansible-navigator"
 
 [tool]
 
-[tool.black]
-line-length = 100
-
 [tool.coverage.paths]
 source = ["src", ".tox/*/site-packages"]
 
@@ -377,6 +374,7 @@ line-length = 100
 
 [tool.ruff.lint]
 ignore = [
+  "COM812", # conflicts with ISC001 on format
   'ERA001', # [*] Found commented-out code
   'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
   'PLW2901', # `for` loop variable `info_name` overwritten by assignment target

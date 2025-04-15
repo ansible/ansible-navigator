@@ -121,7 +121,7 @@ def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
     indent = 4
     yaml_like = ["", "```yaml title='Settings'", ""]
     for idx, path_part in enumerate(path.split(".")):
-        yaml_like.append(f"{(2*idx+indent) * ' '}{path_part}:")
+        yaml_like.append(f"{(2 * idx + indent) * ' '}{path_part}:")
     yaml_like.append("```\n")
 
     if entry.value.schema_default is not C.NOT_SET:

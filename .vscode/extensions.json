@@ -4,7 +4,6 @@
     "esbenp.prettier-vscode",
     "gruntfuggly.triggertaskonsave",
     "markis.code-coverage",
-    "ms-python.black-formatter",
     "ms-python.debugpy",
     "ms-python.mypy-type-checker",
     "ms-python.pylint",
@@ -12,5 +11,6 @@
     "sonarsource.sonarlint-vscode",
     "streetsidesoftware.code-spell-checker",
     "tamasfe.even-better-toml"
-  ]
+  ],
+  "unwantedRecommendations": ["ms-python.black-formatter"]
 }

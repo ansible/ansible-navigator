@@ -66,6 +66,6 @@ def test_ce_auto_none(
     monkeypatch.setattr(shutil, "which", which)
     response = generate_config()
     expected = "No container engine could be found"
-    assert any(
-        expected in exit_msg.message for exit_msg in response.exit_messages
-    ), response.exit_messages
+    assert any(expected in exit_msg.message for exit_msg in response.exit_messages), (
+        response.exit_messages
+    )
