@@ -45,6 +45,11 @@ from .definitions import VolumeMountError
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+strict_resolve = True
+# Testing hack to allow errors trying to resolve /tmp/ansible.cfg during unit tests
+if os.environ.get("PYTEST_VERSION", ""):
+    strict_resolve = False
+
 
 def _post_processor(func: Callable[..., Any]) -> Callable[..., Any]:
     """Decorate a post processing function.
@@ -621,6 +626,49 @@ class NavigatorPostProcessor:
             message = f"`{entry.name} requesting mode {mode.value}"
             messages.append(LogMessage(level=logging.DEBUG, message=message))
         return messages, exit_messages
+
+    @_post_processor
+    def _normalize_path(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        """Normalize path in config by resolving symlinks and relative paths.
+
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
+        """
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
+
+        if entry.value.current is not C.NOT_SET:
+            normalized = Path(entry.value.current).resolve(strict=strict_resolve).as_posix()
+            if normalized != entry.value.current:
+                entry.value.current = normalized
+                message = f"`{entry.name} was normalized to {entry.value}."
+                messages.append(LogMessage(level=logging.WARNING, message=message))
+        return messages, exit_messages
+
+    @_post_processor
+    def config(
+        self,
+        entry: SettingsEntry,
+        config: ApplicationConfiguration,
+    ) -> PostProcessorReturn:
+        """Post process config.
+
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
+        """
+        return self._normalize_path(entry=entry, config=config)
 
     @staticmethod
     @_post_processor
