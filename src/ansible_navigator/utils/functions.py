@@ -13,6 +13,8 @@ import shlex
 import shutil
 import subprocess
 import zoneinfo
+import glob
+import re
 
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -627,24 +629,3 @@ def unescape_moustaches(obj: Any) -> Any:
     replacements = (("U+007B", "{"), ("U+007D", "}"))
     result = dispatch(obj, replacements)
     return result
-
-
-def get_latest_python3_executable() -> str:
-    """Get the latest python3 executable.
-
-    Returns:
-        The result of the command.
-    """
-    cmd = (
-        r"ls /usr/bin/python3.* | "
-        r"grep -E '^/usr/bin/python3\.[0-9]+$' | "
-        r"sort -V | "
-        r"tail -1"
-    )
-    try:
-        result = subprocess.check_output(cmd, shell=True, text=True).strip()
-    except subprocess.CalledProcessError as e:
-        print("Error while trying to find the latest Python executable:", e)
-        return ""
-    else:
-        return result

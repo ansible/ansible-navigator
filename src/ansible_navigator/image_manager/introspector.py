@@ -18,7 +18,7 @@ from ansible_navigator.utils.functions import get_latest_python3_executable
 logger = logging.getLogger(__name__)
 
 
-def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
+def run(self, image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
     """Run runner to collect image details.
 
     Args:
@@ -29,7 +29,8 @@ def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[st
         Output, errors and the return code
     """
     errors = []
-    python_exec_path = get_latest_python3_executable()
+    cache_path = self._args.internals.cache_path
+    python_exec_path = f"{cache_path}/python_latest.sh"
 
     with tempfile.TemporaryDirectory() as tmp_dir_name:
         introspect_source = inspect.getsource(image_introspect)
