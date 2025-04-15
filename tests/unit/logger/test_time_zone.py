@@ -7,16 +7,17 @@ import re
 from dataclasses import dataclass
 from re import Pattern
 from typing import TYPE_CHECKING
-from typing import Any
 
 import pytest
 
-from ansible_navigator import cli
+from ansible_navigator.utils.functions import shlex_join
 from tests.defaults import BaseScenario
 
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+    from tests.conftest import TCmdInTty
 
 
 @dataclass
@@ -45,30 +46,42 @@ class Scenario(BaseScenario):
         Returns:
             The list of CLI arguments
         """
-        arg_list = ["ansible-navigator", "--la", "false", "--lf", str(log_file), "--ll", "debug"]
+        arg_list = [
+            "ansible-navigator",
+            "--la",
+            "false",
+            "--lf",
+            str(log_file),
+            "--ll",
+            "debug",
+            "--mode",
+            "stdout",
+            "config",
+            "--help-config",
+        ]
         if isinstance(self.time_zone, str):
             arg_list.extend(["--tz", self.time_zone])
         return arg_list
 
 
 test_data = (
-    pytest.param(Scenario(name="0", re_match=re.compile(r"^.*\+00:00$")), id="0"),
+    pytest.param(Scenario(name="0", re_match=re.compile(r"^.*\+00:00")), id="0"),
     pytest.param(
-        Scenario(name="1", re_match=re.compile(r"^.*-0[78]:00$"), time_zone="America/Los_Angeles"),
+        Scenario(name="1", re_match=re.compile(r"^.*-0[78]:00"), time_zone="America/Los_Angeles"),
         id="1",
     ),
     pytest.param(
-        Scenario(name="2", re_match=re.compile(r"^.*\+09:00$"), time_zone="Japan"),
+        Scenario(name="2", re_match=re.compile(r"^.*\+09:00"), time_zone="Japan"),
         id="2",
     ),
     pytest.param(
-        Scenario(name="3", re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]$"), time_zone="local"),
+        Scenario(name="3", re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]"), time_zone="local"),
         id="3",
     ),
     pytest.param(
         Scenario(
             name="4",
-            re_match=re.compile(r"^.*\+00:00$"),
+            re_match=re.compile(r"^.*\+00:00"),
             time_zone="does_not_exist",
             will_exit=True,
         ),
@@ -80,45 +93,25 @@ test_data = (
 @pytest.mark.parametrize("data", test_data)
 def test_tz_support(
     data: Scenario,
-    caplog: pytest.LogCaptureFixture,
-    monkeypatch: pytest.MonkeyPatch,
+    cmd_in_tty: TCmdInTty,
     tmp_path: Path,
 ) -> None:
     """Start with the CLI, create log messages and match the time zone.
 
     Args:
-        caplog: The log capture fixture
         data: The test data
-        monkeypatch: The monkeypatch fixture
+        cmd_in_tty: The tty command runner
         tmp_path: A temporary file path
     """
-
-    def return_none(*_args: Any, **_kwargs: dict[str, Any]) -> None:
-        """Take no action, return none.
-
-        Args:
-            *_args: Arguments
-            **_kwargs: Keyword arguments
-
-        Returns:
-            Nothing
-        """
-        return
-
     log_file = tmp_path / "ansible-navigator.log"
     args = data.args(log_file=log_file)
-    monkeypatch.setattr("sys.argv", args)
-    monkeypatch.setattr("ansible_navigator.cli.wrapper", return_none)
-
+    command = shlex_join(args)
+    stdout, stderr, exit_code = cmd_in_tty(cmd=command)
     if data.will_exit:
-        with pytest.raises(SystemExit):
-            cli.main()
+        assert exit_code != 0, f"{stdout}, {stderr}, {exit_code}"
     else:
-        cli.main()
-    # This is a conservative number based on debug logging, it should be closer to 200
-    # but this assertion is here to ensure many records were retrieved.
-    assert len(caplog.records) > 100
-    for record in caplog.records:
+        assert exit_code == 0, f"{stdout}, {stderr}, {exit_code}"
+    for line in log_file.read_text().splitlines():
         assert data.re_match.match(
-            record.asctime,
-        ), f"{data.re_match.pattern} does not match '{record.asctime}'"
+            line,
+        ), f"{data.re_match.pattern} does not match '{line}'"
