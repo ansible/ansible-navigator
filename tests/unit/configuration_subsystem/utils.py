@@ -56,8 +56,8 @@ def config_post_process(expected: dict[str, Any], path: str) -> dict[str, Any]:
             if volume_mount.get("options"):
                 mount_path += f":{volume_mount['options']}"
             parsed_volume_mounts.append(mount_path)
-        expected["ansible-navigator"]["execution-environment"][
-            "volume-mounts"
-        ] = parsed_volume_mounts
+        expected["ansible-navigator"]["execution-environment"]["volume-mounts"] = (
+            parsed_volume_mounts
+        )
 
     return expected

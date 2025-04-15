@@ -1,27 +1,5 @@
 # Contributing to Ansible Navigator
 
-Some background:
-
-The ansible-navigator code base is not just for it's users but current and
-future developers. Over time we have adopted a few tools that help us maintain
-it and you contribute.
-
-1.  mypy (Helps with type checking)
-
-2.  pylint (lints all the things)
-
-3.  code-spell (prevents typos in code)
-
-4.  isort (sorts import statements)
-
-!!! notice
-
-    In early development cycles, a decision was made to use black as a formatter
-    which is why current pull-requests are required to pass a
-    `black --diff` check of the source tree. The decision to use `black` is
-    left to individual developers as the formatting changes it makes can be
-    achieved without it.
-
 Details can be found below on how to run these manually, our CI will also check
 them for you.
 

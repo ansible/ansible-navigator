@@ -235,8 +235,7 @@ class Configurator:
             )
             self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
             hint = (
-                "A sample settings file can be created with"
-                " 'ansible-navigator settings --sample'"
+                "A sample settings file can be created with 'ansible-navigator settings --sample'"
             )
             self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
             return
