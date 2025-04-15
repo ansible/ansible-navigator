@@ -318,6 +318,7 @@ class DiagnosticsCollector:
             return {"errors": "No container engine available or found"}
 
         details, errors, return_code = introspector.run(
+            self=self,
             image_name=self._args.execution_environment_image,
             container_engine=self._args.container_engine,
         )

@@ -12,16 +12,16 @@ from typing import Any
 
 from ansible_navigator.data import image_introspect
 from ansible_navigator.runner import Command
-from ansible_navigator.utils.functions import get_latest_python3_executable
 
 
 logger = logging.getLogger(__name__)
 
 
-def run(self, image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
+def run(self: Any, image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
     """Run runner to collect image details.
 
     Args:
+        self: The class instance
         image_name: The full image name
         container_engine: The container engine to use
 

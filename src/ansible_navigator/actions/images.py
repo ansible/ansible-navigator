@@ -24,7 +24,6 @@ from ansible_navigator.ui_framework import CursesLines
 from ansible_navigator.ui_framework import Interaction
 from ansible_navigator.ui_framework import nonblocking_notification
 from ansible_navigator.ui_framework import warning_notification
-from ansible_navigator.utils.functions import get_latest_python3_executable
 from ansible_navigator.utils.print import print_to_stdout
 
 from . import _actions as actions
