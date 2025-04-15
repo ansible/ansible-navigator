@@ -20,6 +20,11 @@ from typing import Protocol
 
 import pytest
 
+
+# This needs to happen before importing ansible-navigator to avoid test_editor_command_default
+# failure, as simple import already calls generate_editor_command()
+if "EDITOR" in os.environ:
+    os.environ.pop("EDITOR")
 from ansible_navigator.configuration_subsystem import to_sample
 from ansible_navigator.configuration_subsystem.navigator_configuration import APP_NAME
 from ansible_navigator.configuration_subsystem.navigator_configuration import NavigatorConfiguration
@@ -403,6 +408,11 @@ def pytest_configure(config: pytest.Config) -> None:
     for k in os.environ:
         if k in allow:
             continue
+        if (
+            k == "ANSIBLE_NAVIGATOR_CONFIG"
+            and os.environ["ANSIBLE_NAVIGATOR_CONFIG"] == "/dev/null"
+        ):
+            continue
         if k.startswith("ANSIBLE_"):
             USER_ENVIRONMENT[k] = os.environ.pop(k)
         if k == "EDITOR":
@@ -428,10 +438,11 @@ def pytest_configure(config: pytest.Config) -> None:
             "before testing, as this will likely break the test results.",
         )
 
-    # look for ansible-navigator settings file
-    _log, _errors, file_path = find_settings_file()
-    if file_path:
-        pytest.exit(f"Please remove the settings file '{file_path}' before testing.")
+    if os.environ.get("ANSIBLE_NAVIGATOR_CONFIG", "") != "/dev/null":
+        # look for ansible-navigator settings file
+        _log, _errors, file_path = find_settings_file()
+        if file_path:
+            pytest.exit(f"Please remove the settings file '{file_path}' before testing.")
 
     # ensure tmux is installed
     tmux_location = shutil.which("tmux")
