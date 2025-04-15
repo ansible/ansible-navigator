@@ -87,6 +87,7 @@ baseline = ".config/pydoclint-baseline.txt"
 check-return-types = false
 check-yield-types = false
 exclude = '\.git|\.test_logs|\.tox|build|out|tests/fixtures|venv'
+quiet = true # needed as it can break pre-commit
 should-document-private-class-attributes = true
 show-filenames-in-every-violation-message = true
 skip-checking-short-docstrings = false
