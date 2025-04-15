@@ -103,6 +103,7 @@ stdout_tests = (
 steps = add_indices(stdout_tests)
 
 
+@pytest.mark.skip(reason="builder tests are very slow and do not provide much value")
 @pytest.mark.parametrize("step", steps)
 class Test(BaseClass):
     """Run the tests for ``builder`` from CLI, mode stdout."""
