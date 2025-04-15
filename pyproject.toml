@@ -450,3 +450,16 @@ write_to = "src/ansible_navigator/_version.py"
 in_place = true
 sort_inline_tables = true
 sort_table_keys = true
+
+[tool.uv.pip]
+annotation-style = "line"
+custom-compile-command = "tox run -e deps"
+no-emit-package = [
+  "exceptiongroup",
+  "tomli",
+  "ruamel-yaml-clib",
+  "pip",
+  "setuptools",
+  "typing-extensions",
+  "uv"
+]
