@@ -18,7 +18,7 @@ CLI = Command(
     subcommand="run",
     cmdline=cmdline,
     execution_environment=False,
-    precommand=f"ANSIBLE_COLLECTIONS_PATHS={common_fixture_dir}",
+    precommand=f"ANSIBLE_COLLECTIONS_PATH={common_fixture_dir}",
 ).join()
 
 initial_steps = (
@@ -26,6 +26,7 @@ initial_steps = (
         user_input=CLI,
         comment="ansible-navigator run playbook",
         search_within_response=["Complete", "Successful"],
+        present=["run integration test play-1", "run integration test play-2"],
     ),
 )
 
