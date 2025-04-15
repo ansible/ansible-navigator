@@ -7,9 +7,13 @@
       "source.organizeImports": "explicit"
     }
   },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "evenBetterToml.formatter.alignComments": false,
+  "evenBetterToml.formatter.arrayTrailingComma": true,
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.git": true,

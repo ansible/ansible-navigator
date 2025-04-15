@@ -8,7 +8,7 @@ requires = [
 ]
 
 [project]
-requires-python = ">=3.10"
+authors = [{"email" = "bthornto@redhat.com", "name" = "Bradley A. Thornton"}]
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Intended Audience :: Developers',
@@ -27,23 +27,23 @@ classifiers = [
   'Programming Language :: Python :: Implementation :: CPython',
   'Programming Language :: Python :: Implementation :: PyPy'
 ]
-dynamic = ["version", "dependencies", "optional-dependencies"]
-name = "ansible-navigator"
 description = "A text-based user interface (TUI) for the Red Hat Ansible Automation Platform"
-readme = "README.md"
-authors = [{"name" = "Bradley A. Thornton", "email" = "bthornto@redhat.com"}]
-maintainers = [{"name" = "Ansible by Red Hat", "email" = "info@ansible.com"}]
-license = {text = "Apache"}
+dynamic = ["version", "dependencies", "optional-dependencies"]
 keywords = ["ansible"]
+license = {text = "Apache"}
+maintainers = [{"email" = "info@ansible.com", "name" = "Ansible by Red Hat"}]
+name = "ansible-navigator"
+readme = "README.md"
+requires-python = ">=3.10"
 
 [project.scripts]
 ansible-navigator = "ansible_navigator.cli:main"
 
 [project.urls]
-homepage = "https://github.com/ansible/ansible-navigator"
-documentation = "https://ansible-navigator.readthedocs.io/en/latest/"
-repository = "https://github.com/ansible/ansible-navigator"
 changelog = "https://github.com/ansible/ansible-navigator/releases"
+documentation = "https://ansible-navigator.readthedocs.io/en/latest/"
+homepage = "https://github.com/ansible/ansible-navigator"
+repository = "https://github.com/ansible/ansible-navigator"
 
 [tool]
 
@@ -55,8 +55,8 @@ source = ["src", ".tox/*/site-packages"]
 
 [tool.coverage.report]
 exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
-skip_covered = true
 show_missing = true
+skip_covered = true
 
 [tool.coverage.run]
 # branch = true
@@ -65,20 +65,20 @@ parallel = true
 source_pkgs = ["ansible_navigator"]
 
 [tool.mypy]
-python_version = "3.10"
+check_untyped_defs = true
 # strict = true
 color_output = true
-error_summary = true
-check_untyped_defs = true
+disallow_any_generics = true
 # disallow_untyped_calls = true
 disallow_untyped_defs = true
-disallow_any_generics = true
+error_summary = true
 incremental = false
+python_version = "3.10"
 
 [[tool.mypy.overrides]]
+ignore_missing_imports = true
 # https://github.com/ansible/ansible-runner/issues/1340
 module = ["ansible_runner"]
-ignore_missing_imports = true
 
 [tool.pydoclint]
 allow-init-docstring = true
@@ -106,16 +106,16 @@ preferred-modules = [
 ]
 
 [tool.pylint.master]
+# pylint defaults + fh for with open .. as (f|fh)
+good-names = "i,j,k,ex,Run,_,f,fh"
 ignore = [
   "_version.py", # built by setuptools_scm
   "tm_tokenize" # tm_tokenize is virtually vendored and shouldn't be linted as such
 ]
-# pylint defaults + fh for with open .. as (f|fh)
-good-names = "i,j,k,ex,Run,_,f,fh"
 jobs = 0
-no-docstring-rgx = "__.*__"
-max-positional-arguments = 14
 max-args = 6 # default of 5 too low
+max-positional-arguments = 14
+no-docstring-rgx = "__.*__"
 
 [tool.pylint.messages_control]
 disable = [
@@ -369,10 +369,10 @@ PYTEST_CHECK_TEST_ID_REGEX = 1
 PYTEST_MAX_TEST_ID_LENGTH = 0
 
 [tool.ruff]
-fix = true
-line-length = 100
 builtins = ["__"]
 exclude = ["tests/fixtures/**", ".git"]
+fix = true
+line-length = 100
 
 [tool.ruff.lint]
 ignore = [
@@ -429,18 +429,23 @@ lines-after-imports = 2 # Ensures consistency for cases when there's variable vs
 lines-between-types = 1 # Separate import/from with 1 line
 
 [tool.ruff.lint.per-file-ignores]
+"src/ansible_navigator/tm_tokenize/*" = ["D100", "D101", "D102", "D103"]
 "tests/**" = ["SLF001", "S101", "S602"]
 "tests/integration/actions/collections/__init__.py" = ["A005"]
-"src/ansible_navigator/tm_tokenize/*" = ["D100", "D101", "D102", "D103"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.setuptools.dynamic]
 dependencies = {file = [".config/requirements.in"]}
-optional-dependencies.test = {file = [".config/requirements-test.in"]}
 optional-dependencies.docs = {file = [".config/requirements-docs.in"]}
+optional-dependencies.test = {file = [".config/requirements-test.in"]}
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
 write_to = "src/ansible_navigator/_version.py"
+
+[tool.tomlsort]
+in_place = true
+sort_inline_tables = true
+sort_table_keys = true
