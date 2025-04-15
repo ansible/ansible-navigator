@@ -9,35 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "Play name: Simple unicode output test:0",
-        "Task name: Raw with unicode arg and output",
-        "CHANGED: localhost",
-        " 0│---",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        " 3│event_loop: null",
-        " 4│host: localhost",
-        " 5│play: Simple unicode output test",
-        " 6│play_pattern: localhost",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        " 8│remote_addr: localhost",
-        " 9│res:",
-        "10│  _ansible_no_log: false",
-        "11│  changed: true",
-        "12│  rc: 0",
-        "13│  stderr: ''",
-        "14│  stderr_lines: []",
-        "15│  stdout: |-",
-        "16│    航海家",
-        "17│  stdout_lines:",
-        "18│  - 航海",
-        "19│resolved_action: ansible.builtin.raw",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "21│task: Raw with unicode arg and output",
-        "22│task_action: raw",
-        "23│task_args: ''",
-        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "^b/PgUp page up             ^f/PgDn page down             ↑↓ scroll             esc back             - previous             + next             [0-9] goto             :help help            Successful"
-    ]
+    "output": []
 }
