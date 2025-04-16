@@ -17,11 +17,10 @@ from ansible_navigator.runner import Command
 logger = logging.getLogger(__name__)
 
 
-def run(self: Any, image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
+def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[str], int]:
     """Run runner to collect image details.
 
     Args:
-        self: The class instance
         image_name: The full image name
         container_engine: The container engine to use
 
@@ -29,8 +28,9 @@ def run(self: Any, image_name: str, container_engine: str) -> tuple[dict[Any, An
         Output, errors and the return code
     """
     errors = []
-    cache_path = self._args.internals.cache_path
-    python_exec_path = f"{cache_path}/python_latest.sh"
+    python_exec_path = "python3"
+    # cache_path = self._args.internals.cache_path
+    # python_exec_path = f"{cache_path}/python_latest.sh"
 
     with tempfile.TemporaryDirectory() as tmp_dir_name:
         introspect_source = inspect.getsource(image_introspect)
