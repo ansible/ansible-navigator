@@ -29,8 +29,6 @@ def run(image_name: str, container_engine: str) -> tuple[dict[Any, Any], list[st
     """
     errors = []
     python_exec_path = "python3"
-    # cache_path = self._args.internals.cache_path
-    # python_exec_path = f"{cache_path}/python_latest.sh"
 
     with tempfile.TemporaryDirectory() as tmp_dir_name:
         introspect_source = inspect.getsource(image_introspect)
