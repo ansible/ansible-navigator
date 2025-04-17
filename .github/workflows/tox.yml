@@ -38,6 +38,7 @@ jobs:
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
     permissions:
+      contents: read
       id-token: write # codecov actions
       checks: read # codecov actions
     runs-on: ubuntu-24.04
