@@ -39,6 +39,7 @@ jobs:
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
     permissions:
+      contents: read
       id-token: write # codecov actions
       checks: read # codecov actions
     runs-on: ubuntu-24.04
@@ -164,7 +165,7 @@ jobs:
           path: .
 
       - name: Upload coverage data
-        uses: codecov/codecov-action@v5.4.0
+        uses: codecov/codecov-action@v5.4.2
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true

@@ -44,14 +44,14 @@ repos:
       - id: tox-ini-fmt
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.11.5"
+    rev: "v0.11.6"
     hooks:
       - id: ruff
         entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
         types_or: [python, pyi]
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.17.3
+    rev: v8.19.0
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -146,7 +146,7 @@ repos:
           - flake8-docstrings # uses pydocstyle
 
   - repo: https://github.com/jsh9/pydoclint
-    rev: 0.6.5
+    rev: 0.6.6
     hooks:
       - id: pydoclint
 
