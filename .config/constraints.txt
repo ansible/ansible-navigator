@@ -15,7 +15,7 @@ black==25.1.0
 bracex==2.5.post1
 cairocffi==1.7.1
 cairosvg==2.7.1
-certifi==2025.1.31
+certifi==2025.4.26
 cffi==1.17.1
 cfgv==3.4.0
 charset-normalizer==3.4.1
@@ -36,7 +36,7 @@ filelock==3.18.0
 flake8==7.2.0
 flake8-docstrings==1.7.0
 ghp-import==2.1.0
-griffe==1.7.2
+griffe==1.7.3
 hjson==3.1.0
 htmlmin2==0.1.13
 identify==2.6.10
@@ -46,7 +46,7 @@ iniconfig==2.1.0
 jinja2==3.1.6
 jsmin==3.0.1
 jsonschema==4.23.0
-jsonschema-specifications==2024.10.1
+jsonschema-specifications==2025.4.1
 libtmux==0.46.1
 linkchecker==10.5.0
 lockfile==0.12.2
@@ -69,7 +69,7 @@ mkdocs-minify-plugin==0.8.0
 mkdocs-monorepo-plugin==1.1.0
 mkdocstrings==0.29.1
 mkdocstrings-python==1.16.10
-mypy-extensions==1.0.0
+mypy-extensions==1.1.0
 nodeenv==1.9.1
 onigurumacffi==1.4.1
 packaging==25.0
@@ -107,7 +107,7 @@ rpds-py==0.24.0
 ruamel-yaml==0.18.10
 six==1.17.0
 snowballstemmer==2.2.0
-soupsieve==2.6
+soupsieve==2.7
 subprocess-tee==0.4.2
 super-collections==0.5.3
 termcolor==3.0.1
