@@ -9,11 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "                                                                Success",
-        "                                                                ────────────────────────────────────────",
-        "                                                                Congratulations, no lint issues found!",
-        "                                                                ────────────────────────────────────────",
-        "                                                                                                   Ok"
-    ]
+    "output": []
 }
