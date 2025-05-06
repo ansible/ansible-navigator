@@ -43,7 +43,7 @@ base_steps = (
     UiTestStep(user_input=":1", comment="play-2 task-2 details"),
     UiTestStep(user_input=":back", comment="play-2 details"),
     UiTestStep(user_input=":back", comment="all play details"),
-    UiTestStep(user_input=":st", comment="display stream"),
+    UiTestStep(user_input=":st", comment="display stream", present=["Successful"]),
 )
 
 
