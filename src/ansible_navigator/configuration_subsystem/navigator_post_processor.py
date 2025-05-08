@@ -647,8 +647,7 @@ class NavigatorPostProcessor:
         exit_messages: list[ExitMessage] = []
 
         if entry.value.current is not C.NOT_SET:
-            entry_value = entry.value.current.replace("$PWD", str(Path.cwd()))
-            normalized = Path(entry_value).resolve(strict=strict_resolve).as_posix()
+            normalized = Path(entry.value.current).resolve().as_posix()
             if normalized != entry.value.current:
                 entry.value.current = normalized
                 message = f"`{entry.name} was normalized to {entry.value}."
