@@ -4,3 +4,4 @@ coverage:
     patch: true # we want github annotations
 ignore:
   - "src/ansible_navigator/actions"
+  - "src/ansible_navigator/data/catalog_collections.py"
