@@ -647,7 +647,15 @@ class NavigatorPostProcessor:
         exit_messages: list[ExitMessage] = []
 
         if entry.value.current is not C.NOT_SET:
-            normalized = Path(entry.value.current).resolve(strict=strict_resolve).as_posix()
+            try:
+                normalized = Path(entry.value.current).resolve(strict=strict_resolve).as_posix()
+            except FileNotFoundError:  # pragma: no cover
+                message = (
+                    f"Path `{entry.value.current}` does not exist."
+                    " Falling back to non-strict resolution."
+                )
+                messages.append(LogMessage(level=logging.WARNING, message=message))
+                normalized = Path(entry.value.current).resolve().as_posix()
             if normalized != entry.value.current:
                 entry.value.current = normalized
                 message = f"`{entry.name} was normalized to {entry.value}."
