@@ -649,7 +649,7 @@ class NavigatorPostProcessor:
         if entry.value.current is not C.NOT_SET:
             try:
                 normalized = Path(entry.value.current).resolve(strict=strict_resolve).as_posix()
-            except FileNotFoundError:
+            except FileNotFoundError:  # pragma: no cover
                 message = (
                     f"Path `{entry.value.current}` does not exist."
                     " Falling back to non-strict resolution."
