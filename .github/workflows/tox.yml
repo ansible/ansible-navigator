@@ -9,6 +9,9 @@ on:
   create: # is used for publishing to PyPI and TestPyPI
     tags: # any tag regardless of its name, no branches
       - "**"
+  merge_group:
+    branches:
+      - "main"
   push: # only publishes pushes to the main branch to TestPyPI
     branches: # any integration branch but not tag
       - "main"
