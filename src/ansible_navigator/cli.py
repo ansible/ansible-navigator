@@ -58,10 +58,10 @@ logger = logging.getLogger(PKG_NAME)
 def cache_scripts() -> None:
     """Cache the scripts used to introspect the container image."""
     scripts = ("catalog_collections.py", "image_introspect.py", "python_latest.sh")
+    cache_path = generate_cache_path(app_name=APP_NAME)
+    cache_path.mkdir(parents=True, exist_ok=True)
     for script in scripts:
         src = path_to_file(filename=script)
-        cache_path = generate_cache_path(app_name=APP_NAME)
-        cache_path.mkdir(parents=True, exist_ok=True)
         dst = cache_path / script
         message = f"No update required for {src} to {dst}"
         try:
