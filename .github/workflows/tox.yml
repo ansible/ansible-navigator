@@ -183,10 +183,6 @@ jobs:
             echo "::warning::Number of coverage.xml files was not the expected one (${JOBS_PRODUCING_COVERAGE}): $(find . -name coverage.xml | xargs echo)"
           fi
 
-      - name: Check codecov.io status
-        if: github.event_name == 'pull_request'
-        uses: coactions/codecov-status@main
-
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1
         with:
