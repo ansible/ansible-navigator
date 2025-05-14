@@ -113,7 +113,7 @@ jobs:
           name: ${{ matrix.name }}
           # unable to use wildcards yet due to https://github.com/codecov/test-results-action/issues/110
           flags: ${{ matrix.python_version }},${{ matrix.os }}
-          use_oidc: true
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Change accessibility for cache
         if: ${{ startsWith(matrix.name, 'py') }}
@@ -168,7 +168,7 @@ jobs:
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
-          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }} # cspell:ignore oidc
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Delete Merged Artifacts
         uses: actions/upload-artifact/merge@v4
