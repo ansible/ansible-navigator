@@ -113,7 +113,7 @@ jobs:
           name: ${{ matrix.name }}
           # unable to use wildcards yet due to https://github.com/codecov/test-results-action/issues/110
           flags: ${{ matrix.python_version }},${{ matrix.os }}
-          use_oidc: true
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Change accessibility for cache
         if: ${{ startsWith(matrix.name, 'py') }}
@@ -168,7 +168,7 @@ jobs:
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
-          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }} # cspell:ignore oidc
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Delete Merged Artifacts
         uses: actions/upload-artifact/merge@v4
@@ -182,10 +182,6 @@ jobs:
           if [ "$(find . -name coverage.xml | wc -l | bc)" -ne "${JOBS_PRODUCING_COVERAGE}" ]; then
             echo "::warning::Number of coverage.xml files was not the expected one (${JOBS_PRODUCING_COVERAGE}): $(find . -name coverage.xml | xargs echo)"
           fi
-
-      - name: Check codecov.io status
-        if: github.event_name == 'pull_request'
-        uses: coactions/codecov-status@main
 
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1
