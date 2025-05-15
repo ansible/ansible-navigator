@@ -3,10 +3,8 @@
 
 from __future__ import annotations
 
-import filecmp
 import logging
 import os
-import shutil
 import signal
 import sys
 
@@ -64,13 +62,23 @@ def cache_scripts() -> None:
         src = path_to_file(filename=script)
         dst = cache_path / script
         message = f"No update required for {src} to {dst}"
+        # try:
+        #     if not filecmp.cmp(src, dst):
+        #         shutil.copy(src, dst)
+        #         message = f"Updated {src} to {dst} (outdated)"
+        # except FileNotFoundError:
+        #     shutil.copy(src, dst)
+        #     message = f"Copied {src} to {dst} (missing)"
         try:
-            if not filecmp.cmp(src, dst):
-                shutil.copy(src, dst)
-                message = f"Updated {src} to {dst} (outdated)"
-        except FileNotFoundError:
-            shutil.copy(src, dst)
-            message = f"Copied {src} to {dst} (missing)"
+            # Remove the destination if it exists and is not a symlink
+            if dst.exists() and not dst.is_symlink():
+                dst.unlink()
+            # Create a symlink if it doesn't exist or points to the wrong source
+            if not dst.exists() or dst.resolve() != src.resolve():
+                dst.symlink_to(src)
+                message = f"Created symbolic link from {src} to {dst}"
+        except Exception as exc:
+            message = f"Failed to create symbolic link from {src} to {dst}: {exc}"
         logger.log(level=logging.DEBUG, msg=message)
 
 
