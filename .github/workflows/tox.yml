@@ -167,7 +167,7 @@ jobs:
           path: .
 
       - name: Upload coverage data
-        uses: codecov/codecov-action@v5.4.2
+        uses: codecov/codecov-action@v5.4.3
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
