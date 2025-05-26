@@ -44,7 +44,7 @@ repos:
       - id: tox-ini-fmt
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.11.9"
+    rev: "v0.11.10"
     hooks:
       - id: ruff
         entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
@@ -97,7 +97,7 @@ repos:
       - id: check-json5
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.44.0
+    rev: v0.45.0
     hooks:
       - id: markdownlint
         exclude: >
@@ -146,7 +146,7 @@ repos:
           - flake8-docstrings # uses pydocstyle
 
   - repo: https://github.com/jsh9/pydoclint
-    rev: 0.6.6
+    rev: 0.6.7
     hooks:
       - id: pydoclint
 
