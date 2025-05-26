@@ -23,7 +23,7 @@ click==8.1.8
 colorama==0.4.6
 coverage==7.8.2
 coverage-enable-subprocess==1.0
-cryptography==45.0.2
+cryptography==45.0.3
 csscompressor==0.9.5
 cssselect2==0.8.0
 darglint==1.8.1
