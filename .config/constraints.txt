@@ -45,9 +45,9 @@ importlib-metadata==8.7.0
 iniconfig==2.1.0
 jinja2==3.1.6
 jsmin==3.0.1
-jsonschema==4.23.0
+jsonschema==4.24.0
 jsonschema-specifications==2025.4.1
-libtmux==0.46.1
+libtmux==0.46.2
 linkchecker==10.5.0
 lockfile==0.12.2
 markdown==3.8
@@ -90,10 +90,10 @@ pygments==2.19.1
 pymdown-extensions==10.15
 pytest==8.3.5
 pytest-env==1.1.5
-pytest-mock==3.14.0
+pytest-mock==3.14.1
 pytest-plus==0.8.1
 pytest-subtests==0.14.1
-pytest-xdist==3.6.1
+pytest-xdist==3.7.0
 python-daemon==3.1.2
 python-dateutil==2.9.0.post0
 pyyaml==6.0.2
@@ -102,7 +102,7 @@ referencing==0.36.2
 requests==2.32.3
 resolvelib==1.0.1
 rpds-py==0.25.1
-ruamel-yaml==0.18.11
+ruamel-yaml==0.18.12
 six==1.17.0
 snowballstemmer==3.0.1
 soupsieve==2.7
@@ -117,7 +117,7 @@ watchdog==6.0.0
 wcmatch==10.0
 webencodings==0.5.1
 yamllint==1.37.1
-zipp==3.21.0
+zipp==3.22.0
 
 # The following packages were excluded from the output:
 # exceptiongroup
