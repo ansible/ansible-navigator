@@ -21,7 +21,11 @@ from tests.integration._tmux_session import TmuxSessionKwargs
 EXPECTED_COLLECTIONS = ["ansible.builtin", "company_name.coll_1", "company_name.coll_2"]
 
 base_steps = (
-    UiTestStep(user_input=":1", comment="Browse company_name.coll_1 plugins window"),
+    UiTestStep(
+        user_input=":1",
+        comment="Browse company_name.coll_1 plugins window",
+        present=["Company name.coll 1", "0│filter_1", "This is test filter plugin"],
+    ),
     UiTestStep(user_input=":0", comment="filter_1 plugin docs window"),
     UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
     UiTestStep(user_input=":1", comment="lookup_1 plugin docs window"),

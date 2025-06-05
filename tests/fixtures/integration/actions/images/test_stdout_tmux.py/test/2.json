@@ -17,10 +17,5 @@
         ],
         "compared_fixture": false
     },
-    "output": [
-        "ansible_collections:",
-        "ansible_version:",
-        "image_name: ghcr.io/ansible/community-ansible-dev-tools:latest",
-        "(venv) bash$"
-    ]
+    "output": []
 }
