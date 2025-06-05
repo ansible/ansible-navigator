@@ -100,12 +100,11 @@ jobs:
 
       - name: Archive logs and coverage data
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: coactions/upload-artifact@v4
         with:
           name: logs-${{ matrix.name }}.zip
           include-hidden-files: true
           path: |
-            .tox/**/log/
             .tox/**/coverage.xml
 
       - name: Upload test results to Codecov
