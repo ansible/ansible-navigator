@@ -15,7 +15,7 @@ from .base import common_fixture_dir
 
 cmdline = (
     f"{PLAYBOOK_COLLECTION} --eev {common_fixture_dir}:{common_fixture_dir}"
-    f" --senv ANSIBLE_COLLECTIONS_PATHS={common_fixture_dir}"
+    f" --senv ANSIBLE_COLLECTIONS_PATH={common_fixture_dir}"
 )
 CLI = Command(subcommand="run", cmdline=cmdline, execution_environment=True).join()
 

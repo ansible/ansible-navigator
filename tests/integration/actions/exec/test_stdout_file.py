@@ -48,7 +48,7 @@ stdout_tests = (
             cmdline="/bin/env",
             execution_environment=True,
         ).join(),
-        present=["ANSIBLE_COLLECTIONS_PATHS=/tmp/collections"],
+        present=["ANSIBLE_COLLECTIONS_PATH=/tmp/collections"],
     ),
 )
 

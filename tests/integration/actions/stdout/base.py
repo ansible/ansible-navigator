@@ -11,6 +11,8 @@ import pytest
 from tests.defaults import FIXTURES_DIR
 from tests.integration._common import retrieve_fixture_for_step
 from tests.integration._common import update_fixtures
+from tests.integration._interactions import SearchFor
+from tests.integration._interactions import UiTestStep
 from tests.integration._tmux_session import TmuxSession
 from tests.integration._tmux_session import TmuxSessionKwargs
 
@@ -18,6 +20,8 @@ from tests.integration._tmux_session import TmuxSessionKwargs
 TEST_FIXTURE_DIR = FIXTURES_DIR / "integration/actions/stdout"
 ANSIBLE_PLAYBOOK = TEST_FIXTURE_DIR / "site.yml"
 TEST_CONFIG_FILE = TEST_FIXTURE_DIR / "ansible-navigator.yml"
+
+base_steps = UiTestStep(user_input=":0", comment="play-1 details")
 
 
 class BaseClass:
@@ -52,37 +56,51 @@ class BaseClass:
         self,
         request: pytest.FixtureRequest,
         tmux_session: TmuxSession,
-        index: int,
-        user_input: str,
-        comment: str,
-        search_within_response: str,
+        step: UiTestStep,
         skip_if_already_failed: None,
     ) -> None:
-        # pylint:disable=too-many-arguments
         """Run the tests for stdout, mode and EE set in child class.
 
         Args:
             request: A fixture providing details about the test caller
             tmux_session: The tmux session to use
-            index: The test index
-            user_input: Value to send to the tmux session
-            comment: Comment to add to the fixture
-            search_within_response: A list of strings or string to find
+            step: The commands to issue and content to look for
             skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
         """
         assert ANSIBLE_PLAYBOOK.exists()
         assert TEST_CONFIG_FILE.exists()
 
-        received_output = tmux_session.interaction(user_input, search_within_response)
+        search_within_response: str | list[str]
+        if step.search_within_response is SearchFor.HELP:
+            search_within_response = ":help help"
+        elif step.search_within_response is SearchFor.PROMPT:
+            search_within_response = tmux_session.cli_prompt
+        elif step.search_within_response is SearchFor.WARNING:
+            search_within_response = "Warning"
+        else:
+            search_within_response = step.search_within_response
+        received_output = tmux_session.interaction(step.user_input, search_within_response)
+
+        index = step.step_index
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
         )
         if fixtures_update_requested:
-            update_fixtures(request, index, received_output, comment)
+            update_fixtures(request, index, received_output, step.comment)
 
         expected_output = retrieve_fixture_for_step(request, index)
-        assert expected_output == received_output, "\n" + "\n".join(
-            difflib.unified_diff(expected_output, received_output, "expected", "received"),
-        )
+
+        page = " ".join(received_output)
+        if step.present:
+            assert all(present in page for present in step.present)
+
+        if step.absent:
+            assert not any(absent in page for absent in step.absent)
+
+        if not any((step.present, step.absent)):
+            expected_output = retrieve_fixture_for_step(request, step.step_index)
+            assert expected_output == received_output, "\n" + "\n".join(
+                difflib.unified_diff(expected_output, received_output, "expected", "received"),
+            )
