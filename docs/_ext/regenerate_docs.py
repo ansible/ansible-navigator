@@ -109,7 +109,7 @@ def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
     if entry.cli_parameters is None:
         cli_parameters = "positional"
     elif entry.cli_parameters.short:
-        if entry.cli_parameters.long_override:
+        if entry.cli_parameters.long_override:  # noqa: SIM108
             long = entry.cli_parameters.long_override
         else:
             long = f"--{entry.name_dashed}"

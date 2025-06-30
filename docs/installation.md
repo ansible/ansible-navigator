@@ -141,7 +141,6 @@
       The podman package is available in the official repositories for Ubuntu 20.10 and newer.
       Since interim releases of Ubuntu are not available on the Microsoft Store for WSL the
       [Kubic project] package can be used.
-
   1.  Update the ubuntu package index:
 
       ```bash
@@ -186,7 +185,6 @@
 
 - Follow the [Docker Desktop for Windows] installation instructions (if podman
   was not installed above)
-
   - Be sure to complete the [Manage Docker as a non-root user] steps.
 
 ### Install ansible-navigator (windows)
