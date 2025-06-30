@@ -141,7 +141,6 @@
       The podman package is available in the official repositories for Ubuntu 20.10 and newer.
       Since interim releases of Ubuntu are not available on the Microsoft Store for WSL the
       [Kubic project] package can be used.
-
   1.  Update the ubuntu package index:
 
       ```bash
