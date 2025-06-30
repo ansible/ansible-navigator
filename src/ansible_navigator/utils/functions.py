@@ -466,7 +466,7 @@ def round_half_up(number: float) -> int:
     Returns:
         The rounded number as an it
     """
-    rounded = decimal.Decimal(number).quantize(decimal.Decimal("1"), rounding=decimal.ROUND_HALF_UP)
+    rounded = decimal.Decimal(number).quantize(decimal.Decimal(1), rounding=decimal.ROUND_HALF_UP)
     return int(rounded)
 
 
