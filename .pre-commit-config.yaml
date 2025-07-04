@@ -9,7 +9,7 @@ exclude: >
   )$
 repos:
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.5.3"
+    rev: "v3.6.2"
     hooks:
       - id: prettier
         # Original hook implementation is flaky due to *several* bugs described
@@ -44,7 +44,7 @@ repos:
       - id: tox-ini-fmt
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.11.13"
+    rev: "v0.12.1"
     hooks:
       - id: ruff
         entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
@@ -138,7 +138,7 @@ repos:
         types: [file, yaml]
 
   - repo: https://github.com/PyCQA/flake8.git
-    rev: 7.2.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         language_version: python3
@@ -157,7 +157,7 @@ repos:
       - id: pyupgrade
         args: ["--py310-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.16.0
+    rev: v1.16.1
     hooks:
       - id: mypy
         additional_dependencies:
