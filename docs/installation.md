@@ -186,7 +186,6 @@
 
 - Follow the [Docker Desktop for Windows] installation instructions (if podman
   was not installed above)
-
   - Be sure to complete the [Manage Docker as a non-root user] steps.
 
 ### Install ansible-navigator (windows)
