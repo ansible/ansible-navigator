@@ -1,5 +1,6 @@
 # cspell:ignore ftype, chksum
 """Catalog collections within the execution environment."""
+
 from __future__ import annotations
 
 import argparse
@@ -382,7 +383,7 @@ def worker(
     # pylint: disable=too-many-locals
 
     # load the fragment_loader _after_ the path is set
-    from ansible.plugins.loader import fragment_loader
+    from ansible.plugins.loader import fragment_loader  # noqa: PLC0415
 
     while True:
         entry = pending_queue.get()

@@ -2,3 +2,9 @@
 coverage:
   status:
     patch: true # we want github annotations
+# The given ignore files are either not tested/tracked currently or cannot be tested at all
+# therefore adding them to the ignore list
+ignore:
+  - "src/ansible_navigator/actions"
+  - "src/ansible_navigator/data/catalog_collections.py"
+  - "src/ansible_navigator/version.py"

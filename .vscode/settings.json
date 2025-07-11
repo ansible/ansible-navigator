@@ -1,15 +1,19 @@
 {
   "[python]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.organizeImports": "explicit"
     }
   },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "evenBetterToml.formatter.alignComments": false,
+  "evenBetterToml.formatter.arrayTrailingComma": true,
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.git": true,
@@ -21,7 +25,6 @@
     "dist": true,
     "venv": true
   },
-  "python.formatting.provider": "black",
   "python.linting.flake8Enabled": true,
   "python.linting.mypyEnabled": true,
   "python.linting.pylintEnabled": true,

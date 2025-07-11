@@ -109,7 +109,7 @@ def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
     if entry.cli_parameters is None:
         cli_parameters = "positional"
     elif entry.cli_parameters.short:
-        if entry.cli_parameters.long_override:
+        if entry.cli_parameters.long_override:  # noqa: SIM108
             long = entry.cli_parameters.long_override
         else:
             long = f"--{entry.name_dashed}"
@@ -121,7 +121,7 @@ def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
     indent = 4
     yaml_like = ["", "```yaml title='Settings'", ""]
     for idx, path_part in enumerate(path.split(".")):
-        yaml_like.append(f"{(2*idx+indent) * ' '}{path_part}:")
+        yaml_like.append(f"{(2 * idx + indent) * ' '}{path_part}:")
     yaml_like.append("```\n")
 
     if entry.value.schema_default is not C.NOT_SET:

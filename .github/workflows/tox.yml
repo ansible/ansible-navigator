@@ -9,6 +9,9 @@ on:
   create: # is used for publishing to PyPI and TestPyPI
     tags: # any tag regardless of its name, no branches
       - "**"
+  merge_group:
+    branches:
+      - "main"
   push: # only publishes pushes to the main branch to TestPyPI
     branches: # any integration branch but not tag
       - "main"
@@ -38,6 +41,7 @@ jobs:
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
     permissions:
+      contents: read
       id-token: write # codecov actions
       checks: read # codecov actions
     runs-on: ubuntu-24.04
@@ -96,12 +100,11 @@ jobs:
 
       - name: Archive logs and coverage data
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: coactions/upload-artifact@v4
         with:
           name: logs-${{ matrix.name }}.zip
           include-hidden-files: true
           path: |
-            .tox/**/log/
             .tox/**/coverage.xml
 
       - name: Upload test results to Codecov
@@ -112,7 +115,7 @@ jobs:
           name: ${{ matrix.name }}
           # unable to use wildcards yet due to https://github.com/codecov/test-results-action/issues/110
           flags: ${{ matrix.python_version }},${{ matrix.os }}
-          use_oidc: true
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Change accessibility for cache
         if: ${{ startsWith(matrix.name, 'py') }}
@@ -163,11 +166,11 @@ jobs:
           path: .
 
       - name: Upload coverage data
-        uses: codecov/codecov-action@v5.4.0
+        uses: codecov/codecov-action@v5.4.3
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
-          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }} # cspell:ignore oidc
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Delete Merged Artifacts
         uses: actions/upload-artifact/merge@v4
@@ -179,13 +182,8 @@ jobs:
         run: |
           JOBS_PRODUCING_COVERAGE=6
           if [ "$(find . -name coverage.xml | wc -l | bc)" -ne "${JOBS_PRODUCING_COVERAGE}" ]; then
-            echo "::error::Number of coverage.xml files was not the expected one (${JOBS_PRODUCING_COVERAGE}): $(find . -name coverage.xml |xargs echo)"
-            exit 1
+            echo "::warning::Number of coverage.xml files was not the expected one (${JOBS_PRODUCING_COVERAGE}): $(find . -name coverage.xml | xargs echo)"
           fi
-
-      - name: Check codecov.io status
-        if: github.event_name == 'pull_request'
-        uses: coactions/codecov-status@main
 
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1

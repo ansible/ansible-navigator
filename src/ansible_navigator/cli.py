@@ -1,10 +1,12 @@
 # cspell:ignore getpid, gmtime, msecs
 """Navigator entry point."""
+
 from __future__ import annotations
 
 import filecmp
 import logging
 import os
+import shutil
 import signal
 import sys
 
@@ -13,7 +15,6 @@ from curses import wrapper
 from importlib.metadata import version
 from importlib.util import find_spec
 from pathlib import Path
-from shutil import copyfile
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -56,19 +57,19 @@ logger = logging.getLogger(PKG_NAME)
 
 def cache_scripts() -> None:
     """Cache the scripts used to introspect the container image."""
-    scripts = ("catalog_collections.py", "image_introspect.py")
+    scripts = ("catalog_collections.py", "image_introspect.py", "python_latest.sh")
+    cache_path = generate_cache_path(app_name=APP_NAME)
+    cache_path.mkdir(parents=True, exist_ok=True)
     for script in scripts:
         src = path_to_file(filename=script)
-        cache_path = generate_cache_path(app_name=APP_NAME)
-        cache_path.mkdir(parents=True, exist_ok=True)
         dst = cache_path / script
         message = f"No update required for {src} to {dst}"
         try:
             if not filecmp.cmp(src, dst):
-                copyfile(src, dst)
+                shutil.copy(src, dst)
                 message = f"Updated {src} to {dst} (outdated)"
         except FileNotFoundError:
-            copyfile(src, dst)
+            shutil.copy(src, dst)
             message = f"Copied {src} to {dst} (missing)"
         logger.log(level=logging.DEBUG, msg=message)
 

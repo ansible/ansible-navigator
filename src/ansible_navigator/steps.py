@@ -91,7 +91,7 @@ class Step:
         return self._index
 
     @index.setter
-    def index(self, index: int) -> None:
+    def index(self, index: int | None) -> None:
         """Set the index.
 
         Args:
@@ -206,7 +206,7 @@ class TypedStep(Generic[T]):
         return self._index
 
     @index.setter
-    def index(self, index: int) -> None:
+    def index(self, index: int | None) -> None:
         """Set the index.
 
         Args:
