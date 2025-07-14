@@ -44,14 +44,14 @@ repos:
       - id: tox-ini-fmt
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.2"
+    rev: "v0.12.3"
     hooks:
       - id: ruff
         entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
         types_or: [python, pyi]
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v9.0.1
+    rev: v9.1.0
     hooks:
       - id: cspell
         name: Spell check with cspell
