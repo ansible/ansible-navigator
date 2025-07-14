@@ -15,7 +15,7 @@ black==25.1.0
 bracex==2.6
 cairocffi==1.7.1
 cairosvg==2.8.2
-certifi==2025.6.15
+certifi==2025.7.14
 cffi==1.17.1
 cfgv==3.4.0
 charset-normalizer==3.4.2
@@ -100,7 +100,7 @@ pyyaml==6.0.2
 pyyaml-env-tag==1.1
 referencing==0.36.2
 requests==2.32.4
-resolvelib==1.0.1
+resolvelib==1.1.0
 rpds-py==0.26.0
 ruamel-yaml==0.18.14
 six==1.17.0
