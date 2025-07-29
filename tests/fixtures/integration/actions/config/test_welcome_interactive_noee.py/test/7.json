@@ -4,37 +4,10 @@
     "comment": "Yaml filename extensions details",
     "additional_information": {
         "present": [
-            "key: yaml_valid_extensions",
             "Yaml filename extensions (current/default: ['.yml', '.yaml', '.json'])"
         ],
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "Yaml filename extensions (current/default: ['.yml', '.yaml', '.json'])",
-        " 0│---                                                                                                                                                                                                                                                                                                     ▒",
-        " 1│current_config_file: None                                                                                                                                                                                                                                                                               ▒",
-        " 2│current_value:                                                                                                                                                                                                                                                                                          ▒",
-        " 3│- .yml                                                                                                                                                                                                                                                                                                  ▒",
-        " 4│- .yaml                                                                                                                                                                                                                                                                                                 ▒",
-        " 5│- .json                                                                                                                                                                                                                                                                                                 ▒",
-        " 6│default: true                                                                                                                                                                                                                                                                                           ▒",
-        " 7│default_value:                                                                                                                                                                                                                                                                                          ▒",
-        " 8│- .yml                                                                                                                                                                                                                                                                                                  ▒",
-        " 9│- .yaml                                                                                                                                                                                                                                                                                                 ▒",
-        "10│- .json                                                                                                                                                                                                                                                                                                 ▒",
-        "11│description:                                                                                                                                                                                                                                                                                            ▒",
-        "12│- Check all of these extensions when looking for 'variable' files which should be                                                                                                                                                                                                                       ▒",
-        "13│  YAML or JSON or vaulted versions of these.                                                                                                                                                                                                                                                            ▒",
-        "14│- This affects vars_files, include_vars, inventory and vars plugins among others.                                                                                                                                                                                                                       ▒",
-        "15│env:                                                                                                                                                                                                                                                                                                    ▒",
-        "16│- name: ANSIBLE_YAML_FILENAME_EXT                                                                                                                                                                                                                                                                       ▒",
-        "17│ini:                                                                                                                                                                                                                                                                                                    ▒",
-        "18│- key: yaml_valid_extensions                                                                                                                                                                                                                                                                            ▒",
-        "19│  section: defaults                                                                                                                                                                                                                                                                                     ▒",
-        "20│name: Yaml filename extensions                                                                                                                                                                                                                                                                          ▒",
-        "21│option: YAML_FILENAME_EXTENSIONS                                                                                                                                                                                                                                                                        ▒",
-        "22│source: default",
-        "^b/PgUp page up                          ^f/PgDn page down                          ↑↓ scroll                          esc back                          - previous                          + next                          [0-9] goto                          :help help"
-    ]
+    "output": []
 }
