@@ -39,12 +39,12 @@ repos:
       - id: toml-sort-fix
 
   - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: 1.5.0
+    rev: 1.6.0
     hooks:
       - id: tox-ini-fmt
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.5"
+    rev: "v0.12.7"
     hooks:
       - id: ruff
         entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
@@ -157,7 +157,7 @@ repos:
       - id: pyupgrade
         args: ["--py310-plus"]
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.17.0
+    rev: v1.17.1
     hooks:
       - id: mypy
         additional_dependencies:
