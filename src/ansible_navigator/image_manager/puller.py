@@ -199,7 +199,7 @@ class ImagePuller:
         Returns:
             The command
         """
-        command_line = [self._container_engine, "pull"]
+        command_line = [self._container_engine, "pull", "-q"]
         command_line.extend(self._arguments)
         command_line.append(self._image)
         joined_command = " ".join(command_line)
