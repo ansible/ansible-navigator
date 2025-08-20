@@ -9,15 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "        \"full_name\": \"ghcr.io/ansible/community-ansible-dev-tools:latest\",",
-        "                    \"ghcr.io/ansible/community-ansible-dev-tools:latest\"",
-        "                    \"ghcr.io/ansible/community-ansible-dev-tools@sha256:1a34b5204fa61df1d33429d5100360e5e7654ba628f478000e2ae3c35c7a8561\",",
-        "                    \"ghcr.io/ansible/community-ansible-dev-tools@sha256:4e20a3c4880306415c573c31b750d21878488f6b44a82a0991faeb35fa0b4c11\"",
-        "                    \"ghcr.io/ansible/community-ansible-dev-tools:latest\"",
-        "        \"name\": \"community-ansible-dev-tools\",",
-        "        \"name_tag\": \"community-ansible-dev-tools:latest (primary)\",",
-        "        \"repository\": \"ghcr.io/ansible/community-ansible-dev-tools\",",
-        "(venv) bash$"
-    ]
+    "output": []
 }
