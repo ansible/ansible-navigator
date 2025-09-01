@@ -34,6 +34,8 @@ ansible-navigator:
   color:
     enable: False
     osc4: False
+  ui:
+    cursor-navigation: true
   editor:
     command: vim_from_setting
     console: False

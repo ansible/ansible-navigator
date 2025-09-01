@@ -518,6 +518,21 @@
                     "default": "UTC",
                     "description": "Specify the IANA time zone to use or 'local' to use the system time zone",
                     "type": "string"
+                },
+                "ui": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "cursor-navigation": {
+                            "default": false,
+                            "description": "Enable arrow-key cursor navigation and Enter selection in menus",
+                            "enum": [
+                                true,
+                                false
+                            ],
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
                 }
             }
         }
@@ -525,7 +540,7 @@
     "required": [
         "ansible-navigator"
     ],
-    "title": "ansible-navigator settings v25",
+    "title": "ansible-navigator settings v24",
     "type": "object",
-    "version": "25"
+    "version": "24"
 }
