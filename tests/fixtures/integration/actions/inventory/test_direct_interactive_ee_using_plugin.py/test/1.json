@@ -9,9 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "  Inventory hostname                                                                                            Ansible network os                                                                                            Ansible network cli ssh type                                                                                                                                           Ansible connection",
-        "0│from.test.plugin                                                                                              None                                                                                                          None                                                                                                                                                                   None",
-        "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
-    ]
+    "output": []
 }
