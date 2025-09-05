@@ -317,15 +317,6 @@ NavigatorConfiguration = ApplicationConfiguration(
             version_added="v2.0",
         ),
         SettingsEntry(
-            name="cursor_navigation",
-            choices=[True, False],
-            cli_parameters=CliParameters(short="--cn", action="store_true"),
-            settings_file_path_override="ui.cursor-navigation",
-            short_description="Enable arrow-key cursor navigation and Enter selection in menus",
-            value=SettingsEntryValue(default=False),
-            version_added="v2.5",
-        ),
-        SettingsEntry(
             name="display_color",
             change_after_initial=False,
             choices=[True, False],

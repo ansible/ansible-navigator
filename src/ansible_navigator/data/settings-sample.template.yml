@@ -63,9 +63,6 @@ ansible-navigator:
     enable: True
     # {{ color.osc4 }}
     osc4: True
-  ui:
-    # {{ ui.cursor-navigation }}
-    cursor-navigation: False
   editor:
     # {{ editor.command }}
     command: vim_from_setting

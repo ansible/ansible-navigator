@@ -67,7 +67,6 @@ class ActionRunner(ActionBase):
             osc4=self._args.osc4,
             terminal_colors_path=TERMINAL_COLORS_PATH,
             theme_path=THEME_PATH,
-            cursor_navigation=bool(getattr(self._args, "cursor_navigation", False)),
         )
         self._logger.debug("grammar path = %s", config.grammar_dir)
         self._logger.debug("theme path = %s", config.theme_path)

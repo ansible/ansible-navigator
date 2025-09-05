@@ -201,9 +201,9 @@ class UserInterface(CursesWindow):
         self._screen.timeout(refresh)
         self._screen.keypad(True)  # Enable keypad mode for proper key handling
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
-        # When cursor navigation is enabled, this tracks which visible row to highlight
+        # This tracks which visible row to highlight
         self._highlight_line_offset: int | None = None
-        # When cursor navigation is enabled, this tracks the cursor position in menus
+        # This tracks the cursor position in menus
         self._menu_cursor_pos: int = 0
 
     def clear(self) -> None:
@@ -484,9 +484,9 @@ class UserInterface(CursesWindow):
                 line_index = line_numbers[idx]
                 line_index_str = str(line_index).rjust(index_width)
                 prefix = f"{line_index_str}\u2502"
-                # Apply highlight decoration when enabled and this is the selected row
-                if (indent_heading and self._ui_config.cursor_navigation and
-                    self._highlight_line_offset is not None and idx == self._highlight_line_offset):
+                # Apply highlight decoration when this is the selected row
+                if (indent_heading and self._highlight_line_offset is not None and
+                        idx == self._highlight_line_offset):
                     # Rebuild the line with reverse-video decoration added
                     highlighted_parts = tuple(
                         CursesLinePart(
@@ -526,11 +526,9 @@ class UserInterface(CursesWindow):
                 char = self._screen.getch()
                 key = "KEY_F(5)" if char == -1 else curses.keyname(char).decode()
                 # Debug: log the raw char and converted key for troubleshooting
-                if self._ui_config.cursor_navigation:
-                    self._logger.debug("Raw char: %s, Converted key: '%s'", char, key)
+                self._logger.debug("Raw char: %s, Converted key: '%s'", char, key)
                 # Check for Enter key codes and return a special value for cursor navigation
-                if (self._ui_config.cursor_navigation and
-                    char in [10, 13]):  # Enter key codes: 10=LF, 13=CR
+                if char in [10, 13]:  # Enter key codes: 10=LF, 13=CR
                     self._logger.debug(
                         "Enter key detected! Raw char: %s, setting key to CURSOR_ENTER", char
                     )
@@ -948,7 +946,7 @@ class UserInterface(CursesWindow):
 
             # Determine which row to highlight, if enabled
             self._highlight_line_offset = None
-            if self._ui_config.cursor_navigation and self._menu_indices:
+            if self._menu_indices:
                 self._menu_cursor_pos = max(0, min(self._menu_cursor_pos,
                                                    len(self._menu_indices) - 1))
                 selected_global_index = self._menu_indices[self._menu_cursor_pos]
@@ -968,23 +966,21 @@ class UserInterface(CursesWindow):
             )
 
             # Debug: log what entry we received
-            if self._ui_config.cursor_navigation:
-                self._logger.debug("Received entry: '%s'", entry)
+            self._logger.debug("Received entry: '%s'", entry)
 
             # Handle arrow navigation for menus when enabled
             if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
-                if (entry in ["KEY_DOWN", "KEY_UP"] and self._ui_config.cursor_navigation and
-                    self._menu_indices):
+                if (entry in ["KEY_DOWN", "KEY_UP"] and self._menu_indices):
                     # Move the cursor position
                     if entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1:
                         self._menu_cursor_pos += 1
                         # If moved past the last visible item, scroll down one
                         if (self._highlight_line_offset is None or
-                            self._highlight_line_offset >= len(showing_indices) - 1):
+                                self._highlight_line_offset >= len(showing_indices) - 1):
                             # Mimic _display scroll down
                             viewport_height = self._screen_height - len(menu_heading) - 1
                             self.scroll(max(min(self.scroll() + 1, len(self._menu_indices)),
-                                           viewport_height))
+                                        viewport_height))
                     elif entry == "KEY_UP" and self._menu_cursor_pos > 0:
                         self._menu_cursor_pos -= 1
                         # If moved before the first visible item, scroll up one
@@ -997,11 +993,10 @@ class UserInterface(CursesWindow):
                 continue
 
             # Enter key should select the highlighted item when cursor nav is enabled
-            if (self._ui_config.cursor_navigation and
-                    (entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"]) and
+            if ((entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"]) and
                     self._menu_indices):
                 self._logger.debug("Enter key selection triggered! Entry: '%s', Selecting index %s",
-                                  entry, self._menu_cursor_pos)
+                                   entry, self._menu_cursor_pos)
                 index_to_select = self._menu_indices[self._menu_cursor_pos]
                 entry = str(index_to_select)
                 self._logger.debug("Changed entry to: '%s'", entry)

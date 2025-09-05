@@ -284,15 +284,6 @@
         "time-zone": {
           "type": "string"
         },
-        "ui": {
-          "additionalProperties": false,
-          "properties": {
-            "cursor-navigation": {
-              "type": "boolean"
-            }
-          },
-          "type": "object"
-        },
         "settings": {
           "additionalProperties": false,
           "properties": {

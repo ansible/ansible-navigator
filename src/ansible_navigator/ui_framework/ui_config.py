@@ -7,29 +7,22 @@ from ansible_navigator.utils.compatibility import Traversable
 
 @dataclass
 class UIConfig:
-    """The UI configuration.
+    """Object to hold basic UI settings.
 
-    Args:
-        color: Enable the use of color for mode interactive and stdout
-        colors_initialized: Whether colors have been initialized
-        cursor_navigation: Enable arrow-key cursor navigation and Enter selection in menus
-        grammar_dir: The path to the grammar directory
-        osc4: Enable or disable terminal color changing support with OSC 4
-        terminal_colors_path: The path to the terminal colors file
-        theme_path: The path to the theme file
+    Used to determine properties about rendering things. An instance of this
+    class gets threaded throughout most of the UI system, so it can be used for
+    fairly global things, such as "should we render color, ever?"
     """
 
-    #: Enable the use of color for mode interactive and stdout
+    #: Indicates coloring is enabled or disabled
     color: bool
-    #: Whether colors have been initialized
+    #: Indicates if the curses colors have been initialized
     colors_initialized: bool
     #: The path to the grammar directory
     grammar_dir: Traversable
-    #: Enable or disable terminal color changing support with OSC 4
+    #: Indicates if terminal support for OSC4 is enabled
     osc4: bool
-    #: The path to the terminal colors file
+    #: The path to the 16 terminal color map
     terminal_colors_path: Traversable
     #: The path to the theme file
     theme_path: Traversable
-    #: Enable arrow-key cursor navigation and Enter selection in menus
-    cursor_navigation: bool = False
