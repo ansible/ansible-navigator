@@ -1,4 +1,5 @@
 # cspell:ignore KEY_NPAGE, KEY_PPAGE
+# pylint: disable=too-many-lines
 """The main UI renderer."""
 
 from __future__ import annotations
@@ -485,8 +486,11 @@ class UserInterface(CursesWindow):
                 line_index_str = str(line_index).rjust(index_width)
                 prefix = f"{line_index_str}\u2502"
                 # Apply highlight decoration when this is the selected row
-                if (indent_heading and self._highlight_line_offset is not None and
-                        idx == self._highlight_line_offset):
+                if (
+                    indent_heading
+                    and self._highlight_line_offset is not None
+                    and idx == self._highlight_line_offset
+                ):
                     # Rebuild the line with reverse-video decoration added
                     highlighted_parts = tuple(
                         CursesLinePart(
@@ -947,8 +951,10 @@ class UserInterface(CursesWindow):
             # Determine which row to highlight, if enabled
             self._highlight_line_offset = None
             if self._menu_indices:
-                self._menu_cursor_pos = max(0, min(self._menu_cursor_pos,
-                                                   len(self._menu_indices) - 1))
+                self._menu_cursor_pos = max(
+                    0,
+                    min(self._menu_cursor_pos, len(self._menu_indices) - 1),
+                )
                 selected_global_index = self._menu_indices[self._menu_cursor_pos]
                 try:
                     self._highlight_line_offset = showing_indices.index(selected_global_index)
@@ -970,17 +976,23 @@ class UserInterface(CursesWindow):
 
             # Handle arrow navigation for menus when enabled
             if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
-                if (entry in ["KEY_DOWN", "KEY_UP"] and self._menu_indices):
+                if entry in ["KEY_DOWN", "KEY_UP"] and self._menu_indices:
                     # Move the cursor position
                     if entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1:
                         self._menu_cursor_pos += 1
                         # If moved past the last visible item, scroll down one
-                        if (self._highlight_line_offset is None or
-                                self._highlight_line_offset >= len(showing_indices) - 1):
+                        if (
+                            self._highlight_line_offset is None
+                            or self._highlight_line_offset >= len(showing_indices) - 1
+                        ):
                             # Mimic _display scroll down
                             viewport_height = self._screen_height - len(menu_heading) - 1
-                            self.scroll(max(min(self.scroll() + 1, len(self._menu_indices)),
-                                        viewport_height))
+                            self.scroll(
+                                max(
+                                    min(self.scroll() + 1, len(self._menu_indices)),
+                                    viewport_height,
+                                ),
+                            )
                     elif entry == "KEY_UP" and self._menu_cursor_pos > 0:
                         self._menu_cursor_pos -= 1
                         # If moved before the first visible item, scroll up one
@@ -993,10 +1005,14 @@ class UserInterface(CursesWindow):
                 continue
 
             # Enter key should select the highlighted item when cursor nav is enabled
-            if ((entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"]) and
-                    self._menu_indices):
-                self._logger.debug("Enter key selection triggered! Entry: '%s', Selecting index %s",
-                                   entry, self._menu_cursor_pos)
+            if (
+                entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"]
+            ) and self._menu_indices:
+                self._logger.debug(
+                    "Enter key selection triggered! Entry: '%s', Selecting index %s",
+                    entry,
+                    self._menu_cursor_pos,
+                )
                 index_to_select = self._menu_indices[self._menu_cursor_pos]
                 entry = str(index_to_select)
                 self._logger.debug("Changed entry to: '%s'", entry)
