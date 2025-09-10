@@ -64,7 +64,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('src/ansible_navigator/data/images_dockerfile') }}
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python_version }}
           cache: pip
@@ -145,7 +145,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -166,7 +166,7 @@ jobs:
           path: .
 
       - name: Upload coverage data
-        uses: codecov/codecov-action@v5.5.0
+        uses: codecov/codecov-action@v5.5.1
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
