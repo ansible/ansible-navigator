@@ -8,8 +8,7 @@ ansible-lint==25.5.0
 ansible-runner==2.4.1
 attrs==25.3.0
 babel==2.17.0
-backrefs>=5.7.post1,<6.0.0 ; extra == "docs"
-backrefs>=6.0.0 ; extra != "docs"
+backrefs>=5.7.post1,<6.0.0
 beautifulsoup4==4.13.5
 bindep==2.13.0
 black==25.1.0
