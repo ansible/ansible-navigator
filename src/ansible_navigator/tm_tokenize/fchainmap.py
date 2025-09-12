@@ -8,7 +8,7 @@ TKey_contra = TypeVar("TKey_contra", contravariant=True)
 TValue_co = TypeVar("TValue_co", covariant=True)
 
 
-class Indexable(Generic[TKey_contra, TValue_co], Protocol):
+class Indexable(Generic[TKey_contra, TValue_co], Protocol):  # noqa: PYI059
     def __getitem__(self, key: TKey_contra) -> TValue_co:
         """Get the value associated with the given key.
 
