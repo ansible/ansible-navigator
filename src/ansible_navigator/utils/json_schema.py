@@ -16,10 +16,10 @@ from .definitions import ExitMessage
 
 
 if TYPE_CHECKING:
-    from collections import deque
+    from collections.abc import Sequence
 
 
-def to_path(schema_path: deque[Any]) -> str:
+def to_path(schema_path: Sequence[Any]) -> str:
     """Flatten a path to a dot delimited string.
 
     Args:
@@ -31,7 +31,7 @@ def to_path(schema_path: deque[Any]) -> str:
     return ".".join(str(index) for index in schema_path)
 
 
-def json_path(absolute_path: deque[Any]) -> str:
+def json_path(absolute_path: Sequence[Any]) -> str:
     """Flatten a data path to a dot delimited string.
 
     Args:
@@ -97,7 +97,7 @@ def validate(schema: str | dict[str, Any], data: dict[str, Any]) -> list[JsonSch
 
     if isinstance(schema, str):
         schema = json.loads(schema)
-    if isinstance(schema, bool):
+    if isinstance(schema, (bool, str)):
         msg = "Unexpected schema data."
         raise TypeError(msg)
     validator = validator_for(schema)
@@ -124,15 +124,19 @@ def validate(schema: str | dict[str, Any], data: dict[str, Any]) -> list[JsonSch
 
     for validation_error in validation_errors:
         if isinstance(validation_error, ValidationError):
+            if isinstance(validation_error.absolute_path, bool):
+                path = str(validation_error.absolute_path)
+            else:
+                path = to_path(validation_error.absolute_path)
             error = JsonSchemaError(
                 message=validation_error.message,
-                data_path=to_path(validation_error.absolute_path),
-                json_path=json_path(validation_error.absolute_path),
+                data_path=path,
+                json_path=path,
                 schema_path=to_path(validation_error.relative_schema_path),
-                relative_schema=validation_error.schema,
-                expected=validation_error.validator_value,
-                validator=validation_error.validator,
-                found=validation_error.instance,
+                relative_schema=str(validation_error.schema),
+                expected=str(validation_error.validator_value),
+                validator=str(validation_error.validator),
+                found=str(validation_error.instance),
             )
             errors.append(error)
     return errors

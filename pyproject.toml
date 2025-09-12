@@ -12,7 +12,6 @@ authors = [{"email" = "bthornto@redhat.com", "name" = "Bradley A. Thornton"}]
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Intended Audience :: Developers',
-  'License :: OSI Approved :: Apache Software License',
   'Operating System :: OS Independent',
   'Topic :: Software Development :: Testing',
   'Topic :: Software Development :: Quality Assurance',
@@ -30,7 +29,7 @@ classifiers = [
 description = "A text-based user interface (TUI) for the Red Hat Ansible Automation Platform"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 keywords = ["ansible"]
-license = {text = "Apache"}
+license = "Apache-2.0"
 maintainers = [{"email" = "info@ansible.com", "name" = "Ansible by Red Hat"}]
 name = "ansible-navigator"
 readme = "README.md"
@@ -51,7 +50,7 @@ repository = "https://github.com/ansible/ansible-navigator"
 source = ["src", ".tox/*/site-packages"]
 
 [tool.coverage.report]
-exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
+exclude_also = ["pragma: no cover", "if TYPE_CHECKING:"]
 show_missing = true
 skip_covered = true
 
@@ -69,6 +68,7 @@ disallow_any_generics = true
 # disallow_untyped_calls = true
 disallow_untyped_defs = true
 error_summary = true
+exclude_gitignore = true
 incremental = false
 python_version = "3.10"
 
@@ -359,7 +359,7 @@ filterwarnings = [
   "ignore::pytest.PytestUnraisableExceptionWarning",
   "ignore::DeprecationWarning:ansible_runner"
 ]
-junit_family = "legacy" # see https://docs.codecov.com/docs/test-analytics
+junit_family = "xunit2" # see https://docs.codecov.com/docs/test-analytics
 
 [tool.pytest_env]
 PYTEST_CHECK_TEST_DUPLICATE = 0
@@ -442,7 +442,7 @@ optional-dependencies.test = {file = [".config/requirements-test.in"]}
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
-write_to = "src/ansible_navigator/_version.py"
+version_file = "src/ansible_navigator/_version.py"
 
 [tool.tomlsort]
 in_place = true
