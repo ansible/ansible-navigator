@@ -1,3 +1,11 @@
+COLORTERM
+ESCDELAY
+KEGEX
+Kegex
+Lightbulbs
+PULLABLE
+Representer
+Rocannon's
 ansiblelint
 argname
 argnames
@@ -7,16 +15,13 @@ argvalues
 autorefs
 basesystem
 caplog
-cliconf             # Ansible network cli abstraction plugin
+cliconf
 codeclimate
 colname
-colorterm
 coltext
 colval
-devel
 dumpable
 dunder
-escdelay
 facelessuser
 fedoraproject
 fontawesome
@@ -33,39 +38,31 @@ importables
 inlinehilite
 introspector
 keepends
-kegex               # An action's regex
+kegex
 kegexes
 lentext
 levelname
-libonig
 lightbulbs
 linenums
 lintable
 lintables
 magiclink
 maskables
-maxsplit
-mergeable
 mkdocstrings
-mqueue              # https://github.com/ansible/ansible-runner/issues/984
+mqueue
 myproject
-netcommon           # Ansible network collection, seen in tests and README
+netcommon
 netconf
 nonblocking
 oldmask
 oneline
-onigurumacffi
 oxfordcomma
-preclear
 precommand
 premanent
 pullable
 pymdownx
-redhatinsights
 representer
 returndocs
-rocannon's
-scap
 scrollback
 somevalue
 stripspaces
@@ -73,14 +70,11 @@ subaction
 subschema
 superfences
 templatable
-templated
 testhost
 testname
 testsfailed
-tracebacks
 truecolor
 usefixtures
 volmount
 withast
-workdir
 xmss

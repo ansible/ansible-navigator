@@ -1,18 +1,11 @@
 ci:
   autoupdate_schedule: quarterly
-  skip:
-    - renovate-config-validator
 default_language_version:
   python: python3.11
-exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
-  - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 41.119.5
+  - repo: meta
     hooks:
-      - id: renovate-config-validator
-        alias: renovate
-        args:
-          - --strict
+      - id: check-useless-excludes
   - repo: https://github.com/rbubley/mirrors-prettier
     rev: v3.6.2
     hooks:
@@ -25,26 +18,26 @@ repos:
         additional_dependencies:
           - prettier
           - prettier-plugin-toml
-  - repo: https://github.com/pappasam/toml-sort
-    rev: v0.24.3
-    hooks:
-      - id: toml-sort-fix
-  - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: 1.6.0
-    hooks:
-      - id: tox-ini-fmt
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v9.2.0
     hooks:
       - id: cspell
-        name: Spell check with cspell
+        entry: bash
+        pass_filenames: false
+        args:
+          [
+            "-euo",
+            "pipefail",
+            "-c",
+            "cspell-cli . --relative --no-progress --no-summary && cspell-cli . --disable-dictionary=words --no-exit-code --words-only --quiet --unique | LC_ALL=C sort > .config/dictionary.txt",
+          ]
+        name: cspell + remove unused and sort dictionary
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: check-merge-conflict
       - id: end-of-file-fixer
-      - id: requirements-txt-fixer
       - id: check-added-large-files
       - id: fix-byte-order-marker
       - id: check-case-conflict
@@ -73,9 +66,6 @@ repos:
         args:
           - -L
           - dout
-        exclude:
-          "(?x)^\n  (\n    tests/fixtures/integration/actions/.*\\.json|\n
-          \   src/ansible_navigator/data/grammar/.*\\.json\n  )\n$\n"
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.37.1
     hooks:
