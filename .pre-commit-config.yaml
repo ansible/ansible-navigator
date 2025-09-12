@@ -15,7 +15,7 @@ exclude: >
   )$
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 41.91.1
+    rev: 41.99.7
     hooks:
       - id: renovate-config-validator
         alias: renovate
@@ -46,7 +46,7 @@ repos:
           - prettier-plugin-toml
 
   - repo: https://github.com/pappasam/toml-sort
-    rev: v0.24.2
+    rev: v0.24.3
     hooks:
       - id: toml-sort-fix
 
