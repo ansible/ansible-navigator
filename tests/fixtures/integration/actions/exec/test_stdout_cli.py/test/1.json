@@ -12,14 +12,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "Warning: Issues were found while applying the settings.",
-        "   Hint: Command provided: 'exec 'echo test_data_from_cli' --ee False --ll debug --mode stdout'",
-        "  Error: The 'exec' subcommand requires execution environment support.",
-        "   Hint: Try again with '--ee true' to enable the use of an execution environment.",
-        "   Note: Configuration failed, using default log file location. (/home/user/github/ansible-navigator/ansible-navigator.log) Log",
-        "         level set to debug",
-        "   Hint: Review the hints and log file to see what went wrong.",
-        "(venv) bash$"
-    ]
+    "output": []
 }
