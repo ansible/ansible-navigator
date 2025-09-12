@@ -1,4 +1,10 @@
 ---
+ci:
+  # We rely on renovate to update it but there is no way to fully disable it
+  # https://github.com/pre-commit-ci/issues/issues/83
+  autoupdate_schedule: quarterly
+  skip:
+    - renovate-config-validator # container limits
 default_language_version:
   # ensures that we get same behavior on CI(s) as on local machines
   python: python3.11
@@ -8,6 +14,12 @@ exclude: >
     .tox
   )$
 repos:
+  - repo: https://github.com/renovatebot/pre-commit-hooks
+    rev: 41.91.1
+    hooks:
+      - id: renovate-config-validator
+        alias: renovate
+        args: [--strict]
   - repo: https://github.com/rbubley/mirrors-prettier
     rev: "v3.6.2"
     hooks:
