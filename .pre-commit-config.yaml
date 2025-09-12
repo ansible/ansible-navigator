@@ -15,7 +15,7 @@ exclude: >
   )$
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 41.99.7
+    rev: 41.109.0
     hooks:
       - id: renovate-config-validator
         alias: renovate
@@ -44,39 +44,11 @@ repos:
         additional_dependencies:
           - prettier
           - prettier-plugin-toml
-
-  - repo: https://github.com/pappasam/toml-sort
-    rev: v0.24.3
-    hooks:
-      - id: toml-sort-fix
-
-  - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: 1.6.0
-    hooks:
-      - id: tox-ini-fmt
-
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.12"
-    hooks:
-      - id: ruff
-        entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
-        types_or: [python, pyi]
-
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v9.2.0
     hooks:
       - id: cspell
         name: Spell check with cspell
-
-  - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.5.5
-    hooks:
-      - id: remove-tabs
-        exclude: >
-          (?x)^(
-            .config/pylint-baseline.txt
-          )$
-
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
     rev: v6.0.0
     hooks:
@@ -157,6 +129,11 @@ repos:
         additional_dependencies:
           - flake8-docstrings # uses pydocstyle
 
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.24.3
+    hooks:
+      - id: toml-sort-fix
+        alias: toml
   - repo: https://github.com/jsh9/pydoclint
     rev: 0.7.3
     hooks:
@@ -168,8 +145,15 @@ repos:
     hooks:
       - id: pyupgrade
         args: ["--py310-plus"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.0
+    hooks:
+      - id: ruff-format
+        alias: ruff
+      - id: ruff-check
+        alias: ruff
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.17.1
+    rev: v1.18.1
     hooks:
       - id: mypy
         additional_dependencies:
