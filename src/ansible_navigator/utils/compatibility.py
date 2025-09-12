@@ -8,10 +8,10 @@ import sys
 from typing import TypeAlias
 
 
-if sys.version_info < (3, 11):
-    from importlib.abc import Traversable
-else:
+if sys.version_info >= (3, 11):
     from importlib.resources.abc import Traversable
+else:
+    from importlib.abc import Traversable  # pylint: disable=deprecated-class
 
 
 __all__ = ["Traversable", "TypeAlias", "importlib_metadata"]
