@@ -15,7 +15,7 @@ exclude: >
   )$
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 41.99.7
+    rev: 41.99.11
     hooks:
       - id: renovate-config-validator
         alias: renovate
@@ -56,7 +56,7 @@ repos:
       - id: tox-ini-fmt
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.12"
+    rev: "v0.13.0"
     hooks:
       - id: ruff
         entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
