@@ -122,6 +122,7 @@ disable = [
   "too-few-public-methods",
   "unsubscriptable-object",
   "unknown-option-value",
+  "CPY001", # copyright notice at top of file
   # https://gist.github.com/cidrblock/ec3412bacfeb34dbc2d334c1d53bef83
   "C0103", # invalid-name / ruff N815
   "C0105", # typevar-name-incorrect-variance / ruff PLC0105
@@ -344,9 +345,12 @@ disable = [
 enable = [
   "useless-suppression" # Identify unneeded pylint disable statements
 ]
+# disabled "useless-suppression" on fail-on due to conflict with needed deprecated-class on older python versions
 fail-on = [
-  "useless-suppression"
 ]
+
+[tool.pylint.reports]
+score = false
 
 [tool.pytest.ini_options]
 # do not add xdist options here as this will make running of a single test and
@@ -371,6 +375,7 @@ builtins = ["__"]
 exclude = ["tests/fixtures/**", ".git"]
 fix = true
 line-length = 100
+unsafe-fixes = true
 
 [tool.ruff.lint]
 ignore = [
