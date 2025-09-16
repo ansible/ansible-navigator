@@ -9,32 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "   Ansible.posix                                                                Type                                 Added                   Deprecated                                   Description",
-        " 0│acl                                                                          module                               1.0.0                   False                                        Set and retrieve file ACL information.",
-        " 1│at                                                                           module                               1.0.0                   False                                        Schedule the execution of a command or script file via the at command",
-        " 2│authorized_key                                                               module                               1.0.0                   False                                        Adds or removes an SSH authorized key",
-        " 3│cgroup_perf_recap                                                            callback                             None                    False                                        Profiles system activity of tasks and full execution using cgroups",
-        " 4│csh                                                                          shell                                None                    False                                        C shell (/bin/csh)",
-        " 5│debug                                                                        callback                             None                    False                                        formatted stdout/stderr display",
-        " 6│firewalld                                                                    module                               None                    False                                        Manage arbitrary ports/services with firewalld",
-        " 7│firewalld_info                                                               module                               None                    False                                        Gather information about firewalld",
-        " 8│fish                                                                         shell                                None                    False                                        fish shell (/bin/fish)",
-        " 9│json                                                                         callback                             None                    False                                        Ansible screen output as JSON",
-        "10│jsonl                                                                        callback                             None                    False                                        Ansible screen output as JSONL (lines in json format)",
-        "11│mount                                                                        module                               1.0.0                   False                                        Control active and configured mount points",
-        "12│patch                                                                        module                               1.0.0                   False                                        Apply patch files using the GNU patch tool",
-        "13│profile_roles                                                                callback                             None                    False                                        adds timing information to roles",
-        "14│profile_tasks                                                                callback                             None                    False                                        adds time information to tasks",
-        "15│rhel_facts                                                                   module                               1.5.0                   False                                        Facts module to set or override RHEL specific facts.",
-        "16│rhel_rpm_ostree                                                              module                               1.5.0                   False                                        Ensure packages exist in a RHEL for Edge rpm-ostree based system",
-        "17│rpm_ostree_upgrade                                                           module                               1.5.0                   False                                        Manage rpm-ostree upgrade transactions",
-        "18│seboolean                                                                    module                               1.0.0                   False                                        Toggles SELinux booleans",
-        "19│selinux                                                                      module                               1.0.0                   False                                        Change policy and state of SELinux",
-        "20│skippy                                                                       callback                             None                    True                                         Ansible screen output that ignores skipped status",
-        "21│synchronize                                                                  module                               1.0.0                   False                                        A wrapper around rsync to make common tasks in your playbooks quick and easy",
-        "22│sysctl                                                                       module                               1.0.0                   False                                        Manage entries in sysctl.conf.",
-        "23│timer                                                                        callback                             None                    False                                        Adds time to play stats",
-        "^b/PgUp page up                                                                       ^f/PgDn page down                                                                       ↑↓ scroll                                                                       esc back                                                                       [0-9] goto                                                                       :help help"
-    ]
+    "output": []
 }
