@@ -37,6 +37,7 @@ jobs:
           other_names: |
             lint
             docs
+            pkg
           platforms: linux,macos
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}

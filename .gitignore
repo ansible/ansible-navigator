@@ -161,3 +161,6 @@ out
 
 # Ansible
 .ansible/
+
+# Ansible Navigator artifact files
+playbook-artifact-*.json
