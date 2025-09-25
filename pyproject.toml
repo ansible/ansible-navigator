@@ -7,12 +7,41 @@ requires = [
   "setuptools_scm[toml] >= 7.0"
 ]
 
+[dependency-groups]
+coverage = [
+  "coverage[toml]>=7.10.6"
+]
+dev = [
+  "ansible-core>=2.17.14",
+  "coverage-enable-subprocess>=1.0",
+  "coverage[toml]>=7.4.3",
+  "darglint>=1.8.1",
+  "flake8-docstrings>=1.7.0",
+  "libtmux>=0.36.0",
+  "pre-commit>=4.3.0",
+  "pytest-env>=1.1.5",
+  "pytest-mock>=3.15.0",
+  "pytest-plus>=0.8.1",
+  "pytest-subtests>=0.14.2",
+  "pytest-xdist>=3.8.0"
+]
+docs = [
+  "mkdocs-ansible>=24.3.0"
+]
+lint = [
+  "pip>=25.2",
+  "pre-commit-uv>=4.1.4",
+  "pre-commit>=4.1",
+  "pytest>=7.2.2",
+  "setuptools>=51.1.1"
+]
+pkg = ["build>=0.9", "pip>=25.2", "pipx>=1.7.1", "twine>=4.0.1"]
+
 [project]
 authors = [{"email" = "bthornto@redhat.com", "name" = "Bradley A. Thornton"}]
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Intended Audience :: Developers',
-  'License :: OSI Approved :: Apache Software License',
   'Operating System :: OS Independent',
   'Topic :: Software Development :: Testing',
   'Topic :: Software Development :: Quality Assurance',
@@ -27,10 +56,21 @@ classifiers = [
   'Programming Language :: Python :: Implementation :: CPython',
   'Programming Language :: Python :: Implementation :: PyPy'
 ]
+dependencies = [
+  "ansible-builder>=3.0.0",
+  "ansible-lint>=6.19.0",
+  "ansible-runner>=2.3.1,<3",
+  "jinja2>=3.1.6",
+  "jsonschema>=4.25.1",
+  "onigurumacffi>=1.1.0,<2",
+  "pyyaml>=6.0.2",
+  "setuptools>=63.1.0 ; python_full_version >= '3.11'",
+  "tzdata>=2025.2"
+]
 description = "A text-based user interface (TUI) for the Red Hat Ansible Automation Platform"
-dynamic = ["version", "dependencies", "optional-dependencies"]
+dynamic = ["version"]
 keywords = ["ansible"]
-license = {text = "Apache"}
+license = "Apache-2.0"
 maintainers = [{"email" = "info@ansible.com", "name" = "Ansible by Red Hat"}]
 name = "ansible-navigator"
 readme = "README.md"
@@ -45,21 +85,24 @@ documentation = "https://ansible-navigator.readthedocs.io/en/latest/"
 homepage = "https://github.com/ansible/ansible-navigator"
 repository = "https://github.com/ansible/ansible-navigator"
 
-[tool]
+[tool.codespell]
+skip = ".tox,.mypy_cache,build,.git,.eggs,uv.lock,pip-wheel-metadata,tests/fixtures/integration/actions/*.json,src/ansible_navigator/data/grammar/*.json"
 
 [tool.coverage.paths]
 source = ["src", ".tox/*/site-packages"]
 
 [tool.coverage.report]
-exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
+exclude_also = ["pragma: no cover", "if TYPE_CHECKING:"]
 show_missing = true
 skip_covered = true
+skip_empty = true
 
 [tool.coverage.run]
-# branch = true
+# branch is more reliable than lines, protects against false positives
+branch = true
 concurrency = ["multiprocessing", "thread"]
 parallel = true
-source_pkgs = ["ansible_navigator"]
+source = ["src"]
 
 [tool.mypy]
 check_untyped_defs = true
@@ -69,6 +112,7 @@ disallow_any_generics = true
 # disallow_untyped_calls = true
 disallow_untyped_defs = true
 error_summary = true
+exclude_gitignore = true
 incremental = false
 python_version = "3.10"
 
@@ -363,7 +407,7 @@ filterwarnings = [
   "ignore::pytest.PytestUnraisableExceptionWarning",
   "ignore::DeprecationWarning:ansible_runner"
 ]
-junit_family = "legacy" # see https://docs.codecov.com/docs/test-analytics
+junit_family = "xunit2" # see https://docs.codecov.com/docs/test-analytics
 
 [tool.pytest_env]
 PYTEST_CHECK_TEST_DUPLICATE = 0
@@ -440,29 +484,183 @@ lines-between-types = 1 # Separate import/from with 1 line
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.setuptools.dynamic]
-dependencies = {file = [".config/requirements.in"]}
-optional-dependencies.docs = {file = [".config/requirements-docs.in"]}
-optional-dependencies.test = {file = [".config/requirements-test.in"]}
-
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
-write_to = "src/ansible_navigator/_version.py"
+version_file = "src/ansible_navigator/_version.py"
 
 [tool.tomlsort]
 in_place = true
 sort_inline_tables = true
 sort_table_keys = true
 
-[tool.uv.pip]
-annotation-style = "line"
-custom-compile-command = "tox run -e deps"
-no-emit-package = [
-  "exceptiongroup",
-  "tomli",
-  "ruamel-yaml-clib",
-  "pip",
-  "setuptools",
-  "typing-extensions",
-  "uv"
+[tool.tox]
+env_list = [
+  "py",
+  "lint",
+  "report",
+  "pkg",
+  "docs",
+  "clean"
 ]
+requires = ["setuptools>=65.3", "tox>=4.30.2", "tox-extra>=2.1", "tox-uv>=1.28"]
+skip_missing_interpreters = true
+work_dir = "{env:TOX_WORK_DIR:.tox}"
+
+[tool.tox.env.clean]
+commands = [
+  ["coverage", "erase"]
+]
+dependency_groups = ["coverage"]
+description = "Erase coverage data"
+skip_install = true
+
+[tool.tox.env.deps]
+commands = [
+  ["uv", "pip", "compile", "-q", "--upgrade", "--universal", "--python-version=3.10", "--no-annotate", "--all-extras", "--output-file=.config/constraints.txt", "--strip-extras", "pyproject.toml"]
+]
+commands_post = []
+description = "Bump all test dependencies"
+skip_install = true
+
+[tool.tox.env.docs]
+commands = [
+  [
+    "mkdocs",
+    {default = ["build", "--strict", "--site-dir=_readthedocs/html/"], extend = true, replace = "posargs"}
+  ]
+]
+commands_post = []
+commands_pre = [
+  ["rm", "-rf", ".cache/plugin"]
+]
+dependency_groups = ["docs"]
+description = "Builds docs"
+skip_install = false
+set_env.DYLD_FALLBACK_LIBRARY_PATH = "/opt/homebrew/lib:{env:LD_LIBRARY_PATH}"
+set_env.NO_COLOR = "1"
+set_env.TERM = "dump"
+
+[tool.tox.env.lint]
+commands = [
+  ["sh", "-c", "TERM=xterm-256color ansible-navigator --ee false settings --schema json > src/ansible_navigator/data/ansible-navigator.json"],
+  ["pre-commit", "run", "--show-diff-on-failure", "--hook-stage", "manual", "--all-files"]
+]
+commands_post = []
+commands_pre = []
+dependency_groups = ["lint"]
+description = "Enforce quality standards under {py_dot_ver}"
+skip_install = false
+
+[tool.tox.env.no-test-deps]
+commands = [
+  ["python3", "-m", "unittest", "tests/smoke/no_test_dependencies.py"]
+]
+commands_post = []
+dependency_groups = []
+description = "Run smoke(unittest) under {py_dot_ver}"
+
+[tool.tox.env.pkg]
+commands = [
+  ["rm", "-rf", "{tox_root}/dist/"],
+  ["{env_python}", "-m", "build", "--outdir", "{tox_root}/dist/", "{tox_root}"],
+  ["sh", "-c", "python -m twine check --strict {tox_root}/dist/*"],
+  ["sh", "-c", "python3 -m pip install {tox_root}/dist/*.whl"],
+  ["ansible-navigator", "--version"],
+  ["pip", "uninstall", "-y", "ansible-navigator"]
+]
+commands_post = []
+commands_pre = []
+dependency_groups = ["pkg"]
+description = "Build package, verify metadata, install package"
+skip_install = true
+
+[tool.tox.env.report]
+commands = [
+  ["coverage", "report"],
+  ["cat", ".tox/.tmp/.mypy/index.txt"]
+]
+dependency_groups = ["coverage"]
+description = "Produce coverage report"
+skip_install = true
+
+[tool.tox.env.update-fixtures]
+commands = [
+  ["ansible-navigator", "run", "./tests/fixtures/integration/actions/lint/no_errors/playbook.yml", "--ee", "true", "--ce", "podman", "--eei", "ghcr.io/ansible/community-ansible-dev-tools:latest", "--mode", "stdout", "--pae", "false"],
+  ["sh", "-c", "grep -iFInrq \"UPDATE_FIXTURES = True\" ./tests && exit 1 || exit 0"]
+]
+description = "Update test fixtures"
+set_env.ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES = "true"
+set_env.PYTEST_ADDOPST = "--maxfail=0"
+
+[tool.tox.env_run_base]
+allowlist_externals = [
+  "./tools/report-coverage",
+  "cat",
+  "grep",
+  "pre-commit",
+  "rm",
+  "sh"
+]
+commands = [
+  ["ansible-navigator", "run", "./tests/fixtures/integration/actions/lint/no_errors/playbook.yml", "--ee", "true", "--ce", "podman", "--eei", "ghcr.io/ansible/community-ansible-dev-tools:latest", "--mode", "stdout", "--pae", "false"],
+  ["sh", "-c", "grep -iFInrq \"UPDATE_FIXTURES = True\" ./tests && exit 1 || exit 0"],
+  [
+    "python",
+    "-m",
+    "coverage",
+    "run",
+    "-m",
+    "pytest",
+    {default = [
+      "-ra",
+      "--showlocals",
+      "-n=auto",
+      "--dist=loadfile",
+      "--junitxml=./junit.xml"
+    ], extend = true, replace = "posargs"}
+  ]
+]
+commands_post = [
+  ["./tools/report-coverage"]
+]
+description = """Run the tests: py{py_dot_ver}"""
+package = "editable"
+pass_env = [
+  "ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES",
+  "CI",
+  "CONTAINER_*",
+  "CURL_CA_BUNDLE",
+  "FORCE_COLOR",
+  "DOCKER_*",
+  "GITHUB_*",
+  "HOME",
+  "LANG",
+  "LC_*",
+  "NO_COLOR",
+  "PRE_COMMIT_HOME",
+  "PYTEST_*",
+  "PYTHON*",
+  "PYTHONBREAKPOINT",
+  "PYTHONIOENCODING",
+  "PYTHONPYCACHEPREFIX",
+  "PY_COLORS",
+  "REQUESTS_CA_BUNDLE",
+  "RTD_TOKEN",
+  "SETUPTOOLS_SCM_DEBUG",
+  "SSH_AUTH_SOCK",
+  "SSL_CERT_FILE",
+  "TERM",
+  "USER",
+  "UV_*"
+]
+runner = "uv-venv-lock-runner"
+
+[tool.tox.env_run_base.set_env]
+COVERAGE_FILE = "{env:COVERAGE_FILE:{env_dir}/.coverage.{env_name}}"
+COVERAGE_PROCESS_START = "{tox_root}/pyproject.toml"
+FORCE_COLOR = "1"
+PRE_COMMIT_COLOR = "always"
+TERM = "xterm-256color"
+
+[tool.uv]
+package = true

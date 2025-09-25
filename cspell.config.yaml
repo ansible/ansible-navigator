@@ -12,32 +12,27 @@ dictionaries:
   - "!cryptocurrencies"
   - "!cpp"
 ignorePaths:
-  # All dot files in the root
-  - \.*
-  # This file
+  - "*.egg-info"
+  - _readthedocs
+  - build
+  - context/Containerfile
+  - context/_build
+  - coverage.lcov
+  - coverage.xml
   - cspell.config.yaml
-  # The docs requirements file
-  - docs/requirements.in
-  # Ignore licenses
+  - junit.xml
   - licenses/*
-  # The mypy configuration file
-  - mypy.ini
-  # The shared file for tool configuration
+  - out
+  - playbook-artifact-*.json
   - pyproject.toml
-  # The setup file
-  - setup.cfg
-  # All grammar (text-mate) tokenization files
+  - site
+  - src/ansible_navigator/_version.py
   - src/ansible_navigator/data/grammar/*.json
-  # Theme files
   - src/ansible_navigator/data/themes/*.json
-  # Anything in the vendored tokenization directory
   - src/ansible_navigator/tm_tokenize/*
-  # requirements.txt is generated
-  - requirements.txt
-  # All fixture files in the tests directory
+  - tests/fixtures/common/builder/test_ee/context/Dockerfile
   - tests/fixtures/integration/actions/**/*.json
-  # The tox configuration file
-  - tox.ini
+  - uv.lock
 
 ignoreRegExpList:
   - "--\\w+" # ansible-navigator long CLI parameters
