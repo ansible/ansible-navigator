@@ -3,11 +3,9 @@
     "index": 0,
     "comment": "ansible-navigator config command top window",
     "additional_information": {
-        "present": [
-            "Action warnings"
-        ],
+        "present": [],
         "absent": [],
-        "compared_fixture": false
+        "compared_fixture": true
     },
     "output": [
         "    Name                                                                                                          Default               Source                Current",

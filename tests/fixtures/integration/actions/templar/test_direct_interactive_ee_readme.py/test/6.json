@@ -9,8 +9,5 @@
         "absent": [],
         "compared_fixture": false
     },
-    "output": [
-        "0│ansible.posix.csh",
-        "^b/PgUp page up                                                                                        ^f/PgDn page down                                                                                        ↑↓ scroll                                                                                        esc back                                                                                        :help help"
-    ]
+    "output": []
 }
