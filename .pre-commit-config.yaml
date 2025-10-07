@@ -7,7 +7,7 @@ default_language_version:
 exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 41.132.5
+    rev: 41.137.0
     hooks:
       - id: renovate-config-validator
         alias: renovate
@@ -132,7 +132,7 @@ repos:
           - types-setuptools
           - types-typed-ast
   - repo: https://github.com/pycqa/pylint.git
-    rev: v3.3.8
+    rev: v3.3.9
     hooks:
       - id: pylint
         args:
