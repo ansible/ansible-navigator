@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Determine matrix
         id: generate_matrix
-        uses: coactions/dynamic-matrix@v4
+        uses: ansible/actions/matrix@main
         with:
           min_python: "3.10"
           max_python: "3.13"
