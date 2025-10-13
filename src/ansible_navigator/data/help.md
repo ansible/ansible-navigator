@@ -33,12 +33,15 @@
 - `[0-9]`                                         Go to menu item
 - `:<number> `                                    Go to menu item
 - `:{{ n|filter }} `                              Template the menu item
+- `arrow up, arrow down`                          Move cursor
+- `enter`                                         Select highlighted item
 
 # Content and tasks
 
 - `[0-9]`                                         Go to task number
 - `:<number>`                                     Go to task number
 - `+, - `                                         Next/Previous task
+- `arrow up, arrow down`                          Next/Previous task
 - `_, :_`                                         Toggle hidden keys
 - `:{{ key|filter }}`                             Template the key's value
 - `:d, :doc`                                      Show the doc for the current task's module
