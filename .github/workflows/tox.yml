@@ -185,23 +185,6 @@ jobs:
             echo "::warning::Number of coverage.xml files was not the expected one (${JOBS_PRODUCING_COVERAGE}): $(find . -name coverage.xml | xargs echo)"
           fi
 
-      - name: SonarCloud scan
-        # Run only for pull requests or push to main
-        if: >
-          ${{ !cancelled() &&
-          hashFiles('**/coverage.xml') != '' &&
-          (github.event_name == 'pull_request' ||
-          (github.event_name == 'push' && github.ref_name =='main')
-          )}}
-        uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.CICD_ORG_SONAR_TOKEN_CICD_BOT || secrets.AAP_ORG_SONAR_TOKEN_ANSIBLE_CICD_BOT }}
-        with:
-          args: ${{ env.SONAR_ARGS }}
-        # Temporarily ignore errors if the pull request is from a fork due to lack of upload secrets access
-        # See https://issues.redhat.com/browse/AAP-52660
-        continue-on-error: ${{ github.event_name == 'pull_request' && github.repository != github.event.pull_request.head.repo.full_name }}
-
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1
         with:
