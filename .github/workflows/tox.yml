@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Determine matrix
         id: generate_matrix
-        uses: coactions/dynamic-matrix@v4
+        uses: ansible/actions/matrix@main
         with:
           min_python: "3.10"
           max_python: "3.13"
@@ -147,7 +147,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - run: pip3 install 'coverage>=7.5.1'
 
