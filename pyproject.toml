@@ -60,7 +60,7 @@ skip_covered = true
 concurrency = ["multiprocessing", "thread"]
 parallel = true
 relative_files = true
-source = ["src"]
+source_pkgs = ["ansible_navigator"]
 
 [tool.mypy]
 check_untyped_defs = true
