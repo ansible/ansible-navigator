@@ -59,6 +59,7 @@ skip_covered = true
 # branch = true
 concurrency = ["multiprocessing", "thread"]
 parallel = true
+relative_files = true
 source_pkgs = ["ansible_navigator"]
 
 [tool.mypy]
