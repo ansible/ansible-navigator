@@ -7,7 +7,7 @@ default_language_version:
 exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 41.146.0
+    rev: 41.157.1
     hooks:
       - id: renovate-config-validator
         alias: renovate
@@ -109,7 +109,7 @@ repos:
         alias: toml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.0
+    rev: v0.14.1
     hooks:
       - id: ruff-format
         alias: ruff
@@ -132,7 +132,7 @@ repos:
           - types-setuptools
           - types-typed-ast
   - repo: https://github.com/pycqa/pylint.git
-    rev: v3.3.9
+    rev: v4.0.2
     hooks:
       - id: pylint
         args:
