@@ -43,7 +43,7 @@ class Command(NamedTuple):
             args.append(self.subcommand)
         if isinstance(self.cmdline, str):
             args.extend(shlex.split(self.cmdline))
-        args.extend(["--ee", str(self.execution_environment).lower()])
+        args.extend(["--ee", str(self.execution_environment)])
         args.extend(["--ll", self.log_level])
         args.extend(["--mode", self.mode])
         if self.format_:
