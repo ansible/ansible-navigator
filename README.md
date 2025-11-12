@@ -25,7 +25,7 @@ Any kind of contribution to this project is very welcome and appreciated,
 whether it is a documentation improvement, [bug report][issue],
 [pull request][pull request] review, or a patch.
 
-See the [Contributing guidelines][contributing guidelines] for details.
+See [Contributing guidelines][contributing guidelines] for details.
 
 [issue]:https://github.com/ansible/ansible-navigator/issues
 [pull request]:https://github.com/ansible/ansible-navigator/pulls
