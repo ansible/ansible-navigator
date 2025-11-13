@@ -107,9 +107,9 @@ preferred-modules = [
 [tool.pylint.master]
 # pylint defaults + fh for with open .. as (f|fh)
 good-names = "i,j,k,ex,Run,_,f,fh"
-ignore = [
-  "_version.py", # built by setuptools_scm
-  "tm_tokenize" # tm_tokenize is virtually vendored and shouldn't be linted as such
+ignore-paths = [
+  "^.*_version\\.py$", # built by setuptools_scm
+  "^.*tm_tokenize.*$" # tm_tokenize is virtually vendored and shouldn't be linted as such
 ]
 jobs = 0
 max-args = 6 # default of 5 too low
