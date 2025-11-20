@@ -49,7 +49,7 @@ class BaseClass:
     """Base class for interactive/stdout ``config`` tests."""
 
     UPDATE_FIXTURES = False
-    PANE_HEIGHT = 25
+    PANE_HEIGHT = 300
     PANE_WIDTH = 300
 
     @pytest.fixture(scope="module", name="tmux_session")

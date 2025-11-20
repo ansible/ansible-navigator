@@ -381,7 +381,7 @@ class TmuxSession:
                 # taint the screen output w/ timestamp so it's never a valid fixture
                 alerts = [
                     f"******** ERROR: TMUX '{err_message}'"
-                    " TIMEOUT @ {elapsed}s @ {time_stamp} ********",
+                    f" TIMEOUT @ {elapsed}s @ {time_stamp} ********",
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
