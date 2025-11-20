@@ -104,6 +104,7 @@ class BaseClass:
         received_output = tmux_session.interaction(
             value=step.user_input,
             search_within_response=search_within_response,
+            timeout=600,
         )
 
         if step.mask:
