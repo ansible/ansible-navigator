@@ -8,15 +8,12 @@ import shlex
 import time
 import uuid
 import warnings
-
 from pathlib import Path
 from timeit import default_timer as timer
-from typing import TYPE_CHECKING
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import libtmux
 import libtmux.exc
-
 
 if TYPE_CHECKING:
     import types
@@ -381,7 +378,7 @@ class TmuxSession:
                 # taint the screen output w/ timestamp so it's never a valid fixture
                 alerts = [
                     f"******** ERROR: TMUX '{err_message}'"
-                    " TIMEOUT @ {elapsed}s @ {time_stamp} ********",
+                    f" TIMEOUT @ {elapsed}s @ {time_stamp} ********",
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing
