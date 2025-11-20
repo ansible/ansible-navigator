@@ -8,12 +8,15 @@ import shlex
 import time
 import uuid
 import warnings
+
 from pathlib import Path
 from timeit import default_timer as timer
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING
+from typing import TypedDict
 
 import libtmux
 import libtmux.exc
+
 
 if TYPE_CHECKING:
     import types
