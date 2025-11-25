@@ -224,6 +224,8 @@ filterwarnings = [
   # Python 3.12+ emits deprecation warnings for importlib.abc.Traversable
   # This is used in v3.4.1 but deprecated; ignore for backward compatibility testing
   "ignore:'importlib.abc.Traversable' is deprecated:DeprecationWarning",
+  # libtmux deprecates Pane.split_window() in favor of Pane.split()
+  "ignore:Pane.split_window\\(\\) is deprecated:DeprecationWarning",
 ]
 
 [tool.ruff]

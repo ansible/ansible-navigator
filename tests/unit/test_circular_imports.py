@@ -10,6 +10,7 @@ This module is based on an idea that ``pytest`` uses for self-testing:
 * https://twitter.com/codewithanthony/status/1229445110510735361
 * https://github.com/aio-libs/aiohttp/blob/master/tests/test_circular_imports.py
 """  # noqa: E501
+
 from __future__ import annotations
 
 import os
@@ -104,6 +105,9 @@ def test_no_warnings(import_path: str) -> None:
         "ignore: pkg_resources is deprecated as an API:DeprecationWarning",
         "-W",
         "ignore: Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning",
+        # NOTE: Python 3.12+ deprecates importlib.abc.Traversable
+        "-W",
+        "ignore:'importlib.abc.Traversable' is deprecated:DeprecationWarning",
         "-c",
         f"import {import_path!s}",
     )
