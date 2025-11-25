@@ -224,10 +224,11 @@ filterwarnings = [
   # Python 3.12+ emits deprecation warnings for importlib.abc.Traversable
   # This is used in v3.4.1 but deprecated; ignore for backward compatibility testing
   "ignore:'importlib.abc.Traversable' is deprecated:DeprecationWarning",
-  # libtmux deprecations (newer libtmux versions deprecate old Pane API methods)
+  # libtmux deprecations (newer libtmux versions deprecate old API methods)
   # v3.4.1 tests use older libtmux API that still works but emits warnings
   "ignore:.*Pane.*deprecated.*:DeprecationWarning",
   "ignore:Deprecated.*Pane.*:DeprecationWarning",
+  "ignore:.*Session.*deprecated.*:DeprecationWarning",
 ]
 
 [tool.ruff]
