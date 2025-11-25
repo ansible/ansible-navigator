@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Determine matrix
         id: generate_matrix
-        uses: coactions/dynamic-matrix@v1
+        uses: ansible/actions/matrix@main
         with:
           min_python: "3.9"
           max_python: "3.12"
@@ -40,20 +40,20 @@ jobs:
       matrix: ${{ fromJson(needs.pre.outputs.matrix) }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # needed by setuptools-scm
 
       - name: Cache container images
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
-        uses: actions/cache@v3
+        if: ${{ startsWith(matrix.name, 'py') }}
+        uses: actions/cache@v4
         with:
           path: |
             ~/.local/share/containers
           key: ${{ runner.os }}-${{ hashFiles('src/ansible_navigator/data/images_dockerfile') }}
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -66,30 +66,28 @@ jobs:
           python --version --version
           python3 -m pip freeze --all
 
-      - name: "tox -e ${{ matrix.passed_name }}"
-        continue-on-error: ${{ matrix.devel || false }}
-        run: python3 -m tox -e ${{ matrix.passed_name }}
+      - run: ${{ matrix.command }}
 
       - name: tox -e no-test-deps
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
+        if: ${{ startsWith(matrix.name, 'py') }}
         continue-on-error: ${{ matrix.devel || false }}
         run: python3 -m tox -e no-test-deps
 
       - name: Upload coverage data
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
-        uses: codecov/codecov-action@v3
+        if: ${{ startsWith(matrix.name, 'py') }}
+        uses: codecov/codecov-action@v5
         with:
-          name: ${{ matrix.passed_name }}
-          fail_ci_if_error: false # see https://github.com/codecov/codecov-action/issues/598
+          name: ${{ matrix.name }}
+          fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true # optional (default = false)
+          verbose: true
+
       - name: Change accessibility for cache
-        if: ${{ startsWith(matrix.passed_name, 'py') }}
+        if: ${{ startsWith(matrix.name, 'py') }}
         run: podman unshare chmod -R 755 ~/.local/share/containers/
 
   check: # This job does nothing and is only used for the branch protection
     if: always()
-
     needs:
       - tox
     runs-on: ubuntu-24.04
