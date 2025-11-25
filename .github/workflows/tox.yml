@@ -17,7 +17,7 @@ on:
 jobs:
   pre:
     name: pre
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       matrix: ${{ steps.generate_matrix.outputs.matrix }}
     steps:
@@ -26,14 +26,14 @@ jobs:
         uses: coactions/dynamic-matrix@v1
         with:
           min_python: "3.9"
-          max_python: "3.11"
-          default_python: "3.11" # used by jobs in other_names
+          max_python: "3.12"
+          default_python: "3.12" # used by jobs in other_names
           other_names: |
             lint
             docs
   tox:
     name: ${{ matrix.name }} / python ${{ matrix.python_version }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: pre
     strategy:
       fail-fast: false
@@ -92,7 +92,7 @@ jobs:
 
     needs:
       - tox
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1
