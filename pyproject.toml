@@ -222,7 +222,8 @@ filterwarnings = [
   # https://github.com/ansible/ansible-runner/issues/1246
   "ignore::ResourceWarning:ansible_runner",
   # Python 3.12+ emits deprecation warnings for importlib.abc.Traversable
-  "ignore:importlib.abc.Traversable.*:DeprecationWarning",
+  # This is used in v3.4.1 but deprecated; ignore for backward compatibility testing
+  "ignore:'importlib.abc.Traversable' is deprecated:DeprecationWarning",
 ]
 
 [tool.ruff]
