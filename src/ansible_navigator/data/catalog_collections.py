@@ -676,7 +676,7 @@ if __name__ == "__main__":
     args, parent_directories = parse_args()
 
     COLLECTION_SCAN_PATHS = ":".join(str(parent) for parent in parent_directories)
-    os.environ["ANSIBLE_COLLECTIONS_PATHS"] = COLLECTION_SCAN_PATHS
+    os.environ["ANSIBLE_COLLECTIONS_PATH"] = COLLECTION_SCAN_PATHS
 
     result = main()
     result["stats"]["duration"] = (datetime.now(timezone.utc) - start_time).total_seconds()

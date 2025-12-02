@@ -4,14 +4,14 @@
     "comment": "ensure env vars get set from config",
     "additional_information": {
         "present": [
-            "ANSIBLE_COLLECTIONS_PATHS=/tmp/collections"
+            "ANSIBLE_COLLECTIONS_PATH=/tmp/collections"
         ],
         "absent": [],
         "compared_fixture": false
     },
     "output": [
         "ANSIBLE_DEV_TOOLS_CONTAINER=1",
-        "ANSIBLE_COLLECTIONS_PATHS=/tmp/collections",
+        "ANSIBLE_COLLECTIONS_PATH=/tmp/collections",
         "PWD=/home/user/github/ansible-navigator",
         "PIP_BREAK_SYSTEM_PACKAGES=1",
         "ANSIBLE_NAVIGATOR_PLAYBOOK_ARTIFACT_SAVE_AS=/home/user/github/ansible-navigator/.test_logs/integration/actions/exec/test_stdout_file.py/test_stdout_file_py/ansible-navigator.log/playbook-artifact.log",

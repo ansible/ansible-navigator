@@ -43,7 +43,7 @@ execution environment using
 done to help playbook developers author playbooks that are production ready, as
 both ansible controller and awx support playbook adjacent collection
 directories. If the collections are in another directory, the
-`ANSIBLE_COLLECTIONS_PATHS` variable needs to be set and the directory specified
+`ANSIBLE_COLLECTIONS_PATH` variable needs to be set and the directory specified
 as a custom volume mount. (See the [settings guide](settings.md) for
 `execution-environment-volume-mounts`)
 
