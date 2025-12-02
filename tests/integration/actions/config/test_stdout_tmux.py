@@ -37,7 +37,7 @@ stdout_tests = (
     ShellCommand(
         comment="config dump without ee",
         user_input=StdoutCommand(
-            cmdline="dump",
+            cmdline="dump --senv PAGER=cat",
             mode="stdout",
             execution_environment=False,
         ).join(),
@@ -50,7 +50,7 @@ stdout_tests = (
             mode="stdout",
             execution_environment=True,
         ).join(),
-        present=["YAML_FILENAME_EXTENSIONS"],
+        present=["_TEMPLAR_UNTRUSTED_TEMPLATE_BEHAVIOR"],
     ),
     ShellCommand(
         comment="config list without ee",

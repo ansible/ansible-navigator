@@ -153,3 +153,7 @@ repos:
           - pytest-mock
           - setuptools-scm
         pass_filenames: false
+  - repo: https://github.com/ansible/team-devtools
+    rev: v25.12.8
+    hooks:
+      - id: check-platform-constraints
