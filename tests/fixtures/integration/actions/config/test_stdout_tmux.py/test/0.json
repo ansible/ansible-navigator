@@ -10,19 +10,6 @@
         "compared_fixture": false
     },
     "output": [
-        "PLUGIN_FILTERS_CFG(default) = None",
-        "PYTHON_MODULE_RLIMIT_NOFILE(default) = 0",
-        "RETRY_FILES_ENABLED(env: ANSIBLE_RETRY_FILES_ENABLED) = False",
-        "RETRY_FILES_SAVE_PATH(default) = None",
-        "RUN_VARS_PLUGINS(default) = demand",
-        "SHOW_CUSTOM_STATS(default) = False",
-        "STRING_CONVERSION_ACTION(default) = warn",
-        "STRING_TYPE_FILTERS(default) = ['string', 'to_json', 'to_nice_json', 'to_yaml', 'to_nice_yaml', 'ppretty', 'json']",
-        "SYSTEM_WARNINGS(default) = True",
-        "TAGS_RUN(default) = []",
-        "TAGS_SKIP(default) = []",
-        "TARGET_LOG_INFO(default) = None",
-        "TASK_DEBUGGER_IGNORE_ERRORS(default) = True",
         "TASK_TIMEOUT(default) = 0",
         "TRANSFORM_INVALID_GROUP_CHARS(default) = never",
         "USE_PERSISTENT_CONNECTIONS(default) = False",
@@ -34,6 +21,18 @@
         "WIN_ASYNC_STARTUP_TIMEOUT(default) = 5",
         "WORKER_SHUTDOWN_POLL_COUNT(default) = 0",
         "WORKER_SHUTDOWN_POLL_DELAY(default) = 0.1",
-        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json'](venv) bash$"
+        "YAML_FILENAME_EXTENSIONS(default) = ['.yml', '.yaml', '.json']",
+        "_ANSIBALLZ_COVERAGE_CONFIG(default) = None",
+        "_ANSIBALLZ_DEBUGPY_CONFIG(default) = None",
+        "_ANSIBALLZ_PYDEVD_CONFIG(default) = None",
+        "_ANSIBLE_CONNECTION_PATH(default) = None",
+        "_CALLBACK_DISPATCH_ERROR_BEHAVIOR(default) = warning",
+        "_MODULE_METADATA(default) = False",
+        "_TEMPLAR_SANDBOX_MODE(default) = default",
+        "_TEMPLAR_UNKNOWN_TYPE_CONVERSION(default) = warning",
+        "_TEMPLAR_UNKNOWN_TYPE_ENCOUNTERED(default) = ignore",
+        "_TEMPLAR_UNTRUSTED_TEMPLATE_BEHAVIOR(default) = ignore",
+        "GALAXY_SERVERS:",
+        "(py312) bash$"
     ]
 }
