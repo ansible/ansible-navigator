@@ -2,7 +2,6 @@
 """Unit tests for image introspection."""
 
 import importlib
-import sys
 import types
 
 from importlib.machinery import ModuleSpec
@@ -53,7 +52,6 @@ which contains NET-SNMP utilities.
 """
 
 PIP_FREEZE_OUTPUT = """ansible-core==2.19.4
-ansible-pylibssh==1.3.0
 ansible-runner==2.4.2
 attrs==25.4.0
 bcrypt==5.0.0
