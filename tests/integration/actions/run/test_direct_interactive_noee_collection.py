@@ -18,7 +18,7 @@ CLI = Command(
     subcommand="run",
     cmdline=cmdline,
     execution_environment=False,
-    precommand=f"ANSIBLE_COLLECTIONS_PATHS={common_fixture_dir}",
+    precommand=f"ANSIBLE_COLLECTIONS_PATH={common_fixture_dir}",
 ).join()
 
 initial_steps = (
