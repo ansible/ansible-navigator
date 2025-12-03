@@ -7,14 +7,14 @@ default_language_version:
 exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 41.157.1
+    rev: 42.27.0
     hooks:
       - id: renovate-config-validator
         alias: renovate
         args:
           - --strict
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: v3.6.2
+    rev: v3.7.3
     hooks:
       - id: prettier
         entry:
@@ -34,7 +34,7 @@ repos:
     hooks:
       - id: tox-ini-fmt
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v9.2.0
+    rev: v9.3.3
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -59,7 +59,7 @@ repos:
     hooks:
       - id: check-json5
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.45.0
+    rev: v0.46.0
     hooks:
       - id: markdownlint
         exclude:
@@ -93,11 +93,11 @@ repos:
         additional_dependencies:
           - flake8-docstrings
   - repo: https://github.com/jsh9/pydoclint
-    rev: 0.7.3
+    rev: 0.8.3
     hooks:
       - id: pydoclint
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         args:
@@ -109,14 +109,14 @@ repos:
         alias: toml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.1
+    rev: v0.14.7
     hooks:
       - id: ruff-format
         alias: ruff
       - id: ruff-check
         alias: ruff
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.18.2
+    rev: v1.19.0
     hooks:
       - id: mypy
         additional_dependencies:
@@ -132,7 +132,7 @@ repos:
           - types-setuptools
           - types-typed-ast
   - repo: https://github.com/pycqa/pylint.git
-    rev: v4.0.2
+    rev: v4.0.4
     hooks:
       - id: pylint
         args:
@@ -153,3 +153,7 @@ repos:
           - pytest-mock
           - setuptools-scm
         pass_filenames: false
+  - repo: https://github.com/ansible/team-devtools
+    rev: v25.12.8
+    hooks:
+      - id: check-platform-constraints
