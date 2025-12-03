@@ -173,7 +173,7 @@ def test_python_packages_parse_freeze(imported_ii: Any) -> None:
     assert packages["jinja2"] == "3.1.6"
     assert packages["cryptography"] == "46.0.3"
     assert packages["ansible-runner"] == "2.4.2"
-    assert len(packages) == 10
+    assert len(packages) == 9
 
 
 def test_python_packages_parse_show(imported_ii: Any) -> None:
