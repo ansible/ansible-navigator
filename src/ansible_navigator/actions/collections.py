@@ -236,8 +236,15 @@ class Action(ActionBase):
         msgs = ["humph. Something went really wrong while cataloging collections."]
         msgs.append("Details have been added to the log file")
         closing = ["[HINT] Please log an issue about this one, it shouldn't have happened"]
-        warning = warning_notification(messages=msgs + closing)
-        self._interaction.ui.show_form(warning)
+
+        # Only show UI notification in interactive mode
+        if self._args.mode == "interactive" and hasattr(self, "_interaction"):
+            warning = warning_notification(messages=msgs + closing)
+            self._interaction.ui.show_form(warning)
+        else:
+            # In stdout mode, just log the error
+            for msg in msgs + closing:
+                self._logger.error(msg)
 
     def notify_none(self) -> None:
         """Notify no collections were found."""
