@@ -512,19 +512,30 @@ def retrieve_collections_paths() -> dict[Any, Any]:
     Returns:
         Errors or the configured collection directories
     """
-    cmd = ["ansible-config", "dump", "|", "grep", "COLLECTIONS_PATHS"]
+    cmd = ["ansible-config", "dump"]
     proc_out = run_command(cmd)
     if "error" in proc_out:
         return proc_out
+
+    # Filter for COLLECTIONS_PATHS instead of using shell pipe and grep
+    collections_paths_line = None
+    for line in proc_out["stdout"].splitlines():
+        if "COLLECTIONS_PATHS" in line:
+            collections_paths_line = line
+            break
+
+    if not collections_paths_line:
+        return {"error": "COLLECTIONS_PATHS not found in ansible-config output"}
+
     regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
-    parsed = regex.match(proc_out["stdout"])
+    parsed = regex.match(collections_paths_line)
     if parsed:
         try:
             current = yaml.load(parsed.groupdict()["current"], Loader=SafeLoader)
         except (YAMLError, KeyError) as exc:
             return {"error": str(exc)}
         return {"result": current}
-    return {"error": f"corrupt current collection path: {proc_out['stdout']}"}
+    return {"error": f"corrupt current collection path: {collections_paths_line}"}
 
 
 def retrieve_docs(
@@ -611,14 +622,16 @@ def run_command(cmd: list[str]) -> dict[str, str]:
     """
     try:
         proc_out = subprocess.run(
-            " ".join(cmd),
+            cmd,
             capture_output=True,
             check=True,
             text=True,
-            shell=True,
+            shell=False,
         )
     except subprocess.CalledProcessError as exc:
         return {"error": str(exc)}
+    except (FileNotFoundError, PermissionError) as exc:
+        return {"error": f"{type(exc).__name__}: {exc}"}
     return {"stdout": proc_out.stdout}
 
 
