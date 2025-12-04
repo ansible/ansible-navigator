@@ -1,4 +1,5 @@
 # cspell:ignore KEY_NPAGE, KEY_PPAGE
+# pylint: disable=too-many-lines
 """The main UI renderer."""
 
 from __future__ import annotations
@@ -199,7 +200,12 @@ class UserInterface(CursesWindow):
         self._status_color = 0
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
+        self._screen.keypad(True)  # Enable keypad mode for proper key handling
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
+        # This tracks which visible row to highlight
+        self._highlight_line_offset: int | None = None
+        # This tracks the cursor position in menus
+        self._menu_cursor_pos: int = 0
 
     def clear(self) -> None:
         """Clear the screen."""
@@ -464,7 +470,7 @@ class UserInterface(CursesWindow):
         index_width = len(str(count))
 
         keypad = {str(x) for x in range(10)}
-        other_valid_keys = ["+", "-", "_", "KEY_F(5)", "^[", "\x1b"]
+        other_valid_keys = ["+", "-", "_", "KEY_F(5)", "^[", "\x1b", "CURSOR_ENTER"]
 
         while True:
             self._screen.erase()
@@ -479,10 +485,29 @@ class UserInterface(CursesWindow):
                 line_index = line_numbers[idx]
                 line_index_str = str(line_index).rjust(index_width)
                 prefix = f"{line_index_str}\u2502"
+                # Apply highlight decoration when this is the selected row
+                if (
+                    indent_heading
+                    and self._highlight_line_offset is not None
+                    and idx == self._highlight_line_offset
+                ):
+                    # Rebuild the line with reverse-video decoration added
+                    highlighted_parts = tuple(
+                        CursesLinePart(
+                            column=lp.column,
+                            string=lp.string,
+                            color=lp.color,
+                            decoration=lp.decoration | curses.A_REVERSE,
+                        )
+                        for lp in line
+                    )
+                    line_to_draw = CursesLine(highlighted_parts)
+                else:
+                    line_to_draw = line
                 self._add_line(
                     window=self._screen,
                     lineno=idx + len(heading),
-                    line=line,
+                    line=line_to_draw,
                     prefix=prefix,
                 )
 
@@ -504,6 +529,14 @@ class UserInterface(CursesWindow):
             if await_input:
                 char = self._screen.getch()
                 key = "KEY_F(5)" if char == -1 else curses.keyname(char).decode()
+                # Debug: log the raw char and converted key for troubleshooting
+                self._logger.debug("Raw char: %s, Converted key: '%s'", char, key)
+                # Check for Enter key codes and return a special value for cursor navigation
+                if char in [10, 13]:  # Enter key codes: 10=LF, 13=CR
+                    self._logger.debug(
+                        "Enter key detected! Raw char: %s, setting key to CURSOR_ENTER", char
+                    )
+                    key = "CURSOR_ENTER"
             else:
                 key = "KEY_F(5)"
 
@@ -915,6 +948,19 @@ class UserInterface(CursesWindow):
                 showing_indices,
             )
 
+            # Determine which row to highlight, if enabled
+            self._highlight_line_offset = None
+            if self._menu_indices:
+                self._menu_cursor_pos = max(
+                    0,
+                    min(self._menu_cursor_pos, len(self._menu_indices) - 1),
+                )
+                selected_global_index = self._menu_indices[self._menu_cursor_pos]
+                try:
+                    self._highlight_line_offset = showing_indices.index(selected_global_index)
+                except ValueError:
+                    self._highlight_line_offset = None
+
             entry = self._display(
                 lines=menu_lines,
                 line_numbers=line_numbers,
@@ -925,8 +971,51 @@ class UserInterface(CursesWindow):
                 await_input=await_input,
             )
 
+            # Debug: log what entry we received
+            self._logger.debug("Received entry: '%s'", entry)
+
+            # Handle arrow navigation for menus when enabled
             if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
+                if entry in ["KEY_DOWN", "KEY_UP"] and self._menu_indices:
+                    # Move the cursor position
+                    if entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1:
+                        self._menu_cursor_pos += 1
+                        # If moved past the last visible item, scroll down one
+                        if (
+                            self._highlight_line_offset is None
+                            or self._highlight_line_offset >= len(showing_indices) - 1
+                        ):
+                            # Mimic _display scroll down
+                            viewport_height = self._screen_height - len(menu_heading) - 1
+                            self.scroll(
+                                max(
+                                    min(self.scroll() + 1, len(self._menu_indices)),
+                                    viewport_height,
+                                ),
+                            )
+                    elif entry == "KEY_UP" and self._menu_cursor_pos > 0:
+                        self._menu_cursor_pos -= 1
+                        # If moved before the first visible item, scroll up one
+                        if self._highlight_line_offset is None or self._highlight_line_offset <= 0:
+                            viewport_height = self._screen_height - len(menu_heading) - 1
+                            self.scroll(max(self.scroll() - 1, viewport_height))
+                    # Re-render with updated highlight
+                    continue
+                # Otherwise, preserve prior behavior
                 continue
+
+            # Enter key should select the highlighted item for cursor navigation
+            if (
+                entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"]
+            ) and self._menu_indices:
+                self._logger.debug(
+                    "Enter key selection triggered! Entry: '%s', Selecting index %s",
+                    entry,
+                    self._menu_cursor_pos,
+                )
+                index_to_select = self._menu_indices[self._menu_cursor_pos]
+                entry = str(index_to_select)
+                self._logger.debug("Changed entry to: '%s'", entry)
 
             name, action = self._template_match_action(entry, current)
             if name and action:
