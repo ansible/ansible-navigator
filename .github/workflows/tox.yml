@@ -57,7 +57,7 @@ jobs:
 
       - name: Cache container images
         if: ${{ startsWith(matrix.name, 'py') }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.local/share/containers
@@ -152,7 +152,7 @@ jobs:
       - run: pip3 install 'coverage>=7.5.1'
 
       - name: Merge logs into a single archive
-        uses: actions/upload-artifact/merge@v5
+        uses: actions/upload-artifact/merge@v6
         with:
           name: logs.zip
           include-hidden-files: true
@@ -160,20 +160,20 @@ jobs:
           separate-directories: true
 
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: logs.zip
           path: .
 
       - name: Upload coverage data
-        uses: codecov/codecov-action@v5.5.1
+        uses: codecov/codecov-action@v5.5.2
         with:
           name: ${{ matrix.name }}
           fail_ci_if_error: true
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Delete Merged Artifacts
-        uses: actions/upload-artifact/merge@v5
+        uses: actions/upload-artifact/merge@v6
         with:
           include-hidden-files: true
           delete-merged: true
