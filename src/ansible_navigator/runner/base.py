@@ -11,11 +11,8 @@ import os
 import shutil
 import sys
 import tempfile
-
 from pathlib import Path
-from typing import TYPE_CHECKING
-from typing import Any
-
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ansible_runner import Runner
@@ -109,6 +106,20 @@ class Base:
                 container_options.append("--user=root")
             else:
                 container_options = ["--user=root"]
+
+        # Fix SSH agent socket when running Docker on macOS.
+        if sys.platform == "darwin" and self._ce == "docker":
+            ssh_agent_socket_opts = [
+                # Docker exposes this proxy socket for SSH agent on macOS.
+                "--volume=/run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock:ro",
+                "--env=SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock",
+            ]
+
+            if container_options:
+                # Prepend to existing container options to allow overriding this fix.
+                container_options = ssh_agent_socket_opts + container_options
+            else:
+                container_options = ssh_agent_socket_opts
 
         if self._ee:
             self._runner_args.update(
