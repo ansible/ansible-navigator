@@ -11,8 +11,11 @@ import os
 import shutil
 import sys
 import tempfile
+
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+from typing import Any
+
 
 if TYPE_CHECKING:
     from ansible_runner import Runner
