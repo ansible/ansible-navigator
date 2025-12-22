@@ -7,7 +7,7 @@ default_language_version:
 exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 42.52.2
+    rev: 42.64.1
     hooks:
       - id: renovate-config-validator
         alias: renovate
@@ -109,14 +109,14 @@ repos:
         alias: toml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.9
+    rev: v0.14.10
     hooks:
       - id: ruff-format
         alias: ruff
       - id: ruff-check
         alias: ruff
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.19.0
+    rev: v1.19.1
     hooks:
       - id: mypy
         additional_dependencies:
