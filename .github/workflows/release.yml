@@ -21,9 +21,9 @@ jobs:
 
     steps:
       - name: Switch to using Python 3.10 by default
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: "3.14"
       - name: Install tox
         run: >-
           python3 -m
@@ -31,7 +31,7 @@ jobs:
           --user
           tox
       - name: Check out src from Git
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # needed by setuptools-scm
       - name: Build dists

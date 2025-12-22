@@ -325,7 +325,7 @@ class PythonPackages(CmdParser):
         """
         pre = Command(
             id_="pip_freeze",
-            command="/usr/bin/python3 -m pip freeze",
+            command=f"{sys.executable} -m pip freeze",
             parse=self.parse_freeze,
         )
         run_command(pre)
@@ -334,7 +334,7 @@ class PythonPackages(CmdParser):
         return [
             Command(
                 id_="python_packages",
-                command=f"/usr/bin/python3 -m pip show {pkgs}",
+                command=f"{sys.executable} -m pip show {pkgs}",
                 parse=self.parse,
             ),
         ]

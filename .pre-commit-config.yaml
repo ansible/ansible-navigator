@@ -1,74 +1,46 @@
----
+ci:
+  autoupdate_schedule: quarterly
+  skip:
+    - renovate-config-validator
 default_language_version:
-  # ensures that we get same behavior on CI(s) as on local machines
   python: python3.11
-exclude: >
-  (?x)^(
-    _readthedocs|
-    .tox
-  )$
+exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
+  - repo: https://github.com/renovatebot/pre-commit-hooks
+    rev: 42.64.1
+    hooks:
+      - id: renovate-config-validator
+        alias: renovate
+        args:
+          - --strict
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.6.2"
+    rev: v3.7.4
     hooks:
       - id: prettier
-        # Original hook implementation is flaky due to *several* bugs described
-        # in https://github.com/prettier/prettier/issues/12364
-        # a) CI=1 needed to avoid incomplete output
-        # b) two executions are needed because --list-different works correctly
-        # only when run with --check as with --write the output will also
-        # include other entries and logging level cannot be used to keep only
-        # modified files listed (any file is listes using the log level, regardless if
-        # is modified or not).
-        # c) We avoid letting pre-commit pass each filename in order to avoid
-        # runing multiple instances in parallel. This also ensures that running
-        # prettier from the command line behaves identically with the pre-commit
-        # one. No real performance downsides.
-        # d) exit with the return code from list-different (0=none, 1=some)
-        # rather than the write (0=successfully rewrote files). pre-commit.ci
-        entry: env CI=1 bash -c "prettier --list-different . || ec=$? && prettier --loglevel=error --write . && exit $ec"
+        entry:
+          env CI=1 bash -c "prettier --list-different . || ec=$? && prettier
+          --loglevel=error --write . && exit $ec"
         pass_filenames: false
         args: []
         additional_dependencies:
           - prettier
           - prettier-plugin-toml
-
   - repo: https://github.com/pappasam/toml-sort
-    rev: v0.24.2
+    rev: v0.24.3
     hooks:
       - id: toml-sort-fix
-
   - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: 1.6.0
+    rev: 1.7.1
     hooks:
       - id: tox-ini-fmt
-
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.10"
-    hooks:
-      - id: ruff
-        entry: sh -c 'ruff check --fix --force-exclude && ruff format --force-exclude'
-        types_or: [python, pyi]
-
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v9.2.0
+    rev: v9.3.3
     hooks:
       - id: cspell
         name: Spell check with cspell
-
-  - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-    rev: v1.5.5
-    hooks:
-      - id: remove-tabs
-        exclude: >
-          (?x)^(
-            .config/pylint-baseline.txt
-          )$
-
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
     rev: v6.0.0
     hooks:
-      # Side-effects:
       - id: trailing-whitespace
       - id: check-merge-conflict
       - id: end-of-file-fixer
@@ -78,86 +50,73 @@ repos:
       - id: check-case-conflict
       - id: check-symlinks
       - id: check-yaml
-        exclude: >
-          (?x)^
-            (
-              mkdocs.yml
-            )
-          $
+        exclude: "(?x)^\n  (\n    mkdocs.yml\n  )\n$\n"
       - id: detect-private-key
-      # Heavy checks:
       - id: check-ast
       - id: debug-statements
-
   - repo: https://gitlab.com/bmares/check-json5
-    # Allow json comments, trailing commas
-    # https://github.com/pre-commit/pre-commit-hooks/issues/395
     rev: v1.0.0
     hooks:
       - id: check-json5
-
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.45.0
+    rev: v0.47.0
     hooks:
       - id: markdownlint
-        exclude: >
-          (?x)^
-            (
-              \.github/ISSUE_TEMPLATE/\w+|
-              docs/(
-                faq|
-                index|
-              )|
-              README|
-              src/ansible_navigator/data/(help|welcome)
-            )\.md
-          $
-
+        exclude:
+          "(?x)^\n  (\n    \\.github/ISSUE_TEMPLATE/\\w+|\n    docs/(\n      faq|\n
+          \     index|\n    )|\n    README|\n    src/ansible_navigator/data/(help|welcome)\n
+          \ )\\.md\n$\n"
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
     hooks:
       - id: codespell
-        # NOTE: dout is part of the stdout action regex
-        args: ["-L", "dout"]
-        # We exclude generated and external files as they are not directly under
-        # our control, so we cannot fix spelling in them.
-        exclude: >
-          (?x)^
-            (
-              tests/fixtures/integration/actions/.*\.json|
-              src/ansible_navigator/data/grammar/.*\.json
-            )
-          $
-
+        args:
+          - -L
+          - dout
+        exclude:
+          "(?x)^\n  (\n    tests/fixtures/integration/actions/.*\\.json|\n
+          \   src/ansible_navigator/data/grammar/.*\\.json\n  )\n$\n"
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.37.1
     hooks:
       - id: yamllint
         args:
           - --strict
-        types: [file, yaml]
-
+        types:
+          - file
+          - yaml
   - repo: https://github.com/PyCQA/flake8.git
     rev: 7.3.0
     hooks:
       - id: flake8
         language_version: python3
         additional_dependencies:
-          - flake8-docstrings # uses pydocstyle
-
+          - flake8-docstrings
   - repo: https://github.com/jsh9/pydoclint
-    rev: 0.6.10
+    rev: 0.8.3
     hooks:
       - id: pydoclint
-
   - repo: https://github.com/asottile/pyupgrade
-    # keep it after flake8
-    rev: v3.20.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
-        args: ["--py310-plus"]
+        args:
+          - --py310-plus
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.24.3
+    hooks:
+      - id: toml-sort-fix
+        alias: toml
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.10
+    hooks:
+      - id: ruff-format
+        alias: ruff
+      - id: ruff-check
+        alias: ruff
   - repo: https://github.com/pre-commit/mirrors-mypy.git
-    rev: v1.17.1
+    rev: v1.19.1
     hooks:
       - id: mypy
         additional_dependencies:
@@ -170,11 +129,10 @@ repos:
           - types-docutils
           - types-mock
           - types-PyYAML
-          - types-setuptools # Needed logging version
+          - types-setuptools
           - types-typed-ast
-
   - repo: https://github.com/pycqa/pylint.git
-    rev: v3.3.8
+    rev: v4.0.4
     hooks:
       - id: pylint
         args:
@@ -185,7 +143,7 @@ repos:
           - ansible-core
           - ansible-runner
           - astroid
-          - dill>=0.3.6 # needed for py311
+          - dill>=0.3.6
           - jinja2
           - jsonschema
           - libtmux
@@ -195,3 +153,7 @@ repos:
           - pytest-mock
           - setuptools-scm
         pass_filenames: false
+  - repo: https://github.com/ansible/team-devtools
+    rev: v25.12.8
+    hooks:
+      - id: check-platform-constraints
