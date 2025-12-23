@@ -3,26 +3,27 @@
 from __future__ import annotations
 
 import shlex
-
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
 
 from ansible_navigator import cli
-from tests.conftest import default_ee_image_name
-from tests.conftest import small_image_name
+from tests.conftest import default_ee_image_name, small_image_name
 from tests.defaults import FIXTURES_DIR
 
-from ._cli2runner import Cli2Runner
-from ._cli2runner import RunnerTestError
-
+from ._cli2runner import Cli2Runner, RunnerTestError
 
 if TYPE_CHECKING:
     from unittest.mock import MagicMock  # pylint: disable=preferred-module
 
 test_data = [
-    ("defaults", "", "ansible-navigator_empty.yml", {"container_image": default_ee_image_name()}),
+    (
+        "defaults",
+        "",
+        "ansible-navigator_empty.yml",
+        {"container_image": default_ee_image_name()},
+    ),
     (
         "set at command line",
         f"--execution-environment-image {small_image_name()}",
