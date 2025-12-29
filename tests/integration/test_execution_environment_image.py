@@ -114,9 +114,7 @@ class Test(Cli2Runner):
             assert item in kwargs.items()
 
         # MacOS SSH options should not be included when running in another OS or on Podman.
-        container_options = (
-            kwargs["container_options"] if kwargs["container_options"] is not None else []
-        )
+        container_options = kwargs["container_options"] or []
 
         macos_container_options = [
             "--volume=/run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock:ro",
