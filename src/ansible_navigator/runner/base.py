@@ -106,7 +106,12 @@ class Base:
         # when the ce is podman, set the container user to root
         if self._ce == "podman":
             if container_options:
-                container_options.append("--user=root")
+                user_seen: bool = False
+                for _o in container_options:
+                    if _o.startswith("--user="):
+                        user_seen = True
+                if not user_seen:
+                    container_options.append("--user=root")
             else:
                 container_options = ["--user=root"]
 
