@@ -7,7 +7,7 @@ default_language_version:
 exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 42.70.2
+    rev: 42.71.0
     hooks:
       - id: renovate-config-validator
         alias: renovate
