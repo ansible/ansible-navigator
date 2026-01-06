@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shlex
+import sys
 
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -22,7 +23,12 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock  # pylint: disable=preferred-module
 
 test_data = [
-    ("defaults", "", "ansible-navigator_empty.yml", {"container_image": default_ee_image_name()}),
+    (
+        "defaults",
+        "",
+        "ansible-navigator_empty.yml",
+        {"container_image": default_ee_image_name()},
+    ),
     (
         "set at command line",
         f"--execution-environment-image {small_image_name()}",
@@ -106,3 +112,17 @@ class Test(Cli2Runner):
 
         for item in expected.items():
             assert item in kwargs.items()
+
+        # MacOS SSH options should not be included when running in another OS or on Podman.
+        container_options = kwargs["container_options"] or []
+
+        macos_container_options = [
+            "--volume=/run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock:ro",
+            "--env=SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock",
+        ]
+
+        for opt in macos_container_options:
+            if sys.platform == "darwin" and kwargs["process_isolation_executable"] == "docker":
+                assert opt in container_options
+            else:
+                assert opt not in container_options
