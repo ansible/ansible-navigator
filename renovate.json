@@ -13,8 +13,13 @@
       "description": "Platform compatibility constraint"
     },
     {
+      "matchPackageNames": ["cryptography"],
+      "allowedVersions": "<38",
+      "description": "Platform compatibility constraint"
+    },
+    {
       "matchPackageNames": ["django"],
-      "allowedVersions": "<4.3",
+      "allowedVersions": "<6.0",
       "description": "Platform compatibility constraint"
     },
     {
