@@ -108,8 +108,7 @@ class Base:
         # when the ce is podman, set the container user to root unless already specified
         if self._ce == "podman":
             has_user_flag = any(
-                opt.startswith(("--user", "-u=", "-u ")) or opt == "-u"
-                for opt in container_options
+                opt.startswith(("--user", "-u=", "-u ")) or opt == "-u" for opt in container_options
             )
             if not has_user_flag:
                 container_options.append("--user=root")

@@ -154,7 +154,7 @@ def test_podman_other_u_flags_dont_match() -> None:
 
 def test_podman_user_space_separated() -> None:
     """Test that space-separated user flags are detected (as separate list items)."""
-    # When passed as --container-options="-u myuser", the parser may split this into ["-u", "myuser"]
+    # When passed as --container-options="-u myuser", the parser may split into ["-u", "myuser"]
     base = Base(
         container_engine="podman",
         execution_environment=True,

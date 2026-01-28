@@ -48,9 +48,11 @@ maxsplit
 mergeable
 mkdocstrings
 mqueue              # https://github.com/ansible/ansible-runner/issues/984
+myuser
 myproject
 netcommon           # Ansible network collection, seen in tests and README
 netconf
+nofile
 nonblocking
 oldmask
 oneline
