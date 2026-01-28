@@ -105,18 +105,14 @@ class Base:
 
         container_options = container_options or []
 
-        # when the ce is podman, set the container user to root
+        # when the ce is podman, set the container user to root unless already specified
         if self._ce == "podman":
-            if container_options:
-                user_seen: bool = False
-                for _o in container_options:
-                    if _o.startswith("--user="):
-                        user_seen = True
-                if not user_seen:
-                    container_options.append("--user=root")
-            else:
-                container_options = ["--user=root"]
-            container_options.append("--user=root")
+            has_user_flag = any(
+                opt.startswith(("--user", "-u=", "-u ")) or opt == "-u"
+                for opt in container_options
+            )
+            if not has_user_flag:
+                container_options.append("--user=root")
 
         # Fix SSH agent socket when running Docker on macOS.
         if sys.platform == "darwin" and self._ce == "docker":
