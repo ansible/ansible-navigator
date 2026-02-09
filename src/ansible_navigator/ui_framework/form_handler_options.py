@@ -95,7 +95,7 @@ class FormHandlerOptions(CursesWindow):
                     break
                 active += 1
 
-            elif char in [curses_ascii.SP]:
+            elif char == curses_ascii.SP:
                 if not form_field.options[active].disabled:
                     form_field.options[active].checked = not form_field.options[active].checked
                     if form_field.__class__.__name__ == "FieldRadio":

@@ -388,14 +388,14 @@ def ansi_to_curses(line: str) -> CursesLine:
                 elif cap["fg_action"] == "38;5;":
                     color = int(one)
                     if two:
-                        style = CURSES_STYLES.get(int(two), None) or 0
+                        style = CURSES_STYLES.get(int(two)) or 0
                 elif not cap["fg_action"]:
                     ansi_16 = list(chain(range(30, 38), range(90, 98)))
                     if two is None:
                         color = ansi_16.index(int(one)) if int(one) in ansi_16 else int(one)
                     else:
                         color = ansi_16.index(int(two)) if int(two) in ansi_16 else int(two)
-                        style = CURSES_STYLES.get(int(one), None) or 0
+                        style = CURSES_STYLES.get(int(one)) or 0
             else:
                 curses_line = CursesLinePart(
                     column=colno,
