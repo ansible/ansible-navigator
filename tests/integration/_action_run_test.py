@@ -127,7 +127,7 @@ class ActionRunTest:
         Returns:
             The content format value
         """
-        return value if value else ContentFormat.YAML
+        return value or ContentFormat.YAML
 
     def show(
         self,
