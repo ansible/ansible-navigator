@@ -94,7 +94,7 @@ class ImagesList:
             local_images = [
                 dict(zip(headers, re_2omo.split(line), strict=False)) for line in images
             ]
-            valid_images = [image for image in local_images if image["tag"] != "<none>"]
+            valid_images = [image for image in local_images if image.get("tag") != "<none>"]
             command.details = valid_images
 
 
