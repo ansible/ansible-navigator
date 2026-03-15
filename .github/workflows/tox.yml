@@ -152,7 +152,7 @@ jobs:
       - run: pip3 install 'coverage>=7.5.1'
 
       - name: Merge logs into a single archive
-        uses: actions/upload-artifact/merge@v6
+        uses: actions/upload-artifact/merge@v7
         with:
           name: logs.zip
           include-hidden-files: true
@@ -173,7 +173,7 @@ jobs:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
 
       - name: Delete Merged Artifacts
-        uses: actions/upload-artifact/merge@v6
+        uses: actions/upload-artifact/merge@v7
         with:
           include-hidden-files: true
           delete-merged: true
