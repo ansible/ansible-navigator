@@ -69,13 +69,31 @@ def ui(ui_config: UIConfig) -> UserInterface:
 class TestMenuCursorPos:
     """Tests for _menu_cursor_pos increment/decrement and clamping."""
 
-    def test_initial_cursor_pos(self, ui: UserInterface) -> None:
-        """Cursor starts at 0.
+    def test_initial_cursor_pos_is_none(self, ui: UserInterface) -> None:
+        """Cursor starts as None (inactive) until an arrow key is pressed.
 
         Args:
             ui: A UserInterface fixture.
         """
-        assert ui._menu_cursor_pos == 0
+        assert ui._menu_cursor_pos is None
+
+    def test_cursor_activates_at_zero_on_first_key_down(self, ui: UserInterface) -> None:
+        """First KEY_DOWN activates the cursor at position 0.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        ui._menu_indices = (0, 1, 2)
+        ui._highlight_line_offset = None
+
+        # Simulate first KEY_DOWN: activate cursor
+        if ui._menu_cursor_pos is None:
+            ui._menu_cursor_pos = 0
+        # Then move down (pos 0 < len-1=2, so it increments)
+        if ui._menu_cursor_pos < len(ui._menu_indices) - 1:
+            ui._menu_cursor_pos += 1
+
+        assert ui._menu_cursor_pos == 1
 
     def test_cursor_increments_on_key_down(self, ui: UserInterface) -> None:
         """KEY_DOWN increments cursor when below the last item.
@@ -87,8 +105,7 @@ class TestMenuCursorPos:
         ui._menu_cursor_pos = 0
         ui._highlight_line_offset = 0
 
-        entry = "KEY_DOWN"
-        if entry == "KEY_DOWN" and ui._menu_cursor_pos < len(ui._menu_indices) - 1:
+        if ui._menu_cursor_pos < len(ui._menu_indices) - 1:
             ui._menu_cursor_pos += 1
 
         assert ui._menu_cursor_pos == 1
@@ -103,8 +120,7 @@ class TestMenuCursorPos:
         ui._menu_cursor_pos = 2
         ui._highlight_line_offset = 2
 
-        entry = "KEY_UP"
-        if entry == "KEY_UP" and ui._menu_cursor_pos > 0:
+        if ui._menu_cursor_pos is not None and ui._menu_cursor_pos > 0:
             ui._menu_cursor_pos -= 1
 
         assert ui._menu_cursor_pos == 1
@@ -119,8 +135,7 @@ class TestMenuCursorPos:
         ui._menu_cursor_pos = 0
         ui._highlight_line_offset = 0
 
-        entry = "KEY_UP"
-        if entry == "KEY_UP" and ui._menu_cursor_pos > 0:
+        if ui._menu_cursor_pos is not None and ui._menu_cursor_pos > 0:
             ui._menu_cursor_pos -= 1
 
         assert ui._menu_cursor_pos == 0
@@ -135,8 +150,7 @@ class TestMenuCursorPos:
         ui._menu_cursor_pos = 2
         ui._highlight_line_offset = 2
 
-        entry = "KEY_DOWN"
-        if entry == "KEY_DOWN" and ui._menu_cursor_pos < len(ui._menu_indices) - 1:
+        if ui._menu_cursor_pos < len(ui._menu_indices) - 1:
             ui._menu_cursor_pos += 1
 
         assert ui._menu_cursor_pos == 2
@@ -144,6 +158,25 @@ class TestMenuCursorPos:
 
 class TestHighlightLineOffset:
     """Tests for _highlight_line_offset computation."""
+
+    def test_no_highlight_when_cursor_inactive(self, ui: UserInterface) -> None:
+        """No row is highlighted when cursor is None (not yet activated).
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        ui._menu_indices = (0, 1, 2, 3, 4)
+        showing_indices = (0, 1, 2, 3, 4)
+
+        ui._highlight_line_offset = None
+        if ui._menu_indices and ui._menu_cursor_pos is not None:
+            selected_global_index = ui._menu_indices[ui._menu_cursor_pos]
+            try:
+                ui._highlight_line_offset = list(showing_indices).index(selected_global_index)
+            except ValueError:
+                ui._highlight_line_offset = None
+
+        assert ui._highlight_line_offset is None
 
     def test_highlight_offset_matches_visible_row(self, ui: UserInterface) -> None:
         """_highlight_line_offset is the index of the selected item in showing_indices.
@@ -156,11 +189,12 @@ class TestHighlightLineOffset:
         showing_indices = (0, 1, 2, 3, 4)
 
         ui._highlight_line_offset = None
-        selected_global_index = ui._menu_indices[ui._menu_cursor_pos]
-        try:
-            ui._highlight_line_offset = list(showing_indices).index(selected_global_index)
-        except ValueError:
-            ui._highlight_line_offset = None
+        if ui._menu_indices and ui._menu_cursor_pos is not None:
+            selected_global_index = ui._menu_indices[ui._menu_cursor_pos]
+            try:
+                ui._highlight_line_offset = list(showing_indices).index(selected_global_index)
+            except ValueError:
+                ui._highlight_line_offset = None
 
         assert ui._highlight_line_offset == 2
 
@@ -175,17 +209,33 @@ class TestHighlightLineOffset:
         showing_indices = (0, 1, 2)  # item 4 is not visible
 
         ui._highlight_line_offset = None
-        selected_global_index = ui._menu_indices[ui._menu_cursor_pos]
-        try:
-            ui._highlight_line_offset = list(showing_indices).index(selected_global_index)
-        except ValueError:
-            ui._highlight_line_offset = None
+        if ui._menu_indices and ui._menu_cursor_pos is not None:
+            selected_global_index = ui._menu_indices[ui._menu_cursor_pos]
+            try:
+                ui._highlight_line_offset = list(showing_indices).index(selected_global_index)
+            except ValueError:
+                ui._highlight_line_offset = None
 
         assert ui._highlight_line_offset is None
 
 
 class TestEnterKeySelection:
     """Tests for Enter-key converting cursor position to a numeric entry."""
+
+    def test_cursor_enter_ignored_when_cursor_inactive(self, ui: UserInterface) -> None:
+        """CURSOR_ENTER does nothing when cursor is None (not yet activated).
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        ui._menu_indices = (3, 7, 11)
+        # cursor_pos is None (inactive) — stray Enter should be ignored
+
+        entry = "CURSOR_ENTER"
+        if entry == "CURSOR_ENTER" and ui._menu_indices and ui._menu_cursor_pos is not None:
+            entry = str(ui._menu_indices[ui._menu_cursor_pos])
+
+        assert entry == "CURSOR_ENTER"  # unchanged — stray Enter was ignored
 
     def test_cursor_enter_selects_correct_index(self, ui: UserInterface) -> None:
         """CURSOR_ENTER converts _menu_cursor_pos to the correct global index string.
@@ -197,7 +247,7 @@ class TestEnterKeySelection:
         ui._menu_cursor_pos = 1  # pointing at global index 7
 
         entry = "CURSOR_ENTER"
-        if entry == "CURSOR_ENTER" and ui._menu_indices:
+        if entry == "CURSOR_ENTER" and ui._menu_indices and ui._menu_cursor_pos is not None:
             index_to_select = ui._menu_indices[ui._menu_cursor_pos]
             entry = str(index_to_select)
 
@@ -213,7 +263,7 @@ class TestEnterKeySelection:
         ui._menu_cursor_pos = 0
 
         entry = "CURSOR_ENTER"
-        if entry == "CURSOR_ENTER" and ui._menu_indices:
+        if entry == "CURSOR_ENTER" and ui._menu_indices and ui._menu_cursor_pos is not None:
             entry = str(ui._menu_indices[ui._menu_cursor_pos])
 
         assert entry == "5"
@@ -228,7 +278,7 @@ class TestEnterKeySelection:
         ui._menu_cursor_pos = 2
 
         entry = "CURSOR_ENTER"
-        if entry == "CURSOR_ENTER" and ui._menu_indices:
+        if entry == "CURSOR_ENTER" and ui._menu_indices and ui._menu_cursor_pos is not None:
             entry = str(ui._menu_indices[ui._menu_cursor_pos])
 
         assert entry == "7"

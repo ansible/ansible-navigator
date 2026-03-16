@@ -204,8 +204,9 @@ class UserInterface(CursesWindow):
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
         # This tracks which visible row to highlight
         self._highlight_line_offset: int | None = None
-        # This tracks the cursor position in menus
-        self._menu_cursor_pos: int = 0
+        # Cursor position in menus; None means cursor is not yet active.
+        # It activates (becomes an int) only after the user presses UP or DOWN.
+        self._menu_cursor_pos: int | None = None
 
     def clear(self) -> None:
         """Clear the screen."""
@@ -945,9 +946,9 @@ class UserInterface(CursesWindow):
                 showing_indices,
             )
 
-            # Determine which row to highlight, if enabled
+            # Determine which row to highlight (only when cursor is active)
             self._highlight_line_offset = None
-            if self._menu_indices:
+            if self._menu_indices and self._menu_cursor_pos is not None:
                 self._menu_cursor_pos = max(
                     0,
                     min(self._menu_cursor_pos, len(self._menu_indices) - 1),
@@ -971,6 +972,9 @@ class UserInterface(CursesWindow):
             # Handle arrow navigation for menus when enabled
             if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
                 if entry in ["KEY_DOWN", "KEY_UP"] and self._menu_indices:
+                    # Activate cursor at position 0 on first arrow-key press
+                    if self._menu_cursor_pos is None:
+                        self._menu_cursor_pos = 0
                     # Move the cursor position
                     if entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1:
                         self._menu_cursor_pos += 1
@@ -998,10 +1002,14 @@ class UserInterface(CursesWindow):
                 # Otherwise, preserve prior behavior
                 continue
 
-            # Enter key should select the highlighted item for cursor navigation
+            # Enter key selects the highlighted item, but only when cursor is active.
+            # Guarding against None prevents stray Enter presses (e.g. from tmux
+            # send_keys which appends a second Enter) from accidentally selecting item 0.
             if (
-                entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"]
-            ) and self._menu_indices:
+                (entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"])
+                and self._menu_indices
+                and self._menu_cursor_pos is not None
+            ):
                 index_to_select = self._menu_indices[self._menu_cursor_pos]
                 entry = str(index_to_select)
 
