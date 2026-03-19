@@ -923,6 +923,7 @@ class UserInterface(CursesWindow):
         Returns:
             Interaction with the user
         """
+        self._menu_cursor_pos = None
         while True:
             if self.scroll() == 0:
                 last_line_idx = min(len(current) - 1, self._screen_height - 3)
