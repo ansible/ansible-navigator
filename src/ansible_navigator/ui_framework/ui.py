@@ -546,10 +546,12 @@ class UserInterface(CursesWindow):
             elif key in keypad or key in other_valid_keys:
                 return_value = key
             elif key == "KEY_DOWN":
-                self.scroll(max(min(self.scroll() + 1, count), viewport_height))
+                if not indent_heading:
+                    self.scroll(max(min(self.scroll() + 1, count), viewport_height))
                 return_value = key
             elif key == "KEY_UP":
-                self.scroll(max(self.scroll() - 1, viewport_height))
+                if not indent_heading:
+                    self.scroll(max(self.scroll() - 1, viewport_height))
                 return_value = key
             elif key in ["^F", "KEY_NPAGE"]:
                 self.scroll(max(min(self.scroll() + viewport_height, count), viewport_height))
@@ -972,11 +974,13 @@ class UserInterface(CursesWindow):
             # Handle arrow navigation for menus when enabled
             if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
                 if entry in ["KEY_DOWN", "KEY_UP"] and self._menu_indices:
-                    # Activate cursor at position 0 on first arrow-key press
+                    # Activate cursor at position 0 on first arrow-key press (no movement)
                     if self._menu_cursor_pos is None:
                         self._menu_cursor_pos = 0
-                    # Move the cursor position
-                    if entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1:
+                    # Move the cursor position (only if cursor was already active)
+                    elif (
+                        entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1
+                    ):
                         self._menu_cursor_pos += 1
                         # If moved past the last visible item, scroll down one
                         if (
