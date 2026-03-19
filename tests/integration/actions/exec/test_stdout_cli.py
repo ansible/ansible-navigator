@@ -48,7 +48,7 @@ stdout_tests = (
             cmdline="'echo $PATH'",
             execution_environment=True,
         ).join(),
-        present=["/sbin"],
+        present=["/usr/bin"],
     ),
     ShellCommand(
         comment="exec echo check no path via shell",
