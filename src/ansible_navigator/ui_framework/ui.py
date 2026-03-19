@@ -1003,15 +1003,13 @@ class UserInterface(CursesWindow):
                 continue
 
             # Enter key selects the highlighted item, but only when cursor is active.
-            # Guarding against None prevents stray Enter presses (e.g. from tmux
-            # send_keys which appends a second Enter) from accidentally selecting item 0.
-            if (
-                (entry == "CURSOR_ENTER" or entry in ["^J", "^M", "KEY_ENTER", "KEY_RETURN"])
-                and self._menu_indices
-                and self._menu_cursor_pos is not None
-            ):
-                index_to_select = self._menu_indices[self._menu_cursor_pos]
-                entry = str(index_to_select)
+            # If cursor is inactive (None), ignore the Enter entirely so it does not
+            # fall through to _template_match_action and trigger a spurious warning dialog.
+            if entry in ["CURSOR_ENTER", "^J", "^M", "KEY_ENTER", "KEY_RETURN"]:
+                if self._menu_cursor_pos is not None and self._menu_indices:
+                    entry = str(self._menu_indices[self._menu_cursor_pos])
+                else:
+                    continue
 
             name, action = self._template_match_action(entry, current)
             if name and action:
