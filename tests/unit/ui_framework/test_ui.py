@@ -86,14 +86,12 @@ class TestMenuCursorPos:
         ui._menu_indices = (0, 1, 2)
         ui._highlight_line_offset = None
 
-        # Simulate first KEY_DOWN: activate cursor
+        # Simulate first KEY_DOWN: activate cursor at 0, no movement (elif guards it)
         if ui._menu_cursor_pos is None:
             ui._menu_cursor_pos = 0
-        # Then move down (pos 0 < len-1=2, so it increments)
-        if ui._menu_cursor_pos < len(ui._menu_indices) - 1:
-            ui._menu_cursor_pos += 1
+        # elif would run here, but the branch above was taken, so no increment
 
-        assert ui._menu_cursor_pos == 1
+        assert ui._menu_cursor_pos == 0
 
     def test_cursor_increments_on_key_down(self, ui: UserInterface) -> None:
         """KEY_DOWN increments cursor when below the last item.
