@@ -207,6 +207,9 @@ class UserInterface(CursesWindow):
         # Cursor position in menus; None means cursor is not yet active.
         # It activates (becomes an int) only after the user presses UP or DOWN.
         self._menu_cursor_pos: int | None = None
+        # Tracks the identity of the current menu's data object so the cursor
+        # is reset only when entering a new menu, not on refresh cycles.
+        self._menu_current_id: int | None = None
 
     def clear(self) -> None:
         """Clear the screen."""
@@ -923,7 +926,10 @@ class UserInterface(CursesWindow):
         Returns:
             Interaction with the user
         """
-        self._menu_cursor_pos = None
+        # Reset cursor only when entering a new menu, not on refresh cycles
+        if id(current) != self._menu_current_id:
+            self._menu_cursor_pos = None
+            self._menu_current_id = id(current)
         while True:
             if self.scroll() == 0:
                 last_line_idx = min(len(current) - 1, self._screen_height - 3)
