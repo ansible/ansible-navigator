@@ -7,7 +7,7 @@ default_language_version:
 exclude: "(?x)^(\n  _readthedocs|\n  .tox\n)$\n"
 repos:
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 43.29.2
+    rev: 43.77.9
     hooks:
       - id: renovate-config-validator
         alias: renovate
@@ -34,7 +34,7 @@ repos:
     hooks:
       - id: tox-ini-fmt
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v9.6.0
+    rev: v9.7.0
     hooks:
       - id: cspell
         name: Spell check with cspell
@@ -59,7 +59,7 @@ repos:
     hooks:
       - id: check-json5
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.47.0
+    rev: v0.48.0
     hooks:
       - id: markdownlint
         exclude:
@@ -67,7 +67,7 @@ repos:
           \     index|\n    )|\n    README|\n    src/ansible_navigator/data/(help|welcome)\n
           \ )\\.md\n$\n"
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
       - id: codespell
         args:
@@ -109,7 +109,7 @@ repos:
         alias: toml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.2
+    rev: v0.15.6
     hooks:
       - id: ruff-format
         alias: ruff
@@ -154,6 +154,6 @@ repos:
           - setuptools-scm
         pass_filenames: false
   - repo: https://github.com/ansible/team-devtools
-    rev: v26.1.0
+    rev: v26.2.2
     hooks:
       - id: check-platform-constraints
