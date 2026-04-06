@@ -1,4 +1,5 @@
 # cspell:ignore KEY_NPAGE, KEY_PPAGE
+# pylint: disable=too-many-lines
 """The main UI renderer."""
 
 from __future__ import annotations
@@ -199,7 +200,16 @@ class UserInterface(CursesWindow):
         self._status_color = 0
         self._screen: Window = curses.initscr()
         self._screen.timeout(refresh)
+        self._screen.keypad(True)  # Enable keypad mode for proper key handling
         self._one_line_input = FormHandlerText(screen=self._screen, ui_config=self._ui_config)
+        # This tracks which visible row to highlight
+        self._highlight_line_offset: int | None = None
+        # Cursor position in menus; None means cursor is not yet active.
+        # It activates (becomes an int) only after the user presses UP or DOWN.
+        self._menu_cursor_pos: int | None = None
+        # Tracks the identity of the current menu's data object so the cursor
+        # is reset only when entering a new menu, not on refresh cycles.
+        self._menu_current_id: int | None = None
 
     def clear(self) -> None:
         """Clear the screen."""
@@ -464,7 +474,7 @@ class UserInterface(CursesWindow):
         index_width = len(str(count))
 
         keypad = {str(x) for x in range(10)}
-        other_valid_keys = ["+", "-", "_", "KEY_F(5)", "^[", "\x1b"]
+        other_valid_keys = ["+", "-", "_", "KEY_F(5)", "^[", "\x1b", "CURSOR_ENTER"]
 
         while True:
             self._screen.erase()
@@ -479,10 +489,29 @@ class UserInterface(CursesWindow):
                 line_index = line_numbers[idx]
                 line_index_str = str(line_index).rjust(index_width)
                 prefix = f"{line_index_str}\u2502"
+                # Apply highlight decoration when this is the selected row
+                if (
+                    indent_heading
+                    and self._highlight_line_offset is not None
+                    and idx == self._highlight_line_offset
+                ):
+                    # Rebuild the line with reverse-video decoration added
+                    highlighted_parts = tuple(
+                        CursesLinePart(
+                            column=lp.column,
+                            string=lp.string,
+                            color=lp.color,
+                            decoration=lp.decoration | curses.A_REVERSE,
+                        )
+                        for lp in line
+                    )
+                    line_to_draw = CursesLine(highlighted_parts)
+                else:
+                    line_to_draw = line
                 self._add_line(
                     window=self._screen,
                     lineno=idx + len(heading),
-                    line=line,
+                    line=line_to_draw,
                     prefix=prefix,
                 )
 
@@ -504,6 +533,8 @@ class UserInterface(CursesWindow):
             if await_input:
                 char = self._screen.getch()
                 key = "KEY_F(5)" if char == -1 else curses.keyname(char).decode()
+                if char in [10, 13]:  # Enter key codes: 10=LF, 13=CR
+                    key = "CURSOR_ENTER"
             else:
                 key = "KEY_F(5)"
 
@@ -518,10 +549,12 @@ class UserInterface(CursesWindow):
             elif key in keypad or key in other_valid_keys:
                 return_value = key
             elif key == "KEY_DOWN":
-                self.scroll(max(min(self.scroll() + 1, count), viewport_height))
+                if not indent_heading:
+                    self.scroll(max(min(self.scroll() + 1, count), viewport_height))
                 return_value = key
             elif key == "KEY_UP":
-                self.scroll(max(self.scroll() - 1, viewport_height))
+                if not indent_heading:
+                    self.scroll(max(self.scroll() - 1, viewport_height))
                 return_value = key
             elif key in ["^F", "KEY_NPAGE"]:
                 self.scroll(max(min(self.scroll() + viewport_height, count), viewport_height))
@@ -772,6 +805,9 @@ class UserInterface(CursesWindow):
             if entry in ["KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
                 continue
 
+            if entry == "CURSOR_ENTER":
+                continue
+
             if entry == "KEY_RESIZE":
                 # only the heading knows about the screen width and height
                 heading = self._content_heading(objs[index], self._screen_width)
@@ -890,6 +926,10 @@ class UserInterface(CursesWindow):
         Returns:
             Interaction with the user
         """
+        # Reset cursor only when entering a new menu, not on refresh cycles
+        if id(current) != self._menu_current_id:
+            self._menu_cursor_pos = None
+            self._menu_current_id = id(current)
         while True:
             if self.scroll() == 0:
                 last_line_idx = min(len(current) - 1, self._screen_height - 3)
@@ -915,6 +955,19 @@ class UserInterface(CursesWindow):
                 showing_indices,
             )
 
+            # Determine which row to highlight (only when cursor is active)
+            self._highlight_line_offset = None
+            if self._menu_indices and self._menu_cursor_pos is not None:
+                self._menu_cursor_pos = max(
+                    0,
+                    min(self._menu_cursor_pos, len(self._menu_indices) - 1),
+                )
+                selected_global_index = self._menu_indices[self._menu_cursor_pos]
+                try:
+                    self._highlight_line_offset = showing_indices.index(selected_global_index)
+                except ValueError:
+                    self._highlight_line_offset = None
+
             entry = self._display(
                 lines=menu_lines,
                 line_numbers=line_numbers,
@@ -925,8 +978,49 @@ class UserInterface(CursesWindow):
                 await_input=await_input,
             )
 
+            # Handle arrow navigation for menus when enabled
             if entry in ["KEY_RESIZE", "KEY_DOWN", "KEY_UP", "KEY_NPAGE", "KEY_PPAGE", "^F", "^B"]:
+                if entry in ["KEY_DOWN", "KEY_UP"] and self._menu_indices:
+                    # Activate cursor at position 0 on first arrow-key press (no movement)
+                    if self._menu_cursor_pos is None:
+                        self._menu_cursor_pos = 0
+                    # Move the cursor position (only if cursor was already active)
+                    elif (
+                        entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1
+                    ):
+                        self._menu_cursor_pos += 1
+                        # If moved past the last visible item, scroll down one
+                        if (
+                            self._highlight_line_offset is None
+                            or self._highlight_line_offset >= len(showing_indices) - 1
+                        ):
+                            # Mimic _display scroll down
+                            viewport_height = self._screen_height - len(menu_heading) - 1
+                            self.scroll(
+                                max(
+                                    min(self.scroll() + 1, len(self._menu_indices)),
+                                    viewport_height,
+                                ),
+                            )
+                    elif entry == "KEY_UP" and self._menu_cursor_pos > 0:
+                        self._menu_cursor_pos -= 1
+                        # If moved before the first visible item, scroll up one
+                        if self._highlight_line_offset is None or self._highlight_line_offset <= 0:
+                            viewport_height = self._screen_height - len(menu_heading) - 1
+                            self.scroll(max(self.scroll() - 1, viewport_height))
+                    # Re-render with updated highlight
+                    continue
+                # Otherwise, preserve prior behavior
                 continue
+
+            # Enter key selects the highlighted item, but only when cursor is active.
+            # If cursor is inactive (None), ignore the Enter entirely so it does not
+            # fall through to _template_match_action and trigger a spurious warning dialog.
+            if entry in ["CURSOR_ENTER", "^J", "^M", "KEY_ENTER", "KEY_RETURN"]:
+                if self._menu_cursor_pos is not None and self._menu_indices:
+                    entry = str(self._menu_indices[self._menu_cursor_pos])
+                else:
+                    continue
 
             name, action = self._template_match_action(entry, current)
             if name and action:
