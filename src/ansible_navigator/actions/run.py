@@ -48,13 +48,11 @@ from . import _actions as actions
 from . import run_action
 from .stdout import Action as stdout_action
 
-
 if TYPE_CHECKING:
     from collections.abc import Callable
 
     from ansible_navigator.app_public import AppPublic
     from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
-
 
 RESULT_TO_COLOR = [
     ("(?i)^failed$", 9),
@@ -114,7 +112,7 @@ def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, i
 
     elif "task" in entry:
         if entry["__result"].lower() == "in progress" or (
-            colname in ["__result", "__host", "__number", "__task", "__task_action"]
+                colname in ["__result", "__host", "__number", "__task", "__task_action"]
         ):
             color = get_color(entry["__result"])
         elif colname == "__changed":
@@ -258,11 +256,11 @@ class Action(ActionBase):
             such, else return mode
         """
         if all(
-            (
-                self._args.mode == "stdout",
-                self._args.playbook_artifact_enable,
-                self._args.app != "replay",
-            ),
+                (
+                        self._args.mode == "stdout",
+                        self._args.playbook_artifact_enable,
+                        self._args.app != "replay",
+                ),
         ):
             return "stdout_w_artifact"
         return self._args.mode
@@ -302,6 +300,19 @@ class Action(ActionBase):
             )
         return RunStdoutReturn(message="", return_code=return_code)
 
+    def pre_run_stdout(self) -> RunStdoutReturn:
+        # Ensure the playbook and inventory are valid
+
+        if isinstance(self._args.playbook, str):
+            playbook_valid = Path(self._args.playbook).exists()
+        else:
+            playbook_valid = False
+
+        if not playbook_valid:
+            return RunStdoutReturn(message=f"Playbook \"{self._args.playbook}\" does not exist", return_code=1)
+
+        return RunStdoutReturn(message="", return_code=0)
+
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Run :run or :replay.
 
@@ -335,7 +346,7 @@ class Action(ActionBase):
 
         self.steps.append(self._plays)
 
-        # Show a notification until the first the first message from the queue is processed
+        # Show a notification until the first message from the queue is processed
         if self._subaction_type == "run":
             messages = ["Preparing for automation, please wait..."]
             notification = nonblocking_notification(messages=messages)
