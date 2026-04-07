@@ -23,7 +23,8 @@ from .action_defs import RunInteractiveReturn
 from .action_defs import RunReturn
 from .action_defs import RunStdoutReturn
 from .action_runner import ActionRunner
-from .actions import run_action_stdout, pre_run_action_stdout
+from .actions import pre_run_action_stdout
+from .actions import run_action_stdout
 from .configuration_subsystem import Constants
 from .configuration_subsystem import NavigatorConfiguration
 from .image_manager import ImagePuller

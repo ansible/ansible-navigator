@@ -303,7 +303,9 @@ def pre_run_interactive_factory(package: str) -> Callable[..., Any]:
     return functools.partial(pre_run_interactive, package)
 
 
-def pre_run_stdout(package: str, action: str, *args: Any, **_kwargs: dict[str, Any]) -> RunStdoutReturn:
+def pre_run_stdout(
+    package: str, action: str, *args: Any, **_kwargs: dict[str, Any]
+) -> RunStdoutReturn:
     """Call the given action's ``pre_run_stdout`` method.
 
     Args:

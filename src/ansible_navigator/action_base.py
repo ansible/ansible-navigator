@@ -173,8 +173,7 @@ class ActionBase:
 
     # TODO: Create PreRun Stdout class
     def pre_run_stdout(self) -> RunStdoutReturn:
-        """Performs pre-run tasks, such as fail-fast checks.
-        """
+        """Performs pre-run tasks, such as fail-fast checks."""
         messages = []
         message = f"Subcommand '{self._name}' does not support mode 'stdout'."
         messages.append(ExitMessage(message=message))

@@ -48,6 +48,7 @@ from . import _actions as actions
 from . import run_action
 from .stdout import Action as stdout_action
 
+
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -112,7 +113,7 @@ def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, i
 
     elif "task" in entry:
         if entry["__result"].lower() == "in progress" or (
-                colname in ["__result", "__host", "__number", "__task", "__task_action"]
+            colname in ["__result", "__host", "__number", "__task", "__task_action"]
         ):
             color = get_color(entry["__result"])
         elif colname == "__changed":
@@ -256,11 +257,11 @@ class Action(ActionBase):
             such, else return mode
         """
         if all(
-                (
-                        self._args.mode == "stdout",
-                        self._args.playbook_artifact_enable,
-                        self._args.app != "replay",
-                ),
+            (
+                self._args.mode == "stdout",
+                self._args.playbook_artifact_enable,
+                self._args.app != "replay",
+            ),
         ):
             return "stdout_w_artifact"
         return self._args.mode
@@ -309,7 +310,9 @@ class Action(ActionBase):
             playbook_valid = False
 
         if not playbook_valid:
-            return RunStdoutReturn(message=f"Playbook \"{self._args.playbook}\" does not exist", return_code=1)
+            return RunStdoutReturn(
+                message=f'Playbook "{self._args.playbook}" does not exist', return_code=1
+            )
 
         return RunStdoutReturn(message="", return_code=0)
 
