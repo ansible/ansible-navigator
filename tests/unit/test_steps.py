@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 
 from ansible_navigator.steps import Step
-from ansible_navigator.steps import StepType
 from ansible_navigator.steps import Steps
+from ansible_navigator.steps import StepType
 from ansible_navigator.steps import TypedStep
 
 

@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import NamedTuple
-from unittest.mock import patch
-
-import pytest
 
 from ansible_navigator.utils.print import color_bits
 from ansible_navigator.utils.print import color_lines
+
+
+if TYPE_CHECKING:
+    import pytest
 
 
 class MockLinePart(NamedTuple):
@@ -81,10 +83,12 @@ class TestColorLines:
 
     def test_multiple_parts(self) -> None:
         """Test multiple parts in a line."""
-        tokenized = [[
-            MockLinePart(color=(255, 0, 0), chars="red"),
-            MockLinePart(color=(0, 255, 0), chars="green"),
-        ]]
+        tokenized = [
+            [
+                MockLinePart(color=(255, 0, 0), chars="red"),
+                MockLinePart(color=(0, 255, 0), chars="green"),
+            ]
+        ]
         result = color_lines(24, tokenized)
         assert "red" in result
         assert "green" in result

@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-import sys
-
-from unittest.mock import patch
-
 import pytest
 
 from ansible_navigator.utils.ansi import blank_line
@@ -136,6 +132,7 @@ def test_prompt_enter(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_prompt_enter_keyboard_interrupt(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test prompt_enter exits on KeyboardInterrupt."""
+
     def raise_keyboard_interrupt(_: str) -> None:
         raise KeyboardInterrupt
 
@@ -165,6 +162,7 @@ def test_prompt_yn_no(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_prompt_yn_keyboard_interrupt(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test prompt_yn exits on KeyboardInterrupt."""
+
     def raise_keyboard_interrupt(_: str) -> None:
         raise KeyboardInterrupt
 

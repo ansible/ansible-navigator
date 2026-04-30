@@ -57,7 +57,7 @@ class TestCmdParserRePartition:
 
     def test_regex_separator(self) -> None:
         """Test with regex separator."""
-        key, delim, content = CmdParser.re_partition("key: value", r":\s+")
+        key, _delim, content = CmdParser.re_partition("key: value", r":\s+")
         assert key == "key"
         assert content == "value"
 

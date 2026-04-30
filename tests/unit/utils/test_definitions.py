@@ -126,28 +126,34 @@ class TestExitMessages:
 
     def test_multiple_same_prefix(self) -> None:
         """Test with multiple messages of same prefix."""
-        msgs = ExitMessages(messages=[
-            ExitMessage(message="err1"),
-            ExitMessage(message="err2"),
-        ])
+        msgs = ExitMessages(
+            messages=[
+                ExitMessage(message="err1"),
+                ExitMessage(message="err2"),
+            ]
+        )
         result = msgs.to_strings(color=False, width=80)
         assert len(result) >= 2
 
     def test_different_prefixes_with_separator(self) -> None:
         """Test messages with different prefixes get separator."""
-        msgs = ExitMessages(messages=[
-            ExitMessage(message="error", prefix=ExitPrefix.ERROR),
-            ExitMessage(message="note", prefix=ExitPrefix.NOTE),
-        ])
+        msgs = ExitMessages(
+            messages=[
+                ExitMessage(message="error", prefix=ExitPrefix.ERROR),
+                ExitMessage(message="note", prefix=ExitPrefix.NOTE),
+            ]
+        )
         result = msgs.to_strings(color=False, width=80)
         assert "" in result
 
     def test_hint_follows_without_break(self) -> None:
         """Test hint after error doesn't get blank line separator."""
-        msgs = ExitMessages(messages=[
-            ExitMessage(message="error", prefix=ExitPrefix.ERROR),
-            ExitMessage(message="try this", prefix=ExitPrefix.HINT),
-        ])
+        msgs = ExitMessages(
+            messages=[
+                ExitMessage(message="error", prefix=ExitPrefix.ERROR),
+                ExitMessage(message="try this", prefix=ExitPrefix.HINT),
+            ]
+        )
         result = msgs.to_strings(color=False, width=80)
         assert "" not in result
 

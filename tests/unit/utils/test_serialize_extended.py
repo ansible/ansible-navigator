@@ -9,9 +9,9 @@ import stat
 
 from pathlib import Path
 
-import pytest
 import yaml
 
+from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentView
 from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.utils.serialize import HumanDumper
@@ -25,8 +25,6 @@ from ansible_navigator.utils.serialize import serialize
 from ansible_navigator.utils.serialize import serialize_write_file
 from ansible_navigator.utils.serialize import serialize_write_temp_file
 from ansible_navigator.utils.serialize import write_diagnostics_json
-
-from ansible_navigator.content_defs import ContentFormat
 
 
 class TestSerialize:

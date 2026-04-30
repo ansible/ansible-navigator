@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ansible_navigator.content_defs import CFormat
 from ansible_navigator.content_defs import ContentBase
 from ansible_navigator.content_defs import ContentFormat
 from ansible_navigator.content_defs import ContentView

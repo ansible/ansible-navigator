@@ -117,10 +117,12 @@ class TestValidate:
 
     def test_schema_as_json_string(self) -> None:
         """Test validate with schema as JSON string."""
-        schema_str = json.dumps({
-            "type": "object",
-            "properties": {"age": {"type": "integer"}},
-        })
+        schema_str = json.dumps(
+            {
+                "type": "object",
+                "properties": {"age": {"type": "integer"}},
+            }
+        )
         errors = validate(schema_str, {"age": 25})
         assert errors == []
 

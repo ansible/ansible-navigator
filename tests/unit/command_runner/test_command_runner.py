@@ -7,8 +7,6 @@ import subprocess
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 from ansible_navigator.command_runner.command_runner import Command
 from ansible_navigator.command_runner.command_runner import CommandRunner
 from ansible_navigator.command_runner.command_runner import run_command
@@ -84,7 +82,10 @@ class TestRunCommand:
     def test_failure(self, mock_run: MagicMock) -> None:
         """Test run_command with CalledProcessError."""
         mock_run.side_effect = subprocess.CalledProcessError(
-            returncode=1, cmd="false", output="out", stderr="err",
+            returncode=1,
+            cmd="false",
+            output="out",
+            stderr="err",
         )
 
         cmd = Command(identity="t", command="false", post_process=_noop)

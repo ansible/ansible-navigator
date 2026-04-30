@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from ansible_navigator.ui_framework.validators import FieldValidators
 from ansible_navigator.ui_framework.validators import FormValidators
 from ansible_navigator.ui_framework.validators import Validation
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class TestFieldValidatorsHttp:
@@ -362,7 +366,9 @@ class TestFieldValidatorsSomeOfOrNone:
         """Test valid number of selections."""
         choices = [MockCheckbox(checked=True), MockCheckbox(checked=False)]
         result = FieldValidators.some_of_or_none(
-            choices=choices, min_selected=1, max_selected=2,
+            choices=choices,
+            min_selected=1,
+            max_selected=2,
         )
         assert isinstance(result, Validation)
         assert result.error_msg == ""
@@ -371,7 +377,9 @@ class TestFieldValidatorsSomeOfOrNone:
         """Test too few selections."""
         choices = [MockCheckbox(checked=False), MockCheckbox(checked=False)]
         result = FieldValidators.some_of_or_none(
-            choices=choices, min_selected=1, max_selected=2,
+            choices=choices,
+            min_selected=1,
+            max_selected=2,
         )
         assert isinstance(result, Validation)
         assert result.error_msg != ""
@@ -382,7 +390,9 @@ class TestFieldValidatorsSomeOfOrNone:
 
         with pytest.raises(TypeError):
             FieldValidators.some_of_or_none(
-                choices=unknown, min_selected=unknown, max_selected=unknown,
+                choices=unknown,
+                min_selected=unknown,
+                max_selected=unknown,
             )
 
 

@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import shutil
 
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
@@ -27,6 +26,10 @@ from ansible_navigator.utils.functions import templar
 from ansible_navigator.utils.functions import time_stamp_for_file
 from ansible_navigator.utils.functions import timestamp_to_iso
 from ansible_navigator.utils.functions import to_list
+
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def test_check_for_ansible_found(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -71,7 +74,9 @@ def test_clear_screen_vscode(
     """Test clear_screen prints blank lines in vscode terminal."""
     monkeypatch.setenv("TERM_PROGRAM", "vscode")
     fake_size = type("TermSize", (), {"lines": 5, "columns": 80})()
-    with patch("ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size):
+    with patch(
+        "ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size
+    ):
         clear_screen()
     captured = capsys.readouterr()
     assert captured.out.count("\n") == 5
@@ -91,14 +96,18 @@ def test_clear_screen_normal(
 def test_console_width_small() -> None:
     """Test console_width with small terminal."""
     fake_size = type("TermSize", (), {"columns": 60})()
-    with patch("ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size):
+    with patch(
+        "ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size
+    ):
         assert console_width() == 60
 
 
 def test_console_width_medium() -> None:
     """Test console_width with medium terminal."""
     fake_size = type("TermSize", (), {"columns": 120})()
-    with patch("ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size):
+    with patch(
+        "ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size
+    ):
         result = console_width()
     assert 80 <= result <= 120
 
@@ -106,7 +115,9 @@ def test_console_width_medium() -> None:
 def test_console_width_large() -> None:
     """Test console_width with large terminal."""
     fake_size = type("TermSize", (), {"columns": 200})()
-    with patch("ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size):
+    with patch(
+        "ansible_navigator.utils.functions.shutil.get_terminal_size", return_value=fake_size
+    ):
         assert console_width() == 132
 
 
@@ -261,7 +272,7 @@ def test_templar_simple() -> None:
 
 def test_templar_error() -> None:
     """Test templar with undefined variable."""
-    errors, result = templar("{{ undefined_var }}", {})
+    errors, _result = templar("{{ undefined_var }}", {})
     assert len(errors) > 0
 
 
