@@ -1,10 +1,10 @@
 ---
 name: tox
 description: >
-  Reference for running lint, test, build, and doc commands via tox.
-  Agents MUST use tox for all quality gates — never invoke pytest, ruff,
-  mypy, prek, or shell scripts directly. This skill is the canonical
-  lookup table for which tox environment to use.
+  Reference for running lint, test, build, and doc commands via tox. Agents MUST
+  use tox for all quality gates — never invoke pytest, ruff, mypy, prek, or
+  shell scripts directly. This skill is the canonical lookup table for which tox
+  environment to use.
 argument-hint: "[environment-name]"
 user-invocable: true
 metadata:
@@ -39,41 +39,41 @@ directly. Every task maps to a `tox -e <env>` command.
 
 ### Quality gates
 
-| Environment | What it runs | When to use |
-|-------------|-------------|-------------|
+| Environment   | What it runs                                                               | When to use                                           |
+| ------------- | -------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `tox -e lint` | `prek run --all-files` (ruff, mypy, biome, tombi, codespell, ansible-lint) | Before every commit. Verification step for all tasks. |
 
 ### Test suites
 
-| Environment | What it runs | When to use |
-|-------------|-------------|-------------|
-| `tox -e py` | `pytest` with coverage (threshold varies per repo) | After any code change. |
-| `tox -e py -- -k <pattern>` | Single test or test pattern | Debugging a specific test. |
-| `tox -e py -- --no-cov` | Tests without coverage overhead | Quick iteration. |
-| `tox -e devel` | Tests with newest deps (no lock, prereleases allowed) | Verifying forward compatibility. |
+| Environment                 | What it runs                                          | When to use                      |
+| --------------------------- | ----------------------------------------------------- | -------------------------------- |
+| `tox -e py`                 | `pytest` with coverage (threshold varies per repo)    | After any code change.           |
+| `tox -e py -- -k <pattern>` | Single test or test pattern                           | Debugging a specific test.       |
+| `tox -e py -- --no-cov`     | Tests without coverage overhead                       | Quick iteration.                 |
+| `tox -e devel`              | Tests with newest deps (no lock, prereleases allowed) | Verifying forward compatibility. |
 
 ### Documentation
 
-| Environment | What it runs | When to use |
-|-------------|-------------|-------------|
+| Environment   | What it runs            | When to use        |
+| ------------- | ----------------------- | ------------------ |
 | `tox -e docs` | `mkdocs build --strict` | After doc changes. |
 
 ### Packaging
 
-| Environment | What it runs | When to use |
-|-------------|-------------|-------------|
+| Environment  | What it runs                               | When to use                              |
+| ------------ | ------------------------------------------ | ---------------------------------------- |
 | `tox -e pkg` | `python -m build` + `twine check --strict` | Before release. Verify package metadata. |
 
 ### Dependency management
 
-| Environment | What it runs | When to use |
-|-------------|-------------|-------------|
+| Environment   | What it runs                                        | When to use               |
+| ------------- | --------------------------------------------------- | ------------------------- |
 | `tox -e deps` | `prek run deps` + `prek autoupdate` + `tox -e lint` | Bumping all dependencies. |
 
 ### Default set
 
-Running `tox` with no `-e` flag executes the default environment list defined
-in the repo's `pyproject.toml` or `tox.ini`. This is the full quality gate.
+Running `tox` with no `-e` flag executes the default environment list defined in
+the repo's `pyproject.toml` or `tox.ini`. This is the full quality gate.
 
 **Note:** Not all environments listed above are available in every repo. Run
 `tox l` to discover the environments available in the current repository.
@@ -121,7 +121,7 @@ uv tool install tox --with tox-uv
 
 ## Configuration
 
-Tox configuration typically lives in `pyproject.toml` under `[tool.tox]` or in
-a standalone `tox.ini`. Environment definitions, extras, pass-through env vars,
+Tox configuration typically lives in `pyproject.toml` under `[tool.tox]` or in a
+standalone `tox.ini`. Environment definitions, extras, pass-through env vars,
 and commands are all there. Do not scatter test/lint invocations across
 Makefiles, scripts, or workflow YAML.
