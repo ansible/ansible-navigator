@@ -35,3 +35,6 @@ README.md
 # mkdocs
 site/
 docs/.generated
+
+# skill files
+.agents/skills/
