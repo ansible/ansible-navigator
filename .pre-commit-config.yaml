@@ -63,7 +63,7 @@ repos:
     hooks:
       - id: markdownlint
         exclude:
-          "(?x)^\n  (\n    \\.github/ISSUE_TEMPLATE/\\w+|\n    docs/(\n      faq|\n
+          "(?x)^\n  (\n    \\.agents/skills/.+|\n    \\.github/ISSUE_TEMPLATE/\\w+|\n    docs/(\n      faq|\n
           \     index|\n    )|\n    README|\n    src/ansible_navigator/data/(help|welcome)\n
           \ )\\.md\n$\n"
   - repo: https://github.com/codespell-project/codespell
