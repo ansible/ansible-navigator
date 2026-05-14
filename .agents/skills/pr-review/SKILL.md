@@ -2,8 +2,8 @@
 name: pr-review
 description: >
   Use when handling pull request reviews, including automated (Copilot) and
-  human reviewer feedback. Use when responding to PR comments, resolving review
-  threads, or updating PRs after review.
+  human reviewer feedback. Use when responding to PR comments, resolving
+  review threads, or updating PRs after review.
 argument-hint: "<PR number>"
 user-invocable: true
 metadata:
@@ -18,37 +18,38 @@ This skill defines how to handle PR review feedback in this project.
 ## Responding to review comments
 
 Every review comment MUST receive a response. Resolve threads only after the
-feedback has been addressed and accepted; leave threads unresolved when
-disputing feedback and escalate to a human reviewer. Unanswered comments or
-unresolved disputed threads block merge.
+feedback has been addressed and accepted; leave threads unresolved when disputing
+feedback and escalate to a human reviewer. Unanswered comments or unresolved
+disputed threads block merge.
 
 ### Rules
 
-- Address ALL review comments before requesting re-review. Do not leave comments
-  unanswered.
-- Every comment requires a **closing reply**. When the feedback is addressed or
-  accepted, also **resolve the thread** via the GitHub UI or API. When disputing
-  or flagging a false positive, leave the thread unresolved for human
-  escalation.
+- Address ALL review comments before requesting re-review. Do not leave
+  comments unanswered.
+- Every comment requires a **closing reply**. When the feedback is addressed
+  or accepted, also **resolve the thread** via the GitHub UI or API. When
+  disputing or flagging a false positive, leave the thread unresolved for
+  human escalation.
 - Reply to each comment with a **brief explanation of how it was resolved** and
-  the commit hash (e.g., "Removed the unused imports so Ruff F401 passes. Fixed
-  in abc1234."). Do not reply with only the SHA; explain the fix.
-- If a comment is a false positive or you disagree, reply with a clear technical
-  explanation. Do not resolve the thread. This will require human intervention.
-  Do not dismiss without justification.
+  the commit hash (e.g., "Removed the unused imports so Ruff F401 passes.
+  Fixed in abc1234."). Do not reply with only the SHA; explain the fix.
+- If a comment is a false positive or you disagree, reply with a clear
+  technical explanation. Do not resolve the thread. This will require human
+  intervention. Do not dismiss without justification.
 - After pushing fixes, update the PR description to reflect the expanded scope
   (per the pr-new skill).
 
 ### Deferred work MUST be tracked
 
 Any time a review response includes language like "follow-up PR", "subsequent
-PR", "leaving as a follow-up", "future enhancement", "out of scope for this PR",
-or "logging this for later" — you **MUST** create a GitHub issue immediately
-using `gh issue create`. Do not reply to the comment without also creating the
-issue. Include the issue URL in your reply so the reviewer can verify tracking.
+PR", "leaving as a follow-up", "future enhancement", "out of scope for this
+PR", or "logging this for later" — you **MUST** create a GitHub issue
+immediately using `gh issue create`. Do not reply to the comment without also
+creating the issue. Include the issue URL in your reply so the reviewer can
+verify tracking.
 
-Untracked follow-ups are invisible debt. If it is worth mentioning, it is worth
-an issue.
+Untracked follow-ups are invisible debt. If it is worth mentioning, it is
+worth an issue.
 
 ```bash
 gh issue create --repo <upstream-owner>/<repo> \
@@ -78,9 +79,9 @@ proactively before pushing to avoid review round-trips:
 
 ### Supply-chain security
 
-Pin GitHub Actions to commit SHAs instead of mutable tags (`@v1`). Mutable tags
-allow upstream changes to affect CI without review. Use a comment to note the
-original tag:
+Pin GitHub Actions to commit SHAs instead of mutable tags (`@v1`). Mutable
+tags allow upstream changes to affect CI without review. Use a comment to
+note the original tag:
 
 ```yaml
 - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -89,8 +90,8 @@ original tag:
 ### Inaccurate documentation
 
 Documentation MUST accurately describe the actual behavior. If a workflow
-triggers on `pull_request` targeting `main`, don't document it as running on
-"every pull request". Be specific about triggers, branches, and conditions.
+triggers on `pull_request` targeting `main`, don't document it as running
+on "every pull request". Be specific about triggers, branches, and conditions.
 
 ### Markdown table formatting
 
@@ -99,8 +100,8 @@ as an extra empty column. Validate table rendering before committing.
 
 ### Inaccurate comments
 
-Code comments and docstrings MUST accurately describe what the code does. If you
-rename a function, change behavior, or remove functionality, update all
+Code comments and docstrings MUST accurately describe what the code does. If
+you rename a function, change behavior, or remove functionality, update all
 associated comments in the same commit.
 
 ### Secrets in documentation
@@ -118,10 +119,10 @@ import is intentionally side-effect only.
 
 ## Workflow
 
-1. **Ensure the PR branch is up to date with upstream main.** Before reviewing
-   or pushing fixes, rebase or merge `upstream/main` into the PR branch. A stale
-   base causes misleading CI results, merge conflicts, and wasted review cycles.
-   If the branch is behind, update it first:
+1. **Ensure the PR branch is up to date with upstream main.** Before
+   reviewing or pushing fixes, rebase or merge `upstream/main` into the PR
+   branch. A stale base causes misleading CI results, merge conflicts, and
+   wasted review cycles. If the branch is behind, update it first:
 
    ```bash
    git fetch upstream
@@ -132,11 +133,11 @@ import is intentionally side-effect only.
 2. After pushing a PR, wait for both CI and Copilot review.
 3. Check CI status and read all review comments.
 4. Fix all issues in a single commit (or minimal commits).
-5. Reply to each comment with a brief explanation of how it was resolved and the
-   commit hash (e.g., "Removed unused imports. Fixed in abc1234.").
+5. Reply to each comment with a brief explanation of how it was resolved and
+   the commit hash (e.g., "Removed unused imports. Fixed in abc1234.").
 6. **Reply to every comment.** Resolve the thread only when the issue is
-   addressed or accepted. Leave disagreement or false-positive threads open for
-   a human reviewer to decide.
+   addressed or accepted. Leave disagreement or false-positive threads open
+   for a human reviewer to decide.
 
 ### Checking CI status
 
@@ -156,17 +157,17 @@ gh run view RUN_ID --log-failed 2>&1 | tail -80
 
 Common CI failures and how to fix them:
 
-- **prek (ruff)**: Run `tox -e lint` to reproduce. Long type annotations and
-  function signatures often need line wrapping.
+- **prek (ruff)**: Run `tox -e lint` to reproduce. Long type annotations
+  and function signatures often need line wrapping.
 - **prek (mypy)**: Add type annotations to all new functions. Use the correct
   `type: ignore` code (e.g., `[assignment]` vs `[method-assign]`). Run
   `tox -e lint` to verify.
 - **prek (biome)**: Run `tox -e lint` to reproduce. Biome enforces formatting
   for JSON, Markdown, and JavaScript files.
-- **prek (ansible-lint)**: Run `tox -e lint` to reproduce. Ensure playbooks and
-  roles follow ansible-lint rules.
-- **prek (tombi)**: Run `tox -e lint` to reproduce. TOML files must be formatted
-  with tombi.
+- **prek (ansible-lint)**: Run `tox -e lint` to reproduce. Ensure playbooks
+  and roles follow ansible-lint rules.
+- **prek (tombi)**: Run `tox -e lint` to reproduce. TOML files must be
+  formatted with tombi.
 - **test failures**: Run `tox -e py` to reproduce. Update tests when behavior
   changes.
 
@@ -239,6 +240,6 @@ gh api repos/<upstream-owner>/<repo>/pulls/N/reviews --jq '.[] | select(.user.lo
 gh api repos/<upstream-owner>/<repo>/pulls/N/comments --jq '.[] | select(.user.login == "Copilot" and .created_at > "ISO8601") | {id, created_at, path, body: .body[0:150]}'
 ```
 
-If both return nothing, no new Copilot activity. Otherwise, address new comments
-(reply with how it was resolved + commit hash, then resolve threads) and repeat
-this check after the next push.
+If both return nothing, no new Copilot activity. Otherwise, address new
+comments (reply with how it was resolved + commit hash, then resolve threads)
+and repeat this check after the next push.

@@ -15,9 +15,9 @@ metadata:
 # Review Contributor PR
 
 This skill defines how to review and assist with a **contributor's** pull
-request (someone else's PR, e.g. from a fork or another branch). Use it when you
-are helping make a contributor PR merge-ready, not when submitting your own PR
-(use `pr-new` for that).
+request (someone else's PR, e.g. from a fork or another branch). Use it when
+you are helping make a contributor PR merge-ready, not when submitting your
+own PR (use `pr-new` for that).
 
 ## Goals
 
@@ -42,15 +42,16 @@ remote/branch you will push to if you make changes.
 ### 2. Check if the branch is up to date with upstream
 
 - Fetch `upstream main` (or the base branch).
-- Compare base ref of the PR to current `upstream/main`. If upstream has newer
-  commits, the contributor's branch should be rebased (or merged) onto
+- Compare base ref of the PR to current `upstream/main`. If upstream has
+  newer commits, the contributor's branch should be rebased (or merged) onto
   `upstream/main` before merge.
 
-If you are going to push changes to the contributor's branch (e.g. adding fixes
-or improving the PR):
+If you are going to push changes to the contributor's branch (e.g. adding
+fixes or improving the PR):
 
-- Rebase the **local** branch that mirrors their PR onto `upstream/main` before
-  pushing. That way the PR stays mergeable and CI runs against the latest main.
+- Rebase the **local** branch that mirrors their PR onto `upstream/main`
+  before pushing. That way the PR stays mergeable and CI runs against the
+  latest main.
 
 ### 3. Run quality gates before pushing
 
@@ -75,8 +76,8 @@ and then push so CI stays green.
 - If the PR body is minimal or missing structure, suggest or apply the
   **pr-new** template: Summary, Changes, Test plan.
 
-- You can update the PR body via GitHub (if you have permission) or draft text
-  for the maintainer/contributor to paste:
+- You can update the PR body via GitHub (if you have permission) or draft
+  text for the maintainer/contributor to paste:
 
   ```bash
   gh pr edit <N> --repo <upstream-owner>/<repo> --body-file path/to/body.md
@@ -87,10 +88,11 @@ and then push so CI stays green.
 
 ### 5. Pushing to the contributor's branch
 
-- Only push to the contributor's fork/branch if you have permission and the user
-  has asked you to.
+- Only push to the contributor's fork/branch if you have permission and the
+  user has asked you to.
 
 - Before pushing:
+
   1. Rebase onto `upstream/main` so the PR is up to date.
   2. Ensure `tox -e lint` and `tox -e py` pass (see step 3).
   3. Use `--force-with-lease` when pushing a rebased branch:
@@ -101,16 +103,16 @@ and then push so CI stays green.
 
 ### 5a. Comment on review threads
 
-When you push fixes that address a review comment, reply on that thread so the
-resolution is visible. Follow the **`pr-review`** skill for the full procedure
-(REST reply endpoint, finding comment IDs, GraphQL thread resolution).
+When you push fixes that address a review comment, reply on that thread so
+the resolution is visible. Follow the **`pr-review`** skill for the full
+procedure (REST reply endpoint, finding comment IDs, GraphQL thread resolution).
 
 ### 5b. Track all deferred work as issues
 
 When reviewing a contributor PR, any suggestion that work should happen in a
 follow-up PR — whether from you, the contributor, or another reviewer — **MUST**
-be captured as a GitHub issue immediately. Do not leave "TODO for later" or "out
-of scope, will address separately" without creating an issue. Untracked
+be captured as a GitHub issue immediately. Do not leave "TODO for later" or
+"out of scope, will address separately" without creating an issue. Untracked
 follow-ups are invisible debt.
 
 ```bash
