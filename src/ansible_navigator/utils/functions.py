@@ -367,6 +367,8 @@ def now_iso(time_zone: str) -> str:
     """
     if time_zone == "local":
         return datetime.datetime.now(tz=datetime.timezone.utc).astimezone().isoformat()
+    if time_zone == "UTC":
+        return datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
     try:
         return datetime.datetime.now(tz=zoneinfo.ZoneInfo(time_zone)).isoformat()
     except zoneinfo.ZoneInfoNotFoundError:
@@ -565,6 +567,11 @@ def timestamp_to_iso(timestamp: float, time_zone: str) -> str | None:
                 .astimezone()
                 .isoformat()
             )
+        if time_zone == "UTC":
+            return datetime.datetime.fromtimestamp(
+                timestamp,
+                tz=datetime.timezone.utc,
+            ).isoformat()
         return datetime.datetime.fromtimestamp(
             timestamp,
             tz=zoneinfo.ZoneInfo(time_zone),
