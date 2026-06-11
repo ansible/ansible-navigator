@@ -182,8 +182,12 @@ class Action(ActionBase):
             A message and return code
         """
         image_name = self._args.execution_environment_image
+        sections: list[str] = self._args.entry("images_details").value.current
 
-        output, error, return_code = self._run_runner(image_name=image_name)
+        output, error, return_code = self._run_runner(
+            image_name=image_name,
+            sections=sections,
+        )
         if error or return_code:
             return RunStdoutReturn(message=error, return_code=return_code)
 
@@ -578,11 +582,18 @@ class Action(ActionBase):
             self._logger.error("%s %s", error["path"], error["error"])
         return parsed
 
-    def _run_runner(self, image_name: str) -> tuple[str, str, int]:
+    def _run_runner(
+        self,
+        image_name: str,
+        sections: list[str] | None = None,
+    ) -> tuple[str, str, int]:
         """Run runner to collect image details.
 
         Args:
             image_name: The full image name
+            sections: Optional list of introspection sections to collect.
+                When provided, only the named collectors run inside the
+                container instead of all of them.
 
         Returns:
             Output, errors and the return code
@@ -591,8 +602,12 @@ class Action(ActionBase):
         container_volume_mounts = [f"{cache_path}:{cache_path}"]
         python_exec_path = f"{cache_path}/python_latest.sh"
 
+        cmdline = [f"{cache_path}/image_introspect.py"]
+        if sections:
+            cmdline.extend(["--sections", *sections])
+
         kwargs = {
-            "cmdline": [f"{cache_path}/image_introspect.py"],
+            "cmdline": cmdline,
             "container_engine": self._args.container_engine,
             "container_volume_mounts": container_volume_mounts,
             "execution_environment_image": image_name,
