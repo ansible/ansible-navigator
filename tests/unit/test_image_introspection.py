@@ -2,15 +2,19 @@
 """Unit tests for image introspection."""
 
 import importlib
+import sys
 import types
 
 from importlib.machinery import ModuleSpec
+from queue import Empty
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
 
 from ansible_navigator.cli import APP_NAME
 from ansible_navigator.cli import cache_scripts
+from ansible_navigator.data import image_introspect
 from ansible_navigator.utils.functions import generate_cache_path
 
 
@@ -116,6 +120,63 @@ def image_introspection() -> types.ModuleType:
     return module
 
 
+def test_all_collectors_keys(imported_ii: Any) -> None:
+    """Verify ALL_COLLECTORS contains the expected section IDs.
+
+    Args:
+        imported_ii: Image introspection
+    """
+    expected = {
+        "ansible_collections",
+        "ansible_version",
+        "os_release",
+        "redhat_release",
+        "python_packages",
+        "system_packages",
+    }
+    assert set(imported_ii.ALL_COLLECTORS) == expected
+
+
+@pytest.mark.parametrize(
+    "sections",
+    (
+        ["ansible_collections"],
+        ["ansible_collections", "ansible_version"],
+        ["system_packages"],
+    ),
+    ids=["single", "two", "heavy"],
+)
+def test_section_filtering(imported_ii: Any, sections: list[str]) -> None:
+    """Verify only requested collectors are instantiated.
+
+    Args:
+        imported_ii: Image introspection
+        sections: The sections to filter on
+    """
+    collectors = imported_ii.ALL_COLLECTORS
+    selected = [collectors[s]() for s in sections if s in collectors]
+    assert len(selected) == len(sections)
+    for section, cls_instance in zip(sections, selected, strict=False):
+        cmds = cls_instance.commands
+        assert cmds
+        assert cmds[0].id_ == section
+
+
+def test_section_everything_runs_all(imported_ii: Any) -> None:
+    """Verify ``everything`` causes all collectors to be selected.
+
+    Args:
+        imported_ii: Image introspection
+    """
+    sections = ["everything"]
+    collectors = imported_ii.ALL_COLLECTORS
+    if sections and "everything" not in sections:
+        selected = [collectors[s]() for s in sections if s in collectors]
+    else:
+        selected = [cls() for cls in collectors.values()]
+    assert len(selected) == len(collectors)
+
+
 def test_system_packages_parse_one(imported_ii: Any) -> None:
     """Test parsing one package.
 
@@ -217,3 +278,192 @@ def test_python_packages_parse_show(imported_ii: Any) -> None:
     assert crypto["requires"] == ["cffi"]
     assert "ansible-core" in crypto["required-by"]
     assert "paramiko" in crypto["required-by"]
+
+
+class TestMainSectionFiltering:
+    """Tests for the main() function's section filtering logic."""
+
+    def test_main_with_specific_sections(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify main() only runs requested collectors when sections are given.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        ran_commands: list[Any] = []
+
+        def mock_run_multi_thread(
+            self: Any,
+            command_classes: list[Any],
+        ) -> list[Any]:
+            ran_commands.extend(command_classes)
+            return []
+
+        monkeypatch.setattr(
+            image_introspect.CommandRunner,
+            "run_multi_thread",
+            mock_run_multi_thread,
+        )
+        result = image_introspect.main(serialize=False, sections=["ansible_version"])
+        assert result is not None
+        assert len(ran_commands) == 1
+
+    def test_main_with_everything_runs_all(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify main() runs all collectors when sections contains 'everything'.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        ran_commands: list[Any] = []
+
+        def mock_run_multi_thread(
+            self: Any,
+            command_classes: list[Any],
+        ) -> list[Any]:
+            ran_commands.extend(command_classes)
+            return []
+
+        monkeypatch.setattr(
+            image_introspect.CommandRunner,
+            "run_multi_thread",
+            mock_run_multi_thread,
+        )
+        result = image_introspect.main(serialize=False, sections=["everything"])
+        assert result is not None
+        assert len(ran_commands) == len(image_introspect.ALL_COLLECTORS)
+
+    def test_main_with_none_sections_runs_all(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify main() runs all collectors when sections is None.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        ran_commands: list[Any] = []
+
+        def mock_run_multi_thread(
+            self: Any,
+            command_classes: list[Any],
+        ) -> list[Any]:
+            ran_commands.extend(command_classes)
+            return []
+
+        monkeypatch.setattr(
+            image_introspect.CommandRunner,
+            "run_multi_thread",
+            mock_run_multi_thread,
+        )
+        result = image_introspect.main(serialize=False, sections=None)
+        assert result is not None
+        assert len(ran_commands) == len(image_introspect.ALL_COLLECTORS)
+
+    def test_main_with_invalid_section_skipped(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify main() skips section names not in ALL_COLLECTORS.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        ran_commands: list[Any] = []
+
+        def mock_run_multi_thread(
+            self: Any,
+            command_classes: list[Any],
+        ) -> list[Any]:
+            ran_commands.extend(command_classes)
+            return []
+
+        monkeypatch.setattr(
+            image_introspect.CommandRunner,
+            "run_multi_thread",
+            mock_run_multi_thread,
+        )
+        result = image_introspect.main(
+            serialize=False,
+            sections=["nonexistent_section"],
+        )
+        assert result is not None
+        assert len(ran_commands) == 0
+
+
+class TestParseArgs:
+    """Tests for the _parse_args() function."""
+
+    def test_parse_args_no_arguments(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify _parse_args returns None when no --sections flag is given.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        monkeypatch.setattr(sys, "argv", ["image_introspect.py"])
+        result = image_introspect._parse_args()
+        assert result is None
+
+    def test_parse_args_with_sections(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify _parse_args returns the requested section list.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            ["image_introspect.py", "--sections", "ansible_version", "os_release"],
+        )
+        result = image_introspect._parse_args()
+        assert result == ["ansible_version", "os_release"]
+
+    def test_parse_args_with_everything(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify _parse_args accepts 'everything' keyword.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        monkeypatch.setattr(sys, "argv", ["image_introspect.py", "--sections", "everything"])
+        result = image_introspect._parse_args()
+        assert result == ["everything"]
+
+    def test_parse_args_empty_sections(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify _parse_args returns empty list when --sections given without values.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        monkeypatch.setattr(sys, "argv", ["image_introspect.py", "--sections"])
+        result = image_introspect._parse_args()
+        assert result == []
+
+
+def test_always_collected_constant() -> None:
+    """Verify ALWAYS_COLLECTED contains expected section IDs."""
+    assert "python_version" in image_introspect.ALWAYS_COLLECTED
+    assert "environment_variables" in image_introspect.ALWAYS_COLLECTED
+
+
+class TestRunMultiThreadHealthCheck:
+    """Tests for the timeout and thread health check paths in run_multi_thread."""
+
+    def test_raises_when_all_threads_dead(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify RuntimeError when all threads die without completing.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        runner = image_introspect.CommandRunner()
+
+        def _mock_get(timeout: int = 0) -> None:
+            raise Empty
+
+        mock_queue: Any = SimpleNamespace(get=_mock_get)
+        runner._completed_queue = mock_queue
+        runner._pending_queue = SimpleNamespace(put=lambda x: None)  # type: ignore[assignment]
+
+        dead_thread = SimpleNamespace(is_alive=lambda: False, join=lambda: None)
+
+        cmd_parser: Any = SimpleNamespace(
+            commands=[
+                image_introspect.Command(id_="test", command="echo hi", parse=lambda x: x),
+            ],
+        )
+
+        monkeypatch.setattr(runner, "start_workers", lambda jobs: [dead_thread])
+
+        with pytest.raises(RuntimeError, match="All worker threads have terminated"):
+            runner.run_multi_thread([cmd_parser])
