@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -427,11 +428,26 @@ class SystemPackages(CmdParser):
         command.details = parsed
 
 
-def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
+ALL_COLLECTORS: dict[str, type[CmdParser]] = {
+    "ansible_collections": AnsibleCollections,
+    "ansible_version": AnsibleVersion,
+    "os_release": OsRelease,
+    "redhat_release": RedhatRelease,
+    "python_packages": PythonPackages,
+    "system_packages": SystemPackages,
+}
+
+
+def main(
+    serialize: bool = True,
+    sections: list[str] | None = None,
+) -> dict[str, JSONTypes] | None:
     """Enter the image introspection process.
 
     Args:
         serialize: Whether to serialize the results
+        sections: Optional list of section IDs to collect. When ``None`` or
+            when ``"everything"`` is present, all collectors run.
 
     Returns:
         The collected data or none if serialize is False
@@ -441,14 +457,14 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     response["environment_variables"] = {"details": dict(os.environ)}
     try:
         command_runner = CommandRunner()
-        commands: list[CmdParser] = [
-            AnsibleCollections(),
-            AnsibleVersion(),
-            OsRelease(),
-            RedhatRelease(),
-            PythonPackages(),
-            SystemPackages(),
-        ]
+
+        if sections and "everything" not in sections:
+            commands: list[CmdParser] = [
+                ALL_COLLECTORS[s]() for s in sections if s in ALL_COLLECTORS
+            ]
+        else:
+            commands = [cls() for cls in ALL_COLLECTORS.values()]
+
         results = command_runner.run_multi_thread(commands)
         for result in results:
             result_as_dict = vars(result)
@@ -466,5 +482,27 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     return response
 
 
-if __name__ == "__main__":
-    main()
+ALWAYS_COLLECTED = ("python_version", "environment_variables")
+
+
+def _parse_args() -> list[str] | None:
+    """Parse command-line arguments for section filtering.
+
+    Returns:
+        The list of requested sections, or None for all sections.
+    """
+    parser = argparse.ArgumentParser(description="Introspect an execution environment image.")
+    parser.add_argument(
+        "--sections",
+        nargs="*",
+        default=None,
+        choices=[*ALL_COLLECTORS, *ALWAYS_COLLECTED, "everything"],
+        help="Sections to collect. Omit for all sections.",
+    )
+    args = parser.parse_args()
+    return args.sections
+
+
+if __name__ == "__main__":  # pragma: no cover
+    requested_sections = _parse_args()
+    main(sections=requested_sections)
