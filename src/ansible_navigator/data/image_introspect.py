@@ -10,6 +10,7 @@ import subprocess
 import sys
 import threading
 
+from queue import Empty
 from queue import Queue
 from types import SimpleNamespace
 from typing import TYPE_CHECKING
@@ -19,6 +20,8 @@ from typing import TypeAlias
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+_WORKER_TIMEOUT = 30
 
 # https://github.com/python/typing/issues/182#issuecomment-1320974824
 JSONTypes: TypeAlias = dict[str, "JSONTypes"] | list["JSONTypes"] | str | int | float | bool | None
@@ -99,6 +102,9 @@ class CommandRunner:
 
         Returns:
             The results from running all commands
+
+        Raises:
+            RuntimeError: If all workers terminate before all commands complete
         """
         if self._completed_queue is None:
             self._completed_queue = Queue()
@@ -107,29 +113,45 @@ class CommandRunner:
         all_commands = tuple(
             command for command_class in command_classes for command in command_class.commands
         )
-        self.start_workers(all_commands)
+        threads = self.start_workers(all_commands)
         results: list[CmdParser] = []
         while len(results) != len(all_commands):
-            results.append(self._completed_queue.get())
+            try:
+                results.append(self._completed_queue.get(timeout=_WORKER_TIMEOUT))
+            except Empty:
+                alive_threads = [t for t in threads if t.is_alive()]
+                if not alive_threads:
+                    failed = len(all_commands) - len(results)
+                    msg = (
+                        f"All worker threads have terminated but {failed} of "
+                        f"{len(all_commands)} commands did not complete. "
+                        f"Worker threads may have crashed."
+                    )
+                    raise RuntimeError(msg)  # noqa: B904
+        for t in threads:
+            t.join()
         return results
 
-    def start_workers(self, jobs: tuple[Command, ...]) -> None:
+    def start_workers(self, jobs: tuple[Command, ...]) -> list[threading.Thread]:
         """Start workers and submit jobs to pending queue.
 
         Args:
             jobs: The jobs to be run
 
+        Returns:
+            The list of started worker threads
+
         Raises:
-            RuntimeError: if there is a runtime error
+            RuntimeError: if the pending queue is not initialized
         """
         worker_count = len(jobs)
-        processes = []
+        threads: list[threading.Thread] = []
         for _proc in range(worker_count):
             proc = threading.Thread(
                 target=worker,
                 args=(self._pending_queue, self._completed_queue),
             )
-            processes.append(proc)
+            threads.append(proc)
             proc.start()
         if not self._pending_queue:
             raise RuntimeError
@@ -137,8 +159,7 @@ class CommandRunner:
             self._pending_queue.put(job)
         for _proc in range(worker_count):
             self._pending_queue.put(None)
-        for proc in processes:
-            proc.join()
+        return threads
 
 
 class CmdParser:
