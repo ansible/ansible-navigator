@@ -6,6 +6,8 @@ import sys
 import types
 
 from importlib.machinery import ModuleSpec
+from queue import Empty
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -433,3 +435,35 @@ def test_always_collected_constant() -> None:
     """Verify ALWAYS_COLLECTED contains expected section IDs."""
     assert "python_version" in image_introspect.ALWAYS_COLLECTED
     assert "environment_variables" in image_introspect.ALWAYS_COLLECTED
+
+
+class TestRunMultiThreadHealthCheck:
+    """Tests for the timeout and thread health check paths in run_multi_thread."""
+
+    def test_raises_when_all_threads_dead(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify RuntimeError when all threads die without completing.
+
+        Args:
+            monkeypatch: Pytest monkeypatch fixture
+        """
+        runner = image_introspect.CommandRunner()
+
+        def _mock_get(timeout: int = 0) -> None:
+            raise Empty
+
+        mock_queue: Any = SimpleNamespace(get=_mock_get)
+        runner._completed_queue = mock_queue
+        runner._pending_queue = SimpleNamespace(put=lambda x: None)  # type: ignore[assignment]
+
+        dead_thread = SimpleNamespace(is_alive=lambda: False, join=lambda: None)
+
+        cmd_parser: Any = SimpleNamespace(
+            commands=[
+                image_introspect.Command(id_="test", command="echo hi", parse=lambda x: x),
+            ],
+        )
+
+        monkeypatch.setattr(runner, "start_workers", lambda jobs: [dead_thread])
+
+        with pytest.raises(RuntimeError, match="All worker threads have terminated"):
+            runner.run_multi_thread([cmd_parser])
