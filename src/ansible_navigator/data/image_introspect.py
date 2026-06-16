@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -9,6 +10,7 @@ import subprocess
 import sys
 import threading
 
+from queue import Empty
 from queue import Queue
 from types import SimpleNamespace
 from typing import TYPE_CHECKING
@@ -18,6 +20,8 @@ from typing import TypeAlias
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+_WORKER_TIMEOUT = 30
 
 # https://github.com/python/typing/issues/182#issuecomment-1320974824
 JSONTypes: TypeAlias = dict[str, "JSONTypes"] | list["JSONTypes"] | str | int | float | bool | None
@@ -98,6 +102,9 @@ class CommandRunner:
 
         Returns:
             The results from running all commands
+
+        Raises:
+            RuntimeError: If all workers terminate before all commands complete
         """
         if self._completed_queue is None:
             self._completed_queue = Queue()
@@ -106,29 +113,45 @@ class CommandRunner:
         all_commands = tuple(
             command for command_class in command_classes for command in command_class.commands
         )
-        self.start_workers(all_commands)
+        threads = self.start_workers(all_commands)
         results: list[CmdParser] = []
         while len(results) != len(all_commands):
-            results.append(self._completed_queue.get())
+            try:
+                results.append(self._completed_queue.get(timeout=_WORKER_TIMEOUT))
+            except Empty:
+                alive_threads = [t for t in threads if t.is_alive()]
+                if not alive_threads:
+                    failed = len(all_commands) - len(results)
+                    msg = (
+                        f"All worker threads have terminated but {failed} of "
+                        f"{len(all_commands)} commands did not complete. "
+                        f"Worker threads may have crashed."
+                    )
+                    raise RuntimeError(msg)  # noqa: B904
+        for t in threads:
+            t.join()
         return results
 
-    def start_workers(self, jobs: tuple[Command, ...]) -> None:
+    def start_workers(self, jobs: tuple[Command, ...]) -> list[threading.Thread]:
         """Start workers and submit jobs to pending queue.
 
         Args:
             jobs: The jobs to be run
 
+        Returns:
+            The list of started worker threads
+
         Raises:
-            RuntimeError: if there is a runtime error
+            RuntimeError: if the pending queue is not initialized
         """
         worker_count = len(jobs)
-        processes = []
+        threads: list[threading.Thread] = []
         for _proc in range(worker_count):
             proc = threading.Thread(
                 target=worker,
                 args=(self._pending_queue, self._completed_queue),
             )
-            processes.append(proc)
+            threads.append(proc)
             proc.start()
         if not self._pending_queue:
             raise RuntimeError
@@ -136,8 +159,7 @@ class CommandRunner:
             self._pending_queue.put(job)
         for _proc in range(worker_count):
             self._pending_queue.put(None)
-        for proc in processes:
-            proc.join()
+        return threads
 
 
 class CmdParser:
@@ -427,11 +449,26 @@ class SystemPackages(CmdParser):
         command.details = parsed
 
 
-def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
+ALL_COLLECTORS: dict[str, type[CmdParser]] = {
+    "ansible_collections": AnsibleCollections,
+    "ansible_version": AnsibleVersion,
+    "os_release": OsRelease,
+    "redhat_release": RedhatRelease,
+    "python_packages": PythonPackages,
+    "system_packages": SystemPackages,
+}
+
+
+def main(
+    serialize: bool = True,
+    sections: list[str] | None = None,
+) -> dict[str, JSONTypes] | None:
     """Enter the image introspection process.
 
     Args:
         serialize: Whether to serialize the results
+        sections: Optional list of section IDs to collect. When ``None`` or
+            when ``"everything"`` is present, all collectors run.
 
     Returns:
         The collected data or none if serialize is False
@@ -441,14 +478,14 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     response["environment_variables"] = {"details": dict(os.environ)}
     try:
         command_runner = CommandRunner()
-        commands: list[CmdParser] = [
-            AnsibleCollections(),
-            AnsibleVersion(),
-            OsRelease(),
-            RedhatRelease(),
-            PythonPackages(),
-            SystemPackages(),
-        ]
+
+        if sections and "everything" not in sections:
+            commands: list[CmdParser] = [
+                ALL_COLLECTORS[s]() for s in sections if s in ALL_COLLECTORS
+            ]
+        else:
+            commands = [cls() for cls in ALL_COLLECTORS.values()]
+
         results = command_runner.run_multi_thread(commands)
         for result in results:
             result_as_dict = vars(result)
@@ -466,5 +503,27 @@ def main(serialize: bool = True) -> dict[str, JSONTypes] | None:
     return response
 
 
-if __name__ == "__main__":
-    main()
+ALWAYS_COLLECTED = ("python_version", "environment_variables")
+
+
+def _parse_args() -> list[str] | None:
+    """Parse command-line arguments for section filtering.
+
+    Returns:
+        The list of requested sections, or None for all sections.
+    """
+    parser = argparse.ArgumentParser(description="Introspect an execution environment image.")
+    parser.add_argument(
+        "--sections",
+        nargs="*",
+        default=None,
+        choices=[*ALL_COLLECTORS, *ALWAYS_COLLECTED, "everything"],
+        help="Sections to collect. Omit for all sections.",
+    )
+    args = parser.parse_args()
+    return args.sections
+
+
+if __name__ == "__main__":  # pragma: no cover
+    requested_sections = _parse_args()
+    main(sections=requested_sections)

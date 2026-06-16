@@ -1311,8 +1311,10 @@ class NavigatorPostProcessor:
             f" {entry.value.source.value.lower()}, "
         )
         if isinstance(entry.value.current, str):
+            if entry.value.current in ("UTC", "local"):
+                return messages, exit_messages
             available_timezones = sorted(zoneinfo.available_timezones())
-            if entry.value.current in available_timezones or entry.value.current == "local":
+            if entry.value.current in available_timezones:
                 return messages, exit_messages
             exit_msg += "could not be found."
         else:
