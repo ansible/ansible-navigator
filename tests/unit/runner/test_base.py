@@ -1,5 +1,6 @@
 """Unit tests for the Base runner class."""
 
+import os
 import sys
 
 import pytest
@@ -196,3 +197,87 @@ def test_podman_user_quoted_with_space() -> None:
 
     assert "--user=root" not in opts
     assert "-u myuser" in opts
+
+
+# ---------------------------------------------------------------------------
+# SSH_AUTH_SOCK symlink resolution — macOS Tahoe (issue #2113)
+# ---------------------------------------------------------------------------
+
+
+def test_ssh_auth_sock_symlink_resolved_on_macos(monkeypatch: pytest.MonkeyPatch) -> None:
+    """SSH_AUTH_SOCK is resolved to its real path on macOS when it is a symlink.
+
+    On macOS Tahoe (>26.3) the launchd socket moved from /private/tmp to
+    /var/run, which is a symlink to /private/var/run. Container runtimes need
+    the resolved path for volume mounts.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
+    symlink_path = "/var/run/com.apple.launchd.XXXXXXXX/Listeners"
+    real_path = "/private/var/run/com.apple.launchd.XXXXXXXX/Listeners"
+
+    monkeypatch.setattr(sys, "platform", "darwin")
+    monkeypatch.setenv("SSH_AUTH_SOCK", symlink_path)
+    monkeypatch.setattr(os.path, "realpath", lambda p: real_path if p == symlink_path else p)
+
+    Base(container_engine="podman", execution_environment=True)
+
+    assert os.environ["SSH_AUTH_SOCK"] == real_path
+
+
+def test_ssh_auth_sock_already_real_path_unchanged_on_macos(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """SSH_AUTH_SOCK is not modified when it is already a real path on macOS.
+
+    When the path contains no symlinks os.path.realpath returns the same value,
+    so os.environ should not be updated.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
+    real_path = "/private/tmp/com.apple.launchd.XXXXXXXX/Listeners"
+
+    monkeypatch.setattr(sys, "platform", "darwin")
+    monkeypatch.setenv("SSH_AUTH_SOCK", real_path)
+    monkeypatch.setattr(os.path, "realpath", lambda p: p)  # no-op — already real
+
+    Base(container_engine="podman", execution_environment=True)
+
+    assert os.environ["SSH_AUTH_SOCK"] == real_path
+
+
+def test_ssh_auth_sock_not_modified_on_linux(monkeypatch: pytest.MonkeyPatch) -> None:
+    """SSH_AUTH_SOCK symlink resolution is skipped entirely on Linux.
+
+    The macOS Tahoe symlink issue does not affect Linux. The fix must not
+    touch SSH_AUTH_SOCK on non-darwin platforms even if the path looks like
+    it contains a symlink.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
+    original_path = "/run/user/1000/keyring/ssh"
+    resolved_path = "/some/other/path"  # would be wrong to use this on Linux
+
+    monkeypatch.setattr(sys, "platform", "linux")
+    monkeypatch.setenv("SSH_AUTH_SOCK", original_path)
+    monkeypatch.setattr(os.path, "realpath", lambda p: resolved_path)
+
+    Base(container_engine="podman", execution_environment=True)
+
+    assert os.environ["SSH_AUTH_SOCK"] == original_path
+
+
+def test_ssh_auth_sock_missing_env_var_no_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No error is raised when SSH_AUTH_SOCK is not set in the environment.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
+    monkeypatch.setattr(sys, "platform", "darwin")
+    monkeypatch.delenv("SSH_AUTH_SOCK", raising=False)
+
+    # Should not raise
+    Base(container_engine="podman", execution_environment=True)
