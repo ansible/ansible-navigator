@@ -143,6 +143,32 @@ def test_pp_direct(data: Scenario) -> None:
         assert entry.value.current == data.expected
 
 
+def test_utc_accepted_without_tzdata(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that UTC is accepted even when zoneinfo has no timezone data.
+
+    Args:
+        monkeypatch: The monkey patch fixture
+    """
+    monkeypatch.setattr(
+        "ansible_navigator.configuration_subsystem.navigator_post_processor"
+        ".zoneinfo.available_timezones",
+        set,
+    )
+
+    settings = deepcopy(NavigatorConfiguration)
+    entry = settings.entry("time_zone")
+    entry.value.current = "UTC"
+    entry.value.source = C.USER_CLI
+
+    _messages, exit_messages = NavigatorPostProcessor().time_zone(
+        entry=entry,
+        config=settings,
+    )
+
+    assert not exit_messages
+    assert entry.value.current == "UTC"
+
+
 env_var_test_data = [s for s in test_data if s.source is C.ENVIRONMENT_VARIABLE]
 
 
