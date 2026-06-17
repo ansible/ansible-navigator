@@ -124,6 +124,25 @@ class Base:
             # Prepend to existing container options to allow overriding this fix.
             container_options = ssh_agent_socket_opts + container_options
 
+        # On macOS Tahoe (>26.3), the launchd SSH agent socket moved from
+        # /private/tmp to /var/run. Since /var/run is a symlink to /private/var/run,
+        # container runtimes require the resolved real path when building volume mount
+        # arguments. ansible-runner normalises mount paths with os.path.abspath(), which
+        # does not resolve symlinks, causing the container engine to fail with:
+        #   Error: statfs /var/run/com.apple.launchd.xxxxxxxxx: no such file or directory
+        # Resolving SSH_AUTH_SOCK to its real path here — before ansible-runner reads it
+        # from os.environ in _handle_automounts() — ensures the correct path is passed to
+        # the container engine regardless of which CE is in use.
+        if sys.platform == "darwin" and "SSH_AUTH_SOCK" in os.environ:
+            _real_sock = os.path.realpath(os.environ["SSH_AUTH_SOCK"])
+            if _real_sock != os.environ["SSH_AUTH_SOCK"]:
+                self._logger.debug(
+                    "macOS SSH_AUTH_SOCK symlink resolved: %s -> %s",
+                    os.environ["SSH_AUTH_SOCK"],
+                    _real_sock,
+                )
+                os.environ["SSH_AUTH_SOCK"] = _real_sock
+
         if self._ee:
             self._runner_args.update(
                 {
