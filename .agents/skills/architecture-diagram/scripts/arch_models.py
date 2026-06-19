@@ -7,7 +7,10 @@ used by the crawler and diagram generator.
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass, field
+
+from dataclasses import asdict
+from dataclasses import dataclass
+from dataclasses import field
 from enum import Enum
 from pathlib import Path
 

@@ -15,35 +15,33 @@ import re
 import shutil
 import subprocess
 import sys
+
 from pathlib import Path
 
+
 try:
-    from arch_models import (  # pylint: disable=import-error
-        ADT_PACKAGE_MAP,
-        PYTHON_CLI_TOOLS,
-        REPO_MANIFEST,
-        ContainerArtifact,
-        CrawlResult,
-        DiscoveredComponent,
-        DiscoveredRelationship,
-        RelationshipType,
-        RepoLanguage,
-        RepoManifestEntry,
-    )
+    from arch_models import ADT_PACKAGE_MAP  # pylint: disable=import-error
+    from arch_models import PYTHON_CLI_TOOLS  # pylint: disable=import-error
+    from arch_models import REPO_MANIFEST  # pylint: disable=import-error
+    from arch_models import ContainerArtifact  # pylint: disable=import-error
+    from arch_models import CrawlResult  # pylint: disable=import-error
+    from arch_models import DiscoveredComponent  # pylint: disable=import-error
+    from arch_models import DiscoveredRelationship  # pylint: disable=import-error
+    from arch_models import RelationshipType  # pylint: disable=import-error
+    from arch_models import RepoLanguage  # pylint: disable=import-error
+    from arch_models import RepoManifestEntry  # pylint: disable=import-error
 except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from arch_models import (
-        ADT_PACKAGE_MAP,
-        PYTHON_CLI_TOOLS,
-        REPO_MANIFEST,
-        ContainerArtifact,
-        CrawlResult,
-        DiscoveredComponent,
-        DiscoveredRelationship,
-        RelationshipType,
-        RepoLanguage,
-        RepoManifestEntry,
-    )
+    from arch_models import ADT_PACKAGE_MAP
+    from arch_models import PYTHON_CLI_TOOLS
+    from arch_models import REPO_MANIFEST
+    from arch_models import ContainerArtifact
+    from arch_models import CrawlResult
+    from arch_models import DiscoveredComponent
+    from arch_models import DiscoveredRelationship
+    from arch_models import RelationshipType
+    from arch_models import RepoLanguage
+    from arch_models import RepoManifestEntry
 
 # ---------------------------------------------------------------------------
 # Cloning
@@ -325,7 +323,7 @@ def _scan_workflow_reusable(
 # ---------------------------------------------------------------------------
 
 
-def _crawl_vscode_ansible(repo_dir: Path, result: CrawlResult) -> None:  # noqa: PLR0912
+def _crawl_vscode_ansible(repo_dir: Path, result: CrawlResult) -> None:
     """Deep crawl vscode-ansible for language server, MCP, and Python CLI spawns.
 
     Args:
@@ -416,7 +414,9 @@ def _crawl_vscode_ansible(repo_dir: Path, result: CrawlResult) -> None:  # noqa:
                 text = f.read_text(errors="ignore")
             except OSError:
                 continue
-            if "mcp" in text.lower() and ("server" in text.lower() or "McpServer" in text or "MCP" in text):
+            if "mcp" in text.lower() and (
+                "server" in text.lower() or "McpServer" in text or "MCP" in text
+            ):
                 result.components.append(
                     DiscoveredComponent(
                         name="Ansible MCP Server",
@@ -486,7 +486,7 @@ def _crawl_abbenay(repo_dir: Path, result: CrawlResult) -> None:
 # ---------------------------------------------------------------------------
 
 
-def crawl_repo(entry: RepoManifestEntry, repo_dir: Path, result: CrawlResult) -> None:  # noqa: PLR0912
+def crawl_repo(entry: RepoManifestEntry, repo_dir: Path, result: CrawlResult) -> None:
     """Introspect a single cloned repo and add findings to *result*.
 
     Args:
@@ -637,7 +637,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--clone-dir",
-        default="/tmp/adt-c4-repos",  # noqa: S108
+        default="/tmp/adt-c4-repos",
         help="Directory for shallow clones",
     )
     parser.add_argument(
