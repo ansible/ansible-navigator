@@ -115,8 +115,8 @@ class TestAnsibleCollections:
         cmd.stderr = ""
         AnsibleCollections.parse(cmd)
         assert isinstance(cmd.details, dict)
-        assert cmd.details["ansible.builtin"] == "2.14.0"
-        assert cmd.details["community.general"] == "6.0.0"
+        assert cmd.details["ansible.builtin"] == "2.14.0"  # pylint: disable=invalid-sequence-index
+        assert cmd.details["community.general"] == "6.0.0"  # pylint: disable=invalid-sequence-index
 
     def test_parse_ansible29_error(self) -> None:
         """Test parsing ansible 2.9 error."""

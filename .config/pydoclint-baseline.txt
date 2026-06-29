@@ -1010,3 +1010,7 @@ tests/unit/utils/test_serialize_extended.py
     DOC101: Method `TestSerializeWriteFile.test_write_yaml`: Docstring contains fewer arguments than in function signature.
     DOC103: Method `TestSerializeWriteFile.test_write_yaml`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
 --------------------
+tests/unit/test_content_defs.py
+    DOC601: Class `SampleContent`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
+    DOC603: Class `SampleContent`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [name: str, value: int]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
+--------------------

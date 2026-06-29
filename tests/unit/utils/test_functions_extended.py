@@ -5,7 +5,7 @@ from __future__ import annotations
 import shutil
 
 from typing import TYPE_CHECKING
-from unittest.mock import patch
+from unittest.mock import patch  # pylint: disable=preferred-module
 
 import pytest
 

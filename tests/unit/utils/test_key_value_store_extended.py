@@ -1,4 +1,5 @@
 """Tests for the key value store module."""
+# pylint: disable=redefined-outer-name
 
 from __future__ import annotations
 
