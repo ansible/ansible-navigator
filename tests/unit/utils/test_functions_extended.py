@@ -204,7 +204,7 @@ def test_pascal_to_snake_nested() -> None:
 
 def test_remove_ansi() -> None:
     """Test remove_ansi strips ANSI codes."""
-    ansi_string = "\033[31mred text\033[0m"
+    ansi_string = "\033[31mred text\033[0m"  # cspell:disable-line
     assert remove_ansi(ansi_string) == "red text"
 
 
@@ -215,7 +215,7 @@ def test_remove_ansi_no_codes() -> None:
 
 def test_remove_ansi_complex() -> None:
     """Test remove_ansi with complex ANSI sequences."""
-    ansi_string = "\033[38;2;255;0;0mcolored\033[m"
+    ansi_string = "\033[38;2;255;0;0mcolored\033[m"  # cspell:disable-line
     assert remove_ansi(ansi_string) == "colored"
 
 
