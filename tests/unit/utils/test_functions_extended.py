@@ -87,7 +87,7 @@ def test_clear_screen_normal(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     """Test clear_screen does nothing in normal terminal."""
-    monkeypatch.setenv("TERM_PROGRAM", "iterm")
+    monkeypatch.setenv("TERM_PROGRAM", "xterm")
     clear_screen()
     captured = capsys.readouterr()
     assert captured.out == ""
@@ -253,13 +253,13 @@ def test_str2bool_false_values() -> None:
 
 def test_str2bool_invalid() -> None:
     """Test str2bool with invalid value."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="maybe"):
         str2bool("maybe")
 
 
 def test_str2bool_int() -> None:
     """Test str2bool with non-bool non-string."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="42"):
         str2bool(42)
 
 

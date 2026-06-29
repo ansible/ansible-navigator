@@ -150,7 +150,7 @@ class TestIsMultilineString:
 
     def test_unicode_line_separator(self) -> None:
         """Test detects unicode line separator."""
-        assert _is_multiline_string("line1 line2") is True
+        assert _is_multiline_string("line1 line2") is True  # noqa: RUF001
 
 
 class TestHumanDumper:
@@ -158,7 +158,7 @@ class TestHumanDumper:
 
     def test_ignore_aliases(self) -> None:
         """Test ignore_aliases always returns True."""
-        dumper = HumanDumper("")
+        dumper = HumanDumper(io.StringIO(""))
         assert dumper.ignore_aliases(None) is True
         assert dumper.ignore_aliases([1, 2, 3]) is True
 
@@ -189,7 +189,7 @@ class TestWriteDiagnosticsJson:
         """Test written file has correct permissions."""
         path = str(tmp_path / "diag.json")
         write_diagnostics_json(path, 0o600, {})
-        file_stat = os.stat(path)
+        file_stat = Path(path).stat()
         mode = stat.S_IMODE(file_stat.st_mode)
         assert mode == 0o600
 

@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from ansible_navigator.ui_framework.sentinels import unknown
 from ansible_navigator.ui_framework.validators import FieldValidators
 from ansible_navigator.ui_framework.validators import FormValidators
 from ansible_navigator.ui_framework.validators import Validation
@@ -386,8 +387,6 @@ class TestFieldValidatorsSomeOfOrNone:
 
     def test_type_error(self) -> None:
         """Test TypeError with wrong types."""
-        from ansible_navigator.ui_framework.sentinels import unknown
-
         with pytest.raises(TypeError):
             FieldValidators.some_of_or_none(
                 choices=unknown,

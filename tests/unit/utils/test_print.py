@@ -3,21 +3,14 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import NamedTuple
 
+from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
 from ansible_navigator.utils.print import color_bits
 from ansible_navigator.utils.print import color_lines
 
 
 if TYPE_CHECKING:
     import pytest
-
-
-class MockLinePart(NamedTuple):
-    """A mock for SimpleLinePart."""
-
-    color: tuple[int, int, int] | None
-    chars: str
 
 
 class TestColorBits:
@@ -63,21 +56,21 @@ class TestColorLines:
 
     def test_24bit_with_color(self) -> None:
         """Test 24-bit color output."""
-        tokenized = [[MockLinePart(color=(255, 0, 0), chars="red")]]
+        tokenized = [[SimpleLinePart(chars="red", column=0, color=(255, 0, 0), style=None)]]
         result = color_lines(24, tokenized)
         assert "\033[38;2;255;0;0m" in result
         assert "red" in result
 
     def test_24bit_none_color(self) -> None:
         """Test 24-bit with None color defaults to white."""
-        tokenized = [[MockLinePart(color=None, chars="text")]]
+        tokenized = [[SimpleLinePart(chars="text", column=0, color=None, style=None)]]
         result = color_lines(24, tokenized)
         assert "\033[38;2;255;255;255m" in result
         assert "text" in result
 
     def test_8bit_none_color(self) -> None:
         """Test 8-bit with None color uses ansi_color 1."""
-        tokenized = [[MockLinePart(color=None, chars="text")]]
+        tokenized = [[SimpleLinePart(chars="text", column=0, color=None, style=None)]]
         result = color_lines(8, tokenized)
         assert "\033[38;5;1m" in result
 
@@ -85,8 +78,8 @@ class TestColorLines:
         """Test multiple parts in a line."""
         tokenized = [
             [
-                MockLinePart(color=(255, 0, 0), chars="red"),
-                MockLinePart(color=(0, 255, 0), chars="green"),
+                SimpleLinePart(chars="red", column=0, color=(255, 0, 0), style=None),
+                SimpleLinePart(chars="green", column=3, color=(0, 255, 0), style=None),
             ]
         ]
         result = color_lines(24, tokenized)
@@ -101,8 +94,8 @@ class TestColorLines:
     def test_multiple_lines(self) -> None:
         """Test multiple lines."""
         tokenized = [
-            [MockLinePart(color=(255, 0, 0), chars="line1")],
-            [MockLinePart(color=(0, 0, 255), chars="line2")],
+            [SimpleLinePart(chars="line1", column=0, color=(255, 0, 0), style=None)],
+            [SimpleLinePart(chars="line2", column=0, color=(0, 0, 255), style=None)],
         ]
         result = color_lines(24, tokenized)
         assert "line1" in result
