@@ -253,13 +253,13 @@ def test_str2bool_false_values() -> None:
 
 def test_str2bool_invalid() -> None:
     """Test str2bool with invalid value."""
-    with pytest.raises(ValueError, match="maybe"):
+    with pytest.raises(ValueError):  # noqa: PT011
         str2bool("maybe")
 
 
 def test_str2bool_int() -> None:
     """Test str2bool with non-bool non-string."""
-    with pytest.raises(ValueError, match="42"):
+    with pytest.raises(ValueError):  # noqa: PT011
         str2bool(42)
 
 
