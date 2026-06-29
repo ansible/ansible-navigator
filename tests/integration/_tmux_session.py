@@ -298,7 +298,7 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                time_stamp = datetime.datetime.now(tz=datetime.UTC).isoformat()
                 alert = f"******** ERROR: TMUX MODE TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 showing.insert(0, alert)
                 return showing
@@ -326,7 +326,7 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                time_stamp = datetime.datetime.now(tz=datetime.UTC).isoformat()
                 alert = f"******** ERROR: TMUX EXEC TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 showing.insert(0, alert)
                 return showing
@@ -377,7 +377,7 @@ class TmuxSession:
                 with setup_capture_path.open(mode="w", encoding="utf-8") as fh:
                     fh.writelines("\n".join(self._setup_capture))
 
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                time_stamp = datetime.datetime.now(tz=datetime.UTC).isoformat()
                 # taint the screen output w/ timestamp so it's never a valid fixture
                 alerts = [
                     f"******** ERROR: TMUX '{err_message}'"

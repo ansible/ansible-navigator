@@ -7,8 +7,8 @@ import traceback
 
 from dataclasses import asdict
 from dataclasses import dataclass
+from datetime import UTC
 from datetime import datetime
-from datetime import timezone
 from importlib.util import find_spec
 from pathlib import Path
 from sys import stdout
@@ -164,24 +164,24 @@ def diagnostic_runner(func: Callable[..., Any]) -> Callable[..., Any]:
             The result of the function with elapsed or error information
         """
         global DIAGNOSTIC_FAILURES
-        start = datetime.now(timezone.utc)
+        start = datetime.now(UTC)
         color = args[0].color
         collector = func.__collector__  # type: ignore[attr-defined]
         collector.start(color=color)
         try:
             result = func(*args, **kwargs)
-            duration = (datetime.now(timezone.utc) - start).total_seconds()
+            duration = (datetime.now(UTC) - start).total_seconds()
             collector.finish(color=color, duration=duration)
         except FailedCollectionError as error:
             # A collector exception, has data
             result = error.errors
-            duration = (datetime.now(timezone.utc) - start).total_seconds()
+            duration = (datetime.now(UTC) - start).total_seconds()
             collector.fail(color=color, duration=duration)
             DIAGNOSTIC_FAILURES += 1
         except Exception as error:  # noqa: BLE001
             # Any other exception, has no data
             result = {"error": str(error) + "\n" + traceback.format_exc()}
-            duration = (datetime.now(timezone.utc) - start).total_seconds()
+            duration = (datetime.now(UTC) - start).total_seconds()
             collector.fail(color=color, duration=duration)
             DIAGNOSTIC_FAILURES += 1
         result["duration"] = round(duration)

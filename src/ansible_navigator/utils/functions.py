@@ -366,14 +366,14 @@ def now_iso(time_zone: str) -> str:
         The ISO 8601 formatted time zone string
     """
     if time_zone == "local":
-        return datetime.datetime.now(tz=datetime.timezone.utc).astimezone().isoformat()
+        return datetime.datetime.now(tz=datetime.UTC).astimezone().isoformat()
     if time_zone == "UTC":
-        return datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+        return datetime.datetime.now(tz=datetime.UTC).isoformat()
     try:
         return datetime.datetime.now(tz=zoneinfo.ZoneInfo(time_zone)).isoformat()
     except zoneinfo.ZoneInfoNotFoundError:
         logger.exception("The time zone '%s' could not be found. Using UTC.", time_zone)
-        return datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+        return datetime.datetime.now(tz=datetime.UTC).isoformat()
 
 
 PASCAL_REGEX = re.compile("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))")
@@ -562,15 +562,11 @@ def timestamp_to_iso(timestamp: float, time_zone: str) -> str | None:
     """
     try:
         if time_zone == "local":
-            return (
-                datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc)
-                .astimezone()
-                .isoformat()
-            )
+            return datetime.datetime.fromtimestamp(timestamp, datetime.UTC).astimezone().isoformat()
         if time_zone == "UTC":
             return datetime.datetime.fromtimestamp(
                 timestamp,
-                tz=datetime.timezone.utc,
+                tz=datetime.UTC,
             ).isoformat()
         return datetime.datetime.fromtimestamp(
             timestamp,

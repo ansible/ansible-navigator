@@ -15,8 +15,8 @@ import sys
 
 from collections import Counter
 from collections import OrderedDict
+from datetime import UTC
 from datetime import datetime
-from datetime import timezone
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -426,7 +426,7 @@ def worker(
                     "returndocs": returndocs,
                     "metadata": metadata,
                 },
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             }
             completed_queue.put(("plugin", (checksum, json.dumps(q_message, default=str))))
         except JSONDecodeError as exc:
@@ -678,7 +678,7 @@ def main() -> dict[Any, Any]:
 
 
 if __name__ == "__main__":
-    start_time = datetime.now(timezone.utc)
+    start_time = datetime.now(UTC)
 
     collection_paths = retrieve_collections_paths()
     if "error" in collection_paths:
@@ -692,6 +692,6 @@ if __name__ == "__main__":
     os.environ["ANSIBLE_COLLECTIONS_PATH"] = COLLECTION_SCAN_PATHS
 
     result = main()
-    result["stats"]["duration"] = (datetime.now(timezone.utc) - start_time).total_seconds()
+    result["stats"]["duration"] = (datetime.now(UTC) - start_time).total_seconds()
     result["collection_scan_paths"] = COLLECTION_SCAN_PATHS
     print(json.dumps(result, default=str))

@@ -17,7 +17,7 @@ class Indexable(Generic[TKey_contra, TValue_co], Protocol):  # noqa: PYI059
         """
 
 
-class FChainMap(Generic[TKey_contra, TValue_co]):
+class FChainMap[TKey_contra, TValue_co]:
     def __init__(self, *mappings: Indexable[TKey_contra, TValue_co]) -> None:
         """Initialize the FChainMap.
 

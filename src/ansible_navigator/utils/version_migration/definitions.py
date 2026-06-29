@@ -7,7 +7,6 @@ import contextlib
 from enum import Enum
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Generic
 from typing import TypeVar
 
 from ansible_navigator.utils.ansi import COLOR
@@ -32,7 +31,7 @@ class MigrationType(Enum):
 T = TypeVar("T")
 
 
-class MigrationStep(Generic[T]):
+class MigrationStep[T]:
     """Data class for a migration step."""
 
     def __init__(self, name: str) -> None:

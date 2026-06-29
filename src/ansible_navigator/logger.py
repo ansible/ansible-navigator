@@ -49,14 +49,14 @@ class Formatter(logging.Formatter):
         """
         if self._time_zone == "local":
             return (
-                datetime.datetime.fromtimestamp(record.created, datetime.timezone.utc)
+                datetime.datetime.fromtimestamp(record.created, datetime.UTC)
                 .astimezone()
                 .isoformat()
             )
         if self._time_zone == "UTC":
             return datetime.datetime.fromtimestamp(
                 record.created,
-                tz=datetime.timezone.utc,
+                tz=datetime.UTC,
             ).isoformat()
         try:
             return datetime.datetime.fromtimestamp(
@@ -66,7 +66,7 @@ class Formatter(logging.Formatter):
         except zoneinfo.ZoneInfoNotFoundError:
             return datetime.datetime.fromtimestamp(
                 record.created,
-                tz=datetime.timezone.utc,
+                tz=datetime.UTC,
             ).isoformat()
 
 

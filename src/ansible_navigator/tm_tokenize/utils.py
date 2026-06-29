@@ -7,7 +7,7 @@ from typing import TypeVar
 T = TypeVar("T")
 
 
-def uniquely_constructed(t: T) -> T:
+def uniquely_constructed[T](t: T) -> T:
     """Avoid tuple.__hash__ for "singleton" constructed objects."""
     t.__hash__ = object.__hash__  # type: ignore[assignment]
     return t

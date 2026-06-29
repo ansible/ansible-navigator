@@ -8,7 +8,6 @@ from dataclasses import field
 from enum import Enum
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Generic
 from typing import TypeVar
 
 
@@ -159,7 +158,7 @@ T = TypeVar("T")
 
 
 @dataclass
-class TypedStep(Generic[T]):
+class TypedStep[T]:
     # pylint: disable=too-many-instance-attributes
     """One step in the flow of things.
 

@@ -21,8 +21,8 @@ import json
 import shlex
 
 from collections.abc import Mapping
+from datetime import UTC
 from datetime import datetime
-from datetime import timezone
 from enum import IntEnum
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -397,7 +397,7 @@ class Action(ActionBase):
         self._calling_app.update()
 
         # Do this only every 2 seconds
-        if (datetime.now(timezone.utc) - self._modification_times_last_updated).total_seconds() > 2:
+        if (datetime.now(UTC) - self._modification_times_last_updated).total_seconds() > 2:
             rerun_lint = self._rerun_needed()
             if rerun_lint:
                 self._build_issues_menu()
@@ -552,7 +552,7 @@ class Action(ActionBase):
                 if unix_ts > previous_ts:
                     rerun_lint = True
 
-        self._modification_times_last_updated = datetime.now(timezone.utc)
+        self._modification_times_last_updated = datetime.now(UTC)
         if rerun_lint:
             self._logger.debug("Files modified")
         return rerun_lint

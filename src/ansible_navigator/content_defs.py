@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Generic
 from typing import TypeVar
 
 
@@ -36,7 +35,7 @@ class SerializationFormat(Enum):
 
 
 @dataclass
-class ContentBase(Generic[T]):
+class ContentBase[T]:
     r"""The base class for all content dataclasses presented in the UI.
 
     It should be noted, that while the return type is defined as ``T``
