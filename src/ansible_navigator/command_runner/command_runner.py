@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import logging
 import multiprocessing
+import queue
 import subprocess
 
 from dataclasses import dataclass
@@ -16,6 +18,10 @@ if TYPE_CHECKING:
     from queue import Queue
 
     from ansible_navigator.utils.definitions import LogMessage
+
+logger = logging.getLogger(__name__)
+
+_WORKER_TIMEOUT = 30
 
 
 PROCESSES = (multiprocessing.cpu_count() - 1) or 1
@@ -96,7 +102,11 @@ def worker(
         if command is None:
             break
         run_command(command)
-        command.post_process(command)
+        try:
+            command.post_process(command)
+        except Exception as exc:
+            command.errors = str(exc)
+            logger.exception("post_process failed for command %s", command.identity)
         completed_queue.put(command)
 
 
@@ -137,29 +147,55 @@ class CommandRunner:
 
         Returns:
             The results from running all commands
+
+        Raises:
+            RuntimeError: If all workers terminate before all commands complete
         """
         if self._completed_queue is None:
             self._completed_queue = multiprocessing.Manager().Queue()
         if self._pending_queue is None:
             self._pending_queue = multiprocessing.Manager().Queue()
 
-        self.start_workers(commands)
+        workers = self.start_workers(commands)
         results: list[Command] = []
         while len(results) != len(commands):
-            results.append(self._completed_queue.get())
+            try:
+                result = self._completed_queue.get(timeout=_WORKER_TIMEOUT)
+                results.append(result)
+            except queue.Empty:
+                alive_workers = [w for w in workers if w.is_alive()]
+                if not alive_workers:
+                    failed = len(commands) - len(results)
+                    msg = (
+                        f"All worker processes have terminated but {failed} of "
+                        f"{len(commands)} commands did not complete. "
+                        f"Worker processes may have crashed."
+                    )
+                    raise RuntimeError(msg)  # noqa: B904
+                logger.debug(
+                    "Waiting for %d workers (%d/%d results collected)",
+                    len(alive_workers),
+                    len(results),
+                    len(commands),
+                )
+        for w in workers:
+            w.join()
         return results
 
-    def start_workers(self, jobs: list[Command]) -> None:
+    def start_workers(self, jobs: list[Command]) -> list[multiprocessing.Process]:
         """Start the workers.
 
         Args:
             jobs: List of commands to be run
 
+        Returns:
+            The list of started worker processes
+
         Raises:
-            RuntimeError: if the assertion fails
+            RuntimeError: if the pending queue is not initialized
         """
         worker_count = min(len(jobs), PROCESSES)
-        processes = []
+        processes: list[multiprocessing.Process] = []
         for _proc in range(worker_count):
             proc = multiprocessing.Process(
                 target=worker,
@@ -173,5 +209,4 @@ class CommandRunner:
             self._pending_queue.put(job)
         for _proc in range(worker_count):
             self._pending_queue.put(None)
-        for proc in processes:
-            proc.join()
+        return processes

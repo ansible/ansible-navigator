@@ -5,8 +5,8 @@ on:
   merge_group:
     branches:
       - "main"
-  push:
-    branches:
+  push: # only publishes pushes to the main branch to TestPyPI
+    branches: # any integration branch but not tag.
       - "main"
   pull_request:
     branches:
