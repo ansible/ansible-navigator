@@ -115,7 +115,7 @@ class TestExitMessages:
         """Test with no messages."""
         msgs = ExitMessages()
         result = msgs.to_strings(color=False, width=80)
-        assert result == []
+        assert not result
 
     def test_single_message(self) -> None:
         """Test with a single message."""

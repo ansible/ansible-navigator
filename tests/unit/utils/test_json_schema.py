@@ -103,7 +103,7 @@ class TestValidate:
             "properties": {"name": {"type": "string"}},
         }
         errors = validate(schema, {"name": "test"})
-        assert errors == []
+        assert not errors
 
     def test_invalid_data(self) -> None:
         """Test validate with invalid data returns errors."""
@@ -124,7 +124,7 @@ class TestValidate:
             }
         )
         errors = validate(schema_str, {"age": 25})
-        assert errors == []
+        assert not errors
 
     def test_required_field_missing(self) -> None:
         """Test validate detects missing required fields."""

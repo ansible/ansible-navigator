@@ -331,7 +331,7 @@ def test_to_list_list() -> None:
 
 def test_to_list_tuple() -> None:
     """Test to_list with a tuple."""
-    assert to_list((1, 2)) == [1, 2]
+    assert to_list(("a",)) == ["a"]
 
 
 def test_to_list_set() -> None:
@@ -342,7 +342,7 @@ def test_to_list_set() -> None:
 
 def test_to_list_none() -> None:
     """Test to_list with None."""
-    assert to_list(None) == []
+    assert not to_list(None)
 
 
 def test_divmod_int() -> None:

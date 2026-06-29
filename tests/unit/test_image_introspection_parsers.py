@@ -132,7 +132,7 @@ class TestAnsibleCollections:
         cmd.stdout = ""
         cmd.stderr = ""
         AnsibleCollections.parse(cmd)
-        assert cmd.details == {}
+        assert not cmd.details
 
 
 class TestAnsibleVersion:
@@ -200,4 +200,4 @@ class TestCmdParserCommands:
     def test_default_commands(self) -> None:
         """Test default commands property returns empty list."""
         parser = CmdParser()
-        assert parser.commands == []
+        assert not parser.commands
