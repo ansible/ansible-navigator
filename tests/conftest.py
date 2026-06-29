@@ -381,7 +381,7 @@ def pytest_sessionstart(session: pytest.Session) -> None:
     )
 
 
-USER_ENVIRONMENT = {}
+USER_ENVIRONMENT: dict[str, str] = {}
 
 
 def is_config_empty(filename: Path) -> bool:
