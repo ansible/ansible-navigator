@@ -1,0 +1,102 @@
+"""Tests for the print utility module."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from ansible_navigator.ui_framework.curses_defs import SimpleLinePart
+from ansible_navigator.utils.print import color_bits
+from ansible_navigator.utils.print import color_lines
+
+
+if TYPE_CHECKING:
+    import pytest
+
+
+class TestColorBits:
+    """Tests for the color_bits function."""
+
+    def test_truecolor(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test COLORTERM=truecolor returns 24."""
+        monkeypatch.setenv("COLORTERM", "truecolor")
+        assert color_bits() == 24
+
+    def test_24bit(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test COLORTERM=24bit returns 24."""
+        monkeypatch.setenv("COLORTERM", "24bit")
+        assert color_bits() == 24
+
+    def test_256color_term(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test TERM=xterm-256color returns 8."""
+        monkeypatch.delenv("COLORTERM", raising=False)
+        monkeypatch.setenv("TERM", "xterm-256color")
+        assert color_bits() == 8
+
+    def test_16color_term(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test TERM=xterm-16color returns 4."""
+        monkeypatch.delenv("COLORTERM", raising=False)
+        monkeypatch.setenv("TERM", "xterm-16color")
+        assert color_bits() == 4
+
+    def test_no_env_vars(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test fallback with no color env vars returns 4."""
+        monkeypatch.delenv("COLORTERM", raising=False)
+        monkeypatch.delenv("TERM", raising=False)
+        assert color_bits() == 4
+
+    def test_plain_term(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test TERM=xterm (no color suffix) returns 4."""
+        monkeypatch.delenv("COLORTERM", raising=False)
+        monkeypatch.setenv("TERM", "xterm")
+        assert color_bits() == 4
+
+
+class TestColorLines:
+    """Tests for the color_lines function."""
+
+    def test_24bit_with_color(self) -> None:
+        """Test 24-bit color output."""
+        tokenized = [[SimpleLinePart(chars="red", column=0, color=(255, 0, 0), style=None)]]
+        result = color_lines(24, tokenized)
+        assert "\033[38;2;255;0;0m" in result
+        assert "red" in result
+
+    def test_24bit_none_color(self) -> None:
+        """Test 24-bit with None color defaults to white."""
+        tokenized = [[SimpleLinePart(chars="text", column=0, color=None, style=None)]]
+        result = color_lines(24, tokenized)
+        assert "\033[38;2;255;255;255m" in result
+        assert "text" in result
+
+    def test_8bit_none_color(self) -> None:
+        """Test 8-bit with None color uses ansi_color 1."""
+        tokenized = [[SimpleLinePart(chars="text", column=0, color=None, style=None)]]
+        result = color_lines(8, tokenized)
+        assert "\033[38;5;1m" in result
+
+    def test_multiple_parts(self) -> None:
+        """Test multiple parts in a line."""
+        tokenized = [
+            [
+                SimpleLinePart(chars="red", column=0, color=(255, 0, 0), style=None),
+                SimpleLinePart(chars="green", column=3, color=(0, 255, 0), style=None),
+            ]
+        ]
+        result = color_lines(24, tokenized)
+        assert "red" in result
+        assert "green" in result
+
+    def test_empty_input(self) -> None:
+        """Test empty input."""
+        result = color_lines(24, [])
+        assert result == ""
+
+    def test_multiple_lines(self) -> None:
+        """Test multiple lines."""
+        tokenized = [
+            [SimpleLinePart(chars="line1", column=0, color=(255, 0, 0), style=None)],
+            [SimpleLinePart(chars="line2", column=0, color=(0, 0, 255), style=None)],
+        ]
+        result = color_lines(24, tokenized)
+        assert "line1" in result
+        assert "line2" in result
