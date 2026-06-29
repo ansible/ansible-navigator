@@ -8,6 +8,7 @@ automounts
 autorefs
 basesystem
 caplog
+capsys
 cliconf             # Ansible network cli abstraction plugin
 codeclimate
 colname
@@ -60,6 +61,7 @@ oldmask
 oneline
 onigurumacffi
 oxfordcomma
+pathobj
 preclear
 precommand
 premanent
