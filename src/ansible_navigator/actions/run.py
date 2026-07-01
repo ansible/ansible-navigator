@@ -55,7 +55,6 @@ if TYPE_CHECKING:
     from ansible_navigator.app_public import AppPublic
     from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
-
 RESULT_TO_COLOR = [
     ("(?i)^failed$", 9),
     ("(?i)^ok$", 10),
@@ -302,6 +301,21 @@ class Action(ActionBase):
             )
         return RunStdoutReturn(message="", return_code=return_code)
 
+    def pre_run_stdout(self) -> RunStdoutReturn:
+        # Ensure the playbook and inventory are valid
+
+        if isinstance(self._args.playbook, str):
+            playbook_valid = Path(self._args.playbook).exists()
+        else:
+            playbook_valid = False
+
+        if not playbook_valid:
+            return RunStdoutReturn(
+                message=f'Playbook "{self._args.playbook}" does not exist', return_code=1
+            )
+
+        return RunStdoutReturn(message="", return_code=0)
+
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Run :run or :replay.
 
@@ -335,7 +349,7 @@ class Action(ActionBase):
 
         self.steps.append(self._plays)
 
-        # Show a notification until the first the first message from the queue is processed
+        # Show a notification until the first message from the queue is processed
         if self._subaction_type == "run":
             messages = ["Preparing for automation, please wait..."]
             notification = nonblocking_notification(messages=messages)

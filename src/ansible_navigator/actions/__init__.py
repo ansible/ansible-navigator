@@ -48,5 +48,17 @@ run_action: Callable[
     Interaction | None,
 ] = actions.run_interactive_factory(__package__)
 
+pre_run_action_stdout: Callable[
+    [str, ApplicationConfiguration],
+    RunStdoutReturn,
+] = actions.pre_run_stdout_factory(
+    __package__,
+)
+
+pre_run_action: Callable[
+    [str, AppPublic, Interaction],
+    Interaction | None,
+] = actions.pre_run_interactive_factory(__package__)
+
 
 __all__ = ["get", "kegexes", "names", "run_action", "run_action_stdout"]

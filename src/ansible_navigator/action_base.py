@@ -171,6 +171,11 @@ class ActionBase:
         Defined in the child class if necessary.
         """
 
+    # TODO: Create PreRun Stdout class
+    def pre_run_stdout(self) -> RunStdoutReturn:
+        """Performs pre-run tasks, such as fail-fast checks."""
+        return RunStdoutReturn(message="", return_code=0)
+
     def run_stdout(self) -> RunStdoutReturn:
         """Provide a message saying subcommand does not support mode stdout.
 

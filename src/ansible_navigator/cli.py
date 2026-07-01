@@ -23,6 +23,7 @@ from .action_defs import RunInteractiveReturn
 from .action_defs import RunReturn
 from .action_defs import RunStdoutReturn
 from .action_runner import ActionRunner
+from .actions import pre_run_action_stdout
 from .actions import run_action_stdout
 from .configuration_subsystem import Constants
 from .configuration_subsystem import NavigatorConfiguration
@@ -153,6 +154,36 @@ def run(args: ApplicationConfiguration) -> ActionReturn:
     return RunReturn(message="", return_code=0)
 
 
+def pre_run_validation(args: ApplicationConfiguration) -> ActionReturn:
+    """Pre-run validation for the appropriate subcommand for failing earlier.
+
+    Args:
+        args: The current application settings
+
+    Returns:
+        A message to display and a return code
+    """
+    if args.mode == "stdout":
+        try:
+            result = pre_run_action_stdout(args.app.replace("-", "_"), args)
+        except KeyboardInterrupt:
+            logger.warning("Dirty exit, killing the pid")
+            os.kill(os.getpid(), signal.SIGTERM)
+            # TODO: Create new class for PreRunReturns
+            return RunStdoutReturn(message="", return_code=1)
+        return result
+    # if args.mode == "interactive":
+    #     try:
+    #         clear_screen()
+    #         wrapper(ActionRunner(args=args).pre_run)
+    #         return RunInteractiveReturn(message="", return_code=0)
+    #     except KeyboardInterrupt:
+    #         logger.warning("Dirty exit, killing the pid")
+    #         os.kill(os.getpid(), signal.SIGTERM)
+    #         return RunInteractiveReturn(message="", return_code=1)
+    return RunReturn(message="", return_code=0)
+
+
 def main() -> None:
     """Start application here."""
     messages: list[LogMessage] = log_dependencies()
@@ -202,6 +233,16 @@ def main() -> None:
         error_and_exit_early(exit_messages=exit_messages)
 
     os.environ.setdefault("ESCDELAY", "25")
+
+    pre_run_validation_return = pre_run_validation(args)
+    pre_run_validation_message = f"{pre_run_validation_return.message}\n"
+    if pre_run_validation_return.return_code != 0 and pre_run_validation_return.message:
+        sys.stderr.write(pre_run_validation_message)
+        sys.exit(pre_run_validation_return.return_code)
+    elif pre_run_validation_return.return_code != 0:
+        sys.exit(pre_run_validation_return.return_code)
+    elif pre_run_validation_return.message:
+        sys.stdout.write(pre_run_validation_message)
 
     if args.execution_environment:
         pull_image(args)
