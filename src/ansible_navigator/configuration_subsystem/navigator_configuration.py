@@ -100,7 +100,6 @@ class Internals:
     cache_path: Path = generate_cache_path(APP_NAME.replace("_", "-"))  # noqa: RUF009
     collection_doc_cache: C | KeyValueStore = C.NOT_SET
     initializing: bool = False
-    """This is an initial run (app starting for the first time)."""
     initialization_exit_messages = initialization_exit_messages
     initialization_messages = initialization_messages
     settings_file_path: str | None = None

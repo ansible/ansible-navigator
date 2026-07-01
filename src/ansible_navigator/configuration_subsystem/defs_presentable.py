@@ -29,15 +29,20 @@ EntT = TypeVar("EntT", bound="PresentableSettingsEntry")
 
 @dataclass(frozen=True)
 class PresentableCliParameters:
-    """A settings entry's cli parameters in a presentable structure."""
+    """A settings entry's cli parameters in a presentable structure.
+
+    Attributes:
+        NO_LONG_MSG: Default message when no long CLI parameter exists.
+        NO_SHORT_MSG: Default message when no short CLI parameter exists.
+        long: The long cli parameter value.
+        short: The short cli parameter value.
+    """
 
     NO_LONG_MSG: ClassVar[str] = "No long CLI parameter"
     NO_SHORT_MSG: ClassVar[str] = "No short CLI parameter"
 
     long: str = NO_LONG_MSG
-    """The long cli parameter value"""
     short: str = NO_SHORT_MSG
-    """The short cli parameter value"""
 
     @classmethod
     def from_cli_params(
@@ -64,34 +69,37 @@ class PresentableCliParameters:
 @dataclass
 class PresentableSettingsEntry(ContentBase[Any]):
     # pylint: disable=too-many-instance-attributes
-    """A settings entry in a presentable structure."""
+    """A settings entry in a presentable structure.
+
+    Attributes:
+        choices: The possible values.
+        current_settings_file: The path to the current settings file.
+        current_value: The current, effective value.
+        default_value: The default value.
+        default: Indicates if the current value == the default.
+        description: A short description.
+        env_var: The environment variable.
+        name: The name.
+        settings_file_sample: A sample settings file snippet.
+        source: The source of the current value.
+        subcommands: A list of subcommands where this entry is available.
+        version_added: The version this entry was added in.
+        cli_parameters: The cli parameters.
+    """
 
     choices: list[str | bool]
-    """The possible values"""
     current_settings_file: str
-    """The path to the current settings file"""
     current_value: PresentableSettingsEntryValue
-    """The current, effective value"""
     default_value: PresentableSettingsEntryValue
-    """The default value"""
     default: bool
-    """Indicates if the current value == the default"""
     description: str
-    """A short description"""
     env_var: str
-    """The environment variable"""
     name: str
-    """The name"""
     settings_file_sample: str | dict[Any, Any]
-    """A sample settings file snippet"""
     source: str
-    """The source of the current value"""
     subcommands: list[str]
-    """A list of subcommands where this entry is available"""
     version_added: str
-    """The version this entry was added in"""
     cli_parameters: PresentableCliParameters = field(default_factory=PresentableCliParameters)
-    """The CLI parameters, long and short"""
 
     @property
     def current(self) -> str:

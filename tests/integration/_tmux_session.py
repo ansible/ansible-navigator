@@ -219,9 +219,23 @@ class TmuxSession:
             msg = f"Failed to retrieve the 'echo ready' output: {captured}"
             raise ValueError(msg)
 
-        captured = send_and_wait("clear")
-        if len(captured) != 1 or self.cli_prompt not in captured[0]:
-            msg = f"TMUX CLEAR Failure: {captured}."
+        # The final clear needs special handling: send_and_wait returns as soon
+        # as the prompt appears in the last line, but after 'echo ready' that
+        # condition is already satisfied before 'clear' takes effect. So we
+        # poll until the pane truly has only the prompt line.
+        self._pane.send_keys("clear")
+        clear_timeout = time.time() + self._shell_prompt_timeout
+        cleared: list[str] = []
+        while time.time() < clear_timeout:
+            time.sleep(0.1)
+            pane_content = self._pane.capture_pane()
+            if isinstance(pane_content, str):
+                pane_content = [pane_content]
+            cleared = [line for line in pane_content if line != ""]
+            if len(cleared) == 1 and self.cli_prompt in cleared[0]:
+                break
+        else:
+            msg = f"TMUX CLEAR Failure: {cleared}."
             raise ValueError(msg)
 
         return self

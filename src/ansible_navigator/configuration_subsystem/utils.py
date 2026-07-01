@@ -76,26 +76,32 @@ def ansible_verison_parser(command: Command) -> None:
 
 @dataclass
 class AnsibleConfiguration:
-    """Data structure for an ansible.cfg file."""
+    """Data structure for an ansible.cfg file.
+
+    Attributes:
+        contents: The parsed contents of the file.
+        text: The text from the file.
+        path: The path to the file.
+    """
 
     contents: Constants | dict[str, dict[str, bool | int | float | str]] = Constants.NOT_SET
-    """The parsed contents of the file"""
     text: Constants | list[str] = Constants.NOT_SET
-    """The text from the file"""
     path: Constants | Path = Constants.NOT_SET
-    """The path to the file"""
 
 
 @dataclass
 class ParseAnsibleCfgResponse:
-    """Data structure for the response of parse_ansible_cfg."""
+    """Data structure for the response of parse_ansible_cfg.
+
+    Attributes:
+        messages: Log messages.
+        exit_messages: Exit messages.
+        config: An ansible configuration.
+    """
 
     messages: list[LogMessage]
-    """Log messages"""
     exit_messages: list[ExitMessage]
-    """Exit messages"""
     config: AnsibleConfiguration = field(default_factory=AnsibleConfiguration)
-    """An ansible configuration"""
 
 
 def parse_ansible_cfg(ee_enabled: bool) -> ParseAnsibleCfgResponse:

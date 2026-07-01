@@ -29,7 +29,6 @@ class Command(NamedTuple):
     preclear: bool = False
     precommand: str = ""
     raw_append: str = ""
-    """Anything raw that should be appended, and not shlex quoted"""
     subcommand: str | None = None
 
     def join(self) -> str:
