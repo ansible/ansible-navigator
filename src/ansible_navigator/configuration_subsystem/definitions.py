@@ -389,20 +389,23 @@ class VolumeMountError(Exception):
 
 @dataclass(frozen=True)
 class VolumeMount:
-    """Describes EE volume mounts."""
+    """Describes EE volume mounts.
+
+    Attributes:
+        fs_source: The source file system path of the volume mount.
+        fs_destination: The destination file system path in the container for the volume mount.
+        settings_entry: The name of the settings entry requiring this volume mount.
+        source: The settings source for this volume mount.
+        options_string: Comma delimited options.
+        options: Options for the bind mount.
+    """
 
     fs_source: str
-    """The source file system path of the volume mount"""
     fs_destination: str
-    """The destination file system path in the container for the volume mount"""
     settings_entry: str
-    """The name of the settings entry requiring this volume mount"""
     source: Constants = field(compare=False)
-    """The settings source for this volume mount"""
     options_string: InitVar[str]
-    """Comma delimited options"""
     options: tuple[VolumeMountOption, ...] = ()
-    """Options for the bind mount"""
 
     def __post_init__(self, options_string: str) -> None:
         """Post process the ``VolumeMount`` and perform sanity checks.
@@ -496,22 +499,28 @@ class Mode(Enum):
 
 @dataclass
 class ModeChangeRequest:
-    """Data structure to contain a mode change request by a settings entry."""
+    """Data structure to contain a mode change request by a settings entry.
+
+    Attributes:
+        entry: The entry making the request.
+        mode: The desired mode.
+    """
 
     entry: str
-    """The entry making the request"""
     mode: Mode
-    """The desired mode"""
 
 
 @dataclass
 class PaeChangeRequest:
-    """Data structure to hold playbook artifact change request by a settings entry."""
+    """Data structure to hold playbook artifact change request by a settings entry.
+
+    Attributes:
+        entry: The entry making the request.
+        playbook_artifact_enable: The desired value for playbook_artifact_enable.
+    """
 
     entry: str
-    """The entry making the request"""
     playbook_artifact_enable: bool
-    """The desired value for playbook_artifact_enable"""
 
 
 # and some common ones

@@ -22,17 +22,20 @@ TEST_FIXTURE_DIR = Path(FIXTURES_DIR) / "unit" / "configuration_subsystem"
 
 @dataclass
 class Scenario(BaseScenario):
-    """Data for the tests."""
+    """Data for the tests.
+
+    Attributes:
+        comment: The comment for the test.
+        settings_file: The settings file path.
+        messages: Messages expected to be found.
+        command: The command to run.
+    """
 
     comment: str
-    """The comment for the test"""
     settings_file: Path
-    """The settings file path"""
     messages: tuple[str, ...]
-    """Messages expected to be found"""
 
     command: tuple[str, ...] = ("ansible-navigator", "-m", "stdout")
-    """The command to run"""
 
     def __str__(self) -> str:
         """Provide a test id.
