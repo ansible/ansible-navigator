@@ -199,6 +199,21 @@ def test_pull_with_args() -> None:
     assert shlex.split(result) == expected_list
 
 
+def test_pull_with_args_container() -> None:
+    """Ensure Apple Container uses the image pull subcommand shape."""
+    image_puller = ImagePuller(
+        container_engine="container",
+        image="my_image",
+        arguments=["--tls-verify false"],
+        pull_policy="tag",
+    )
+    result = image_puller._generate_pull_command()
+    expected_string = "container image pull --tls-verify false my_image"
+    assert result == expected_string
+    expected_list = ["container", "image", "pull", "--tls-verify", "false", "my_image"]
+    assert shlex.split(result) == expected_list
+
+
 def test_pull_with_env_arg() -> None:
     """Ensure the expansion of env variable in the arguments."""
     image_puller = ImagePuller(

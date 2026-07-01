@@ -284,16 +284,28 @@ class Action(ActionBase):
         self._subaction_type = "playbook"
         self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
         self._run_runner()
-        while True:
-            self._dequeue()
-            if self.runner.finished:
-                if self._args.playbook_artifact_enable:
-                    self.write_artifact()
-                self._logger.debug("runner finished")
-                break
-            # Sleep briefly to prevent 100% CPU utilization
-            # in mode stdout, the delay introduced by the curses key read is not present
-            time.sleep(0.01)
+        try:
+            while True:
+                self._dequeue()
+                if self.runner.finished:
+                    if self._args.playbook_artifact_enable:
+                        self.write_artifact()
+                    self._logger.debug("runner finished")
+                    break
+                # Sleep briefly to prevent 100% CPU utilization
+                # in mode stdout, the delay introduced by the curses key read is not present
+                time.sleep(0.01)
+        except KeyboardInterrupt:
+            self._logger.warning("Keyboard interrupt received, requesting runner cancellation")
+            self.runner.cancelled = True
+            while not self.runner.finished:
+                self._dequeue()
+                time.sleep(0.01)
+            return_code = self.runner.ansible_runner_instance.rc or 1
+            return RunStdoutReturn(
+                message="Please review the log for errors.",
+                return_code=return_code,
+            )
         return_code = self.runner.ansible_runner_instance.rc
         if return_code != 0:
             return RunStdoutReturn(

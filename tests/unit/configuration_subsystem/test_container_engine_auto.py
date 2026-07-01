@@ -49,6 +49,26 @@ def test_ce_auto_docker(
     assert response.application_configuration.container_engine == "docker"
 
 
+def test_ce_auto_container(
+    monkeypatch: pytest.MonkeyPatch,
+    generate_config: GenerateConfigCallable,
+) -> None:
+    """Ensure container is the result when podman and docker are unavailable.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+        generate_config: The configuration generator fixture
+    """
+
+    def which(arg: Any) -> bool:
+        return bool(arg == "container")
+
+    monkeypatch.setattr(shutil, "which", which)
+    response = generate_config()
+    assert response.exit_messages == []
+    assert response.application_configuration.container_engine == "container"
+
+
 def test_ce_auto_none(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
