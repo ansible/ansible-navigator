@@ -951,134 +951,6 @@ tests/unit/utils/test_serialize_dataclass.py
     DOC601: Class `ContentTestOverride`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `ContentTestOverride`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [attr_01: bool, attr_02: int, attr_03: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
 --------------------
-tests/unit/ui_framework/test_validators.py
-    DOC101: Method `TestFieldValidatorsValidFilePath.test_valid_file`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestFieldValidatorsValidFilePath.test_valid_file`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
-    DOC101: Method `TestFieldValidatorsValidFilePath.test_directory_not_file`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestFieldValidatorsValidFilePath.test_directory_not_file`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
-    DOC101: Method `TestFieldValidatorsValidPath.test_valid_directory`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestFieldValidatorsValidPath.test_valid_directory`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
-    DOC101: Method `TestFieldValidatorsValidPathOrNone.test_valid_path`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestFieldValidatorsValidPathOrNone.test_valid_path`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
-    DOC601: Class `MockCheckbox`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC603: Class `MockCheckbox`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [checked: bool]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
---------------------
-tests/unit/utils/test_ansi.py
-    DOC101: Function `test_changed_with_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_changed_with_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_changed_without_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_changed_without_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_failed_with_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_failed_with_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_failed_without_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_failed_without_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_info_with_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_info_with_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_info_without_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_info_without_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_subtle_with_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_subtle_with_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_subtle_without_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_subtle_without_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_success_with_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_success_with_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_success_without_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_success_without_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_warning_with_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_warning_with_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_warning_without_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_warning_without_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_working_with_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_working_with_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_working_without_color`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_working_without_color`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_blank_line`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_blank_line`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str]].
-    DOC101: Function `test_prompt_enter`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_prompt_enter`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_prompt_enter_keyboard_interrupt`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_prompt_enter_keyboard_interrupt`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_prompt_yn_yes`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_prompt_yn_yes`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_prompt_yn_empty`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_prompt_yn_empty`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_prompt_yn_no`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_prompt_yn_no`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_prompt_yn_keyboard_interrupt`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_prompt_yn_keyboard_interrupt`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
---------------------
-tests/unit/utils/test_functions_extended.py
-    DOC101: Function `test_check_for_ansible_found`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_check_for_ansible_found`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_check_for_ansible_not_found`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_check_for_ansible_not_found`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_check_playbook_type_file`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_check_playbook_type_file`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
-    DOC101: Function `test_clear_screen_vscode`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_clear_screen_vscode`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_clear_screen_normal`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_clear_screen_normal`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch].
-    DOC101: Function `test_time_stamp_for_file_exists`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_time_stamp_for_file_exists`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
---------------------
-tests/unit/utils/test_key_value_store_extended.py
-    DOC101: Function `test_path_property`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_path_property`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_set_and_get`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_set_and_get`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_get_missing_key`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_get_missing_key`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_overwrite_value`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_overwrite_value`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_delete_key`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_delete_key`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_delete_missing_key`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_delete_missing_key`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_contains`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_contains`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_len_empty`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_len_empty`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_len_with_items`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_len_with_items`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_iterkeys`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_iterkeys`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_itervalues`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_itervalues`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_iteritems`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_iteritems`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_keys_view`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_keys_view`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_values_view`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_values_view`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_items_view`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_items_view`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_iter`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_iter`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_repr_empty`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_repr_empty`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_repr_with_items`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_repr_with_items`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_close_and_reopen`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_close_and_reopen`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
-    DOC101: Function `test_open_method`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_open_method`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [kvs: KeyValueStore].
-    DOC101: Function `test_init_with_path_object`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `test_init_with_path_object`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
---------------------
-tests/unit/utils/test_print.py
-    DOC101: Method `TestColorBits.test_truecolor`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestColorBits.test_truecolor`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Method `TestColorBits.test_24bit`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestColorBits.test_24bit`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Method `TestColorBits.test_256color_term`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestColorBits.test_256color_term`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Method `TestColorBits.test_16color_term`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestColorBits.test_16color_term`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Method `TestColorBits.test_no_env_vars`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestColorBits.test_no_env_vars`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
-    DOC101: Method `TestColorBits.test_plain_term`: Docstring contains fewer arguments than in function signature.
-    DOC103: Method `TestColorBits.test_plain_term`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [monkeypatch: pytest.MonkeyPatch].
---------------------
 tests/unit/utils/test_serialize_extended.py
     DOC101: Method `TestWriteDiagnosticsJson.test_creates_file`: Docstring contains fewer arguments than in function signature.
     DOC103: Method `TestWriteDiagnosticsJson.test_creates_file`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
@@ -1093,7 +965,14 @@ tests/unit/utils/test_serialize_extended.py
     DOC101: Method `TestSerializeWriteFile.test_write_yaml`: Docstring contains fewer arguments than in function signature.
     DOC103: Method `TestSerializeWriteFile.test_write_yaml`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [tmp_path: Path].
 --------------------
-tests/unit/test_content_defs.py
-    DOC601: Class `SampleContent`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
-    DOC603: Class `SampleContent`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Attributes in the class definition but not in the docstring: [name: str, value: int]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
+docs/_ext/regenerate_docs.py
+    DOC101: Function `_mk_row`: Docstring contains fewer arguments than in function signature.
+    DOC103: Function `_mk_row`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [row: tuple[str, ...]].
+    DOC201: Function `_mk_row` does not have a return section in docstring
+    DOC201: Function `md_settings_dump` does not have a return section in docstring
+    DOC101: Function `_params_row_for_entry`: Docstring contains fewer arguments than in function signature.
+    DOC103: Function `_params_row_for_entry`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [entry: SettingsEntry].
+    DOC201: Function `_params_row_for_entry` does not have a return section in docstring
+    DOC201: Function `_subcommands_overview` does not have a return section in docstring
+    DOC201: Function `md_settings_sample` does not have a return section in docstring
 --------------------
