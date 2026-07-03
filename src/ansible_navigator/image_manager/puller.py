@@ -69,6 +69,22 @@ class ImagePuller:
         self._pull_policy: str = pull_policy
         self._pull_required: bool = False
 
+    def _registry_login_hint(self) -> str:
+        """Build an Apple Container registry login hint.
+
+        Returns:
+            The login hint
+        """
+        registry = "docker.io"
+        if "/" in self._image:
+            first = self._image.split("/", 1)[0]
+            if "." in first or ":" in first or first == "localhost":
+                registry = first
+        return (
+            "For Apple Container and private registries, authenticate first with "
+            f"'container registry login {registry}' and try again"
+        )
+
     def assess(self) -> None:
         """Assess the need to pull."""
         self._extract_tag()
@@ -237,6 +253,8 @@ class ImagePuller:
             self._log_message(level=logging.ERROR, message="Execution environment pull failed")
             if exc.stderr is not None:
                 self._log_message(level=logging.ERROR, message=exc.stderr.decode().strip())
+            if self._container_engine == "container":
+                self._log_message(level=logging.INFO, message=self._registry_login_hint(), hint=True)
             exit_msg = (
                 "Check the execution environment image name, connectivity to and permissions"
                 " for the registry, and try again"

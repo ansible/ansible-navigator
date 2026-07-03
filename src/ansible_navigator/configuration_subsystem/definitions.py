@@ -361,7 +361,8 @@ class VolumeMountOption(Enum):
     Usually these are used for things like selinux relabeling, but there are
     some other valid options as well, which can and should be added here as
     needed. See ``man podman-run`` and ``man docker-run`` for valid choices and
-    keep in mind that we support both runtimes.
+    keep in mind that these relabeling options are runtime-specific and are not
+    expected to apply to Apple Container.
     """
 
     # Overlay
@@ -470,7 +471,7 @@ class VolumeMount:
         object.__setattr__(self, "options", tuple(unique))
 
     def to_string(self) -> str:
-        """Render the volume mount in a way that (docker|podman) understands.
+        """Render the volume mount in a runtime-compatible mount-string form.
 
         Returns:
             File system source and system path for volume mount

@@ -90,6 +90,26 @@ class ImagesList:
             command: Image lister command object
         """
         if command.stdout:
+            if command.stdout.lstrip().startswith("["):
+                raw_images = json.loads(command.stdout)
+                valid_images = []
+                for image in raw_images:
+                    if not isinstance(image, dict):
+                        continue
+                    reference = image.get("configuration", {}).get("name")
+                    image_id = image.get("id")
+                    if not reference or not image_id:
+                        continue
+                    repository, tag = reference.rsplit(":", 1)
+                    valid_images.append(
+                        {
+                            "repository": repository,
+                            "tag": tag,
+                            "image_id": image_id,
+                        },
+                    )
+                command.details = valid_images
+                return
             images = command.stdout.splitlines()
             re_2omo = re.compile(r"\s{2,}")
             headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]

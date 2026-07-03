@@ -234,3 +234,26 @@ def test_pull_with_env_arg() -> None:
     )
     assert "XDG_RUNTIME_DIR" not in proc.stdout
     assert "containers/auth.json" in proc.stdout
+
+
+def test_pull_failure_with_container_auth_hint(mocker) -> None:
+    """Ensure Apple Container pull failures include a registry login hint."""
+    mocker.patch(
+        "subprocess.run",
+        side_effect=subprocess.CalledProcessError(
+            1,
+            "container image pull registry.example.com/ns/image:latest",
+            stderr=b"401 Unauthorized",
+        ),
+    )
+    image_puller = ImagePuller(
+        container_engine="container",
+        image="registry.example.com/ns/image:latest",
+        arguments=Constants.NOT_SET,
+        pull_policy="tag",
+    )
+
+    image_puller.pull_stdout()
+
+    hint_messages = [msg.message for msg in image_puller._exit_messages]
+    assert any("container registry login registry.example.com" in message for message in hint_messages)

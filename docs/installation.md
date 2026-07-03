@@ -61,7 +61,7 @@
 
 ### Requirements (macos)
 
-- [Docker Desktop for Mac] or [Podman on macOS]
+- [Docker Desktop for Mac], [Podman on macOS], or [Apple Container]
 - macOS command line developer tools
 - Internet access (during initial installation)
 
@@ -69,6 +69,9 @@
 
 - [Docker Desktop for Mac] installation instructions
 - [Podman on MacOS] installation instructions
+- [Apple Container] installation instructions
+- For Apple Container-specific requirements, trade-offs, and private-registry
+  usage, see the [Apple Container Guide](apple-container.md)
 
 ### Install ansible-navigator (macos)
 
@@ -243,6 +246,7 @@ From the Ubuntu terminal:
 [podman installation instructions]:
   https://podman.io/getting-started/installation
 [Podman on macOS]: https://podman.io/docs/installation#macos
+[apple container]: https://github.com/apple/container
 [ubuntu]: https://ubuntu.com
 [windows subsystem for linux 2]:
   https://docs.microsoft.com/en-us/windows/wsl/install-win10
