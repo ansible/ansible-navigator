@@ -2,9 +2,9 @@
 
 import json
 
+from ansible_navigator.command_runner.command_runner import Command
 from ansible_navigator.image_manager.inspector import ImagesInspect
 from ansible_navigator.image_manager.inspector import ImagesList
-from ansible_navigator.command_runner.command_runner import Command
 
 
 def test_images_list_command_for_docker_unchanged() -> None:
@@ -37,7 +37,9 @@ def test_images_inspect_command_for_container() -> None:
 
 def test_images_list_parse_for_container_json() -> None:
     """Ensure Apple Container image list JSON is normalized for navigator."""
-    command = Command(identity="images", command="container image list", post_process=ImagesList.parse)
+    command = Command(
+        identity="images", command="container image list", post_process=ImagesList.parse
+    )
     command.stdout = json.dumps(
         [
             {

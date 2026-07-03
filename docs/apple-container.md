@@ -11,8 +11,8 @@ environment container engine.
 
 Use this guide when:
 
-- `--container-engine container` or `execution-environment.container-engine: container`
-  is selected
+- `--container-engine container` or
+  `execution-environment.container-engine: container` is selected
 - execution-environment behavior differs from Docker or Podman
 - you need Apple Container-specific setup, troubleshooting, or operational notes
 
@@ -51,8 +51,8 @@ commands:
 - `container image inspect`
 - `container image list`
 
-For execution-environment runs, `ansible-navigator` passes `container` through to
-`ansible-runner`, which launches the EE using `container run`.
+For execution-environment runs, `ansible-navigator` passes `container` through
+to `ansible-runner`, which launches the EE using `container run`.
 
 ## Passing Apple-specific engine options
 
@@ -105,21 +105,18 @@ ansible-navigator:
 
 ### Notes on important flags
 
-`--ssh`
-  Usually the most useful Apple-specific option. Prefer this when your
-  execution-environment workflow needs access to private Git repositories or
-  other SSH-agent-backed credentials. It is generally cleaner than trying to
-  hand-build equivalent socket mounts.
+`--ssh` Usually the most useful Apple-specific option. Prefer this when your
+execution-environment workflow needs access to private Git repositories or other
+SSH-agent-backed credentials. It is generally cleaner than trying to hand-build
+equivalent socket mounts.
 
-`--virtualization`
-  Exposes virtualization capabilities to the container. Use this only when the
-  workload explicitly requires nested virtualization and the host platform
-  supports it.
+`--virtualization` Exposes virtualization capabilities to the container. Use
+this only when the workload explicitly requires nested virtualization and the
+host platform supports it.
 
-`--rosetta`
-  Enables Rosetta in the container. This is mainly useful for compatibility
-  scenarios where the container workload needs x86_64 userland support on Apple
-  Silicon. It should not be treated as a default setting.
+`--rosetta` Enables Rosetta in the container. This is mainly useful for
+compatibility scenarios where the container workload needs x86_64 userland
+support on Apple Silicon. It should not be treated as a default setting.
 
 ## Authentication model
 

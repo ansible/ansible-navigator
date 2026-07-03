@@ -254,7 +254,9 @@ class ImagePuller:
             if exc.stderr is not None:
                 self._log_message(level=logging.ERROR, message=exc.stderr.decode().strip())
             if self._container_engine == "container":
-                self._log_message(level=logging.INFO, message=self._registry_login_hint(), hint=True)
+                self._log_message(
+                    level=logging.INFO, message=self._registry_login_hint(), hint=True
+                )
             exit_msg = (
                 "Check the execution environment image name, connectivity to and permissions"
                 " for the registry, and try again"

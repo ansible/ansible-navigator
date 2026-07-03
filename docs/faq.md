@@ -240,8 +240,8 @@ that:
 - the key path is available inside the execution environment
 - any custom SSH config or referenced include files are reachable from inside
   the container
-- playbook variables such as `ansible_ssh_private_key_file` point to the path
-  as seen from inside the execution environment, not only on the host
+- playbook variables such as `ansible_ssh_private_key_file` point to the path as
+  seen from inside the execution environment, not only on the host
 
 For Apple Container-specific SSH behavior and option examples, see the
 [Apple Container Guide](apple-container.md).
@@ -418,7 +418,8 @@ environment notes, see the [Apple Container Guide](apple-container.md).
 Apple Container uses its own registry login state. Authenticate first with
 `container registry login <registry>` before running `ansible-navigator` against
 private execution-environment images. `ansible-navigator` and `ansible-runner`
-do not automatically log in or log out Apple Container registries on your behalf.
+do not automatically log in or log out Apple Container registries on your
+behalf.
 
 For the broader Apple Container requirements, trade-offs, and FAQ, see the
 [Apple Container Guide](apple-container.md).

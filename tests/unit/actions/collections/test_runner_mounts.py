@@ -1,7 +1,6 @@
 """Unit tests for collections runner mounts."""
 
 from copy import deepcopy
-
 from pathlib import Path
 
 from ansible_navigator.actions.collections import Action
@@ -22,7 +21,7 @@ def _base_args(tmp_path: Path):
     return args
 
 
-def test_collections_runner_mounts_do_not_use_selinux_labels_for_container(mocker, tmp_path):
+def test_collections_runner_mounts_do_not_use_selinux_labels_for_container(mocker, tmp_path) -> None:
     args = _base_args(tmp_path)
     fake_runner = mocker.patch("ansible_navigator.actions.collections.Command")
     fake_runner.return_value.run.return_value = ("", "", 0)
@@ -35,7 +34,7 @@ def test_collections_runner_mounts_do_not_use_selinux_labels_for_container(mocke
     assert all(not mount.endswith(":z") for mount in mounts)
 
 
-def test_collections_runner_mounts_keep_selinux_labels_for_docker(mocker, tmp_path):
+def test_collections_runner_mounts_keep_selinux_labels_for_docker(mocker, tmp_path) -> None:
     args = _base_args(tmp_path)
     args.entry("container_engine").value.current = "docker"
     fake_runner = mocker.patch("ansible_navigator.actions.collections.Command")

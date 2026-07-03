@@ -256,4 +256,6 @@ def test_pull_failure_with_container_auth_hint(mocker) -> None:
     image_puller.pull_stdout()
 
     hint_messages = [msg.message for msg in image_puller._exit_messages]
-    assert any("container registry login registry.example.com" in message for message in hint_messages)
+    assert any(
+        "container registry login registry.example.com" in message for message in hint_messages
+    )
