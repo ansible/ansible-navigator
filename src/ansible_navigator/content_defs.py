@@ -150,14 +150,17 @@ ContentType = ContentTypeSingle | ContentTypeSequence
 
 @dataclass(frozen=True)
 class CFormat:
-    """A single instance for a content format."""
+    """A single instance for a content format.
+
+    Attributes:
+        scope: The scope, used for tokenization.
+        file_extension: The file extension, with a dot.
+        serialization: If needed the serialization format.
+    """
 
     scope: str
-    """The scope, used for tokenization"""
     file_extension: str
-    """The file extension, with a ."""
     serialization: SerializationFormat | None
-    """If needed the serialization format"""
 
 
 class ContentFormat(Enum):

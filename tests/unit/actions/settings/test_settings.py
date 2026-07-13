@@ -20,16 +20,19 @@ from tests.defaults import id_func
 
 @dataclass
 class ColorMenuTestEntry(BaseScenario):
-    """A test for menu coloring."""
+    """A test for menu coloring.
+
+    Attributes:
+        color: The color for menu entry.
+        comment: Describe the test.
+        decoration: The test decoration.
+        default: Is the current value equal to the default.
+    """
 
     color: int
-    """The color for menu entry"""
     comment: str
-    """Describe the test"""
     decoration: int
-    """The test decoration"""
     default: bool
-    """Is the current value equal to the default"""
 
     def __str__(self) -> str:
         """Provide a string representation.
@@ -89,14 +92,17 @@ def test_color_menu(data: ColorMenuTestEntry) -> None:
 
 @dataclass
 class ContentHeadingEntry(BaseScenario):
-    """A test for content headings."""
+    """A test for content headings.
+
+    Attributes:
+        color: The color for menu entry.
+        comment: Describes the test.
+        content: The content.
+    """
 
     color: int
-    """The color for menu entry"""
     comment: str
-    """Describes the test"""
     content: PresentableSettingsEntry
-    """The content"""
 
     @property
     def heading(self) -> str:

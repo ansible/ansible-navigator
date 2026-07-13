@@ -4,9 +4,11 @@ argnames
 argparser
 argspec
 argvalues
+automounts
 autorefs
 basesystem
 caplog
+capsys
 cliconf             # Ansible network cli abstraction plugin
 codeclimate
 colname
@@ -54,10 +56,12 @@ netcommon           # Ansible network collection, seen in tests and README
 netconf
 nofile
 nonblocking
+normalises
 oldmask
 oneline
 onigurumacffi
 oxfordcomma
+pathobj
 preclear
 precommand
 premanent
@@ -70,6 +74,7 @@ rocannon's
 scap
 scrollback
 somevalue
+statfs
 stripspaces
 subaction
 subschema

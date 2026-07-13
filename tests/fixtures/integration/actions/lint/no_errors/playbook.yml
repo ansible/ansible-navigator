@@ -1,4 +1,5 @@
+---
 - name: Test play
   hosts: localhost
   roles:
-    - no-errors-here
+    - no_errors_here

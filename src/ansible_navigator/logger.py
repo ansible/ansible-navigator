@@ -53,10 +53,21 @@ class Formatter(logging.Formatter):
                 .astimezone()
                 .isoformat()
             )
-        return datetime.datetime.fromtimestamp(
-            record.created,
-            tz=zoneinfo.ZoneInfo(self._time_zone),
-        ).isoformat()
+        if self._time_zone == "UTC":
+            return datetime.datetime.fromtimestamp(
+                record.created,
+                tz=datetime.timezone.utc,
+            ).isoformat()
+        try:
+            return datetime.datetime.fromtimestamp(
+                record.created,
+                tz=zoneinfo.ZoneInfo(self._time_zone),
+            ).isoformat()
+        except zoneinfo.ZoneInfoNotFoundError:
+            return datetime.datetime.fromtimestamp(
+                record.created,
+                tz=datetime.timezone.utc,
+            ).isoformat()
 
 
 def setup_logger(args: ApplicationConfiguration) -> None:
