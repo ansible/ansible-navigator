@@ -37,7 +37,7 @@ base_steps = (
     step_back,
     UiTestStep(user_input=":3", comment="goto Python information", present=["ansible-runner"]),
     step_back,
-    UiTestStep(user_input=":4", comment="goto System information", present=["basesystem"]),
+    UiTestStep(user_input=":4", comment="goto System information", present=["bash"]),
     step_back,
     UiTestStep(user_input=":5", comment="goto Everything", present=["collections:"]),
 )
