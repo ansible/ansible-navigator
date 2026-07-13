@@ -20,6 +20,7 @@ from ansible_navigator.steps import Steps
 from ansible_navigator.ui_framework.ui import Action as Ui_action
 from ansible_navigator.ui_framework.ui import Interaction
 from ansible_navigator.ui_framework.ui import Ui
+from ansible_navigator.utils.functions import remove_ansi
 
 
 if TYPE_CHECKING:
@@ -262,12 +263,12 @@ class ActionRunTest:
 
             # read and restore ``stdout``
             sys.stdout.seek(0)
-            stdout = sys.stdout.read().decode()  # type: ignore[attr-defined]
+            stdout = remove_ansi(sys.stdout.read().decode())  # type: ignore[attr-defined]
             sys.stdout = __stdout__
 
             # read and restore ``stderr``
             sys.stderr.seek(0)
-            stderr = sys.stderr.read().decode()  # type: ignore[attr-defined]
+            stderr = remove_ansi(sys.stderr.read().decode())  # type: ignore[attr-defined]
             sys.stderr = __stderr__
 
         return result, stdout, stderr

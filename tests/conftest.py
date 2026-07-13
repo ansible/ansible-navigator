@@ -34,6 +34,7 @@ from ansible_navigator.content_defs import SerializationFormat
 from ansible_navigator.image_manager.puller import ImagePuller
 from ansible_navigator.utils.functions import console_width
 from ansible_navigator.utils.functions import find_settings_file
+from ansible_navigator.utils.functions import remove_ansi
 from ansible_navigator.utils.packaged_data import ImageEntry
 from ansible_navigator.utils.serialize import Loader
 from ansible_navigator.utils.serialize import serialize_write_file
@@ -331,7 +332,11 @@ def _cmd_in_tty(
                 proc.kill()
             proc.wait()
 
-    return result[m_stdout].decode("utf-8"), result[m_stderr].decode("utf-8"), proc.returncode
+    return (
+        remove_ansi(result[m_stdout].decode("utf-8")),
+        remove_ansi(result[m_stderr].decode("utf-8")),
+        proc.returncode,
+    )
 
 
 @pytest.fixture
