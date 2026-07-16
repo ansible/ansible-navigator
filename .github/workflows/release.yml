@@ -5,13 +5,15 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read # checkout source for the build
+  id-token: write # PyPI trusted publishing (OIDC)
+
 jobs:
   pypi:
     name: Publish to PyPI registry
     environment: release
     runs-on: ubuntu-24.04
-    permissions:
-      id-token: write
 
     env:
       FORCE_COLOR: 1
