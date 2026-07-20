@@ -138,6 +138,26 @@ class TmuxSession:
         self._pane = self._window.panes[0]
         self._window.resize(height=self._pane_height, width=self._pane_width)
 
+        # Verify the pane actually resized; on slow CI runners the resize
+        # can be asynchronous and the TUI may start before the pane has
+        # the requested dimensions.
+        resize_deadline = time.time() + 5
+        while time.time() < resize_deadline:
+            pane_w = self._pane.pane_width
+            pane_h = self._pane.pane_height
+            if (
+                pane_w is not None
+                and pane_h is not None
+                and int(pane_w) == self._pane_width
+                and int(pane_h) == self._pane_height
+            ):
+                break
+            time.sleep(0.1)
+        else:
+            # Last-resort retry: issue the resize one more time.
+            self._window.resize(height=self._pane_height, width=self._pane_width)
+            time.sleep(0.5)
+
         # Figure out where the tox initiated venv is. In environments where a
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we
         # expect inside of tmux, so we can't depend on it. We *must* determine
