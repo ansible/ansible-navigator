@@ -392,10 +392,11 @@ class PythonPackages(CmdParser):
             parsed = [parsed]
         for pkg in parsed:
             for entry in ["required-by", "requires"]:
-                if pkg[entry]:
-                    pkg[entry] = [p.strip() for p in pkg[entry].split(",")]
+                val = pkg[entry]  # pylint: disable=invalid-sequence-index
+                if val:
+                    pkg[entry] = [p.strip() for p in val.split(",")]  # pylint: disable=invalid-sequence-index
                 else:
-                    pkg[entry] = []
+                    pkg[entry] = []  # pylint: disable=invalid-sequence-index
         command.details = parsed
 
     def parse_freeze(self, command: Command) -> None:

@@ -313,7 +313,6 @@ def _cmd_in_tty(
     Returns:
         stdout, stderr, and the exit code
     """
-    # pylint: disable=too-many-locals
     m_stdout, s_stdout = pty.openpty()  # provide tty to enable line-buffering
     m_stderr, s_stderr = pty.openpty()
     m_stdin, s_stdin = pty.openpty()
