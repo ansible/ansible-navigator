@@ -313,6 +313,91 @@ class Action(ActionBase):
             value=self._collections,
         )
 
+    def _process_plugin_for_menu(
+        self,
+        plugin_checksum: str,
+        details: dict[str, Any],
+        selected_collection: dict[str, Any],
+        collection_name: str,
+    ) -> dict[str, Any] | None:
+        """Process a single plugin entry for the collection content menu.
+
+        Args:
+            plugin_checksum: The checksum key for the plugin in the cache
+            details: The plugin details including type information
+            selected_collection: The parent collection data
+            collection_name: The display column name for the collection
+
+        Returns:
+            The processed plugin dict, or None if it could not be loaded
+        """
+        try:
+            plugin_json = self._collection_cache[plugin_checksum]
+            loaded = json.loads(plugin_json)
+
+            plugin = loaded["plugin"]
+            if plugin["doc"] is None:
+                return None
+
+            if "name" in plugin["doc"]:
+                short_name = plugin["doc"]["name"]
+            else:
+                short_name = plugin["doc"][details["type"]]
+            plugin[collection_name] = short_name
+            plugin["full_name"] = f"{selected_collection['known_as']}.{short_name}"
+            plugin["__type"] = details["type"]
+            plugin["collection_info"] = selected_collection["collection_info"]
+            plugin["collection_info"]["name"] = selected_collection["known_as"]
+            plugin["collection_info"]["shadowed_by"] = selected_collection["hidden_by"]
+            plugin["collection_info"]["path"] = selected_collection["path"]
+
+            plugin["__added"] = plugin["doc"].get("version_added")
+            plugin["__description"] = plugin["doc"]["short_description"]
+
+            runtime_section = "modules" if details["type"] == "module" else details["type"]
+            plugin["__deprecated"] = "False"
+            try:
+                routing_info = selected_collection["runtime"]["plugin_routing"]
+                runtime_info = routing_info[runtime_section][short_name]
+                plugin["additional_information"] = runtime_info
+                if "deprecation" in runtime_info:
+                    plugin["__deprecated"] = "True"
+            except KeyError:
+                plugin["additional_information"] = {}
+        except (KeyError, JSONDecodeError) as exc:
+            self._logger.exception("error loading plugin doc %s", details)
+            self._logger.debug("error was %s", str(exc))
+            return None
+        else:
+            return plugin
+
+    def _process_roles_for_menu(
+        self,
+        roles: list[dict[str, Any]],
+        collection_name: str,
+    ) -> list[dict[str, Any]]:
+        """Process roles for the collection content menu.
+
+        Args:
+            roles: The list of role dicts from the collection
+            collection_name: The display column name for the collection
+
+        Returns:
+            The list of processed role dicts ready for menu display
+        """
+        processed = []
+        for role in roles:
+            role[collection_name] = role["short_name"]
+            try:
+                role["__description"] = role["info"]["galaxy_info"]["description"]
+            except KeyError:
+                role["__description"] = ""
+            role["__deprecated"] = "Unknown"
+            role["__added"] = "Unknown"
+            role["__type"] = "role"
+            processed.append(role)
+        return processed
+
     def _build_collection_content_menu(self) -> Step:
         """Build the menu of plugins.
 
@@ -324,55 +409,20 @@ class Action(ActionBase):
         collection_name = f"__{selected_collection['known_as']}"
         collection_contents = []
         for plugin_checksum, details in selected_collection["plugin_checksums"].items():
-            try:
-                plugin_json = self._collection_cache[plugin_checksum]
-                loaded = json.loads(plugin_json)
-
-                plugin = loaded["plugin"]
-                if plugin["doc"] is not None:
-                    if "name" in plugin["doc"]:
-                        short_name = plugin["doc"]["name"]
-                    else:
-                        short_name = plugin["doc"][details["type"]]
-                    plugin[collection_name] = short_name
-                    plugin["full_name"] = f"{selected_collection['known_as']}.{short_name}"
-                    plugin["__type"] = details["type"]
-                    plugin["collection_info"] = selected_collection["collection_info"]
-                    plugin["collection_info"]["name"] = selected_collection["known_as"]
-                    plugin["collection_info"]["shadowed_by"] = selected_collection["hidden_by"]
-                    plugin["collection_info"]["path"] = selected_collection["path"]
-
-                    plugin["__added"] = plugin["doc"].get("version_added")
-                    plugin["__description"] = plugin["doc"]["short_description"]
-
-                    runtime_section = "modules" if details["type"] == "module" else details["type"]
-                    plugin["__deprecated"] = "False"
-                    try:
-                        routing_info = selected_collection["runtime"]["plugin_routing"]
-                        runtime_info = routing_info[runtime_section][short_name]
-                        plugin["additional_information"] = runtime_info
-                        if "deprecation" in runtime_info:
-                            plugin["__deprecated"] = "True"
-                    except KeyError:
-                        plugin["additional_information"] = {}
-
-                    collection_contents.append(plugin)
-            except (KeyError, JSONDecodeError) as exc:
-                self._logger.exception("error loading plugin doc %s", details)
-                self._logger.debug("error was %s", str(exc))
+            plugin = self._process_plugin_for_menu(
+                plugin_checksum,
+                details,
+                selected_collection,
+                collection_name,
+            )
+            if plugin is not None:
+                collection_contents.append(plugin)
 
         self._collection_cache.close()
 
-        for role in selected_collection["roles"]:
-            role[collection_name] = role["short_name"]
-            try:
-                role["__description"] = role["info"]["galaxy_info"]["description"]
-            except KeyError:
-                role["__description"] = ""
-            role["__deprecated"] = "Unknown"
-            role["__added"] = "Unknown"
-            role["__type"] = "role"
-            collection_contents.append(role)
+        collection_contents.extend(
+            self._process_roles_for_menu(selected_collection["roles"], collection_name),
+        )
 
         collection_contents = sorted(collection_contents, key=lambda i: i[collection_name])
 
@@ -397,8 +447,83 @@ class Action(ActionBase):
             index=self.steps.current.index,
         )
 
+    def _setup_ee_pythonpath(
+        self,
+        set_environment_variable: dict[str, Any],
+    ) -> None:
+        """Configure PYTHONPATH for execution environment runs.
+
+        Injects the navigator utils mount path into PYTHONPATH so that
+        the key_value_store module is accessible inside the EE.
+
+        Args:
+            set_environment_variable: The environment variable dict to update in place
+        """
+        ee_navigator_utils_mount = "/opt/ansible_navigator_utils"
+        if "PYTHONPATH" in set_environment_variable:
+            set_environment_variable["PYTHONPATH"].append(
+                f":{ee_navigator_utils_mount}",
+            )
+        else:
+            set_environment_variable["PYTHONPATH"] = f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
+        self._logger.debug(
+            "Execution Environment's PYTHONPATH is set to: %s",
+            set_environment_variable["PYTHONPATH"],
+        )
+
+    def _setup_ee_volume_mounts(
+        self,
+        kwargs: dict[str, Any],
+        playbook_dir: str,
+        cache_path: Path,
+    ) -> str:
+        """Build container volume mounts and return the python executable path for EE runs.
+
+        Args:
+            kwargs: The runner kwargs dict to update with volume mounts
+            playbook_dir: The playbook directory path
+            cache_path: The application cache path
+
+        Returns:
+            The python executable path to use inside the EE
+        """
+        self._logger.debug("running collections command with execution environment enabled")
+        python_exec_path = f"{cache_path}/python_latest.sh"
+        utils_lib = Path(__file__).parent / ".." / "utils"
+
+        container_volume_mounts = [
+            f"{cache_path}:{cache_path}",
+            f"{utils_lib!s}:/opt/ansible_navigator_utils",
+        ]
+        if Path(self._adjacent_collection_dir).exists():
+            container_volume_mounts.append(
+                f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
+            )
+
+        mount_doc_cache = not path_is_relative_to(
+            child=Path(self._args.collection_doc_cache_path),
+            parent=(cache_path),
+        ) and not path_is_relative_to(
+            child=Path(self._args.collection_doc_cache_path),
+            parent=(Path(playbook_dir)),
+        )
+
+        if mount_doc_cache:
+            container_volume_mounts.append(
+                f"{self._args.collection_doc_cache_path}:{self._args.collection_doc_cache_path}:z",
+            )
+
+        for volume_mount in container_volume_mounts:
+            self._logger.debug("Adding volume mount to container invocation: %s", volume_mount)
+
+        if "container_volume_mounts" in kwargs:
+            kwargs["container_volume_mounts"] += container_volume_mounts
+        else:
+            kwargs["container_volume_mounts"] = container_volume_mounts
+
+        return python_exec_path
+
     def _run_runner(self) -> None:
-        # pylint: disable=too-many-locals
         """Use the runner subsystem to catalog collections."""
         if isinstance(self._args.set_environment_variable, dict):
             set_environment_variable = deepcopy(self._args.set_environment_variable)
@@ -406,26 +531,8 @@ class Action(ActionBase):
             set_environment_variable = {}
         set_environment_variable["ANSIBLE_NOCOLOR"] = "True"
 
-        # We mount in the utils directory to /opt/ansible_navigator_utils
-        # We do this so that we can access key_value_store (KVS) from within
-        # the EE. If the Navigator user is overriding PYTHONPATH, we still need
-        # to inject this utils directory into the PYTHONPATH. If not, we'll just
-        # use the EE's default PYTHONPATH (if it exists) and just add our path
-        # at the end.
         if self._args.execution_environment:
-            ee_navigator_utils_mount = "/opt/ansible_navigator_utils"
-            if "PYTHONPATH" in set_environment_variable:
-                set_environment_variable["PYTHONPATH"].append(
-                    f":{ee_navigator_utils_mount}",
-                )
-            else:
-                set_environment_variable["PYTHONPATH"] = (
-                    f"${{PYTHONPATH}}:{ee_navigator_utils_mount}"
-                )
-            self._logger.debug(
-                "Execution Environment's PYTHONPATH is set to: %s",
-                set_environment_variable["PYTHONPATH"],
-            )
+            self._setup_ee_pythonpath(set_environment_variable)
 
         kwargs = {
             "container_engine": self._args.container_engine,
@@ -466,50 +573,7 @@ class Action(ActionBase):
         kwargs["cmdline"] = pass_through_arg
 
         if self._args.execution_environment:
-            self._logger.debug("running collections command with execution environment enabled")
-            python_exec_path = f"{cache_path}/python_latest.sh"
-            utils_lib = Path(__file__).parent / ".." / "utils"
-
-            container_volume_mounts = [
-                # cache directory which has introspection script
-                f"{cache_path}:{cache_path}",
-                # KVS library used by both Navigator and the introspection script
-                f"{utils_lib!s}:/opt/ansible_navigator_utils",
-            ]
-            if Path(self._adjacent_collection_dir).exists():
-                container_volume_mounts.append(
-                    f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
-                )
-
-            mount_doc_cache = True
-            # Determine if the doc_cache is relative to the cache directory
-            if path_is_relative_to(
-                child=Path(self._args.collection_doc_cache_path),
-                parent=(cache_path),
-            ):
-                mount_doc_cache = False
-
-            # The playbook directory will be mounted as host_cwd, so don't duplicate
-            if path_is_relative_to(
-                child=Path(self._args.collection_doc_cache_path),
-                parent=(Path(playbook_dir)),
-            ):
-                mount_doc_cache = False
-
-            if mount_doc_cache:
-                container_volume_mounts.append(
-                    f"{self._args.collection_doc_cache_path}:"
-                    f"{self._args.collection_doc_cache_path}:z",
-                )
-
-            for volume_mount in container_volume_mounts:
-                self._logger.debug("Adding volume mount to container invocation: %s", volume_mount)
-
-            if "container_volume_mounts" in kwargs:
-                kwargs["container_volume_mounts"] += container_volume_mounts
-            else:
-                kwargs["container_volume_mounts"] = container_volume_mounts
-
+            python_exec_path = self._setup_ee_volume_mounts(kwargs, playbook_dir, cache_path)
         else:
             self._logger.debug("running collections command locally")
             python_exec_path = sys.executable
@@ -531,17 +595,15 @@ class Action(ActionBase):
         if output:
             self._parse(output)
 
-    def _parse(self, output: str) -> None:
-        """Load and process the ``json`` output from the collection cataloging process.
+    def _extract_json_output(self, output: str) -> dict[str, Any] | None:
+        """Extract and parse JSON from the collection cataloging output.
 
         Args:
-            output: The output from the collection cataloging process
+            output: The raw output string that may contain warnings before JSON
 
         Returns:
-            Nothing
+            The parsed JSON dict, or None if parsing failed
         """
-        # pylint: disable=too-many-locals
-
         try:
             if not output.startswith("{"):
                 _warnings, json_str = output.split("{", 1)
@@ -554,6 +616,80 @@ class Action(ActionBase):
             self._logger.exception("Unable to extract collection json from stdout")
             self._logger.debug("error json loading output: '%s'", str(exc))
             self._logger.debug(output)
+            return None
+        return parsed
+
+    def _get_dest_volume_mounts(self) -> tuple[str, ...]:
+        """Build a tuple of destination volume mount paths for collection type detection.
+
+        Returns:
+            A tuple of destination paths derived from execution environment volume mounts
+        """
+        volume_mounts = self.app.args.execution_environment_volume_mounts
+        if not isinstance(volume_mounts, list):
+            return ()
+
+        tmp_list = []
+        for mount in volume_mounts:
+            source_str, destination_str = mount.split(":")[0:2]
+            if not Path(source_str).is_dir():
+                continue
+            dest_path = Path(destination_str)
+            if dest_path.parent.name == "ansible_collections":
+                continue
+            if dest_path.parent.parent.name == "ansible_collections":
+                continue
+            if dest_path.name != "ansible_collections":
+                dest_path /= "ansible_collections"
+            tmp_list.append(str(dest_path))
+        return tuple(tmp_list)
+
+    def _annotate_collection(
+        self,
+        collection: dict[str, Any],
+        dest_volume_mounts: tuple[str, ...],
+    ) -> None:
+        """Annotate a single collection with display metadata.
+
+        Adds __name, __version, __shadowed, and (for EE runs) __type fields.
+
+        Args:
+            collection: The collection dict to annotate in place
+            dest_volume_mounts: Destination volume mount paths for type detection
+        """
+        collection["__name"] = collection["known_as"]
+        collection["__version"] = collection["collection_info"].get("version", "missing")
+        collection["__shadowed"] = bool(collection["hidden_by"])
+        if not self._args.execution_environment:
+            return
+
+        if collection["path"].startswith(dest_volume_mounts) or collection["path"].startswith(
+            self._adjacent_collection_dir,
+        ):
+            collection["__type"] = "bind_mount"
+        elif collection["path"].startswith(f"{Path(self._adjacent_collection_dir).parent}"):
+            collection["__type"] = "bind_mount"
+            error = (
+                f"{collection['known_as']} was mounted and catalogued in the"
+                " execution environment but was outside the adjacent 'collections'"
+                " directory. This may cause issues outside the local development"
+                " environment."
+            )
+            self._logger.error(error)
+        else:
+            collection["__type"] = "contained"
+
+    def _parse(self, output: str) -> None:
+        """Load and process the ``json`` output from the collection cataloging process.
+
+        Args:
+            output: The output from the collection cataloging process
+
+        Returns:
+            Nothing
+        """
+        parsed = self._extract_json_output(output)
+        if parsed is None:
             return
 
         for error in parsed["errors"]:
@@ -563,48 +699,11 @@ class Action(ActionBase):
             parsed["collections"].values(),
             key=lambda i: i["known_as"],
         )
-        volume_mounts = self.app.args.execution_environment_volume_mounts
-        if isinstance(volume_mounts, list):
-            tmp_list = []
-            for mount in volume_mounts:
-                source_str, destination_str = mount.split(":")[0:2]
-                if not Path(source_str).is_dir():
-                    continue
-                dest_path = Path(destination_str)
-                # /x/ansible_collections/co:/x/ansible_collections/co
-                if dest_path.parent.name == "ansible_collections":
-                    continue
-                # /x/ansible_collections/co/ns:/x/ansible_collections/co/ns
-                if dest_path.parent.parent.name == "ansible_collections":
-                    continue
-                # /x:/x
-                if dest_path.name != "ansible_collections":
-                    dest_path /= "ansible_collections"
-                tmp_list.append(str(dest_path))
-            dest_volume_mounts = tuple(tmp_list)
-        else:
-            dest_volume_mounts = ()
+
+        dest_volume_mounts = self._get_dest_volume_mounts()
 
         for collection in self._collections:
-            collection["__name"] = collection["known_as"]
-            collection["__version"] = collection["collection_info"].get("version", "missing")
-            collection["__shadowed"] = bool(collection["hidden_by"])
-            if self._args.execution_environment:
-                if collection["path"].startswith(dest_volume_mounts) or collection[
-                    "path"
-                ].startswith(self._adjacent_collection_dir):
-                    collection["__type"] = "bind_mount"
-                elif collection["path"].startswith(f"{Path(self._adjacent_collection_dir).parent}"):
-                    collection["__type"] = "bind_mount"
-                    error = (
-                        f"{collection['known_as']} was mounted and catalogued in the"
-                        " execution environment but was outside the adjacent 'collections'"
-                        " directory. This may cause issues outside the local development"
-                        " environment."
-                    )
-                    self._logger.error(error)
-                else:
-                    collection["__type"] = "contained"
+            self._annotate_collection(collection, dest_volume_mounts)
 
         self._stats = parsed["stats"]
 
@@ -622,6 +721,56 @@ class Action(ActionBase):
             error = f"No collections found in {env} environment, searched in "
             error += parsed["collection_scan_paths"]
             self._logger.warning(error)
+
+    def _extract_single_plugin_details(
+        self,
+        plugin_checksum: str,
+        plugin_info: dict[str, Any],
+        selected_collection: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Extract details for a single plugin from the cache.
+
+        Args:
+            plugin_checksum: The checksum key for the plugin in the cache
+            plugin_info: The plugin info dict containing type and path
+            selected_collection: The parent collection data
+
+        Returns:
+            A dict with path, full_name, and optionally short_description
+        """
+        plugin_type = plugin_info.get("type")
+        plugin_json = self._collection_cache[plugin_checksum]
+        loaded = json.loads(plugin_json)
+
+        plugin = loaded.get("plugin")
+        plugin_docs: dict[str, Any] = {}
+        plugin_path = Path(selected_collection.get("path", "")) / Path(
+            plugin_info.get("path", ""),
+        )
+        plugin_docs["path"] = str(plugin_path)
+        if plugin and plugin["doc"] is not None:
+            try:
+                if "name" in plugin["doc"]:
+                    short_name = plugin["doc"]["name"]
+                else:
+                    short_name = plugin["doc"][plugin_type]
+            except (KeyError, TypeError) as exc:
+                short_name = None
+                self._logger.exception(
+                    "Error getting short name from plugin doc %s",
+                    plugin_docs["path"],
+                )
+                self._logger.debug("error was %s", str(exc))
+                self._logger.debug(plugin)
+            if short_name is None:
+                plugin_docs["full_name"] = selected_collection["known_as"]
+            else:
+                plugin_docs["full_name"] = f"{selected_collection['known_as']}.{short_name}"
+
+            if "short_description" in plugin["doc"]:
+                plugin_docs["short_description"] = plugin["doc"]["short_description"]
+
+        return plugin_docs
 
     def _get_collection_plugins_details(
         self,
@@ -643,40 +792,69 @@ class Action(ActionBase):
             if plugin_type not in plugins_details:
                 plugins_details[plugin_type] = []
 
-            plugin_json = self._collection_cache[plugin_checksum]
-            loaded = json.loads(plugin_json)
-
-            plugin = loaded.get("plugin")
-            plugin_docs = {}
-            plugin_path = Path(selected_collection.get("path", "")) / Path(
-                plugin_info.get("path", ""),
+            plugin_docs = self._extract_single_plugin_details(
+                plugin_checksum,
+                plugin_info,
+                selected_collection,
             )
-            plugin_docs["path"] = str(plugin_path)
-            if plugin and plugin["doc"] is not None:
-                try:
-                    if "name" in plugin["doc"]:
-                        short_name = plugin["doc"]["name"]
-                    else:
-                        short_name = plugin["doc"][plugin_type]
-                except (KeyError, TypeError) as exc:
-                    short_name = None
-                    self._logger.exception(
-                        "Error getting short name from plugin doc %s",
-                        plugin_docs["path"],
-                    )
-                    self._logger.debug("error was %s", str(exc))
-                    self._logger.debug(plugin)
-                if short_name is None:
-                    plugin_docs["full_name"] = selected_collection["known_as"]
-                else:
-                    plugin_docs["full_name"] = f"{selected_collection['known_as']}.{short_name}"
-
-                if "short_description" in plugin["doc"]:
-                    plugin_docs["short_description"] = plugin["doc"]["short_description"]
-
             plugins_details[plugin_type].append(plugin_docs)
 
         return plugins_details
+
+    @staticmethod
+    def _filter_roles_for_stdout(
+        roles: list[dict[str, Any]],
+        exclude_keys: list[str],
+    ) -> list[dict[str, Any]]:
+        """Filter excluded keys from role dicts for stdout display.
+
+        Args:
+            roles: The list of role dicts to filter
+            exclude_keys: Keys to exclude from each role dict
+
+        Returns:
+            A list of role dicts with excluded keys removed
+        """
+        filtered = []
+        for role in roles:
+            updated_role_info = {k: v for k, v in role.items() if k not in exclude_keys}
+            filtered.append(updated_role_info)
+        return filtered
+
+    def _format_collection_for_stdout(
+        self,
+        collection: dict[str, Any],
+        collection_exclude_keys: list[str],
+        roles_exclude_keys: list[str],
+    ) -> dict[str, Any]:
+        """Format a single collection for stdout display.
+
+        Args:
+            collection: The collection dict to format
+            collection_exclude_keys: Top-level keys to exclude
+            roles_exclude_keys: Keys to exclude from role entries
+
+        Returns:
+            The formatted collection dict with plugins details attached
+        """
+        plugins_details = self._get_collection_plugins_details(collection)
+
+        collection_stdout: dict[str, Any] = {}
+        for info_name, info_value in collection.items():
+            info_name = remove_dbl_un(info_name)
+            if info_name in collection_exclude_keys:
+                continue
+
+            if info_name == "roles":
+                collection_stdout["roles"] = self._filter_roles_for_stdout(
+                    info_value,
+                    roles_exclude_keys,
+                )
+            else:
+                collection_stdout[info_name] = info_value
+
+        collection_stdout["plugins"] = plugins_details
+        return collection_stdout
 
     def _parse_collection_info_stdout(self) -> dict[str, Any]:
         """Parse collection information from catalog collection cache.
@@ -684,9 +862,6 @@ class Action(ActionBase):
         Returns:
             The collection information to be displayed on stdout
         """
-        collections_info: dict[str, Any] = {
-            "collections": [],
-        }
         collection_exclude_keys = [
             "file_manifest_file",
             "format",
@@ -697,29 +872,16 @@ class Action(ActionBase):
         roles_exclude_keys = ["readme"]
 
         self._collection_cache.open_()
-        for collection in self._collections:
-            plugins_details = self._get_collection_plugins_details(collection)
-
-            collection_stdout: dict[str, Any] = {}
-            for info_name, info_value in collection.items():
-                info_name = remove_dbl_un(info_name)
-                if info_name in collection_exclude_keys:
-                    continue
-
-                if info_name == "roles":
-                    collection_stdout["roles"] = []
-                    for role in info_value:
-                        updated_role_info = {}
-                        for role_info_key, role_info_value in role.items():
-                            if role_info_key in roles_exclude_keys:
-                                continue
-                            updated_role_info[role_info_key] = role_info_value
-                        collection_stdout["roles"].append(updated_role_info)
-                else:
-                    collection_stdout[info_name] = info_value
-
-            collection_stdout["plugins"] = plugins_details
-            collections_info["collections"].append(collection_stdout)
+        collections_info: dict[str, Any] = {
+            "collections": [
+                self._format_collection_for_stdout(
+                    collection,
+                    collection_exclude_keys,
+                    roles_exclude_keys,
+                )
+                for collection in self._collections
+            ],
+        }
         self._collection_cache.close()
 
         return collections_info
