@@ -127,6 +127,7 @@ class TmuxSession:
             The tmux session
 
         Raises:
+            RuntimeError: If the tmux pane resize fails after retry
             ValueError: If the time is exceeded for finding the shell
                 prompt
         """
@@ -157,6 +158,19 @@ class TmuxSession:
             # Last-resort retry: issue the resize one more time.
             self._window.resize(height=self._pane_height, width=self._pane_width)
             time.sleep(0.5)
+            # Verify retry succeeded
+            pane = self._window.active_pane
+            if (
+                pane
+                and pane.pane_width is not None
+                and pane.pane_height is not None
+                and (
+                    int(pane.pane_width) != self._pane_width
+                    or int(pane.pane_height) != self._pane_height
+                )
+            ):
+                msg = f"tmux pane resize failed: wanted {self._pane_width}x{self._pane_height}"
+                raise RuntimeError(msg)
 
         # Figure out where the tox initiated venv is. In environments where a
         # venv is activated as part of bashrc, $VIRTUAL_ENV won't be what we

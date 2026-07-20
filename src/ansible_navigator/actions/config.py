@@ -306,7 +306,7 @@ class Action(ActionBase):
             msg = f"Error occurred while fetching ansible config (dump): '{dump_output_err}'"
             self._logger.error(msg)
 
-        err_msg = "\n".join({list_output_err, dump_output_err})
+        err_msg = "\n".join(e for e in (list_output_err, dump_output_err) if e)
         if "ERROR!" in err_msg or not list_output or not dump_output:
             warn_msg = ["Errors were encountered while gathering the configuration:"]
             if err_msg:
@@ -442,7 +442,7 @@ class Action(ActionBase):
             parsed[variable]["__current"] = current_as_str
             parsed[variable]["current_value"] = current
         except KeyError:
-            self._logger.exception("variable '%s' not found in list output")
+            self._logger.exception("variable '%s' not found in list output", variable)
             return False
         return True
 

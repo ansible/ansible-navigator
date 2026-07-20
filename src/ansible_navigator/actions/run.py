@@ -489,11 +489,15 @@ class Action(ActionBase):
         else:
             artifact_valid = False
 
-        if not artifact_valid and self.mode == "interactive":
-            populated_form = self._prompt_for_artifact(artifact_file=artifact_file)
-            if populated_form["cancelled"]:
+        if not artifact_valid:
+            if self.mode == "interactive":
+                populated_form = self._prompt_for_artifact(artifact_file=artifact_file)
+                if populated_form["cancelled"]:
+                    return None
+                artifact_file = populated_form["fields"]["artifact_file"]["value"]
+            else:
+                self._logger.error("Artifact file '%s' not found", artifact_file)
                 return None
-            artifact_file = populated_form["fields"]["artifact_file"]["value"]
 
         return artifact_file
 

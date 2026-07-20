@@ -514,46 +514,6 @@ class Action(ActionBase):
             index=self.steps.current.index,
         )
 
-    def _update_file_timestamps(
-        self,
-        path: str,
-        unix_ts: float | None,
-        iso_ts: str | None,
-    ) -> bool:
-        """Update timestamps for all issues matching the given path.
-
-        Args:
-            path: The file path to match against issues
-            unix_ts: The unix timestamp of the file
-            iso_ts: The ISO formatted timestamp of the file
-
-        Returns:
-            True if any matching issue indicates a rerun is needed
-        """
-        rerun_needed = False
-        for issue in self._issues_menu.value:
-            if issue["__path"] != path:
-                continue
-
-            previous_ts = issue.get("__last_modified")
-            issue["last_modified"] = iso_ts
-            issue["__last_modified"] = unix_ts
-
-            # The file may be gone or non existent
-            if unix_ts is None:
-                continue
-
-            # The may be a first run
-            if previous_ts is None:
-                rerun_needed = True
-                continue
-
-            # Has the file changed
-            if unix_ts > previous_ts:
-                rerun_needed = True
-
-        return rerun_needed
-
     def _rerun_needed(self) -> bool:
         """Add a modification timestamp to each issue, check for changes.
 
@@ -561,14 +521,19 @@ class Action(ActionBase):
             Indication if lint should be rerun
         """
         rerun_lint = False
-        checked_paths: list[str] = []
+        path_timestamps: dict[str, tuple[float | None, str | None]] = {}
         for issue in self._issues_menu.value:
             path = issue["__path"]
-            if path in checked_paths:
-                continue
-            checked_paths.append(path)
-            unix_ts, iso_ts = time_stamp_for_file(path, self._args.time_zone)
-            if self._update_file_timestamps(path, unix_ts, iso_ts):
+            if path not in path_timestamps:
+                path_timestamps[path] = time_stamp_for_file(path, self._args.time_zone)
+
+            unix_ts, iso_ts = path_timestamps[path]
+            previous_ts = issue.get("__last_modified")
+
+            issue["last_modified"] = iso_ts
+            issue["__last_modified"] = unix_ts
+
+            if unix_ts is not None and (previous_ts is None or unix_ts > previous_ts):
                 rerun_lint = True
 
         self._modification_times_last_updated = datetime.now(timezone.utc)

@@ -150,6 +150,9 @@ class Action:
             return
 
         obj = self._resolve_content(interaction)
+        if obj is None:
+            self._logger.error("No menu or content found to write")
+            return
 
         if isinstance(obj, str):
             write_as = ".txt"
