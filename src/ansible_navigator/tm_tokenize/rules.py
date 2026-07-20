@@ -256,10 +256,29 @@ class Rule(NamedTuple):
     repository: FChainMap[str, _Rule]
 
     @classmethod
+    def _parse_captures_key(
+        cls,
+        dct: dict[str, Any],
+        key: str,
+        repository: FChainMap[str, _Rule],
+    ) -> Captures:
+        """Parse a captures key from the grammar dict.
+
+        Args:
+            dct: The grammar dictionary.
+            key: The captures key name.
+            repository: The rule repository.
+
+        Returns:
+            The parsed captures tuple.
+        """
+        if key in dct:
+            return tuple((int(k), Rule.make(v, repository)) for k, v in dct[key].items())
+        return ()
+
+    @classmethod
     def make(cls, dct: dict[str, Any], parent_repository: FChainMap[str, _Rule]) -> _Rule:
         if "repository" in dct:
-            # this looks odd, but it's so we can have a self-referential
-            # immutable-after-construction chain map
             repository_dct: dict[str, _Rule] = {}
             repository = FChainMap(parent_repository, repository_dct)
             for k, sub_dct in dct["repository"].items():
@@ -274,38 +293,14 @@ class Rule(NamedTuple):
         while_ = dct.get("while")
         content_name = _split_name(dct.get("contentName"))
 
-        if "captures" in dct:
-            captures = tuple((int(k), Rule.make(v, repository)) for k, v in dct["captures"].items())
-        else:
-            captures = ()
+        captures = cls._parse_captures_key(dct, "captures", repository)
+        begin_captures = cls._parse_captures_key(dct, "beginCaptures", repository)
+        end_captures = cls._parse_captures_key(dct, "endCaptures", repository)
+        while_captures = cls._parse_captures_key(dct, "whileCaptures", repository)
 
-        if "beginCaptures" in dct:
-            begin_captures = tuple(
-                (int(k), Rule.make(v, repository)) for k, v in dct["beginCaptures"].items()
-            )
-        else:
-            begin_captures = ()
-
-        if "endCaptures" in dct:
-            end_captures = tuple(
-                (int(k), Rule.make(v, repository)) for k, v in dct["endCaptures"].items()
-            )
-        else:
-            end_captures = ()
-
-        if "whileCaptures" in dct:
-            while_captures = tuple(
-                (int(k), Rule.make(v, repository)) for k, v in dct["whileCaptures"].items()
-            )
-        else:
-            while_captures = ()
-
-        # some grammars (at least xml) have begin rules with no end
         if begin is not None and end is None and while_ is None:
             end = "$impossible^"
 
-        # Using the captures key for a begin/end/while rule is short-hand for
-        # giving both beginCaptures and endCaptures with same values
         if begin and end and captures:
             begin_captures = end_captures = captures
             captures = ()
@@ -393,6 +388,40 @@ class WhileRule(NamedTuple):
         return do_regset(idx, match, self, compiler, state, pos)
 
 
+def _backtrack_capture(
+    compiler: Compiler,
+    ret: list[Region],
+    start: int,
+    end: int,
+    group_s: str,
+    rule: CompiledRule,
+) -> None:
+    """Handle a capture group that starts before the current position.
+
+    Args:
+        compiler: The grammar compiler.
+        ret: The regions list to splice into.
+        start: The start of the capture group.
+        end: The end of the capture group.
+        group_s: The captured string.
+        rule: The compiled rule for the capture.
+    """
+    j = len(ret) - 1
+    while j > 0 and start < ret[j - 1].end:
+        j -= 1
+
+    oldtok = ret[j]
+    newtok = []
+    if start > oldtok.start:
+        newtok.append(oldtok._replace(end=start))
+
+    newtok.extend(_inner_capture_parse(compiler, start, group_s, oldtok.scope, rule))
+
+    if end < oldtok.end:
+        newtok.append(oldtok._replace(start=end))
+    ret[j : j + 1] = newtok
+
+
 def _captures(
     compiler: Compiler,
     scope: Scope,
@@ -404,7 +433,7 @@ def _captures(
     for i, u_rule in captures:
         try:
             group_s = match[i]
-        except IndexError:  # some grammars are malformed here?
+        except IndexError:
             continue
         if not group_s:
             continue
@@ -412,27 +441,11 @@ def _captures(
         rule = compiler.compile_rule(u_rule)
         start, end = match.span(i)
         if start < pos:
-            # could maybe bisect but this is probably fast enough
-            j = len(ret) - 1
-            while j > 0 and start < ret[j - 1].end:
-                j -= 1
-
-            oldtok = ret[j]
-            newtok = []
-            if start > oldtok.start:
-                newtok.append(oldtok._replace(end=start))
-
-            newtok.extend(_inner_capture_parse(compiler, start, match[i], oldtok.scope, rule))
-
-            if end < oldtok.end:
-                newtok.append(oldtok._replace(start=end))
-            ret[j : j + 1] = newtok
+            _backtrack_capture(compiler, ret, start, end, match[i], rule)
         else:
             if start > pos:
                 ret.append(Region(pos, start, scope))
-
             ret.extend(_inner_capture_parse(compiler, start, match[i], scope, rule))
-
             pos = end
 
     if pos < pos_end:

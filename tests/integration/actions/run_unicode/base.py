@@ -40,6 +40,91 @@ base_steps = (
 )
 
 
+UNICODE_MASK_PATTERNS = ("duration", "playbook", "start", "end", "task_path")
+
+
+def _resolve_search_for(
+    step: UiTestStep,
+    cli_prompt: str,
+) -> str | list[str]:
+    """Resolve the search_within_response from a UiTestStep.
+
+    Args:
+        step: The test step
+        cli_prompt: The CLI prompt string
+
+    Returns:
+        The resolved search value
+    """
+    if step.search_within_response is SearchFor.HELP:
+        return ":help help"
+    if step.search_within_response is SearchFor.PROMPT:
+        return cli_prompt
+    if step.search_within_response is SearchFor.WARNING:
+        return "Warning"
+    return step.search_within_response
+
+
+def _mask_run_output(
+    received_output: list[str],
+    cli_prompt: str,
+    mask_patterns: tuple[str, ...] = UNICODE_MASK_PATTERNS,
+) -> None:
+    """Mask lines containing prompts or variable run data in place.
+
+    Args:
+        received_output: The output lines to mask in place
+        cli_prompt: The CLI prompt string
+        mask_patterns: Patterns that trigger masking
+    """
+    mask = "X" * 50
+    for idx, line in enumerate(received_output):
+        if cli_prompt in line or any(out in line for out in mask_patterns):
+            received_output[idx] = mask
+
+
+def _check_fixtures(
+    request: pytest.FixtureRequest,
+    step: UiTestStep,
+    received_output: list[str],
+    update_requested: bool,
+) -> None:
+    """Update fixtures if requested and assert expected output.
+
+    Args:
+        request: A fixture providing details about the test caller
+        step: The test step
+        received_output: The output received from the session
+        update_requested: Whether fixture updates are requested
+    """
+    if update_requested:
+        update_fixtures(
+            request,
+            step.step_index,
+            received_output,
+            step.comment,
+            additional_information={
+                "present": step.present,
+                "absent": step.absent,
+                "compared_fixture": not any((step.present, step.absent)),
+            },
+        )
+
+    page = " ".join(received_output)
+
+    if step.present:
+        assert all(present in page for present in step.present)
+
+    if step.absent:
+        assert not any(absent in page for absent in step.absent)
+
+    if not any((step.present, step.absent)):
+        expected_output = retrieve_fixture_for_step(request, step.step_index)
+        assert expected_output == received_output, "\n" + "\n".join(
+            difflib.unified_diff(expected_output, received_output, "expected", "received"),
+        )
+
+
 class BaseClass:
     """Base class for run interactive/stdout tests, with unicode."""
 
@@ -83,15 +168,7 @@ class BaseClass:
             step: A step within a series of tests
             skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
         """
-        search_within_response: str | list[str]
-        if step.search_within_response is SearchFor.HELP:
-            search_within_response = ":help help"
-        elif step.search_within_response is SearchFor.PROMPT:
-            search_within_response = tmux_session.cli_prompt
-        elif step.search_within_response is SearchFor.WARNING:
-            search_within_response = "Warning"
-        else:
-            search_within_response = step.search_within_response
+        search_within_response = _resolve_search_for(step, tmux_session.cli_prompt)
 
         received_output = tmux_session.interaction(
             value=step.user_input,
@@ -99,43 +176,10 @@ class BaseClass:
         )
 
         if step.mask:
-            # mask out some configuration that is subject to change each run
-            mask = "X" * 50
-            for idx, line in enumerate(received_output):
-                if tmux_session.cli_prompt in line:
-                    received_output[idx] = mask
-                else:
-                    for out in ["duration", "playbook", "start", "end", "task_path"]:
-                        if out in line:
-                            received_output[idx] = mask
+            _mask_run_output(received_output, tmux_session.cli_prompt)
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
         )
-        if fixtures_update_requested:
-            update_fixtures(
-                request,
-                step.step_index,
-                received_output,
-                step.comment,
-                additional_information={
-                    "present": step.present,
-                    "absent": step.absent,
-                    "compared_fixture": not any((step.present, step.absent)),
-                },
-            )
-        page = " ".join(received_output)
-
-        if step.present:
-            assert all(present in page for present in step.present)
-
-        if step.absent:
-            assert not any(absent in page for absent in step.absent)
-
-        if not any((step.present, step.absent)):
-            expected_output = retrieve_fixture_for_step(request, step.step_index)
-
-            assert expected_output == received_output, "\n" + "\n".join(
-                difflib.unified_diff(expected_output, received_output, "expected", "received"),
-            )
+        _check_fixtures(request, step, received_output, fixtures_update_requested)

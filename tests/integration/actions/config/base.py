@@ -45,6 +45,94 @@ base_steps = (
 )
 
 
+def _resolve_search_for(
+    step: UiTestStep,
+    cli_prompt: str,
+) -> str:
+    """Resolve the search_within_response from a UiTestStep.
+
+    Args:
+        step: The test step
+        cli_prompt: The CLI prompt string
+
+    Returns:
+        The resolved search string
+
+    Raises:
+        ValueError: When the test mode is not set
+    """
+    if step.search_within_response is SearchFor.HELP:
+        return ":help help"
+    if step.search_within_response is SearchFor.PROMPT:
+        return cli_prompt
+    if step.search_within_response is SearchFor.WARNING:
+        return "Warning"
+    msg = "test mode not set"
+    raise ValueError(msg)
+
+
+def _mask_config_output(
+    received_output: list[str],
+    maskables: list[str],
+) -> None:
+    """Mask columns in output lines that match maskable prefixes.
+
+    Args:
+        received_output: The output lines to mask in place
+        maskables: List of prefixes to match for masking
+    """
+    mask_column_name = "Current"
+    column_start = received_output[0].find(mask_column_name)
+    if column_start == -1:
+        return
+    mask = len(mask_column_name) * "X"
+    for idx, line in enumerate(received_output):
+        if any(f"│{m}" in line for m in maskables):
+            received_output[idx] = received_output[idx][0:column_start] + mask
+
+
+def _check_fixtures(
+    request: pytest.FixtureRequest,
+    step: UiTestStep,
+    received_output: list[str],
+    update_requested: bool,
+) -> None:
+    """Update fixtures if requested and assert expected output.
+
+    Args:
+        request: A fixture providing details about the test caller
+        step: The test step
+        received_output: The output received from the session
+        update_requested: Whether fixture updates are requested
+    """
+    if update_requested:
+        update_fixtures(
+            request,
+            step.step_index,
+            received_output,
+            step.comment,
+            additional_information={
+                "present": step.present,
+                "absent": step.absent,
+                "compared_fixture": not any((step.present, step.absent)),
+            },
+        )
+
+    page = " ".join(received_output)
+
+    if step.present:
+        assert all(present in page for present in step.present)
+
+    if step.absent:
+        assert not any(look_not in page for look_not in step.absent)
+
+    if not any((step.present, step.absent)):
+        expected_output = retrieve_fixture_for_step(request, step.step_index)
+        assert expected_output == received_output, "\n" + "\n".join(
+            difflib.unified_diff(expected_output, received_output, "expected", "received"),
+        )
+
+
 class BaseClass:
     """Base class for interactive/stdout ``config`` tests."""
 
@@ -80,7 +168,6 @@ class BaseClass:
         step: UiTestStep,
         skip_if_already_failed: None,
     ) -> None:
-        # pylint: disable=too-many-locals
         """Run the tests for ``config``, mode and ``ee`` set in child class.
 
         Args:
@@ -88,19 +175,8 @@ class BaseClass:
             tmux_session: The tmux session to use
             step: The commands to issue and content to look for
             skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
-
-        Raises:
-            ValueError: When the test mode is not set
         """
-        if step.search_within_response is SearchFor.HELP:
-            search_within_response = ":help help"
-        elif step.search_within_response is SearchFor.PROMPT:
-            search_within_response = tmux_session.cli_prompt
-        elif step.search_within_response is SearchFor.WARNING:
-            search_within_response = "Warning"
-        else:
-            msg = "test mode not set"
-            raise ValueError(msg)
+        search_within_response = _resolve_search_for(step, tmux_session.cli_prompt)
 
         received_output = tmux_session.interaction(
             value=step.user_input,
@@ -108,7 +184,6 @@ class BaseClass:
         )
 
         if step.mask:
-            # mask out some configuration that is subject to change each run
             maskables = [
                 "Become plugin path",
                 "Cache plugin connection",
@@ -116,43 +191,10 @@ class BaseClass:
                 "Default callback plugin path",
                 "Default local tmp",
             ]
-            # Determine if a menu is showing
-            mask_column_name = "Current"
-            column_start = received_output[0].find(mask_column_name)
-            column_exists = column_start != -1
-            if column_exists:
-                mask = len(mask_column_name) * "X"
-                for idx, line in enumerate(received_output):
-                    if any(f"│{m}" in line for m in maskables):
-                        received_output[idx] = received_output[idx][0:column_start] + mask
+            _mask_config_output(received_output, maskables)
 
         fixtures_update_requested = (
             self.UPDATE_FIXTURES
             or os.environ.get("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES") == "true"
         )
-        if fixtures_update_requested:
-            update_fixtures(
-                request,
-                step.step_index,
-                received_output,
-                step.comment,
-                additional_information={
-                    "present": step.present,
-                    "absent": step.absent,
-                    "compared_fixture": not any((step.present, step.absent)),
-                },
-            )
-
-        page = " ".join(received_output)
-
-        if step.present:
-            assert all(present in page for present in step.present)
-
-        if step.absent:
-            assert not any(look_not in page for look_not in step.absent)
-
-        if not any((step.present, step.absent)):
-            expected_output = retrieve_fixture_for_step(request, step.step_index)
-            assert expected_output == received_output, "\n" + "\n".join(
-                difflib.unified_diff(expected_output, received_output, "expected", "received"),
-            )
+        _check_fixtures(request, step, received_output, fixtures_update_requested)

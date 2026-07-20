@@ -264,6 +264,37 @@ def pull_image(valid_container_engine: str, image_name: str) -> None:
         pytest.exit("Image pull failed", 1)
 
 
+def _read_pty_output(
+    readable: list[int],
+    result: dict[int, bytes],
+    timeout: float,
+) -> None:
+    """Read output from pty file descriptors until EOF.
+
+    Args:
+        readable: List of file descriptors to read from
+        result: Dictionary mapping file descriptors to accumulated output
+        timeout: Select timeout in seconds
+
+    Raises:
+        OSError: If a read error other than EIO occurs
+    """
+    while readable:
+        ready, _, _ = select.select(readable, [], [], timeout)
+        for file_d in ready:
+            try:
+                data = os.read(file_d, 512)
+            except OSError as exc:
+                if exc.errno != errno.EIO:
+                    raise
+                # EIO means EOF on some systems
+                readable.remove(file_d)
+            else:
+                if not data:  # EOF
+                    readable.remove(file_d)
+                result[file_d] += data
+
+
 def _cmd_in_tty(
     cmd: str,
     bytes_input: bytes | None = None,
@@ -278,9 +309,6 @@ def _cmd_in_tty(
         cmd: The command to run
         bytes_input: Some bytes to input
         cwd: The working directory
-
-    Raises:
-        OSError: Error if the command fails
 
     Returns:
         stdout, stderr, and the exit code
@@ -309,21 +337,7 @@ def _cmd_in_tty(
         readable = [m_stdout, m_stderr]
         result = {m_stdout: b"", m_stderr: b""}
         try:
-            while readable:
-                ready, _, _ = select.select(readable, [], [], timeout)
-                for file_d in ready:
-                    try:
-                        data = os.read(file_d, 512)
-                    except OSError as exc:
-                        if exc.errno != errno.EIO:
-                            raise
-                        # EIO means EOF on some systems
-                        readable.remove(file_d)
-                    else:
-                        if not data:  # EOF
-                            readable.remove(file_d)
-                        result[file_d] += data
-
+            _read_pty_output(readable, result, timeout)
         finally:
             for file_d in [m_stdout, m_stderr, m_stdin]:
                 os.close(file_d)
@@ -399,15 +413,8 @@ def is_config_empty(filename: Path) -> bool:
     return True
 
 
-def pytest_configure(config: pytest.Config) -> None:
-    """Attempt to save a contributor some troubleshooting.
-
-    Args:
-        config: The pytest config object
-    """
-    global VERBOSITY
-    VERBOSITY = config.option.verbose
-    # limit an environment variables that may conflict with tests
+def _isolate_conflicting_env_vars() -> None:
+    """Remove environment variables that may conflict with tests."""
     allow = ("ANSIBLE_NAVIGATOR_UPDATE_TEST_FIXTURES",)
     for k in os.environ:
         if k in allow:
@@ -425,15 +432,15 @@ def pytest_configure(config: pytest.Config) -> None:
         env_vars = ",".join(USER_ENVIRONMENT.keys())
         print(f"[NOTE] The environment variable(s) {env_vars} will be restored after the test run")
 
-    # look for ansible.cfg
-    # use the current interpreter to get the ansible version
+
+def _validate_ansible_config() -> None:
+    """Validate that no conflicting ansible config file is present."""
     bin_dir = Path(sys.executable).parent
     _log, errors, details = parse_ansible_verison(path=bin_dir)
     if details is None:
         err = "\n".join(error.message for error in errors)
         pytest.exit(f"Error parsing ansible version:\n{err}")
     config_file = Path(details["config file"]).resolve()
-    # detect if the config file is the default empty one.
     if (Path() / "ansible.cfg").resolve() != config_file and not (
         config_file == Path("/etc/ansible/ansible.cfg") and is_config_empty(config_file)
     ):
@@ -442,11 +449,26 @@ def pytest_configure(config: pytest.Config) -> None:
             "before testing, as this will likely break the test results.",
         )
 
+
+def _validate_navigator_settings() -> None:
+    """Validate that no conflicting navigator settings file is present."""
     if os.environ.get("ANSIBLE_NAVIGATOR_CONFIG", "") != "/dev/null":
-        # look for ansible-navigator settings file
         _log, _errors, file_path = find_settings_file()
         if file_path:
             pytest.exit(f"Please remove the settings file '{file_path}' before testing.")
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    """Attempt to save a contributor some troubleshooting.
+
+    Args:
+        config: The pytest config object
+    """
+    global VERBOSITY
+    VERBOSITY = config.option.verbose
+    _isolate_conflicting_env_vars()
+    _validate_ansible_config()
+    _validate_navigator_settings()
 
     # ensure tmux is installed
     tmux_location = shutil.which("tmux")

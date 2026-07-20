@@ -113,6 +113,94 @@ def remove_and_delete_empty_ascendants(content: MutableMapping[Any, Any], path: 
             break
 
 
+def _merge_into_list(
+    behaviors: tuple[MergeBehaviors, ...],
+    nested: dict[Any, Any],
+    part: str,
+    value: bool | list[Any] | float | str | dict[Any, Any],
+) -> None:
+    """Merge a value into an existing list at the given key.
+
+    Args:
+        behaviors: The merge behaviors.
+        nested: The parent dict containing the list.
+        part: The key of the list in nested.
+        value: The value to merge.
+
+    Raises:
+        ValueError: If no matching behavior is specified.
+    """
+    if isinstance(value, list):
+        if MergeBehaviors.LIST_LIST_EXTEND in behaviors:
+            nested[part].extend(value)
+        elif MergeBehaviors.LIST_LIST_REPLACE in behaviors:
+            nested[part] = value
+        else:
+            msg = "No behavior specified for LIST_LIST"
+            raise ValueError(msg)
+    elif MergeBehaviors.LIST_APPEND in behaviors:
+        nested[part].append(value)
+    elif MergeBehaviors.LIST_REPLACE in behaviors:
+        nested[part] = value
+        return
+    else:
+        msg = "No behavior specified for LIST_*"
+        raise ValueError(msg)
+
+    if MergeBehaviors.LIST_UNIQUE in behaviors:
+        nested[part] = list(dict.fromkeys(nested[part]))
+    if MergeBehaviors.LIST_SORT in behaviors:
+        nested[part].sort()
+
+
+def _merge_into_dict(
+    behaviors: tuple[MergeBehaviors, ...],
+    nested: dict[Any, Any],
+    part: str,
+    value: dict[Any, Any],
+) -> None:
+    """Merge a dict value into an existing dict at the given key.
+
+    Args:
+        behaviors: The merge behaviors.
+        nested: The parent dict containing the target dict.
+        part: The key of the dict in nested.
+        value: The dict value to merge.
+
+    Raises:
+        ValueError: If no matching behavior is specified.
+    """
+    if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
+        nested[part].update(value)
+    elif MergeBehaviors.DICT_DICT_REPLACE in behaviors:
+        nested[part] = value
+    else:
+        msg = "No behavior specified for DICT_DICT"
+        raise ValueError(msg)
+
+
+def _place_at_leaf(
+    behaviors: tuple[MergeBehaviors, ...],
+    nested: dict[Any, Any],
+    part: str,
+    value: bool | list[Any] | float | str | dict[Any, Any],
+) -> None:
+    """Place a value at a leaf key in the nested dict.
+
+    Args:
+        behaviors: The merge behaviors.
+        nested: The parent dict.
+        part: The leaf key.
+        value: The value to place.
+    """
+    if isinstance(nested.get(part), list):
+        _merge_into_list(behaviors, nested, part, value)
+    elif isinstance(nested.get(part), dict) and isinstance(value, dict):
+        _merge_into_dict(behaviors, nested, part, value)
+    else:
+        nested[part] = value
+
+
 def place_at_path(
     behaviors: tuple[MergeBehaviors, ...],
     content: dict[Any, Any],
@@ -157,46 +245,14 @@ def place_at_path(
         msg = "Cannot place non dict at root of dict"
         raise ValueError(msg)
 
+    last_part = path.rsplit(".", maxsplit=1)[-1]
     for part in path.split("."):
-        if part == path.rsplit(".", maxsplit=1)[-1]:
-            if isinstance(nested.get(part), list):
-                if isinstance(value, list):
-                    if MergeBehaviors.LIST_LIST_EXTEND in behaviors:
-                        nested[part].extend(value)
-                    elif MergeBehaviors.LIST_LIST_REPLACE in behaviors:
-                        nested[part] = value
-                    else:
-                        msg = "No behavior specified for LIST_LIST"
-                        raise ValueError(msg)
-                elif MergeBehaviors.LIST_APPEND in behaviors:
-                    nested[part].append(value)
-                elif MergeBehaviors.LIST_REPLACE in behaviors:
-                    nested[part] = value
-                    continue
-                else:
-                    msg = "No behavior specified for LIST_*"
-                    raise ValueError(msg)
-
-                if MergeBehaviors.LIST_UNIQUE in behaviors:
-                    nested[part] = list(dict.fromkeys(nested[part]))
-                if MergeBehaviors.LIST_SORT in behaviors:
-                    nested[part].sort()
-                continue
-
-            if isinstance(nested.get(part), dict) and isinstance(value, dict):
-                if MergeBehaviors.DICT_DICT_UPDATE in behaviors:
-                    nested[part].update(value)
-                elif MergeBehaviors.DICT_DICT_REPLACE in behaviors:
-                    nested[part] = value
-                else:
-                    msg = "No behavior specified for DICT_DICT"
-                    raise ValueError(msg)
-                continue
-
-            nested[part] = value
-        elif part not in nested:
-            nested[part] = {}
-        nested = nested[part]
+        if part == last_part:
+            _place_at_leaf(behaviors, nested, part, value)
+        else:
+            if part not in nested:
+                nested[part] = {}
+            nested = nested[part]
     return copied_content
 
 

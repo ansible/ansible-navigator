@@ -12,6 +12,27 @@ class DictMergeError(Exception):
 Mergeable = bool | dict[Any, Any] | list[Any] | str | None
 
 
+def _merge_dicts(
+    left: dict[Any, Any],
+    right: dict[Any, Any],
+) -> dict[Any, Any]:
+    """Merge right dict into left dict recursively.
+
+    Args:
+        left: Dict to be merged into.
+        right: Dict to be merged from.
+
+    Returns:
+        The merged dict.
+    """
+    for key, value in right.items():
+        if key in left:
+            left[key] = in_place_list_replace(left[key], value)
+        else:
+            left[key] = value
+    return left
+
+
 def in_place_list_replace(left: Mergeable, right: Mergeable) -> Mergeable:
     """Merge right into left in place and returns merged result.
 
@@ -32,18 +53,11 @@ def in_place_list_replace(left: Mergeable, right: Mergeable) -> Mergeable:
     """
     key = None
     try:
-        if left is None or isinstance(left, str | int | float | bool):
-            # Border case for first run or if a is a primitive
-            left = right
-        elif isinstance(left, tuple | list):
+        if left is None or isinstance(left, (str | int | float | bool, tuple | list)):
             left = right
         elif isinstance(left, dict):
             if isinstance(right, dict):
-                for key in right:
-                    if key in left:
-                        left[key] = in_place_list_replace(left[key], right[key])
-                    else:
-                        left[key] = right[key]
+                left = _merge_dicts(left, right)
             else:
                 msg = f"Cannot merge non-dict '{right}' into dict '{left}'"
                 raise DictMergeError(msg)

@@ -113,14 +113,143 @@ class CollectionCatalog:
                     collection,
                 )
 
+    def _load_role_argspecs(
+        self,
+        role: dict[str, str | dict[str, Any]],
+        role_directory: Path,
+        collection_name: str,
+    ) -> None:
+        """Load argument specs for a role. Non-fatal on error.
+
+        Args:
+            role: The role dict to populate.
+            role_directory: Path to the role directory.
+            collection_name: The collection name.
+        """
+        argspec_name = "argument_specs.yml"
+        argspec_path = role_directory / "meta" / argspec_name
+        role["argument_specs"] = {}
+        role["argument_specs_path"] = ""
+        error = {"path": str(argspec_path)}
+        try:
+            with argspec_path.open(encoding="utf-8") as fh:
+                role["argument_specs"] = yaml.load(fh, Loader=SafeLoader)["argument_specs"]
+                role["argument_specs_path"] = str(argspec_path)
+        except KeyError:
+            error["error"] = f"Malformed {argspec_name} for role in {collection_name}."
+            self._errors.append(error)
+        except FileNotFoundError:
+            error["error"] = f"Failed to find {argspec_name} for role in {collection_name}."
+            self._errors.append(error)
+        except YAMLError:
+            error["error"] = f"Failed to load {argspec_name} for role in {collection_name}."
+            self._errors.append(error)
+
+    def _load_role_defaults(
+        self,
+        role: dict[str, str | dict[str, Any]],
+        role_directory: Path,
+        collection_name: str,
+    ) -> bool:
+        """Load defaults for a role.
+
+        Args:
+            role: The role dict to populate.
+            role_directory: Path to the role directory.
+            collection_name: The collection name.
+
+        Returns:
+            True if a fatal error occurred.
+        """
+        defaults_name = "main.yml"
+        defaults_path = role_directory / "defaults" / defaults_name
+        role["defaults"] = {}
+        role["defaults_path"] = ""
+        error = {"path": str(defaults_path)}
+        try:
+            with defaults_path.open(encoding="utf-8") as fh:
+                role["defaults"] = yaml.load(fh, Loader=SafeLoader)
+                role["defaults_path"] = str(defaults_path)
+        except FileNotFoundError:
+            pass
+        except YAMLError:
+            error["error"] = f"Failed to load {defaults_name} for role in {collection_name}."
+            self._errors.append(error)
+            return True
+        return False
+
+    def _load_role_info(
+        self,
+        role: dict[str, str | dict[str, Any]],
+        role_directory: Path,
+        collection_name: str,
+    ) -> bool:
+        """Load meta/main.yml info for a role.
+
+        Args:
+            role: The role dict to populate.
+            role_directory: Path to the role directory.
+            collection_name: The collection name.
+
+        Returns:
+            True if a fatal error occurred.
+        """
+        meta_name = "main.yml"
+        meta_path = role_directory / "meta" / meta_name
+        role["info"] = {}
+        role["info_path"] = ""
+        error = {"path": str(meta_path)}
+        try:
+            with meta_path.open(encoding="utf-8") as fh:
+                role["info"] = yaml.load(fh, Loader=SafeLoader)
+                role["info_path"] = str(meta_path)
+        except FileNotFoundError:
+            error["error"] = f"Failed to find {meta_name} for role in {collection_name}."
+            self._errors.append(error)
+            return True
+        except YAMLError:
+            error["error"] = f"Failed to load {meta_name} for role in {collection_name}."
+            self._errors.append(error)
+            return True
+        return False
+
+    def _load_role_readme(
+        self,
+        role: dict[str, str | dict[str, Any]],
+        role_directory: Path,
+        collection_name: str,
+    ) -> bool:
+        """Load README.md for a role.
+
+        Args:
+            role: The role dict to populate.
+            role_directory: Path to the role directory.
+            collection_name: The collection name.
+
+        Returns:
+            True if a fatal error occurred.
+        """
+        readme_name = "README.md"
+        readme_path = role_directory / readme_name
+        role["readme"] = ""
+        role["readme_path"] = ""
+        error = {"path": str(readme_path)}
+        try:
+            with readme_path.open(encoding="utf-8") as fh:
+                role["readme"] = fh.read()
+                role["readme_path"] = str(readme_path)
+        except FileNotFoundError:
+            error["error"] = f"Failed to find {readme_name} for role in {collection_name}."
+            self._errors.append(error)
+            return True
+        return False
+
     def _catalog_roles(self, collection: dict[str, Any]) -> None:
         """Catalog the roles within a collection.
 
         Args:
             collection: Details describing the collection
         """
-        # pylint: disable=too-many-locals
-
         collection_name: str = collection["known_as"]
         collection["roles"] = []
         roles_directory = Path(collection["path"], "roles")
@@ -134,79 +263,15 @@ class CollectionCatalog:
                 "short_name": role_directory.name,
                 "full_name": f"{collection_name}.{role_directory.name}",
             }
-            error_cataloging_role = False
-
-            # Argument spec cataloging, it is not required
-            argspec_name = "argument_specs.yml"
-            argspec_path = role_directory / "meta" / argspec_name
-            role["argument_specs"] = {}
-            role["argument_specs_path"] = ""
-            error = {"path": str(argspec_path)}
-            try:
-                with argspec_path.open(encoding="utf-8") as fh:
-                    role["argument_specs"] = yaml.load(fh, Loader=SafeLoader)["argument_specs"]
-                    role["argument_specs_path"] = str(argspec_path)
-            except KeyError:
-                error["error"] = f"Malformed {argspec_name} for role in {collection_name}."
-                self._errors.append(error)
-            except FileNotFoundError:
-                error["error"] = f"Failed to find {argspec_name} for role in {collection_name}."
-                self._errors.append(error)
-            except YAMLError:
-                error["error"] = f"Failed to load {argspec_name} for role in {collection_name}."
-                self._errors.append(error)
-
-            # Defaults cataloging, it is not required
-            defaults_name = "main.yml"
-            defaults_path = role_directory / "defaults" / defaults_name
-            role["defaults"] = {}
-            role["defaults_path"] = ""
-            error = {"path": str(defaults_path)}
-            try:
-                with defaults_path.open(encoding="utf-8") as fh:
-                    role["defaults"] = yaml.load(fh, Loader=SafeLoader)
-                    role["defaults_path"] = str(defaults_path)
-            except FileNotFoundError:
-                pass
-            except YAMLError:
-                error["error"] = f"Failed to load {defaults_name} for role in {collection_name}."
-                self._errors.append(error)
-                error_cataloging_role = True
-
-            # Meta/main.yml cataloging, it is required
-            meta_name = "main.yml"
-            meta_path = role_directory / "meta" / meta_name
-            role["info"] = {}
-            role["info_path"] = ""
-            error = {"path": str(meta_path)}
-            try:
-                with meta_path.open(encoding="utf-8") as fh:
-                    role["info"] = yaml.load(fh, Loader=SafeLoader)
-                    role["info_path"] = str(meta_path)
-            except FileNotFoundError:
-                error["error"] = f"Failed to find {meta_name} for role in {collection_name}."
-                self._errors.append(error)
-                error_cataloging_role = True
-            except YAMLError:
-                error["error"] = f"Failed to load {meta_name} for role in {collection_name}."
-                self._errors.append(error)
-                error_cataloging_role = True
-
-            # Readme.md cataloging, it is required
-            readme_name = "README.md"
-            readme_path = role_directory / readme_name
-            role["readme"] = ""
-            role["readme_path"] = ""
-            error = {"path": str(readme_path)}
-            try:
-                with readme_path.open(encoding="utf-8") as fh:
-                    role["readme"] = fh.read()
-                    role["readme_path"] = str(readme_path)
-            except FileNotFoundError:
-                error["error"] = f"Failed to find {readme_name} for role in {collection_name}."
-                self._errors.append(error)
-                error_cataloging_role = True
-
+            self._load_role_argspecs(role, role_directory, collection_name)
+            error_cataloging_role = self._load_role_defaults(role, role_directory, collection_name)
+            error_cataloging_role = (
+                self._load_role_info(role, role_directory, collection_name) or error_cataloging_role
+            )
+            error_cataloging_role = (
+                self._load_role_readme(role, role_directory, collection_name)
+                or error_cataloging_role
+            )
             if not error_cataloging_role:
                 collection["roles"].append(role)
 
@@ -264,6 +329,67 @@ class CollectionCatalog:
                 "type": plugin_type,
             }
 
+    def _load_collection_meta(self, directory_path: Path) -> dict[str, Any] | None:
+        """Load collection metadata from MANIFEST.json or galaxy.yml.
+
+        Args:
+            directory_path: The path to a single collection directory.
+
+        Returns:
+            The collection dict, or None if no metadata could be loaded.
+        """
+        manifest_file = directory_path / "MANIFEST.json"
+        galaxy_file = directory_path / "galaxy.yml"
+        if manifest_file.exists():
+            with manifest_file.open(encoding="utf-8") as fh:
+                try:
+                    collection = json.load(fh)
+                    collection["meta_source"] = "MANIFEST.json"
+                except JSONDecodeError:
+                    self._errors.append(
+                        {"path": str(manifest_file), "error": "failed to load MANIFEST.json"},
+                    )
+                else:
+                    return collection
+        elif galaxy_file.exists():
+            with galaxy_file.open(encoding="utf-8") as fh:
+                try:
+                    collection = {"collection_info": yaml.load(fh, Loader=SafeLoader)}
+                    collection["meta_source"] = "galaxy.yml"
+                except YAMLError:
+                    self._errors.append(
+                        {"path": str(galaxy_file), "error": "failed to load galaxy.yml"},
+                    )
+                else:
+                    return collection
+        return None
+
+    def _finalize_collection(
+        self,
+        collection: dict[str, Any],
+        directory_path: Path,
+    ) -> None:
+        """Set derived fields and load runtime.yml for a collection.
+
+        Args:
+            collection: The collection dict to finalize.
+            directory_path: The path to the collection directory.
+        """
+        collection_name = f"{collection['collection_info']['namespace']}"
+        collection_name += f".{collection['collection_info']['name']}"
+        collection["known_as"] = collection_name
+        collection["plugin_checksums"] = {}
+        collection["path"] = str(directory_path)
+
+        runtime_file = directory_path / "meta" / "runtime.yml"
+        collection["runtime"] = {}
+        if runtime_file.exists():
+            with runtime_file.open(encoding="utf-8") as fh:
+                try:
+                    collection["runtime"] = yaml.load(fh, Loader=SafeLoader)
+                except YAMLError as exc:
+                    self._errors.append({"path": str(runtime_file), "error": str(exc)})
+
     def _one_path(self, directory: Path) -> None:
         """Process the contents of an <...>/ansible_collections/ directory.
 
@@ -272,47 +398,9 @@ class CollectionCatalog:
                 load
         """
         for directory_path in directory.glob("*/*/"):
-            manifest_file = directory_path / "MANIFEST.json"
-            galaxy_file = directory_path / "galaxy.yml"
-            collection = None
-            if manifest_file.exists():
-                with manifest_file.open(encoding="utf-8") as fh:
-                    try:
-                        collection = json.load(fh)
-                        collection["meta_source"] = "MANIFEST.json"
-                    except JSONDecodeError:
-                        error = {
-                            "path": str(manifest_file),
-                            "error": "failed to load MANIFEST.json",
-                        }
-                        self._errors.append(error)
-            elif galaxy_file.exists():
-                with galaxy_file.open(encoding="utf-8") as fh:
-                    try:
-                        collection = {"collection_info": yaml.load(fh, Loader=SafeLoader)}
-                        collection["meta_source"] = "galaxy.yml"
-                    except YAMLError:
-                        error = {
-                            "path": str(galaxy_file),
-                            "error": "failed to load galaxy.yml",
-                        }
-                        self._errors.append(error)
+            collection = self._load_collection_meta(directory_path)
             if collection:
-                collection_name = f"{collection['collection_info']['namespace']}"
-                collection_name += f".{collection['collection_info']['name']}"
-                collection["known_as"] = collection_name
-                collection["plugin_checksums"] = {}
-                collection["path"] = str(directory_path)
-
-                runtime_file = directory_path / "meta" / "runtime.yml"
-                collection["runtime"] = {}
-                if runtime_file.exists():
-                    with runtime_file.open(encoding="utf-8") as fh:
-                        try:
-                            collection["runtime"] = yaml.load(fh, Loader=SafeLoader)
-                        except YAMLError as exc:
-                            self._errors.append({"path": str(runtime_file), "error": str(exc)})
-
+                self._finalize_collection(collection, directory_path)
                 self._collections[collection["path"]] = collection
             else:
                 msg = (

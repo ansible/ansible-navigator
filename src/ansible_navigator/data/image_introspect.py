@@ -201,6 +201,37 @@ class CmdParser:
         key, content = re.split(delim, content, maxsplit=1)
         return key, delim, content
 
+    @staticmethod
+    def _handle_description(
+        lines: list[str],
+        result: dict[str, Any],
+        results: list[dict[str, Any]],
+        section_delim: str | None,
+    ) -> dict[str, Any]:
+        """Handle the special description field parsing.
+
+        Args:
+            lines: Remaining lines to consume.
+            result: The current result dict.
+            results: The list of results.
+            section_delim: The section delimiter.
+
+        Returns:
+            The finalized result dict.
+        """
+        description = []
+        while lines:
+            line = lines.pop(0)
+            if line == section_delim:
+                break
+            description.append(line)
+        if description:
+            result["description"] = " ".join(description)
+        else:
+            result["description"] = "No description available"
+        results.append(result)
+        return result
+
     def splitter(
         self,
         lines: list[str],
@@ -232,20 +263,8 @@ class CmdParser:
                 result[current_key] += f" {content}"
                 continue
             current_key = key.lower().replace("_", "-").strip()
-            # system_packages description field needs special handling
             if current_key == "description":
-                description = []
-                while lines:
-                    line = lines.pop(0)
-                    if line == section_delim:
-                        break
-                    description.append(line)
-                if description:
-                    result[current_key] = " ".join(description)
-                else:
-                    result[current_key] = "No description available"
-                results.append(result)
-                return result
+                return self._handle_description(lines, result, results, section_delim)
             result[current_key] = content
 
         if result:
