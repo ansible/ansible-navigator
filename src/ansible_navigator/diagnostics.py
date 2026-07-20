@@ -79,8 +79,6 @@ class Collector:
         """
         message = f"{self.name.capitalize()} information collected"
         information = f"{message:.<60}{duration:.2f}s"
-
-        # information = f"{message:<.50}{duration_message:>.7}"
         ansi.success(color=color, message=information)
 
 

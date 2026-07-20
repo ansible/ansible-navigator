@@ -550,7 +550,7 @@ class Action(ActionBase):
                 json_str = output
             parsed = json.loads(json_str)
             self._logger.debug("json loading output succeeded")
-        except (JSONDecodeError, ValueError) as exc:
+        except ValueError as exc:
             self._logger.exception("Unable to extract collection json from stdout")
             self._logger.debug("error json loading output: '%s'", str(exc))
             self._logger.debug(output)
@@ -622,8 +622,6 @@ class Action(ActionBase):
             error = f"No collections found in {env} environment, searched in "
             error += parsed["collection_scan_paths"]
             self._logger.warning(error)
-
-        return
 
     def _get_collection_plugins_details(
         self,

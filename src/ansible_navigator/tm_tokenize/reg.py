@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from .rules import _Rule  # noqa: F401
     from .state import State
 
-_BACKREF_RE = re.compile(r"((?<!\\)(?:\\\\)*)\\([0-9]+)")
+_BACKREF_RE = re.compile(r"((?<!\\)(?:\\\\)*)\\(\d+)")
 
 
 _FLAGS = {

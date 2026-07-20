@@ -195,7 +195,6 @@ class Migration:
             step.print_failed()
         else:
             step.print_updated()
-        return
 
     def run_steps(self, *args: Any, **kwargs: Any) -> None:
         """Run all registered migration steps.

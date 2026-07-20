@@ -31,7 +31,7 @@ from yaml.error import YAMLError
 
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import Iterator
 
 
 try:
@@ -105,7 +105,7 @@ class CollectionCatalog:
                 if plugin_type == "modules":
                     plugin_type = "module"
                 files = list(plugin_dir.glob("**/*.py")) + list(plugin_dir.glob("**/*.yml"))
-                filenames = (x for x in files)
+                filenames = iter(files)
                 self._process_plugin_dir(
                     plugin_type,
                     filenames,
@@ -238,7 +238,7 @@ class CollectionCatalog:
     def _process_plugin_dir(
         self,
         plugin_type: str,
-        filenames: Generator[Path],
+        filenames: Iterator[Path],
         file_checksums: dict[str, dict[Any, Any]],
         collection: dict[Any, Any],
     ) -> None:

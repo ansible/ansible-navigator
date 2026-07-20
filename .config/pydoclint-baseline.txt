@@ -367,7 +367,7 @@ tests/conftest.py
     DOC103: Function `is_config_empty`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [filename: Path].
     DOC201: Function `is_config_empty` does not have a return section in docstring
     DOC101: Function `skip_if_already_failed`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `skip_if_already_failed`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [failed: set[str], request: pytest.FixtureRequest].
+    DOC103: Function `skip_if_already_failed`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [request: pytest.FixtureRequest].
 --------------------
 tests/defaults.py
     DOC601: Class `BaseScenario`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)

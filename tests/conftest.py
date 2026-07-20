@@ -74,7 +74,6 @@ def valid_ce() -> str:
                 continue
             return engine
     pytest.exit(reason=msg, returncode=1)
-    return False
 
 
 @pytest.fixture(scope="session", name="valid_container_engine")
@@ -465,12 +464,15 @@ def pytest_unconfigure(config: pytest.Config) -> None:
         os.environ[key] = value
 
 
+_FAILED_TESTS: set[str] = set()
+
+
 @pytest.fixture
 def skip_if_already_failed(
     request: pytest.FixtureRequest,
-    failed: set[str] = set(),
 ) -> Generator[None]:
     """Fixture that stops parametrized tests running on first failure."""
+    failed = _FAILED_TESTS
     key = request.node.name.split("[")[0]
     failed_before = request.session.testsfailed
     if key in failed:

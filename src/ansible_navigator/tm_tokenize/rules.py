@@ -200,12 +200,12 @@ class MatchRule(NamedTuple):
 
     def search(
         self,
-        compiler: Compiler,
-        state: State,
-        line: str,
-        pos: int,
-        first_line: bool,
-        boundary: bool,
+        _compiler: Compiler,
+        _state: State,
+        _line: str,
+        _pos: int,
+        _first_line: bool,
+        _boundary: bool,
     ) -> tuple[State, int, bool, Regions] | None:
         msg = f"unreachable {self}"
         raise AssertionError(msg)
@@ -219,9 +219,9 @@ class PatternRule(NamedTuple):
 
     def start(
         self,
-        compiler: Compiler,
-        match: Match[str],
-        state: State,
+        _compiler: Compiler,
+        _match: Match[str],
+        _state: State,
     ) -> tuple[State, bool, Regions]:
         msg = f"unreachable {self}"
         raise AssertionError(msg)

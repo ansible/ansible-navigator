@@ -500,7 +500,6 @@ class Action(ActionBase):
 
         # Update new content timestamps
         _rerun_lint = self._rerun_needed()
-        return
 
     def _build_issue_content(self) -> Step:
         """Build the content for one plugin.

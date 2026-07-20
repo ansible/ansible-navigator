@@ -156,7 +156,7 @@ class CursesWindow:
                             lineno == window.getyx()[0]
                             and column + len(text) == window.getyx()[1] + 1
                         ):
-                            pass
+                            pass  # cursor is at expected position, no error
 
                         else:
                             self._logger.debug("curses error")

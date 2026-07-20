@@ -5,7 +5,6 @@ from typing import Any
 
 def filter_1() -> None:
     """Convert strings to Candlepin labels."""
-    return
 
 
 # ---- Ansible filters ----

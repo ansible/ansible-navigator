@@ -150,7 +150,7 @@ class MenuBuilder:
         """
         col_starts, cols, adjusted_column_widths = menu_layout
         coltext = re.sub("^__", "", cols[colno])
-        coltext = re.sub("_", " ", coltext)
+        coltext = coltext.replace("_", " ")
         adj_entry = coltext[0 : adjusted_column_widths[colno]].capitalize()
         # right justify header if progress
         if cols[colno] == "__progress":

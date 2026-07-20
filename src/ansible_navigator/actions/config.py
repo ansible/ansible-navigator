@@ -400,4 +400,3 @@ class Action(ActionBase):
 
         self._config = list(parsed.values())
         self._logger.debug("parsed and merged list and dump successfully")
-        return

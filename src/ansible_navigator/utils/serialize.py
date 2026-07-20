@@ -355,7 +355,7 @@ class HumanDumper(SafeDumper):
             value = value.strip().expandtabs()
 
             # Replace some whitespace chars
-            value = re.sub(r"[\r]", "", value)
+            value = re.sub(r"\r", "", value)
 
         return super().represent_scalar(tag, value, style)
 

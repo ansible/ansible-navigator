@@ -260,9 +260,9 @@ def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
     if colors == 256:
         if red == green and green == blue:
             if red < 8:
-                ansi = 16
+                return 16
             if red > 248:
-                ansi = 231
+                return 231
             ansi = round(((red - 8) / 247) * 24) + 232
         else:
             ansi = (

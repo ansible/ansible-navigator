@@ -106,4 +106,3 @@ class Action:
                 serialization_format=SerializationFormat.JSON,
             )
         self._logger.info("Wrote to '%s' with mode '%s' as '%s'", filename, file_mode, write_as)
-        return

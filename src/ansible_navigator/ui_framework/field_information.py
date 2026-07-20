@@ -42,11 +42,11 @@ class FieldInformation:
         """
         return max(self.information)
 
-    def validate(self, response: str) -> None:
+    def validate(self, _response: str) -> None:
         """No validation required for information field.
 
         Args:
-            response: Field data
+            _response: Field data
         """
         self.valid = True
 

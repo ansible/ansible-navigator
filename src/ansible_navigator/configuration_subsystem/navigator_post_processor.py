@@ -856,7 +856,7 @@ class NavigatorPostProcessor:
         try:
             Path(Path(entry.value.current).parent).mkdir(parents=True, exist_ok=True)
             Path(entry.value.current).touch()
-        except (OSError, FileNotFoundError) as exc:
+        except OSError as exc:
             exit_msgs = [
                 (
                     f"Failed to create log file {entry.value.current}"
