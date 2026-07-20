@@ -21,6 +21,8 @@ if TYPE_CHECKING:
     from .rules import CompiledRule
     from .rules import _Rule
 
+INCLUDE_SELF = "$self"
+
 
 class Compiler:
     def __init__(self, grammar: Grammar, grammars: Grammars) -> None:
@@ -48,16 +50,16 @@ class Compiler:
         repository: FChainMap[str, _Rule],
         s: str,
     ) -> tuple[list[str], tuple[_Rule, ...]]:
-        if s == "$self":
+        if s == INCLUDE_SELF:
             return self._patterns(grammar, grammar.patterns)
         if s == "$base":
             grammar = self._grammars.grammar_for_scope(self._root_scope)
-            return self._include(grammar, grammar.repository, "$self")
+            return self._include(grammar, grammar.repository, INCLUDE_SELF)
         if s.startswith("#"):
             return self._patterns(grammar, (repository[s[1:]],))
         if "#" not in s:
             grammar = self._grammars.grammar_for_scope(s)
-            return self._include(grammar, grammar.repository, "$self")
+            return self._include(grammar, grammar.repository, INCLUDE_SELF)
         scope, _, s = s.partition("#")
         grammar = self._grammars.grammar_for_scope(scope)
         return self._include(grammar, grammar.repository, f"#{s}")

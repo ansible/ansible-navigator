@@ -17,6 +17,9 @@ from ansible_navigator.utils.serialize import serialize_write_file
 from . import _actions as actions
 
 
+JSON_EXTENSION = ".json"
+
+
 @actions.register
 class Action:
     """``:write`` command implementation."""
@@ -80,8 +83,8 @@ class Action:
             write_as = ".txt"
         elif re.match(r"^.*\.y(?:a)?ml$", filename):
             write_as = ".yaml"
-        elif filename.endswith(".json"):
-            write_as = ".json"
+        elif filename.endswith(JSON_EXTENSION):
+            write_as = JSON_EXTENSION
         else:
             write_as = interaction.ui.content_format().value.file_extension
 
@@ -97,7 +100,7 @@ class Action:
                 file_mode=file_mode,
                 serialization_format=SerializationFormat.YAML,
             )
-        elif write_as == ".json":
+        elif write_as == JSON_EXTENSION:
             serialize_write_file(
                 content=obj,
                 content_view=ContentView.NORMAL,

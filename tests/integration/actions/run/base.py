@@ -30,19 +30,23 @@ playbook_path = run_fixture_dir / "site.yaml"
 common_fixture_dir = FIXTURES_DIR / "common" / "collections"
 PLAYBOOK_COLLECTION = "company_name.coll_1.playbook_1"
 
+PLAY_1_DETAILS = "play-1 details"
+BACK_CMD = ":back"
+PLAY_2_DETAILS = "play-2 details"
+
 base_steps = (
-    UiTestStep(user_input=":0", comment="play-1 details"),
+    UiTestStep(user_input=":0", comment=PLAY_1_DETAILS),
     UiTestStep(user_input=":0", comment="task-1 details"),
-    UiTestStep(user_input=":back", comment="play-1 details"),
+    UiTestStep(user_input=BACK_CMD, comment=PLAY_1_DETAILS),
     UiTestStep(user_input=":1", comment="play-1 task-2 details"),
-    UiTestStep(user_input=":back", comment="play-1 details"),
-    UiTestStep(user_input=":back", comment="all play details"),
-    UiTestStep(user_input=":1", comment="play-2 details"),
+    UiTestStep(user_input=BACK_CMD, comment=PLAY_1_DETAILS),
+    UiTestStep(user_input=BACK_CMD, comment="all play details"),
+    UiTestStep(user_input=":1", comment=PLAY_2_DETAILS),
     UiTestStep(user_input=":0", comment="play-2 task-1 details"),
-    UiTestStep(user_input=":back", comment="play-2 details"),
+    UiTestStep(user_input=BACK_CMD, comment=PLAY_2_DETAILS),
     UiTestStep(user_input=":1", comment="play-2 task-2 details"),
-    UiTestStep(user_input=":back", comment="play-2 details"),
-    UiTestStep(user_input=":back", comment="all play details"),
+    UiTestStep(user_input=BACK_CMD, comment=PLAY_2_DETAILS),
+    UiTestStep(user_input=BACK_CMD, comment="all play details"),
     UiTestStep(user_input=":st", comment="display stream"),
 )
 

@@ -55,6 +55,7 @@ if TYPE_CHECKING:
     from ansible_navigator.app_public import AppPublic
     from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
+COLUMN_IN_PROGRESS = "__in progress"
 
 RESULT_TO_COLOR = [
     ("(?i)^failed$", 9),
@@ -189,7 +190,7 @@ PLAY_COLUMNS = [
     "__failed",
     "__skipped",
     "__ignored",
-    "__in progress",
+    COLUMN_IN_PROGRESS,
     "__task_count",
     "__progress",
 ]
@@ -790,7 +791,14 @@ class Action(ActionBase):
     def _play_stats(self) -> None:
         """Calculate the play's stats based on it's tasks."""
         for idx, play in enumerate(self._plays.value):
-            total = ["__ok", "__skipped", "__failed", "__unreachable", "__ignored", "__in progress"]
+            total = [
+                "__ok",
+                "__skipped",
+                "__failed",
+                "__unreachable",
+                "__ignored",
+                COLUMN_IN_PROGRESS,
+            ]
             self._plays.value[idx].update(
                 {
                     tot: len([t for t in play["tasks"] if t["__result"].lower() == tot[2:]])
@@ -802,7 +810,7 @@ class Action(ActionBase):
             )
             task_count = len(play["tasks"])
             self._plays.value[idx]["__task_count"] = task_count
-            completed = task_count - self._plays.value[idx]["__in progress"]
+            completed = task_count - self._plays.value[idx][COLUMN_IN_PROGRESS]
             if completed:
                 new = floor(completed / task_count * 100)
                 current = self._plays.value[idx].get("__percent_complete", 0)

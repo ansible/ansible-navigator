@@ -19,6 +19,8 @@ from .utils import uniquely_constructed
 
 T = TypeVar("T")
 
+SCOPE_UNKNOWN = "source.unknown"
+
 
 @uniquely_constructed
 class Grammar(NamedTuple):
@@ -58,8 +60,8 @@ class Grammars:
             if filename.endswith(".json")
         }
 
-        unknown_grammar = {"scopeName": "source.unknown", "patterns": []}
-        self._raw = {"source.unknown": unknown_grammar}
+        unknown_grammar = {"scopeName": SCOPE_UNKNOWN, "patterns": []}
+        self._raw = {SCOPE_UNKNOWN: unknown_grammar}
         self._file_types: list[tuple[frozenset[str], str]] = []
         self._first_line: list[tuple[_Reg, str]] = []
         self._parsed: dict[str, Grammar] = {}
@@ -104,7 +106,7 @@ class Grammars:
         return ret
 
     def blank_compiler(self) -> Compiler:
-        return self.compiler_for_scope("source.unknown")
+        return self.compiler_for_scope(SCOPE_UNKNOWN)
 
     def compiler_for_file(self, filename: str, first_line: str) -> Compiler:
         # didn't find it in the fast path, need to read all the json
@@ -120,4 +122,4 @@ class Grammars:
             if reg.match(first_line, 0, first_line=True, boundary=True):
                 return self.compiler_for_scope(scope)
 
-        return self.compiler_for_scope("source.unknown")
+        return self.compiler_for_scope(SCOPE_UNKNOWN)

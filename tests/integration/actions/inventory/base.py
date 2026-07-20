@@ -20,32 +20,35 @@ ANSIBLE_INVENTORY_FIXTURE_DIR = TEST_FIXTURE_DIR / "ansible_inventory" / "invent
 TEST_CONFIG_FILE = TEST_FIXTURE_DIR / "ansible-navigator.yml"
 
 
+BACK_CMD = ":back"
+PREV_GROUP_LIST = "Previous window (Group list window)"
+
 base_steps = (
     UiTestStep(user_input=":0", comment="Browse hosts/ungrouped window"),
     UiTestStep(user_input=":0", comment="Group list window"),
     UiTestStep(user_input=":0", comment="group01 hosts detail window"),
     UiTestStep(user_input=":0", comment="host0101 detail window"),
-    UiTestStep(user_input=":back", comment="Previous window (group01 hosts detail window)"),
-    UiTestStep(user_input=":back", comment="Previous window (Group list window)"),
+    UiTestStep(user_input=BACK_CMD, comment="Previous window (group01 hosts detail window)"),
+    UiTestStep(user_input=BACK_CMD, comment=PREV_GROUP_LIST),
     UiTestStep(user_input=":1", comment="group02 hosts detail window"),
     UiTestStep(user_input=":0", comment="host0201 detail window"),
-    UiTestStep(user_input=":back", comment="Previous window (group02 hosts detail window)"),
-    UiTestStep(user_input=":back", comment="Previous window (Group list window)"),
+    UiTestStep(user_input=BACK_CMD, comment="Previous window (group02 hosts detail window)"),
+    UiTestStep(user_input=BACK_CMD, comment=PREV_GROUP_LIST),
     UiTestStep(user_input=":2", comment="group03 hosts detail window"),
     UiTestStep(user_input=":0", comment="host0301 detail window"),
-    UiTestStep(user_input=":back", comment="Previous window (group03 hosts detail window)"),
-    UiTestStep(user_input=":back", comment="Previous window (Group list window)"),
-    UiTestStep(user_input=":back", comment="Previous window (Browse hosts/ungrouped window)"),
-    UiTestStep(user_input=":back", comment="Previous window (top window)"),
+    UiTestStep(user_input=BACK_CMD, comment="Previous window (group03 hosts detail window)"),
+    UiTestStep(user_input=BACK_CMD, comment=PREV_GROUP_LIST),
+    UiTestStep(user_input=BACK_CMD, comment="Previous window (Browse hosts/ungrouped window)"),
+    UiTestStep(user_input=BACK_CMD, comment="Previous window (top window)"),
     UiTestStep(user_input=":1", comment="Inventory hostname window"),
     UiTestStep(user_input=":0", comment="host0101 detail window"),
     UiTestStep(
-        user_input=":back",
+        user_input=BACK_CMD,
         comment="Previous window after host0101 (Inventory hostname window)",
     ),
     UiTestStep(user_input=":1", comment="host0201 detail window"),
     UiTestStep(
-        user_input=":back",
+        user_input=BACK_CMD,
         comment="Previous window after host0201 (Inventory hostname window)",
     ),
     UiTestStep(user_input=":2", comment="host0301 detail window"),
