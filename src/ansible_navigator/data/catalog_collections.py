@@ -133,8 +133,13 @@ class CollectionCatalog:
         error = {"path": str(argspec_path)}
         try:
             with argspec_path.open(encoding="utf-8") as fh:
-                role["argument_specs"] = yaml.load(fh, Loader=SafeLoader)["argument_specs"]
-                role["argument_specs_path"] = str(argspec_path)
+                parsed = yaml.load(fh, Loader=SafeLoader)
+                if not isinstance(parsed, dict) or "argument_specs" not in parsed:
+                    error["error"] = f"Malformed {argspec_name} for role in {collection_name}."
+                    self._errors.append(error)
+                else:
+                    role["argument_specs"] = parsed["argument_specs"]
+                    role["argument_specs_path"] = str(argspec_path)
         except KeyError:
             error["error"] = f"Malformed {argspec_name} for role in {collection_name}."
             self._errors.append(error)
@@ -168,7 +173,8 @@ class CollectionCatalog:
         error = {"path": str(defaults_path)}
         try:
             with defaults_path.open(encoding="utf-8") as fh:
-                role["defaults"] = yaml.load(fh, Loader=SafeLoader)
+                parsed = yaml.load(fh, Loader=SafeLoader)
+                role["defaults"] = parsed if isinstance(parsed, dict) else {}
                 role["defaults_path"] = str(defaults_path)
         except FileNotFoundError:
             pass
@@ -201,7 +207,12 @@ class CollectionCatalog:
         error = {"path": str(meta_path)}
         try:
             with meta_path.open(encoding="utf-8") as fh:
-                role["info"] = yaml.load(fh, Loader=SafeLoader)
+                parsed = yaml.load(fh, Loader=SafeLoader)
+                if not isinstance(parsed, dict):
+                    error["error"] = f"Malformed {meta_name} for role in {collection_name}."
+                    self._errors.append(error)
+                    return True
+                role["info"] = parsed
                 role["info_path"] = str(meta_path)
         except FileNotFoundError:
             error["error"] = f"Failed to find {meta_name} for role in {collection_name}."
@@ -344,24 +355,35 @@ class CollectionCatalog:
             with manifest_file.open(encoding="utf-8") as fh:
                 try:
                     collection = json.load(fh)
-                    collection["meta_source"] = "MANIFEST.json"
                 except JSONDecodeError:
                     self._errors.append(
                         {"path": str(manifest_file), "error": "failed to load MANIFEST.json"},
                     )
                 else:
-                    return collection
+                    if not isinstance(collection, dict):
+                        self._errors.append(
+                            {"path": str(manifest_file), "error": "failed to load MANIFEST.json"},
+                        )
+                    else:
+                        collection["meta_source"] = "MANIFEST.json"
+                        return collection
         elif galaxy_file.exists():
             with galaxy_file.open(encoding="utf-8") as fh:
                 try:
-                    collection = {"collection_info": yaml.load(fh, Loader=SafeLoader)}
-                    collection["meta_source"] = "galaxy.yml"
+                    parsed = yaml.load(fh, Loader=SafeLoader)
                 except YAMLError:
                     self._errors.append(
                         {"path": str(galaxy_file), "error": "failed to load galaxy.yml"},
                     )
                 else:
-                    return collection
+                    if not isinstance(parsed, dict):
+                        self._errors.append(
+                            {"path": str(galaxy_file), "error": "failed to load galaxy.yml"},
+                        )
+                    else:
+                        collection = {"collection_info": parsed}
+                        collection["meta_source"] = "galaxy.yml"
+                        return collection
         return None
 
     def _finalize_collection(
@@ -386,7 +408,10 @@ class CollectionCatalog:
         if runtime_file.exists():
             with runtime_file.open(encoding="utf-8") as fh:
                 try:
-                    collection["runtime"] = yaml.load(fh, Loader=SafeLoader)
+                    parsed_runtime = yaml.load(fh, Loader=SafeLoader)
+                    collection["runtime"] = (
+                        parsed_runtime if isinstance(parsed_runtime, dict) else {}
+                    )
                 except YAMLError as exc:
                     self._errors.append({"path": str(runtime_file), "error": str(exc)})
 

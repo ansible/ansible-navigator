@@ -207,17 +207,17 @@ class CmdParser:
         result: dict[str, Any],
         results: list[dict[str, Any]],
         section_delim: str | None,
-    ) -> dict[str, Any]:
+    ) -> None:
         """Handle the special description field parsing.
+
+        Consumes lines up to the next section delimiter and appends
+        the completed result to results in place.
 
         Args:
             lines: Remaining lines to consume.
             result: The current result dict.
             results: The list of results.
             section_delim: The section delimiter.
-
-        Returns:
-            The finalized result dict.
         """
         description = []
         while lines:
@@ -230,7 +230,6 @@ class CmdParser:
         else:
             result["description"] = "No description available"
         results.append(result)
-        return result
 
     def splitter(
         self,
@@ -264,7 +263,9 @@ class CmdParser:
                 continue
             current_key = key.lower().replace("_", "-").strip()
             if current_key == "description":
-                return self._handle_description(lines, result, results, section_delim)
+                self._handle_description(lines, result, results, section_delim)
+                result = {}
+                continue
             result[current_key] = content
 
         if result:

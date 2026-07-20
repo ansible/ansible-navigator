@@ -400,12 +400,14 @@ class TmuxSession:
         self,
         showing: list[str],
         err_message: str,
+        elapsed: float,
     ) -> list[str]:
         """Handle a timeout while waiting for a response.
 
         Args:
             showing: The current screen content
             err_message: The error message category
+            elapsed: The elapsed time in seconds
 
         Returns:
             The annotated screen content
@@ -416,10 +418,9 @@ class TmuxSession:
         with setup_capture_path.open(mode="w", encoding="utf-8") as fh:
             fh.writelines("\n".join(self._setup_capture))
 
-        datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+        time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
         alerts = [
-            f"******** ERROR: TMUX '{err_message}'"
-            " TIMEOUT @ {elapsed}s @ {time_stamp} ********",
+            f"******** ERROR: TMUX '{err_message}' TIMEOUT @ {elapsed}s @ {time_stamp} ********",
         ]
         alerts.append(f"******** Captured to: {timeout_capture_path}")
         showing = alerts + showing
@@ -460,12 +461,17 @@ class TmuxSession:
                     timeout,
                 )
                 if stable_timeout:
-                    return self._handle_response_timeout(final_showing, "5 LIKE SCREENS"), True
+                    stable_elapsed = timer() - start_time
+                    return self._handle_response_timeout(
+                        final_showing,
+                        "5 LIKE SCREENS",
+                        stable_elapsed,
+                    ), True
                 return final_showing, False
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                return self._handle_response_timeout(showing, "RESPONSE"), True
+                return self._handle_response_timeout(showing, "RESPONSE", elapsed), True
             time.sleep(0.1)
 
     def interaction(

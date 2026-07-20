@@ -245,9 +245,10 @@ def place_at_path(
         msg = "Cannot place non dict at root of dict"
         raise ValueError(msg)
 
-    last_part = path.rsplit(".", maxsplit=1)[-1]
-    for part in path.split("."):
-        if part == last_part:
+    parts = path.split(".")
+    last_idx = len(parts) - 1
+    for idx, part in enumerate(parts):
+        if idx == last_idx:
             _place_at_leaf(behaviors, nested, part, value)
         else:
             if part not in nested:

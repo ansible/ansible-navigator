@@ -273,7 +273,10 @@ class Rule(NamedTuple):
             The parsed captures tuple.
         """
         if key in dct:
-            return tuple((int(k), Rule.make(v, repository)) for k, v in dct[key].items())
+            return tuple(
+                (int(k), Rule.make(v, repository))
+                for k, v in sorted(dct[key].items(), key=lambda x: int(x[0]))
+            )
         return ()
 
     @classmethod
