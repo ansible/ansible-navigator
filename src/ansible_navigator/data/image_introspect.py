@@ -201,36 +201,6 @@ class CmdParser:
         key, content = re.split(delim, content, maxsplit=1)
         return key, delim, content
 
-    @staticmethod
-    def _handle_description(
-        lines: list[str],
-        result: dict[str, Any],
-        results: list[dict[str, Any]],
-        section_delim: str | None,
-    ) -> None:
-        """Handle the special description field parsing.
-
-        Consumes lines up to the next section delimiter and appends
-        the completed result to results in place.
-
-        Args:
-            lines: Remaining lines to consume.
-            result: The current result dict.
-            results: The list of results.
-            section_delim: The section delimiter.
-        """
-        description = []
-        while lines:
-            line = lines.pop(0)
-            if line == section_delim:
-                break
-            description.append(line)
-        if description:
-            result["description"] = " ".join(description)
-        else:
-            result["description"] = "No description available"
-        results.append(result)
-
     def splitter(
         self,
         lines: list[str],
@@ -262,10 +232,20 @@ class CmdParser:
                 result[current_key] += f" {content}"
                 continue
             current_key = key.lower().replace("_", "-").strip()
+            # system_packages description field needs special handling
             if current_key == "description":
-                self._handle_description(lines, result, results, section_delim)
-                result = {}
-                continue
+                description = []
+                while lines:
+                    line = lines.pop(0)
+                    if line == section_delim:
+                        break
+                    description.append(line)
+                if description:
+                    result[current_key] = " ".join(description)
+                else:
+                    result[current_key] = "No description available"
+                results.append(result)
+                return result
             result[current_key] = content
 
         if result:
@@ -392,11 +372,10 @@ class PythonPackages(CmdParser):
             parsed = [parsed]
         for pkg in parsed:
             for entry in ["required-by", "requires"]:
-                val = pkg[entry]  # pylint: disable=invalid-sequence-index
-                if val:
-                    pkg[entry] = [p.strip() for p in val.split(",")]  # pylint: disable=invalid-sequence-index
+                if pkg[entry]:
+                    pkg[entry] = [p.strip() for p in pkg[entry].split(",")]
                 else:
-                    pkg[entry] = []  # pylint: disable=invalid-sequence-index
+                    pkg[entry] = []
         command.details = parsed
 
     def parse_freeze(self, command: Command) -> None:
