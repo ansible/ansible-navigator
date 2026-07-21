@@ -213,7 +213,7 @@ class TmuxSession:
 
         self._setup_capture = self._pane.capture_pane()
 
-        captured = send_and_wait("clear")
+        send_and_wait("clear")
         captured = send_and_wait("echo ready")
         if "ready" not in captured:
             msg = f"Failed to retrieve the 'echo ready' output: {captured}"
@@ -381,7 +381,6 @@ class TmuxSession:
                         break
                     elapsed = timer() - start_time
                     if elapsed > timeout:
-                        err_message = "5 LIKE SCREENS"
                         break
                     time.sleep(0.1)
                 break
@@ -395,7 +394,7 @@ class TmuxSession:
                 # taint the screen output w/ timestamp so it's never a valid fixture
                 alerts = [
                     f"******** ERROR: TMUX '{err_message}'"
-                    " TIMEOUT @ {elapsed}s @ {time_stamp} ********",
+                    f" TIMEOUT @ {elapsed}s @ {time_stamp} ********",
                 ]
                 alerts.append(f"******** Captured to: {timeout_capture_path}")
                 showing = alerts + showing

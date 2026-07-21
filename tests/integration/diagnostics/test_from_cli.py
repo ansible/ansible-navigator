@@ -57,4 +57,4 @@ def test(
 
     # Test the file permissions as well since diagnostics takes time to run
     status = Path(file_name).stat()
-    assert oct(status.st_mode)[-3:] == str(oct(0o600))[-3:]
+    assert oct(status.st_mode).endswith("600")

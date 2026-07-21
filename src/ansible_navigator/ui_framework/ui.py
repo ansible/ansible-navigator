@@ -401,7 +401,7 @@ class UserInterface(CursesWindow):
                 window=self._screen,
                 lineno=min(lineno, viewport_height + len_heading),
                 line=CursesLine(
-                    ((line_part,)),
+                    (line_part,),
                 ),
             )
 
@@ -419,7 +419,7 @@ class UserInterface(CursesWindow):
             window=self._screen,
             lineno=input_at,
             line=CursesLine(
-                ((line_part,)),
+                (line_part,),
             ),
         )
         self._screen.refresh()
@@ -835,7 +835,6 @@ class UserInterface(CursesWindow):
                 if ordered_indices:
                     index = ordered_indices[0]
                     self.scroll(0)
-                    entry = "KEY_F(5)"
                 continue
 
             if entry == "+":
@@ -846,13 +845,11 @@ class UserInterface(CursesWindow):
                 if ordered_indices:
                     index = ordered_indices[0]
                     self.scroll(0)
-                    entry = "KEY_F(5)"
                 continue
 
             if entry.isnumeric():
                 index = int(entry) % len(objs)
                 self.scroll(0)
-                entry = "KEY_F(5)"
                 continue
 
             current = objs[index % len(objs)]

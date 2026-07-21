@@ -826,7 +826,7 @@ class Action(ActionBase):
                 self._logger.debug("shutting down runner")
                 self.runner.cancelled = True
                 while not self.runner.finished:
-                    pass
+                    pass  # busy-wait until the runner finishes
                 self.write_artifact()
                 return True
             self._logger.warning("Quit requested but playbook running, try q! or quit!")

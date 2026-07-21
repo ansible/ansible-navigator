@@ -81,5 +81,3 @@ class SettingsFile(Migration):
             serialization_format=serialization_format,
         )
         changed(color=COLOR, message=f"Updated: {self.settings_file_path}")
-
-        return

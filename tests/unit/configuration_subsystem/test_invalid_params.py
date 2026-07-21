@@ -112,7 +112,6 @@ def test_no_container_engine(
         Returns:
             no container engine
         """
-        return
 
     monkeypatch.setattr("shutil.which", local_which)
     response = generate_config()
@@ -266,7 +265,7 @@ def test_poor_choices(
     subcommand = entry.subcommands[0] if isinstance(entry.subcommands, list) else None
 
     if entry.cli_parameters and entry.cli_parameters.action == "store_true":
-        pass
+        pass  # store_true params don't accept invalid values to test
     elif entry.cli_parameters:
         look_for = "must be one"
         # ansible-navigator choice error

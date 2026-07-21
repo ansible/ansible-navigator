@@ -140,8 +140,7 @@ def _params_row_for_entry(entry: SettingsEntry) -> tuple[str, ...]:
         settings.append(f"**Choices:** {choices}")
     if default is not None:
         settings.append(f"**Default:** {default}")
-    if cli_parameters is not None:
-        settings.append(f"**CLI:** {cli_parameters}")
+    settings.append(f"**CLI:** {cli_parameters}")
     if env_var is not None:
         settings.append(f"**ENV:** {env_var}")
 

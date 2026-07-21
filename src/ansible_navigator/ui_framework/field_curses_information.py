@@ -39,10 +39,7 @@ class FieldCursesInformation:
             The max width string
         """
         return max(
-            (
-                max((line_part for line_part in line), key=lambda lp: len(lp.string)).string
-                for line in self.information
-            ),
+            (max(line, key=lambda lp: len(lp.string)).string for line in self.information),
             key=len,
         )
 

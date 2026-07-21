@@ -38,22 +38,22 @@ class Cli2Runner:
 
     def run_test(
         self,
-        mocked_runner: MagicMock,
+        _mocked_runner: MagicMock,
         monkeypatch: pytest.MonkeyPatch,
-        tmp_path: Path,
-        cli_entry: str,
-        config_fixture: str,
+        _tmp_path: Path,
+        _cli_entry: str,
+        _config_fixture: str,
         expected: dict[str, str],
     ) -> None:
         # pylint: disable=too-many-arguments
         """Confirm execution of ``cli.main()`` produces the desired results.
 
         Args:
-            mocked_runner: A patched instance of runner
+            _mocked_runner: A patched instance of runner
             monkeypatch: The monkeypatch fixture
-            tmp_path: A test specific temporary path
-            cli_entry: The CLI entry to set as :data:`sys.argv`
-            config_fixture: The settings fixture
+            _tmp_path: A test specific temporary path
+            _cli_entry: The CLI entry to set as :data:`sys.argv`
+            _config_fixture: The settings fixture
             expected: the expected return value
         """
         pytest.exit(reason="Override in subclass", returncode=1)

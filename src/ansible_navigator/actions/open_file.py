@@ -233,4 +233,3 @@ class Action:
             editor_console=editor_console,
             editor_command=editor_command,
         )
-        return

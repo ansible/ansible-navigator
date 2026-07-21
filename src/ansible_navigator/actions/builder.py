@@ -78,7 +78,7 @@ class Action(ActionBase):
                 log_message,
                 self._args.set_environment_variable,
             )
-        env_vars_to_set = {}
+            env_vars_to_set = {}
 
         if self._args.display_color is False:
             env_vars_to_set["ANSIBLE_NOCOLOR"] = "1"

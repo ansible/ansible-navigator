@@ -75,7 +75,7 @@ test_data = (
         id="2",
     ),
     pytest.param(
-        Scenario(name="3", re_match=re.compile(r"^.*[+-][01][0-9]:[0-5][0-9]"), time_zone="local"),
+        Scenario(name="3", re_match=re.compile(r"^.*[+-][01]\d:[0-5]\d"), time_zone="local"),
         id="3",
     ),
     pytest.param(

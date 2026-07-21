@@ -75,7 +75,7 @@ class Form:
                 ),
             )
         elif self.type_ is FormType.WORKING:
-            pass
+            pass  # no additional fields needed for WORKING form type
 
         FormPresenter(form=self, screen=screen, ui_config=ui_config).present()
         try:

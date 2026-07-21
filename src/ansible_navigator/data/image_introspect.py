@@ -352,7 +352,7 @@ class PythonPackages(CmdParser):
         )
         run_command(pre)
         pre.parse(pre)
-        pkgs = " ".join(pkg for pkg in pre.details[0]) if pre.details else ""
+        pkgs = " ".join(pre.details[0]) if pre.details else ""
         return [
             Command(
                 id_="python_packages",
@@ -490,7 +490,7 @@ def main(
         for result in results:
             result_as_dict = vars(result)
             result_as_dict.pop("parse")
-            for key in list(result_as_dict.keys()):
+            for key in list(result_as_dict):
                 if key not in ["details", "errors"]:
                     result_as_dict[f"__{key}"] = result_as_dict[key]
                     result_as_dict.pop(key)
