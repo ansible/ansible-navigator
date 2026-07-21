@@ -251,3 +251,85 @@ def run_stdout_factory(package: str) -> Callable[..., Any]:
         A partial ``run_stdout()`` method for the package
     """
     return functools.partial(run_stdout, package)
+
+
+def pre_run_interactive(package: str, action: str, *args: Any, **_kwargs: dict[str, Any]) -> Any:
+    """Call the given action's ``pre_run()`` method.
+
+    Args:
+        package: The name of the package
+        action: The name of the action
+        *args: The arguments passed to the action's run method
+        **_kwargs: The keyword arguments passed to the action's run
+            method
+
+    Returns:
+        The outcome of running the action's run method
+    """
+    action_cls = get(package, action)
+    app, interaction = args
+    app_action = action_cls(app.args)
+    supports_interactive = hasattr(app_action, "pre_run")
+    if not supports_interactive:
+        logger.error("Subcommand '%s' does not support mode interactive", action)
+    pre_run_action = app_action.pre_run if supports_interactive else app_action.no_interactive_mode
+
+    # Allow tracebacks to bring down the UI, used in tests
+    if os.getenv("ANSIBLE_NAVIGATOR_ALLOW_UI_TRACEBACK") == "true":
+        return pre_run_action(app=app, interaction=interaction)
+
+    # Capture and show a UI notification
+    try:
+        return pre_run_action(app=app, interaction=interaction)
+    except Exception:
+        logger.critical("Subcommand '%s' encountered a fatal error.", action)
+        logger.exception("Logging an uncaught exception")
+        warn_msg = [f"Unexpected errors were encountered while performing pre-run for '{action}'."]
+        warn_msg.append("Please log an issue with the log file contents.")
+        warning = error_notification(warn_msg)
+        interaction.ui.show_form(warning)
+        return None
+
+
+def pre_run_interactive_factory(package: str) -> Callable[..., Any]:
+    """Create a ``pre_run_interactive()`` function for one package.
+
+    Args:
+        package: The name of the package
+
+    Returns:
+        A partial ``pre_run_interactive()`` method for the package
+    """
+    return functools.partial(pre_run_interactive, package)
+
+
+def pre_run_stdout(
+    package: str, action: str, *args: Any, **_kwargs: dict[str, Any]
+) -> RunStdoutReturn:
+    """Call the given action's ``pre_run_stdout`` method.
+
+    Args:
+        package: The name of the package
+        action: The name of the action
+        *args: The arguments passed to the action's pre_run_stdout method
+        **_kwargs: The keyword arguments passed to the action's
+            pre_run_stdout method
+
+    Returns:
+        The outcome of running the action's ``pre_run_stdout()`` method
+    """
+    action_cls = get(package, action)
+    args = args[0]
+    return action_cls(args).pre_run_stdout()
+
+
+def pre_run_stdout_factory(package: str) -> Callable[..., Any]:
+    """Create a ``pre_run_stdout()`` function for one package.
+
+    Args:
+        package: The name of the package
+
+    Returns:
+        A partial ``pre_run_stdout()`` method for the package
+    """
+    return functools.partial(pre_run_stdout, package)
