@@ -122,6 +122,22 @@ def test_no_container_engine(
     )
 
 
+def test_explicit_container_engine(
+    monkeypatch: pytest.MonkeyPatch,
+    generate_config: GenerateConfigCallable,
+) -> None:
+    """Ensure explicit Apple Container selection is accepted.
+
+    Args:
+        monkeypatch: Fixture for patching
+        generate_config: Fixture to generate a config
+    """
+    monkeypatch.setattr("shutil.which", which)
+    response = generate_config(params=["run", "site.yml", "--ce", "container"])
+    assert response.exit_messages == []
+    assert response.application_configuration.container_engine == "container"
+
+
 def test_fail_log_file_dir(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,

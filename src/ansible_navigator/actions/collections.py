@@ -469,6 +469,7 @@ class Action(ActionBase):
             self._logger.debug("running collections command with execution environment enabled")
             python_exec_path = f"{cache_path}/python_latest.sh"
             utils_lib = Path(__file__).parent / ".." / "utils"
+            mount_label = ":z" if self._args.container_engine != "container" else ""
 
             container_volume_mounts = [
                 # cache directory which has introspection script
@@ -478,7 +479,7 @@ class Action(ActionBase):
             ]
             if Path(self._adjacent_collection_dir).exists():
                 container_volume_mounts.append(
-                    f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}:z",
+                    f"{self._adjacent_collection_dir}:{self._adjacent_collection_dir}{mount_label}",
                 )
 
             mount_doc_cache = True
@@ -499,7 +500,7 @@ class Action(ActionBase):
             if mount_doc_cache:
                 container_volume_mounts.append(
                     f"{self._args.collection_doc_cache_path}:"
-                    f"{self._args.collection_doc_cache_path}:z",
+                    f"{self._args.collection_doc_cache_path}{mount_label}",
                 )
 
             for volume_mount in container_volume_mounts:

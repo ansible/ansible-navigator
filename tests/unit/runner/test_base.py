@@ -18,8 +18,10 @@ macos_docker_ssh_opts = [
     ("platform", "container_engine"),
     (
         ("darwin", "docker"),
+        ("darwin", "container"),
         ("darwin", "podman"),
         ("linux", "docker"),
+        ("linux", "container"),
         ("linux", "podman"),
     ),
 )
@@ -125,10 +127,11 @@ def test_podman_user_override_with_other_options() -> None:
     assert "--env=TEST=1" in opts
 
 
-def test_docker_no_user_root() -> None:
-    """Test that docker does not set --user=root."""
+@pytest.mark.parametrize("container_engine", ("docker", "container"))
+def test_non_podman_no_user_root(container_engine: str) -> None:
+    """Test that non-podman engines do not set --user=root."""
     base = Base(
-        container_engine="docker",
+        container_engine=container_engine,
         execution_environment=True,
     )
 

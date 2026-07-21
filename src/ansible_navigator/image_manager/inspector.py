@@ -33,10 +33,11 @@ class ImagesInspect:
         Returns:
             List of image inspection command objects
         """
+        inspect_command = "image inspect" if self._container_engine == "container" else "inspect"
         return [
             Command(
                 identity=image_id,
-                command=f"{self._container_engine} inspect {image_id}",
+                command=f"{self._container_engine} {inspect_command} {image_id}",
                 post_process=self.parse,
             )
             for image_id in self._image_ids
@@ -72,10 +73,11 @@ class ImagesList:
         Returns:
             List of the image lister commands
         """
+        list_command = "image list" if self._container_engine == "container" else "images"
         return [
             Command(
                 identity="images",
-                command=f"{self._container_engine} images",
+                command=f"{self._container_engine} {list_command}",
                 post_process=self.parse,
             ),
         ]
@@ -88,6 +90,26 @@ class ImagesList:
             command: Image lister command object
         """
         if command.stdout:
+            if command.stdout.lstrip().startswith("["):
+                raw_images = json.loads(command.stdout)
+                valid_images = []
+                for image in raw_images:
+                    if not isinstance(image, dict):
+                        continue
+                    reference = image.get("configuration", {}).get("name")
+                    image_id = image.get("id")
+                    if not reference or not image_id:
+                        continue
+                    repository, tag = reference.rsplit(":", 1)
+                    valid_images.append(
+                        {
+                            "repository": repository,
+                            "tag": tag,
+                            "image_id": image_id,
+                        },
+                    )
+                command.details = valid_images
+                return
             images = command.stdout.splitlines()
             re_2omo = re.compile(r"\s{2,}")
             headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]

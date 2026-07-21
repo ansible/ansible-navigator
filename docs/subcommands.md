@@ -10,7 +10,9 @@ some examples.
 ### `ansible`
 
 Use `ansible-navigator exec -- ansible` from shell. The exec subcommand requires
-execution environment support.
+execution environment support. When the selected execution-environment engine is
+Apple Container, see the [Apple Container Guide](apple-container.md) for
+runtime-specific differences.
 
 ### `ansible-builder`
 

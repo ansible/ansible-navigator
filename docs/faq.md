@@ -214,6 +214,38 @@ the execution environment. (eg `/home/runner/.ssh/key_name` or
 `~/.ssh/key_name` which will resolve to the user's home directory with or
 without the use of an execution environment.
 
+### Why can my playbook no longer reach SSH targets when using Apple Container?
+
+If an execution-environment playbook can no longer connect to remote hosts over
+SSH when Apple Container is selected, the most likely cause is that the
+container does not have the SSH agent socket or the needed key material
+available in the way your workflow expects.
+
+Check the following first:
+
+1.  Confirm that Apple Container is actually the selected engine.
+1.  Confirm that your SSH key is loaded in `ssh-agent`.
+1.  Prefer Apple Container's native SSH forwarding with `--co=--ssh`.
+1.  Re-run with `--log-level debug` and inspect the final container invocation.
+
+Example:
+
+```bash
+ansible-navigator run site.yml --ee true --ce container --co=--ssh
+```
+
+If your workflow depends on direct key files instead of `ssh-agent`, also verify
+that:
+
+- the key path is available inside the execution environment
+- any custom SSH config or referenced include files are reachable from inside
+  the container
+- playbook variables such as `ansible_ssh_private_key_file` point to the path as
+  seen from inside the execution environment, not only on the host
+
+For Apple Container-specific SSH behavior and option examples, see the
+[Apple Container Guide](apple-container.md).
+
 ## Compatibility with `ansible-*` utilities
 
 ### Why does the playbook hang when `vars_prompt`, `pause/prompt` or `--ask-pass` is used?
@@ -377,6 +409,20 @@ currently required when using `podman`. Not all operating systems have a
 
 Please reference the documentation for your operating system related to POSIX
 message queues, or simply create the directory.
+
+This requirement is Podman-specific. For Apple Container-specific execution
+environment notes, see the [Apple Container Guide](apple-container.md).
+
+### How does Apple Container authenticate to private registries?
+
+Apple Container uses its own registry login state. Authenticate first with
+`container registry login <registry>` before running `ansible-navigator` against
+private execution-environment images. `ansible-navigator` and `ansible-runner`
+do not automatically log in or log out Apple Container registries on your
+behalf.
+
+For the broader Apple Container requirements, trade-offs, and FAQ, see the
+[Apple Container Guide](apple-container.md).
 
 ### Something didn't work, how can I troubleshoot it?
 

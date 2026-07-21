@@ -291,6 +291,7 @@ class DiagnosticsCollector:
         commands = [
             Command(identity="podman", command="podman --version", post_process=lambda c: c),
             Command(identity="docker", command="docker --version", post_process=lambda c: c),
+            Command(identity="container", command="container --version", post_process=lambda c: c),
         ]
         CommandRunner().run_single_process(commands)
         engines: dict[str, JSONTypes] = {}

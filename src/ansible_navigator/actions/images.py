@@ -495,8 +495,16 @@ class Action(ActionBase):
             except (KeyError, TypeError):
                 config_label_check = False
 
+            try:
+                variants_label_check = any(
+                    variant["config"]["config"]["labels"]["ansible-execution-environment"] == "true"
+                    for variant in details["variants"]
+                )
+            except (KeyError, TypeError):
+                variants_label_check = False
+
             image["execution_environment"] = any(
-                (legacy_check, root_label_check, config_label_check),
+                (legacy_check, root_label_check, config_label_check, variants_label_check),
             )
         self._images.value = sorted(images, key=lambda i: i["name"])
 
