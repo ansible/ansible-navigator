@@ -495,12 +495,7 @@ class TmuxSession:
                     timeout,
                 )
                 if stable_timeout:
-                    stable_elapsed = timer() - start_time
-                    return self._handle_response_timeout(
-                        final_showing,
-                        "5 LIKE SCREENS",
-                        stable_elapsed,
-                    ), True
+                    return final_showing, False
                 return final_showing, False
 
             elapsed = timer() - start_time
