@@ -54,6 +54,36 @@ class FormHandlerText(CursesWindow, Textbox):
         """
         self.input_line_pointer = (self.input_line_pointer + amount) % len(self.input_line_cache)
 
+    def _handle_arrow_down(self) -> int:
+        """Handle arrow down / Ctrl-N key input for line cache navigation.
+
+        Returns:
+            1 to indicate the window should be repainted
+        """
+        if self.input_line_cache:
+            if not self._arrowing:
+                self.input_line_pointer = 0
+                self._arrowing = True
+            else:
+                self._adjust_line_pointer(1)
+                self._paint_from_line_cache()
+        return 1
+
+    def _handle_arrow_up(self) -> int:
+        """Handle arrow up / Ctrl-P key input for line cache navigation.
+
+        Returns:
+            1 to indicate the window should be repainted
+        """
+        if self.input_line_cache:
+            if not self._arrowing:
+                self.input_line_pointer = len(self.input_line_cache) - 1
+                self._arrowing = True
+            else:
+                self._adjust_line_pointer(-1)
+                self._paint_from_line_cache()
+        return 1
+
     def _do_command(self, char: int) -> int:
         """Handle the input from the user.
 
@@ -76,23 +106,9 @@ class FormHandlerText(CursesWindow, Textbox):
         elif char == curses.KEY_RESIZE:
             ret = 0
         elif char in (curses_ascii.SO, curses.KEY_DOWN):
-            if self.input_line_cache:
-                if not self._arrowing:
-                    self.input_line_pointer = 0
-                    self._arrowing = True
-                else:
-                    self._adjust_line_pointer(1)
-                    self._paint_from_line_cache()
-            ret = 1
+            ret = self._handle_arrow_down()
         elif char in (curses_ascii.DLE, curses.KEY_UP):
-            if self.input_line_cache:
-                if not self._arrowing:
-                    self.input_line_pointer = len(self.input_line_cache) - 1
-                    self._arrowing = True
-                else:
-                    self._adjust_line_pointer(-1)
-                    self._paint_from_line_cache()
-            ret = 1
+            ret = self._handle_arrow_up()
         elif char == curses_ascii.TAB:
             ret = 0
         else:

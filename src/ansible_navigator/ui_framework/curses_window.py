@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from _curses import window
 
     from .curses_defs import CursesLine
+    from .curses_defs import CursesLinePart
     from .ui_config import UIConfig
 
     Window = window
@@ -114,6 +115,55 @@ class CursesWindow:
         except curses.error:
             self._logger.exception("Errors setting up terminal, check TERM value")
 
+    def _render_line_part(
+        self,
+        window: Window,
+        lineno: int,
+        line_part: CursesLinePart,
+        prefix_len: int,
+    ) -> None:
+        """Render a single line part to a curses window.
+
+        Args:
+            window: A curses window
+            lineno: the line number
+            line_part: The individual line part to render
+            prefix_len: The length of the line prefix
+        """
+        column = line_part.column + prefix_len
+        if column > self._screen_width:
+            return
+
+        text = line_part.string[0 : self._screen_width - column + 1]
+        try:
+            color = self._color_pair_or_none(line_part.color)
+            if color is None:
+                window.addstr(lineno, column, text)
+            else:
+                window.addstr(lineno, column, text, color | line_part.decoration)
+        except curses.error:
+            # curses error at last column & row but I don't care
+            # because it still draws it
+            # https://stackoverflow.com/questions/10877469/
+            # ncurses-setting-last-character-on-screen-without-scrolling-enabled
+            if lineno == window.getyx()[0] and column + len(text) == window.getyx()[1] + 1:
+                pass
+            else:
+                self._logger.debug("curses error")
+                self._logger.debug(
+                    "screen_height: %s, lineno: %s",
+                    self._screen_height,
+                    lineno,
+                )
+                self._logger.debug(
+                    "screen_w: %s, column: %s text: %s, lentext: %s, end_col: %s",
+                    self._screen_width,
+                    column,
+                    text,
+                    len(text),
+                    column + len(text),
+                )
+
     def _add_line(
         self,
         window: Window,
@@ -138,41 +188,7 @@ class CursesWindow:
         if line:
             window.move(lineno, 0)
             for line_part in line:
-                column = line_part.column + len(prefix or "")
-                if column <= self._screen_width:
-                    text = line_part.string[0 : self._screen_width - column + 1]
-                    try:
-                        color = self._color_pair_or_none(line_part.color)
-                        if color is None:
-                            window.addstr(lineno, column, text)
-                        else:
-                            window.addstr(lineno, column, text, color | line_part.decoration)
-                    except curses.error:
-                        # curses error at last column & row but I don't care
-                        # because it still draws it
-                        # https://stackoverflow.com/questions/10877469/
-                        # ncurses-setting-last-character-on-screen-without-scrolling-enabled
-                        if (
-                            lineno == window.getyx()[0]
-                            and column + len(text) == window.getyx()[1] + 1
-                        ):
-                            pass  # cursor is at expected position, no error
-
-                        else:
-                            self._logger.debug("curses error")
-                            self._logger.debug(
-                                "screen_height: %s, lineno: %s",
-                                self._screen_height,
-                                lineno,
-                            )
-                            self._logger.debug(
-                                "screen_w: %s, column: %s text: %s, lentext: %s, end_col: %s",
-                                self._screen_width,
-                                column,
-                                text,
-                                len(text),
-                                column + len(text),
-                            )
+                self._render_line_part(window, lineno, line_part, len(prefix or ""))
 
     def _set_colors(self) -> None:
         """Set the colors for curses."""
