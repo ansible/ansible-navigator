@@ -14,6 +14,9 @@ if TYPE_CHECKING:
     from pytest_mock import MockerFixture
 
 
+OVERRIDE_MSG = "override in subclass"
+
+
 class RunnerTestError(Exception):
     """Custom exception for runner to throw."""
 
@@ -23,15 +26,15 @@ class Cli2Runner:
     """A base class which mocks the runner calls."""
 
     INTERACTIVE = {
-        "config": "override in subclass",
-        "inventory": "override in subclass",
-        "run": "override in subclass",
+        "config": OVERRIDE_MSG,
+        "inventory": OVERRIDE_MSG,
+        "run": OVERRIDE_MSG,
     }
 
     STDOUT = {
-        "config": "override in subclass",
-        "inventory": "override in subclass",
-        "run": "override in subclass",
+        "config": OVERRIDE_MSG,
+        "inventory": OVERRIDE_MSG,
+        "run": OVERRIDE_MSG,
     }
 
     cli_entry = "ansible-navigator {0} {1} -m {2}"

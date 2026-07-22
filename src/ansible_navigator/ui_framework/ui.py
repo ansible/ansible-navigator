@@ -50,6 +50,8 @@ if TYPE_CHECKING:
     from .ui_config import UIConfig
 
 
+KEY_REFRESH = "KEY_F(5)"
+
 STANDARD_KEYS = {
     "^b/PgUp": "page up",
     "^f/PgDn": "page down",
@@ -478,7 +480,7 @@ class UserInterface(CursesWindow):
             "+",
             "-",
             "_",
-            "KEY_F(5)",
+            KEY_REFRESH,
             "^[",
             "\x1b",
             "CURSOR_ENTER",
@@ -540,11 +542,11 @@ class UserInterface(CursesWindow):
 
             if await_input:
                 char = self._screen.getch()
-                key = "KEY_F(5)" if char == -1 else curses.keyname(char).decode()
+                key = KEY_REFRESH if char == -1 else curses.keyname(char).decode()
                 if char in [10, 13]:  # pragma: no cover  # Enter key codes: 10=LF, 13=CR
                     key = "CURSOR_ENTER"
             else:
-                key = "KEY_F(5)"
+                key = KEY_REFRESH
 
             return_value = None
             if key == "KEY_RESIZE":

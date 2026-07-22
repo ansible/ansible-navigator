@@ -26,6 +26,8 @@ from ansible_navigator.content_defs import SerializationFormat
 
 logger = logging.getLogger(__name__)
 
+UNKNOWN_SERIALIZATION_FORMAT_MSG = "Unknown serialization format"
+
 try:
     from yaml import CSafeDumper as SafeDumper
 except ImportError:
@@ -66,8 +68,7 @@ def serialize(
         return _yaml_dumps(dumpable=dumpable)
     if serialization_format == SerializationFormat.JSON:
         return _json_dumps(dumpable=dumpable)
-    msg = "Unknown serialization format"
-    raise ValueError(msg)
+    raise ValueError(UNKNOWN_SERIALIZATION_FORMAT_MSG)
 
 
 def serialize_write_file(
@@ -101,8 +102,7 @@ def serialize_write_file(
         if serialization_format == SerializationFormat.YAML:
             _yaml_dump(dumpable=dumpable, file_handle=file_handle)
             return
-    msg = "Unknown serialization format"
-    raise ValueError(msg)
+    raise ValueError(UNKNOWN_SERIALIZATION_FORMAT_MSG)
 
 
 def serialize_write_temp_file(
@@ -144,8 +144,7 @@ def serialize_write_temp_file(
             return Path(file_like.name)
         _text_dump(dumpable=str(dumpable), file_handle=file_like)
         return Path(file_like.name)
-    msg = "Unknown serialization format"
-    raise ValueError(msg)
+    raise ValueError(UNKNOWN_SERIALIZATION_FORMAT_MSG)
 
 
 SERIALIZATION_FAILURE_MSG = (

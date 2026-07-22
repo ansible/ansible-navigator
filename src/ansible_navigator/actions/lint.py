@@ -521,35 +521,20 @@ class Action(ActionBase):
             Indication if lint should be rerun
         """
         rerun_lint = False
-        checked_paths = []
-        for outer_issue in self._issues_menu.value:
-            outer_path = outer_issue["__path"]
-            if outer_path in checked_paths:
-                continue
-            checked_paths.append(outer_path)
-            unix_ts, iso_ts = time_stamp_for_file(outer_path, self._args.time_zone)
-            # Set all issues for the same file
-            for inner_issue in self._issues_menu.value:
-                inner_path = inner_issue["__path"]
-                if inner_path != outer_path:
-                    continue
+        path_timestamps: dict[str, tuple[float | None, str | None]] = {}
+        for issue in self._issues_menu.value:
+            path = issue["__path"]
+            if path not in path_timestamps:
+                path_timestamps[path] = time_stamp_for_file(path, self._args.time_zone)
 
-                previous_ts = inner_issue.get("__last_modified")
-                inner_issue["last_modified"] = iso_ts
-                inner_issue["__last_modified"] = unix_ts
+            unix_ts, iso_ts = path_timestamps[path]
+            previous_ts = issue.get("__last_modified")
 
-                # The file may be gone or non existent
-                if unix_ts is None:
-                    continue
+            issue["last_modified"] = iso_ts
+            issue["__last_modified"] = unix_ts
 
-                # The may be a first run
-                if previous_ts is None:
-                    rerun_lint = True
-                    continue
-
-                # Has the file changed
-                if unix_ts > previous_ts:
-                    rerun_lint = True
+            if unix_ts is not None and (previous_ts is None or unix_ts > previous_ts):
+                rerun_lint = True
 
         self._modification_times_last_updated = datetime.now(timezone.utc)
         if rerun_lint:

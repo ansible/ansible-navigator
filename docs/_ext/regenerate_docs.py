@@ -32,9 +32,10 @@ TEST_SETTINGS_FIXTURE = (
     / "configuration_subsystem"
     / "ansible-navigator.yml"
 )
-DOCS_SETTINGS_SAMPLE = PROJECT_DIR / "docs" / ".generated" / "ansible-navigator.yml"
-DOCS_SETTINGS_DUMP = PROJECT_DIR / "docs" / ".generated" / "settings-dump.md"
-DOCS_SUBCOMMANDS_OVERVIEW = PROJECT_DIR / "docs" / ".generated" / "subcommands-overview.md"
+GENERATED_DIR_NAME = ".generated"
+DOCS_SETTINGS_SAMPLE = PROJECT_DIR / "docs" / GENERATED_DIR_NAME / "ansible-navigator.yml"
+DOCS_SETTINGS_DUMP = PROJECT_DIR / "docs" / GENERATED_DIR_NAME / "settings-dump.md"
+DOCS_SUBCOMMANDS_OVERVIEW = PROJECT_DIR / "docs" / GENERATED_DIR_NAME / "subcommands-overview.md"
 
 APP = "ansible-navigator"
 

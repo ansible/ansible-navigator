@@ -27,15 +27,18 @@ run_fixture_dir = FIXTURES_DIR / "integration" / "actions" / "run_unicode"
 inventory_path = run_fixture_dir / "inventory"
 playbook_path = run_fixture_dir / "site.yaml"
 
+PLAY_1_DETAILS = "play-1 details"
+BACK_CMD = ":back"
+
 base_steps = (
-    UiTestStep(user_input=":0", comment="play-1 details"),
+    UiTestStep(user_input=":0", comment=PLAY_1_DETAILS),
     UiTestStep(user_input=":0", comment="task-1 yaml", present=["航海家"]),
     UiTestStep(user_input=":json", comment="task-1 json", present=["航海家"]),
-    UiTestStep(user_input=":back", comment="play-1 details"),
+    UiTestStep(user_input=BACK_CMD, comment=PLAY_1_DETAILS),
     UiTestStep(user_input=":1", comment="task-2 json", present=["航海家"]),
     UiTestStep(user_input=":yaml", comment="task-2 yaml", present=["航海家"]),
-    UiTestStep(user_input=":back", comment="play-1 details"),
-    UiTestStep(user_input=":back", comment="all play details"),
+    UiTestStep(user_input=BACK_CMD, comment=PLAY_1_DETAILS),
+    UiTestStep(user_input=BACK_CMD, comment="all play details"),
     UiTestStep(user_input=":st", comment="display stream"),
 )
 

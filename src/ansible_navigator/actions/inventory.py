@@ -189,6 +189,48 @@ class Action(ActionBase):
         """Request calling app update, inventory update checked in ``run()``."""
         self._calling_app.update()
 
+    def _initialize_inventory(self) -> bool:
+        """Set up args, collect inventory details, and check for errors.
+
+        Returns:
+            True if initialization succeeded, False otherwise
+        """
+        args_updated = self._update_args(
+            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
+        )
+        if not args_updated:
+            return False
+
+        self.stdout = self._calling_app.stdout
+        self._inventories = self._args.inventory
+        self._set_inventories_mtime()
+
+        self._collect_inventory_details()
+        return bool(self._inventory) or bool(self._inventory_error)
+
+    def _check_inventory_changed(self) -> bool:
+        """Check if inventory files have been modified and refresh if needed.
+
+        Returns:
+            True if the loop should break, False otherwise
+        """
+        current_mtime = self._inventories_mtime
+        self._set_inventories_mtime()
+        if current_mtime != self._inventories_mtime:
+            self._logger.debug("inventory changed")
+
+            self._set_inventories_mtime()
+
+            self._collect_inventory_details()
+            if not self._inventory:
+                return True
+
+            if self._inventory_error:
+                self._logger.error(self._inventory_error)
+                return True
+
+        return False
+
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Execute the ``inventory`` request for mode interactive.
 
@@ -204,19 +246,7 @@ class Action(ActionBase):
         self._logger.debug("inventory requested in interactive mode")
         self._prepare_to_run(app, interaction)
 
-        args_updated = self._update_args(
-            [self._name] + shlex.split(self._interaction.action.match.groupdict()["params"] or ""),
-        )
-        if not args_updated:
-            self._prepare_to_exit(interaction)
-            return None
-
-        self.stdout = self._calling_app.stdout
-        self._inventories = self._args.inventory
-        self._set_inventories_mtime()
-
-        self._collect_inventory_details()
-        if not self._inventory:
+        if not self._initialize_inventory():
             self._prepare_to_exit(interaction)
             return None
 
@@ -239,20 +269,8 @@ class Action(ActionBase):
             if not self.steps:
                 break
 
-            current_mtime = self._inventories_mtime
-            self._set_inventories_mtime()
-            if current_mtime != self._inventories_mtime:
-                self._logger.debug("inventory changed")
-
-                self._set_inventories_mtime()
-
-                self._collect_inventory_details()
-                if not self._inventory:
-                    break
-
-                if self._inventory_error:
-                    self._logger.error(self._inventory_error)
-                    break
+            if self._check_inventory_changed():
+                break
 
             if self.steps.current.name == "quit":
                 return self.steps.current
@@ -467,6 +485,29 @@ class Action(ActionBase):
         msg = "unknown step type"
         raise TypeError(msg)
 
+    def _handle_inventory_errors(self, inventory_err: str, inventory_output: str) -> None:
+        """Check inventory errors and show notifications or extract inventory.
+
+        Args:
+            inventory_err: The error output from the inventory collection
+            inventory_output: The standard output from the inventory collection
+        """
+        preface = ["Errors were encountered while gathering the inventory:"]
+        notify = ("ERROR!", "Error", "Unable to parse")
+        if any(string in inventory_err for string in notify):
+            if "[WARNING]" in inventory_err:
+                parts = inventory_err.split("[WARNING]")
+                messages = [part.replace("\n", " ").strip() for part in parts if part]
+                present = preface + [f"[WARNING]{message}" for message in messages]
+            else:
+                present = preface + inventory_err.splitlines()
+            for line in present:
+                self._logger.error(line)
+            warning = warning_notification(present)
+            self._interaction.ui.show_form(warning)
+        else:
+            self._extract_inventory(inventory_output)
+
     def _collect_inventory_details_interactive(
         self,
         kwargs: dict[str, Any],
@@ -503,21 +544,7 @@ class Action(ActionBase):
             parts = inventory_output.split("{", 1)
             inventory_err = parts[0] + inventory_err if inventory_err else parts[0]
             inventory_output = "{" + parts[1] if len(parts) == 2 else ""
-        preface = ["Errors were encountered while gathering the inventory:"]
-        notify = ("ERROR!", "Error", "Unable to parse")
-        if any(string in inventory_err for string in notify):
-            if "[WARNING]" in inventory_err:
-                parts = inventory_err.split("[WARNING]")
-                messages = [part.replace("\n", " ").strip() for part in parts if part]
-                present = preface + [f"[WARNING]{message}" for message in messages]
-            else:
-                present = preface + inventory_err.splitlines()
-            for line in present:
-                self._logger.error(line)
-            warning = warning_notification(present)
-            self._interaction.ui.show_form(warning)
-        else:
-            self._extract_inventory(inventory_output)
+        self._handle_inventory_errors(inventory_err, inventory_output)
 
     def _collect_inventory_details_automated(
         self,

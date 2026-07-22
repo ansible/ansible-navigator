@@ -55,6 +55,7 @@ if TYPE_CHECKING:
     from ansible_navigator.app_public import AppPublic
     from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
+COLUMN_IN_PROGRESS = "__in progress"
 
 RESULT_TO_COLOR = [
     ("(?i)^failed$", 9),
@@ -80,6 +81,64 @@ def get_color(word: str) -> int:
     )
 
 
+def _color_for_play(colname: str, colval: Any, entry: dict[str, Any]) -> tuple[int, int]:
+    """Determine color and decoration for a play menu entry.
+
+    Args:
+        colname: The column name
+        colval: The column value
+        entry: The menu entry
+
+    Returns:
+        The color and decoration
+    """
+    color = 0
+    decoration = 0
+    if not colval:
+        color = 8
+    elif colname in ["__task_count", "__play_name", "__progress"]:
+        failures = entry["__failed"] + entry["__unreachable"]
+        if failures:
+            color = 9
+        elif entry["__ok"]:
+            color = 10
+        else:
+            color = 8
+    elif colname == "__changed":
+        color = 11
+    else:
+        color = get_color(colname[2:])
+
+    if colname == "__progress" and entry["__progress"].strip().lower() == "complete":
+        decoration = curses.A_BOLD
+
+    return color, decoration
+
+
+def _color_for_task(colname: str, colval: Any, entry: dict[str, Any]) -> tuple[int, int]:
+    """Determine color and decoration for a task menu entry.
+
+    Args:
+        colname: The column name
+        colval: The column value
+        entry: The menu entry
+
+    Returns:
+        The color and decoration
+    """
+    color = 0
+    decoration = 0
+    if entry["__result"].lower() == "in progress" or (
+        colname in ["__result", "__host", "__number", "__task", "__task_action"]
+    ):
+        color = get_color(entry["__result"])
+    elif colname == "__changed":
+        color = 11 if colval is True else get_color(entry["__result"])
+    elif colname == "__duration":
+        color = 12
+    return color, decoration
+
+
 def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Find matching color for word.
 
@@ -91,38 +150,11 @@ def color_menu(_colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, i
         The color and decoration
     """
     colval = entry[colname]
-    color = 0
-    decoration = 0
     if "__play_name" in entry:
-        if not colval:
-            color = 8
-        elif colname in ["__task_count", "__play_name", "__progress"]:
-            failures = entry["__failed"] + entry["__unreachable"]
-            if failures:
-                color = 9
-            elif entry["__ok"]:
-                color = 10
-            else:
-                color = 8
-        elif colname == "__changed":
-            color = 11
-        else:
-            color = get_color(colname[2:])
-
-        if colname == "__progress" and entry["__progress"].strip().lower() == "complete":
-            decoration = curses.A_BOLD
-
-    elif "task" in entry:
-        if entry["__result"].lower() == "in progress" or (
-            colname in ["__result", "__host", "__number", "__task", "__task_action"]
-        ):
-            color = get_color(entry["__result"])
-        elif colname == "__changed":
-            color = 11 if colval is True else get_color(entry["__result"])
-        elif colname == "__duration":
-            color = 12
-
-    return color, decoration
+        return _color_for_play(colname, colval, entry)
+    if "task" in entry:
+        return _color_for_task(colname, colval, entry)
+    return 0, 0
 
 
 def content_heading(obj: Any, screen_w: int) -> CursesLines | None:
@@ -189,7 +221,7 @@ PLAY_COLUMNS = [
     "__failed",
     "__skipped",
     "__ignored",
-    "__in progress",
+    COLUMN_IN_PROGRESS,
     "__task_count",
     "__progress",
 ]
@@ -302,6 +334,32 @@ class Action(ActionBase):
             )
         return RunStdoutReturn(message="", return_code=return_code)
 
+    def _initialize_subaction(self, interaction: Interaction) -> bool:
+        """Initialize the run or replay subaction based on user interaction.
+
+        Args:
+            interaction: The interaction from the user
+
+        Returns:
+            True if initialization succeeded
+        """
+        if interaction.action.match.groupdict().get("run"):
+            self._logger.debug("run requested in interactive mode")
+            self._subaction_type = "run"
+            str_uuid = str(uuid.uuid4())
+            self._logger = logging.getLogger(f"{__name__}_{str_uuid[-4:]}")
+            self._name = f"run_{str_uuid[-4:]}"
+            return self._init_run()
+
+        if interaction.action.match.groupdict().get("replay"):
+            self._logger.debug("replay requested in interactive mode")
+            self._subaction_type = "replay"
+            self._name = "replay"
+            self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
+            return self._init_replay()
+
+        return False
+
     def run(self, interaction: Interaction, app: AppPublic) -> Interaction | None:
         """Run :run or :replay.
 
@@ -313,23 +371,8 @@ class Action(ActionBase):
             The pending interaction or none
         """
         self._prepare_to_run(app, interaction)
-        initialized = False
 
-        if interaction.action.match.groupdict().get("run"):
-            self._logger.debug("run requested in interactive mode")
-            self._subaction_type = "run"
-            str_uuid = str(uuid.uuid4())
-            self._logger = logging.getLogger(f"{__name__}_{str_uuid[-4:]}")
-            self._name = f"run_{str_uuid[-4:]}"
-            initialized = self._init_run()
-        elif interaction.action.match.groupdict().get("replay"):
-            self._logger.debug("replay requested in interactive mode")
-            self._subaction_type = "replay"
-            self._name = "replay"
-            self._logger = logging.getLogger(f"{__name__}_{self._subaction_type}")
-            initialized = self._init_replay()
-
-        if not initialized:
+        if not self._initialize_subaction(interaction):
             self._prepare_to_exit(interaction)
             return None
 
@@ -345,32 +388,72 @@ class Action(ActionBase):
 
         while True:
             self.update()
-
             self._take_step()
 
             if not self.steps:
                 if not self._runner_finished:
                     self._logger.error("Can not step back while playbook in progress, :q! to exit")
                     self.steps.append(self._plays)
-                else:
-                    self._logger.debug(
-                        "No steps remaining for '%s' returning to calling app",
-                        self._name,
-                    )
-                    break
+                    continue
+                self._logger.debug(
+                    "No steps remaining for '%s' returning to calling app",
+                    self._name,
+                )
+                break
 
             if self.steps.current.name == "quit":
-                if self._args.app == "replay":
-                    self._prepare_to_exit(interaction)
-                    return self.steps.current
-                done = self._prepare_to_quit(self.steps.current)
-                if done:
-                    self._prepare_to_exit(interaction)
-                    return self.steps.current
-                self.steps.back_one()
+                result = self._handle_quit(interaction)
+                if result is not None:
+                    return result
 
         self._prepare_to_exit(interaction)
         return None
+
+    def _handle_quit(self, interaction: Interaction) -> Interaction | None:
+        """Handle quit step logic during the run loop.
+
+        Args:
+            interaction: The interaction from the user
+
+        Returns:
+            The quit interaction if exiting, None to continue the loop
+        """
+        if self._args.app == "replay":
+            self._prepare_to_exit(interaction)
+            return self.steps.current
+        done = self._prepare_to_quit(self.steps.current)
+        if done:
+            self._prepare_to_exit(interaction)
+            return self.steps.current
+        self.steps.back_one()
+        return None
+
+    def _validate_and_prompt_playbook(self) -> bool:
+        """Validate the playbook path and prompt the user if invalid.
+
+        Returns:
+            True if the playbook is valid or the user provided a valid one
+        """
+        if isinstance(self._args.playbook, str):
+            playbook_valid = Path(self._args.playbook).exists()
+        else:
+            playbook_valid = False
+
+        if playbook_valid:
+            return True
+
+        populated_form = self._prompt_for_playbook()
+        if populated_form["cancelled"]:
+            return False
+
+        new_cmd = ["run"]
+        new_cmd.append(populated_form["fields"]["playbook"]["value"])
+
+        if populated_form["fields"]["cmdline"]["value"]:
+            new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
+
+        # Parse as if provided from the cmdline
+        return self._update_args(new_cmd)
 
     def _init_run(self) -> bool:
         """In the case of :run, check the user input.
@@ -386,30 +469,72 @@ class Action(ActionBase):
         if not args_updated:
             return False
 
-        if self._playbook_type == "file":
-            if isinstance(self._args.playbook, str):
-                playbook_valid = Path(self._args.playbook).exists()
-            else:
-                playbook_valid = False
-
-            if not playbook_valid:
-                populated_form = self._prompt_for_playbook()
-                if populated_form["cancelled"]:
-                    return False
-
-                new_cmd = ["run"]
-                new_cmd.append(populated_form["fields"]["playbook"]["value"])
-
-                if populated_form["fields"]["cmdline"]["value"]:
-                    new_cmd.extend(shlex.split(populated_form["fields"]["cmdline"]["value"]))
-
-                # Parse as if provided from the cmdline
-                args_updated = self._update_args(new_cmd)
-                if not args_updated:
-                    return False
+        if self._playbook_type == "file" and not self._validate_and_prompt_playbook():
+            return False
 
         self._run_runner()
         self._logger.info("Run initialized and playbook started.")
+        return True
+
+    def _validate_artifact_file(self) -> str | None:
+        """Validate the artifact file path and prompt if needed.
+
+        Returns:
+            The resolved artifact file path, or None if validation failed
+        """
+        artifact_file = self._args.playbook_artifact_replay
+
+        if isinstance(self._args.playbook_artifact_replay, str):
+            artifact_valid = Path(self._args.playbook_artifact_replay).exists()
+        else:
+            artifact_valid = False
+
+        if not artifact_valid:
+            if self.mode == "interactive":
+                populated_form = self._prompt_for_artifact(artifact_file=artifact_file)
+                if populated_form["cancelled"]:
+                    return None
+                artifact_file = populated_form["fields"]["artifact_file"]["value"]
+            else:
+                self._logger.error("Artifact file '%s' not found", artifact_file)
+                return None
+
+        return artifact_file
+
+    def _load_artifact_data(self, data: dict[str, Any]) -> bool:
+        """Load artifact data based on version and current mode.
+
+        Args:
+            data: The parsed artifact data
+
+        Returns:
+            True if the data was loaded successfully
+        """
+        version = data.get("version", "")
+        if not version.startswith(("1.", "2.")):
+            self._logger.error(
+                "Incompatible artifact version, got '%s', compatible = '1.y.z'",
+                version,
+            )
+            return False
+
+        try:
+            stdout = data["stdout"]
+            if self.mode == "interactive":
+                self._plays.value = data["plays"]
+                self._interaction.ui.update_status(data["status"], data["status_color"])
+                self.stdout = stdout
+            else:
+                for line in data["stdout"]:
+                    if self._args.display_color is True:
+                        print(line)
+                    else:
+                        print(remove_ansi(line))
+        except KeyError as exc:
+            self._logger.debug("missing keys from artifact file")
+            self._logger.debug("error was: %s", str(exc))
+            return False
+
         return True
 
     def _init_replay(self) -> bool:
@@ -430,18 +555,9 @@ class Action(ActionBase):
             if not args_updated:
                 return False
 
-        artifact_file = self._args.playbook_artifact_replay
-
-        if isinstance(self._args.playbook_artifact_replay, str):
-            artifact_valid = Path(self._args.playbook_artifact_replay).exists()
-        else:
-            artifact_valid = False
-
-        if not artifact_valid and self.mode == "interactive":
-            populated_form = self._prompt_for_artifact(artifact_file=artifact_file)
-            if populated_form["cancelled"]:
-                return False
-            artifact_file = populated_form["fields"]["artifact_file"]["value"]
+        artifact_file = self._validate_artifact_file()
+        if artifact_file is None:
+            return False
 
         try:
             with Path(artifact_file).open(encoding="utf-8") as fh:
@@ -451,29 +567,7 @@ class Action(ActionBase):
             self._logger.exception("Unable to parse artifact file")
             return False
 
-        version = data.get("version", "")
-        if version.startswith(("1.", "2.")):
-            try:
-                stdout = data["stdout"]
-                if self.mode == "interactive":
-                    self._plays.value = data["plays"]
-                    self._interaction.ui.update_status(data["status"], data["status_color"])
-                    self.stdout = stdout
-                else:
-                    for line in data["stdout"]:
-                        if self._args.display_color is True:
-                            print(line)
-                        else:
-                            print(remove_ansi(line))
-            except KeyError as exc:
-                self._logger.debug("missing keys from artifact file")
-                self._logger.debug("error was: %s", str(exc))
-                return False
-        else:
-            self._logger.error(
-                "Incompatible artifact version, got '%s', compatible = '1.y.z'",
-                version,
-            )
+        if not self._load_artifact_data(data):
             return False
 
         self._runner_finished = True
@@ -547,40 +641,60 @@ class Action(ActionBase):
         populated_form = form_to_dict(form, key_on_name=True)
         return populated_form
 
+    def _handle_step_display(self) -> Interaction | None:
+        """Handle display logic for a Step on the stack.
+
+        Returns:
+            The interaction result from the UI, or None
+        """
+        if self.steps.current.show_func:
+            self.steps.current.show_func()
+
+        if self.steps.current.type == "menu":
+            return self._handle_menu_step()
+
+        if self.steps.current.type == "content":
+            return self._interaction.ui.show(
+                obj=self.steps.current.value,
+                index=self.steps.current.index,
+                content_heading=content_heading,
+                filter_content_keys=self._content_key_filter,
+            )
+        return None
+
+    def _handle_menu_step(self) -> Interaction | None:
+        """Handle display and auto-scroll logic for a menu step.
+
+        Returns:
+            The interaction result from the UI, or None
+        """
+        new_scroll = len(self.steps.current.value)
+        if self._auto_scroll:
+            self._interaction.ui.scroll(new_scroll)
+
+        result = self._interaction.ui.show(
+            obj=self.steps.current.value,
+            columns=self.steps.current.columns,
+            color_menu_item=color_menu,
+        )
+
+        if self._interaction.ui.scroll() < new_scroll and self._auto_scroll:
+            self._logger.debug("auto_scroll disabled")
+            self._auto_scroll = False
+        elif self._interaction.ui.scroll() >= new_scroll and not self._auto_scroll:
+            self._logger.debug("auto_scroll enabled")
+            self._auto_scroll = True
+
+        return result
+
     def _take_step(self) -> None:
         """Run the current step on the stack."""
         result = None
         if isinstance(self.steps.current, Interaction):
             result = run_action(self.steps.current.name, self.app, self.steps.current)
         elif isinstance(self.steps.current, Step):
-            if self.steps.current.show_func:
-                self.steps.current.show_func()
+            result = self._handle_step_display()
 
-            if self.steps.current.type == "menu":
-                new_scroll = len(self.steps.current.value)
-                if self._auto_scroll:
-                    self._interaction.ui.scroll(new_scroll)
-
-                result = self._interaction.ui.show(
-                    obj=self.steps.current.value,
-                    columns=self.steps.current.columns,
-                    color_menu_item=color_menu,
-                )
-
-                if self._interaction.ui.scroll() < new_scroll and self._auto_scroll:
-                    self._logger.debug("auto_scroll disabled")
-                    self._auto_scroll = False
-                elif self._interaction.ui.scroll() >= new_scroll and not self._auto_scroll:
-                    self._logger.debug("auto_scroll enabled")
-                    self._auto_scroll = True
-
-            elif self.steps.current.type == "content":
-                result = self._interaction.ui.show(
-                    obj=self.steps.current.value,
-                    index=self.steps.current.index,
-                    content_heading=content_heading,
-                    filter_content_keys=self._content_key_filter,
-                )
         if result is None:
             self.steps.back_one()
         else:
@@ -667,8 +781,90 @@ class Action(ActionBase):
         if drain_count:
             self._logger.debug("Drained %s events", drain_count)
 
+    def _handle_runner_on_start(
+        self,
+        play: dict[str, Any],
+        event_data: dict[str, Any],
+    ) -> None:
+        """Handle a runner_on_start event by adding a new in-progress task.
+
+        Args:
+            play: The parent play data
+            event_data: The event data from the runner
+        """
+        try:
+            previous_name = self._task_cache[event_data["task_uuid"]]
+            use_previous = not is_jinja(previous_name)
+        except KeyError:
+            use_previous = False
+
+        event_data.update(
+            {
+                "__changed": "unknown",
+                "__duration": "Pending",
+                "__host": event_data["host"],
+                "__number": len(play["tasks"]),
+                "__result": "In progress",
+                "__task_action": event_data["task_action"],
+                "__task": previous_name if use_previous else event_data["task"],
+            },
+        )
+        play["tasks"].append(event_data)
+
+    def _handle_runner_on_finish(
+        self,
+        play: dict[str, Any],
+        event_data: dict[str, Any],
+        runner_event: str,
+    ) -> None:
+        """Handle a runner task-finished event by updating the task with results.
+
+        Args:
+            play: The parent play data
+            event_data: The event data from the runner
+            runner_event: The runner event type (ok, skipped, failed, etc.)
+        """
+        match = ("task_uuid", "host")
+        try:
+            task = next(
+                t for t in play["tasks"] if itemgetter(*match)(t) == itemgetter(*match)(event_data)
+            )
+        except StopIteration:
+            self._logger.warning("Task event without parent task")
+            return
+
+        # Get the duration
+        if isinstance(event_data["duration"], int | float):
+            duration = human_time(seconds=round_half_up(event_data["duration"]))
+        else:
+            self._logger.debug(
+                "Task duration for '%s' was type '%s', set to 0",
+                event_data["task"],
+                type(event_data["duration"]),
+            )
+            duration = human_time(seconds=0)
+
+        # Replace failed with ignored
+        modify_result = runner_event == "failed" and event_data["ignore_errors"]
+
+        event_data.update(
+            {
+                "__changed": event_data.get("res", {}).get("changed", False),
+                "__duration": duration,
+                "__result": ("ignored" if modify_result else runner_event).capitalize(),
+            },
+        )
+
+        # Find the best name for the task
+        name_changed = task["__task"] != event_data["task"]
+        no_longer_templated = is_jinja(task["__task"]) and not is_jinja(event_data["task"])
+        changed_and_not_templated = name_changed and not is_jinja(event_data["task"])
+        if no_longer_templated or changed_and_not_templated:
+            event_data["__task"] = event_data["task"]
+
+        task.update(event_data)
+
     def _handle_message(self, message: dict[str, Any]) -> None:
-        # pylint: disable=too-many-locals
         """Handle a runner message.
 
         Args:
@@ -724,73 +920,22 @@ class Action(ActionBase):
             self._logger.warning("Playbook event without parent play")
             return
 
-        # New task encountered
         if runner_event == "start":
-            try:
-                previous_name = self._task_cache[event_data["task_uuid"]]
-                use_previous = not is_jinja(previous_name)
-            except KeyError:
-                use_previous = False
-
-            event_data.update(
-                {
-                    "__changed": "unknown",
-                    "__duration": "Pending",
-                    "__host": event_data["host"],
-                    "__number": len(play["tasks"]),
-                    "__result": "In progress",
-                    "__task_action": event_data["task_action"],
-                    "__task": previous_name if use_previous else event_data["task"],
-                },
-            )
-            play["tasks"].append(event_data)
-            return
-
-        # The runner event indicates a task has finished, find the task in the play
-        match = ("task_uuid", "host")
-        try:
-            task = next(
-                t for t in play["tasks"] if itemgetter(*match)(t) == itemgetter(*match)(event_data)
-            )
-        except StopIteration:
-            self._logger.warning("Task event without parent task")
-            return
-
-        # Get the duration
-        if isinstance(event_data["duration"], int | float):
-            duration = human_time(seconds=round_half_up(event_data["duration"]))
+            self._handle_runner_on_start(play, event_data)
         else:
-            self._logger.debug(
-                "Task duration for '%s' was type '%s', set to 0",
-                event_data["task"],
-                type(event_data["duration"]),
-            )
-            duration = human_time(seconds=0)
-
-        # Replace failed with ignored
-        modify_result = runner_event == "failed" and event_data["ignore_errors"]
-
-        event_data.update(
-            {
-                "__changed": event_data.get("res", {}).get("changed", False),
-                "__duration": duration,
-                "__result": ("ignored" if modify_result else runner_event).capitalize(),
-            },
-        )
-
-        # Find the best name for the task
-        name_changed = task["__task"] != event_data["task"]
-        no_longer_templated = is_jinja(task["__task"]) and not is_jinja(event_data["task"])
-        changed_and_not_templated = name_changed and not is_jinja(event_data["task"])
-        if no_longer_templated or changed_and_not_templated:
-            event_data["__task"] = event_data["task"]
-
-        task.update(event_data)
+            self._handle_runner_on_finish(play, event_data, runner_event)
 
     def _play_stats(self) -> None:
         """Calculate the play's stats based on it's tasks."""
         for idx, play in enumerate(self._plays.value):
-            total = ["__ok", "__skipped", "__failed", "__unreachable", "__ignored", "__in progress"]
+            total = [
+                "__ok",
+                "__skipped",
+                "__failed",
+                "__unreachable",
+                "__ignored",
+                COLUMN_IN_PROGRESS,
+            ]
             self._plays.value[idx].update(
                 {
                     tot: len([t for t in play["tasks"] if t["__result"].lower() == tot[2:]])
@@ -802,7 +947,7 @@ class Action(ActionBase):
             )
             task_count = len(play["tasks"])
             self._plays.value[idx]["__task_count"] = task_count
-            completed = task_count - self._plays.value[idx]["__in progress"]
+            completed = task_count - self._plays.value[idx][COLUMN_IN_PROGRESS]
             if completed:
                 new = floor(completed / task_count * 100)
                 current = self._plays.value[idx].get("__percent_complete", 0)
