@@ -29,6 +29,75 @@ from .ui_constants import Color
 from .validators import FieldValidators
 
 
+def _build_text_field(field: dict[str, Any]) -> FieldText:
+    """Build a FieldText from a field dictionary.
+
+    Args:
+        field: Field dictionary from form data
+
+    Returns:
+        Constructed FieldText instance
+    """
+    field_params: dict[str, Any] = {"name": field["name"]}
+    field_params["prompt"] = field["prompt"]
+    field_params["validator"] = getattr(FieldValidators, field["validator"]["name"])
+
+    choices = field["validator"].get("choices")
+    if choices:
+        field_params["validator"] = partial(field_params["validator"], choices=choices)
+
+    default = field.get("default")
+    if default:
+        field_params["default"] = default
+
+    frm_field_text = FieldText(**field_params)
+
+    pre_populate = field.get("pre_populate")
+    if pre_populate:
+        frm_field_text.pre_populate(pre_populate)
+
+    return frm_field_text
+
+
+def _build_checks_field(field: dict[str, Any]) -> FieldChecks:
+    """Build a FieldChecks from a field dictionary.
+
+    Args:
+        field: Field dictionary from form data
+
+    Returns:
+        Constructed FieldChecks instance
+    """
+    field_params: dict[str, Any] = {"name": field["name"]}
+    field_params["prompt"] = field["prompt"]
+    field_params["options"] = [FieldOption(**option) for option in field["options"]]
+
+    max_selected = field.get("max_selected")
+    if max_selected:
+        field_params["max_selected"] = max_selected
+
+    min_selected = field.get("min_selected")
+    if min_selected:
+        field_params["min_selected"] = min_selected
+
+    return FieldChecks(**field_params)
+
+
+def _build_radio_field(field: dict[str, Any]) -> FieldRadio:
+    """Build a FieldRadio from a field dictionary.
+
+    Args:
+        field: Field dictionary from form data
+
+    Returns:
+        Constructed FieldRadio instance
+    """
+    field_params: dict[str, Any] = {"name": field["name"]}
+    field_params["prompt"] = field["prompt"]
+    field_params["options"] = [FieldOption(**option) for option in field["options"]]
+    return FieldRadio(**field_params)
+
+
 def dict_to_form(form_data: dict[str, Any]) -> Form:
     """Convert a python dict to a form.
 
@@ -50,44 +119,14 @@ def dict_to_form(form_data: dict[str, Any]) -> Form:
     form.title_color = form_data.get("title_color", 0)
 
     for field in form_data["fields"]:
-        field_params = {"name": field["name"]}
         if field["type"] == "text_input":
-            field_params["prompt"] = field["prompt"]
-            field_params["validator"] = getattr(FieldValidators, field["validator"]["name"])
+            form.fields.append(_build_text_field(field))
 
-            choices = field["validator"].get("choices")
-            if choices:
-                field_params["validator"] = partial(field_params["validator"], choices=choices)
+        elif field["type"] == "checkbox":
+            form.fields.append(_build_checks_field(field))
 
-            default = field.get("default")
-            if default:
-                field_params["default"] = default
-
-            frm_field_text = FieldText(**field_params)
-
-            pre_populate = field.get("pre_populate")
-            if pre_populate:
-                frm_field_text.pre_populate(pre_populate)
-
-            form.fields.append(frm_field_text)
-
-        elif field["type"] in ["checkbox", "radio"]:
-            field_params["prompt"] = field["prompt"]
-            field_params["options"] = [FieldOption(**option) for option in field["options"]]
-            if field["type"] == "checkbox":
-                max_selected = field.get("max_selected")
-                if max_selected:
-                    field_params["max_selected"] = max_selected
-
-                min_selected = field.get("min_selected")
-                if min_selected:
-                    field_params["min_selected"] = min_selected
-                frm_field_checks = FieldChecks(**field_params)
-                form.fields.append(frm_field_checks)
-
-            elif field["type"] == "radio":
-                frm_field_radio = FieldRadio(**field_params)
-                form.fields.append(frm_field_radio)
+        elif field["type"] == "radio":
+            form.fields.append(_build_radio_field(field))
 
         elif field["type"] == "information":
             frm_field_info = FieldInformation(name=field["name"], information=field["information"])
@@ -126,16 +165,28 @@ def form_to_dict(form: Form, key_on_name: bool = False) -> dict[str, Any]:
             ]
 
     if key_on_name:
-        fields = {}
-        for field in res["fields"]:
-            fields[field["name"]] = field
-            if "options" in field:
-                options = {}
-                for option in field["options"]:
-                    options[option["name"]] = option
-                fields[field["name"]]["options"] = options
-        res["fields"] = fields
+        res["fields"] = _rekey_fields_by_name(res)
     return res
+
+
+def _rekey_fields_by_name(res: dict[str, Any]) -> dict[str, Any]:
+    """Rekey the fields list into a dict keyed by field name.
+
+    Args:
+        res: The form result dictionary containing a "fields" list
+
+    Returns:
+        Dictionary of fields keyed by name
+    """
+    fields: dict[str, Any] = {}
+    for field in res["fields"]:
+        fields[field["name"]] = field
+        if "options" in field:
+            options = {}
+            for option in field["options"]:
+                options[option["name"]] = option
+            fields[field["name"]]["options"] = options
+    return fields
 
 
 def break_long_lines(messages: list[str]) -> list[str]:

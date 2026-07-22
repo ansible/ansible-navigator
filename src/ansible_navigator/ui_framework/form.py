@@ -139,13 +139,17 @@ class FormPresenter(CursesWindow):
         """
         return self._screen_width - self._field_win_start
 
-    def _dimensions(self) -> None:
-        """Calculate the dimensions of the form."""
-        self._prompt_end = max(len(form_field.full_prompt) for form_field in self._form.fields)
-        self._input_start = self._prompt_end + len(self._separator)
+    def _calculate_field_widths(self, fields: list[Any]) -> list[int]:
+        """Calculate the widths needed for each form field.
 
+        Args:
+            fields: The list of form fields
+
+        Returns:
+            A list of widths for each field
+        """
         widths = []
-        for form_field in self._form.fields:
+        for form_field in fields:
             if hasattr(form_field, "value") and form_field.value is not unknown:
                 widths.append(len(str(form_field.value)) + self._input_start)
             if hasattr(form_field, "options"):
@@ -155,14 +159,19 @@ class FormPresenter(CursesWindow):
             if hasattr(form_field, "messages"):
                 widths.append(max(len(msg) for msg in form_field.messages))
             widths.append(len(form_field.validator(hint=True)) + self._input_start)
+        return widths
 
-        if self._form.type_ is FormType.FORM:
-            self._form_width = max(widths) + BUTTON_SPACE
-        elif self._form.type_ in (FormType.NOTIFICATION, FormType.WORKING):
-            self._form_width = max(widths)
+    def _calculate_form_height(self, fields: list[Any]) -> int:
+        """Calculate the height of the form from fields.
 
+        Args:
+            fields: The list of form fields
+
+        Returns:
+            The total height of the form
+        """
         height = 2  # title + horizontal line
-        for form_field in self._form.fields:
+        for form_field in fields:
             if isinstance(form_field, FieldCursesInformation | FieldInformation):
                 height += len(form_field.information)
             if isinstance(form_field, (FieldWorking)):
@@ -172,10 +181,82 @@ class FormPresenter(CursesWindow):
             elif isinstance(form_field, FieldChecks | FieldRadio):
                 height += len(form_field.options)
         height += 2  # horizontal line + buttons
-        self._form_height = height
+        return height
+
+    def _dimensions(self) -> None:
+        """Calculate the dimensions of the form."""
+        self._prompt_end = max(len(form_field.full_prompt) for form_field in self._form.fields)
+        self._input_start = self._prompt_end + len(self._separator)
+
+        widths = self._calculate_field_widths(self._form.fields)
+
+        if self._form.type_ is FormType.FORM:
+            self._form_width = max(widths) + BUTTON_SPACE
+        elif self._form.type_ in (FormType.NOTIFICATION, FormType.WORKING):
+            self._form_width = max(widths)
+
+        self._form_height = self._calculate_form_height(self._form.fields)
 
         self._pad_top = max(int((self._screen_height - self._form_height) * TOP_PAD_RATIO), 0)
         self._pad_left = max(int((self._screen_width - self._form_width) * LEFT_PAD_RATIO), 0)
+
+    def _generate_body_field_lines(
+        self,
+        form_field: Any,
+    ) -> list[tuple[int, CursesLine]]:
+        """Generate the lines for a single body field.
+
+        Args:
+            form_field: The form field to generate lines for
+
+        Returns:
+            A list of (line_number, CursesLine) tuples for this field
+        """
+        lines: list[tuple[int, CursesLine]] = []
+
+        if isinstance(form_field, (FieldCursesInformation)):
+            for line in form_field.information:
+                lines.append((self._line_number, line))
+                self._line_number += 1
+
+        elif isinstance(form_field, FieldInformation):
+            information_lines = self._generate_information(form_field)
+            for line in information_lines:  # pylint: disable=not-an-iterable
+                lines.append((self._line_number, line))
+                self._line_number += 1
+
+        elif isinstance(form_field, FieldWorking):
+            message_lines = self._generate_messages(form_field)
+            for line in message_lines:  # pylint: disable=not-an-iterable
+                lines.append((self._line_number, line))
+                self._line_number += 1
+
+        elif isinstance(form_field, FieldText):
+            prompt = self._generate_prompt(form_field)
+            line = CursesLine(tuple(prompt + [self._generate_field_text(form_field)]))
+            lines.append((self._line_number, line))
+            self._line_number += 1
+
+        elif isinstance(form_field, FieldChecks | FieldRadio):
+            prompt = self._generate_prompt(form_field)
+            option_lines = self._generate_field_options(form_field)
+            # although option_lines[0] is a CursesLine, only it's first line part is needed
+            # because the prompt needs to be prepended to it
+            first_option_line_part = option_lines[0][0]
+            line = CursesLine(tuple(prompt + [first_option_line_part]))
+            lines.append((self._line_number, line))
+            self._line_number += 1
+
+            for option_line in option_lines[1:]:
+                lines.append((self._line_number, CursesLine(option_line)))
+                self._line_number += 1
+
+        error = self._generate_error(form_field)
+        if error:
+            lines.append((self._line_number, error))
+            self._line_number += 1
+
+        return lines
 
     def _generate_form(self) -> tuple[tuple[int, CursesLine], ...]:
         """Generate the form.
@@ -193,47 +274,7 @@ class FormPresenter(CursesWindow):
             field for field in self._form.fields if field.name not in ["submit", "cancel"]
         ]
         for form_field in body_fields:
-            if isinstance(form_field, (FieldCursesInformation)):
-                for line in form_field.information:
-                    lines.append((self._line_number, line))
-                    self._line_number += 1
-
-            elif isinstance(form_field, FieldInformation):
-                information_lines = self._generate_information(form_field)
-                for line in information_lines:  # pylint: disable=not-an-iterable
-                    lines.append((self._line_number, line))
-                    self._line_number += 1
-
-            elif isinstance(form_field, FieldWorking):
-                message_lines = self._generate_messages(form_field)
-                for line in message_lines:  # pylint: disable=not-an-iterable
-                    lines.append((self._line_number, line))
-                    self._line_number += 1
-
-            elif isinstance(form_field, FieldText):
-                prompt = self._generate_prompt(form_field)
-                line = CursesLine(tuple(prompt + [self._generate_field_text(form_field)]))
-                lines.append((self._line_number, line))
-                self._line_number += 1
-
-            elif isinstance(form_field, FieldChecks | FieldRadio):
-                prompt = self._generate_prompt(form_field)
-                option_lines = self._generate_field_options(form_field)
-                # although option_lines[0] is a CursesLine, only it's first line part is needed
-                # because the prompt needs to be prepended to it
-                first_option_line_part = option_lines[0][0]
-                line = CursesLine(tuple(prompt + [first_option_line_part]))
-                lines.append((self._line_number, line))
-                self._line_number += 1
-
-                for option_line in option_lines[1:]:
-                    lines.append((self._line_number, CursesLine(option_line)))
-                    self._line_number += 1
-
-            error = self._generate_error(form_field)
-            if error:
-                lines.append((self._line_number, error))
-                self._line_number += 1
+            lines.extend(self._generate_body_field_lines(form_field))
 
         lines.append((self._line_number, self._generate_horizontal_line()))
         self._line_number += 1
@@ -400,6 +441,46 @@ class FormPresenter(CursesWindow):
         line_part = CursesLinePart(0, title, self._form.title_color, 0)
         return CursesLine((line_part,))
 
+    def _handle_form_input(
+        self,
+        idx: int,
+        form_field: Any,
+        win_response: tuple[Any, int],
+    ) -> tuple[bool, int]:
+        """Handle user input for a single form interaction cycle.
+
+        Args:
+            idx: The current field index
+            form_field: The current form field
+            win_response: The response and character from the window handler
+
+        Returns:
+            A tuple of (should_break, new_idx)
+        """
+        response, char = win_response
+
+        if char == curses.KEY_RESIZE:
+            self._screen.clear()
+            self._screen.refresh()
+
+        elif char == 112065:
+            # non-blocking form
+            return True, idx
+
+        elif isinstance(form_field, FieldButton):
+            if form_field.pressed:
+                return True, idx
+            idx += 1
+        elif char == curses_ascii.TAB:
+            form_field.conditional_validation(response)
+            idx += 1
+        else:
+            form_field.validate(response)
+            if form_field.valid is True:
+                idx += 1
+
+        return False, idx
+
     def present(self) -> Form:
         """Present the form to the user.
 
@@ -434,27 +515,9 @@ class FormPresenter(CursesWindow):
             form_field.window_handler.win = form_field.win
             win_response = form_field.window_handler.handle(idx, self._form.fields)
 
-            response, char = win_response
-
-            if char == curses.KEY_RESIZE:
-                self._screen.clear()
-                self._screen.refresh()
-
-            elif char == 112065:
-                # non-blocking form
+            should_break, idx = self._handle_form_input(idx, form_field, win_response)
+            if should_break:
                 break
-
-            elif isinstance(form_field, FieldButton):
-                if form_field.pressed:
-                    break
-                idx += 1
-            elif char == curses_ascii.TAB:
-                form_field.conditional_validation(response)
-                idx += 1
-            else:
-                form_field.validate(response)
-                if form_field.valid is True:
-                    idx += 1
 
         return self._form
 

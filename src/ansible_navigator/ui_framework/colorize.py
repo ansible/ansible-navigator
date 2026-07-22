@@ -244,6 +244,47 @@ def hex_to_rgb_curses(value: str) -> RgbTuple:
     return (scale_for_curses(red), scale_for_curses(green), scale_for_curses(blue))
 
 
+def _rgb_to_ansi_256(red: int, green: int, blue: int) -> int:
+    """Convert an RGB color to a 256-color ansi value.
+
+    Args:
+        red: The red component
+        green: The green component
+        blue: The blue component
+
+    Returns:
+        A 256-color ansi value
+    """
+    if red == green and green == blue:
+        if red < 8:
+            return 16
+        if red > 248:
+            return 231
+        return round(((red - 8) / 247) * 24) + 232
+    return 16 + (36 * round(red / 255 * 5)) + (6 * round(green / 255 * 5)) + round(blue / 255 * 5)
+
+
+def _rgb_to_ansi_16(red: int, green: int, blue: int) -> int:
+    """Convert an RGB color to a 16-color ansi value.
+
+    Args:
+        red: The red component
+        green: The green component
+        blue: The blue component
+
+    Returns:
+        A 16-color ansi value
+    """
+    value = colorsys.rgb_to_hsv(red, green, blue)[2]
+    value = round(value / 50)
+    if value == 0:
+        return 30
+    ansi = (round(blue / 255) << 2) | (round(green / 255) << 1) | round(red / 255)
+    if value == 2:
+        ansi += 8
+    return ansi
+
+
 def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
     """Convert an RGB color to an ansi color.
 
@@ -258,31 +299,72 @@ def rgb_to_ansi(red: int, green: int, blue: int, colors: int) -> int:
     """
     # https://github.com/Qix-/color-convert/blob/master/conversions.js
     if colors == 256:
-        if red == green and green == blue:
-            if red < 8:
-                return 16
-            if red > 248:
-                return 231
-            ansi = round(((red - 8) / 247) * 24) + 232
-        else:
-            ansi = (
-                16
-                + (36 * round(red / 255 * 5))
-                + (6 * round(green / 255 * 5))
-                + round(blue / 255 * 5)
-            )
+        ansi = _rgb_to_ansi_256(red, green, blue)
     elif colors == 16:
-        value = colorsys.rgb_to_hsv(red, green, blue)[2]
-        value = round(value / 50)
-        if value == 0:
-            ansi = 30
-        else:
-            ansi = (round(blue / 255) << 2) | (round(green / 255) << 1) | round(red / 255)
-            if value == 2:
-                ansi += 8
+        ansi = _rgb_to_ansi_16(red, green, blue)
     else:  # colors == 8, sorry
         ansi = (round(blue / 255) << 2) | (round(green / 255) << 1) | round(red / 255)
     return ansi
+
+
+def _apply_regions_to_parts(
+    line_parts: list[SimpleLinePart],
+    regions: Regions,
+    schema: ColorSchema,
+) -> None:
+    """Apply color and style from regions to line parts.
+
+    Args:
+        line_parts: The individual character parts of a line
+        regions: The tokenized regions for the line
+        schema: An instance of the ColorSchema
+    """
+    for region in regions:
+        color, style = schema.get_color_and_style(region.scope)
+        if color:
+            for idx in range(region.start, region.end):
+                line_parts[idx].color = color
+        if style:
+            for idx in range(region.start, region.end):
+                line_parts[idx].style = style
+
+
+def _compress_line_parts(
+    line_parts: list[SimpleLinePart],
+    line_text: str,
+) -> list[SimpleLinePart]:
+    """Compress adjacent line parts with the same color and style.
+
+    Args:
+        line_parts: The individual character parts of a line
+        line_text: The original line text
+
+    Returns:
+        Compressed line parts
+    """
+    if not line_parts:
+        return [SimpleLinePart(chars=line_text, color=None, column=0, style=None)]
+    grouped = [line_parts.pop(0)]
+    while line_parts:
+        entry = line_parts.pop(0)
+        if entry.color == grouped[-1].color and entry.style == grouped[-1].style:
+            grouped[-1].chars += entry.chars
+        else:
+            grouped.append(entry)
+    return grouped
+
+
+def _update_line_part_columns(results: list[list[SimpleLinePart]]) -> None:
+    """Update column offsets in each line part based on preceding text lengths.
+
+    Args:
+        results: Lines of text parts to update
+    """
+    for result in results:
+        column = 0
+        for line_part in result:
+            line_part.column = column
+            column += len(line_part.chars)
 
 
 def columns_and_colors(
@@ -308,36 +390,48 @@ def columns_and_colors(
         ]
 
         # Replace the color with the RgbTuple
-        for region in line[0]:
-            color, style = schema.get_color_and_style(region.scope)
-            if color:
-                for idx in range(region.start, region.end):
-                    line_parts[idx].color = color
-            if style:
-                for idx in range(region.start, region.end):
-                    line_parts[idx].style = style
+        _apply_regions_to_parts(line_parts, line[0], schema)
 
         # Compress the line, grouping characters of like color and decoration
-        if line_parts:
-            grouped = [line_parts.pop(0)]
-            while line_parts:
-                entry = line_parts.pop(0)
-                if entry.color == grouped[-1].color and entry.style == grouped[-1].style:
-                    grouped[-1].chars += entry.chars
-                else:
-                    grouped.append(entry)
-            results.append(grouped)
-        else:
-            results.append([SimpleLinePart(chars=line[1], color=None, column=0, style=None)])
+        results.append(_compress_line_parts(line_parts, line[1]))
 
     # Update the column in each line part, based on the total of the preceding text lengths
-    for result in results:
-        column = 0
-        for line_part in result:
-            line_part.column = column
-            column += len(line_part.chars)
+    _update_line_part_columns(results)
 
     return results
+
+
+def _parse_ansi_match(
+    cap: dict[str, str | None],
+    color: int = 0,
+    style: int = 0,
+) -> tuple[int, int]:
+    """Parse an ANSI color match groupdict into a color and style.
+
+    Args:
+        cap: The groupdict from a color_regex match
+        color: The current color state to preserve across calls
+        style: The current style state to preserve across calls
+
+    Returns:
+        A (color, style) tuple
+    """
+    one = cap["one"]
+    two = cap["two"]
+    if cap["fg_action"] == "39;" or (one == "0" and two is None):
+        pass  # default color
+    elif cap["fg_action"] == "38;5;":
+        color = int(one)  # type: ignore[arg-type]
+        if two:
+            style = CURSES_STYLES.get(int(two)) or 0
+    elif not cap["fg_action"]:
+        ansi_16 = list(chain(range(30, 38), range(90, 98)))
+        if two is None:
+            color = ansi_16.index(int(one)) if int(one) in ansi_16 else int(one)  # type: ignore[arg-type]
+        else:
+            color = ansi_16.index(int(two)) if int(two) in ansi_16 else int(two)
+            style = CURSES_STYLES.get(int(one)) or 0  # type: ignore[arg-type]
+    return color, style
 
 
 def ansi_to_curses(line: str) -> CursesLine:
@@ -349,7 +443,6 @@ def ansi_to_curses(line: str) -> CursesLine:
     Returns:
         A line ready for presentation in the TUI
     """
-    # pylint: disable=too-many-locals
     if line == "":
         line_part = CursesLinePart(
             column=0,
@@ -380,22 +473,7 @@ def ansi_to_curses(line: str) -> CursesLine:
         if part:
             match = color_regex.match(part)
             if match:
-                cap = match.groupdict()
-                one = cap["one"]
-                two = cap["two"]
-                if cap["fg_action"] == "39;" or (one == "0" and two is None):
-                    pass  # default color
-                elif cap["fg_action"] == "38;5;":
-                    color = int(one)
-                    if two:
-                        style = CURSES_STYLES.get(int(two)) or 0
-                elif not cap["fg_action"]:
-                    ansi_16 = list(chain(range(30, 38), range(90, 98)))
-                    if two is None:
-                        color = ansi_16.index(int(one)) if int(one) in ansi_16 else int(one)
-                    else:
-                        color = ansi_16.index(int(two)) if int(two) in ansi_16 else int(two)
-                        style = CURSES_STYLES.get(int(one)) or 0
+                color, style = _parse_ansi_match(match.groupdict(), color, style)
             else:
                 curses_line = CursesLinePart(
                     column=colno,
@@ -408,6 +486,64 @@ def ansi_to_curses(line: str) -> CursesLine:
                 color = 0
                 style = 0
     return CursesLine(tuple(printable))
+
+
+def _process_markdown_part(
+    lines: list[list[SimpleLinePart]],
+    line_idx: int,
+    part_idx: int,
+    part: SimpleLinePart,
+    in_a_code_block: bool,
+    full_dash_line: list[SimpleLinePart],
+) -> bool:
+    """Process a single markdown part and apply transformations.
+
+    Args:
+        lines: Lines of text and their parts (mutated in place)
+        line_idx: The index of the current line
+        part_idx: The index of the current part within the line
+        part: The current part to process
+        in_a_code_block: Whether we are currently inside a code block
+        full_dash_line: The dash line to use for separators
+
+    Returns:
+        The updated in_a_code_block state
+    """
+    if part.chars.startswith("```"):
+        # Remove ```x from a line
+        lines[line_idx][part_idx].chars = "\n"
+        return not in_a_code_block
+
+    if in_a_code_block:
+        # Don't modify inside a code block
+        return in_a_code_block
+
+    if part.chars.startswith("#"):
+        # Remove # headings
+        lines[line_idx][part_idx].chars = re.sub(r"^(#{1,6}\s)(.*$)", r"\2", part.chars)
+        if part.chars.startswith("# "):
+            # Insert a full line after a heading 1
+            lines.insert(line_idx + 1, full_dash_line)
+        return in_a_code_block
+
+    if part.chars == "---\n":
+        # Replace all dash line with no-break dashes if \n before and after
+        try:
+            if lines[line_idx - 1][0].chars == "\n" and lines[line_idx + 1][0].chars == "\n":
+                lines[line_idx] = full_dash_line
+                return in_a_code_block
+        except IndexError:
+            pass
+
+    if "`" in part.chars:
+        # Remove `` from code blocks
+        lines[line_idx][part_idx].chars = re.sub(r"`(.*)`", r"\1", part.chars)
+
+    if "*" in part.chars:
+        # Remove `` from code blocks
+        lines[line_idx][part_idx].chars = re.sub(r"\*(.*)\*", r"\1", part.chars)
+
+    return in_a_code_block
 
 
 def strip_markdown(lines: list[list[SimpleLinePart]]) -> list[list[SimpleLinePart]]:
@@ -433,42 +569,13 @@ def strip_markdown(lines: list[list[SimpleLinePart]]) -> list[list[SimpleLinePar
     in_a_code_block = False
     for line_idx, line in reversed(list(enumerate(copy.deepcopy(lines)))):
         for part_idx, part in enumerate(line):
-            if part.chars.startswith("```"):
-                # Remove ```x from a line
-                lines[line_idx][part_idx].chars = "\n"
-                in_a_code_block = not in_a_code_block
-                continue
-
-            if in_a_code_block:
-                # Don't modify inside a code block
-                continue
-
-            if part.chars.startswith("#"):
-                # Remove # headings
-                lines[line_idx][part_idx].chars = re.sub(r"^(#{1,6}\s)(.*$)", r"\2", part.chars)
-                if part.chars.startswith("# "):
-                    # Insert a full line after a heading 1
-                    lines.insert(line_idx + 1, full_dash_line)
-                continue
-
-            if part.chars == "---\n":
-                # Replace all dash line with no-break dashes if \n before and after
-                try:
-                    if (
-                        lines[line_idx - 1][0].chars == "\n"
-                        and lines[line_idx + 1][0].chars == "\n"
-                    ):
-                        lines[line_idx] = full_dash_line
-                        continue
-                except IndexError:
-                    pass
-
-            if "`" in part.chars:
-                # Remove `` from code blocks
-                lines[line_idx][part_idx].chars = re.sub(r"`(.*)`", r"\1", part.chars)
-
-            if "*" in part.chars:
-                # Remove `` from code blocks
-                lines[line_idx][part_idx].chars = re.sub(r"\*(.*)\*", r"\1", part.chars)
+            in_a_code_block = _process_markdown_part(
+                lines,
+                line_idx,
+                part_idx,
+                part,
+                in_a_code_block,
+                full_dash_line,
+            )
 
     return lines
