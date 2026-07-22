@@ -239,10 +239,6 @@ class Action(ActionBase):
     def _run_runner(self) -> tuple[str, str, int] | None:
         """Use the runner subsystem to retrieve the configuration.
 
-        Raises:
-            RuntimeError: When the ansible-config command cannot be
-                found with execution environment support disabled.
-
         Returns:
             For mode interactive nothing. For mode stdout the output,
             errors and return code from runner.
@@ -277,58 +273,93 @@ class Action(ActionBase):
             kwargs.update({"container_options": self._args.container_options})
 
         if self._args.mode == "interactive":
-            self._runner = AnsibleConfig(**kwargs)
-            kwargs = {}
-            if isinstance(self._args.config, str):
-                kwargs["config_file"] = self._args.config
-            list_output, list_output_err = self._runner.fetch_ansible_config("list", **kwargs)
-            dump_output, dump_output_err = self._runner.fetch_ansible_config("dump", **kwargs)
-            if list_output_err:
-                msg = f"Error occurred while fetching ansible config (list): '{list_output_err}'"
-                self._logger.error(msg)
-            if dump_output_err:
-                msg = f"Error occurred while fetching ansible config (dump): '{dump_output_err}'"
-                self._logger.error(msg)
+            self._run_runner_interactive(kwargs)
+            return None
+        return self._run_runner_stdout(kwargs)
 
-            err_msg = "\n".join({list_output_err, dump_output_err})
-            if "ERROR!" in err_msg or not list_output or not dump_output:
-                warn_msg = ["Errors were encountered while gathering the configuration:"]
-                if err_msg:
-                    warn_msg += err_msg.splitlines()
-                if not list_output or not dump_output:
-                    warn_msg.append("The configuration could not be gathered.")
-                warning = warning_notification(warn_msg)
-                self._interaction.ui.show_form(warning)
-            else:
-                self._parse_and_merge(list_output, dump_output)
+    def _run_runner_interactive(
+        self,
+        kwargs: dict[str, Any],
+    ) -> None:
+        """Run the ansible-config runner in interactive mode.
+
+        Fetches both the list and dump output from ansible-config,
+        logs any errors, and parses/merges the results.
+
+        Args:
+            kwargs: The common runner keyword arguments.
+        """
+        self._runner = AnsibleConfig(**kwargs)
+        config_file = self._args.config if isinstance(self._args.config, str) else None
+        list_output, list_output_err = self._runner.fetch_ansible_config(
+            "list",
+            config_file=config_file,
+        )
+        dump_output, dump_output_err = self._runner.fetch_ansible_config(
+            "dump",
+            config_file=config_file,
+        )
+        if list_output_err:
+            msg = f"Error occurred while fetching ansible config (list): '{list_output_err}'"
+            self._logger.error(msg)
+        if dump_output_err:
+            msg = f"Error occurred while fetching ansible config (dump): '{dump_output_err}'"
+            self._logger.error(msg)
+
+        err_msg = "\n".join(e for e in (list_output_err, dump_output_err) if e)
+        if "ERROR!" in err_msg or not list_output or not dump_output:
+            warn_msg = ["Errors were encountered while gathering the configuration:"]
+            if err_msg:
+                warn_msg += err_msg.splitlines()
+            if not list_output or not dump_output:
+                warn_msg.append("The configuration could not be gathered.")
+            warning = warning_notification(warn_msg)
+            self._interaction.ui.show_form(warning)
         else:
-            if self._args.execution_environment:
-                ansible_config_path = "ansible-config"
-            else:
-                exec_path = shutil.which("ansible-config")
-                if exec_path is None:
-                    msg = "'ansible-config' executable not found"
-                    self._logger.error(msg)
-                    raise RuntimeError(msg)
-                ansible_config_path = exec_path
+            self._parse_and_merge(list_output, dump_output)
 
-            if isinstance(self._args.cmdline, list):
-                pass_through_arg = self._args.cmdline.copy()
-            else:
-                pass_through_arg = []
+    def _run_runner_stdout(
+        self,
+        kwargs: dict[str, Any],
+    ) -> tuple[str, str, int] | None:
+        """Run the ansible-config runner in stdout mode.
 
-            if self._args.help_config is True:
-                pass_through_arg.append("--help")
+        Resolves the ansible-config executable path, builds the
+        pass-through arguments, and runs the command.
 
-            if isinstance(self._args.config, str):
-                pass_through_arg.extend(["--config", self._args.config])
+        Args:
+            kwargs: The common runner keyword arguments.
 
-            kwargs.update({"cmdline": pass_through_arg})
+        Raises:
+            RuntimeError: When the ansible-config command cannot be
+                found with execution environment support disabled.
 
-            self._runner = Command(executable_cmd=ansible_config_path, **kwargs)
-            stdout_return = self._runner.run()
-            return stdout_return
-        return None
+        Returns:
+            The output, errors and return code from runner.
+        """
+        if self._args.execution_environment:
+            ansible_config_path = "ansible-config"
+        else:
+            exec_path = shutil.which("ansible-config")
+            if exec_path is None:
+                msg = "'ansible-config' executable not found"
+                self._logger.error(msg)
+                raise RuntimeError(msg)
+            ansible_config_path = exec_path
+
+        pass_through_arg = self._args.cmdline.copy() if isinstance(self._args.cmdline, list) else []
+
+        if self._args.help_config is True:
+            pass_through_arg.append("--help")
+
+        if isinstance(self._args.config, str):
+            pass_through_arg.extend(["--config", self._args.config])
+
+        kwargs.update({"cmdline": pass_through_arg})
+
+        self._runner = Command(executable_cmd=ansible_config_path, **kwargs)
+        stdout_return = self._runner.run()
+        return stdout_return
 
     def _parse_and_merge(self, list_output: str, dump_output: str) -> None:
         """Parse the list and dump output. Merge dump into list.
@@ -340,7 +371,6 @@ class Action(ActionBase):
         Returns:
             Nothing
         """
-        # pylint: disable=too-many-locals
         try:
             parsed = yaml.load(list_output, Loader=Loader)
             self._logger.debug("yaml loading list output succeeded")
@@ -354,40 +384,77 @@ class Action(ActionBase):
         for line in dump_output.splitlines():
             if not line:
                 break
-            extracted = regex.match(line)
-            if extracted:
-                variable = extracted.groupdict()["variable"]
-                try:
-                    source = yaml.load(extracted.groupdict()["source"], Loader=Loader)
-                except yaml.YAMLError:
-                    source = extracted.groupdict()["source"]
-                try:
-                    current = yaml.load(extracted.groupdict()["current"], Loader=Loader)
-                except yaml.YAMLError:
-                    current = extracted.groupdict()["current"]
-                try:
-                    if isinstance(source, dict):
-                        parsed[variable]["source"] = next(iter(source.keys()))
-                        parsed[variable]["via"] = next(iter(source.values()))
-                    else:
-                        parsed[variable]["source"] = source
-                        parsed[variable]["via"] = source
-                    current_as_str = str(current)
-
-                    target_screen_w = int(100 / 2)  # half a wide screen
-                    if len(current_as_str) > target_screen_w:
-                        more_indicator = "..."
-                        text_width = target_screen_w - len(more_indicator)
-                        current_as_str = f"{current_as_str[0:text_width]}{more_indicator}"
-                    parsed[variable]["__current"] = current_as_str
-                    parsed[variable]["current_value"] = current
-                except KeyError:
-                    self._logger.exception("variable '%s' not found in list output")
-                    return
-            else:
-                self._logger.error("Unparsable dump entry: %s", line)
+            if not self._parse_dump_line(regex, line, parsed):
                 return
 
+        self._finalize_parsed_config(parsed)
+        self._config = list(parsed.values())
+        self._logger.debug("parsed and merged list and dump successfully")
+        return
+
+    def _parse_dump_line(
+        self,
+        regex: re.Pattern[str],
+        line: str,
+        parsed: dict[str, Any],
+    ) -> bool:
+        """Parse a single line from the ansible-config dump output.
+
+        Extracts the variable name, source, and current value from
+        the line and merges them into the parsed config dictionary.
+
+        Args:
+            regex: The compiled regex pattern for matching dump lines.
+            line: A single line from the dump output.
+            parsed: The parsed config dictionary to update in place.
+
+        Returns:
+            True if the line was parsed successfully, False on error.
+        """
+        extracted = regex.match(line)
+        if not extracted:
+            self._logger.error("Unparsable dump entry: %s", line)
+            return False
+
+        variable = extracted.groupdict()["variable"]
+        try:
+            source = yaml.load(extracted.groupdict()["source"], Loader=Loader)
+        except yaml.YAMLError:
+            source = extracted.groupdict()["source"]
+        try:
+            current = yaml.load(extracted.groupdict()["current"], Loader=Loader)
+        except yaml.YAMLError:
+            current = extracted.groupdict()["current"]
+        try:
+            if isinstance(source, dict):
+                parsed[variable]["source"] = next(iter(source.keys()))
+                parsed[variable]["via"] = next(iter(source.values()))
+            else:
+                parsed[variable]["source"] = source
+                parsed[variable]["via"] = source
+            current_as_str = str(current)
+
+            target_screen_w = int(100 / 2)  # half a wide screen
+            if len(current_as_str) > target_screen_w:
+                more_indicator = "..."
+                text_width = target_screen_w - len(more_indicator)
+                current_as_str = f"{current_as_str[0:text_width]}{more_indicator}"
+            parsed[variable]["__current"] = current_as_str
+            parsed[variable]["current_value"] = current
+        except KeyError:
+            self._logger.exception("variable '%s' not found in list output", variable)
+            return False
+        return True
+
+    def _finalize_parsed_config(self, parsed: dict[str, Any]) -> None:
+        """Post-process the parsed config entries with display metadata.
+
+        Adds option name, default indicators, and config file path
+        to each parsed config entry.
+
+        Args:
+            parsed: The parsed config dictionary to update in place.
+        """
         for key, value in parsed.items():
             value["option"] = key
             value["name"] = key.replace("_", " ").capitalize()

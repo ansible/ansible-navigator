@@ -151,10 +151,6 @@ class Action(ActionBase):
     def _run_runner(self) -> dict[Any, Any] | tuple[str, str, int] | None:
         """Use the runner subsystem to retrieve the configuration.
 
-        Raises:
-            RuntimeError: When the ansible-doc command cannot be found
-                with execution environment support disabled.
-
         Returns:
             For mode interactive nothing or the plugin's doc. For mode
             stdout the output, errors and return code from runner.
@@ -188,31 +184,69 @@ class Action(ActionBase):
             kwargs.update({"container_options": self._args.container_options})
 
         if self._args.mode == "interactive":
-            if isinstance(self._args.playbook, str):
-                playbook_dir = f"{Path(self._args.playbook).parent}"
-            else:
-                playbook_dir = str(Path.cwd())
-            kwargs.update({"host_cwd": playbook_dir})
+            return self._run_runner_interactive(kwargs)
+        return self._run_runner_stdout(kwargs)
 
-            self._runner = AnsibleDoc(**kwargs)
+    def _run_runner_interactive(
+        self,
+        kwargs: dict[str, Any],
+    ) -> dict[Any, Any] | None:
+        """Run the ansible-doc runner in interactive mode.
 
-            # set the playbook directory so playbook
-            # adjacent collection docs can be found
-            self._logger.debug("doc playbook dir set to: %s", playbook_dir)
+        Resolves the playbook directory, fetches plugin documentation
+        via AnsibleDoc, and extracts the result.
 
-            plugin_doc, plugin_doc_err = self._runner.fetch_plugin_doc(
-                [self._plugin_name],
-                plugin_type=self._plugin_type,
-                playbook_dir=playbook_dir,
+        Args:
+            kwargs: The common runner keyword arguments.
+
+        Returns:
+            The plugin's documentation dictionary or None.
+        """
+        if isinstance(self._args.playbook, str):
+            playbook_dir = f"{Path(self._args.playbook).parent}"
+        else:
+            playbook_dir = str(Path.cwd())
+        kwargs.update({"host_cwd": playbook_dir})
+
+        self._runner = AnsibleDoc(**kwargs)
+
+        # set the playbook directory so playbook
+        # adjacent collection docs can be found
+        self._logger.debug("doc playbook dir set to: %s", playbook_dir)
+
+        plugin_doc, plugin_doc_err = self._runner.fetch_plugin_doc(
+            [self._plugin_name],
+            plugin_type=self._plugin_type,
+            playbook_dir=playbook_dir,
+        )
+        if plugin_doc_err:
+            self._logger.error(
+                "Error occurred while fetching doc for plugin %s: '%s'",
+                self._plugin_name,
+                plugin_doc_err,
             )
-            if plugin_doc_err:
-                self._logger.error(
-                    "Error occurred while fetching doc for plugin %s: '%s'",
-                    self._plugin_name,
-                    plugin_doc_err,
-                )
-            plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
-            return plugin_doc_response
+        plugin_doc_response = self._extract_plugin_doc(plugin_doc, plugin_doc_err)
+        return plugin_doc_response
+
+    def _run_runner_stdout(
+        self,
+        kwargs: dict[str, Any],
+    ) -> tuple[str, str, int] | None:
+        """Run the ansible-doc runner in stdout mode.
+
+        Resolves the ansible-doc executable path, builds the
+        pass-through arguments, and runs the command.
+
+        Args:
+            kwargs: The common runner keyword arguments.
+
+        Raises:
+            RuntimeError: When the ansible-doc command cannot be
+                found with execution environment support disabled.
+
+        Returns:
+            The output, errors and return code from runner.
+        """
         kwargs.update({"host_cwd": str(Path.cwd())})
         if self._args.execution_environment:
             ansible_doc_path = "ansible-doc"
@@ -257,39 +291,62 @@ class Action(ActionBase):
         Returns:
             The plugin's doc or errors
         """
-        plugin_doc = {}
         if self._args.execution_environment:
             error_key_name = "execution_environment_errors"
         else:
             error_key_name = "local_errors"
 
         if out:
-            if isinstance(out, dict):
-                plugin_doc = out[self._plugin_name]
-            else:
-                try:
-                    json_loaded = json.loads(out)
-                except json.JSONDecodeError as exc:
-                    if self._args.mode == "interactive":
-                        self._logger.info(
-                            "Parsing of ansible-doc output failed for '%s'",
-                            self._plugin_name,
-                        )
-                    self._logger.debug("json decode error: %s", str(exc))
-                    self._logger.debug("tried: %s", out)
-                    plugin_doc[error_key_name] = out
-                else:
-                    plugin_doc = json_loaded[self._plugin_name]
+            return self._process_plugin_output(out, err, error_key_name)
 
-            if isinstance(err, dict):
-                plugin_doc["warnings"] = err
-            else:
-                plugin_doc["warnings"] = err.splitlines()
-
-        elif err:
+        plugin_doc: dict[Any, Any] = {}
+        if err:
             if isinstance(err, dict):
                 plugin_doc[error_key_name] = err
             else:
                 plugin_doc[error_key_name] = err.splitlines()
+        return plugin_doc
+
+    def _process_plugin_output(
+        self,
+        out: dict[Any, Any] | str,
+        err: dict[Any, Any] | str,
+        error_key_name: str,
+    ) -> dict[Any, Any]:
+        """Process the plugin output when output is present.
+
+        Parses the runner output (dict or JSON string), extracts the
+        plugin documentation, and attaches any warnings from stderr.
+
+        Args:
+            out: The non-empty output from runner.
+            err: Any runner errors.
+            error_key_name: The key name to use for error entries.
+
+        Returns:
+            The plugin's documentation dictionary with warnings.
+        """
+        plugin_doc: dict[Any, Any] = {}
+        if isinstance(out, dict):
+            plugin_doc = out[self._plugin_name]
+        else:
+            try:
+                json_loaded = json.loads(out)
+            except json.JSONDecodeError as exc:
+                if self._args.mode == "interactive":
+                    self._logger.info(
+                        "Parsing of ansible-doc output failed for '%s'",
+                        self._plugin_name,
+                    )
+                self._logger.debug("json decode error: %s", str(exc))
+                self._logger.debug("tried: %s", out)
+                plugin_doc[error_key_name] = out
+            else:
+                plugin_doc = json_loaded[self._plugin_name]
+
+        if isinstance(err, dict):
+            plugin_doc["warnings"] = err
+        else:
+            plugin_doc["warnings"] = err.splitlines()
 
         return plugin_doc
