@@ -206,7 +206,7 @@ class Action(ActionBase):
         self._set_inventories_mtime()
 
         self._collect_inventory_details()
-        return bool(self._inventory)
+        return bool(self._inventory) or bool(self._inventory_error)
 
     def _check_inventory_changed(self) -> bool:
         """Check if inventory files have been modified and refresh if needed.
