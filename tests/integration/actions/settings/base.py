@@ -42,7 +42,7 @@ base_steps = (
 def _resolve_search_for(
     step: UiTestStep,
     cli_prompt: str,
-) -> str:
+) -> str | list[str]:
     """Resolve the search_within_response from a UiTestStep.
 
     Args:
@@ -61,6 +61,8 @@ def _resolve_search_for(
         return cli_prompt
     if step.search_within_response is SearchFor.WARNING:
         return "Warning"
+    if isinstance(step.search_within_response, (str, list)):
+        return step.search_within_response
     msg = "test mode not set"
     raise ValueError(msg)
 
