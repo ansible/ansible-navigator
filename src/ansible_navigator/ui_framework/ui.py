@@ -913,7 +913,7 @@ class UserInterface(CursesWindow):
             if should_continue:
                 if new_index != index:
                     index = new_index
-                    self.scroll(0)
+                self.scroll(0)
                 if new_entry == "_":
                     self._hide_keys = not self._hide_keys
                     heading, lines = self._filter_and_serialize(objs[index])
