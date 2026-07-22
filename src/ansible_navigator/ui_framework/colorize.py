@@ -401,17 +401,21 @@ def columns_and_colors(
     return results
 
 
-def _parse_ansi_match(cap: dict[str, str | None]) -> tuple[int, int]:
+def _parse_ansi_match(
+    cap: dict[str, str | None],
+    color: int = 0,
+    style: int = 0,
+) -> tuple[int, int]:
     """Parse an ANSI color match groupdict into a color and style.
 
     Args:
         cap: The groupdict from a color_regex match
+        color: The current color state to preserve across calls
+        style: The current style state to preserve across calls
 
     Returns:
         A (color, style) tuple
     """
-    color = 0
-    style = 0
     one = cap["one"]
     two = cap["two"]
     if cap["fg_action"] == "39;" or (one == "0" and two is None):
@@ -469,7 +473,7 @@ def ansi_to_curses(line: str) -> CursesLine:
         if part:
             match = color_regex.match(part)
             if match:
-                color, style = _parse_ansi_match(match.groupdict())
+                color, style = _parse_ansi_match(match.groupdict(), color, style)
             else:
                 curses_line = CursesLinePart(
                     column=colno,
