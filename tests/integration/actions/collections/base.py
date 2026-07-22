@@ -18,33 +18,37 @@ from tests.integration._tmux_session import TmuxSession
 from tests.integration._tmux_session import TmuxSessionKwargs
 
 
+BACK_CMD = ":back"
+BACK_TO_PLUGINS = "Back to browse company_name.coll_1 plugins window"
+BACK_TO_COLLECTIONS = "Back to ansible-navigator collections browse window"
+
 EXPECTED_COLLECTIONS = ["ansible.builtin", "company_name.coll_1", "company_name.coll_2"]
 
 base_steps = (
     UiTestStep(user_input=":1", comment="Browse company_name.coll_1 plugins window"),
     UiTestStep(user_input=":0", comment="filter_1 plugin docs window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment=BACK_TO_PLUGINS),
     UiTestStep(user_input=":1", comment="lookup_1 plugin docs window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment=BACK_TO_PLUGINS),
     UiTestStep(user_input=":2", comment="mod_1 plugin docs window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment=BACK_TO_PLUGINS),
     UiTestStep(user_input=":3", comment="role_full details window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment=BACK_TO_PLUGINS),
     UiTestStep(user_input=":4", comment="role_minimal details window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment=BACK_TO_PLUGINS),
     UiTestStep(
-        user_input=":back",
-        comment="Back to ansible-navigator collections browse window",
+        user_input=BACK_CMD,
+        comment=BACK_TO_COLLECTIONS,
         present=EXPECTED_COLLECTIONS,
     ),
     UiTestStep(user_input=":2", comment="Browse company_name.coll_2 plugins window"),
     UiTestStep(user_input=":0", comment="lookup_2 plugin docs window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_2 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment="Back to browse company_name.coll_2 plugins window"),
     UiTestStep(user_input=":1", comment="mod_2 plugin docs window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_2 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment="Back to browse company_name.coll_2 plugins window"),
     UiTestStep(
-        user_input=":back",
-        comment="Back to ansible-navigator collections browse window",
+        user_input=BACK_CMD,
+        comment=BACK_TO_COLLECTIONS,
         present=EXPECTED_COLLECTIONS,
     ),
     # Try some things that should not work but not fail (#1061 and #1062)
@@ -63,12 +67,12 @@ base_steps = (
     # and repeat some basic browsing
     UiTestStep(user_input=":1", comment="Browse company_name.coll_1 plugins window"),
     UiTestStep(user_input=":0", comment="filter_1 plugin docs window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment=BACK_TO_PLUGINS),
     UiTestStep(user_input=":1", comment="lookup_1 plugin docs window"),
-    UiTestStep(user_input=":back", comment="Back to browse company_name.coll_1 plugins window"),
+    UiTestStep(user_input=BACK_CMD, comment=BACK_TO_PLUGINS),
     UiTestStep(
-        user_input=":back",
-        comment="Back to ansible-navigator collections browse window",
+        user_input=BACK_CMD,
+        comment=BACK_TO_COLLECTIONS,
         present=EXPECTED_COLLECTIONS,
     ),
     UiTestStep(

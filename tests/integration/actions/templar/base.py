@@ -28,16 +28,19 @@ run_fixture_dir = FIXTURES_DIR / "integration" / "actions" / "run"
 inventory_path = run_fixture_dir / "inventory"
 playbook_path = run_fixture_dir / "site.yaml"
 
+BACK_CMD = ":back"
+MODULE_DEBUG = "module: debug"
+
 base_steps = (
     UiTestStep(user_input=":0", comment="play-1 details"),
     UiTestStep(user_input=":{{ this[0] }}", comment="render menu as content"),
-    UiTestStep(user_input=":back", comment="show play-1 details"),
+    UiTestStep(user_input=BACK_CMD, comment="show play-1 details"),
     UiTestStep(user_input=":0", comment="task-1 details"),
     UiTestStep(
         user_input=":doc",
         comment="doc for task",
-        present=["module: debug"],
-        search_within_response="module: debug",
+        present=[MODULE_DEBUG],
+        search_within_response=MODULE_DEBUG,
     ),
     UiTestStep(
         user_input=":{{ examples }}",
@@ -45,12 +48,12 @@ base_steps = (
         present=["ansible.builtin.debug:"],
     ),
     UiTestStep(
-        user_input=":back",
+        user_input=BACK_CMD,
         comment="show doc",
-        present=["module: debug"],
-        search_within_response="module: debug",
+        present=[MODULE_DEBUG],
+        search_within_response=MODULE_DEBUG,
     ),
-    UiTestStep(user_input=":back", comment="show task"),
+    UiTestStep(user_input=BACK_CMD, comment="show task"),
     UiTestStep(
         user_input=":open {{ task_path }}",
         comment="goto vi, look for localhost since it is not in the task",
