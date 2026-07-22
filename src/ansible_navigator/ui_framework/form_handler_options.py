@@ -6,6 +6,7 @@ import curses
 
 from curses import ascii as curses_ascii
 from typing import TYPE_CHECKING
+from typing import Any
 
 from .curses_defs import CursesLine
 from .curses_defs import CursesLinePart
@@ -57,6 +58,50 @@ class FormHandlerOptions(CursesWindow):
                 line=CursesLine((clp_option_code, clp_text)),
             )
 
+    def _handle_key_input(
+        self,
+        char: int,
+        form_field: Any,
+        active: int,
+    ) -> tuple[bool, int]:
+        """Process a single key input for checkbox/radio fields.
+
+        Args:
+            char: The character input from the user
+            form_field: Field from a form
+            active: Track active checkbox/option
+
+        Returns:
+            Tuple of (should_break, new_active)
+        """
+        if char in (curses_ascii.SO, curses.KEY_DOWN):
+            return False, active + 1
+
+        if char in (curses_ascii.DLE, curses.KEY_UP):
+            return False, active - 1
+
+        if char == curses.KEY_RESIZE:
+            return True, active
+
+        if char == curses_ascii.TAB:
+            if active == len(form_field.options) - 1:
+                return True, active
+            return False, active + 1
+
+        if char == curses_ascii.SP:
+            if not form_field.options[active].disabled:
+                form_field.options[active].checked = not form_field.options[active].checked
+                if form_field.__class__.__name__ == "FieldRadio":
+                    for ffo_idx, option in enumerate(form_field.options):
+                        if ffo_idx != active:
+                            option.checked = False
+            return False, active
+
+        if char in [curses_ascii.NL, curses_ascii.CR]:
+            return True, active
+
+        return False, active
+
     def handle(self, idx: int, form_fields: list[FieldText]) -> tuple[FieldText, int]:
         """Handle the check box field.
 
@@ -81,29 +126,8 @@ class FormHandlerOptions(CursesWindow):
 
             char = self.win.getch()
 
-            if char in (curses_ascii.SO, curses.KEY_DOWN):
-                active += 1
-
-            elif char in (curses_ascii.DLE, curses.KEY_UP):
-                active -= 1
-
-            elif char == curses.KEY_RESIZE:
-                break
-
-            elif char == curses_ascii.TAB:
-                if active == len(form_field.options) - 1:
-                    break
-                active += 1
-
-            elif char == curses_ascii.SP:
-                if not form_field.options[active].disabled:
-                    form_field.options[active].checked = not form_field.options[active].checked
-                    if form_field.__class__.__name__ == "FieldRadio":
-                        for ffo_idx, option in enumerate(form_field.options):
-                            if ffo_idx != active:
-                                option.checked = False
-
-            elif char in [curses_ascii.NL, curses_ascii.CR]:
+            should_break, active = self._handle_key_input(char, form_field, active)
+            if should_break:
                 break
 
         return form_field, char
