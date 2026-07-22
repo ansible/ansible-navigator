@@ -66,6 +66,14 @@ test_data = (
             " has unrecognized variables: 'name'"
         ),
     ),
+    Scenario(
+        name="4",
+        current="s{",
+        exit_message_substr=(
+            "The playbook artifact file name 's{', set by command line,"
+            " has invalid format syntax: Single '{' encountered in format string"
+        ),
+    ),
 )
 
 
