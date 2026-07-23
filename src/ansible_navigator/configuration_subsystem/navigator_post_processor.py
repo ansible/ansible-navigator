@@ -1176,12 +1176,23 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        # literal_text, fname, format_spec, conversion
-        found = {f for _, f, _, _ in Formatter().parse(entry.value.current) if f}
         available = {f for _, f, _, _ in Formatter().parse(entry.value.default) if f}
         non_defaults_also_available = {"playbook_status"}
 
         available.update(non_defaults_also_available)
+        # literal_text, fname, format_spec, conversion
+        try:
+            found = {f for _, f, _, _ in Formatter().parse(entry.value.current) if f}
+        except ValueError as exc:
+            exit_msg = (
+                f"The playbook artifact file name '{entry.value.current}', set by"
+                f" {entry.value.source.value.lower()}, has invalid format syntax: {exc!s}"
+            )
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = f"Try again with matching braces around {oxfordcomma(available, 'and/or')}"
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
+
         unknown = found - available
         if not unknown:
             return messages, exit_messages
