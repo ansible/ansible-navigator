@@ -18,6 +18,37 @@ class BaseScenario:
     name: str
 
 
+def _id_from_scenario(param: BaseScenario) -> str:
+    """Generate id from a BaseScenario instance.
+
+    Args:
+        param: A BaseScenario instance
+
+    Returns:
+        The id string
+    """
+    if hasattr(param, "name"):
+        return param.name
+    if hasattr(param, "comment"):
+        return param.comment
+    return ""
+
+
+def _id_from_tuple(param: tuple[Any, ...]) -> str:
+    """Generate id from a tuple.
+
+    Args:
+        param: A tuple of values
+
+    Returns:
+        The id string
+    """
+    if hasattr(param, "name"):
+        return param.name
+    args = [str(part.value) if isinstance(part, Enum) else str(part) for part in param]
+    return "-".join(args)
+
+
 def id_func(param: Any) -> str:
     """Generate id for tests.
 
@@ -27,30 +58,14 @@ def id_func(param: Any) -> str:
     Returns:
         Returns a string.
     """
-    result = ""
-    auto_id_counter = 0
     if isinstance(param, str):
         result = param
-    elif hasattr(param, "value") and isinstance(param.value, str):  # covers for Enums too
+    elif hasattr(param, "value") and isinstance(param.value, str):
         result = str(param.value)
     elif isinstance(param, BaseScenario):
-        if hasattr(param, "name"):
-            result = param.name
-        elif hasattr(param, "comment"):
-            result = param.comment
+        result = _id_from_scenario(param)
     elif isinstance(param, tuple):
-        if hasattr(param, "name"):
-            result = param.name
-        else:
-            args = []
-            for _, part in enumerate(param):
-                if isinstance(part, Enum):
-                    args.append(str(part.value))
-                else:
-                    args.append(str(part))
-            result = "-".join(args)
+        result = _id_from_tuple(param)
     else:
-        result = str(auto_id_counter)
-        auto_id_counter += 1
-    result = result.lower().replace(" ", "-")
-    return result
+        result = "0"
+    return result.lower().replace(" ", "-")

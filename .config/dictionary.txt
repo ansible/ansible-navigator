@@ -3,6 +3,7 @@ argname
 argnames
 argparser
 argspec
+argspecs
 argvalues
 automounts
 autorefs

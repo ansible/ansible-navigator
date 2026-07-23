@@ -10,7 +10,6 @@ from .base import Base
 
 
 class AnsibleDoc(Base):
-    # pylint: disable=too-many-arguments
     """An interface to ``ansible-runner`` for running the ``ansible-doc`` command."""
 
     def fetch_plugin_doc(

@@ -877,32 +877,22 @@ class NavigatorPostProcessor:
                 exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
         return messages, exit_messages
 
-    @_post_processor
-    def mode(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
-        # pylint: disable=too-many-locals
-        """Post process mode.
+    @staticmethod
+    def _load_subcommand_action(
+        subcommand_name: str,
+        config: ApplicationConfiguration,
+        messages: list[LogMessage],
+    ) -> Any:
+        """Load the action module for the given subcommand name.
 
         Args:
-            entry: The current settings entry
+            subcommand_name: The name of the subcommand to load
             config: The full application configuration
-
-        Raises:
-            ValueError: When more than 2 mode changes requests are
-                present, shouldn't happen
+            messages: The list of log messages to append to
 
         Returns:
-            An instance of the standard post process return object
+            The loaded subcommand action, or None if not found
         """
-        messages: list[LogMessage] = []
-        exit_messages: list[ExitMessage] = []
-        subcommand_action = None
-        subcommand_name = config.subcommand(config.app).name
-
-        # Post initialization of mode processing is not needed since switching modes after
-        # is not supported
-        if not config.internals.initializing:
-            return messages, exit_messages
-
         for action_package_name in config.internals.action_packages:
             try:
                 action_package = importlib.import_module(action_package_name)
@@ -913,12 +903,67 @@ class NavigatorPostProcessor:
             try:
                 if hasattr(action_package, "get"):
                     valid_pkg_name = subcommand_name.replace("-", "_")
-                    subcommand_action = action_package.get(valid_pkg_name)
+                    return action_package.get(valid_pkg_name)
                 break
             except (AttributeError, ModuleNotFoundError) as exc:
                 message = f"Unable to load subcommand '{subcommand_name}' from"
                 message += f" action package: '{action_package_name}': {exc!s}"
                 messages.append(LogMessage(level=logging.DEBUG, message=message))
+        return None
+
+    def _apply_mode_change_requests(
+        self,
+        entry: SettingsEntry,
+        messages: list[LogMessage],
+    ) -> None:
+        """Apply any accumulated mode change requests to the entry.
+
+        Args:
+            entry: The current settings entry
+            messages: The list of log messages to append to
+
+        Raises:
+            ValueError: When more than 1 distinct mode change is requested
+        """
+        mode_set = {request.mode for request in self._requested_mode}
+        if len(mode_set) == 1:
+            requested = self._requested_mode[0]
+            auto_mode = requested.mode.value
+            if auto_mode != entry.value.current:
+                entry_mode_change_msgs = (
+                    f"Parameter '{requested.entry}' required mode '{auto_mode!s}'.",
+                    f"Mode will be set to '{auto_mode}'",
+                )
+                messages.extend(
+                    LogMessage(level=logging.INFO, message=msg) for msg in entry_mode_change_msgs
+                )
+                entry.value.current = auto_mode
+                entry.value.source = C.AUTO
+        elif len(mode_set) > 1:
+            msg = f"Conflicting mode requests: {self._requested_mode}"
+            raise ValueError(msg)
+
+    @_post_processor
+    def mode(self, entry: SettingsEntry, config: ApplicationConfiguration) -> PostProcessorReturn:
+        """Post process mode.
+
+        Args:
+            entry: The current settings entry
+            config: The full application configuration
+
+        Returns:
+            An instance of the standard post process return object
+        """
+        messages: list[LogMessage] = []
+        exit_messages: list[ExitMessage] = []
+        subcommand_name = config.subcommand(config.app).name
+
+        # Post initialization of mode processing is not needed since switching modes after
+        # is not supported
+        if not config.internals.initializing:
+            return messages, exit_messages
+
+        subcommand_action = self._load_subcommand_action(subcommand_name, config, messages)
 
         if subcommand_action is None:
             exit_msg = f"Unable to find an action for '{subcommand_name}', tried: "
@@ -950,23 +995,7 @@ class NavigatorPostProcessor:
             entry.value.source = C.AUTO
 
         # Check if any other entry has requested a mode change different than current
-        mode_set = {request.mode for request in self._requested_mode}
-        if len(mode_set) == 1:
-            requested = self._requested_mode[0]
-            auto_mode = requested.mode.value
-            if auto_mode != entry.value.current:
-                entry_mode_change_msgs = (
-                    f"Parameter '{requested.entry}' required mode '{auto_mode!s}'.",
-                    f"Mode will be set to '{auto_mode}'",
-                )
-                messages.extend(
-                    LogMessage(level=logging.INFO, message=msg) for msg in entry_mode_change_msgs
-                )
-                entry.value.current = auto_mode
-                entry.value.source = C.AUTO
-        elif len(mode_set) > 1:
-            msg = f"Conflicting mode requests: {self._requested_mode}"
-            raise ValueError(msg)
+        self._apply_mode_change_requests(entry, messages)
         return messages, exit_messages
 
     # Post process osc4.

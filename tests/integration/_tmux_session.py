@@ -306,6 +306,203 @@ class TmuxSession:
             return captured
         raise RuntimeError
 
+    def _determine_mode(
+        self,
+        start_time: float,
+        timeout: int,
+    ) -> tuple[str | None, list[str]]:
+        """Determine if the session is at a shell prompt or in a TUI app.
+
+        Args:
+            start_time: The timer start value
+            timeout: Timeout in seconds
+
+        Returns:
+            A tuple of (mode, showing) where mode is 'shell', 'app', or None on timeout
+        """
+        while True:
+            showing = self._capture_pane()
+
+            if showing:
+                mode = "shell" if self.cli_prompt in showing[-1] else "app"
+                return mode, showing
+
+            elapsed = timer() - start_time
+            if elapsed > timeout:
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                alert = f"******** ERROR: TMUX MODE TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
+                showing.insert(0, alert)
+                return None, showing
+            time.sleep(0.1)
+
+    def _wait_for_command_execution(
+        self,
+        value: str,
+        mode: str,
+        start_time: float,
+        timeout: int,
+    ) -> tuple[bool, list[str]]:
+        """Send a value and wait for the command to execute.
+
+        Args:
+            value: The value to send
+            mode: The current mode ('shell' or 'app')
+            start_time: The timer start value
+            timeout: Timeout in seconds
+
+        Returns:
+            A tuple of (success, showing)
+        """
+        pre_send = self._pane.capture_pane()
+        self._pane.send_keys(value)
+        while True:
+            showing = self._capture_pane()
+
+            if showing and showing != pre_send:
+                if mode == "shell" and value not in showing[-1]:
+                    return True, showing
+                if mode == "app":
+                    return True, showing
+
+            elapsed = timer() - start_time
+            if elapsed > timeout:
+                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                alert = f"******** ERROR: TMUX EXEC TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
+                showing.insert(0, alert)
+                return False, showing
+            time.sleep(0.1)
+
+    def _check_response_match(
+        self,
+        showing: list[str],
+        search_within_response: list[str] | str | None,
+        ignore_within_response: str | None,
+    ) -> bool:
+        """Check if the screen content matches the search criteria.
+
+        Args:
+            showing: The current screen content
+            search_within_response: Strings to find in the response
+            ignore_within_response: String that invalidates the match
+
+        Returns:
+            True if the response matches
+        """
+        ok = False
+        if isinstance(search_within_response, str):
+            ok = any(search_within_response in line for line in showing)
+        elif isinstance(search_within_response, list):
+            page = " ".join(showing)
+            ok = all(search in page for search in search_within_response)
+
+        if (
+            ok
+            and ignore_within_response
+            and any(ignore_within_response in line for line in showing)
+        ):
+            ok = False
+        return ok
+
+    def _wait_for_stable_screen(
+        self,
+        showing: list[str],
+        start_time: float,
+        timeout: int,
+    ) -> tuple[list[str], bool]:
+        """Wait for the screen to stabilize (5 identical captures in a row).
+
+        Args:
+            showing: The initial screen content
+            start_time: The timer start value
+            timeout: Timeout in seconds
+
+        Returns:
+            A tuple of (final_showing, timed_out)
+        """
+        screens = [showing]
+        while True:
+            captured = self._capture_pane()
+            screens.append(captured)
+            if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
+                return screens[-1], False
+            elapsed = timer() - start_time
+            if elapsed > timeout:
+                return showing, True
+            time.sleep(0.1)
+
+    def _handle_response_timeout(
+        self,
+        showing: list[str],
+        err_message: str,
+        elapsed: float,
+    ) -> list[str]:
+        """Handle a timeout while waiting for a response.
+
+        Args:
+            showing: The current screen content
+            err_message: The error message category
+            elapsed: The elapsed time in seconds
+
+        Returns:
+            The annotated screen content
+        """
+        setup_capture_path = self._test_log_dir / "showing_setup.txt"
+        timeout_capture_path = self._test_log_dir / "showing_timeout.txt"
+
+        with setup_capture_path.open(mode="w", encoding="utf-8") as fh:
+            fh.writelines("\n".join(self._setup_capture))
+
+        time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+        alerts = [
+            f"******** ERROR: TMUX '{err_message}' TIMEOUT @ {elapsed}s @ {time_stamp} ********",
+        ]
+        alerts.append(f"******** Captured to: {timeout_capture_path}")
+        showing = alerts + showing
+        with timeout_capture_path.open(mode="w", encoding="utf-8") as fh:
+            fh.writelines("\n".join(showing))
+        self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
+        return showing
+
+    def _wait_for_response(
+        self,
+        search_within_response: list[str] | str | None,
+        ignore_within_response: str | None,
+        start_time: float,
+        timeout: int,
+    ) -> tuple[list[str], bool]:
+        """Wait for the expected response to appear on screen.
+
+        Args:
+            search_within_response: Strings to find in the response
+            ignore_within_response: String that invalidates the match
+            start_time: The timer start value
+            timeout: Timeout in seconds
+
+        Returns:
+            A tuple of (showing, timed_out)
+        """
+        while True:
+            showing = self._capture_pane()
+
+            if showing and self._check_response_match(
+                showing,
+                search_within_response,
+                ignore_within_response,
+            ):
+                final_showing, stable_timeout = self._wait_for_stable_screen(
+                    showing,
+                    start_time,
+                    timeout,
+                )
+                if stable_timeout:
+                    return final_showing, False
+                return final_showing, False
+
+            elapsed = timer() - start_time
+            if elapsed > timeout:
+                return self._handle_response_timeout(showing, "RESPONSE", elapsed), True
+            time.sleep(0.1)
+
     def interaction(
         self,
         value: str,
@@ -327,115 +524,26 @@ class TmuxSession:
         Returns:
             The screen content
         """
-        showing = None
         if self._fail_remaining:
             return self._fail_remaining
         start_time = timer()
 
-        # before issuing commands, determine
-        # if presently at command prompt or in TUI
-        mode = None
-        while True:
-            showing = self._capture_pane()
+        mode, showing = self._determine_mode(start_time, timeout)
+        if mode is None:
+            return showing
 
-            if showing:
-                mode = "shell" if self.cli_prompt in showing[-1] else "app"
+        success, showing = self._wait_for_command_execution(value, mode, start_time, timeout)
+        if not success:
+            return showing
 
-            if mode is not None:
-                break
-
-            elapsed = timer() - start_time
-            if elapsed > timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX MODE TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                showing.insert(0, alert)
-                return showing
-            time.sleep(0.1)
-
-        # capture the screen, send the value, ensure the screen has changed
-        # if at the shell, the prompt should not longer be in the last line
-        # for the TUI, ensure the screen has changed
-        # this risk here is if the shell command is instant and returns to a prompt
-        # before we get the screen this will result in a timeout
-        pre_send = self._pane.capture_pane()
-        self._pane.send_keys(value)
-        command_executed = False
-        while True:
-            showing = self._capture_pane()
-
-            if showing and showing != pre_send:
-                if mode == "shell":
-                    command_executed = value not in showing[-1]
-                elif mode == "app":
-                    command_executed = True
-
-            if command_executed:
-                break
-
-            elapsed = timer() - start_time
-            if elapsed > timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                alert = f"******** ERROR: TMUX EXEC TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
-                showing.insert(0, alert)
-                return showing
-            time.sleep(0.1)
-
-        setup_capture_path = self._test_log_dir / "showing_setup.txt"
-        timeout_capture_path = self._test_log_dir / "showing_timeout.txt"
-
-        ok_to_return = False
-        err_message = "RESPONSE"
-        while True:
-            showing = self._capture_pane()
-
-            if showing:
-                if isinstance(search_within_response, str):
-                    for line in showing:
-                        if search_within_response in line:
-                            ok_to_return = True
-                            break
-                elif isinstance(search_within_response, list):
-                    page = " ".join(showing)
-                    ok_to_return = all(search in page for search in search_within_response)
-
-                if ignore_within_response:
-                    for line in showing:
-                        if ignore_within_response in line:
-                            ok_to_return = False
-                            break
-
-            if ok_to_return:
-                screens = [showing]
-                while True:
-                    captured = self._capture_pane()
-
-                    screens.append(captured)
-                    if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
-                        showing = screens[-1]
-                        break
-                    elapsed = timer() - start_time
-                    if elapsed > timeout:
-                        break
-                    time.sleep(0.1)
-                break
-
-            elapsed = timer() - start_time
-            if elapsed > timeout:
-                with setup_capture_path.open(mode="w", encoding="utf-8") as fh:
-                    fh.writelines("\n".join(self._setup_capture))
-
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-                # taint the screen output w/ timestamp so it's never a valid fixture
-                alerts = [
-                    f"******** ERROR: TMUX '{err_message}'"
-                    f" TIMEOUT @ {elapsed}s @ {time_stamp} ********",
-                ]
-                alerts.append(f"******** Captured to: {timeout_capture_path}")
-                showing = alerts + showing
-                with timeout_capture_path.open(mode="w", encoding="utf-8") as fh:
-                    fh.writelines("\n".join(showing))
-                self._fail_remaining = ["******** PREVIOUS TEST FAILURE ********"]
-                return showing
+        showing, timed_out = self._wait_for_response(
+            search_within_response,
+            ignore_within_response,
+            start_time,
+            timeout,
+        )
+        if timed_out:
+            return showing
 
         # Clear the screen in case subsequent tests produce the same output
         # This ensures the pre_send capture will be different.

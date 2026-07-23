@@ -139,9 +139,6 @@ src/ansible_navigator/command_runner/command_runner.py
 --------------------
 src/ansible_navigator/configuration_subsystem/configurator.py
     DOC111: Method `Configurator._argparse_error_handler`: The option `--arg-type-hints-in-docstring` is `False` but there are type hints in the docstring arg list
-    DOC502: Method `Configurator._apply_settings_file` has a "Raises" section in the docstring, but there are not "raise" statements in the body
-    DOC101: Function `raise_value_error`: Docstring contains fewer arguments than in function signature.
-    DOC103: Function `raise_value_error`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [message: str].
 --------------------
 src/ansible_navigator/configuration_subsystem/definitions.py
     DOC601: Class `Constants`: Class docstring contains fewer class attributes than actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)

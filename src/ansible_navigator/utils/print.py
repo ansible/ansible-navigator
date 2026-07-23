@@ -44,6 +44,33 @@ def color_bits() -> int:
         return 4
 
 
+def _ansi_code_for_part(
+    color: tuple[int, int, int] | None,
+    term_color_bits: int,
+) -> str:
+    """Compute the ANSI escape code for a line part.
+
+    Args:
+        color: The RGB color tuple, or None for default.
+        term_color_bits: The number of color bits the terminal supports.
+
+    Returns:
+        The ANSI escape code string.
+    """
+    if term_color_bits == 24:
+        if color is None:
+            return "\033[38;2;255;255;255m"
+        red, green, blue = color
+        return f"\033[38;2;{red};{green};{blue}m"
+    if color is None:
+        ansi_color = 1
+    else:
+        red, green, blue = color
+        number_of_colors = 2**term_color_bits
+        ansi_color = rgb_to_ansi(red, green, blue, number_of_colors)
+    return f"\033[38;5;{ansi_color}m"
+
+
 def color_lines(term_color_bits: int, tokenized: list[list[SimpleLinePart]]) -> str:
     """Transform tokenized lines to ANSI lines.
 
@@ -54,26 +81,11 @@ def color_lines(term_color_bits: int, tokenized: list[list[SimpleLinePart]]) -> 
     Returns:
         The ANSI string
     """
-    # pylint: disable=possibly-used-before-assignment
     lines = []
     for line in tokenized:
         printable = ""
         for line_part in line:
-            color = line_part.color
-            if color is not None:
-                red, green, blue = color
-            if term_color_bits == 24:
-                if color is None:
-                    ansi_code = "\033[38;2;255;255;255m"
-                else:
-                    ansi_code = f"\033[38;2;{red};{green};{blue}m"
-            else:
-                if color is None:
-                    ansi_color = 1
-                else:
-                    number_of_colors = 2**term_color_bits
-                    ansi_color = rgb_to_ansi(red, green, blue, number_of_colors)
-                ansi_code = f"\033[38;5;{ansi_color}m"
+            ansi_code = _ansi_code_for_part(line_part.color, term_color_bits)
             printable += f"{ansi_code}{line_part.chars}\033[m"
         lines.append(printable)
     return "".join(lines)

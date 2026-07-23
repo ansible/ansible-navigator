@@ -7,6 +7,7 @@ import os
 
 from copy import deepcopy
 from pathlib import Path
+from typing import Any
 
 from ansible_navigator.utils.definitions import ExitMessage
 from ansible_navigator.utils.definitions import ExitPrefix
@@ -162,41 +163,26 @@ class Configurator:
                 message = f"'{entry.name}' cannot be reconfigured. (apply defaults)"
                 self._messages.append(LogMessage(level=logging.INFO, message=message))
 
-    def _apply_settings_file(self) -> None:
-        # pylint: disable=too-many-locals
-        """Apply the settings file.
+    def _load_settings_yaml(self, settings_filesystem_path: str) -> dict[str, Any] | None:
+        """Load and parse the YAML settings file.
 
-        Raises:
-            ValueError: If the settings file is empty
+        Args:
+            settings_filesystem_path: Path to the settings file.
+
+        Returns:
+            The parsed config dict, or None if loading failed or should be skipped.
         """
 
-        def raise_value_error(message: str) -> None:
-            """Raise a ValueError with the given message.
-
-            Raises:
-                ValueError: If the settings file is empty
-            """
+        def _raise_value_error(message: str) -> None:
             raise ValueError(message)
-
-        settings_filesystem_path = self._config.internals.settings_file_path
-
-        if not isinstance(settings_filesystem_path, str):
-            return
-
-        run_all_migrations(
-            settings_file_str=settings_filesystem_path,
-            migration_types=(MigrationType.SETTINGS_FILE,),
-        )
 
         with Path(settings_filesystem_path).open(encoding="utf-8") as fh:
             try:
                 config = yaml.load(fh, Loader=SafeLoader)
                 if config is None:
-                    # In the case of ansible-navigator settings --sample > ansible-navigator.yml
-                    # the file will be empty, but we shouldn't exit.
                     if self._params in (["settings", "--sample"], ["settings", "--gs"]):
-                        return
-                    raise_value_error("Settings file cannot be empty.")
+                        return None
+                    _raise_value_error("Settings file cannot be empty.")
             except (yaml.scanner.ScannerError, yaml.parser.ParserError, ValueError) as exc:
                 exit_msg = f"Settings file found {settings_filesystem_path}, but failed to load it."
                 self._exit_messages.append(ExitMessage(message=exit_msg))
@@ -209,37 +195,53 @@ class Configurator:
                 self._exit_messages.append(
                     ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT),
                 )
-                return
+                return None
+        return config
 
+    def _validate_settings_schema(
+        self, settings_filesystem_path: str, config: dict[str, Any]
+    ) -> bool:
+        """Validate the settings config against the schema.
+
+        Args:
+            settings_filesystem_path: Path to the settings file.
+            config: The parsed config dict.
+
+        Returns:
+            True if validation errors were found.
+        """
         schema = to_schema(settings=self._config)
         errors = validate(schema=schema, data=config)
+        if not errors:
+            return False
+        msg = f"The following errors were found in the settings file ({settings_filesystem_path}):"
+        self._exit_messages.append(ExitMessage(message=msg))
+        self._exit_messages.extend(error.to_exit_message() for error in errors)
+        hint = "Check the settings file and compare it to the current version."
+        self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+        hint = (
+            "The current version can be found here:"
+            " (https://ansible-navigator.readthedocs.io/en/latest/settings/"
+            "#ansible-navigator-settings)"
+        )
+        self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+        hint = (
+            "The schema used for validation can be seen with 'ansible-navigator settings --schema'"
+        )
+        self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+        hint = "A sample settings file can be created with 'ansible-navigator settings --sample'"
+        self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
+        return True
 
-        if errors:
-            msg = (
-                "The following errors were found in the settings file"
-                f" ({settings_filesystem_path}):"
-            )
-            self._exit_messages.append(ExitMessage(message=msg))
-            self._exit_messages.extend(error.to_exit_message() for error in errors)
-            hint = "Check the settings file and compare it to the current version."
-            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
-            hint = (
-                "The current version can be found here:"
-                " (https://ansible-navigator.readthedocs.io/en/latest/settings/"
-                "#ansible-navigator-settings)"
-            )
-            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
-            hint = (
-                "The schema used for validation can be seen with"
-                " 'ansible-navigator settings --schema'"
-            )
-            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
-            hint = (
-                "A sample settings file can be created with 'ansible-navigator settings --sample'"
-            )
-            self._exit_messages.append(ExitMessage(message=hint, prefix=ExitPrefix.HINT))
-            return
+    def _apply_settings_to_entries(
+        self, settings_filesystem_path: str, config: dict[str, Any]
+    ) -> None:
+        """Apply parsed settings config values to the configuration entries.
 
+        Args:
+            settings_filesystem_path: Path to the settings file.
+            config: The parsed config dict.
+        """
         for entry in self._config.entries:
             settings_file_path = entry.settings_file_path(self._config.application_name)
             path_parts = settings_file_path.split(".")
@@ -272,6 +274,27 @@ class Configurator:
             except KeyError:
                 message = f"{settings_file_path} not found in settings file"
                 self._messages.append(LogMessage(level=logging.DEBUG, message=message))
+
+    def _apply_settings_file(self) -> None:
+        """Apply the settings file."""
+        settings_filesystem_path = self._config.internals.settings_file_path
+
+        if not isinstance(settings_filesystem_path, str):
+            return
+
+        run_all_migrations(
+            settings_file_str=settings_filesystem_path,
+            migration_types=(MigrationType.SETTINGS_FILE,),
+        )
+
+        config = self._load_settings_yaml(settings_filesystem_path)
+        if config is None:
+            return
+
+        if self._validate_settings_schema(settings_filesystem_path, config):
+            return
+
+        self._apply_settings_to_entries(settings_filesystem_path, config)
 
     def _apply_environment_variables(self) -> None:
         """Apply the environment variables."""
@@ -353,13 +376,21 @@ class Configurator:
         """Check the choices for each settings entry."""
         for entry in self._config.entries:
             if entry.cli_parameters and entry.choices:
-                if isinstance(entry.value.current, list):
-                    for value in entry.value.current:
-                        logged = self._check_choice(entry=entry, value=value)
-                        if logged:
-                            break
-                else:
-                    self._check_choice(entry=entry, value=entry.value.current)
+                self._check_entry_choices(entry)
+
+    def _check_entry_choices(self, entry: SettingsEntry) -> None:
+        """Check choice validity for a single settings entry.
+
+        Args:
+            entry: The settings entry to check.
+        """
+        if isinstance(entry.value.current, list):
+            for value in entry.value.current:
+                logged = self._check_choice(entry=entry, value=value)
+                if logged:
+                    break
+        else:
+            self._check_choice(entry=entry, value=entry.value.current)
 
     def _check_choice(self, entry: SettingsEntry, value: bool | str) -> bool:
         """Check the choice for a single settings entry.
@@ -384,9 +415,46 @@ class Configurator:
             return True
         return False
 
+    def _is_eligible_for_previous_cli(
+        self,
+        current_entry: SettingsEntry,
+        previous_entry: SettingsEntry,
+        current_subcommand: str,
+        previous_subcommand: str,
+    ) -> bool:
+        """Check if a previous CLI entry is eligible for reapplication.
+
+        Args:
+            current_entry: The current settings entry.
+            previous_entry: The corresponding previous settings entry.
+            current_subcommand: The current subcommand name.
+            previous_subcommand: The previous subcommand name.
+
+        Returns:
+            True if the entry is eligible for reapplication.
+        """
+        if not any((self._config.internals.initializing, current_entry.change_after_initial)):
+            message = f"'{current_entry.name}' cannot be reconfigured (apply previous cli)"
+            self._messages.append(LogMessage(level=logging.INFO, message=message))
+            return False
+        if current_entry.value.source is C.USER_CLI:
+            return False
+        if (
+            isinstance(self._apply_previous_cli_entries, list)
+            and current_entry.name not in self._apply_previous_cli_entries
+        ):
+            return False
+        if previous_entry.apply_to_subsequent_cli not in [C.ALL, C.SAME_SUBCOMMAND]:
+            return False
+        if (
+            current_entry.apply_to_subsequent_cli is C.SAME_SUBCOMMAND
+            and current_subcommand != previous_subcommand
+        ):
+            return False
+        return previous_entry.value.source is C.USER_CLI
+
     def _apply_previous_cli_to_current(self) -> None:
         """Apply eligible previous CLI values to current not set by the CLI."""
-        # _apply_previous_cli_entries must be ALL or a list of entries
         if self._apply_previous_cli_entries is not C.ALL and not isinstance(
             self._apply_previous_cli_entries,
             list,
@@ -403,43 +471,15 @@ class Configurator:
         )
 
         for current_entry in self._config.entries:
-            # retrieve the corresponding previous entry
             previous_entry = self._config.initial.entry(current_entry.name)
-
-            # skip if not initial and not able to be changed
-            if not any((self._config.internals.initializing, current_entry.change_after_initial)):
-                message = f"'{current_entry.name}' cannot be reconfigured (apply previous cli)"
-                self._messages.append(LogMessage(level=logging.INFO, message=message))
-                continue
-
-            # skip if currently set from the CLI
-            if current_entry.value.source is C.USER_CLI:
-                continue
-
-            # skip if _apply_previous_cli_entries is a list and the entry isn't in it
-            if (
-                isinstance(self._apply_previous_cli_entries, list)
-                and current_entry.name not in self._apply_previous_cli_entries
+            if self._is_eligible_for_previous_cli(
+                current_entry,
+                previous_entry,
+                current_subcommand,
+                previous_subcommand,
             ):
-                continue
-
-            # skip if the previous entry not eligible for reapplication
-            if previous_entry.apply_to_subsequent_cli not in [C.ALL, C.SAME_SUBCOMMAND]:
-                continue
-
-            # skip if the same subcommand is required for reapplication
-            if (
-                current_entry.apply_to_subsequent_cli is C.SAME_SUBCOMMAND
-                and current_subcommand != previous_subcommand
-            ):
-                continue
-
-            # skip if the previous entry was not set by the CLI
-            if previous_entry.value.source is not C.USER_CLI:
-                continue
-
-            current_entry.value.current = previous_entry.value.current
-            current_entry.value.source = C.PREVIOUS_CLI
+                current_entry.value.current = previous_entry.value.current
+                current_entry.value.source = C.PREVIOUS_CLI
 
     def _retrieve_ansible_cfg(self) -> None:
         """Retrieve the ansible.cfg file.

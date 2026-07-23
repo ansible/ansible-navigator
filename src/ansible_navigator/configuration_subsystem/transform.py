@@ -20,6 +20,22 @@ from .defs_presentable import PresentableSettingsEntry
 from .utils import create_settings_file_sample
 
 
+def _convert_volume_mount(mount: str) -> dict[str, str]:
+    """Convert a volume mount string to a dictionary.
+
+    Args:
+        mount: A colon-separated volume mount string.
+
+    Returns:
+        A dictionary with src, dest, and optionally options keys.
+    """
+    parts = mount.split(":")
+    v_mount: dict[str, str] = {"src": parts[0], "dest": parts[1]}
+    if len(parts) == 3:
+        v_mount["options"] = parts[2]
+    return v_mount
+
+
 def to_effective(
     settings: ApplicationConfiguration,
 ) -> SettingsFileType:
@@ -36,18 +52,10 @@ def to_effective(
         path = entry.settings_file_path(prefix=settings.application_name_dashed)
         if not isinstance(entry.value.current, Constants):
             current: bool | int | str | dict[Any, Any] | list[Any] = entry.value.current
-            # It is necessary to un post-process here
             if path == "ansible-navigator.ansible.cmdline":
-                # post-processed into a list
                 current = shlex_join(entry.value.current)
             elif path == "ansible-navigator.execution-environment.volume-mounts":
-                current = []
-                for mount in entry.value.current:
-                    parts = mount.split(":")
-                    v_mount = {"src": parts[0], "dest": parts[1]}
-                    if len(parts) == 3:
-                        v_mount["options"] = parts[2]
-                    current.append(v_mount)
+                current = [_convert_volume_mount(mount) for mount in entry.value.current]
 
             partial = create_settings_file_sample(
                 settings_path=path,
@@ -109,6 +117,48 @@ def to_presentable(settings: ApplicationConfiguration) -> PresentableSettingsEnt
     return PresentableSettingsEntries(tuple(settings_list))
 
 
+def _apply_entry_to_schema(
+    entry: SettingsEntry,
+    subschema: dict[Any, Any],
+    dot_parts: list[str],
+) -> None:
+    """Apply a single entry's metadata to the schema.
+
+    Args:
+        entry: The settings entry.
+        subschema: The subschema dict to populate.
+        dot_parts: The dot-separated path parts.
+    """
+    subschema[dot_parts[-1]]["description"] = entry.short_description
+    if entry.choices:
+        choices = list(entry.choices)
+        if subschema[dot_parts[-1]].get("type") == "array":
+            subschema[dot_parts[-1]]["items"]["enum"] = choices
+        else:
+            subschema[dot_parts[-1]]["enum"] = choices
+    if entry.value.schema_default is not Constants.NOT_SET:
+        if entry.value.schema_default is not Constants.NONE:
+            subschema[dot_parts[-1]]["default"] = entry.value.schema_default
+    elif entry.value.default is not Constants.NOT_SET:
+        subschema[dot_parts[-1]]["default"] = entry.value.default
+
+
+def _resolve_schema_version(settings: ApplicationConfiguration) -> str:
+    """Resolve the application version for schema use.
+
+    Args:
+        settings: The application settings.
+
+    Returns:
+        The major version string.
+    """
+    if isinstance(settings.application_version, Constants):
+        version = settings.application_version.value
+    else:
+        version = settings.application_version
+    return ".".join(version.split(".")[:1])
+
+
 def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
     """Build a json schema from the settings using the stub schema.
 
@@ -127,29 +177,9 @@ def to_schema(settings: ApplicationConfiguration) -> dict[str, Any]:
         for part in dot_parts[:-1]:
             if isinstance(subschema, dict):
                 subschema = subschema.get(part, {}).get("properties")
-        subschema[dot_parts[-1]]["description"] = entry.short_description
-        if entry.choices:
-            # choice may be a tuple, so make a list
-            choices = list(entry.choices)
-            if subschema[dot_parts[-1]].get("type") == "array":
-                # A list of items
-                subschema[dot_parts[-1]]["items"]["enum"] = choices
-            else:
-                # A single item
-                subschema[dot_parts[-1]]["enum"] = choices
-        if entry.value.schema_default is not Constants.NOT_SET:
-            if entry.value.schema_default is not Constants.NONE:
-                subschema[dot_parts[-1]]["default"] = entry.value.schema_default
-        elif entry.value.default is not Constants.NOT_SET:
-            subschema[dot_parts[-1]]["default"] = entry.value.default
+        _apply_entry_to_schema(entry, subschema, dot_parts)
 
-    if isinstance(settings.application_version, Constants):
-        version = settings.application_version.value
-    else:
-        version = settings.application_version
-    # get only major version info for the schema:
-    version = ".".join(version.split(".")[:1])
-
+    version = _resolve_schema_version(settings)
     partial_schema["version"] = version
     partial_schema["title"] = partial_schema["title"].format(version=version)
 

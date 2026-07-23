@@ -55,7 +55,6 @@ class BaseClass:
         comment: str,
         search_within_response: str,
     ) -> None:
-        # pylint: disable=too-many-arguments
         """Run the tests for replay, mode and ``ee`` set in child class.
 
         Args:
