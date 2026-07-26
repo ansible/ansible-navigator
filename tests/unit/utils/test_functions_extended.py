@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import errno
+import pathlib
 import shutil
 
 from typing import TYPE_CHECKING
@@ -65,6 +67,20 @@ def test_check_playbook_type_missing() -> None:
 def test_check_playbook_type_fqcn() -> None:
     """Test check_playbook_type with an FQCN playbook."""
     assert check_playbook_type("namespace.collection.playbook") == "fqcn"
+
+
+def test_check_playbook_type_name_too_long(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test check_playbook_type when the path cannot name a file on this system.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
+
+    def raise_name_too_long(_self: pathlib.Path) -> bool:
+        raise OSError(errno.ENAMETOOLONG, "File name too long")
+
+    monkeypatch.setattr(pathlib.Path, "exists", raise_name_too_long)
+    assert check_playbook_type("a" * 300) == "missing"
 
 
 def test_clear_screen_vscode(

@@ -110,9 +110,14 @@ def check_playbook_type(playbook: str) -> str:
     """
     playbook_type = "file"
     playbook_path = str(playbook)
-    if Path(playbook_path).exists() is False:
+    try:
+        exists = Path(playbook_path).exists()
+    except OSError:
+        # The path cannot name a file on this system, e.g. it is too long
+        exists = False
+    if exists is False:
         playbook_type = "missing"
-    if Path(playbook_path).exists() is False and len(playbook_path.split(".")) >= 3:
+    if exists is False and len(playbook_path.split(".")) >= 3:
         playbook_type = "fqcn"
     return playbook_type
 
