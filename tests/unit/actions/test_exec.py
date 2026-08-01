@@ -54,8 +54,10 @@ command_test_data = [
             result_command="/bin/bash",
             result_params=[
                 "-c",
-                "ansible-vault encrypt_string --vault-password-file"
-                " a_password_file 'foobar' --name 'the_secret'",
+                (
+                    "ansible-vault encrypt_string --vault-password-file"
+                    " a_password_file 'foobar' --name 'the_secret'"
+                ),
             ],
         ),
         id="2",
