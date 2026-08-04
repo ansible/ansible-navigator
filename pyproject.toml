@@ -381,6 +381,7 @@ unsafe-fixes = true
 [tool.ruff.lint]
 ignore = [
   "COM812", # conflicts with ISC001 on format
+  'CPY001', # copyright notice not required
   'ERA001', # [*] Found commented-out code
   'INP001', # File `docs/_ext/regenerate_docs.py` is part of an implicit namespace package. Add an `__init__.py`.
   'PLW2901', # `for` loop variable `info_name` overwritten by assignment target
@@ -407,6 +408,7 @@ ignore = [
   'PLR0912', # Too many branches (13 > 12)
   'PLR0913', # Too many arguments to function call (7 > 5)
   'PLR0915', # Too many statements (58 > 50)
+  'PLR0917', # Too many positional arguments
   'PLR2004', # Magic value used in comparison, consider replacing 2 with a constant variable
   'PLW0603', # Using the global statement to update `DIAGNOSTIC_FAILURES` is discouraged
   'PT019', # Fixture `_mocked_func` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
