@@ -319,6 +319,7 @@ class Action(ActionBase):
         while True:
             self._dequeue()
             if self.runner.finished:
+                self._dequeue()
                 if self._args.playbook_artifact_enable:
                     self.write_artifact()
                 self._logger.debug("runner finished")
