@@ -49,7 +49,6 @@ magiclink
 maskables
 maxsplit
 mergeable
-mkdocstrings
 mqueue              # https://github.com/ansible/ansible-runner/issues/984
 myuser
 myproject
