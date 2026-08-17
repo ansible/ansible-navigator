@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Switch to using Python 3.10 by default
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
       - name: Install tox
