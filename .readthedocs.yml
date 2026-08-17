@@ -1,10 +1,6 @@
 ---
 version: 2
 
-mkdocs:
-  fail_on_warning: true
-  configuration: mkdocs.yml
-
 build:
   os: ubuntu-24.04
   tools:
@@ -12,14 +8,3 @@ build:
   commands:
     - pip install --user tox
     - python3 -m tox -e docs -- build --strict --site-dir=_readthedocs/html/
-python:
-  install:
-    - method: pip
-      path: tox
-    - method: pip
-      path: .
-      extra_requirements:
-        - docs
-submodules:
-  include: all
-  recursive: true
