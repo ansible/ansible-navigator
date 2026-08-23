@@ -11,8 +11,8 @@ environment container engine.
 
 Use this guide when:
 
-- `--container-engine container` or `execution-environment.container-engine: container`
-  is selected
+- `--container-engine container` or
+  `execution-environment.container-engine: container` is selected
 - execution-environment behavior differs from Docker or Podman
 - you need Apple Container-specific setup, troubleshooting, or operational notes
 
@@ -51,8 +51,8 @@ commands:
 - `container image inspect`
 - `container image list`
 
-For execution-environment runs, `ansible-navigator` passes `container` through to
-`ansible-runner`, which launches the EE using `container run`.
+For execution-environment runs, `ansible-navigator` passes `container` through
+to `ansible-runner`, which launches the EE using `container run`.
 
 ## Passing Apple-specific engine options
 
