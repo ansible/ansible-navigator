@@ -299,10 +299,10 @@ NavigatorConfiguration = ApplicationConfiguration(
         ),
         SettingsEntry(
             name="container_engine",
-            choices=["auto", "podman", "docker"],
+            choices=["auto", "podman", "docker", "container"],
             cli_parameters=CliParameters(short="--ce"),
             settings_file_path_override="execution-environment.container-engine",
-            short_description="Specify the container engine (auto=podman then docker)",
+            short_description="Specify the container engine (auto=podman then docker then container)",
             value=SettingsEntryValue(default="auto"),
             version_added="v1.0",
         ),

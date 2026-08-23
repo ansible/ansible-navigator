@@ -33,10 +33,11 @@ class ImagesInspect:
         Returns:
             List of image inspection command objects
         """
+        inspect_command = "image inspect" if self._container_engine == "container" else "inspect"
         return [
             Command(
                 identity=image_id,
-                command=f"{self._container_engine} inspect {image_id}",
+                command=f"{self._container_engine} {inspect_command} {image_id}",
                 post_process=self.parse,
             )
             for image_id in self._image_ids
@@ -72,10 +73,11 @@ class ImagesList:
         Returns:
             List of the image lister commands
         """
+        list_command = "image list" if self._container_engine == "container" else "images"
         return [
             Command(
                 identity="images",
-                command=f"{self._container_engine} images",
+                command=f"{self._container_engine} {list_command}",
                 post_process=self.parse,
             ),
         ]
