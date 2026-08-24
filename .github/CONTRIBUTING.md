@@ -81,6 +81,21 @@ Example: To run an integration test "test_stdout_vault.py ", we will execute:
 
 and so on ...
 
+#### Choosing a patching fixture
+
+Prefer pytest's [monkeypatch fixture] for simple, temporary changes to
+attributes, environment variables, the current directory, or `sys.path`. Use the
+`mocker` fixture from [pytest-mock] when a test needs mock behavior such as call
+assertions, side effects, autospeccing, or spies.
+
+If a test only needs a fixed return value, use `monkeypatch.setattr` with an
+ordinary function. Also prefer `monkeypatch.setenv` and `monkeypatch.chdir` for
+temporary environment and directory changes. This keeps tests explicit and
+avoids creating a mock object when its API is not needed.
+
+[monkeypatch fixture]: https://docs.pytest.org/en/stable/how-to/monkeypatch.html
+[pytest-mock]: https://pytest-mock.readthedocs.io/en/latest/
+
 Additionally, leverage the ability of VSCode test tree to run and debug tests in
 a more easier and interactive way. There is a dedicated configuration provided
 inside launch.json named as **Debug tests** to interactively debug the tests
