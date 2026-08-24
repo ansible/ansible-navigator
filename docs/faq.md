@@ -360,14 +360,16 @@ Additional information about `ansible-vault` can be found
 
 ### How can complex commands be run inside an execution-environment?
 
-The easiest way to pass complex commands to an execution environment is by using
-the `--` delimiter. Everything after the `--` will be passed into the
-execution-environment.
+Use the `--` delimiter to pass a command to the execution environment. Shell
+operators such as pipes and redirects must also be interpreted inside the
+execution environment, so invoke them through a shell:
 
 ```bash
-$ ansible-navigator exec -- ansible --version | head -n 1 | awk -F '\\[|\\]|\\s' '{print $4}'
-2.12.4rc1.post0
+ansible-navigator exec -- sh -c 'ansible --version | head -n 1'
 ```
+
+Without `sh -c`, the host shell interprets the pipe and only the command before
+it runs in the execution environment.
 
 ### Why did I get an error about `/dev/mqueue` missing?
 
