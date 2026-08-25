@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import contextlib
 import datetime
 import decimal
 import html
@@ -64,7 +65,9 @@ def expand_path(path: str | Path) -> Path:
         Resolved file path
     """
     _path = Path(os.path.expandvars(path))
-    _path = _path.expanduser()
+    # The home directory may not be determinable, e.g. ~ names an unknown user
+    with contextlib.suppress(RuntimeError):
+        _path = _path.expanduser()
     return _path.resolve()
 
 

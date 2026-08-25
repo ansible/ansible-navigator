@@ -116,6 +116,11 @@ def test_env_var_is_file_path(
     assert result == anticipated_result
 
 
+def test_expand_path_unknown_user() -> None:
+    """Test expand_path with a tilde naming a user without a home directory."""
+    assert expand_path("~nonexistentuser") == Path("~nonexistentuser").resolve()
+
+
 @pytest.mark.parametrize(
     ("value", "anticipated_result"),
     (
