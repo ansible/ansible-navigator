@@ -117,7 +117,11 @@ def test_env_var_is_file_path(
 
 
 def test_expand_path_unknown_user(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test expand_path when expanduser raises RuntimeError."""
+    """Test expand_path when expanduser raises RuntimeError.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
 
     def mock_expanduser(self: Path) -> Path:
         msg = "unknown user"
