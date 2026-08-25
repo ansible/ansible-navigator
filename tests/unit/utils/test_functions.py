@@ -116,9 +116,14 @@ def test_env_var_is_file_path(
     assert result == anticipated_result
 
 
-def test_expand_path_unknown_user() -> None:
-    """Test expand_path with a tilde naming a user without a home directory."""
-    assert expand_path("~nonexistentuser") == Path("~nonexistentuser").resolve()
+def test_expand_path_unknown_user(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test expand_path when expanduser raises RuntimeError."""
+    def mock_expanduser(self: Path) -> Path:
+        raise RuntimeError("unknown user")
+
+    monkeypatch.setattr(Path, "expanduser", mock_expanduser)
+    result = expand_path("~/path")
+    assert str(result).endswith("~/path")
 
 
 @pytest.mark.parametrize(
