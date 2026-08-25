@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import errno
 import shutil
 
-from typing import TYPE_CHECKING
+from pathlib import Path
 from unittest.mock import patch  # pylint: disable=preferred-module
 
 import pytest
@@ -26,10 +27,6 @@ from ansible_navigator.utils.functions import templar
 from ansible_navigator.utils.functions import time_stamp_for_file
 from ansible_navigator.utils.functions import timestamp_to_iso
 from ansible_navigator.utils.functions import to_list
-
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 
 def test_check_for_ansible_found(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -65,6 +62,20 @@ def test_check_playbook_type_missing() -> None:
 def test_check_playbook_type_fqcn() -> None:
     """Test check_playbook_type with an FQCN playbook."""
     assert check_playbook_type("namespace.collection.playbook") == "fqcn"
+
+
+def test_check_playbook_type_name_too_long(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test check_playbook_type when the path cannot name a file on this system.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
+
+    def raise_name_too_long(_self: Path) -> bool:
+        raise OSError(errno.ENAMETOOLONG, "File name too long")
+
+    monkeypatch.setattr(Path, "exists", raise_name_too_long)
+    assert check_playbook_type("a" * 300) == "missing"
 
 
 def test_clear_screen_vscode(
