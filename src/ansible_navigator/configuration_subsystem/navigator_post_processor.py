@@ -1205,12 +1205,26 @@ class NavigatorPostProcessor:
         """
         messages: list[LogMessage] = []
         exit_messages: list[ExitMessage] = []
-        # literal_text, fname, format_spec, conversion
-        found = {f for _, f, _, _ in Formatter().parse(entry.value.current) if f}
         available = {f for _, f, _, _ in Formatter().parse(entry.value.default) if f}
         non_defaults_also_available = {"playbook_status"}
 
         available.update(non_defaults_also_available)
+        # literal_text, fname, format_spec, conversion
+        try:
+            found = {f for _, f, _, _ in Formatter().parse(entry.value.current) if f}
+        except ValueError:
+            # Handle invalid artifact filename formats (malformed braces)
+            exit_msg = (
+                f"The playbook artifact file name '{entry.value.current}', set by"
+                f" {entry.value.source.value.lower()}, is not a valid format string."
+            )
+            exit_messages.append(ExitMessage(message=exit_msg))
+            exit_msg = (
+                "Invalid format string. Ensure braces are properly matched and only"
+                f" supported variables are used: {oxfordcomma(available, 'and/or')}"
+            )
+            exit_messages.append(ExitMessage(message=exit_msg, prefix=ExitPrefix.HINT))
+            return messages, exit_messages
         unknown = found - available
         if not unknown:
             return messages, exit_messages
