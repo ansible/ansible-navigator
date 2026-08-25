@@ -219,3 +219,33 @@ def test_pull_with_env_arg() -> None:
     )
     assert "XDG_RUNTIME_DIR" not in proc.stdout
     assert "containers/auth.json" in proc.stdout
+
+
+def test_pull_with_container_engine() -> None:
+    """Ensure command uses 'image pull' for container engine."""
+    image_puller = ImagePuller(
+        container_engine="container",
+        image="my_image",
+        arguments=Constants.NOT_SET,
+        pull_policy="tag",
+    )
+    result = image_puller._generate_pull_command()
+    expected_string = "container image pull my_image"
+    assert result == expected_string
+    expected_list = ["container", "image", "pull", "my_image"]
+    assert shlex.split(result) == expected_list
+
+
+def test_pull_with_container_engine_and_args() -> None:
+    """Ensure command with container engine and additional arguments."""
+    image_puller = ImagePuller(
+        container_engine="container",
+        image="my_image",
+        arguments=["--tls-verify", "false"],
+        pull_policy="tag",
+    )
+    result = image_puller._generate_pull_command()
+    expected_string = "container image pull --tls-verify false my_image"
+    assert result == expected_string
+    expected_list = ["container", "image", "pull", "--tls-verify", "false", "my_image"]
+    assert shlex.split(result) == expected_list

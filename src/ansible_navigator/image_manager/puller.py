@@ -199,7 +199,10 @@ class ImagePuller:
         Returns:
             The command
         """
-        command_line = [self._container_engine, "pull"]
+        if self._container_engine == "container":
+            command_line = [self._container_engine, "image", "pull"]
+        else:
+            command_line = [self._container_engine, "pull"]
         command_line.extend(self._arguments)
         command_line.append(self._image)
         joined_command = " ".join(command_line)
