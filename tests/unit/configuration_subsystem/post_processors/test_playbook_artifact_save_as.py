@@ -66,6 +66,15 @@ test_data = (
             " has unrecognized variables: 'name'"
         ),
     ),
+    Scenario(
+        name="4",
+        current="{playbook_name}.json{",
+        exit_message_substr=(
+            "The playbook artifact file name"
+            " '{playbook_name}.json{', set by command line,"
+            " is not a valid format string"
+        ),
+    ),
 )
 
 
@@ -93,3 +102,10 @@ def test_pas(data: Scenario) -> None:
 
     if data.exit_message_substr:
         assert data.exit_message_substr in exit_messages[0].message
+        assert len(exit_messages) >= 2, "Expected a HINT message with supported variables"
+        hint_msg = exit_messages[1].message
+        assert "playbook_dir" in hint_msg
+        assert "playbook_name" in hint_msg
+        assert "playbook_status" in hint_msg
+        assert "time_stamp" in hint_msg
+        assert "inventory" not in hint_msg
