@@ -33,10 +33,11 @@ class ImagesInspect:
         Returns:
             List of image inspection command objects
         """
+        inspect_command = "image inspect" if self._container_engine == "container" else "inspect"
         return [
             Command(
                 identity=image_id,
-                command=f"{self._container_engine} inspect {image_id}",
+                command=f"{self._container_engine} {inspect_command} {image_id}",
                 post_process=self.parse,
             )
             for image_id in self._image_ids
@@ -55,7 +56,13 @@ class ImagesInspect:
 
 
 class ImagesList:
-    """Functionality for listing container images."""
+    """Functionality for listing container images.
+
+    Attributes:
+        APPLE_HEADER_MAP: Mapping of Apple Container headers to standard ones.
+    """
+
+    APPLE_HEADER_MAP: dict[str, str] = {"name": "repository", "digest": "image_id"}
 
     def __init__(self, container_engine: str) -> None:
         """Initialize the container image lister.
@@ -72,25 +79,29 @@ class ImagesList:
         Returns:
             List of the image lister commands
         """
+        list_command = "image list" if self._container_engine == "container" else "images"
         return [
             Command(
                 identity="images",
-                command=f"{self._container_engine} images",
+                command=f"{self._container_engine} {list_command}",
                 post_process=self.parse,
             ),
         ]
 
-    @staticmethod
-    def parse(command: Command) -> None:
+    @classmethod
+    def parse(cls, command: Command) -> None:
         """Parse the image lister command output.
 
         Args:
             command: Image lister command object
         """
         if command.stdout:
+            is_apple = command.command.startswith("container ")
             images = command.stdout.splitlines()
             re_2omo = re.compile(r"\s{2,}")
             headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]
+            if is_apple:
+                headers = [cls.APPLE_HEADER_MAP.get(h, h) for h in headers]
             local_images = [
                 dict(zip(headers, re_2omo.split(line), strict=False)) for line in images
             ]

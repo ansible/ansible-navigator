@@ -14,6 +14,7 @@ To learn how to easily start leveraging the container technology with
 [Getting started with Execution Environments guide](https://docs.ansible.com/ansible/devel/getting_started_ee/index.html).
 
 - [Installation](installation.md)
+- [Apple Container Guide](apple-container.md)
 - [Settings](settings.md)
 - [Subcommands](subcommands.md)
 - [FAQ](faq.md)

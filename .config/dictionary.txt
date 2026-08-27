@@ -42,6 +42,7 @@ kegexes
 lentext
 levelname
 libonig
+lifecycle
 lightbulbs
 linenums
 lintable
@@ -88,6 +89,7 @@ testsfailed
 tracebacks
 truecolor
 usefixtures
+userland
 volmount
 withast
 workdir
