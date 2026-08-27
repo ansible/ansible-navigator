@@ -116,6 +116,22 @@ def test_env_var_is_file_path(
     assert result == anticipated_result
 
 
+def test_expand_path_unknown_user(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test expand_path when expanduser raises RuntimeError.
+
+    Args:
+        monkeypatch: The monkeypatch fixture
+    """
+
+    def mock_expanduser(self: Path) -> Path:
+        msg = "unknown user"
+        raise RuntimeError(msg)
+
+    monkeypatch.setattr(Path, "expanduser", mock_expanduser)
+    result = expand_path("~/path")
+    assert str(result).endswith("~/path")
+
+
 @pytest.mark.parametrize(
     ("value", "anticipated_result"),
     (
