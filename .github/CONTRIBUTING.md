@@ -17,23 +17,8 @@ In order to contribute, you'll need to:
 Prerequisites:
 
 1.  Have {doc}`tox <tox:index>`.
-
 2.  Use {doc}`tox <tox:index>` to run the tests.
-
-3.  Before sending a PR, make sure that `lint` passes:
-
-    ```shell-session
-    $ tox -e lint
-    lint create: .tox/lint
-    lint installdeps: .[test]
-    lint installed: ...
-    lint run-test-pre: PYTHONHASHSEED='4242713142'
-    lint run-test: commands[0] | pylint ansible_navigator tests ...
-    ...
-    _________________________________ summary __________________________________
-    lint: commands succeeded
-    congratulations :)
-    ```
+3.  Before sending a PR, make sure that `lint` passes: `tox -e lint`
 
 !!! notice
 
@@ -43,6 +28,39 @@ Prerequisites:
     find interpreter for Builtin discover of python_spec='python3.XX'`. This
     indicates the version of python that needs to be installed for tox to run
     locally. In this case, the version of python that needs to be installed is
+
+## Linting and formatting
+
+`tox -e lint` runs the project's [pre-commit] hooks over the repository. The
+main checks are:
+
+- [Ruff] for Python formatting and lint rules.
+- [pyupgrade] for modern Python syntax.
+- [mypy] for static type checking.
+- [Pylint] and [Flake8] for additional Python checks.
+- [pydoclint] for docstring consistency.
+- [markdownlint], [codespell], and [yamllint] for documentation and
+  configuration files.
+- [Prettier], [toml-sort], and [tox-ini-fmt] for supported configuration file
+  formats. The [cspell] hook is configured separately but skipped by
+  `tox -e lint`. Run it with `tox -e lint -- cspell --all-files` when needed.
+  Many hooks can fix files automatically. Review those changes, then rerun
+  `tox -e lint` until it succeeds. To run one hook while iterating, use
+  `tox -e lint -- HOOK_ID --all-files`. Do not add a project-wide exception for
+  a new local warning. Keep a necessary Pylint suppression next to the affected
+  statement and use its symbolic message name, for example
+  `# pylint: disable=too-many-arguments`. A mypy suppression must include the
+  specific error code, for example `# type: ignore[arg-type]`. [pre-commit]:
+  <https://pre-commit.com/> [Ruff]: <https://docs.astral.sh/ruff/> [pyupgrade]:
+  <https://github.com/asottile/pyupgrade> [mypy]: <https://mypy.readthedocs.io/>
+  [Pylint]: <https://pylint.readthedocs.io/> [Flake8]:
+  <https://flake8.pycqa.org/> [pydoclint]: <https://jsh9.github.io/pydoclint/>
+  [markdownlint]: <https://github.com/igorshubovych/markdownlint-cli> [cspell]:
+  <https://cspell.org/> [codespell]:
+  <https://github.com/codespell-project/codespell> [yamllint]:
+  <https://yamllint.readthedocs.io/> [Prettier]: <https://prettier.io/>
+  [toml-sort]: <https://github.com/pappasam/toml-sort> [tox-ini-fmt]:
+  <https://github.com/tox-dev/tox-ini-fmt>
 
 ## Getting started with Ansible Navigator
 
@@ -137,9 +155,8 @@ Now, the final steps!
 
 - Put breakpoint(s) in the code where needed.
 - Hover to the **Run and Debug** icon in the Activity Bar to start the debugger.
-
-At this point, the debugger should hit your breakpoint and start the debugging
-session.
+  At this point, the debugger should hit your breakpoint and start the debugging
+  session.
 
 ### Debug Ansible-Navigator Subcommands
 
@@ -194,7 +211,6 @@ in the repository's root.
 
 We use [mkdocs](https://www.mkdocs.org/) to generate our docs website. You can
 trigger the process locally by executing:
-
 <!-- cspell:disable -->
 
 ```shell
