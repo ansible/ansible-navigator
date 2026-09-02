@@ -1,1 +1,1 @@
-../../.github/SECURITY.md
+../../SECURITY.md
