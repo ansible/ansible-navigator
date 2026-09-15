@@ -34,8 +34,16 @@ def test_images_inspect_command(
 @pytest.mark.parametrize(
     ("container_engine", "expected_list_cmd"),
     (
-        pytest.param("podman", "podman images", id="podman-images"),
-        pytest.param("docker", "docker images", id="docker-images"),
+        pytest.param(
+            "podman",
+            f"podman images --format '{ImagesList.FORMAT}'",
+            id="podman-images",
+        ),
+        pytest.param(
+            "docker",
+            f"docker images --format '{ImagesList.FORMAT}'",
+            id="docker-images",
+        ),
         pytest.param("container", "container image list", id="container-image-list"),
     ),
 )
@@ -55,20 +63,62 @@ def test_images_list_command(
     assert commands[0].command == expected_list_cmd
 
 
-def test_images_list_parse_docker() -> None:
-    """Test that Docker/Podman list output is parsed with standard headers."""
+@pytest.mark.parametrize(
+    "container_engine",
+    (
+        pytest.param("docker", id="docker"),
+        pytest.param("podman", id="podman"),
+    ),
+)
+def test_images_list_parse(container_engine: str) -> None:
+    """Test that Docker/Podman list output from the requested format is parsed.
+
+    Images without a tag are dropped.
+
+    Args:
+        container_engine: Container engine identifier
+    """
     stdout = (
-        "REPOSITORY          TAG       IMAGE ID       CREATED        SIZE\n"
-        "my-image            latest    abc123def456   2 days ago     250MB"
+        "my-image\tlatest\tabc123def456\t2 days ago\t250 MB\n"
+        "<none>\t<none>\t0123456789ab\t3 weeks ago\t1.2GB\n"
     )
-    cmd = Command(identity="images", command="podman images", post_process=ImagesList.parse)
+    cmd = ImagesList(container_engine=container_engine).commands[0]
     cmd.stdout = stdout
     ImagesList.parse(cmd)
-    assert isinstance(cmd.details, list)
-    assert len(cmd.details) == 1
-    assert cmd.details[0]["repository"] == "my-image"
-    assert cmd.details[0]["tag"] == "latest"
-    assert cmd.details[0]["image_id"] == "abc123def456"
+    assert cmd.details == [
+        {
+            "repository": "my-image",
+            "tag": "latest",
+            "image_id": "abc123def456",
+            "created": "2 days ago",
+            "size": "250 MB",
+        },
+    ]
+
+
+def test_images_list_parse_skips_blank_lines() -> None:
+    """Test that blank lines in the list output do not become rows."""
+    stdout = "my-image\tlatest\tabc123def456\t2 days ago\t250 MB\n\n"
+    cmd = ImagesList(container_engine="docker").commands[0]
+    cmd.stdout = stdout
+    ImagesList.parse(cmd)
+    assert cmd.details == [
+        {
+            "repository": "my-image",
+            "tag": "latest",
+            "image_id": "abc123def456",
+            "created": "2 days ago",
+            "size": "250 MB",
+        },
+    ]
+
+
+def test_images_list_parse_rejects_malformed_line() -> None:
+    """Test that a line not matching the requested format fails the parse."""
+    cmd = ImagesList(container_engine="docker").commands[0]
+    cmd.stdout = "my-image\tlatest\tabc123def456\n"
+    with pytest.raises(ValueError, match="zip"):
+        ImagesList.parse(cmd)
 
 
 def test_images_list_parse_apple_container() -> None:
