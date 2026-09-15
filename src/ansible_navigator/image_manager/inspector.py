@@ -107,7 +107,7 @@ class ImagesList:
         """
         if command.stdout:
             is_apple = command.command.startswith("container ")
-            images = command.stdout.splitlines()
+            images = [line for line in command.stdout.splitlines() if line.strip()]
             if is_apple:
                 re_2omo = re.compile(r"\s{2,}")
                 headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]
@@ -117,7 +117,7 @@ class ImagesList:
                 ]
             else:
                 local_images = [
-                    dict(zip(cls.FORMAT_KEYS, line.split("\t"), strict=False)) for line in images
+                    dict(zip(cls.FORMAT_KEYS, line.split("\t"), strict=True)) for line in images
                 ]
             valid_images = [image for image in local_images if image.get("tag") != "<none>"]
             command.details = valid_images
