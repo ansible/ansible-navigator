@@ -136,3 +136,27 @@ def test_images_list_parse_apple_container() -> None:
     assert cmd.details[0]["repository"] == "my-image"
     assert cmd.details[0]["tag"] == "latest"
     assert cmd.details[0]["image_id"] == "sha256:abc123"
+
+
+@pytest.mark.parametrize(
+    ("container_engine", "command"),
+    (
+        pytest.param("docker", "docker images", id="docker"),
+        pytest.param("container", "container image list", id="container-image-list"),
+    ),
+)
+def test_images_list_parse_blank_output(container_engine: str, command: str) -> None:
+    """Test that output with no image lines yields no images.
+
+    Args:
+        container_engine: Container engine identifier
+        command: Image lister command string
+    """
+    cmd = Command(
+        identity="images",
+        command=command,
+        post_process=ImagesList.parse,
+    )
+    cmd.stdout = "\n\n"
+    ImagesList.parse(cmd)
+    assert cmd.details == []

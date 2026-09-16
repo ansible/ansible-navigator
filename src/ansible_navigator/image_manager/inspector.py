@@ -108,6 +108,9 @@ class ImagesList:
         if command.stdout:
             is_apple = command.command.startswith("container ")
             images = [line for line in command.stdout.splitlines() if line.strip()]
+            if not images:
+                command.details = []
+                return
             if is_apple:
                 re_2omo = re.compile(r"\s{2,}")
                 headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]
