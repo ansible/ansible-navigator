@@ -60,9 +60,13 @@ class ImagesList:
 
     Attributes:
         APPLE_HEADER_MAP: Mapping of Apple Container headers to standard ones.
+        FORMAT: Output template for docker and podman, one tab separated line per image.
+        FORMAT_KEYS: Keys for the fields in ``FORMAT``, in the same order.
     """
 
     APPLE_HEADER_MAP: dict[str, str] = {"name": "repository", "digest": "image_id"}
+    FORMAT = r"{{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedSince}}\t{{.Size}}"
+    FORMAT_KEYS = ("repository", "tag", "image_id", "created", "size")
 
     def __init__(self, container_engine: str) -> None:
         """Initialize the container image lister.
@@ -79,7 +83,13 @@ class ImagesList:
         Returns:
             List of the image lister commands
         """
-        list_command = "image list" if self._container_engine == "container" else "images"
+        # The default table layout of ``images`` varies between engine versions
+        # (e.g. docker 29) and user configuration, so request the fields explicitly
+        list_command = (
+            "image list"
+            if self._container_engine == "container"
+            else f"images --format '{self.FORMAT}'"
+        )
         return [
             Command(
                 identity="images",
@@ -97,14 +107,21 @@ class ImagesList:
         """
         if command.stdout:
             is_apple = command.command.startswith("container ")
-            images = command.stdout.splitlines()
-            re_2omo = re.compile(r"\s{2,}")
-            headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]
+            images = [line for line in command.stdout.splitlines() if line.strip()]
+            if not images:
+                command.details = []
+                return
             if is_apple:
+                re_2omo = re.compile(r"\s{2,}")
+                headers = [key.lower().replace(" ", "_") for key in re_2omo.split(images.pop(0))]
                 headers = [cls.APPLE_HEADER_MAP.get(h, h) for h in headers]
-            local_images = [
-                dict(zip(headers, re_2omo.split(line), strict=False)) for line in images
-            ]
+                local_images = [
+                    dict(zip(headers, re_2omo.split(line), strict=False)) for line in images
+                ]
+            else:
+                local_images = [
+                    dict(zip(cls.FORMAT_KEYS, line.split("\t"), strict=True)) for line in images
+                ]
             valid_images = [image for image in local_images if image.get("tag") != "<none>"]
             command.details = valid_images
 
