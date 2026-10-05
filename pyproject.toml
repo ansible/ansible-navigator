@@ -8,7 +8,7 @@ requires = [
 ]
 
 [project]
-authors = [{"email" = "bthornto@redhat.com", "name" = "Bradley A. Thornton"}]
+authors = [{ "email" = "bthornto@redhat.com", "name" = "Bradley A. Thornton" }]
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Intended Audience :: Developers',
@@ -30,8 +30,8 @@ classifiers = [
 description = "A text-based user interface (TUI) for the Red Hat Ansible Automation Platform"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 keywords = ["ansible"]
-license = {text = "Apache"}
-maintainers = [{"email" = "info@ansible.com", "name" = "Ansible by Red Hat"}]
+license = { text = "Apache" }
+maintainers = [{ "email" = "info@ansible.com", "name" = "Ansible by Red Hat" }]
 name = "ansible-navigator"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -444,9 +444,9 @@ lines-between-types = 1 # Separate import/from with 1 line
 convention = "google"
 
 [tool.setuptools.dynamic]
-dependencies = {file = [".config/requirements.in"]}
-optional-dependencies.docs = {file = [".config/requirements-docs.in"]}
-optional-dependencies.test = {file = [".config/requirements-test.in"]}
+dependencies = { file = [".config/requirements.in"] }
+optional-dependencies.docs = { file = [".config/requirements-docs.in"] }
+optional-dependencies.test = { file = [".config/requirements-test.in"] }
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
