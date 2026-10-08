@@ -77,6 +77,23 @@ class TestMenuCursorPos:
         """
         assert ui._menu_cursor_pos is None
 
+    def test_key_down_preserves_scroll(self, ui: UserInterface) -> None:
+        """Scrolling with KEY_DOWN does not reset the displayed content.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        ui.scroll(40)
+
+        with (
+            patch.object(ui, "_filter_and_serialize", return_value=(None, ())),
+            patch.object(ui, "_display", side_effect=["KEY_DOWN", StopIteration]),
+            pytest.raises(StopIteration),
+        ):
+            ui._show_obj_from_list([{"key": "value"}], index=0, await_input=True)
+
+        assert ui.scroll() == 40
+
     def test_cursor_activates_at_zero_on_first_key_down(self, ui: UserInterface) -> None:
         """First KEY_DOWN activates the cursor at position 0.
 
