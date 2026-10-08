@@ -94,6 +94,23 @@ class TestMenuCursorPos:
 
         assert ui.scroll() == 40
 
+    def test_changing_object_resets_scroll(self, ui: UserInterface) -> None:
+        """Selecting another object resets the scroll position.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        ui.scroll(40)
+
+        with (
+            patch.object(ui, "_filter_and_serialize", return_value=(None, ())),
+            patch.object(ui, "_display", side_effect=["1", StopIteration]),
+            pytest.raises(StopIteration),
+        ):
+            ui._show_obj_from_list([{"key": "value"}, {"key": "other"}], index=0, await_input=True)
+
+        assert ui.scroll() == 0
+
     def test_cursor_activates_at_zero_on_first_key_down(self, ui: UserInterface) -> None:
         """First KEY_DOWN activates the cursor at position 0.
 
