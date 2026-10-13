@@ -77,17 +77,30 @@ class TestMenuCursorPos:
         """
         assert ui._menu_cursor_pos is None
 
-    def test_key_down_preserves_scroll(self, ui: UserInterface) -> None:
-        """Scrolling with KEY_DOWN does not reset the displayed content.
+    # cspell:ignore NPAGE PPAGE
+    @pytest.mark.parametrize(
+        "key",
+        (
+            "KEY_DOWN",
+            "KEY_UP",
+            "KEY_NPAGE",
+            "KEY_PPAGE",
+            "^F",
+            "^B",
+        ),
+    )
+    def test_navigation_keys_preserve_scroll(self, key: str, ui: UserInterface) -> None:
+        """Scrolling navigation keys do not reset the displayed content.
 
         Args:
+            key: Navigation key to test.
             ui: A UserInterface fixture.
         """
         ui.scroll(40)
 
         with (
             patch.object(ui, "_filter_and_serialize", return_value=(None, ())),
-            patch.object(ui, "_display", side_effect=["KEY_DOWN", StopIteration]),
+            patch.object(ui, "_display", side_effect=[key, StopIteration]),
             pytest.raises(StopIteration),
         ):
             ui._show_obj_from_list([{"key": "value"}], index=0, await_input=True)
