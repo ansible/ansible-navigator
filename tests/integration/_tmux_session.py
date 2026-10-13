@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import os
 import shlex
 import time
@@ -329,7 +329,7 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                time_stamp = dt.datetime.now(tz=dt.timezone.utc).isoformat()
                 alert = f"******** ERROR: TMUX MODE TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 showing.insert(0, alert)
                 return None, showing
@@ -366,7 +366,7 @@ class TmuxSession:
 
             elapsed = timer() - start_time
             if elapsed > timeout:
-                time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+                time_stamp = dt.datetime.now(tz=dt.timezone.utc).isoformat()
                 alert = f"******** ERROR: TMUX EXEC TIMEOUT  @ {elapsed}s @ {time_stamp} ********"
                 showing.insert(0, alert)
                 return False, showing
@@ -452,7 +452,7 @@ class TmuxSession:
         with setup_capture_path.open(mode="w", encoding="utf-8") as fh:
             fh.writelines("\n".join(self._setup_capture))
 
-        time_stamp = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
+        time_stamp = dt.datetime.now(tz=dt.timezone.utc).isoformat()
         alerts = [
             f"******** ERROR: TMUX '{err_message}' TIMEOUT @ {elapsed}s @ {time_stamp} ********",
         ]

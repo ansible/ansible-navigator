@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import logging
 import zoneinfo
 
@@ -49,24 +49,24 @@ class Formatter(logging.Formatter):
         """
         if self._time_zone == "local":
             return (
-                datetime.datetime.fromtimestamp(record.created, datetime.timezone.utc)
+                dt.datetime.fromtimestamp(record.created, dt.timezone.utc)
                 .astimezone()
                 .isoformat()
             )
         if self._time_zone == "UTC":
-            return datetime.datetime.fromtimestamp(
+            return dt.datetime.fromtimestamp(
                 record.created,
-                tz=datetime.timezone.utc,
+                tz=dt.timezone.utc,
             ).isoformat()
         try:
-            return datetime.datetime.fromtimestamp(
+            return dt.datetime.fromtimestamp(
                 record.created,
                 tz=zoneinfo.ZoneInfo(self._time_zone),
             ).isoformat()
         except zoneinfo.ZoneInfoNotFoundError:
-            return datetime.datetime.fromtimestamp(
+            return dt.datetime.fromtimestamp(
                 record.created,
-                tz=datetime.timezone.utc,
+                tz=dt.timezone.utc,
             ).isoformat()
 
 
