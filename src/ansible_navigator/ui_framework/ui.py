@@ -1001,9 +1001,10 @@ class UserInterface(CursesWindow):
                 viewport height calculation)
             showing_indices: The indices currently visible on screen
         """
-        # Activate cursor at position 0 on first arrow-key press (no movement)
+        # Activate cursor on first arrow-key press (no movement). _show_menu clamps it
+        # into the visible rows, so DOWN lands on the top row and UP on the bottom row.
         if self._menu_cursor_pos is None:
-            self._menu_cursor_pos = 0
+            self._menu_cursor_pos = 0 if entry == "KEY_DOWN" else len(self._menu_indices) - 1
             return
         # Move the cursor position (only if cursor was already active)
         if entry == "KEY_DOWN" and self._menu_cursor_pos < len(self._menu_indices) - 1:
@@ -1075,15 +1076,16 @@ class UserInterface(CursesWindow):
             # Determine which row to highlight (only when cursor is active)
             self._highlight_line_offset = None
             if self._menu_indices and self._menu_cursor_pos is not None:
-                self._menu_cursor_pos = max(
-                    0,
-                    min(self._menu_cursor_pos, len(self._menu_indices) - 1),
-                )
-                selected_global_index = self._menu_indices[self._menu_cursor_pos]
-                try:
-                    self._highlight_line_offset = showing_indices.index(selected_global_index)
-                except ValueError:
-                    self._highlight_line_offset = None
+                self._menu_cursor_pos = min(self._menu_cursor_pos, len(self._menu_indices) - 1)
+                if showing_indices:
+                    # Keep the cursor on a visible row so the bar survives auto-scroll
+                    # during a run and PgUp/PgDn, which move the viewport without it
+                    last_visible_pos = first_line_idx + len(showing_indices) - 1
+                    self._menu_cursor_pos = max(
+                        first_line_idx,
+                        min(self._menu_cursor_pos, last_visible_pos),
+                    )
+                    self._highlight_line_offset = self._menu_cursor_pos - first_line_idx
 
             entry = self._display(
                 lines=menu_lines,

@@ -327,3 +327,71 @@ class TestEnterKeySelection:
             entry = str(ui._menu_indices[ui._menu_cursor_pos])
 
         assert entry == "7"
+
+
+def _show_menu(ui: UserInterface, items: list[dict[str, str]], keys: list[str]) -> None:
+    """Drive ``_show_menu`` with a scripted key sequence, stopping after the last key.
+
+    Args:
+        ui: A UserInterface fixture.
+        items: The menu rows.
+        keys: Keys returned by successive ``_display`` calls.
+    """
+    ui._color_menu_item = lambda *_args, **_kwargs: (0, 0)
+    with (
+        patch.object(ui, "_display", side_effect=[*keys, StopIteration]),
+        patch("curses.COLORS", 8, create=True),
+        pytest.raises(StopIteration),
+    ):
+        ui._show_menu(items, ["task"], await_input=True)
+
+
+class TestCursorFollowsViewport:
+    """The cursor bar must stay visible when the viewport moves without it."""
+
+    # 24-row screen, 1 heading, 1 footer -> 22 visible rows; 40 items scrolled to the end
+    # shows items 18..39.
+
+    def test_cursor_clamped_into_view_when_scroll_moves(self, ui: UserInterface) -> None:
+        """Auto-scroll or paging past the cursor pulls the cursor onto the first visible row.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui._menu_current_id = id(items)
+        ui._menu_cursor_pos = 2
+        ui.scroll(40)
+
+        _show_menu(ui, items, [])
+
+        assert ui._menu_cursor_pos == 18
+        assert ui._highlight_line_offset == 0
+
+    def test_first_key_down_activates_on_first_visible_row(self, ui: UserInterface) -> None:
+        """First KEY_DOWN in a scrolled menu highlights the top visible row, not item 0.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui.scroll(40)
+
+        _show_menu(ui, items, ["KEY_DOWN"])
+
+        assert ui._menu_cursor_pos == 18
+        assert ui._highlight_line_offset == 0
+
+    def test_first_key_up_activates_on_last_visible_row(self, ui: UserInterface) -> None:
+        """First KEY_UP in a scrolled menu highlights the bottom visible row.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui.scroll(40)
+
+        _show_menu(ui, items, ["KEY_UP"])
+
+        assert ui._menu_cursor_pos == 39
+        assert ui._highlight_line_offset == 21
