@@ -568,11 +568,7 @@ def timestamp_to_iso(timestamp: float, time_zone: str) -> str | None:
     """
     try:
         if time_zone == "local":
-            return (
-                dt.datetime.fromtimestamp(timestamp, dt.timezone.utc)
-                .astimezone()
-                .isoformat()
-            )
+            return dt.datetime.fromtimestamp(timestamp, dt.timezone.utc).astimezone().isoformat()
         if time_zone == "UTC":
             return dt.datetime.fromtimestamp(
                 timestamp,

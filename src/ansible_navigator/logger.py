@@ -49,9 +49,7 @@ class Formatter(logging.Formatter):
         """
         if self._time_zone == "local":
             return (
-                dt.datetime.fromtimestamp(record.created, dt.timezone.utc)
-                .astimezone()
-                .isoformat()
+                dt.datetime.fromtimestamp(record.created, dt.timezone.utc).astimezone().isoformat()
             )
         if self._time_zone == "UTC":
             return dt.datetime.fromtimestamp(
