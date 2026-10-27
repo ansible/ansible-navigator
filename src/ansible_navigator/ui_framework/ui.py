@@ -1108,7 +1108,9 @@ class UserInterface(CursesWindow):
             # fall through to _template_match_action and trigger a spurious warning dialog.
             if entry in ["CURSOR_ENTER", "^J", "^M", "KEY_ENTER", "KEY_RETURN"]:
                 if self._menu_cursor_pos is not None and self._menu_indices:
-                    entry = str(self._menu_indices[self._menu_cursor_pos])
+                    # The select action treats the entry as a position in _menu_indices
+                    # (the number shown in the row prefix), not a global index
+                    entry = str(self._menu_cursor_pos)
                 else:
                     continue
 

@@ -3,6 +3,10 @@
 # pylint: disable=redefined-outer-name
 from __future__ import annotations
 
+import re
+
+from types import SimpleNamespace
+from typing import Any
 from unittest.mock import MagicMock  # pylint: disable=W0407
 from unittest.mock import patch  # pylint: disable=W0407
 
@@ -329,21 +333,29 @@ class TestEnterKeySelection:
         assert entry == "7"
 
 
-def _show_menu(ui: UserInterface, items: list[dict[str, str]], keys: list[str]) -> None:
-    """Drive ``_show_menu`` with a scripted key sequence, stopping after the last key.
+def _show_menu(ui: UserInterface, items: list[dict[str, str]], keys: list[str]) -> Any:
+    """Drive ``_show_menu`` with a scripted key sequence.
+
+    Stops after the last key unless the menu returns an interaction first.
 
     Args:
         ui: A UserInterface fixture.
         items: The menu rows.
         keys: Keys returned by successive ``_display`` calls.
+
+    Returns:
+        The interaction returned by the menu, or None if the keys ran out.
     """
     ui._color_menu_item = lambda *_args, **_kwargs: (0, 0)
+    ui._kegexes = lambda: [SimpleNamespace(name="select", kegex=re.compile(r"^\d+$"))]
     with (
         patch.object(ui, "_display", side_effect=[*keys, StopIteration]),
         patch("curses.COLORS", 8, create=True),
-        pytest.raises(StopIteration),
     ):
-        ui._show_menu(items, ["task"], await_input=True)
+        try:
+            return ui._show_menu(items, ["task"], await_input=True)
+        except StopIteration:
+            return None
 
 
 class TestCursorFollowsViewport:
@@ -395,3 +407,174 @@ class TestCursorFollowsViewport:
 
         assert ui._menu_cursor_pos == 39
         assert ui._highlight_line_offset == 21
+
+    def test_cursor_on_first_visible_row_stays_when_viewport_stationary(
+        self,
+        ui: UserInterface,
+    ) -> None:
+        """A cursor already on the top visible row is not moved by a redraw.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui._menu_current_id = id(items)
+        ui._menu_cursor_pos = 18
+        ui.scroll(40)
+
+        _show_menu(ui, items, [])
+
+        assert ui._menu_cursor_pos == 18
+        assert ui._highlight_line_offset == 0
+
+    def test_cursor_on_last_visible_row_stays_when_viewport_stationary(
+        self,
+        ui: UserInterface,
+    ) -> None:
+        """A cursor already on the bottom visible row is not moved by a redraw.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui._menu_current_id = id(items)
+        ui._menu_cursor_pos = 39
+        ui.scroll(40)
+
+        _show_menu(ui, items, [])
+
+        assert ui._menu_cursor_pos == 39
+        assert ui._highlight_line_offset == 21
+
+    def test_cursor_mid_screen_unchanged_when_viewport_moves_one_row(
+        self,
+        ui: UserInterface,
+    ) -> None:
+        """A one-row viewport move (one task arriving) leaves a mid-screen cursor alone.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui._menu_current_id = id(items)
+        ui._menu_cursor_pos = 30
+        ui.scroll(39)
+        _show_menu(ui, items, [])
+        assert ui._highlight_line_offset == 13
+
+        ui.scroll(40)
+        _show_menu(ui, items, [])
+
+        assert ui._menu_cursor_pos == 30
+        assert ui._highlight_line_offset == 12
+
+    def test_cursor_clamped_to_last_row_when_viewport_moves_backwards(
+        self,
+        ui: UserInterface,
+    ) -> None:
+        """Paging up past the cursor pulls it onto the last visible row.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui._menu_current_id = id(items)
+        ui._menu_cursor_pos = 39
+        ui.scroll(40 - 22)  # what KEY_PPAGE does in _display: back one viewport
+
+        _show_menu(ui, items, [])
+
+        assert ui._menu_cursor_pos == 17
+        assert ui._highlight_line_offset == 17
+
+    def test_key_down_off_bottom_row_scrolls_without_clamping(self, ui: UserInterface) -> None:
+        """Arrow keys keep the cursor adjacent to the viewport, so the clamp never fires.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(45)]
+        ui._menu_current_id = id(items)
+        ui._menu_cursor_pos = 39
+        ui.scroll(40)
+
+        _show_menu(ui, items, ["KEY_DOWN", "KEY_DOWN"])
+
+        assert ui._menu_cursor_pos == 41
+        assert ui.scroll() == 42
+        assert ui._highlight_line_offset == 21
+
+    def test_short_menu_cursor_stays_valid(self, ui: UserInterface) -> None:
+        """With fewer items than rows the cursor and highlight track the same item.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(5)]
+
+        _show_menu(ui, items, ["KEY_UP", "KEY_UP", "KEY_UP"])
+
+        assert ui._menu_cursor_pos == 2
+        assert ui._highlight_line_offset == 2
+
+    def test_empty_menu_ignores_arrows_and_enter(self, ui: UserInterface) -> None:
+        """An empty menu never indexes into its items or highlights a row.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        result = _show_menu(ui, [], ["KEY_DOWN", "KEY_UP", "CURSOR_ENTER"])
+
+        assert result is None
+        assert ui._menu_cursor_pos is None
+        assert ui._highlight_line_offset is None
+
+    def test_filtered_menu_highlight_maps_to_matching_item(self, ui: UserInterface) -> None:
+        """With a filter the cursor is a position in the filtered list and maps to a match.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": f"t{i}"} for i in range(40)]
+        ui.menu_filter("t1")  # t1, t10..t19 -> 11 items, all visible
+        ui.scroll(40)
+
+        _show_menu(ui, items, ["KEY_UP"])
+
+        assert ui._menu_indices == (1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
+        assert ui._menu_cursor_pos == 10
+        assert ui._highlight_line_offset == 10
+        assert items[ui._menu_indices[ui._menu_cursor_pos]]["task"] == "t19"
+
+    def test_filtered_menu_enter_selects_highlighted_item(self, ui: UserInterface) -> None:
+        """Enter in a filtered menu selects the highlighted item, not another match.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": f"t{i}"} for i in range(40)]
+        ui.menu_filter("t1")
+        ui.scroll(40)
+
+        result = _show_menu(ui, items, ["KEY_UP", "CURSOR_ENTER"])
+
+        assert result is not None
+        assert result.name == "select"
+        assert items[result.action.value]["task"] == "t19"
+
+    def test_enter_after_clamp_selects_highlighted_item(self, ui: UserInterface) -> None:
+        """After auto-scroll clamps the cursor, Enter selects the row that is highlighted.
+
+        Args:
+            ui: A UserInterface fixture.
+        """
+        items = [{"task": str(i)} for i in range(40)]
+        ui._menu_current_id = id(items)
+        ui._menu_cursor_pos = 2
+        ui.scroll(40)
+
+        result = _show_menu(ui, items, ["CURSOR_ENTER"])
+
+        assert result is not None
+        assert ui._highlight_line_offset == 0
+        assert result.action.value == 18
