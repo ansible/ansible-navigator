@@ -96,10 +96,48 @@ def test_config_filter_content_keys() -> None:
             "\n\nSOME_VAR(default) = some_value",
             [],
         ),
+        pytest.param(
+            "ACTION_WARNINGS:\n  default: true\n",
+            "[WARNING]: extra banner\n"
+            "\x1b[32mACTION_WARNINGS(default) = True\x1b[0m\n"
+            "UNKNOWN_SETTING(default) = 1\n",
+            [
+                {
+                    "__current": "True",
+                    "current_config_file": "Not set",
+                    "current_value": True,
+                    "default": True,
+                    "default_value": True,
+                    "name": "Action warnings",
+                    "option": "ACTION_WARNINGS",
+                    "source": "default",
+                    "via": "default",
+                },
+            ],
+        ),
+        pytest.param(
+            "[WARNING]: list banner\nACTION_WARNINGS:\n  default: true\n",
+            "[WARNING]: dump banner\n\nACTION_WARNINGS(default) = True\n",
+            [
+                {
+                    "__current": "True",
+                    "current_config_file": "Not set",
+                    "current_value": True,
+                    "default": True,
+                    "default_value": True,
+                    "name": "Action warnings",
+                    "option": "ACTION_WARNINGS",
+                    "source": "default",
+                    "via": "default",
+                },
+            ],
+        ),
     ),
     ids=[
         "output_with_galaxy_server",
         "empty_output_with_some_var_dump",
+        "colored_dump_with_banner",
+        "banner_and_blank_line_before_settings",
     ],
 )
 def test_parse_and_merge(
