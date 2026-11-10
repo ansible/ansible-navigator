@@ -34,6 +34,42 @@ if TYPE_CHECKING:
     from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
 
 
+_ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+
+
+def _strip_ansi(text: str) -> str:
+    """Remove ANSI color sequences from ansible-config output.
+
+    Args:
+        text: Command output that may include terminal color codes
+
+    Returns:
+        The same text without ANSI escape sequences
+    """
+    return _ANSI_ESCAPE.sub("", text)
+
+
+_LIST_YAML_START = re.compile(r"^(?:---|[A-Za-z_][\w]*:)")
+
+
+def _ansible_config_list_yaml(text: str) -> str:
+    """Return YAML payload from ansible-config list output.
+
+    EE runs may prefix stdout with banners before the mapping document.
+
+    Args:
+        text: Raw stdout from ``ansible-config list``
+
+    Returns:
+        A substring suitable for :func:`yaml.load`
+    """
+    lines = _strip_ansi(text).splitlines()
+    for idx, line in enumerate(lines):
+        if _LIST_YAML_START.match(line.strip()):
+            return "\n".join(lines[idx:])
+    return _strip_ansi(text)
+
+
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
     """Provide a color for a collections menu entry in one column.
 
@@ -372,20 +408,30 @@ class Action(ActionBase):
             Nothing
         """
         try:
-            parsed = yaml.load(list_output, Loader=Loader)
+            parsed = yaml.load(_ansible_config_list_yaml(list_output), Loader=Loader)
             self._logger.debug("yaml loading list output succeeded")
         except yaml.YAMLError as exc:
             self._logger.debug("error yaml loading list output: '%s'", str(exc))
             return
 
+        if not isinstance(parsed, dict):
+            return
+
         parsed.pop("GALAXY_SERVERS", None)
 
         regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
-        for line in dump_output.splitlines():
+        saw_setting = False
+        for line in _strip_ansi(dump_output).splitlines():
             if not line:
-                break
-            if not self._parse_dump_line(regex, line, parsed):
-                return
+                if saw_setting:
+                    # ansible-config ends the base settings with a blank line
+                    break
+                continue
+            if not regex.match(line):
+                # Warnings and other banners are not settings.
+                continue
+            if self._parse_dump_line(regex, line, parsed):
+                saw_setting = True
 
         self._finalize_parsed_config(parsed)
         self._config = list(parsed.values())
@@ -459,6 +505,11 @@ class Action(ActionBase):
             value["option"] = key
             value["name"] = key.replace("_", " ").capitalize()
             value["default_value"] = value.get("default", "None")
+            if "source" not in value:
+                value["source"] = "default"
+                value["via"] = "default"
+            value.setdefault("current_value", value.get("default"))
+            value.setdefault("__current", str(value.get("current_value")))
             if value["source"] == "default":
                 value["default"] = True
             else:
