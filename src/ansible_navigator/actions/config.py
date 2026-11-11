@@ -525,9 +525,10 @@ class Action(ActionBase):
         Args:
             parsed: The parsed config dictionary to update in place.
         """
-        for key, value in parsed.items():
+        for key, value in list(parsed.items()):
             if not isinstance(value, dict):
                 self._logger.debug("skipping unparsable list entry for %s", key)
+                del parsed[key]
                 continue
             value["option"] = key
             value["name"] = key.replace("_", " ").capitalize()

@@ -78,6 +78,21 @@ def test_config_content_heading_false() -> None:
     assert heading[0][0].column == 0
 
 
+def test_finalize_parsed_config_drops_non_dict_entries() -> None:
+    """Non-mapping list YAML entries must not appear in the config menu."""
+    args = deepcopy(NavigatorConfiguration)
+    run_action = action(args=args)
+    parsed = {
+        "ACTION_WARNINGS": {"default": True},
+        "WARNING": "notice",
+    }
+    run_action._finalize_parsed_config(parsed)
+
+    assert "WARNING" not in parsed
+    assert len(run_action._config) == 1
+    assert run_action._config[0]["option"] == "ACTION_WARNINGS"
+
+
 def test_unwrap_runner_stdout_requires_runner_envelope() -> None:
     """Only unwrap JSON that looks like ansible-runner json_mode output."""
     wrapped = json.dumps({"stdout": "ACTION_WARNINGS:\n", "stderr": "", "rc": 0})
